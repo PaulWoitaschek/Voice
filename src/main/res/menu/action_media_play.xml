@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activity.MediaPlay">
+
+    <item
+        android:id="@+id/action_sleep"
+        android:title="@string/action_sleep"
+        android:orderInCategory="89"
+        android:icon="@drawable/ic_action_time"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_time_change"
+        android:title="@string/action_time_change"
+        android:orderInCategory="99"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+</menu>

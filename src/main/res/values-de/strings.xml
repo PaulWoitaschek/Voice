@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MaterialPlayer</string>
+    <string name="action_add">Dateien hinzufügen</string>
+    <string name="zeroTime">0:00:00</string>
+    <string name="cover">Cover</string>
+    <string name="play">Play / Pause</string>
+
+    <string name="action_settings">Einstellungen</string>
+    <string name="back">Zurück</string>
+    <string name="forward">Nächster Song</string>
+    <string name="action_delete">Löschen</string>
+    <string name="action_add_badge">Medien hinzufügen</string>
+    <string name="book_name_hint">Name des Hörbuchs</string>
+    <string name="book_add">Buch hinzufügen</string>
+    <string name="book_add_empty_title">Geben Sie einen Titel ein</string>
+    <string name="description_thumbnail">Thumbnail des Covers</string>
+    <string name="book_no_media">Enthält keine Audiodateien</string>
+    <string name="next_song">Nächstes Lied</string>
+    <string name="previous_song">Voriges Lied</string>
+    <string name="choose_time_okay">Okay</string>
+    <string name="choose_time_cancel">Abbrechen</string>
+    <string name="action_time_change">Zu Stelle springen</string>
+    <string name="pref_resume_on_replug">Wiedergabe fortsetzen</string>
+    <string name="pref_resume_on_replug_hint">Nimmt die Wiedergabe beim Einstecken der Kopfhörer wieder auf.</string>
+    <string name="many_files">Sie haben viele Dateien hinzugefügt. Bitte einen Moment Geduld.</string>
+    <string name="action_sleep">Pausiert nach vorgegebener Zeit</string>
+    <string name="no_external_storage">Der externe Speicher ist nicht verfügbar. Prüfen Sie, ob Ihre Speicherkarte eingesteckt und nicht mit dem Computer verbunden ist.</string>
+    <string name="action_sleep_title">…z..Z..ZZ</string>
+    <string name="action_sleep_title_hint_left">Pausiert nach</string>
+    <string name="action_sleep_title_hint_right">Minuten</string>
+    <string name="toast_last_file_reached">Letzter song erreicht!</string>
+    <string name="action_jump_to">Zu Stelle springen</string>
+    <string name="hours">stunden</string>
+    <string name="minutes">minuten</string>
+
+    <string name="file_not_found">Das Hörbuch konnte nicht gefunden werden. Bitte fügen Sie es erneut hinzu.</string>
+
+    <string name="media_view_how_to">Drücken Sie auf + um ein Buch hinzuzufügen.</string>
+
+    <string name="current_cover">Zeigt das Cover des momentan spielenden Buchs.</string>
+    <string name="current_playing">Zeigt an, ob momentan ein Buch abgespielt wird.</string>
+
+    <string name="choose_this">Wählt diesen Ordner.</string>
+
+    <string name="pref_cover_on_internet">Benutze Mobiles Internet</string>
+    <string name="pref_cover_on_internet_hint">Benutze auch die mobile Datenverbindung um Cover herunterzuladen.</string>
+
+    <string name="content_previous_cover">Wählt voriges Cover</string>
+    <string name="content_next_cover">Wählt nächstes Cover</string>
+    <string name="content_cover">Zeigt aktuelles Cover an</string>
+
+</resources>

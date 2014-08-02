@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MaterialPlayer</string>
+    <string name="action_add">Add media</string>
+    <string name="zeroTime">0:00:00</string>
+    <string name="cover">Cover</string>
+    <string name="play">Play / Pause</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="back">Back</string>
+    <string name="forward">Forward</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_add_badge">Add Media</string>
+    <string name="book_name_hint">Name of audiobook</string>
+    <string name="book_add">Add book</string>
+    <string name="book_add_empty_title">Add a title</string>
+    <string name="description_thumbnail">Thumbnail for cover</string>
+    <string name="book_no_media">Choice contains no media.</string>
+    <string name="next_song">Next song</string>
+    <string name="previous_song">Previous song</string>
+    <string name="choose_time_okay">Set</string>
+    <string name="choose_time_cancel">Cancel</string>
+    <string name="action_time_change">Jump to</string>
+    <string name="pref_resume_on_replug">Resume playback</string>
+    <string name="pref_resume_on_replug_hint">If you paused by plugging headset out, it will resume on replug.</string>
+    <string name="many_files">You added a lot of files. Please be patient, this could take a moment.</string>
+    <string name="action_sleep">Pauses after scheduled time</string>
+    <string name="no_external_storage">External Storage is not available. Please make sure it is connected and not mounted in your computer.</string>
+    <string name="action_sleep_title">Sleep timer</string>
+    <string name="action_sleep_title_hint_left">Pauses after</string>
+    <string name="action_sleep_title_hint_right">minutes</string>
+    <string name="toast_last_file_reached">This is the last file in your book.</string>
+    <string name="action_jump_to">Position changer</string>
+    <string name="hours">hours</string>
+    <string name="minutes">minutes</string>
+
+    <string name="file_not_found">It seems that the audiobook cannot be found on storage. Please re-add the audiobook.</string>
+
+    <string name="media_view_how_to">Press + to add a book</string>
+
+    <string name="current_cover">Shows cover of currently playing book.</string>
+    <string name="current_playing">Shows playing state.</string>
+
+    <string name="choose_this">Chooses this folder.</string>
+
+    <string name="pref_cover_on_internet">Use Mobile Network</string>
+    <string name="pref_cover_on_internet_hint">Uses mobile network to find cover for the current audiobook.</string>
+
+    <string name="content_previous_cover">Chooses previous cover</string>
+    <string name="content_next_cover">Chooses next cover</string>
+    <string name="content_cover">Shows cover to choose</string>
+
+
+</resources>
