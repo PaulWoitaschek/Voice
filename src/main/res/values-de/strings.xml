@@ -41,8 +41,6 @@
     <string name="current_cover">Zeigt das Cover des momentan spielenden Buchs.</string>
     <string name="current_playing">Zeigt an, ob momentan ein Buch abgespielt wird.</string>
 
-    <string name="choose_this">Wählt diesen Ordner.</string>
-
     <string name="pref_cover_on_internet">Benutze Mobiles Internet</string>
     <string name="pref_cover_on_internet_hint">Benutze auch die mobile Datenverbindung um Cover herunterzuladen.</string>
 

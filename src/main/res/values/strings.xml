@@ -41,8 +41,6 @@
     <string name="current_cover">Shows cover of currently playing book.</string>
     <string name="current_playing">Shows playing state.</string>
 
-    <string name="choose_this">Chooses this folder.</string>
-
     <string name="pref_cover_on_internet">Use Mobile Network</string>
     <string name="pref_cover_on_internet_hint">Uses mobile network to find cover for the current audiobook.</string>
 
