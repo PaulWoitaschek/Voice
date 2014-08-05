@@ -33,19 +33,23 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:contentDescription="@string/content_cover"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:visibility="visible"/>
 
         <ProgressBar
             android:id="@+id/cover_loading"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_margin="60dp"
+            style="@android:style/Widget.ProgressBar.Large.Inverse"
+            android:indeterminate="false"
             android:visibility="gone"/>
 
         <ImageButton
             android:id="@+id/next_cover"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:src="@drawable/ic_action_next_item"
             style="?android:attr/borderlessButtonStyle"
             android:contentDescription="@string/content_next_cover" />

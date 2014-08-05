@@ -122,13 +122,12 @@ public class MediaAdd extends ActionBarActivity implements CompoundButton.OnChec
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath();
         Spinner dirSpinner = (Spinner) findViewById(R.id.dirSpinner);
 
         addPathToSpinner("/storage/extSdCard");
+        addPathToSpinner(Environment.getExternalStorageDirectory().getAbsolutePath());
         if (BuildConfig.DEBUG)
             addPathToSpinner("/storage/sdcard0/Audiobooks");
-        addPathToSpinner(Environment.getExternalStorageDirectory().getAbsolutePath());
         addPathToSpinner("/storage/emulated/0");
 
         if (dirs.size() > 1) {
@@ -139,6 +138,8 @@ public class MediaAdd extends ActionBarActivity implements CompoundButton.OnChec
             dirSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (BuildConfig.DEBUG)
+                        Log.d(TAG, "onItemSelected for chooser was called!");
                     link.clear();
                     link.add(dirs.get(position));
                     populateList(dirs.get(position));
@@ -153,8 +154,10 @@ public class MediaAdd extends ActionBarActivity implements CompoundButton.OnChec
             dirSpinner.setVisibility(View.GONE);
         }
 
-        link.add(path); //first element of file hierarchy
-        populateList(path); //Setting path to external storage directory to list it
+        if (dirs.size() > 0) {
+            link.add(dirs.get(0)); //first element of file hierarchy
+            populateList(dirs.get(0)); //Setting path to external storage directory to list it
+        }
     }
 
     private void addMediaBundle(ArrayList<File> dirAddList) {
