@@ -29,6 +29,7 @@
             android:contentDescription="@string/content_previous_cover" />
 
         <ImageView
+            android:id="@+id/cover"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:contentDescription="@string/content_cover"

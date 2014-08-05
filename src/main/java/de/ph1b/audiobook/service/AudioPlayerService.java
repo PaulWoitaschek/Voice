@@ -16,9 +16,11 @@ import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import java.io.File;
 
+import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.MediaPlay;
 import de.ph1b.audiobook.helper.BookDetail;
@@ -104,10 +106,15 @@ public class AudioPlayerService extends Service {
             if (newBookId != bookId) {
                 bookId = newBookId;
                 book = db.getBook(bookId);
-                MediaDetail[] allMedia = db.getMediaFromBook(bookId);
-
-                playbackService.initBook(book, allMedia);
-                playbackService.prepare(book.getPosition());
+                if (book != null) {
+                    if (BuildConfig.DEBUG)
+                        Log.d(TAG, "book with id is != null:" + bookId);
+                    MediaDetail[] allMedia = db.getMediaFromBook(bookId);
+                    playbackService.initBook(book, allMedia);
+                    playbackService.prepare(book.getPosition());
+                } else if (BuildConfig.DEBUG) {
+                    Log.d(TAG, "Book of bookId " + bookId + " is null");
+                }
             }
         }
 

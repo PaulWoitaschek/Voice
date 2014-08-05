@@ -255,7 +255,6 @@ public class MediaView extends ActionBarActivity {
         final BookDetail b = db.getBook(position);
 
         if (b != null) {
-
             Intent i = new Intent(getApplicationContext(), AudioPlayerService.class);
             i.putExtra(AudioPlayerService.BOOK_ID, b.getId());
             startService(i);
