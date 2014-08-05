@@ -160,7 +160,6 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             if (position != oldPosition) {
-                                //int newMediaId = allMedia[(int) id].getId();
                                 int newMediaId = allMedia[position].getId();
                                 Intent i = new Intent(AudioPlayerService.CONTROL_CHANGE_BOOK_POSITION);
                                 i.putExtra(AudioPlayerService.CONTROL_CHANGE_BOOK_POSITION, newMediaId);
