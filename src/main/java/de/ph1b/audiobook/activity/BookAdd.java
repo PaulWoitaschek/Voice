@@ -98,8 +98,10 @@ public class BookAdd extends ActionBarActivity {
 
         //genBitmapFromLocal();
         if (isOnline()) {
+            setCoverLoading(true);
             genBitmapFromInternet(fieldName.getText().toString());
         } else {
+            setCoverLoading(false);
             genBitmapFromLocal();
             coverView.setImageBitmap(bitmapList.get(0));
         }
