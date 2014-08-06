@@ -32,7 +32,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.helper.BookDetail;
-import de.ph1b.audiobook.helper.CommonTasks;
 import de.ph1b.audiobook.helper.DataBaseHelper;
 import de.ph1b.audiobook.helper.MediaDetail;
 import de.ph1b.audiobook.receiver.RemoteControlReceiver;
@@ -82,7 +81,7 @@ public class PlaybackService {
     @SuppressLint("NewApi")
     public PlaybackService(Context context) {
         String TAG = PlaybackService.TAG + "PlaybackService()";
-        CommonTasks.logD(TAG, "Initialiszing new PlaybackService");
+        if (BuildConfig.DEBUG) Log.d(TAG, "Initialiszing new PlaybackService");
 
         this.context = context;
         shouldUpdateCover = true;
@@ -106,7 +105,7 @@ public class PlaybackService {
     private final BroadcastReceiver audioBecomingNoisyReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            CommonTasks.logD(TAG, "audio becoming noisy!");
+            if (BuildConfig.DEBUG) Log.d(TAG, "audio becoming noisy!");
             if (StateManager.getState() == PlayerStates.STARTED)
                 pauseBecauseHeadset = true;
             pause();
@@ -130,7 +129,7 @@ public class PlaybackService {
                                 boolean resumeOnReplug = sharedPref.getBoolean(context.getString(R.string.pref_resume_on_replug), true);
                                 if (resumeOnReplug) {
                                     play();
-                                    CommonTasks.logD(TAG, "Resuming player because headset was replugged");
+                                    if (BuildConfig.DEBUG) Log.d(TAG, "Resuming player because headset was replugged");
                                 }
                                 pauseBecauseHeadset = false;
                             }
@@ -193,7 +192,7 @@ public class PlaybackService {
 
             reset();
 
-            CommonTasks.logD(TAG, "creating new player");
+            if (BuildConfig.DEBUG) Log.d(TAG, "creating new player");
             if (StateManager.getState() == PlayerStates.END)
                 mediaPlayer = new MediaPlayer();
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -211,7 +210,7 @@ public class PlaybackService {
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    CommonTasks.logD(TAG, "Next Song by onCompletion");
+                    if (BuildConfig.DEBUG) Log.d(TAG, "Next Song by onCompletion");
                     media.setPosition(0);
                     db.updateMediaAsync(media);
                     nextSong();
@@ -230,7 +229,7 @@ public class PlaybackService {
             if (state == PlayerStates.STARTED)
                 pause();
             if (state == PlayerStates.IDLE || state == PlayerStates.PREPARED || state == PlayerStates.STARTED || state == PlayerStates.PAUSED) {
-                CommonTasks.logD(TAG, "resetting player");
+                if (BuildConfig.DEBUG) Log.d(TAG, "resetting player");
                 mediaPlayer.reset();
                 StateManager.setState(PlayerStates.IDLE);
             }
@@ -261,7 +260,7 @@ public class PlaybackService {
             public void run() {
                 playerLock.lock();
                 try {
-                    CommonTasks.logD(TAG, "Good night everyone");
+                    if (BuildConfig.DEBUG) Log.d(TAG, "Good night everyone");
                     reset();
                     if (StateManager.getState() == PlayerStates.IDLE) {
                         mediaPlayer.release();
@@ -272,7 +271,7 @@ public class PlaybackService {
                 }
             }
         };
-        CommonTasks.logD(TAG, "I should fall asleep after " + sleepTime / 1000 + " s");
+        if (BuildConfig.DEBUG) Log.d(TAG, "I should fall asleep after " + sleepTime / 1000 + " s");
         sandman.schedule(sleepSand, sleepTime);
     }
 
@@ -358,7 +357,7 @@ public class PlaybackService {
                     if (StateManager.getState() == PlayerStates.STARTED) {
                         wasPlaying = true;
                     }
-                    CommonTasks.logD(TAG, "preparing now");
+                    if (BuildConfig.DEBUG) Log.d(TAG, "preparing now");
                     prepare(allIds[i + 1]);
                     book.setPosition(media.getId());
                     db.updateBookAsync(book);
@@ -402,7 +401,7 @@ public class PlaybackService {
             switch (StateManager.getState()) {
                 case PREPARED:
                 case PAUSED:
-                    CommonTasks.logD(TAG, "starting mediaplayer");
+                    if (BuildConfig.DEBUG) Log.d(TAG, "starting mediaplayer");
                     mediaPlayer.start();
                     StateManager.setState(PlayerStates.STARTED);
 
@@ -414,12 +413,12 @@ public class PlaybackService {
                     //requesting audio-focus and setting up lock-screen-controls
                     if (audioFocus != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
                         audioFocus = audioManager.requestAudioFocus(audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-                        CommonTasks.logD(TAG, "Audio-focus granted. Setting up RemoteControlClient");
+                        if (BuildConfig.DEBUG) Log.d(TAG, "Audio-focus granted. Setting up RemoteControlClient");
 
                         audioManager.registerMediaButtonEventReceiver(myEventReceiver);
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                            CommonTasks.logD(TAG, "Setting up remote Control Client");
+                            if (BuildConfig.DEBUG) Log.d(TAG, "Setting up remote Control Client");
                             audioManager.registerRemoteControlClient(mRemoteControlClient);
                             mRemoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
                         }
@@ -473,7 +472,7 @@ public class PlaybackService {
 
                 //saves current position, then pauses
                 int position = mediaPlayer.getCurrentPosition();
-                CommonTasks.logD(TAG, "setting position to " + position);
+                if (BuildConfig.DEBUG) Log.d(TAG, "setting position to " + position);
                 if (position > 0) {
                     media.setPosition(position);
                     db.updateMediaAsync(media);
@@ -546,7 +545,7 @@ public class PlaybackService {
             PlayerStates state = StateManager.getState();
             if (state == PlayerStates.STARTED || state == PlayerStates.PREPARED || state == PlayerStates.PAUSED) {
                 mediaPlayer.seekTo(position);
-                CommonTasks.logD(TAG, "setting position to " + position + " by changePosition");
+                if (BuildConfig.DEBUG) Log.d(TAG, "setting position to " + position + " by changePosition");
                 media.setPosition(position);
                 db.updateMediaAsync(media);
             }
@@ -600,12 +599,12 @@ public class PlaybackService {
         public void onAudioFocusChange(int focusChange) {
             switch (focusChange) {
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                    CommonTasks.logD(TAG, "Paused by audio-focus loss transient.");
+                    if (BuildConfig.DEBUG) Log.d(TAG, "Paused by audio-focus loss transient.");
                     pause();
                     lastState = focusChange;
                     break;
                 case AudioManager.AUDIOFOCUS_GAIN:
-                    CommonTasks.logD(TAG, "started by audioFocus gained");
+                    if (BuildConfig.DEBUG) Log.d(TAG, "started by audioFocus gained");
                     switch (lastState) {
                         case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                             play();
@@ -618,11 +617,11 @@ public class PlaybackService {
                     }
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS:
-                    CommonTasks.logD(TAG, "paused by audiofocus loss");
+                    if (BuildConfig.DEBUG) Log.d(TAG, "paused by audiofocus loss");
                     pause();
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                    CommonTasks.logD(TAG, "audio focus loss transient can duck");
+                    if (BuildConfig.DEBUG) Log.d(TAG, "audio focus loss transient can duck");
                     audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
                     lastState = focusChange;
                     break;

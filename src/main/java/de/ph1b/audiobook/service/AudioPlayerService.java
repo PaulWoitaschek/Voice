@@ -24,7 +24,6 @@ import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.MediaPlay;
 import de.ph1b.audiobook.helper.BookDetail;
-import de.ph1b.audiobook.helper.CommonTasks;
 import de.ph1b.audiobook.helper.DataBaseHelper;
 import de.ph1b.audiobook.helper.MediaDetail;
 
@@ -91,17 +90,18 @@ public class AudioPlayerService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
 
-        CommonTasks.logD(TAG, "onStartCommand was called");
+        if (BuildConfig.DEBUG) Log.d(TAG, "onStartCommand was called");
         //serviceRunning = true;
 
         if (playbackService == null) {
             playbackService = new PlaybackService(this);
-            CommonTasks.logD(TAG, "Started new playback service");
+            if (BuildConfig.DEBUG) Log.d(TAG, "Started new playback service");
         }
 
         if (intent != null && intent.hasExtra(BOOK_ID)) {
             int newBookId = intent.getIntExtra(BOOK_ID, 0);
-            CommonTasks.logD(TAG, "Old bookId: " + bookId + ", new bookId: " + newBookId + ", state: " + StateManager.getState());
+            if (BuildConfig.DEBUG)
+                Log.d(TAG, "Old bookId: " + bookId + ", new bookId: " + newBookId + ", state: " + StateManager.getState());
 
             if (newBookId != bookId) {
                 bookId = newBookId;

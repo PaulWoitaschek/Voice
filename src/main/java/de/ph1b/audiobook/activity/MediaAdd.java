@@ -162,9 +162,11 @@ public class MediaAdd extends ActionBarActivity implements CompoundButton.OnChec
 
     private void addMediaBundle(ArrayList<File> dirAddList) {
         Collections.sort(dirAddList, new NaturalOrderComparator<File>());
-        CommonTasks.logD(TAG, "Sorted dirAddList :");
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "Sorted dirAddList :");
         for (File f : dirAddList) {
-            CommonTasks.logD(TAG, f.getAbsolutePath());
+            if (BuildConfig.DEBUG)
+                Log.d(TAG, f.getAbsolutePath());
         }
 
         ArrayList<File> files = dirsToFiles(filterShowAudioAndFolder, dirAddList, AUDIO);
@@ -284,7 +286,8 @@ public class MediaAdd extends ActionBarActivity implements CompoundButton.OnChec
         }
         Collections.sort(returnList, new NaturalOrderComparator<File>());
         for (File f : returnList)
-            CommonTasks.logD(TAG, f.getAbsolutePath());
+            if (BuildConfig.DEBUG)
+                Log.d(TAG, f.getAbsolutePath());
         endList.addAll(returnList);
     }
 
@@ -298,15 +301,18 @@ public class MediaAdd extends ActionBarActivity implements CompoundButton.OnChec
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        CommonTasks.logD(TAG, String.valueOf(isChecked));
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, String.valueOf(isChecked));
         fileListView.getPositionForView(buttonView);
     }
 
     public void checkStateChanged(ArrayList<File> dirAddList) {
         this.dirAddList = dirAddList;
-        CommonTasks.logD(TAG, "checkStateChange was called");
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "checkStateChange was called");
         if (dirAddList.size() > 0 && mActionModeCallback == null) {
-            CommonTasks.logD(TAG, "Starting new ActionMode");
+            if (BuildConfig.DEBUG)
+                Log.d(TAG, "Starting new ActionMode");
             mActionModeCallback = new ActionMode.Callback() {
 
                 @Override
@@ -326,7 +332,7 @@ public class MediaAdd extends ActionBarActivity implements CompoundButton.OnChec
                     switch (item.getItemId()) {
                         case R.id.action_add_badge:
                             for (File f : MediaAdd.this.dirAddList)
-                                CommonTasks.logD(TAG, "Adding: " + f.getAbsolutePath());
+                                if (BuildConfig.DEBUG) Log.d(TAG, "Adding: " + f.getAbsolutePath());
                             addMediaBundle(MediaAdd.this.dirAddList);
                             mode.finish();
                             return true;

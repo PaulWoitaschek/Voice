@@ -17,6 +17,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.helper.BookDetail;
 import de.ph1b.audiobook.helper.CommonTasks;
@@ -111,7 +113,8 @@ public class BookAdd extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 int size = bitmapList.size();
-                CommonTasks.logD(TAG, "pressed next cover, current position and size is: " + coverPosition + ", " + size);
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "pressed next cover, current position and size is: " + coverPosition + ", " + size);
                 if (size > 0 && coverPosition + 1 < size) {
                     setCoverLoading(false);
                     coverPosition++;
@@ -129,7 +132,8 @@ public class BookAdd extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 int size = bitmapList.size();
-                CommonTasks.logD(TAG, "pressed previous cover, current position and size is: " + coverPosition + ", " + size);
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "pressed previous cover, current position and size is: " + coverPosition + ", " + size);
                 if (size > 0 && coverPosition > 0) {
                     setCoverLoading(false);
                     coverPosition--;
@@ -187,7 +191,8 @@ public class BookAdd extends ActionBarActivity {
                 }
             }
         } catch (Exception e) {
-            CommonTasks.logD(TAG, e.getMessage());
+            if (BuildConfig.DEBUG)
+                Log.d(TAG, e.getMessage());
         }
         return "";
     }
@@ -202,7 +207,8 @@ public class BookAdd extends ActionBarActivity {
                     URL searchUrl = new URL(
                             "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&imgsz=large|xlarge&rsz=1&q=" + URLEncoder.encode(searchText, "UTF-8") + "&start=" + pageCounter++ + "&userip=" + getIPAddress());
 
-                    CommonTasks.logD(TAG, searchUrl.toString());
+                    if (BuildConfig.DEBUG)
+                        Log.d(TAG, searchUrl.toString());
                     URLConnection connection = searchUrl.openConnection();
 
                     String line;
@@ -219,7 +225,8 @@ public class BookAdd extends ActionBarActivity {
                     String imageUrl = results.getJSONObject(0).getString("url");
 
                     if (imageUrl != null) {
-                        CommonTasks.logD(TAG, imageUrl);
+                        if (BuildConfig.DEBUG)
+                            Log.d(TAG, imageUrl);
 
                         URL url = new URL(imageUrl);
                         Bitmap coverBmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
@@ -227,7 +234,8 @@ public class BookAdd extends ActionBarActivity {
                         return coverBmp;
                     }
                 } catch (Exception e) {
-                    CommonTasks.logD(TAG, e.toString());
+                    if (BuildConfig.DEBUG)
+                        Log.d(TAG, e.toString());
                 }
                 return null;
             }
@@ -267,18 +275,21 @@ public class BookAdd extends ActionBarActivity {
             String path = f1.getAbsolutePath();
             MediaMetadataRetriever mmr = new MediaMetadataRetriever();
             mmr.setDataSource(path);
-            CommonTasks.logD(TAG, "getting embedded picture of " + path);
+            if (BuildConfig.DEBUG)
+                Log.d(TAG, "getting embedded picture of " + path);
             byte[] data = mmr.getEmbeddedPicture();
             if (data != null) {
                 try {
-                    CommonTasks.logD(TAG, "Data is not null!");
+                    if (BuildConfig.DEBUG)
+                        Log.d(TAG, "Data is not null!");
                     Bitmap cover = BitmapFactory.decodeByteArray(data, 0, data.length);
                     if (cover != null) {
                         bitmapList.add(cover);
                         break;
                     }
                 } catch (Exception e) {
-                    CommonTasks.logD(TAG, e.toString());
+                    if (BuildConfig.DEBUG)
+                        Log.d(TAG, e.toString());
                 }
             }
         }
@@ -451,7 +462,8 @@ public class BookAdd extends ActionBarActivity {
             thumbOut.close();
             coverPath = imageFile.getAbsolutePath();
             thumbPath = thumbFile.getAbsolutePath();
-            CommonTasks.logD(TAG, "Saving image: " + coverPath);
+            if (BuildConfig.DEBUG)
+                Log.d(TAG, "Saving image: " + coverPath);
         } catch (IOException e) {
             e.printStackTrace();
         }

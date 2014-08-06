@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +13,11 @@ import android.widget.TextView;
 import java.io.File;
 import java.util.ArrayList;
 
+import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.MediaAdd;
-import de.ph1b.audiobook.helper.CommonTasks;
 
-public class FileAdapter extends BaseAdapter{
+public class FileAdapter extends BaseAdapter {
 
     private final ArrayList<File> data;
     private final Context c;
@@ -76,7 +77,8 @@ public class FileAdapter extends BaseAdapter{
                 for (int i = 0; i < checked.length; i++) {
                     if (checked[i]) {
                         dirAddList.add(data.get(i));
-                        CommonTasks.logD(TAG, "data is checked: " + data.get(i).getAbsolutePath());
+                        if (BuildConfig.DEBUG)
+                            Log.d(TAG, "data is checked: " + data.get(i).getAbsolutePath());
                     }
                 }
                 ((MediaAdd) c).checkStateChanged(dirAddList);
@@ -103,9 +105,9 @@ public class FileAdapter extends BaseAdapter{
     }
 
     public void clearCheckBoxes() {
-        CommonTasks.logD(TAG, "clearCheckBoxes() was called!");
+        if (BuildConfig.DEBUG) Log.d(TAG, "clearCheckBoxes() was called!");
         //for (int i = 0; i < getCount(); i++)
-          //  checked[i] = false;
+        //  checked[i] = false;
         checked = new boolean[getCount()];
         notifyDataSetChanged();
     }

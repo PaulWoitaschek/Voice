@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.Menu;
@@ -34,6 +35,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
 
+import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.MediaAdapter;
 import de.ph1b.audiobook.helper.BookDetail;
@@ -62,10 +64,7 @@ public class MediaView extends ActionBarActivity {
     private TextView currentText;
     private ImageButton currentPlaying;
 
-
     private LinearLayout current;
-
-    //private static final String TAG = "MediaView";
 
 
     @Override
@@ -122,7 +121,8 @@ public class MediaView extends ActionBarActivity {
                         for (BookDetail b : deleteList) {
                             //setting visibility of play list at bottom to gone if book is gone
                             if (b.getId() == position) {
-                                CommonTasks.logD(TAG, "Deleted Book that is marked as current with ID: " + position);
+                                if (BuildConfig.DEBUG)
+                                    Log.d(TAG, "Deleted Book that is marked as current with ID: " + position);
                                 current.setVisibility(View.GONE);
                             }
                             details.remove(b);

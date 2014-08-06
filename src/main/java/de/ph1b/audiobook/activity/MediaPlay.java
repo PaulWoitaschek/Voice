@@ -14,6 +14,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -206,7 +207,7 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
 
             if (action.equals(PlaybackService.GUI_MAKE_TOAST)) {
                 String text = intent.getStringExtra(PlaybackService.GUI_MAKE_TOAST);
-                CommonTasks.logD(TAG, "Received text for toast: " + text);
+                if (BuildConfig.DEBUG) Log.d(TAG, "Received text for toast: " + text);
                 makeToast(text, Toast.LENGTH_SHORT);
             }
         }
