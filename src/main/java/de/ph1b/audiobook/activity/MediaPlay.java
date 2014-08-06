@@ -207,7 +207,8 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
 
             if (action.equals(PlaybackService.GUI_MAKE_TOAST)) {
                 String text = intent.getStringExtra(PlaybackService.GUI_MAKE_TOAST);
-                if (BuildConfig.DEBUG) Log.d(TAG, "Received text for toast: " + text);
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "Received text for toast: " + text);
                 makeToast(text, Toast.LENGTH_SHORT);
             }
         }
