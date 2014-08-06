@@ -22,12 +22,14 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.locks.ReentrantLock;
 
+import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.helper.BookDetail;
 import de.ph1b.audiobook.helper.CommonTasks;
@@ -61,8 +63,6 @@ public class PlaybackService {
     private BookDetail book;
     private final DataBaseHelper db;
     private final Handler handler = new Handler();
-
-    private final static int CHANGE_TIME_AMOUNT = 20000;
 
     private RemoteControlClient mRemoteControlClient;
 
@@ -282,7 +282,11 @@ public class PlaybackService {
             PlayerStates state = StateManager.getState();
             if (state == PlayerStates.STARTED || state == PlayerStates.PREPARED || state == PlayerStates.PAUSED) {
                 int position = mediaPlayer.getCurrentPosition();
-                int newPosition = position + CHANGE_TIME_AMOUNT;
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+                int changeTimeAmount = sharedPref.getInt(context.getString(R.string.pref_change_amount), 20) * 1000;
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "Fast Forward by " + changeTimeAmount);
+                int newPosition = position + changeTimeAmount;
                 if (newPosition < 0)
                     newPosition = 0;
                 mediaPlayer.seekTo(newPosition);
@@ -302,7 +306,11 @@ public class PlaybackService {
             PlayerStates state = StateManager.getState();
             if (state == PlayerStates.STARTED || state == PlayerStates.PREPARED || state == PlayerStates.PAUSED) {
                 int position = mediaPlayer.getCurrentPosition();
-                int newPosition = position - CHANGE_TIME_AMOUNT;
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+                int changeTimeAmount = sharedPref.getInt(context.getString(R.string.pref_change_amount), 20) * 1000;
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "Rewind by " + changeTimeAmount);
+                int newPosition = position - changeTimeAmount;
                 if (newPosition < 0)
                     newPosition = 0;
                 mediaPlayer.seekTo(newPosition);

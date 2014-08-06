@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MaterialPlayer</string>
-    <string name="action_add">Add media</string>
-    <string name="zeroTime">0:00:00</string>
-    <string name="cover">Cover</string>
-    <string name="play">Play / Pause</string>
+    <string translatable="false" name="app_name">MaterialPlayer</string>
+    <string translatable="false" name="action_add">Add media</string>
+    <string translatable="false" name="zeroTime">0:00:00</string>
+    <string translatable="false" name="cover">Cover</string>
+    <string translatable="false" name="play">Play / Pause</string>
+    <string translatable="false" name="pref_change_amount">CHANGE_AMOUNT</string>
 
     <string name="action_settings">Settings</string>
     <string name="back">Back</string>
@@ -48,5 +49,7 @@
     <string name="content_next_cover">Chooses next cover</string>
     <string name="content_cover">Shows cover to choose</string>
 
+    <string name="change_forward_amount">Fast forward</string>
+    <string name="change_forward_amount_hint">Defines how many seconds to skip when pressing fast forward.</string>
 
 </resources>

@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MaterialPlayer</string>
-    <string name="action_add">Dateien hinzufügen</string>
-    <string name="zeroTime">0:00:00</string>
-    <string name="cover">Cover</string>
-    <string name="play">Play / Pause</string>
-
     <string name="action_settings">Einstellungen</string>
     <string name="back">Zurück</string>
     <string name="forward">Nächster Song</string>
@@ -47,5 +41,9 @@
     <string name="content_previous_cover">Wählt voriges Cover</string>
     <string name="content_next_cover">Wählt nächstes Cover</string>
     <string name="content_cover">Zeigt aktuelles Cover an</string>
+
+    <string name="change_forward_amount">Vorspulen</string>
+    <string name="change_forward_amount_hint">Legt fest, um wie viele Sekunden beim Vorspulen gesprungen wird</string>
+
 
 </resources>
