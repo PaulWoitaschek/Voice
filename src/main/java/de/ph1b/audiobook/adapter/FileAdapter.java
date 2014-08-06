@@ -105,8 +105,9 @@ public class FileAdapter extends BaseAdapter {
     }
 
     public void clearCheckBoxes() {
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "clearCheckBoxes() was called!");
+        if (BuildConfig.DEBUG) Log.d(TAG, "clearCheckBoxes() was called!");
+        //for (int i = 0; i < getCount(); i++)
+        //  checked[i] = false;
         checked = new boolean[getCount()];
         notifyDataSetChanged();
     }
