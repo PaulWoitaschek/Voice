@@ -90,12 +90,13 @@ public class AudioPlayerService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "onStartCommand was called");
-        //serviceRunning = true;
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "onStartCommand was called");
 
         if (playbackService == null) {
             playbackService = new PlaybackService(this);
-            if (BuildConfig.DEBUG) Log.d(TAG, "Started new playback service");
+            if (BuildConfig.DEBUG)
+                Log.d(TAG, "Started new playback service");
         }
 
         if (intent != null && intent.hasExtra(BOOK_ID)) {
