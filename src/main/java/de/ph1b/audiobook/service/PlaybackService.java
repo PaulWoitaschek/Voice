@@ -177,8 +177,7 @@ public class PlaybackService {
 
     public void prepare(int mediaId) {
         if (StateManager.getState() == PlayerStates.STARTED) {
-            mediaPlayer.pause();
-            StateManager.setState(PlayerStates.PAUSED);
+            pause();
         }
 
         playerLock.lock();
