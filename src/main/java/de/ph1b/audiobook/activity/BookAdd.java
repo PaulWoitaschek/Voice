@@ -98,7 +98,6 @@ public class BookAdd extends ActionBarActivity {
         fieldName = (EditText) findViewById(R.id.book_name);
         fieldName.setText(defaultName);
 
-        //genBitmapFromLocal();
         if (isOnline()) {
             setCoverLoading(true);
             genBitmapFromInternet(fieldName.getText().toString());
