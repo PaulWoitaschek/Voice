@@ -27,6 +27,8 @@
     <string name="action_jump_to">Zu Stelle springen</string>
     <string name="hours">stunden</string>
     <string name="minutes">minuten</string>
+    <string name="seconds">Sekunden</string>
+
 
     <string name="file_not_found">Das Hörbuch konnte nicht gefunden werden. Bitte fügen Sie es erneut hinzu.</string>
 

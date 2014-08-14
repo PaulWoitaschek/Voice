@@ -28,10 +28,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
@@ -60,7 +56,6 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
     private Spinner bookSpinner;
     private TextView maxTimeView;
     private int position;
-    private View adBorderBottom;
 
     private LocalBroadcastManager bcm;
 
@@ -75,7 +70,6 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
     private MediaDetail media;
 
     private int duration;
-    private AdView adView;
 
 
     private final BroadcastReceiver updateGUIReceiver = new BroadcastReceiver() {
@@ -157,6 +151,10 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
                     int currentPosition = b.getPosition();
                     bookSpinner.setSelection(adapter.getPositionByMediaDetailId(currentPosition));
                     bookSpinner.setAdapter(adapter);
+                    //sets correct position in spinner
+                    if (allMedia.length > 1) {
+                        bookSpinner.setSelection(adapter.getPositionByMediaDetailId(mediaId));
+                    }
                     bookSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -185,10 +183,6 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
                 duration = media.getDuration();
                 maxTimeView.setText(formatTime(duration));
 
-                //sets correct position in spinner
-                if (allMedia.length > 1) {
-                    bookSpinner.setSelection(adapter.getPositionByMediaDetailId(mediaId));
-                }
 
                 //sets seekBar to current position and correct length
                 seek_bar.setMax(duration);
@@ -227,32 +221,6 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media_player);
         new CommonTasks().checkExternalStorage(this);
-
-        //setting up ads; hide border dynamically
-        adBorderBottom = this.findViewById(R.id.ad_border_bottom);
-        adView = (AdView) this.findViewById(R.id.adView);
-        AdRequest.Builder builder = new AdRequest.Builder();
-        // if in debug use test device
-        if (BuildConfig.DEBUG) {
-            builder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                    .addTestDevice("519E06DCB5FBBF75CBDD11B9FA4571D2");
-        }
-        AdRequest adRequest = builder.build();
-
-        adView.loadAd(adRequest);
-        adView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-                adBorderBottom.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                super.onAdFailedToLoad(errorCode);
-                adBorderBottom.setVisibility(View.GONE);
-            }
-        });
 
         bcm = LocalBroadcastManager.getInstance(this);
 
@@ -383,7 +351,6 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
 
     @Override
     public void onDestroy() {
-        adView.destroy();
         bcm.unregisterReceiver(updateGUIReceiver);
 
         super.onDestroy();
@@ -398,8 +365,6 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
         Intent serviceIntent = new Intent(this, AudioPlayerService.class);
         serviceIntent.putExtra(AudioPlayerService.BOOK_ID, bookId);
         startService(serviceIntent);
-
-        adView.resume();
 
         Intent pokeIntent = new Intent(AudioPlayerService.CONTROL_POKE_UPDATE);
         pokeIntent.setAction(AudioPlayerService.CONTROL_POKE_UPDATE);
@@ -425,7 +390,6 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
 
     @Override
     public void onPause() {
-        adView.pause();
         bcm.unregisterReceiver(updateGUIReceiver);
         super.onPause();
     }

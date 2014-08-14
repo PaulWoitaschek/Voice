@@ -3,6 +3,7 @@ package de.ph1b.audiobook.fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.DialogPreference;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -26,7 +27,7 @@ public class SeekAmountPreference extends DialogPreference {
     }
 
     @Override
-    protected void onBindDialogView(View view) {
+    protected void onBindDialogView(@NonNull View view) {
         super.onBindDialogView(view);
         seekBar = (SeekBar) view.findViewById(R.id.change_forward_amount);
         final TextView textView = (TextView) view.findViewById(R.id.change_forward_text_amount);
@@ -36,12 +37,13 @@ public class SeekAmountPreference extends DialogPreference {
         int position = sp.getInt(getContext().getString(R.string.pref_change_amount), 20);
         seekBar.setProgress(position - SEEK_BAR_MIN);
 
-        textView.setText(String.valueOf(seekBar.getProgress() + SEEK_BAR_MIN));
+
+        textView.setText(String.valueOf(seekBar.getProgress() + SEEK_BAR_MIN) + " " + getContext().getString(R.string.seconds)  );
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                textView.setText(String.valueOf(progress + SEEK_BAR_MIN));
+                textView.setText(String.valueOf(progress + SEEK_BAR_MIN) + " " + getContext().getString(R.string.seconds));
             }
 
             @Override
@@ -62,7 +64,7 @@ public class SeekAmountPreference extends DialogPreference {
 
         if (positiveResult) {
             int seekAmount = seekBar.getProgress();
-            if (seekAmount > 0){
+            if (seekAmount > 0) {
                 SharedPreferences.Editor editor = getEditor();
                 editor.putInt(getContext().getString(R.string.pref_change_amount), seekAmount + SEEK_BAR_MIN);
                 editor.apply();

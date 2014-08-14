@@ -82,7 +82,7 @@ public class PlaybackService {
     public PlaybackService(Context context) {
         String TAG = PlaybackService.TAG + "PlaybackService()";
         if (BuildConfig.DEBUG)
-            Log.d(TAG, "Initialiszing new PlaybackService");
+            Log.d(TAG, "Initializing new PlaybackService");
 
         this.context = context;
         shouldUpdateCover = true;
@@ -410,7 +410,7 @@ public class PlaybackService {
                 case PREPARED:
                 case PAUSED:
                     if (BuildConfig.DEBUG)
-                        Log.d(TAG, "starting mediaplayer");
+                        Log.d(TAG, "starting MediaPlayer");
                     mediaPlayer.start();
                     StateManager.setState(PlayerStates.STARTED);
 
@@ -633,7 +633,7 @@ public class PlaybackService {
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS:
                     if (BuildConfig.DEBUG)
-                        Log.d(TAG, "paused by audiofocus loss");
+                        Log.d(TAG, "paused by audioFocus loss");
                     pause();
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:

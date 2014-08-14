@@ -15,12 +15,6 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
 
-        <meta-data android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
-
-        <activity android:name="com.google.android.gms.ads.AdActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
-
         <activity
             android:name=".activity.MediaView"
             android:label="@string/app_name">
@@ -58,7 +52,8 @@
             android:name=".activity.Preferences"
             android:label="Preferences" />
 
-        <activity android:name=".activity.NoExternalStorage"
+        <activity
+            android:name=".activity.NoExternalStorage"
             android:label="@string/app_name" />
 
         <service android:name=".service.AudioPlayerService" />

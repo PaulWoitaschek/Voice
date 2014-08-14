@@ -34,6 +34,7 @@
     <string name="action_jump_to">Position changer</string>
     <string name="hours">hours</string>
     <string name="minutes">minutes</string>
+    <string name="seconds">Seconds</string>
 
     <string name="file_not_found">It seems that the audiobook cannot be found on storage. Please re-add the audiobook.</string>
 

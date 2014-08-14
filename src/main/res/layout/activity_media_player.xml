@@ -20,25 +20,9 @@
         android:contentDescription="@string/cover"
         android:scaleType="centerCrop" />
 
-
     <View
-        android:id="@+id/ad_border_top"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@color/holo_blue_dark" />
-
-    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/adView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        ads:adSize="SMART_BANNER"
-        ads:adUnitId="ca-app-pub-3446180126620439/6581449147" />
-
-    <View
-        android:id="@+id/ad_border_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:visibility="gone"
         android:background="@color/holo_blue_dark" />
 
     <Spinner
@@ -66,20 +50,20 @@
                 android:id="@+id/played"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="2dp"
                 android:text="@string/zeroTime" />
 
             <SeekBar
                 android:id="@+id/seekBar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:layout_marginRight="2dp"
+                android:layout_marginLeft="2dp" />
 
             <TextView
                 android:id="@+id/maxTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="2dp"
                 android:text="@string/zeroTime" />
         </LinearLayout>
 
