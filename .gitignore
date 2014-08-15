@@ -1,4 +1,4 @@
-/build
-AudioBook.iml
-audiobook.iml
-app.iml
+audiobook/build
+build
+*.iml
+gradle/

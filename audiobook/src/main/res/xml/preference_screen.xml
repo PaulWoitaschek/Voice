@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:key="@string/pref_resume_on_replug"
+        android:title="@string/pref_resume_on_replug"
+        android:summary="@string/pref_resume_on_replug_hint"
+        android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="@string/pref_cover_on_internet"
+        android:title="@string/pref_cover_on_internet"
+        android:summary="@string/pref_cover_on_internet_hint"
+        android:defaultValue="true" />
+    <de.ph1b.audiobook.fragment.SeekAmountPreference
+        android:title="@string/change_forward_amount"
+        android:summary="@string/change_forward_amount_hint"
+
+        />
+</PreferenceScreen>
+
+
