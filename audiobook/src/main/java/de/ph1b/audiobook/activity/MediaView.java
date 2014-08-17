@@ -57,8 +57,8 @@ public class MediaView extends ActionBarActivity {
     private LocalBroadcastManager bcm;
     private static final String TAG = "de.ph1b.audiobook.MediaView";
 
-    private static final String SHARED_PREFS = "sharedPreferences";
-    private static final String SHARED_PREFS_CURRENT = "sharedPreferencesCurrent";
+    public static final String SHARED_PREFS = "sharedPreferences";
+    public static final String SHARED_PREFS_CURRENT = "sharedPreferencesCurrent";
 
     private ImageView currentCover;
     private TextView currentText;
