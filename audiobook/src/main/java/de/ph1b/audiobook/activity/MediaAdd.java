@@ -206,13 +206,9 @@ public class MediaAdd extends ActionBarActivity implements CompoundButton.OnChec
                     for (File f : files) {
                         dirAddAsString.add(f.getAbsolutePath());
                     }
-
                     return true;
-
-
-                } else {
+                } else
                     return false;
-                }
             }
 
             @Override
@@ -225,7 +221,7 @@ public class MediaAdd extends ActionBarActivity implements CompoundButton.OnChec
                     startActivity(intent);
                 } else {
 
-                    if (dirs.size() > 0)
+                    if (dirs.size() > 1)
                         dirSpinner.setVisibility(View.VISIBLE);
                     fileListView.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.GONE);
@@ -339,7 +335,7 @@ public class MediaAdd extends ActionBarActivity implements CompoundButton.OnChec
     @Override
     public void onResume() {
         super.onResume();
-        if (dirs.size() > 0)
+        if (dirs.size() > 1)
             dirSpinner.setVisibility(View.VISIBLE);
         fileListView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
