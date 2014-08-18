@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,7 +15,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -61,33 +61,31 @@ public class BookAdd extends ActionBarActivity {
     private EditText fieldName;
 
     private final DataBaseHelper db = DataBaseHelper.getInstance(this);
-    private LocalBroadcastManager bcm;
 
     private static final String TAG = "BookProperties";
     private ArrayList<String> fileFolderPaths;
     private String bookName;
-    public static final String BOOK_ADDED = "bookAdded";
-    private final int MANY_FILES_MIN_AMOUNT = 15;
     private ImageView coverView;
     private ProgressBar coverLoadingBar;
     private int coverPosition = 0;
     private int pageCounter = 0;
 
+    private ProgressDialog progressDialog;
+
     private final ArrayList<Bitmap> bitmapList = new ArrayList<Bitmap>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "started onCreate task!");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_properties);
         new CommonTasks().checkExternalStorage(this);
-
-        bcm = LocalBroadcastManager.getInstance(this);
 
         PreferenceManager.setDefaultValues(this, R.xml.preference_screen, false);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
 
         fileFolderPaths = getIntent().getStringArrayListExtra(MediaAdd.FILES_AS_STRING);
 
@@ -98,14 +96,9 @@ public class BookAdd extends ActionBarActivity {
         fieldName = (EditText) findViewById(R.id.book_name);
         fieldName.setText(defaultName);
 
-        if (isOnline()) {
-            setCoverLoading(true);
-            genBitmapFromInternet(fieldName.getText().toString());
-        } else {
-            setCoverLoading(false);
-            genBitmapFromLocal();
-            coverView.setImageBitmap(bitmapList.get(0));
-        }
+
+        genBitmapFromLocal();
+        coverView.setImageBitmap(bitmapList.get(0));
 
         ImageButton nextCover = (ImageButton) findViewById(R.id.next_cover);
         nextCover.setOnClickListener(new View.OnClickListener() {
@@ -120,7 +113,6 @@ public class BookAdd extends ActionBarActivity {
                     coverView.setImageBitmap(bitmapList.get(coverPosition));
                 } else {
                     if (isOnline() && pageCounter < 64) {
-                        setCoverLoading(true);
                         genBitmapFromInternet(fieldName.getText().toString());
                     }
                 }
@@ -148,13 +140,6 @@ public class BookAdd extends ActionBarActivity {
                 bookName = fieldName.getText().toString();
                 if (!bookName.equals("")) {
                     new AddBookAsync().execute();
-
-                    if (fileFolderPaths.size() > MANY_FILES_MIN_AMOUNT) {
-                        String text = getString(R.string.many_files);
-                        Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
-                        toast.show();
-                    }
-                    startActivity(new Intent(getApplicationContext(), MediaView.class));
                 } else {
                     CharSequence text = getString(R.string.book_add_empty_title);
                     Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
@@ -163,6 +148,8 @@ public class BookAdd extends ActionBarActivity {
                 }
             }
         });
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "finished onCreate task!");
     }
 
     private void setCoverLoading(boolean loading) {
@@ -198,6 +185,12 @@ public class BookAdd extends ActionBarActivity {
 
     private void genBitmapFromInternet(String search) {
         new AsyncTask<String, Void, Bitmap>() {
+
+            @Override
+            protected void onPreExecute() {
+                setCoverLoading(true);
+            }
+
             @Override
             protected Bitmap doInBackground(String... params) {
 
@@ -228,9 +221,7 @@ public class BookAdd extends ActionBarActivity {
                             Log.d(TAG, imageUrl);
 
                         URL url = new URL(imageUrl);
-                        Bitmap coverBmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                        bitmapList.add(coverBmp);
-                        return coverBmp;
+                        return BitmapFactory.decodeStream(url.openConnection().getInputStream());
                     }
                 } catch (Exception e) {
                     if (BuildConfig.DEBUG)
@@ -242,6 +233,7 @@ public class BookAdd extends ActionBarActivity {
             @Override
             protected void onPostExecute(Bitmap result) {
                 if (result != null) {
+                    bitmapList.add(result);
                     coverPosition = bitmapList.indexOf(result);
                     coverView.setImageBitmap(result);
                     setCoverLoading(false);
@@ -252,47 +244,6 @@ public class BookAdd extends ActionBarActivity {
 
 
     private void genBitmapFromLocal() {
-        // makes a file list out of the path names to add
-        ArrayList<File> dirAddList = new ArrayList<File>();
-        for (String s : fileFolderPaths) {
-            dirAddList.add(new File(s));
-        }
-
-        // if an image file is found in any folder, stop there.
-        ArrayList<File> imageList = MediaAdd.dirsToFiles(filterShowImagesAndFolder, dirAddList, MediaAdd.IMAGE);
-        for (File f1 : imageList) {
-            Bitmap cover = BitmapFactory.decodeFile(f1.getAbsolutePath());
-            if (cover != null) {
-                bitmapList.add(cover);
-                break;
-            }
-        }
-
-        // if no image file was found in any folder, search for audio files.
-        ArrayList<File> musicList = MediaAdd.dirsToFiles(MediaAdd.filterShowAudioAndFolder, dirAddList, MediaAdd.AUDIO);
-        for (File f1 : musicList) {
-            String path = f1.getAbsolutePath();
-            MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-            mmr.setDataSource(path);
-            if (BuildConfig.DEBUG)
-                Log.d(TAG, "getting embedded picture of " + path);
-            byte[] data = mmr.getEmbeddedPicture();
-            if (data != null) {
-                try {
-                    if (BuildConfig.DEBUG)
-                        Log.d(TAG, "Data is not null!");
-                    Bitmap cover = BitmapFactory.decodeByteArray(data, 0, data.length);
-                    if (cover != null) {
-                        bitmapList.add(cover);
-                        break;
-                    }
-                } catch (Exception e) {
-                    if (BuildConfig.DEBUG)
-                        Log.d(TAG, e.toString());
-                }
-            }
-        }
-
         // adding canvas with capital to bitmap - list
         if (fieldName != null) {
             String capital = fieldName.getText().toString().substring(0, 1);
@@ -315,13 +266,62 @@ public class BookAdd extends ActionBarActivity {
                 bitmapList.add(cover);
             }
         }
+
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "started async task!");
+                // makes a file list out of the path names to add
+                ArrayList<File> dirAddList = new ArrayList<File>();
+                for (String s : fileFolderPaths) {
+                    dirAddList.add(new File(s));
+                }
+
+                // if an image file is found in any folder, stop there.
+                ArrayList<File> imageList = MediaAdd.dirsToFiles(filterShowImagesAndFolder, dirAddList, MediaAdd.IMAGE);
+                for (File f1 : imageList) {
+                    Bitmap cover = BitmapFactory.decodeFile(f1.getAbsolutePath());
+                    if (cover != null) {
+                        bitmapList.add(cover);
+                        break;
+                    }
+                }
+
+                // if no image file was found in any folder, search for audio files.
+                ArrayList<File> musicList = MediaAdd.dirsToFiles(MediaAdd.filterShowAudioAndFolder, dirAddList, MediaAdd.AUDIO);
+                for (File f1 : musicList) {
+                    String path = f1.getAbsolutePath();
+                    MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+                    mmr.setDataSource(path);
+                    byte[] data = mmr.getEmbeddedPicture();
+                    if (data != null) {
+                        try {
+                            if (BuildConfig.DEBUG)
+                                Log.d(TAG, "Data is not null!");
+                            Bitmap cover = BitmapFactory.decodeByteArray(data, 0, data.length);
+                            if (cover != null) {
+                                bitmapList.add(cover);
+                                break;
+                            }
+                        } catch (Exception e) {
+                            if (BuildConfig.DEBUG)
+                                Log.d(TAG, e.toString());
+                        }
+                    }
+                }
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "finished async task!");
+                return null;
+            }
+        }.execute();
     }
 
     /*
     * returns if the device is online.
     * If setting is set to ignore mobile connection,
     * it will only return true,
-    * if there is a wifi connection    *
+    * if there is a wifi connection
     */
     private boolean isOnline() {
         ConnectivityManager cm =
@@ -336,20 +336,6 @@ public class BookAdd extends ActionBarActivity {
         return isWifi || (useMobileConnection && isMobile);
     }
 
-
-    private ArrayList<MediaDetail> filesToMedia(ArrayList<File> files) {
-        ArrayList<MediaDetail> media = new ArrayList<MediaDetail>();
-        for (File f : files) {
-            MediaDetail m = new MediaDetail();
-            String fileName = f.getName();
-            if (fileName.indexOf(".") > 0)
-                fileName = fileName.substring(0, fileName.lastIndexOf("."));
-            m.setName(fileName);
-            m.setPath(f.getAbsolutePath());
-            media.add(m);
-        }
-        return media;
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -370,7 +356,18 @@ public class BookAdd extends ActionBarActivity {
     }
 
 
-    private class AddBookAsync extends AsyncTask<Void, Void, Void> {
+    private class AddBookAsync extends AsyncTask<Void, Integer, Void> {
+
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(BookAdd.this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setCancelable(false);
+            progressDialog.setTitle(getString(R.string.book_add_progress_title));
+            progressDialog.setMessage(getString(R.string.book_add_progress_message));
+            progressDialog.show();
+        }
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -380,12 +377,23 @@ public class BookAdd extends ActionBarActivity {
                 dirAddList.add(new File(s));
             }
 
-            ArrayList<MediaDetail> mediaList = filesToMedia(dirAddList);
+            ArrayList<MediaDetail> mediaList = new ArrayList<MediaDetail>();
+            for (File f : dirAddList) {
+                MediaDetail m = new MediaDetail();
+                String fileName = f.getName();
+                if (fileName.indexOf(".") > 0)
+                    fileName = fileName.substring(0, fileName.lastIndexOf("."));
+                m.setName(fileName);
+                m.setPath(f.getAbsolutePath());
+                mediaList.add(m);
+            }
 
-            if (mediaList.size() != 0) {
+
+            if (mediaList.size() > 0) {
 
                 int[] mediaIDs = new int[mediaList.size()];
 
+                progressDialog.setMax(mediaList.size() + 1);
                 for (int i = 0; i < mediaList.size(); i++) {
                     MediaDetail m = mediaList.get(i);
 
@@ -396,30 +404,42 @@ public class BookAdd extends ActionBarActivity {
                     m.setDuration(duration);
                     int id = db.addMedia(m);
                     mediaIDs[i] = id;
+                    publishProgress(i + 1);
                 }
 
                 BookDetail b = new BookDetail();
                 b.setName(bookName);
                 b.setMediaIds(mediaIDs);
                 String[] res;
-                if (coverPosition > bitmapList.size()) {
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "bitmap list size is: " + bitmapList.size() + "cover position is:" + coverPosition);
+                if (bitmapList.size() != 0 && coverPosition > bitmapList.size()) {
+                    if (BuildConfig.DEBUG)
+                        Log.d(TAG, "saving bitmap with index 0!");
                     res = saveImages(bitmapList.get(0));
                 } else {
+                    if (BuildConfig.DEBUG)
+                        Log.d(TAG, "saving bitmap with index 0!");
                     res = saveImages(bitmapList.get(coverPosition));
                 }
                 b.setCover(res[0]);
                 b.setThumb(res[1]);
                 b.setMediaIds(mediaIDs);
                 db.addBook(b);
+
             }
             return null;
         }
 
         @Override
+        protected void onProgressUpdate(Integer... progress) {
+            progressDialog.setProgress(progress[0]);
+        }
+
+        @Override
         protected void onPostExecute(Void result) {
-            Intent i = new Intent(BOOK_ADDED);
-            i.setAction(BOOK_ADDED);
-            bcm.sendBroadcast(i);
+            progressDialog.cancel();
+            startActivity(new Intent(getApplicationContext(), MediaView.class));
         }
     }
 
