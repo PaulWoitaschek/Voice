@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.activity.MediaView;
 import de.ph1b.audiobook.helper.BookDetail;
 import de.ph1b.audiobook.helper.DataBaseHelper;
 import de.ph1b.audiobook.service.AudioPlayerService;
@@ -26,7 +27,7 @@ public class WidgetProvider extends AppWidgetProvider {
     private static final String PLAY_CLICK = TAG + ".PLAY_CLICK";
 
 
-    protected PendingIntent getPendingSelfIntent(Context context, String action) {
+    private PendingIntent getPendingSelfIntent(Context context, String action) {
         Intent intent = new Intent(context, getClass());
         intent.setAction(action);
         return PendingIntent.getBroadcast(context, 0, intent, 0);
@@ -56,23 +57,33 @@ public class WidgetProvider extends AppWidgetProvider {
             if (BuildConfig.DEBUG)
                 Log.d(TAG, "clicked play!");
 
-            SharedPreferences settings = context.getSharedPreferences(de.ph1b.audiobook.activity.MediaView.SHARED_PREFS, 0);
-            int position = settings.getInt(de.ph1b.audiobook.activity.MediaView.SHARED_PREFS_CURRENT, -1);
+            SharedPreferences settings = context.getSharedPreferences(MediaView.SHARED_PREFS, 0);
+            int position = settings.getInt(MediaView.SHARED_PREFS_CURRENT, -1);
 
             DataBaseHelper db = DataBaseHelper.getInstance(context);
             final BookDetail b = db.getBook(position);
 
-            if (b != null) {
-                Intent i = new Intent(context, AudioPlayerService.class);
+            Intent i = new Intent(context, AudioPlayerService.class);
+
+            if (b != null) { // if a valid book is found start service
                 i.putExtra(AudioPlayerService.BOOK_ID, b.getId());
                 context.startService(i);
-
                 LocalBroadcastManager bcm = LocalBroadcastManager.getInstance(context);
                 bcm.sendBroadcast(new Intent(AudioPlayerService.CONTROL_PLAY_PAUSE));
-            } else {
-                ArrayList <BookDetail> books = db.getAllBooks();
+            } else { //if no valid book is found search for available books
+                ArrayList<BookDetail> books = db.getAllBooks();
+                if (books.size() > 0) { //if there are valid books start the first one
+                    int bookId = books.get(0).getId();
 
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putInt(MediaView.SHARED_PREFS_CURRENT, bookId);
+                    editor.apply();
 
+                    i.putExtra(AudioPlayerService.BOOK_ID, bookId);
+                    context.startService(i);
+                    LocalBroadcastManager bcm = LocalBroadcastManager.getInstance(context);
+                    bcm.sendBroadcast(new Intent(AudioPlayerService.CONTROL_PLAY_PAUSE));
+                }
             }
         }
     }

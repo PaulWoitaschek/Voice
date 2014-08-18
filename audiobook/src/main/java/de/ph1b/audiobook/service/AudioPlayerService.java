@@ -94,7 +94,7 @@ public class AudioPlayerService extends Service {
             Log.d(TAG, "onStartCommand was called");
 
         if (playbackService == null) {
-            playbackService = new PlaybackService(this, intent);
+            playbackService = new PlaybackService(this);
             if (BuildConfig.DEBUG)
                 Log.d(TAG, "Started new playback service");
         }

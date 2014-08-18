@@ -19,7 +19,6 @@ import android.media.RemoteControlClient;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
@@ -83,10 +82,10 @@ public class PlaybackService {
     private boolean noisyRCRegistered = false;
     private boolean headsetRCRegistered = false;
 
-    private ComponentName widgetComponentName;
+    private final ComponentName widgetComponentName;
 
     @SuppressLint("NewApi")
-    public PlaybackService(final Context context, final Intent intent) {
+    public PlaybackService(final Context context) {
         final String TAG = PlaybackService.TAG + "PlaybackService()";
         if (BuildConfig.DEBUG)
             Log.d(TAG, "Initializing new PlaybackService");
@@ -96,16 +95,6 @@ public class PlaybackService {
 
         bcm = LocalBroadcastManager.getInstance(context);
         db = DataBaseHelper.getInstance(context);
-
-
-        int appWidgetId;
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            appWidgetId = extras.getInt(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    AppWidgetManager.INVALID_APPWIDGET_ID);
-        }
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 
 
         // Create an Intent to launch ExampleActivity

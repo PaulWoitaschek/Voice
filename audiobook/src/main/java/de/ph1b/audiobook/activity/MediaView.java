@@ -1,10 +1,7 @@
 package de.ph1b.audiobook.activity;
 
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -186,34 +183,6 @@ public class MediaView extends ActionBarActivity {
     }
 
 
-    private final BroadcastReceiver addedBookReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(BookAdd.BOOK_ADDED))
-                new AddedBookAsync().execute();
-        }
-    };
-
-
-    private class AddedBookAsync extends AsyncTask<Void, Void, Void> {
-
-        private ArrayList<BookDetail> books;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            books = db.getAllBooks();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            details.clear();
-            details.addAll(books);
-            adapt.notifyDataSetChanged();
-        }
-    }
-
     private class DeleteBookAsync extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -225,22 +194,10 @@ public class MediaView extends ActionBarActivity {
         }
     }
 
-    @Override
-    public void onDestroy() {
-        bcm.unregisterReceiver(addedBookReceiver);
-        super.onDestroy();
-    }
-
-    @Override
-    public void onBackPressed() {
-        //do nothing to stay in activity
-    }
-
 
     @Override
     public void onResume() {
         super.onResume();
-        bcm.registerReceiver(addedBookReceiver, new IntentFilter(BookAdd.BOOK_ADDED));
 
         if (details.size() == 0) {
             String text = getString(R.string.media_view_how_to);
@@ -342,6 +299,5 @@ public class MediaView extends ActionBarActivity {
     @Override
     public void onPause() {
         super.onPause();
-        bcm.unregisterReceiver(addedBookReceiver);
     }
 }
