@@ -98,9 +98,94 @@ public class BookAdd extends ActionBarActivity {
         fieldName = (EditText) findViewById(R.id.book_name);
         fieldName.setText(defaultName);
 
+        if (fieldName != null) {
+            String capital = fieldName.getText().toString().substring(0, 1);
+            if (capital.length() > 0) {
+                int width = 500;
+                int height = 500;
+                Bitmap cover = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+                Canvas c = new Canvas(cover);
+                Paint textPaint = new Paint();
+                textPaint.setTextSize(4 * width / 5);
+                Resources r = getApplicationContext().getResources();
+                textPaint.setColor(r.getColor(android.R.color.white));
+                textPaint.setAntiAlias(true);
+                textPaint.setTextAlign(Paint.Align.CENTER);
+                Paint backgroundPaint = new Paint();
+                backgroundPaint.setColor(r.getColor(R.color.file_chooser_audio));
+                c.drawRect(0, 0, width, height, backgroundPaint);
+                int y = (int) ((c.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2));
+                c.drawText(fieldName.getText().toString().substring(0, 1).toUpperCase(), width / 2, y, textPaint);
+                bitmapList.add(cover);
+            }
+        }
 
-        genBitmapFromLocal();
-        coverView.setImageBitmap(bitmapList.get(0));
+        new AsyncTask<Void, Void, Bitmap>() {
+            @Override
+            protected void onPreExecute() {
+                setCoverLoading(true);
+            }
+
+            @Override
+            protected Bitmap doInBackground(Void... voids) {
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "started async task!");
+                // makes a file list out of the path names to add
+                ArrayList<File> dirAddList = new ArrayList<File>();
+                for (String s : fileFolderPaths) {
+                    dirAddList.add(new File(s));
+                }
+
+                // if an image file is found in any folder, stop there.
+                ArrayList<File> imageList = MediaAdd.dirsToFiles(filterShowImagesAndFolder, dirAddList, MediaAdd.IMAGE);
+                for (File f1 : imageList) {
+                    Bitmap cover = BitmapFactory.decodeFile(f1.getAbsolutePath());
+                    if (cover != null) {
+                        bitmapList.add(cover);
+                        break;
+                    }
+                }
+
+                // if no image file was found in any folder, search for audio files.
+                ArrayList<File> musicList = MediaAdd.dirsToFiles(MediaAdd.filterShowAudioAndFolder, dirAddList, MediaAdd.AUDIO);
+                for (File f1 : musicList) {
+                    String path = f1.getAbsolutePath();
+                    MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+                    mmr.setDataSource(path);
+                    byte[] data = mmr.getEmbeddedPicture();
+                    if (data != null) {
+                        try {
+                            if (BuildConfig.DEBUG)
+                                Log.d(TAG, "Data is not null!");
+                            Bitmap cover = BitmapFactory.decodeByteArray(data, 0, data.length);
+                            if (cover != null)
+                                return cover;
+                        } catch (Exception e) {
+                            if (BuildConfig.DEBUG)
+                                Log.d(TAG, e.toString());
+                        }
+                    }
+                }
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "finished async task!");
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap result) {
+                if (result != null) {
+                    bitmapList.add(result);
+                    coverPosition = bitmapList.indexOf(result);
+                    coverView.setImageBitmap(result);
+                } else if (bitmapList.size() > 0) {
+                    coverView.setImageBitmap(bitmapList.get(0));
+                    coverPosition = 0;
+                }
+                setCoverLoading(false);
+            }
+
+        }.execute();
+
 
         ImageButton nextCover = (ImageButton) findViewById(R.id.next_cover);
         nextCover.setOnClickListener(new View.OnClickListener() {
@@ -244,80 +329,6 @@ public class BookAdd extends ActionBarActivity {
         }.execute(search);
     }
 
-
-    private void genBitmapFromLocal() {
-        // adding canvas with capital to bitmap - list
-        if (fieldName != null) {
-            String capital = fieldName.getText().toString().substring(0, 1);
-            if (capital.length() > 0) {
-                int width = 500;
-                int height = 500;
-                Bitmap cover = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-                Canvas c = new Canvas(cover);
-                Paint textPaint = new Paint();
-                textPaint.setTextSize(4 * width / 5);
-                Resources r = getApplicationContext().getResources();
-                textPaint.setColor(r.getColor(android.R.color.white));
-                textPaint.setAntiAlias(true);
-                textPaint.setTextAlign(Paint.Align.CENTER);
-                Paint backgroundPaint = new Paint();
-                backgroundPaint.setColor(r.getColor(R.color.file_chooser_audio));
-                c.drawRect(0, 0, width, height, backgroundPaint);
-                int y = (int) ((c.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2));
-                c.drawText(fieldName.getText().toString().substring(0, 1).toUpperCase(), width / 2, y, textPaint);
-                bitmapList.add(cover);
-            }
-        }
-
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, "started async task!");
-                // makes a file list out of the path names to add
-                ArrayList<File> dirAddList = new ArrayList<File>();
-                for (String s : fileFolderPaths) {
-                    dirAddList.add(new File(s));
-                }
-
-                // if an image file is found in any folder, stop there.
-                ArrayList<File> imageList = MediaAdd.dirsToFiles(filterShowImagesAndFolder, dirAddList, MediaAdd.IMAGE);
-                for (File f1 : imageList) {
-                    Bitmap cover = BitmapFactory.decodeFile(f1.getAbsolutePath());
-                    if (cover != null) {
-                        bitmapList.add(cover);
-                        break;
-                    }
-                }
-
-                // if no image file was found in any folder, search for audio files.
-                ArrayList<File> musicList = MediaAdd.dirsToFiles(MediaAdd.filterShowAudioAndFolder, dirAddList, MediaAdd.AUDIO);
-                for (File f1 : musicList) {
-                    String path = f1.getAbsolutePath();
-                    MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-                    mmr.setDataSource(path);
-                    byte[] data = mmr.getEmbeddedPicture();
-                    if (data != null) {
-                        try {
-                            if (BuildConfig.DEBUG)
-                                Log.d(TAG, "Data is not null!");
-                            Bitmap cover = BitmapFactory.decodeByteArray(data, 0, data.length);
-                            if (cover != null) {
-                                bitmapList.add(cover);
-                                break;
-                            }
-                        } catch (Exception e) {
-                            if (BuildConfig.DEBUG)
-                                Log.d(TAG, e.toString());
-                        }
-                    }
-                }
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, "finished async task!");
-                return null;
-            }
-        }.execute();
-    }
 
     /*
     * returns if the device is online.
