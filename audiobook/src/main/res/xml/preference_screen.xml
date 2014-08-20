@@ -9,7 +9,7 @@
         android:key="@string/pref_cover_on_internet"
         android:title="@string/pref_cover_on_internet"
         android:summary="@string/pref_cover_on_internet_hint"
-        android:defaultValue="true" />
+        android:defaultValue="false" />
     <de.ph1b.audiobook.fragment.SeekAmountPreference
         android:title="@string/change_forward_amount"
         android:summary="@string/change_forward_amount_hint"
