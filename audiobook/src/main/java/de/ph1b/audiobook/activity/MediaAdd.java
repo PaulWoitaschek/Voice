@@ -120,10 +120,14 @@ public class MediaAdd extends ActionBarActivity implements CompoundButton.OnChec
         if (BuildConfig.DEBUG)
             paths.add("/storage/sdcard0/Audiobooks");
         paths.add("/storage/emulated/0");
+        paths.add("/storage/sdcard1/");
+        paths.add("/storage/sdcard2/");
+
         for (String s : paths)
             if (!dirs.contains(s) && new File(s).isDirectory())
                 dirs.add(s);
     }
+
 
 
     @Override
