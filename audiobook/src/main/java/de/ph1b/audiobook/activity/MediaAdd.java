@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.activity;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -32,6 +33,7 @@ import java.util.LinkedList;
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.FileAdapter;
+import de.ph1b.audiobook.fragment.SettingsFragment;
 import de.ph1b.audiobook.helper.CommonTasks;
 import de.ph1b.audiobook.helper.NaturalOrderComparator;
 
@@ -128,7 +130,6 @@ public class MediaAdd extends ActionBarActivity implements CompoundButton.OnChec
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,7 +138,7 @@ public class MediaAdd extends ActionBarActivity implements CompoundButton.OnChec
 
         setContentView(R.layout.activity_file_chooser);
 
-        PreferenceManager.setDefaultValues(this, R.xml.preference_screen, false);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -290,7 +291,9 @@ public class MediaAdd extends ActionBarActivity implements CompoundButton.OnChec
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                startActivity(new Intent(this, Preferences.class));
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(android.R.id.content, new SettingsFragment());
+                fragmentTransaction.commit();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

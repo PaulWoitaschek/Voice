@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.activity;
 
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -50,6 +51,7 @@ import java.util.List;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.fragment.SettingsFragment;
 import de.ph1b.audiobook.helper.BookDetail;
 import de.ph1b.audiobook.helper.CommonTasks;
 import de.ph1b.audiobook.helper.DataBaseHelper;
@@ -82,7 +84,7 @@ public class BookAdd extends ActionBarActivity {
         setContentView(R.layout.activity_book_properties);
         new CommonTasks().checkExternalStorage(this);
 
-        PreferenceManager.setDefaultValues(this, R.xml.preference_screen, false);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -348,7 +350,9 @@ public class BookAdd extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                startActivity(new Intent(this, Preferences.class));
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(android.R.id.content, new SettingsFragment());
+                fragmentTransaction.commit();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

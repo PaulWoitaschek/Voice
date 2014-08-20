@@ -12,9 +12,5 @@
         android:defaultValue="false" />
     <de.ph1b.audiobook.fragment.SeekAmountPreference
         android:title="@string/change_forward_amount"
-        android:summary="@string/change_forward_amount_hint"
-
-        />
+        android:summary="@string/change_forward_amount_hint" />
 </PreferenceScreen>
-
-

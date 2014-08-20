@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.activity;
 
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -35,6 +36,7 @@ import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.MediaSpinnerAdapter;
 import de.ph1b.audiobook.fragment.JumpToPosition;
+import de.ph1b.audiobook.fragment.SettingsFragment;
 import de.ph1b.audiobook.fragment.SleepDialog;
 import de.ph1b.audiobook.helper.BookDetail;
 import de.ph1b.audiobook.helper.CommonTasks;
@@ -226,7 +228,7 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        PreferenceManager.setDefaultValues(this, R.xml.preference_screen, false);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         //starting AudioPlayerService and give him bookId to play
         if (getIntent().hasExtra(MediaView.PLAY_BOOK))
@@ -319,7 +321,9 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                startActivity(new Intent(this, Preferences.class));
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(android.R.id.content, new SettingsFragment());
+                fragmentTransaction.commit();
                 return true;
             case R.id.action_time_change:
                 if (duration > 0) {
