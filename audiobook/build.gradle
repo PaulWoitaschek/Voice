@@ -13,13 +13,13 @@ android {
             }
         }
     }
-    compileSdkVersion 20
+    compileSdkVersion 19
     buildToolsVersion '20'
     defaultConfig {
         minSdkVersion 11
-        targetSdkVersion 20
-        versionCode 5
-        versionName '1.2.1'
+        targetSdkVersion 19
+        versionCode 6
+        versionName '1.2.2'
     }
     buildTypes {
         release {
@@ -31,8 +31,6 @@ android {
             zipAlign true
             signingConfig signingConfigs.release
         }
-    }
-    productFlavors {
     }
 }
 

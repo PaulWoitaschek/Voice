@@ -1,7 +1,7 @@
 MaterialAudiobookPlayer
 =======================
+Audiobook Player for Android is also available on [GooglePlay](https://play.google.com/store/apps/details?id=de.ph1b.audiobook)
 
-Audiobook Player for Android
 # License
 Copyright (C) 2014, Paul Woitaschek
 

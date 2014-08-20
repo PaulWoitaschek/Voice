@@ -3,4 +3,8 @@ build
 *.iml
 gradle/
 .gradle/
+<<<<<<< HEAD
 .idea
+=======
+.idea/
+>>>>>>> master

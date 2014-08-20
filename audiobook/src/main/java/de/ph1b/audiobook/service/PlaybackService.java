@@ -3,6 +3,7 @@ package de.ph1b.audiobook.service;
 
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -23,6 +24,7 @@ import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.RemoteViews;
 
 import java.io.IOException;
 import java.util.Timer;
@@ -34,7 +36,9 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.helper.BookDetail;
 import de.ph1b.audiobook.helper.DataBaseHelper;
 import de.ph1b.audiobook.helper.MediaDetail;
+import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.receiver.RemoteControlReceiver;
+import de.ph1b.audiobook.receiver.WidgetProvider;
 
 public class PlaybackService {
 
@@ -78,9 +82,11 @@ public class PlaybackService {
     private boolean noisyRCRegistered = false;
     private boolean headsetRCRegistered = false;
 
+    private final ComponentName widgetComponentName;
+
     @SuppressLint("NewApi")
-    public PlaybackService(Context context) {
-        String TAG = PlaybackService.TAG + "PlaybackService()";
+    public PlaybackService(final Context context) {
+        final String TAG = PlaybackService.TAG + "PlaybackService()";
         if (BuildConfig.DEBUG)
             Log.d(TAG, "Initializing new PlaybackService");
 
@@ -89,6 +95,29 @@ public class PlaybackService {
 
         bcm = LocalBroadcastManager.getInstance(context);
         db = DataBaseHelper.getInstance(context);
+
+
+        // Create an Intent to launch ExampleActivity
+
+
+        widgetComponentName = new ComponentName(context, WidgetProvider.class);
+        final RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
+                R.layout.widget);
+
+        //state manager to update widget
+        StateManager.setStateChangeListener(new OnStateChangedListener() {
+            @Override
+            public void onStateChanged(PlayerStates state) {
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "state changed called: " + state);
+                if (state == PlayerStates.STARTED) {
+                    remoteViews.setImageViewResource(R.id.widgetPlayButton, R.drawable.av_pause);
+                } else {
+                    remoteViews.setImageViewResource(R.id.widgetPlayButton, R.drawable.av_play);
+                }
+                AppWidgetManager.getInstance(context).updateAppWidget(widgetComponentName, remoteViews);
+            }
+        });
 
         myEventReceiver = new ComponentName(context.getPackageName(), RemoteControlReceiver.class.getName());
 
@@ -361,9 +390,8 @@ public class PlaybackService {
             for (int i = 0; i < allIds.length - 1; i++) { //-1 to prevent change when already last song reached
                 if (allIds[i] == currentId) {
                     boolean wasPlaying = false;
-                    if (StateManager.getState() == PlayerStates.STARTED) {
+                    if (StateManager.getState() == PlayerStates.STARTED)
                         wasPlaying = true;
-                    }
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "preparing now");
                     prepare(allIds[i + 1]);
@@ -377,13 +405,9 @@ public class PlaybackService {
 
             }
 
-            // if at last position, send toast
-            if (currentId == allIds[allIds.length - 1]) {
-                Intent i = new Intent(GUI_MAKE_TOAST);
-                i.setAction(GUI_MAKE_TOAST);
-                i.putExtra(context.getString(R.string.toast_last_file_reached), "");
-                bcm.sendBroadcast(i);
-            }
+            // if at last position, remove handler and notification, audio-focus
+            if (currentId == allIds[allIds.length - 1])
+                pause();
         }
     }
 
@@ -397,6 +421,7 @@ public class PlaybackService {
             prepare(mediaId);
             if (wasPlaying)
                 play();
+            updateGUI();
         }
     }
 

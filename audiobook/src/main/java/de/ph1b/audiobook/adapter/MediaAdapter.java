@@ -80,7 +80,7 @@ public class MediaAdapter extends BaseAdapter {
                         int width = viewHolder.iconImageView.getMeasuredWidth();
                         String thumbPath = b.getThumb();
                         Bitmap thumb;
-                        if (thumbPath.equals("") || new File(thumbPath).isDirectory()) {
+                        if (thumbPath.equals("") || new File(thumbPath).isDirectory() || !(new File(thumbPath).exists())) {
                             thumb = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
                             Canvas c = new Canvas(thumb);
                             Paint textPaint = new Paint();

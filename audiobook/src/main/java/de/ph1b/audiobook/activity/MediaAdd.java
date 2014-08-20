@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.activity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -45,6 +47,8 @@ public class MediaAdd extends ActionBarActivity implements CompoundButton.OnChec
     public static final int IMAGE = 2;
     public final static String FILES_AS_STRING = "filesAsString";
     private ListView fileListView;
+    private Spinner dirSpinner;
+    private ProgressBar progressBar;
     private FileAdapter adapter;
 
     private ActionMode actionMode;
@@ -104,10 +108,25 @@ public class MediaAdd extends ActionBarActivity implements CompoundButton.OnChec
         return audioTypes;
     }
 
-    private void addPathToSpinner(String path) {
-        if (!dirs.contains(path) && new File(path).isDirectory())
-            dirs.add(path);
+    /*
+    adds spinner paths. returns true
+    if there is more than one file
+    for the spinner to add
+     */
+    private void addPathToSpinner() {
+        ArrayList<String> paths = new ArrayList<String>();
+        paths.add("/storage/extSdCard");
+        paths.add(Environment.getExternalStorageDirectory().getAbsolutePath());
+        if (BuildConfig.DEBUG)
+            paths.add("/storage/sdcard0/Audiobooks");
+        paths.add("/storage/emulated/0");
+
+        for (String s : paths)
+            if (!dirs.contains(s) && new File(s).isDirectory())
+                dirs.add(s);
     }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,13 +141,11 @@ public class MediaAdd extends ActionBarActivity implements CompoundButton.OnChec
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        Spinner dirSpinner = (Spinner) findViewById(R.id.dirSpinner);
+        dirSpinner = (Spinner) findViewById(R.id.dirSpinner);
+        progressBar = (ProgressBar) findViewById(R.id.progress);
+        fileListView = (ListView) findViewById(R.id.fileListView);
 
-        addPathToSpinner("/storage/extSdCard");
-        addPathToSpinner(Environment.getExternalStorageDirectory().getAbsolutePath());
-        if (BuildConfig.DEBUG)
-            addPathToSpinner("/storage/sdcard0/Audiobooks");
-        addPathToSpinner("/storage/emulated/0");
+        addPathToSpinner();
 
         if (dirs.size() > 1) {
             dirSpinner.setVisibility(View.VISIBLE);
@@ -160,36 +177,63 @@ public class MediaAdd extends ActionBarActivity implements CompoundButton.OnChec
         }
     }
 
-    private void addMediaBundle(ArrayList<File> dirAddList) {
-        Collections.sort(dirAddList, new NaturalOrderComparator<File>());
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "Sorted dirAddList :");
-        for (File f : dirAddList) {
-            if (BuildConfig.DEBUG)
-                Log.d(TAG, f.getAbsolutePath());
-        }
+    private void addMediaBundleAsync(ArrayList<File> dirAddList) {
 
-        ArrayList<File> files = dirsToFiles(filterShowAudioAndFolder, dirAddList, AUDIO);
-        if (files.size() != 0) {
-            String defaultName = dirAddList.get(0).getName();
-            if (!dirAddList.get(0).isDirectory())
-                defaultName = defaultName.substring(0, defaultName.length() - 4);
+        new AsyncTask<Object, Void, Boolean>() {
 
-            ArrayList<String> dirAddAsString = new ArrayList<String>();
-            for (File f : files) {
-                dirAddAsString.add(f.getAbsolutePath());
+            private String defaultName;
+            private ArrayList<String> dirAddAsString;
+
+            @Override
+            protected void onPreExecute() {
+                fileListView.setVisibility(View.GONE);
+                dirSpinner.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
             }
 
-            Intent intent = new Intent(getApplicationContext(), BookAdd.class);
-            intent.putExtra(BOOK_PROPERTIES_DEFAULT_NAME, defaultName);
-            intent.putStringArrayListExtra(FILES_AS_STRING, dirAddAsString);
-            startActivity(intent);
+            @Override
+            protected Boolean doInBackground(Object... arrayLists) {
+                @SuppressWarnings("unchecked")
+                ArrayList<File> dirAddList = (ArrayList<File>) arrayLists[0];
 
-        } else {
-            CharSequence text = getString(R.string.book_no_media);
-            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-            toast.show();
-        }
+                Collections.sort(dirAddList, new NaturalOrderComparator<File>());
+
+                ArrayList<File> files = dirsToFiles(filterShowAudioAndFolder, dirAddList, AUDIO);
+                if (files.size() != 0) {
+                    defaultName = dirAddList.get(0).getName();
+                    if (!dirAddList.get(0).isDirectory())
+                        defaultName = defaultName.substring(0, defaultName.length() - 4);
+
+                    dirAddAsString = new ArrayList<String>();
+                    for (File f : files) {
+                        dirAddAsString.add(f.getAbsolutePath());
+                    }
+                    return true;
+                } else
+                    return false;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean result) {
+                //if adding worked start next activity,  otherwise stay here and make toast
+                if (result) {
+                    Intent intent = new Intent(getApplicationContext(), BookAdd.class);
+                    intent.putExtra(BOOK_PROPERTIES_DEFAULT_NAME, defaultName);
+                    intent.putStringArrayListExtra(FILES_AS_STRING, dirAddAsString);
+                    startActivity(intent);
+                } else {
+
+                    if (dirs.size() > 1)
+                        dirSpinner.setVisibility(View.VISIBLE);
+                    fileListView.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
+
+                    CharSequence text = getString(R.string.book_no_media);
+                    Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        }.execute(dirAddList);
     }
 
     @Override
@@ -221,7 +265,6 @@ public class MediaAdd extends ActionBarActivity implements CompoundButton.OnChec
         //fileList = new ArrayList<File>();
         Collections.sort(fileList, new NaturalOrderComparator<File>());
         adapter = new FileAdapter(fileList, this);
-        fileListView = (ListView) findViewById(R.id.listView1);
         fileListView.setAdapter(adapter);
 
         fileListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -294,7 +337,10 @@ public class MediaAdd extends ActionBarActivity implements CompoundButton.OnChec
     @Override
     public void onResume() {
         super.onResume();
-
+        if (dirs.size() > 1)
+            dirSpinner.setVisibility(View.VISIBLE);
+        fileListView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
         //checking if external storage is available
         new CommonTasks().checkExternalStorage(this);
     }
@@ -308,11 +354,7 @@ public class MediaAdd extends ActionBarActivity implements CompoundButton.OnChec
 
     public void checkStateChanged(ArrayList<File> dirAddList) {
         this.dirAddList = dirAddList;
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "checkStateChange was called");
         if (dirAddList.size() > 0 && mActionModeCallback == null) {
-            if (BuildConfig.DEBUG)
-                Log.d(TAG, "Starting new ActionMode");
             mActionModeCallback = new ActionMode.Callback() {
 
                 @Override
@@ -333,7 +375,7 @@ public class MediaAdd extends ActionBarActivity implements CompoundButton.OnChec
                         case R.id.action_add_badge:
                             for (File f : MediaAdd.this.dirAddList)
                                 if (BuildConfig.DEBUG) Log.d(TAG, "Adding: " + f.getAbsolutePath());
-                            addMediaBundle(MediaAdd.this.dirAddList);
+                            addMediaBundleAsync(MediaAdd.this.dirAddList);
                             mode.finish();
                             return true;
                         default:

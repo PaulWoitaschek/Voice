@@ -66,8 +66,8 @@
 
         <receiver
             android:icon="@drawable/ic_launcher"
-            android:name=".helper.WidgetProvider"
-            android:label="@string/app_name">
+            android:name=".receiver.WidgetProvider"
+            android:label="@string/widget_small">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

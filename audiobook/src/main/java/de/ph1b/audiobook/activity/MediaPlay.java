@@ -63,8 +63,6 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
     private int oldPosition = -1;
     private static final String TAG = "MediaPlay";
 
-    private MediaSpinnerAdapter adapter;
-
     private boolean seekBarIsUpdating = false;
     private MediaDetail[] allMedia;
     private MediaDetail media;
@@ -147,7 +145,7 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
                     previous_button.setVisibility(View.VISIBLE);
                     forward_button.setVisibility(View.VISIBLE);
                     bookSpinner.setVisibility(View.VISIBLE);
-                    adapter = new MediaSpinnerAdapter(getApplicationContext(), allMedia);
+                    MediaSpinnerAdapter adapter = new MediaSpinnerAdapter(getApplicationContext(), allMedia);
                     int currentPosition = b.getPosition();
                     bookSpinner.setSelection(adapter.getPositionByMediaDetailId(currentPosition));
                     bookSpinner.setAdapter(adapter);
