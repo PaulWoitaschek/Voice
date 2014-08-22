@@ -15,18 +15,20 @@ import java.util.ArrayList;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.MediaAdd;
+import de.ph1b.audiobook.fragment.ChooseFilesFragment;
 
 public class FileAdapter extends BaseAdapter {
 
     private final ArrayList<File> data;
     private final Context c;
+    private final ChooseFilesFragment fragment;
     private static boolean[] checked;
     private static final String TAG = "FileAdapter";
 
-    public FileAdapter(ArrayList<File> data, Context c) {
+    public FileAdapter(ArrayList<File> data, Context c, ChooseFilesFragment fragment) {
         this.data = data;
         this.c = c;
+        this.fragment = fragment;
         checked = new boolean[getCount()];
     }
 
@@ -81,7 +83,7 @@ public class FileAdapter extends BaseAdapter {
                             Log.d(TAG, "data is checked: " + data.get(i).getAbsolutePath());
                     }
                 }
-                ((MediaAdd) c).checkStateChanged(dirAddList);
+                fragment.checkStateChanged(dirAddList);
             }
         });
 

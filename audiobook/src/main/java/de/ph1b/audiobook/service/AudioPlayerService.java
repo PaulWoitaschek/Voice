@@ -22,7 +22,8 @@ import java.io.File;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.MediaPlay;
+import de.ph1b.audiobook.activity.MediaView;
+import de.ph1b.audiobook.fragment.MediaPlayFragment;
 import de.ph1b.audiobook.helper.BookDetail;
 import de.ph1b.audiobook.helper.DataBaseHelper;
 import de.ph1b.audiobook.helper.MediaDetail;
@@ -207,9 +208,17 @@ public class AudioPlayerService extends Service {
     private class StartNotificationAsync extends AsyncTask<Void, Void, Void> {
 
         Bitmap thumb = null;
-        final PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), 0,
-                new Intent(getApplicationContext(), MediaPlay.class),
-                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        PendingIntent pi;
+
+        @Override
+        protected void onPreExecute() {
+            Intent intent = new Intent(getApplicationContext(), MediaView.class);
+            intent.setAction(MediaPlayFragment.TAG);
+            pi = PendingIntent.getActivity(getApplicationContext(), 0,
+                    new Intent(intent),
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+        }
 
         @Override
         protected Void doInBackground(Void... params) {

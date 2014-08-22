@@ -8,7 +8,7 @@
     <string translatable="false" name="pref_change_amount">CHANGE_AMOUNT</string>
     <string translatable="false" name="widget_small">MaterialPlayer (1x1)</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Preferences</string>
     <string name="back">Back</string>
     <string name="forward">Forward</string>
     <string name="action_delete">Delete</string>

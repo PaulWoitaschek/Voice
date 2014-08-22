@@ -107,7 +107,7 @@ public class BookAdd extends ActionBarActivity {
                 Canvas c = new Canvas(cover);
                 Paint textPaint = new Paint();
                 textPaint.setTextSize(4 * width / 5);
-                Resources r = getApplicationContext().getResources();
+                Resources r = getApplication().getResources();
                 textPaint.setColor(r.getColor(android.R.color.white));
                 textPaint.setAntiAlias(true);
                 textPaint.setTextAlign(Paint.Align.CENTER);
@@ -229,7 +229,7 @@ public class BookAdd extends ActionBarActivity {
                     new AddBookAsync().execute();
                 } else {
                     CharSequence text = getString(R.string.book_add_empty_title);
-                    Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getApplication(), text, Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
                     toast.show();
                 }
@@ -454,7 +454,7 @@ public class BookAdd extends ActionBarActivity {
         @Override
         protected void onPostExecute(Void result) {
             progressDialog.cancel();
-            startActivity(new Intent(getApplicationContext(), MediaView.class));
+            startActivity(new Intent(getApplication(), MediaView.class));
         }
     }
 

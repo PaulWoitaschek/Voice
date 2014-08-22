@@ -3,6 +3,7 @@ package de.ph1b.audiobook.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -37,7 +38,7 @@ import java.util.ArrayList;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.MediaPlay;
+import de.ph1b.audiobook.activity.MediaAdd;
 import de.ph1b.audiobook.activity.MediaView;
 import de.ph1b.audiobook.adapter.MediaAdapter;
 import de.ph1b.audiobook.helper.BookDetail;
@@ -48,9 +49,10 @@ import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.service.StateManager;
 
+
 public class MediaChooserFragment extends Fragment {
 
-    private static final String TAG = "de.ph1b.audiobook.fragment.MediaChooserFragment";
+    public static final String TAG = "de.ph1b.audiobook.fragment.MediaChooserFragment";
 
     private ArrayList<BookDetail> details;
     private ArrayList<BookDetail> deleteList;
@@ -74,6 +76,8 @@ public class MediaChooserFragment extends Fragment {
         db = DataBaseHelper.getInstance(a);
         bcm = LocalBroadcastManager.getInstance(a);
 
+        setHasOptionsMenu(true);
+
         details = db.getAllBooks();
         deleteList = new ArrayList<BookDetail>();
 
@@ -89,6 +93,8 @@ public class MediaChooserFragment extends Fragment {
         currentText = (TextView) v.findViewById(R.id.current_text);
         currentPlaying = (ImageButton) v.findViewById(R.id.current_playing);
         ListView mediaListView = (ListView) v.findViewById(R.id.listMediaView);
+
+        setHasOptionsMenu(true);
 
         adapt = new MediaAdapter(details, a);
         mediaListView.setAdapter(adapt);
@@ -158,9 +164,15 @@ public class MediaChooserFragment extends Fragment {
                     editor.putInt(MediaView.SHARED_PREFS_CURRENT, bookId);
                     editor.apply();
 
-                    Intent intent = new Intent(a.getContext(), MediaPlay.class);
-                    intent.putExtra(MediaView.PLAY_BOOK, bookId);
-                    startActivity(intent);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(MediaView.PLAY_BOOK, bookId);
+                    MediaPlayFragment fragment = new MediaPlayFragment();
+                    fragment.setArguments(bundle);
+                    getFragmentManager().beginTransaction()
+                            .replace(android.R.id.content, fragment)
+                            .addToBackStack(MediaPlayFragment.TAG)
+                            .commit();
+
                 }
             }
         });
@@ -237,9 +249,14 @@ public class MediaChooserFragment extends Fragment {
             currentText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(a, MediaPlay.class);
-                    intent.putExtra(MediaView.PLAY_BOOK, b.getId());
-                    startActivity(intent);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(MediaView.PLAY_BOOK, b.getId());
+                    MediaPlayFragment fragment = new MediaPlayFragment();
+                    fragment.setArguments(bundle);
+                    getFragmentManager().beginTransaction()
+                            .add(android.R.id.content, fragment)
+                            .addToBackStack(MediaPlayFragment.TAG)
+                            .commit();
                 }
             });
 
@@ -258,6 +275,30 @@ public class MediaChooserFragment extends Fragment {
 
         //checking if external storage is available
         new CommonTasks().checkExternalStorage(a);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "onCreateOptionsMenu was called!");
+        inflater.inflate(R.menu.action_media_view, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add:
+                startActivity(new Intent(a, MediaAdd.class));
+                return true;
+            case R.id.action_settings:
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(android.R.id.content, new SettingsFragment());
+                fragmentTransaction.addToBackStack(TAG);
+                fragmentTransaction.commit();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void setPlayIcon(PlayerStates state) {

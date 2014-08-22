@@ -1,5 +1,7 @@
-package de.ph1b.audiobook.activity;
+package de.ph1b.audiobook.fragment;
 
+
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,10 +18,13 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -34,20 +39,16 @@ import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.activity.MediaView;
 import de.ph1b.audiobook.adapter.MediaSpinnerAdapter;
-import de.ph1b.audiobook.fragment.JumpToPosition;
-import de.ph1b.audiobook.fragment.SettingsFragment;
-import de.ph1b.audiobook.fragment.SleepDialog;
 import de.ph1b.audiobook.helper.BookDetail;
-import de.ph1b.audiobook.helper.CommonTasks;
 import de.ph1b.audiobook.helper.MediaDetail;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlaybackService;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.service.StateManager;
 
-public class MediaPlay extends ActionBarActivity implements OnClickListener {
-
+public class MediaPlayFragment extends Fragment implements OnClickListener {
 
     private ImageButton play_button;
     private TextView playedTimeView;
@@ -63,7 +64,7 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
 
     private static int bookId;
     private int oldPosition = -1;
-    private static final String TAG = "MediaPlay";
+    public static final String TAG = "de.ph1b.audiobooks.fragment.MediaPlayFragment";
 
     private boolean seekBarIsUpdating = false;
     private MediaDetail[] allMedia;
@@ -96,12 +97,13 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
                 File testFile = new File(media.getPath());
                 if (!testFile.exists()) {
                     makeToast(getString(R.string.file_not_found), Toast.LENGTH_LONG);
-                    startActivity(new Intent(getApplicationContext(), MediaView.class));
+                    startActivity(new Intent(getActivity(), MediaView.class));
                 }
+
 
                 //setting book name
                 String bookName = b.getName();
-                getSupportActionBar().setTitle(bookName);
+                ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(bookName);
 
                 bookId = b.getId();
 
@@ -118,7 +120,7 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
                                     Canvas c = new Canvas(cover);
                                     Paint textPaint = new Paint();
                                     textPaint.setTextSize(4 * width / 5);
-                                    Resources r = getApplicationContext().getResources();
+                                    Resources r = getActivity().getResources();
 
                                     textPaint.setColor(r.getColor(android.R.color.white));
                                     textPaint.setAntiAlias(true);
@@ -147,7 +149,7 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
                     previous_button.setVisibility(View.VISIBLE);
                     forward_button.setVisibility(View.VISIBLE);
                     bookSpinner.setVisibility(View.VISIBLE);
-                    MediaSpinnerAdapter adapter = new MediaSpinnerAdapter(getApplicationContext(), allMedia);
+                    MediaSpinnerAdapter adapter = new MediaSpinnerAdapter(getActivity(), allMedia);
                     int currentPosition = b.getPosition();
                     bookSpinner.setSelection(adapter.getPositionByMediaDetailId(currentPosition));
                     bookSpinner.setAdapter(adapter);
@@ -210,42 +212,63 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
 
     private void makeToast(String text, int duration) {
         if (text != null) {
-            Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+            Toast toast = Toast.makeText(getActivity(), text, duration);
             toast.show();
         }
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.activity_media_player, container, false);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_media_player);
-        new CommonTasks().checkExternalStorage(this);
 
-        bcm = LocalBroadcastManager.getInstance(this);
+        bcm = LocalBroadcastManager.getInstance(getActivity());
 
         //setup actionbar
-        ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
 
         //starting AudioPlayerService and give him bookId to play
-        if (getIntent().hasExtra(MediaView.PLAY_BOOK))
-            bookId = getIntent().getIntExtra(MediaView.PLAY_BOOK, 0);
+        if (getArguments() != null)
+            bookId = getArguments().getInt(MediaView.PLAY_BOOK);
+        else
+            bookId = 0;
+
+        //starting the service
+        Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
+        serviceIntent.putExtra(AudioPlayerService.BOOK_ID, bookId);
+        getActivity().startService(serviceIntent);
 
 
         //init buttons
-        seek_bar = (SeekBar) findViewById(R.id.seekBar);
-        play_button = (ImageButton) findViewById(R.id.play);
-        ImageButton rewind_button = (ImageButton) findViewById(R.id.rewind);
-        ImageButton fast_forward_button = (ImageButton) findViewById(R.id.fast_forward);
-        playedTimeView = (TextView) findViewById(R.id.played);
-        forward_button = (ImageButton) findViewById(R.id.next_song);
-        previous_button = (ImageButton) findViewById(R.id.previous_song);
-        coverView = (ImageView) findViewById(R.id.book_cover);
-        maxTimeView = (TextView) findViewById(R.id.maxTime);
-        bookSpinner = (Spinner) findViewById(R.id.book_spinner);
+        seek_bar = (SeekBar) v.findViewById(R.id.seekBar);
+        play_button = (ImageButton) v.findViewById(R.id.play);
+        ImageButton rewind_button = (ImageButton) v.findViewById(R.id.rewind);
+        ImageButton fast_forward_button = (ImageButton) v.findViewById(R.id.fast_forward);
+        playedTimeView = (TextView) v.findViewById(R.id.played);
+        forward_button = (ImageButton) v.findViewById(R.id.next_song);
+        previous_button = (ImageButton) v.findViewById(R.id.previous_song);
+        coverView = (ImageView) v.findViewById(R.id.book_cover);
+        maxTimeView = (TextView) v.findViewById(R.id.maxTime);
+        bookSpinner = (Spinner) v.findViewById(R.id.book_spinner);
+
+
+        //register bc to receive images from services immediately
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(PlaybackService.GUI);
+        filter.addAction(PlaybackService.GUI_SEEK);
+        filter.addAction(PlaybackService.GUI_PLAY_ICON);
+        filter.addAction(PlaybackService.GUI_MAKE_TOAST);
+        bcm.registerReceiver(updateGUIReceiver, filter);
 
 
         //setup buttons
@@ -278,6 +301,7 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
                 seekBarIsUpdating = false;
             }
         });
+        return v;
     }
 
     private String formatTime(int ms) {
@@ -311,10 +335,8 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.action_media_play, menu);
-        return true;
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.action_media_play, menu);
     }
 
     @Override
@@ -332,22 +354,16 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
                     bundle.putInt(JumpToPosition.DURATION, duration);
                     bundle.putInt(JumpToPosition.POSITION, position);
                     jumpToPosition.setArguments(bundle);
-                    jumpToPosition.show(getSupportFragmentManager(), "timePicker");
+                    jumpToPosition.show(getFragmentManager(), "timePicker");
                 }
                 return true;
             case R.id.action_sleep:
                 SleepDialog sleepDialog = new SleepDialog();
-                sleepDialog.show(getSupportFragmentManager(), "sleep_timer");
+                sleepDialog.show(getFragmentManager(), "sleep_timer");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        startActivity(new Intent(this, MediaView.class));
     }
 
 
@@ -364,9 +380,9 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
         super.onResume();
 
         //starting the service
-        Intent serviceIntent = new Intent(this, AudioPlayerService.class);
+        Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
         serviceIntent.putExtra(AudioPlayerService.BOOK_ID, bookId);
-        startService(serviceIntent);
+        getActivity().startService(serviceIntent);
 
         Intent pokeIntent = new Intent(AudioPlayerService.CONTROL_POKE_UPDATE);
         pokeIntent.setAction(AudioPlayerService.CONTROL_POKE_UPDATE);
@@ -384,9 +400,6 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
         filter.addAction(PlaybackService.GUI_PLAY_ICON);
         filter.addAction(PlaybackService.GUI_MAKE_TOAST);
         bcm.registerReceiver(updateGUIReceiver, filter);
-
-        //checking if external storage is available
-        new CommonTasks().checkExternalStorage(this);
     }
 
 
@@ -395,5 +408,4 @@ public class MediaPlay extends ActionBarActivity implements OnClickListener {
         bcm.unregisterReceiver(updateGUIReceiver);
         super.onPause();
     }
-
 }

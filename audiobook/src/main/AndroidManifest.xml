@@ -33,14 +33,6 @@
         </activity>
 
         <activity
-            android:name=".activity.MediaPlay"
-            android:label="@string/app_name">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MediaView" />
-        </activity>
-
-        <activity
             android:name=".activity.BookAdd"
             android:label="@string/app_name">
             <meta-data

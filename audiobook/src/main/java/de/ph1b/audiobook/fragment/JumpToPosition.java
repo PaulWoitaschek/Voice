@@ -3,12 +3,12 @@ package de.ph1b.audiobook.fragment;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -109,7 +109,7 @@ public class JumpToPosition extends DialogFragment {
                 int newPosition = (m+60*h)*60*1000;
                 Intent i = new Intent(AudioPlayerService.CONTROL_CHANGE_MEDIA_POSITION);
                 i.putExtra(AudioPlayerService.CONTROL_CHANGE_MEDIA_POSITION, newPosition);
-                Context c = getActivity().getApplicationContext();
+                Context c = getActivity().getApplication();
                 LocalBroadcastManager.getInstance(c).sendBroadcast(i);
 
             }
