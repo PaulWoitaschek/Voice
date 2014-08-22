@@ -1,11 +1,11 @@
-package de.ph1b.audiobook.helper;
+package de.ph1b.audiobook.utils;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 
 import de.ph1b.audiobook.activity.MediaView;
-import de.ph1b.audiobook.activity.NoExternalStorage;
+import de.ph1b.audiobook.fragment.NoExternalStorage;
 
 
 

@@ -19,9 +19,9 @@ import java.io.File;
 import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.helper.BookDetail;
-import de.ph1b.audiobook.helper.DataBaseHelper;
-import de.ph1b.audiobook.helper.MediaDetail;
+import de.ph1b.audiobook.utils.BookDetail;
+import de.ph1b.audiobook.utils.DataBaseHelper;
+import de.ph1b.audiobook.utils.MediaDetail;
 
 
 public class MediaAdapter extends BaseAdapter {

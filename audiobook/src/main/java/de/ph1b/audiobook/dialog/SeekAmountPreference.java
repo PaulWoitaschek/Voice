@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.fragment;
+package de.ph1b.audiobook.dialog;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -18,12 +18,12 @@ public class SeekAmountPreference extends DialogPreference {
 
     private final int SEEK_BAR_MIN = 10;
     private SeekBar seekBar;
-    private static final String TAG = "de.ph1b.audiobook.fragment.SeekAmountPreference";
+    private static final String TAG = "de.ph1b.audiobook.dialog.SeekAmountPreference";
 
     public SeekAmountPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         setDialogTitle(context.getString(R.string.change_forward_amount));
-        setDialogLayoutResource(R.layout.change_forward_amount_dialog);
+        setDialogLayoutResource(R.layout.dialog_seek_amount);
     }
 
     @Override

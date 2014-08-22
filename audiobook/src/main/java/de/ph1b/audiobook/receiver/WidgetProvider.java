@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.MediaView;
-import de.ph1b.audiobook.helper.BookDetail;
-import de.ph1b.audiobook.helper.DataBaseHelper;
+import de.ph1b.audiobook.utils.BookDetail;
+import de.ph1b.audiobook.utils.DataBaseHelper;
 import de.ph1b.audiobook.service.AudioPlayerService;
 
 public class WidgetProvider extends AppWidgetProvider {

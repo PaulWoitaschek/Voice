@@ -32,18 +32,6 @@
                 android:value=".activity.MediaView" />
         </activity>
 
-        <activity
-            android:name=".activity.BookAdd"
-            android:label="@string/app_name">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MediaView" />
-        </activity>
-
-        <activity
-            android:name=".activity.NoExternalStorage"
-            android:label="@string/app_name" />
-
         <service android:name=".service.AudioPlayerService" />
 
         <receiver android:name=".receiver.RemoteControlReceiver">

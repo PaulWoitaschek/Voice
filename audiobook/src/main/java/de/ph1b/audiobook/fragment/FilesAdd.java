@@ -1,6 +1,6 @@
-package de.ph1b.audiobook.activity;
+package de.ph1b.audiobook.fragment;
 
-import android.app.FragmentTransaction;
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,9 +20,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -51,20 +54,20 @@ import java.util.List;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.fragment.SettingsFragment;
-import de.ph1b.audiobook.helper.BookDetail;
-import de.ph1b.audiobook.helper.CommonTasks;
-import de.ph1b.audiobook.helper.DataBaseHelper;
-import de.ph1b.audiobook.helper.MediaDetail;
+import de.ph1b.audiobook.activity.MediaAdd;
+import de.ph1b.audiobook.activity.MediaView;
+import de.ph1b.audiobook.utils.BookDetail;
+import de.ph1b.audiobook.utils.DataBaseHelper;
+import de.ph1b.audiobook.utils.MediaDetail;
 
 
-public class BookAdd extends ActionBarActivity {
+public class FilesAdd extends Fragment {
 
     private EditText fieldName;
 
-    private final DataBaseHelper db = DataBaseHelper.getInstance(this);
+    private DataBaseHelper db;
 
-    private static final String TAG = "BookProperties";
+    public static final String TAG = "de.ph1b.audiobook.fragment.FilesAdd";
     private ArrayList<String> fileFolderPaths;
     private String bookName;
     private ImageView coverView;
@@ -77,25 +80,16 @@ public class BookAdd extends ActionBarActivity {
     private final ArrayList<Bitmap> bitmapList = new ArrayList<Bitmap>();
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "started onCreate task!");
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_book_properties);
-        new CommonTasks().checkExternalStorage(this);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_files_add, container, false);
 
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        fileFolderPaths = getArguments().getStringArrayList(MediaAdd.FILES_AS_STRING);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        coverView = (ImageView) v.findViewById(R.id.cover);
+        coverLoadingBar = (ProgressBar) v.findViewById(R.id.cover_loading);
+        fieldName = (EditText) v.findViewById(R.id.book_name);
 
-        fileFolderPaths = getIntent().getStringArrayListExtra(MediaAdd.FILES_AS_STRING);
-
-        coverView = (ImageView) findViewById(R.id.cover);
-        coverLoadingBar = (ProgressBar) findViewById(R.id.cover_loading);
-
-        String defaultName = getIntent().getStringExtra(MediaAdd.BOOK_PROPERTIES_DEFAULT_NAME);
-        fieldName = (EditText) findViewById(R.id.book_name);
+        String defaultName = getArguments().getString(MediaAdd.BOOK_PROPERTIES_DEFAULT_NAME);
         fieldName.setText(defaultName);
 
         if (fieldName != null) {
@@ -107,7 +101,7 @@ public class BookAdd extends ActionBarActivity {
                 Canvas c = new Canvas(cover);
                 Paint textPaint = new Paint();
                 textPaint.setTextSize(4 * width / 5);
-                Resources r = getApplication().getResources();
+                Resources r = getActivity().getResources();
                 textPaint.setColor(r.getColor(android.R.color.white));
                 textPaint.setAntiAlias(true);
                 textPaint.setTextAlign(Paint.Align.CENTER);
@@ -187,7 +181,7 @@ public class BookAdd extends ActionBarActivity {
         }.execute();
 
 
-        ImageButton nextCover = (ImageButton) findViewById(R.id.next_cover);
+        ImageButton nextCover = (ImageButton) v.findViewById(R.id.next_cover);
         nextCover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,7 +199,7 @@ public class BookAdd extends ActionBarActivity {
                 }
             }
         });
-        ImageButton previousCover = (ImageButton) findViewById(R.id.previous_cover);
+        ImageButton previousCover = (ImageButton) v.findViewById(R.id.previous_cover);
         previousCover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -220,7 +214,7 @@ public class BookAdd extends ActionBarActivity {
             }
         });
 
-        Button done = (Button) findViewById(R.id.book_add);
+        Button done = (Button) v.findViewById(R.id.book_add);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -229,7 +223,7 @@ public class BookAdd extends ActionBarActivity {
                     new AddBookAsync().execute();
                 } else {
                     CharSequence text = getString(R.string.book_add_empty_title);
-                    Toast toast = Toast.makeText(getApplication(), text, Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
                     toast.show();
                 }
@@ -237,6 +231,23 @@ public class BookAdd extends ActionBarActivity {
         });
         if (BuildConfig.DEBUG)
             Log.d(TAG, "finished onCreate task!");
+        return v;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "started onCreate task!");
+        super.onCreate(savedInstanceState);
+
+        db  = DataBaseHelper.getInstance(getActivity());
+
+        PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
+
+        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+
     }
 
     private void setCoverLoading(boolean loading) {
@@ -338,32 +349,32 @@ public class BookAdd extends ActionBarActivity {
     */
     private boolean isOnline() {
         ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         boolean isWifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
                 .isConnectedOrConnecting();
         boolean isMobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
                 .isConnectedOrConnecting();
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         boolean useMobileConnection = sharedPref.getBoolean(getString(R.string.pref_cover_on_internet), true);
         return isWifi || (useMobileConnection && isMobile);
     }
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.action_book_add, menu);
-        return true;
+        inflater.inflate(R.menu.action_book_add, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(android.R.id.content, new SettingsFragment());
-                fragmentTransaction.commit();
+                getFragmentManager().beginTransaction()
+                        .add(android.R.id.content, new Preferences())
+                        .addToBackStack(Preferences.TAG)
+                        .commit();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -376,7 +387,7 @@ public class BookAdd extends ActionBarActivity {
 
         @Override
         protected void onPreExecute() {
-            progressDialog = new ProgressDialog(BookAdd.this);
+            progressDialog = new ProgressDialog(getActivity());
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progressDialog.setCancelable(false);
             progressDialog.setTitle(getString(R.string.book_add_progress_title));
@@ -454,7 +465,7 @@ public class BookAdd extends ActionBarActivity {
         @Override
         protected void onPostExecute(Void result) {
             progressDialog.cancel();
-            startActivity(new Intent(getApplication(), MediaView.class));
+            startActivity(new Intent(getActivity(), MediaView.class));
         }
     }
 
@@ -462,7 +473,7 @@ public class BookAdd extends ActionBarActivity {
     private String[] saveImages(Bitmap cover) {
         String thumbPath = "";
         String coverPath = "";
-        String packageName = getPackageName();
+        String packageName = getActivity().getPackageName();
         String fileName = String.valueOf(System.currentTimeMillis()) + ".png";
         int pixelCut = 10;
 
@@ -511,12 +522,4 @@ public class BookAdd extends ActionBarActivity {
             return !pathname.isHidden() && (pathname.isDirectory() || MediaAdd.isImage(pathname.getName()));
         }
     };
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        //checking if external storage is available
-        new CommonTasks().checkExternalStorage(this);
-    }
 }

@@ -33,9 +33,9 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.helper.BookDetail;
-import de.ph1b.audiobook.helper.DataBaseHelper;
-import de.ph1b.audiobook.helper.MediaDetail;
+import de.ph1b.audiobook.utils.BookDetail;
+import de.ph1b.audiobook.utils.DataBaseHelper;
+import de.ph1b.audiobook.utils.MediaDetail;
 import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.receiver.RemoteControlReceiver;
 import de.ph1b.audiobook.receiver.WidgetProvider;

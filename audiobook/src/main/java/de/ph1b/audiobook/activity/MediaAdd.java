@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.activity;
 
+import android.app.Fragment;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -12,9 +13,10 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import de.ph1b.audiobook.BuildConfig;
-import de.ph1b.audiobook.fragment.ChooseFilesFragment;
-import de.ph1b.audiobook.helper.CommonTasks;
-import de.ph1b.audiobook.helper.NaturalOrderComparator;
+import de.ph1b.audiobook.fragment.FilesAdd;
+import de.ph1b.audiobook.fragment.FilesChoose;
+import de.ph1b.audiobook.utils.CommonTasks;
+import de.ph1b.audiobook.utils.NaturalOrderComparator;
 import de.ph1b.audiobook.interfaces.OnBackPressedListener;
 
 
@@ -26,7 +28,7 @@ public class MediaAdd extends ActionBarActivity {
     public static final int AUDIO = 1;
     public static final int IMAGE = 2;
 
-    private static ArrayList<String> audioTypes = genAudioTypes();
+    private static final ArrayList<String> audioTypes = genAudioTypes();
 
     private static ArrayList<String> genAudioTypes() {
         ArrayList<String> audioTypes = new ArrayList<String>();
@@ -68,7 +70,8 @@ public class MediaAdd extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        if (onBackPressedListener != null)
+        FilesChoose filesChooseFragment = (FilesChoose) getFragmentManager().findFragmentByTag(FilesChoose.TAG);
+        if (onBackPressedListener != null && filesChooseFragment != null && filesChooseFragment.allowBackPress())
             onBackPressedListener.backPressed();
         else
             super.onBackPressed();
@@ -79,8 +82,8 @@ public class MediaAdd extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         getFragmentManager().beginTransaction()
-                .add(android.R.id.content, new ChooseFilesFragment())
-                .addToBackStack(ChooseFilesFragment.TAG)
+                .replace(android.R.id.content, new FilesChoose())
+                .addToBackStack(FilesChoose.TAG)
                 .commit();
     }
 

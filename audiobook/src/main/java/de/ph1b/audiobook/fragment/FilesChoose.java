@@ -2,7 +2,6 @@ package de.ph1b.audiobook.fragment;
 
 
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,14 +33,13 @@ import java.util.LinkedList;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.BookAdd;
 import de.ph1b.audiobook.activity.MediaAdd;
 import de.ph1b.audiobook.activity.MediaView;
 import de.ph1b.audiobook.adapter.FileAdapter;
-import de.ph1b.audiobook.helper.NaturalOrderComparator;
 import de.ph1b.audiobook.interfaces.OnBackPressedListener;
+import de.ph1b.audiobook.utils.NaturalOrderComparator;
 
-public class ChooseFilesFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
+public class FilesChoose extends Fragment implements CompoundButton.OnCheckedChangeListener {
 
     public static final String TAG = "de.ph1b.audiobook.fragment.ChooseFilesFragment";
 
@@ -71,7 +69,7 @@ public class ChooseFilesFragment extends Fragment implements CompoundButton.OnCh
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_file_chooser, container, false);
+        View v = inflater.inflate(R.layout.fragment_files_choose, container, false);
 
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -128,6 +126,10 @@ public class ChooseFilesFragment extends Fragment implements CompoundButton.OnCh
         return v;
     }
 
+    public boolean allowBackPress(){
+        return link.size() > 0;
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -138,10 +140,10 @@ public class ChooseFilesFragment extends Fragment implements CompoundButton.OnCh
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(android.R.id.content, new SettingsFragment());
-                fragmentTransaction.addToBackStack(TAG);
-                fragmentTransaction.commit();
+                getFragmentManager().beginTransaction()
+                        .add(android.R.id.content, new Preferences())
+                        .addToBackStack(Preferences.TAG)
+                        .commit();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -185,9 +187,9 @@ public class ChooseFilesFragment extends Fragment implements CompoundButton.OnCh
                 public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.action_add_badge:
-                            for (File f : ChooseFilesFragment.this.dirAddList)
+                            for (File f : FilesChoose.this.dirAddList)
                                 if (BuildConfig.DEBUG) Log.d(TAG, "Adding: " + f.getAbsolutePath());
-                            addMediaBundleAsync(ChooseFilesFragment.this.dirAddList);
+                            addMediaBundleAsync(FilesChoose.this.dirAddList);
                             mode.finish();
                             return true;
                         default:
@@ -263,14 +265,19 @@ public class ChooseFilesFragment extends Fragment implements CompoundButton.OnCh
 
             @Override
             protected void onPostExecute(Boolean result) {
-                //if adding worked start next activity,  otherwise stay here and make toast
+                //if adding worked start next fragment,  otherwise stay here and make toast
                 if (result) {
-                    Intent intent = new Intent(getActivity(), BookAdd.class);
-                    intent.putExtra(MediaAdd.BOOK_PROPERTIES_DEFAULT_NAME, defaultName);
-                    intent.putStringArrayListExtra(MediaAdd.FILES_AS_STRING, dirAddAsString);
-                    startActivity(intent);
-                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(MediaAdd.BOOK_PROPERTIES_DEFAULT_NAME, defaultName);
+                    bundle.putStringArrayList(MediaAdd.FILES_AS_STRING, dirAddAsString);
+                    FilesAdd fragment = new FilesAdd();
+                    fragment.setArguments(bundle);
 
+                    getFragmentManager().beginTransaction()
+                            .add(android.R.id.content, fragment)
+                            .addToBackStack(FilesAdd.TAG)
+                            .commit();
+                } else {
                     if (dirs.size() > 1)
                         dirSpinner.setVisibility(View.VISIBLE);
                     fileListView.setVisibility(View.VISIBLE);

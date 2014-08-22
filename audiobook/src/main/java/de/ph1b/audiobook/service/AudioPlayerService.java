@@ -23,10 +23,10 @@ import java.io.File;
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.MediaView;
-import de.ph1b.audiobook.fragment.MediaPlayFragment;
-import de.ph1b.audiobook.helper.BookDetail;
-import de.ph1b.audiobook.helper.DataBaseHelper;
-import de.ph1b.audiobook.helper.MediaDetail;
+import de.ph1b.audiobook.fragment.BookPlay;
+import de.ph1b.audiobook.utils.BookDetail;
+import de.ph1b.audiobook.utils.DataBaseHelper;
+import de.ph1b.audiobook.utils.MediaDetail;
 
 public class AudioPlayerService extends Service {
 
@@ -214,7 +214,7 @@ public class AudioPlayerService extends Service {
         @Override
         protected void onPreExecute() {
             Intent intent = new Intent(getApplicationContext(), MediaView.class);
-            intent.setAction(MediaPlayFragment.TAG);
+            intent.setAction(BookPlay.TAG);
             pi = PendingIntent.getActivity(getApplicationContext(), 0,
                     new Intent(intent),
                     PendingIntent.FLAG_UPDATE_CURRENT);

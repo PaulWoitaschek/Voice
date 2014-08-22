@@ -3,7 +3,6 @@ package de.ph1b.audiobook.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -41,16 +40,16 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.MediaAdd;
 import de.ph1b.audiobook.activity.MediaView;
 import de.ph1b.audiobook.adapter.MediaAdapter;
-import de.ph1b.audiobook.helper.BookDetail;
-import de.ph1b.audiobook.helper.CommonTasks;
-import de.ph1b.audiobook.helper.DataBaseHelper;
+import de.ph1b.audiobook.utils.BookDetail;
+import de.ph1b.audiobook.utils.CommonTasks;
+import de.ph1b.audiobook.utils.DataBaseHelper;
 import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.service.StateManager;
 
 
-public class MediaChooserFragment extends Fragment {
+public class BookChoose extends Fragment {
 
     public static final String TAG = "de.ph1b.audiobook.fragment.MediaChooserFragment";
 
@@ -86,7 +85,7 @@ public class MediaChooserFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_media_chooser, container, false);
+        View v = inflater.inflate(R.layout.fragment_book_choose, container, false);
 
         current = (LinearLayout) v.findViewById(R.id.current);
         currentCover = (ImageView) v.findViewById(R.id.current_cover);
@@ -159,20 +158,19 @@ public class MediaChooserFragment extends Fragment {
                 int bookId = book.getId();
 
                 if (book.getMediaIds().length > 0) {
-                    SharedPreferences settings = MediaChooserFragment.this.a.getSharedPreferences(MediaView.SHARED_PREFS, 0);
+                    SharedPreferences settings = BookChoose.this.a.getSharedPreferences(MediaView.SHARED_PREFS, 0);
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putInt(MediaView.SHARED_PREFS_CURRENT, bookId);
                     editor.apply();
 
                     Bundle bundle = new Bundle();
                     bundle.putInt(MediaView.PLAY_BOOK, bookId);
-                    MediaPlayFragment fragment = new MediaPlayFragment();
+                    BookPlay fragment = new BookPlay();
                     fragment.setArguments(bundle);
                     getFragmentManager().beginTransaction()
-                            .replace(android.R.id.content, fragment)
-                            .addToBackStack(MediaPlayFragment.TAG)
+                            .add(android.R.id.content, fragment)
+                            .addToBackStack(BookPlay.TAG)
                             .commit();
-
                 }
             }
         });
@@ -251,11 +249,11 @@ public class MediaChooserFragment extends Fragment {
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
                     bundle.putInt(MediaView.PLAY_BOOK, b.getId());
-                    MediaPlayFragment fragment = new MediaPlayFragment();
+                    BookPlay fragment = new BookPlay();
                     fragment.setArguments(bundle);
                     getFragmentManager().beginTransaction()
                             .add(android.R.id.content, fragment)
-                            .addToBackStack(MediaPlayFragment.TAG)
+                            .addToBackStack(BookPlay.TAG)
                             .commit();
                 }
             });
@@ -291,10 +289,10 @@ public class MediaChooserFragment extends Fragment {
                 startActivity(new Intent(a, MediaAdd.class));
                 return true;
             case R.id.action_settings:
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(android.R.id.content, new SettingsFragment());
-                fragmentTransaction.addToBackStack(TAG);
-                fragmentTransaction.commit();
+                getFragmentManager().beginTransaction()
+                        .add(android.R.id.content, new Preferences())
+                        .addToBackStack(Preferences.TAG)
+                        .commit();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

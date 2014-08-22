@@ -2,14 +2,13 @@ package de.ph1b.audiobook.activity;
 
 
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
-import de.ph1b.audiobook.fragment.MediaChooserFragment;
-import de.ph1b.audiobook.helper.CommonTasks;
+import de.ph1b.audiobook.fragment.BookChoose;
+import de.ph1b.audiobook.utils.CommonTasks;
 
-public class MediaView extends ActionBarActivity {
+public class MediaView extends ActionBarActivity{
 
     private static final String TAG = "de.ph1b.audiobook.activity.MediaView";
     public static final String PLAY_BOOK = TAG + ".PLAY_BOOK";
@@ -21,8 +20,8 @@ public class MediaView extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         getFragmentManager().beginTransaction()
-                .add(android.R.id.content, new MediaChooserFragment())
-                .addToBackStack(MediaChooserFragment.TAG)
+                .add(android.R.id.content, new BookChoose())
+                .addToBackStack(BookChoose.TAG)
                 .commit();
     }
 

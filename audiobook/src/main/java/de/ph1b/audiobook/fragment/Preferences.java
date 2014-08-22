@@ -17,9 +17,9 @@ import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 
 
-public class SettingsFragment extends PreferenceFragment {
+public class Preferences extends PreferenceFragment {
 
-    private static final String TAG = "de.ph1b.audiobook.fragment.SettingsFragment";
+    public static final String TAG = "de.ph1b.audiobook.fragment.Preferences";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,10 +34,10 @@ public class SettingsFragment extends PreferenceFragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-        //if (view != null)
-            //view.setBackgroundColor(getResources().getColor(android.R.color.white));
-        return view;
+        View v = super.onCreateView(inflater, container, savedInstanceState);
+        if (v != null)
+            v.setBackgroundColor(getResources().getColor(R.color.fragment_background));
+        return v;
     }
 
     @Override

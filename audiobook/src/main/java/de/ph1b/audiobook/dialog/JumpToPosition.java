@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.fragment;
+package de.ph1b.audiobook.dialog;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;

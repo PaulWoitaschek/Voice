@@ -2,7 +2,6 @@ package de.ph1b.audiobook.fragment;
 
 
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -41,14 +40,16 @@ import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.MediaView;
 import de.ph1b.audiobook.adapter.MediaSpinnerAdapter;
-import de.ph1b.audiobook.helper.BookDetail;
-import de.ph1b.audiobook.helper.MediaDetail;
+import de.ph1b.audiobook.dialog.JumpToPosition;
+import de.ph1b.audiobook.dialog.SleepDialog;
+import de.ph1b.audiobook.utils.BookDetail;
+import de.ph1b.audiobook.utils.MediaDetail;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlaybackService;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.service.StateManager;
 
-public class MediaPlayFragment extends Fragment implements OnClickListener {
+public class BookPlay extends Fragment implements OnClickListener {
 
     private ImageButton play_button;
     private TextView playedTimeView;
@@ -226,7 +227,7 @@ public class MediaPlayFragment extends Fragment implements OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_media_player, container, false);
+        View v = inflater.inflate(R.layout.fragment_book_play, container, false);
         super.onCreate(savedInstanceState);
 
         bcm = LocalBroadcastManager.getInstance(getActivity());
@@ -343,9 +344,10 @@ public class MediaPlayFragment extends Fragment implements OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(android.R.id.content, new SettingsFragment());
-                fragmentTransaction.commit();
+                getFragmentManager().beginTransaction()
+                        .replace(android.R.id.content, new Preferences())
+                        .addToBackStack(Preferences.TAG)
+                        .commit();
                 return true;
             case R.id.action_time_change:
                 if (duration > 0) {

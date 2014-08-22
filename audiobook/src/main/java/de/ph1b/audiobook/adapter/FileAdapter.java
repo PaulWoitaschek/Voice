@@ -15,17 +15,17 @@ import java.util.ArrayList;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.fragment.ChooseFilesFragment;
+import de.ph1b.audiobook.fragment.FilesChoose;
 
 public class FileAdapter extends BaseAdapter {
 
     private final ArrayList<File> data;
     private final Context c;
-    private final ChooseFilesFragment fragment;
+    private final FilesChoose fragment;
     private static boolean[] checked;
     private static final String TAG = "FileAdapter";
 
-    public FileAdapter(ArrayList<File> data, Context c, ChooseFilesFragment fragment) {
+    public FileAdapter(ArrayList<File> data, Context c, FilesChoose fragment) {
         this.data = data;
         this.c = c;
         this.fragment = fragment;
@@ -53,7 +53,7 @@ public class FileAdapter extends BaseAdapter {
 
         if (convertView == null) {
             LayoutInflater vi = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = vi.inflate(R.layout.file_chooser_listview_layout, parent, false);
+            convertView = vi.inflate(R.layout.adapter_files_choose, parent, false);
 
             viewHolder = new ViewHolder();
             viewHolder.symbolView = (TextView) convertView.findViewById(R.id.file_symbol);
