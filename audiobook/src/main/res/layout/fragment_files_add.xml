@@ -12,7 +12,8 @@
         android:id="@+id/book_name"
         android:hint="@string/book_name_hint"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="20dp"/>
+        android:layout_margin="20dp"
+        android:windowSoftInputMode="stateHidden" />
 
     <LinearLayout
         android:id="@+id/coverLayout"
@@ -35,7 +36,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/content_cover"
             android:layout_weight="1"
-            android:visibility="visible"/>
+            android:visibility="visible" />
 
         <ProgressBar
             android:id="@+id/cover_loading"
@@ -45,7 +46,7 @@
             android:layout_margin="60dp"
             style="@android:style/Widget.ProgressBar.Large.Inverse"
             android:indeterminate="false"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <ImageButton
             android:id="@+id/next_cover"
@@ -55,7 +56,7 @@
             style="?android:attr/borderlessButtonStyle"
             android:contentDescription="@string/content_next_cover" />
 
-        </LinearLayout>
+    </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"
@@ -63,6 +64,6 @@
         android:text="@string/book_add"
         android:id="@+id/book_add"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="20dp"/>
+        android:layout_margin="20dp" />
 
 </LinearLayout>

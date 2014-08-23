@@ -240,11 +240,11 @@ public class FilesAdd extends Fragment {
             Log.d(TAG, "started onCreate task!");
         super.onCreate(savedInstanceState);
 
-        db  = DataBaseHelper.getInstance(getActivity());
+        db = DataBaseHelper.getInstance(getActivity());
 
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
 
-        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
 
