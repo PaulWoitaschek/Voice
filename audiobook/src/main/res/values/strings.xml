@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string translatable="false" name="app_name">MaterialPlayer</string>
+    <string translatable="false" name="app_name">Material Player</string>
     <string translatable="false" name="action_add">Add media</string>
     <string translatable="false" name="zeroTime">0:00:00</string>
     <string translatable="false" name="cover">Cover</string>
     <string translatable="false" name="play">Play / Pause</string>
     <string translatable="false" name="pref_change_amount">CHANGE_AMOUNT</string>
-    <string translatable="false" name="widget_small">MaterialPlayer (1x1)</string>
+    <string translatable="false" name="widget_small">Material Player (1x1)</string>
 
     <string name="action_settings">Preferences</string>
     <string name="back">Back</string>
