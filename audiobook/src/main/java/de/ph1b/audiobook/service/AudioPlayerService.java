@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -249,19 +250,25 @@ public class AudioPlayerService extends Service {
             return null;
         }
 
+        @SuppressWarnings("deprecation")
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             Intent i = new Intent(NOTIFICATION_PAUSE);
             PendingIntent pauseActionPI = PendingIntent.getBroadcast(getApplicationContext(), 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
-            Notification notification = new NotificationCompat.Builder(getApplicationContext())
-                    .setContentTitle(book.getName())
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
+            builder.setContentTitle(book.getName())
                     .setLargeIcon(thumb)
                     .setSmallIcon(R.drawable.av_play_dark)
                     .setContentIntent(pi)
+                    .setOngoing(true)
                     .addAction(R.drawable.av_pause_dark, "Pause", pauseActionPI)
-                    .setAutoCancel(true)
-                    .build();
+                    .setAutoCancel(true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+                builder.setPriority(Notification.PRIORITY_HIGH);
+            Notification notification = builder.build();
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
+                notification.flags |= Notification.FLAG_HIGH_PRIORITY;
             startForeground(NOTIFICATION_ID, notification);
         }
     }
