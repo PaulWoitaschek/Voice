@@ -42,12 +42,12 @@ import de.ph1b.audiobook.activity.MediaView;
 import de.ph1b.audiobook.adapter.MediaSpinnerAdapter;
 import de.ph1b.audiobook.dialog.JumpToPosition;
 import de.ph1b.audiobook.dialog.SleepDialog;
-import de.ph1b.audiobook.utils.BookDetail;
-import de.ph1b.audiobook.utils.MediaDetail;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlaybackService;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.service.StateManager;
+import de.ph1b.audiobook.utils.BookDetail;
+import de.ph1b.audiobook.utils.MediaDetail;
 
 public class BookPlay extends Fragment implements OnClickListener {
 
@@ -103,8 +103,9 @@ public class BookPlay extends Fragment implements OnClickListener {
 
 
                 //setting book name
+                ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
                 String bookName = b.getName();
-                ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(bookName);
+                actionBar.setTitle(bookName);
 
                 bookId = b.getId();
 
@@ -194,19 +195,20 @@ public class BookPlay extends Fragment implements OnClickListener {
                 //sets play-button logo depending on player playing
                 int icon = intent.getExtras().getInt(PlaybackService.GUI_PLAY_ICON);
                 play_button.setImageResource(icon);
-            }
 
-            //updates seekBar by frequent calls
-            if (action.equals(PlaybackService.GUI_SEEK)) {
-                if (!seekBarIsUpdating)
-                    seek_bar.setProgress(intent.getExtras().getInt(PlaybackService.GUI_SEEK));
-            }
 
-            if (action.equals(PlaybackService.GUI_MAKE_TOAST)) {
-                String text = intent.getStringExtra(PlaybackService.GUI_MAKE_TOAST);
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, "Received text for toast: " + text);
-                makeToast(text, Toast.LENGTH_SHORT);
+                //updates seekBar by frequent calls
+                if (action.equals(PlaybackService.GUI_SEEK)) {
+                    if (!seekBarIsUpdating)
+                        seek_bar.setProgress(intent.getExtras().getInt(PlaybackService.GUI_SEEK));
+                }
+
+                if (action.equals(PlaybackService.GUI_MAKE_TOAST)) {
+                    String text = intent.getStringExtra(PlaybackService.GUI_MAKE_TOAST);
+                    if (BuildConfig.DEBUG)
+                        Log.d(TAG, "Received text for toast: " + text);
+                    makeToast(text, Toast.LENGTH_SHORT);
+                }
             }
         }
     };
@@ -221,6 +223,11 @@ public class BookPlay extends Fragment implements OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //setup actionbar
+        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         setHasOptionsMenu(true);
     }
 
@@ -232,9 +239,6 @@ public class BookPlay extends Fragment implements OnClickListener {
 
         bcm = LocalBroadcastManager.getInstance(getActivity());
 
-        //setup actionbar
-        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
 
@@ -343,6 +347,12 @@ public class BookPlay extends Fragment implements OnClickListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                getFragmentManager().beginTransaction()
+                        .replace(android.R.id.content, new BookChoose())
+                        .addToBackStack(BookChoose.TAG)
+                        .commit();
+                return true;
             case R.id.action_settings:
                 getFragmentManager().beginTransaction()
                         .replace(android.R.id.content, new Preferences())
@@ -372,7 +382,6 @@ public class BookPlay extends Fragment implements OnClickListener {
     @Override
     public void onDestroy() {
         bcm.unregisterReceiver(updateGUIReceiver);
-
         super.onDestroy();
     }
 

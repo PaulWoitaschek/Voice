@@ -143,14 +143,11 @@ public class AudioPlayerService extends Service {
 
             if (action.equals(CONTROL_PLAY_PAUSE)) {
                 switch (StateManager.getState()) {
-                    case PREPARED:
-                    case PAUSED:
-                        playbackService.play();
-                        break;
                     case STARTED:
                         playbackService.pause();
                         break;
                     default:
+                        playbackService.play();
                         break;
                 }
             }
@@ -216,6 +213,7 @@ public class AudioPlayerService extends Service {
         protected void onPreExecute() {
             Intent intent = new Intent(getApplicationContext(), MediaView.class);
             intent.setAction(BookPlay.TAG);
+            intent.putExtra(BOOK_ID, book.getId());
             pi = PendingIntent.getActivity(getApplicationContext(), 0,
                     new Intent(intent),
                     PendingIntent.FLAG_UPDATE_CURRENT);
@@ -276,12 +274,12 @@ public class AudioPlayerService extends Service {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
 
         unregisterReceiver(notificationPauseReceiver);
         bcm.unregisterReceiver(controlReceiver);
         playbackService.finish();
         playbackService = null;
+        super.onDestroy();
     }
 
     @Override

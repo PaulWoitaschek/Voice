@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.fragment;
 
+
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -244,8 +245,9 @@ public class FilesAdd extends Fragment {
 
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
 
-        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+
 
 
     }
@@ -370,9 +372,12 @@ public class FilesAdd extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                startActivity(new Intent(getActivity(), MediaView.class));
+                return true;
             case R.id.action_settings:
                 getFragmentManager().beginTransaction()
-                        .add(android.R.id.content, new Preferences())
+                        .replace(android.R.id.content, new Preferences())
                         .addToBackStack(Preferences.TAG)
                         .commit();
                 return true;

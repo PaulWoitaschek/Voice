@@ -62,6 +62,11 @@ public class FilesChoose extends Fragment implements CompoundButton.OnCheckedCha
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
+        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+
+        addPathToSpinner();
 
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
 
@@ -71,14 +76,10 @@ public class FilesChoose extends Fragment implements CompoundButton.OnCheckedCha
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_files_choose, container, false);
 
-        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
         dirSpinner = (Spinner) v.findViewById(R.id.dirSpinner);
         progressBar = (ProgressBar) v.findViewById(R.id.progress);
         fileListView = (ListView) v.findViewById(R.id.fileListView);
 
-        addPathToSpinner();
 
         if (dirs.size() > 1) {
             dirSpinner.setVisibility(View.VISIBLE);
@@ -112,13 +113,15 @@ public class FilesChoose extends Fragment implements CompoundButton.OnCheckedCha
         ((MediaAdd) getActivity()).setOnBackPressedListener(new OnBackPressedListener() {
             @Override
             public void backPressed() {
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "backPressed called with link size: " + link.size());
                 if (link.getLast().equals(link.getFirst())) {
-                    Intent intent = new Intent(getActivity(), MediaView.class);
-                    startActivity(intent);
+                    startActivity(new Intent(getActivity(), MediaView.class));
                 }
                 link.removeLast();
                 String now = link.getLast();
-                link.removeLast();
+                if (link.size() > 0)
+                    link.removeLast();
                 populateList(now);
             }
         });
@@ -126,7 +129,7 @@ public class FilesChoose extends Fragment implements CompoundButton.OnCheckedCha
         return v;
     }
 
-    public boolean allowBackPress(){
+    public boolean allowBackPress() {
         return link.size() > 0;
     }
 
@@ -139,9 +142,12 @@ public class FilesChoose extends Fragment implements CompoundButton.OnCheckedCha
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                startActivity(new Intent(getActivity(), MediaView.class));
+                return true;
             case R.id.action_settings:
                 getFragmentManager().beginTransaction()
-                        .add(android.R.id.content, new Preferences())
+                        .replace(android.R.id.content, new Preferences())
                         .addToBackStack(Preferences.TAG)
                         .commit();
                 return true;
@@ -188,7 +194,8 @@ public class FilesChoose extends Fragment implements CompoundButton.OnCheckedCha
                     switch (item.getItemId()) {
                         case R.id.action_add_badge:
                             for (File f : FilesChoose.this.dirAddList)
-                                if (BuildConfig.DEBUG) Log.d(TAG, "Adding: " + f.getAbsolutePath());
+                                if (BuildConfig.DEBUG)
+                                    Log.d(TAG, "Adding: " + f.getAbsolutePath());
                             addMediaBundleAsync(FilesChoose.this.dirAddList);
                             mode.finish();
                             return true;
@@ -274,7 +281,7 @@ public class FilesChoose extends Fragment implements CompoundButton.OnCheckedCha
                     fragment.setArguments(bundle);
 
                     getFragmentManager().beginTransaction()
-                            .add(android.R.id.content, fragment)
+                            .replace(android.R.id.content, fragment)
                             .addToBackStack(FilesAdd.TAG)
                             .commit();
                 } else {

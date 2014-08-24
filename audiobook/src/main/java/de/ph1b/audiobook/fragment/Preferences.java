@@ -4,14 +4,12 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v7.app.ActionBarActivity;
-
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
@@ -27,9 +25,9 @@ public class Preferences extends PreferenceFragment {
         setHasOptionsMenu(true);
         addPreferencesFromResource(R.xml.preferences);
         String actionBarTitle = getString(R.string.action_settings);
-        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
-        if (actionBar != null)
-            actionBar.setTitle(actionBarTitle);
+        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(actionBarTitle);
     }
 
     @Override
@@ -40,10 +38,19 @@ public class Preferences extends PreferenceFragment {
         return v;
     }
 
+
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         if (BuildConfig.DEBUG)
-            Log.d(TAG, "onCreateOptionsMenu was called!");
-        inflater.inflate(R.menu.empty, menu);
+            Log.d(TAG, "onOptionsItemSelected was called with: " + item.toString());
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getFragmentManager().beginTransaction()
+                        .replace(android.R.id.content, new BookChoose())
+                        .commit();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

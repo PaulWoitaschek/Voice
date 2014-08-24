@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.activity;
 
-import android.app.Fragment;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -13,11 +13,10 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import de.ph1b.audiobook.BuildConfig;
-import de.ph1b.audiobook.fragment.FilesAdd;
 import de.ph1b.audiobook.fragment.FilesChoose;
+import de.ph1b.audiobook.interfaces.OnBackPressedListener;
 import de.ph1b.audiobook.utils.CommonTasks;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
-import de.ph1b.audiobook.interfaces.OnBackPressedListener;
 
 
 public class MediaAdd extends ActionBarActivity {
@@ -70,11 +69,15 @@ public class MediaAdd extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
+        int size = getFragmentManager().getBackStackEntryCount();
         FilesChoose filesChooseFragment = (FilesChoose) getFragmentManager().findFragmentByTag(FilesChoose.TAG);
         if (onBackPressedListener != null && filesChooseFragment != null && filesChooseFragment.allowBackPress())
             onBackPressedListener.backPressed();
-        else
-            super.onBackPressed();
+        else if (size > 0) {
+            getFragmentManager().popBackStackImmediate();
+        } else {
+            startActivity(new Intent(this, MediaView.class));
+        }
     }
 
     @Override
@@ -82,8 +85,8 @@ public class MediaAdd extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new FilesChoose())
-                .addToBackStack(FilesChoose.TAG)
+                //.replace(android.R.id.content, new FilesChoose())
+                .add(android.R.id.content, new FilesChoose(), FilesChoose.TAG)
                 .commit();
     }
 

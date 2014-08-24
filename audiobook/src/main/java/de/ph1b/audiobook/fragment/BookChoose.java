@@ -13,6 +13,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.Gravity;
@@ -40,18 +42,18 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.MediaAdd;
 import de.ph1b.audiobook.activity.MediaView;
 import de.ph1b.audiobook.adapter.MediaAdapter;
-import de.ph1b.audiobook.utils.BookDetail;
-import de.ph1b.audiobook.utils.CommonTasks;
-import de.ph1b.audiobook.utils.DataBaseHelper;
 import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.service.StateManager;
+import de.ph1b.audiobook.utils.BookDetail;
+import de.ph1b.audiobook.utils.CommonTasks;
+import de.ph1b.audiobook.utils.DataBaseHelper;
 
 
 public class BookChoose extends Fragment {
 
-    public static final String TAG = "de.ph1b.audiobook.fragment.MediaChooserFragment";
+    public static final String TAG = "de.ph1b.audiobook.fragment.BookChoose";
 
     private ArrayList<BookDetail> details;
     private ArrayList<BookDetail> deleteList;
@@ -71,11 +73,14 @@ public class BookChoose extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "onCreate was called");
+
+
         a = getActivity();
         db = DataBaseHelper.getInstance(a);
         bcm = LocalBroadcastManager.getInstance(a);
 
-        setHasOptionsMenu(true);
 
         details = db.getAllBooks();
         deleteList = new ArrayList<BookDetail>();
@@ -87,13 +92,16 @@ public class BookChoose extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_book_choose, container, false);
 
+        setHasOptionsMenu(true);
+        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setTitle(getActivity().getString(R.string.app_name));
+
         current = (LinearLayout) v.findViewById(R.id.current);
         currentCover = (ImageView) v.findViewById(R.id.current_cover);
         currentText = (TextView) v.findViewById(R.id.current_text);
         currentPlaying = (ImageButton) v.findViewById(R.id.current_playing);
         ListView mediaListView = (ListView) v.findViewById(R.id.listMediaView);
-
-        setHasOptionsMenu(true);
 
         adapt = new MediaAdapter(details, a);
         mediaListView.setAdapter(adapt);
@@ -168,7 +176,7 @@ public class BookChoose extends Fragment {
                     BookPlay fragment = new BookPlay();
                     fragment.setArguments(bundle);
                     getFragmentManager().beginTransaction()
-                            .add(android.R.id.content, fragment)
+                            .replace(android.R.id.content, fragment)
                             .addToBackStack(BookPlay.TAG)
                             .commit();
                 }
@@ -252,7 +260,7 @@ public class BookChoose extends Fragment {
                     BookPlay fragment = new BookPlay();
                     fragment.setArguments(bundle);
                     getFragmentManager().beginTransaction()
-                            .add(android.R.id.content, fragment)
+                            .replace(android.R.id.content, fragment)
                             .addToBackStack(BookPlay.TAG)
                             .commit();
                 }
@@ -275,11 +283,13 @@ public class BookChoose extends Fragment {
         new CommonTasks().checkExternalStorage(a);
     }
 
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (BuildConfig.DEBUG)
             Log.d(TAG, "onCreateOptionsMenu was called!");
         inflater.inflate(R.menu.action_media_view, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -290,7 +300,7 @@ public class BookChoose extends Fragment {
                 return true;
             case R.id.action_settings:
                 getFragmentManager().beginTransaction()
-                        .add(android.R.id.content, new Preferences())
+                        .replace(android.R.id.content, new Preferences())
                         .addToBackStack(Preferences.TAG)
                         .commit();
                 return true;
