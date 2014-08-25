@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".activity.MediaView"
+            android:name=".activity.BookChoose"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,12 +24,39 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".activity.BookPlay">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.BookChoose" />
+        </activity>
+
         <activity
-            android:name=".activity.MediaAdd"
+            android:name=".activity.FilesChoose"
             android:label="@string/app_name">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MediaView" />
+                android:value=".activity.BookChoose" />
+        </activity>
+
+        <activity
+            android:name=".activity.FilesAdd"
+            android:label="@string/app_name">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.BookChoose" />
+        </activity>
+
+        <activity
+            android:name=".activity.Settings"
+            android:label="@string/action_settings">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.BookChoose" />
+        </activity>
+
+        <activity
+            android:name=".activity.NoExternalStorage"
+            android:label="@string/action_settings">
         </activity>
 
         <service android:name=".service.AudioPlayerService" />

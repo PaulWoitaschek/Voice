@@ -33,13 +33,12 @@ import java.util.LinkedList;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.MediaAdd;
-import de.ph1b.audiobook.activity.MediaView;
+import de.ph1b.audiobook.activity.*;
 import de.ph1b.audiobook.adapter.FileAdapter;
 import de.ph1b.audiobook.interfaces.OnBackPressedListener;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
 
-public class FilesChoose extends Fragment implements CompoundButton.OnCheckedChangeListener {
+public class FilesChooseFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
 
     public static final String TAG = "de.ph1b.audiobook.fragment.ChooseFilesFragment";
 
@@ -110,13 +109,13 @@ public class FilesChoose extends Fragment implements CompoundButton.OnCheckedCha
             populateList(dirs.get(0)); //Setting path to external storage directory to list it
         }
 
-        ((MediaAdd) getActivity()).setOnBackPressedListener(new OnBackPressedListener() {
+        ((FilesChoose) getActivity()).setOnBackPressedListener(new OnBackPressedListener() {
             @Override
             public void backPressed() {
                 if (BuildConfig.DEBUG)
                     Log.d(TAG, "backPressed called with link size: " + link.size());
                 if (link.getLast().equals(link.getFirst())) {
-                    startActivity(new Intent(getActivity(), MediaView.class));
+                    startActivity(new Intent(getActivity(), BookChoose.class));
                 }
                 link.removeLast();
                 String now = link.getLast();
@@ -142,14 +141,8 @@ public class FilesChoose extends Fragment implements CompoundButton.OnCheckedCha
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                startActivity(new Intent(getActivity(), MediaView.class));
-                return true;
             case R.id.action_settings:
-                getFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, new Preferences())
-                        .addToBackStack(Preferences.TAG)
-                        .commit();
+                startActivity(new Intent(getActivity(), Settings.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -193,10 +186,10 @@ public class FilesChoose extends Fragment implements CompoundButton.OnCheckedCha
                 public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.action_add_badge:
-                            for (File f : FilesChoose.this.dirAddList)
+                            for (File f : FilesChooseFragment.this.dirAddList)
                                 if (BuildConfig.DEBUG)
                                     Log.d(TAG, "Adding: " + f.getAbsolutePath());
-                            addMediaBundleAsync(FilesChoose.this.dirAddList);
+                            addMediaBundleAsync(FilesChooseFragment.this.dirAddList);
                             mode.finish();
                             return true;
                         default:
@@ -255,7 +248,7 @@ public class FilesChoose extends Fragment implements CompoundButton.OnCheckedCha
 
                 Collections.sort(dirAddList, new NaturalOrderComparator<File>());
 
-                ArrayList<File> files = MediaAdd.dirsToFiles(MediaAdd.filterShowAudioAndFolder, dirAddList, MediaAdd.AUDIO);
+                ArrayList<File> files = FilesChoose.dirsToFiles(FilesChoose.filterShowAudioAndFolder, dirAddList, FilesChoose.AUDIO);
                 if (files.size() != 0) {
                     defaultName = dirAddList.get(0).getName();
                     if (!dirAddList.get(0).isDirectory())
@@ -274,16 +267,12 @@ public class FilesChoose extends Fragment implements CompoundButton.OnCheckedCha
             protected void onPostExecute(Boolean result) {
                 //if adding worked start next fragment,  otherwise stay here and make toast
                 if (result) {
+                    Intent i = new Intent(getActivity(), FilesAdd.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString(MediaAdd.BOOK_PROPERTIES_DEFAULT_NAME, defaultName);
-                    bundle.putStringArrayList(MediaAdd.FILES_AS_STRING, dirAddAsString);
-                    FilesAdd fragment = new FilesAdd();
-                    fragment.setArguments(bundle);
-
-                    getFragmentManager().beginTransaction()
-                            .replace(android.R.id.content, fragment)
-                            .addToBackStack(FilesAdd.TAG)
-                            .commit();
+                    bundle.putString(FilesChoose.BOOK_PROPERTIES_DEFAULT_NAME, defaultName);
+                    bundle.putStringArrayList(FilesChoose.FILES_AS_STRING, dirAddAsString);
+                    i.putExtras(bundle);
+                    startActivity(i);
                 } else {
                     if (dirs.size() > 1)
                         dirSpinner.setVisibility(View.VISIBLE);
@@ -309,7 +298,7 @@ public class FilesChoose extends Fragment implements CompoundButton.OnCheckedCha
 
         link.add(path);
         File f = new File(path);
-        File[] files = f.listFiles(MediaAdd.filterShowAudioAndFolder);
+        File[] files = f.listFiles(FilesChoose.filterShowAudioAndFolder);
         fileList = new ArrayList<File>(Arrays.asList(files));
 
         //fileList = new ArrayList<File>();

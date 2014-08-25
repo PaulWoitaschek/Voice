@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -38,18 +39,20 @@ import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.MediaView;
+import de.ph1b.audiobook.activity.BookChoose;
+import de.ph1b.audiobook.activity.Settings;
 import de.ph1b.audiobook.adapter.MediaSpinnerAdapter;
 import de.ph1b.audiobook.dialog.JumpToPosition;
 import de.ph1b.audiobook.dialog.SleepDialog;
+import de.ph1b.audiobook.interfaces.OnStateChangedListener;
+import de.ph1b.audiobook.interfaces.OnTimeChangedListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
-import de.ph1b.audiobook.service.PlaybackService;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.service.StateManager;
 import de.ph1b.audiobook.utils.BookDetail;
 import de.ph1b.audiobook.utils.MediaDetail;
 
-public class BookPlay extends Fragment implements OnClickListener {
+public class BookPlayFragment extends Fragment implements OnClickListener{
 
     private ImageButton play_button;
     private TextView playedTimeView;
@@ -65,7 +68,7 @@ public class BookPlay extends Fragment implements OnClickListener {
 
     private static int bookId;
     private int oldPosition = -1;
-    public static final String TAG = "de.ph1b.audiobooks.fragment.MediaPlayFragment";
+    private static final String TAG = "de.ph1b.audiobooks.fragment.MediaPlayFragment";
 
     private boolean seekBarIsUpdating = false;
     private MediaDetail[] allMedia;
@@ -80,145 +83,133 @@ public class BookPlay extends Fragment implements OnClickListener {
 
             String action = intent.getAction();
 
-            if (action.equals(PlaybackService.GUI)) {
+            if (action.equals(AudioPlayerService.GUI)) {
+
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "setting time to" + position);
+                seek_bar.setProgress(StateManager.getTime());
+                playedTimeView.setText(formatTime(StateManager.getTime()));
 
                 //update book
-                final BookDetail b = intent.getParcelableExtra(PlaybackService.GUI_BOOK);
-                int mediaId = b.getPosition();
-                allMedia = (MediaDetail[]) intent.getParcelableArrayExtra(PlaybackService.GUI_ALL_MEDIA);
-
-                for (MediaDetail m : allMedia) {
-                    if (m.getId() == mediaId) {
-                        media = m;
-                        break;
-                    }
-                }
-
-                //checks if file exists
-                File testFile = new File(media.getPath());
-                if (!testFile.exists()) {
-                    makeToast(getString(R.string.file_not_found), Toast.LENGTH_LONG);
-                    startActivity(new Intent(getActivity(), MediaView.class));
-                }
-
-
-                //setting book name
-                ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
-                String bookName = b.getName();
-                actionBar.setTitle(bookName);
-
-                bookId = b.getId();
-
-                //setting cover
-                coverView.getViewTreeObserver().addOnPreDrawListener(
-                        new ViewTreeObserver.OnPreDrawListener() {
-                            public boolean onPreDraw() {
-                                int height = coverView.getMeasuredHeight();
-                                int width = coverView.getMeasuredWidth();
-                                String imagePath = b.getCover();
-                                Bitmap cover;
-                                if (imagePath.equals("") || new File(imagePath).isDirectory()) {
-                                    cover = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-                                    Canvas c = new Canvas(cover);
-                                    Paint textPaint = new Paint();
-                                    textPaint.setTextSize(4 * width / 5);
-                                    Resources r = getActivity().getResources();
-
-                                    textPaint.setColor(r.getColor(android.R.color.white));
-                                    textPaint.setAntiAlias(true);
-                                    textPaint.setTextAlign(Paint.Align.CENTER);
-                                    Paint backgroundPaint = new Paint();
-                                    backgroundPaint.setColor(r.getColor(R.color.file_chooser_audio));
-                                    c.drawRect(0, 0, width, height, backgroundPaint);
-                                    int y = (int) ((c.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2));
-                                    c.drawText(b.getName().substring(0, 1).toUpperCase(), width / 2, y, textPaint);
-                                    coverView.setImageBitmap(cover);
-                                } else {
-                                    coverView.setImageURI(Uri.parse(imagePath));
-                                }
-                                return true;
-                            }
-                        }
-                );
-
-
-                //hides control elements if there is only one media to play
-                if (allMedia.length == 1) {
-                    previous_button.setVisibility(View.GONE);
-                    forward_button.setVisibility(View.GONE);
-                    bookSpinner.setVisibility(View.GONE);
-                } else {
-                    previous_button.setVisibility(View.VISIBLE);
-                    forward_button.setVisibility(View.VISIBLE);
-                    bookSpinner.setVisibility(View.VISIBLE);
-                    MediaSpinnerAdapter adapter = new MediaSpinnerAdapter(getActivity(), allMedia);
-                    int currentPosition = b.getPosition();
-                    bookSpinner.setSelection(adapter.getPositionByMediaDetailId(currentPosition));
-                    bookSpinner.setAdapter(adapter);
-                    //sets correct position in spinner
-                    if (allMedia.length > 1) {
-                        bookSpinner.setSelection(adapter.getPositionByMediaDetailId(mediaId));
-                    }
-                    bookSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            if (position != oldPosition) {
-                                int newMediaId = allMedia[position].getId();
-                                Intent i = new Intent(AudioPlayerService.CONTROL_CHANGE_BOOK_POSITION);
-                                i.putExtra(AudioPlayerService.CONTROL_CHANGE_BOOK_POSITION, newMediaId);
-                                bcm.sendBroadcast(i);
-                                oldPosition = position;
-                            }
-                        }
-
-                        @Override
-                        public void onNothingSelected(AdapterView<?> parent) {
-
-                        }
-                    });
-                }
-
-
-                //updates media
-                int position = media.getPosition();
-                playedTimeView.setText(formatTime(position));
-
-                //sets duration of file
-                duration = media.getDuration();
-                maxTimeView.setText(formatTime(duration));
-
-
-                //sets seekBar to current position and correct length
-                seek_bar.setMax(duration);
-                seek_bar.setProgress(position);
-
-                //sets play-button logo depending on player playing
-                int icon = intent.getExtras().getInt(PlaybackService.GUI_PLAY_ICON);
-                play_button.setImageResource(icon);
-
-
-                //updates seekBar by frequent calls
-                if (action.equals(PlaybackService.GUI_SEEK)) {
-                    if (!seekBarIsUpdating)
-                        seek_bar.setProgress(intent.getExtras().getInt(PlaybackService.GUI_SEEK));
-                }
-
-                if (action.equals(PlaybackService.GUI_MAKE_TOAST)) {
-                    String text = intent.getStringExtra(PlaybackService.GUI_MAKE_TOAST);
+                final BookDetail b = intent.getParcelableExtra(AudioPlayerService.GUI_BOOK);
+                if (b == null) {
                     if (BuildConfig.DEBUG)
-                        Log.d(TAG, "Received text for toast: " + text);
-                    makeToast(text, Toast.LENGTH_SHORT);
+                        Log.e(TAG, "parcel extra (book) is null");
+                } else {
+                    int mediaId = b.getPosition();
+                    allMedia = (MediaDetail[]) intent.getParcelableArrayExtra(AudioPlayerService.GUI_ALL_MEDIA);
+
+                    for (MediaDetail m : allMedia) {
+                        if (m.getId() == mediaId) {
+                            media = m;
+                            break;
+                        }
+                    }
+
+                    //checks if file exists
+                    File testFile = new File(media.getPath());
+                    if (!testFile.exists()) {
+                        String text = getString(R.string.file_not_found);
+                        Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_LONG);
+                        toast.show();
+                        startActivity(new Intent(getActivity(), BookChoose.class));
+                    }
+
+
+                    //setting book name
+                    ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+                    String bookName = b.getName();
+                    actionBar.setTitle(bookName);
+
+                    bookId = b.getId();
+
+                    //setting cover
+                    coverView.getViewTreeObserver().addOnPreDrawListener(
+                            new ViewTreeObserver.OnPreDrawListener() {
+                                public boolean onPreDraw() {
+                                    int height = coverView.getMeasuredHeight();
+                                    int width = coverView.getMeasuredWidth();
+                                    String imagePath = b.getCover();
+                                    Bitmap cover;
+                                    if (imagePath.equals("") || new File(imagePath).isDirectory()) {
+                                        cover = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+                                        Canvas c = new Canvas(cover);
+                                        Paint textPaint = new Paint();
+                                        textPaint.setTextSize(4 * width / 5);
+                                        Resources r = getActivity().getResources();
+
+                                        textPaint.setColor(r.getColor(android.R.color.white));
+                                        textPaint.setAntiAlias(true);
+                                        textPaint.setTextAlign(Paint.Align.CENTER);
+                                        Paint backgroundPaint = new Paint();
+                                        backgroundPaint.setColor(r.getColor(R.color.file_chooser_audio));
+                                        c.drawRect(0, 0, width, height, backgroundPaint);
+                                        int y = (int) ((c.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2));
+                                        c.drawText(b.getName().substring(0, 1).toUpperCase(), width / 2, y, textPaint);
+                                        coverView.setImageBitmap(cover);
+                                    } else {
+                                        coverView.setImageURI(Uri.parse(imagePath));
+                                    }
+                                    return true;
+                                }
+                            }
+
+                    );
+
+
+                    //hides control elements if there is only one media to play
+                    if (allMedia.length == 1) {
+                        previous_button.setVisibility(View.GONE);
+                        forward_button.setVisibility(View.GONE);
+                        bookSpinner.setVisibility(View.GONE);
+                    } else {
+                        previous_button.setVisibility(View.VISIBLE);
+                        forward_button.setVisibility(View.VISIBLE);
+                        bookSpinner.setVisibility(View.VISIBLE);
+                        MediaSpinnerAdapter adapter = new MediaSpinnerAdapter(getActivity(), allMedia);
+                        int currentPosition = b.getPosition();
+                        bookSpinner.setSelection(adapter.getPositionByMediaDetailId(currentPosition));
+                        bookSpinner.setAdapter(adapter);
+                        //sets correct position in spinner
+                        if (allMedia.length > 1) {
+                            bookSpinner.setSelection(adapter.getPositionByMediaDetailId(mediaId));
+                        }
+                        bookSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                if (position != oldPosition) {
+                                    int newMediaId = allMedia[position].getId();
+                                    Intent i = new Intent(AudioPlayerService.CONTROL_CHANGE_BOOK_POSITION);
+                                    i.putExtra(AudioPlayerService.CONTROL_CHANGE_BOOK_POSITION, newMediaId);
+                                    bcm.sendBroadcast(i);
+                                    oldPosition = position;
+                                }
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+
+                    }
+
+                    //sets duration of file
+                    duration = media.getDuration();
+                    maxTimeView.setText(formatTime(duration));
+
+                    //sets seekBar to current position and correct length
+                    seek_bar.setMax(duration);
                 }
+            }
+            //updates seekBar by frequent calls
+            if (action.equals(AudioPlayerService.GUI_SEEK)) {
+                if (!seekBarIsUpdating)
+                    seek_bar.setProgress(intent.getExtras().getInt(AudioPlayerService.GUI_SEEK));
             }
         }
     };
 
-    private void makeToast(String text, int duration) {
-        if (text != null) {
-            Toast toast = Toast.makeText(getActivity(), text, duration);
-            toast.show();
-        }
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -239,20 +230,15 @@ public class BookPlay extends Fragment implements OnClickListener {
 
         bcm = LocalBroadcastManager.getInstance(getActivity());
 
-
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
 
-        //starting AudioPlayerService and give him bookId to play
-        if (getArguments() != null)
-            bookId = getArguments().getInt(MediaView.PLAY_BOOK);
-        else
-            bookId = 0;
+        SharedPreferences settings = getActivity().getSharedPreferences(BookChoose.SHARED_PREFS, 0);
+        bookId = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, 0);
 
         //starting the service
         Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
         serviceIntent.putExtra(AudioPlayerService.BOOK_ID, bookId);
         getActivity().startService(serviceIntent);
-
 
         //init buttons
         seek_bar = (SeekBar) v.findViewById(R.id.seekBar);
@@ -266,14 +252,16 @@ public class BookPlay extends Fragment implements OnClickListener {
         maxTimeView = (TextView) v.findViewById(R.id.maxTime);
         bookSpinner = (Spinner) v.findViewById(R.id.book_spinner);
 
-
-        //register bc to receive images from services immediately
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(PlaybackService.GUI);
-        filter.addAction(PlaybackService.GUI_SEEK);
-        filter.addAction(PlaybackService.GUI_PLAY_ICON);
-        filter.addAction(PlaybackService.GUI_MAKE_TOAST);
-        bcm.registerReceiver(updateGUIReceiver, filter);
+        StateManager.setStateChangeListener(new OnStateChangedListener() {
+            @Override
+            public void onStateChanged(PlayerStates state) {
+                if (state == PlayerStates.STARTED) {
+                    play_button.setImageResource(R.drawable.av_pause);
+                } else {
+                    play_button.setImageResource(R.drawable.av_play);
+                }
+            }
+        });
 
 
         //setup buttons
@@ -304,6 +292,13 @@ public class BookPlay extends Fragment implements OnClickListener {
 
                 playedTimeView.setText(formatTime(position));
                 seekBarIsUpdating = false;
+            }
+        });
+        StateManager.setTimeChangedListener(new OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(int time) {
+                playedTimeView.setText(formatTime(time));
+                seek_bar.setProgress(time);
             }
         });
         return v;
@@ -347,17 +342,8 @@ public class BookPlay extends Fragment implements OnClickListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                getFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, new BookChoose())
-                        .addToBackStack(BookChoose.TAG)
-                        .commit();
-                return true;
             case R.id.action_settings:
-                getFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, new Preferences())
-                        .addToBackStack(Preferences.TAG)
-                        .commit();
+                startActivity(new Intent(getActivity(), Settings.class));
                 return true;
             case R.id.action_time_change:
                 if (duration > 0) {
@@ -390,27 +376,26 @@ public class BookPlay extends Fragment implements OnClickListener {
     public void onResume() {
         super.onResume();
 
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(AudioPlayerService.GUI);
+        filter.addAction(AudioPlayerService.GUI_SEEK);
+        bcm.registerReceiver(updateGUIReceiver, filter);
+
         //starting the service
         Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
         serviceIntent.putExtra(AudioPlayerService.BOOK_ID, bookId);
         getActivity().startService(serviceIntent);
 
-        Intent pokeIntent = new Intent(AudioPlayerService.CONTROL_POKE_UPDATE);
-        pokeIntent.setAction(AudioPlayerService.CONTROL_POKE_UPDATE);
-        bcm.sendBroadcast(pokeIntent);
-
+        //sets current state
         if (StateManager.getState() == PlayerStates.STARTED) {
             play_button.setImageResource(R.drawable.av_pause);
         } else {
             play_button.setImageResource(R.drawable.av_play);
         }
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(PlaybackService.GUI);
-        filter.addAction(PlaybackService.GUI_SEEK);
-        filter.addAction(PlaybackService.GUI_PLAY_ICON);
-        filter.addAction(PlaybackService.GUI_MAKE_TOAST);
-        bcm.registerReceiver(updateGUIReceiver, filter);
+        Intent pokeIntent = new Intent(AudioPlayerService.CONTROL_POKE_UPDATE);
+        pokeIntent.setAction(AudioPlayerService.CONTROL_POKE_UPDATE);
+        bcm.sendBroadcast(pokeIntent);
     }
 
 

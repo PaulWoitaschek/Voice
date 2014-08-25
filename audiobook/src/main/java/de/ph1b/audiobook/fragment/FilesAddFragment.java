@@ -55,20 +55,19 @@ import java.util.List;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.MediaAdd;
-import de.ph1b.audiobook.activity.MediaView;
+import de.ph1b.audiobook.activity.*;
 import de.ph1b.audiobook.utils.BookDetail;
 import de.ph1b.audiobook.utils.DataBaseHelper;
 import de.ph1b.audiobook.utils.MediaDetail;
 
 
-public class FilesAdd extends Fragment {
+public class FilesAddFragment extends Fragment {
 
     private EditText fieldName;
 
     private DataBaseHelper db;
 
-    public static final String TAG = "de.ph1b.audiobook.fragment.FilesAdd";
+    private static final String TAG = "de.ph1b.audiobook.fragment.FilesAdd";
     private ArrayList<String> fileFolderPaths;
     private String bookName;
     private ImageView coverView;
@@ -84,13 +83,13 @@ public class FilesAdd extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_files_add, container, false);
 
-        fileFolderPaths = getArguments().getStringArrayList(MediaAdd.FILES_AS_STRING);
+        fileFolderPaths = getArguments().getStringArrayList(FilesChoose.FILES_AS_STRING);
 
         coverView = (ImageView) v.findViewById(R.id.cover);
         coverLoadingBar = (ProgressBar) v.findViewById(R.id.cover_loading);
         fieldName = (EditText) v.findViewById(R.id.book_name);
 
-        String defaultName = getArguments().getString(MediaAdd.BOOK_PROPERTIES_DEFAULT_NAME);
+        String defaultName = getArguments().getString(FilesChoose.BOOK_PROPERTIES_DEFAULT_NAME);
         fieldName.setText(defaultName);
 
         if (fieldName != null) {
@@ -132,7 +131,7 @@ public class FilesAdd extends Fragment {
                 }
 
                 // if an image file is found in any folder, stop there.
-                ArrayList<File> imageList = MediaAdd.dirsToFiles(filterShowImagesAndFolder, dirAddList, MediaAdd.IMAGE);
+                ArrayList<File> imageList = FilesChoose.dirsToFiles(filterShowImagesAndFolder, dirAddList, FilesChoose.IMAGE);
                 for (File f1 : imageList) {
                     Bitmap cover = BitmapFactory.decodeFile(f1.getAbsolutePath());
                     if (cover != null) {
@@ -142,7 +141,7 @@ public class FilesAdd extends Fragment {
                 }
 
                 // if no image file was found in any folder, search for audio files.
-                ArrayList<File> musicList = MediaAdd.dirsToFiles(MediaAdd.filterShowAudioAndFolder, dirAddList, MediaAdd.AUDIO);
+                ArrayList<File> musicList = FilesChoose.dirsToFiles(FilesChoose.filterShowAudioAndFolder, dirAddList, FilesChoose.AUDIO);
                 for (File f1 : musicList) {
                     String path = f1.getAbsolutePath();
                     MediaMetadataRetriever mmr = new MediaMetadataRetriever();
@@ -372,14 +371,8 @@ public class FilesAdd extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                startActivity(new Intent(getActivity(), MediaView.class));
-                return true;
             case R.id.action_settings:
-                getFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, new Preferences())
-                        .addToBackStack(Preferences.TAG)
-                        .commit();
+                startActivity(new Intent (getActivity(), Settings.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -470,7 +463,7 @@ public class FilesAdd extends Fragment {
         @Override
         protected void onPostExecute(Void result) {
             progressDialog.cancel();
-            startActivity(new Intent(getActivity(), MediaView.class));
+            startActivity(new Intent(getActivity(), BookChoose.class));
         }
     }
 
@@ -524,7 +517,7 @@ public class FilesAdd extends Fragment {
     private final FileFilter filterShowImagesAndFolder = new FileFilter() {
         @Override
         public boolean accept(File pathname) {
-            return !pathname.isHidden() && (pathname.isDirectory() || MediaAdd.isImage(pathname.getName()));
+            return !pathname.isHidden() && (pathname.isDirectory() || FilesChoose.isImage(pathname.getName()));
         }
     };
 }

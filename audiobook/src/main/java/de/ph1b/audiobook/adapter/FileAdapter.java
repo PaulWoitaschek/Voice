@@ -15,17 +15,17 @@ import java.util.ArrayList;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.fragment.FilesChoose;
+import de.ph1b.audiobook.fragment.FilesChooseFragment;
 
 public class FileAdapter extends BaseAdapter {
 
     private final ArrayList<File> data;
     private final Context c;
-    private final FilesChoose fragment;
+    private final FilesChooseFragment fragment;
     private static boolean[] checked;
     private static final String TAG = "FileAdapter";
 
-    public FileAdapter(ArrayList<File> data, Context c, FilesChoose fragment) {
+    public FileAdapter(ArrayList<File> data, Context c, FilesChooseFragment fragment) {
         this.data = data;
         this.c = c;
         this.fragment = fragment;

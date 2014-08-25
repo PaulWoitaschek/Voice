@@ -13,13 +13,14 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import de.ph1b.audiobook.BuildConfig;
-import de.ph1b.audiobook.fragment.FilesChoose;
+import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.fragment.FilesChooseFragment;
 import de.ph1b.audiobook.interfaces.OnBackPressedListener;
 import de.ph1b.audiobook.utils.CommonTasks;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
 
 
-public class MediaAdd extends ActionBarActivity {
+public class FilesChoose extends ActionBarActivity {
 
     private static final String TAG = "de.ph1b.audiobook.activities.MediaAdd";
     public static final String FILES_AS_STRING = TAG + ".FILES_AS_STRING";
@@ -69,14 +70,11 @@ public class MediaAdd extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        int size = getFragmentManager().getBackStackEntryCount();
-        FilesChoose filesChooseFragment = (FilesChoose) getFragmentManager().findFragmentByTag(FilesChoose.TAG);
-        if (onBackPressedListener != null && filesChooseFragment != null && filesChooseFragment.allowBackPress())
+        FilesChooseFragment filesChooseFragmentFragment = (FilesChooseFragment) getFragmentManager().findFragmentByTag(FilesChooseFragment.TAG);
+        if (onBackPressedListener != null && filesChooseFragmentFragment != null && filesChooseFragmentFragment.allowBackPress())
             onBackPressedListener.backPressed();
-        else if (size > 0) {
-            getFragmentManager().popBackStackImmediate();
-        } else {
-            startActivity(new Intent(this, MediaView.class));
+        else {
+            startActivity(new Intent(this, BookChoose.class));
         }
     }
 
@@ -84,10 +82,7 @@ public class MediaAdd extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getFragmentManager().beginTransaction()
-                //.replace(android.R.id.content, new FilesChoose())
-                .add(android.R.id.content, new FilesChoose(), FilesChoose.TAG)
-                .commit();
+        setContentView(R.layout.activity_files_choose);
     }
 
     @Override

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.MediaView;
+import de.ph1b.audiobook.activity.BookChoose;
 import de.ph1b.audiobook.utils.BookDetail;
 import de.ph1b.audiobook.utils.DataBaseHelper;
 import de.ph1b.audiobook.service.AudioPlayerService;
@@ -57,8 +57,8 @@ public class WidgetProvider extends AppWidgetProvider {
             if (BuildConfig.DEBUG)
                 Log.d(TAG, "clicked play!");
 
-            SharedPreferences settings = context.getSharedPreferences(MediaView.SHARED_PREFS, 0);
-            int position = settings.getInt(MediaView.SHARED_PREFS_CURRENT, -1);
+            SharedPreferences settings = context.getSharedPreferences(BookChoose.SHARED_PREFS, 0);
+            int position = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
 
             DataBaseHelper db = DataBaseHelper.getInstance(context);
             final BookDetail b = db.getBook(position);
@@ -76,7 +76,7 @@ public class WidgetProvider extends AppWidgetProvider {
                     int bookId = books.get(0).getId();
 
                     SharedPreferences.Editor editor = settings.edit();
-                    editor.putInt(MediaView.SHARED_PREFS_CURRENT, bookId);
+                    editor.putInt(BookChoose.SHARED_PREFS_CURRENT, bookId);
                     editor.apply();
 
                     i.putExtra(AudioPlayerService.BOOK_ID, bookId);

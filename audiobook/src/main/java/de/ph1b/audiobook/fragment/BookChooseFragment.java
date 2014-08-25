@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.fragment;
 
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -39,27 +38,27 @@ import java.util.ArrayList;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.MediaAdd;
-import de.ph1b.audiobook.activity.MediaView;
+import de.ph1b.audiobook.activity.BookChoose;
+import de.ph1b.audiobook.activity.BookPlay;
+import de.ph1b.audiobook.activity.FilesChoose;
+import de.ph1b.audiobook.activity.Settings;
 import de.ph1b.audiobook.adapter.MediaAdapter;
 import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.service.StateManager;
 import de.ph1b.audiobook.utils.BookDetail;
-import de.ph1b.audiobook.utils.CommonTasks;
 import de.ph1b.audiobook.utils.DataBaseHelper;
 
 
-public class BookChoose extends Fragment {
+public class BookChooseFragment extends Fragment {
 
-    public static final String TAG = "de.ph1b.audiobook.fragment.BookChoose";
+    private static final String TAG = "de.ph1b.audiobook.fragment.BookChoose";
 
     private ArrayList<BookDetail> details;
     private ArrayList<BookDetail> deleteList;
     private DataBaseHelper db;
     private MediaAdapter adapt;
-    private Activity a;
 
     private LocalBroadcastManager bcm;
 
@@ -77,15 +76,14 @@ public class BookChoose extends Fragment {
             Log.d(TAG, "onCreate was called");
 
 
-        a = getActivity();
-        db = DataBaseHelper.getInstance(a);
-        bcm = LocalBroadcastManager.getInstance(a);
+        db = DataBaseHelper.getInstance(getActivity());
+        bcm = LocalBroadcastManager.getInstance(getActivity());
 
 
         details = db.getAllBooks();
         deleteList = new ArrayList<BookDetail>();
 
-        PreferenceManager.setDefaultValues(a, R.xml.preferences, false);
+        PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
     }
 
     @Override
@@ -103,7 +101,7 @@ public class BookChoose extends Fragment {
         currentPlaying = (ImageButton) v.findViewById(R.id.current_playing);
         ListView mediaListView = (ListView) v.findViewById(R.id.listMediaView);
 
-        adapt = new MediaAdapter(details, a);
+        adapt = new MediaAdapter(details, getActivity());
         mediaListView.setAdapter(adapt);
 
         mediaListView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
@@ -133,8 +131,8 @@ public class BookChoose extends Fragment {
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_delete:
-                        SharedPreferences settings = a.getSharedPreferences(MediaView.SHARED_PREFS, 0);
-                        int position = settings.getInt(MediaView.SHARED_PREFS_CURRENT, -1);
+                        SharedPreferences settings = getActivity().getSharedPreferences(BookChoose.SHARED_PREFS, 0);
+                        int position = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
                         for (BookDetail b : deleteList) {
                             //setting visibility of play list at bottom to gone if book is gone
                             if (b.getId() == position) {
@@ -166,19 +164,16 @@ public class BookChoose extends Fragment {
                 int bookId = book.getId();
 
                 if (book.getMediaIds().length > 0) {
-                    SharedPreferences settings = BookChoose.this.a.getSharedPreferences(MediaView.SHARED_PREFS, 0);
+                    SharedPreferences settings = BookChooseFragment.this.getActivity().getSharedPreferences(BookChoose.SHARED_PREFS, 0);
                     SharedPreferences.Editor editor = settings.edit();
-                    editor.putInt(MediaView.SHARED_PREFS_CURRENT, bookId);
+                    editor.putInt(BookChoose.SHARED_PREFS_CURRENT, bookId);
                     editor.apply();
 
+                    Intent i = new Intent(getActivity(), BookPlay.class);
                     Bundle bundle = new Bundle();
-                    bundle.putInt(MediaView.PLAY_BOOK, bookId);
-                    BookPlay fragment = new BookPlay();
-                    fragment.setArguments(bundle);
-                    getFragmentManager().beginTransaction()
-                            .replace(android.R.id.content, fragment)
-                            .addToBackStack(BookPlay.TAG)
-                            .commit();
+                    bundle.putInt(BookChoose.PLAY_BOOK, bookId);
+                    i.putExtras(bundle);
+                    startActivity(new Intent(getActivity(), BookPlay.class));
                 }
             }
         });
@@ -191,20 +186,20 @@ public class BookChoose extends Fragment {
 
         if (details.size() == 0) {
             String text = getString(R.string.media_view_how_to);
-            Toast toast = Toast.makeText(a, text, Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL, 0, 0);
             toast.show();
         }
 
-        SharedPreferences settings = a.getSharedPreferences(MediaView.SHARED_PREFS, 0);
-        int position = settings.getInt(MediaView.SHARED_PREFS_CURRENT, -1);
+        SharedPreferences settings = getActivity().getSharedPreferences(BookChoose.SHARED_PREFS, 0);
+        int position = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
 
         final BookDetail b = db.getBook(position);
 
         if (b != null) {
-            Intent i = new Intent(a, AudioPlayerService.class);
+            Intent i = new Intent(getActivity(), AudioPlayerService.class);
             i.putExtra(AudioPlayerService.BOOK_ID, b.getId());
-            a.startService(i);
+            getActivity().startService(i);
 
             //setting cover
             //set tree observer to measure height pre-drawn
@@ -255,14 +250,11 @@ public class BookChoose extends Fragment {
             currentText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Intent i = new Intent(getActivity(), BookPlay.class);
                     Bundle bundle = new Bundle();
-                    bundle.putInt(MediaView.PLAY_BOOK, b.getId());
-                    BookPlay fragment = new BookPlay();
-                    fragment.setArguments(bundle);
-                    getFragmentManager().beginTransaction()
-                            .replace(android.R.id.content, fragment)
-                            .addToBackStack(BookPlay.TAG)
-                            .commit();
+                    bundle.putInt(BookChoose.PLAY_BOOK, b.getId());
+                    i.putExtras(bundle);
+                    startActivity(i);
                 }
             });
 
@@ -278,9 +270,6 @@ public class BookChoose extends Fragment {
         } else {
             current.setVisibility(View.GONE);
         }
-
-        //checking if external storage is available
-        new CommonTasks().checkExternalStorage(a);
     }
 
 
@@ -296,13 +285,10 @@ public class BookChoose extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                startActivity(new Intent(a, MediaAdd.class));
+                startActivity(new Intent(getActivity(), FilesChoose.class));
                 return true;
             case R.id.action_settings:
-                getFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, new Preferences())
-                        .addToBackStack(Preferences.TAG)
-                        .commit();
+                startActivity(new Intent(getActivity(), Settings.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

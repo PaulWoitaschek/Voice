@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@color/fragment_background"
     tools:context=".activity.MediaAdd">
 
     <Spinner

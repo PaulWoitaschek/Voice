@@ -4,5 +4,5 @@ import de.ph1b.audiobook.service.PlayerStates;
 
 
 public interface OnStateChangedListener {
-    void onStateChanged(PlayerStates state);
+    public void onStateChanged(PlayerStates state);
 }
