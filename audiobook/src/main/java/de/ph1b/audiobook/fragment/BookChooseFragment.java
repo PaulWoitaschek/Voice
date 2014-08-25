@@ -2,7 +2,10 @@ package de.ph1b.audiobook.fragment;
 
 
 import android.app.Fragment;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,8 +13,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -46,7 +49,6 @@ import de.ph1b.audiobook.adapter.MediaAdapter;
 import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
-import de.ph1b.audiobook.service.StateManager;
 import de.ph1b.audiobook.utils.BookDetail;
 import de.ph1b.audiobook.utils.DataBaseHelper;
 
@@ -60,25 +62,65 @@ public class BookChooseFragment extends Fragment {
     private DataBaseHelper db;
     private MediaAdapter adapt;
 
-    private LocalBroadcastManager bcm;
-
     private ImageView currentCover;
     private TextView currentText;
     private ImageButton currentPlaying;
     private LinearLayout current;
+
+    private AudioPlayerService mService;
+    private boolean mBound = false;
+
+    private final ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            AudioPlayerService.LocalBinder binder = (AudioPlayerService.LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+            mService.stateManager.setStateChangeListener(onStateChangedListener);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Intent intent = new Intent(getActivity(), AudioPlayerService.class);
+        getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // Unbind from the service
+        if (mBound) {
+            mService.stateManager.removeStateChangeListener(onStateChangedListener);
+            getActivity().unbindService(mConnection);
+            mBound = false;
+        }
+    }
+
+    private final OnStateChangedListener onStateChangedListener = new OnStateChangedListener() {
+        @Override
+        public void onStateChanged(PlayerStates state) {
+            if (state == PlayerStates.STARTED) {
+                currentPlaying.setImageResource(R.drawable.av_pause);
+            } else {
+                currentPlaying.setImageResource(R.drawable.av_play);
+            }
+        }
+    };
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "onCreate was called");
-
-
         db = DataBaseHelper.getInstance(getActivity());
-        bcm = LocalBroadcastManager.getInstance(getActivity());
-
 
         details = db.getAllBooks();
         deleteList = new ArrayList<BookDetail>();
@@ -235,15 +277,6 @@ public class BookChooseFragment extends Fragment {
             );
 
 
-            //setting play-state
-            setPlayIcon(StateManager.getState());
-            StateManager.setStateChangeListener(new OnStateChangedListener() {
-                @Override
-                public void onStateChanged(PlayerStates state) {
-                    setPlayIcon(state);
-                }
-            });
-
             //setting text
             currentText.setText(b.getName());
 
@@ -261,7 +294,9 @@ public class BookChooseFragment extends Fragment {
             currentPlaying.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    bcm.sendBroadcast(new Intent(AudioPlayerService.CONTROL_PLAY_PAUSE));
+                    Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
+                    serviceIntent.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
+                    getActivity().startService(serviceIntent);
                 }
             });
 
@@ -292,14 +327,6 @@ public class BookChooseFragment extends Fragment {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void setPlayIcon(PlayerStates state) {
-        if (state == PlayerStates.STARTED) {
-            currentPlaying.setImageResource(R.drawable.av_pause);
-        } else {
-            currentPlaying.setImageResource(R.drawable.av_play);
         }
     }
 

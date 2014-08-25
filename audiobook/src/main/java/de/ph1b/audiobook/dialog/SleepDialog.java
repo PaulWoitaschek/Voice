@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
@@ -50,10 +49,12 @@ public class SleepDialog extends DialogFragment {
         builder.setPositiveButton(R.string.choose_time_okay, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                Context c = getActivity().getApplicationContext();
-                Intent i = new Intent(AudioPlayerService.CONTROL_SLEEP);
-                i.putExtra(AudioPlayerService.CONTROL_SLEEP, mPicker.getValue() * 60 * 1000);
-                LocalBroadcastManager.getInstance(c).sendBroadcast(i);
+                Context context = getActivity().getApplicationContext();
+
+                Intent serviceIntent = new Intent(context, AudioPlayerService.class);
+                serviceIntent.setAction(AudioPlayerService.CONTROL_SLEEP);
+                serviceIntent.putExtra(AudioPlayerService.CONTROL_SLEEP, mPicker.getValue() * 60 * 1000);
+                context.startService(serviceIntent);
             }
         });
         builder.setNegativeButton(R.string.choose_time_cancel, new DialogInterface.OnClickListener() {

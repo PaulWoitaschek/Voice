@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -67,9 +66,8 @@ public class WidgetProvider extends AppWidgetProvider {
 
             if (b != null) { // if a valid book is found start service
                 i.putExtra(AudioPlayerService.BOOK_ID, b.getId());
+                i.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
                 context.startService(i);
-                LocalBroadcastManager bcm = LocalBroadcastManager.getInstance(context);
-                bcm.sendBroadcast(new Intent(AudioPlayerService.CONTROL_PLAY_PAUSE));
             } else { //if no valid book is found search for available books
                 ArrayList<BookDetail> books = db.getAllBooks();
                 if (books.size() > 0) { //if there are valid books start the first one
@@ -80,9 +78,8 @@ public class WidgetProvider extends AppWidgetProvider {
                     editor.apply();
 
                     i.putExtra(AudioPlayerService.BOOK_ID, bookId);
+                    i.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
                     context.startService(i);
-                    LocalBroadcastManager bcm = LocalBroadcastManager.getInstance(context);
-                    bcm.sendBroadcast(new Intent(AudioPlayerService.CONTROL_PLAY_PAUSE));
                 }
             }
         }

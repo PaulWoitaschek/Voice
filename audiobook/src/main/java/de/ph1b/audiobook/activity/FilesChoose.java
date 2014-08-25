@@ -70,8 +70,7 @@ public class FilesChoose extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        FilesChooseFragment filesChooseFragmentFragment = (FilesChooseFragment) getFragmentManager().findFragmentByTag(FilesChooseFragment.TAG);
-        if (onBackPressedListener != null && filesChooseFragmentFragment != null && filesChooseFragmentFragment.allowBackPress())
+        if (onBackPressedListener != null)
             onBackPressedListener.backPressed();
         else {
             startActivity(new Intent(this, BookChoose.class));

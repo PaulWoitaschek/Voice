@@ -33,14 +33,18 @@ import java.util.LinkedList;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.*;
+import de.ph1b.audiobook.activity.BookChoose;
+import de.ph1b.audiobook.activity.FilesAdd;
+import de.ph1b.audiobook.activity.FilesChoose;
+import de.ph1b.audiobook.activity.Settings;
 import de.ph1b.audiobook.adapter.FileAdapter;
 import de.ph1b.audiobook.interfaces.OnBackPressedListener;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
 
 public class FilesChooseFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
 
-    public static final String TAG = "de.ph1b.audiobook.fragment.ChooseFilesFragment";
+    public static final String TAG = "de.ph1b.audiobook.fragment.FilesChooseFragment";
+
 
     private final LinkedList<String> link = new LinkedList<String>();
     private final ArrayList<String> dirs = new ArrayList<String>();
@@ -114,9 +118,8 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
             public void backPressed() {
                 if (BuildConfig.DEBUG)
                     Log.d(TAG, "backPressed called with link size: " + link.size());
-                if (link.getLast().equals(link.getFirst())) {
+                if (link.size() < 2 || link.getLast().equals(link.getFirst()))
                     startActivity(new Intent(getActivity(), BookChoose.class));
-                }
                 link.removeLast();
                 String now = link.getLast();
                 if (link.size() > 0)
@@ -126,10 +129,6 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
         });
 
         return v;
-    }
-
-    public boolean allowBackPress() {
-        return link.size() > 0;
     }
 
     @Override

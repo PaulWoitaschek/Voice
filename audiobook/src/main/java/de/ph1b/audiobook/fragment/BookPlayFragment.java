@@ -3,9 +3,11 @@ package de.ph1b.audiobook.fragment;
 
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -13,6 +15,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
@@ -48,11 +51,10 @@ import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.interfaces.OnTimeChangedListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
-import de.ph1b.audiobook.service.StateManager;
 import de.ph1b.audiobook.utils.BookDetail;
 import de.ph1b.audiobook.utils.MediaDetail;
 
-public class BookPlayFragment extends Fragment implements OnClickListener{
+public class BookPlayFragment extends Fragment implements OnClickListener {
 
     private ImageButton play_button;
     private TextView playedTimeView;
@@ -77,6 +79,65 @@ public class BookPlayFragment extends Fragment implements OnClickListener{
     private int duration;
 
 
+    private AudioPlayerService mService;
+    private boolean mBound = false;
+
+    private final ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            AudioPlayerService.LocalBinder binder = (AudioPlayerService.LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+            mService.stateManager.setStateChangeListener(onStateChangedListener);
+            mService.stateManager.setTimeChangedListener(onTimeChangedListener);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Intent intent = new Intent(getActivity(), AudioPlayerService.class);
+        getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // Unbind from the service
+        if (mBound) {
+            mService.stateManager.removeStateChangeListener(onStateChangedListener);
+            mService.stateManager.removeTimeChangedListener(onTimeChangedListener);
+            getActivity().unbindService(mConnection);
+            mBound = false;
+        }
+    }
+
+    private final OnStateChangedListener onStateChangedListener = new OnStateChangedListener() {
+        @Override
+        public void onStateChanged(PlayerStates state) {
+            if (state == PlayerStates.STARTED) {
+                play_button.setImageResource(R.drawable.av_pause);
+            } else {
+                play_button.setImageResource(R.drawable.av_play);
+            }
+        }
+    };
+
+    private final OnTimeChangedListener onTimeChangedListener = new OnTimeChangedListener() {
+        @Override
+        public void onTimeChanged(int time) {
+            playedTimeView.setText(formatTime(time));
+            seek_bar.setProgress(time);
+        }
+    };
+
+
     private final BroadcastReceiver updateGUIReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -87,8 +148,10 @@ public class BookPlayFragment extends Fragment implements OnClickListener{
 
                 if (BuildConfig.DEBUG)
                     Log.d(TAG, "setting time to" + position);
-                seek_bar.setProgress(StateManager.getTime());
-                playedTimeView.setText(formatTime(StateManager.getTime()));
+                if (mBound) {
+                    seek_bar.setProgress(mService.stateManager.getTime());
+                    playedTimeView.setText(formatTime(mService.stateManager.getTime()));
+                }
 
                 //update book
                 final BookDetail b = intent.getParcelableExtra(AudioPlayerService.GUI_BOOK);
@@ -179,9 +242,8 @@ public class BookPlayFragment extends Fragment implements OnClickListener{
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 if (position != oldPosition) {
                                     int newMediaId = allMedia[position].getId();
-                                    Intent i = new Intent(AudioPlayerService.CONTROL_CHANGE_BOOK_POSITION);
-                                    i.putExtra(AudioPlayerService.CONTROL_CHANGE_BOOK_POSITION, newMediaId);
-                                    bcm.sendBroadcast(i);
+                                    if (mBound)
+                                        mService.changeBookPosition(newMediaId);
                                     oldPosition = position;
                                 }
                             }
@@ -252,17 +314,6 @@ public class BookPlayFragment extends Fragment implements OnClickListener{
         maxTimeView = (TextView) v.findViewById(R.id.maxTime);
         bookSpinner = (Spinner) v.findViewById(R.id.book_spinner);
 
-        StateManager.setStateChangeListener(new OnStateChangedListener() {
-            @Override
-            public void onStateChanged(PlayerStates state) {
-                if (state == PlayerStates.STARTED) {
-                    play_button.setImageResource(R.drawable.av_pause);
-                } else {
-                    play_button.setImageResource(R.drawable.av_play);
-                }
-            }
-        });
-
 
         //setup buttons
         forward_button.setOnClickListener(this);
@@ -286,19 +337,11 @@ public class BookPlayFragment extends Fragment implements OnClickListener{
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Intent i = new Intent(AudioPlayerService.CONTROL_CHANGE_MEDIA_POSITION);
-                i.putExtra(AudioPlayerService.CONTROL_CHANGE_MEDIA_POSITION, position);
-                bcm.sendBroadcast(i);
+                if (mBound)
+                    mService.changePosition(position);
 
                 playedTimeView.setText(formatTime(position));
                 seekBarIsUpdating = false;
-            }
-        });
-        StateManager.setTimeChangedListener(new OnTimeChangedListener() {
-            @Override
-            public void onTimeChanged(int time) {
-                playedTimeView.setText(formatTime(time));
-                seek_bar.setProgress(time);
             }
         });
         return v;
@@ -313,24 +356,29 @@ public class BookPlayFragment extends Fragment implements OnClickListener{
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.play:
-                bcm.sendBroadcast(new Intent(AudioPlayerService.CONTROL_PLAY_PAUSE));
-                break;
-            case R.id.rewind:
-                bcm.sendBroadcast(new Intent(AudioPlayerService.CONTROL_REWIND));
-                break;
-            case R.id.fast_forward:
-                bcm.sendBroadcast(new Intent(AudioPlayerService.CONTROL_FAST_FORWARD));
-                break;
-            case R.id.next_song:
-                bcm.sendBroadcast(new Intent(AudioPlayerService.CONTROL_FORWARD));
-                break;
-            case R.id.previous_song:
-                bcm.sendBroadcast(new Intent(AudioPlayerService.CONTROL_PREVIOUS));
-                break;
-            default:
-                break;
+        if (mBound) {
+            switch (view.getId()) {
+                case R.id.play:
+                    if (mService.stateManager.getState() == PlayerStates.STARTED)
+                        mService.pause();
+                    else
+                        mService.play();
+                    break;
+                case R.id.rewind:
+                    mService.rewind();
+                    break;
+                case R.id.fast_forward:
+                    mService.fastForward();
+                    break;
+                case R.id.next_song:
+                    mService.nextSong();
+                    break;
+                case R.id.previous_song:
+                    mService.previousSong();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -387,15 +435,18 @@ public class BookPlayFragment extends Fragment implements OnClickListener{
         getActivity().startService(serviceIntent);
 
         //sets current state
-        if (StateManager.getState() == PlayerStates.STARTED) {
-            play_button.setImageResource(R.drawable.av_pause);
-        } else {
-            play_button.setImageResource(R.drawable.av_play);
+        if (mBound) {
+            if (mService.stateManager.getState() == PlayerStates.STARTED) {
+                play_button.setImageResource(R.drawable.av_pause);
+            } else {
+                play_button.setImageResource(R.drawable.av_play);
+            }
         }
 
-        Intent pokeIntent = new Intent(AudioPlayerService.CONTROL_POKE_UPDATE);
-        pokeIntent.setAction(AudioPlayerService.CONTROL_POKE_UPDATE);
-        bcm.sendBroadcast(pokeIntent);
+        //calls update manually
+        if (mBound) {
+            mService.updateGUI();
+        }
     }
 
 

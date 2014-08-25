@@ -83,13 +83,15 @@ public class FilesAddFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_files_add, container, false);
 
-        fileFolderPaths = getArguments().getStringArrayList(FilesChoose.FILES_AS_STRING);
+        Bundle extras = ((FilesAdd)getActivity()).getExtras();
+
+        fileFolderPaths = extras.getStringArrayList(FilesChoose.FILES_AS_STRING);
 
         coverView = (ImageView) v.findViewById(R.id.cover);
         coverLoadingBar = (ProgressBar) v.findViewById(R.id.cover_loading);
         fieldName = (EditText) v.findViewById(R.id.book_name);
 
-        String defaultName = getArguments().getString(FilesChoose.BOOK_PROPERTIES_DEFAULT_NAME);
+        String defaultName = extras.getString(FilesChoose.BOOK_PROPERTIES_DEFAULT_NAME);
         fieldName.setText(defaultName);
 
         if (fieldName != null) {

@@ -22,6 +22,7 @@ import android.media.MediaPlayer;
 import android.media.RemoteControlClient;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -30,6 +31,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.RemoteViews;
 
 import java.io.File;
@@ -63,18 +65,13 @@ public class AudioPlayerService extends Service {
     //indicates if service is running for MediaPlay to check on resume
     //public static boolean serviceRunning = true;
 
+    private final IBinder mBinder = new LocalBinder();
+
     private static final String TAG = "de.ph1b.audiobook.AudioPlayerService";
 
     public static final String CONTROL_PLAY_PAUSE = TAG + ".CONTROL_PLAY_PAUSE";
-    public static final String CONTROL_FORWARD = TAG + ".CONTROL_FORWARD";
-    public static final String CONTROL_FAST_FORWARD = TAG + ".CONTROL_FAST_FORWARD";
-    public static final String CONTROL_PREVIOUS = TAG + ".CONTROL_PREVIOUS";
-    public static final String CONTROL_REWIND = TAG + ".CONTROL_REWIND";
     public static final String CONTROL_CHANGE_MEDIA_POSITION = TAG + ".CONTROL_CHANGE_MEDIA_POSITION";
-    private static final String CONTROL_SETUP_NOTIFICATION = TAG + ".CONTROL_SETUP_NOTIFICATION";
     public static final String CONTROL_SLEEP = TAG + ".CONTROL_SLEEP";
-    public static final String CONTROL_POKE_UPDATE = TAG + ".CONTROL_POKE_UPDATE";
-    public static final String CONTROL_CHANGE_BOOK_POSITION = TAG + ".CONTROL_CHANGE_BOOK_POSITION";
 
     public static final String GUI = TAG + ".GUI";
     public static final String GUI_BOOK = TAG + ".GUI_BOOK";
@@ -111,6 +108,8 @@ public class AudioPlayerService extends Service {
     private ComponentName widgetComponentName;
     private RemoteViews remoteViews;
 
+    public final StateManager stateManager = new StateManager();
+
     private final OnStateChangedListener onStateChangedListener = new OnStateChangedListener() {
         @Override
         public void onStateChanged(PlayerStates state) {
@@ -126,6 +125,18 @@ public class AudioPlayerService extends Service {
     };
 
 
+    public class LocalBinder extends Binder {
+        public AudioPlayerService getService() {
+            return AudioPlayerService.this;
+        }
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mBinder;
+    }
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -136,6 +147,7 @@ public class AudioPlayerService extends Service {
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         handler = new Handler();
+
 
         myEventReceiver = new ComponentName(getPackageName(), RemoteControlReceiver.class.getName());
 
@@ -151,39 +163,67 @@ public class AudioPlayerService extends Service {
 
         //state manager to update widget
         widgetComponentName = new ComponentName(this, WidgetProvider.class);
-        remoteViews = new RemoteViews(this.getPackageName(),
-                R.layout.widget);
-        StateManager.setStateChangeListener(onStateChangedListener);
-
-        //registering receiver for controlling player
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(CONTROL_PLAY_PAUSE);
-        filter.addAction(CONTROL_FORWARD);
-        filter.addAction(CONTROL_FAST_FORWARD);
-        filter.addAction(CONTROL_PREVIOUS);
-        filter.addAction(CONTROL_CHANGE_MEDIA_POSITION);
-        filter.addAction(CONTROL_REWIND);
-        filter.addAction(CONTROL_SETUP_NOTIFICATION);
-        filter.addAction(CONTROL_SLEEP);
-        filter.addAction(CONTROL_POKE_UPDATE);
-        filter.addAction(CONTROL_CHANGE_BOOK_POSITION);
-        bcm.registerReceiver(controlReceiver, filter);
+        remoteViews = new RemoteViews(this.getPackageName(), R.layout.widget);
+        stateManager.setStateChangeListener(onStateChangedListener);
 
         //registering receiver for pause from notification
         registerReceiver(notificationPauseReceiver, new IntentFilter(NOTIFICATION_PAUSE));
     }
 
+    private void handleAction(Intent intent) {
+        String action = intent.getAction();
+        if (action.equals(CONTROL_PLAY_PAUSE)) {
+            if (stateManager.getState() == PlayerStates.STARTED)
+                pause();
+            else
+                play();
+        } else if (action.equals(CONTROL_CHANGE_MEDIA_POSITION)) {
+            int position = intent.getIntExtra(CONTROL_CHANGE_MEDIA_POSITION, -1);
+            if (position != -1)
+                changePosition(position);
+        } else if (action.equals(CONTROL_SLEEP)) {
+            int sleepTime = intent.getIntExtra(CONTROL_SLEEP, -1);
+            if (sleepTime > 0)
+                sleepTimer(sleepTime);
+        }
+    }
 
-
+    private void handleKeyCode(int keyCode) {
+        switch (keyCode) {
+            case -1:
+                break;
+            case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+                if (stateManager.getState() == PlayerStates.STARTED)
+                    pause();
+                else
+                    play();
+                break;
+            case KeyEvent.KEYCODE_MEDIA_NEXT:
+                nextSong();
+                break;
+            case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+                previousSong();
+                break;
+            case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
+                fastForward();
+                break;
+            case KeyEvent.KEYCODE_MEDIA_REWIND:
+                rewind();
+                break;
+            default:
+                break;
+        }
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
 
-        if (intent != null && intent.hasExtra(BOOK_ID)) {
-            int newBookId = intent.getIntExtra(BOOK_ID, 0);
+
+        int newBookId = intent.getIntExtra(BOOK_ID, 0);
+        if (newBookId != 0) {
             if (BuildConfig.DEBUG)
-                Log.d(TAG, "Old bookId: " + bookId + ", new bookId: " + newBookId + ", state: " + StateManager.getState());
+                Log.d(TAG, "Old bookId: " + bookId + ", new bookId: " + newBookId + ", state: " + stateManager.getState());
 
             if (newBookId != bookId) {
                 bookId = newBookId;
@@ -200,6 +240,12 @@ public class AudioPlayerService extends Service {
             }
         }
 
+        if (intent.getAction() != null)
+            handleAction(intent);
+
+        int keyCode = intent.getIntExtra(RemoteControlReceiver.KEYCODE, -1);
+        handleKeyCode(keyCode);
+
         updateGUI();
 
         //sticky to re-init when stopped
@@ -213,65 +259,6 @@ public class AudioPlayerService extends Service {
             pause();
         }
     };
-
-
-    private final BroadcastReceiver controlReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-
-            if (action.equals(CONTROL_PLAY_PAUSE)) {
-                switch (StateManager.getState()) {
-                    case STARTED:
-                        pause();
-                        break;
-                    default:
-                        play();
-                        break;
-                }
-            }
-            if (action.equals(CONTROL_FORWARD)) {
-                nextSong();
-            }
-            if (action.equals(CONTROL_FAST_FORWARD)) {
-                fastForward();
-            }
-            if (action.equals(CONTROL_PREVIOUS)) {
-                previousSong();
-            }
-            if (action.equals(CONTROL_REWIND)) {
-                rewind();
-            }
-            if (action.equals(CONTROL_SETUP_NOTIFICATION)) {
-                boolean setupNotification = intent.getBooleanExtra(CONTROL_SETUP_NOTIFICATION, false);
-                if (setupNotification) {
-                    foreground(true);
-                } else {
-                    foreground(false);
-                }
-            }
-            if (action.equals(CONTROL_CHANGE_MEDIA_POSITION)) {
-                int position = intent.getIntExtra(CONTROL_CHANGE_MEDIA_POSITION, -1);
-                if (position != -1)
-                    changePosition(position);
-            }
-            if (action.equals(CONTROL_SLEEP)) {
-                int sleepTime = intent.getIntExtra(CONTROL_SLEEP, 0);
-                sleepTimer(sleepTime);
-            }
-            if (action.equals(CONTROL_POKE_UPDATE)) {
-                updateGUI();
-            }
-
-            if (action.equals(CONTROL_CHANGE_BOOK_POSITION)) {
-                int position = intent.getIntExtra(CONTROL_CHANGE_BOOK_POSITION, -1);
-                if (position != -1)
-                    changeBookPosition(position);
-            }
-
-        }
-    };
-
 
     private void foreground(Boolean set) {
         if (set) {
@@ -364,11 +351,11 @@ public class AudioPlayerService extends Service {
             audioFocus = 0;
             audioManager.unregisterMediaButtonEventReceiver(myEventReceiver);
 
-            if (StateManager.getState() != PlayerStates.END)
+            if (stateManager.getState() != PlayerStates.END)
                 mediaPlayer.reset();
             mediaPlayer.release();
 
-            StateManager.setState(PlayerStates.END);
+            stateManager.setState(PlayerStates.END);
             if (noisyRCRegistered) {
                 unregisterReceiver(audioBecomingNoisyReceiver);
                 noisyRCRegistered = false;
@@ -381,13 +368,7 @@ public class AudioPlayerService extends Service {
             playerLock.unlock();
         }
         unregisterReceiver(notificationPauseReceiver);
-        bcm.unregisterReceiver(controlReceiver);
         super.onDestroy();
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
     }
 
 
@@ -396,7 +377,7 @@ public class AudioPlayerService extends Service {
         public void onReceive(Context context, Intent intent) {
             if (BuildConfig.DEBUG)
                 Log.d(TAG, "audio becoming noisy!");
-            if (StateManager.getState() == PlayerStates.STARTED)
+            if (stateManager.getState() == PlayerStates.STARTED)
                 pauseBecauseHeadset = true;
             pause();
         }
@@ -454,7 +435,7 @@ public class AudioPlayerService extends Service {
     }
 
     private void prepare(int mediaId) {
-        if (StateManager.getState() == PlayerStates.STARTED) {
+        if (stateManager.getState() == PlayerStates.STARTED) {
             pause();
         }
 
@@ -473,13 +454,13 @@ public class AudioPlayerService extends Service {
 
             if (BuildConfig.DEBUG)
                 Log.d(TAG, "creating new player");
-            if (StateManager.getState() == PlayerStates.END)
+            if (stateManager.getState() == PlayerStates.END)
                 mediaPlayer = new MediaPlayer();
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             try {
                 mediaPlayer.setDataSource(this, Uri.parse(path));
                 mediaPlayer.prepare();
-                StateManager.setState(PlayerStates.PREPARED);
+                stateManager.setState(PlayerStates.PREPARED);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -505,24 +486,24 @@ public class AudioPlayerService extends Service {
     private void reset() {
         playerLock.lock();
         try {
-            PlayerStates state = StateManager.getState();
+            PlayerStates state = stateManager.getState();
             if (state == PlayerStates.STARTED)
                 pause();
             if (state == PlayerStates.IDLE || state == PlayerStates.PREPARED || state == PlayerStates.STARTED || state == PlayerStates.PAUSED) {
                 if (BuildConfig.DEBUG)
                     Log.d(TAG, "resetting player");
                 mediaPlayer.reset();
-                StateManager.setState(PlayerStates.IDLE);
+                stateManager.setState(PlayerStates.IDLE);
             }
         } finally {
             playerLock.unlock();
         }
     }
 
-    private void updateGUI() {
+    public void updateGUI() {
         if (BuildConfig.DEBUG)
             Log.d(TAG, "setting time to" + mediaPlayer.getCurrentPosition());
-        StateManager.setTime(mediaPlayer.getCurrentPosition());
+        stateManager.setTime(mediaPlayer.getCurrentPosition());
 
 
         if (BuildConfig.DEBUG)
@@ -546,9 +527,9 @@ public class AudioPlayerService extends Service {
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "Good night everyone");
                     reset();
-                    if (StateManager.getState() == PlayerStates.IDLE) {
+                    if (stateManager.getState() == PlayerStates.IDLE) {
                         mediaPlayer.release();
-                        StateManager.setState(PlayerStates.END);
+                        stateManager.setState(PlayerStates.END);
                     }
                 } finally {
                     playerLock.unlock();
@@ -560,10 +541,10 @@ public class AudioPlayerService extends Service {
         sandman.schedule(sleepSand, sleepTime);
     }
 
-    private void fastForward() {
+    public void fastForward() {
         playerLock.lock();
         try {
-            PlayerStates state = StateManager.getState();
+            PlayerStates state = stateManager.getState();
             if (state == PlayerStates.STARTED || state == PlayerStates.PREPARED || state == PlayerStates.PAUSED) {
                 int position = mediaPlayer.getCurrentPosition();
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -576,17 +557,17 @@ public class AudioPlayerService extends Service {
                     media.setPosition(newPosition);
                     db.updateMediaAsync(media);
                 }
-                StateManager.setTime(mediaPlayer.getCurrentPosition());
+                stateManager.setTime(mediaPlayer.getCurrentPosition());
             }
         } finally {
             playerLock.unlock();
         }
     }
 
-    private void rewind() {
+    public void rewind() {
         playerLock.lock();
         try {
-            PlayerStates state = StateManager.getState();
+            PlayerStates state = stateManager.getState();
             if (state == PlayerStates.STARTED || state == PlayerStates.PREPARED || state == PlayerStates.PAUSED) {
                 int position = mediaPlayer.getCurrentPosition();
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -599,22 +580,22 @@ public class AudioPlayerService extends Service {
                     media.setPosition(newPosition);
                     db.updateMediaAsync(media);
                 }
-                StateManager.setTime(mediaPlayer.getCurrentPosition());
+                stateManager.setTime(mediaPlayer.getCurrentPosition());
             }
         } finally {
             playerLock.unlock();
         }
     }
 
-    private void previousSong() {
-        PlayerStates state = StateManager.getState();
+    public void previousSong() {
+        PlayerStates state = stateManager.getState();
         if (state == PlayerStates.STARTED || state == PlayerStates.PREPARED || state == PlayerStates.PAUSED) {
             int[] allIds = book.getMediaIds();
             int currentId = media.getId();
             for (int i = 1; i < allIds.length; i++) { //starting at #1 to prevent change when on first song
                 if (allIds[i] == currentId) {
                     boolean wasPlaying = false;
-                    if (StateManager.getState() == PlayerStates.STARTED) {
+                    if (stateManager.getState() == PlayerStates.STARTED) {
                         wasPlaying = true;
                     }
                     prepare(allIds[i - 1]);
@@ -629,15 +610,15 @@ public class AudioPlayerService extends Service {
         }
     }
 
-    private void nextSong() {
-        PlayerStates state = StateManager.getState();
+    public void nextSong() {
+        PlayerStates state = stateManager.getState();
         if (state == PlayerStates.STARTED || state == PlayerStates.PREPARED || state == PlayerStates.PAUSED) {
             int[] allIds = book.getMediaIds();
             int currentId = media.getId();
             for (int i = 0; i < allIds.length - 1; i++) { //-1 to prevent change when already last song reached
                 if (allIds[i] == currentId) {
                     boolean wasPlaying = false;
-                    if (StateManager.getState() == PlayerStates.STARTED)
+                    if (stateManager.getState() == PlayerStates.STARTED)
                         wasPlaying = true;
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "preparing now");
@@ -658,12 +639,12 @@ public class AudioPlayerService extends Service {
         }
     }
 
-    private void changeBookPosition(int mediaId) {
+    public void changeBookPosition(int mediaId) {
         if (mediaId != book.getPosition()) {
             book.setPosition(mediaId);
             db.updateBookAsync(book);
             boolean wasPlaying = false;
-            if (StateManager.getState() == PlayerStates.STARTED)
+            if (stateManager.getState() == PlayerStates.STARTED)
                 wasPlaying = true;
             prepare(mediaId);
             if (wasPlaying)
@@ -673,21 +654,19 @@ public class AudioPlayerService extends Service {
     }
 
     @SuppressLint("NewApi")
-    private void play() {
+    public void play() {
         playerLock.lock();
         try {
-            switch (StateManager.getState()) {
+            switch (stateManager.getState()) {
                 case PREPARED:
                 case PAUSED:
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "starting MediaPlayer");
                     mediaPlayer.start();
-                    StateManager.setState(PlayerStates.STARTED);
+                    stateManager.setState(PlayerStates.STARTED);
 
                     //start notification
-                    Intent i = new Intent(AudioPlayerService.CONTROL_SETUP_NOTIFICATION);
-                    i.putExtra(AudioPlayerService.CONTROL_SETUP_NOTIFICATION, true);
-                    bcm.sendBroadcast(i);
+                    foreground(true);
 
                     //requesting audio-focus and setting up lock-screen-controls
                     if (audioFocus != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
@@ -739,11 +718,12 @@ public class AudioPlayerService extends Service {
 
     }
 
+
     @SuppressLint("NewApi")
-    private void pause() {
+    public void pause() {
         playerLock.lock();
         try {
-            if (StateManager.getState() == PlayerStates.STARTED) {
+            if (stateManager.getState() == PlayerStates.STARTED) {
                 String TAG = AudioPlayerService.TAG + "pause()";
                 //stops runner who were updating gui frequently
                 handler.removeCallbacks(savePositionRunner);
@@ -759,11 +739,9 @@ public class AudioPlayerService extends Service {
                 }
 
                 mediaPlayer.pause();
-                StateManager.setState(PlayerStates.PAUSED);
+                stateManager.setState(PlayerStates.PAUSED);
             }
-            Intent i = new Intent(AudioPlayerService.CONTROL_SETUP_NOTIFICATION);
-            i.putExtra(AudioPlayerService.CONTROL_SETUP_NOTIFICATION, false);
-            bcm.sendBroadcast(i);
+            foreground(false);
 
             //abandon audio-focus and disabling lock-screen controls
             audioManager.abandonAudioFocus(audioFocusChangeListener);
@@ -789,10 +767,10 @@ public class AudioPlayerService extends Service {
         }
     }
 
-    private void changePosition(int position) {
+    public void changePosition(int position) {
         playerLock.lock();
         try {
-            PlayerStates state = StateManager.getState();
+            PlayerStates state = stateManager.getState();
             if (state == PlayerStates.STARTED || state == PlayerStates.PREPARED || state == PlayerStates.PAUSED) {
                 mediaPlayer.seekTo(position);
                 if (BuildConfig.DEBUG)
@@ -811,7 +789,7 @@ public class AudioPlayerService extends Service {
         public void run() {
             if (playerLock.tryLock()) {
                 try {
-                    if (StateManager.getState() == PlayerStates.STARTED) {
+                    if (stateManager.getState() == PlayerStates.STARTED) {
                         int position = mediaPlayer.getCurrentPosition();
                         if (position > 0) {
                             media.setPosition(position);
@@ -831,8 +809,8 @@ public class AudioPlayerService extends Service {
         public void run() {
             playerLock.lock();
             try {
-                if (StateManager.getState() == PlayerStates.STARTED) {
-                    StateManager.setTime(mediaPlayer.getCurrentPosition());
+                if (stateManager.getState() == PlayerStates.STARTED) {
+                    stateManager.setTime(mediaPlayer.getCurrentPosition());
                 }
             } finally {
                 playerLock.unlock();
