@@ -56,8 +56,7 @@
 
         <activity
             android:name=".activity.NoExternalStorage"
-            android:label="@string/action_settings">
-        </activity>
+            android:label="@string/action_settings" />
 
         <service android:name=".service.AudioPlayerService" />
 
