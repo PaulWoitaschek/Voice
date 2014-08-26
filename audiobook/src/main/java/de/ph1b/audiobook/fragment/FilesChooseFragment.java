@@ -4,12 +4,14 @@ package de.ph1b.audiobook.fragment;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,7 +31,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
@@ -66,7 +71,9 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-
+        //TESTING IF THIS WORKS!!! (for backup leave traditional hardcoded way for now.)
+        String [] storage = getStorageDirectories();
+        Collections.addAll(dirs, storage);
         addPathToSpinner();
 
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
@@ -80,7 +87,6 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
         dirSpinner = (Spinner) v.findViewById(R.id.dirSpinner);
         progressBar = (ProgressBar) v.findViewById(R.id.progress);
         fileListView = (ListView) v.findViewById(R.id.fileListView);
-
 
         if (dirs.size() > 1) {
             dirSpinner.setVisibility(View.VISIBLE);
@@ -112,6 +118,59 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
         }
 
         return v;
+    }
+
+    private static final Pattern DIR_SEPARATOR = Pattern.compile("/");
+
+    public static String[] getStorageDirectories() {
+        // Final set of paths
+        final Set<String> rv = new HashSet<String>();
+        // Primary physical SD-CARD (not emulated)
+        final String rawExternalStorage = System.getenv("EXTERNAL_STORAGE");
+        // All Secondary SD-CARDs (all exclude primary) separated by ":"
+        final String rawSecondaryStoragesStr = System.getenv("SECONDARY_STORAGE");
+        // Primary emulated SD-CARD
+        final String rawEmulatedStorageTarget = System.getenv("EMULATED_STORAGE_TARGET");
+        if (TextUtils.isEmpty(rawEmulatedStorageTarget)) {
+            // Device has physical external storage; use plain paths.
+            if (TextUtils.isEmpty(rawExternalStorage)) {
+                // EXTERNAL_STORAGE undefined; falling back to default.
+                rv.add("/storage/sdcard0");
+            } else {
+                rv.add(rawExternalStorage);
+            }
+        } else {
+            // Device has emulated storage; external storage paths should have
+            // userId burned into them.
+            final String rawUserId;
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                rawUserId = "";
+            } else {
+                final String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+                final String[] folders = DIR_SEPARATOR.split(path);
+                final String lastFolder = folders[folders.length - 1];
+                boolean isDigit = false;
+                try {
+                    Integer.valueOf(lastFolder);
+                    isDigit = true;
+                } catch (NumberFormatException ignored) {
+                }
+                rawUserId = isDigit ? lastFolder : "";
+            }
+            // /storage/emulated/0[1,2,...]
+            if (TextUtils.isEmpty(rawUserId)) {
+                rv.add(rawEmulatedStorageTarget);
+            } else {
+                rv.add(rawEmulatedStorageTarget + File.separator + rawUserId);
+            }
+        }
+        // Add all secondary storages
+        if (!TextUtils.isEmpty(rawSecondaryStoragesStr)) {
+            // All Secondary SD-CARDs splited into array
+            final String[] rawSecondaryStorages = rawSecondaryStoragesStr.split(File.pathSeparator);
+            Collections.addAll(rv, rawSecondaryStorages);
+        }
+        return rv.toArray(new String[rv.size()]);
     }
 
     private final OnBackPressedListener onBackPressedListener = new OnBackPressedListener() {
