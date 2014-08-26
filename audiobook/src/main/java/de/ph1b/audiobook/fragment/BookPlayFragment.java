@@ -88,9 +88,16 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
                                        IBinder service) {
             AudioPlayerService.LocalBinder binder = (AudioPlayerService.LocalBinder) service;
             mService = binder.getService();
-            mBound = true;
+
+            if (mService.stateManager.getState() == PlayerStates.STARTED) {
+                play_button.setImageResource(R.drawable.av_pause);
+            } else {
+                play_button.setImageResource(R.drawable.av_play);
+            }
             mService.stateManager.setStateChangeListener(onStateChangedListener);
             mService.stateManager.setTimeChangedListener(onTimeChangedListener);
+
+            mBound = true;
         }
 
         @Override
@@ -433,20 +440,6 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
         Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
         serviceIntent.putExtra(AudioPlayerService.BOOK_ID, bookId);
         getActivity().startService(serviceIntent);
-
-        //sets current state
-        if (mBound) {
-            if (mService.stateManager.getState() == PlayerStates.STARTED) {
-                play_button.setImageResource(R.drawable.av_pause);
-            } else {
-                play_button.setImageResource(R.drawable.av_play);
-            }
-        }
-
-        //calls update manually
-        if (mBound) {
-            mService.updateGUI();
-        }
     }
 
 
