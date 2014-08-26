@@ -76,7 +76,6 @@ public class AudioPlayerService extends Service {
     public static final String GUI = TAG + ".GUI";
     public static final String GUI_BOOK = TAG + ".GUI_BOOK";
     public static final String GUI_ALL_MEDIA = TAG + ".GUI_ALL_MEDIA";
-    public static final String GUI_SEEK = TAG + ".GUI_SEEK";
 
     private static final String NOTIFICATION_PAUSE = TAG + ".NOTIFICATION_PAUSE";
 

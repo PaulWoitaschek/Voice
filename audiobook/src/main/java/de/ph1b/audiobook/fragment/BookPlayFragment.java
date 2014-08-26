@@ -139,8 +139,10 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
     private final OnTimeChangedListener onTimeChangedListener = new OnTimeChangedListener() {
         @Override
         public void onTimeChanged(int time) {
-            playedTimeView.setText(formatTime(time));
-            seek_bar.setProgress(time);
+            if (!seekBarIsUpdating) {
+                playedTimeView.setText(formatTime(time));
+                seek_bar.setProgress(time);
+            }
         }
     };
 
@@ -270,11 +272,6 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
                     //sets seekBar to current position and correct length
                     seek_bar.setMax(duration);
                 }
-            }
-            //updates seekBar by frequent calls
-            if (action.equals(AudioPlayerService.GUI_SEEK)) {
-                if (!seekBarIsUpdating)
-                    seek_bar.setProgress(intent.getExtras().getInt(AudioPlayerService.GUI_SEEK));
             }
         }
     };
@@ -432,7 +429,6 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(AudioPlayerService.GUI);
-        filter.addAction(AudioPlayerService.GUI_SEEK);
         bcm.registerReceiver(updateGUIReceiver, filter);
 
         //starting the service
