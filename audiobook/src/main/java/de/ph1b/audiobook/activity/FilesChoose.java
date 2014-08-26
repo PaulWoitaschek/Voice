@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.activity;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -14,7 +13,6 @@ import java.util.Collections;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.fragment.FilesChooseFragment;
 import de.ph1b.audiobook.interfaces.OnBackPressedListener;
 import de.ph1b.audiobook.utils.CommonTasks;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
@@ -73,7 +71,7 @@ public class FilesChoose extends ActionBarActivity {
         if (onBackPressedListener != null)
             onBackPressedListener.backPressed();
         else {
-            startActivity(new Intent(this, BookChoose.class));
+            super.onBackPressed();
         }
     }
 

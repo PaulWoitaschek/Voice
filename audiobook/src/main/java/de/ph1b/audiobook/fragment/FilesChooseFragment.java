@@ -33,7 +33,6 @@ import java.util.LinkedList;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.BookChoose;
 import de.ph1b.audiobook.activity.FilesAdd;
 import de.ph1b.audiobook.activity.FilesChoose;
 import de.ph1b.audiobook.activity.Settings;
@@ -43,8 +42,7 @@ import de.ph1b.audiobook.utils.NaturalOrderComparator;
 
 public class FilesChooseFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
 
-    public static final String TAG = "de.ph1b.audiobook.fragment.FilesChooseFragment";
-
+    private static final String TAG = "de.ph1b.audiobook.fragment.FilesChooseFragment";
 
     private final LinkedList<String> link = new LinkedList<String>();
     private final ArrayList<String> dirs = new ArrayList<String>();
@@ -96,7 +94,7 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
                         Log.d(TAG, "onItemSelected for chooser was called!");
                     link.clear();
                     link.add(dirs.get(position));
-                    populateList(dirs.get(position));
+                    populateList();
                 }
 
                 @Override
@@ -110,26 +108,30 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
 
         if (dirs.size() > 0) {
             link.add(dirs.get(0)); //first element of file hierarchy
-            populateList(dirs.get(0)); //Setting path to external storage directory to list it
+            populateList(); //Setting path to external storage directory to list it
         }
-
-        ((FilesChoose) getActivity()).setOnBackPressedListener(new OnBackPressedListener() {
-            @Override
-            public void backPressed() {
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, "backPressed called with link size: " + link.size());
-                if (link.size() < 2 || link.getLast().equals(link.getFirst()))
-                    startActivity(new Intent(getActivity(), BookChoose.class));
-                link.removeLast();
-                String now = link.getLast();
-                if (link.size() > 0)
-                    link.removeLast();
-                populateList(now);
-            }
-        });
 
         return v;
     }
+
+    private final OnBackPressedListener onBackPressedListener = new OnBackPressedListener() {
+        @Override
+        public synchronized void backPressed() {
+            if (BuildConfig.DEBUG)
+                Log.d(TAG, "backPressed called with link size: " + link.size());
+            if (link.size() < 2) {
+                //setting onBackPressedListener to null and invoke new onBackPressed
+                //to invoke super.onBackPressed();
+                ((FilesChoose) getActivity()).setOnBackPressedListener(null);
+                getActivity().onBackPressed();
+            }
+            //startActivity(new Intent(getActivity(), BookChoose.class));
+            else {
+                link.removeLast();
+                populateList();
+            }
+        }
+    };
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -155,6 +157,15 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
             dirSpinner.setVisibility(View.VISIBLE);
         fileListView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
+
+        ((FilesChoose) getActivity()).setOnBackPressedListener(onBackPressedListener);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        ((FilesChoose) getActivity()).setOnBackPressedListener(null);
     }
 
     @Override
@@ -286,8 +297,8 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
         }.execute(dirAddList);
     }
 
-    private void populateList(String path) {
-
+    private synchronized void populateList() {
+        String path = link.getLast();
         //finishing action mode on populating new folder
         if (actionMode != null) {
             actionMode.finish();
@@ -295,7 +306,6 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
         if (BuildConfig.DEBUG)
             Log.e(TAG, "Populate this folder: " + path);
 
-        link.add(path);
         File f = new File(path);
         File[] files = f.listFiles(FilesChoose.filterShowAudioAndFolder);
         fileList = new ArrayList<File>(Arrays.asList(files));
@@ -309,7 +319,8 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (fileList.get(position).isDirectory()) {
-                    populateList(fileList.get(position).getAbsolutePath());
+                    link.add(fileList.get(position).getAbsolutePath());
+                    populateList();
                 }
             }
         });

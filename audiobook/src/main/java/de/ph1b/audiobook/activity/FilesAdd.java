@@ -2,9 +2,7 @@ package de.ph1b.audiobook.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 
-import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.utils.CommonTasks;
 
@@ -27,7 +25,7 @@ public class FilesAdd extends ActionBarActivity {
         new CommonTasks().checkExternalStorage(this);
     }
 
-    public Bundle getExtras(){
+    public Bundle getExtras() {
         return extras;
     }
 }
