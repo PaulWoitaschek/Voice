@@ -72,7 +72,7 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         //TESTING IF THIS WORKS!!! (for backup leave traditional hardcoded way for now.)
-        String [] storage = getStorageDirectories();
+        String[] storage = getStorageDirectories();
         Collections.addAll(dirs, storage);
         addPathToSpinner();
 
@@ -373,7 +373,6 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
         Collections.sort(fileList, new NaturalOrderComparator<File>());
         adapter = new FileAdapter(fileList, getActivity(), this);
         fileListView.setAdapter(adapter);
-
         fileListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

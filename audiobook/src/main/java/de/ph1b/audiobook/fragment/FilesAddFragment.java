@@ -55,7 +55,10 @@ import java.util.List;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.*;
+import de.ph1b.audiobook.activity.BookChoose;
+import de.ph1b.audiobook.activity.FilesAdd;
+import de.ph1b.audiobook.activity.FilesChoose;
+import de.ph1b.audiobook.activity.Settings;
 import de.ph1b.audiobook.utils.BookDetail;
 import de.ph1b.audiobook.utils.DataBaseHelper;
 import de.ph1b.audiobook.utils.MediaDetail;
@@ -83,7 +86,7 @@ public class FilesAddFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_files_add, container, false);
 
-        Bundle extras = ((FilesAdd)getActivity()).getExtras();
+        Bundle extras = ((FilesAdd) getActivity()).getExtras();
 
         fileFolderPaths = extras.getStringArrayList(FilesChoose.FILES_AS_STRING);
 
@@ -246,9 +249,8 @@ public class FilesAddFragment extends Fragment {
 
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
 
-        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
-            actionBar.setDisplayHomeAsUpEnabled(true);
-
+        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
 
     }
@@ -374,7 +376,7 @@ public class FilesAddFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                startActivity(new Intent (getActivity(), Settings.class));
+                startActivity(new Intent(getActivity(), Settings.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -392,6 +394,7 @@ public class FilesAddFragment extends Fragment {
             progressDialog.setCancelable(false);
             progressDialog.setTitle(getString(R.string.book_add_progress_title));
             progressDialog.setMessage(getString(R.string.book_add_progress_message));
+            progressDialog.setMax(fileFolderPaths.size() * 2 + 1);
             progressDialog.show();
         }
 
@@ -399,12 +402,12 @@ public class FilesAddFragment extends Fragment {
         protected Void doInBackground(Void... params) {
 
             ArrayList<File> dirAddList = new ArrayList<File>();
-            for (String s : fileFolderPaths) {
+            for (String s : fileFolderPaths)
                 dirAddList.add(new File(s));
-            }
 
             ArrayList<MediaDetail> mediaList = new ArrayList<MediaDetail>();
             for (File f : dirAddList) {
+                publishProgress(progressDialog.getProgress() + 1);
                 MediaDetail m = new MediaDetail();
                 String fileName = f.getName();
                 if (fileName.indexOf(".") > 0)
@@ -414,12 +417,10 @@ public class FilesAddFragment extends Fragment {
                 mediaList.add(m);
             }
 
-
             if (mediaList.size() > 0) {
 
                 int[] mediaIDs = new int[mediaList.size()];
 
-                progressDialog.setMax(mediaList.size() + 1);
                 for (int i = 0; i < mediaList.size(); i++) {
                     MediaDetail m = mediaList.get(i);
 
@@ -430,7 +431,7 @@ public class FilesAddFragment extends Fragment {
                     m.setDuration(duration);
                     int id = db.addMedia(m);
                     mediaIDs[i] = id;
-                    publishProgress(i + 1);
+                    publishProgress(progressDialog.getProgress() + 1);
                 }
 
                 BookDetail b = new BookDetail();
