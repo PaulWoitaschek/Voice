@@ -88,7 +88,8 @@ public class FileAdapter extends BaseAdapter {
         });
 
         //setting correct value
-        viewHolder.checkBox.setChecked(checked[position]);
+        if (checked.length > position)
+            viewHolder.checkBox.setChecked(checked[position]);
 
         File f = data.get(position);
         String name = f.getName();
