@@ -122,7 +122,8 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
 
     private static final Pattern DIR_SEPARATOR = Pattern.compile("/");
 
-    public static String[] getStorageDirectories() {
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private String[] getStorageDirectories() {
         // Final set of paths
         final Set<String> rv = new HashSet<String>();
         // Primary physical SD-CARD (not emulated)

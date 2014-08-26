@@ -1,15 +1,10 @@
 package de.ph1b.audiobook.adapter;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -20,6 +15,7 @@ import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.utils.BookDetail;
+import de.ph1b.audiobook.utils.CommonTasks;
 import de.ph1b.audiobook.utils.DataBaseHelper;
 import de.ph1b.audiobook.utils.MediaDetail;
 
@@ -72,38 +68,13 @@ public class MediaAdapter extends BaseAdapter {
         String name = b.getName();
         viewHolder.textView.setText(name);
 
-
-        viewHolder.iconImageView.getViewTreeObserver().addOnPreDrawListener(
-                new ViewTreeObserver.OnPreDrawListener() {
-                    public boolean onPreDraw() {
-                        int height = viewHolder.iconImageView.getMeasuredHeight();
-                        int width = viewHolder.iconImageView.getMeasuredWidth();
-                        String thumbPath = b.getThumb();
-                        Bitmap thumb;
-                        if (thumbPath.equals("") || new File(thumbPath).isDirectory() || !(new File(thumbPath).exists())) {
-                            thumb = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-                            Canvas c = new Canvas(thumb);
-                            Paint textPaint = new Paint();
-                            textPaint.setTextSize(2 * width / 3);
-                            Resources r = MediaAdapter.this.c.getResources();
-                            textPaint.setColor(r.getColor(android.R.color.white));
-                            textPaint.setAntiAlias(true);
-                            textPaint.setTextAlign(Paint.Align.CENTER);
-                            Paint backgroundPaint = new Paint();
-                            backgroundPaint.setColor(r.getColor(R.color.file_chooser_audio));
-                            c.drawRect(0, 0, width, height, backgroundPaint);
-                            int y = (int) ((c.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2));
-                            c.drawText(b.getName().substring(0, 1).toUpperCase(), width / 2, y, textPaint);
-                            viewHolder.iconImageView.setImageBitmap(thumb);
-                        } else {
-                            viewHolder.iconImageView.setImageURI(Uri.parse(thumbPath));
-                            //thumb = BitmapFactory.decodeFile(thumbPath);
-                            //thumb = Bitmap.createScaledBitmap(thumb, width, height, false);
-                        }
-                        return true;
-                    }
-                }
-        );
+        String thumbPath = b.getThumb();
+        if (thumbPath.equals("") || new File(thumbPath).isDirectory() || !(new File(thumbPath).exists())) {
+            int px = CommonTasks.convertDpToPx(c.getResources().getDimension(R.dimen.thumb_size), c.getResources());
+            viewHolder.iconImageView.setImageBitmap(CommonTasks.genCapital(b.getName(), px, c.getResources()));
+        } else {
+            viewHolder.iconImageView.setImageURI(Uri.parse(thumbPath));
+        }
 
         //setting bar
         MediaDetail m = db.getMedia(b.getPosition());
@@ -122,6 +93,8 @@ public class MediaAdapter extends BaseAdapter {
 
         return convertView;
     }
+
+
 
     static class ViewHolder {
         ImageView iconImageView;

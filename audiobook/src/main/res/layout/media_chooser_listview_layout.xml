@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="@dimen/thumb_size"
+        android:layout_height="@dimen/thumb_size"
         android:contentDescription="@string/description_thumbnail" />
 
     <LinearLayout

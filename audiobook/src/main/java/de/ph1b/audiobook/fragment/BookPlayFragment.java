@@ -9,10 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -28,7 +25,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -52,6 +48,7 @@ import de.ph1b.audiobook.interfaces.OnTimeChangedListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.utils.BookDetail;
+import de.ph1b.audiobook.utils.CommonTasks;
 import de.ph1b.audiobook.utils.MediaDetail;
 
 public class BookPlayFragment extends Fragment implements OnClickListener {
@@ -77,7 +74,6 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
     private MediaDetail media;
 
     private int duration;
-
 
     private AudioPlayerService mService;
     private boolean mBound = false;
@@ -196,37 +192,13 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
                     bookId = b.getId();
 
                     //setting cover
-                    coverView.getViewTreeObserver().addOnPreDrawListener(
-                            new ViewTreeObserver.OnPreDrawListener() {
-                                public boolean onPreDraw() {
-                                    int height = coverView.getMeasuredHeight();
-                                    int width = coverView.getMeasuredWidth();
-                                    String imagePath = b.getCover();
-                                    Bitmap cover;
-                                    if (imagePath.equals("") || new File(imagePath).isDirectory()) {
-                                        cover = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-                                        Canvas c = new Canvas(cover);
-                                        Paint textPaint = new Paint();
-                                        textPaint.setTextSize(4 * width / 5);
-                                        Resources r = getActivity().getResources();
-
-                                        textPaint.setColor(r.getColor(android.R.color.white));
-                                        textPaint.setAntiAlias(true);
-                                        textPaint.setTextAlign(Paint.Align.CENTER);
-                                        Paint backgroundPaint = new Paint();
-                                        backgroundPaint.setColor(r.getColor(R.color.file_chooser_audio));
-                                        c.drawRect(0, 0, width, height, backgroundPaint);
-                                        int y = (int) ((c.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2));
-                                        c.drawText(b.getName().substring(0, 1).toUpperCase(), width / 2, y, textPaint);
-                                        coverView.setImageBitmap(cover);
-                                    } else {
-                                        coverView.setImageURI(Uri.parse(imagePath));
-                                    }
-                                    return true;
-                                }
-                            }
-
-                    );
+                    String imagePath = b.getCover();
+                    if (imagePath.equals("") || !new File(imagePath).exists() || new File(imagePath).isDirectory()) {
+                        Bitmap cover = CommonTasks.genCapital(b.getName(), CommonTasks.getDisplayMinSize(getActivity()), getResources());
+                        coverView.setImageBitmap(cover);
+                    } else {
+                        coverView.setImageURI(Uri.parse(imagePath));
+                    }
 
 
                     //hides control elements if there is only one media to play

@@ -6,11 +6,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.media.MediaMetadataRetriever;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
@@ -60,6 +57,7 @@ import de.ph1b.audiobook.activity.FilesAdd;
 import de.ph1b.audiobook.activity.FilesChoose;
 import de.ph1b.audiobook.activity.Settings;
 import de.ph1b.audiobook.utils.BookDetail;
+import de.ph1b.audiobook.utils.CommonTasks;
 import de.ph1b.audiobook.utils.DataBaseHelper;
 import de.ph1b.audiobook.utils.MediaDetail;
 
@@ -98,23 +96,10 @@ public class FilesAddFragment extends Fragment {
         fieldName.setText(defaultName);
 
         if (fieldName != null) {
-            String capital = fieldName.getText().toString().substring(0, 1);
-            if (capital.length() > 0) {
-                int width = 500;
-                int height = 500;
-                Bitmap cover = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-                Canvas c = new Canvas(cover);
-                Paint textPaint = new Paint();
-                textPaint.setTextSize(4 * width / 5);
-                Resources r = getActivity().getResources();
-                textPaint.setColor(r.getColor(android.R.color.white));
-                textPaint.setAntiAlias(true);
-                textPaint.setTextAlign(Paint.Align.CENTER);
-                Paint backgroundPaint = new Paint();
-                backgroundPaint.setColor(r.getColor(R.color.file_chooser_audio));
-                c.drawRect(0, 0, width, height, backgroundPaint);
-                int y = (int) ((c.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2));
-                c.drawText(fieldName.getText().toString().substring(0, 1).toUpperCase(), width / 2, y, textPaint);
+            String name = fieldName.getText().toString();
+            if (name.length() > 0) {
+                int size = CommonTasks.getDisplayMinSize(getActivity());
+                Bitmap cover = CommonTasks.genCapital(name, size, getResources());
                 bitmapList.add(cover);
             }
         }
@@ -165,8 +150,6 @@ public class FilesAddFragment extends Fragment {
                         }
                     }
                 }
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, "finished async task!");
                 return null;
             }
 
@@ -478,16 +461,15 @@ public class FilesAddFragment extends Fragment {
         String fileName = String.valueOf(System.currentTimeMillis()) + ".png";
         int pixelCut = 10;
 
-        int coverWidth = cover.getWidth();
-        int coverHeight = cover.getHeight();
-
         // if cover is too big, scale it down
-        if (coverWidth > 500 || coverHeight > 500) {
-            cover = Bitmap.createScaledBitmap(cover, 500, 500, false);
+        int displayPx = CommonTasks.getDisplayMinSize(getActivity());
+        if (cover.getWidth() > displayPx || cover.getHeight() > displayPx) {
+            cover = Bitmap.createScaledBitmap(cover, displayPx, displayPx, false);
         }
 
         cover = Bitmap.createBitmap(cover, pixelCut, pixelCut, cover.getWidth() - 2 * pixelCut, cover.getHeight() - 2 * pixelCut); //crop n px from each side for poor images
-        Bitmap thumb = Bitmap.createScaledBitmap(cover, 200, 200, false);
+        int thumbPx = CommonTasks.convertDpToPx(getResources().getDimension(R.dimen.thumb_size), getResources());
+        Bitmap thumb = Bitmap.createScaledBitmap(cover, thumbPx, thumbPx, false);
         File thumbDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/" + packageName + "/thumbs");
         File imageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/" + packageName + "/images");
         File thumbFile = new File(thumbDir, fileName);
@@ -513,7 +495,6 @@ public class FilesAddFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return new String[]{coverPath, thumbPath};
     }
 

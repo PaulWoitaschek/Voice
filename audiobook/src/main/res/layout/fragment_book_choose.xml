@@ -56,8 +56,8 @@
 
             <ImageButton
                 android:id="@+id/current_playing"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="@dimen/thumb_size"
+                android:layout_height="@dimen/thumb_size"
                 android:layout_gravity="center"
                 style="?android:attr/borderlessButtonStyle"
                 android:src="@drawable/av_play"

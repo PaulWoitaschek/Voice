@@ -8,9 +8,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -26,7 +24,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -50,6 +47,7 @@ import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.utils.BookDetail;
+import de.ph1b.audiobook.utils.CommonTasks;
 import de.ph1b.audiobook.utils.DataBaseHelper;
 
 
@@ -244,37 +242,16 @@ public class BookChooseFragment extends Fragment {
             getActivity().startService(i);
 
             //setting cover
-            //set tree observer to measure height pre-drawn
-            currentCover.getViewTreeObserver().addOnPreDrawListener(
-                    new ViewTreeObserver.OnPreDrawListener() {
-                        public boolean onPreDraw() {
-                            int height = currentCover.getMeasuredHeight();
-                            int width = currentCover.getMeasuredWidth();
-                            String thumbPath = b.getThumb();
-                            Bitmap thumb;
-                            if (thumbPath.equals("") || new File(thumbPath).isDirectory()) {
-                                thumb = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-                                Canvas c = new Canvas(thumb);
-                                Paint textPaint = new Paint();
-                                textPaint.setTextSize(2 * width / 3);
-                                textPaint.setColor(getResources().getColor(android.R.color.white));
-                                textPaint.setAntiAlias(true);
-                                textPaint.setTextAlign(Paint.Align.CENTER);
-                                Paint backgroundPaint = new Paint();
-                                backgroundPaint.setColor(getResources().getColor(R.color.file_chooser_audio));
-                                c.drawRect(0, 0, width, height, backgroundPaint);
-                                int y = (int) ((c.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2));
-                                c.drawText(b.getName().substring(0, 1).toUpperCase(), width / 2, y, textPaint);
-                                currentCover.setImageBitmap(thumb);
-                            } else if (new File(thumbPath).isFile()) {
-                                thumb = BitmapFactory.decodeFile(thumbPath);
-                                thumb = Bitmap.createScaledBitmap(thumb, width, height, false);
-                                currentCover.setImageBitmap(thumb);
-                            }
-                            return true;
-                        }
-                    }
-            );
+            String thumbPath = b.getThumb();
+            if (thumbPath.equals("") || !new File(thumbPath).exists() || new File(thumbPath).isDirectory()) {
+                String bookName = b.getName();
+                float dp = getResources().getDimension(R.dimen.thumb_size);
+                int px = CommonTasks.convertDpToPx(dp, getResources());
+                Bitmap thumb = CommonTasks.genCapital(bookName, px, getResources());
+                currentCover.setImageBitmap(thumb);
+            } else if (new File(thumbPath).isFile()) {
+                currentCover.setImageURI(Uri.parse(thumbPath));
+            }
 
 
             //setting text

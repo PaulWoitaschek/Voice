@@ -14,8 +14,6 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
@@ -48,6 +46,7 @@ import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.receiver.RemoteControlReceiver;
 import de.ph1b.audiobook.receiver.WidgetProvider;
 import de.ph1b.audiobook.utils.BookDetail;
+import de.ph1b.audiobook.utils.CommonTasks;
 import de.ph1b.audiobook.utils.DataBaseHelper;
 import de.ph1b.audiobook.utils.MediaDetail;
 
@@ -268,11 +267,8 @@ public class AudioPlayerService extends Service {
     }
 
 
-    private class StartNotificationAsync extends AsyncTask<Void, Void, Void> {
+    private class StartNotificationAsync extends AsyncTask<Void, Void, Bitmap> {
 
-        Bitmap thumb = null;
-
-        PendingIntent pi;
 
         @Override
         protected void onPreExecute() {
@@ -280,50 +276,37 @@ public class AudioPlayerService extends Service {
             SharedPreferences.Editor editor = settings.edit();
             editor.putInt(BookChoose.SHARED_PREFS_CURRENT, book.getId());
             editor.apply();
-
-            pi = PendingIntent.getActivity(getApplicationContext(), 0,
-                    new Intent(getApplicationContext(), BookPlay.class),
-                    PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected Bitmap doInBackground(Void... params) {
             String thumbPath = book.getThumb();
 
             Resources res = getApplicationContext().getResources();
             int height = (int) res.getDimension(android.R.dimen.notification_large_icon_height);
             int width = (int) res.getDimension(android.R.dimen.notification_large_icon_width);
+            int size = height < width ? height : width;
 
-            if (thumbPath.equals("") || new File(thumbPath).isDirectory()) {
-                thumb = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-                Canvas c = new Canvas(thumb);
-                Paint textPaint = new Paint();
-                textPaint.setTextSize(2 * width / 3);
-                textPaint.setColor(getResources().getColor(android.R.color.white));
-                textPaint.setAntiAlias(true);
-                textPaint.setTextAlign(Paint.Align.CENTER);
-                Paint backgroundPaint = new Paint();
-                backgroundPaint.setColor(getResources().getColor(R.color.file_chooser_audio));
-                c.drawRect(0, 0, width, height, backgroundPaint);
-                int y = (int) ((c.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2));
-                c.drawText(book.getName().substring(0, 1).toUpperCase(), width / 2, y, textPaint);
+            if (thumbPath.equals("") || !new File(thumbPath).exists() || new File(thumbPath).isDirectory()) {
+                return CommonTasks.genCapital(book.getName(), size, getResources());
             } else {
-                thumb = BitmapFactory.decodeFile(thumbPath);
-                thumb = Bitmap.createScaledBitmap(thumb, width, height, false);
+                Bitmap thumb = BitmapFactory.decodeFile(thumbPath);
+                return Bitmap.createScaledBitmap(thumb, width, height, false);
             }
-
-            return null;
         }
 
         @SuppressWarnings("deprecation")
         @Override
-        protected void onPostExecute(Void result) {
+        protected void onPostExecute(Bitmap result) {
             super.onPostExecute(result);
+            PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), 0,
+                    new Intent(getApplicationContext(), BookPlay.class),
+                    PendingIntent.FLAG_UPDATE_CURRENT);
             Intent i = new Intent(NOTIFICATION_PAUSE);
             PendingIntent pauseActionPI = PendingIntent.getBroadcast(getApplicationContext(), 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
             builder.setContentTitle(book.getName())
-                    .setLargeIcon(thumb)
+                    .setLargeIcon(result)
                     .setSmallIcon(R.drawable.av_play_dark)
                     .setContentIntent(pi)
                     .setOngoing(true)
@@ -499,7 +482,7 @@ public class AudioPlayerService extends Service {
         }
     }
 
-    public void updateGUI() {
+    private void updateGUI() {
         if (BuildConfig.DEBUG)
             Log.d(TAG, "setting time to" + mediaPlayer.getCurrentPosition());
         stateManager.setTime(mediaPlayer.getCurrentPosition());
@@ -871,8 +854,14 @@ public class AudioPlayerService extends Service {
                     editor = mRemoteControlClient.editMetadata(true);
                     editor.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, media.getName());
                     editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, book.getName());
-                    Bitmap bm = BitmapFactory.decodeFile(book.getCover());
-                    editor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bm);
+                    String coverPath = book.getCover();
+                    Bitmap bitmap;
+                    if (coverPath.equals("") || !new File(coverPath).exists() || new File(coverPath).isDirectory()) {
+                        bitmap = CommonTasks.genCapital(book.getName(), 500, getResources());
+                    } else {
+                        bitmap = BitmapFactory.decodeFile(book.getCover());
+                    }
+                    editor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bitmap);
                     editor.apply();
                 }
                 return null;
