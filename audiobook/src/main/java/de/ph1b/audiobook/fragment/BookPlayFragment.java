@@ -295,7 +295,6 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_book_play, container, false);
-        super.onCreate(savedInstanceState);
 
         bcm = LocalBroadcastManager.getInstance(getActivity());
 
