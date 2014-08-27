@@ -322,31 +322,15 @@ public class AudioPlayerService extends Service {
         }
     }
 
-
     @Override
     public void onDestroy() {
         playerLock.lock();
         try {
-            handler.removeCallbacks(savePositionRunner);
-            handler.removeCallbacks(updateSeekBarRunner);
-
-            audioManager.abandonAudioFocus(audioFocusChangeListener);
-            audioFocus = 0;
-            audioManager.unregisterMediaButtonEventReceiver(myEventReceiver);
-
-            if (stateManager.getState() != PlayerStates.END)
+            registerAsPlaying(false);
+            if (stateManager.getState() != PlayerStates.DEAD)
                 mediaPlayer.reset();
             mediaPlayer.release();
-
-            stateManager.setState(PlayerStates.END);
-            if (noisyRCRegistered) {
-                unregisterReceiver(audioBecomingNoisyReceiver);
-                noisyRCRegistered = false;
-            }
-            if (headsetRCRegistered) {
-                unregisterReceiver(headsetPlugReceiver);
-                headsetRCRegistered = false;
-            }
+            stateManager.setState(PlayerStates.DEAD);
         } finally {
             playerLock.unlock();
         }
@@ -358,8 +342,6 @@ public class AudioPlayerService extends Service {
     private final BroadcastReceiver audioBecomingNoisyReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (BuildConfig.DEBUG)
-                Log.d(TAG, "audio becoming noisy!");
             if (stateManager.getState() == PlayerStates.STARTED)
                 pauseBecauseHeadset = true;
             pause();
@@ -381,11 +363,8 @@ public class AudioPlayerService extends Service {
                             if (pauseBecauseHeadset) {
                                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
                                 boolean resumeOnReplug = sharedPref.getBoolean(context.getString(R.string.pref_resume_on_replug), true);
-                                if (resumeOnReplug) {
+                                if (resumeOnReplug)
                                     play();
-                                    if (BuildConfig.DEBUG)
-                                        Log.d(TAG, "Resuming player because headset was replugged");
-                                }
                                 pauseBecauseHeadset = false;
                             }
                         }
@@ -402,28 +381,35 @@ public class AudioPlayerService extends Service {
         this.allMedia = allMedia;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-
             if (book.getMediaIds().length > 1) {
                 mRemoteControlClient.setTransportControlFlags(
                         RemoteControlClient.FLAG_KEY_MEDIA_PAUSE |
                                 RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS |
-                                RemoteControlClient.FLAG_KEY_MEDIA_NEXT
+                                RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
+                                RemoteControlClient.FLAG_KEY_MEDIA_REWIND |
+                                RemoteControlClient.FLAG_KEY_MEDIA_FAST_FORWARD
                 );
             } else {
                 mRemoteControlClient.setTransportControlFlags(
-                        RemoteControlClient.FLAG_KEY_MEDIA_PAUSE
+                        RemoteControlClient.FLAG_KEY_MEDIA_PAUSE |
+                                RemoteControlClient.FLAG_KEY_MEDIA_REWIND |
+                                RemoteControlClient.FLAG_KEY_MEDIA_FAST_FORWARD
                 );
             }
         }
     }
 
     private void prepare(int mediaId) {
-        if (stateManager.getState() == PlayerStates.STARTED) {
-            pause();
-        }
-
         playerLock.lock();
         try {
+            if (BuildConfig.DEBUG) Log.d(TAG, "prepare(" + mediaId + ")");
+
+            if (stateManager.getState() == PlayerStates.DEAD)
+                mediaPlayer = new MediaPlayer();
+            else
+                mediaPlayer.reset();
+            stateManager.setState(PlayerStates.IDLE);
+
             if (book.getPosition() != mediaId) {
                 book.setPosition(mediaId);
                 db.updateBookAsync(book);
@@ -433,15 +419,10 @@ public class AudioPlayerService extends Service {
             String path = media.getPath();
             int position = media.getPosition();
 
-            reset();
-
-            if (BuildConfig.DEBUG)
-                Log.d(TAG, "creating new player");
-            if (stateManager.getState() == PlayerStates.END)
-                mediaPlayer = new MediaPlayer();
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             try {
                 mediaPlayer.setDataSource(this, Uri.parse(path));
+                stateManager.setState(PlayerStates.INITIALIZED);
                 mediaPlayer.prepare();
                 stateManager.setState(PlayerStates.PREPARED);
             } catch (IOException e) {
@@ -454,6 +435,12 @@ public class AudioPlayerService extends Service {
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
+                    playerLock.lock();
+                    try {
+                        stateManager.setState(PlayerStates.PLAYBACK_COMPLETED);
+                    } finally {
+                        playerLock.unlock();
+                    }
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "Next Song by onCompletion");
                     media.setPosition(0);
@@ -466,48 +453,35 @@ public class AudioPlayerService extends Service {
         }
     }
 
-    private void reset() {
-        playerLock.lock();
-        try {
-            PlayerStates state = stateManager.getState();
-            if (state == PlayerStates.STARTED)
-                pause();
-            if (state == PlayerStates.IDLE || state == PlayerStates.PREPARED || state == PlayerStates.STARTED || state == PlayerStates.PAUSED) {
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, "resetting player");
-                mediaPlayer.reset();
-                stateManager.setState(PlayerStates.IDLE);
+
+    private void updateGUI() {
+        if (stateManager.getState() != PlayerStates.DEAD) {
+            if (playerLock.tryLock()) {
+                try {
+                    stateManager.setTime(mediaPlayer.getCurrentPosition());
+                    Intent i = new Intent(GUI);
+                    i.putExtra(GUI_BOOK, book);
+                    i.putExtra(GUI_ALL_MEDIA, allMedia);
+                    bcm.sendBroadcast(i);
+                } finally {
+                    playerLock.unlock();
+                }
             }
-        } finally {
-            playerLock.unlock();
         }
     }
 
-    private void updateGUI() {
-        stateManager.setTime(mediaPlayer.getCurrentPosition());
-
-        Intent i = new Intent(GUI);
-        i.putExtra(GUI_BOOK, book);
-        i.putExtra(GUI_ALL_MEDIA, allMedia);
-
-        bcm.sendBroadcast(i);
-    }
-
     private void sleepTimer(int sleepTime) {
-
         Timer sandman = new Timer();
-
         TimerTask sleepSand = new TimerTask() {
             @Override
             public void run() {
                 playerLock.lock();
                 try {
                     if (BuildConfig.DEBUG) Log.d(TAG, "Good night everyone");
-                    reset();
-                    if (stateManager.getState() == PlayerStates.IDLE) {
-                        mediaPlayer.release();
-                        stateManager.setState(PlayerStates.END);
-                    }
+                    mediaPlayer.reset();
+                    mediaPlayer.release();
+                    registerAsPlaying(false);
+                    stateManager.setState(PlayerStates.DEAD);
                 } finally {
                     playerLock.unlock();
                 }
@@ -519,10 +493,10 @@ public class AudioPlayerService extends Service {
     }
 
     public void fastForward() {
-        playerLock.lock();
-        try {
-            PlayerStates state = stateManager.getState();
-            if (state == PlayerStates.STARTED || state == PlayerStates.PREPARED || state == PlayerStates.PAUSED) {
+        PlayerStates state = stateManager.getState();
+        if (state == PlayerStates.STARTED || state == PlayerStates.PREPARED || state == PlayerStates.PAUSED) {
+            playerLock.lock();
+            try {
                 int position = mediaPlayer.getCurrentPosition();
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
                 int changeTimeAmount = sharedPref.getInt(getString(R.string.pref_change_amount), 20) * 1000;
@@ -535,22 +509,21 @@ public class AudioPlayerService extends Service {
                     db.updateMediaAsync(media);
                 }
                 stateManager.setTime(mediaPlayer.getCurrentPosition());
+
+            } finally {
+                playerLock.unlock();
             }
-        } finally {
-            playerLock.unlock();
         }
     }
 
     public void rewind() {
-        playerLock.lock();
-        try {
-            PlayerStates state = stateManager.getState();
-            if (state == PlayerStates.STARTED || state == PlayerStates.PREPARED || state == PlayerStates.PAUSED) {
+        PlayerStates state = stateManager.getState();
+        if (state == PlayerStates.STARTED || state == PlayerStates.PREPARED || state == PlayerStates.PAUSED) {
+            playerLock.lock();
+            try {
                 int position = mediaPlayer.getCurrentPosition();
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
                 int changeTimeAmount = sharedPref.getInt(getString(R.string.pref_change_amount), 20) * 1000;
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, "Rewind by " + changeTimeAmount);
                 int newPosition = position - changeTimeAmount;
                 if (newPosition > 0) {
                     mediaPlayer.seekTo(newPosition);
@@ -558,61 +531,60 @@ public class AudioPlayerService extends Service {
                     db.updateMediaAsync(media);
                 }
                 stateManager.setTime(mediaPlayer.getCurrentPosition());
+            } finally {
+                playerLock.unlock();
             }
-        } finally {
-            playerLock.unlock();
         }
     }
 
     public void previousSong() {
-        PlayerStates state = stateManager.getState();
-        if (state == PlayerStates.STARTED || state == PlayerStates.PREPARED || state == PlayerStates.PAUSED) {
-            int[] allIds = book.getMediaIds();
-            int currentId = media.getId();
-            for (int i = 1; i < allIds.length; i++) { //starting at #1 to prevent change when on first song
-                if (allIds[i] == currentId) {
-                    boolean wasPlaying = false;
-                    if (stateManager.getState() == PlayerStates.STARTED) {
-                        wasPlaying = true;
-                    }
-                    prepare(allIds[i - 1]);
-                    book.setPosition(media.getId());
-                    db.updateBookAsync(book);
-                    if (wasPlaying)
-                        play();
-                    updateGUI();
-                    break;
-                }
+        int[] allIds = book.getMediaIds();
+        int currentId = media.getId();
+        for (int i = 1; i < allIds.length; i++) { //starting at #1 to prevent change when on first song
+            if (allIds[i] == currentId) {
+                boolean wasPlaying = ((stateManager.getState() == PlayerStates.STARTED) ||
+                        (stateManager.getState() == PlayerStates.PLAYBACK_COMPLETED));
+                int mediaId = allIds[i - 1];
+                prepare(mediaId);
+                book.setPosition(media.getId());
+                db.updateBookAsync(book);
+                if (wasPlaying)
+                    play();
+                updateGUI();
+                break;
             }
         }
     }
 
     public void nextSong() {
-        PlayerStates state = stateManager.getState();
-        if (state == PlayerStates.STARTED || state == PlayerStates.PREPARED || state == PlayerStates.PAUSED) {
-            int[] allIds = book.getMediaIds();
-            int currentId = media.getId();
-            for (int i = 0; i < allIds.length - 1; i++) { //-1 to prevent change when already last song reached
-                if (allIds[i] == currentId) {
-                    boolean wasPlaying = false;
-                    if (stateManager.getState() == PlayerStates.STARTED)
-                        wasPlaying = true;
-                    if (BuildConfig.DEBUG)
-                        Log.d(TAG, "preparing now");
-                    prepare(allIds[i + 1]);
-                    book.setPosition(media.getId());
-                    db.updateBookAsync(book);
-                    if (wasPlaying)
-                        play();
-                    updateGUI();
-                    break;
-                }
-
+        int[] allIds = book.getMediaIds();
+        int currentId = media.getId();
+        for (int i = 0; i < allIds.length - 1; i++) { //-1 to prevent change when already last song reached
+            if (allIds[i] == currentId) {
+                boolean wasPlaying = ((stateManager.getState() == PlayerStates.STARTED) ||
+                        (stateManager.getState() == PlayerStates.PLAYBACK_COMPLETED));
+                int mediaId = allIds[i + 1];
+                prepare(mediaId);
+                book.setPosition(media.getId());
+                db.updateBookAsync(book);
+                if (wasPlaying)
+                    play();
+                updateGUI();
+                break;
             }
+        }
 
-            // if at last position, remove handler and notification, audio-focus
-            if (currentId == allIds[allIds.length - 1])
-                pause();
+        // if at last position, remove handler and notification, audio-focus
+        if (currentId == allIds[allIds.length - 1]) {
+            playerLock.lock();
+            try {
+                mediaPlayer.reset();
+                mediaPlayer.release();
+                registerAsPlaying(false);
+                stateManager.setState(PlayerStates.DEAD);
+            } finally {
+                playerLock.unlock();
+            }
         }
     }
 
@@ -620,9 +592,7 @@ public class AudioPlayerService extends Service {
         if (mediaId != book.getPosition()) {
             book.setPosition(mediaId);
             db.updateBookAsync(book);
-            boolean wasPlaying = false;
-            if (stateManager.getState() == PlayerStates.STARTED)
-                wasPlaying = true;
+            Boolean wasPlaying = (stateManager.getState() == PlayerStates.STARTED);
             prepare(mediaId);
             if (wasPlaying)
                 play();
@@ -641,48 +611,13 @@ public class AudioPlayerService extends Service {
                         Log.d(TAG, "starting MediaPlayer");
                     mediaPlayer.start();
                     stateManager.setState(PlayerStates.STARTED);
-
-                    //start notification
-                    foreground(true);
-
-                    //requesting audio-focus and setting up lock-screen-controls
-                    if (audioFocus != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                        audioFocus = audioManager.requestAudioFocus(audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-                        if (BuildConfig.DEBUG)
-                            Log.d(TAG, "Audio-focus granted. Setting up RemoteControlClient");
-
-                        audioManager.registerMediaButtonEventReceiver(myEventReceiver);
-
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                            if (BuildConfig.DEBUG)
-                                Log.d(TAG, "Setting up remote Control Client");
-                            audioManager.registerRemoteControlClient(mRemoteControlClient);
-                            mRemoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
-                            updateMetaData();
-                        }
-                    }
-
-
-                    //starting runner to update gui
-                    handler.postDelayed(savePositionRunner, 10000);
-                    handler.postDelayed(updateSeekBarRunner, 1000);
-
-                    //setting logo
+                    registerAsPlaying(true);
                     updateGUI();
-
-                    //registering receivers for information on media controls
-                    if (!noisyRCRegistered) {
-                        registerReceiver(audioBecomingNoisyReceiver, new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY));
-                        noisyRCRegistered = true;
-                    }
-                    if (!headsetRCRegistered) {
-                        registerReceiver(headsetPlugReceiver, new IntentFilter(Intent.ACTION_HEADSET_PLUG));
-                        headsetRCRegistered = true;
-                    }
                     break;
                 case IDLE:
-                case END:
+                case DEAD:
                 case STOPPED:
+                case PLAYBACK_COMPLETED:
                     prepare(media.getId());
                     play();
                     break;
@@ -692,55 +627,86 @@ public class AudioPlayerService extends Service {
         } finally {
             playerLock.unlock();
         }
-
     }
 
+    private void registerAsPlaying(Boolean playing) {
+        if (playing) {
+            //setup notification
+            foreground(true);
 
-    @SuppressLint("NewApi")
-    public void pause() {
-        playerLock.lock();
-        try {
-            if (stateManager.getState() == PlayerStates.STARTED) {
-                String TAG = AudioPlayerService.TAG + "pause()";
-                //stops runner who were updating gui frequently
-                handler.removeCallbacks(savePositionRunner);
-                handler.removeCallbacks(updateSeekBarRunner);
+            //starting runner to update gui
+            handler.postDelayed(savePositionRunner, 10000);
+            handler.postDelayed(updateSeekBarRunner, 1000);
 
-                //saves current position, then pauses
-                int position = mediaPlayer.getCurrentPosition();
+            //requesting audio-focus and setting up lock-screen-controls
+            if (audioFocus != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                audioFocus = audioManager.requestAudioFocus(audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
                 if (BuildConfig.DEBUG)
-                    Log.d(TAG, "setting position to " + position);
-                if (position > 0) {
-                    media.setPosition(position);
-                    db.updateMediaAsync(media);
-                }
+                    Log.d(TAG, "Audio-focus granted. Setting up RemoteControlClient");
 
-                mediaPlayer.pause();
-                stateManager.setState(PlayerStates.PAUSED);
+                audioManager.registerMediaButtonEventReceiver(myEventReceiver);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                    if (BuildConfig.DEBUG)
+                        Log.d(TAG, "Setting up remote Control Client");
+                    audioManager.registerRemoteControlClient(mRemoteControlClient);
+                    mRemoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
+                    updateMetaData();
+                }
             }
+
+            //registering receivers for information on media controls
+            if (!noisyRCRegistered) {
+                registerReceiver(audioBecomingNoisyReceiver, new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY));
+                noisyRCRegistered = true;
+            }
+            if (!headsetRCRegistered) {
+                registerReceiver(headsetPlugReceiver, new IntentFilter(Intent.ACTION_HEADSET_PLUG));
+                headsetRCRegistered = true;
+            }
+        } else {
+            //stop notification
             foreground(false);
+
+            //stops runner who were updating gui frequently
+            handler.removeCallbacks(savePositionRunner);
+            handler.removeCallbacks(updateSeekBarRunner);
 
             //abandon audio-focus and disabling lock-screen controls
             audioManager.abandonAudioFocus(audioFocusChangeListener);
             audioFocus = 0;
             audioManager.unregisterMediaButtonEventReceiver(myEventReceiver);
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                 audioManager.unregisterRemoteControlClient(mRemoteControlClient);
                 mRemoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_STOPPED);
             }
-
-            //setting logo
-            updateGUI();
-
 
             //releasing control receivers because pause
             if (noisyRCRegistered) {
                 unregisterReceiver(audioBecomingNoisyReceiver);
                 noisyRCRegistered = false;
             }
-        } finally {
-            playerLock.unlock();
+
+        }
+    }
+
+
+    public void pause() {
+        registerAsPlaying(false);
+        if (stateManager.getState() == PlayerStates.STARTED) {
+            playerLock.lock();
+            try {
+                //saves current position, then pauses
+                int position = mediaPlayer.getCurrentPosition();
+                if (position > 0) {
+                    media.setPosition(position);
+                    db.updateMediaAsync(media);
+                }
+                mediaPlayer.pause();
+                stateManager.setState(PlayerStates.PAUSED);
+            } finally {
+                playerLock.unlock();
+            }
         }
     }
 
@@ -750,8 +716,6 @@ public class AudioPlayerService extends Service {
             PlayerStates state = stateManager.getState();
             if (state == PlayerStates.STARTED || state == PlayerStates.PREPARED || state == PlayerStates.PAUSED) {
                 mediaPlayer.seekTo(position);
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, "setting position to " + position + " by changePosition");
                 media.setPosition(position);
                 db.updateMediaAsync(media);
             }
@@ -784,15 +748,16 @@ public class AudioPlayerService extends Service {
     private final Runnable updateSeekBarRunner = new Runnable() {
         @Override
         public void run() {
-            playerLock.lock();
-            try {
-                if (stateManager.getState() == PlayerStates.STARTED) {
-                    stateManager.setTime(mediaPlayer.getCurrentPosition());
+            if (stateManager.getState() == PlayerStates.STARTED) {
+                if (playerLock.tryLock()) {
+                    try {
+                        stateManager.setTime(mediaPlayer.getCurrentPosition());
+                    } finally {
+                        playerLock.unlock();
+                    }
                 }
-            } finally {
-                playerLock.unlock();
+                handler.postDelayed(updateSeekBarRunner, 1000);
             }
-            handler.postDelayed(updateSeekBarRunner, 1000);
         }
     };
 

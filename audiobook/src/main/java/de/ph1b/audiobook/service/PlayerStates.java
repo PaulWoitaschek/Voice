@@ -7,6 +7,8 @@ public enum PlayerStates {
     PAUSED,
     STOPPED,
     PREPARED,
-    END,
-    IDLE
-}
+    IDLE,
+    PLAYBACK_COMPLETED,
+    INITIALIZED,
+    DEAD,
+    }
