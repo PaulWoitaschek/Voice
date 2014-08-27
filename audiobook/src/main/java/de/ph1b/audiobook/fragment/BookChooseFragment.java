@@ -75,6 +75,11 @@ public class BookChooseFragment extends Fragment {
             AudioPlayerService.LocalBinder binder = (AudioPlayerService.LocalBinder) service;
             mService = binder.getService();
             mBound = true;
+            if (mService.stateManager.getState() == PlayerStates.STARTED) {
+                currentPlaying.setImageResource(R.drawable.av_pause);
+            } else {
+                currentPlaying.setImageResource(R.drawable.av_play);
+            }
             mService.stateManager.setStateChangeListener(onStateChangedListener);
         }
 
