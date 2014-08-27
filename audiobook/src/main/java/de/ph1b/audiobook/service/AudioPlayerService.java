@@ -484,13 +484,8 @@ public class AudioPlayerService extends Service {
     }
 
     private void updateGUI() {
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "setting time to" + mediaPlayer.getCurrentPosition());
         stateManager.setTime(mediaPlayer.getCurrentPosition());
 
-
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "updategui called with media length " + media.getPosition());
         Intent i = new Intent(GUI);
         i.putExtra(GUI_BOOK, book);
         i.putExtra(GUI_ALL_MEDIA, allMedia);
@@ -507,8 +502,7 @@ public class AudioPlayerService extends Service {
             public void run() {
                 playerLock.lock();
                 try {
-                    if (BuildConfig.DEBUG)
-                        Log.d(TAG, "Good night everyone");
+                    if (BuildConfig.DEBUG) Log.d(TAG, "Good night everyone");
                     reset();
                     if (stateManager.getState() == PlayerStates.IDLE) {
                         mediaPlayer.release();
