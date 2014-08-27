@@ -44,7 +44,6 @@ import de.ph1b.audiobook.activity.FilesChoose;
 import de.ph1b.audiobook.activity.Settings;
 import de.ph1b.audiobook.adapter.FileAdapter;
 import de.ph1b.audiobook.interfaces.OnBackPressedListener;
-import de.ph1b.audiobook.utils.CommonTasks;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
 
 public class FilesChooseFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
@@ -332,6 +331,8 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
                     for (File f : dirAddList)
                         dirAddAsString.add(f.getAbsolutePath());
                     String defaultName = dirAddList.get(0).getName();
+                    if (dirAddList.get(0).isFile())
+                        defaultName = defaultName.substring(0, defaultName.lastIndexOf("."));
 
                     Intent i = new Intent(getActivity(), FilesAdd.class);
                     Bundle bundle = new Bundle();

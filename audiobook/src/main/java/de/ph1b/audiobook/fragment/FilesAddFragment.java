@@ -259,20 +259,18 @@ public class FilesAddFragment extends Fragment {
     private String getIPAddress() {
         try {
             List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
-            for (NetworkInterface intf : interfaces) {
-                List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
-                for (InetAddress addr : addrs) {
-                    if (!addr.isLoopbackAddress()) {
-                        String sAddr = addr.getHostAddress().toUpperCase();
-                        boolean isIPv4 = InetAddressUtils.isIPv4Address(sAddr);
-                        if (isIPv4)
-                            return sAddr;
+            for (NetworkInterface i : interfaces) {
+                List<InetAddress> internetAdresses = Collections.list(i.getInetAddresses());
+                for (InetAddress a : internetAdresses) {
+                    if (!a.isLoopbackAddress()) {
+                        String address = a.getHostAddress().toUpperCase();
+                        if (InetAddressUtils.isIPv4Address(address))
+                            return address;
                     }
                 }
             }
         } catch (Exception e) {
-            if (BuildConfig.DEBUG)
-                Log.d(TAG, e.getMessage());
+            if (BuildConfig.DEBUG) Log.d(TAG, e.getMessage());
         }
         return "";
     }
