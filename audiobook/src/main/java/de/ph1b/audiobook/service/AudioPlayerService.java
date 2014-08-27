@@ -26,7 +26,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -305,19 +304,21 @@ public class AudioPlayerService extends Service {
                     PendingIntent.FLAG_UPDATE_CURRENT);
             Intent i = new Intent(NOTIFICATION_PAUSE);
             PendingIntent pauseActionPI = PendingIntent.getBroadcast(getApplicationContext(), 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
+            Notification.Builder builder = new Notification.Builder(getApplicationContext());
             builder.setContentTitle(book.getName())
                     .setLargeIcon(result)
                     .setSmallIcon(R.drawable.notification)
                     .setContentIntent(pi)
                     .setOngoing(true)
-                    .addAction(R.drawable.av_pause_dark, "Pause", pauseActionPI)
                     .setAutoCancel(true);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 builder.setPriority(Notification.PRIORITY_HIGH);
-            Notification notification = builder.build();
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
-                notification.flags |= Notification.FLAG_HIGH_PRIORITY;
+                builder.addAction(R.drawable.av_pause_dark, "Pause", pauseActionPI);
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+                builder.setShowWhen(false);
+            Notification notification = builder.getNotification();
+            notification.flags |= Notification.FLAG_HIGH_PRIORITY;
             startForeground(NOTIFICATION_ID, notification);
         }
     }
