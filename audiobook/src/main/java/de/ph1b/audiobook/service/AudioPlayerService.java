@@ -307,7 +307,7 @@ public class AudioPlayerService extends Service {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
             builder.setContentTitle(book.getName())
                     .setLargeIcon(result)
-                    .setSmallIcon(R.drawable.av_play_dark)
+                    .setSmallIcon(R.drawable.notification)
                     .setContentIntent(pi)
                     .setOngoing(true)
                     .addAction(R.drawable.av_pause_dark, "Pause", pauseActionPI)
