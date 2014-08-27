@@ -80,7 +80,7 @@ public class BookChooseFragment extends Fragment {
             } else {
                 currentPlaying.setImageResource(R.drawable.av_play);
             }
-            mService.stateManager.setStateChangeListener(onStateChangedListener);
+            mService.stateManager.addStateChangeListener(onStateChangedListener);
         }
 
         @Override
@@ -109,12 +109,17 @@ public class BookChooseFragment extends Fragment {
 
     private final OnStateChangedListener onStateChangedListener = new OnStateChangedListener() {
         @Override
-        public void onStateChanged(PlayerStates state) {
-            if (state == PlayerStates.STARTED) {
-                currentPlaying.setImageResource(R.drawable.av_pause);
-            } else {
-                currentPlaying.setImageResource(R.drawable.av_play);
-            }
+        public void onStateChanged(final PlayerStates state) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (state == PlayerStates.STARTED) {
+                        currentPlaying.setImageResource(R.drawable.av_pause);
+                    } else {
+                        currentPlaying.setImageResource(R.drawable.av_play);
+                    }
+                }
+            });
         }
     };
 

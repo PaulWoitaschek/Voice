@@ -54,15 +54,11 @@ public class SleepDialog extends DialogFragment {
                 Intent serviceIntent = new Intent(context, AudioPlayerService.class);
                 serviceIntent.setAction(AudioPlayerService.CONTROL_SLEEP);
                 serviceIntent.putExtra(AudioPlayerService.CONTROL_SLEEP, mPicker.getValue() * 60 * 1000);
+
                 context.startService(serviceIntent);
             }
         });
-        builder.setNegativeButton(R.string.choose_time_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
+        builder.setNegativeButton(R.string.choose_time_cancel, null);
         builder.setTitle(R.string.action_sleep_title);
 
         return builder.create();

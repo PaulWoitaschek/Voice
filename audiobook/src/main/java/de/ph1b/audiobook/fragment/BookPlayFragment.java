@@ -90,8 +90,8 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
             } else {
                 play_button.setImageResource(R.drawable.av_play);
             }
-            mService.stateManager.setStateChangeListener(onStateChangedListener);
-            mService.stateManager.setTimeChangedListener(onTimeChangedListener);
+            mService.stateManager.addStateChangeListener(onStateChangedListener);
+            mService.stateManager.addTimeChangedListener(onTimeChangedListener);
 
             mBound = true;
         }
@@ -121,23 +121,34 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
         }
     }
 
+
     private final OnStateChangedListener onStateChangedListener = new OnStateChangedListener() {
         @Override
-        public void onStateChanged(PlayerStates state) {
-            if (state == PlayerStates.STARTED) {
-                play_button.setImageResource(R.drawable.av_pause);
-            } else {
-                play_button.setImageResource(R.drawable.av_play);
-            }
+        public void onStateChanged(final PlayerStates state) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (state == PlayerStates.STARTED) {
+                        play_button.setImageResource(R.drawable.av_pause);
+                    } else {
+                        play_button.setImageResource(R.drawable.av_play);
+                    }
+                }
+            });
         }
     };
 
     private final OnTimeChangedListener onTimeChangedListener = new OnTimeChangedListener() {
         @Override
-        public void onTimeChanged(int time) {
+        public void onTimeChanged(final int time) {
             if (!seekBarIsUpdating) {
-                playedTimeView.setText(formatTime(time));
-                seek_bar.setProgress(time);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        playedTimeView.setText(formatTime(time));
+                        seek_bar.setProgress(time);
+                    }
+                });
             }
         }
     };

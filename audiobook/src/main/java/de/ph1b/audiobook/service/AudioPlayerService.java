@@ -162,7 +162,7 @@ public class AudioPlayerService extends Service {
         //state manager to update widget
         widgetComponentName = new ComponentName(this, WidgetProvider.class);
         remoteViews = new RemoteViews(this.getPackageName(), R.layout.widget);
-        stateManager.setStateChangeListener(onStateChangedListener);
+        stateManager.addStateChangeListener(onStateChangedListener);
 
         //registering receiver for pause from notification
         registerReceiver(notificationPauseReceiver, new IntentFilter(NOTIFICATION_PAUSE));
@@ -170,19 +170,21 @@ public class AudioPlayerService extends Service {
 
     private void handleAction(Intent intent) {
         String action = intent.getAction();
-        if (action.equals(CONTROL_PLAY_PAUSE)) {
-            if (stateManager.getState() == PlayerStates.STARTED)
-                pause();
-            else
-                play();
-        } else if (action.equals(CONTROL_CHANGE_MEDIA_POSITION)) {
-            int position = intent.getIntExtra(CONTROL_CHANGE_MEDIA_POSITION, -1);
-            if (position != -1)
-                changePosition(position);
-        } else if (action.equals(CONTROL_SLEEP)) {
-            int sleepTime = intent.getIntExtra(CONTROL_SLEEP, -1);
-            if (sleepTime > 0)
-                sleepTimer(sleepTime);
+        if (intent.getAction() != null) {
+            if (action.equals(CONTROL_PLAY_PAUSE)) {
+                if (stateManager.getState() == PlayerStates.STARTED)
+                    pause();
+                else
+                    play();
+            } else if (action.equals(CONTROL_CHANGE_MEDIA_POSITION)) {
+                int position = intent.getIntExtra(CONTROL_CHANGE_MEDIA_POSITION, -1);
+                if (position != -1)
+                    changePosition(position);
+            } else if (action.equals(CONTROL_SLEEP)) {
+                int sleepTime = intent.getIntExtra(CONTROL_SLEEP, -1);
+                if (sleepTime > 0)
+                    sleepTimer(sleepTime);
+            }
         }
     }
 
@@ -238,8 +240,7 @@ public class AudioPlayerService extends Service {
             }
         }
 
-        if (intent.getAction() != null)
-            handleAction(intent);
+        handleAction(intent);
 
         int keyCode = intent.getIntExtra(RemoteControlReceiver.KEYCODE, -1);
         handleKeyCode(keyCode);

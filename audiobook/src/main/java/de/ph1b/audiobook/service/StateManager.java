@@ -15,7 +15,7 @@ public class StateManager {
     private final List<OnTimeChangedListener> allTimeListener = new ArrayList<OnTimeChangedListener>();
 
 
-    public void setStateChangeListener(OnStateChangedListener listener) {
+    public void addStateChangeListener(OnStateChangedListener listener) {
         allStateListener.add(listener);
     }
 
@@ -23,7 +23,7 @@ public class StateManager {
         allStateListener.remove(listener);
     }
 
-    public void setTimeChangedListener(OnTimeChangedListener listener) {
+    public void addTimeChangedListener(OnTimeChangedListener listener) {
         allTimeListener.add(listener);
     }
 
