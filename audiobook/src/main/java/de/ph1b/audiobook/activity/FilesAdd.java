@@ -18,14 +18,13 @@ public class FilesAdd extends ActionBarActivity {
         setContentView(R.layout.activity_files_add);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //checking if external storage is available
-        new CommonTasks().checkExternalStorage(this);
-    }
-
     public Bundle getExtras() {
         return extras;
+    }
+
+    @Override
+    public void onResume() {
+        CommonTasks.checkExternalStorage(this);
+        super.onResume();
     }
 }

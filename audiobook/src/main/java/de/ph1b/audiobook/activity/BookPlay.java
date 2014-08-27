@@ -17,8 +17,7 @@ public class BookPlay extends ActionBarActivity {
 
     @Override
     public void onResume() {
+        CommonTasks.checkExternalStorage(this);
         super.onResume();
-        //checking if external storage is available
-        new CommonTasks().checkExternalStorage(this);
     }
 }

@@ -28,6 +28,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -43,6 +44,7 @@ import de.ph1b.audiobook.activity.FilesChoose;
 import de.ph1b.audiobook.activity.Settings;
 import de.ph1b.audiobook.adapter.FileAdapter;
 import de.ph1b.audiobook.interfaces.OnBackPressedListener;
+import de.ph1b.audiobook.utils.CommonTasks;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
 
 public class FilesChooseFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
@@ -184,9 +186,7 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
                 //to invoke super.onBackPressed();
                 ((FilesChoose) getActivity()).setOnBackPressedListener(null);
                 getActivity().onBackPressed();
-            }
-            //startActivity(new Intent(getActivity(), BookChoose.class));
-            else {
+            } else {
                 link.removeLast();
                 populateList();
             }
@@ -213,6 +213,7 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
     @Override
     public void onResume() {
         super.onResume();
+
         if (dirs.size() > 1)
             dirSpinner.setVisibility(View.VISIBLE);
         fileListView.setVisibility(View.VISIBLE);
@@ -256,10 +257,7 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
                 public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.action_add_badge:
-                            for (File f : FilesChooseFragment.this.dirAddList)
-                                if (BuildConfig.DEBUG)
-                                    Log.d(TAG, "Adding: " + f.getAbsolutePath());
-                            addMediaBundleAsync(FilesChooseFragment.this.dirAddList);
+                            addMediaBundleAsync();
                             mode.finish();
                             return true;
                         default:
@@ -297,12 +295,21 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
                 dirs.add(s);
     }
 
-    private void addMediaBundleAsync(ArrayList<File> dirAddList) {
+    private boolean hasAudio(ArrayList<File> files) {
+        for (File f : files) {
+            if (FilesChoose.isAudio(f.getName())) {
+                return true;
+            } else if (f.isDirectory()) {
+                if (hasAudio(new ArrayList<File>(Arrays.asList(f.listFiles()))))
+                    return true;
+            }
+        }
+        return false;
+    }
 
-        new AsyncTask<Object, Void, Boolean>() {
+    private void addMediaBundleAsync() {
 
-            private String defaultName;
-            private ArrayList<String> dirAddAsString;
+        new AsyncTask<Void, Void, Boolean>() {
 
             @Override
             protected void onPreExecute() {
@@ -312,31 +319,20 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
             }
 
             @Override
-            protected Boolean doInBackground(Object... arrayLists) {
-                @SuppressWarnings("unchecked")
-                ArrayList<File> dirAddList = (ArrayList<File>) arrayLists[0];
-
+            protected Boolean doInBackground(Void... params) {
                 Collections.sort(dirAddList, new NaturalOrderComparator<File>());
-
-                ArrayList<File> files = FilesChoose.dirsToFiles(FilesChoose.filterShowAudioAndFolder, dirAddList, FilesChoose.AUDIO);
-                if (files.size() != 0) {
-                    defaultName = dirAddList.get(0).getName();
-                    if (!dirAddList.get(0).isDirectory())
-                        defaultName = defaultName.substring(0, defaultName.length() - 4);
-
-                    dirAddAsString = new ArrayList<String>();
-                    for (File f : files) {
-                        dirAddAsString.add(f.getAbsolutePath());
-                    }
-                    return true;
-                } else
-                    return false;
+                return hasAudio(dirAddList);
             }
 
             @Override
             protected void onPostExecute(Boolean result) {
-                //if adding worked start next fragment,  otherwise stay here and make toast
+                //if adding worked start next activity,  otherwise stay here and make toast
                 if (result) {
+                    ArrayList<String> dirAddAsString = new ArrayList<String>();
+                    for (File f : dirAddList)
+                        dirAddAsString.add(f.getAbsolutePath());
+                    String defaultName = dirAddList.get(0).getName();
+
                     Intent i = new Intent(getActivity(), FilesAdd.class);
                     Bundle bundle = new Bundle();
                     bundle.putString(FilesChoose.BOOK_PROPERTIES_DEFAULT_NAME, defaultName);
@@ -354,7 +350,7 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
                     toast.show();
                 }
             }
-        }.execute(dirAddList);
+        }.execute();
     }
 
     private synchronized void populateList() {
@@ -367,7 +363,7 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
             Log.e(TAG, "Populate this folder: " + path);
 
         File f = new File(path);
-        File[] files = f.listFiles(FilesChoose.filterShowAudioAndFolder);
+        File[] files = f.listFiles(filterShowAudioAndFolder);
         fileList = new ArrayList<File>(Arrays.asList(files));
 
         //fileList = new ArrayList<File>();
@@ -384,4 +380,11 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
             }
         });
     }
+
+    private final FileFilter filterShowAudioAndFolder = new FileFilter() {
+        @Override
+        public boolean accept(File pathname) {
+            return !pathname.isHidden() && (pathname.isDirectory() || FilesChoose.isAudio(pathname.getName()));
+        }
+    };
 }

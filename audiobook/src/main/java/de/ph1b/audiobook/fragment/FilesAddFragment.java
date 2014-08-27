@@ -37,7 +37,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -47,7 +46,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import de.ph1b.audiobook.BuildConfig;
@@ -60,6 +61,7 @@ import de.ph1b.audiobook.utils.BookDetail;
 import de.ph1b.audiobook.utils.CommonTasks;
 import de.ph1b.audiobook.utils.DataBaseHelper;
 import de.ph1b.audiobook.utils.MediaDetail;
+import de.ph1b.audiobook.utils.NaturalOrderComparator;
 
 
 public class FilesAddFragment extends Fragment {
@@ -69,12 +71,13 @@ public class FilesAddFragment extends Fragment {
     private DataBaseHelper db;
 
     private static final String TAG = "de.ph1b.audiobook.fragment.FilesAdd";
-    private ArrayList<String> fileFolderPaths;
+
     private String bookName;
     private ImageView coverView;
     private ProgressBar coverLoadingBar;
     private int coverPosition = 0;
     private int pageCounter = 0;
+    private ArrayList<File> dirAddList = new ArrayList<File>();
 
     private ProgressDialog progressDialog;
 
@@ -86,7 +89,12 @@ public class FilesAddFragment extends Fragment {
 
         Bundle extras = ((FilesAdd) getActivity()).getExtras();
 
-        fileFolderPaths = extras.getStringArrayList(FilesChoose.FILES_AS_STRING);
+        ArrayList<String> fileFolderPaths = extras.getStringArrayList(FilesChoose.FILES_AS_STRING);
+        for (String s : fileFolderPaths) {
+            if (BuildConfig.DEBUG) Log.d(TAG, s);
+            dirAddList.add(new File(s));
+        }
+        dirAddList = addFilesRecursive(dirAddList);
 
         coverView = (ImageView) v.findViewById(R.id.cover);
         coverLoadingBar = (ProgressBar) v.findViewById(R.id.cover_loading);
@@ -104,68 +112,70 @@ public class FilesAddFragment extends Fragment {
             }
         }
 
-        new AsyncTask<Void, Void, Bitmap>() {
+        new AsyncTask<Void, Void, Boolean>() {
             @Override
             protected void onPreExecute() {
                 setCoverLoading(true);
             }
 
             @Override
-            protected Bitmap doInBackground(Void... voids) {
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, "started async task!");
-                // makes a file list out of the path names to add
-                ArrayList<File> dirAddList = new ArrayList<File>();
-                for (String s : fileFolderPaths) {
-                    dirAddList.add(new File(s));
-                }
+            protected Boolean doInBackground(Void... voids) {
 
-                // if an image file is found in any folder, stop there.
-                ArrayList<File> imageList = FilesChoose.dirsToFiles(filterShowImagesAndFolder, dirAddList, FilesChoose.IMAGE);
-                for (File f1 : imageList) {
-                    Bitmap cover = BitmapFactory.decodeFile(f1.getAbsolutePath());
-                    if (cover != null) {
-                        bitmapList.add(cover);
-                        break;
-                    }
-                }
-
-                // if no image file was found in any folder, search for audio files.
-                ArrayList<File> musicList = FilesChoose.dirsToFiles(FilesChoose.filterShowAudioAndFolder, dirAddList, FilesChoose.AUDIO);
-                for (File f1 : musicList) {
-                    String path = f1.getAbsolutePath();
-                    MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-                    mmr.setDataSource(path);
-                    byte[] data = mmr.getEmbeddedPicture();
-                    if (data != null) {
-                        try {
-                            if (BuildConfig.DEBUG)
-                                Log.d(TAG, "Data is not null!");
-                            Bitmap cover = BitmapFactory.decodeByteArray(data, 0, data.length);
-                            if (cover != null)
-                                return cover;
-                        } catch (Exception e) {
-                            if (BuildConfig.DEBUG)
-                                Log.d(TAG, e.toString());
+                //checks for covers in audio, stops after first score
+                for (File f : dirAddList) {
+                    String path = f.getAbsolutePath();
+                    if (FilesChoose.isAudio(path)) {
+                        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+                        mmr.setDataSource(path);
+                        byte[] data = mmr.getEmbeddedPicture();
+                        if (data != null) {
+                            try {
+                                Bitmap cover = BitmapFactory.decodeByteArray(data, 0, data.length);
+                                if (cover != null) {
+                                    bitmapList.add(cover);
+                                    break;
+                                }
+                            } catch (Exception e) {
+                                if (BuildConfig.DEBUG) Log.d(TAG, e.toString());
+                            }
                         }
                     }
                 }
-                return null;
+
+                //adds all covers found in picture files
+                for (File f : dirAddList) {
+                    String path = f.getAbsolutePath();
+                    if (FilesChoose.isImage(path)) {
+                        Bitmap cover = BitmapFactory.decodeFile(path);
+                        if (cover != null)
+                            bitmapList.add(cover);
+                    }
+                }
+                return (bitmapList.size() > 1);
+                //return bitmapList.get(bitmapList.size() - 1);
+
             }
 
             @Override
-            protected void onPostExecute(Bitmap result) {
-                if (result != null) {
-                    bitmapList.add(result);
-                    coverPosition = bitmapList.indexOf(result);
-                    coverView.setImageBitmap(result);
+            protected void onPostExecute(Boolean result) {
+                /*
+                If a more than the default canvas cover was found, use that cover to show now.
+                if that is not the case and it is possible to get covers from the internet,
+                them immediately use that.
+                If that is also not the case, display the canvas cover.
+                 */
+                if (result) {
+                    Bitmap bitmap = bitmapList.get(bitmapList.size() - 1);
+                    coverPosition = bitmapList.indexOf(bitmap);
+                    coverView.setImageBitmap(bitmap);
+                    setCoverLoading(false);
+                } else if (isOnline() && pageCounter < 64 && fieldName.getText().toString().length() > 0) {
+                    genBitmapFromInternet(fieldName.getText().toString());
                 } else if (bitmapList.size() > 0) {
                     coverView.setImageBitmap(bitmapList.get(0));
                     coverPosition = 0;
                 }
-                setCoverLoading(false);
             }
-
         }.execute();
 
 
@@ -181,9 +191,7 @@ public class FilesAddFragment extends Fragment {
                     coverPosition++;
                     coverView.setImageBitmap(bitmapList.get(coverPosition));
                 } else {
-                    if (isOnline() && pageCounter < 64) {
-                        genBitmapFromInternet(fieldName.getText().toString());
-                    }
+                    genBitmapFromInternet(fieldName.getText().toString());
                 }
             }
         });
@@ -270,62 +278,64 @@ public class FilesAddFragment extends Fragment {
     }
 
     private void genBitmapFromInternet(String search) {
-        new AsyncTask<String, Void, Bitmap>() {
+        if (isOnline() && pageCounter < 64) {
+            new AsyncTask<String, Void, Bitmap>() {
 
-            @Override
-            protected void onPreExecute() {
-                setCoverLoading(true);
-            }
+                @Override
+                protected void onPreExecute() {
+                    setCoverLoading(true);
+                }
 
-            @Override
-            protected Bitmap doInBackground(String... params) {
+                @Override
+                protected Bitmap doInBackground(String... params) {
 
-                String searchText = params[0] + " audiobook cover";
-                try {
-                    URL searchUrl = new URL(
-                            "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&imgsz=large|xlarge&rsz=1&q=" + URLEncoder.encode(searchText, "UTF-8") + "&start=" + pageCounter++ + "&userip=" + getIPAddress());
+                    String searchText = params[0] + " audiobook cover";
+                    try {
+                        URL searchUrl = new URL(
+                                "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&imgsz=large|xlarge&rsz=1&q=" + URLEncoder.encode(searchText, "UTF-8") + "&start=" + pageCounter++ + "&userip=" + getIPAddress());
 
-                    if (BuildConfig.DEBUG)
-                        Log.d(TAG, searchUrl.toString());
-                    URLConnection connection = searchUrl.openConnection();
-
-                    String line;
-                    StringBuilder builder = new StringBuilder();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(
-                            connection.getInputStream()));
-                    while ((line = reader.readLine()) != null) {
-                        builder.append(line);
-                    }
-                    JSONObject obj = new JSONObject(builder.toString());
-                    JSONObject responseData = obj.getJSONObject("responseData");
-                    JSONArray results = responseData.getJSONArray("results");
-
-                    String imageUrl = results.getJSONObject(0).getString("url");
-
-                    if (imageUrl != null) {
                         if (BuildConfig.DEBUG)
-                            Log.d(TAG, imageUrl);
+                            Log.d(TAG, searchUrl.toString());
+                        URLConnection connection = searchUrl.openConnection();
 
-                        URL url = new URL(imageUrl);
-                        return BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                        String line;
+                        StringBuilder builder = new StringBuilder();
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(
+                                connection.getInputStream()));
+                        while ((line = reader.readLine()) != null) {
+                            builder.append(line);
+                        }
+                        JSONObject obj = new JSONObject(builder.toString());
+                        JSONObject responseData = obj.getJSONObject("responseData");
+                        JSONArray results = responseData.getJSONArray("results");
+
+                        String imageUrl = results.getJSONObject(0).getString("url");
+
+                        if (imageUrl != null) {
+                            if (BuildConfig.DEBUG)
+                                Log.d(TAG, imageUrl);
+
+                            URL url = new URL(imageUrl);
+                            return BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                        }
+                    } catch (Exception e) {
+                        if (BuildConfig.DEBUG)
+                            Log.d(TAG, e.toString());
                     }
-                } catch (Exception e) {
-                    if (BuildConfig.DEBUG)
-                        Log.d(TAG, e.toString());
+                    return null;
                 }
-                return null;
-            }
 
-            @Override
-            protected void onPostExecute(Bitmap result) {
-                if (result != null) {
-                    bitmapList.add(result);
-                    coverPosition = bitmapList.indexOf(result);
-                    coverView.setImageBitmap(result);
-                    setCoverLoading(false);
+                @Override
+                protected void onPostExecute(Bitmap result) {
+                    if (result != null) {
+                        bitmapList.add(result);
+                        coverPosition = bitmapList.indexOf(result);
+                        coverView.setImageBitmap(result);
+                        setCoverLoading(false);
+                    }
                 }
-            }
-        }.execute(search);
+            }.execute(search);
+        }
     }
 
 
@@ -369,7 +379,6 @@ public class FilesAddFragment extends Fragment {
 
     private class AddBookAsync extends AsyncTask<Void, Integer, Void> {
 
-
         @Override
         protected void onPreExecute() {
             progressDialog = new ProgressDialog(getActivity());
@@ -377,49 +386,37 @@ public class FilesAddFragment extends Fragment {
             progressDialog.setCancelable(false);
             progressDialog.setTitle(getString(R.string.book_add_progress_title));
             progressDialog.setMessage(getString(R.string.book_add_progress_message));
-            progressDialog.setMax(fileFolderPaths.size() * 2 + 1);
+            progressDialog.setMax(dirAddList.size() + 1);
             progressDialog.show();
         }
 
         @Override
         protected Void doInBackground(Void... params) {
 
-            ArrayList<File> dirAddList = new ArrayList<File>();
-            for (String s : fileFolderPaths)
-                dirAddList.add(new File(s));
-
-            ArrayList<MediaDetail> mediaList = new ArrayList<MediaDetail>();
+            LinkedHashMap<Integer, MediaDetail> media = new LinkedHashMap<Integer, MediaDetail>();
             for (File f : dirAddList) {
-                publishProgress(progressDialog.getProgress() + 1);
-                MediaDetail m = new MediaDetail();
-                String fileName = f.getName();
-                if (fileName.indexOf(".") > 0)
-                    fileName = fileName.substring(0, fileName.lastIndexOf("."));
-                m.setName(fileName);
-                m.setPath(f.getAbsolutePath());
-                mediaList.add(m);
-            }
+                if (FilesChoose.isAudio(f.getName())) {
+                    MediaDetail m = new MediaDetail();
+                    String fileName = f.getName();
+                    if (fileName.indexOf(".") > 0)
+                        fileName = fileName.substring(0, fileName.lastIndexOf("."));
+                    m.setName(fileName);
+                    m.setPath(f.getAbsolutePath());
 
-            if (mediaList.size() > 0) {
-
-                int[] mediaIDs = new int[mediaList.size()];
-
-                for (int i = 0; i < mediaList.size(); i++) {
-                    MediaDetail m = mediaList.get(i);
-
-                    String path = m.getPath();
                     MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
-                    metaRetriever.setDataSource(path);
+                    metaRetriever.setDataSource(f.getAbsolutePath());
                     int duration = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
                     m.setDuration(duration);
                     int id = db.addMedia(m);
-                    mediaIDs[i] = id;
-                    publishProgress(progressDialog.getProgress() + 1);
+                    //if (BuildConfig.DEBUG) Log.d(TAG, "added: "+m.getPath());
+                    media.put(id, m);
                 }
+                // put progress here to increase for checked covers
+                publishProgress(progressDialog.getProgress() + 1);
+            }
 
+            if (media.size() > 0) {
                 BookDetail b = new BookDetail();
-                b.setName(bookName);
-                b.setMediaIds(mediaIDs);
                 String[] res;
                 if (BuildConfig.DEBUG)
                     Log.d(TAG, "bitmap list size is: " + bitmapList.size() + "cover position is:" + coverPosition);
@@ -432,11 +429,11 @@ public class FilesAddFragment extends Fragment {
                         Log.d(TAG, "saving bitmap with index 0!");
                     res = saveImages(bitmapList.get(coverPosition));
                 }
+                b.setName(bookName);
                 b.setCover(res[0]);
                 b.setThumb(res[1]);
-                b.setMediaIds(mediaIDs);
+                b.setMediaIDs(media);
                 db.addBook(b);
-
             }
             return null;
         }
@@ -498,10 +495,20 @@ public class FilesAddFragment extends Fragment {
         return new String[]{coverPath, thumbPath};
     }
 
-    private final FileFilter filterShowImagesAndFolder = new FileFilter() {
-        @Override
-        public boolean accept(File pathname) {
-            return !pathname.isHidden() && (pathname.isDirectory() || FilesChoose.isImage(pathname.getName()));
+    private ArrayList<File> addFilesRecursive(ArrayList<File> dir) {
+        ArrayList<File> returnList = new ArrayList<File>();
+        for (File f : dir) {
+            if (f.exists() && f.isFile())
+                returnList.add(f);
+            else if (f.exists() && f.isDirectory()) {
+                File[] content = f.listFiles();
+                if (content.length > 0) {
+                    ArrayList<File> tempReturn = addFilesRecursive(new ArrayList<File>(Arrays.asList(content)));
+                    Collections.sort(tempReturn, new NaturalOrderComparator<File>());
+                    returnList.addAll(tempReturn);
+                }
+            }
         }
-    };
+        return returnList;
+    }
 }

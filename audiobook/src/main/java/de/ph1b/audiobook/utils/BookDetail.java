@@ -4,6 +4,9 @@ package de.ph1b.audiobook.utils;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+
 public class BookDetail implements Parcelable{
 
     private int id;
@@ -65,9 +68,6 @@ public class BookDetail implements Parcelable{
         return idsAsString;
     }
 
-    public void setMediaIds(int[] mediaID) {
-        this.mediaIds = mediaID;
-    }
 
     public void setMediaIDs(String mediaIDsAsString) {
         if (!mediaIDsAsString.equals("")) {
@@ -77,6 +77,20 @@ public class BookDetail implements Parcelable{
                 mediaIDsAsSplittedInt[i] = Integer.parseInt(mediaIDsAsSplittedString[i]);
             }
             this.mediaIds = mediaIDsAsSplittedInt;
+        }
+    }
+
+    public void setMediaIDs(LinkedHashMap<Integer, MediaDetail> media){
+        if (media.size() > 0){
+            ArrayList<Integer> keyArrayList = new ArrayList<Integer>();
+            for (int key : media.keySet()){
+                keyArrayList.add(key);
+            }
+            int [] mediaIds = new int[keyArrayList.size()];
+            for (int i=0; i< mediaIds.length; i++){
+                mediaIds[i] = keyArrayList.get(i);
+            }
+            this.mediaIds = mediaIds;
         }
     }
 

@@ -19,6 +19,7 @@
     <string name="pref_resume_on_replug_hint">Nimmt die Wiedergabe beim Einstecken der Kopfhörer wieder auf.</string>
     <string name="action_sleep">Pausiert nach vorgegebener Zeit</string>
     <string name="no_external_storage">Der externe Speicher ist nicht verfügbar. Prüfen Sie, ob Ihre Speicherkarte eingesteckt und nicht mit dem Computer verbunden ist.</string>
+    <string name="no_external_storage_action_bar_title">Externer Speicher</string>
     <string name="action_sleep_title">…z..Z..ZZ</string>
     <string name="action_sleep_title_hint_left">Pausiert nach</string>
     <string name="action_sleep_title_hint_right">Minuten</string>

@@ -13,23 +13,11 @@ import android.util.TypedValue;
 import android.view.Display;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.BookChoose;
-import de.ph1b.audiobook.fragment.NoExternalStorageFragment;
+import de.ph1b.audiobook.activity.NoExternalStorage;
 
 
 public class CommonTasks {
 
-    public void checkExternalStorage(Context c) {
-        String state = Environment.getExternalStorageState();
-        if (!Environment.MEDIA_MOUNTED.equals(state))
-            c.startActivity(new Intent(c, NoExternalStorageFragment.class));
-    }
-
-    public void startMediaViewIfExternalStorageAvailable(Context c) {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state))
-            c.startActivity(new Intent(c, BookChoose.class));
-    }
 
     public static Bitmap genCapital(String bookName, int pxSize, Resources resources) {
         Bitmap thumb = Bitmap.createBitmap(pxSize, pxSize, Bitmap.Config.RGB_565);
@@ -58,5 +46,14 @@ public class CommonTasks {
         int width = display.getWidth();
         int height = display.getHeight();
         return width < height ? width : height;
+    }
+
+    public static void checkExternalStorage(Context c) {
+        String state = Environment.getExternalStorageState();
+        if (!Environment.MEDIA_MOUNTED.equals(state)) {
+            Intent i = new Intent(c, NoExternalStorage.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            c.startActivity(new Intent(i));
+        }
     }
 }
