@@ -2,9 +2,7 @@ package de.ph1b.audiobook.activity;
 
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.utils.CommonTasks;

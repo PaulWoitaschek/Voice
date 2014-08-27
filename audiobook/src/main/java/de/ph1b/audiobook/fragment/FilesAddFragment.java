@@ -112,6 +112,7 @@ public class FilesAddFragment extends Fragment {
             }
         }
 
+        // getting covers from local
         new AsyncTask<Void, Void, Boolean>() {
             @Override
             protected void onPreExecute() {
@@ -152,8 +153,6 @@ public class FilesAddFragment extends Fragment {
                     }
                 }
                 return (bitmapList.size() > 1);
-                //return bitmapList.get(bitmapList.size() - 1);
-
             }
 
             @Override
@@ -165,19 +164,18 @@ public class FilesAddFragment extends Fragment {
                 If that is also not the case, display the canvas cover.
                  */
                 if (result) {
-                    Bitmap bitmap = bitmapList.get(bitmapList.size() - 1);
-                    coverPosition = bitmapList.indexOf(bitmap);
-                    coverView.setImageBitmap(bitmap);
+                    coverPosition = 1;
+                    coverView.setImageBitmap(bitmapList.get(1));
                     setCoverLoading(false);
                 } else if (isOnline() && pageCounter < 64 && fieldName.getText().toString().length() > 0) {
                     genBitmapFromInternet(fieldName.getText().toString());
                 } else if (bitmapList.size() > 0) {
                     coverView.setImageBitmap(bitmapList.get(0));
                     coverPosition = 0;
+                    setCoverLoading(false);
                 }
             }
         }.execute();
-
 
         ImageButton nextCover = (ImageButton) v.findViewById(R.id.next_cover);
         nextCover.setOnClickListener(new View.OnClickListener() {
