@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
@@ -88,11 +87,12 @@ public class JumpToPosition extends DialogFragment {
                 int hValue = hPicker.getValue();
 
                 //scrolling forward
-                if (oldVal == 59 && newVal == 0){
+                if (oldVal == 59 && newVal == 0) {
                     hPicker.setValue(++hValue);
 
-                //scrolling backward
-                } if (oldVal == 0 && newVal ==59){
+                    //scrolling backward
+                }
+                if (oldVal == 0 && newVal == 59) {
                     hPicker.setValue(--hValue);
                 }
             }
@@ -104,21 +104,18 @@ public class JumpToPosition extends DialogFragment {
         builder.setPositiveButton(R.string.choose_time_okay, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
+                Context c = getActivity().getApplication();
                 int h = hPicker.getValue();
                 int m = mPicker.getValue();
-                int newPosition = (m+60*h)*60*1000;
-                Intent i = new Intent(AudioPlayerService.CONTROL_CHANGE_MEDIA_POSITION);
+                int newPosition = (m + 60 * h) * 60 * 1000;
+                Intent i = new Intent(c, AudioPlayerService.class);
+                i.setAction(AudioPlayerService.CONTROL_CHANGE_MEDIA_POSITION);
                 i.putExtra(AudioPlayerService.CONTROL_CHANGE_MEDIA_POSITION, newPosition);
-                Context c = getActivity().getApplication();
-                LocalBroadcastManager.getInstance(c).sendBroadcast(i);
+                c.startService(i);
 
             }
         });
-        builder.setNegativeButton(R.string.choose_time_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-            }
-        });
+        builder.setNegativeButton(R.string.choose_time_cancel, null);
 
         return builder.create();
     }
