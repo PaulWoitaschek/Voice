@@ -38,7 +38,7 @@ public class SeekAmountPreference extends DialogPreference {
         seekBar.setProgress(position - SEEK_BAR_MIN);
 
 
-        textView.setText(String.valueOf(seekBar.getProgress() + SEEK_BAR_MIN) + " " + getContext().getString(R.string.seconds)  );
+        textView.setText(String.valueOf(seekBar.getProgress() + SEEK_BAR_MIN) + " " + getContext().getString(R.string.seconds));
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -61,16 +61,13 @@ public class SeekAmountPreference extends DialogPreference {
     @Override
     protected void onDialogClosed(boolean positiveResult) {
         super.onDialogClosed(positiveResult);
-
         if (positiveResult) {
             int seekAmount = seekBar.getProgress();
-            if (seekAmount > 0) {
-                SharedPreferences.Editor editor = getEditor();
-                editor.putInt(getContext().getString(R.string.pref_change_amount), seekAmount + SEEK_BAR_MIN);
-                editor.apply();
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, "Put new seek-amount to shared Preferences: " + (seekAmount + SEEK_BAR_MIN));
-            }
+            SharedPreferences.Editor editor = getEditor();
+            editor.putInt(getContext().getString(R.string.pref_change_amount), seekAmount + SEEK_BAR_MIN);
+            editor.apply();
+            if (BuildConfig.DEBUG)
+                Log.d(TAG, "Put new seek-amount to shared Preferences: " + (seekAmount + SEEK_BAR_MIN));
         }
     }
 }
