@@ -223,8 +223,7 @@ public class FilesAddFragment extends Fragment {
                 }
             }
         });
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "finished onCreate task!");
+        fieldName.clearFocus();
         return v;
     }
 
