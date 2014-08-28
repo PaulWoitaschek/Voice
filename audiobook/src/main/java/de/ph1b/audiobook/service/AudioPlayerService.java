@@ -579,10 +579,11 @@ public class AudioPlayerService extends Service {
         if (currentId == allIds[allIds.length - 1]) {
             playerLock.lock();
             try {
-                mediaPlayer.reset();
+                if (stateManager.getState() != PlayerStates.DEAD)
+                    mediaPlayer.reset();
                 mediaPlayer.release();
-                registerAsPlaying(false);
                 stateManager.setState(PlayerStates.DEAD);
+                registerAsPlaying(false);
             } finally {
                 playerLock.unlock();
             }
