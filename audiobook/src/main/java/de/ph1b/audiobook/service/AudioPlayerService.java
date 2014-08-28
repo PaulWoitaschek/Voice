@@ -404,7 +404,6 @@ public class AudioPlayerService extends Service {
         playerLock.lock();
         try {
             if (BuildConfig.DEBUG) Log.d(TAG, "prepare(" + mediaId + ")");
-
             if (stateManager.getState() == PlayerStates.DEAD)
                 mediaPlayer = new MediaPlayer();
             else
@@ -479,7 +478,8 @@ public class AudioPlayerService extends Service {
                 playerLock.lock();
                 try {
                     if (BuildConfig.DEBUG) Log.d(TAG, "Good night everyone");
-                    mediaPlayer.reset();
+                    if (stateManager.getState() != PlayerStates.DEAD)
+                        mediaPlayer.reset();
                     mediaPlayer.release();
                     registerAsPlaying(false);
                     stateManager.setState(PlayerStates.DEAD);
