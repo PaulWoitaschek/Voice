@@ -181,7 +181,8 @@ public class BookChooseFragment extends Fragment {
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_delete:
-                        SharedPreferences settings = getActivity().getSharedPreferences(BookChoose.SHARED_PREFS, 0);
+
+                        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
                         int position = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
                         for (BookDetail b : deleteList) {
                             //setting visibility of play list at bottom to gone if book is gone
@@ -214,7 +215,7 @@ public class BookChooseFragment extends Fragment {
                 int bookId = book.getId();
 
                 if (book.getMediaIds().length > 0) {
-                    SharedPreferences settings = BookChooseFragment.this.getActivity().getSharedPreferences(BookChoose.SHARED_PREFS, 0);
+                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putInt(BookChoose.SHARED_PREFS_CURRENT, bookId);
                     editor.apply();
@@ -241,7 +242,8 @@ public class BookChooseFragment extends Fragment {
             toast.show();
         }
 
-        SharedPreferences settings = getActivity().getSharedPreferences(BookChoose.SHARED_PREFS, 0);
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
         int position = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
 
         final BookDetail b = db.getBook(position);

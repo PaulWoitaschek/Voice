@@ -7,6 +7,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -16,9 +17,9 @@ import java.util.ArrayList;
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookChoose;
+import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.utils.BookDetail;
 import de.ph1b.audiobook.utils.DataBaseHelper;
-import de.ph1b.audiobook.service.AudioPlayerService;
 
 public class WidgetProvider extends AppWidgetProvider {
 
@@ -56,7 +57,7 @@ public class WidgetProvider extends AppWidgetProvider {
             if (BuildConfig.DEBUG)
                 Log.d(TAG, "clicked play!");
 
-            SharedPreferences settings = context.getSharedPreferences(BookChoose.SHARED_PREFS, 0);
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
             int position = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
 
             DataBaseHelper db = DataBaseHelper.getInstance(context);

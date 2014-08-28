@@ -280,7 +280,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
 
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
 
-        SharedPreferences settings = getActivity().getSharedPreferences(BookChoose.SHARED_PREFS, 0);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
         bookId = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, 0);
 
         //starting the service

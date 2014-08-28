@@ -11,6 +11,6 @@
         android:summary="@string/pref_cover_on_internet_hint"
         android:defaultValue="false" />
     <de.ph1b.audiobook.dialog.SeekAmountPreference
-        android:title="@string/change_forward_amount"
-        android:summary="@string/change_forward_amount_hint" />
+        android:key="@string/change_forward_amount"
+        android:title="@string/change_forward_amount" />
 </PreferenceScreen>

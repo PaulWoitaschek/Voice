@@ -11,7 +11,6 @@ public class BookChoose extends ActionBarActivity {
 
     private static final String TAG = "de.ph1b.audiobook.activity.BookChoose";
     public static final String PLAY_BOOK = TAG + ".PLAY_BOOK";
-    public static final String SHARED_PREFS = TAG + ".SHARED_PREFS";
     public static final String SHARED_PREFS_CURRENT = TAG + ".SHARED_PREFS_CURRENT";
 
     @Override

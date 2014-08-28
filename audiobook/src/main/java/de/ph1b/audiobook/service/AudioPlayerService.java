@@ -272,7 +272,7 @@ public class AudioPlayerService extends Service {
 
         @Override
         protected void onPreExecute() {
-            SharedPreferences settings = getSharedPreferences(BookChoose.SHARED_PREFS, 0);
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             SharedPreferences.Editor editor = settings.edit();
             editor.putInt(BookChoose.SHARED_PREFS_CURRENT, book.getId());
             editor.apply();
