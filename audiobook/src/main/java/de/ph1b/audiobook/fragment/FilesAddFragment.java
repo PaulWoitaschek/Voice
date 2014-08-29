@@ -349,7 +349,7 @@ public class FilesAddFragment extends Fragment {
                 .isConnectedOrConnecting();
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        boolean useMobileConnection = sharedPref.getBoolean(getString(R.string.pref_cover_on_internet), true);
+        boolean useMobileConnection = sharedPref.getBoolean(getString(R.string.pref_cover_on_internet), false);
         return isWifi || (useMobileConnection && isMobile);
     }
 
@@ -403,7 +403,6 @@ public class FilesAddFragment extends Fragment {
                     int duration = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
                     m.setDuration(duration);
                     int id = db.addMedia(m);
-                    //if (BuildConfig.DEBUG) Log.d(TAG, "added: "+m.getPath());
                     media.put(id, m);
                 }
                 // put progress here to increase for checked covers
