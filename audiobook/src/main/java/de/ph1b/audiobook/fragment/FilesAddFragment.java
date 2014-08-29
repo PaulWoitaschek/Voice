@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -343,14 +344,19 @@ public class FilesAddFragment extends Fragment {
     private boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        boolean isWifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-                .isConnectedOrConnecting();
-        boolean isMobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
-                .isConnectedOrConnecting();
+        if (cm != null) {
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            boolean useMobileConnection = sharedPref.getBoolean(getString(R.string.pref_cover_on_internet), false);
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        boolean useMobileConnection = sharedPref.getBoolean(getString(R.string.pref_cover_on_internet), false);
-        return isWifi || (useMobileConnection && isMobile);
+            NetworkInfo wifiNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            if (wifiNetwork != null && wifiNetwork.isConnected())
+                return true;
+
+            NetworkInfo mobileNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+            if (mobileNetwork != null && mobileNetwork.isConnected() && useMobileConnection)
+                return true;
+        }
+        return false;
     }
 
 
