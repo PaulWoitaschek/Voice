@@ -78,7 +78,6 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
         addPathToSpinner();
 
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
-
     }
 
     @Override
@@ -284,14 +283,19 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
         ArrayList<String> paths = new ArrayList<String>();
         paths.add("/storage/extSdCard");
         paths.add(Environment.getExternalStorageDirectory().getAbsolutePath());
-        if (BuildConfig.DEBUG)
+        if (BuildConfig.DEBUG) {
             paths.add("/storage/sdcard0/Audiobooks");
+            paths.add("abc");
+            paths.add("/system");
+        }
         paths.add("/storage/emulated/0");
         paths.add("/storage/sdcard1");
 
-        for (String s : paths)
-            if (!dirs.contains(s) && new File(s).isDirectory())
+        for (String s : paths) {
+            File f = new File(s);
+            if (!dirs.contains(s) && f.exists() && f.isDirectory() && f.canRead() && f.listFiles().length > 0)
                 dirs.add(s);
+        }
     }
 
     private boolean hasAudio(ArrayList<File> files) {
