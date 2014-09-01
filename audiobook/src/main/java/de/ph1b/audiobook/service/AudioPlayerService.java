@@ -381,6 +381,8 @@ public class AudioPlayerService extends Service {
         this.book = book;
         this.allMedia = allMedia;
 
+        registerAsPlaying(false);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             if (book.getMediaIds().length > 1) {
                 mRemoteControlClient.setTransportControlFlags(
@@ -428,6 +430,9 @@ public class AudioPlayerService extends Service {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            //updates metadata for proper lock screen information
+            updateMetaData();
 
             //requests wake-mode which is automatically released when pausing
             mediaPlayer.setWakeMode(this, PowerManager.PARTIAL_WAKE_LOCK);
@@ -653,7 +658,6 @@ public class AudioPlayerService extends Service {
                         Log.d(TAG, "Setting up remote Control Client");
                     audioManager.registerRemoteControlClient(mRemoteControlClient);
                     mRemoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
-                    updateMetaData();
                 }
             }
 
@@ -808,14 +812,14 @@ public class AudioPlayerService extends Service {
     @SuppressLint("NewApi")
     private void updateMetaData() {
         new AsyncTask<Void, Void, Void>() {
-            private RemoteControlClient.MetadataEditor editor;
-
             @Override
             protected Void doInBackground(Void... params) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                    editor = mRemoteControlClient.editMetadata(true);
-                    editor.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, media.getName());
-                    editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, book.getName());
+                    if (BuildConfig.DEBUG)
+                        Log.d(TAG, "editing metadata with" + media.getName());
+                    RemoteControlClient.MetadataEditor editor = mRemoteControlClient.editMetadata(true);
+                    editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, media.getName());
+                    editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName());
                     String coverPath = book.getCover();
                     Bitmap bitmap;
                     if (coverPath.equals("") || !new File(coverPath).exists() || new File(coverPath).isDirectory()) {
