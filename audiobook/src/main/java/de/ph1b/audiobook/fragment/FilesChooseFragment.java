@@ -51,7 +51,7 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
     private static final String TAG = "de.ph1b.audiobook.fragment.FilesChooseFragment";
 
     private final LinkedList<String> link = new LinkedList<String>();
-    private final ArrayList<String> dirs = new ArrayList<String>();
+    private final ArrayList<String> dirs = getStorageDirectories();
     private ArrayList<File> fileList;
     private ArrayList<File> dirAddList;
 
@@ -71,11 +71,6 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
         setHasOptionsMenu(true);
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
-        //TESTING IF THIS WORKS!!! (for backup leave traditional hardcoded way for now.)
-        String[] storage = getStorageDirectories();
-        Collections.addAll(dirs, storage);
-        addPathToSpinner();
 
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
     }
@@ -123,7 +118,7 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
     private static final Pattern DIR_SEPARATOR = Pattern.compile("/");
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    private String[] getStorageDirectories() {
+    private ArrayList<String> getStorageDirectories() {
         // Final set of paths
         final Set<String> rv = new HashSet<String>();
         // Primary physical SD-CARD (not emulated)
@@ -171,7 +166,23 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
             final String[] rawSecondaryStorages = rawSecondaryStoragesStr.split(File.pathSeparator);
             Collections.addAll(rv, rawSecondaryStorages);
         }
-        return rv.toArray(new String[rv.size()]);
+        rv.add("/storage/extSdCard");
+        rv.add(Environment.getExternalStorageDirectory().getAbsolutePath());
+        if (BuildConfig.DEBUG) {
+            rv.add("/storage/sdcard0/Audiobooks");
+            rv.add("abc");
+            rv.add("/system");
+        }
+        rv.add("/storage/emulated/0");
+        rv.add("/storage/sdcard1");
+
+        ArrayList<String> paths = new ArrayList<String>();
+        for (String s : rv) {
+            File f = new File(s);
+            if (!paths.contains(s) && f.exists() && f.isDirectory() && f.canRead() && f.listFiles().length > 0)
+                paths.add(s);
+        }
+        return paths;
     }
 
     private final OnBackPressedListener onBackPressedListener = new OnBackPressedListener() {
@@ -279,24 +290,6 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
         }
     }
 
-    private void addPathToSpinner() {
-        ArrayList<String> paths = new ArrayList<String>();
-        paths.add("/storage/extSdCard");
-        paths.add(Environment.getExternalStorageDirectory().getAbsolutePath());
-        if (BuildConfig.DEBUG) {
-            paths.add("/storage/sdcard0/Audiobooks");
-            paths.add("abc");
-            paths.add("/system");
-        }
-        paths.add("/storage/emulated/0");
-        paths.add("/storage/sdcard1");
-
-        for (String s : paths) {
-            File f = new File(s);
-            if (!dirs.contains(s) && f.exists() && f.isDirectory() && f.canRead() && f.listFiles().length > 0)
-                dirs.add(s);
-        }
-    }
 
     private boolean hasAudio(ArrayList<File> files) {
         for (File f : files) {
