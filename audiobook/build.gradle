@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         release {
-            if (project.hasProperty("GlobalProject.signing")) {
+            if (project.hasProperty("GlobalProject.signing") && new File(project.property("GlobalProject.signing") + ".gradle").exists()) {
                 apply from: project.property("GlobalProject.signing") + ".gradle";
             } else {
                 storeFile file("file.keystore")
