@@ -224,7 +224,6 @@ public class FilesAddFragment extends Fragment {
                 }
             }
         });
-        fieldName.clearFocus();
         return v;
     }
 
