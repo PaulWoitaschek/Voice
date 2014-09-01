@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
@@ -345,15 +346,19 @@ public class FilesAddFragment extends Fragment {
                 (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm != null) {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            boolean useMobileConnection = sharedPref.getBoolean(getString(R.string.pref_cover_on_internet), false);
+            boolean mobileConnectionAllowed = sharedPref.getBoolean(getString(R.string.pref_cover_on_internet), false);
 
-            NetworkInfo wifiNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-            if (wifiNetwork != null && wifiNetwork.isConnected())
-                return true;
-
-            NetworkInfo mobileNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-            if (mobileNetwork != null && mobileNetwork.isConnected() && useMobileConnection)
-                return true;
+            NetworkInfo info = cm.getActiveNetworkInfo();
+            if (info != null && info.isConnected()){
+                /*
+                if type is NOT mobile return !(false && ?) == true
+                if type IS mobile and mobileConnection is allowed return !(true && !true) == !(true && false)
+                == !(false) = true
+                if type IS mobile and mobileConnection is NOT allowed return !(true && !false) ==
+                !(true && true) == !(true) == false
+                 */
+                return !(info.getType() == ConnectivityManager.TYPE_MOBILE && !mobileConnectionAllowed);
+            }
         }
         return false;
     }
