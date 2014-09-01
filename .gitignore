@@ -1,7 +1,6 @@
 audiobook/build
 build
 *.iml
-gradle/
 .gradle/
 <<<<<<< HEAD
 .idea
