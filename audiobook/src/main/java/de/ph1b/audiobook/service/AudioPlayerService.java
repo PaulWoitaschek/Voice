@@ -306,11 +306,16 @@ public class AudioPlayerService extends Service {
             PendingIntent pauseActionPI = PendingIntent.getBroadcast(getApplicationContext(), 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
             Notification.Builder builder = new Notification.Builder(getApplicationContext());
             builder.setContentTitle(book.getName())
+                    .setContentText(media.getName())
                     .setLargeIcon(result)
                     .setSmallIcon(R.drawable.notification)
                     .setContentIntent(pi)
                     .setOngoing(true)
                     .setAutoCancel(true);
+            int pos = positionInAllMedia(media.getId());
+            if (allMedia.length > 1 && pos != -1) {
+                builder.setContentInfo(String.valueOf(pos) + "/" + String.valueOf(allMedia.length));
+            }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 builder.setPriority(Notification.PRIORITY_HIGH);
                 builder.addAction(R.drawable.av_pause_dark, "Pause", pauseActionPI);
@@ -808,6 +813,14 @@ public class AudioPlayerService extends Service {
             }
         }
     };
+
+    int positionInAllMedia(int mediaId) {
+        for (int i = 0; i < allMedia.length; i++) {
+            if (mediaId == allMedia[i].getId())
+                return i + 1;
+        }
+        return -1;
+    }
 
     @SuppressLint("NewApi")
     private void updateMetaData() {
