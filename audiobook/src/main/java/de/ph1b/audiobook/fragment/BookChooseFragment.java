@@ -234,6 +234,12 @@ public class BookChooseFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        //updates list each time!
+        ArrayList <BookDetail> tempDetails = db.getAllBooks();
+        details.clear();
+        details.addAll(tempDetails);
+        adapt.notifyDataSetChanged();
+
         if (details.size() == 0) {
             String text = getString(R.string.media_view_how_to);
             Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_LONG);
