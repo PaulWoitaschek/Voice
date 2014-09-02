@@ -53,7 +53,6 @@
     <string name="content_widget_play">Plays the current book</string>
 
     <string name="change_forward_amount">Fast forward</string>
-    <string name="change_forward_amount_hint">Defines how many seconds to skip when pressing fast forward.</string>
 
     <string name="book_add_progress_title">Adding book</string>
     <string name="book_add_progress_message">Please wait while the book is being added.</string>

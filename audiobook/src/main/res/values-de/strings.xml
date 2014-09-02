@@ -45,7 +45,6 @@
     <string name="content_widget_play">Spielt das aktuelle Buch</string>
 
     <string name="change_forward_amount">Vorspulen</string>
-    <string name="change_forward_amount_hint">Legt fest, um wie viele Sekunden beim Vorspulen gesprungen wird</string>
 
     <string name="book_add_progress_title">Füge Buch hinzu</string>
     <string name="book_add_progress_message">Bitte einen Moment warten.</string>
