@@ -63,7 +63,7 @@ public class BookChooseFragment extends Fragment {
     private ImageView currentCover;
     private TextView currentText;
     private ImageButton currentPlaying;
-    private LinearLayout current;
+    private ViewGroup current;
 
     private AudioPlayerService mService;
     private boolean mBound = false;
@@ -145,7 +145,7 @@ public class BookChooseFragment extends Fragment {
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setTitle(getActivity().getString(R.string.app_name));
 
-        current = (LinearLayout) v.findViewById(R.id.current);
+        current = (ViewGroup) v.findViewById(R.id.current);
         currentCover = (ImageView) v.findViewById(R.id.current_cover);
         currentText = (TextView) v.findViewById(R.id.current_text);
         currentPlaying = (ImageButton) v.findViewById(R.id.current_playing);
@@ -268,8 +268,8 @@ public class BookChooseFragment extends Fragment {
 
             //setting text
             currentText.setText(b.getName());
-
-            currentText.setOnClickListener(new View.OnClickListener() {
+;
+            current.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(getActivity(), BookPlay.class);
