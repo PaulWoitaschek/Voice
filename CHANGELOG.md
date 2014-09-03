@@ -1,8 +1,10 @@
 # v1.2.5
+
 ## Additions
 * Loads covers also on eternet etc.
 * Better lockscreen information
 * More information in notification now
+
 ## Bugfixes
 * Fixed a bug where the textfield made the keyboard pop up
 * Fixes some bugs considering lockscreen
