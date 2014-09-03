@@ -2,9 +2,8 @@ audiobook/build
 build
 *.iml
 .gradle/
-<<<<<<< HEAD
 .idea
-=======
-.idea/
->>>>>>> master
-audiobook/Signing
+
+# Signing
+audiobook/release.keystore
+signing.properties
