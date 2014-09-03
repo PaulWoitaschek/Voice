@@ -49,7 +49,7 @@ public class JumpToPosition extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         //passing null is fine because of fragment
-        @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.time_picker, null);
+        @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_time_picker, null);
 
         Bundle bundle = this.getArguments();
         duration = bundle.getInt(DURATION, 0);
