@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:singleLine="true"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
 
         <ProgressBar
             android:id="@+id/current_progress"

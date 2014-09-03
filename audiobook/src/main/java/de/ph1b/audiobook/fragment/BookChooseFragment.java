@@ -235,7 +235,7 @@ public class BookChooseFragment extends Fragment {
         super.onResume();
 
         //updates list each time!
-        ArrayList <BookDetail> tempDetails = db.getAllBooks();
+        ArrayList<BookDetail> tempDetails = db.getAllBooks();
         details.clear();
         details.addAll(tempDetails);
         adapt.notifyDataSetChanged();

@@ -9,6 +9,6 @@
         android:id="@+id/fragment_book_choose"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        class="de.ph1b.audiobook.fragment.BookChooseFragment"/>
+        class="de.ph1b.audiobook.fragment.BookChooseFragment" />
 
 </LinearLayout>

@@ -7,7 +7,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-public class BookDetail implements Parcelable{
+public class BookDetail implements Parcelable {
 
     private int id;
     private String name;
@@ -16,7 +16,7 @@ public class BookDetail implements Parcelable{
     private int[] mediaIds;
     private int position;
 
-    public BookDetail(){
+    public BookDetail() {
 
     }
 
@@ -80,14 +80,14 @@ public class BookDetail implements Parcelable{
         }
     }
 
-    public void setMediaIDs(LinkedHashMap<Integer, MediaDetail> media){
-        if (media.size() > 0){
+    public void setMediaIDs(LinkedHashMap<Integer, MediaDetail> media) {
+        if (media.size() > 0) {
             ArrayList<Integer> keyArrayList = new ArrayList<Integer>();
-            for (int key : media.keySet()){
+            for (int key : media.keySet()) {
                 keyArrayList.add(key);
             }
-            int [] mediaIds = new int[keyArrayList.size()];
-            for (int i=0; i< mediaIds.length; i++){
+            int[] mediaIds = new int[keyArrayList.size()];
+            for (int i = 0; i < mediaIds.length; i++) {
                 mediaIds[i] = keyArrayList.get(i);
             }
             this.mediaIds = mediaIds;
@@ -117,7 +117,7 @@ public class BookDetail implements Parcelable{
         destination.writeInt(position);
     }
 
-    private BookDetail(Parcel pc){
+    private BookDetail(Parcel pc) {
         id = pc.readInt();
         name = pc.readString();
         cover = pc.readString();

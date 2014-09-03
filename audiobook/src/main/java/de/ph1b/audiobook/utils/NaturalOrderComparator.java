@@ -4,7 +4,7 @@ package de.ph1b.audiobook.utils;
 import java.io.File;
 import java.util.Comparator;
 
-public class NaturalOrderComparator <T> implements Comparator <T> {
+public class NaturalOrderComparator<T> implements Comparator<T> {
 
     public int compare(T o1, T o2) {
         File f1 = (File) o1;

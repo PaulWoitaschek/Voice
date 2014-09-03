@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:textSize="40sp"
         android:gravity="center"
-        android:textColor="#FFFFFF"/>
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:id="@+id/file_name"

@@ -12,7 +12,7 @@ import android.widget.EditText;
 
 import de.ph1b.audiobook.R;
 
-public class FilesAddDialog extends DialogFragment{
+public class FilesAddDialog extends DialogFragment {
 
 
     @Override

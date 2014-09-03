@@ -95,7 +95,6 @@ public class MediaAdapter extends BaseAdapter {
     }
 
 
-
     static class ViewHolder {
         ImageView iconImageView;
         TextView textView;

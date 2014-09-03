@@ -348,7 +348,7 @@ public class FilesAddFragment extends Fragment {
             boolean mobileConnectionAllowed = sharedPref.getBoolean(getString(R.string.pref_cover_on_internet), false);
 
             NetworkInfo info = cm.getActiveNetworkInfo();
-            if (info != null && info.isConnected()){
+            if (info != null && info.isConnected()) {
                 /*
                 if type is NOT mobile return !(false && ?) == true
                 if type IS mobile and mobileConnection is allowed return !(true && !true) == !(true && false)
