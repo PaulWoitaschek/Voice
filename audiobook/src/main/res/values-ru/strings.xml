@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_add">Добавить каталог аудиокниги</string>
+    <string name="cover">Обложка</string>
+    <string name="play">Воспроизвести / Пауза</string>
+
+    <string name="action_settings">Настройки</string>
+    <string name="back">Назад</string>
+    <string name="forward">Вперед</string>
+    <string name="action_delete">Удалить</string>
+    <string name="action_add_badge">Добавить каталог аудиокниги</string>
+    <string name="book_name_hint">Имя аудиокниги</string>
+    <string name="book_add">Добавить аудиокнигу</string>
+    <string name="book_add_empty_title">Добавить название</string>
+    <string name="description_thumbnail">Изображение обложки</string>
+    <string name="book_no_media">Выбранный каталог не содержит аудиофайлов.</string>
+    <string name="next_song">Следующий трек</string>
+    <string name="previous_song">Предыдущий трек</string>
+    <string name="choose_time_okay">Установить</string>
+    <string name="choose_time_cancel">Отмена</string>
+    <string name="action_time_change">Перейти к</string>
+    <string name="pref_resume_on_replug">Прокрутка назад</string>
+    <string name="pref_resume_on_replug_hint">Автоматическая прокрутка назад после паузы.</string>
+    <string name="action_sleep">Остановить после указанного времени</string>
+    <string name="no_external_storage">Карта памяти недоступна. Пожалуйста убедитесь, что она установлена и вы не соединены кабелем с компьютером.</string>
+    <string name="no_external_storage_action_bar_title">Карта памяти</string>
+
+    <string name="action_sleep_title">Таймер сна</string>
+    <string name="action_sleep_title_hint_left">Отключить через</string>
+    <string name="action_sleep_title_hint_right">минут</string>
+    <string name="action_jump_to">Изменение позиции</string>
+    <string name="hours">часов</string>
+    <string name="minutes">минут</string>
+    <string name="seconds">секунд</string>
+
+    <string name="file_not_found">Аудиокнига не найдена по указанному пути. Пожалуйста, произведите добавление повторно.</string>
+    <string name="media_view_how_to">Нажмите + для добавления книги</string>
+    <string name="current_cover">Показать обложку текущей аудиокниги.</string>
+    <string name="current_playing">Показывать состояние проигрывания.</string>
+    <string name="pref_cover_on_internet">Использовать 3G интернет</string>
+    <string name="pref_cover_on_internet_hint">Использовать 3G интернет для поиска обложек аудиокниг.</string>
+    <string name="content_previous_cover">Выбрать предыдущую обложку</string>
+    <string name="content_next_cover">Выбрать следующую обложку</string>
+    <string name="content_cover">Показать выбранную обложку</string>
+    <string name="content_widget_play">Проиграть текущую аудиокнигу</string>
+    <string name="change_forward_amount">Ускоренная перемотка</string>
+    <string name="book_add_progress_title">Добавление книги</string>
+    <string name="book_add_progress_message">Пожалуйста ждите, книга добавляется.</string>
+</resources>
