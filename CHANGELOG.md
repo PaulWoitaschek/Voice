@@ -1,3 +1,8 @@
+# v1.2.5.1
+
+## Additions
+* Now with russian translation. All credits to: Utrobin Mikhail
+
 # v1.2.5
 
 ## Additions
