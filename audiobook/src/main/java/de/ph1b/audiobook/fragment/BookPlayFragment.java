@@ -256,6 +256,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
         rewind_button.setOnClickListener(this);
         fast_forward_button.setOnClickListener(this);
         play_button.setOnClickListener(this);
+        playedTimeView.setOnClickListener(this);
 
         seek_bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -347,6 +348,9 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
                 case R.id.previous_song:
                     mService.previousSong();
                     break;
+                case R.id.played:
+                    launchJumpToPositionDialog();
+                    break;
                 default:
                     break;
             }
@@ -358,6 +362,15 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
         inflater.inflate(R.menu.action_media_play, menu);
     }
 
+    private void launchJumpToPositionDialog() {
+        JumpToPosition jumpToPosition = new JumpToPosition();
+        Bundle bundle = new Bundle();
+        bundle.putInt(JumpToPosition.DURATION, duration);
+        bundle.putInt(JumpToPosition.POSITION, position);
+        jumpToPosition.setArguments(bundle);
+        jumpToPosition.show(getFragmentManager(), "timePicker");
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -365,14 +378,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
                 startActivity(new Intent(getActivity(), Settings.class));
                 return true;
             case R.id.action_time_change:
-                if (duration > 0) {
-                    JumpToPosition jumpToPosition = new JumpToPosition();
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(JumpToPosition.DURATION, duration);
-                    bundle.putInt(JumpToPosition.POSITION, position);
-                    jumpToPosition.setArguments(bundle);
-                    jumpToPosition.show(getFragmentManager(), "timePicker");
-                }
+                launchJumpToPositionDialog();
                 return true;
             case R.id.action_sleep:
                 SleepDialog sleepDialog = new SleepDialog();
