@@ -77,19 +77,8 @@ public class MediaAdapter extends BaseAdapter {
         }
 
         //setting bar
-        MediaDetail m = db.getMedia(b.getPosition());
-        int[] mediaIds = b.getMediaIds();
-        int bookDuration = mediaIds.length;
-        int bookPosition = 1;
-        for (int i = 0; i < mediaIds.length; i++)
-            if (mediaIds[i] == b.getPosition())
-                bookPosition = i + 1;
-        int progressMax = bookDuration * 100;
-        viewHolder.progressBar.setMax(progressMax);
-        long mediaDuration = m.getDuration();
-        long mediaPosition = m.getPosition();
-        int progressNow = ((bookPosition - 1) * 100) + (int) (mediaPosition * 100 / mediaDuration);
-        viewHolder.progressBar.setProgress(progressNow);
+        viewHolder.progressBar.setMax(1000);
+        viewHolder.progressBar.setProgress(db.getGlobalProgress(b.getId()));
 
         return convertView;
     }

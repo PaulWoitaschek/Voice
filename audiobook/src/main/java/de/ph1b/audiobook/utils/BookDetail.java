@@ -4,8 +4,7 @@ package de.ph1b.audiobook.utils;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+
 
 public class BookDetail implements Parcelable {
 
@@ -13,7 +12,6 @@ public class BookDetail implements Parcelable {
     private String name;
     private String cover;
     private String thumb;
-    private int[] mediaIds;
     private int position;
 
     public BookDetail() {
@@ -52,50 +50,8 @@ public class BookDetail implements Parcelable {
         this.thumb = thumb;
     }
 
-    public int[] getMediaIds() {
-        return mediaIds;
-    }
-
-    public String getMediaIdsAsString() {
-        return idsToString(mediaIds);
-    }
-
-    private String idsToString(int[] intId) {
-        String idsAsString = "";
-        for (int i : intId) {
-            idsAsString += String.valueOf(i) + ",";
-        }
-        return idsAsString;
-    }
-
-
-    public void setMediaIDs(String mediaIDsAsString) {
-        if (!mediaIDsAsString.equals("")) {
-            String[] mediaIDsAsSplittedString = mediaIDsAsString.split(",");
-            int[] mediaIDsAsSplittedInt = new int[mediaIDsAsSplittedString.length];
-            for (int i = 0; i < mediaIDsAsSplittedInt.length; i++) {
-                mediaIDsAsSplittedInt[i] = Integer.parseInt(mediaIDsAsSplittedString[i]);
-            }
-            this.mediaIds = mediaIDsAsSplittedInt;
-        }
-    }
-
-    public void setMediaIDs(LinkedHashMap<Integer, MediaDetail> media) {
-        if (media.size() > 0) {
-            ArrayList<Integer> keyArrayList = new ArrayList<Integer>();
-            for (int key : media.keySet()) {
-                keyArrayList.add(key);
-            }
-            int[] mediaIds = new int[keyArrayList.size()];
-            for (int i = 0; i < mediaIds.length; i++) {
-                mediaIds[i] = keyArrayList.get(i);
-            }
-            this.mediaIds = mediaIds;
-        }
-    }
-
     public int getPosition() {
-        return position == 0 ? mediaIds[0] : position;
+        return position;
     }
 
     public void setPosition(int position) {
@@ -113,7 +69,6 @@ public class BookDetail implements Parcelable {
         destination.writeString(name);
         destination.writeString(cover);
         destination.writeString(thumb);
-        destination.writeIntArray(mediaIds);
         destination.writeInt(position);
     }
 
@@ -122,7 +77,6 @@ public class BookDetail implements Parcelable {
         name = pc.readString();
         cover = pc.readString();
         thumb = pc.readString();
-        mediaIds = pc.createIntArray();
         position = pc.readInt();
     }
 

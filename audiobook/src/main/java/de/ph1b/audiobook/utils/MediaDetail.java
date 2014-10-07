@@ -13,6 +13,7 @@ public class MediaDetail implements Parcelable {
     private int position = 0;
     private int id;
     private int duration;
+    private int bookId;
 
 
     public MediaDetail() {
@@ -25,6 +26,14 @@ public class MediaDetail implements Parcelable {
 
     public int getDuration() {
         return duration;
+    }
+
+    public int getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(int bookId) {
+        this.bookId = bookId;
     }
 
     public void setName(String name) {
@@ -71,6 +80,7 @@ public class MediaDetail implements Parcelable {
         out.writeInt(position);
         out.writeInt(id);
         out.writeInt(duration);
+        out.writeInt(bookId);
     }
 
     private MediaDetail(Parcel pc) {
@@ -79,6 +89,7 @@ public class MediaDetail implements Parcelable {
         position = pc.readInt();
         id = pc.readInt();
         duration = pc.readInt();
+        bookId = pc.readInt();
     }
 
     public static final Parcelable.Creator<MediaDetail> CREATOR = new Parcelable.Creator<MediaDetail>() {

@@ -213,19 +213,16 @@ public class BookChooseFragment extends Fragment {
                 BookDetail book = details.get(position);
                 int bookId = book.getId();
 
-                if (book.getMediaIds().length > 0) {
-                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putInt(BookChoose.SHARED_PREFS_CURRENT, bookId);
-                    editor.apply();
+                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putInt(BookChoose.SHARED_PREFS_CURRENT, bookId);
+                editor.apply();
 
-                    Intent i = new Intent(getActivity(), BookPlay.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(BookChoose.PLAY_BOOK, bookId);
-                    i.putExtras(bundle);
-                    startActivity(new Intent(getActivity(), BookPlay.class));
-                }
+                Intent i = new Intent(getActivity(), BookPlay.class);
+                i.putExtra(AudioPlayerService.BOOK_ID, book.getId());
+                startActivity(i);
             }
+
         });
         return v;
     }
@@ -278,9 +275,7 @@ public class BookChooseFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(getActivity(), BookPlay.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(BookChoose.PLAY_BOOK, b.getId());
-                    i.putExtras(bundle);
+                    i.putExtra(AudioPlayerService.BOOK_ID, b.getId());
                     startActivity(i);
                 }
             });
@@ -289,6 +284,7 @@ public class BookChooseFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
+                    serviceIntent.putExtra(AudioPlayerService.BOOK_ID, b.getId());
                     serviceIntent.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
                     getActivity().startService(serviceIntent);
                 }

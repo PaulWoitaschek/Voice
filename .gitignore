@@ -3,6 +3,7 @@ build
 *.iml
 .gradle/
 .idea
+*~
 
 # Signing
 audiobook/release.keystore

@@ -181,9 +181,10 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
                     for (MediaDetail m : allMedia) {
                         if (m.getId() == mediaId) {
                             media = m;
-                            break;
                         }
                     }
+                    if (media == null)
+                        media = allMedia[0];
 
                     //checks if file exists
                     File testFile = new File(media.getPath());
@@ -284,6 +285,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
         bookId = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, 0);
 
         //starting the service
+        if (BuildConfig.DEBUG) Log.d(TAG, "Starting service with id: " + bookId);
         Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
         serviceIntent.putExtra(AudioPlayerService.BOOK_ID, bookId);
         getActivity().startService(serviceIntent);

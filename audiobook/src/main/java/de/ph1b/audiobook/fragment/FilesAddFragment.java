@@ -49,7 +49,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import de.ph1b.audiobook.BuildConfig;
@@ -397,7 +396,26 @@ public class FilesAddFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            LinkedHashMap<Integer, MediaDetail> media = new LinkedHashMap<Integer, MediaDetail>();
+            BookDetail b = new BookDetail();
+            String[] res;
+            if (BuildConfig.DEBUG)
+                Log.d(TAG, "bitmap list size is: " + bitmapList.size() + "cover position is:" + coverPosition);
+            if (bitmapList.size() != 0 && coverPosition > bitmapList.size()) {
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "saving bitmap with index 0!");
+                res = saveImages(bitmapList.get(0));
+            } else {
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "saving bitmap with index 0!");
+                res = saveImages(bitmapList.get(coverPosition));
+            }
+            b.setName(bookName);
+            b.setCover(res[0]);
+            b.setThumb(res[1]);
+            int bookId = db.addBook(b);
+
+
+            ArrayList<MediaDetail> media = new ArrayList<MediaDetail>();
             for (File f : dirAddList) {
                 if (FilesChoose.isAudio(f.getName())) {
                     MediaDetail m = new MediaDetail();
@@ -411,33 +429,13 @@ public class FilesAddFragment extends Fragment {
                     metaRetriever.setDataSource(f.getAbsolutePath());
                     int duration = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
                     m.setDuration(duration);
-                    int id = db.addMedia(m);
-                    media.put(id, m);
+                    m.setBookId(bookId);
+                    media.add(m);
                 }
                 // put progress here to increase for checked covers
                 publishProgress(progressDialog.getProgress() + 1);
             }
-
-            if (media.size() > 0) {
-                BookDetail b = new BookDetail();
-                String[] res;
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, "bitmap list size is: " + bitmapList.size() + "cover position is:" + coverPosition);
-                if (bitmapList.size() != 0 && coverPosition > bitmapList.size()) {
-                    if (BuildConfig.DEBUG)
-                        Log.d(TAG, "saving bitmap with index 0!");
-                    res = saveImages(bitmapList.get(0));
-                } else {
-                    if (BuildConfig.DEBUG)
-                        Log.d(TAG, "saving bitmap with index 0!");
-                    res = saveImages(bitmapList.get(coverPosition));
-                }
-                b.setName(bookName);
-                b.setCover(res[0]);
-                b.setThumb(res[1]);
-                b.setMediaIDs(media);
-                db.addBook(b);
-            }
+            db.addMedia(media);
             return null;
         }
 
