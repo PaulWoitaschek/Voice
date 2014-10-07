@@ -122,7 +122,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     bookValues.put(KEY_BOOK_COVER, bookCover);
                     bookValues.put(KEY_BOOK_THUMB, bookThumb);
                     bookValues.put(KEY_BOOK_POSITION, bookPosition);
-                    db.insert(TABLE_BOOKS, null, bookValues);
+                    long newBookId = db.insert(TABLE_BOOKS, null, bookValues);
 
                     //generate int array from string
                     String[] mediaIDsAsSplittedString = bookMediaContaining.split(",");
@@ -147,7 +147,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                             mediaValues.put(KEY_MEDIA_NAME, mediaName);
                             mediaValues.put(KEY_MEDIA_POSITION, mediaPosition);
                             mediaValues.put(KEY_MEDIA_DURATION, mediaDuration);
-                            mediaValues.put(KEY_MEDIA_BOOK_ID, i);
+                            mediaValues.put(KEY_MEDIA_BOOK_ID, newBookId);
                             db.insert(TABLE_MEDIA, null, mediaValues);
                         }
                     }
