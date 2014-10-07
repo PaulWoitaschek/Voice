@@ -300,8 +300,6 @@ public class BookChooseFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "onCreateOptionsMenu was called!");
         inflater.inflate(R.menu.action_media_view, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }

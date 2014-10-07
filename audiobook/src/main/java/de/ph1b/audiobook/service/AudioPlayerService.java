@@ -33,6 +33,7 @@ import android.widget.RemoteViews;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.locks.ReentrantLock;
@@ -74,6 +75,7 @@ public class AudioPlayerService extends Service {
     public static final String GUI = TAG + ".GUI";
     public static final String GUI_BOOK = TAG + ".GUI_BOOK";
     public static final String GUI_ALL_MEDIA = TAG + ".GUI_ALL_MEDIA";
+    public static final String GUI_MEDIA = TAG + ".GUI_MEDIA";
 
     private static final String NOTIFICATION_PAUSE = TAG + ".NOTIFICATION_PAUSE";
 
@@ -86,7 +88,7 @@ public class AudioPlayerService extends Service {
     private int lastState;
 
     private MediaDetail media;
-    private MediaDetail[] allMedia;
+    private ArrayList<MediaDetail> allMedia;
     private BookDetail book;
     private Handler handler;
 
@@ -219,14 +221,15 @@ public class AudioPlayerService extends Service {
         super.onStartCommand(intent, flags, startId);
 
 
-        int newBookId = intent.getIntExtra(BOOK_ID, 0);
-
-        if (book == null || book.getId() != newBookId) {
-            book = db.getBook(newBookId);
-            allMedia = db.getMediaFromBook(book.getId());
-            initBook();
-            prepare(book.getPosition());
-        }
+        //int newBookId = intent.getIntExtra(BOOK_ID, 0);
+        BookDetail newBook = intent.getParcelableExtra(GUI_BOOK);
+        if (newBook != null)
+            if ((book != null && book.getId() != newBook.getId()) || book == null) {
+                book = newBook;
+                allMedia = intent.getParcelableArrayListExtra(GUI_ALL_MEDIA);
+                initBook();
+                prepare(book.getPosition());
+            }
 
         handleAction(intent);
 
@@ -300,8 +303,8 @@ public class AudioPlayerService extends Service {
                     .setOngoing(true)
                     .setAutoCancel(true);
             int pos = positionInAllMedia(media.getId());
-            if (allMedia.length > 1 && pos != -1) {
-                builder.setContentInfo(String.valueOf(pos) + "/" + String.valueOf(allMedia.length));
+            if (allMedia.size() > 1 && pos != -1) {
+                builder.setContentInfo(String.valueOf(pos) + "/" + String.valueOf(allMedia.size()));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 builder.setPriority(Notification.PRIORITY_HIGH);
@@ -376,7 +379,7 @@ public class AudioPlayerService extends Service {
         registerAsPlaying(false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            if (allMedia.length > 1) {
+            if (allMedia.size() > 1) {
                 mRemoteControlClient.setTransportControlFlags(
                         RemoteControlClient.FLAG_KEY_MEDIA_PAUSE |
                                 RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS |
@@ -403,7 +406,7 @@ public class AudioPlayerService extends Service {
                 if (m.getId() == mediaId)
                     media = m;
             if (media == null)
-                media = allMedia[0];
+                media = allMedia.get(0);
 
             if (stateManager.getState() == PlayerStates.DEAD)
                 mediaPlayer = new MediaPlayer();
@@ -464,8 +467,9 @@ public class AudioPlayerService extends Service {
                 try {
                     stateManager.setTime(mediaPlayer.getCurrentPosition());
                     Intent i = new Intent(GUI);
-                    i.putExtra(GUI_BOOK, book);
-                    i.putExtra(GUI_ALL_MEDIA, allMedia);
+                   // i.putExtra(GUI_BOOK, book);
+                   // i.putExtra(GUI_ALL_MEDIA, allMedia);
+                    i.putExtra(GUI_MEDIA, media);
                     bcm.sendBroadcast(i);
                 } finally {
                     playerLock.unlock();
@@ -547,11 +551,11 @@ public class AudioPlayerService extends Service {
 
     public void previousSong() {
         int currentId = media.getId();
-        for (int i = 1; i < allMedia.length; i++) { //starting at #1 to prevent change when on first song
-            if (allMedia[i].getId() == currentId) {
+        for (int i = 1; i < allMedia.size(); i++) { //starting at #1 to prevent change when on first song
+            if (allMedia.get(i).getId() == currentId) {
                 boolean wasPlaying = ((stateManager.getState() == PlayerStates.STARTED) ||
                         (stateManager.getState() == PlayerStates.PLAYBACK_COMPLETED));
-                int mediaId = allMedia[i - 1].getId();
+                int mediaId = allMedia.get(i - 1).getId();
                 prepare(mediaId);
                 book.setPosition(media.getId());
                 db.updateBookAsync(book);
@@ -565,11 +569,11 @@ public class AudioPlayerService extends Service {
 
     public void nextSong() {
         int currentId = media.getId();
-        for (int i = 0; i < allMedia.length - 1; i++) { //-1 to prevent change when already last song reached
-            if (allMedia[i].getId() == currentId) {
+        for (int i = 0; i < allMedia.size() - 1; i++) { //-1 to prevent change when already last song reached
+            if (allMedia.get(i).getId() == currentId) {
                 boolean wasPlaying = ((stateManager.getState() == PlayerStates.STARTED) ||
                         (stateManager.getState() == PlayerStates.PLAYBACK_COMPLETED));
-                int mediaId = allMedia[i + 1].getId();
+                int mediaId = allMedia.get(i + 1).getId();
                 prepare(mediaId);
                 book.setPosition(media.getId());
                 db.updateBookAsync(book);
@@ -581,7 +585,7 @@ public class AudioPlayerService extends Service {
         }
 
         // if at last position, remove handler and notification, audio-focus
-        if (currentId == allMedia[allMedia.length - 1].getId()) {
+        if (currentId == allMedia.get(allMedia.size() - 1).getId()) {
             playerLock.lock();
             try {
                 if (stateManager.getState() != PlayerStates.DEAD)
@@ -810,8 +814,8 @@ public class AudioPlayerService extends Service {
     };
 
     int positionInAllMedia(int mediaId) {
-        for (int i = 0; i < allMedia.length; i++) {
-            if (mediaId == allMedia[i].getId())
+        for (int i = 0; i < allMedia.size(); i++) {
+            if (mediaId == allMedia.get(i).getId())
                 return i + 1;
         }
         return -1;

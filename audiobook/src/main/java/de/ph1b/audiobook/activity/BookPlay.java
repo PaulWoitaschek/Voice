@@ -14,8 +14,6 @@ public class BookPlay extends ActionBarActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (BuildConfig.DEBUG) Log.d("bookplay", "got extras?" + getIntent().getExtras());
         setContentView(R.layout.activity_book_play);
     }
 

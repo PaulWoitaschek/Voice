@@ -36,11 +36,7 @@ public class WidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,
                          int[] appWidgetIds) {
-
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "onUpdate called!, lenght: " + appWidgetIds.length);
         for (int appWidgetId : appWidgetIds) {
-
             final RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
                     R.layout.widget);
             remoteViews.setOnClickPendingIntent(R.id.widgetPlayButton, getPendingSelfIntent(context, PLAY_CLICK));
@@ -54,9 +50,6 @@ public class WidgetProvider extends AppWidgetProvider {
         if (BuildConfig.DEBUG)
             Log.d(TAG, "onReceive called!, intent is :" + intent.getAction());
         if (intent.getAction().equals(PLAY_CLICK)) {
-            if (BuildConfig.DEBUG)
-                Log.d(TAG, "clicked play!");
-
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
             int position = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
 

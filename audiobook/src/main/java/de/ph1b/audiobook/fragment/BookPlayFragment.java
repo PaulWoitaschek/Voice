@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.BuildConfig;
@@ -49,6 +50,7 @@ import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.utils.BookDetail;
 import de.ph1b.audiobook.utils.CommonTasks;
+import de.ph1b.audiobook.utils.DataBaseHelper;
 import de.ph1b.audiobook.utils.MediaDetail;
 
 public class BookPlayFragment extends Fragment implements OnClickListener {
@@ -63,6 +65,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
     private TextView maxTimeView;
     private int position;
 
+    private final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
     private LocalBroadcastManager bcm;
 
     private static int bookId;
@@ -70,8 +73,9 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
     private static final String TAG = "de.ph1b.audiobooks.fragment.MediaPlayFragment";
 
     private boolean seekBarIsUpdating = false;
-    private MediaDetail[] allMedia;
-    private MediaDetail media;
+    private BookDetail book;
+    private ArrayList<MediaDetail> allMedia;
+    private MediaSpinnerAdapter adapter;
 
     private int duration;
 
@@ -157,105 +161,43 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
     private final BroadcastReceiver updateGUIReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
             String action = intent.getAction();
-
             if (action.equals(AudioPlayerService.GUI)) {
-
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, "setting time to" + position);
                 if (mBound) {
+                    //setting up time related stuff
                     seek_bar.setProgress(mService.stateManager.getTime());
                     playedTimeView.setText(formatTime(mService.stateManager.getTime()));
                 }
 
-                //update book
-                final BookDetail b = intent.getParcelableExtra(AudioPlayerService.GUI_BOOK);
-                if (b == null) {
-                    if (BuildConfig.DEBUG)
-                        Log.e(TAG, "parcel extra (book) is null");
-                } else {
-                    int mediaId = b.getPosition();
-                    allMedia = (MediaDetail[]) intent.getParcelableArrayExtra(AudioPlayerService.GUI_ALL_MEDIA);
-
-                    for (MediaDetail m : allMedia) {
-                        if (m.getId() == mediaId) {
-                            media = m;
-                        }
-                    }
-                    if (media == null)
-                        media = allMedia[0];
-
-                    //checks if file exists
-                    File testFile = new File(media.getPath());
-                    if (!testFile.exists()) {
-                        String text = getString(R.string.file_not_found);
-                        Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_LONG);
-                        toast.show();
-                        startActivity(new Intent(getActivity(), BookChoose.class));
-                    }
-
-
-                    //setting book name
-                    ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
-                    String bookName = b.getName();
-                    actionBar.setTitle(bookName);
-
-                    bookId = b.getId();
-
-                    //setting cover
-                    String imagePath = b.getCover();
-                    if (imagePath.equals("") || !new File(imagePath).exists() || new File(imagePath).isDirectory()) {
-                        Bitmap cover = CommonTasks.genCapital(b.getName(), CommonTasks.getDisplayMinSize(getActivity()), getResources());
-                        coverView.setImageBitmap(cover);
-                    } else {
-                        coverView.setImageURI(Uri.parse(imagePath));
-                    }
-
-
-                    //hides control elements if there is only one media to play
-                    if (allMedia.length == 1) {
-                        previous_button.setVisibility(View.GONE);
-                        forward_button.setVisibility(View.GONE);
-                        bookSpinner.setVisibility(View.GONE);
-                    } else {
-                        previous_button.setVisibility(View.VISIBLE);
-                        forward_button.setVisibility(View.VISIBLE);
-                        bookSpinner.setVisibility(View.VISIBLE);
-                        MediaSpinnerAdapter adapter = new MediaSpinnerAdapter(getActivity(), allMedia);
-                        int currentPosition = b.getPosition();
-                        bookSpinner.setSelection(adapter.getPositionByMediaDetailId(currentPosition));
-                        bookSpinner.setAdapter(adapter);
-                        //sets correct position in spinner
-                        if (allMedia.length > 1) {
-                            bookSpinner.setSelection(adapter.getPositionByMediaDetailId(mediaId));
-                        }
-                        bookSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                if (position != oldPosition) {
-                                    int newMediaId = allMedia[position].getId();
-                                    if (mBound)
-                                        mService.changeBookPosition(newMediaId);
-                                    oldPosition = position;
-                                }
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });
-
-                    }
-
-                    //sets duration of file
-                    duration = media.getDuration();
-                    maxTimeView.setText(formatTime(duration));
-
-                    //sets seekBar to current position and correct length
-                    seek_bar.setMax(duration);
+                MediaDetail media = intent.getParcelableExtra(AudioPlayerService.GUI_MEDIA);
+                //checks if file exists
+                File testFile = new File(media.getPath());
+                if (!testFile.exists()) {
+                    String text = getString(R.string.file_not_found);
+                    Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_LONG);
+                    toast.show();
+                    startActivity(new Intent(getActivity(), BookChoose.class));
                 }
+
+                //hides control elements if there is only one media to play
+                if (allMedia.size() == 1) {
+                    previous_button.setVisibility(View.GONE);
+                    forward_button.setVisibility(View.GONE);
+                    bookSpinner.setVisibility(View.GONE);
+                } else {
+                    previous_button.setVisibility(View.VISIBLE);
+                    forward_button.setVisibility(View.VISIBLE);
+                    bookSpinner.setVisibility(View.VISIBLE);
+
+                    bookSpinner.setSelection(adapter.getPositionByMediaDetailId(media.getId()));
+                }
+
+                //sets duration of file
+                duration = media.getDuration();
+                maxTimeView.setText(formatTime(duration));
+
+                //sets seekBar to current position and correct length
+                seek_bar.setMax(duration);
             }
         }
     };
@@ -270,12 +212,6 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         setHasOptionsMenu(true);
-    }
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_book_play, container, false);
 
         bcm = LocalBroadcastManager.getInstance(getActivity());
 
@@ -283,12 +219,23 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
         bookId = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, 0);
+        book = db.getBook(bookId);
+        allMedia = db.getMediaFromBook(bookId);
 
         //starting the service
         if (BuildConfig.DEBUG) Log.d(TAG, "Starting service with id: " + bookId);
         Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
         serviceIntent.putExtra(AudioPlayerService.BOOK_ID, bookId);
+        serviceIntent.putExtra(AudioPlayerService.GUI_BOOK, book);
+        serviceIntent.putExtra(AudioPlayerService.GUI_ALL_MEDIA, allMedia);
         getActivity().startService(serviceIntent);
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_book_play, container, false);
+
 
         //init buttons
         seek_bar = (SeekBar) v.findViewById(R.id.seekBar);
@@ -332,7 +279,43 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
                 seekBarIsUpdating = false;
             }
         });
+        initGUI();
         return v;
+    }
+
+    private void initGUI() {
+        // cover
+        String imagePath = book.getCover();
+        if (imagePath.equals("") || !new File(imagePath).exists() || new File(imagePath).isDirectory()) {
+            Bitmap cover = CommonTasks.genCapital(book.getName(), CommonTasks.getDisplayMinSize(getActivity()), getResources());
+            coverView.setImageBitmap(cover);
+        } else
+            coverView.setImageURI(Uri.parse(imagePath));
+
+
+        //setting book name
+        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+        String bookName = book.getName();
+        actionBar.setTitle(bookName);
+
+        adapter = new MediaSpinnerAdapter(getActivity(), db.getMediaFromBook(book.getId()));
+        bookSpinner.setAdapter(adapter);
+        bookSpinner.setSelection(adapter.getPositionByMediaDetailId(book.getPosition()));
+        bookSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != oldPosition) {
+                    if (mBound)
+                        mService.changeBookPosition(allMedia.get(position).getId());
+                    oldPosition = position;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private String formatTime(int ms) {

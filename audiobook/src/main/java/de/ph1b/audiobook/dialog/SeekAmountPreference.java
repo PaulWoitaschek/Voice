@@ -5,12 +5,10 @@ import android.content.SharedPreferences;
 import android.preference.DialogPreference;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 
 
@@ -66,8 +64,6 @@ public class SeekAmountPreference extends DialogPreference {
             SharedPreferences.Editor editor = getEditor();
             editor.putInt(getContext().getString(R.string.pref_change_amount), seekAmount + SEEK_BAR_MIN);
             editor.apply();
-            if (BuildConfig.DEBUG)
-                Log.d(TAG, "Put new seek-amount to shared Preferences: " + (seekAmount + SEEK_BAR_MIN));
         }
     }
 }

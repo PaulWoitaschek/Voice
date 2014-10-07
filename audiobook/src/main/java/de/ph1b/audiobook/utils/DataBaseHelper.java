@@ -78,7 +78,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (BuildConfig.DEBUG) Log.d("dbh", "onUpgrade called");
         if (oldVersion == 1 && newVersion == 2) {
             db.beginTransaction();
             try {
@@ -278,7 +277,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public MediaDetail[] getMediaFromBook(int bookId) {
+    public ArrayList<MediaDetail> getMediaFromBook(int bookId) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_MEDIA,
@@ -287,12 +286,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 null, null, null,
                 KEY_MEDIA_ID);
 
-        if (BuildConfig.DEBUG) Log.d("dbh", "cursor has size:" + cursor.getCount());
-        if (BuildConfig.DEBUG) Log.d("dbh", "book id is " + bookId);
-
         if (cursor != null) {
-            MediaDetail[] containingMedia = new MediaDetail[cursor.getCount()];
-            int i = 0;
+            ArrayList<MediaDetail> containingMedia = new ArrayList<MediaDetail>();
             while (cursor.moveToNext()) {
                 MediaDetail media = new MediaDetail();
                 media.setId(Integer.parseInt(cursor.getString(0)));
@@ -301,7 +296,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 media.setPosition(Integer.parseInt(cursor.getString(3)));
                 media.setDuration(Integer.parseInt(cursor.getString(4)));
                 media.setBookId(Integer.parseInt(cursor.getString(5)));
-                containingMedia[i++] = media;
+                containingMedia.add(media);
             }
             cursor.close();
             return containingMedia;

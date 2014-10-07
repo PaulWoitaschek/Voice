@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.utils.MediaDetail;
 
@@ -14,9 +16,9 @@ import de.ph1b.audiobook.utils.MediaDetail;
 public class MediaSpinnerAdapter extends BaseAdapter {
 
     private final Context c;
-    private final MediaDetail[] data;
+    private final ArrayList<MediaDetail> data;
 
-    public MediaSpinnerAdapter(Context c, MediaDetail[] data) {
+    public MediaSpinnerAdapter(Context c, ArrayList<MediaDetail> data) {
         super();
         this.c = c;
         this.data = data;
@@ -24,19 +26,19 @@ public class MediaSpinnerAdapter extends BaseAdapter {
 
     public int getPositionByMediaDetailId(int givenId) {
         for (int i = 0; i < getCount(); i++)
-            if (data[i].getId() == givenId)
+            if (data.get(i).getId() == givenId)
                 return i;
         return 0;
     }
 
     @Override
     public int getCount() {
-        return data != null ? data.length : 0;
+        return data != null ? data.size() : 0;
     }
 
     @Override
     public MediaDetail getItem(int position) {
-        return data[position];
+        return data.get(position);
     }
 
     @Override
@@ -69,7 +71,7 @@ public class MediaSpinnerAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.textView.setText(data[position].getName());
+        viewHolder.textView.setText(data.get(position).getName());
         return convertView;
     }
 

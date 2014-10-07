@@ -15,7 +15,6 @@ public class RemoteControlReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
         KeyEvent event = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
         if (event.getAction() == (KeyEvent.ACTION_DOWN)) {
             int keyCode = event.getKeyCode();
