@@ -15,8 +15,7 @@
         android:id="@+id/action_time_change"
         android:title="@string/action_time_change"
         android:orderInCategory="90"
-        android:icon="@drawable/ic_action_forward"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_settings"
