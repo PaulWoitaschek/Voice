@@ -21,24 +21,13 @@ import de.ph1b.audiobook.service.AudioPlayerService;
 
 public class JumpToPosition extends DialogFragment {
 
-    private int duration;
+    private int durationInMinutes;
     private int biggestHour;
     private NumberPicker mPicker;
     private NumberPicker hPicker;
 
     public static final String POSITION = "position";
     public static final String DURATION = "duration";
-
-    private int maxMinuteOfHour(int hour) {
-        int hourInMinutes = hour * 60;
-        int durationInMinutes = (int) TimeUnit.MILLISECONDS.toMinutes(duration);
-
-        if (hour == biggestHour) {
-            return (durationInMinutes - hourInMinutes) % 60;
-        } else {
-            return 59;
-        }
-    }
 
 
     @NonNull
@@ -51,22 +40,26 @@ public class JumpToPosition extends DialogFragment {
         //passing null is fine because of fragment
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_time_picker, null);
 
-        Bundle bundle = this.getArguments();
-        duration = bundle.getInt(DURATION, 0);
-        int position = bundle.getInt(POSITION, 0);
-
-
         hPicker = (NumberPicker) v.findViewById(R.id.number_hour);
         mPicker = (NumberPicker) v.findViewById(R.id.number_minute);
 
-        //set maximum values
+        Bundle bundle = this.getArguments();
+        int duration = bundle.getInt(DURATION, 0);
+        int position = bundle.getInt(POSITION, 0);
         biggestHour = (int) TimeUnit.MILLISECONDS.toHours(duration);
-        hPicker.setMaxValue(biggestHour);
-        if (biggestHour == 0) {
-            mPicker.setMaxValue((int) TimeUnit.MILLISECONDS.toMinutes(duration));
-        } else {
-            mPicker.setMaxValue(59);
+        durationInMinutes = (int) TimeUnit.MILLISECONDS.toMinutes(duration);
+        if (biggestHour == 0) { //sets visibility of hour related things to gone if max.hour is zero
+            v.findViewById(R.id.hours).setVisibility(View.GONE);
+            v.findViewById(R.id.colon).setVisibility(View.GONE);
+            hPicker.setVisibility(View.GONE);
         }
+
+        //set maximum values
+        hPicker.setMaxValue(biggestHour);
+        if (biggestHour == 0)
+            mPicker.setMaxValue((int) TimeUnit.MILLISECONDS.toMinutes(duration));
+        else
+            mPicker.setMaxValue(59);
 
         //set default values
         int defaultHour = (int) TimeUnit.MILLISECONDS.toHours(position);
@@ -77,7 +70,11 @@ public class JumpToPosition extends DialogFragment {
         hPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                mPicker.setMaxValue(maxMinuteOfHour(newVal));
+                if (newVal == biggestHour) {
+                    mPicker.setMaxValue((durationInMinutes - newVal * 60) % 60);
+                } else {
+                    mPicker.setMaxValue(59);
+                }
             }
         });
 
@@ -86,15 +83,10 @@ public class JumpToPosition extends DialogFragment {
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 int hValue = hPicker.getValue();
 
-                //scrolling forward
-                if (oldVal == 59 && newVal == 0) {
+                if (oldVal == 59 && newVal == 0) //scrolling forward
                     hPicker.setValue(++hValue);
-
-                    //scrolling backward
-                }
-                if (oldVal == 0 && newVal == 59) {
+                if (oldVal == 0 && newVal == 59) //scrolling backward
                     hPicker.setValue(--hValue);
-                }
             }
         });
 
@@ -119,6 +111,4 @@ public class JumpToPosition extends DialogFragment {
 
         return builder.create();
     }
-
-
 }
