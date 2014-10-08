@@ -16,7 +16,6 @@ public class SeekAmountPreference extends DialogPreference {
 
     private final int SEEK_BAR_MIN = 10;
     private SeekBar seekBar;
-    private static final String TAG = "de.ph1b.audiobook.dialog.SeekAmountPreference";
 
     public SeekAmountPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
