@@ -21,11 +21,10 @@
     <string name="action_time_change">Перейти к</string>
     <string name="pref_resume_on_replug">Прокрутка назад</string>
     <string name="pref_resume_on_replug_hint">Автоматическая прокрутка назад после паузы.</string>
-    <string name="action_sleep">Остановить после указанного времени</string>
+    <string name="action_sleep">Таймер сна</string>
     <string name="no_external_storage">Карта памяти недоступна. Пожалуйста убедитесь, что она установлена и вы не соединены кабелем с компьютером.</string>
     <string name="no_external_storage_action_bar_title">Карта памяти</string>
 
-    <string name="action_sleep_title">Таймер сна</string>
     <string name="action_sleep_title_hint_left">Отключить через</string>
     <string name="action_sleep_title_hint_right">минут</string>
     <string name="action_jump_to">Изменение позиции</string>

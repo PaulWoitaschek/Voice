@@ -4,6 +4,7 @@
     <string translatable="false" name="zeroTime">0:00:00</string>
     <string translatable="false" name="pref_change_amount">CHANGE_AMOUNT</string>
     <string translatable="false" name="widget_small">Material Player (1x1)</string>
+    <string translatable="false" name="action_sleep_title">…z..Z..ZZ</string>
 
     <string name="action_add">Add Book</string>
     <string name="cover">Cover</string>
@@ -30,7 +31,6 @@
     <string name="no_external_storage">External Storage is not available. Please make sure it is connected and not mounted in your computer.</string>
     <string name="no_external_storage_action_bar_title">External Storage</string>
 
-    <string name="action_sleep_title">Sleep timer</string>
     <string name="action_sleep_title_hint_left">Pauses after</string>
     <string name="action_sleep_title_hint_right">minutes</string>
     <string name="action_jump_to">Position changer</string>
