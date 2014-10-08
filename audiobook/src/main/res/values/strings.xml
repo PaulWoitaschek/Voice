@@ -27,7 +27,7 @@
     <string name="action_time_change">Jump to</string>
     <string name="pref_resume_on_replug">Resume playback</string>
     <string name="pref_resume_on_replug_hint">If you paused by plugging headset out, it will resume on replug.</string>
-    <string name="action_sleep">Pauses after scheduled time</string>
+    <string name="action_sleep">Sleep-Timer</string>
     <string name="no_external_storage">External Storage is not available. Please make sure it is connected and not mounted in your computer.</string>
     <string name="no_external_storage_action_bar_title">External Storage</string>
 
