@@ -40,6 +40,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -182,8 +183,6 @@ public class FilesAddFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 int size = bitmapList.size();
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, "pressed next cover, current position and size is: " + coverPosition + ", " + size);
                 if (size > 0 && coverPosition + 1 < size) {
                     setCoverLoading(false);
                     coverPosition++;
@@ -198,8 +197,6 @@ public class FilesAddFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 int size = bitmapList.size();
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, "pressed previous cover, current position and size is: " + coverPosition + ", " + size);
                 if (size > 0 && coverPosition > 0) {
                     setCoverLoading(false);
                     coverPosition--;
@@ -306,11 +303,19 @@ public class FilesAddFragment extends Fragment {
                         String imageUrl = results.getJSONObject(0).getString("url");
 
                         if (imageUrl != null) {
-                            if (BuildConfig.DEBUG)
-                                Log.d(TAG, imageUrl);
-
+                            BitmapFactory.Options options = new BitmapFactory.Options();
+                            options.inJustDecodeBounds = true;
                             URL url = new URL(imageUrl);
-                            return BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                            InputStream inputStream = url.openConnection().getInputStream();
+                            BitmapFactory.decodeStream(inputStream, null, options);
+
+                            // Calculate inSampleSize
+                            int coverDimensions = CommonTasks.getDisplayMinSize(getActivity());
+                            options.inSampleSize = calculateInSampleSize(options, coverDimensions, coverDimensions);
+
+                            // Decode bitmap with inSampleSize set
+                            options.inJustDecodeBounds = false;
+                            return BitmapFactory.decodeStream(inputStream, null, options);
                         }
                     } catch (Exception e) {
                         if (BuildConfig.DEBUG)
@@ -330,6 +335,27 @@ public class FilesAddFragment extends Fragment {
                 }
             }.execute(search);
         }
+    }
+
+    private int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 
 
@@ -491,7 +517,7 @@ public class FilesAddFragment extends Fragment {
             if (BuildConfig.DEBUG)
                 Log.d(TAG, "Saving image: " + coverPath);
         } catch (IOException e) {
-            e.printStackTrace();
+            if (BuildConfig.DEBUG) Log.d(TAG, e.toString());
         }
         return new String[]{coverPath, thumbPath};
     }
