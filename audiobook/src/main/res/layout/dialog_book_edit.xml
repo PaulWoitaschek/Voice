@@ -53,7 +53,7 @@
     <LinearLayout
         android:id="@+id/cover_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="250dp"
         android:layout_marginBottom="10dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
@@ -66,12 +66,27 @@
             style="?android:attr/borderlessButtonStyle"
             android:contentDescription="@string/content_previous_cover" />
 
-        <ImageView
-            android:id="@+id/cover"
+        <FrameLayout
             android:layout_width="0dp"
-            android:layout_height="170dp"
-            android:contentDescription="@string/content_cover"
-            android:layout_weight="1" />
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ProgressBar
+                android:id="@+id/cover_replacement"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/cover"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:contentDescription="@string/content_cover" />
+        </FrameLayout>
+
 
         <ImageButton
             android:id="@+id/next_cover"

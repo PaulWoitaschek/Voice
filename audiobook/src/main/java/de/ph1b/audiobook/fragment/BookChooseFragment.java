@@ -207,7 +207,9 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                         bookToEdit = adapt.getCheckedBooks().get(0);
 
                         ArrayList<Bitmap> bitmap = new ArrayList<Bitmap>();
-                        bitmap.add(BitmapFactory.decodeFile(bookToEdit.getCover()));
+                        Bitmap defaultCover = BitmapFactory.decodeFile(bookToEdit.getCover());
+                        if (defaultCover != null)
+                            bitmap.add(defaultCover);
 
                         bundle.putParcelableArrayList(EditBook.BOOK_COVER, bitmap);
                         bundle.putString(EditBook.DIALOG_TITLE, getString(R.string.edit_book_title));

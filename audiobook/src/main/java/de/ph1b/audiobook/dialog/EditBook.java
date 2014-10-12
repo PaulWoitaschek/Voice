@@ -7,21 +7,26 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.utils.CommonTasks;
 
 public class EditBook extends DialogFragment implements View.OnClickListener {
 
@@ -29,11 +34,15 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
     public static final String BOOK_COVER = "BOOK_COVER";
     public static final String DIALOG_TITLE = "DIALOG_TITLE";
 
-    private int coverPosition;
     private ImageView cover;
-    private ImageButton previousDialogCover;
+    private ProgressBar coverReplacement;
+    private ImageButton previousCover;
+    private ImageButton nextCover;
     private EditText nameEditText;
+
+    private int coverPosition;
     private ArrayList<Bitmap> covers;
+    int googleCount = 1;
 
     @Override
     public void onClick(View view) {
@@ -45,14 +54,18 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
                 coverPosition--;
                 cover.setImageBitmap(covers.get(coverPosition));
                 cover.setVisibility(View.VISIBLE);
+                coverReplacement.setVisibility(View.GONE);
+                nextCover.setVisibility(View.VISIBLE);
                 if (coverPosition == 0)
-                    previousDialogCover.setVisibility(View.INVISIBLE);
+                    previousCover.setVisibility(View.INVISIBLE);
                 break;
             case R.id.next_cover:
                 if (coverPosition < covers.size() - 1) {
                     coverPosition++;
                     cover.setImageBitmap(covers.get(coverPosition));
-                    previousDialogCover.setVisibility(View.VISIBLE);
+                    previousCover.setVisibility(View.VISIBLE);
+                } else {
+                    new AddCoverAsync(nameEditText.getText().toString(), googleCount++).execute();
                 }
                 break;
             default:
@@ -87,32 +100,41 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
         nameEditText = (EditText) v.findViewById(R.id.book_name);
         ImageButton removeBookName = (ImageButton) v.findViewById(R.id.book_name_remove);
         cover = (ImageView) v.findViewById(R.id.cover);
-        previousDialogCover = (ImageButton) v.findViewById(R.id.previous_cover);
-        ImageButton nextDialogCover = (ImageButton) v.findViewById(R.id.next_cover);
+        coverReplacement = (ProgressBar) v.findViewById(R.id.cover_replacement);
+        previousCover = (ImageButton) v.findViewById(R.id.previous_cover);
+        nextCover = (ImageButton) v.findViewById(R.id.next_cover);
         final TextView emptyTitleText = (TextView) v.findViewById(R.id.empty_title);
 
         //init listeners
         removeBookName.setOnClickListener(this);
-        nextDialogCover.setOnClickListener(this);
-        previousDialogCover.setOnClickListener(this);
+        nextCover.setOnClickListener(this);
+        previousCover.setOnClickListener(this);
 
         builder.setTitle(R.string.action_jump_to);
         builder.setNegativeButton(R.string.dialog_cancel, null);
 
-
         //init values
         nameEditText.setText(defaultName);
-        if (covers.size() > 0) {
-            cover.setImageBitmap(covers.get(0));
+
+        previousCover.setVisibility(View.INVISIBLE);
+        boolean online = CommonTasks.isOnline(getActivity());
+        int coverSize = covers.size();
+        if (BuildConfig.DEBUG) Log.d("ebk", String.valueOf(coverSize));
+
+        //sets up cover according to online state and amount of covers available
+        if (coverSize == 0) {
+            if (online) {
+                if (BuildConfig.DEBUG) Log.d("ebk", "p1");
+                new AddCoverAsync(defaultName, googleCount++).execute();
+            } else {
+                coverLayout.setVisibility(View.GONE);
+            }
         }
-        coverPosition = 0;
-
-
-        previousDialogCover.setVisibility(View.INVISIBLE);
-        if (covers.size() == 0) {
-            coverLayout.setVisibility(View.GONE);
-        } else if (covers.size() == 1) {
-            nextDialogCover.setVisibility(View.INVISIBLE);
+        if (coverSize > 0) {
+            cover.setImageBitmap(covers.get(0));
+            coverPosition = 0;
+            if (!online && coverSize == 1)
+                nextCover.setVisibility(View.INVISIBLE);
         }
 
 
@@ -154,8 +176,44 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                googleCount = 0;
             }
         });
         return editBook;
+    }
+
+    private class AddCoverAsync extends AsyncTask<Void, Void, Bitmap> {
+        String searchString;
+        int pageCounter;
+
+        public AddCoverAsync(String searchString, int pageCounter) {
+            this.searchString = searchString;
+            this.pageCounter = pageCounter;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            coverReplacement.setVisibility(View.VISIBLE);
+            cover.setVisibility(View.GONE);
+        }
+
+        @Override
+        protected Bitmap doInBackground(Void... voids) {
+            return CommonTasks.genBitmapFromInternet(searchString, pageCounter);
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            coverReplacement.setVisibility(View.GONE);
+            cover.setVisibility(View.VISIBLE);
+            if (bitmap != null) {
+                covers.add(bitmap);
+                coverPosition = covers.indexOf(bitmap);
+                cover.setImageBitmap(bitmap);
+                previousCover.setVisibility(View.VISIBLE);
+            } else {
+                new AddCoverAsync(searchString, googleCount++).execute();
+            }
+        }
     }
 }

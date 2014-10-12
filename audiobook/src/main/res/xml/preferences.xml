@@ -5,6 +5,11 @@
         android:title="@string/pref_resume_on_replug"
         android:summary="@string/pref_resume_on_replug_hint"
         android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="@string/pref_cover_on_internet"
+        android:title="@string/pref_cover_on_internet"
+        android:summary="@string/pref_cover_on_internet_hint"
+        android:defaultValue="false" />
     <de.ph1b.audiobook.dialog.SeekAmountPreference
         android:key="@string/change_forward_amount"
         android:title="@string/change_forward_amount" />
