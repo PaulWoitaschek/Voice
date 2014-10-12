@@ -502,7 +502,9 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         @Override
         protected void onPostExecute(Void result) {
             progressDialog.cancel();
-            startActivity(new Intent(getActivity(), BookChoose.class));
+            Intent i = new Intent(getActivity(), BookChoose.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
         }
     }
 
