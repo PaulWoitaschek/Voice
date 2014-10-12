@@ -42,7 +42,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
 
     private int coverPosition;
     private ArrayList<Bitmap> covers;
-    int googleCount = 1;
+    int googleCount = 0;
 
     @Override
     public void onClick(View view) {

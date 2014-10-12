@@ -95,9 +95,7 @@ public class CommonTasks {
         int pixelCut = 10;
         // if cover is too big, scale it down
         int displayPx = CommonTasks.getDisplayMinSize(a);
-        if (cover.getWidth() > displayPx || cover.getHeight() > displayPx) {
-            cover = Bitmap.createScaledBitmap(cover, displayPx, displayPx, false);
-        }
+        cover = Bitmap.createScaledBitmap(cover, displayPx, displayPx, false);
         cover = Bitmap.createBitmap(cover, pixelCut, pixelCut, cover.getWidth() - 2 * pixelCut, cover.getHeight() - 2 * pixelCut); //crop n px from each side for poor images
         int thumbPx = CommonTasks.convertDpToPx(a.getResources().getDimension(R.dimen.thumb_size), a.getResources());
         Bitmap thumb = Bitmap.createScaledBitmap(cover, thumbPx, thumbPx, false);
