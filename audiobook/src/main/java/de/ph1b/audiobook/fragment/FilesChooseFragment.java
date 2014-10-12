@@ -4,6 +4,7 @@ package de.ph1b.audiobook.fragment;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
@@ -397,16 +398,26 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                 toast.show();
             } else {
                 //fragments onEditBookFinished sets visibilities of spinner and views
-                EditBook editBook = new EditBook();
-                Bundle bundle = new Bundle();
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                boolean fastAdd = sharedPref.getBoolean(getString(R.string.pref_fast_add), false);
+                if (!fastAdd) {
+                    EditBook editBook = new EditBook();
+                    Bundle bundle = new Bundle();
 
-                bundle.putParcelableArrayList(EditBook.BOOK_COVER, bitmaps);
-                bundle.putString(EditBook.DIALOG_TITLE, getString(R.string.book_add));
-                bundle.putString(EditBook.BOOK_NAME, bookTitle);
+                    bundle.putParcelableArrayList(EditBook.BOOK_COVER, bitmaps);
+                    bundle.putString(EditBook.DIALOG_TITLE, getString(R.string.book_add));
+                    bundle.putString(EditBook.BOOK_NAME, bookTitle);
 
-                editBook.setArguments(bundle);
-                editBook.setTargetFragment(FilesChooseFragment.this, 0);
-                editBook.show(getFragmentManager(), TAG);
+                    editBook.setArguments(bundle);
+                    editBook.setTargetFragment(FilesChooseFragment.this, 0);
+                    editBook.show(getFragmentManager(), TAG);
+                } else {
+                    Bitmap cover = null;
+                    if (bitmaps.size() > 0) {
+                        cover = bitmaps.get(0);
+                    }
+                    onEditBookFinished(bookTitle, cover, true);
+                }
             }
         }
     }
