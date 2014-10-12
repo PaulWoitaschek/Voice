@@ -2,7 +2,6 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <item name="android:background">?android:attr/activatedBackgroundIndicator</item>
         <item name="android:actionModeCloseButtonStyle">@style/NoCloseButton</item>
     </style>
 

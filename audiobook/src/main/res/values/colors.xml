@@ -4,4 +4,5 @@
     <color name="file_chooser_audio">#ff7c3fe3</color>
     <color name="holo_blue_dark">#ff0099cc</color>
     <color name="transparent_widget_background">#80ffffff</color>
+    <color name="holo_red_dark">#ffcc0000</color>
 </resources>

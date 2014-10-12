@@ -277,7 +277,7 @@ public class AudioPlayerService extends Service {
             int width = (int) res.getDimension(android.R.dimen.notification_large_icon_width);
             int size = height < width ? height : width;
 
-            if (thumbPath.equals("") || !new File(thumbPath).exists() || new File(thumbPath).isDirectory()) {
+            if (thumbPath == null || thumbPath.equals("") || !new File(thumbPath).exists() || new File(thumbPath).isDirectory()) {
                 return CommonTasks.genCapital(book.getName(), size, getResources());
             } else {
                 Bitmap thumb = BitmapFactory.decodeFile(thumbPath);
@@ -467,8 +467,8 @@ public class AudioPlayerService extends Service {
                 try {
                     stateManager.setTime(mediaPlayer.getCurrentPosition());
                     Intent i = new Intent(GUI);
-                   // i.putExtra(GUI_BOOK, book);
-                   // i.putExtra(GUI_ALL_MEDIA, allMedia);
+                    // i.putExtra(GUI_BOOK, book);
+                    // i.putExtra(GUI_ALL_MEDIA, allMedia);
                     i.putExtra(GUI_MEDIA, media);
                     bcm.sendBroadcast(i);
                 } finally {
@@ -834,7 +834,7 @@ public class AudioPlayerService extends Service {
                     editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName());
                     String coverPath = book.getCover();
                     Bitmap bitmap;
-                    if (coverPath.equals("") || !new File(coverPath).exists() || new File(coverPath).isDirectory()) {
+                    if (coverPath == null || coverPath.equals("") || !new File(coverPath).exists() || new File(coverPath).isDirectory()) {
                         bitmap = CommonTasks.genCapital(book.getName(), 500, getResources());
                     } else {
                         bitmap = BitmapFactory.decodeFile(book.getCover());

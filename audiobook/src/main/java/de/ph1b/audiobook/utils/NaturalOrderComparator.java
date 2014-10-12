@@ -4,12 +4,9 @@ package de.ph1b.audiobook.utils;
 import java.io.File;
 import java.util.Comparator;
 
-public class NaturalOrderComparator<T> implements Comparator<T> {
+public class NaturalOrderComparator implements Comparator<File> {
 
-    public int compare(T o1, T o2) {
-        File f1 = (File) o1;
-        File f2 = (File) o2;
-
+    public int compare(File f1, File f2) {
         if (f1.isDirectory() && !f2.isDirectory()) {
             // Directory before non-directory
             return -1;

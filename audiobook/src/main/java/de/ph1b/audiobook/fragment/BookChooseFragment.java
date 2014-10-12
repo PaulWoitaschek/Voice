@@ -8,14 +8,13 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -35,13 +34,13 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
 
-import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookChoose;
 import de.ph1b.audiobook.activity.BookPlay;
 import de.ph1b.audiobook.activity.FilesChoose;
 import de.ph1b.audiobook.activity.Settings;
 import de.ph1b.audiobook.adapter.MediaAdapter;
+import de.ph1b.audiobook.dialog.EditBook;
 import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
@@ -50,12 +49,12 @@ import de.ph1b.audiobook.utils.CommonTasks;
 import de.ph1b.audiobook.utils.DataBaseHelper;
 
 
-public class BookChooseFragment extends Fragment {
+public class BookChooseFragment extends Fragment implements View.OnClickListener, EditBook.OnEditBookFinished {
 
-    private static final String TAG = "de.ph1b.audiobook.fragment.BookChoose";
+
+    private static final String TAG = "de.ph1b.audiobook.fragment.BookChooseFragment";
 
     private ArrayList<BookDetail> details;
-    private ArrayList<BookDetail> deleteList;
     private DataBaseHelper db;
     private MediaAdapter adapt;
 
@@ -66,6 +65,9 @@ public class BookChooseFragment extends Fragment {
 
     private AudioPlayerService mService;
     private boolean mBound = false;
+    private ActionMode actionMode;
+    private BookDetail currentBook;
+    private BookDetail bookToEdit;
 
     private final ServiceConnection mConnection = new ServiceConnection() {
         @Override
@@ -128,9 +130,7 @@ public class BookChooseFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         db = DataBaseHelper.getInstance(getActivity());
-
         details = db.getAllBooks();
-        deleteList = new ArrayList<BookDetail>();
 
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
     }
@@ -148,24 +148,24 @@ public class BookChooseFragment extends Fragment {
         currentCover = (ImageView) v.findViewById(R.id.current_cover);
         currentText = (TextView) v.findViewById(R.id.current_text);
         currentPlaying = (ImageButton) v.findViewById(R.id.current_playing);
-        ListView mediaListView = (ListView) v.findViewById(R.id.listMediaView);
+        final ListView mediaListView = (ListView) v.findViewById(R.id.listMediaView);
 
         adapt = new MediaAdapter(details, getActivity());
         mediaListView.setAdapter(adapt);
+
 
         mediaListView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
         mediaListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
             @Override
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-                if (checked) {
-                    deleteList.add(details.get(position));
-                } else {
-                    deleteList.remove(details.get(position));
-                }
+                adapt.setBookChecked(details.get(position).getId(), checked);
+                // invalidates to invoke onPrepareActionMode again
+                mode.invalidate();
             }
 
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                actionMode = mode;
                 MenuInflater inflater = mode.getMenuInflater();
                 inflater.inflate(R.menu.action_mode_mediaview, menu);
                 return true;
@@ -173,21 +173,24 @@ public class BookChooseFragment extends Fragment {
 
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                return false;
+                MenuItem actionEdit = menu.findItem(R.id.action_edit);
+                if (mediaListView.getCheckedItemCount() > 1)
+                    actionEdit.setVisible(false);
+                if (mediaListView.getCheckedItemCount() == 1)
+                    actionEdit.setVisible(true);
+                return true;
             }
 
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_delete:
-
                         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
                         int position = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
-                        for (BookDetail b : deleteList) {
+                        ArrayList<BookDetail> books = adapt.getCheckedBooks();
+                        for (BookDetail b : books) {
                             //setting visibility of play list at bottom to gone if book is gone
                             if (b.getId() == position) {
-                                if (BuildConfig.DEBUG)
-                                    Log.d(TAG, "Deleted Book that is marked as current with ID: " + position);
                                 current.setVisibility(View.GONE);
                             }
                             details.remove(b);
@@ -195,8 +198,24 @@ public class BookChooseFragment extends Fragment {
 
                         adapt.notifyDataSetChanged();
 
-                        new DeleteBookAsync().execute();
+                        db.deleteBooksAsync(books);
                         mode.finish();
+                        return true;
+                    case R.id.action_edit:
+                        EditBook editBook = new EditBook();
+                        Bundle bundle = new Bundle();
+                        bookToEdit = adapt.getCheckedBooks().get(0);
+
+                        ArrayList<Bitmap> bitmap = new ArrayList<Bitmap>();
+                        bitmap.add(BitmapFactory.decodeFile(bookToEdit.getCover()));
+
+                        bundle.putParcelableArrayList(EditBook.BOOK_COVER, bitmap);
+                        bundle.putString(EditBook.DIALOG_TITLE, getString(R.string.edit_book_title));
+                        bundle.putString(EditBook.BOOK_NAME, bookToEdit.getName());
+
+                        editBook.setArguments(bundle);
+                        editBook.setTargetFragment(BookChooseFragment.this, 0);
+                        editBook.show(getFragmentManager(), TAG);
                         return true;
                     default:
                         return false;
@@ -205,6 +224,7 @@ public class BookChooseFragment extends Fragment {
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
+                adapt.unCheckAll();
             }
         });
 
@@ -227,10 +247,8 @@ public class BookChooseFragment extends Fragment {
         return v;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
 
+    private void refreshBookList() {
         //updates list each time!
         ArrayList<BookDetail> tempDetails = db.getAllBooks();
         details.clear();
@@ -243,22 +261,28 @@ public class BookChooseFragment extends Fragment {
             toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL, 0, 0);
             toast.show();
         }
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        refreshBookList();
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
         int position = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
 
-        final BookDetail b = db.getBook(position);
+        currentBook = db.getBook(position);
 
-        if (b != null) {
+        if (currentBook != null) {
             Intent i = new Intent(getActivity(), AudioPlayerService.class);
-            i.putExtra(AudioPlayerService.BOOK_ID, b.getId());
+            i.putExtra(AudioPlayerService.BOOK_ID, currentBook.getId());
             getActivity().startService(i);
 
             //setting cover
-            String thumbPath = b.getThumb();
-            if (thumbPath.equals("") || !new File(thumbPath).exists() || new File(thumbPath).isDirectory()) {
-                String bookName = b.getName();
+            String thumbPath = currentBook.getThumb();
+            if (thumbPath == null || thumbPath.equals("") || !new File(thumbPath).exists() || new File(thumbPath).isDirectory()) {
+                String bookName = currentBook.getName();
                 float dp = getResources().getDimension(R.dimen.thumb_size);
                 int px = CommonTasks.convertDpToPx(dp, getResources());
                 Bitmap thumb = CommonTasks.genCapital(bookName, px, getResources());
@@ -267,31 +291,11 @@ public class BookChooseFragment extends Fragment {
                 currentCover.setImageURI(Uri.parse(thumbPath));
             }
 
-
             //setting text
-            currentText.setText(b.getName());
-
-            current.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(getActivity(), BookPlay.class);
-                    i.putExtra(AudioPlayerService.BOOK_ID, b.getId());
-                    startActivity(i);
-                }
-            });
-
-            currentPlaying.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
-                    serviceIntent.putExtra(AudioPlayerService.BOOK_ID, b.getId());
-                    serviceIntent.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
-                    getActivity().startService(serviceIntent);
-                }
-            });
-
+            currentText.setText(currentBook.getName());
+            current.setOnClickListener(this);
+            currentPlaying.setOnClickListener(this);
             current.setVisibility(View.VISIBLE);
-
         } else {
             current.setVisibility(View.GONE);
         }
@@ -318,13 +322,37 @@ public class BookChooseFragment extends Fragment {
         }
     }
 
-    private class DeleteBookAsync extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            for (BookDetail b : deleteList) {
-                db.deleteBook(b);
-            }
-            return null;
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.current:
+                Intent i = new Intent(getActivity(), BookPlay.class);
+                i.putExtra(AudioPlayerService.BOOK_ID, currentBook.getId());
+                startActivity(i);
+                break;
+            case R.id.current_playing:
+                Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
+                serviceIntent.putExtra(AudioPlayerService.BOOK_ID, currentBook.getId());
+                serviceIntent.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
+                getActivity().startService(serviceIntent);
+                break;
+            default:
+                break;
         }
+    }
+
+    @Override
+    public void onEditBookFinished(String bookName, Bitmap cover, Boolean success) {
+        if (success) {
+            bookToEdit.setName(bookName);
+            String[] coverPaths = CommonTasks.saveCovers(cover, getActivity());
+            bookToEdit.setCover(coverPaths[0]);
+            bookToEdit.setThumb(coverPaths[1]);
+            db.updateBook(bookToEdit);
+            refreshBookList();
+        }
+        if (actionMode != null)
+            actionMode.finish();
     }
 }

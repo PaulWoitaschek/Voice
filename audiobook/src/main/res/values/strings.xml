@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string translatable="false" name="app_name">Material Player</string>
     <string translatable="false" name="zeroTime">0:00:00</string>
     <string translatable="false" name="pref_change_amount">CHANGE_AMOUNT</string>
@@ -15,15 +15,14 @@
     <string name="forward">Forward</string>
     <string name="action_delete">Delete</string>
     <string name="action_add_badge">Add Media</string>
-    <string name="book_name_hint">Name of audiobook</string>
     <string name="book_add">Add book</string>
     <string name="book_add_empty_title">Add a title</string>
     <string name="description_thumbnail">Thumbnail for cover</string>
     <string name="book_no_media">Choice contains no media.</string>
     <string name="next_song">Next song</string>
     <string name="previous_song">Previous song</string>
-    <string name="choose_time_okay">Set</string>
-    <string name="choose_time_cancel">Cancel</string>
+    <string name="dialog_confirm">Set</string>
+    <string name="dialog_cancel">Cancel</string>
     <string name="action_time_change">Jump to</string>
     <string name="pref_resume_on_replug">Resume playback</string>
     <string name="pref_resume_on_replug_hint">If you paused by plugging headset out, it will resume on replug.</string>
@@ -51,4 +50,9 @@
     <string name="change_forward_amount">Fast forward</string>
     <string name="book_add_progress_title">Adding book</string>
     <string name="book_add_progress_message">Please wait while the book is being added.</string>
+
+    <string tools:ignore="MissingTranslation" name="edit_book_title">Edit book</string>
+    <string tools:ignore="MissingTranslation" name="book_title_delete">Delete book-title</string>
+    <string tools:ignore="MissingTranslation" name="action_edit">Edit book</string>
+
 </resources>

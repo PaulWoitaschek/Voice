@@ -287,7 +287,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
     private void initGUI() {
         // cover
         String imagePath = book.getCover();
-        if (imagePath.equals("") || !new File(imagePath).exists() || new File(imagePath).isDirectory()) {
+        if (imagePath == null || imagePath.equals("") || !new File(imagePath).exists() || new File(imagePath).isDirectory()) {
             Bitmap cover = CommonTasks.genCapital(book.getName(), CommonTasks.getDisplayMinSize(getActivity()), getResources());
             coverView.setImageBitmap(cover);
         } else

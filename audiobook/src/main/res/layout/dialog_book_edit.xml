@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <EditText
+            android:id="@+id/book_name"
+            android:focusableInTouchMode="true"
+            android:textSize="20sp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:inputType="textCapSentences"
+            android:layout_gravity="center_vertical"
+            android:singleLine="true" />
+
+        <ImageButton
+            android:id="@+id/book_name_remove"
+            android:layout_width="30sp"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:layout_marginRight="3dp"
+            android:layout_marginEnd="3dp"
+            android:src="@drawable/ic_action_remove"
+            android:layout_gravity="end|center_vertical"
+            style="?android:attr/borderlessButtonStyle"
+            android:contentDescription="@string/book_title_delete" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/empty_title"
+        android:text="@string/book_add_empty_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:visibility="invisible"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="5dp"
+        android:gravity="center_vertical"
+        android:textColor="@color/holo_red_dark" />
+
+    <LinearLayout
+        android:id="@+id/cover_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/previous_cover"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_action_previous_item"
+            style="?android:attr/borderlessButtonStyle"
+            android:contentDescription="@string/content_previous_cover" />
+
+        <ImageView
+            android:id="@+id/cover"
+            android:layout_width="0dp"
+            android:layout_height="170dp"
+            android:contentDescription="@string/content_cover"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/next_cover"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_action_next_item"
+            style="?android:attr/borderlessButtonStyle"
+            android:contentDescription="@string/content_next_cover" />
+    </LinearLayout>
+</LinearLayout>

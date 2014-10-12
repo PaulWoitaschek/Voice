@@ -2,7 +2,11 @@ package de.ph1b.audiobook.fragment;
 
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,7 +25,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -39,29 +42,62 @@ import java.util.regex.Pattern;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.FilesAdd;
+import de.ph1b.audiobook.activity.BookChoose;
 import de.ph1b.audiobook.activity.FilesChoose;
 import de.ph1b.audiobook.activity.Settings;
 import de.ph1b.audiobook.adapter.FileAdapter;
+import de.ph1b.audiobook.dialog.EditBook;
 import de.ph1b.audiobook.interfaces.OnBackPressedListener;
+import de.ph1b.audiobook.utils.BookDetail;
+import de.ph1b.audiobook.utils.CommonTasks;
+import de.ph1b.audiobook.utils.DataBaseHelper;
+import de.ph1b.audiobook.utils.MediaDetail;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
 
-public class FilesChooseFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
+public class FilesChooseFragment extends Fragment implements EditBook.OnEditBookFinished {
 
     private static final String TAG = "de.ph1b.audiobook.fragment.FilesChooseFragment";
 
     private final LinkedList<String> link = new LinkedList<String>();
     private final ArrayList<String> dirs = getStorageDirectories();
-    private ArrayList<File> fileList;
-    private ArrayList<File> dirAddList;
+    private final ArrayList<File> fileList = new ArrayList<File>();
+    private ArrayList<File> mediaFiles = new ArrayList<File>();
 
     private ListView fileListView;
     private Spinner dirSpinner;
-    private ProgressBar progressBar;
+    private ProgressBar loadingView;
     private FileAdapter adapter;
 
     private ActionMode actionMode;
     private ActionMode.Callback mActionModeCallback;
+
+    private final ArrayList<String> audioTypes = genAudioTypes();
+
+    private ArrayList<String> genAudioTypes() {
+        ArrayList<String> audioTypes = new ArrayList<String>();
+        audioTypes.add(".3gp");
+        audioTypes.add(".mp4");
+        audioTypes.add(".m4a");
+        audioTypes.add(".mp3");
+        audioTypes.add(".mid");
+        audioTypes.add(".xmf");
+        audioTypes.add(".mxmf");
+        audioTypes.add(".rtttl");
+        audioTypes.add(".rtx");
+        audioTypes.add(".ota");
+        audioTypes.add(".imy");
+        audioTypes.add(".ogg");
+        audioTypes.add(".wav");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+            audioTypes.add(".aac");
+            audioTypes.add(".flac");
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+            audioTypes.add(".mkv");
+
+        return audioTypes;
+    }
 
 
     @Override
@@ -80,8 +116,8 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
         View v = inflater.inflate(R.layout.fragment_files_choose, container, false);
 
         dirSpinner = (Spinner) v.findViewById(R.id.dirSpinner);
-        progressBar = (ProgressBar) v.findViewById(R.id.progress);
         fileListView = (ListView) v.findViewById(R.id.fileListView);
+        loadingView = (ProgressBar) v.findViewById(R.id.progress);
 
         if (dirs.size() > 1) {
             dirSpinner.setVisibility(View.VISIBLE);
@@ -188,8 +224,6 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
     private final OnBackPressedListener onBackPressedListener = new OnBackPressedListener() {
         @Override
         public synchronized void backPressed() {
-            if (BuildConfig.DEBUG)
-                Log.d(TAG, "backPressed called with link size: " + link.size());
             if (link.size() < 2) {
                 //setting onBackPressedListener to null and invoke new onBackPressed
                 //to invoke super.onBackPressed();
@@ -225,9 +259,6 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
 
         if (dirs.size() > 1)
             dirSpinner.setVisibility(View.VISIBLE);
-        fileListView.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.GONE);
-
         ((FilesChoose) getActivity()).setOnBackPressedListener(onBackPressedListener);
     }
 
@@ -238,16 +269,9 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
         ((FilesChoose) getActivity()).setOnBackPressedListener(null);
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, String.valueOf(isChecked));
-        fileListView.getPositionForView(buttonView);
-    }
 
-    public void checkStateChanged(ArrayList<File> dirAddList) {
-        this.dirAddList = dirAddList;
-        if (dirAddList.size() > 0 && mActionModeCallback == null) {
+    public void checkStateChanged(final ArrayList<File> files) {
+        if (files.size() > 0 && mActionModeCallback == null) {
             mActionModeCallback = new ActionMode.Callback() {
 
                 @Override
@@ -266,7 +290,8 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
                 public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.action_add_badge:
-                            addMediaBundleAsync();
+                            new LaunchEditDialog(files).execute();
+                            //new AddMediaBundleAsync(files).execute();
                             mode.finish();
                             return true;
                         default:
@@ -283,90 +308,241 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
             };
 
             actionMode = ((ActionBarActivity) getActivity()).startSupportActionMode(mActionModeCallback);
-        } else if (dirAddList.size() == 0) {
+        } else if (files.size() == 0) {
             if (actionMode != null) {
                 actionMode.finish();
             }
         }
     }
 
+    private class LaunchEditDialog extends AsyncTask<Void, Void, Void> {
 
-    private boolean hasAudio(ArrayList<File> files) {
-        for (File f : files) {
-            if (FilesChoose.isAudio(f.getName())) {
-                return true;
-            } else if (f.isDirectory()) {
-                if (hasAudio(new ArrayList<File>(Arrays.asList(f.listFiles()))))
-                    return true;
+        private ArrayList<File> files;
+        //private ArrayList<File> mediaFiles = new ArrayList<File>();
+        private final ArrayList<File> imageFiles = new ArrayList<File>();
+        private final ArrayList<Bitmap> bitmaps = new ArrayList<Bitmap>();
+        private String bookTitle;
+
+        public LaunchEditDialog(ArrayList<File> files) {
+            this.files = files;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            dirSpinner.setVisibility(View.GONE);
+            fileListView.setVisibility(View.GONE);
+            loadingView.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Collections.sort(files, new NaturalOrderComparator());
+
+            //title
+            File firstFile = files.get(0);
+            bookTitle = firstFile.getName();
+            if (firstFile.isFile())
+                bookTitle = bookTitle.substring(0, bookTitle.lastIndexOf("."));
+
+            files = addFilesRecursive(files);
+
+
+            mediaFiles = new ArrayList<File>();
+            for (File f : files) {
+                if (isAudio(f)) {
+                    mediaFiles.add(f);
+                } else if (isImage(f)) {
+                    imageFiles.add(f);
+                }
+            }
+
+            //checking media files for covers
+            int attempt = 0;
+            for (File media : mediaFiles) {
+                if (attempt++ > 4 || bitmaps.size() > 0)
+                    break;
+                MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+                mmr.setDataSource(media.getAbsolutePath());
+                byte[] data = mmr.getEmbeddedPicture();
+                if (data != null) {
+                    try {
+                        Bitmap cover = BitmapFactory.decodeByteArray(data, 0, data.length);
+                        if (cover != null)
+                            bitmaps.add(cover);
+                    } catch (Exception e) {
+                        if (BuildConfig.DEBUG) Log.d(TAG, e.toString());
+                    }
+                }
+            }
+
+            //checking imageFiles for cover
+            for (File image : imageFiles) {
+                Bitmap cover = BitmapFactory.decodeFile(image.getAbsolutePath());
+                if (cover != null)
+                    bitmaps.add(cover);
+            }
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if (mediaFiles.size() == 0) {
+                dirSpinner.setVisibility(View.VISIBLE);
+                fileListView.setVisibility(View.VISIBLE);
+                loadingView.setVisibility(View.GONE);
+
+                CharSequence text = getString(R.string.book_no_media);
+                Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
+                toast.show();
+            } else {
+                //fragments onEditBookFinished sets visibilities of spinner and views
+                EditBook editBook = new EditBook();
+                Bundle bundle = new Bundle();
+
+                bundle.putParcelableArrayList(EditBook.BOOK_COVER, bitmaps);
+                bundle.putString(EditBook.DIALOG_TITLE, getString(R.string.book_add));
+                bundle.putString(EditBook.BOOK_NAME, bookTitle);
+
+                editBook.setArguments(bundle);
+                editBook.setTargetFragment(FilesChooseFragment.this, 0);
+                editBook.show(getFragmentManager(), TAG);
             }
         }
+    }
+
+
+    private boolean isAudio(File file) {
+        for (String s : audioTypes)
+            if (file.getName().toLowerCase().endsWith(s))
+                return true;
         return false;
     }
 
-    private void addMediaBundleAsync() {
+    @Override
+    public void onEditBookFinished(String bookName, Bitmap cover, Boolean success) {
+        if (success) {
+            dirSpinner.setVisibility(View.VISIBLE);
+            fileListView.setVisibility(View.VISIBLE);
+            loadingView.setVisibility(View.GONE);
 
-        new AsyncTask<Void, Void, Boolean>() {
+            //adds book and launches progress dialog
+            new AddBookAsync(mediaFiles, bookName, cover).execute();
+        } else {
+            dirSpinner.setVisibility(View.VISIBLE);
+            fileListView.setVisibility(View.VISIBLE);
+            loadingView.setVisibility(View.GONE);
+        }
+    }
 
-            @Override
-            protected void onPreExecute() {
-                fileListView.setVisibility(View.GONE);
-                dirSpinner.setVisibility(View.GONE);
-                progressBar.setVisibility(View.VISIBLE);
-            }
 
-            @Override
-            protected Boolean doInBackground(Void... params) {
-                Collections.sort(dirAddList, new NaturalOrderComparator<File>());
-                return hasAudio(dirAddList);
-            }
+    private class AddBookAsync extends AsyncTask<Void, Integer, Void> {
+        private ProgressDialog progressDialog;
+        private final ArrayList<File> files;
+        private final String defaultName;
+        private final Bitmap cover;
 
-            @Override
-            protected void onPostExecute(Boolean result) {
-                //if adding worked start next activity,  otherwise stay here and make toast
-                if (result) {
-                    ArrayList<String> dirAddAsString = new ArrayList<String>();
-                    for (File f : dirAddList)
-                        dirAddAsString.add(f.getAbsolutePath());
-                    String defaultName = dirAddList.get(0).getName();
-                    if (dirAddList.get(0).isFile())
-                        defaultName = defaultName.substring(0, defaultName.lastIndexOf("."));
 
-                    Intent i = new Intent(getActivity(), FilesAdd.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString(FilesChoose.BOOK_PROPERTIES_DEFAULT_NAME, defaultName);
-                    bundle.putStringArrayList(FilesChoose.FILES_AS_STRING, dirAddAsString);
-                    i.putExtras(bundle);
-                    startActivity(i);
-                } else {
-                    if (dirs.size() > 1)
-                        dirSpinner.setVisibility(View.VISIBLE);
-                    fileListView.setVisibility(View.VISIBLE);
-                    progressBar.setVisibility(View.GONE);
+        public AddBookAsync(ArrayList<File> files, String defaultName, Bitmap cover) {
+            this.files = files;
+            this.defaultName = defaultName;
+            this.cover = cover;
+        }
 
-                    CharSequence text = getString(R.string.book_no_media);
-                    Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
-                    toast.show();
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setCancelable(false);
+            progressDialog.setTitle(getString(R.string.book_add_progress_title));
+            progressDialog.setMessage(getString(R.string.book_add_progress_message));
+            progressDialog.setIndeterminate(true);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
+
+            BookDetail b = new BookDetail();
+            b.setName(defaultName);
+            if (cover != null) {
+                String[] imagePaths = CommonTasks.saveCovers(cover, getActivity());
+                if (imagePaths != null) {
+                    b.setCover(imagePaths[0]);
+                    b.setThumb(imagePaths[1]);
                 }
             }
-        }.execute();
+            int bookId = db.addBook(b);
+
+
+            ArrayList<MediaDetail> media = new ArrayList<MediaDetail>();
+            for (File f : files) {
+                MediaDetail m = new MediaDetail();
+                String fileName = f.getName();
+                if (fileName.indexOf(".") > 0)
+                    fileName = fileName.substring(0, fileName.lastIndexOf("."));
+                m.setName(fileName);
+                String path = f.getAbsolutePath();
+                m.setPath(path);
+                MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
+                metaRetriever.setDataSource(f.getAbsolutePath());
+                int duration = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+                m.setDuration(duration);
+                m.setBookId(bookId);
+                media.add(m);
+            }
+
+
+            db.addMedia(media);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            progressDialog.cancel();
+            startActivity(new Intent(getActivity(), BookChoose.class));
+        }
+    }
+
+
+    private Boolean isImage(File f) {
+        String fileName = f.getName().toLowerCase();
+        return fileName.endsWith(".jpg") || fileName.endsWith(".png");
+    }
+
+    private ArrayList<File> addFilesRecursive(ArrayList<File> dir) {
+        ArrayList<File> returnList = new ArrayList<File>();
+        for (File f : dir) {
+            if (f.exists() && f.isFile())
+                returnList.add(f);
+            else if (f.exists() && f.isDirectory()) {
+                File[] content = f.listFiles();
+                if (content.length > 0) {
+                    ArrayList<File> tempReturn = addFilesRecursive(new ArrayList<File>(Arrays.asList(content)));
+                    Collections.sort(tempReturn, new NaturalOrderComparator());
+                    returnList.addAll(tempReturn);
+                }
+            }
+        }
+        return returnList;
     }
 
     private synchronized void populateList() {
         String path = link.getLast();
         //finishing action mode on populating new folder
-        if (actionMode != null) {
+        if (actionMode != null)
             actionMode.finish();
-        }
-        if (BuildConfig.DEBUG)
-            Log.e(TAG, "Populate this folder: " + path);
 
         File f = new File(path);
         File[] files = f.listFiles(filterShowAudioAndFolder);
-        fileList = new ArrayList<File>(Arrays.asList(files));
+        fileList.clear();
+        Collections.addAll(fileList, files);
 
         //fileList = new ArrayList<File>();
-        Collections.sort(fileList, new NaturalOrderComparator<File>());
-        adapter = new FileAdapter(fileList, getActivity(), this);
+        Collections.sort(fileList, new NaturalOrderComparator());
+        adapter = new FileAdapter(fileList, this);
         fileListView.setAdapter(adapter);
         fileListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -381,8 +557,8 @@ public class FilesChooseFragment extends Fragment implements CompoundButton.OnCh
 
     private final FileFilter filterShowAudioAndFolder = new FileFilter() {
         @Override
-        public boolean accept(File pathname) {
-            return !pathname.isHidden() && (pathname.isDirectory() || FilesChoose.isAudio(pathname.getName()));
+        public boolean accept(File file) {
+            return !file.isHidden() && (file.isDirectory() || isAudio(file));
         }
     };
 }

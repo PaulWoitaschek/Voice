@@ -93,7 +93,7 @@ public class JumpToPosition extends DialogFragment {
         builder.setView(v);
         builder.setTitle(R.string.action_jump_to);
 
-        builder.setPositiveButton(R.string.choose_time_okay, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 Context c = getActivity().getApplication();
@@ -107,7 +107,7 @@ public class JumpToPosition extends DialogFragment {
 
             }
         });
-        builder.setNegativeButton(R.string.choose_time_cancel, null);
+        builder.setNegativeButton(R.string.dialog_cancel, null);
 
         return builder.create();
     }

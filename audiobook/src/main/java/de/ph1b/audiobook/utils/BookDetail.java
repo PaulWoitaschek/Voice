@@ -8,6 +8,7 @@ import android.os.Parcelable;
 public class BookDetail implements Parcelable {
 
     private int id;
+    private int sortId ;
     private String name;
     private String cover;
     private String thumb;
@@ -15,6 +16,14 @@ public class BookDetail implements Parcelable {
 
     public BookDetail() {
 
+    }
+
+    public int getSortId() {
+        return sortId;
+    }
+
+    public void setSortId(int sortId) {
+        this.sortId = sortId;
     }
 
     public int getId() {
@@ -69,6 +78,7 @@ public class BookDetail implements Parcelable {
         destination.writeString(cover);
         destination.writeString(thumb);
         destination.writeInt(position);
+        destination.writeInt(sortId);
     }
 
     private BookDetail(Parcel pc) {
@@ -77,6 +87,7 @@ public class BookDetail implements Parcelable {
         cover = pc.readString();
         thumb = pc.readString();
         position = pc.readInt();
+        sortId = pc.readInt();
     }
 
     public static final Parcelable.Creator<BookDetail> CREATOR = new Parcelable.Creator<BookDetail>() {

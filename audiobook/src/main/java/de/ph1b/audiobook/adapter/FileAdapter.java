@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.adapter;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,16 +21,13 @@ import de.ph1b.audiobook.fragment.FilesChooseFragment;
 public class FileAdapter extends BaseAdapter {
 
     private final ArrayList<File> data;
-    private final Context c;
-    private final FilesChooseFragment fragment;
-    private static boolean[] checked;
+    private final Fragment fragment;
+    private final ArrayList<File> checked = new ArrayList<File>();
     private static final String TAG = "FileAdapter";
 
-    public FileAdapter(ArrayList<File> data, Context c, FilesChooseFragment fragment) {
+    public FileAdapter(ArrayList<File> data, Fragment fragment) {
         this.data = data;
-        this.c = c;
         this.fragment = fragment;
-        checked = new boolean[getCount()];
     }
 
     @Override
@@ -52,7 +50,7 @@ public class FileAdapter extends BaseAdapter {
         final ViewHolder viewHolder;
 
         if (convertView == null) {
-            LayoutInflater vi = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater vi = (LayoutInflater) fragment.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = vi.inflate(R.layout.adapter_files_choose, parent, false);
 
             viewHolder = new ViewHolder();
@@ -72,24 +70,26 @@ public class FileAdapter extends BaseAdapter {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 int pos = (Integer) buttonView.getTag();
-                checked[pos] = isChecked;
-                viewHolder.checkBox.setChecked(checked[pos]);
+                if (isChecked)
+                    checked.add(data.get(pos));
+                else
+                    checked.remove(data.get(pos));
 
-                ArrayList<File> dirAddList = new ArrayList<File>();
-                for (int i = 0; i < checked.length; i++) {
-                    if (checked[i]) {
-                        dirAddList.add(data.get(i));
-                        if (BuildConfig.DEBUG)
-                            Log.d(TAG, "data is checked: " + data.get(i).getAbsolutePath());
-                    }
-                }
-                fragment.checkStateChanged(dirAddList);
+                viewHolder.checkBox.setChecked(isChecked);
+
+                //sends only checked files
+                ArrayList<File> checkedFiles = new ArrayList<File>();
+                for (File f : checked)
+                    checkedFiles.add(f);
+                ((FilesChooseFragment) fragment).checkStateChanged(checkedFiles);
             }
         });
 
         //setting correct value
-        if (checked.length > position)
-            viewHolder.checkBox.setChecked(checked[position]);
+
+        File fileOfPosition = data.get(position);
+        Boolean fileIsChecked = checked.contains(fileOfPosition);
+        viewHolder.checkBox.setChecked(fileIsChecked);
 
         File f = data.get(position);
         String name = f.getName();
@@ -97,11 +97,11 @@ public class FileAdapter extends BaseAdapter {
         String capital = name.substring(0, 1).toUpperCase();
 
         viewHolder.symbolView.setText(capital);
-        if (f.isFile()) {
-            viewHolder.symbolView.setBackgroundColor(c.getResources().getColor(R.color.file_chooser_audio));
-        } else {
-            viewHolder.symbolView.setBackgroundColor(c.getResources().getColor(R.color.file_chooser_folder));
-        }
+        if (f.isFile())
+            viewHolder.symbolView.setBackgroundColor(fragment.getActivity().getResources().getColor(R.color.file_chooser_audio));
+        else
+            viewHolder.symbolView.setBackgroundColor(fragment.getActivity().getResources().getColor(R.color.file_chooser_folder));
+
         viewHolder.nameView.setText(name);
 
         return convertView;
@@ -110,7 +110,7 @@ public class FileAdapter extends BaseAdapter {
     public void clearCheckBoxes() {
         if (BuildConfig.DEBUG)
             Log.d(TAG, "clearCheckBoxes() was called!");
-        checked = new boolean[getCount()];
+        checked.clear();
         notifyDataSetChanged();
     }
 
