@@ -289,9 +289,13 @@ public class AudioPlayerService extends Service {
         @Override
         protected void onPostExecute(Bitmap result) {
             super.onPostExecute(result);
-            PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), 0,
-                    new Intent(getApplicationContext(), BookPlay.class),
-                    PendingIntent.FLAG_UPDATE_CURRENT);
+            Context c = getApplicationContext();
+
+            Intent bookPlayIntent = new Intent(c, BookPlay.class);
+            PendingIntent pendingIntent = android.support.v4.app.TaskStackBuilder.create(c)
+                    .addNextIntentWithParentStack(bookPlayIntent)
+                    .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
             Intent i = new Intent(NOTIFICATION_PAUSE);
             PendingIntent pauseActionPI = PendingIntent.getBroadcast(getApplicationContext(), 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
             Notification.Builder builder = new Notification.Builder(getApplicationContext());
@@ -299,7 +303,7 @@ public class AudioPlayerService extends Service {
                     .setContentText(media.getName())
                     .setLargeIcon(result)
                     .setSmallIcon(R.drawable.notification)
-                    .setContentIntent(pi)
+                    .setContentIntent(pendingIntent)
                     .setOngoing(true)
                     .setAutoCancel(true);
             int pos = positionInAllMedia(media.getId());
