@@ -178,47 +178,34 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     /*
     returns the progress of a book in °/°°
      */
-    public int getGlobalProgress(int bookId) {
-        int duration = 0;
-        int progress = 0;
+    public int getGlobalProgress(BookDetail book) {
+        long duration = 0;
+        long progress = 0;
         boolean progressFound = false;
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
         try {
-            // finds out the position in a book
-            Cursor bookCursor = db.query(TABLE_BOOKS,
-                    new String[]{KEY_BOOK_POSITION},
-                    KEY_BOOK_ID + " = " + bookId,
-                    null, null, null, null);
-            if (bookCursor != null) {
-                if (bookCursor.moveToFirst()) {
-                    int bookPosition = bookCursor.getInt(0);
-                    bookCursor.close();
-                    Cursor mediaCursor = db.query(TABLE_MEDIA,
-                            new String[]{KEY_MEDIA_ID, KEY_MEDIA_DURATION, KEY_MEDIA_POSITION},
-                            KEY_MEDIA_BOOK_ID + " = " + bookId,
-                            null, null, null, KEY_MEDIA_ID);
-                    if (mediaCursor != null) {
-                        // adds the sum of length and the sum of played time
-                        while (mediaCursor.moveToNext()) {
-                            duration += mediaCursor.getInt(1);
-                            if (!progressFound) {
-                                if (mediaCursor.getInt(0) == bookPosition) {
-                                    progress += mediaCursor.getInt(2);
-                                    progressFound = true;
-                                } else
-                                    progress += mediaCursor.getInt(1);
-                            }
-                        }
-                        if (!progressFound)
-                            progress = 0;
-                        mediaCursor.close();
+            Cursor mediaCursor = db.query(TABLE_MEDIA,
+                    new String[]{KEY_MEDIA_ID, KEY_MEDIA_DURATION, KEY_MEDIA_POSITION},
+                    KEY_MEDIA_BOOK_ID + " = " + book.getId(),
+                    null, null, null, KEY_MEDIA_ID);
+            if (mediaCursor != null) {
+                // adds the sum of length and the sum of played time
+                while (mediaCursor.moveToNext()) {
+                    duration += mediaCursor.getInt(1);
+                    if (!progressFound) {
+                        if (mediaCursor.getInt(0) == book.getPosition()) {
+                            progress += mediaCursor.getInt(2);
+                            progressFound = true;
+                        } else
+                            progress += mediaCursor.getInt(1);
                     }
                 }
-
+                if (!progressFound)
+                    progress = 0;
+                mediaCursor.close();
             }
-
 
             db.setTransactionSuccessful();
         } finally {
@@ -227,7 +214,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         if (duration == 0 || progress == 0)
             return 0;
         else {
-            return (progress * 1000 / duration);
+            return (int) (progress * 1000 / duration);
         }
     }
 

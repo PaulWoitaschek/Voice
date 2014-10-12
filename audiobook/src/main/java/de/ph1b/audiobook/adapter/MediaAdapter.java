@@ -101,7 +101,7 @@ public class MediaAdapter extends BaseAdapter {
 
         //setting bar
         viewHolder.progressBar.setMax(1000);
-        viewHolder.progressBar.setProgress(db.getGlobalProgress(b.getId()));
+        viewHolder.progressBar.setProgress(db.getGlobalProgress(b));
 
         return convertView;
     }
