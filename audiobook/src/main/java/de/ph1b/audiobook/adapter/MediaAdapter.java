@@ -2,7 +2,10 @@ package de.ph1b.audiobook.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
@@ -64,6 +68,15 @@ public class MediaAdapter extends BaseAdapter {
         return null;
     }
 
+    private void updateBookInData(BookDetail book) {
+        for (int i = 0; i < data.size(); i++) {
+            if (data.get(i).getId() == book.getId()) {
+                data.set(i, book);
+            }
+        }
+    }
+
+
     public void unCheckAll() {
         checkedBookIds.clear();
     }
@@ -85,7 +98,7 @@ public class MediaAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        final BookDetail b = data.get(position);
+        BookDetail b = data.get(position);
 
         //setting text
         String name = b.getName();
@@ -95,6 +108,11 @@ public class MediaAdapter extends BaseAdapter {
         if (thumbPath == null || thumbPath.equals("") || new File(thumbPath).isDirectory() || !(new File(thumbPath).exists())) {
             int px = CommonTasks.convertDpToPx(a.getResources().getDimension(R.dimen.thumb_size), a.getResources());
             viewHolder.iconImageView.setImageBitmap(CommonTasks.genCapital(b.getName(), px, a.getResources()));
+            WeakReference<ImageView> weakReference = new WeakReference<ImageView>(viewHolder.iconImageView);
+
+            //if device is online try to load image in the background!
+            if (CommonTasks.isOnline(a))
+                new AddCover(weakReference, b).execute();
         } else {
             viewHolder.iconImageView.setImageURI(Uri.parse(thumbPath));
         }
@@ -104,6 +122,43 @@ public class MediaAdapter extends BaseAdapter {
         viewHolder.progressBar.setProgress(db.getGlobalProgress(b));
 
         return convertView;
+    }
+
+    private class AddCover extends AsyncTask<Void, Void, String> {
+
+        private WeakReference<ImageView> weakReference;
+        private BookDetail book;
+
+        public AddCover(WeakReference<ImageView> weakReference, BookDetail book) {
+            this.weakReference = weakReference;
+            this.book = book;
+        }
+
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            Bitmap bitmap = CommonTasks.genBitmapFromInternet(book.getName(), 0);
+            String[] coverPaths = CommonTasks.saveCovers(bitmap, MediaAdapter.this.a);
+            if (coverPaths != null) {
+                book.setCover(coverPaths[0]);
+                book.setThumb(coverPaths[1]);
+                db.updateBook(book);
+                updateBookInData(book);
+                return coverPaths[1];
+            }
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(String thumbPath) {
+            if (thumbPath != null && weakReference != null) {
+                ImageView imageView = weakReference.get();
+                if (imageView != null) {
+                    imageView.setImageBitmap(BitmapFactory.decodeFile(thumbPath));
+                }
+            }
+        }
     }
 
 
