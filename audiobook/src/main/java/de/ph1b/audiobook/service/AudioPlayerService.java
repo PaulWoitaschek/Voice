@@ -222,9 +222,11 @@ public class AudioPlayerService extends Service {
 
         BookDetail newBook = intent.getParcelableExtra(GUI_BOOK);
         if (newBook != null)
-            if ((book != null && book.getId() != newBook.getId()) || book == null || media == null) {
+            if ((book != null && book.getId() != newBook.getId()) || book == null || media == null || allMedia == null) {
                 book = newBook;
-                allMedia = intent.getParcelableArrayListExtra(GUI_ALL_MEDIA);
+                //reinits allmedia if its null or belongs to a different book
+                if (allMedia == null || (allMedia.get(0).getId() != book.getId()))
+                    allMedia = intent.getParcelableArrayListExtra(GUI_ALL_MEDIA);
                 initBook();
                 prepare(book.getPosition());
             }
