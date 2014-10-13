@@ -147,7 +147,7 @@ public class CommonTasks {
         return false;
     }
 
-    public static String getIPAddress() {
+    private static String getIPAddress() {
         try {
             List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
             for (NetworkInterface i : interfaces) {
@@ -169,8 +169,8 @@ public class CommonTasks {
     public static URLConnection connection = null;
 
     public static Bitmap genCoverFromInternet(String searchText, int pageCounter, Context c) {
-        int connectTimeOut = 1000;
-        int readTimeOut = 2000;
+        int connectTimeOut = 3000;
+        int readTimeOut = 5000;
         searchText = searchText + " audiobook cover";
         InputStream inputStream;
         try {
@@ -221,17 +221,19 @@ public class CommonTasks {
                 connection.setConnectTimeout(connectTimeOut);
                 connection.setReadTimeout(readTimeOut);
                 inputStream = connection.getInputStream();
+
                 return BitmapFactory.decodeStream(inputStream, null, options);
             }
         } catch (Exception e) {
             if (BuildConfig.DEBUG)
                 Log.d(TAG, e.toString());
+            return null;
         }
 
         return null;
     }
 
-    public static int calculateInSampleSize(
+    private static int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
