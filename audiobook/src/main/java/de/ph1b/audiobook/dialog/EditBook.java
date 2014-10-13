@@ -156,7 +156,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
         builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (!addCoverAsync.isCancelled())
+                if (addCoverAsync != null && !addCoverAsync.isCancelled())
                     addCoverAsync.cancel(true);
                 ((OnEditBookFinished) getTargetFragment()).onEditBookFinished(null, null, false);
             }
@@ -164,7 +164,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
         builder.setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (!addCoverAsync.isCancelled())
+                if (addCoverAsync != null && !addCoverAsync.isCancelled())
                     addCoverAsync.cancel(true);
                 String bookName = nameEditText.getText().toString();
                 Bitmap cover = null;
