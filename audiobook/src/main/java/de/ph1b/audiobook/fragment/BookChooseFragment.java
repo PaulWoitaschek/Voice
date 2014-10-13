@@ -241,7 +241,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                 editor.apply();
 
                 Intent i = new Intent(getActivity(), BookPlay.class);
-                i.putExtra(AudioPlayerService.BOOK_ID, book.getId());
+                i.putExtra(AudioPlayerService.GUI_BOOK, book);
                 startActivity(i);
             }
 
@@ -273,7 +273,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
 
         if (currentBook != null) {
             Intent i = new Intent(getActivity(), AudioPlayerService.class);
-            i.putExtra(AudioPlayerService.BOOK_ID, currentBook.getId());
+            i.putExtra(AudioPlayerService.GUI_BOOK, currentBook);
             getActivity().startService(i);
 
             //setting cover
@@ -334,12 +334,12 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         switch (view.getId()) {
             case R.id.current:
                 Intent i = new Intent(getActivity(), BookPlay.class);
-                i.putExtra(AudioPlayerService.BOOK_ID, currentBook.getId());
+                i.putExtra(AudioPlayerService.GUI_BOOK, currentBook);
                 startActivity(i);
                 break;
             case R.id.current_playing:
                 Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
-                serviceIntent.putExtra(AudioPlayerService.BOOK_ID, currentBook.getId());
+                serviceIntent.putExtra(AudioPlayerService.GUI_BOOK, currentBook);
                 serviceIntent.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
                 getActivity().startService(serviceIntent);
                 break;

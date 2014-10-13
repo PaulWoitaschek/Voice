@@ -225,7 +225,6 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
         //starting the service
         if (BuildConfig.DEBUG) Log.d(TAG, "Starting service with id: " + bookId);
         Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
-        serviceIntent.putExtra(AudioPlayerService.BOOK_ID, bookId);
         serviceIntent.putExtra(AudioPlayerService.GUI_BOOK, book);
         serviceIntent.putExtra(AudioPlayerService.GUI_ALL_MEDIA, allMedia);
         getActivity().startService(serviceIntent);
@@ -406,8 +405,10 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
         bcm.registerReceiver(updateGUIReceiver, filter);
 
         //starting the service
+        if (book != null)
+            book = db.getBook(bookId);
         Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
-        serviceIntent.putExtra(AudioPlayerService.BOOK_ID, bookId);
+        serviceIntent.putExtra(AudioPlayerService.GUI_BOOK, book);
         getActivity().startService(serviceIntent);
     }
 

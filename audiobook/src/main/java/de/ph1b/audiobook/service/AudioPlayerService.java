@@ -16,7 +16,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
-import android.media.MediaPlayer;
 import android.media.RemoteControlClient;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -30,6 +29,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.RemoteViews;
+
+import com.aocate.media.MediaPlayer;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,7 +54,6 @@ import de.ph1b.audiobook.utils.MediaDetail;
 public class AudioPlayerService extends Service {
 
 
-    public static final String BOOK_ID = "de.ph1b.audiobook.BOOK_ID";
     private static final int NOTIFICATION_ID = 1;
 
     //private int bookId;
@@ -142,7 +142,7 @@ public class AudioPlayerService extends Service {
 
         bcm = LocalBroadcastManager.getInstance(this);
         db = DataBaseHelper.getInstance(this);
-        mediaPlayer = new MediaPlayer();
+        mediaPlayer = new MediaPlayer(getApplicationContext());
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         handler = new Handler();
@@ -409,7 +409,7 @@ public class AudioPlayerService extends Service {
                 media = allMedia.get(0);
 
             if (stateManager.getState() == PlayerStates.DEAD)
-                mediaPlayer = new MediaPlayer();
+                mediaPlayer = new MediaPlayer(getApplicationContext());
             else
                 mediaPlayer.reset();
             stateManager.setState(PlayerStates.IDLE);

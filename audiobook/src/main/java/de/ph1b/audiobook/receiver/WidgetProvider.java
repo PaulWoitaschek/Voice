@@ -54,24 +54,24 @@ public class WidgetProvider extends AppWidgetProvider {
             int position = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
 
             DataBaseHelper db = DataBaseHelper.getInstance(context);
-            final BookDetail b = db.getBook(position);
+            BookDetail book = db.getBook(position);
 
             Intent i = new Intent(context, AudioPlayerService.class);
 
-            if (b != null) { // if a valid book is found start service
-                i.putExtra(AudioPlayerService.BOOK_ID, b.getId());
+            if (book != null) { // if a valid book is found start service
+                i.putExtra(AudioPlayerService.GUI_BOOK, book);
                 i.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
                 context.startService(i);
             } else { //if no valid book is found search for available books
                 ArrayList<BookDetail> books = db.getAllBooks();
                 if (books.size() > 0) { //if there are valid books start the first one
-                    int bookId = books.get(0).getId();
+                    book = books.get(0);
 
                     SharedPreferences.Editor editor = settings.edit();
-                    editor.putInt(BookChoose.SHARED_PREFS_CURRENT, bookId);
+                    editor.putInt(BookChoose.SHARED_PREFS_CURRENT, book.getId());
                     editor.apply();
 
-                    i.putExtra(AudioPlayerService.BOOK_ID, bookId);
+                    i.putExtra(AudioPlayerService.GUI_BOOK, book);
                     i.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
                     context.startService(i);
                 }
