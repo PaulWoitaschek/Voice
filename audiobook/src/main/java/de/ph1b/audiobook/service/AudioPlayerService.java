@@ -220,8 +220,6 @@ public class AudioPlayerService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
 
-
-        //int newBookId = intent.getIntExtra(BOOK_ID, 0);
         BookDetail newBook = intent.getParcelableExtra(GUI_BOOK);
         if (newBook != null)
             if ((book != null && book.getId() != newBook.getId()) || book == null || media == null) {
@@ -230,7 +228,6 @@ public class AudioPlayerService extends Service {
                 initBook();
                 prepare(book.getPosition());
             }
-
         handleAction(intent);
 
         int keyCode = intent.getIntExtra(RemoteControlReceiver.KEYCODE, -1);
