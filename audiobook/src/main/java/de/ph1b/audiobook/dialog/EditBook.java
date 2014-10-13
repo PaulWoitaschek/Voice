@@ -22,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.io.InputStream;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 import de.ph1b.audiobook.BuildConfig;
@@ -30,6 +32,7 @@ import de.ph1b.audiobook.utils.CommonTasks;
 
 public class EditBook extends DialogFragment implements View.OnClickListener {
 
+    public static final String TAG = "de.ph1b.audiobook.EditBook";
     public static final String BOOK_NAME = "BOOK_NAME";
     public static final String BOOK_COVER = "BOOK_COVER";
     public static final String DIALOG_TITLE = "DIALOG_TITLE";
@@ -201,6 +204,20 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
 
     private class AddCoverAsync extends AsyncTask<Void, Void, Bitmap> {
         String searchString;
+
+        @Override
+        protected void onCancelled() {
+            URLConnection urlConnection = CommonTasks.connection;
+            if (urlConnection != null) {
+                try {
+                    InputStream inputStream = urlConnection.getInputStream();
+                    if (inputStream != null)
+                        inputStream.close();
+                } catch (Exception ignored) {
+                }
+            }
+        }
+
         int pageCounter;
 
         public AddCoverAsync(String searchString, int pageCounter) {

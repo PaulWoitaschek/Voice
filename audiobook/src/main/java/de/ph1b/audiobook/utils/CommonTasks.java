@@ -93,8 +93,6 @@ public class CommonTasks {
 
             String packageName = a.getPackageName();
             String fileName = String.valueOf(System.currentTimeMillis()) + ".png";
-            int pixelCut = 10;
-            // if cover is too big, scale it down
             int displayPx = getCoverDimensions(a);
 
             //only create scaled version if necessary
@@ -168,69 +166,68 @@ public class CommonTasks {
         return "";
     }
 
-    public static URLConnection connection;
+    public static URLConnection connection = null;
 
     public static Bitmap genCoverFromInternet(String searchText, int pageCounter, Context c) {
-        int retryLeft = 3;
-        while (retryLeft-- != 0) {
-            int connectTimeOut = 1000;
-            int readTimeOut = 2000;
-            searchText = searchText + " audiobook cover";
-            try {
-                URL url = new URL(
-                        "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&imgsz=large|xlarge&rsz=1&q=" +
-                                URLEncoder.encode(searchText, "UTF-8") + "&start=" + pageCounter +
-                                "&userip=" + getIPAddress());
+        int connectTimeOut = 1000;
+        int readTimeOut = 2000;
+        searchText = searchText + " audiobook cover";
+        InputStream inputStream;
+        try {
+            URL url = new URL(
+                    "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&imgsz=large|xlarge&rsz=1&q=" +
+                            URLEncoder.encode(searchText, "UTF-8") + "&start=" + pageCounter +
+                            "&userip=" + getIPAddress());
 
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, url.toString());
-                connection = url.openConnection();
-                connection.setReadTimeout(readTimeOut);
-                connection.setConnectTimeout(connectTimeOut);
+            if (BuildConfig.DEBUG)
+                Log.d(TAG, url.toString());
+            connection = url.openConnection();
+            connection.setReadTimeout(readTimeOut);
+            connection.setConnectTimeout(connectTimeOut);
 
-                InputStream inputStream = connection.getInputStream();
+            inputStream = connection.getInputStream();
 
 
-                String line;
-                StringBuilder builder = new StringBuilder();
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader reader = new BufferedReader(inputStreamReader);
-                while ((line = reader.readLine()) != null) {
-                    builder.append(line);
-                }
-                JSONObject obj = new JSONObject(builder.toString());
-                JSONObject responseData = obj.getJSONObject("responseData");
-                JSONArray results = responseData.getJSONArray("results");
-                String imageUrl = results.getJSONObject(0).getString("url");
-                if (imageUrl != null) {
-                    url = new URL(imageUrl);
-                    connection = url.openConnection();
-                    connection.setConnectTimeout(connectTimeOut);
-                    connection.setReadTimeout(readTimeOut);
-                    inputStream = connection.getInputStream();
-
-                    // First decode with inJustDecodeBounds=true to check dimensions
-                    final BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inJustDecodeBounds = true;
-                    BitmapFactory.decodeStream(inputStream, null, options);
-
-                    // Calculate inSampleSize
-                    int coverDimensions = getCoverDimensions(c);
-                    options.inSampleSize = calculateInSampleSize(options, coverDimensions, coverDimensions);
-
-                    // Decode bitmap with inSampleSize set
-                    options.inJustDecodeBounds = false;
-                    connection = url.openConnection();
-                    connection.setConnectTimeout(connectTimeOut);
-                    connection.setReadTimeout(readTimeOut);
-                    inputStream = connection.getInputStream();
-                    return BitmapFactory.decodeStream(inputStream, null, options);
-                }
-            } catch (Exception e) {
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, e.toString());
+            String line;
+            StringBuilder builder = new StringBuilder();
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            BufferedReader reader = new BufferedReader(inputStreamReader);
+            while ((line = reader.readLine()) != null) {
+                builder.append(line);
             }
+            JSONObject obj = new JSONObject(builder.toString());
+            JSONObject responseData = obj.getJSONObject("responseData");
+            JSONArray results = responseData.getJSONArray("results");
+            String imageUrl = results.getJSONObject(0).getString("url");
+            if (imageUrl != null) {
+                url = new URL(imageUrl);
+                connection = url.openConnection();
+                connection.setConnectTimeout(connectTimeOut);
+                connection.setReadTimeout(readTimeOut);
+                inputStream = connection.getInputStream();
+
+                // First decode with inJustDecodeBounds=true to check dimensions
+                final BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeStream(inputStream, null, options);
+
+                // Calculate inSampleSize
+                int coverDimensions = getCoverDimensions(c);
+                options.inSampleSize = calculateInSampleSize(options, coverDimensions, coverDimensions);
+
+                // Decode bitmap with inSampleSize set
+                options.inJustDecodeBounds = false;
+                connection = url.openConnection();
+                connection.setConnectTimeout(connectTimeOut);
+                connection.setReadTimeout(readTimeOut);
+                inputStream = connection.getInputStream();
+                return BitmapFactory.decodeStream(inputStream, null, options);
+            }
+        } catch (Exception e) {
+            if (BuildConfig.DEBUG)
+                Log.d(TAG, e.toString());
         }
+
         return null;
     }
 
