@@ -269,7 +269,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
         int currentBookPosition = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
 
-        currentBook = adapt.getBookById(currentBookPosition);
+        currentBook = db.getBook(currentBookPosition);
 
         if (currentBook != null) {
             Intent i = new Intent(getActivity(), AudioPlayerService.class);
@@ -359,6 +359,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
             refreshBookList();
             if (actionMode != null)
                 actionMode.finish();
+            initPlayerWidget();
         }
     }
 }
