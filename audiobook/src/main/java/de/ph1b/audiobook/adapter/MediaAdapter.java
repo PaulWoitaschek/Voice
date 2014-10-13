@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,6 +18,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.fragment.BookChooseFragment;
 import de.ph1b.audiobook.utils.BookDetail;
 import de.ph1b.audiobook.utils.CommonTasks;
 import de.ph1b.audiobook.utils.DataBaseHelper;
@@ -29,13 +29,13 @@ public class MediaAdapter extends BaseAdapter {
     private final ArrayList<BookDetail> data;
     private final DataBaseHelper db;
     private final ArrayList<Integer> checkedBookIds = new ArrayList<Integer>();
-    private final Activity a;
+    private final BookChooseFragment fragment;
 
 
-    public MediaAdapter(ArrayList<BookDetail> data, Activity a) {
+    public MediaAdapter(ArrayList<BookDetail> data, BookChooseFragment a) {
         this.data = data;
-        this.a = a;
-        db = DataBaseHelper.getInstance(a);
+        this.fragment = a;
+        db = DataBaseHelper.getInstance(fragment.getActivity());
     }
 
     public int getCount() {
@@ -44,6 +44,14 @@ public class MediaAdapter extends BaseAdapter {
 
     public BookDetail getItem(int position) {
         return data.get(position);
+    }
+
+    public BookDetail getBookById(int bookId) {
+        for (BookDetail b : data) {
+            if (b.getId() == bookId)
+                return b;
+        }
+        return null;
     }
 
     public long getItemId(int position) {
@@ -85,7 +93,7 @@ public class MediaAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
         if (convertView == null) {
-            LayoutInflater vi = (LayoutInflater) a.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater vi = (LayoutInflater) fragment.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = vi.inflate(R.layout.media_chooser_listview_layout, parent, false);
 
             viewHolder = new ViewHolder();
@@ -106,12 +114,12 @@ public class MediaAdapter extends BaseAdapter {
 
         String thumbPath = b.getThumb();
         if (thumbPath == null || thumbPath.equals("") || new File(thumbPath).isDirectory() || !(new File(thumbPath).exists())) {
-            int px = CommonTasks.convertDpToPx(a.getResources().getDimension(R.dimen.thumb_size), a.getResources());
-            viewHolder.iconImageView.setImageBitmap(CommonTasks.genCapital(b.getName(), px, a.getResources()));
+            int px = CommonTasks.getThumbDimensions(fragment.getResources());
+            viewHolder.iconImageView.setImageBitmap(CommonTasks.genCapital(b.getName(), px, fragment.getResources()));
             WeakReference<ImageView> weakReference = new WeakReference<ImageView>(viewHolder.iconImageView);
 
             //if device is online try to load image in the background!
-            if (CommonTasks.isOnline(a))
+            if (CommonTasks.isOnline(fragment.getActivity()))
                 new AddCover(weakReference, b).execute();
         } else {
             viewHolder.iconImageView.setImageURI(Uri.parse(thumbPath));
@@ -137,8 +145,8 @@ public class MediaAdapter extends BaseAdapter {
 
         @Override
         protected String doInBackground(Void... voids) {
-            Bitmap bitmap = CommonTasks.genBitmapFromInternet(book.getName(), 0);
-            String[] coverPaths = CommonTasks.saveCovers(bitmap, MediaAdapter.this.a);
+            Bitmap bitmap = CommonTasks.genCoverFromInternet(book.getName(), 0, fragment.getActivity());
+            String[] coverPaths = CommonTasks.saveCovers(bitmap, fragment.getActivity());
             if (coverPaths != null) {
                 book.setCover(coverPaths[0]);
                 book.setThumb(coverPaths[1]);
@@ -158,6 +166,8 @@ public class MediaAdapter extends BaseAdapter {
                     imageView.setImageBitmap(BitmapFactory.decodeFile(thumbPath));
                 }
             }
+            //re-inits player widget to show new cover
+            fragment.initPlayerWidget();
         }
     }
 

@@ -14,16 +14,15 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
 
 import org.apache.http.conn.util.InetAddressUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -64,16 +63,17 @@ public class CommonTasks {
         return thumb;
     }
 
-    public static int convertDpToPx(float dp, Resources r) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+
+    public static int getCoverDimensions(Context c) {
+        c.getResources().getDisplayMetrics();
+        DisplayMetrics metrics = c.getResources().getDisplayMetrics();
+        int width = metrics.widthPixels;
+        int height = metrics.heightPixels;
+        return width < height ? width : height;
     }
 
-    @SuppressWarnings("deprecation")
-    public static int getDisplayMinSize(Activity a) {
-        Display display = a.getWindowManager().getDefaultDisplay();
-        int width = display.getWidth();
-        int height = display.getHeight();
-        return width < height ? width : height;
+    public static int getThumbDimensions(Resources r) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, r.getDimension(R.dimen.thumb_size), r.getDisplayMetrics());
     }
 
     public static void checkExternalStorage(Context c) {
@@ -95,11 +95,14 @@ public class CommonTasks {
             String fileName = String.valueOf(System.currentTimeMillis()) + ".png";
             int pixelCut = 10;
             // if cover is too big, scale it down
-            int displayPx = CommonTasks.getDisplayMinSize(a);
-            //crop n px from each side for poor images
-            cover = Bitmap.createBitmap(cover, pixelCut, pixelCut, cover.getWidth() - 2 * pixelCut, cover.getHeight() - 2 * pixelCut);
-            cover = Bitmap.createScaledBitmap(cover, displayPx, displayPx, false);
-            int thumbPx = CommonTasks.convertDpToPx(a.getResources().getDimension(R.dimen.thumb_size), a.getResources());
+            int displayPx = getCoverDimensions(a);
+
+            //only create scaled version if necessary
+            if ((cover.getHeight() != cover.getWidth()) ||
+                    (cover.getHeight() > displayPx) ||
+                    (cover.getWidth() > displayPx))
+                cover = Bitmap.createScaledBitmap(cover, displayPx, displayPx, false);
+            int thumbPx = getThumbDimensions(a.getResources());
             Bitmap thumb = Bitmap.createScaledBitmap(cover, thumbPx, thumbPx, false);
             File thumbDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/" + packageName + "/thumbs");
             File imageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/" + packageName + "/images");
@@ -165,57 +168,63 @@ public class CommonTasks {
         return "";
     }
 
-    public static Bitmap genBitmapFromInternet(String searchText, int pageCounter) {
+    public static URLConnection connection;
+
+    public static Bitmap genCoverFromInternet(String searchText, int pageCounter, Context c) {
         int retryLeft = 3;
         while (retryLeft-- != 0) {
-            int readTimeOut = 5000;
-            int connectTimeOut = 5000;
+            int connectTimeOut = 1000;
+            int readTimeOut = 2000;
             searchText = searchText + " audiobook cover";
             try {
-                URL searchUrl = new URL(
+                URL url = new URL(
                         "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&imgsz=large|xlarge&rsz=1&q=" +
                                 URLEncoder.encode(searchText, "UTF-8") + "&start=" + pageCounter +
                                 "&userip=" + getIPAddress());
 
                 if (BuildConfig.DEBUG)
-                    Log.d(TAG, searchUrl.toString());
-                URLConnection connection = searchUrl.openConnection();
+                    Log.d(TAG, url.toString());
+                connection = url.openConnection();
                 connection.setReadTimeout(readTimeOut);
                 connection.setConnectTimeout(connectTimeOut);
 
+                InputStream inputStream = connection.getInputStream();
+
+
                 String line;
                 StringBuilder builder = new StringBuilder();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(
-                        connection.getInputStream()));
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader reader = new BufferedReader(inputStreamReader);
                 while ((line = reader.readLine()) != null) {
                     builder.append(line);
-
                 }
                 JSONObject obj = new JSONObject(builder.toString());
                 JSONObject responseData = obj.getJSONObject("responseData");
                 JSONArray results = responseData.getJSONArray("results");
-
                 String imageUrl = results.getJSONObject(0).getString("url");
-
                 if (imageUrl != null) {
-                    URL url = new URL(imageUrl);
-                    URLConnection urlConnection = url.openConnection();
-                    urlConnection.setConnectTimeout(connectTimeOut);
-                    urlConnection.setReadTimeout(readTimeOut);
-                    InputStream inputStream = urlConnection.getInputStream();
-                    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-                    int nRead;
-                    byte[] data = new byte[16384];
-                    while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
-                        buffer.write(data, 0, nRead);
-                    }
-                    buffer.flush();
-                    byte[] outPut = buffer.toByteArray();
-                    if (outPut.length > 0) {
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(outPut, 0, outPut.length);
-                        if (bitmap != null)
-                            return bitmap;
-                    }
+                    url = new URL(imageUrl);
+                    connection = url.openConnection();
+                    connection.setConnectTimeout(connectTimeOut);
+                    connection.setReadTimeout(readTimeOut);
+                    inputStream = connection.getInputStream();
+
+                    // First decode with inJustDecodeBounds=true to check dimensions
+                    final BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inJustDecodeBounds = true;
+                    BitmapFactory.decodeStream(inputStream, null, options);
+
+                    // Calculate inSampleSize
+                    int coverDimensions = getCoverDimensions(c);
+                    options.inSampleSize = calculateInSampleSize(options, coverDimensions, coverDimensions);
+
+                    // Decode bitmap with inSampleSize set
+                    options.inJustDecodeBounds = false;
+                    connection = url.openConnection();
+                    connection.setConnectTimeout(connectTimeOut);
+                    connection.setReadTimeout(readTimeOut);
+                    inputStream = connection.getInputStream();
+                    return BitmapFactory.decodeStream(inputStream, null, options);
                 }
             } catch (Exception e) {
                 if (BuildConfig.DEBUG)
@@ -223,6 +232,29 @@ public class CommonTasks {
             }
         }
         return null;
+    }
+
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 }
 

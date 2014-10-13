@@ -64,6 +64,8 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     private final ArrayList<File> fileList = new ArrayList<File>();
     private ArrayList<File> mediaFiles = new ArrayList<File>();
 
+    private LaunchEditDialog launchEditDialogAsync;
+
     private ListView fileListView;
     private Spinner dirSpinner;
     private ProgressBar loadingView;
@@ -258,14 +260,15 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     public void onResume() {
         super.onResume();
 
-        if (dirs.size() > 1)
-            dirSpinner.setVisibility(View.VISIBLE);
         ((FilesChoose) getActivity()).setOnBackPressedListener(onBackPressedListener);
     }
 
     @Override
     public void onPause() {
         super.onPause();
+
+        if (launchEditDialogAsync != null && !launchEditDialogAsync.isCancelled())
+            launchEditDialogAsync.cancel(true);
 
         ((FilesChoose) getActivity()).setOnBackPressedListener(null);
     }
@@ -291,8 +294,8 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                 public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.action_add_badge:
-                            new LaunchEditDialog(files).execute();
-                            //new AddMediaBundleAsync(files).execute();
+                            launchEditDialogAsync = new LaunchEditDialog(files);
+                            launchEditDialogAsync.execute();
                             mode.finish();
                             return true;
                         default:
@@ -330,9 +333,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
         @Override
         protected void onPreExecute() {
-            dirSpinner.setVisibility(View.GONE);
-            fileListView.setVisibility(View.GONE);
-            loadingView.setVisibility(View.VISIBLE);
+            setViewLoading(true);
         }
 
         @Override
@@ -360,6 +361,8 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
             //checking media files for covers
             int attempt = 0;
             for (File media : mediaFiles) {
+                if (isCancelled())
+                    return null;
                 if (attempt++ > 4 || bitmaps.size() > 0)
                     break;
                 MediaMetadataRetriever mmr = new MediaMetadataRetriever();
@@ -378,6 +381,8 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
             //checking imageFiles for cover
             for (File image : imageFiles) {
+                if (isCancelled())
+                    return null;
                 Bitmap cover = BitmapFactory.decodeFile(image.getAbsolutePath());
                 if (cover != null)
                     bitmaps.add(cover);
@@ -389,9 +394,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         @Override
         protected void onPostExecute(Void aVoid) {
             if (mediaFiles.size() == 0) {
-                dirSpinner.setVisibility(View.VISIBLE);
-                fileListView.setVisibility(View.VISIBLE);
-                loadingView.setVisibility(View.GONE);
+                setViewLoading(false);
 
                 CharSequence text = getString(R.string.book_no_media);
                 Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
@@ -422,6 +425,19 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         }
     }
 
+    private void setViewLoading(boolean loading) {
+        if (loading) {
+            dirSpinner.setVisibility(View.GONE);
+            fileListView.setVisibility(View.GONE);
+            loadingView.setVisibility(View.VISIBLE);
+        } else {
+            if (dirs.size() > 0)
+                dirSpinner.setVisibility(View.VISIBLE);
+            fileListView.setVisibility(View.VISIBLE);
+            loadingView.setVisibility(View.GONE);
+        }
+    }
+
 
     private boolean isAudio(File file) {
         for (String s : audioTypes)
@@ -432,17 +448,10 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
     @Override
     public void onEditBookFinished(String bookName, Bitmap cover, Boolean success) {
+        setViewLoading(false);
         if (success) {
-            dirSpinner.setVisibility(View.VISIBLE);
-            fileListView.setVisibility(View.VISIBLE);
-            loadingView.setVisibility(View.GONE);
-
             //adds book and launches progress dialog
             new AddBookAsync(mediaFiles, bookName, cover).execute();
-        } else {
-            dirSpinner.setVisibility(View.VISIBLE);
-            fileListView.setVisibility(View.VISIBLE);
-            loadingView.setVisibility(View.GONE);
         }
     }
 
@@ -462,6 +471,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
         @Override
         protected void onPreExecute() {
+            if (BuildConfig.DEBUG) Log.d(TAG, "AddBookAsync, onPreEx" + System.currentTimeMillis());
             progressDialog = new ProgressDialog(getActivity());
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.setCancelable(false);
@@ -473,6 +483,8 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
         @Override
         protected Void doInBackground(Void... params) {
+            if (BuildConfig.DEBUG)
+                Log.d(TAG, "AddBookAsync, doInBack" + System.currentTimeMillis());
 
             DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
 
@@ -512,6 +524,8 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
         @Override
         protected void onPostExecute(Void result) {
+            if (BuildConfig.DEBUG)
+                Log.d(TAG, "AddBookAsync, onPostEx" + System.currentTimeMillis());
             progressDialog.cancel();
             Intent i = new Intent(getActivity(), BookChoose.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

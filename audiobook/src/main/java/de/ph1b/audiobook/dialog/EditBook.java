@@ -40,6 +40,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
     private ImageButton nextCover;
     private EditText nameEditText;
 
+    private AddCoverAsync addCoverAsync;
 
     private int coverPosition;
     private ArrayList<Bitmap> covers;
@@ -66,7 +67,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
                     cover.setImageBitmap(covers.get(coverPosition));
                     previousCover.setVisibility(View.VISIBLE);
                 } else {
-                    new AddCoverAsync(nameEditText.getText().toString(), googleCount++).execute();
+                    genCoverFromInternet(nameEditText.getText().toString());
                 }
                 break;
             default:
@@ -74,6 +75,16 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
         }
     }
 
+    private void genCoverFromInternet(String searchString) {
+        //cancels task if running
+        if (addCoverAsync != null) {
+            if (!addCoverAsync.isCancelled()) {
+                addCoverAsync.cancel(true);
+            }
+        }
+        addCoverAsync = new AddCoverAsync(searchString, googleCount);
+        addCoverAsync.execute();
+    }
 
 
     public interface OnEditBookFinished {
@@ -127,7 +138,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
         if (coverSize == 0) {
             if (online) {
                 if (BuildConfig.DEBUG) Log.d("ebk", "p1");
-                new AddCoverAsync(defaultName, googleCount++).execute();
+                genCoverFromInternet(defaultName);
             } else {
                 coverLayout.setVisibility(View.GONE);
             }
@@ -143,12 +154,16 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
         builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                if (!addCoverAsync.isCancelled())
+                    addCoverAsync.cancel(true);
                 ((OnEditBookFinished) getTargetFragment()).onEditBookFinished(null, null, false);
             }
         });
         builder.setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                if (!addCoverAsync.isCancelled())
+                    addCoverAsync.cancel(true);
                 String bookName = nameEditText.getText().toString();
                 Bitmap cover = null;
                 if (covers.size() > 0)
@@ -201,11 +216,12 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
 
         @Override
         protected Bitmap doInBackground(Void... voids) {
-            return CommonTasks.genBitmapFromInternet(searchString, pageCounter);
+            return CommonTasks.genCoverFromInternet(searchString, pageCounter, getActivity());
         }
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
+            googleCount++;
             coverReplacement.setVisibility(View.GONE);
             cover.setVisibility(View.VISIBLE);
             if (bitmap != null) {
@@ -215,7 +231,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
                 if (covers.size() > 1)
                     previousCover.setVisibility(View.VISIBLE);
             } else {
-                new AddCoverAsync(searchString, googleCount++).execute();
+                genCoverFromInternet(searchString);
             }
         }
     }

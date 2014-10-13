@@ -150,7 +150,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         currentPlaying = (ImageButton) v.findViewById(R.id.current_playing);
         final ListView mediaListView = (ListView) v.findViewById(R.id.listMediaView);
 
-        adapt = new MediaAdapter(details, getActivity());
+        adapt = new MediaAdapter(details, this);
         mediaListView.setAdapter(adapt);
 
 
@@ -265,16 +265,11 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        refreshBookList();
-
+    public void initPlayerWidget() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        int position = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
+        int currentBookPosition = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
 
-        currentBook = db.getBook(position);
+        currentBook = adapt.getBookById(currentBookPosition);
 
         if (currentBook != null) {
             Intent i = new Intent(getActivity(), AudioPlayerService.class);
@@ -285,8 +280,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
             String thumbPath = currentBook.getThumb();
             if (thumbPath == null || thumbPath.equals("") || !new File(thumbPath).exists() || new File(thumbPath).isDirectory()) {
                 String bookName = currentBook.getName();
-                float dp = getResources().getDimension(R.dimen.thumb_size);
-                int px = CommonTasks.convertDpToPx(dp, getResources());
+                int px = CommonTasks.getThumbDimensions(getResources());
                 Bitmap thumb = CommonTasks.genCapital(bookName, px, getResources());
                 currentCover.setImageBitmap(thumb);
             } else if (new File(thumbPath).isFile()) {
@@ -303,6 +297,14 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        refreshBookList();
+        initPlayerWidget();
+    }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -314,7 +316,9 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                startActivity(new Intent(getActivity(), FilesChoose.class));
+                Intent i = new Intent(getActivity(), FilesChoose.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
                 return true;
             case R.id.action_settings:
                 startActivity(new Intent(getActivity(), Settings.class));
