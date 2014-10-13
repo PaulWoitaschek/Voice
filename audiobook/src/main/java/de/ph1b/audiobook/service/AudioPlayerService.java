@@ -224,7 +224,7 @@ public class AudioPlayerService extends Service {
         //int newBookId = intent.getIntExtra(BOOK_ID, 0);
         BookDetail newBook = intent.getParcelableExtra(GUI_BOOK);
         if (newBook != null)
-            if ((book != null && book.getId() != newBook.getId()) || book == null) {
+            if ((book != null && book.getId() != newBook.getId()) || book == null || media == null) {
                 book = newBook;
                 allMedia = intent.getParcelableArrayListExtra(GUI_ALL_MEDIA);
                 initBook();
@@ -259,7 +259,6 @@ public class AudioPlayerService extends Service {
 
 
     private class StartNotificationAsync extends AsyncTask<Void, Void, Bitmap> {
-
         @Override
         protected void onPreExecute() {
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
