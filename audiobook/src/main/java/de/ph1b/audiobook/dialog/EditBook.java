@@ -40,6 +40,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
     private ImageButton nextCover;
     private EditText nameEditText;
 
+
     private int coverPosition;
     private ArrayList<Bitmap> covers;
     int googleCount = 0;
@@ -72,6 +73,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
                 break;
         }
     }
+
 
 
     public interface OnEditBookFinished {
@@ -210,7 +212,8 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
                 covers.add(bitmap);
                 coverPosition = covers.indexOf(bitmap);
                 cover.setImageBitmap(bitmap);
-                previousCover.setVisibility(View.VISIBLE);
+                if (covers.size() > 1)
+                    previousCover.setVisibility(View.VISIBLE);
             } else {
                 new AddCoverAsync(searchString, googleCount++).execute();
             }
