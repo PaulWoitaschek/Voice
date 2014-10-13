@@ -353,8 +353,8 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
             bookToEdit.setThumb(coverPaths[1]);
             db.updateBook(bookToEdit);
             refreshBookList();
+            if (actionMode != null)
+                actionMode.finish();
         }
-        if (actionMode != null)
-            actionMode.finish();
     }
 }
