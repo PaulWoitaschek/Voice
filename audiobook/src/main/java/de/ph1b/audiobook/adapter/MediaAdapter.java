@@ -46,14 +46,6 @@ public class MediaAdapter extends BaseAdapter {
         return data.get(position);
     }
 
-    public BookDetail getBookById(int bookId) {
-        for (BookDetail b : data) {
-            if (b.getId() == bookId)
-                return b;
-        }
-        return null;
-    }
-
     public long getItemId(int position) {
         return position;
     }
@@ -134,8 +126,8 @@ public class MediaAdapter extends BaseAdapter {
 
     private class AddCover extends AsyncTask<Void, Void, String> {
 
-        private WeakReference<ImageView> weakReference;
-        private BookDetail book;
+        private final WeakReference<ImageView> weakReference;
+        private final BookDetail book;
 
         public AddCover(WeakReference<ImageView> weakReference, BookDetail book) {
             this.weakReference = weakReference;

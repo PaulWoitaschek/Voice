@@ -32,7 +32,6 @@ import de.ph1b.audiobook.utils.CommonTasks;
 
 public class EditBook extends DialogFragment implements View.OnClickListener {
 
-    public static final String TAG = "de.ph1b.audiobook.EditBook";
     public static final String BOOK_NAME = "BOOK_NAME";
     public static final String BOOK_COVER = "BOOK_COVER";
     public static final String DIALOG_TITLE = "DIALOG_TITLE";
@@ -47,7 +46,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
 
     private int coverPosition;
     private ArrayList<Bitmap> covers;
-    int googleCount = 0;
+    private int googleCount = 0;
 
     @Override
     public void onClick(View view) {
@@ -203,7 +202,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
     }
 
     private class AddCoverAsync extends AsyncTask<Void, Void, Bitmap> {
-        String searchString;
+        final String searchString;
 
         @Override
         protected void onCancelled() {
@@ -218,7 +217,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
             }
         }
 
-        int pageCounter;
+        final int pageCounter;
 
         public AddCoverAsync(String searchString, int pageCounter) {
             this.searchString = searchString;
