@@ -44,6 +44,7 @@
         android:layout_width="35dp"
         android:layout_height="@dimen/thumb_size"
         android:scaleType="center"
-        android:src="@drawable/ic_drag_handle" />
+        android:src="@drawable/ic_drag_handle"
+        android:contentDescription="@string/drag_handler_description" />
 
 </LinearLayout>
