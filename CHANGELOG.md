@@ -1,3 +1,16 @@
+# v1.3.0
+
+## Improvements
+* Can change book-sort-order now
+* Automatically downloads missing covers
+* Added possiblity to edit book afterwards
+* Faster Database access
+* Position changer improved
+* Now shows the whole filename of media to see the file-end
+* Smaller size
+* Adding book-progress reworked
+* Smaller bugfixes
+
 # v1.2.5.1
 
 ## Additions
