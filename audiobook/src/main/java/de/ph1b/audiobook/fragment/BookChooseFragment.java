@@ -27,9 +27,10 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.mobeta.android.dslv.DragSortListView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -68,6 +69,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     private ActionMode actionMode;
     private BookDetail currentBook;
     private BookDetail bookToEdit;
+    public DragSortListView mediaListView;
 
     private final ServiceConnection mConnection = new ServiceConnection() {
         @Override
@@ -148,11 +150,9 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         currentCover = (ImageView) v.findViewById(R.id.current_cover);
         currentText = (TextView) v.findViewById(R.id.current_text);
         currentPlaying = (ImageButton) v.findViewById(R.id.current_playing);
-        final ListView mediaListView = (ListView) v.findViewById(R.id.listMediaView);
+        mediaListView = (DragSortListView) v.findViewById(R.id.listMediaView);
 
         adapt = new MediaAdapter(details, this);
-        mediaListView.setAdapter(adapt);
-
 
         mediaListView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
         mediaListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
@@ -163,8 +163,10 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                 mode.invalidate();
             }
 
+
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                adapt.toggleDrag(false);
                 actionMode = mode;
                 MenuInflater inflater = mode.getMenuInflater();
                 inflater.inflate(R.menu.action_mode_mediaview, menu);
@@ -226,6 +228,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
+                adapt.toggleDrag(true);
                 adapt.unCheckAll();
             }
         });
@@ -246,7 +249,54 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
             }
 
         });
+
+        mediaListView.setAdapter(adapt);
+
+        mediaListView.setDragSortListener(new DragSortListView.DragSortListener() {
+            @Override
+            public void drag(int from, int to) {
+            }
+
+            @Override
+            public void drop(int from, int to) {
+                if (from != to) {
+                    if (from > to) {
+                        while (from > to) {
+                            swapBooks(from, from - 1);
+                            from--;
+                        }
+                    } else {
+                        while (from < to) {
+                            swapBooks(from, from + 1);
+                            from++;
+                        }
+                    }
+                    db.updateBooksAsync(details);
+                }
+            }
+
+            @Override
+            public void remove(int which) {
+
+            }
+        });
         return v;
+    }
+
+    /*
+    swaps the elements in details list.
+    also swaps their sort id.
+     */
+    public synchronized void swapBooks(int oldPosition, int newPosition) {
+        BookDetail oldBook = details.get(oldPosition);
+        BookDetail newBook = details.get(newPosition);
+        int oldSortId = oldBook.getSortId();
+        int newSortId = newBook.getSortId();
+        oldBook.setSortId(newSortId);
+        newBook.setSortId(oldSortId);
+        details.set(oldPosition, newBook);
+        details.set(newPosition, oldBook);
+        adapt.notifyDataSetChanged();
     }
 
 

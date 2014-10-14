@@ -104,8 +104,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     bookValues.put(KEY_BOOK_COVER, bookCover);
                     bookValues.put(KEY_BOOK_THUMB, bookThumb);
                     bookValues.put(KEY_BOOK_POSITION, bookPosition);
-                    bookValues.put(KEY_BOOK_SORT_ID, -1);
                     long newBookId = db.insert(TABLE_BOOKS, null, bookValues);
+                    bookValues.put(KEY_BOOK_SORT_ID, newBookId);
+                    db.update(TABLE_BOOKS, bookValues, KEY_BOOK_ID + " = " + newBookId, null);
 
                     //generate int array from string
                     String[] mediaIDsAsSplittedString = bookMediaContaining.split(",");
@@ -166,8 +167,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             book.setThumb(cursor.getString(3));
             if (cursor.getString(4) != null)
                 book.setPosition(Integer.parseInt(cursor.getString(4)));
-            if (cursor.getString(5) != null)
-                book.setSortId(Integer.parseInt(cursor.getString(5)));
+            book.setSortId(Integer.parseInt(cursor.getString(5)));
 
             cursor.close();
             return book;
@@ -218,6 +218,33 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public void updateBooksAsync(final ArrayList<BookDetail> books) {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                SQLiteDatabase db = DataBaseHelper.this.getWritableDatabase();
+                db.beginTransaction();
+                try {
+                    for (BookDetail b : books) {
+                        ContentValues values = new ContentValues();
+                        values.put(KEY_BOOK_NAME, b.getName());
+                        values.put(KEY_BOOK_COVER, b.getCover());
+                        values.put(KEY_BOOK_THUMB, b.getThumb());
+                        values.put(KEY_BOOK_POSITION, b.getPosition());
+                        values.put(KEY_BOOK_SORT_ID, b.getSortId());
+                        db.update(TABLE_BOOKS, values, KEY_BOOK_ID + " = " + b.getId(), null);
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                return null;
+            }
+        }.execute();
+    }
+
 
     public void addMedia(ArrayList<MediaDetail> media) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -245,7 +272,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         values.put(KEY_BOOK_COVER, book.getCover());
         values.put(KEY_BOOK_THUMB, book.getThumb());
         SQLiteDatabase db = this.getWritableDatabase();
-        return (int) db.insert(TABLE_BOOKS, null, values);
+        db.beginTransaction();
+        int bookId = 0;
+        try {
+            bookId = (int) db.insert(TABLE_BOOKS, null, values);
+            values.put(KEY_BOOK_SORT_ID, bookId);
+            db.update(TABLE_BOOKS, values, KEY_BOOK_ID + " = " + bookId, null);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        return bookId;
     }
 
 
@@ -279,10 +316,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public ArrayList<BookDetail> getAllBooks() {
         ArrayList<BookDetail> allBooks = new ArrayList<BookDetail>();
-        String query = "SELECT  * FROM " + TABLE_BOOKS;
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = db.query(TABLE_BOOKS,
+                null, null, null, null, null,
+                KEY_BOOK_SORT_ID
+        );
 
         BookDetail book;
         if (cursor.moveToFirst()) {
@@ -294,6 +333,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 book.setThumb(cursor.getString(3));
                 if (cursor.getString(4) != null)
                     book.setPosition(Integer.parseInt(cursor.getString(4)));
+                book.setSortId((Integer.parseInt(cursor.getString(5))));
                 allBooks.add(book);
             } while (cursor.moveToNext());
         }

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,13 @@ public class MediaAdapter extends BaseAdapter {
     private final DataBaseHelper db;
     private final ArrayList<Integer> checkedBookIds = new ArrayList<Integer>();
     private final BookChooseFragment fragment;
+    private boolean dragOn = true;
+
+    public void toggleDrag(boolean dragOn) {
+        this.dragOn = dragOn;
+        Log.d("madapt", String.valueOf(dragOn) + "notify data now");
+        notifyDataSetChanged();
+    }
 
 
     public MediaAdapter(ArrayList<BookDetail> data, BookChooseFragment a) {
@@ -92,6 +100,7 @@ public class MediaAdapter extends BaseAdapter {
             viewHolder.iconImageView = (ImageView) convertView.findViewById(R.id.icon);
             viewHolder.textView = (TextView) convertView.findViewById(R.id.name);
             viewHolder.progressBar = (ProgressBar) convertView.findViewById(R.id.current_progress);
+            viewHolder.dragger = (ImageView) convertView.findViewById(R.id.drag_handle);
 
             convertView.setTag(viewHolder);
         } else {
@@ -120,6 +129,14 @@ public class MediaAdapter extends BaseAdapter {
         //setting bar
         viewHolder.progressBar.setMax(1000);
         viewHolder.progressBar.setProgress(db.getGlobalProgress(b));
+
+        //setting drag visiblity
+        if (dragOn) {
+            viewHolder.dragger.setVisibility(View.VISIBLE);
+        } else {
+            Log.d("madapt", "setting dragger visi to gone");
+            viewHolder.dragger.setVisibility(View.GONE);
+        }
 
         return convertView;
     }
@@ -159,12 +176,14 @@ public class MediaAdapter extends BaseAdapter {
                 }
             }
             //re-inits player widget to show new cover
-            fragment.initPlayerWidget();
+            if (fragment.getActivity() != null)
+                fragment.initPlayerWidget();
         }
     }
 
 
     static class ViewHolder {
+        ImageView dragger;
         ImageView iconImageView;
         TextView textView;
         ProgressBar progressBar;

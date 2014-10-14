@@ -39,4 +39,11 @@
 
     </LinearLayout>
 
+    <ImageView
+        android:id="@id/drag_handle"
+        android:layout_width="35dp"
+        android:layout_height="@dimen/thumb_size"
+        android:scaleType="center"
+        android:src="@drawable/ic_drag_handle" />
+
 </LinearLayout>
