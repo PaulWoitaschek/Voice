@@ -69,7 +69,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     private ActionMode actionMode;
     private BookDetail currentBook;
     private BookDetail bookToEdit;
-    public DragSortListView mediaListView;
+    private DragSortListView mediaListView;
 
     private final ServiceConnection mConnection = new ServiceConnection() {
         @Override
@@ -258,7 +258,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
             }
 
             @Override
-            public void drop(int from, int to) {
+            public synchronized void drop(int from, int to) {
                 if (from != to) {
                     if (from > to) {
                         while (from > to) {
@@ -287,7 +287,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     swaps the elements in details list.
     also swaps their sort id.
      */
-    public synchronized void swapBooks(int oldPosition, int newPosition) {
+    private void swapBooks(int oldPosition, int newPosition) {
         BookDetail oldBook = details.get(oldPosition);
         BookDetail newBook = details.get(newPosition);
         int oldSortId = oldBook.getSortId();
