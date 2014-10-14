@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion '19.1.0'
+    compileSdkVersion 20
+    buildToolsVersion '20.0'
 
     defaultConfig {
         minSdkVersion 11
-        targetSdkVersion 19
-        versionCode 14
-        versionName '1.3.0-pre3'
+        targetSdkVersion 20
+        versionCode 15
+        versionName '1.3.0'
     }
 
     signingConfigs {
