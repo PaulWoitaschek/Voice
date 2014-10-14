@@ -1,13 +1,8 @@
 package com.mobeta.android.dslv;
 
 import android.content.Context;
-import android.view.Gravity;
 import android.view.View;
-import android.view.View.MeasureSpec;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.Checkable;
-import android.util.Log;
 
 /**
  * Lightweight ViewGroup that wraps list items obtained from user's
@@ -18,12 +13,13 @@ import android.util.Log;
  * the width MeasureSpec given to ItemView is passed directly
  * to the child, and the ItemView measured width is set to the
  * child's measured width). The height of ItemView can be anything;
- * the 
- * 
- *
+ * the
+ * <p/>
+ * <p/>
  * The purpose of this class is to optimize slide
  * shuffle animations.
  */
+@SuppressWarnings("ALL")
 public class DragSortItemViewCheckable extends DragSortItemView implements Checkable {
 
     public DragSortItemViewCheckable(Context context) {
