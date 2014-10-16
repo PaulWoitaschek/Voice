@@ -65,7 +65,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
     private TextView maxTimeView;
     private int position;
 
-    private final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
+    private DataBaseHelper db;
     private LocalBroadcastManager bcm;
 
     private static int bookId;
@@ -214,6 +214,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
         setHasOptionsMenu(true);
 
         bcm = LocalBroadcastManager.getInstance(getActivity());
+        db = DataBaseHelper.getInstance(getActivity());
 
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
 
