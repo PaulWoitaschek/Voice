@@ -117,11 +117,10 @@ public class MediaAdapter extends BaseAdapter {
         if (thumbPath == null || thumbPath.equals("") || new File(thumbPath).isDirectory() || !(new File(thumbPath).exists())) {
             int px = CommonTasks.getThumbDimensions(fragment.getResources());
             viewHolder.iconImageView.setImageBitmap(CommonTasks.genCapital(b.getName(), px, fragment.getResources()));
-            WeakReference<ImageView> weakReference = new WeakReference<ImageView>(viewHolder.iconImageView);
 
             //if device is online try to load image in the background!
             if (CommonTasks.isOnline(fragment.getActivity()))
-                new AddCover(weakReference, b).execute();
+                new AddCover(viewHolder.iconImageView, b).execute();
         } else {
             viewHolder.iconImageView.setImageURI(Uri.parse(thumbPath));
         }
@@ -146,11 +145,10 @@ public class MediaAdapter extends BaseAdapter {
         private final WeakReference<ImageView> weakReference;
         private final BookDetail book;
 
-        public AddCover(WeakReference<ImageView> weakReference, BookDetail book) {
-            this.weakReference = weakReference;
+        public AddCover(ImageView imageView, BookDetail book) {
+            this.weakReference = new WeakReference<ImageView>(imageView);
             this.book = book;
         }
-
 
         @Override
         protected String doInBackground(Void... voids) {
@@ -169,7 +167,7 @@ public class MediaAdapter extends BaseAdapter {
 
         @Override
         protected void onPostExecute(String thumbPath) {
-            if (thumbPath != null && weakReference != null) {
+            if (thumbPath != null) {
                 ImageView imageView = weakReference.get();
                 if (imageView != null) {
                     imageView.setImageBitmap(BitmapFactory.decodeFile(thumbPath));
