@@ -72,8 +72,8 @@ public class CommonTasks {
         return width < height ? width : height;
     }
 
-    public static int getThumbDimensions(Resources r) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, r.getDimension(R.dimen.thumb_size), r.getDisplayMetrics());
+    public static float convertDpToPx(float dp) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, Resources.getSystem().getDisplayMetrics());
     }
 
     public static void checkExternalStorage(Context c) {
@@ -100,7 +100,7 @@ public class CommonTasks {
                     (cover.getHeight() > displayPx) ||
                     (cover.getWidth() > displayPx))
                 cover = Bitmap.createScaledBitmap(cover, displayPx, displayPx, false);
-            int thumbPx = getThumbDimensions(a.getResources());
+            int thumbPx = Math.round(convertDpToPx(a.getResources().getDimension(R.dimen.thumb_size_x)));
             Bitmap thumb = Bitmap.createScaledBitmap(cover, thumbPx, thumbPx, false);
             File thumbDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/" + packageName + "/thumbs");
             File imageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/" + packageName + "/images");

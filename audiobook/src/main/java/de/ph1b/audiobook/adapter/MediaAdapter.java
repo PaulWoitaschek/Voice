@@ -115,7 +115,7 @@ public class MediaAdapter extends BaseAdapter {
 
         String thumbPath = b.getThumb();
         if (thumbPath == null || thumbPath.equals("") || new File(thumbPath).isDirectory() || !(new File(thumbPath).exists())) {
-            int px = CommonTasks.getThumbDimensions(fragment.getResources());
+            int px = Math.round(CommonTasks.convertDpToPx(fragment.getResources().getDimension(R.dimen.thumb_size_x)));
             viewHolder.iconImageView.setImageBitmap(CommonTasks.genCapital(b.getName(), px, fragment.getResources()));
 
             //if device is online try to load image in the background!

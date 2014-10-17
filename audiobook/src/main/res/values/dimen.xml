@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="thumb_size">60dp</dimen>
+    <dimen name="thumb_size_x">40dp</dimen>
+    <dimen name="thumb_size_y">40dp</dimen>
+    <dimen name="cover_edit_stroke_width">3dp</dimen>
 </resources>
