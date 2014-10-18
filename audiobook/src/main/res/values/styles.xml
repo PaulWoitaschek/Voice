@@ -1,12 +1,4 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <item name="android:actionModeCloseButtonStyle">@style/NoCloseButton</item>
-    </style>
-
-    <style name="NoCloseButton" parent="@android:style/Widget.ActionButton.CloseMode">
-        <item name="android:visibility">gone</item>
-    </style>
-
+    <style name="AppTheme" parent="Theme.AppCompat.Light" />
 </resources>

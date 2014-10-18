@@ -57,4 +57,5 @@
     <string tools:ignore="MissingTranslation" name="pref_fast_add">Fast adding</string>
     <string tools:ignore="MissingTranslation" name="pref_fast_add_hint">Adds the book immediately without asking for book title and cover.</string>
     <string tools:ignore="MissingTranslation" name="drag_handler_description">Change the order of books by dragging this up or down.</string>
+    <string tools:ignore="MissingTranslation" name="actionModeKill">Discard</string>
 </resources>

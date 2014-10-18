@@ -51,4 +51,5 @@
     <string name="pref_fast_add">Schnelles hinzufügen</string>
     <string name="pref_fast_add_hint">Fügt das Buch sofort hinzu, ohne nach Titel und Cover zu fragen.</string>
     <string name="drag_handler_description">Verändert durch hoch- und runterbewegen die Reihenfolge der Bücher.</string>
+    <string name="actionModeKill">Verwerfen</string>
 </resources>
