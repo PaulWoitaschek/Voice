@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -86,21 +85,21 @@ public class CommonTasks {
     }
 
 
-    public static String[] saveCovers(Bitmap cover, Activity a) {
+    public static String[] saveCovers(Bitmap cover, Context c) {
         if (cover != null) {
             String thumbPath;
             String coverPath;
 
-            String packageName = a.getPackageName();
+            String packageName = c.getPackageName();
             String fileName = String.valueOf(System.currentTimeMillis()) + ".png";
-            int displayPx = getCoverDimensions(a);
+            int displayPx = getCoverDimensions(c);
 
             //only create scaled version if necessary
             if ((cover.getHeight() != cover.getWidth()) ||
                     (cover.getHeight() > displayPx) ||
                     (cover.getWidth() > displayPx))
                 cover = Bitmap.createScaledBitmap(cover, displayPx, displayPx, false);
-            int thumbPx = Math.round(convertDpToPx(a.getResources().getDimension(R.dimen.thumb_size_x)));
+            int thumbPx = Math.round(convertDpToPx(c.getResources().getDimension(R.dimen.thumb_size_x)));
             Bitmap thumb = Bitmap.createScaledBitmap(cover, thumbPx, thumbPx, false);
             File thumbDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/" + packageName + "/thumbs");
             File imageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/" + packageName + "/images");
@@ -212,8 +211,7 @@ public class CommonTasks {
                 BitmapFactory.decodeStream(inputStream, null, options);
 
                 // Calculate inSampleSize
-                int coverDimensions = getCoverDimensions(c);
-                options.inSampleSize = calculateInSampleSize(options, coverDimensions, coverDimensions);
+                options.inSampleSize = calculateInSampleSize(options, c);
 
                 // Decode bitmap with inSampleSize set
                 options.inJustDecodeBounds = false;
@@ -233,8 +231,24 @@ public class CommonTasks {
         return null;
     }
 
+    public static Bitmap genBitmapFromFile(String pathName, Context c) {
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(pathName, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, c);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(pathName, options);
+    }
+
     private static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+            BitmapFactory.Options options, Context c) {
+        int reqHeight = getCoverDimensions(c);
+        int reqWidth = getCoverDimensions(c);
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;

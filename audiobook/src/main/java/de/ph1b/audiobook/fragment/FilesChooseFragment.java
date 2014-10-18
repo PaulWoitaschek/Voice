@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.fragment;
 
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -383,9 +384,12 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
             for (File image : imageFiles) {
                 if (isCancelled())
                     return null;
-                Bitmap cover = BitmapFactory.decodeFile(image.getAbsolutePath());
-                if (cover != null)
-                    bitmaps.add(cover);
+                Activity activity = getActivity();
+                if (activity != null) {
+                    Bitmap cover = CommonTasks.genBitmapFromFile(image.getAbsolutePath(), activity.getApplicationContext());
+                    if (cover != null)
+                        bitmaps.add(cover);
+                }
             }
             return null;
         }
