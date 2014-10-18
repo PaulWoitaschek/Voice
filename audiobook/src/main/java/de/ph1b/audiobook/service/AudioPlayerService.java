@@ -540,11 +540,11 @@ public class AudioPlayerService extends Service {
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
                 int changeTimeAmount = sharedPref.getInt(getString(R.string.pref_change_amount), 20) * 1000;
                 int newPosition = position - changeTimeAmount;
-                if (newPosition > 0) {
-                    mediaPlayer.seekTo(newPosition);
-                    media.setPosition(newPosition);
-                    db.updateMediaAsync(media);
-                }
+                if (newPosition < 0)
+                    newPosition = 0;
+                mediaPlayer.seekTo(newPosition);
+                media.setPosition(newPosition);
+                db.updateMediaAsync(media);
                 stateManager.setTime(mediaPlayer.getCurrentPosition());
             } finally {
                 playerLock.unlock();
