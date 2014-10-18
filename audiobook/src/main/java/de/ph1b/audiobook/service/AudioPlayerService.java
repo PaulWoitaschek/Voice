@@ -512,10 +512,8 @@ public class AudioPlayerService extends Service {
                 int position = mediaPlayer.getCurrentPosition();
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
                 int changeTimeAmount = sharedPref.getInt(getString(R.string.pref_change_amount), 20) * 1000;
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, "Fast Forward by " + changeTimeAmount);
                 int newPosition = position + changeTimeAmount;
-                if (newPosition >= 0) {
+                if (newPosition > 0) {
                     mediaPlayer.seekTo(newPosition);
                     media.setPosition(newPosition);
                     db.updateMediaAsync(media);
