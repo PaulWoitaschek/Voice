@@ -130,10 +130,10 @@ public class MediaAdapter extends BaseAdapter {
         viewHolder.progressBar.setProgress(db.getGlobalProgress(b));
 
         //setting drag visiblity
-        if (dragOn) {
+        if (dragOn && data.size() > 1) {
             viewHolder.dragger.setVisibility(View.VISIBLE);
         } else {
-            Log.d("madapt", "setting dragger visi to gone");
+            //setting dragger invisible if toogled off or size is < 2
             viewHolder.dragger.setVisibility(View.GONE);
         }
 
