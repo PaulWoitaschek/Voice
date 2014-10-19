@@ -4,5 +4,5 @@
     <item
         android:id="@+id/action_add_badge"
         android:title="@string/action_add_badge"
-        android:icon="@drawable/ic_action_save" />
+        android:icon="@drawable/ic_check_white_24dp" />
 </menu>

@@ -12,7 +12,7 @@
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/ic_action_usb"
+        android:src="@drawable/ic_usb_black_36dp"
         android:contentDescription="@string/no_external_storage_action_bar_title" />
 
     <TextView

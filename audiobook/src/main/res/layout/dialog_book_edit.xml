@@ -30,7 +30,7 @@
             android:adjustViewBounds="true"
             android:layout_marginRight="3dp"
             android:layout_marginEnd="3dp"
-            android:src="@drawable/ic_action_remove"
+            android:src="@drawable/ic_close_black_24dp"
             android:layout_gravity="end|center_vertical"
             style="?android:attr/borderlessButtonStyle"
             android:contentDescription="@string/book_title_delete" />
@@ -62,7 +62,7 @@
             android:id="@+id/previous_cover"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_action_previous_item"
+            android:src="@drawable/ic_navigate_before_black_36dp"
             style="?android:attr/borderlessButtonStyle"
             android:contentDescription="@string/content_previous_cover" />
 
@@ -78,7 +78,7 @@
                 android:visibility="gone"
                 android:layout_height="wrap_content" />
 
-            <ImageView
+            <de.ph1b.audiobook.utils.DraggableBoxImageView
                 android:id="@+id/cover"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
             android:id="@+id/next_cover"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_action_next_item"
+            android:src="@drawable/ic_navigate_next_black_36dp"
             style="?android:attr/borderlessButtonStyle"
             android:contentDescription="@string/content_next_cover" />
     </LinearLayout>

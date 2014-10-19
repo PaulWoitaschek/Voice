@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.utils.CommonTasks;
+import de.ph1b.audiobook.utils.DraggableBoxImageView;
 
 public class EditBook extends DialogFragment implements View.OnClickListener {
 
@@ -37,7 +39,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
     public static final String BOOK_COVER = "BOOK_COVER";
     public static final String DIALOG_TITLE = "DIALOG_TITLE";
 
-    private ImageView cover;
+    private DraggableBoxImageView coverImageView;
     private ProgressBar coverReplacement;
     private ImageButton previousCover;
     private ImageButton nextCover;
@@ -57,8 +59,8 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
                 break;
             case R.id.previous_cover:
                 coverPosition--;
-                cover.setImageBitmap(covers.get(coverPosition));
-                cover.setVisibility(View.VISIBLE);
+                coverImageView.setImageBitmap(covers.get(coverPosition));
+                coverImageView.setVisibility(View.VISIBLE);
                 coverReplacement.setVisibility(View.GONE);
                 nextCover.setVisibility(View.VISIBLE);
                 if (coverPosition == 0)
@@ -67,7 +69,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
             case R.id.next_cover:
                 if (coverPosition < covers.size() - 1) {
                     coverPosition++;
-                    cover.setImageBitmap(covers.get(coverPosition));
+                    coverImageView.setImageBitmap(covers.get(coverPosition));
                     previousCover.setVisibility(View.VISIBLE);
                 } else {
                     genCoverFromInternet(nameEditText.getText().toString());
@@ -115,7 +117,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
         ViewGroup coverLayout = (ViewGroup) v.findViewById(R.id.cover_layout);
         nameEditText = (EditText) v.findViewById(R.id.book_name);
         ImageButton removeBookName = (ImageButton) v.findViewById(R.id.book_name_remove);
-        cover = (ImageView) v.findViewById(R.id.cover);
+        coverImageView = (DraggableBoxImageView) v.findViewById(R.id.cover);
         coverReplacement = (ProgressBar) v.findViewById(R.id.cover_replacement);
         previousCover = (ImageButton) v.findViewById(R.id.previous_cover);
         nextCover = (ImageButton) v.findViewById(R.id.next_cover);
@@ -147,7 +149,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
             }
         }
         if (coverSize > 0) {
-            cover.setImageBitmap(covers.get(0));
+            coverImageView.setImageBitmap(covers.get(0));
             coverPosition = 0;
             if (!online && coverSize == 1)
                 nextCover.setVisibility(View.INVISIBLE);
@@ -168,10 +170,14 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
                 if (addCoverAsync != null && !addCoverAsync.isCancelled())
                     addCoverAsync.cancel(true);
                 String bookName = nameEditText.getText().toString();
-                Bitmap cover = null;
-                if (covers.size() > 0)
-                    cover = covers.get(coverPosition);
-                ((OnEditBookFinished) getTargetFragment()).onEditBookFinished(bookName, cover, true);
+                Bitmap newCover = null;
+                if (covers.size() > 0) {
+                    Rect r = coverImageView.getCropPosition();
+                    newCover = covers.get(coverPosition);
+                    newCover = Bitmap.createBitmap(newCover, r.left, r.top, r.width(), r.height());
+                    Log.d("ebook", "Added with" + r.flattenToString());
+                }
+                ((OnEditBookFinished) getTargetFragment()).onEditBookFinished(bookName, newCover, true);
             }
         });
         builder.setTitle(dialogTitle);
@@ -215,14 +221,14 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
             this.searchString = searchString;
             this.pageCounter = pageCounter;
             progressBarWeakReference = new WeakReference<ProgressBar>(coverReplacement);
-            imageViewWeakReference = new WeakReference<ImageView>(cover);
+            imageViewWeakReference = new WeakReference<ImageView>(coverImageView);
             imageButtonWeakReference = new WeakReference<ImageButton>(previousCover);
         }
 
         @Override
         protected void onPreExecute() {
             coverReplacement.setVisibility(View.VISIBLE);
-            cover.setVisibility(View.GONE);
+            coverImageView.setVisibility(View.GONE);
         }
 
         @Override

@@ -8,7 +8,7 @@
         android:id="@+id/action_sleep"
         android:title="@string/action_sleep"
         android:orderInCategory="80"
-        android:icon="@drawable/ic_action_time"
+        android:icon="@drawable/ic_snooze_white_24dp"
         app:showAsAction="ifRoom" />
 
     <item

@@ -64,7 +64,7 @@
                 android:layout_height="@dimen/thumb_size_x"
                 android:layout_gravity="center"
                 style="?android:attr/borderlessButtonStyle"
-                android:src="@drawable/av_play"
+                android:src="@drawable/ic_play_arrow_black_36dp"
                 android:contentDescription="@string/current_playing" />
 
         </LinearLayout>

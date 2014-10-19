@@ -90,17 +90,18 @@ public class CommonTasks {
             String thumbPath;
             String coverPath;
 
+            float thumbSizeX = convertDpToPx(c.getResources().getDimension(R.dimen.thumb_size_x));
+            float thumbSizeY = convertDpToPx(c.getResources().getDimension(R.dimen.thumb_size_y));
+
+
             String packageName = c.getPackageName();
             String fileName = String.valueOf(System.currentTimeMillis()) + ".png";
             int displayPx = getCoverDimensions(c);
+            int displayPy = Math.round(displayPx * thumbSizeY / thumbSizeX);
+            if (displayPx != cover.getWidth() && displayPy != cover.getHeight())
+                cover = Bitmap.createScaledBitmap(cover, displayPx, displayPy, false);
 
-            //only create scaled version if necessary
-            if ((cover.getHeight() != cover.getWidth()) ||
-                    (cover.getHeight() > displayPx) ||
-                    (cover.getWidth() > displayPx))
-                cover = Bitmap.createScaledBitmap(cover, displayPx, displayPx, false);
-            int thumbPx = Math.round(convertDpToPx(c.getResources().getDimension(R.dimen.thumb_size_x)));
-            Bitmap thumb = Bitmap.createScaledBitmap(cover, thumbPx, thumbPx, false);
+            Bitmap thumb = Bitmap.createScaledBitmap(cover, Math.round(thumbSizeX), Math.round(thumbSizeY), false);
             File thumbDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/" + packageName + "/thumbs");
             File imageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/" + packageName + "/images");
             File thumbFile = new File(thumbDir, fileName);
@@ -166,6 +167,11 @@ public class CommonTasks {
     }
 
     public static URLConnection connection = null;
+
+    public static void deleteFile(File deleteFile) {
+        if (deleteFile != null)
+            deleteFile.deleteOnExit();
+    }
 
     public static Bitmap genCoverFromInternet(String searchText, int pageCounter, Context c) {
         int connectTimeOut = 3000;

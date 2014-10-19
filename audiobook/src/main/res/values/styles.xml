@@ -1,4 +1,22 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light" />
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="android:alertDialogStyle">@style/AppAlertTheme</item>
+        <item name="android:dialogTheme">@style/AppDialogTheme</item>
+    </style>
+
+    <style name="AppDialogTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+    </style>
+
+    <!-- This should extend Theme.Material.Dialog.Alert, but that style was
+         incorrectly hidden in L-preview. It will be fixed in a future release.
+         You can approximate the style using the last two MinWidth attributes.-->
+    <style name="AppAlertTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+    </style>
 </resources>

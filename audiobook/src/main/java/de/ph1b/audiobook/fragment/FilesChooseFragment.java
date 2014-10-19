@@ -281,7 +281,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
                 @Override
                 public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                    mode.setTitle(getResources().getString(R.string.actionModeKill));
                     MenuInflater inflater = mode.getMenuInflater();
                     inflater.inflate(R.menu.action_mode_mediaadd, menu);
                     return true;

@@ -9,7 +9,7 @@
         android:id="@+id/widgetPlayButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/av_play"
+        android:src="@drawable/ic_play_arrow_black_36dp"
         android:contentDescription="@string/content_widget_play"
         android:background="@drawable/widget_background" />
 

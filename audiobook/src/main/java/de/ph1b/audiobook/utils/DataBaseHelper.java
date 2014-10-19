@@ -404,15 +404,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         null);
 
                 if (b.getCover() != null) {
-                    File cover = new File(b.getCover());
-                    //noinspection ResultOfMethodCallIgnored
-                    cover.delete();
+                    CommonTasks.deleteFile(new File(b.getCover()));
                 }
 
                 if (b.getThumb() != null) {
-                    File thumb = new File(b.getThumb());
-                    //noinspection ResultOfMethodCallIgnored
-                    thumb.delete();
+                    CommonTasks.deleteFile(new File(b.getThumb()));
                 }
             }
             db.setTransactionSuccessful();

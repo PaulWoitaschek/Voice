@@ -2,7 +2,10 @@ package de.ph1b.audiobook.utils;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -31,6 +34,9 @@ public class DraggableBoxImageView extends ImageView {
     //where the finger last went down
     private float fingerX = 0;
     private float fingerY = 0;
+
+    float relationX = 0;
+    float relationY = 0;
 
 
     @Override
@@ -89,8 +95,8 @@ public class DraggableBoxImageView extends ImageView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 
-        float relationX = getResources().getDimension(R.dimen.thumb_size_x);
-        float relationY = getResources().getDimension(R.dimen.thumb_size_y);
+        relationX = getResources().getDimension(R.dimen.thumb_size_x);
+        relationY = getResources().getDimension(R.dimen.thumb_size_y);
 
         imageViewWidth = w;
         imageViewHeight = h;
@@ -115,16 +121,38 @@ public class DraggableBoxImageView extends ImageView {
                     String.valueOf(bottom));
         }
 
-
         super.onSizeChanged(w, h, oldw, oldh);
+    }
 
+    public Rect getCropPosition() {
+        // Get image matrix values and place them in an array
+        float[] f = new float[9];
+        getImageMatrix().getValues(f);
 
+        // Extract the scale values using the constants (if aspect ratio maintained, scaleX == scaleY)
+        float scaleX = f[Matrix.MSCALE_X];
+        float scaleY = f[Matrix.MSCALE_Y];
+
+        // Get the drawable (could also get the bitmap behind the drawable and getWidth/getHeight)
+        Drawable d = getDrawable();
+        int origW = d.getIntrinsicWidth();
+        int origH = d.getIntrinsicHeight();
+
+        // Calculate the actual dimensions
+        float actW = origW * scaleX;
+        float actH = origH * scaleY;
+
+        //returning the actual sizes
+        int realLeft = Math.round(left / maxWidth * actW);
+        int realTop = Math.round(top / maxHeight * actH);
+        int realRight = Math.round(right / maxWidth * actW);
+        int realBottom = Math.round(bottom / maxHeight * actH);
+
+        return new Rect(realLeft, realTop, realRight, realBottom);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
-
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
@@ -132,11 +160,16 @@ public class DraggableBoxImageView extends ImageView {
     protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
 
-        canvas.drawARGB(70, 0, 0, 0);
-
-        float halfStrokeSize = CommonTasks.convertDpToPx(getResources().getDimension(R.dimen.cover_edit_stroke_width)) / 2;
-        canvas.drawRect(left + halfStrokeSize, top + halfStrokeSize,
-                right - halfStrokeSize, bottom - halfStrokeSize, borderLinePaint);
+        if (imageViewHeight > 0 && imageViewWidth > 0 && relationX > 0 && relationY > 0) {
+            float difference = Math.abs(imageViewHeight / imageViewWidth) / (relationX / relationY);
+            // only draw frame if relation doesn't already fit approx
+            if (difference < 0.95 || difference > 1.05) {
+                canvas.drawARGB(70, 0, 0, 0);
+                float halfStrokeSize = CommonTasks.convertDpToPx(getResources().getDimension(R.dimen.cover_edit_stroke_width)) / 2;
+                canvas.drawRect(left + halfStrokeSize, top + halfStrokeSize,
+                        right - halfStrokeSize, bottom - halfStrokeSize, borderLinePaint);
+            }
+        }
     }
 
     //constructor!
@@ -164,9 +197,8 @@ public class DraggableBoxImageView extends ImageView {
         float strokeWidth = CommonTasks.convertDpToPx(getResources().getDimension(R.dimen.cover_edit_stroke_width));
 
         borderLinePaint = new Paint();
-        borderLinePaint.setColor(getResources().getColor(android.R.color.white));
+        borderLinePaint.setColor(getResources().getColor(R.color.holo_blue_dark));
         borderLinePaint.setStyle(Paint.Style.STROKE);
         borderLinePaint.setStrokeWidth(strokeWidth);
     }
-
 }
