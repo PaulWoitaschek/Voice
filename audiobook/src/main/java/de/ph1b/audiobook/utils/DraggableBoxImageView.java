@@ -35,8 +35,8 @@ public class DraggableBoxImageView extends ImageView {
     private float fingerX = 0;
     private float fingerY = 0;
 
-    float relationX = 0;
-    float relationY = 0;
+    private float relationX = 0;
+    private float relationY = 0;
 
 
     @Override
@@ -149,11 +149,6 @@ public class DraggableBoxImageView extends ImageView {
         int realBottom = Math.round(bottom / maxHeight * actH);
 
         return new Rect(realLeft, realTop, realRight, realBottom);
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     @Override

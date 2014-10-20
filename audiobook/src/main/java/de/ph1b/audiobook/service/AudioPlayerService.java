@@ -91,6 +91,7 @@ public class AudioPlayerService extends Service {
     private BookDetail book;
     private Handler handler;
 
+    @SuppressWarnings("deprecation")
     private RemoteControlClient mRemoteControlClient;
 
     private ComponentName myEventReceiver;
@@ -155,6 +156,7 @@ public class AudioPlayerService extends Service {
             ComponentName nmm = new ComponentName(getPackageName(), RemoteControlReceiver.class.getName());
             mediaButtonIntent.setComponent(nmm);
             PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(this, 0, mediaButtonIntent, 0);
+            //noinspection deprecation
             mRemoteControlClient = new RemoteControlClient(mediaPendingIntent);
         }
 
@@ -374,6 +376,7 @@ public class AudioPlayerService extends Service {
     };
 
 
+    @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")
     private void initBook() {
 
