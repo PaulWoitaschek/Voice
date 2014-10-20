@@ -4,29 +4,6 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
-        <item name="android:alertDialogStyle">@style/StyleForMissingStyle</item>
-        <item name="android:dialogTheme">@style/StyleForMissingStyle</item>
-        <item name="android:seekBarStyle">@style/StyleForMissingStyle</item>
     </style>
-
-    <style name="StyleForMissingStyle" parent="AppTheme">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
-    <style name="alertDialogStyle" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
-    <style name="dialogStyle" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
 
 </resources>
