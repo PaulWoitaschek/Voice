@@ -58,8 +58,6 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
     private ImageButton play_button;
     private TextView playedTimeView;
     private ImageView coverView;
-    private ImageButton previous_button;
-    private ImageButton forward_button;
     private SeekBar seek_bar;
     private Spinner bookSpinner;
     private TextView maxTimeView;
@@ -181,12 +179,9 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
 
                 //hides control elements if there is only one media to play
                 if (allMedia.size() == 1) {
-                    previous_button.setVisibility(View.GONE);
-                    forward_button.setVisibility(View.GONE);
                     bookSpinner.setVisibility(View.GONE);
                 } else {
-                    previous_button.setVisibility(View.VISIBLE);
-                    forward_button.setVisibility(View.VISIBLE);
+
                     bookSpinner.setVisibility(View.VISIBLE);
 
                     bookSpinner.setSelection(adapter.getPositionByMediaDetailId(media.getId()));
@@ -243,16 +238,12 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
         ImageButton rewind_button = (ImageButton) v.findViewById(R.id.rewind);
         ImageButton fast_forward_button = (ImageButton) v.findViewById(R.id.fast_forward);
         playedTimeView = (TextView) v.findViewById(R.id.played);
-        forward_button = (ImageButton) v.findViewById(R.id.next_song);
-        previous_button = (ImageButton) v.findViewById(R.id.previous_song);
         coverView = (ImageView) v.findViewById(R.id.book_cover);
         maxTimeView = (TextView) v.findViewById(R.id.maxTime);
         bookSpinner = (Spinner) v.findViewById(R.id.book_spinner);
 
 
         //setup buttons
-        forward_button.setOnClickListener(this);
-        previous_button.setOnClickListener(this);
         rewind_button.setOnClickListener(this);
         fast_forward_button.setOnClickListener(this);
         play_button.setOnClickListener(this);
@@ -341,12 +332,6 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
                     break;
                 case R.id.fast_forward:
                     mService.fastForward();
-                    break;
-                case R.id.next_song:
-                    mService.nextSong();
-                    break;
-                case R.id.previous_song:
-                    mService.previousSong();
                     break;
                 case R.id.played:
                     launchJumpToPositionDialog();

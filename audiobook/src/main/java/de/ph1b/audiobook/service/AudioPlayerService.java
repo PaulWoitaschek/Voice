@@ -199,10 +199,10 @@ public class AudioPlayerService extends Service {
                     play();
                 break;
             case KeyEvent.KEYCODE_MEDIA_NEXT:
-                nextSong();
+                fastForward();
                 break;
             case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
-                previousSong();
+                rewind();
                 break;
             case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
                 fastForward();
@@ -550,23 +550,6 @@ public class AudioPlayerService extends Service {
         }
     }
 
-    public void previousSong() {
-        int currentId = media.getId();
-        for (int i = 1; i < allMedia.size(); i++) { //starting at #1 to prevent change when on first song
-            if (allMedia.get(i).getId() == currentId) {
-                boolean wasPlaying = ((stateManager.getState() == PlayerStates.STARTED) ||
-                        (stateManager.getState() == PlayerStates.PLAYBACK_COMPLETED));
-                int mediaId = allMedia.get(i - 1).getId();
-                prepare(mediaId);
-                book.setPosition(media.getId());
-                db.updateBookAsync(book);
-                if (wasPlaying)
-                    play();
-                updateGUI();
-                break;
-            }
-        }
-    }
 
     public void nextSong() {
         int currentId = media.getId();
