@@ -3,20 +3,30 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
-        <item name="android:alertDialogStyle">@style/AppAlertTheme</item>
-        <item name="android:dialogTheme">@style/AppDialogTheme</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:alertDialogStyle">@style/StyleForMissingStyle</item>
+        <item name="android:dialogTheme">@style/StyleForMissingStyle</item>
+        <item name="android:seekBarStyle">@style/StyleForMissingStyle</item>
     </style>
 
-    <style name="AppDialogTheme" parent="AppTheme">
+    <style name="StyleForMissingStyle" parent="AppTheme">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <!-- This should extend Theme.Material.Dialog.Alert, but that style was
-         incorrectly hidden in L-preview. It will be fixed in a future release.
-         You can approximate the style using the last two MinWidth attributes.-->
-    <style name="AppAlertTheme" parent="AppTheme">
+    <style name="alertDialogStyle" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <style name="dialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+
 </resources>

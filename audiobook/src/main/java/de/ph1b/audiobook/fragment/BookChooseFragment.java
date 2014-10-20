@@ -79,9 +79,9 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
             mService = binder.getService();
             mBound = true;
             if (mService.stateManager.getState() == PlayerStates.STARTED) {
-                currentPlaying.setImageResource(R.drawable.av_pause);
+                currentPlaying.setImageResource(R.drawable.ic_pause_black_36dp);
             } else {
-                currentPlaying.setImageResource(R.drawable.av_play);
+                currentPlaying.setImageResource(R.drawable.ic_play_arrow_black_36dp);
             }
             mService.stateManager.addStateChangeListener(onStateChangedListener);
         }
@@ -117,9 +117,9 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                 @Override
                 public void run() {
                     if (state == PlayerStates.STARTED) {
-                        currentPlaying.setImageResource(R.drawable.av_pause);
+                        currentPlaying.setImageResource(R.drawable.ic_pause_black_36dp);
                     } else {
-                        currentPlaying.setImageResource(R.drawable.av_play);
+                        currentPlaying.setImageResource(R.drawable.ic_play_arrow_black_36dp);
                     }
                 }
             });

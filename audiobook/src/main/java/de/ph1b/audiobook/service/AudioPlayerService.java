@@ -114,9 +114,9 @@ public class AudioPlayerService extends Service {
             if (BuildConfig.DEBUG)
                 Log.d(TAG, "state changed called: " + state);
             if (state == PlayerStates.STARTED) {
-                remoteViews.setImageViewResource(R.id.widgetPlayButton, R.drawable.av_pause);
+                remoteViews.setImageViewResource(R.id.widgetPlayButton, R.drawable.ic_pause_black_36dp);
             } else {
-                remoteViews.setImageViewResource(R.id.widgetPlayButton, R.drawable.av_play);
+                remoteViews.setImageViewResource(R.id.widgetPlayButton, R.drawable.ic_play_arrow_black_36dp);
             }
             AppWidgetManager.getInstance(getApplicationContext()).updateAppWidget(widgetComponentName, remoteViews);
         }
@@ -311,7 +311,7 @@ public class AudioPlayerService extends Service {
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 builder.setPriority(Notification.PRIORITY_HIGH);
-                builder.addAction(R.drawable.av_pause_dark, "Pause", pauseActionPI);
+                builder.addAction(R.drawable.ic_pause_white_36dp, "Pause", pauseActionPI);
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
                 builder.setShowWhen(false);
@@ -604,7 +604,7 @@ public class AudioPlayerService extends Service {
         if (mediaId != book.getPosition()) {
             book.setPosition(mediaId);
             db.updateBookAsync(book);
-            Boolean wasPlaying = (stateManager.getState() == PlayerStates.STARTED);
+            boolean wasPlaying = (stateManager.getState() == PlayerStates.STARTED);
             prepare(mediaId);
             if (wasPlaying)
                 play();

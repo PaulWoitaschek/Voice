@@ -90,9 +90,9 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
             mService = binder.getService();
 
             if (mService.stateManager.getState() == PlayerStates.STARTED) {
-                play_button.setImageResource(R.drawable.av_pause);
+                play_button.setImageResource(R.drawable.ic_pause_black_36dp);
             } else {
-                play_button.setImageResource(R.drawable.av_play);
+                play_button.setImageResource(R.drawable.ic_play_arrow_black_36dp);
             }
             mService.stateManager.addStateChangeListener(onStateChangedListener);
             mService.stateManager.addTimeChangedListener(onTimeChangedListener);
@@ -133,9 +133,9 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
                 @Override
                 public void run() {
                     if (state == PlayerStates.STARTED) {
-                        play_button.setImageResource(R.drawable.av_pause);
+                        play_button.setImageResource(R.drawable.ic_pause_black_36dp);
                     } else {
-                        play_button.setImageResource(R.drawable.av_play);
+                        play_button.setImageResource(R.drawable.ic_play_arrow_black_36dp);
                     }
                 }
             });
