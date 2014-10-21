@@ -6,6 +6,7 @@
     android:orientation="vertical"
     tools:context=".activity.MediaAdd">
 
+
     <com.mobeta.android.dslv.DragSortListView
         android:id="@+id/listMediaView"
         android:layout_width="fill_parent"

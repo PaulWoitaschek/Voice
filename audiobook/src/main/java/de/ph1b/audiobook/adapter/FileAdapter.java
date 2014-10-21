@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
@@ -51,10 +52,10 @@ public class FileAdapter extends BaseAdapter {
 
         if (convertView == null) {
             LayoutInflater vi = (LayoutInflater) fragment.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = vi.inflate(R.layout.adapter_files_choose, parent, false);
+            convertView = vi.inflate(R.layout.files_chooser_listview, parent, false);
 
             viewHolder = new ViewHolder();
-            viewHolder.symbolView = (TextView) convertView.findViewById(R.id.file_symbol);
+            viewHolder.icon = (ImageView) convertView.findViewById(R.id.icon);
             viewHolder.nameView = (TextView) convertView.findViewById(R.id.file_name);
             viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.file_check);
 
@@ -70,18 +71,20 @@ public class FileAdapter extends BaseAdapter {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 int pos = (Integer) buttonView.getTag();
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "data " + data.get(pos).getName() + " is " + String.valueOf(isChecked));
                 if (isChecked)
                     checked.add(data.get(pos));
                 else
                     checked.remove(data.get(pos));
-
+                
                 viewHolder.checkBox.setChecked(isChecked);
 
-                //sends only checked files
-                ArrayList<File> checkedFiles = new ArrayList<File>();
-                for (File f : checked)
-                    checkedFiles.add(f);
-                ((FilesChooseFragment) fragment).checkStateChanged(checkedFiles);
+                for (File f : checked) {
+                    Log.d(TAG, f.getName());
+                }
+
+                ((FilesChooseFragment) fragment).checkStateChanged(checked);
             }
         });
 
@@ -94,13 +97,9 @@ public class FileAdapter extends BaseAdapter {
         File f = data.get(position);
         String name = f.getName();
 
-        String capital = name.substring(0, 1).toUpperCase();
 
-        viewHolder.symbolView.setText(capital);
         if (f.isFile())
-            viewHolder.symbolView.setBackgroundColor(fragment.getActivity().getResources().getColor(R.color.file_chooser_audio));
-        else
-            viewHolder.symbolView.setBackgroundColor(fragment.getActivity().getResources().getColor(R.color.file_chooser_folder));
+            viewHolder.icon.setImageResource(R.drawable.ic_album_grey600_48dp);
 
         viewHolder.nameView.setText(name);
 
@@ -115,7 +114,7 @@ public class FileAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView symbolView;
+        ImageView icon;
         TextView nameView;
         CheckBox checkBox;
     }

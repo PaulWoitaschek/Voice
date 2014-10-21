@@ -94,7 +94,7 @@ public class MediaAdapter extends BaseAdapter {
         final ViewHolder viewHolder;
         if (convertView == null) {
             LayoutInflater vi = (LayoutInflater) fragment.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = vi.inflate(R.layout.media_chooser_listview_layout, parent, false);
+            convertView = vi.inflate(R.layout.media_chooser_listview, parent, false);
 
             viewHolder = new ViewHolder();
             viewHolder.iconImageView = (ImageView) convertView.findViewById(R.id.icon);
