@@ -115,8 +115,8 @@ public class MediaAdapter extends BaseAdapter {
 
         String thumbPath = b.getThumb();
         if (thumbPath == null || thumbPath.equals("") || new File(thumbPath).isDirectory() || !(new File(thumbPath).exists())) {
-            int px = Math.round(CommonTasks.convertDpToPx(fragment.getResources().getDimension(R.dimen.thumb_size_x)));
-            viewHolder.iconImageView.setImageBitmap(CommonTasks.genCapital(b.getName(), px, fragment.getResources()));
+            int thumbSize = CommonTasks.getThumbSize(fragment.getActivity());
+            viewHolder.iconImageView.setImageBitmap(CommonTasks.genCapital(b.getName(), thumbSize, fragment.getResources()));
 
             //if device is online try to load image in the background!
             if (CommonTasks.isOnline(fragment.getActivity()))
@@ -152,14 +152,16 @@ public class MediaAdapter extends BaseAdapter {
 
         @Override
         protected String doInBackground(Void... voids) {
+            Context c = fragment.getActivity();
             Bitmap bitmap = CommonTasks.genCoverFromInternet(book.getName(), 0, fragment.getActivity());
-            String[] coverPaths = CommonTasks.saveCovers(bitmap, fragment.getActivity());
-            if (coverPaths != null) {
-                book.setCover(coverPaths[0]);
-                book.setThumb(coverPaths[1]);
+            String imagePaths[] = CommonTasks.saveBitmap(bitmap, c);
+
+            if (imagePaths != null) {
+                book.setCover(imagePaths[0]);
+                book.setThumb(imagePaths[1]);
                 db.updateBook(book);
                 updateBookInData(book);
-                return coverPaths[1];
+                return imagePaths[1];
             }
             return null;
         }

@@ -61,8 +61,8 @@
 
             <ImageButton
                 android:id="@+id/current_playing"
-                android:layout_width="@dimen/thumb_size_x"
-                android:layout_height="@dimen/thumb_size_x"
+                android:layout_width="@dimen/thumb_size"
+                android:layout_height="@dimen/thumb_size"
                 android:layout_gravity="center"
                 style="?android:attr/borderlessButtonStyle"
                 android:src="@drawable/ic_play_arrow_black_36dp"

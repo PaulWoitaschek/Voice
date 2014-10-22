@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.utils;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -9,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
@@ -34,9 +36,6 @@ public class DraggableBoxImageView extends ImageView {
     //where the finger last went down
     private float fingerX = 0;
     private float fingerY = 0;
-
-    private float relationX = 0;
-    private float relationY = 0;
 
 
     @Override
@@ -95,22 +94,19 @@ public class DraggableBoxImageView extends ImageView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 
-        relationX = getResources().getDimension(R.dimen.thumb_size_x);
-        relationY = getResources().getDimension(R.dimen.thumb_size_y);
 
         imageViewWidth = w;
         imageViewHeight = h;
 
         if (getDrawable() != null && w > 0 && h > 0) {
-            if ((h / relationY) > (w / relationX)) {
-                //if this is the case, then for the desired ration, the image is too high. so set max to width
-                right = w;
-                bottom = right * relationY / relationX;
 
+            //setting frame accordingly
+            if (w < h) {
+                right = w;
+                bottom = w;
             } else {
-                //..image is to width, so set max to height
+                right = h;
                 bottom = h;
-                right = bottom * relationX / relationY;
             }
 
             maxWidth = right - left;
@@ -155,12 +151,14 @@ public class DraggableBoxImageView extends ImageView {
     protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
 
-        if (imageViewHeight > 0 && imageViewWidth > 0 && relationX > 0 && relationY > 0) {
-            float difference = Math.abs(imageViewHeight / imageViewWidth) / (relationX / relationY);
+        if (imageViewHeight > 0 && imageViewWidth > 0) {
+            float proportion = imageViewHeight / imageViewWidth;
             // only draw frame if relation doesn't already fit approx
-            if (difference < 0.95 || difference > 1.05) {
+            if (proportion < 0.95 || proportion > 1.05) {
                 canvas.drawARGB(70, 0, 0, 0);
-                float halfStrokeSize = CommonTasks.convertDpToPx(getResources().getDimension(R.dimen.cover_edit_stroke_width)) / 2;
+                float strokeSizeInDp = getResources().getDimension(R.dimen.cover_edit_stroke_width);
+                float strokeSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, strokeSizeInDp, Resources.getSystem().getDisplayMetrics());
+                float halfStrokeSize = strokeSize / 2;
                 canvas.drawRect(left + halfStrokeSize, top + halfStrokeSize,
                         right - halfStrokeSize, bottom - halfStrokeSize, borderLinePaint);
             }
@@ -189,7 +187,8 @@ public class DraggableBoxImageView extends ImageView {
     }
 
     private void init() {
-        float strokeWidth = CommonTasks.convertDpToPx(getResources().getDimension(R.dimen.cover_edit_stroke_width));
+        float strokeSizeInDp = getResources().getDimension(R.dimen.cover_edit_stroke_width);
+        float strokeWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, strokeSizeInDp, Resources.getSystem().getDisplayMetrics());
 
         borderLinePaint = new Paint();
         borderLinePaint.setColor(getResources().getColor(R.color.primary));

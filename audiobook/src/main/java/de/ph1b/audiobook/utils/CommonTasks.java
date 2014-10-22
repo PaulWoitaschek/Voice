@@ -63,7 +63,7 @@ public class CommonTasks {
     }
 
 
-    public static int getCoverDimensions(Context c) {
+    public static int getCoverSize(Context c) {
         c.getResources().getDisplayMetrics();
         DisplayMetrics metrics = c.getResources().getDisplayMetrics();
         int width = metrics.widthPixels;
@@ -71,8 +71,9 @@ public class CommonTasks {
         return width < height ? width : height;
     }
 
-    public static float convertDpToPx(float dp) {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, Resources.getSystem().getDisplayMetrics());
+    public static int getThumbSize(Context c) {
+        float thumbSizeDp = c.getResources().getDimension(R.dimen.thumb_size);
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, thumbSizeDp, Resources.getSystem().getDisplayMetrics()));
     }
 
     public static void checkExternalStorage(Context c) {
@@ -84,24 +85,66 @@ public class CommonTasks {
         }
     }
 
+    public static String[] saveBitmap(Bitmap bitmap, Context c) {
+        int width = bitmap.getWidth();
+        int heigth = bitmap.getHeight();
+        int relation = width / heigth;
+        if (relation > 1.05 || relation > 0.95) {
+            int size = Math.min(width, heigth);
+            bitmap = Bitmap.createBitmap(bitmap, 0, 0, size, size);
+        }
+        int coverSize = getCoverSize(c);
+        int thumbSize = getThumbSize(c);
+        Bitmap cover = Bitmap.createScaledBitmap(bitmap, coverSize, coverSize, true);
+        Bitmap thumb = Bitmap.createScaledBitmap(cover, thumbSize, thumbSize, true);
 
+        String packageName = c.getPackageName();
+        String fileName = String.valueOf(System.currentTimeMillis()) + ".png";
+
+        File coverDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/" + packageName + "/cover");
+        File thumbDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/" + packageName + "/thumb");
+        File coverFile = new File(coverDir, fileName);
+        File thumbFile = new File(thumbDir, fileName);
+        //noinspection ResultOfMethodCallIgnored
+        coverDir.mkdirs();
+        //noinspection ResultOfMethodCallIgnored
+        thumbDir.mkdirs();
+        try {
+            FileOutputStream coverOut = new FileOutputStream(coverFile);
+            FileOutputStream thumbOut = new FileOutputStream(thumbFile);
+            cover.compress(Bitmap.CompressFormat.PNG, 90, coverOut);
+            thumb.compress(Bitmap.CompressFormat.PNG, 90, thumbOut);
+            coverOut.flush();
+            thumbOut.flush();
+            coverOut.close();
+            thumbOut.close();
+            return new String[]{coverFile.getAbsolutePath(), thumbFile.getAbsolutePath()};
+        } catch (IOException e) {
+            if (BuildConfig.DEBUG) Log.d(TAG, e.getMessage());
+        }
+        return null;
+    }
+
+
+    /*
     public static String[] saveCovers(Bitmap cover, Context c) {
         if (cover != null) {
             String thumbPath;
             String coverPath;
 
-            float thumbSizeX = convertDpToPx(c.getResources().getDimension(R.dimen.thumb_size_x));
-            float thumbSizeY = convertDpToPx(c.getResources().getDimension(R.dimen.thumb_size_y));
-
+            int thumbSize = (int) convertDpToPx(c.getResources().getDimension(R.dimen.thumb_size));
 
             String packageName = c.getPackageName();
             String fileName = String.valueOf(System.currentTimeMillis()) + ".png";
-            int displayPx = getCoverDimensions(c);
-            int displayPy = Math.round(displayPx * thumbSizeY / thumbSizeX);
-            if (displayPx != cover.getWidth() && displayPy != cover.getHeight())
-                cover = Bitmap.createScaledBitmap(cover, displayPx, displayPy, false);
+            int coverDimensions = getSmallerDisplaySide(c);
 
-            Bitmap thumb = Bitmap.createScaledBitmap(cover, Math.round(thumbSizeX), Math.round(thumbSizeY), false);
+            int relation = cover.getHeight() / cover.getWidth();
+            if (relation > 1.05 || relation < 0.95) {
+
+            }
+            cover = Bitmap.createScaledBitmap(cover, coverDimensions, coverDimensions, false);
+
+            Bitmap thumb = Bitmap.createScaledBitmap(cover, thumbSize, thumbSize, false);
             File thumbDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/" + packageName + "/thumbs");
             File imageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/" + packageName + "/images");
             File thumbFile = new File(thumbDir, fileName);
@@ -131,6 +174,7 @@ public class CommonTasks {
             return null;
         }
     }
+    */
 
     public static boolean isOnline(Context c) {
         ConnectivityManager cm =
@@ -173,6 +217,10 @@ public class CommonTasks {
             deleteFile.deleteOnExit();
     }
 
+    /*
+    returns a bitmap from the internet.
+    this bitmap is not scaled.
+     */
     public static Bitmap genCoverFromInternet(String searchText, int pageCounter, Context c) {
         int connectTimeOut = 3000;
         int readTimeOut = 5000;
@@ -191,7 +239,6 @@ public class CommonTasks {
             connection.setConnectTimeout(connectTimeOut);
 
             inputStream = connection.getInputStream();
-
 
             String line;
             StringBuilder builder = new StringBuilder();
@@ -226,6 +273,7 @@ public class CommonTasks {
                 connection.setReadTimeout(readTimeOut);
                 inputStream = connection.getInputStream();
 
+                //returned bitmap in the desired 1:1 ratio and cropping automatically
                 return BitmapFactory.decodeStream(inputStream, null, options);
             }
         } catch (Exception e) {
@@ -251,13 +299,26 @@ public class CommonTasks {
         return BitmapFactory.decodeFile(pathName, options);
     }
 
+
     private static int calculateInSampleSize(
             BitmapFactory.Options options, Context c) {
-        int reqHeight = getCoverDimensions(c);
-        int reqWidth = getCoverDimensions(c);
+
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
+
+        int reqHeight;
+        int reqWidth;
+
+        //setting reqWidth matching to desired 1:1 ratio and screen-size
+        if (width < height) {
+            reqWidth = getCoverSize(c);
+            reqHeight = (height / width) * reqWidth;
+        } else {
+            reqHeight = getCoverSize(c);
+            reqWidth = (width / height) * reqHeight;
+        }
+
         int inSampleSize = 1;
 
         if (height > reqHeight || width > reqWidth) {

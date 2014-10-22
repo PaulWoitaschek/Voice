@@ -28,7 +28,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -67,7 +66,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
 
     private ListView fileListView;
-    private Spinner dirSpinner;
     private FileAdapter adapter;
 
     private ActionMode actionMode;
@@ -117,7 +115,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_files_choose, container, false);
 
-        dirSpinner = (Spinner) v.findViewById(R.id.dirSpinner);
+        Spinner dirSpinner = (Spinner) v.findViewById(R.id.dirSpinner);
         fileListView = (ListView) v.findViewById(R.id.fileListView);
 
         if (dirs.size() > 1) {
@@ -484,7 +482,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
             BookDetail b = new BookDetail();
             b.setName(defaultName);
             if (cover != null) {
-                String[] imagePaths = CommonTasks.saveCovers(cover, getActivity());
+                String[] imagePaths = CommonTasks.saveBitmap(cover, getActivity());
                 if (imagePaths != null) {
                     b.setCover(imagePaths[0]);
                     b.setThumb(imagePaths[1]);

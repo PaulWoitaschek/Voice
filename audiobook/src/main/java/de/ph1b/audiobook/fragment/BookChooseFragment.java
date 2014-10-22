@@ -330,7 +330,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
             String thumbPath = currentBook.getThumb();
             if (thumbPath == null || thumbPath.equals("") || !new File(thumbPath).exists() || new File(thumbPath).isDirectory()) {
                 String bookName = currentBook.getName();
-                int px = Math.round(CommonTasks.convertDpToPx(getResources().getDimension(R.dimen.thumb_size_x)));
+                int px = Math.round(CommonTasks.getCoverSize(getActivity()));
                 Bitmap thumb = CommonTasks.genCapital(bookName, px, getResources());
                 currentCover.setImageBitmap(thumb);
             } else if (new File(thumbPath).isFile()) {
@@ -402,7 +402,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     public void onEditBookFinished(String bookName, Bitmap cover, Boolean success) {
         if (success) {
             bookToEdit.setName(bookName);
-            String[] coverPaths = CommonTasks.saveCovers(cover, getActivity());
+            String[] coverPaths = CommonTasks.saveBitmap(cover, getActivity());
             bookToEdit.setCover(coverPaths[0]);
             bookToEdit.setThumb(coverPaths[1]);
             db.updateBook(bookToEdit);
