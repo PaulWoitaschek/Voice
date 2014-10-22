@@ -138,6 +138,13 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
+    public void onPause() {
+        if (mBound)
+            mService.foreground(true);
+        super.onPause();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_book_choose, container, false);
 
@@ -350,6 +357,9 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
+
+        if (mBound)
+            mService.foreground(false);
 
         refreshBookList();
         initPlayerWidget();

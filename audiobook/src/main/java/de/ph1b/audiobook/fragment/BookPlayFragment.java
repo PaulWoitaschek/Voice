@@ -387,6 +387,9 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
     public void onResume() {
         super.onResume();
 
+        if (mBound)
+            mService.foreground(false);
+
         IntentFilter filter = new IntentFilter();
         filter.addAction(AudioPlayerService.GUI);
         bcm.registerReceiver(updateGUIReceiver, filter);
@@ -402,6 +405,9 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
 
     @Override
     public void onPause() {
+        if (mBound)
+            if (mService.stateManager.getState() == PlayerStates.STARTED)
+                mService.foreground(true);
         bcm.unregisterReceiver(updateGUIReceiver);
         super.onPause();
     }

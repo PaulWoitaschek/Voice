@@ -23,7 +23,7 @@ import de.ph1b.audiobook.utils.DataBaseHelper;
 
 public class WidgetProvider extends AppWidgetProvider {
 
-    private static final String TAG = "de.ph1b.audiobook.receiver.WidgetProvider";
+    public static final String TAG = "de.ph1b.audiobook.receiver.WidgetProvider";
     private static final String PLAY_CLICK = TAG + ".PLAY_CLICK";
 
 
@@ -61,6 +61,7 @@ public class WidgetProvider extends AppWidgetProvider {
             if (book != null) { // if a valid book is found start service
                 i.putExtra(AudioPlayerService.GUI_BOOK, book);
                 i.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
+                i.putExtra(TAG, true);
                 context.startService(i);
             } else { //if no valid book is found search for available books
                 ArrayList<BookDetail> books = db.getAllBooks();

@@ -173,10 +173,16 @@ public class AudioPlayerService extends Service {
         String action = intent.getAction();
         if (intent.getAction() != null) {
             if (action.equals(CONTROL_PLAY_PAUSE)) {
-                if (stateManager.getState() == PlayerStates.STARTED)
+                boolean comesFromWidget = intent.hasExtra(WidgetProvider.TAG);
+                if (stateManager.getState() == PlayerStates.STARTED) {
+                    // no need to stop foreground, pause does that
                     pause();
-                else
+                } else {
                     play();
+                    // if coming from widget, set foreground to true
+                    if (comesFromWidget)
+                        foreground(true);
+                }
             } else if (action.equals(CONTROL_CHANGE_MEDIA_POSITION)) {
                 int position = intent.getIntExtra(CONTROL_CHANGE_MEDIA_POSITION, -1);
                 if (position != -1)
@@ -252,7 +258,7 @@ public class AudioPlayerService extends Service {
         }
     };
 
-    private void foreground(Boolean set) {
+    public void foreground(Boolean set) {
         if (set)
             new StartNotificationAsync().execute();
         else
@@ -628,9 +634,6 @@ public class AudioPlayerService extends Service {
 
     private void registerAsPlaying(Boolean playing) {
         if (playing) {
-            //setup notification
-            foreground(true);
-
             //starting runner to update gui
             handler.postDelayed(savePositionRunner, 10000);
             handler.postDelayed(updateSeekBarRunner, 1000);
@@ -691,6 +694,7 @@ public class AudioPlayerService extends Service {
 
     public void pause() {
         registerAsPlaying(false);
+        foreground(false);
         if (stateManager.getState() == PlayerStates.STARTED) {
             playerLock.lock();
             try {
