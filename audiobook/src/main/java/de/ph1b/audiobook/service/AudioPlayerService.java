@@ -429,6 +429,10 @@ public class AudioPlayerService extends Service {
             String path = media.getPath();
             int position = book.getCurrentMediaPosition();
 
+            //setting position to 0 if last file was reached
+            if (position == media.getDuration())
+                position = 0;
+
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             try {
                 mediaPlayer.setDataSource(this, Uri.parse(path));
@@ -457,6 +461,11 @@ public class AudioPlayerService extends Service {
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "Next Song by onCompletion");
                     int currentId = media.getId();
+
+                    //setting book to last position
+                    book.setCurrentMediaPosition(media.getDuration());
+                    db.updateBookAsync(book);
+
                     boolean wasPlaying = ((stateManager.getState() == PlayerStates.STARTED) ||
                             (stateManager.getState() == PlayerStates.PLAYBACK_COMPLETED));
                     for (int i = 0; i < allMedia.size() - 1; i++) { //-1 to prevent change when already last song reached
