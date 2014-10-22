@@ -65,11 +65,9 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     private final ArrayList<File> fileList = new ArrayList<File>();
     private ArrayList<File> mediaFiles = new ArrayList<File>();
 
-    private LaunchEditDialog launchEditDialogAsync;
 
     private ListView fileListView;
     private Spinner dirSpinner;
-    private ProgressBar loadingView;
     private FileAdapter adapter;
 
     private ActionMode actionMode;
@@ -121,7 +119,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
         dirSpinner = (Spinner) v.findViewById(R.id.dirSpinner);
         fileListView = (ListView) v.findViewById(R.id.fileListView);
-        loadingView = (ProgressBar) v.findViewById(R.id.progress);
 
         if (dirs.size() > 1) {
             dirSpinner.setVisibility(View.VISIBLE);
@@ -268,14 +265,12 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     public void onPause() {
         super.onPause();
 
-        if (launchEditDialogAsync != null && !launchEditDialogAsync.isCancelled())
-            launchEditDialogAsync.cancel(true);
-
         ((FilesChoose) getActivity()).setOnBackPressedListener(null);
     }
 
 
     public void checkStateChanged(final ArrayList<File> files) {
+        if (BuildConfig.DEBUG) Log.d(TAG, "checkStateChanged!");
         if (files.size() > 0 && mActionModeCallback == null) {
             mActionModeCallback = new ActionMode.Callback() {
 
@@ -295,8 +290,14 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                 public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.action_add_badge:
-                            launchEditDialogAsync = new LaunchEditDialog(files);
-                            launchEditDialogAsync.execute();
+
+                            if (BuildConfig.DEBUG) {
+                                Log.d(TAG, "launching dialog with fiels");
+                                for (File f : files) {
+                                    Log.d(TAG, f.getName());
+                                }
+                            }
+                            launchEditDialog(files);
                             mode.finish();
                             return true;
                         default:
@@ -320,126 +321,115 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         }
     }
 
-    private class LaunchEditDialog extends AsyncTask<Void, Void, Void> {
-
-        private ArrayList<File> files;
-        //private ArrayList<File> mediaFiles = new ArrayList<File>();
-        private final ArrayList<File> imageFiles = new ArrayList<File>();
-        private final ArrayList<Bitmap> bitmaps = new ArrayList<Bitmap>();
-        private String bookTitle;
-
-        public LaunchEditDialog(ArrayList<File> files) {
-            this.files = files;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            setViewLoading(true);
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            Collections.sort(files, new NaturalOrderComparator());
-
-            //title
-            File firstFile = files.get(0);
-            bookTitle = firstFile.getName();
-            if (firstFile.isFile())
-                bookTitle = bookTitle.substring(0, bookTitle.lastIndexOf("."));
-
-            files = addFilesRecursive(files);
+    @SuppressWarnings("unchecked")
+    private void launchEditDialog(ArrayList<File> files) {
+        new AsyncTask<ArrayList<File>, Void, Void>() {
+            private final ArrayList<File> imageFiles = new ArrayList<File>();
+            private final ArrayList<Bitmap> bitmaps = new ArrayList<Bitmap>();
+            private String bookTitle;
 
 
-            mediaFiles = new ArrayList<File>();
-            for (File f : files) {
-                if (isAudio(f)) {
-                    mediaFiles.add(f);
-                } else if (isImage(f)) {
-                    imageFiles.add(f);
+            @Override
+            protected Void doInBackground(ArrayList<File>... params) {
+                ArrayList<File> files = params[0];
+                if (BuildConfig.DEBUG) {
+                    Log.d(TAG, "doInBackground with");
+                    for (File f : files)
+                        Log.d(TAG, f.getName());
                 }
-            }
+                Collections.sort(files, new NaturalOrderComparator());
 
-            //checking media files for covers
-            int attempt = 0;
-            for (File media : mediaFiles) {
-                if (isCancelled())
-                    return null;
-                if (attempt++ > 4 || bitmaps.size() > 0)
-                    break;
-                MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-                mmr.setDataSource(media.getAbsolutePath());
-                byte[] data = mmr.getEmbeddedPicture();
-                if (data != null) {
-                    try {
-                        Bitmap cover = BitmapFactory.decodeByteArray(data, 0, data.length);
+                if (BuildConfig.DEBUG) {
+                    Log.d(TAG, "have sorted with");
+                    for (File f : files)
+                        Log.d(TAG, f.getName());
+                }
+
+                //title
+                File firstFile = files.get(0);
+                bookTitle = firstFile.getName();
+                if (firstFile.isFile())
+                    bookTitle = bookTitle.substring(0, bookTitle.lastIndexOf("."));
+
+                files = addFilesRecursive(files);
+
+                mediaFiles = new ArrayList<File>();
+                for (File f : files) {
+                    if (isAudio(f)) {
+                        mediaFiles.add(f);
+                    } else if (isImage(f)) {
+                        imageFiles.add(f);
+                    }
+                }
+
+                //checking media files for covers
+                int attempt = 0;
+                for (File media : mediaFiles) {
+                    if (isCancelled())
+                        return null;
+                    if (attempt++ > 4 || bitmaps.size() > 0)
+                        break;
+                    MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+                    mmr.setDataSource(media.getAbsolutePath());
+                    byte[] data = mmr.getEmbeddedPicture();
+                    if (data != null) {
+                        try {
+                            Bitmap cover = BitmapFactory.decodeByteArray(data, 0, data.length);
+                            if (cover != null)
+                                bitmaps.add(cover);
+                        } catch (Exception e) {
+                            if (BuildConfig.DEBUG) Log.d(TAG, e.toString());
+                        }
+                    }
+                }
+
+                //checking imageFiles for cover
+                for (File image : imageFiles) {
+                    if (isCancelled())
+                        return null;
+                    Activity activity = getActivity();
+                    if (activity != null) {
+                        Bitmap cover = CommonTasks.genBitmapFromFile(image.getAbsolutePath(), activity.getApplicationContext());
                         if (cover != null)
                             bitmaps.add(cover);
-                    } catch (Exception e) {
-                        if (BuildConfig.DEBUG) Log.d(TAG, e.toString());
                     }
                 }
+                return null;
             }
 
-            //checking imageFiles for cover
-            for (File image : imageFiles) {
-                if (isCancelled())
-                    return null;
-                Activity activity = getActivity();
-                if (activity != null) {
-                    Bitmap cover = CommonTasks.genBitmapFromFile(image.getAbsolutePath(), activity.getApplicationContext());
-                    if (cover != null)
-                        bitmaps.add(cover);
-                }
-            }
-            return null;
-        }
 
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                if (mediaFiles.size() == 0) {
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            if (mediaFiles.size() == 0) {
-                setViewLoading(false);
-
-                CharSequence text = getString(R.string.book_no_media);
-                Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
-                toast.show();
-            } else {
-                //fragments onEditBookFinished sets visibilities of spinner and views
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                boolean fastAdd = sharedPref.getBoolean(getString(R.string.pref_fast_add), false);
-                if (!fastAdd) {
-                    EditBook editBook = new EditBook();
-                    Bundle bundle = new Bundle();
-
-                    bundle.putParcelableArrayList(EditBook.BOOK_COVER, bitmaps);
-                    bundle.putString(EditBook.DIALOG_TITLE, getString(R.string.book_add));
-                    bundle.putString(EditBook.BOOK_NAME, bookTitle);
-
-                    editBook.setArguments(bundle);
-                    editBook.setTargetFragment(FilesChooseFragment.this, 0);
-                    editBook.show(getFragmentManager(), TAG);
+                    CharSequence text = getString(R.string.book_no_media);
+                    Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
+                    toast.show();
                 } else {
-                    Bitmap cover = null;
-                    if (bitmaps.size() > 0) {
-                        cover = bitmaps.get(0);
+                    //fragments onEditBookFinished sets visibilities of spinner and views
+                    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                    boolean fastAdd = sharedPref.getBoolean(getString(R.string.pref_fast_add), false);
+                    if (!fastAdd) {
+                        EditBook editBook = new EditBook();
+                        Bundle bundle = new Bundle();
+
+                        bundle.putParcelableArrayList(EditBook.BOOK_COVER, bitmaps);
+                        bundle.putString(EditBook.DIALOG_TITLE, getString(R.string.book_add));
+                        bundle.putString(EditBook.BOOK_NAME, bookTitle);
+
+                        editBook.setArguments(bundle);
+                        editBook.setTargetFragment(FilesChooseFragment.this, 0);
+                        editBook.show(getFragmentManager(), TAG);
+                    } else {
+                        Bitmap cover = null;
+                        if (bitmaps.size() > 0) {
+                            cover = bitmaps.get(0);
+                        }
+                        onEditBookFinished(bookTitle, cover, true);
                     }
-                    onEditBookFinished(bookTitle, cover, true);
                 }
             }
-        }
-    }
-
-    private void setViewLoading(boolean loading) {
-        if (loading) {
-            dirSpinner.setVisibility(View.GONE);
-            fileListView.setVisibility(View.GONE);
-            loadingView.setVisibility(View.VISIBLE);
-        } else {
-            if (dirs.size() > 0)
-                dirSpinner.setVisibility(View.VISIBLE);
-            fileListView.setVisibility(View.VISIBLE);
-            loadingView.setVisibility(View.GONE);
-        }
+        }.execute(files);
     }
 
 
@@ -452,7 +442,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
     @Override
     public void onEditBookFinished(String bookName, Bitmap cover, Boolean success) {
-        setViewLoading(false);
         if (success) {
             //adds book and launches progress dialog
             new AddBookAsync(mediaFiles, bookName, cover).execute();

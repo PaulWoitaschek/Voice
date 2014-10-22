@@ -8,11 +8,12 @@ import android.os.Parcelable;
 public class BookDetail implements Parcelable {
 
     private int id;
-    private int sortId ;
+    private int sortId;
     private String name;
     private String cover;
     private String thumb;
-    private int position;
+    private int currentMediaId;
+    private int currentMediaPosition;
 
     public BookDetail() {
 
@@ -58,12 +59,20 @@ public class BookDetail implements Parcelable {
         this.thumb = thumb;
     }
 
-    public int getPosition() {
-        return position;
+    public int getCurrentMediaId() {
+        return currentMediaId;
     }
 
-    public void setPosition(int position) {
-        this.position = position;
+    public void setCurrentMediaId(int currentMediaId) {
+        this.currentMediaId = currentMediaId;
+    }
+
+    public void setCurrentMediaPosition(int currentMediaPosition) {
+        this.currentMediaPosition = currentMediaPosition;
+    }
+
+    public int getCurrentMediaPosition() {
+        return currentMediaPosition;
     }
 
     @Override
@@ -77,7 +86,8 @@ public class BookDetail implements Parcelable {
         destination.writeString(name);
         destination.writeString(cover);
         destination.writeString(thumb);
-        destination.writeInt(position);
+        destination.writeInt(currentMediaId);
+        destination.writeInt(currentMediaPosition);
         destination.writeInt(sortId);
     }
 
@@ -86,7 +96,8 @@ public class BookDetail implements Parcelable {
         name = pc.readString();
         cover = pc.readString();
         thumb = pc.readString();
-        position = pc.readInt();
+        currentMediaId = pc.readInt();
+        currentMediaPosition = pc.readInt();
         sortId = pc.readInt();
     }
 

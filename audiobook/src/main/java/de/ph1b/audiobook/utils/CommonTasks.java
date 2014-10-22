@@ -55,7 +55,7 @@ public class CommonTasks {
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTypeface(Typeface.SANS_SERIF);
         Paint backgroundPaint = new Paint();
-        backgroundPaint.setColor(resources.getColor(R.color.file_chooser_audio));
+        backgroundPaint.setColor(resources.getColor(R.color.colorAccent));
         canvas.drawRect(0, 0, pxSize, pxSize, backgroundPaint);
         int y = (int) ((canvas.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2));
         canvas.drawText(bookName.substring(0, 1).toUpperCase(), pxSize / 2, y, textPaint);

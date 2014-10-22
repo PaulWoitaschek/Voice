@@ -77,7 +77,7 @@ public class FileAdapter extends BaseAdapter {
                     checked.add(data.get(pos));
                 else
                     checked.remove(data.get(pos));
-                
+
                 viewHolder.checkBox.setChecked(isChecked);
 
                 for (File f : checked) {
@@ -109,8 +109,8 @@ public class FileAdapter extends BaseAdapter {
     public void clearCheckBoxes() {
         if (BuildConfig.DEBUG)
             Log.d(TAG, "clearCheckBoxes() was called!");
-        checked.clear();
-        notifyDataSetChanged();
+        //checked.clear();
+        //notifyDataSetChanged();
     }
 
     static class ViewHolder {

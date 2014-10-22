@@ -27,7 +27,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@color/holo_blue_dark" />
+            android:background="@color/primary" />
 
         <LinearLayout
             android:layout_width="fill_parent"

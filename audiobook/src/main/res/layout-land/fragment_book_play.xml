@@ -25,7 +25,7 @@
         android:id="@+id/div1"
         android:layout_width="2dp"
         android:layout_height="match_parent"
-        android:background="@color/holo_blue_dark" />
+        android:background="@color/primary" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -83,14 +83,6 @@
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/previous_song"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/previous_song"
-                    android:src="@drawable/ic_action_previous" />
-
-                <ImageButton
                     android:id="@+id/rewind"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
@@ -114,13 +106,6 @@
                     android:contentDescription="@string/forward"
                     android:src="@drawable/ic_fast_forward_black_36dp" />
 
-                <ImageButton
-                    android:id="@+id/next_song"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/next_song"
-                    android:src="@drawable/ic_action_next" />
             </LinearLayout>
         </LinearLayout>
 

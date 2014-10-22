@@ -10,7 +10,6 @@ public class MediaDetail implements Parcelable {
     private String path;
     private String name;
 
-    private int position = 0;
     private int id;
     private int duration;
     private int bookId;
@@ -60,14 +59,6 @@ public class MediaDetail implements Parcelable {
         return path;
     }
 
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -77,7 +68,6 @@ public class MediaDetail implements Parcelable {
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(path);
         out.writeString(name);
-        out.writeInt(position);
         out.writeInt(id);
         out.writeInt(duration);
         out.writeInt(bookId);
@@ -86,7 +76,6 @@ public class MediaDetail implements Parcelable {
     private MediaDetail(Parcel pc) {
         path = pc.readString();
         name = pc.readString();
-        position = pc.readInt();
         id = pc.readInt();
         duration = pc.readInt();
         bookId = pc.readInt();

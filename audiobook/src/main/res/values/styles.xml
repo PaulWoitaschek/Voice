@@ -4,20 +4,22 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:dialogTheme">@style/dialogTheme</item>
-        <item name="android:alertDialogTheme">@style/alertDialogTheme</item>
     </style>
 
-    <style name="dialogTheme" parent="Theme.AppCompat.Light.Dialog">
+    <style name="AppDialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="alertDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+    <!-- This should extend Theme.Material.Dialog.Alert, but that style was
+         incorrectly hidden in L-preview. It will be fixed in a future release.
+         You can approximate the style using the last two MinWidth attributes.-->
+    <style name="AppAlertTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowMinWidthMajor">65%</item>
+        <item name="android:windowMinWidthMinor">95%</item>
     </style>
-
 </resources>

@@ -5,12 +5,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <View
-        android:id="@+id/div1"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/holo_blue_dark" />
-
     <ImageView
         android:id="@+id/book_cover"
         android:layout_width="fill_parent"
@@ -20,10 +14,6 @@
         android:contentDescription="@string/cover"
         android:scaleType="centerCrop" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/holo_blue_dark" />
 
     <Spinner
         android:id="@+id/book_spinner"

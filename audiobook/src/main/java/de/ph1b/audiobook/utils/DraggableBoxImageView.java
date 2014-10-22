@@ -192,7 +192,7 @@ public class DraggableBoxImageView extends ImageView {
         float strokeWidth = CommonTasks.convertDpToPx(getResources().getDimension(R.dimen.cover_edit_stroke_width));
 
         borderLinePaint = new Paint();
-        borderLinePaint.setColor(getResources().getColor(R.color.holo_blue_dark));
+        borderLinePaint.setColor(getResources().getColor(R.color.primary));
         borderLinePaint.setStyle(Paint.Style.STROKE);
         borderLinePaint.setStrokeWidth(strokeWidth);
     }

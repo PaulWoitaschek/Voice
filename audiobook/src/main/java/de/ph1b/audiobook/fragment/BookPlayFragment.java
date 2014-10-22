@@ -292,7 +292,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
 
         adapter = new MediaSpinnerAdapter(getActivity(), db.getMediaFromBook(book.getId()));
         bookSpinner.setAdapter(adapter);
-        bookSpinner.setSelection(adapter.getPositionByMediaDetailId(book.getPosition()));
+        bookSpinner.setSelection(adapter.getPositionByMediaDetailId(book.getCurrentMediaId()));
         bookSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
