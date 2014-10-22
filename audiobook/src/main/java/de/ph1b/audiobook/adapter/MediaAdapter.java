@@ -3,7 +3,6 @@ package de.ph1b.audiobook.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -113,21 +112,13 @@ public class MediaAdapter extends BaseAdapter {
         String name = b.getName();
         viewHolder.textView.setText(name);
 
-        String thumbPath = b.getThumb();
-        if (thumbPath == null || thumbPath.equals("") || new File(thumbPath).isDirectory() || !(new File(thumbPath).exists())) {
-            int thumbSize = CommonTasks.getThumbSize(fragment.getActivity());
-            viewHolder.iconImageView.setImageBitmap(CommonTasks.genCapital(b.getName(), thumbSize, fragment.getResources()));
-
-            //if device is online try to load image in the background!
-            if (CommonTasks.isOnline(fragment.getActivity()))
-                new AddCover(viewHolder.iconImageView, b).execute();
-        } else {
-            viewHolder.iconImageView.setImageURI(Uri.parse(thumbPath));
-        }
+        viewHolder.iconImageView.setTag(b.getId());
+        new LoadCoverAsync(b, viewHolder.iconImageView).execute();
 
         //setting bar
         viewHolder.progressBar.setMax(1000);
-        viewHolder.progressBar.setProgress(db.getGlobalProgress(b));
+        viewHolder.progressBar.setTag(b.getId());
+        new LoadProgressAsync(b, viewHolder.progressBar).execute();
 
         //setting drag visiblity
         if (dragOn && data.size() > 1) {
@@ -140,44 +131,91 @@ public class MediaAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private class AddCover extends AsyncTask<Void, Void, String> {
+    private class LoadProgressAsync extends AsyncTask<Void, Void, Integer> {
+        WeakReference<ProgressBar> weakReference;
+        BookDetail book;
 
-        private final WeakReference<ImageView> weakReference;
-        private final BookDetail book;
-
-        public AddCover(ImageView imageView, BookDetail book) {
-            this.weakReference = new WeakReference<ImageView>(imageView);
+        public LoadProgressAsync(BookDetail book, ProgressBar progressBar) {
             this.book = book;
+            weakReference = new WeakReference<ProgressBar>(progressBar);
         }
 
         @Override
-        protected String doInBackground(Void... voids) {
-            Context c = fragment.getActivity();
-            Bitmap bitmap = CommonTasks.genCoverFromInternet(book.getName(), 0, fragment.getActivity());
-            String imagePaths[] = CommonTasks.saveBitmap(bitmap, c);
+        protected void onPreExecute() {
+            ProgressBar progressBar = weakReference.get();
+            if (progressBar != null)
+                progressBar.setProgress(0);
+        }
 
-            if (imagePaths != null) {
-                book.setCover(imagePaths[0]);
-                book.setThumb(imagePaths[1]);
-                db.updateBook(book);
-                updateBookInData(book);
-                return imagePaths[1];
+        @Override
+        protected Integer doInBackground(Void... params) {
+            return db.getGlobalProgress(book);
+        }
+
+        @Override
+        protected void onPostExecute(Integer globalProgress) {
+            ProgressBar progressBar = weakReference.get();
+            if (progressBar != null && (book.getId() == progressBar.getTag())) {
+                progressBar.setProgress(globalProgress);
+            }
+        }
+    }
+
+    private class LoadCoverAsync extends AsyncTask<Void, Void, Bitmap> {
+
+        private WeakReference<ImageView> weakReference;
+        private BookDetail book;
+
+        public LoadCoverAsync(BookDetail book, ImageView imageView) {
+            this.book = book;
+            weakReference = new WeakReference<ImageView>(imageView);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            ImageView imageView = weakReference.get();
+            if (imageView != null) {
+                imageView.setImageBitmap(null);
+            }
+        }
+
+        @Override
+        protected Bitmap doInBackground(Void... params) {
+            String thumbPath = book.getThumb();
+            if (thumbPath == null || thumbPath.equals("") || new File(thumbPath).isDirectory() || !(new File(thumbPath).exists())) {
+                //if device is online try to load image from internet
+                if (fragment.getActivity() != null && CommonTasks.isOnline(fragment.getActivity())) {
+                    Context c = fragment.getActivity();
+                    Bitmap bitmap = CommonTasks.genCoverFromInternet(book.getName(), 0, fragment.getActivity());
+                    String imagePaths[] = CommonTasks.saveBitmap(bitmap, c);
+
+                    if (imagePaths != null) {
+                        book.setCover(imagePaths[0]);
+                        book.setThumb(imagePaths[1]);
+                        db.updateBook(book);
+                        updateBookInData(book);
+                        return BitmapFactory.decodeFile(imagePaths[1]);
+                    }
+                } else {
+                    int thumbSize = CommonTasks.getThumbSize(fragment.getActivity());
+                    return (CommonTasks.genCapital(book.getName(), thumbSize, fragment.getResources()));
+                }
+            } else {
+                return BitmapFactory.decodeFile(thumbPath);
             }
             return null;
         }
 
-
         @Override
-        protected void onPostExecute(String thumbPath) {
-            if (thumbPath != null) {
+        protected void onPostExecute(Bitmap bitmap) {
+            if (bitmap != null) {
                 ImageView imageView = weakReference.get();
-                if (imageView != null) {
-                    imageView.setImageBitmap(BitmapFactory.decodeFile(thumbPath));
+                if (imageView != null && ((Integer) imageView.getTag() == book.getId())) {
+                    imageView.setImageBitmap(bitmap);
+                    if (fragment.getActivity() != null)
+                        fragment.initPlayerWidget();
                 }
             }
-            //re-inits player widget to show new cover
-            if (fragment.getActivity() != null)
-                fragment.initPlayerWidget();
         }
     }
 
