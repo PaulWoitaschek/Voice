@@ -3,7 +3,6 @@ package de.ph1b.audiobook.utils;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -121,28 +120,24 @@ public class DraggableBoxImageView extends ImageView {
     }
 
     public Rect getCropPosition() {
-        // Get image matrix values and place them in an array
-        float[] f = new float[9];
-        getImageMatrix().getValues(f);
-
-        // Extract the scale values using the constants (if aspect ratio maintained, scaleX == scaleY)
-        float scaleX = f[Matrix.MSCALE_X];
-        float scaleY = f[Matrix.MSCALE_Y];
-
-        // Get the drawable (could also get the bitmap behind the drawable and getWidth/getHeight)
         Drawable d = getDrawable();
         int origW = d.getIntrinsicWidth();
         int origH = d.getIntrinsicHeight();
 
-        // Calculate the actual dimensions
-        float actW = origW * scaleX;
-        float actH = origH * scaleY;
-
         //returning the actual sizes
-        int realLeft = Math.round(left / maxWidth * actW);
-        int realTop = Math.round(top / maxHeight * actH);
-        int realRight = Math.round(right / maxWidth * actW);
-        int realBottom = Math.round(bottom / maxHeight * actH);
+        int realLeft = Math.round(left / imageViewWidth * origW);
+        int realTop = Math.round(top / imageViewHeight * origH);
+        int realRight = Math.round(right / imageViewWidth * origW);
+        int realBottom = Math.round(bottom / imageViewHeight * origH);
+
+
+        if (BuildConfig.DEBUG) {
+            Log.d("dbimv", "realright//origW");
+            Log.d("dmiv", String.valueOf(realRight) + "/" + String.valueOf(origW));
+            Log.d("dbmiv", "bottom//maxheight");
+            Log.d("dbmiv", String.valueOf(bottom) + "/" + String.valueOf(maxHeight));
+            Log.d("dbmiv", String.valueOf(origH));
+        }
 
         return new Rect(realLeft, realTop, realRight, realBottom);
     }

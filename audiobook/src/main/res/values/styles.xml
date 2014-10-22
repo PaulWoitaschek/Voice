@@ -4,19 +4,6 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
-        <item name="android:alertDialogStyle">@style/AppAlertTheme</item>
-        <item name="android:alertDialogTheme">@style/AppAlertTheme</item>
-
-        <item name="android:dialogTheme">@style/AppAlertTheme</item>
     </style>
 
-
-    <style name="AppAlertTheme" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowMinWidthMajor">65%</item>
-        <item name="android:windowMinWidthMinor">95%</item>
-    </style>
 </resources>

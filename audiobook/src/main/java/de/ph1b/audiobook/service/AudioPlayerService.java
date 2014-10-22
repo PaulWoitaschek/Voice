@@ -457,10 +457,10 @@ public class AudioPlayerService extends Service {
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "Next Song by onCompletion");
                     int currentId = media.getId();
+                    boolean wasPlaying = ((stateManager.getState() == PlayerStates.STARTED) ||
+                            (stateManager.getState() == PlayerStates.PLAYBACK_COMPLETED));
                     for (int i = 0; i < allMedia.size() - 1; i++) { //-1 to prevent change when already last song reached
                         if (allMedia.get(i).getId() == currentId) {
-                            boolean wasPlaying = ((stateManager.getState() == PlayerStates.STARTED) ||
-                                    (stateManager.getState() == PlayerStates.PLAYBACK_COMPLETED));
                             int mediaId = allMedia.get(i + 1).getId();
                             prepare(mediaId);
                             if (wasPlaying)
