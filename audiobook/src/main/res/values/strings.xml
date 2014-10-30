@@ -30,12 +30,12 @@
     <string name="no_external_storage">외부저장공간이 없습니다. 연결과 인식상태를 확인해주세요.</string>
     <string name="no_external_storage_action_bar_title">외부저장공간</string>
 
-    <string name="action_sleep_title_hint_left">Pauses after</string>
-    <string name="action_sleep_title_hint_right">minutes</string>
-    <string name="action_jump_to">Position changer</string>
-    <string name="hours">hours</string>
-    <string name="minutes">minutes</string>
-    <string name="seconds">Seconds</string>
+    <string name="action_sleep_title_hint_left">일정시간 후 일시정지</string>
+    <string name="action_sleep_title_hint_right">분</string>
+    <string name="action_jump_to">이동</string>
+    <string name="hours">시간</string>
+    <string name="minutes">분</string>
+    <string name="seconds">초</string>
 
     <string name="file_not_found">저장공간에서 책을 찾지 못했습니다. 다시 책을 추가해주세요.</string>
     <string name="media_view_how_to">+ 를 눌러 추가</string>
