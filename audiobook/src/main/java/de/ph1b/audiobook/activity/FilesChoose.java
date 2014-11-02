@@ -1,14 +1,12 @@
 package de.ph1b.audiobook.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.interfaces.OnBackPressedListener;
-import de.ph1b.audiobook.utils.CommonTasks;
 
 
-public class FilesChoose extends ActionBarActivity {
+public class FilesChoose extends BaseActivity {
 
 
     private OnBackPressedListener onBackPressedListener;
@@ -30,11 +28,5 @@ public class FilesChoose extends ActionBarActivity {
 
     public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
-    }
-
-    @Override
-    public void onResume() {
-        CommonTasks.checkExternalStorage(this);
-        super.onResume();
     }
 }

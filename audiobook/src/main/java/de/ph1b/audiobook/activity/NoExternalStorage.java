@@ -3,12 +3,11 @@ package de.ph1b.audiobook.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v7.app.ActionBarActivity;
 
 import de.ph1b.audiobook.R;
 
 
-public class NoExternalStorage extends ActionBarActivity {
+public class NoExternalStorage extends BaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

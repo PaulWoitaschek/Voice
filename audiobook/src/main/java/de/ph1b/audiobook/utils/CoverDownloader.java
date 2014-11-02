@@ -1,0 +1,175 @@
+package de.ph1b.audiobook.utils;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
+
+import org.apache.http.conn.util.InetAddressUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
+import de.ph1b.audiobook.BuildConfig;
+
+public class CoverDownloader {
+
+    public static URLConnection connection = null;
+    private static final String TAG = "CoverDownloader";
+
+    private static final HashMap<String, ArrayList<URL>> searchStringMap = new HashMap<String, ArrayList<URL>>();
+
+
+    /**
+     * Returns a bitmap from google, defined by the searchText
+     *
+     * @param searchText The Audiobook to look for
+     * @param c          Application context
+     * @param number     The nth result
+     * @return the generated bitmap. If no bitmap was found, returns null
+     */
+    public static Bitmap getCover(String searchText, Context c, int number) {
+
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "Loading Cover with " + searchText + " and #" + String.valueOf(number));
+
+        ArrayList<URL> bitmapUrls;
+
+        URL searchURL = null;
+
+        try {
+            // if there is a value corresponding to searchText, use that one
+            if (searchStringMap.containsKey(searchText)) {
+                bitmapUrls = searchStringMap.get(searchText);
+                if (bitmapUrls.size() - 1 <= number) {
+                    searchURL = bitmapUrls.get(number);
+                } else {
+                    ArrayList<URL> newSetOfURL = new ArrayList<URL>();
+                    newSetOfURL.addAll(bitmapUrls);
+                    ArrayList<URL> eightSetOfURL = genEightSetOfURL(searchText, number);
+                    if (eightSetOfURL == null)
+                        return null;
+                    newSetOfURL.addAll(eightSetOfURL);
+                    searchStringMap.put(searchText, newSetOfURL);
+                    searchURL = newSetOfURL.get(0);
+                }
+            } else {
+                ArrayList<URL> eightSetOfURL = genEightSetOfURL(searchText, number);
+                if (eightSetOfURL == null)
+                    return null;
+                searchStringMap.put(searchText, eightSetOfURL);
+                searchURL = eightSetOfURL.get(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        int connectTimeOut = 3000;
+        int readTimeOut = 5000;
+        InputStream inputStream;
+
+        if (searchURL != null) {
+            try {
+                connection = searchURL.openConnection();
+                connection.setConnectTimeout(connectTimeOut);
+                connection.setReadTimeout(readTimeOut);
+                inputStream = connection.getInputStream();
+
+                // First decode with inJustDecodeBounds=true to check dimensions
+                final BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeStream(inputStream, null, options);
+
+                // Calculate inSampleSize
+                int reqSize = ImageHelper.resolveImageType(ImageHelper.TYPE_COVER, c);
+                options.inSampleSize = ImageHelper.calculateInSampleSize(reqSize, reqSize, options);
+
+                // Decode bitmap with inSampleSize set
+                options.inJustDecodeBounds = false;
+                connection = searchURL.openConnection();
+                connection.setConnectTimeout(connectTimeOut);
+                connection.setReadTimeout(readTimeOut);
+                inputStream = connection.getInputStream();
+
+                //returned bitmap in the desired 1:1 ratio and cropping automatically
+                return BitmapFactory.decodeStream(inputStream, null, options);
+            } catch (Exception e) {
+                if (BuildConfig.DEBUG) Log.d(TAG, e.toString());
+            }
+        }
+        return null;
+    }
+
+    private static String getIPAddress() {
+        try {
+            List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface i : interfaces) {
+                List<InetAddress> internetAdresses = Collections.list(i.getInetAddresses());
+                for (InetAddress a : internetAdresses) {
+                    if (!a.isLoopbackAddress()) {
+                        String address = a.getHostAddress().toUpperCase();
+                        if (InetAddressUtils.isIPv4Address(address))
+                            return address;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            if (BuildConfig.DEBUG) Log.d(TAG, e.getMessage());
+        }
+        return "";
+    }
+
+    private static ArrayList<URL> genEightSetOfURL(String searchText, int startPage) {
+        searchText = searchText + " audiobook cover";
+        int readTimeOut = 5000;
+        int connectTimeOut = 3000;
+
+        ArrayList<URL> eightSetOfURL = new ArrayList<URL>();
+
+        try {
+            URL url = new URL(
+                    "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&imgsz=large|xlarge&rsz=1&q=" +
+                            URLEncoder.encode(searchText, "UTF-8") + "&start=" + startPage +
+                            "&userip=" + getIPAddress());
+            if (BuildConfig.DEBUG)
+                Log.d(TAG, url.toString());
+            connection = url.openConnection();
+            connection.setReadTimeout(readTimeOut);
+            connection.setConnectTimeout(connectTimeOut);
+
+            InputStream inputStream = connection.getInputStream();
+
+            String line;
+            StringBuilder builder = new StringBuilder();
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            BufferedReader reader = new BufferedReader(inputStreamReader);
+            while ((line = reader.readLine()) != null) {
+                builder.append(line);
+            }
+            JSONObject obj = new JSONObject(builder.toString());
+            JSONObject responseData = obj.getJSONObject("responseData");
+            JSONArray results = responseData.getJSONArray("results");
+            for (int i = 0; i < results.length(); i++) {
+                URL imageURL = new URL(results.getJSONObject(0).getString("url"));
+                eightSetOfURL.add(imageURL);
+            }
+        } catch (Exception e) {
+            if (BuildConfig.DEBUG) Log.d(TAG, e.toString());
+            return null;
+        }
+        return eightSetOfURL;
+    }
+
+}

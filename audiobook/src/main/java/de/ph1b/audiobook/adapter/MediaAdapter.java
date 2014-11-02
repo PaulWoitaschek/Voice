@@ -1,229 +1,315 @@
 package de.ph1b.audiobook.adapter;
 
+import android.app.ActivityManager;
+import android.content.ComponentCallbacks2;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.support.v4.util.LruCache;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.fragment.BookChooseFragment;
+import de.ph1b.audiobook.interfaces.OnItemClickListener;
 import de.ph1b.audiobook.utils.BookDetail;
-import de.ph1b.audiobook.utils.CommonTasks;
+import de.ph1b.audiobook.utils.CoverDownloader;
 import de.ph1b.audiobook.utils.DataBaseHelper;
+import de.ph1b.audiobook.utils.ImageHelper;
 
 
-public class MediaAdapter extends BaseAdapter {
+public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> implements ComponentCallbacks2 {
 
     private final ArrayList<BookDetail> data;
     private final DataBaseHelper db;
-    private final ArrayList<Integer> checkedBookIds = new ArrayList<Integer>();
-    private final BookChooseFragment fragment;
-    private boolean dragOn = true;
-
-    public void toggleDrag(boolean dragOn) {
-        this.dragOn = dragOn;
-        Log.d("madapt", String.valueOf(dragOn) + "notify data now");
-        notifyDataSetChanged();
-    }
+    private final Context c;
+    private final OnItemClickListener onItemClickListener;
+    private final ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
+    private final ImageCache imageCache;
+    private final OnCoverChangedListener onCoverChangedListener;
 
 
-    public MediaAdapter(ArrayList<BookDetail> data, BookChooseFragment a) {
+    public MediaAdapter(ArrayList<BookDetail> data, Context c, OnItemClickListener onItemClickListener, OnCoverChangedListener onCoverChangedListener) {
         this.data = data;
-        this.fragment = a;
-        db = DataBaseHelper.getInstance(fragment.getActivity());
+        this.c = c;
+        this.onItemClickListener = onItemClickListener;
+        this.onCoverChangedListener = onCoverChangedListener;
+
+        ActivityManager am = (ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
+        int memoryClassBytes = am.getMemoryClass() * 1024 * 1024;
+        imageCache = new ImageCache(memoryClassBytes / 8);
+
+        db = DataBaseHelper.getInstance(c);
     }
 
-    public int getCount() {
-        return data != null ? data.size() : 0;
+    public void updateItem(final BookDetail book) {
+        for (int position = 0; position < data.size(); position++) {
+            if (data.get(position).getId() == book.getId()) {
+                data.set(position, book);
+                notifyItemChanged(position);
+                singleThreadExecutor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        db.updateBook(book);
+                    }
+                });
+            }
+        }
     }
 
     public BookDetail getItem(int position) {
         return data.get(position);
     }
 
-    public long getItemId(int position) {
-        return position;
+    public ArrayList<BookDetail> getData() {
+        return data;
     }
 
-    public void setBookChecked(int bookId, Boolean checked) {
-        if (checked)
-            checkedBookIds.add(bookId);
-        else
-            checkedBookIds.remove(Integer.valueOf(bookId)); //integer value of to prevent accessing by position instead of object
+    public interface OnCoverChangedListener {
+        public void onCoverChanged();
     }
 
-    public ArrayList<BookDetail> getCheckedBooks() {
-        ArrayList<BookDetail> books = new ArrayList<BookDetail>();
-        for (BookDetail b : data)
-            for (Integer i : checkedBookIds)
-                if (b.getId() == i)
-                    books.add(b);
-        if (books.size() > 0)
-            return books;
-        return null;
-    }
 
-    private void updateBookInData(BookDetail book) {
-        for (int i = 0; i < data.size(); i++) {
-            if (data.get(i).getId() == book.getId()) {
-                data.set(i, book);
+    /**
+     * Removes an item from the grid, deletes it from database and notifys the adapter about the item removed
+     *
+     * @param position The position of the item to be removed
+     */
+    public void removeItem(final int position) {
+        singleThreadExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                db.deleteBook(data.get(position));
             }
-        }
-    }
-
-
-    public void unCheckAll() {
-        checkedBookIds.clear();
+        });
+        data.remove(position);
+        notifyItemRemoved(position);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        final ViewHolder viewHolder;
-        if (convertView == null) {
-            LayoutInflater vi = (LayoutInflater) fragment.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = vi.inflate(R.layout.media_chooser_listview, parent, false);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.media_chooser_recycler_grid_item, parent, false);
+        return new ViewHolder(v, onItemClickListener);
+    }
 
-            viewHolder = new ViewHolder();
-            viewHolder.iconImageView = (ImageView) convertView.findViewById(R.id.icon);
-            viewHolder.textView = (TextView) convertView.findViewById(R.id.name);
-            viewHolder.progressBar = (ProgressBar) convertView.findViewById(R.id.current_progress);
-            viewHolder.dragger = (ImageView) convertView.findViewById(R.id.drag_handle);
-
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+    /**
+     * Swaps elements in the detailList and saves them to the database.
+     *
+     * @param from The first book to swap
+     * @param to   The second book to swap
+     */
+    public void swapItems(int from, int to) {
+        if (BuildConfig.DEBUG)
+            Log.d("madapt", "swap items from to" + String.valueOf(from) + "/" + String.valueOf(to));
+        final int finalFrom = from;
+        if (from != to) {
+            if (from > to) {
+                while (from > to) {
+                    swapItemsInData(from, --from);
+                }
+            } else {
+                while (from < to) {
+                    swapItemsInData(from, ++from);
+                }
+            }
         }
+        if (BuildConfig.DEBUG)
+            Log.d("madapt", "notifyItemMoved" + finalFrom + "/" + to);
+        notifyItemMoved(finalFrom, to);
+    }
 
+    private void swapItemsInData(int from, int to) {
+        if (BuildConfig.DEBUG)
+            Log.d("madapt", "swapInData:" + from + "/" + to);
+        final BookDetail oldBook = data.get(from);
+        final BookDetail newBook = data.get(to);
+        int oldSortId = oldBook.getSortId();
+        int newSortId = newBook.getSortId();
+        oldBook.setSortId(newSortId);
+        newBook.setSortId(oldSortId);
+        data.set(from, newBook);
+        data.set(to, oldBook);
+        singleThreadExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                db.updateBook(newBook);
+                db.updateBook(oldBook);
+            }
+        });
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder viewHolder, int position) {
         BookDetail b = data.get(position);
+
+        if (BuildConfig.DEBUG)
+            Log.d("madapt", "onBindViewHolder with position:" + position);
 
         //setting text
         String name = b.getName();
-        viewHolder.textView.setText(name);
+        viewHolder.titleView.setText(name);
+        viewHolder.titleView.setActivated(true);
 
-        viewHolder.iconImageView.setTag(b.getId());
-        new LoadCoverAsync(b, viewHolder.iconImageView).execute();
-
-        //setting bar
-        viewHolder.progressBar.setMax(1000);
-        viewHolder.progressBar.setTag(b.getId());
-        new LoadProgressAsync(b, viewHolder.progressBar).execute();
-
-        //setting drag visiblity
-        if (dragOn && data.size() > 1) {
-            viewHolder.dragger.setVisibility(View.VISIBLE);
+        Bitmap cached = imageCache.get(b.getId());
+        if (cached != null) {
+            if (BuildConfig.DEBUG) Log.d("madapt", "cached bitmap! " + b.getId());
+            viewHolder.coverView.setImageBitmap(cached);
         } else {
-            //setting dragger invisible if toogled off or size is < 2
-            viewHolder.dragger.setVisibility(View.GONE);
-        }
-
-        return convertView;
-    }
-
-    private class LoadProgressAsync extends AsyncTask<Void, Void, Integer> {
-        WeakReference<ProgressBar> weakReference;
-        BookDetail book;
-
-        public LoadProgressAsync(BookDetail book, ProgressBar progressBar) {
-            this.book = book;
-            weakReference = new WeakReference<ProgressBar>(progressBar);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            ProgressBar progressBar = weakReference.get();
-            if (progressBar != null)
-                progressBar.setProgress(0);
-        }
-
-        @Override
-        protected Integer doInBackground(Void... params) {
-            return db.getGlobalProgress(book);
-        }
-
-        @Override
-        protected void onPostExecute(Integer globalProgress) {
-            ProgressBar progressBar = weakReference.get();
-            if (progressBar != null && (book.getId() == progressBar.getTag())) {
-                progressBar.setProgress(globalProgress);
-            }
+            viewHolder.coverView.setImageBitmap(null);
+            viewHolder.coverView.setTag(b.getId());
+            String coverPath = b.getCover();
+            boolean coverNotExists = (coverPath == null || coverPath.equals("") || new File(coverPath).isDirectory() || !(new File(coverPath).exists()));
+            LoadCoverAsync loadCoverAsync = new LoadCoverAsync(position, viewHolder.coverView);
+            if (coverNotExists)
+                loadCoverAsync.execute();
+            else
+                loadCoverAsync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
 
+
+    @Override
+    public int getItemCount() {
+        return data.size();
+    }
+
+
+    @Override
+    public void onTrimMemory(int level) {
+        if (level >= TRIM_MEMORY_MODERATE) {
+            imageCache.evictAll();
+        } else if (level >= TRIM_MEMORY_BACKGROUND) {
+            imageCache.trimToSize(imageCache.size() / 2);
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+
+    }
+
+    @Override
+    public void onLowMemory() {
+
+    }
+
+
+    /**
+     * Loads cover Async into the ViewHolder. If there is no cover specified and the devices is allowed
+     * to go online, it will download an image from the internet and save it to the database.
+     * If there is no cover and the device is not allowed to go online, a default capital-letter will
+     * be generated and NOT be written to the database.
+     * In any case the bitmap will be put to the lru cache.
+     *
+     * @see de.ph1b.audiobook.adapter.MediaAdapter.ImageCache
+     * @see de.ph1b.audiobook.utils.CoverDownloader
+     */
     private class LoadCoverAsync extends AsyncTask<Void, Void, Bitmap> {
 
-        private WeakReference<ImageView> weakReference;
-        private BookDetail book;
+        private final WeakReference<ImageView> weakReference;
+        private final int position;
+        private final BookDetail book;
 
-        public LoadCoverAsync(BookDetail book, ImageView imageView) {
-            this.book = book;
+        public LoadCoverAsync(int position, ImageView imageView) {
+            this.position = position;
             weakReference = new WeakReference<ImageView>(imageView);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            ImageView imageView = weakReference.get();
-            if (imageView != null) {
-                imageView.setImageBitmap(null);
-            }
+            book = data.get(position);
         }
 
         @Override
         protected Bitmap doInBackground(Void... params) {
-            String thumbPath = book.getThumb();
-            if (thumbPath == null || thumbPath.equals("") || new File(thumbPath).isDirectory() || !(new File(thumbPath).exists())) {
-                //if device is online try to load image from internet
-                if (fragment.getActivity() != null && CommonTasks.isOnline(fragment.getActivity())) {
-                    Context c = fragment.getActivity();
-                    Bitmap bitmap = CommonTasks.genCoverFromInternet(book.getName(), 0, fragment.getActivity());
-                    String imagePaths[] = CommonTasks.saveBitmap(bitmap, c);
 
-                    if (imagePaths != null) {
-                        book.setCover(imagePaths[0]);
-                        book.setThumb(imagePaths[1]);
+            String coverPath = book.getCover();
+            boolean coverNotExists = (coverPath == null || coverPath.equals("") || new File(coverPath).isDirectory() || !(new File(coverPath).exists()));
+            Bitmap bitmap = null;
+
+            //try to load a cover 3 times
+            if (coverNotExists && ImageHelper.isOnline(c)) {
+                for (int i = 0; i < 3; i++) {
+                    bitmap = CoverDownloader.getCover(book.getName(), c, i);
+                    if (bitmap != null) {
+                        String savedCoverPath = ImageHelper.saveCover(bitmap, c);
+                        book.setCover(savedCoverPath);
+                        data.set(position, book);
                         db.updateBook(book);
-                        updateBookInData(book);
-                        return BitmapFactory.decodeFile(imagePaths[1]);
+                        break;
                     }
-                } else {
-                    int thumbSize = CommonTasks.getThumbSize(fragment.getActivity());
-                    return (CommonTasks.genCapital(book.getName(), thumbSize, fragment.getResources()));
                 }
             } else {
-                return BitmapFactory.decodeFile(thumbPath);
+                bitmap = ImageHelper.genBitmapFromFile(coverPath, c, ImageHelper.TYPE_MEDIUM);
             }
-            return null;
+
+            if (bitmap == null) {
+                bitmap = ImageHelper.genCapital(book.getName(), c, ImageHelper.TYPE_MEDIUM);
+            }
+
+            //save bitmap to lru cache
+            imageCache.put(book.getId(), bitmap);
+
+            return bitmap;
         }
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             if (bitmap != null) {
                 ImageView imageView = weakReference.get();
-                if (imageView != null && ((Integer) imageView.getTag() == book.getId())) {
+                if (imageView != null && (Integer) imageView.getTag() == book.getId()) {
                     imageView.setImageBitmap(bitmap);
-                    if (fragment.getActivity() != null)
-                        fragment.initPlayerWidget();
+                    onCoverChangedListener.onCoverChanged();
                 }
             }
         }
     }
 
 
-    static class ViewHolder {
-        ImageView dragger;
-        ImageView iconImageView;
-        TextView textView;
-        ProgressBar progressBar;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        final ImageView coverView;
+        final TextView titleView;
+        final ImageButton editBook;
+
+        public ViewHolder(View itemView, final OnItemClickListener onItemClickListener) {
+            super(itemView);
+            coverView = (ImageView) itemView.findViewById(R.id.cover);
+            titleView = (TextView) itemView.findViewById(R.id.title);
+            editBook = (ImageButton) itemView.findViewById(R.id.editBook);
+
+            coverView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.onCoverClicked(getPosition());
+                }
+            });
+            editBook.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.onPopupMenuClicked(v, getPosition());
+                }
+            });
+        }
+    }
+
+    private class ImageCache extends LruCache<Integer, Bitmap> {
+
+        public ImageCache(int maxSizeBytes) {
+            super(maxSizeBytes);
+        }
+
+        @Override
+        protected int sizeOf(Integer key, Bitmap value) {
+            return value.getByteCount();
+        }
     }
 }

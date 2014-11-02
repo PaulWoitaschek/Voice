@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.service;
 
-import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -21,11 +20,11 @@ import android.media.RemoteControlClient;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Binder;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -46,8 +45,8 @@ import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.receiver.RemoteControlReceiver;
 import de.ph1b.audiobook.receiver.WidgetProvider;
 import de.ph1b.audiobook.utils.BookDetail;
-import de.ph1b.audiobook.utils.CommonTasks;
 import de.ph1b.audiobook.utils.DataBaseHelper;
+import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.MediaDetail;
 
 public class AudioPlayerService extends Service {
@@ -150,15 +149,12 @@ public class AudioPlayerService extends Service {
         myEventReceiver = new ComponentName(getPackageName(), RemoteControlReceiver.class.getName());
 
         //setup remote client
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-            ComponentName nmm = new ComponentName(getPackageName(), RemoteControlReceiver.class.getName());
-            mediaButtonIntent.setComponent(nmm);
-            PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(this, 0, mediaButtonIntent, 0);
-            //noinspection deprecation
-            mRemoteControlClient = new RemoteControlClient(mediaPendingIntent);
-        }
-
+        Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        ComponentName nmm = new ComponentName(getPackageName(), RemoteControlReceiver.class.getName());
+        mediaButtonIntent.setComponent(nmm);
+        PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(this, 0, mediaButtonIntent, 0);
+        //noinspection deprecation
+        mRemoteControlClient = new RemoteControlClient(mediaPendingIntent);
 
         //state manager to update widget
         widgetComponentName = new ComponentName(this, WidgetProvider.class);
@@ -277,22 +273,21 @@ public class AudioPlayerService extends Service {
 
         @Override
         protected Bitmap doInBackground(Void... params) {
-            String thumbPath = book.getThumb();
+            String coverPath = book.getCover();
 
             Resources res = getApplicationContext().getResources();
             int height = (int) res.getDimension(android.R.dimen.notification_large_icon_height);
             int width = (int) res.getDimension(android.R.dimen.notification_large_icon_width);
-            int size = height < width ? height : width;
+            //    int size = Math.min(width, height);
 
-            if (thumbPath == null || thumbPath.equals("") || !new File(thumbPath).exists() || new File(thumbPath).isDirectory()) {
-                return CommonTasks.genCapital(book.getName(), size, getResources());
+            if (coverPath == null || coverPath.equals("") || !new File(coverPath).exists() || new File(coverPath).isDirectory()) {
+                return ImageHelper.genCapital(book.getName(), getApplicationContext(), ImageHelper.TYPE_THUMB);
             } else {
-                Bitmap thumb = BitmapFactory.decodeFile(thumbPath);
+                Bitmap thumb = BitmapFactory.decodeFile(coverPath);
                 return Bitmap.createScaledBitmap(thumb, width, height, false);
             }
         }
 
-        @SuppressWarnings("deprecation")
         @Override
         protected void onPostExecute(Bitmap result) {
             super.onPostExecute(result);
@@ -305,7 +300,7 @@ public class AudioPlayerService extends Service {
 
             Intent i = new Intent(NOTIFICATION_PAUSE);
             PendingIntent pauseActionPI = PendingIntent.getBroadcast(getApplicationContext(), 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
-            Notification.Builder builder = new Notification.Builder(getApplicationContext());
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(c);
             builder.setContentTitle(book.getName())
                     .setContentText(media.getName())
                     .setLargeIcon(result)
@@ -317,14 +312,10 @@ public class AudioPlayerService extends Service {
             if (allMedia.size() > 1 && pos != -1) {
                 builder.setContentInfo(String.valueOf(pos) + "/" + String.valueOf(allMedia.size()));
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                builder.setPriority(Notification.PRIORITY_HIGH);
-                builder.addAction(R.drawable.ic_pause_white_36dp, "Pause", pauseActionPI);
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
-                builder.setShowWhen(false);
-            Notification notification = builder.getNotification();
-            notification.flags |= Notification.FLAG_HIGH_PRIORITY;
+            builder.setPriority(NotificationCompat.PRIORITY_HIGH);
+            builder.addAction(R.drawable.ic_pause_white_36dp, "Pause", pauseActionPI);
+            builder.setShowWhen(false);
+            Notification notification = builder.build();
             startForeground(NOTIFICATION_ID, notification);
         }
     }
@@ -382,32 +373,20 @@ public class AudioPlayerService extends Service {
     };
 
 
-    @SuppressWarnings("deprecation")
-    @SuppressLint("NewApi")
     private void initBook() {
-
         if (BuildConfig.DEBUG) Log.d(TAG, "Init book with id " + book.getId());
 
         registerAsPlaying(false);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            if (allMedia.size() > 1) {
-                mRemoteControlClient.setTransportControlFlags(
-                        RemoteControlClient.FLAG_KEY_MEDIA_PAUSE |
-                                RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS |
-                                RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
-                                RemoteControlClient.FLAG_KEY_MEDIA_REWIND |
-                                RemoteControlClient.FLAG_KEY_MEDIA_FAST_FORWARD
-                );
-            } else {
-                mRemoteControlClient.setTransportControlFlags(
-                        RemoteControlClient.FLAG_KEY_MEDIA_PAUSE |
-                                RemoteControlClient.FLAG_KEY_MEDIA_REWIND |
-                                RemoteControlClient.FLAG_KEY_MEDIA_FAST_FORWARD
-                );
-            }
-        }
+        mRemoteControlClient.setTransportControlFlags(
+                RemoteControlClient.FLAG_KEY_MEDIA_PAUSE |
+                        RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS |
+                        RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
+                        RemoteControlClient.FLAG_KEY_MEDIA_REWIND |
+                        RemoteControlClient.FLAG_KEY_MEDIA_FAST_FORWARD
+        );
     }
+
 
     private void prepare(int mediaId) {
         if (BuildConfig.DEBUG) Log.d(TAG, "prepare()" + mediaId);
@@ -426,14 +405,18 @@ public class AudioPlayerService extends Service {
                 mediaPlayer.reset();
             stateManager.setState(PlayerStates.IDLE);
 
+            int position;
+            //setting up new file depending on if it is the latest media in book
             if (book.getCurrentMediaId() != media.getId()) {
                 book.setCurrentMediaId(media.getId());
-                db.updateBookAsync(book);
+                position = 0;
+                book.setCurrentMediaPosition(0);
+                updateBookAsync(book);
+            } else {
+                position = book.getCurrentMediaPosition();
             }
 
-
             String path = media.getPath();
-            int position = book.getCurrentMediaPosition();
 
             //setting position to 0 if last file was reached
             if (position == media.getDuration())
@@ -470,7 +453,7 @@ public class AudioPlayerService extends Service {
 
                     //setting book to last position
                     book.setCurrentMediaPosition(media.getDuration());
-                    db.updateBookAsync(book);
+                    updateBookAsync(book);
 
                     boolean wasPlaying = ((stateManager.getState() == PlayerStates.STARTED) ||
                             (stateManager.getState() == PlayerStates.PLAYBACK_COMPLETED));
@@ -505,8 +488,17 @@ public class AudioPlayerService extends Service {
         }
     }
 
+    private void updateBookAsync(final BookDetail book) {
+        new Runnable() {
+            @Override
+            public void run() {
+                db.updateBook(book);
+            }
+        }.run();
+    }
 
-    private void updateGUI() {
+
+    public void updateGUI() {
         if (stateManager.getState() != PlayerStates.DEAD) {
             if (playerLock.tryLock()) {
                 try {
@@ -522,6 +514,7 @@ public class AudioPlayerService extends Service {
             }
         }
     }
+
 
     private void sleepTimer(int sleepTime) {
         Timer sandman = new Timer();
@@ -558,7 +551,7 @@ public class AudioPlayerService extends Service {
                 if (newPosition > 0) {
                     mediaPlayer.seekTo(newPosition);
                     book.setCurrentMediaPosition(newPosition);
-                    db.updateBookAsync(book);
+                    updateBookAsync(book);
                 }
                 stateManager.setTime(mediaPlayer.getCurrentPosition());
 
@@ -584,7 +577,7 @@ public class AudioPlayerService extends Service {
                     newPosition = 0;
                 mediaPlayer.seekTo(newPosition);
                 book.setCurrentMediaPosition(newPosition);
-                db.updateBookAsync(book);
+                updateBookAsync(book);
                 stateManager.setTime(mediaPlayer.getCurrentPosition());
             } finally {
                 playerLock.unlock();
@@ -603,7 +596,6 @@ public class AudioPlayerService extends Service {
         }
     }
 
-    @SuppressLint("NewApi")
     public void play() {
         playerLock.lock();
         try {
@@ -645,13 +637,10 @@ public class AudioPlayerService extends Service {
                     Log.d(TAG, "Audio-focus granted. Setting up RemoteControlClient");
 
                 audioManager.registerMediaButtonEventReceiver(myEventReceiver);
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                    if (BuildConfig.DEBUG)
-                        Log.d(TAG, "Setting up remote Control Client");
-                    audioManager.registerRemoteControlClient(mRemoteControlClient);
-                    mRemoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
-                }
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "Setting up remote Control Client");
+                audioManager.registerRemoteControlClient(mRemoteControlClient);
+                mRemoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
             }
 
             //registering receivers for information on media controls
@@ -675,12 +664,8 @@ public class AudioPlayerService extends Service {
             audioManager.abandonAudioFocus(audioFocusChangeListener);
             audioFocus = 0;
             audioManager.unregisterMediaButtonEventReceiver(myEventReceiver);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                //noinspection deprecation
-                audioManager.unregisterRemoteControlClient(mRemoteControlClient);
-                //noinspection deprecation
-                mRemoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_STOPPED);
-            }
+            audioManager.unregisterRemoteControlClient(mRemoteControlClient);
+            mRemoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_STOPPED);
 
             //releasing control receivers because pause
             if (noisyRCRegistered) {
@@ -702,7 +687,7 @@ public class AudioPlayerService extends Service {
                 int position = mediaPlayer.getCurrentPosition();
                 if (position > 0) {
                     book.setCurrentMediaPosition(position);
-                    db.updateBookAsync(book);
+                    updateBookAsync(book);
                 }
                 mediaPlayer.pause();
                 stateManager.setState(PlayerStates.PAUSED);
@@ -719,7 +704,7 @@ public class AudioPlayerService extends Service {
             if (state == PlayerStates.STARTED || state == PlayerStates.PREPARED || state == PlayerStates.PAUSED) {
                 mediaPlayer.seekTo(position);
                 book.setCurrentMediaPosition(position);
-                db.updateBookAsync(book);
+                updateBookAsync(book);
             }
             updateGUI();
         } finally {
@@ -736,7 +721,7 @@ public class AudioPlayerService extends Service {
                         int position = mediaPlayer.getCurrentPosition();
                         if (position > 0) {
                             book.setCurrentMediaPosition(position);
-                            db.updateBookAsync(book);
+                            updateBookAsync(book);
                         }
                     }
                 } finally {
@@ -813,27 +798,25 @@ public class AudioPlayerService extends Service {
         return -1;
     }
 
-    @SuppressLint("NewApi")
     private void updateMetaData() {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                    if (BuildConfig.DEBUG)
-                        Log.d(TAG, "editing metadata with" + media.getName());
-                    RemoteControlClient.MetadataEditor editor = mRemoteControlClient.editMetadata(true);
-                    editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, media.getName());
-                    editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName());
-                    String coverPath = book.getCover();
-                    Bitmap bitmap;
-                    if (coverPath == null || coverPath.equals("") || !new File(coverPath).exists() || new File(coverPath).isDirectory()) {
-                        bitmap = CommonTasks.genCapital(book.getName(), 500, getResources());
-                    } else {
-                        bitmap = BitmapFactory.decodeFile(book.getCover());
-                    }
-                    editor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bitmap);
-                    editor.apply();
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "editing metadata with" + media.getName());
+                RemoteControlClient.MetadataEditor editor = mRemoteControlClient.editMetadata(true);
+                editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, media.getName());
+                editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName());
+                String coverPath = book.getCover();
+                Bitmap bitmap;
+                if (coverPath == null || coverPath.equals("") || !new File(coverPath).exists() || new File(coverPath).isDirectory()) {
+                    bitmap = ImageHelper.genCapital(book.getName(), getApplication(), ImageHelper.TYPE_COVER);
+                } else {
+                    bitmap = BitmapFactory.decodeFile(book.getCover());
                 }
+                editor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bitmap);
+                editor.apply();
+
                 return null;
             }
         }.execute();

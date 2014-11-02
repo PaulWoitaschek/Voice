@@ -1,36 +1,44 @@
 package de.ph1b.audiobook.fragment;
 
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.ActionMode;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.mobeta.android.dslv.DragSortListView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,20 +50,23 @@ import de.ph1b.audiobook.activity.FilesChoose;
 import de.ph1b.audiobook.activity.Settings;
 import de.ph1b.audiobook.adapter.MediaAdapter;
 import de.ph1b.audiobook.dialog.EditBook;
+import de.ph1b.audiobook.interfaces.OnItemClickListener;
+import de.ph1b.audiobook.interfaces.OnItemLongClickListener;
 import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.utils.BookDetail;
-import de.ph1b.audiobook.utils.CommonTasks;
+import de.ph1b.audiobook.utils.CustomOnSimpleGestureListener;
 import de.ph1b.audiobook.utils.DataBaseHelper;
+import de.ph1b.audiobook.utils.ImageHelper;
 
 
-public class BookChooseFragment extends Fragment implements View.OnClickListener, EditBook.OnEditBookFinished {
+public class BookChooseFragment extends Fragment implements View.OnClickListener, EditBook.OnEditBookFinished, RecyclerView.OnItemTouchListener {
 
 
     private static final String TAG = "de.ph1b.audiobook.fragment.BookChooseFragment";
 
-    private ArrayList<BookDetail> details;
+    //private ArrayList<BookDetail> details;
     private DataBaseHelper db;
     private MediaAdapter adapt;
 
@@ -66,10 +77,11 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
 
     private AudioPlayerService mService;
     private boolean mBound = false;
-    private ActionMode actionMode;
-    private BookDetail currentBook;
+    private GestureDetectorCompat detector;
     private BookDetail bookToEdit;
-    private DragSortListView mediaListView;
+
+    private float scrollBy = 0;
+
 
     private final ServiceConnection mConnection = new ServiceConnection() {
         @Override
@@ -113,16 +125,18 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     private final OnStateChangedListener onStateChangedListener = new OnStateChangedListener() {
         @Override
         public void onStateChanged(final PlayerStates state) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (state == PlayerStates.STARTED) {
-                        currentPlaying.setImageResource(R.drawable.ic_pause_black_36dp);
-                    } else {
-                        currentPlaying.setImageResource(R.drawable.ic_play_arrow_black_36dp);
+            Activity a = getActivity();
+            if (a != null)
+                a.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (state == PlayerStates.STARTED) {
+                            currentPlaying.setImageResource(R.drawable.ic_pause_black_36dp);
+                        } else {
+                            currentPlaying.setImageResource(R.drawable.ic_play_arrow_black_36dp);
+                        }
                     }
-                }
-            });
+                });
         }
     };
 
@@ -132,7 +146,6 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         super.onCreate(savedInstanceState);
 
         db = DataBaseHelper.getInstance(getActivity());
-        details = db.getAllBooks();
 
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
     }
@@ -140,7 +153,8 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     @Override
     public void onPause() {
         if (mBound)
-            mService.foreground(true);
+            if (mService.stateManager.getState() == PlayerStates.STARTED)
+                mService.foreground(true);
         super.onPause();
     }
 
@@ -157,92 +171,12 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         currentCover = (ImageView) v.findViewById(R.id.current_cover);
         currentText = (TextView) v.findViewById(R.id.current_text);
         currentPlaying = (ImageButton) v.findViewById(R.id.current_playing);
-        mediaListView = (DragSortListView) v.findViewById(R.id.listMediaView);
+        final RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.listMediaView);
 
-        adapt = new MediaAdapter(details, this);
-
-        mediaListView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
-        mediaListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+        OnItemClickListener onClickListener = new OnItemClickListener() {
             @Override
-            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-                adapt.setBookChecked(details.get(position).getId(), checked);
-                // invalidates to invoke onPrepareActionMode again
-                mode.invalidate();
-            }
-
-
-            @Override
-            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                adapt.toggleDrag(false);
-                actionMode = mode;
-                MenuInflater inflater = mode.getMenuInflater();
-                inflater.inflate(R.menu.action_mode_mediaview, menu);
-                return true;
-            }
-
-            @Override
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                MenuItem actionEdit = menu.findItem(R.id.action_edit);
-                if (mediaListView.getCheckedItemCount() > 1)
-                    actionEdit.setVisible(false);
-                if (mediaListView.getCheckedItemCount() == 1)
-                    actionEdit.setVisible(true);
-                return true;
-            }
-
-            @Override
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_delete:
-                        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                        int position = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
-                        ArrayList<BookDetail> books = adapt.getCheckedBooks();
-                        for (BookDetail b : books) {
-                            //setting visibility of play list at bottom to gone if book is gone
-                            if (b.getId() == position) {
-                                current.setVisibility(View.GONE);
-                            }
-                            details.remove(b);
-                        }
-
-                        adapt.notifyDataSetChanged();
-
-                        db.deleteBooksAsync(books);
-                        mode.finish();
-                        return true;
-                    case R.id.action_edit:
-                        EditBook editBook = new EditBook();
-                        Bundle bundle = new Bundle();
-                        bookToEdit = adapt.getCheckedBooks().get(0);
-
-                        ArrayList<Bitmap> bitmap = new ArrayList<Bitmap>();
-                        Bitmap defaultCover = BitmapFactory.decodeFile(bookToEdit.getCover());
-                        if (defaultCover != null)
-                            bitmap.add(defaultCover);
-
-                        bundle.putParcelableArrayList(EditBook.BOOK_COVER, bitmap);
-                        bundle.putString(EditBook.DIALOG_TITLE, getString(R.string.edit_book_title));
-                        bundle.putString(EditBook.BOOK_NAME, bookToEdit.getName());
-
-                        editBook.setArguments(bundle);
-                        editBook.setTargetFragment(BookChooseFragment.this, 0);
-                        editBook.show(getFragmentManager(), TAG);
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-
-            @Override
-            public void onDestroyActionMode(ActionMode mode) {
-                adapt.toggleDrag(true);
-                adapt.unCheckAll();
-            }
-        });
-
-        mediaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView a, View v, int position, long id) {
-                BookDetail book = details.get(position);
+            public void onCoverClicked(int position) {
+                BookDetail book = adapt.getItem(position);
                 int bookId = book.getId();
 
                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -255,103 +189,199 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                 startActivity(i);
             }
 
-        });
-
-        mediaListView.setAdapter(adapt);
-
-        mediaListView.setDragSortListener(new DragSortListView.DragSortListener() {
             @Override
-            public void drag(int from, int to) {
-            }
+            public void onPopupMenuClicked(View v, final int position) {
+                Log.d(TAG, "popup" + String.valueOf(position));
+                PopupMenu popup = new PopupMenu(getActivity(), v);
+                MenuInflater inflater = popup.getMenuInflater();
+                inflater.inflate(R.menu.popup_menu, popup.getMenu());
 
-            @Override
-            public synchronized void drop(int from, int to) {
-                if (from != to) {
-                    if (from > to) {
-                        while (from > to) {
-                            swapBooks(from, from - 1);
-                            from--;
-                        }
-                    } else {
-                        while (from < to) {
-                            swapBooks(from, from + 1);
-                            from++;
+                bookToEdit = adapt.getItem(position);
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.edit_book:
+                                EditBook editBook = new EditBook();
+                                Bundle bundle = new Bundle();
+
+                                ArrayList<Bitmap> bitmap = new ArrayList<Bitmap>();
+                                Bitmap defaultCover = BitmapFactory.decodeFile(bookToEdit.getCover());
+                                if (defaultCover != null)
+                                    bitmap.add(defaultCover);
+
+                                bundle.putParcelableArrayList(EditBook.BOOK_COVER, bitmap);
+                                bundle.putString(EditBook.DIALOG_TITLE, getString(R.string.edit_book_title));
+                                bundle.putString(EditBook.BOOK_NAME, bookToEdit.getName());
+
+                                editBook.setArguments(bundle);
+                                editBook.setTargetFragment(BookChooseFragment.this, 0);
+                                editBook.show(getFragmentManager(), TAG);
+                                return true;
+                            case R.id.delete_book:
+                                //setting visibility of play widget at bottom to gone if book is gone
+                                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                                int currentBookId = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
+                                for (BookDetail b : adapt.getData()) {
+                                    if (b.getId() == currentBookId) {
+                                        current.setVisibility(View.GONE);
+                                    }
+                                }
+
+                                adapt.removeItem(position);
+                                return true;
+                            default:
+                                return false;
                         }
                     }
-                    db.updateBooksAsync(details);
-                }
+                });
+                popup.show();
             }
+        };
 
+        OnItemLongClickListener onLongClickListener = new OnItemLongClickListener() {
             @Override
-            public void remove(int which) {
-
+            public void onItemLongClicked(int position, View view) {
+                ClipData cData = ClipData.newPlainText("position", String.valueOf(position));
+                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+                view.startDrag(cData, shadowBuilder, view, 0);
             }
-        });
+        };
+
+        MediaAdapter.OnCoverChangedListener onCoverChangedListener = new MediaAdapter.OnCoverChangedListener() {
+            @Override
+            public void onCoverChanged() {
+                if (getActivity() != null)
+                    initPlayerWidget();
+            }
+        };
+
+        ArrayList<BookDetail> books = db.getAllBooks();
+        adapt = new MediaAdapter(books, getActivity(), onClickListener, onCoverChangedListener);
+        recyclerView.setHasFixedSize(true);
+
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getAmountOfColumns(getActivity().getApplicationContext())));
+        recyclerView.setAdapter(adapt);
+        recyclerView.addOnItemTouchListener(this);
+        final Handler handler = new Handler();
+
+        final Runnable scroller = new Runnable() {
+            @Override
+            public void run() {
+                recyclerView.smoothScrollBy(0, Math.round(scrollBy));
+                handler.postDelayed(this, 50);
+            }
+        };
+
+        View.OnDragListener onDragListener = new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+
+
+                int action = event.getAction();
+                switch (action) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        return event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN);
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        return true;
+                    case DragEvent.ACTION_DRAG_LOCATION:
+
+                        int height = recyclerView.getMeasuredHeight();
+
+                        float scrollArea = height / 4;
+                        float maxScrollStrength = scrollArea / 3;
+
+                        float y = event.getY();
+
+                        scrollBy = 0;
+                        if (y <= scrollArea && y > 0) {
+                            scrollBy = maxScrollStrength * (y / scrollArea - 1);
+                            Log.d(TAG, String.valueOf(scrollBy));
+                        } else if (y >= (height - scrollArea) && y <= height) {
+                            scrollBy = maxScrollStrength * (1 - y / height);
+
+                            float factor = 1 + (y * y - height * height) /
+                                    (2 * scrollArea * height - scrollArea * scrollArea);
+
+                            scrollBy = maxScrollStrength * factor;
+                        }
+                        handler.removeCallbacks(scroller);
+                        if (scrollBy != 0) {
+                            handler.removeCallbacks(scroller);
+                            handler.post(scroller);
+                        }
+
+                        return true;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        return true;
+                    case DragEvent.ACTION_DROP:
+                        ClipData.Item item = event.getClipData().getItemAt(0);
+                        String dragData = String.valueOf(item.getText());
+                        int from = Integer.valueOf(dragData);
+
+                        float endX = event.getX();
+                        float endY = event.getY();
+                        View endChild = recyclerView.findChildViewUnder(endX, endY);
+                        int to = recyclerView.getChildPosition(endChild);
+
+                        if (from == -1 || to == -1)
+                            return false;
+
+                        adapt.swapItems(from, to);
+
+                        return true;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        handler.removeCallbacks(scroller);
+                        scrollBy = 0;
+                        return true;
+                }
+                return false;
+            }
+        };
+        recyclerView.setOnDragListener(onDragListener);
+        detector = new GestureDetectorCompat(getActivity(),
+                new CustomOnSimpleGestureListener(recyclerView, onLongClickListener));
         return v;
     }
 
-    /*
-    swaps the elements in details list.
-    also swaps their sort id.
-     */
-    private void swapBooks(int oldPosition, int newPosition) {
-        BookDetail oldBook = details.get(oldPosition);
-        BookDetail newBook = details.get(newPosition);
-        int oldSortId = oldBook.getSortId();
-        int newSortId = newBook.getSortId();
-        oldBook.setSortId(newSortId);
-        newBook.setSortId(oldSortId);
-        details.set(oldPosition, newBook);
-        details.set(newPosition, oldBook);
-        adapt.notifyDataSetChanged();
-    }
 
-
-    private void refreshBookList() {
-        //updates list each time!
-        ArrayList<BookDetail> tempDetails = db.getAllBooks();
-        details.clear();
-        details.addAll(tempDetails);
-        adapt.notifyDataSetChanged();
-
-        if (details.size() == 0) {
-            String text = getString(R.string.media_view_how_to);
-            Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL, 0, 0);
-            toast.show();
-        }
-    }
-
-    public void initPlayerWidget() {
+    private void initPlayerWidget() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
         int currentBookPosition = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
 
-        currentBook = db.getBook(currentBookPosition);
+        boolean widgetInitialized = false;
+        for (final BookDetail b : adapt.getData()) {
+            if (b.getId() == currentBookPosition) {
+                //setting cover
+                String coverPath = b.getCover();
+                if (coverPath == null || coverPath.equals("") || !new File(coverPath).exists() || new File(coverPath).isDirectory()) {
+                    String bookName = b.getName();
+                    Bitmap thumb = ImageHelper.genCapital(bookName, getActivity(), ImageHelper.TYPE_THUMB);
+                    currentCover.setImageBitmap(thumb);
+                } else if (new File(coverPath).isFile()) {
+                    Bitmap bitmap = ImageHelper.genBitmapFromFile(coverPath, getActivity(), ImageHelper.TYPE_THUMB);
+                    currentCover.setImageBitmap(bitmap);
+                }
 
-        if (currentBook != null) {
-            Intent i = new Intent(getActivity(), AudioPlayerService.class);
-            i.putExtra(AudioPlayerService.GUI_BOOK, currentBook);
-            getActivity().startService(i);
-
-            //setting cover
-            String thumbPath = currentBook.getThumb();
-            if (thumbPath == null || thumbPath.equals("") || !new File(thumbPath).exists() || new File(thumbPath).isDirectory()) {
-                String bookName = currentBook.getName();
-                int px = Math.round(CommonTasks.getCoverSize(getActivity()));
-                Bitmap thumb = CommonTasks.genCapital(bookName, px, getResources());
-                currentCover.setImageBitmap(thumb);
-            } else if (new File(thumbPath).isFile()) {
-                currentCover.setImageURI(Uri.parse(thumbPath));
+                //setting text
+                currentText.setText(b.getName());
+                current.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(getActivity(), BookPlay.class);
+                        i.putExtra(AudioPlayerService.GUI_BOOK, b);
+                        startActivity(i);
+                    }
+                });
+                currentPlaying.setOnClickListener(this);
+                current.setVisibility(View.VISIBLE);
+                widgetInitialized = true;
+                break;
             }
-
-            //setting text
-            currentText.setText(currentBook.getName());
-            current.setOnClickListener(this);
-            currentPlaying.setOnClickListener(this);
-            current.setVisibility(View.VISIBLE);
-        } else {
-            current.setVisibility(View.GONE);
         }
+        if (!widgetInitialized)
+            current.setVisibility(View.GONE);
     }
 
     @Override
@@ -361,7 +391,14 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         if (mBound)
             mService.foreground(false);
 
-        refreshBookList();
+        new StartServiceAsync(getActivity(), false).execute();
+
+        if (adapt.getItemCount() == 0) {
+            String text = getString(R.string.media_view_how_to);
+            Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL, 0, 0);
+            toast.show();
+        }
         initPlayerWidget();
     }
 
@@ -392,16 +429,8 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.current:
-                Intent i = new Intent(getActivity(), BookPlay.class);
-                i.putExtra(AudioPlayerService.GUI_BOOK, currentBook);
-                startActivity(i);
-                break;
             case R.id.current_playing:
-                Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
-                serviceIntent.putExtra(AudioPlayerService.GUI_BOOK, currentBook);
-                serviceIntent.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
-                getActivity().startService(serviceIntent);
+                new StartServiceAsync(getActivity().getApplicationContext(), true).execute();
                 break;
             default:
                 break;
@@ -412,14 +441,79 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     public void onEditBookFinished(String bookName, Bitmap cover, Boolean success) {
         if (success) {
             bookToEdit.setName(bookName);
-            String[] coverPaths = CommonTasks.saveBitmap(cover, getActivity());
-            bookToEdit.setCover(coverPaths[0]);
-            bookToEdit.setThumb(coverPaths[1]);
-            db.updateBook(bookToEdit);
-            refreshBookList();
-            if (actionMode != null)
-                actionMode.finish();
+            if (cover != null) {
+                String coverPath = ImageHelper.saveCover(cover, getActivity());
+                bookToEdit.setCover(coverPath);
+            }
+            adapt.updateItem(bookToEdit);
             initPlayerWidget();
         }
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+        detector.onTouchEvent(motionEvent);
+        return false;
+    }
+
+    @Override
+    public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+
+    }
+
+    /**
+     * Starts the AudioPlayerService Async. You must invoke the constructor.
+     */
+    private class StartServiceAsync extends AsyncTask<Void, Void, Void> {
+        private final Context c;
+        private final boolean play;
+
+
+        /**
+         * Default constructor.
+         *
+         * @param c    Pass the Context
+         * @param play If true, the Service will automatically start playing a book.
+         */
+        public StartServiceAsync(Context c, boolean play) {
+            this.c = c;
+            this.play = play;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            int currentBookId = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
+            for (BookDetail b : adapt.getData()) {
+                if (b.getId() == currentBookId) {
+                    Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
+                    serviceIntent.putExtra(AudioPlayerService.GUI_BOOK, b);
+                    if (play)
+                        serviceIntent.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
+                    c.startService(serviceIntent);
+
+                    Intent intent = new Intent(getActivity(), AudioPlayerService.class);
+                    c.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+                }
+            }
+
+            return null;
+        }
+    }
+
+
+    /**
+     * Returns the amount of columns the main-grid will need
+     *
+     * @param c Application Context
+     * @return The amount of columns, but at least 2.
+     */
+    public static int getAmountOfColumns(Context c) {
+        Resources r = c.getResources();
+        DisplayMetrics displayMetrics = r.getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        int columns = Math.round(dpWidth / r.getDimension(R.dimen.desired_medium_cover));
+        return columns > 2 ? columns : 2;
     }
 }

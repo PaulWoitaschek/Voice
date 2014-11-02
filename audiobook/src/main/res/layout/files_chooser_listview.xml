@@ -14,7 +14,8 @@
         android:layout_marginRight="16dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/ic_folder_grey600_48dp"
-        android:layout_gravity="center_vertical|center_horizontal" />
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:contentDescription="@string/content_file_or_folder" />
 
     <TextView
         android:id="@+id/file_name"

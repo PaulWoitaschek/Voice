@@ -11,7 +11,6 @@ public class BookDetail implements Parcelable {
     private int sortId;
     private String name;
     private String cover;
-    private String thumb;
     private int currentMediaId;
     private int currentMediaPosition;
 
@@ -51,14 +50,6 @@ public class BookDetail implements Parcelable {
         this.cover = cover;
     }
 
-    public String getThumb() {
-        return thumb;
-    }
-
-    public void setThumb(String thumb) {
-        this.thumb = thumb;
-    }
-
     public int getCurrentMediaId() {
         return currentMediaId;
     }
@@ -85,7 +76,6 @@ public class BookDetail implements Parcelable {
         destination.writeInt(id);
         destination.writeString(name);
         destination.writeString(cover);
-        destination.writeString(thumb);
         destination.writeInt(currentMediaId);
         destination.writeInt(currentMediaPosition);
         destination.writeInt(sortId);
@@ -95,7 +85,6 @@ public class BookDetail implements Parcelable {
         id = pc.readInt();
         name = pc.readString();
         cover = pc.readString();
-        thumb = pc.readString();
         currentMediaId = pc.readInt();
         currentMediaPosition = pc.readInt();
         sortId = pc.readInt();

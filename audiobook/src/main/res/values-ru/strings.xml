@@ -7,14 +7,10 @@
     <string name="action_settings">Настройки</string>
     <string name="back">Назад</string>
     <string name="forward">Вперед</string>
-    <string name="action_delete">Удалить</string>
     <string name="action_add_badge">Добавить каталог аудиокниги</string>
     <string name="book_add">Добавить аудиокнигу</string>
     <string name="book_add_empty_title">Добавить название</string>
-    <string name="description_thumbnail">Изображение обложки</string>
     <string name="book_no_media">Выбранный каталог не содержит аудиофайлов.</string>
-    <string name="next_song">Следующий трек</string>
-    <string name="previous_song">Предыдущий трек</string>
     <string name="dialog_confirm">Установить</string>
     <string name="dialog_cancel">Отмена</string>
     <string name="action_time_change">Перейти к</string>

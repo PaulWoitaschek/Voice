@@ -50,8 +50,8 @@ import de.ph1b.audiobook.adapter.FileAdapter;
 import de.ph1b.audiobook.dialog.EditBook;
 import de.ph1b.audiobook.interfaces.OnBackPressedListener;
 import de.ph1b.audiobook.utils.BookDetail;
-import de.ph1b.audiobook.utils.CommonTasks;
 import de.ph1b.audiobook.utils.DataBaseHelper;
+import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.MediaDetail;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
 
@@ -288,13 +288,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                 public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.action_add_badge:
-
-                            if (BuildConfig.DEBUG) {
-                                Log.d(TAG, "launching dialog with fiels");
-                                for (File f : files) {
-                                    Log.d(TAG, f.getName());
-                                }
-                            }
                             launchEditDialog(files);
                             mode.finish();
                             return true;
@@ -387,7 +380,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                         return null;
                     Activity activity = getActivity();
                     if (activity != null) {
-                        Bitmap cover = CommonTasks.genBitmapFromFile(image.getAbsolutePath(), activity.getApplicationContext());
+                        Bitmap cover = ImageHelper.genBitmapFromFile(image.getAbsolutePath(), activity, ImageHelper.TYPE_COVER);
                         if (cover != null)
                             bitmaps.add(cover);
                     }
@@ -482,10 +475,9 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
             BookDetail b = new BookDetail();
             b.setName(defaultName);
             if (cover != null) {
-                String[] imagePaths = CommonTasks.saveBitmap(cover, getActivity());
-                if (imagePaths != null) {
-                    b.setCover(imagePaths[0]);
-                    b.setThumb(imagePaths[1]);
+                String coverPath = ImageHelper.saveCover(cover, getActivity());
+                if (coverPath != null) {
+                    b.setCover(coverPath);
                 }
             }
             int bookId = db.addBook(b);

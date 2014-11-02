@@ -30,7 +30,8 @@ import java.util.ArrayList;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.utils.CommonTasks;
+import de.ph1b.audiobook.utils.ImageHelper;
+import de.ph1b.audiobook.utils.CoverDownloader;
 import de.ph1b.audiobook.utils.DraggableBoxImageView;
 
 public class EditBook extends DialogFragment implements View.OnClickListener {
@@ -135,7 +136,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
         nameEditText.setText(defaultName);
 
         previousCover.setVisibility(View.INVISIBLE);
-        boolean online = CommonTasks.isOnline(getActivity());
+        boolean online = ImageHelper.isOnline(getActivity());
         int coverSize = covers.size();
         if (BuildConfig.DEBUG) Log.d("ebk", String.valueOf(coverSize));
 
@@ -233,33 +234,35 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
 
         @Override
         protected Bitmap doInBackground(Void... voids) {
-            return CommonTasks.genCoverFromInternet(searchString, pageCounter, getActivity());
+            return CoverDownloader.getCover(searchString, getActivity(), pageCounter);
         }
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             googleCount++;
-            ProgressBar coverReplacement = progressBarWeakReference.get();
-            ImageView cover = imageViewWeakReference.get();
-            ImageButton previousCover = imageButtonWeakReference.get();
-            if (coverReplacement != null && cover != null && previousCover != null) {
-                coverReplacement.setVisibility(View.GONE);
-                cover.setVisibility(View.VISIBLE);
-                if (bitmap != null) {
-                    covers.add(bitmap);
-                    coverPosition = covers.indexOf(bitmap);
-                    cover.setImageBitmap(bitmap);
-                    if (covers.size() > 1)
-                        previousCover.setVisibility(View.VISIBLE);
-                } else {
-                    genCoverFromInternet(searchString);
+            if (googleCount < 20) {
+                ProgressBar coverReplacement = progressBarWeakReference.get();
+                ImageView cover = imageViewWeakReference.get();
+                ImageButton previousCover = imageButtonWeakReference.get();
+                if (coverReplacement != null && cover != null && previousCover != null) {
+                    coverReplacement.setVisibility(View.GONE);
+                    cover.setVisibility(View.VISIBLE);
+                    if (bitmap != null) {
+                        covers.add(bitmap);
+                        coverPosition = covers.indexOf(bitmap);
+                        cover.setImageBitmap(bitmap);
+                        if (covers.size() > 1)
+                            previousCover.setVisibility(View.VISIBLE);
+                    } else {
+                        genCoverFromInternet(searchString);
+                    }
                 }
             }
         }
 
         @Override
         protected void onCancelled() {
-            URLConnection urlConnection = CommonTasks.connection;
+            URLConnection urlConnection = CoverDownloader.connection;
             if (urlConnection != null) {
                 try {
                     InputStream inputStream = urlConnection.getInputStream();

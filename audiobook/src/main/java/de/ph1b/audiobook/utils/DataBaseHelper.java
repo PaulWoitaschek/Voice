@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.File;
@@ -27,7 +26,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String KEY_MEDIA_DURATION = "KEY_MEDIA_DURATION";
     private static final String KEY_MEDIA_BOOK_ID = "KEY_MEDIA_BOOK_ID";
 
-    private String CREATE_MEDIA_TABLE = "CREATE TABLE " + TABLE_MEDIA + " ( " +
+    private final String CREATE_MEDIA_TABLE = "CREATE TABLE " + TABLE_MEDIA + " ( " +
             KEY_MEDIA_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             KEY_MEDIA_PATH + " TEXT, " +
             KEY_MEDIA_NAME + " TEXT, " +
@@ -39,16 +38,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String KEY_BOOK_COVER = "KEY_BOOK_COVER";
     private static final String KEY_BOOK_CURRENT_MEDIA_ID = "KEY_BOOK_CURRENT_MEDIA_ID";
     private static final String KEY_BOOK_CURRENT_MEDIA_POSITION = "KEY_BOOK_CURRENT_MEDIA_POSITION";
-    private static final String KEY_BOOK_THUMB = "KEY_BOOK_THUMB";
     private static final String KEY_BOOK_SORT_ID = "KEY_BOOK_SORT_ID";
 
-    private String CREATE_BOOK_TABLE = "CREATE TABLE " + TABLE_BOOKS + " ( " +
+    private final String CREATE_BOOK_TABLE = "CREATE TABLE " + TABLE_BOOKS + " ( " +
             KEY_BOOK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             KEY_BOOK_NAME + " TEXT, " +
             KEY_BOOK_COVER + " TEXT, " +
             KEY_BOOK_CURRENT_MEDIA_ID + " INTEGER, " +
             KEY_BOOK_CURRENT_MEDIA_POSITION + " INTEGER, " +
-            KEY_BOOK_THUMB + " TEXT, " +
             KEY_BOOK_SORT_ID + " INTEGER)";
 
     private static DataBaseHelper instance;
@@ -175,7 +172,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         // getting data from old table
         Cursor bookTableCursor = db.query("TEMP_TABLE_BOOKS",
-                new String[]{"KEY_BOOK_ID", "KEY_BOOK_NAME", "KEY_BOOK_COVER", "KEY_BOOK_POSITION", "KEY_BOOK_THUMB", "KEY_BOOK_SORT_ID"},
+                new String[]{"KEY_BOOK_ID", "KEY_BOOK_NAME", "KEY_BOOK_COVER", "KEY_BOOK_POSITION", "KEY_BOOK_SORT_ID"},
                 null, null, null, null, null);
 
         //going through all books and updating them with current values
@@ -184,8 +181,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             String bookName = bookTableCursor.getString(1);
             String bookCover = bookTableCursor.getString(2);
             int bookPosition = bookTableCursor.getInt(3);
-            String bookThumb = bookTableCursor.getString(4);
-            int bookSortId = bookTableCursor.getInt(5);
+            int bookSortId = bookTableCursor.getInt(4);
 
             Cursor mediaPositionCursor = db.query("TEMP_TABLE_MEDIA",
                     new String[]{"KEY_MEDIA_POSITION"},
@@ -199,7 +195,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             bookValues.put("KEY_BOOK_COVER", bookCover);
             bookValues.put("KEY_BOOK_CURRENT_MEDIA_ID", bookPosition);
             bookValues.put("KEY_BOOK_CURRENT_MEDIA_POSITION", bookMediaPosition);
-            bookValues.put("KEY_BOOK_THUMB", bookThumb);
             bookValues.put("KEY_BOOK_SORT_ID", bookSortId);
 
             int newBookId = (int) db.insert("TABLE_BOOKS", null, bookValues);
@@ -263,84 +258,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             book.setCover(cursor.getString(2));
             book.setCurrentMediaId(cursor.getInt(3));
             book.setCurrentMediaPosition(cursor.getInt(4));
-            book.setThumb(cursor.getString(5));
-            book.setSortId(cursor.getInt(6));
+            book.setSortId(cursor.getInt(5));
 
             cursor.close();
             return book;
         }
         return null;
-    }
-
-    /*
-    returns the progress of a book in °/°°
-     */
-    public int getGlobalProgress(BookDetail book) {
-        long duration = 0;
-        long progress = 0;
-        boolean progressFound = false;
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.beginTransaction();
-        try {
-            Cursor mediaCursor = db.query(TABLE_MEDIA,
-                    new String[]{KEY_MEDIA_ID, KEY_MEDIA_DURATION},
-                    KEY_MEDIA_BOOK_ID + " = " + book.getId(),
-                    null, null, null, KEY_MEDIA_ID);
-            if (mediaCursor != null) {
-                // adds the sum of length and the sum of played time
-                while (mediaCursor.moveToNext()) {
-                    duration += mediaCursor.getInt(1);
-                    if (!progressFound) {
-                        if (mediaCursor.getInt(0) == book.getCurrentMediaId()) {
-                            progress += book.getCurrentMediaPosition();
-                            progressFound = true;
-                        } else
-                            progress += mediaCursor.getInt(1);
-                    }
-                }
-                if (!progressFound)
-                    progress = 0;
-                mediaCursor.close();
-            }
-
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
-        if (duration == 0 || progress == 0)
-            return 0;
-        else {
-            return (int) (progress * 1000 / duration);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public void updateBooksAsync(final ArrayList<BookDetail> books) {
-        new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                SQLiteDatabase db = DataBaseHelper.this.getWritableDatabase();
-                db.beginTransaction();
-                try {
-                    for (BookDetail b : books) {
-                        ContentValues values = new ContentValues();
-                        values.put(KEY_BOOK_NAME, b.getName());
-                        values.put(KEY_BOOK_COVER, b.getCover());
-                        values.put(KEY_BOOK_CURRENT_MEDIA_ID, b.getCurrentMediaId());
-                        values.put(KEY_BOOK_CURRENT_MEDIA_POSITION, b.getCurrentMediaPosition());
-                        values.put(KEY_BOOK_THUMB, b.getThumb());
-                        values.put(KEY_BOOK_SORT_ID, b.getSortId());
-                        db.update(TABLE_BOOKS, values, KEY_BOOK_ID + " = " + b.getId(), null);
-                    }
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
-                }
-                return null;
-            }
-        }.execute();
     }
 
 
@@ -367,7 +290,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_BOOK_NAME, book.getName());
         values.put(KEY_BOOK_COVER, book.getCover());
-        values.put(KEY_BOOK_THUMB, book.getThumb());
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
         int bookId = 0;
@@ -428,8 +350,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 book.setCover(cursor.getString(2));
                 book.setCurrentMediaId(cursor.getInt(3));
                 book.setCurrentMediaPosition(cursor.getInt(4));
-                book.setThumb(cursor.getString(5));
-                book.setSortId(cursor.getInt(6));
+                book.setSortId(cursor.getInt(5));
                 allBooks.add(book);
             } while (cursor.moveToNext());
         }
@@ -447,44 +368,28 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         values.put(KEY_BOOK_COVER, book.getCover());
         values.put(KEY_BOOK_CURRENT_MEDIA_ID, book.getCurrentMediaId());
         values.put(KEY_BOOK_CURRENT_MEDIA_POSITION, book.getCurrentMediaPosition());
-        values.put(KEY_BOOK_THUMB, book.getThumb());
         values.put(KEY_BOOK_SORT_ID, book.getSortId());
 
         db.update(TABLE_BOOKS, values, KEY_BOOK_ID + " = " + book.getId(), null);
     }
 
 
-    public void updateBookAsync(BookDetail book) {
-        new AsyncTask<BookDetail, Void, Void>() {
-            @Override
-            protected Void doInBackground(BookDetail... params) {
-                updateBook(params[0]);
-                return null;
-            }
-        }.execute(book);
-    }
-
-
-    public void deleteBooksAsync(ArrayList<BookDetail> books) {
+    public void deleteBook(BookDetail book) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
         try {
-            for (BookDetail b : books) {
-                int bookId = b.getId();
-                db.delete(TABLE_MEDIA,
-                        KEY_MEDIA_BOOK_ID + " = " + bookId,
-                        null);
-                db.delete(TABLE_BOOKS,
-                        KEY_BOOK_ID + " = " + bookId,
-                        null);
-
-                if (b.getCover() != null) {
-                    CommonTasks.deleteFile(new File(b.getCover()));
-                }
-
-                if (b.getThumb() != null) {
-                    CommonTasks.deleteFile(new File(b.getThumb()));
-                }
+            int bookId = book.getId();
+            db.delete(TABLE_MEDIA,
+                    KEY_MEDIA_BOOK_ID + " = " + bookId,
+                    null);
+            db.delete(TABLE_BOOKS,
+                    KEY_BOOK_ID + " = " + bookId,
+                    null);
+            String coverPath = book.getCover();
+            if (coverPath != null) {
+                File coverFile = new File(coverPath);
+                if (coverFile.exists())
+                    coverFile.deleteOnExit();
             }
             db.setTransactionSuccessful();
         } finally {
@@ -492,4 +397,3 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 }
-

@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -49,15 +48,14 @@ import de.ph1b.audiobook.interfaces.OnTimeChangedListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.utils.BookDetail;
-import de.ph1b.audiobook.utils.CommonTasks;
 import de.ph1b.audiobook.utils.DataBaseHelper;
+import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.MediaDetail;
 
 public class BookPlayFragment extends Fragment implements OnClickListener {
 
     private ImageButton play_button;
     private TextView playedTimeView;
-    private ImageView coverView;
     private SeekBar seek_bar;
     private Spinner bookSpinner;
     private TextView maxTimeView;
@@ -66,7 +64,6 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
     private DataBaseHelper db;
     private LocalBroadcastManager bcm;
 
-    private static int bookId;
     private int oldPosition = -1;
     private static final String TAG = "de.ph1b.audiobooks.fragment.MediaPlayFragment";
 
@@ -95,6 +92,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
             mService.stateManager.addStateChangeListener(onStateChangedListener);
             mService.stateManager.addTimeChangedListener(onTimeChangedListener);
 
+            mService.updateGUI();
             mBound = true;
         }
 
@@ -181,9 +179,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
                 if (allMedia.size() == 1) {
                     bookSpinner.setVisibility(View.GONE);
                 } else {
-
                     bookSpinner.setVisibility(View.VISIBLE);
-
                     bookSpinner.setSelection(adapter.getPositionByMediaDetailId(media.getId()));
                 }
 
@@ -213,13 +209,13 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
 
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
 
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        bookId = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, 0);
-        book = db.getBook(bookId);
-        allMedia = db.getMediaFromBook(bookId);
+        Intent i = getActivity().getIntent();
+        book = i.getParcelableExtra(AudioPlayerService.GUI_BOOK);
+        //book = db.getBook(bookId);
+        allMedia = db.getMediaFromBook(book.getId());
 
         //starting the service
-        if (BuildConfig.DEBUG) Log.d(TAG, "Starting service with id: " + bookId);
+        if (BuildConfig.DEBUG) Log.d(TAG, "Starting service with id: " + book.getId());
         Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
         serviceIntent.putExtra(AudioPlayerService.GUI_BOOK, book);
         serviceIntent.putExtra(AudioPlayerService.GUI_ALL_MEDIA, allMedia);
@@ -231,6 +227,11 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_book_play, container, false);
 
+        initGUI(v);
+        return v;
+    }
+
+    private void initGUI(View v) {
 
         //init buttons
         seek_bar = (SeekBar) v.findViewById(R.id.seekBar);
@@ -238,7 +239,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
         ImageButton rewind_button = (ImageButton) v.findViewById(R.id.rewind);
         ImageButton fast_forward_button = (ImageButton) v.findViewById(R.id.fast_forward);
         playedTimeView = (TextView) v.findViewById(R.id.played);
-        coverView = (ImageView) v.findViewById(R.id.book_cover);
+        ImageView coverView = (ImageView) v.findViewById(R.id.book_cover);
         maxTimeView = (TextView) v.findViewById(R.id.maxTime);
         bookSpinner = (Spinner) v.findViewById(R.id.book_spinner);
 
@@ -271,20 +272,14 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
                 seekBarIsUpdating = false;
             }
         });
-        initGUI();
-        return v;
-    }
 
-    private void initGUI() {
         // cover
         String imagePath = book.getCover();
         if (imagePath == null || imagePath.equals("") || !new File(imagePath).exists() || new File(imagePath).isDirectory()) {
-            int coverSize = CommonTasks.getCoverSize(getActivity());
-            Bitmap cover = CommonTasks.genCapital(book.getName(), coverSize, getResources());
+            Bitmap cover = ImageHelper.genCapital(book.getName(), getActivity(), ImageHelper.TYPE_COVER);
             coverView.setImageBitmap(cover);
         } else
             coverView.setImageURI(Uri.parse(imagePath));
-
 
         //setting book name
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
@@ -393,13 +388,6 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
         IntentFilter filter = new IntentFilter();
         filter.addAction(AudioPlayerService.GUI);
         bcm.registerReceiver(updateGUIReceiver, filter);
-
-        //starting the service
-        if (book != null)
-            book = db.getBook(bookId);
-        Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
-        serviceIntent.putExtra(AudioPlayerService.GUI_BOOK, book);
-        getActivity().startService(serviceIntent);
     }
 
 

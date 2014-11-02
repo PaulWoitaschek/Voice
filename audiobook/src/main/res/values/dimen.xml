@@ -2,4 +2,5 @@
 <resources>
     <dimen name="thumb_size">68dp</dimen>
     <dimen name="cover_edit_stroke_width">3dp</dimen>
+    <dimen name="desired_medium_cover">180dp</dimen>
 </resources>
