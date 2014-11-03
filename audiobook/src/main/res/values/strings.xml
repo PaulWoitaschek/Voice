@@ -55,5 +55,5 @@
     <string name="popup_edit_book">Edit</string>
     <string name="popup_delete_book">Delete</string>
 
-    <string name="content_file_or_folder">Indicates weather its a file or a folder</string>
+    <string name="content_file_or_folder">Indicates whether its a file or a folder</string>
 </resources>
