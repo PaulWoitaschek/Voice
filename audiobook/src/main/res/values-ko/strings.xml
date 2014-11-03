@@ -17,22 +17,22 @@
     <string name="pref_resume_on_replug">이어서 재생</string>
     <string name="pref_resume_on_replug_hint">이어폰잭을 빼면 자동으로 일시정지, 끼면 이어서 재생됩니다.</string>
     <string name="action_sleep">취침예약</string>
-    <string name="no_external_storage">외부저장공간이 없습니다. 연결과 인식상태를 확인해주세요.</string>
+    <string name="no_external_storage">외부저장공간을 찾지 못했습니다. 연결/인식상태를 확인해주세요.</string>
     <string name="no_external_storage_action_bar_title">외부저장공간</string>
 
-    <string name="action_sleep_title_hint_left">일정시간 후 일시정지</string>
+    <string name="action_sleep_title_hint_left">취침시간 설정</string>
     <string name="action_sleep_title_hint_right">분</string>
     <string name="action_jump_to">이동</string>
     <string name="hours">시간</string>
     <string name="minutes">분</string>
     <string name="seconds">초</string>
 
-    <string name="file_not_found">저장공간에서 책을 찾지 못했습니다. 다시 책을 추가해주세요.</string>
+    <string name="file_not_found">저장공간에서 책을 찾지 못했으니, 다시 추가해주세요.</string>
     <string name="media_view_how_to">+ 를 눌러 추가</string>
     <string name="current_cover">재생중인 책표지 보기</string>
     <string name="current_playing">재생상태 보기</string>
     <string name="pref_cover_on_internet">3G 사용</string>
-    <string name="pref_cover_on_internet_hint">3G 데이터로 이 책표지 검색하기</string>
+    <string name="pref_cover_on_internet_hint">3G 데이터로 책표지 검색하기</string>
     <string name="content_previous_cover">전 표지 고르기</string>
     <string name="content_next_cover">다음표지 고르기</string>
     <string name="content_cover">책표지 보여주기</string>
@@ -41,13 +41,12 @@
     <string name="book_add_progress_title">추가중</string>
     <string name="book_add_progress_message">책이 추가 될 동안 기다려주세요</string>
 
-    <!-- Missing translations:
-    <string name="book_title_delete"></string>
-    <string name="content_file_or_folder"></string>
-    <string name="edit_book_title"></string>
-    <string name="popup_delete_book"></string>
-    <string name="popup_edit_book"></string>
-    <string name="pref_fast_add"></string>
-    <string name="pref_fast_add_hint"></string>
-    -->
+    <string name="book_title_delete">제목 삭제</string>
+    <string name="content_file_or_folder">파일/폴더 여부를 표시</string>
+    <string name="edit_book_title">제목 수정</string>
+    <string name="popup_delete_book">삭제</string>
+    <string name="popup_edit_book">수정</string>
+    <string name="pref_fast_add">빠른추가</string>
+    <string name="pref_fast_add_hint">책표지와 제목을 묻지 않고 빠르게 추가합니다.</string>
+
 </resources>
