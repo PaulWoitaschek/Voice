@@ -49,10 +49,10 @@ import de.ph1b.audiobook.activity.Settings;
 import de.ph1b.audiobook.adapter.FileAdapter;
 import de.ph1b.audiobook.dialog.EditBook;
 import de.ph1b.audiobook.interfaces.OnBackPressedListener;
-import de.ph1b.audiobook.utils.BookDetail;
-import de.ph1b.audiobook.utils.DataBaseHelper;
+import de.ph1b.audiobook.content.BookDetail;
+import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.utils.ImageHelper;
-import de.ph1b.audiobook.utils.MediaDetail;
+import de.ph1b.audiobook.content.MediaDetail;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
 
 public class FilesChooseFragment extends Fragment implements EditBook.OnEditBookFinished {

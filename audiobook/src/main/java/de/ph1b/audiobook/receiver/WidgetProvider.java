@@ -18,8 +18,8 @@ import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookChoose;
 import de.ph1b.audiobook.service.AudioPlayerService;
-import de.ph1b.audiobook.utils.BookDetail;
-import de.ph1b.audiobook.utils.DataBaseHelper;
+import de.ph1b.audiobook.content.BookDetail;
+import de.ph1b.audiobook.content.DataBaseHelper;
 
 public class WidgetProvider extends AppWidgetProvider {
 

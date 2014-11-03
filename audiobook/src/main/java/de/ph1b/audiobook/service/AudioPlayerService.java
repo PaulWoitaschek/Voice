@@ -44,10 +44,10 @@ import de.ph1b.audiobook.activity.BookPlay;
 import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.receiver.RemoteControlReceiver;
 import de.ph1b.audiobook.receiver.WidgetProvider;
-import de.ph1b.audiobook.utils.BookDetail;
-import de.ph1b.audiobook.utils.DataBaseHelper;
+import de.ph1b.audiobook.content.BookDetail;
+import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.utils.ImageHelper;
-import de.ph1b.audiobook.utils.MediaDetail;
+import de.ph1b.audiobook.content.MediaDetail;
 
 public class AudioPlayerService extends Service {
 

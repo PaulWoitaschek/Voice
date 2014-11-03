@@ -55,9 +55,9 @@ import de.ph1b.audiobook.interfaces.OnItemLongClickListener;
 import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
-import de.ph1b.audiobook.utils.BookDetail;
+import de.ph1b.audiobook.content.BookDetail;
 import de.ph1b.audiobook.utils.CustomOnSimpleGestureListener;
-import de.ph1b.audiobook.utils.DataBaseHelper;
+import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.utils.ImageHelper;
 
 

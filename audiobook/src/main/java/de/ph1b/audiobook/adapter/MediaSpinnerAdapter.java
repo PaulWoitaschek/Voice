@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.utils.MediaDetail;
+import de.ph1b.audiobook.content.MediaDetail;
 
 
 public class MediaSpinnerAdapter extends BaseAdapter {

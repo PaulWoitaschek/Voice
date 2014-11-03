@@ -25,9 +25,9 @@ import java.util.concurrent.Executors;
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.interfaces.OnItemClickListener;
-import de.ph1b.audiobook.utils.BookDetail;
+import de.ph1b.audiobook.content.BookDetail;
 import de.ph1b.audiobook.utils.CoverDownloader;
-import de.ph1b.audiobook.utils.DataBaseHelper;
+import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.utils.ImageHelper;
 
 

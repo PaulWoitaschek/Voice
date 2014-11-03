@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.utils;
+package de.ph1b.audiobook.content;
 
 
 import android.os.Parcel;

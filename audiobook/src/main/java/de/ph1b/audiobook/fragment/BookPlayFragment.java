@@ -47,10 +47,10 @@ import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.interfaces.OnTimeChangedListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
-import de.ph1b.audiobook.utils.BookDetail;
-import de.ph1b.audiobook.utils.DataBaseHelper;
+import de.ph1b.audiobook.content.BookDetail;
+import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.utils.ImageHelper;
-import de.ph1b.audiobook.utils.MediaDetail;
+import de.ph1b.audiobook.content.MediaDetail;
 
 public class BookPlayFragment extends Fragment implements OnClickListener {
 
