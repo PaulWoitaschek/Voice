@@ -27,11 +27,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -65,8 +67,10 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
 
     private ListView fileListView;
-    private FileAdapter adapter;
+    private Spinner dirSpinner;
+    private ProgressBar progressBar;
 
+    private FileAdapter adapter;
     private ActionMode actionMode;
     private ActionMode.Callback mActionModeCallback;
 
@@ -114,8 +118,9 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_files_choose, container, false);
 
-        Spinner dirSpinner = (Spinner) v.findViewById(R.id.dirSpinner);
+        dirSpinner = (Spinner) v.findViewById(R.id.dirSpinner);
         fileListView = (ListView) v.findViewById(R.id.fileListView);
+        progressBar = (ProgressBar) v.findViewById(R.id.progress);
 
         if (dirs.size() > 1) {
             dirSpinner.setVisibility(View.VISIBLE);
@@ -287,7 +292,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                 public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.action_add_badge:
-                            launchEditDialog(files);
+                            new LaunchEditDialog(files, dirSpinner, fileListView, progressBar).execute();
                             mode.finish();
                             return true;
                         default:
@@ -311,104 +316,124 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private void launchEditDialog(ArrayList<File> files) {
-        new AsyncTask<ArrayList<File>, Void, Void>() {
-            private final ArrayList<File> imageFiles = new ArrayList<File>();
-            private final ArrayList<Bitmap> bitmaps = new ArrayList<Bitmap>();
-            private String bookTitle;
+    private class LaunchEditDialog extends AsyncTask<Void, Void, Void> {
 
+        private final ArrayList<File> imageFiles = new ArrayList<File>();
+        private final ArrayList<Bitmap> bitmaps = new ArrayList<Bitmap>();
+        private String bookTitle;
 
-            @Override
-            protected Void doInBackground(ArrayList<File>... params) {
-                ArrayList<File> files = params[0];
-                if (BuildConfig.DEBUG) {
-                    Log.d(TAG, "doInBackground with");
-                    for (File f : files)
-                        Log.d(TAG, f.getName());
+        private ArrayList<File> files;
+        private WeakReference<Spinner> spinnerWeakReference;
+        private WeakReference<ListView> listViewWeakReference;
+        private WeakReference<ProgressBar> progressBarWeakReference;
+        private int oldSpinnerVisibility;
+
+        public LaunchEditDialog(ArrayList<File> files, Spinner spinner, ListView listView, ProgressBar progressBar) {
+            this.files = files;
+            spinnerWeakReference = new WeakReference<Spinner>(spinner);
+            listViewWeakReference = new WeakReference<ListView>(listView);
+            progressBarWeakReference = new WeakReference<ProgressBar>(progressBar);
+            oldSpinnerVisibility = spinner.getVisibility();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            Spinner spinner = spinnerWeakReference.get();
+            ListView listView = listViewWeakReference.get();
+            ProgressBar progressBar = progressBarWeakReference.get();
+            spinner.setVisibility(View.GONE);
+            listView.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            Collections.sort(files, new NaturalOrderComparator());
+
+            if (BuildConfig.DEBUG) {
+                Log.d(TAG, "have sorted with");
+                for (File f : files)
+                    Log.d(TAG, f.getName());
+            }
+
+            //title
+            File firstFile = files.get(0);
+            bookTitle = firstFile.getName();
+            if (firstFile.isFile())
+                bookTitle = bookTitle.substring(0, bookTitle.lastIndexOf("."));
+
+            files = addFilesRecursive(files);
+
+            mediaFiles = new ArrayList<File>();
+            for (File f : files) {
+                if (isAudio(f)) {
+                    mediaFiles.add(f);
+                } else if (isImage(f)) {
+                    imageFiles.add(f);
                 }
-                Collections.sort(files, new NaturalOrderComparator());
+            }
 
-                if (BuildConfig.DEBUG) {
-                    Log.d(TAG, "have sorted with");
-                    for (File f : files)
-                        Log.d(TAG, f.getName());
-                }
-
-                //title
-                File firstFile = files.get(0);
-                bookTitle = firstFile.getName();
-                if (firstFile.isFile())
-                    bookTitle = bookTitle.substring(0, bookTitle.lastIndexOf("."));
-
-                files = addFilesRecursive(files);
-
-                mediaFiles = new ArrayList<File>();
-                for (File f : files) {
-                    if (isAudio(f)) {
-                        mediaFiles.add(f);
-                    } else if (isImage(f)) {
-                        imageFiles.add(f);
-                    }
-                }
-
-                //checking media files for covers
-                int attempt = 0;
-                for (File media : mediaFiles) {
-                    if (isCancelled())
-                        return null;
-                    if (attempt++ > 4 || bitmaps.size() > 0)
-                        break;
-                    MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-                    mmr.setDataSource(media.getAbsolutePath());
-                    byte[] data = mmr.getEmbeddedPicture();
-                    if (data != null) {
-                        try {
-                            Bitmap cover = BitmapFactory.decodeByteArray(data, 0, data.length);
-                            if (cover != null)
-                                bitmaps.add(cover);
-                        } catch (Exception e) {
-                            if (BuildConfig.DEBUG) Log.d(TAG, e.toString());
-                        }
-                    }
-                }
-
-                //checking imageFiles for cover
-                for (File image : imageFiles) {
-                    if (isCancelled())
-                        return null;
-                    Activity activity = getActivity();
-                    if (activity != null) {
-                        Bitmap cover = ImageHelper.genBitmapFromFile(image.getAbsolutePath(), activity, ImageHelper.TYPE_COVER);
+            //checking media files for covers
+            int attempt = 0;
+            for (File media : mediaFiles) {
+                if (isCancelled())
+                    return null;
+                if (attempt++ > 4 || bitmaps.size() > 0)
+                    break;
+                MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+                mmr.setDataSource(media.getAbsolutePath());
+                byte[] data = mmr.getEmbeddedPicture();
+                if (data != null) {
+                    try {
+                        Bitmap cover = BitmapFactory.decodeByteArray(data, 0, data.length);
                         if (cover != null)
                             bitmaps.add(cover);
+                    } catch (Exception e) {
+                        if (BuildConfig.DEBUG) Log.d(TAG, e.toString());
                     }
                 }
-                return null;
             }
 
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                if (mediaFiles.size() == 0) {
-
-                    CharSequence text = getString(R.string.book_no_media);
-                    Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
-                    toast.show();
-                } else {
-                    EditBook editBook = new EditBook();
-                    Bundle bundle = new Bundle();
-
-                    bundle.putParcelableArrayList(EditBook.BOOK_COVER, bitmaps);
-                    bundle.putString(EditBook.DIALOG_TITLE, getString(R.string.book_add));
-                    bundle.putString(EditBook.BOOK_NAME, bookTitle);
-
-                    editBook.setArguments(bundle);
-                    editBook.setTargetFragment(FilesChooseFragment.this, 0);
-                    editBook.show(getFragmentManager(), TAG);
+            //checking imageFiles for cover
+            for (File image : imageFiles) {
+                if (isCancelled())
+                    return null;
+                Activity activity = getActivity();
+                if (activity != null) {
+                    Bitmap cover = ImageHelper.genBitmapFromFile(image.getAbsolutePath(), activity, ImageHelper.TYPE_COVER);
+                    if (cover != null)
+                        bitmaps.add(cover);
                 }
             }
-        }.execute(files);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if (mediaFiles.size() == 0) {
+                CharSequence text = getString(R.string.book_no_media);
+                Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
+                toast.show();
+            } else {
+                EditBook editBook = new EditBook();
+                Bundle bundle = new Bundle();
+
+                bundle.putParcelableArrayList(EditBook.BOOK_COVER, bitmaps);
+                bundle.putString(EditBook.DIALOG_TITLE, getString(R.string.book_add));
+                bundle.putString(EditBook.BOOK_NAME, bookTitle);
+
+                editBook.setArguments(bundle);
+                editBook.setTargetFragment(FilesChooseFragment.this, 0);
+                editBook.show(getFragmentManager(), TAG);
+            }
+
+            Spinner spinner = spinnerWeakReference.get();
+            ListView listView = listViewWeakReference.get();
+            ProgressBar progressBar = progressBarWeakReference.get();
+            spinner.setVisibility(oldSpinnerVisibility);
+            listView.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+        }
     }
 
 
