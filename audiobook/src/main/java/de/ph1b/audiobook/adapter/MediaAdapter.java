@@ -155,9 +155,6 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         BookDetail b = data.get(position);
 
-        if (BuildConfig.DEBUG)
-            Log.d("madapt", "onBindViewHolder with position:" + position);
-
         //setting text
         String name = b.getName();
         viewHolder.titleView.setText(name);

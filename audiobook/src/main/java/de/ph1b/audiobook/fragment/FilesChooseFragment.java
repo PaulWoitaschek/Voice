@@ -16,6 +16,8 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,7 +28,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -62,11 +63,10 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
     private final LinkedList<String> link = new LinkedList<String>();
     private final ArrayList<String> dirs = getStorageDirectories();
-    private final ArrayList<File> fileList = new ArrayList<File>();
     private ArrayList<File> mediaFiles = new ArrayList<File>();
 
 
-    private ListView fileListView;
+    private RecyclerView recyclerView;
     private Spinner dirSpinner;
     private ProgressBar progressBar;
 
@@ -119,7 +119,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         View v = inflater.inflate(R.layout.fragment_files_choose, container, false);
 
         dirSpinner = (Spinner) v.findViewById(R.id.dirSpinner);
-        fileListView = (ListView) v.findViewById(R.id.fileListView);
+        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         progressBar = (ProgressBar) v.findViewById(R.id.progress);
 
         if (dirs.size() > 1) {
@@ -130,8 +130,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
             dirSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (BuildConfig.DEBUG)
-                        Log.d(TAG, "onItemSelected for chooser was called!");
                     link.clear();
                     link.add(dirs.get(position));
                     populateList();
@@ -271,50 +269,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     }
 
 
-    public void checkStateChanged(final ArrayList<File> files) {
-        if (files.size() > 0 && mActionModeCallback == null) {
-            mActionModeCallback = new ActionMode.Callback() {
-
-                @Override
-                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                    MenuInflater inflater = mode.getMenuInflater();
-                    inflater.inflate(R.menu.action_mode_mediaadd, menu);
-                    return true;
-                }
-
-                @Override
-                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                    return false;
-                }
-
-                @Override
-                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.action_add_badge:
-                            new LaunchEditDialog(files, dirSpinner, fileListView, progressBar).execute();
-                            mode.finish();
-                            return true;
-                        default:
-                            return false;
-                    }
-                }
-
-                @Override
-                public void onDestroyActionMode(ActionMode mode) {
-                    if (adapter != null)
-                        adapter.clearCheckBoxes();
-                    mActionModeCallback = null;
-                }
-            };
-
-            actionMode = ((ActionBarActivity) getActivity()).startSupportActionMode(mActionModeCallback);
-        } else if (files.size() == 0) {
-            if (actionMode != null) {
-                actionMode.finish();
-            }
-        }
-    }
-
     private class LaunchEditDialog extends AsyncTask<Void, Void, Void> {
 
         private final ArrayList<File> imageFiles = new ArrayList<File>();
@@ -322,15 +276,15 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         private String bookTitle;
 
         private ArrayList<File> files;
-        private WeakReference<Spinner> spinnerWeakReference;
-        private WeakReference<ListView> listViewWeakReference;
-        private WeakReference<ProgressBar> progressBarWeakReference;
-        private int oldSpinnerVisibility;
+        private final WeakReference<Spinner> spinnerWeakReference;
+        private final WeakReference<RecyclerView> recyclerViewWeakReference;
+        private final WeakReference<ProgressBar> progressBarWeakReference;
+        private final int oldSpinnerVisibility;
 
-        public LaunchEditDialog(ArrayList<File> files, Spinner spinner, ListView listView, ProgressBar progressBar) {
+        public LaunchEditDialog(ArrayList<File> files, Spinner spinner, RecyclerView recyclerView, ProgressBar progressBar) {
             this.files = files;
             spinnerWeakReference = new WeakReference<Spinner>(spinner);
-            listViewWeakReference = new WeakReference<ListView>(listView);
+            recyclerViewWeakReference = new WeakReference<RecyclerView>(recyclerView);
             progressBarWeakReference = new WeakReference<ProgressBar>(progressBar);
             oldSpinnerVisibility = spinner.getVisibility();
         }
@@ -338,22 +292,16 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         @Override
         protected void onPreExecute() {
             Spinner spinner = spinnerWeakReference.get();
-            ListView listView = listViewWeakReference.get();
+            RecyclerView recyclerView = recyclerViewWeakReference.get();
             ProgressBar progressBar = progressBarWeakReference.get();
             spinner.setVisibility(View.GONE);
-            listView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected Void doInBackground(Void... params) {
             Collections.sort(files, new NaturalOrderComparator());
-
-            if (BuildConfig.DEBUG) {
-                Log.d(TAG, "have sorted with");
-                for (File f : files)
-                    Log.d(TAG, f.getName());
-            }
 
             //title
             File firstFile = files.get(0);
@@ -427,10 +375,10 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
             }
 
             Spinner spinner = spinnerWeakReference.get();
-            ListView listView = listViewWeakReference.get();
+            RecyclerView recyclerView = recyclerViewWeakReference.get();
             ProgressBar progressBar = progressBarWeakReference.get();
             spinner.setVisibility(oldSpinnerVisibility);
-            listView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
         }
     }
@@ -467,7 +415,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
         @Override
         protected void onPreExecute() {
-            if (BuildConfig.DEBUG) Log.d(TAG, "AddBookAsync, onPreEx" + System.currentTimeMillis());
             progressDialog = new ProgressDialog(getActivity());
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.setCancelable(false);
@@ -479,9 +426,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (BuildConfig.DEBUG)
-                Log.d(TAG, "AddBookAsync, doInBack" + System.currentTimeMillis());
-
             DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
 
             BookDetail b = new BookDetail();
@@ -519,8 +463,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
         @Override
         protected void onPostExecute(Void result) {
-            if (BuildConfig.DEBUG)
-                Log.d(TAG, "AddBookAsync, onPostEx" + System.currentTimeMillis());
             progressDialog.cancel();
             Intent i = new Intent(getActivity(), BookChoose.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -558,23 +500,68 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
             actionMode.finish();
 
         File f = new File(path);
-        File[] files = f.listFiles(filterShowAudioAndFolder);
-        fileList.clear();
-        Collections.addAll(fileList, files);
-
-        //fileList = new ArrayList<File>();
+        ArrayList<File> fileList = new ArrayList<File>(Arrays.asList(f.listFiles(filterShowAudioAndFolder)));
         Collections.sort(fileList, new NaturalOrderComparator());
-        adapter = new FileAdapter(fileList, this);
-        fileListView.setAdapter(adapter);
-        fileListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        FileAdapter.ItemInteraction itemInteraction = new FileAdapter.ItemInteraction() {
+
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (fileList.get(position).isDirectory()) {
-                    link.add(fileList.get(position).getAbsolutePath());
+            public void onCheckStateChanged() {
+                if (adapter.getCheckedItems().size() > 0 && mActionModeCallback == null) {
+                    mActionModeCallback = new ActionMode.Callback() {
+
+                        @Override
+                        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                            MenuInflater inflater = mode.getMenuInflater();
+                            inflater.inflate(R.menu.action_mode_mediaadd, menu);
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.action_add_badge:
+                                    new LaunchEditDialog(adapter.getCheckedItems(), dirSpinner, recyclerView, progressBar).execute();
+                                    mode.finish();
+                                    return true;
+                                default:
+                                    return false;
+                            }
+                        }
+
+                        @Override
+                        public void onDestroyActionMode(ActionMode mode) {
+                            adapter.clearCheckBoxes();
+                            mActionModeCallback = null;
+                        }
+                    };
+
+                    actionMode = ((ActionBarActivity) getActivity()).startSupportActionMode(mActionModeCallback);
+                } else if (adapter.getCheckedItems().size() == 0) {
+                    if (actionMode != null) {
+                        actionMode.finish();
+                    }
+                }
+            }
+
+            @Override
+            public void onItemClicked(int position) {
+                File f = adapter.getItem(position);
+                if (f.isDirectory()) {
+                    link.add(f.getAbsolutePath());
                     populateList();
                 }
             }
-        });
+        };
+
+        adapter = new FileAdapter(fileList, itemInteraction);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     private final FileFilter filterShowAudioAndFolder = new FileFilter() {

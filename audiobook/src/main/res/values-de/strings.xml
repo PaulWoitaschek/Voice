@@ -46,6 +46,5 @@
     <string name="popup_delete_book">Löschen</string>
     <string name="popup_edit_book">Bearbeiten</string>
     <string name="content_file_or_folder">Zeit an, ob es sich um eine Datei oder einen Ordner handelt</string>
-    <string name="pref_fast_add"></string>
 
 </resources>
