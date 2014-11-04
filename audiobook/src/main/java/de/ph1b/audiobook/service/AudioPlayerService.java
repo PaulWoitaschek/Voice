@@ -294,6 +294,8 @@ public class AudioPlayerService extends Service {
             Context c = getApplicationContext();
 
             Intent bookPlayIntent = new Intent(c, BookPlay.class);
+            bookPlayIntent.putExtra(GUI_BOOK, book);
+            bookPlayIntent.putExtra(GUI_ALL_MEDIA, allMedia);
             PendingIntent pendingIntent = android.support.v4.app.TaskStackBuilder.create(c)
                     .addNextIntentWithParentStack(bookPlayIntent)
                     .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);

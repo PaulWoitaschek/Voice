@@ -41,16 +41,16 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookChoose;
 import de.ph1b.audiobook.activity.Settings;
 import de.ph1b.audiobook.adapter.MediaSpinnerAdapter;
+import de.ph1b.audiobook.content.BookDetail;
+import de.ph1b.audiobook.content.DataBaseHelper;
+import de.ph1b.audiobook.content.MediaDetail;
 import de.ph1b.audiobook.dialog.JumpToPosition;
 import de.ph1b.audiobook.dialog.SleepDialog;
 import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.interfaces.OnTimeChangedListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
-import de.ph1b.audiobook.content.BookDetail;
-import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.utils.ImageHelper;
-import de.ph1b.audiobook.content.MediaDetail;
 
 public class BookPlayFragment extends Fragment implements OnClickListener {
 
@@ -211,8 +211,9 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
 
         Intent i = getActivity().getIntent();
         book = i.getParcelableExtra(AudioPlayerService.GUI_BOOK);
-        //book = db.getBook(bookId);
-        allMedia = db.getMediaFromBook(book.getId());
+        allMedia = i.getParcelableArrayListExtra(AudioPlayerService.GUI_ALL_MEDIA);
+        if (allMedia == null)
+            allMedia = db.getMediaFromBook(book.getId());
 
         //starting the service
         if (BuildConfig.DEBUG) Log.d(TAG, "Starting service with id: " + book.getId());
