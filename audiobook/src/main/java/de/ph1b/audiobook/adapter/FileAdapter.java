@@ -100,6 +100,8 @@ public class FileAdapter extends BaseAdapter {
 
         if (f.isFile())
             viewHolder.icon.setImageResource(R.drawable.ic_album_grey600_48dp);
+        else
+            viewHolder.icon.setImageResource(R.drawable.ic_folder_grey600_48dp);
 
         viewHolder.nameView.setText(name);
 
