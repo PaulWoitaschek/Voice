@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
@@ -47,12 +46,12 @@ import de.ph1b.audiobook.activity.BookChoose;
 import de.ph1b.audiobook.activity.FilesChoose;
 import de.ph1b.audiobook.activity.Settings;
 import de.ph1b.audiobook.adapter.FileAdapter;
-import de.ph1b.audiobook.dialog.EditBook;
-import de.ph1b.audiobook.interfaces.OnBackPressedListener;
 import de.ph1b.audiobook.content.BookDetail;
 import de.ph1b.audiobook.content.DataBaseHelper;
-import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.content.MediaDetail;
+import de.ph1b.audiobook.dialog.EditBook;
+import de.ph1b.audiobook.interfaces.OnBackPressedListener;
+import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
 
 public class FilesChooseFragment extends Fragment implements EditBook.OnEditBookFinished {
@@ -397,27 +396,16 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                     Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
                     toast.show();
                 } else {
-                    //fragments onEditBookFinished sets visibilities of spinner and views
-                    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                    boolean fastAdd = sharedPref.getBoolean(getString(R.string.pref_fast_add), false);
-                    if (!fastAdd) {
-                        EditBook editBook = new EditBook();
-                        Bundle bundle = new Bundle();
+                    EditBook editBook = new EditBook();
+                    Bundle bundle = new Bundle();
 
-                        bundle.putParcelableArrayList(EditBook.BOOK_COVER, bitmaps);
-                        bundle.putString(EditBook.DIALOG_TITLE, getString(R.string.book_add));
-                        bundle.putString(EditBook.BOOK_NAME, bookTitle);
+                    bundle.putParcelableArrayList(EditBook.BOOK_COVER, bitmaps);
+                    bundle.putString(EditBook.DIALOG_TITLE, getString(R.string.book_add));
+                    bundle.putString(EditBook.BOOK_NAME, bookTitle);
 
-                        editBook.setArguments(bundle);
-                        editBook.setTargetFragment(FilesChooseFragment.this, 0);
-                        editBook.show(getFragmentManager(), TAG);
-                    } else {
-                        Bitmap cover = null;
-                        if (bitmaps.size() > 0) {
-                            cover = bitmaps.get(0);
-                        }
-                        onEditBookFinished(bookTitle, cover, true);
-                    }
+                    editBook.setArguments(bundle);
+                    editBook.setTargetFragment(FilesChooseFragment.this, 0);
+                    editBook.show(getFragmentManager(), TAG);
                 }
             }
         }.execute(files);

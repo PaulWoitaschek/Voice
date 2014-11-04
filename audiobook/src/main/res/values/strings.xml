@@ -49,8 +49,6 @@
 
     <string name="edit_book_title">Edit book</string>
     <string name="book_title_delete">Delete book-title</string>
-    <string name="pref_fast_add">Fast adding</string>
-    <string name="pref_fast_add_hint">Adds the book immediately without asking for book title and cover.</string>
 
     <string name="popup_edit_book">Edit</string>
     <string name="popup_delete_book">Delete</string>

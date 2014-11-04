@@ -46,7 +46,5 @@
     <string name="edit_book_title">제목 수정</string>
     <string name="popup_delete_book">삭제</string>
     <string name="popup_edit_book">수정</string>
-    <string name="pref_fast_add">빠른추가</string>
-    <string name="pref_fast_add_hint">책표지와 제목을 묻지 않고 빠르게 추가합니다.</string>
 
 </resources>
