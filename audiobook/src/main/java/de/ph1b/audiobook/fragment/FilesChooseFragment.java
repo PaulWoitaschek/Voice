@@ -272,7 +272,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
 
     public void checkStateChanged(final ArrayList<File> files) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "checkStateChanged!");
         if (files.size() > 0 && mActionModeCallback == null) {
             mActionModeCallback = new ActionMode.Callback() {
 

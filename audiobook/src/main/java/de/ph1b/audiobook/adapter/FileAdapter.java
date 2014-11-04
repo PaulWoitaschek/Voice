@@ -3,6 +3,7 @@ package de.ph1b.audiobook.adapter;
 import android.app.Fragment;
 import android.content.Context;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +24,13 @@ public class FileAdapter extends BaseAdapter {
 
     private final ArrayList<File> data;
     private final Fragment fragment;
-    private final ArrayList<File> checked = new ArrayList<File>();
+    private final SparseBooleanArray checked;
     private static final String TAG = "FileAdapter";
 
     public FileAdapter(ArrayList<File> data, Fragment fragment) {
         this.data = data;
         this.fragment = fragment;
+        this.checked = new SparseBooleanArray();
     }
 
     @Override
@@ -71,32 +73,22 @@ public class FileAdapter extends BaseAdapter {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 int pos = (Integer) buttonView.getTag();
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, "data " + data.get(pos).getName() + " is " + String.valueOf(isChecked));
-                if (isChecked)
-                    checked.add(data.get(pos));
-                else
-                    checked.remove(data.get(pos));
-
-                viewHolder.checkBox.setChecked(isChecked);
-
-                for (File f : checked) {
-                    Log.d(TAG, f.getName());
+                checked.put(pos, isChecked);
+                ArrayList<File> returnList = new ArrayList<File>();
+                for (int i = 0; i < getCount(); i++) {
+                    if (checked.get(i))
+                        returnList.add(data.get(i));
                 }
-
-                ((FilesChooseFragment) fragment).checkStateChanged(checked);
+                ((FilesChooseFragment) fragment).checkStateChanged(returnList);
             }
         });
 
         //setting correct value
-
-        File fileOfPosition = data.get(position);
-        Boolean fileIsChecked = checked.contains(fileOfPosition);
+        boolean fileIsChecked = checked.get(position);
         viewHolder.checkBox.setChecked(fileIsChecked);
 
         File f = data.get(position);
         String name = f.getName();
-
 
         if (f.isFile())
             viewHolder.icon.setImageResource(R.drawable.ic_album_grey600_48dp);
@@ -111,8 +103,8 @@ public class FileAdapter extends BaseAdapter {
     public void clearCheckBoxes() {
         if (BuildConfig.DEBUG)
             Log.d(TAG, "clearCheckBoxes() was called!");
-        //checked.clear();
-        //notifyDataSetChanged();
+        checked.clear();
+        notifyDataSetChanged();
     }
 
     static class ViewHolder {
