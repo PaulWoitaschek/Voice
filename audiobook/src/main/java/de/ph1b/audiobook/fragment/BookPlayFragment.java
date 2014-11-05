@@ -210,16 +210,15 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
 
         Intent i = getActivity().getIntent();
-        book = i.getParcelableExtra(AudioPlayerService.GUI_BOOK);
-        allMedia = i.getParcelableArrayListExtra(AudioPlayerService.GUI_ALL_MEDIA);
-        if (allMedia == null)
-            allMedia = db.getMediaFromBook(book.getId());
+
+        int bookId = i.getIntExtra(AudioPlayerService.GUI_BOOK_ID, -1);
+        book = db.getBook(bookId);
+        allMedia = db.getMediaFromBook(book.getId());
 
         //starting the service
         if (BuildConfig.DEBUG) Log.d(TAG, "Starting service with id: " + book.getId());
         Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
-        serviceIntent.putExtra(AudioPlayerService.GUI_BOOK, book);
-        serviceIntent.putExtra(AudioPlayerService.GUI_ALL_MEDIA, allMedia);
+        serviceIntent.putExtra(AudioPlayerService.GUI_BOOK_ID, book.getId());
         getActivity().startService(serviceIntent);
     }
 

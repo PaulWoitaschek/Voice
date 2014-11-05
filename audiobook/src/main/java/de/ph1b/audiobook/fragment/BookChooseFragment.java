@@ -49,15 +49,15 @@ import de.ph1b.audiobook.activity.BookPlay;
 import de.ph1b.audiobook.activity.FilesChoose;
 import de.ph1b.audiobook.activity.Settings;
 import de.ph1b.audiobook.adapter.MediaAdapter;
+import de.ph1b.audiobook.content.BookDetail;
+import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.dialog.EditBook;
 import de.ph1b.audiobook.interfaces.OnItemClickListener;
 import de.ph1b.audiobook.interfaces.OnItemLongClickListener;
 import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
-import de.ph1b.audiobook.content.BookDetail;
 import de.ph1b.audiobook.utils.CustomOnSimpleGestureListener;
-import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.utils.ImageHelper;
 
 
@@ -185,7 +185,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                 editor.apply();
 
                 Intent i = new Intent(getActivity(), BookPlay.class);
-                i.putExtra(AudioPlayerService.GUI_BOOK, book);
+                i.putExtra(AudioPlayerService.GUI_BOOK_ID, book.getId());
                 startActivity(i);
             }
 
@@ -370,7 +370,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                     @Override
                     public void onClick(View v) {
                         Intent i = new Intent(getActivity(), BookPlay.class);
-                        i.putExtra(AudioPlayerService.GUI_BOOK, b);
+                        i.putExtra(AudioPlayerService.GUI_BOOK_ID, b.getId());
                         startActivity(i);
                     }
                 });
@@ -488,7 +488,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
             for (BookDetail b : adapt.getData()) {
                 if (b.getId() == currentBookId) {
                     Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
-                    serviceIntent.putExtra(AudioPlayerService.GUI_BOOK, b);
+                    serviceIntent.putExtra(AudioPlayerService.GUI_BOOK_ID, b.getId());
                     if (play)
                         serviceIntent.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
                     c.startService(serviceIntent);

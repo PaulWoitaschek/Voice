@@ -41,13 +41,13 @@ import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookChoose;
 import de.ph1b.audiobook.activity.BookPlay;
+import de.ph1b.audiobook.content.BookDetail;
+import de.ph1b.audiobook.content.DataBaseHelper;
+import de.ph1b.audiobook.content.MediaDetail;
 import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.receiver.RemoteControlReceiver;
 import de.ph1b.audiobook.receiver.WidgetProvider;
-import de.ph1b.audiobook.content.BookDetail;
-import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.utils.ImageHelper;
-import de.ph1b.audiobook.content.MediaDetail;
 
 public class AudioPlayerService extends Service {
 
@@ -71,8 +71,7 @@ public class AudioPlayerService extends Service {
     public static final String CONTROL_SLEEP = TAG + ".CONTROL_SLEEP";
 
     public static final String GUI = TAG + ".GUI";
-    public static final String GUI_BOOK = TAG + ".GUI_BOOK";
-    public static final String GUI_ALL_MEDIA = TAG + ".GUI_ALL_MEDIA";
+    public static final String GUI_BOOK_ID = TAG + ".GUI_BOOK_ID";
     public static final String GUI_MEDIA = TAG + ".GUI_MEDIA";
 
     private static final String NOTIFICATION_PAUSE = TAG + ".NOTIFICATION_PAUSE";
@@ -222,19 +221,16 @@ public class AudioPlayerService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
 
-        BookDetail newBook = intent.getParcelableExtra(GUI_BOOK);
-        if (newBook != null) {
-            if (book == null || (book.getId() != newBook.getId()) || media == null || allMedia == null) {
-                book = newBook;
 
-                //re-inits allMedia if its null or belongs to a different book pr simply not existing
-                allMedia = intent.getParcelableArrayListExtra(GUI_ALL_MEDIA);
-                if (allMedia == null || (allMedia.get(0).getId() != book.getId()))
-                    allMedia = db.getMediaFromBook(book.getId());
-                initBook();
-                prepare(book.getCurrentMediaId());
-            }
+        int newBookId = intent.getIntExtra(GUI_BOOK_ID, -1);
+         if (book == null || book.getId() != newBookId) {
+            book = db.getBook(newBookId);
+            allMedia = db.getMediaFromBook(book.getId());
+
+            initBook();
+            prepare(book.getCurrentMediaId());
         }
+
         handleAction(intent);
 
         int keyCode = intent.getIntExtra(RemoteControlReceiver.KEYCODE, -1);
@@ -294,8 +290,7 @@ public class AudioPlayerService extends Service {
             Context c = getApplicationContext();
 
             Intent bookPlayIntent = new Intent(c, BookPlay.class);
-            bookPlayIntent.putExtra(GUI_BOOK, book);
-            bookPlayIntent.putExtra(GUI_ALL_MEDIA, allMedia);
+            bookPlayIntent.putExtra(GUI_BOOK_ID, book.getId());
             PendingIntent pendingIntent = android.support.v4.app.TaskStackBuilder.create(c)
                     .addNextIntentWithParentStack(bookPlayIntent)
                     .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -377,7 +372,6 @@ public class AudioPlayerService extends Service {
 
     private void initBook() {
         if (BuildConfig.DEBUG) Log.d(TAG, "Init book with id " + book.getId());
-
         registerAsPlaying(false);
 
         mRemoteControlClient.setTransportControlFlags(
@@ -490,13 +484,19 @@ public class AudioPlayerService extends Service {
         }
     }
 
+
+    /**
+     * Updates the book Async via a new Thread.
+     *
+     * @param book The book to be updated
+     */
     private void updateBookAsync(final BookDetail book) {
-        new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 db.updateBook(book);
             }
-        }.run();
+        }).run();
     }
 
 
@@ -506,8 +506,6 @@ public class AudioPlayerService extends Service {
                 try {
                     stateManager.setTime(mediaPlayer.getCurrentPosition());
                     Intent i = new Intent(GUI);
-                    // i.putExtra(GUI_BOOK, book);
-                    // i.putExtra(GUI_ALL_MEDIA, allMedia);
                     i.putExtra(GUI_MEDIA, media);
                     bcm.sendBroadcast(i);
                 } finally {
@@ -629,8 +627,7 @@ public class AudioPlayerService extends Service {
     private void registerAsPlaying(Boolean playing) {
         if (playing) {
             //starting runner to update gui
-            handler.postDelayed(savePositionRunner, 10000);
-            handler.postDelayed(updateSeekBarRunner, 1000);
+            handler.post(timeChangedRunner);
 
             //requesting audio-focus and setting up lock-screen-controls
             if (audioFocus != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
@@ -659,8 +656,7 @@ public class AudioPlayerService extends Service {
             foreground(false);
 
             //stops runner who were updating gui frequently
-            handler.removeCallbacks(savePositionRunner);
-            handler.removeCallbacks(updateSeekBarRunner);
+            handler.removeCallbacks(timeChangedRunner);
 
             //abandon audio-focus and disabling lock-screen controls
             audioManager.abandonAudioFocus(audioFocusChangeListener);
@@ -714,13 +710,14 @@ public class AudioPlayerService extends Service {
         }
     }
 
-    private final Runnable savePositionRunner = new Runnable() {
+    private final Runnable timeChangedRunner = new Runnable() {
         @Override
         public void run() {
             if (playerLock.tryLock()) {
                 try {
                     if (stateManager.getState() == PlayerStates.STARTED) {
                         int position = mediaPlayer.getCurrentPosition();
+                        stateManager.setTime(position);
                         if (position > 0) {
                             book.setCurrentMediaPosition(position);
                             updateBookAsync(book);
@@ -730,23 +727,7 @@ public class AudioPlayerService extends Service {
                     playerLock.unlock();
                 }
             }
-            handler.postDelayed(savePositionRunner, 10000);
-        }
-    };
-
-    private final Runnable updateSeekBarRunner = new Runnable() {
-        @Override
-        public void run() {
-            if (stateManager.getState() == PlayerStates.STARTED) {
-                if (playerLock.tryLock()) {
-                    try {
-                        stateManager.setTime(mediaPlayer.getCurrentPosition());
-                    } finally {
-                        playerLock.unlock();
-                    }
-                }
-                handler.postDelayed(updateSeekBarRunner, 1000);
-            }
+            handler.postDelayed(timeChangedRunner, 1000);
         }
     };
 

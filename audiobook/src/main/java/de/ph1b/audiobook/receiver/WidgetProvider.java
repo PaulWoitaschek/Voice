@@ -17,9 +17,9 @@ import java.util.ArrayList;
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookChoose;
-import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.content.BookDetail;
 import de.ph1b.audiobook.content.DataBaseHelper;
+import de.ph1b.audiobook.service.AudioPlayerService;
 
 public class WidgetProvider extends AppWidgetProvider {
 
@@ -59,7 +59,7 @@ public class WidgetProvider extends AppWidgetProvider {
             Intent i = new Intent(context, AudioPlayerService.class);
 
             if (book != null) { // if a valid book is found start service
-                i.putExtra(AudioPlayerService.GUI_BOOK, book);
+                i.putExtra(AudioPlayerService.GUI_BOOK_ID, book.getId());
                 i.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
                 i.putExtra(TAG, true);
                 context.startService(i);
@@ -72,7 +72,7 @@ public class WidgetProvider extends AppWidgetProvider {
                     editor.putInt(BookChoose.SHARED_PREFS_CURRENT, book.getId());
                     editor.apply();
 
-                    i.putExtra(AudioPlayerService.GUI_BOOK, book);
+                    i.putExtra(AudioPlayerService.GUI_BOOK_ID, book.getId());
                     i.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
                     context.startService(i);
                 }
