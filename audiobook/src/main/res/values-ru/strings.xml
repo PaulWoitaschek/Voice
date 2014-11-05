@@ -49,5 +49,6 @@
     <string name="popup_edit_book"></string>
     <string name="pref_fast_add"></string>
     <string name="pref_fast_add_hint"></string>
+    <string name="database_upgrade"></string>
     -->
 </resources>

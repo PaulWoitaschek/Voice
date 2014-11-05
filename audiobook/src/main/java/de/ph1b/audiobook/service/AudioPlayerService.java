@@ -612,7 +612,7 @@ public class AudioPlayerService extends Service {
      * Changes the current song in book and prepares the media. If the book was playing, it will play
      * again after being prepared and it always calls {@link #updateGUI()}
      *
-     * @param mediaId
+     * @param mediaId The new chosen mediaId
      */
     public void changeBookPosition(int mediaId) {
         if (mediaId != book.getCurrentMediaId()) {
@@ -624,6 +624,11 @@ public class AudioPlayerService extends Service {
         }
     }
 
+
+    /**
+     * Plays the current file. Also sets up the controls. If state is {@link de.ph1b.audiobook.service.PlayerStates#PLAYBACK_COMPLETED}
+     * then the latest medium is being prepared again.
+     */
     public void play() {
         playerLock.lock();
         try {

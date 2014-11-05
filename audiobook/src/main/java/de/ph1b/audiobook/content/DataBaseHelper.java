@@ -5,12 +5,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import de.ph1b.audiobook.BuildConfig;
+import de.ph1b.audiobook.utils.ImageHelper;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 
@@ -49,15 +53,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             KEY_BOOK_SORT_ID + " INTEGER)";
 
     private static DataBaseHelper instance;
+    private final Context c;
 
-    public static synchronized DataBaseHelper getInstance(Context context) {
+    public static synchronized DataBaseHelper getInstance(Context c) {
         if (instance == null)
-            instance = new DataBaseHelper(context);
+            instance = new DataBaseHelper(c);
         return instance;
     }
 
-    private DataBaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    private DataBaseHelper(Context c) {
+        super(c, DATABASE_NAME, null, DATABASE_VERSION);
+        this.c = c;
     }
 
     @Override
@@ -237,6 +243,31 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     break;
             }
         }
+
+        convertPNGFilesToJPG();
+        deleteUnnecessaryFiles();
+    }
+
+
+    /**
+     * Converts all png files to jpg to save memory. Also saves them as now cover
+     */
+    private void convertPNGFilesToJPG() {
+        ArrayList<BookDetail> allBooks = getAllBooks();
+        for (BookDetail b : allBooks) {
+            String cover = b.getCover();
+            if (cover != null) {
+                File f = new File(cover);
+                if (f.exists()) {
+                    if (f.getName().toLowerCase().endsWith(".png")) {
+                        String newCover = ImageHelper.saveCover(BitmapFactory.decodeFile(f.getAbsolutePath()), c);
+                        b.setCover(newCover);
+                        updateBook(b);
+                        //noinspection ResultOfMethodCallIgnored
+                    }
+                }
+            }
+        }
     }
 
 
@@ -388,15 +419,46 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             db.delete(TABLE_BOOKS,
                     KEY_BOOK_ID + " = " + bookId,
                     null);
-            String coverPath = book.getCover();
-            if (coverPath != null) {
-                File coverFile = new File(coverPath);
-                if (coverFile.exists())
-                    coverFile.deleteOnExit();
-            }
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
         }
+    }
+
+    private void deleteUnnecessaryFiles() {
+        // get all Files
+        String storagePlace = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                "/Android/data/" + c.getPackageName() + "/";
+        ArrayList<File> rootDir = new ArrayList<File>();
+        rootDir.add(new File(storagePlace));
+        ArrayList<File> allFiles = getAllFiles(rootDir, null);
+
+        //get all covers
+        ArrayList<File> allCovers = new ArrayList<File>();
+        ArrayList<BookDetail> allBooks = getAllBooks();
+        for (BookDetail b : allBooks)
+            allCovers.add(new File((b.getCover())));
+
+        // removes the covers from all files. these are the delete candidates
+        allFiles.removeAll(allCovers);
+        for (File f : allFiles)
+            //noinspection ResultOfMethodCallIgnored
+            f.delete();
+    }
+
+
+    private ArrayList<File> getAllFiles(ArrayList<File> filesToScan, ArrayList<File> filesScanned) {
+        if (filesScanned == null)
+            filesScanned = new ArrayList<File>();
+
+        for (File f : filesToScan) {
+            if (f.isFile()) {
+                filesScanned.add(f);
+            } else if (f.isDirectory()) {
+                ArrayList<File> newRoot = new ArrayList<File>(Arrays.asList(f.listFiles()));
+                filesScanned.addAll(getAllFiles(newRoot, null));
+            }
+        }
+        return filesScanned;
     }
 }

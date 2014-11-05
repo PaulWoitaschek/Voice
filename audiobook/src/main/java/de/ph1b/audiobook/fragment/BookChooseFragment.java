@@ -146,7 +146,6 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         super.onCreate(savedInstanceState);
 
         db = DataBaseHelper.getInstance(getActivity());
-
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
     }
 

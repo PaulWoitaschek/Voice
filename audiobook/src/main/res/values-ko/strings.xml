@@ -47,4 +47,7 @@
     <string name="popup_delete_book">삭제</string>
     <string name="popup_edit_book">수정</string>
 
+    <!-- TODO Missing translations:
+    <string name="database_upgrade"></string>
+    -->
 </resources>
