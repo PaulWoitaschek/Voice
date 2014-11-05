@@ -150,13 +150,6 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
     }
 
-    @Override
-    public void onPause() {
-        if (mBound)
-            if (mService.stateManager.getState() == PlayerStates.STARTED)
-                mService.foreground(true);
-        super.onPause();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -387,9 +380,6 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
-
-        if (mBound)
-            mService.foreground(false);
 
         new StartServiceAsync(getActivity(), false).execute();
 

@@ -9,12 +9,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import java.util.ArrayList;
 
-import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookChoose;
 import de.ph1b.audiobook.content.BookDetail;
@@ -47,8 +45,6 @@ public class WidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(@NonNull Context context, @NonNull Intent intent) {
         super.onReceive(context, intent);
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "onReceive called!, intent is :" + intent.getAction());
         if (intent.getAction().equals(PLAY_CLICK)) {
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
             int position = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
@@ -61,7 +57,6 @@ public class WidgetProvider extends AppWidgetProvider {
             if (book != null) { // if a valid book is found start service
                 i.putExtra(AudioPlayerService.GUI_BOOK_ID, book.getId());
                 i.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
-                i.putExtra(TAG, true);
                 context.startService(i);
             } else { //if no valid book is found search for available books
                 ArrayList<BookDetail> books = db.getAllBooks();

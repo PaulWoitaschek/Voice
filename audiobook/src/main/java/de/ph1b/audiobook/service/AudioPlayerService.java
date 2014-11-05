@@ -168,15 +168,12 @@ public class AudioPlayerService extends Service {
         String action = intent.getAction();
         if (intent.getAction() != null) {
             if (action.equals(CONTROL_PLAY_PAUSE)) {
-                boolean comesFromWidget = intent.hasExtra(WidgetProvider.TAG);
                 if (stateManager.getState() == PlayerStates.STARTED) {
                     // no need to stop foreground, pause does that
                     pause();
                 } else {
                     play();
-                    // if coming from widget, set foreground to true
-                    if (comesFromWidget)
-                        foreground(true);
+                    foreground(true);
                 }
             } else if (action.equals(CONTROL_CHANGE_MEDIA_POSITION)) {
                 int position = intent.getIntExtra(CONTROL_CHANGE_MEDIA_POSITION, -1);
@@ -223,7 +220,7 @@ public class AudioPlayerService extends Service {
 
 
         int newBookId = intent.getIntExtra(GUI_BOOK_ID, -1);
-         if (book == null || book.getId() != newBookId) {
+        if (book == null || book.getId() != newBookId) {
             book = db.getBook(newBookId);
             allMedia = db.getMediaFromBook(book.getId());
 
@@ -250,7 +247,7 @@ public class AudioPlayerService extends Service {
         }
     };
 
-    public void foreground(Boolean set) {
+    private void foreground(Boolean set) {
         if (set)
             new StartNotificationAsync().execute();
         else
@@ -295,8 +292,8 @@ public class AudioPlayerService extends Service {
                     .addNextIntentWithParentStack(bookPlayIntent)
                     .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            Intent i = new Intent(NOTIFICATION_PAUSE);
-            PendingIntent pauseActionPI = PendingIntent.getBroadcast(getApplicationContext(), 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
+            Intent intent = new Intent(NOTIFICATION_PAUSE);
+            PendingIntent pauseActionPI = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(c);
             builder.setContentTitle(book.getName())
                     .setContentText(media.getName())
@@ -305,7 +302,15 @@ public class AudioPlayerService extends Service {
                     .setContentIntent(pendingIntent)
                     .setOngoing(true)
                     .setAutoCancel(true);
-            int pos = positionInAllMedia(media.getId());
+
+            int pos = 0;
+            for (int i = 0; i < allMedia.size(); i++) {
+                if (media.getId() == allMedia.get(i).getId()) {
+                    pos = ++i;
+                    break;
+                }
+            }
+
             if (allMedia.size() > 1 && pos != -1) {
                 builder.setContentInfo(String.valueOf(pos) + "/" + String.valueOf(allMedia.size()));
             }
@@ -384,6 +389,12 @@ public class AudioPlayerService extends Service {
     }
 
 
+    /**
+     * Prepares a new media. Also handles the onCompletion and updates the database. After preparing,
+     * state should be PlayerStates.PREPARED
+     *
+     * @param mediaId The mediaId to be prepared for playback
+     */
     private void prepare(int mediaId) {
         if (BuildConfig.DEBUG) Log.d(TAG, "prepare()" + mediaId);
         playerLock.lock();
@@ -500,6 +511,12 @@ public class AudioPlayerService extends Service {
     }
 
 
+    /**
+     * Sends a broadcast signaling that there are changes affecting the gui and sends the current
+     * media as parcelable.
+     *
+     * @see de.ph1b.audiobook.fragment.BookPlayFragment#updateGUIReceiver
+     */
     public void updateGUI() {
         if (stateManager.getState() != PlayerStates.DEAD) {
             if (playerLock.tryLock()) {
@@ -516,6 +533,11 @@ public class AudioPlayerService extends Service {
     }
 
 
+    /**
+     * Pauses the player after specified time.
+     *
+     * @param sleepTime The amount in ms after the book should pause.
+     */
     private void sleepTimer(int sleepTime) {
         Timer sandman = new Timer();
         TimerTask sleepSand = new TimerTask() {
@@ -586,6 +608,12 @@ public class AudioPlayerService extends Service {
     }
 
 
+    /**
+     * Changes the current song in book and prepares the media. If the book was playing, it will play
+     * again after being prepared and it always calls {@link #updateGUI()}
+     *
+     * @param mediaId
+     */
     public void changeBookPosition(int mediaId) {
         if (mediaId != book.getCurrentMediaId()) {
             boolean wasPlaying = (stateManager.getState() == PlayerStates.STARTED);
@@ -607,6 +635,7 @@ public class AudioPlayerService extends Service {
                     mediaPlayer.start();
                     stateManager.setState(PlayerStates.STARTED);
                     registerAsPlaying(true);
+                    foreground(true);
                     updateGUI();
                     break;
                 case IDLE:
@@ -695,6 +724,13 @@ public class AudioPlayerService extends Service {
         }
     }
 
+
+    /**
+     * Changes the position in the current track. Also updates the database accordingly.
+     * Calls {@link #updateGUI()}
+     *
+     * @param position The position in the current track to jump to
+     */
     public void changePosition(int position) {
         playerLock.lock();
         try {
@@ -710,6 +746,12 @@ public class AudioPlayerService extends Service {
         }
     }
 
+
+    /**
+     * Sets the {@link #stateManager} to the current position in the media. Also updates the book calling
+     * {@link #updateBookAsync(de.ph1b.audiobook.content.BookDetail)} and repeats itself via the {@link #handler}
+     * after a certain time.
+     */
     private final Runnable timeChangedRunner = new Runnable() {
         @Override
         public void run() {
@@ -773,13 +815,6 @@ public class AudioPlayerService extends Service {
         }
     };
 
-    int positionInAllMedia(int mediaId) {
-        for (int i = 0; i < allMedia.size(); i++) {
-            if (mediaId == allMedia.get(i).getId())
-                return i + 1;
-        }
-        return -1;
-    }
 
     private void updateMetaData() {
         new AsyncTask<Void, Void, Void>() {
