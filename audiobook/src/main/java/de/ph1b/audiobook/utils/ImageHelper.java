@@ -108,7 +108,7 @@ public class ImageHelper {
         // saving cover
         int coverSize = resolveImageType(TYPE_COVER, c);
         Bitmap cover = Bitmap.createScaledBitmap(bitmap, coverSize, coverSize, true);
-        File coverDir = new File(storagePlace + "/cover");
+        File coverDir = new File(storagePlace + "cover");
         File coverFile = new File(coverDir, fileName);
         //noinspection ResultOfMethodCallIgnored
         coverDir.mkdirs();
