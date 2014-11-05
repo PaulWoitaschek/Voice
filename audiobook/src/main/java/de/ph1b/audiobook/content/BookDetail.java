@@ -14,6 +14,11 @@ public class BookDetail implements Parcelable {
     private int currentMediaId;
     private int currentMediaPosition;
 
+    @Override
+    public String toString() {
+        return "BookId: " + id;
+    }
+
     public BookDetail() {
 
     }
