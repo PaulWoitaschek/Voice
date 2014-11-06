@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
@@ -47,34 +48,38 @@ public class CoverDownloader {
 
         ArrayList<URL> bitmapUrls;
 
-        URL searchURL = null;
+        URL searchURL;
 
-        try {
-            // if there is a value corresponding to searchText, use that one
-            if (searchStringMap.containsKey(searchText)) {
-                bitmapUrls = searchStringMap.get(searchText);
-                if (bitmapUrls.size() - 1 <= number) {
-                    searchURL = bitmapUrls.get(number);
-                } else {
-                    ArrayList<URL> newSetOfURL = new ArrayList<URL>();
-                    newSetOfURL.addAll(bitmapUrls);
-                    ArrayList<URL> eightSetOfURL = genEightSetOfURL(searchText, number);
-                    if (eightSetOfURL == null)
-                        return null;
-                    newSetOfURL.addAll(eightSetOfURL);
-                    searchStringMap.put(searchText, newSetOfURL);
-                    searchURL = newSetOfURL.get(0);
-                }
+        // if there is a value corresponding to searchText, use that one
+        if (searchStringMap.containsKey(searchText)) {
+            if (BuildConfig.DEBUG) Log.d(TAG, "Found bitmapUrls");
+            bitmapUrls = searchStringMap.get(searchText);
+            if (number < bitmapUrls.size()) {
+                searchURL = bitmapUrls.get(number);
+                if (BuildConfig.DEBUG) Log.d(TAG, "Already got one in cache!:" + searchURL);
             } else {
-                ArrayList<URL> eightSetOfURL = genEightSetOfURL(searchText, number);
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "Will look for a new eightSet because bitmapUrls is too small");
+                ArrayList<URL> newSetOfURL = new ArrayList<URL>();
+                newSetOfURL.addAll(bitmapUrls);
+                ArrayList<URL> eightSetOfURL = genEightSetOfURL(searchText, bitmapUrls.size() + 1);
                 if (eightSetOfURL == null)
                     return null;
-                searchStringMap.put(searchText, eightSetOfURL);
-                searchURL = eightSetOfURL.get(0);
+                newSetOfURL.addAll(eightSetOfURL);
+                searchStringMap.put(searchText, newSetOfURL);
+                searchURL = newSetOfURL.get(0);
+                if (BuildConfig.DEBUG) Log.d(TAG, "Got one: " + searchURL);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            if (BuildConfig.DEBUG) Log.d(TAG, "Didnt find bitmapUrls");
+            ArrayList<URL> eightSetOfURL = genEightSetOfURL(searchText, number);
+            if (eightSetOfURL == null)
+                return null;
+            searchStringMap.put(searchText, eightSetOfURL);
+            searchURL = eightSetOfURL.get(0);
+            if (BuildConfig.DEBUG) Log.d(TAG, "But made a new one, returning:" + searchURL);
         }
+
 
         int connectTimeOut = 3000;
         int readTimeOut = 5000;
@@ -105,8 +110,8 @@ public class CoverDownloader {
 
                 //returned bitmap in the desired 1:1 ratio and cropping automatically
                 return BitmapFactory.decodeStream(inputStream, null, options);
-            } catch (Exception e) {
-                if (BuildConfig.DEBUG) Log.d(TAG, e.toString());
+            } catch (IOException e) {
+                if (BuildConfig.DEBUG) Log.d(TAG, "Catched IOException!");
             }
         }
         return null;
@@ -140,7 +145,7 @@ public class CoverDownloader {
 
         try {
             URL url = new URL(
-                    "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&imgsz=large|xlarge&rsz=1&q=" +
+                    "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&imgsz=large|xlarge&rsz=8&q=" +
                             URLEncoder.encode(searchText, "UTF-8") + "&start=" + startPage +
                             "&userip=" + getIPAddress());
             if (BuildConfig.DEBUG)
@@ -162,7 +167,7 @@ public class CoverDownloader {
             JSONObject responseData = obj.getJSONObject("responseData");
             JSONArray results = responseData.getJSONArray("results");
             for (int i = 0; i < results.length(); i++) {
-                URL imageURL = new URL(results.getJSONObject(0).getString("url"));
+                URL imageURL = new URL(results.getJSONObject(i).getString("url"));
                 eightSetOfURL.add(imageURL);
             }
         } catch (Exception e) {
