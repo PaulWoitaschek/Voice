@@ -398,9 +398,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         values.put(KEY_BOOK_CURRENT_MEDIA_POSITION, book.getCurrentMediaPosition());
         values.put(KEY_BOOK_SORT_ID, book.getSortId());
 
-        if (BuildConfig.DEBUG)
-            Log.d("dbh", book.toString());
-
         db.update(TABLE_BOOKS, values, KEY_BOOK_ID + " = " + book.getId(), null);
     }
 

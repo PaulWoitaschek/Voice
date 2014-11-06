@@ -74,8 +74,7 @@ public class AudioPlayerService extends Service {
     public static final String GUI_BOOK_ID = TAG + ".GUI_BOOK_ID";
     public static final String GUI_MEDIA = TAG + ".GUI_MEDIA";
 
-    private static final String NOTIFICATION_PAUSE = TAG + ".NOTIFICATION_PAUSE";
-
+    public static final String KEYCODE = TAG + ".KEYCODE";
 
     private AudioManager audioManager;
     private MediaPlayer mediaPlayer;
@@ -159,9 +158,6 @@ public class AudioPlayerService extends Service {
         widgetComponentName = new ComponentName(this, WidgetProvider.class);
         remoteViews = new RemoteViews(this.getPackageName(), R.layout.widget);
         stateManager.addStateChangeListener(onStateChangedListener);
-
-        //registering receiver for pause from notification
-        registerReceiver(notificationPauseReceiver, new IntentFilter(NOTIFICATION_PAUSE));
     }
 
     private void handleAction(Intent intent) {
@@ -192,20 +188,18 @@ public class AudioPlayerService extends Service {
             case -1:
                 break;
             case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+            case KeyEvent.KEYCODE_MEDIA_PAUSE:
+            case KeyEvent.KEYCODE_MEDIA_PLAY:
                 if (stateManager.getState() == PlayerStates.STARTED)
                     pause();
                 else
                     play();
                 break;
             case KeyEvent.KEYCODE_MEDIA_NEXT:
-                fastForward();
-                break;
-            case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
-                rewind();
-                break;
             case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
                 fastForward();
                 break;
+            case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
             case KeyEvent.KEYCODE_MEDIA_REWIND:
                 rewind();
                 break;
@@ -218,9 +212,8 @@ public class AudioPlayerService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
 
-
         int newBookId = intent.getIntExtra(GUI_BOOK_ID, -1);
-        if (book == null || book.getId() != newBookId) {
+        if (newBookId != -1 && (book == null || (book.getId() != newBookId))) {
             book = db.getBook(newBookId);
             allMedia = db.getMediaFromBook(book.getId());
 
@@ -230,7 +223,7 @@ public class AudioPlayerService extends Service {
 
         handleAction(intent);
 
-        int keyCode = intent.getIntExtra(RemoteControlReceiver.KEYCODE, -1);
+        int keyCode = intent.getIntExtra(KEYCODE, -1);
         handleKeyCode(keyCode);
 
         updateGUI();
@@ -239,13 +232,6 @@ public class AudioPlayerService extends Service {
         return Service.START_REDELIVER_INTENT;
     }
 
-
-    private final BroadcastReceiver notificationPauseReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            pause();
-        }
-    };
 
     private void foreground(Boolean set) {
         if (set)
@@ -286,14 +272,25 @@ public class AudioPlayerService extends Service {
             super.onPostExecute(result);
             Context c = getApplicationContext();
 
+
+            Intent rewindIntent = new Intent(AudioPlayerService.this, AudioPlayerService.class);
+            rewindIntent.putExtra(KEYCODE, KeyEvent.KEYCODE_MEDIA_REWIND);
+            PendingIntent rewindPI = PendingIntent.getService(AudioPlayerService.this, 0, rewindIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            Intent pauseIntent = new Intent(AudioPlayerService.this, AudioPlayerService.class);
+            pauseIntent.putExtra(KEYCODE, KeyEvent.KEYCODE_MEDIA_PAUSE);
+            PendingIntent pausePI = PendingIntent.getService(AudioPlayerService.this, 1, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            Intent fforwardIntent = new Intent(AudioPlayerService.this, AudioPlayerService.class);
+            fforwardIntent.putExtra(KEYCODE, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD);
+            PendingIntent fforwardPI = PendingIntent.getService(AudioPlayerService.this, 2, fforwardIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
             Intent bookPlayIntent = new Intent(c, BookPlay.class);
             bookPlayIntent.putExtra(GUI_BOOK_ID, book.getId());
             PendingIntent pendingIntent = android.support.v4.app.TaskStackBuilder.create(c)
                     .addNextIntentWithParentStack(bookPlayIntent)
                     .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            Intent intent = new Intent(NOTIFICATION_PAUSE);
-            PendingIntent pauseActionPI = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(c);
             builder.setContentTitle(book.getName())
                     .setContentText(media.getName())
@@ -303,14 +300,18 @@ public class AudioPlayerService extends Service {
                     .setOngoing(true)
                     .setAutoCancel(true);
 
-
             int pos = allMedia.indexOf(media);
 
             if (allMedia.size() > 1 && pos != -1) {
                 builder.setContentInfo(String.valueOf(pos + 1) + "/" + String.valueOf(allMedia.size()));
             }
             builder.setPriority(NotificationCompat.PRIORITY_HIGH);
-            builder.addAction(R.drawable.ic_pause_white_36dp, "Pause", pauseActionPI);
+
+
+            builder.addAction(R.drawable.ic_fast_rewind_grey600_36dp, null, rewindPI);
+            builder.addAction(R.drawable.ic_pause_grey600_36dp, null, pausePI);
+            builder.addAction(R.drawable.ic_fast_forward_grey600_36dp, null, fforwardPI);
+
             builder.setShowWhen(false);
             Notification notification = builder.build();
             startForeground(NOTIFICATION_ID, notification);
@@ -329,7 +330,6 @@ public class AudioPlayerService extends Service {
         } finally {
             playerLock.unlock();
         }
-        unregisterReceiver(notificationPauseReceiver);
         super.onDestroy();
     }
 

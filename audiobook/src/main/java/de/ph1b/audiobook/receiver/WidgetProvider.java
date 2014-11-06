@@ -21,8 +21,7 @@ import de.ph1b.audiobook.service.AudioPlayerService;
 
 public class WidgetProvider extends AppWidgetProvider {
 
-    public static final String TAG = "de.ph1b.audiobook.receiver.WidgetProvider";
-    private static final String PLAY_CLICK = TAG + ".PLAY_CLICK";
+    private static final String PLAY_CLICK = "de.ph1b.audiobook.receiver.WidgetProvider.PLAY_CLICK";
 
 
     private PendingIntent getPendingSelfIntent(Context context, String action) {
