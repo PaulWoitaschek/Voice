@@ -43,6 +43,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
 
+import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookChoose;
 import de.ph1b.audiobook.activity.BookPlay;
@@ -177,7 +178,9 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                 editor.apply();
 
                 Intent i = new Intent(getActivity(), BookPlay.class);
-                i.putExtra(AudioPlayerService.GUI_BOOK_ID, book.getId());
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "Starting book with id: " + bookId);
+                i.putExtra(AudioPlayerService.GUI_BOOK_ID, bookId);
                 startActivity(i);
             }
 
@@ -215,11 +218,8 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                                 //setting visibility of play widget at bottom to gone if book is gone
                                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
                                 int currentBookId = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
-                                for (BookDetail b : adapt.getData()) {
-                                    if (b.getId() == currentBookId) {
-                                        current.setVisibility(View.GONE);
-                                    }
-                                }
+                                if (adapt.getItem(position).getId() == currentBookId)
+                                    current.setVisibility(View.GONE);
 
                                 adapt.removeItem(position);
                                 return true;
