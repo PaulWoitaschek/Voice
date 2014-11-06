@@ -413,6 +413,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             db.delete(TABLE_BOOKS,
                     KEY_BOOK_ID + " = " + bookId,
                     null);
+            String cover = book.getCover();
+            if (cover != null) {
+                File f = new File(cover);
+                if (f.exists() && f.canWrite()) {
+                    //noinspection ResultOfMethodCallIgnored
+                    f.delete();
+                }
+            }
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
