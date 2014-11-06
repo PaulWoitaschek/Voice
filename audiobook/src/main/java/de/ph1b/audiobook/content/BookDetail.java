@@ -14,6 +14,36 @@ public class BookDetail implements Parcelable {
     private int currentMediaId;
     private int currentMediaPosition;
 
+
+    /**
+     * @param o the object to compare this instance with.
+     * @return true if the objects are identically, have the same id or if an integer was set to compare,
+     * if the integer interpreted as an bookId matches to the current book.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        } else if (o == this) {
+            return true;
+        } else if (o instanceof BookDetail) {
+            BookDetail book = (BookDetail) o;
+            if (book.getId() == this.getId())
+                return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * @return the bookId because there can be no duplicate ID because of database auto-
+     * increment
+     */
+    @Override
+    public int hashCode() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return "BookId: " + id;
