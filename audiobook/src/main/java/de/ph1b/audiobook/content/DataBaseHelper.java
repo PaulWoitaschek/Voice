@@ -6,12 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.utils.ImageHelper;
@@ -178,7 +176,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         // getting data from old table
         Cursor bookTableCursor = db.query("TEMP_TABLE_BOOKS",
-                new String[]{"KEY_BOOK_ID", "KEY_BOOK_NAME", "KEY_BOOK_COVER", "KEY_BOOK_POSITION", "KEY_BOOK_SORT_ID"},
+                new String[]{"KEY_BOOK_ID", "KEY_BOOK_NAME", "KEY_BOOK_COVER", "KEY_BOOK_POSITION", "KEY_BOOK_SORT_ID", "KEY_BOOK_THUMB"},
                 null, null, null, null, null);
 
         //going through all books and updating them with current values
@@ -188,6 +186,30 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             String bookCover = bookTableCursor.getString(2);
             int bookPosition = bookTableCursor.getInt(3);
             int bookSortId = bookTableCursor.getInt(4);
+            String bookThumb = bookTableCursor.getString(5);
+
+            //deleting unnecessary thumbs
+            if (bookThumb != null) {
+                File f = new File(bookThumb);
+                if (f.isFile()) {
+                    //noinspection ResultOfMethodCallIgnored
+                    f.delete();
+                }
+            }
+
+            //converts png cover to jpg and deletes old cover
+            if (bookCover != null) {
+                File f = new File(bookCover);
+                if (f.exists()) {
+                    if (f.getName().toLowerCase().endsWith(".png")) {
+                        if (f.exists()) {
+                            bookCover = ImageHelper.saveCover(BitmapFactory.decodeFile(f.getAbsolutePath()), c);
+                            //noinspection ResultOfMethodCallIgnored
+                            f.delete();
+                        }
+                    }
+                }
+            }
 
             Cursor mediaPositionCursor = db.query("TEMP_TABLE_MEDIA",
                     new String[]{"KEY_MEDIA_POSITION"},
@@ -230,10 +252,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (BuildConfig.DEBUG)
-            Log.d("dbh", "onUpgrade called with " + String.valueOf(oldVersion) + "/" + String.valueOf(newVersion));
-
-        while (oldVersion++ < newVersion) {
+        while (oldVersion < newVersion) {
+            if (BuildConfig.DEBUG)
+                Log.d("dbh", "upgrading version" + oldVersion);
             switch (oldVersion) {
                 case 1:
                     upgradeOne(db);
@@ -242,31 +263,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     upgradeTwo(db);
                     break;
             }
-        }
-
-        convertPNGFilesToJPG();
-        deleteUnnecessaryFiles();
-    }
-
-
-    /**
-     * Converts all png files to jpg to save memory. Also saves them as now cover
-     */
-    private void convertPNGFilesToJPG() {
-        ArrayList<BookDetail> allBooks = getAllBooks();
-        for (BookDetail b : allBooks) {
-            String cover = b.getCover();
-            if (cover != null) {
-                File f = new File(cover);
-                if (f.exists()) {
-                    if (f.getName().toLowerCase().endsWith(".png")) {
-                        String newCover = ImageHelper.saveCover(BitmapFactory.decodeFile(f.getAbsolutePath()), c);
-                        b.setCover(newCover);
-                        updateBook(b);
-                        //noinspection ResultOfMethodCallIgnored
-                    }
-                }
-            }
+            oldVersion++;
         }
     }
 
@@ -423,42 +420,5 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
         }
-    }
-
-    private void deleteUnnecessaryFiles() {
-        // get all Files
-        String storagePlace = Environment.getExternalStorageDirectory().getAbsolutePath() +
-                "/Android/data/" + c.getPackageName() + "/";
-        ArrayList<File> rootDir = new ArrayList<File>();
-        rootDir.add(new File(storagePlace));
-        ArrayList<File> allFiles = getAllFiles(rootDir, null);
-
-        //get all covers
-        ArrayList<File> allCovers = new ArrayList<File>();
-        ArrayList<BookDetail> allBooks = getAllBooks();
-        for (BookDetail b : allBooks)
-            allCovers.add(new File((b.getCover())));
-
-        // removes the covers from all files. these are the delete candidates
-        allFiles.removeAll(allCovers);
-        for (File f : allFiles)
-            //noinspection ResultOfMethodCallIgnored
-            f.delete();
-    }
-
-
-    private ArrayList<File> getAllFiles(ArrayList<File> filesToScan, ArrayList<File> filesScanned) {
-        if (filesScanned == null)
-            filesScanned = new ArrayList<File>();
-
-        for (File f : filesToScan) {
-            if (f.isFile()) {
-                filesScanned.add(f);
-            } else if (f.isDirectory()) {
-                ArrayList<File> newRoot = new ArrayList<File>(Arrays.asList(f.listFiles()));
-                filesScanned.addAll(getAllFiles(newRoot, null));
-            }
-        }
-        return filesScanned;
     }
 }
