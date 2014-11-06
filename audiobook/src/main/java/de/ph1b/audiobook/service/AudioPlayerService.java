@@ -303,16 +303,11 @@ public class AudioPlayerService extends Service {
                     .setOngoing(true)
                     .setAutoCancel(true);
 
-            int pos = 0;
-            for (int i = 0; i < allMedia.size(); i++) {
-                if (media.getId() == allMedia.get(i).getId()) {
-                    pos = ++i;
-                    break;
-                }
-            }
+
+            int pos = allMedia.indexOf(media);
 
             if (allMedia.size() > 1 && pos != -1) {
-                builder.setContentInfo(String.valueOf(pos) + "/" + String.valueOf(allMedia.size()));
+                builder.setContentInfo(String.valueOf(pos + 1) + "/" + String.valueOf(allMedia.size()));
             }
             builder.setPriority(NotificationCompat.PRIORITY_HIGH);
             builder.addAction(R.drawable.ic_pause_white_36dp, "Pause", pauseActionPI);
@@ -399,10 +394,15 @@ public class AudioPlayerService extends Service {
         if (BuildConfig.DEBUG) Log.d(TAG, "prepare()" + mediaId);
         playerLock.lock();
         try {
+
             //if no proper current song is found, use the first
-            for (MediaDetail m : allMedia)
-                if (m.getId() == mediaId)
+            media = null;
+            for (MediaDetail m : allMedia) {
+                if (m.getId() == mediaId) {
                     media = m;
+                    break;
+                }
+            }
             if (media == null)
                 media = allMedia.get(0);
 
@@ -456,7 +456,6 @@ public class AudioPlayerService extends Service {
                     }
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "Next Song by onCompletion");
-                    int currentId = media.getId();
 
                     //setting book to last position
                     book.setCurrentMediaPosition(media.getDuration());
@@ -464,19 +463,15 @@ public class AudioPlayerService extends Service {
 
                     boolean wasPlaying = ((stateManager.getState() == PlayerStates.STARTED) ||
                             (stateManager.getState() == PlayerStates.PLAYBACK_COMPLETED));
-                    for (int i = 0; i < allMedia.size() - 1; i++) { //-1 to prevent change when already last song reached
-                        if (allMedia.get(i).getId() == currentId) {
-                            int mediaId = allMedia.get(i + 1).getId();
-                            prepare(mediaId);
-                            if (wasPlaying)
-                                play();
-                            updateGUI();
-                            break;
-                        }
-                    }
 
-                    // if at last position, remove handler and notification, audio-focus
-                    if (currentId == allMedia.get(allMedia.size() - 1).getId()) {
+                    int index = allMedia.indexOf(media);
+                    // play next one if there is any
+                    if (index < allMedia.size() - 1) {//-1 to prevent change when already last song reached
+                        prepare(media.getId());
+                        if (wasPlaying)
+                            play();
+                        updateGUI();
+                    } else { //else unregister as playing
                         playerLock.lock();
                         try {
                             if (stateManager.getState() != PlayerStates.DEAD)
