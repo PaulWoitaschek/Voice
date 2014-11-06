@@ -467,7 +467,7 @@ public class AudioPlayerService extends Service {
                     int index = allMedia.indexOf(media);
                     // play next one if there is any
                     if (index < allMedia.size() - 1) {//-1 to prevent change when already last song reached
-                        prepare(media.getId());
+                        prepare(allMedia.get(index + 1).getId());
                         if (wasPlaying)
                             play();
                         updateGUI();
