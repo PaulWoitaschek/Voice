@@ -834,7 +834,6 @@ public class AudioPlayerService extends Service {
                 }
                 editor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bitmap);
                 editor.apply();
-
                 return null;
             }
         }.execute();

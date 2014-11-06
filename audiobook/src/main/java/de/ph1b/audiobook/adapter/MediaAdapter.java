@@ -88,15 +88,16 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
      *
      * @param position The position of the item to be removed
      */
-    public void removeItem(final int position) {
+    public void removeItem(int position) {
+        final BookDetail bookToRemove = getItem(position);
+        data.remove(position);
+        notifyItemRemoved(position);
         singleThreadExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                db.deleteBook(data.get(position));
+                db.deleteBook(bookToRemove);
             }
         });
-        data.remove(position);
-        notifyItemRemoved(position);
     }
 
     @Override
