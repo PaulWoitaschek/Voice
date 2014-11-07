@@ -653,7 +653,7 @@ public class AudioPlayerService extends Service {
         }
     }
 
-    private void registerAsPlaying(boolean playing){
+    private void registerAsPlaying(boolean playing) {
         registerAsPlaying(playing, false);
     }
 
@@ -709,7 +709,7 @@ public class AudioPlayerService extends Service {
         }
     }
 
-    public void pause(){
+    public void pause() {
         pause(false);
     }
 
@@ -801,7 +801,9 @@ public class AudioPlayerService extends Service {
                             play();
                             break;
                         case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                            audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
+                            if (BuildConfig.DEBUG)
+                                Log.d(TAG, "increasing volume because of regain focus from tcanduck");
+                            audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
                             break;
                         default:
                             break;
@@ -814,8 +816,8 @@ public class AudioPlayerService extends Service {
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                     if (BuildConfig.DEBUG)
-                        Log.d(TAG, "audio focus loss transient can duck");
-                    audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
+                        Log.d(TAG, "lowering volume because of af loss transcient can duck");
+                    audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
                     lastState = focusChange;
                     break;
                 default:
