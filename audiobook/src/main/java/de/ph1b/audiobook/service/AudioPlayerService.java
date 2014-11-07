@@ -634,7 +634,7 @@ public class AudioPlayerService extends Service {
                         Log.d(TAG, "starting MediaPlayer");
                     mediaPlayer.start();
                     stateManager.setState(PlayerStates.STARTED);
-                    registerAsPlaying(true);
+                    registerAsPlaying(true, true);
                     foreground(true);
                     updateGUI();
                     break;
@@ -653,7 +653,11 @@ public class AudioPlayerService extends Service {
         }
     }
 
-    private void registerAsPlaying(Boolean playing) {
+    private void registerAsPlaying(boolean playing){
+        registerAsPlaying(playing, false);
+    }
+
+    private void registerAsPlaying(boolean playing, boolean keepAudioFocus) {
         if (playing) {
             //starting runner to update gui
             handler.post(timeChangedRunner);
@@ -688,8 +692,10 @@ public class AudioPlayerService extends Service {
             handler.removeCallbacks(timeChangedRunner);
 
             //abandon audio-focus and disabling lock-screen controls
-            audioManager.abandonAudioFocus(audioFocusChangeListener);
-            audioFocus = 0;
+            if (!keepAudioFocus) {
+                audioManager.abandonAudioFocus(audioFocusChangeListener);
+                audioFocus = 0;
+            }
             audioManager.unregisterMediaButtonEventReceiver(myEventReceiver);
             audioManager.unregisterRemoteControlClient(mRemoteControlClient);
             mRemoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_STOPPED);
@@ -703,9 +709,12 @@ public class AudioPlayerService extends Service {
         }
     }
 
+    public void pause(){
+        pause(false);
+    }
 
-    public void pause() {
-        registerAsPlaying(false);
+    public void pause(Boolean keepAudioFocus) {
+        registerAsPlaying(false, keepAudioFocus);
         foreground(false);
         if (stateManager.getState() == PlayerStates.STARTED) {
             playerLock.lock();
@@ -781,7 +790,7 @@ public class AudioPlayerService extends Service {
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "Paused by audio-focus loss transient.");
-                    pause();
+                    pause(true);
                     lastState = focusChange;
                     break;
                 case AudioManager.AUDIOFOCUS_GAIN:
