@@ -417,7 +417,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.current_playing:
-                new StartServiceAsync(getActivity().getApplicationContext(), true).execute();
+                new StartServiceAsync(getActivity().getApplicationContext()).execute();
                 break;
             default:
                 break;
@@ -453,18 +453,14 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
      */
     private class StartServiceAsync extends AsyncTask<Void, Void, Void> {
         private final Context c;
-        private final boolean play;
 
-
-        /**
+              /**
          * Default constructor.
          *
          * @param c    Pass the Context
-         * @param play If true, the Service will automatically start playing a book.
          */
-        public StartServiceAsync(Context c, boolean play) {
+        public StartServiceAsync(Context c) {
             this.c = c;
-            this.play = play;
         }
 
         @Override
@@ -476,15 +472,13 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                 if (b.getId() == currentBookId) {
                     Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
                     serviceIntent.putExtra(AudioPlayerService.GUI_BOOK_ID, b.getId());
-                    if (play)
-                        serviceIntent.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
+                    serviceIntent.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
                     c.startService(serviceIntent);
 
                     Intent intent = new Intent(getActivity(), AudioPlayerService.class);
                     c.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
                 }
             }
-
             return null;
         }
     }

@@ -162,7 +162,7 @@ public class AudioPlayerService extends Service {
 
     private void handleAction(Intent intent) {
         String action = intent.getAction();
-        if (intent.getAction() != null) {
+        if (action != null) {
             if (action.equals(CONTROL_PLAY_PAUSE)) {
                 if (stateManager.getState() == PlayerStates.STARTED) {
                     // no need to stop foreground, pause does that
@@ -212,23 +212,25 @@ public class AudioPlayerService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
 
-        int newBookId = intent.getIntExtra(GUI_BOOK_ID, -1);
-        if (newBookId != -1 && (book == null || (book.getId() != newBookId))) {
-            book = db.getBook(newBookId);
-            allMedia = db.getMediaFromBook(book.getId());
+        if (flags == START_FLAG_REDELIVERY) {
+            foreground(false);
+        } else {
+            int newBookId = intent.getIntExtra(GUI_BOOK_ID, -1);
+            if (newBookId != -1 && (book == null || (book.getId() != newBookId))) {
+                book = db.getBook(newBookId);
+                allMedia = db.getMediaFromBook(book.getId());
 
-            initBook();
-            prepare(book.getCurrentMediaId());
+                initBook();
+                prepare(book.getCurrentMediaId());
+            }
+
+            handleAction(intent);
+
+            int keyCode = intent.getIntExtra(KEYCODE, -1);
+            handleKeyCode(keyCode);
+            updateGUI();
         }
 
-        handleAction(intent);
-
-        int keyCode = intent.getIntExtra(KEYCODE, -1);
-        handleKeyCode(keyCode);
-
-        updateGUI();
-
-        //sticky to re-init when stopped
         return Service.START_REDELIVER_INTENT;
     }
 
