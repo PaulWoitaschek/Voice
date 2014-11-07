@@ -236,24 +236,24 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
             Bitmap bitmap = null;
 
             //try to load a cover 3 times
-            if (coverNotExists && ImageHelper.isOnline(c)) {
-                for (int i = 0; i < 3; i++) {
-                    bitmap = CoverDownloader.getCover(book.getName(), c, i);
-                    if (bitmap != null) {
-                        String savedCoverPath = ImageHelper.saveCover(bitmap, c);
-                        book.setCover(savedCoverPath);
-                        data.set(position, book);
-                        db.updateBook(book);
-                        break;
+            if (coverNotExists) {
+                if (ImageHelper.isOnline(c))
+                    for (int i = 0; i < 3; i++) {
+                        bitmap = CoverDownloader.getCover(book.getName(), c, i);
+                        if (bitmap != null) {
+                            String savedCoverPath = ImageHelper.saveCover(bitmap, c);
+                            book.setCover(savedCoverPath);
+                            data.set(position, book);
+                            db.updateBook(book);
+                            break;
+                        }
                     }
-                }
             } else {
                 bitmap = ImageHelper.genBitmapFromFile(coverPath, c, ImageHelper.TYPE_MEDIUM);
             }
 
-            if (bitmap == null) {
+            if (bitmap == null)
                 bitmap = ImageHelper.genCapital(book.getName(), c, ImageHelper.TYPE_MEDIUM);
-            }
 
             //save bitmap to lru cache
             imageCache.put(book.getId(), bitmap);
