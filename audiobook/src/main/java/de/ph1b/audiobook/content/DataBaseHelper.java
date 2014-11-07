@@ -213,8 +213,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
             Cursor mediaPositionCursor = db.query("TEMP_TABLE_MEDIA",
                     new String[]{"KEY_MEDIA_POSITION"},
-                    "KEY_MEDIA_BOOK_ID = " + oldBookId,
+                    "KEY_MEDIA_BOOK_ID = " + oldBookId + " AND KEY_MEDIA_ID = " + bookPosition,
                     null, null, null, null, null);
+
             int bookMediaPosition = 0;
             if (mediaPositionCursor.moveToFirst())
                 bookMediaPosition = mediaPositionCursor.getInt(0);
