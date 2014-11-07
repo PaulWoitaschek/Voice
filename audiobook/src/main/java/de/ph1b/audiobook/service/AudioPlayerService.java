@@ -568,6 +568,8 @@ public class AudioPlayerService extends Service {
                 int changeTimeAmount = sharedPref.getInt(getString(R.string.pref_change_amount), 20) * 1000;
                 int newPosition = position + changeTimeAmount;
                 if (newPosition > 0) {
+                    if (newPosition > media.getDuration())
+                        newPosition = media.getDuration();
                     mediaPlayer.seekTo(newPosition);
                     book.setCurrentMediaPosition(newPosition);
                     updateBookAsync(book);
