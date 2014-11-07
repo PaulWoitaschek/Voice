@@ -59,7 +59,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
                 nameEditText.setText("");
                 break;
             case R.id.previous_cover:
-                if (addCoverAsync != null && !addCoverAsync.isCancelled()){
+                if (addCoverAsync != null && !addCoverAsync.isCancelled()) {
                     addCoverAsync.cancel(true);
                 }
 
@@ -235,7 +235,8 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
         @Override
         protected void onPreExecute() {
             nextCover.setVisibility(View.INVISIBLE);
-            previousCover.setVisibility(View.VISIBLE);
+            if (covers.size() > 0)
+                previousCover.setVisibility(View.VISIBLE);
             coverReplacement.setVisibility(View.VISIBLE);
             coverImageView.setVisibility(View.GONE);
         }
@@ -263,6 +264,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
                     if (covers.size() > 1)
                         previousCover.setVisibility(View.VISIBLE);
                 } else {
+                    //if we found no bitmap, set old one
                     cover.setImageBitmap(covers.get(coverPosition));
                     if (coverPosition == 0)
                         previousCover.setVisibility(View.INVISIBLE);
