@@ -24,10 +24,10 @@ import java.util.concurrent.Executors;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.interfaces.OnItemClickListener;
 import de.ph1b.audiobook.content.BookDetail;
-import de.ph1b.audiobook.utils.CoverDownloader;
 import de.ph1b.audiobook.content.DataBaseHelper;
+import de.ph1b.audiobook.interfaces.OnItemClickListener;
+import de.ph1b.audiobook.utils.CoverDownloader;
 import de.ph1b.audiobook.utils.ImageHelper;
 
 
@@ -59,6 +59,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         for (int position = 0; position < data.size(); position++) {
             if (data.get(position).getId() == book.getId()) {
                 data.set(position, book);
+                imageCache.remove(book.getId());
                 notifyItemChanged(position);
                 singleThreadExecutor.execute(new Runnable() {
                     @Override
