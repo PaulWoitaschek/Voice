@@ -30,9 +30,9 @@ import java.util.ArrayList;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.CoverDownloader;
 import de.ph1b.audiobook.utils.DraggableBoxImageView;
+import de.ph1b.audiobook.utils.ImageHelper;
 
 public class EditBook extends DialogFragment implements View.OnClickListener {
 
@@ -59,7 +59,12 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
                 nameEditText.setText("");
                 break;
             case R.id.previous_cover:
-                coverPosition--;
+                if (addCoverAsync != null && !addCoverAsync.isCancelled()){
+                    addCoverAsync.cancel(true);
+                }
+
+                if (coverPosition > 0)
+                    coverPosition--;
                 coverImageView.setImageBitmap(covers.get(coverPosition));
                 coverImageView.setVisibility(View.VISIBLE);
                 coverReplacement.setVisibility(View.GONE);
@@ -88,7 +93,8 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
                 addCoverAsync.cancel(true);
             }
         }
-        addCoverAsync = new AddCoverAsync(searchString, googleCount);
+        addCoverAsync = new AddCoverAsync(searchString);
+        googleCount++;
         addCoverAsync.execute();
     }
 
@@ -212,50 +218,55 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
 
     private class AddCoverAsync extends AsyncTask<Void, Void, Bitmap> {
         private final String searchString;
-        private final int pageCounter;
         private final WeakReference<ProgressBar> progressBarWeakReference;
         private final WeakReference<ImageView> imageViewWeakReference;
-        private final WeakReference<ImageButton> imageButtonWeakReference;
+        private final WeakReference<ImageButton> previousCoverWeakReference;
+        private final WeakReference<ImageButton> nextCoverWeakReference;
 
 
-        public AddCoverAsync(String searchString, int pageCounter) {
+        public AddCoverAsync(String searchString) {
             this.searchString = searchString;
-            this.pageCounter = pageCounter;
             progressBarWeakReference = new WeakReference<ProgressBar>(coverReplacement);
             imageViewWeakReference = new WeakReference<ImageView>(coverImageView);
-            imageButtonWeakReference = new WeakReference<ImageButton>(previousCover);
+            previousCoverWeakReference = new WeakReference<ImageButton>(previousCover);
+            nextCoverWeakReference = new WeakReference<ImageButton>(nextCover);
         }
 
         @Override
         protected void onPreExecute() {
+            nextCover.setVisibility(View.INVISIBLE);
+            previousCover.setVisibility(View.VISIBLE);
             coverReplacement.setVisibility(View.VISIBLE);
             coverImageView.setVisibility(View.GONE);
         }
 
         @Override
         protected Bitmap doInBackground(Void... voids) {
-            return CoverDownloader.getCover(searchString, getActivity(), pageCounter);
+            return CoverDownloader.getCover(searchString, getActivity(), googleCount);
         }
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
-            googleCount++;
-            if (googleCount < 20) {
-                ProgressBar coverReplacement = progressBarWeakReference.get();
-                ImageView cover = imageViewWeakReference.get();
-                ImageButton previousCover = imageButtonWeakReference.get();
-                if (coverReplacement != null && cover != null && previousCover != null) {
-                    coverReplacement.setVisibility(View.GONE);
-                    cover.setVisibility(View.VISIBLE);
-                    if (bitmap != null) {
-                        covers.add(bitmap);
-                        coverPosition = covers.indexOf(bitmap);
-                        cover.setImageBitmap(bitmap);
-                        if (covers.size() > 1)
-                            previousCover.setVisibility(View.VISIBLE);
-                    } else {
-                        genCoverFromInternet(searchString);
-                    }
+            ProgressBar coverReplacement = progressBarWeakReference.get();
+            ImageView cover = imageViewWeakReference.get();
+            ImageButton previousCover = previousCoverWeakReference.get();
+            ImageButton nextCover = nextCoverWeakReference.get();
+
+            if (coverReplacement != null && cover != null && previousCover != null && nextCover != null) {
+                coverReplacement.setVisibility(View.GONE);
+                cover.setVisibility(View.VISIBLE);
+                nextCover.setVisibility(View.VISIBLE);
+                if (bitmap != null) {
+                    covers.add(bitmap);
+                    coverPosition = covers.indexOf(bitmap);
+                    cover.setImageBitmap(bitmap);
+                    if (covers.size() > 1)
+                        previousCover.setVisibility(View.VISIBLE);
+                } else {
+                    cover.setImageBitmap(covers.get(coverPosition));
+                    if (coverPosition == 0)
+                        previousCover.setVisibility(View.INVISIBLE);
+                    genCoverFromInternet(searchString);
                 }
             }
         }
