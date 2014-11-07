@@ -1,3 +1,19 @@
+# v1.4.0
+
+## Improvements
+* Now with material design
+* New grid-based design
+* Much much less memory needed on SD-Card
+* Now its possible choose the part of the cover you want to use. No more ugly cropping.
+* Now with Korean translation. Credits to Josh Graham
+* More control from notification
+
+## Fixes
+* Player should now always keep track of the right position
+* Keyboard should no longer pop up automatically when adding/editing a book
+* Should now properly resume on call ended
+* Many, many smaller fixes
+
 # v1.3.0
 
 ## Improvements
@@ -28,3 +44,4 @@
 * Fixes some bugs considering lockscreen
 * Fixes a layout bug with strange marked areas when deleting book
 * Additional checks for mounted folders to look for audiobooks
+
