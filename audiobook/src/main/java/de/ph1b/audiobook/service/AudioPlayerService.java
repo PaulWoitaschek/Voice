@@ -316,7 +316,7 @@ public class AudioPlayerService extends Service {
     public void onDestroy() {
         playerLock.lock();
         try {
-            registerAsPlaying(false);
+            registerAsPlaying(false, false);
             if (stateManager.getState() != PlayerStates.DEAD)
                 mediaPlayer.reset();
             mediaPlayer.release();
@@ -366,7 +366,7 @@ public class AudioPlayerService extends Service {
 
     private void initBook() {
         if (BuildConfig.DEBUG) Log.d(TAG, "Init book with id " + book.getId());
-        registerAsPlaying(false);
+        registerAsPlaying(false, false);
 
         mRemoteControlClient.setTransportControlFlags(
                 RemoteControlClient.FLAG_KEY_MEDIA_PAUSE |
@@ -472,7 +472,7 @@ public class AudioPlayerService extends Service {
                                 mediaPlayer.reset();
                             mediaPlayer.release();
                             stateManager.setState(PlayerStates.DEAD);
-                            registerAsPlaying(false);
+                            registerAsPlaying(false, false);
                         } finally {
                             playerLock.unlock();
                         }
@@ -538,7 +538,7 @@ public class AudioPlayerService extends Service {
                     if (stateManager.getState() != PlayerStates.DEAD)
                         mediaPlayer.reset();
                     mediaPlayer.release();
-                    registerAsPlaying(false);
+                    registerAsPlaying(false, false);
                     stateManager.setState(PlayerStates.DEAD);
                 } finally {
                     playerLock.unlock();
@@ -649,9 +649,6 @@ public class AudioPlayerService extends Service {
         }
     }
 
-    private void registerAsPlaying(boolean playing) {
-        registerAsPlaying(playing, false);
-    }
 
     private void registerAsPlaying(boolean playing, boolean keepAudioFocus) {
         if (playing) {
