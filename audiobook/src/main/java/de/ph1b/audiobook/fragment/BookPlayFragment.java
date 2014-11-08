@@ -176,10 +176,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
                 //checks if file exists
                 File testFile = new File(media.getPath());
                 if (!testFile.exists()) {
-                    String text = getString(R.string.file_not_found);
-                    Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_LONG);
-                    toast.show();
-                    startActivity(new Intent(getActivity(), BookChoose.class));
+                    noMediaFound();
                 }
 
                 //hides control elements if there is only one media to play
@@ -221,12 +218,25 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
         int bookId = i.getIntExtra(AudioPlayerService.GUI_BOOK_ID, -1);
         book = db.getBook(bookId);
         allMedia = db.getMediaFromBook(book.getId());
+        if (allMedia.size() == 0) {
+            noMediaFound();
+        } else {
+            //starting the service
+            if (BuildConfig.DEBUG) Log.d(TAG, "Starting service with id: " + book.getId());
+            Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
+            serviceIntent.putExtra(AudioPlayerService.GUI_BOOK_ID, book.getId());
+            getActivity().startService(serviceIntent);
+        }
+    }
 
-        //starting the service
-        if (BuildConfig.DEBUG) Log.d(TAG, "Starting service with id: " + book.getId());
-        Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
-        serviceIntent.putExtra(AudioPlayerService.GUI_BOOK_ID, book.getId());
-        getActivity().startService(serviceIntent);
+    private void noMediaFound() {
+        String text = getString(R.string.file_not_found);
+        Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_LONG);
+        toast.show();
+
+        Intent i = new Intent(getActivity(), BookChoose.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
     }
 
 
