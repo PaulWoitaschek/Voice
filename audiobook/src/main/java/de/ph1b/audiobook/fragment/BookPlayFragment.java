@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.fragment;
 
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -125,16 +126,19 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
     private final OnStateChangedListener onStateChangedListener = new OnStateChangedListener() {
         @Override
         public void onStateChanged(final PlayerStates state) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (state == PlayerStates.STARTED) {
-                        play_button.setImageResource(R.drawable.ic_pause_black_36dp);
-                    } else {
-                        play_button.setImageResource(R.drawable.ic_play_arrow_black_36dp);
+            Activity a = getActivity();
+            if (a != null) {
+                a.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (state == PlayerStates.STARTED) {
+                            play_button.setImageResource(R.drawable.ic_pause_black_36dp);
+                        } else {
+                            play_button.setImageResource(R.drawable.ic_play_arrow_black_36dp);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     };
 
@@ -142,13 +146,16 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
         @Override
         public void onTimeChanged(final int time) {
             if (!seekBarIsUpdating) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        playedTimeView.setText(formatTime(time));
-                        seek_bar.setProgress(time);
-                    }
-                });
+                Activity a = getActivity();
+                if (a != null) {
+                    a.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            playedTimeView.setText(formatTime(time));
+                            seek_bar.setProgress(time);
+                        }
+                    });
+                }
             }
         }
     };
