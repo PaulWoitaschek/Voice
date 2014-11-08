@@ -21,7 +21,6 @@ public class SleepDialog extends DialogFragment {
 
     private TextView timeView;
     private NumberPicker mPicker;
-    private SleepTimeCallback sleepTimeCallback;
 
     public interface SleepTimeCallback {
         public void onSleepTimeChosen(int sleepTime);
