@@ -4,9 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -15,13 +13,20 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.service.AudioPlayerService;
 
 
 public class SleepDialog extends DialogFragment {
 
+    public static final String TAG = "de.ph1b.audiobook.dialog.SleepDialog";
+
     private TextView timeView;
     private NumberPicker mPicker;
+    private SleepTimeCallback sleepTimeCallback;
+
+    public interface SleepTimeCallback {
+        public void onSleepTimeChosen(int sleepTime);
+    }
+
 
     @NonNull
     @Override
@@ -49,13 +54,8 @@ public class SleepDialog extends DialogFragment {
         builder.setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                Context context = getActivity().getApplicationContext();
-
-                Intent serviceIntent = new Intent(context, AudioPlayerService.class);
-                serviceIntent.setAction(AudioPlayerService.CONTROL_SLEEP);
-                serviceIntent.putExtra(AudioPlayerService.CONTROL_SLEEP, mPicker.getValue() * 60 * 1000);
-
-                context.startService(serviceIntent);
+                SleepTimeCallback fragment = (SleepTimeCallback) getTargetFragment();
+                fragment.onSleepTimeChosen(mPicker.getValue() * 60 * 1000);
             }
         });
         builder.setNegativeButton(R.string.dialog_cancel, null);

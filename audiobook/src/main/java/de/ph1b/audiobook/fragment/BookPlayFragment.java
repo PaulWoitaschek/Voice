@@ -53,7 +53,7 @@ import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.utils.ImageHelper;
 
-public class BookPlayFragment extends Fragment implements OnClickListener {
+public class BookPlayFragment extends Fragment implements OnClickListener, SleepDialog.SleepTimeCallback {
 
     private ImageButton play_button;
     private TextView playedTimeView;
@@ -350,6 +350,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
         inflater.inflate(R.menu.action_media_play, menu);
     }
 
+
     private void launchJumpToPositionDialog() {
         JumpToPosition jumpToPosition = new JumpToPosition();
         Bundle bundle = new Bundle();
@@ -370,7 +371,8 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
                 return true;
             case R.id.action_sleep:
                 SleepDialog sleepDialog = new SleepDialog();
-                sleepDialog.show(getFragmentManager(), "sleep_timer");
+                sleepDialog.setTargetFragment(BookPlayFragment.this, 42);
+                sleepDialog.show(getFragmentManager(), SleepDialog.TAG);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -399,5 +401,13 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
     public void onPause() {
         bcm.unregisterReceiver(updateGUIReceiver);
         super.onPause();
+    }
+
+    @Override
+    public void onSleepTimeChosen(int sleepTime) {
+        Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
+        serviceIntent.setAction(AudioPlayerService.CONTROL_SLEEP);
+        serviceIntent.putExtra(AudioPlayerService.CONTROL_SLEEP, sleepTime);
+        getActivity().startService(serviceIntent);
     }
 }
