@@ -326,7 +326,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
             switch (view.getId()) {
                 case R.id.play:
                     if (mService.stateManager.getState() == PlayerStates.STARTED)
-                        mService.pause();
+                        mService.pause(false);
                     else
                         mService.play();
                     break;

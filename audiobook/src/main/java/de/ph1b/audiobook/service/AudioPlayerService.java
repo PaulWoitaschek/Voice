@@ -165,7 +165,7 @@ public class AudioPlayerService extends Service {
             if (action.equals(CONTROL_PLAY_PAUSE)) {
                 if (stateManager.getState() == PlayerStates.STARTED) {
                     // no need to stop foreground, pause does that
-                    pause();
+                    pause(false);
                 } else {
                     play();
                     foreground(true);
@@ -190,7 +190,7 @@ public class AudioPlayerService extends Service {
             case KeyEvent.KEYCODE_MEDIA_PAUSE:
             case KeyEvent.KEYCODE_MEDIA_PLAY:
                 if (stateManager.getState() == PlayerStates.STARTED)
-                    pause();
+                    pause(false);
                 else
                     play();
                 break;
@@ -333,7 +333,7 @@ public class AudioPlayerService extends Service {
         public void onReceive(Context context, Intent intent) {
             if (stateManager.getState() == PlayerStates.STARTED)
                 pauseBecauseHeadset = true;
-            pause();
+            pause(false);
         }
     };
 
@@ -702,9 +702,6 @@ public class AudioPlayerService extends Service {
         }
     }
 
-    public void pause() {
-        pause(false);
-    }
 
     public void pause(Boolean keepAudioFocus) {
         registerAsPlaying(false, keepAudioFocus);
@@ -805,7 +802,7 @@ public class AudioPlayerService extends Service {
                 case AudioManager.AUDIOFOCUS_LOSS:
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "paused by audioFocus loss");
-                    pause();
+                    pause(false);
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                     if (BuildConfig.DEBUG)
