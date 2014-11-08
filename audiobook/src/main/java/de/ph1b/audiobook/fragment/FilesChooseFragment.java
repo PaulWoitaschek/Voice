@@ -207,8 +207,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         rv.add(Environment.getExternalStorageDirectory().getAbsolutePath());
         if (BuildConfig.DEBUG) {
             rv.add("/storage/sdcard0/Audiobooks");
-            rv.add("abc");
-            rv.add("/system");
+            rv.add("/mnt/shared");
         }
         rv.add("/storage/emulated/0");
         rv.add("/storage/sdcard1");
