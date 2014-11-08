@@ -3,6 +3,7 @@ package de.ph1b.audiobook.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.util.Log;
 
 import org.apache.http.conn.util.InetAddressUtils;
@@ -98,8 +99,8 @@ public class CoverDownloader {
                 BitmapFactory.decodeStream(inputStream, null, options);
 
                 // Calculate inSampleSize
-                int reqSize = ImageHelper.resolveImageType(ImageHelper.TYPE_COVER, c);
-                options.inSampleSize = ImageHelper.calculateInSampleSize(reqSize, reqSize, options);
+                Rect reqSize = ImageHelper.resolveImageType(ImageHelper.TYPE_COVER, c);
+                options.inSampleSize = ImageHelper.calculateInSampleSize(reqSize, options);
 
                 // Decode bitmap with inSampleSize set
                 options.inJustDecodeBounds = false;

@@ -2,11 +2,11 @@ package de.ph1b.audiobook.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -14,7 +14,6 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,54 +30,61 @@ public class ImageHelper {
 
 
     public static Bitmap genCapital(String bookName, Context c, int type) {
-        int pxSize;
+        Rect rect;
         switch (type) {
             case TYPE_COVER:
-                pxSize = resolveImageType(TYPE_COVER, c);
+                rect = resolveImageType(TYPE_COVER, c);
                 break;
             case TYPE_MEDIUM:
-                pxSize = resolveImageType(TYPE_MEDIUM, c);
+                rect = resolveImageType(TYPE_MEDIUM, c);
                 break;
             case TYPE_THUMB:
-                pxSize = resolveImageType(TYPE_THUMB, c);
+                rect = resolveImageType(TYPE_THUMB, c);
+                break;
+            case TYPE_NOTIFICATION:
+                rect = resolveImageType(TYPE_NOTIFICATION, c);
                 break;
             default:
                 return null;
         }
-        Bitmap bitmap = Bitmap.createBitmap(pxSize, pxSize, Bitmap.Config.RGB_565);
+        Bitmap bitmap = Bitmap.createBitmap(rect.width(), rect.height(), Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(bitmap);
         Paint textPaint = new Paint();
-        textPaint.setTextSize(2 * pxSize / 3);
+        textPaint.setTextSize(2 * rect.height() / 3);
         textPaint.setColor(c.getResources().getColor(android.R.color.white));
         textPaint.setAntiAlias(true);
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTypeface(Typeface.SANS_SERIF);
         Paint backgroundPaint = new Paint();
         backgroundPaint.setColor(c.getResources().getColor(R.color.colorAccent));
-        canvas.drawRect(0, 0, pxSize, pxSize, backgroundPaint);
+        canvas.drawRect(0, 0, rect.width(), rect.height(), backgroundPaint);
         int y = (int) ((canvas.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2));
-        canvas.drawText(bookName.substring(0, 1).toUpperCase(), pxSize / 2, y, textPaint);
+        canvas.drawText(bookName.substring(0, 1).toUpperCase(), rect.height() / 2, y, textPaint);
         return bitmap;
     }
 
-    public static int resolveImageType(int type, Context c) {
+    public static Rect resolveImageType(int type, Context c) {
         c.getResources().getDisplayMetrics();
         DisplayMetrics metrics = c.getResources().getDisplayMetrics();
-        int width = metrics.widthPixels;
-        int height = metrics.heightPixels;
-        int coverSize = width < height ? width : height;
+        int displayWidth = metrics.widthPixels;
+        int displayHeight = metrics.heightPixels;
+        int squareCover = displayWidth < displayHeight ? displayWidth : displayHeight;
 
         switch (type) {
             case TYPE_COVER:
-                return coverSize;
+                return new Rect(0, 0, squareCover, squareCover);
             case TYPE_MEDIUM:
                 float columns = BookChooseFragment.getAmountOfColumns(c);
-                return Math.round(coverSize / columns);
+                return new Rect(0, 0, Math.round(squareCover / columns), Math.round(squareCover / columns));
             case TYPE_THUMB:
-                float thumbSizeDp = c.getResources().getDimension(R.dimen.thumb_size);
-                return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, thumbSizeDp, Resources.getSystem().getDisplayMetrics()));
+                int thumbSizePx = c.getResources().getDimensionPixelSize(R.dimen.thumb_size);
+                return new Rect(0, 0, thumbSizePx, thumbSizePx);
+            case TYPE_NOTIFICATION:
+                int height = c.getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_height);
+                int width = c.getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_width);
+                return new Rect(0, 0, width, height);
             default:
-                return -1;
+                return null;
         }
     }
 
@@ -106,8 +112,8 @@ public class ImageHelper {
         String fileName = String.valueOf(System.currentTimeMillis()) + ".jpg";
 
         // saving cover
-        int coverSize = resolveImageType(TYPE_COVER, c);
-        Bitmap cover = Bitmap.createScaledBitmap(bitmap, coverSize, coverSize, true);
+        Rect coverSize = resolveImageType(TYPE_COVER, c);
+        Bitmap cover = Bitmap.createScaledBitmap(bitmap, coverSize.width(), coverSize.height(), true);
         File coverDir = new File(storagePlace + "cover");
         File coverFile = new File(coverDir, fileName);
         //noinspection ResultOfMethodCallIgnored
@@ -145,9 +151,10 @@ public class ImageHelper {
     public static final int TYPE_COVER = 0;
     public static final int TYPE_MEDIUM = 1;
     public static final int TYPE_THUMB = 2;
+    public static final int TYPE_NOTIFICATION = 3;
 
     public static Bitmap genBitmapFromFile(String pathName, Context c, int type) {
-        int reqSize = resolveImageType(type, c);
+        Rect reqSize = resolveImageType(type, c);
 
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
@@ -155,7 +162,7 @@ public class ImageHelper {
         BitmapFactory.decodeFile(pathName, options);
 
         // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(reqSize, reqSize, options);
+        options.inSampleSize = calculateInSampleSize(reqSize, options);
 
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
@@ -163,11 +170,13 @@ public class ImageHelper {
     }
 
 
-    public static int calculateInSampleSize(int reqWidth, int reqHeight, BitmapFactory.Options options) {
+    public static int calculateInSampleSize(Rect reqRect, BitmapFactory.Options options) {
 
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
+        int reqWidth = reqRect.width();
+        int reqHeight = reqRect.height();
 
         //setting reqWidth matching to desired 1:1 ratio and screen-size
         if (width < height) {

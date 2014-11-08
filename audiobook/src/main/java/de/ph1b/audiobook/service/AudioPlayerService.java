@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
@@ -256,16 +255,10 @@ public class AudioPlayerService extends Service {
         protected Bitmap doInBackground(Void... params) {
             String coverPath = book.getCover();
 
-            Resources res = getApplicationContext().getResources();
-            int height = (int) res.getDimension(android.R.dimen.notification_large_icon_height);
-            int width = (int) res.getDimension(android.R.dimen.notification_large_icon_width);
-            //    int size = Math.min(width, height);
-
             if (coverPath == null || coverPath.equals("") || !new File(coverPath).exists() || new File(coverPath).isDirectory()) {
-                return ImageHelper.genCapital(book.getName(), getApplicationContext(), ImageHelper.TYPE_THUMB);
+                return ImageHelper.genCapital(book.getName(), getApplicationContext(), ImageHelper.TYPE_NOTIFICATION);
             } else {
-                Bitmap thumb = BitmapFactory.decodeFile(coverPath);
-                return Bitmap.createScaledBitmap(thumb, width, height, false);
+                return ImageHelper.genBitmapFromFile(coverPath, getApplicationContext(), ImageHelper.TYPE_NOTIFICATION);
             }
         }
 
@@ -308,7 +301,6 @@ public class AudioPlayerService extends Service {
                 builder.setContentInfo(String.valueOf(pos + 1) + "/" + String.valueOf(allMedia.size()));
             }
             builder.setPriority(NotificationCompat.PRIORITY_HIGH);
-
 
             builder.addAction(R.drawable.ic_fast_rewind_grey600_36dp, null, rewindPI);
             builder.addAction(R.drawable.ic_pause_grey600_36dp, null, pausePI);
