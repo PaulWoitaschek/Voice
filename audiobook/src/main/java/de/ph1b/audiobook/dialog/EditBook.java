@@ -270,7 +270,6 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
                         if (coverPosition == 0)
                             previousCover.setVisibility(View.INVISIBLE);
                     }
-                    genCoverFromInternet(searchString);
                 }
             }
         }

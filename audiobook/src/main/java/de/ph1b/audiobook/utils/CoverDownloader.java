@@ -44,6 +44,11 @@ public class CoverDownloader {
      */
     public static Bitmap getCover(String searchText, Context c, int number) {
 
+        if (number > 64) {
+            Log.d(TAG, "Number exceeded results: " + number);
+            return null;
+        }
+
         if (BuildConfig.DEBUG)
             Log.d(TAG, "Loading Cover with " + searchText + " and #" + String.valueOf(number));
 
@@ -63,21 +68,21 @@ public class CoverDownloader {
                     Log.d(TAG, "Will look for a new eightSet because bitmapUrls is too small");
                 ArrayList<URL> newSetOfURL = new ArrayList<URL>();
                 newSetOfURL.addAll(bitmapUrls);
-                ArrayList<URL> eightSetOfURL = genEightSetOfURL(searchText, bitmapUrls.size() + 1);
-                if (eightSetOfURL == null)
+                ArrayList<URL> newUrls = genNewURLs(searchText, bitmapUrls.size() + 1);
+                if (newUrls == null)
                     return null;
-                newSetOfURL.addAll(eightSetOfURL);
+                newSetOfURL.addAll(newUrls);
                 searchStringMap.put(searchText, newSetOfURL);
                 searchURL = newSetOfURL.get(0);
                 if (BuildConfig.DEBUG) Log.d(TAG, "Got one: " + searchURL);
             }
         } else {
             if (BuildConfig.DEBUG) Log.d(TAG, "Didnt find bitmapUrls");
-            ArrayList<URL> eightSetOfURL = genEightSetOfURL(searchText, number);
-            if (eightSetOfURL == null)
+            ArrayList<URL> newUrls = genNewURLs(searchText, number);
+            if (newUrls == null)
                 return null;
-            searchStringMap.put(searchText, eightSetOfURL);
-            searchURL = eightSetOfURL.get(0);
+            searchStringMap.put(searchText, newUrls);
+            searchURL = newUrls.get(0);
             if (BuildConfig.DEBUG) Log.d(TAG, "But made a new one, returning:" + searchURL);
         }
 
@@ -137,7 +142,15 @@ public class CoverDownloader {
         return "";
     }
 
-    private static ArrayList<URL> genEightSetOfURL(String searchText, int startPage) {
+
+    /**
+     * Gens a new set of urls pointing to covers.
+     *
+     * @param searchText The name of the audiobook
+     * @param startPage  the (google-) page to begin with
+     * @return the new URLs, or <code>null</code> if none were found
+     */
+    private static ArrayList<URL> genNewURLs(String searchText, int startPage) {
         searchText = searchText + " audiobook cover";
         int readTimeOut = 5000;
         int connectTimeOut = 3000;
@@ -173,9 +186,8 @@ public class CoverDownloader {
             }
         } catch (Exception e) {
             if (BuildConfig.DEBUG) Log.d(TAG, e.toString());
-            return null;
         }
-        return eightSetOfURL;
+        return eightSetOfURL.size() > 0 ? eightSetOfURL : null;
     }
 
 }
