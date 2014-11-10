@@ -264,21 +264,19 @@ public class AudioPlayerService extends Service {
 
         @Override
         protected void onPostExecute(Bitmap result) {
-            super.onPostExecute(result);
-            Context c = getApplicationContext();
+            Context c = AudioPlayerService.this;
 
-
-            Intent rewindIntent = new Intent(AudioPlayerService.this, AudioPlayerService.class);
+            Intent rewindIntent = new Intent(c, AudioPlayerService.class);
             rewindIntent.putExtra(KEYCODE, KeyEvent.KEYCODE_MEDIA_REWIND);
-            PendingIntent rewindPI = PendingIntent.getService(AudioPlayerService.this, 0, rewindIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent rewindPI = PendingIntent.getService(c, 0, rewindIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            Intent pauseIntent = new Intent(AudioPlayerService.this, AudioPlayerService.class);
+            Intent pauseIntent = new Intent(c, AudioPlayerService.class);
             pauseIntent.putExtra(KEYCODE, KeyEvent.KEYCODE_MEDIA_PAUSE);
-            PendingIntent pausePI = PendingIntent.getService(AudioPlayerService.this, 1, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pausePI = PendingIntent.getService(c, 1, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            Intent fforwardIntent = new Intent(AudioPlayerService.this, AudioPlayerService.class);
+            Intent fforwardIntent = new Intent(c, AudioPlayerService.class);
             fforwardIntent.putExtra(KEYCODE, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD);
-            PendingIntent fforwardPI = PendingIntent.getService(AudioPlayerService.this, 2, fforwardIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent fforwardPI = PendingIntent.getService(c, 2, fforwardIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             Intent bookPlayIntent = new Intent(c, BookPlay.class);
             bookPlayIntent.putExtra(GUI_BOOK_ID, book.getId());
@@ -308,7 +306,8 @@ public class AudioPlayerService extends Service {
 
             builder.setShowWhen(false);
             Notification notification = builder.build();
-            startForeground(NOTIFICATION_ID, notification);
+            if (notification != null)
+                startForeground(NOTIFICATION_ID, notification);
         }
     }
 
