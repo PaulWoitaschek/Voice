@@ -1,3 +1,10 @@
+# v1.4.1
+
+## Fixes
+* Checks for defect audiofiles
+* Fixes crash by notification
+* Fixed crash when there were no covers found from the internet
+
 # v1.4.0
 
 ## Improvements
