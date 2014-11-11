@@ -19,6 +19,7 @@ import android.media.RemoteControlClient;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -266,17 +267,6 @@ public class AudioPlayerService extends Service {
         protected void onPostExecute(Bitmap result) {
             Context c = AudioPlayerService.this;
 
-            Intent rewindIntent = new Intent(c, AudioPlayerService.class);
-            rewindIntent.putExtra(KEYCODE, KeyEvent.KEYCODE_MEDIA_REWIND);
-            PendingIntent rewindPI = PendingIntent.getService(c, 0, rewindIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            Intent pauseIntent = new Intent(c, AudioPlayerService.class);
-            pauseIntent.putExtra(KEYCODE, KeyEvent.KEYCODE_MEDIA_PAUSE);
-            PendingIntent pausePI = PendingIntent.getService(c, 1, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            Intent fforwardIntent = new Intent(c, AudioPlayerService.class);
-            fforwardIntent.putExtra(KEYCODE, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD);
-            PendingIntent fforwardPI = PendingIntent.getService(c, 2, fforwardIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             Intent bookPlayIntent = new Intent(c, BookPlay.class);
             bookPlayIntent.putExtra(GUI_BOOK_ID, book.getId());
@@ -284,7 +274,7 @@ public class AudioPlayerService extends Service {
                     .addNextIntentWithParentStack(bookPlayIntent)
                     .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(c);
+            Notification.Builder builder = new Notification.Builder(c);
             builder.setContentTitle(book.getName())
                     .setContentText(media.getName())
                     .setLargeIcon(result)
@@ -294,20 +284,40 @@ public class AudioPlayerService extends Service {
                     .setAutoCancel(true);
 
             int pos = allMedia.indexOf(media);
-
             if (allMedia.size() > 1 && pos != -1) {
                 builder.setContentInfo(String.valueOf(pos + 1) + "/" + String.valueOf(allMedia.size()));
             }
-            builder.setPriority(NotificationCompat.PRIORITY_HIGH);
 
-            builder.addAction(R.drawable.ic_fast_rewind_grey600_36dp, null, rewindPI);
-            builder.addAction(R.drawable.ic_pause_grey600_36dp, null, pausePI);
-            builder.addAction(R.drawable.ic_fast_forward_grey600_36dp, null, fforwardPI);
+            if (Build.VERSION.SDK_INT >= 16) {
+                Intent rewindIntent = new Intent(c, AudioPlayerService.class);
+                rewindIntent.putExtra(KEYCODE, KeyEvent.KEYCODE_MEDIA_REWIND);
+                PendingIntent rewindPI = PendingIntent.getService(c, 0, rewindIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            builder.setShowWhen(false);
-            Notification notification = builder.build();
-            if (notification != null)
-                startForeground(NOTIFICATION_ID, notification);
+                Intent pauseIntent = new Intent(c, AudioPlayerService.class);
+                pauseIntent.putExtra(KEYCODE, KeyEvent.KEYCODE_MEDIA_PAUSE);
+                PendingIntent pausePI = PendingIntent.getService(c, 1, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                Intent fastForwardIntent = new Intent(c, AudioPlayerService.class);
+                fastForwardIntent.putExtra(KEYCODE, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD);
+                PendingIntent fastForwardPI = PendingIntent.getService(c, 2, fastForwardIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                builder.addAction(R.drawable.ic_fast_rewind_grey600_36dp, null, rewindPI);
+                builder.addAction(R.drawable.ic_pause_grey600_36dp, null, pausePI);
+                builder.addAction(R.drawable.ic_fast_forward_grey600_36dp, null, fastForwardPI);
+
+                builder.setPriority(NotificationCompat.PRIORITY_HIGH);
+            }
+
+            if (Build.VERSION.SDK_INT >= 17) {
+                builder.setShowWhen(false);
+            }
+
+            //noinspection deprecation
+            Notification notification = builder.getNotification();
+            //noinspection deprecation
+            notification.flags |= Notification.FLAG_HIGH_PRIORITY;
+
+            startForeground(NOTIFICATION_ID, notification);
         }
     }
 
