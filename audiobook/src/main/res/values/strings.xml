@@ -33,12 +33,14 @@
     <string name="minutes">minutes</string>
     <string name="seconds">Seconds</string>
 
-    <string name="file_not_found">It seems that the audiobook cannot be found on storage. Please re-add the audiobook.</string>
+    <string name="file_not_found">It seems that the audiobook cannot be found on storage. Please
+        re-add the audiobook.</string>
     <string name="media_view_how_to">Press + to add a book</string>
     <string name="current_cover">Shows cover of currently playing book.</string>
     <string name="current_playing">Shows playing state.</string>
     <string name="pref_cover_on_internet">Use Mobile Network</string>
-    <string name="pref_cover_on_internet_hint">Uses mobile network to find cover for the current audiobook.</string>
+    <string name="pref_cover_on_internet_hint">Uses mobile network to find cover for the current
+        audiobook.</string>
     <string name="content_previous_cover">Chooses previous cover</string>
     <string name="content_next_cover">Chooses next cover</string>
     <string name="content_cover">Shows cover to choose</string>
@@ -51,8 +53,15 @@
     <string tools:ignore="MissingTranslation" name="book_title_delete">Delete book-title</string>
     <string tools:ignore="MissingTranslation" name="popup_edit_book">Edit</string>
     <string tools:ignore="MissingTranslation" name="popup_delete_book">Delete</string>
-    <string tools:ignore="MissingTranslation" name="content_file_or_folder">Indicates whether its a file or a folder</string>
+    <string tools:ignore="MissingTranslation" name="content_file_or_folder">Indicates whether its a
+        file or a folder</string>
     <string tools:ignore="MissingTranslation" name="error_in_file_title">Error in file</string>
-    <string tools:ignore="MissingTranslation" name="error_in_file_description">The following files seem to be corrupted. Add book without corrupted files?</string>
-    <string tools:ignore="MissingTranslation" name="error_in_file_all_defect">All files seem to be corrupt</string>
+    <string tools:ignore="MissingTranslation" name="error_in_file_description">The following files
+        seem to be corrupted. Add book without corrupted files?</string>
+    <string tools:ignore="MissingTranslation" name="error_in_file_all_defect">All files seem to be
+        corrupt</string>
+    <string tools:ignore="MissingTranslation" name="folder_choose_title">Choose a folder</string>
+    <string tools:ignore="MissingTranslation" name="folder_choose_content">Choose a folder, where
+        your audiobooks are stored.</string>
+
 </resources>
