@@ -454,10 +454,10 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     private class StartServiceAsync extends AsyncTask<Void, Void, Void> {
         private final Context c;
 
-              /**
+        /**
          * Default constructor.
          *
-         * @param c    Pass the Context
+         * @param c Pass the Context
          */
         public StartServiceAsync(Context c) {
             this.c = c;

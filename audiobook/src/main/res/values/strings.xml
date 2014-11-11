@@ -55,4 +55,7 @@
     <string tools:ignore="MissingTranslation" name="error_in_file_title">Error in file</string>
     <string tools:ignore="MissingTranslation" name="error_in_file_description">The following files seem to be corrupted. Add book without corrupted files?</string>
     <string tools:ignore="MissingTranslation" name="error_in_file_all_defect">All files seem to be corrupt</string>
+
+    <string tools:ignore="MissingTranslation" name="folder_choose_title">Choose Folder</string>
+    <string tools:ignore="MissingTranslation" name="folder_choose_content">Choose your audiobook folder</string>
 </resources>
