@@ -1,3 +1,8 @@
+# v1.4.2
+
+## Fixes
+* Hotfix: Crash on Notification
+
 # v1.4.1
 
 ## Fixes
