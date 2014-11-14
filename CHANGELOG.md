@@ -1,10 +1,12 @@
 # v1.4.2
 
+## Additions
+* Added Lollipop controls
+* Updated notification for lollipop
+
 ## Fixes
 * Finally fixed crash on notification
 * Reworked AudioPlayerService
-* Added Lollipop controls
-* Updated notification for lollipop
 
 # v1.4.1.1
 
