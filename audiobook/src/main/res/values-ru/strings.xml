@@ -2,11 +2,9 @@
 <resources>
     <string name="action_add">Добавить каталог аудиокниги</string>
     <string name="cover">Обложка</string>
-    <string name="play">Воспроизвести / Пауза</string>
+    <string name="play_pause">Воспроизвести / Пауза</string>
 
     <string name="action_settings">Настройки</string>
-    <string name="back">Назад</string>
-    <string name="forward">Вперед</string>
     <string name="action_add_badge">Добавить каталог аудиокниги</string>
     <string name="book_add">Добавить аудиокнигу</string>
     <string name="book_add_empty_title">Добавить название</string>
@@ -43,7 +41,6 @@
 
     <!-- TODO Missing translations:
     <string name="edit_book_title">Edit book</string>
-    <string name="book_title_delete">Delete book-title</string>
     <string name="popup_edit_book">Edit</string>
     <string name="popup_delete_book">Delete</string>
     <string name="content_file_or_folder">Indicates whether its a file or a folder</string>

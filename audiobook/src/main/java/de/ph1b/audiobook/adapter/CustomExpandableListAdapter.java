@@ -17,7 +17,7 @@ import de.ph1b.audiobook.R;
 public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 
 
-    private Context c;
+    private final Context c;
 
 
     private ArrayList<File> data = new ArrayList<File>();

@@ -8,11 +8,9 @@
 
     <string name="action_add">Add Book</string>
     <string name="cover">Cover</string>
-    <string name="play">Play / Pause</string>
+    <string name="play_pause">Play / Pause</string>
 
     <string name="action_settings">Preferences</string>
-    <string name="back">Back</string>
-    <string name="forward">Forward</string>
     <string name="action_add_badge">Add Media</string>
     <string name="book_add">Add book</string>
     <string name="book_add_empty_title">Add a title</string>
@@ -50,7 +48,6 @@
     <string name="book_add_progress_message">Please wait while the book is being added.</string>
 
     <string tools:ignore="MissingTranslation" name="edit_book_title">Edit book</string>
-    <string tools:ignore="MissingTranslation" name="book_title_delete">Delete book-title</string>
     <string tools:ignore="MissingTranslation" name="popup_edit_book">Edit</string>
     <string tools:ignore="MissingTranslation" name="popup_delete_book">Delete</string>
     <string tools:ignore="MissingTranslation" name="content_file_or_folder">Indicates whether its a
@@ -63,5 +60,8 @@
     <string tools:ignore="MissingTranslation" name="folder_choose_title">Choose a folder</string>
     <string tools:ignore="MissingTranslation" name="folder_choose_content">Choose a folder, where
         your audiobooks are stored.</string>
+    <string tools:ignore="MissingTranslation" name="pause">Pause</string>
+    <string tools:igonre="MissingTranslation" name="rewind">Rewind</string>
+    <string tools:igonre="MissingTranslation" name="fast_forward">Fast forward</string>
 
 </resources>

@@ -57,7 +57,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
 
     private ImageButton play_button;
     private TextView playedTimeView;
-    private SeekBar seek_bar;
+    private SeekBar seekBar;
     private Spinner bookSpinner;
     private TextView maxTimeView;
     private int position;
@@ -152,7 +152,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
                         @Override
                         public void run() {
                             playedTimeView.setText(formatTime(time));
-                            seek_bar.setProgress(time);
+                            seekBar.setProgress(time);
                         }
                     });
                 }
@@ -168,7 +168,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
             if (action.equals(AudioPlayerService.GUI)) {
                 if (mBound) {
                     //setting up time related stuff
-                    seek_bar.setProgress(mService.stateManager.getTime());
+                    seekBar.setProgress(mService.stateManager.getTime());
                     playedTimeView.setText(formatTime(mService.stateManager.getTime()));
                 }
 
@@ -192,7 +192,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
                 maxTimeView.setText(formatTime(duration));
 
                 //sets seekBar to current position and correct length
-                seek_bar.setMax(duration);
+                seekBar.setMax(duration);
             }
         }
     };
@@ -243,15 +243,13 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_book_play, container, false);
-
         initGUI(v);
         return v;
     }
 
     private void initGUI(View v) {
-
         //init buttons
-        seek_bar = (SeekBar) v.findViewById(R.id.seekBar);
+        seekBar = (SeekBar) v.findViewById(R.id.seekBar);
         play_button = (ImageButton) v.findViewById(R.id.play);
         ImageButton rewind_button = (ImageButton) v.findViewById(R.id.rewind);
         ImageButton fast_forward_button = (ImageButton) v.findViewById(R.id.fast_forward);
@@ -260,15 +258,26 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
         maxTimeView = (TextView) v.findViewById(R.id.maxTime);
         bookSpinner = (Spinner) v.findViewById(R.id.book_spinner);
 
-
         //setup buttons
         rewind_button.setOnClickListener(this);
         fast_forward_button.setOnClickListener(this);
         play_button.setOnClickListener(this);
         playedTimeView.setOnClickListener(this);
 
-        seek_bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        int mediaPosition = book.getCurrentMediaPosition();
+        int mediaDuration = 0;
+        for (MediaDetail m : allMedia) {
+            if (m.getId() == book.getCurrentMediaId()) {
+                mediaDuration = m.getDuration();
+                break;
+            }
+        }
+        seekBar.setProgress(book.getCurrentMediaPosition());
+        seekBar.setMax(mediaDuration);
+        maxTimeView.setText(formatTime(mediaDuration));
+        playedTimeView.setText(formatTime(mediaPosition));
 
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 position = progress;
@@ -290,7 +299,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
             }
         });
 
-        // cover
+        //cover
         String imagePath = book.getCover();
         if (imagePath == null || imagePath.equals("") || !new File(imagePath).exists() || new File(imagePath).isDirectory()) {
             Bitmap cover = ImageHelper.genCapital(book.getName(), getActivity(), ImageHelper.TYPE_COVER);
@@ -335,9 +344,10 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
         if (mBound) {
             switch (view.getId()) {
                 case R.id.play:
-                    if (mService.stateManager.getState() == PlayerStates.STARTED)
-                        mService.pause(false);
-                    else
+                    if (mService.stateManager.getState() == PlayerStates.STARTED) {
+                        mService.pause();
+                        mService.stopForeground(true);
+                    } else
                         mService.play();
                     break;
                 case R.id.rewind:

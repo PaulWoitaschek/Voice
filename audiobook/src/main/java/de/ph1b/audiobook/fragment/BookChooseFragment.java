@@ -380,6 +380,8 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     public void onResume() {
         super.onResume();
 
+        new StartServiceAsync(getActivity(), false);
+
         if (adapt.getItemCount() == 0) {
             String text = getString(R.string.media_view_how_to);
             Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_LONG);
@@ -417,7 +419,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.current_playing:
-                new StartServiceAsync(getActivity().getApplicationContext()).execute();
+                new StartServiceAsync(getActivity(), true).execute();
                 break;
             default:
                 break;
@@ -453,14 +455,17 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
      */
     private class StartServiceAsync extends AsyncTask<Void, Void, Void> {
         private final Context c;
+        private final boolean shouldPlay;
 
-              /**
+        /**
          * Default constructor.
          *
-         * @param c    Pass the Context
+         * @param c          Pass the Context
+         * @param shouldPlay If the service should immediately start playing
          */
-        public StartServiceAsync(Context c) {
+        public StartServiceAsync(Context c, boolean shouldPlay) {
             this.c = c;
+            this.shouldPlay = shouldPlay;
         }
 
         @Override
@@ -472,7 +477,8 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                 if (b.getId() == currentBookId) {
                     Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
                     serviceIntent.putExtra(AudioPlayerService.GUI_BOOK_ID, b.getId());
-                    serviceIntent.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
+                    if (shouldPlay)
+                        serviceIntent.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
                     c.startService(serviceIntent);
 
                     Intent intent = new Intent(getActivity(), AudioPlayerService.class);

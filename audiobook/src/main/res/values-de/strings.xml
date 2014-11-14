@@ -2,11 +2,9 @@
 <resources>
     <string name="action_add">Buch hinzufügen</string>
     <string name="cover">Cover</string>
-    <string name="play">Play / Pause</string>
+    <string name="play_pause">Play / Pause</string>
 
     <string name="action_settings">Einstellungen</string>
-    <string name="back">Zurück</string>
-    <string name="forward">Nächster Song</string>
     <string name="action_add_badge">Medien hinzufügen</string>
     <string name="book_add">Buch hinzufügen</string>
     <string name="book_add_empty_title">Geben Sie einen Titel ein</string>
@@ -42,11 +40,13 @@
     <string name="book_add_progress_message">Bitte einen Moment warten.</string>
 
     <string name="edit_book_title">Buch bearbeiten</string>
-    <string name="book_title_delete">Buchtitel löschen</string>
     <string name="popup_delete_book">Löschen</string>
     <string name="popup_edit_book">Bearbeiten</string>
     <string name="content_file_or_folder">Zeit an, ob es sich um eine Datei oder einen Ordner handelt</string>
     <string name="error_in_file_title">Dateifehler</string>
     <string name="error_in_file_description">Die folgenden Dateien scheinen defekt zu sein. Buch ohne diese Dateien hinzufügen?</string>
     <string name="error_in_file_all_defect">Alle Dateien sind defekt.</string>
+    <string name="pause">Pause</string>
+    <string name="rewind">Zurückspulen</string>
+    <string name="fast_forward">Vorspulen</string>
 </resources>
