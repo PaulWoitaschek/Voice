@@ -55,9 +55,6 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.book_name_remove:
-                nameEditText.setText("");
-                break;
             case R.id.previous_cover:
                 if (addCoverAsync != null && !addCoverAsync.isCancelled()) {
                     addCoverAsync.cancel(true);
@@ -123,7 +120,6 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
         //init items
         ViewGroup coverLayout = (ViewGroup) v.findViewById(R.id.cover_layout);
         nameEditText = (EditText) v.findViewById(R.id.book_name);
-        ImageButton removeBookName = (ImageButton) v.findViewById(R.id.book_name_remove);
         coverImageView = (DraggableBoxImageView) v.findViewById(R.id.cover);
         coverReplacement = (ProgressBar) v.findViewById(R.id.cover_replacement);
         previousCover = (ImageButton) v.findViewById(R.id.previous_cover);
@@ -131,7 +127,6 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
         final TextView emptyTitleText = (TextView) v.findViewById(R.id.empty_title);
 
         //init listeners
-        removeBookName.setOnClickListener(this);
         nextCover.setOnClickListener(this);
         previousCover.setOnClickListener(this);
 
