@@ -3,7 +3,7 @@
     <color name="transparent_widget_background">#80ffffff</color>
     <color name="dark_red">#ffcc0000</color>
 
-    <color name="primary">#ff738ffe</color>
-    <color name="primaryDark">#ff455ede</color>
-    <color name="colorAccent">#ffff9800</color>
+    <color name="primary">#ff7986cb</color>
+    <color name="primaryDark">#ff5c6bc0</color>
+    <color name="colorAccent">#ff009688</color>
 </resources>
