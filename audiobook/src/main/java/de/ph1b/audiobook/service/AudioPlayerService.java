@@ -483,13 +483,7 @@ public class AudioPlayerService extends Service {
             if (position == media.getDuration())
                 position = 0;
 
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
-
-            //because of api change use ring instead of music for lollipop+
-            if (Build.VERSION.SDK_INT < 21)
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            else
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
             try {
                 mediaPlayer.setDataSource(this, Uri.parse(path));
