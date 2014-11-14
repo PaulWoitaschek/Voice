@@ -61,7 +61,7 @@
     <string tools:ignore="MissingTranslation" name="folder_choose_content">Choose a folder, where
         your audiobooks are stored.</string>
     <string tools:ignore="MissingTranslation" name="pause">Pause</string>
-    <string tools:igonre="MissingTranslation" name="rewind">Rewind</string>
-    <string tools:igonre="MissingTranslation" name="fast_forward">Fast forward</string>
+    <string tools:ignore="MissingTranslation" name="rewind">Rewind</string>
+    <string tools:ignore="MissingTranslation" name="fast_forward">Fast forward</string>
 
 </resources>
