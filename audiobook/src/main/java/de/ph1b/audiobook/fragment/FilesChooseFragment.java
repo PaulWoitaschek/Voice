@@ -317,7 +317,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
         @Override
         protected Void doInBackground(Void... params) {
-            Collections.sort(files, new NaturalOrderComparator());
 
             //title
             File firstFile = files.get(0);
@@ -534,18 +533,36 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         return fileName.endsWith(".jpg") || fileName.endsWith(".png");
     }
 
+
+    /**
+     * Adds files recursively. First takes all files and adds them sorted to the return list. Then
+     * sorts the folders, and then adds their content sorted to the return list.
+     *
+     * @param dir The dirs and files to be added
+     * @return All the files containing in a natural sorted order.
+     */
     private ArrayList<File> addFilesRecursive(ArrayList<File> dir) {
         ArrayList<File> returnList = new ArrayList<File>();
+
+        ArrayList<File> fileList = new ArrayList<File>();
+        ArrayList<File> dirList = new ArrayList<File>();
+
         for (File f : dir) {
             if (f.exists() && f.isFile())
-                returnList.add(f);
+                fileList.add(f);
             else if (f.exists() && f.isDirectory()) {
-                File[] content = f.listFiles();
-                if (content.length > 0) {
-                    ArrayList<File> tempReturn = addFilesRecursive(new ArrayList<File>(Arrays.asList(content)));
-                    Collections.sort(tempReturn, new NaturalOrderComparator());
-                    returnList.addAll(tempReturn);
-                }
+                dirList.add(f);
+            }
+        }
+        Collections.sort(fileList, new NaturalOrderComparator());
+        returnList.addAll(fileList);
+
+        Collections.sort(dirList, new NaturalOrderComparator());
+        for (File f : dirList) {
+            ArrayList<File> content = new ArrayList<File>(Arrays.asList(f.listFiles()));
+            if (content.size() > 0) {
+                ArrayList<File> tempReturn = addFilesRecursive(content);
+                returnList.addAll(tempReturn);
             }
         }
         return returnList;
