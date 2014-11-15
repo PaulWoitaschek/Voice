@@ -43,12 +43,4 @@
     <string name="edit_book_title">제목 수정</string>
     <string name="popup_delete_book">삭제</string>
     <string name="popup_edit_book">수정</string>
-
-    <!-- TODO Missing translations:
-    <string name="content_file_or_folder">Indicates whether its a file or a folder</string>
-    <string name="error_in_file_title">Error in file</string>
-    <string name="error_in_file_description">The following files seem to be corrupted. The following files seem to be corrupted. Add book without corrupted files?</string>
-    <string name="error_in_file_all_defect">All files seem to be corrupt</string>
-    <string name="rewind"></string>
-    -->
 </resources>

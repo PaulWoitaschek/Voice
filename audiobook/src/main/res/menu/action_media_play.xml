@@ -5,6 +5,14 @@
     tools:context=".activity.MediaPlay">
 
     <item
+        android:id="@+id/time_lapse"
+        android:title="@string/playback_speed"
+        android:orderInCategory="70"
+        android:icon="@drawable/ic_timelapse_white_24dp"
+        app:showAsAction="ifRoom"
+        android:visible="false" />
+
+    <item
         android:id="@+id/action_sleep"
         android:title="@string/action_sleep"
         android:orderInCategory="80"

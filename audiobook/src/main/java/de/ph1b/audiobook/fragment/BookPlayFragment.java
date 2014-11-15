@@ -46,6 +46,7 @@ import de.ph1b.audiobook.content.BookDetail;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.content.MediaDetail;
 import de.ph1b.audiobook.dialog.JumpToPosition;
+import de.ph1b.audiobook.dialog.SetPlaybackSpeedDialog;
 import de.ph1b.audiobook.dialog.SleepDialog;
 import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.interfaces.OnTimeChangedListener;
@@ -53,7 +54,7 @@ import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.utils.ImageHelper;
 
-public class BookPlayFragment extends Fragment implements OnClickListener, SleepDialog.SleepTimeCallback {
+public class BookPlayFragment extends Fragment implements OnClickListener, SleepDialog.SleepTimeCallback, SetPlaybackSpeedDialog.PlaybackSpeedChanged {
 
     private ImageButton play_button;
     private TextView playedTimeView;
@@ -66,7 +67,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
     private LocalBroadcastManager bcm;
 
     private int oldPosition = -1;
-    private static final String TAG = "de.ph1b.audiobooks.fragment.MediaPlayFragment";
+    private static final String TAG = "de.ph1b.audiobooks.fragment.BookPlayFragment";
 
     private boolean seekBarIsUpdating = false;
     private BookDetail book;
@@ -92,6 +93,9 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
             }
             mService.stateManager.addStateChangeListener(onStateChangedListener);
             mService.stateManager.addTimeChangedListener(onTimeChangedListener);
+
+            //invalidateOptionsMenu to have the variable speed button shown or not.
+            getActivity().invalidateOptionsMenu();
 
             mService.updateGUI();
             mBound = true;
@@ -332,6 +336,17 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
         });
     }
 
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.time_lapse);
+        item.setVisible(false);
+        if (mBound) {
+            if (mService.variablePlaybackSpeedIsAvailable())
+                item.setVisible(true);
+        }
+        super.onPrepareOptionsMenu(menu);
+    }
+
     private String formatTime(int ms) {
         String h = String.valueOf(TimeUnit.MILLISECONDS.toHours(ms));
         String m = String.format("%02d", (TimeUnit.MILLISECONDS.toMinutes(ms) % 60));
@@ -394,6 +409,14 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
                 sleepDialog.setTargetFragment(BookPlayFragment.this, 42);
                 sleepDialog.show(getFragmentManager(), SleepDialog.TAG);
                 return true;
+            case R.id.time_lapse:
+                SetPlaybackSpeedDialog dialog = new SetPlaybackSpeedDialog();
+                dialog.setTargetFragment(this, 42);
+                Bundle args = new Bundle();
+                args.putFloat(SetPlaybackSpeedDialog.DEFAULT_AMOUNT, mService.getPlaybackSpeed());
+                dialog.setArguments(args);
+                dialog.show(getFragmentManager(), TAG);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -429,5 +452,12 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
         serviceIntent.setAction(AudioPlayerService.CONTROL_SLEEP);
         serviceIntent.putExtra(AudioPlayerService.CONTROL_SLEEP, sleepTime);
         getActivity().startService(serviceIntent);
+    }
+
+    @Override
+    public void onSpeedChanged(float speed) {
+        if (mBound) {
+            mService.setPlaybackSpeed(speed);
+        }
     }
 }

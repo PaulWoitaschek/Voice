@@ -14,7 +14,6 @@ import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaMetadata;
 import android.media.MediaMetadataRetriever;
-import android.media.MediaPlayer;
 import android.media.RemoteControlClient;
 import android.media.session.MediaSession;
 import android.net.Uri;
@@ -30,6 +29,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.RemoteViews;
+
+import com.aocate.media.MediaPlayer;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,13 +56,10 @@ public class AudioPlayerService extends Service {
 
     private static final int NOTIFICATION_ID = 1;
 
-    //private int bookId;
+    private float playbackSpeed = 1;
 
     private DataBaseHelper db;
     private LocalBroadcastManager bcm;
-
-    //indicates if service is running for MediaPlay to check on resume
-    //public static boolean serviceRunning = true;
 
     private final IBinder mBinder = new LocalBinder();
 
@@ -101,7 +99,7 @@ public class AudioPlayerService extends Service {
     private ComponentName widgetComponentName;
     private RemoteViews remoteViews;
 
-    public final StateManager stateManager = new StateManager();
+    public StateManager stateManager;
 
     private final OnStateChangedListener onStateChangedListener = new OnStateChangedListener() {
         @Override
@@ -124,9 +122,22 @@ public class AudioPlayerService extends Service {
         }
     }
 
+    public float getPlaybackSpeed() {
+        return playbackSpeed;
+    }
+
+    public void setPlaybackSpeed(float playbackSpeed) {
+        this.playbackSpeed = playbackSpeed;
+        mediaPlayer.setPlaybackSpeed(playbackSpeed);
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
+    }
+
+    public boolean variablePlaybackSpeedIsAvailable() {
+        return mediaPlayer.canSetSpeed();
     }
 
 
@@ -136,7 +147,10 @@ public class AudioPlayerService extends Service {
 
         bcm = LocalBroadcastManager.getInstance(this);
         db = DataBaseHelper.getInstance(this);
-        mediaPlayer = new MediaPlayer();
+        mediaPlayer = new MediaPlayer(AudioPlayerService.this);
+        stateManager = new StateManager();
+        stateManager.setState(PlayerStates.IDLE);
+
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         handler = new Handler();
@@ -193,6 +207,7 @@ public class AudioPlayerService extends Service {
         //state manager to update widget
         widgetComponentName = new ComponentName(this, WidgetProvider.class);
         remoteViews = new RemoteViews(this.getPackageName(), R.layout.widget);
+
         stateManager.addStateChangeListener(onStateChangedListener);
     }
 
@@ -448,7 +463,6 @@ public class AudioPlayerService extends Service {
         if (BuildConfig.DEBUG) Log.d(TAG, "prepare() mediaId: " + mediaId);
         playerLock.lock();
         try {
-
             //if no proper current song is found, use the first
             media = null;
             for (MediaDetail m : allMedia) {
@@ -461,7 +475,7 @@ public class AudioPlayerService extends Service {
                 media = allMedia.get(0);
 
             if (stateManager.getState() == PlayerStates.DEAD)
-                mediaPlayer = new MediaPlayer();
+                mediaPlayer = new MediaPlayer(AudioPlayerService.this);
             else
                 mediaPlayer.reset();
             stateManager.setState(PlayerStates.IDLE);
@@ -796,17 +810,6 @@ public class AudioPlayerService extends Service {
             }
         }
     }
-
-    /**
-     *                 if (Build.VERSION.SDK_INT < 21) {
-     //noinspection deprecation
-     audioManager.unregisterMediaButtonEventReceiver(myEventReceiver);
-     //noinspection deprecation
-     audioManager.unregisterRemoteControlClient(mRemoteControlClient);
-     //noinspection deprecation
-     mRemoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_STOPPED);
-     } todo
-     */
 
 
     /**

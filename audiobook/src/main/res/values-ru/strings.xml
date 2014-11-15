@@ -38,14 +38,4 @@
     <string name="change_forward_amount">Ускоренная перемотка</string>
     <string name="book_add_progress_title">Добавление книги</string>
     <string name="book_add_progress_message">Пожалуйста ждите, книга добавляется.</string>
-
-    <!-- TODO Missing translations:
-    <string name="edit_book_title">Edit book</string>
-    <string name="popup_edit_book">Edit</string>
-    <string name="popup_delete_book">Delete</string>
-    <string name="content_file_or_folder">Indicates whether its a file or a folder</string>
-    <string name="error_in_file_title">Error in file</string>
-    <string name="error_in_file_description">The following files seem to be corrupted. Add book without corrupted files?</string>
-    <string name="error_in_file_all_defect">All files seem to be corrupt</string>
-    -->
 </resources>

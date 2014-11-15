@@ -20,14 +20,14 @@ public class SeekAmountPreference extends DialogPreference {
     public SeekAmountPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         setDialogTitle(context.getString(R.string.change_forward_amount));
-        setDialogLayoutResource(R.layout.dialog_seek_amount);
+        setDialogLayoutResource(R.layout.dialog_amount_chooser);
     }
 
     @Override
     protected void onBindDialogView(@NonNull View view) {
         super.onBindDialogView(view);
-        seekBar = (SeekBar) view.findViewById(R.id.change_forward_amount);
-        final TextView textView = (TextView) view.findViewById(R.id.change_forward_text_amount);
+        seekBar = (SeekBar) view.findViewById(R.id.seekBar);
+        final TextView textView = (TextView) view.findViewById(R.id.textView);
         seekBar.setMax(60 - SEEK_BAR_MIN);
         SharedPreferences sp = getSharedPreferences();
 
