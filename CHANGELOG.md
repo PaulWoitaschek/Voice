@@ -1,3 +1,12 @@
+# v1.4.3
+
+## Additions
+* Now with variable Playback speed for Android >= 4.1
+
+## Fixes
+* Bluetooth should now be played correctly
+* Bug with wrong sorting on file adding fixed
+
 # v1.4.2
 
 ## Additions
