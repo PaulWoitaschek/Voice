@@ -240,7 +240,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.action_media_add, menu);
+        inflater.inflate(R.menu.action_only_settings, menu);
     }
 
     @Override

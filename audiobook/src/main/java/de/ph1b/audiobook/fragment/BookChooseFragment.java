@@ -165,6 +165,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         currentText = (TextView) v.findViewById(R.id.current_text);
         currentPlaying = (ImageButton) v.findViewById(R.id.current_playing);
         final RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.listMediaView);
+        v.findViewById(R.id.fab).setOnClickListener(this);
 
         OnItemClickListener onClickListener = new OnItemClickListener() {
             @Override
@@ -258,7 +259,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         recyclerView.addOnItemTouchListener(this);
         final Handler handler = new Handler();
 
-        final Runnable scroller = new Runnable() {
+        final Runnable smoothScroll = new Runnable() {
             @Override
             public void run() {
                 recyclerView.smoothScrollBy(0, Math.round(scrollBy));
@@ -298,10 +299,10 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
 
                             scrollBy = maxScrollStrength * factor;
                         }
-                        handler.removeCallbacks(scroller);
+                        handler.removeCallbacks(smoothScroll);
                         if (scrollBy != 0) {
-                            handler.removeCallbacks(scroller);
-                            handler.post(scroller);
+                            handler.removeCallbacks(smoothScroll);
+                            handler.post(smoothScroll);
                         }
 
                         return true;
@@ -324,7 +325,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
 
                         return true;
                     case DragEvent.ACTION_DRAG_ENDED:
-                        handler.removeCallbacks(scroller);
+                        handler.removeCallbacks(smoothScroll);
                         scrollBy = 0;
                         return true;
                 }
@@ -396,18 +397,13 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.action_media_view, menu);
+        inflater.inflate(R.menu.action_only_settings, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_add:
-                Intent i = new Intent(getActivity(), FilesChoose.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
-                return true;
             case R.id.action_settings:
                 startActivity(new Intent(getActivity(), Settings.class));
                 return true;
@@ -422,6 +418,11 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         switch (view.getId()) {
             case R.id.current_playing:
                 new StartServiceAsync(getActivity(), true).execute();
+                break;
+            case R.id.fab:
+                Intent i = new Intent(getActivity(), FilesChoose.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
                 break;
             default:
                 break;
