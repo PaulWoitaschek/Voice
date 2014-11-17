@@ -2,6 +2,7 @@
 
 ## Additions
 * Now with variable Playback speed for Android >= 4.1
+* Floating actionbutton in book chooser
 
 ## Fixes
 * Bluetooth should now be played correctly
