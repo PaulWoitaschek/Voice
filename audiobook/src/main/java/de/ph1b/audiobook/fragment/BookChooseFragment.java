@@ -382,6 +382,8 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
 
         new StartServiceAsync(getActivity(), false);
 
+        //new FolderChangerDialog().show(getFragmentManager(), TAG);
+
         if (adapt.getItemCount() == 0) {
             String text = getString(R.string.media_view_how_to);
             Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_LONG);

@@ -9,12 +9,14 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ExpandableListView;
+
+import com.melnykov.fab.FloatingActionButton;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.adapter.CustomExpandableListAdapter;
 
-public class FolderChooseDialog extends DialogFragment {
+public class FolderChangerDialog extends DialogFragment {
+
+    private static final String TAG = "FolderChangerDialog";
 
 
     @Override
@@ -23,15 +25,21 @@ public class FolderChooseDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         //suppress because dialog!
-        @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_folder_choose, null);
+        @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_folder_changer, null);
         builder.setView(v);
 
         builder.setTitle(R.string.folder_choose_title);
         builder.setMessage(R.string.folder_choose_content);
 
-        ExpandableListView list = (ExpandableListView) v.findViewById(R.id.expandableListView);
-        CustomExpandableListAdapter adapt = new CustomExpandableListAdapter("/mnt/sdcard/", getActivity());
-        list.setAdapter(adapt);
+
+        FloatingActionButton button = (FloatingActionButton) v.findViewById(R.id.fab);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FolderAdderDialog dialog = new FolderAdderDialog();
+                dialog.show(getFragmentManager(), TAG);
+            }
+        });
 
 
         builder.setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
@@ -45,4 +53,6 @@ public class FolderChooseDialog extends DialogFragment {
 
         return builder.create();
     }
+
+
 }
