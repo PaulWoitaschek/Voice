@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.fragment;
 
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -21,7 +22,7 @@ public class PreferencesFragment extends PreferenceFragment {
         SeekAmountPreference seekAmountPreference = (SeekAmountPreference) findPreference(getString(R.string.change_forward_amount));
         seekAmountPreference.setSummary(getSeekTime());
 
-        if (com.aocate.media.MediaPlayer.isPrestoLibraryInstalled(getActivity())) {
+        if (Build.VERSION.SDK_INT < 16 || com.aocate.media.MediaPlayer.isPrestoLibraryInstalled(getActivity())) {
             VariablePlaybackSpeedPreferenceDialog speedDialog =
                     (VariablePlaybackSpeedPreferenceDialog) findPreference
                             (getString(R.string.pref_variable_playback_speed));
