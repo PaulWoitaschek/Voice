@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaMetadata;
 import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer;
 import android.media.RemoteControlClient;
 import android.media.session.MediaSession;
 import android.net.Uri;
@@ -30,8 +31,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.RemoteViews;
 import android.widget.Toast;
-
-import com.aocate.media.MediaPlayer;
 
 import java.io.File;
 import java.io.IOException;
@@ -130,8 +129,9 @@ public class AudioPlayerService extends Service {
     }
 
     public void setPlaybackSpeed(float playbackSpeed) {
+        //todo implement playback speed
         this.playbackSpeed = playbackSpeed;
-        mediaPlayer.setPlaybackSpeed(playbackSpeed);
+        //mediaPlayer.setPlaybackSpeed(playbackSpeed);
     }
 
     @Override
@@ -140,7 +140,8 @@ public class AudioPlayerService extends Service {
     }
 
     public boolean variablePlaybackSpeedIsAvailable() {
-        return mediaPlayer.canSetSpeed();
+        //TODO: Implement return mediaPlayer.canSetSpeed();
+        return false;
     }
 
 
@@ -150,7 +151,7 @@ public class AudioPlayerService extends Service {
 
         bcm = LocalBroadcastManager.getInstance(this);
         db = DataBaseHelper.getInstance(this);
-        mediaPlayer = new MediaPlayer(AudioPlayerService.this);
+        mediaPlayer = new MediaPlayer();
         stateManager = new StateManager();
         stateManager.setState(PlayerStates.IDLE);
 
@@ -479,7 +480,7 @@ public class AudioPlayerService extends Service {
                 media = allMedia.get(0);
 
             if (stateManager.getState() == PlayerStates.DEAD)
-                mediaPlayer = new MediaPlayer(AudioPlayerService.this);
+                mediaPlayer = new MediaPlayer();
             else
                 mediaPlayer.reset();
             stateManager.setState(PlayerStates.IDLE);
