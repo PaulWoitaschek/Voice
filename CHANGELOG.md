@@ -1,3 +1,12 @@
+# v1.4.4
+
+## Additions
+* Added m4b support
+* Reworked sleep timer
+
+## Fixes
+* Home Up shown in Preferences now
+
 # v1.4.3
 
 ## Additions
