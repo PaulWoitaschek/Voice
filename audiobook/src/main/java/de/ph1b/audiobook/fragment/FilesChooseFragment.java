@@ -82,6 +82,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         audioTypes.add(".3gp");
         audioTypes.add(".mp4");
         audioTypes.add(".m4a");
+        audioTypes.add(".m4b");
         audioTypes.add(".mp3");
         audioTypes.add(".mid");
         audioTypes.add(".xmf");
