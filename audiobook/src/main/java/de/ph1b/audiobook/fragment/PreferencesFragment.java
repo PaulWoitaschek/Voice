@@ -24,16 +24,9 @@ public class PreferencesFragment extends PreferenceFragment {
 
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
-        initValues();
-
-        if (Build.VERSION.SDK_INT < 16 || com.aocate.media.MediaPlayer.isPrestoLibraryInstalled(getActivity())) {
-            VariablePlaybackSpeedPreferenceDialog speedDialog =
-                    (VariablePlaybackSpeedPreferenceDialog) findPreference
-                            (getString(R.string.pref_key_variable_playback_speed));
-            getPreferenceScreen().removePreference(speedDialog);
-        }
     }
+
+
 
     private void initValues() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -47,12 +40,20 @@ public class PreferencesFragment extends PreferenceFragment {
         String sleepSummary = String.valueOf(sleepAmount) + " " + getString(R.string.minutes);
         SleepPreferenceDialog sleepPreferenceDialog = (SleepPreferenceDialog) findPreference(getString(R.string.pref_key_sleep_time));
         sleepPreferenceDialog.setSummary(sleepSummary);
+
+        if (Build.VERSION.SDK_INT < 16 || com.aocate.media.MediaPlayer.isPrestoLibraryInstalled(getActivity())) {
+            VariablePlaybackSpeedPreferenceDialog speedDialog =
+                    (VariablePlaybackSpeedPreferenceDialog) findPreference
+                            (getString(R.string.pref_key_variable_playback_speed));
+            getPreferenceScreen().removePreference(speedDialog);
+        }
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
+        initValues();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         sharedPreferences.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
     }
