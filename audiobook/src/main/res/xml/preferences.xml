@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <CheckBoxPreference
-        android:key="@string/pref_resume_on_replug"
+        android:key="@string/pref_key_resume_on_replug"
         android:title="@string/pref_resume_on_replug"
         android:summary="@string/pref_resume_on_replug_hint"
         android:defaultValue="true" />
     <CheckBoxPreference
-        android:key="@string/pref_cover_on_internet"
+        android:key="@string/pref_key_cover_on_internet"
         android:title="@string/pref_cover_on_internet"
         android:summary="@string/pref_cover_on_internet_hint"
         android:defaultValue="false" />
     <de.ph1b.audiobook.dialog.VariablePlaybackSpeedPreferenceDialog
-        android:key="@string/pref_variable_playback_speed"
+        android:key="@string/pref_key_variable_playback_speed"
         android:title="@string/pref_variable_playback_speed"
         android:dialogMessage="@string/download_plugin_message"
         android:dialogTitle="@string/title_playback_speed"
         android:negativeButtonText="@string/dialog_cancel"
         android:positiveButtonText="@string/download_plugin"
         android:summary="@string/pref_variable_playback_speed_hint" />
-    <de.ph1b.audiobook.dialog.SeekAmountPreference
-        android:key="@string/change_forward_amount"
-        android:title="@string/change_forward_amount" />
+    <de.ph1b.audiobook.dialog.SeekPreferenceDialog
+        android:key="@string/pref_key_seek_time"
+        android:title="@string/pref_seek_time" />
+    <de.ph1b.audiobook.dialog.SleepPreferenceDialog
+        android:key="@string/pref_key_sleep_time"
+        android:title="@string/pref_sleep_time" />
 </PreferenceScreen>

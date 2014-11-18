@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="action_add">추가</string>
     <string name="cover">책표지</string>
     <string name="play_pause">재생 / 일시정지</string>
 
@@ -26,7 +25,6 @@
     <string name="seconds">초</string>
 
     <string name="file_not_found">저장공간에서 책을 찾지 못했으니, 다시 추가해주세요.</string>
-    <string name="media_view_how_to">+ 를 눌러 추가</string>
     <string name="current_cover">재생중인 책표지 보기</string>
     <string name="current_playing">재생상태 보기</string>
     <string name="pref_cover_on_internet">3G 사용</string>
@@ -35,7 +33,7 @@
     <string name="content_next_cover">다음표지 고르기</string>
     <string name="content_cover">책표지 보여주기</string>
     <string name="content_widget_play">현재 책 재생</string>
-    <string name="change_forward_amount">건너뛸 시간</string>
+    <string name="pref_seek_time">건너뛸 시간</string>
     <string name="book_add_progress_title">추가중</string>
     <string name="book_add_progress_message">책이 추가 될 동안 기다려주세요</string>
 

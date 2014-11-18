@@ -137,7 +137,7 @@ public class ImageHelper {
                 (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm != null) {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(c);
-            boolean mobileConnectionAllowed = sharedPref.getBoolean(c.getString(R.string.pref_cover_on_internet), false);
+            boolean mobileConnectionAllowed = sharedPref.getBoolean(c.getString(R.string.pref_key_cover_on_internet), false);
 
             NetworkInfo info = cm.getActiveNetworkInfo();
             if (info != null && info.isConnected()) {

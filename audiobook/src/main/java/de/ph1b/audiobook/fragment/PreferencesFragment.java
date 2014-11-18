@@ -9,7 +9,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.dialog.SeekAmountPreference;
+import de.ph1b.audiobook.dialog.SeekPreferenceDialog;
+import de.ph1b.audiobook.dialog.SleepPreferenceDialog;
 import de.ph1b.audiobook.dialog.VariablePlaybackSpeedPreferenceDialog;
 
 
@@ -24,22 +25,30 @@ public class PreferencesFragment extends PreferenceFragment {
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        SeekAmountPreference seekAmountPreference = (SeekAmountPreference) findPreference(getString(R.string.change_forward_amount));
-        seekAmountPreference.setSummary(getSeekTime());
+        initValues();
 
         if (Build.VERSION.SDK_INT < 16 || com.aocate.media.MediaPlayer.isPrestoLibraryInstalled(getActivity())) {
             VariablePlaybackSpeedPreferenceDialog speedDialog =
                     (VariablePlaybackSpeedPreferenceDialog) findPreference
-                            (getString(R.string.pref_variable_playback_speed));
+                            (getString(R.string.pref_key_variable_playback_speed));
             getPreferenceScreen().removePreference(speedDialog);
         }
     }
 
-    private String getSeekTime() {
+    private void initValues() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        int value = sp.getInt(getString(R.string.pref_change_amount), 20);
-        return String.valueOf(value) + " " + getString(R.string.seconds);
+
+        int seekAmount = sp.getInt(getString(R.string.pref_key_seek_time), 20);
+        String seekSummary = String.valueOf(seekAmount) + " " + getString(R.string.seconds);
+        SeekPreferenceDialog seekPreferenceDialog = (SeekPreferenceDialog) findPreference(getString(R.string.pref_key_seek_time));
+        seekPreferenceDialog.setSummary(seekSummary);
+
+        int sleepAmount = sp.getInt(getString(R.string.pref_key_sleep_time), 20);
+        String sleepSummary = String.valueOf(sleepAmount) + " " + getString(R.string.minutes);
+        SleepPreferenceDialog sleepPreferenceDialog = (SleepPreferenceDialog) findPreference(getString(R.string.pref_key_sleep_time));
+        sleepPreferenceDialog.setSummary(sleepSummary);
     }
+
 
     @Override
     public void onResume() {
@@ -58,8 +67,7 @@ public class PreferencesFragment extends PreferenceFragment {
     private final SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-            SeekAmountPreference seekAmountPreference = (SeekAmountPreference) findPreference(getString(R.string.change_forward_amount));
-            seekAmountPreference.setSummary(getSeekTime());
+            initValues();
         }
     };
 }

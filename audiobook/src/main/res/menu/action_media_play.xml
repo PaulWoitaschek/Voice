@@ -5,7 +5,7 @@
     tools:context=".activity.MediaPlay">
 
     <item
-        android:id="@+id/time_lapse"
+        android:id="@+id/action_time_lapse"
         android:title="@string/playback_speed"
         android:orderInCategory="70"
         android:icon="@drawable/ic_timelapse_white_24dp"

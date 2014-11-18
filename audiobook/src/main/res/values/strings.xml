@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string translatable="false" name="app_name">Material Player</string>
-    <string translatable="false" name="zeroTime">0:00:00</string>
-    <string translatable="false" name="pref_change_amount">CHANGE_AMOUNT</string>
-    <string translatable="false" name="widget_small">Material Player (1x1)</string>
-    <string translatable="false" name="action_sleep_title">…z..Z..ZZ</string>
-
-    <string name="action_add">Add Book</string>
     <string name="cover">Cover</string>
     <string name="play_pause">Play / Pause</string>
 
@@ -31,11 +24,10 @@
     <string name="action_jump_to">Position changer</string>
     <string name="hours">hours</string>
     <string name="minutes">minutes</string>
-    <string name="seconds">Seconds</string>
+    <string name="seconds">seconds</string>
 
     <string name="file_not_found">It seems that the audiobook cannot be found on storage. Please
         re-add the audiobook.</string>
-    <string name="media_view_how_to">Press + to add a book</string>
     <string name="current_cover">Shows cover of currently playing book.</string>
     <string name="current_playing">Shows playing state.</string>
     <string name="pref_cover_on_internet">Use Mobile Network</string>
@@ -45,7 +37,7 @@
     <string name="content_next_cover">Chooses next cover</string>
     <string name="content_cover">Shows cover to choose</string>
     <string name="content_widget_play">Plays the current book</string>
-    <string name="change_forward_amount">Skip amount</string>
+    <string name="pref_seek_time">Skip amount</string>
     <string name="book_add_progress_title">Adding book</string>
     <string name="book_add_progress_message">Please wait while the book is being added.</string>
 
@@ -59,9 +51,6 @@
         seem to be corrupted. Add book without corrupted files?</string>
     <string tools:ignore="MissingTranslation" name="error_in_file_all_defect">All files seem to be
         corrupt</string>
-    <string tools:ignore="MissingTranslation" name="folder_choose_title">Choose a folder</string>
-    <string tools:ignore="MissingTranslation" name="folder_choose_content">Choose a folder, where
-        your audiobooks are stored.</string>
     <string tools:ignore="MissingTranslation" name="rewind">Rewind</string>
     <string tools:ignore="MissingTranslation" name="fast_forward">Fast forward</string>
     <string tools:ignore="MissingTranslation" name="title_playback_speed">Change playback speed</string>
@@ -74,4 +63,7 @@
     called \'Prestissimo\' from the market. Please report any errors you find related to this to the
     author of that plugin. After installing, you can change the playback speed from the play screen.
     </string>
+    <string tools:ignore="MissingTranslation" name="pref_sleep_time">Sleep time</string>
+    <string tools:ignore="MissingTranslation" name="sleep_timer_started">Sleep timer: </string>
+    <string tools:ignore="MissingTranslation" name="sleep_timer_canceled">Sleep timer canceled.</string>
 </resources>

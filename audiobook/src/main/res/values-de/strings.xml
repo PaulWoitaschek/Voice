@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="action_add">Buch hinzufügen</string>
     <string name="cover">Cover</string>
     <string name="play_pause">Play / Pause</string>
 
@@ -23,13 +22,12 @@
     <string name="action_sleep_title_hint_left">Pausiert nach</string>
     <string name="action_sleep_title_hint_right">Minuten</string>
     <string name="action_jump_to">Zu Stelle springen</string>
-    <string name="hours">stunden</string>
-    <string name="minutes">minuten</string>
+    <string name="hours">Stunden</string>
+    <string name="minutes">Minuten</string>
     <string name="seconds">Sekunden</string>
 
     <string name="file_not_found">Das Hörbuch konnte nicht gefunden werden. Bitte fügen Sie es
         erneut hinzu.</string>
-    <string name="media_view_how_to">Drücken Sie auf + um ein Buch hinzuzufügen.</string>
     <string name="current_cover">Zeigt das Cover des momentan spielenden Buchs.</string>
     <string name="current_playing">Zeigt an, ob momentan ein Buch abgespielt wird.</string>
     <string name="pref_cover_on_internet">Benutze Mobiles Internet</string>
@@ -39,7 +37,7 @@
     <string name="content_next_cover">Wählt nächstes Cover</string>
     <string name="content_cover">Zeigt aktuelles Cover an</string>
     <string name="content_widget_play">Spielt das aktuelle Buch</string>
-    <string name="change_forward_amount">Vor- und zurückspulen</string>
+    <string name="pref_seek_time">Vor- und zurückspulen</string>
     <string name="book_add_progress_title">Füge Buch hinzu</string>
     <string name="book_add_progress_message">Bitte einen Moment warten.</string>
 
@@ -64,4 +62,7 @@
         Sie bei dem Plugin finden an den Author. Danach können Sie die Geschwindigkeit einfach im Abspiel
         Screen einstellen.
     </string>
+    <string name="pref_sleep_time">Einschlafzeit</string>
+    <string name="sleep_timer_canceled">Einschlaftimer gestoppt.</string>
+    <string name="sleep_timer_started">Einschlaftimer: </string>
 </resources>

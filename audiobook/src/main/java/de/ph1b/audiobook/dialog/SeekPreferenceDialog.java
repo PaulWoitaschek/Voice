@@ -12,14 +12,14 @@ import android.widget.TextView;
 import de.ph1b.audiobook.R;
 
 
-public class SeekAmountPreference extends DialogPreference {
+public class SeekPreferenceDialog extends DialogPreference {
 
     private final int SEEK_BAR_MIN = 10;
     private SeekBar seekBar;
 
-    public SeekAmountPreference(Context context, AttributeSet attrs) {
+    public SeekPreferenceDialog(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setDialogTitle(context.getString(R.string.change_forward_amount));
+        setDialogTitle(context.getString(R.string.pref_seek_time));
         setDialogLayoutResource(R.layout.dialog_amount_chooser);
     }
 
@@ -31,7 +31,7 @@ public class SeekAmountPreference extends DialogPreference {
         seekBar.setMax(60 - SEEK_BAR_MIN);
         SharedPreferences sp = getSharedPreferences();
 
-        int position = sp.getInt(getContext().getString(R.string.pref_change_amount), 20);
+        int position = sp.getInt(getContext().getString(R.string.pref_key_seek_time), 20);
         seekBar.setProgress(position - SEEK_BAR_MIN);
 
 
@@ -61,7 +61,7 @@ public class SeekAmountPreference extends DialogPreference {
         if (positiveResult) {
             int seekAmount = seekBar.getProgress();
             SharedPreferences.Editor editor = getEditor();
-            editor.putInt(getContext().getString(R.string.pref_change_amount), seekAmount + SEEK_BAR_MIN);
+            editor.putInt(getContext().getString(R.string.pref_key_seek_time), seekAmount + SEEK_BAR_MIN);
             editor.apply();
         }
     }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="action_add">Добавить каталог аудиокниги</string>
     <string name="cover">Обложка</string>
     <string name="play_pause">Воспроизвести / Пауза</string>
 
@@ -26,7 +25,6 @@
     <string name="seconds">секунд</string>
 
     <string name="file_not_found">Аудиокнига не найдена по указанному пути. Пожалуйста, произведите добавление повторно.</string>
-    <string name="media_view_how_to">Нажмите + для добавления книги</string>
     <string name="current_cover">Показать обложку текущей аудиокниги.</string>
     <string name="current_playing">Показывать состояние проигрывания.</string>
     <string name="pref_cover_on_internet">Использовать 3G интернет</string>
@@ -35,7 +33,7 @@
     <string name="content_next_cover">Выбрать следующую обложку</string>
     <string name="content_cover">Показать выбранную обложку</string>
     <string name="content_widget_play">Проиграть текущую аудиокнигу</string>
-    <string name="change_forward_amount">Ускоренная перемотка</string>
+    <string name="pref_seek_time">Ускоренная перемотка</string>
     <string name="book_add_progress_title">Добавление книги</string>
     <string name="book_add_progress_message">Пожалуйста ждите, книга добавляется.</string>
 </resources>

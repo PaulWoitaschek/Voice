@@ -47,14 +47,13 @@ import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.content.MediaDetail;
 import de.ph1b.audiobook.dialog.JumpToPosition;
 import de.ph1b.audiobook.dialog.SetPlaybackSpeedDialog;
-import de.ph1b.audiobook.dialog.SleepDialog;
 import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.interfaces.OnTimeChangedListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.utils.ImageHelper;
 
-public class BookPlayFragment extends Fragment implements OnClickListener, SleepDialog.SleepTimeCallback, SetPlaybackSpeedDialog.PlaybackSpeedChanged {
+public class BookPlayFragment extends Fragment implements OnClickListener, SetPlaybackSpeedDialog.PlaybackSpeedChanged {
 
     private ImageButton play_button;
     private TextView playedTimeView;
@@ -67,7 +66,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
     private LocalBroadcastManager bcm;
 
     private int oldPosition = -1;
-    private static final String TAG = "de.ph1b.audiobooks.fragment.BookPlayFragment";
+    private static final String TAG = "de.ph1b.audiobook.fragment.BookPlayFragment";
 
     private boolean seekBarIsUpdating = false;
     private BookDetail book;
@@ -78,6 +77,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
 
     private AudioPlayerService mService;
     private boolean mBound = false;
+    private boolean sleepTimerActive = false;
 
     private final ServiceConnection mConnection = new ServiceConnection() {
         @Override
@@ -93,6 +93,15 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
             }
             mService.stateManager.addStateChangeListener(onStateChangedListener);
             mService.stateManager.addTimeChangedListener(onTimeChangedListener);
+            sleepTimerActive = mService.sleepSandActive();
+            getActivity().invalidateOptionsMenu();
+            mService.setOnSleepStateChangedListener(new AudioPlayerService.OnSleepStateChangedListener() {
+                @Override
+                public void onSleepStateChanged(boolean active) {
+                    sleepTimerActive = active;
+                    getActivity().invalidateOptionsMenu();
+                }
+            });
 
             //invalidateOptionsMenu to have the variable speed button shown or not.
             getActivity().invalidateOptionsMenu();
@@ -121,6 +130,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
         if (mBound) {
             mService.stateManager.removeStateChangeListener(onStateChangedListener);
             mService.stateManager.removeTimeChangedListener(onTimeChangedListener);
+            mService.setOnSleepStateChangedListener(null);
             getActivity().unbindService(mConnection);
             mBound = false;
         }
@@ -336,13 +346,21 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
         });
     }
 
+
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        MenuItem item = menu.findItem(R.id.time_lapse);
-        item.setVisible(false);
+        MenuItem timeLapseItem = menu.findItem(R.id.action_time_lapse);
+        timeLapseItem.setVisible(false);
         if (mBound) {
             if (mService.variablePlaybackSpeedIsAvailable())
-                item.setVisible(true);
+                timeLapseItem.setVisible(true);
+            MenuItem sleepTimerItem = menu.findItem(R.id.action_sleep);
+
+            if (sleepTimerActive) {
+                sleepTimerItem.setIcon(R.drawable.ic_alarm_on_white_24dp);
+            } else {
+                sleepTimerItem.setIcon(R.drawable.ic_snooze_white_24dp);
+            }
         }
         super.onPrepareOptionsMenu(menu);
     }
@@ -405,11 +423,11 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
                 launchJumpToPositionDialog();
                 return true;
             case R.id.action_sleep:
-                SleepDialog sleepDialog = new SleepDialog();
-                sleepDialog.setTargetFragment(BookPlayFragment.this, 42);
-                sleepDialog.show(getFragmentManager(), SleepDialog.TAG);
+                Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
+                serviceIntent.setAction(AudioPlayerService.CONTROL_SLEEP);
+                getActivity().startService(serviceIntent);
                 return true;
-            case R.id.time_lapse:
+            case R.id.action_time_lapse:
                 SetPlaybackSpeedDialog dialog = new SetPlaybackSpeedDialog();
                 dialog.setTargetFragment(this, 42);
                 Bundle args = new Bundle();
@@ -446,13 +464,6 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Sleep
         super.onPause();
     }
 
-    @Override
-    public void onSleepTimeChosen(int sleepTime) {
-        Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
-        serviceIntent.setAction(AudioPlayerService.CONTROL_SLEEP);
-        serviceIntent.putExtra(AudioPlayerService.CONTROL_SLEEP, sleepTime);
-        getActivity().startService(serviceIntent);
-    }
 
     @Override
     public void onSpeedChanged(float speed) {

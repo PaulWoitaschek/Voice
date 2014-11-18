@@ -29,14 +29,17 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.aocate.media.MediaPlayer;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 import de.ph1b.audiobook.BuildConfig;
@@ -211,6 +214,7 @@ public class AudioPlayerService extends Service {
         stateManager.addStateChangeListener(onStateChangedListener);
     }
 
+
     private void handleAction(Intent intent) {
         String action = intent.getAction();
         if (action != null) {
@@ -226,14 +230,14 @@ public class AudioPlayerService extends Service {
                 if (position != -1)
                     changePosition(position);
             } else if (action.equals(CONTROL_SLEEP)) {
-                int sleepTime = intent.getIntExtra(CONTROL_SLEEP, -1);
-                if (sleepTime > 0)
-                    sleepTimer(sleepTime);
+                toggleSleepSand();
             }
         }
     }
 
+
     private boolean handleKeyCode(int keyCode) {
+
         switch (keyCode) {
             case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
             case KeyEvent.KEYCODE_MEDIA_PAUSE:
@@ -440,7 +444,7 @@ public class AudioPlayerService extends Service {
                         if (headsetState == CONNECTED) {
                             if (pauseBecauseHeadset) {
                                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-                                boolean resumeOnReplug = sharedPref.getBoolean(context.getString(R.string.pref_resume_on_replug), true);
+                                boolean resumeOnReplug = sharedPref.getBoolean(context.getString(R.string.pref_key_resume_on_replug), true);
                                 if (resumeOnReplug)
                                     play();
                                 pauseBecauseHeadset = false;
@@ -627,35 +631,65 @@ public class AudioPlayerService extends Service {
         }
     }
 
+    private final ScheduledExecutorService sandMan = Executors.newSingleThreadScheduledExecutor();
+    private ScheduledFuture<?> sleepSand;
+    private OnSleepStateChangedListener onSleepStateChangedListener;
 
-    /**
-     * Pauses the player after specified time.
-     *
-     * @param sleepTime The amount in ms after the book should pause.
-     */
-    private void sleepTimer(int sleepTime) {
-        Timer sandman = new Timer();
-        TimerTask sleepSand = new TimerTask() {
-            @Override
-            public void run() {
-                playerLock.lock();
-                try {
-                    pause();
-                    stopForeground(true);
-                    if (BuildConfig.DEBUG) Log.d(TAG, "Good night everyone");
-                    if (stateManager.getState() != PlayerStates.DEAD)
-                        mediaPlayer.reset();
-                    mediaPlayer.release();
-                    stateManager.setState(PlayerStates.DEAD);
-                } finally {
-                    playerLock.unlock();
-                }
-            }
-        };
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "I should fall asleep after " + sleepTime / 1000 + " s");
-        sandman.schedule(sleepSand, sleepTime);
+    public interface OnSleepStateChangedListener {
+        public void onSleepStateChanged(boolean active);
     }
+
+    public void setOnSleepStateChangedListener(OnSleepStateChangedListener onSleepStateChangedListener) {
+        this.onSleepStateChangedListener = onSleepStateChangedListener;
+    }
+
+    public boolean sleepSandActive(){
+        return sleepSand != null && !sleepSand.isCancelled() && !sleepSand.isDone();
+    }
+
+
+    private void toggleSleepSand() {
+        if (sleepSandActive()) {
+            sleepSand.cancel(false);
+            if (onSleepStateChangedListener != null) {
+                onSleepStateChangedListener.onSleepStateChanged(false);
+            }
+
+            Toast sleepToast = Toast.makeText(this, R.string.sleep_timer_canceled, Toast.LENGTH_SHORT);
+            sleepToast.show();
+        } else {
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+            int minutes = sp.getInt(getString(R.string.pref_key_sleep_time), 20);
+
+            String message = getString(R.string.sleep_timer_started) + minutes + " " + getString(R.string.minutes);
+            Toast sleepToast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+            sleepToast.show();
+
+            sleepSand = sandMan.schedule(new Runnable() {
+                @Override
+                public void run() {
+                    playerLock.lock();
+                    try {
+                        pause();
+                        stopForeground(true);
+                        if (BuildConfig.DEBUG) Log.d(TAG, "Good night everyone");
+                        if (stateManager.getState() != PlayerStates.DEAD)
+                            mediaPlayer.reset();
+                        mediaPlayer.release();
+                        stateManager.setState(PlayerStates.DEAD);
+                        if (onSleepStateChangedListener != null) {
+                            onSleepStateChangedListener.onSleepStateChanged(false);
+                        }
+                    } finally {
+                        playerLock.unlock();
+                    }
+                }
+            }, minutes, TimeUnit.MINUTES);
+            if (onSleepStateChangedListener != null)
+                onSleepStateChangedListener.onSleepStateChanged(true);
+        }
+    }
+
 
     public void fastForward() {
         PlayerStates state = stateManager.getState();
@@ -664,7 +698,7 @@ public class AudioPlayerService extends Service {
             try {
                 int position = mediaPlayer.getCurrentPosition();
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-                int changeTimeAmount = sharedPref.getInt(getString(R.string.pref_change_amount), 20) * 1000;
+                int changeTimeAmount = sharedPref.getInt(getString(R.string.pref_key_seek_time), 20) * 1000;
                 int newPosition = position + changeTimeAmount;
                 if (newPosition > 0) {
                     if (newPosition > media.getDuration())
@@ -691,7 +725,7 @@ public class AudioPlayerService extends Service {
             try {
                 int position = mediaPlayer.getCurrentPosition();
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-                int changeTimeAmount = sharedPref.getInt(getString(R.string.pref_change_amount), 20) * 1000;
+                int changeTimeAmount = sharedPref.getInt(getString(R.string.pref_key_seek_time), 20) * 1000;
                 int newPosition = position - changeTimeAmount;
                 if (newPosition < 0)
                     newPosition = 0;

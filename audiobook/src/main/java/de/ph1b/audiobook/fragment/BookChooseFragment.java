@@ -26,7 +26,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.DragEvent;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,7 +37,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -385,12 +383,6 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
 
         //new FolderChangerDialog().show(getFragmentManager(), TAG);
 
-        if (adapt.getItemCount() == 0) {
-            String text = getString(R.string.media_view_how_to);
-            Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL, 0, 0);
-            toast.show();
-        }
         initPlayerWidget();
     }
 
