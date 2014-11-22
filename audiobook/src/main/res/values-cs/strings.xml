@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="cover">Obal</string>
     <string name="play_pause">Přehrát / Pozastavit</string>
 
@@ -41,29 +41,29 @@
     <string name="book_add_progress_title">Přidávání knihy</string>
     <string name="book_add_progress_message">Chvíli strpení, než bude kniha přidána.</string>
 
-    <string tools:ignore="MissingTranslation" name="edit_book_title">Upravit knihu</string>
-    <string tools:ignore="MissingTranslation" name="popup_edit_book">Upravit</string>
-    <string tools:ignore="MissingTranslation" name="popup_delete_book">Smazat</string>
-    <string tools:ignore="MissingTranslation" name="content_file_or_folder">Ukazuje jestli jde o
+    <string name="edit_book_title">Upravit knihu</string>
+    <string name="popup_edit_book">Upravit</string>
+    <string name="popup_delete_book">Smazat</string>
+    <string name="content_file_or_folder">Ukazuje jestli jde o
         soubor nebo adresář</string>
-    <string tools:ignore="MissingTranslation" name="error_in_file_title">Chyba souboru</string>
-    <string tools:ignore="MissingTranslation" name="error_in_file_description">Následující soubory
+    <string name="error_in_file_title">Chyba souboru</string>
+    <string name="error_in_file_description">Následující soubory
         jsou nejspíše poškozeny. Přidat knihu bez poškozených souborů?</string>
-    <string tools:ignore="MissingTranslation" name="error_in_file_all_defect">Všechny soubory jsou nejspíše
+    <string name="error_in_file_all_defect">Všechny soubory jsou nejspíše
         poškozeny</string>
-    <string tools:ignore="MissingTranslation" name="rewind">Přetočit</string>
-    <string tools:ignore="MissingTranslation" name="fast_forward">Posun vpřed</string>
-    <string tools:ignore="MissingTranslation" name="title_playback_speed">Změnit rychlost přehrávání</string>
-    <string tools:ignore="MissingTranslation" name="playback_speed">Rychlost přehrávání</string>
-    <string tools:ignore="MissingTranslation" name="pref_variable_playback_speed">Rychlost přehrávání</string>
-    <string tools:ignore="MissingTranslation" name="pref_variable_playback_speed_hint">Povolí
+    <string name="rewind">Přetočit</string>
+    <string name="fast_forward">Posun vpřed</string>
+    <string name="title_playback_speed">Změnit rychlost přehrávání</string>
+    <string name="playback_speed">Rychlost přehrávání</string>
+    <string name="pref_variable_playback_speed">Rychlost přehrávání</string>
+    <string name="pref_variable_playback_speed_hint">Povolí
         dynamickou kontrolu rychlosti přehrávání.</string>
-    <string tools:ignore="MissingTranslation" name="download_plugin">Stahovací plugin</string>
-    <string tools:ignore="MissingTranslation" name="download_plugin_message">Pro proměnlivou rychlost přehrávání je třeba stáhnout 
+    <string name="download_plugin">Stahovací plugin</string>
+    <string name="download_plugin_message">Pro proměnlivou rychlost přehrávání je třeba stáhnout
     plugin \'Prestissimo\'. Všechny nalezené chyby spojené s tímto pluginem hlašte prosím jeho
     autorovi. Po instalaci budete moci měnit rychlost přehrávání na obrazovce přehrávače.
     </string>
-    <string tools:ignore="MissingTranslation" name="pref_sleep_time">Časovač vypnutí</string>
-    <string tools:ignore="MissingTranslation" name="sleep_timer_started">Časovač vypnutí: </string>
-    <string tools:ignore="MissingTranslation" name="sleep_timer_canceled">Časovač vypnutí zrušen.</string>
+    <string name="pref_sleep_time">Časovač vypnutí</string>
+    <string name="sleep_timer_started">Časovač vypnutí: </string>
+    <string name="sleep_timer_canceled">Časovač vypnutí zrušen.</string>
 </resources>
