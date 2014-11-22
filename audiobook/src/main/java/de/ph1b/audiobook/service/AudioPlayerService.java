@@ -362,17 +362,17 @@ public class AudioPlayerService extends Service {
                 Intent rewindIntent = new Intent(AudioPlayerService.this, AudioPlayerService.class);
                 rewindIntent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_REWIND);
                 PendingIntent rewindPI = PendingIntent.getService(getApplicationContext(), 0, rewindIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-                builder.addAction(R.drawable.ic_fast_rewind_grey600_36dp, "", rewindPI);
+                builder.addAction(R.drawable.ic_fast_rewind_grey600_36dp, getString(R.string.rewind), rewindPI);
 
                 Intent pauseIntent = new Intent(AudioPlayerService.this, AudioPlayerService.class);
                 pauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_PAUSE);
                 PendingIntent pausePI = PendingIntent.getService(AudioPlayerService.this, 1, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                builder.addAction(R.drawable.ic_pause_grey600_36dp, "", pausePI);
+                builder.addAction(R.drawable.ic_pause_grey600_36dp, getString(R.string.pause), pausePI);
 
                 Intent fastForwardIntent = new Intent(AudioPlayerService.this, AudioPlayerService.class);
                 fastForwardIntent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD);
                 PendingIntent fastForwardPI = PendingIntent.getService(AudioPlayerService.this, 2, fastForwardIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                builder.addAction(R.drawable.ic_fast_forward_grey600_36dp, "", fastForwardPI);
+                builder.addAction(R.drawable.ic_fast_forward_grey600_36dp, getString(R.string.fast_forward), fastForwardPI);
 
                 builder.setPriority(NotificationCompat.PRIORITY_HIGH);
             }
@@ -644,7 +644,7 @@ public class AudioPlayerService extends Service {
         this.onSleepStateChangedListener = onSleepStateChangedListener;
     }
 
-    public boolean sleepSandActive(){
+    public boolean sleepSandActive() {
         return sleepSand != null && !sleepSand.isCancelled() && !sleepSand.isDone();
     }
 

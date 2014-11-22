@@ -66,4 +66,5 @@
     <string tools:ignore="MissingTranslation" name="pref_sleep_time">Sleep time</string>
     <string tools:ignore="MissingTranslation" name="sleep_timer_started">Sleep timer: </string>
     <string tools:ignore="MissingTranslation" name="sleep_timer_canceled">Sleep timer canceled.</string>
+    <string tools:ignore="MissingTranslation" name="pause">Pause</string>
 </resources>
