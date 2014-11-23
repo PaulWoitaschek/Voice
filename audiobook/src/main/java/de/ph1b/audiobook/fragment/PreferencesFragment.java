@@ -26,7 +26,6 @@ public class PreferencesFragment extends PreferenceFragment {
     }
 
 
-
     private void initValues() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
@@ -43,10 +42,12 @@ public class PreferencesFragment extends PreferenceFragment {
 
         //if (Build.VERSION.SDK_INT < 16 || com.aocate.media.MediaPlayer.isPrestoLibraryInstalled(getActivity())) {
         //TODO: Implement speed change
-            VariablePlaybackSpeedPreferenceDialog speedDialog =
-                    (VariablePlaybackSpeedPreferenceDialog) findPreference
-                            (getString(R.string.pref_key_variable_playback_speed));
+        VariablePlaybackSpeedPreferenceDialog speedDialog =
+                (VariablePlaybackSpeedPreferenceDialog) findPreference
+                        (getString(R.string.pref_key_variable_playback_speed));
+        if (speedDialog != null) {
             getPreferenceScreen().removePreference(speedDialog);
+        }
         //}
     }
 
