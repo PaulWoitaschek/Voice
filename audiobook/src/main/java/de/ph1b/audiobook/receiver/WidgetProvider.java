@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.view.KeyEvent;
 import android.widget.RemoteViews;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class WidgetProvider extends AppWidgetProvider {
     private static final String PLAY_CLICK = "de.ph1b.audiobook.receiver.WidgetProvider.PLAY_CLICK";
 
 
+    @SuppressWarnings("SameParameterValue")
     private PendingIntent getPendingSelfIntent(Context context, String action) {
         Intent intent = new Intent(context, getClass());
         intent.setAction(action);
@@ -55,7 +57,7 @@ public class WidgetProvider extends AppWidgetProvider {
 
             if (book != null) { // if a valid book is found start service
                 i.putExtra(AudioPlayerService.GUI_BOOK_ID, book.getId());
-                i.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
+                i.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
                 context.startService(i);
             } else { //if no valid book is found search for available books
                 ArrayList<BookDetail> books = db.getAllBooks();
@@ -67,11 +69,10 @@ public class WidgetProvider extends AppWidgetProvider {
                     editor.apply();
 
                     i.putExtra(AudioPlayerService.GUI_BOOK_ID, book.getId());
-                    i.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
+                    i.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
                     context.startService(i);
                 }
             }
         }
     }
-
 }

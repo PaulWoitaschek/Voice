@@ -65,5 +65,5 @@
     <string name="pref_sleep_time">Einschlafzeit</string>
     <string name="sleep_timer_canceled">Einschlaftimer gestoppt.</string>
     <string name="sleep_timer_started">Einschlaftimer: </string>
-    <string name="pause">Pause</string>
+    <string name="content_close_notification">Player und Benachrichtigung schließen</string>
 </resources>

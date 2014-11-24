@@ -4,6 +4,7 @@ build
 .gradle/
 .idea
 *~
+*.log
 
 # Signing
 audiobook/release.keystore

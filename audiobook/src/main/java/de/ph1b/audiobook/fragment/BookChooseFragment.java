@@ -13,7 +13,6 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -379,9 +378,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     public void onResume() {
         super.onResume();
 
-        new StartServiceAsync(getActivity(), false);
-
-        //new FolderChangerDialog().show(getFragmentManager(), TAG);
+        startAudioPlayerService();
 
         initPlayerWidget();
     }
@@ -409,7 +406,13 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.current_playing:
-                new StartServiceAsync(getActivity(), true).execute();
+                if (mBound) {
+                    if (mService.stateManager.getState() == PlayerStates.STARTED) {
+                        mService.pause(true);
+                    } else {
+                        mService.play();
+                    }
+                }
                 break;
             case R.id.fab:
                 Intent i = new Intent(getActivity(), FilesChoose.class);
@@ -445,42 +448,18 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
 
     }
 
-    /**
-     * Starts the AudioPlayerService Async. You must invoke the constructor.
-     */
-    private class StartServiceAsync extends AsyncTask<Void, Void, Void> {
-        private final Context c;
-        private final boolean shouldPlay;
+    private void startAudioPlayerService() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        int currentBookId = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
+        for (BookDetail b : adapt.getData()) {
+            if (b.getId() == currentBookId) {
+                Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
+                serviceIntent.putExtra(AudioPlayerService.GUI_BOOK_ID, b.getId());
+                getActivity().startService(serviceIntent);
 
-        /**
-         * Default constructor.
-         *
-         * @param c          Pass the Context
-         * @param shouldPlay If the service should immediately start playing
-         */
-        public StartServiceAsync(Context c, boolean shouldPlay) {
-            this.c = c;
-            this.shouldPlay = shouldPlay;
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            int currentBookId = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
-            for (BookDetail b : adapt.getData()) {
-                if (b.getId() == currentBookId) {
-                    Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
-                    serviceIntent.putExtra(AudioPlayerService.GUI_BOOK_ID, b.getId());
-                    if (shouldPlay)
-                        serviceIntent.setAction(AudioPlayerService.CONTROL_PLAY_PAUSE);
-                    c.startService(serviceIntent);
-
-                    Intent intent = new Intent(getActivity(), AudioPlayerService.class);
-                    c.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-                }
+                Intent intent = new Intent(getActivity(), AudioPlayerService.class);
+                getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
             }
-            return null;
         }
     }
 

@@ -77,7 +77,7 @@ public class CoverDownloader {
                 if (BuildConfig.DEBUG) Log.d(TAG, "Got one: " + searchURL);
             }
         } else {
-            if (BuildConfig.DEBUG) Log.d(TAG, "Didnt find bitmapUrls");
+            if (BuildConfig.DEBUG) Log.d(TAG, "Didn't find bitmapUrls");
             ArrayList<URL> newUrls = genNewURLs(searchText, number);
             if (newUrls == null)
                 return null;

@@ -6,4 +6,6 @@
     <color name="primary">#ff7986cb</color>
     <color name="primaryDark">#ff5c6bc0</color>
     <color name="colorAccent">#ff009688</color>
+    
+    <color name="notification_background_color">#ff181818</color>
 </resources>

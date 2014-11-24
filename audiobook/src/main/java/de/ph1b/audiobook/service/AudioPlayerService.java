@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.service;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
@@ -18,7 +19,6 @@ import android.media.MediaPlayer;
 import android.media.RemoteControlClient;
 import android.media.session.MediaSession;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
@@ -67,9 +67,9 @@ public class AudioPlayerService extends Service {
 
     private static final String TAG = "de.ph1b.audiobook.AudioPlayerService";
 
-    public static final String CONTROL_PLAY_PAUSE = TAG + ".CONTROL_PLAY_PAUSE";
-    public static final String CONTROL_CHANGE_MEDIA_POSITION = TAG + ".CONTROL_CHANGE_MEDIA_POSITION";
-    public static final String CONTROL_SLEEP = TAG + ".CONTROL_SLEEP";
+    // public static final String CONTROL_PLAY_PAUSE = TAG + ".CONTROL_PLAY_PAUSE";
+    //  public static final String CONTROL_CHANGE_MEDIA_POSITION = TAG + ".CONTROL_CHANGE_MEDIA_POSITION";
+    //   public static final String CONTROL_SLEEP = TAG + ".CONTROL_SLEEP";
 
     public static final String GUI = TAG + ".GUI";
     public static final String GUI_BOOK_ID = TAG + ".GUI_BOOK_ID";
@@ -79,6 +79,8 @@ public class AudioPlayerService extends Service {
     private MediaPlayer mediaPlayer;
 
     private boolean pauseBecauseHeadset = false;
+    private NotificationCompat.Builder notificationBuilder = null;
+
 
     private int lastState;
 
@@ -92,14 +94,12 @@ public class AudioPlayerService extends Service {
 
     private ComponentName myEventReceiver;
 
-    private int audioFocus = 0;
-
     private MediaSession mediaSession;
 
     private final ReentrantLock playerLock = new ReentrantLock();
 
     private ComponentName widgetComponentName;
-    private RemoteViews remoteViews;
+    private RemoteViews widgetRemoteViews;
 
     public StateManager stateManager;
 
@@ -109,11 +109,11 @@ public class AudioPlayerService extends Service {
             if (BuildConfig.DEBUG)
                 Log.d(TAG, "state changed called: " + state);
             if (state == PlayerStates.STARTED) {
-                remoteViews.setImageViewResource(R.id.widgetPlayButton, R.drawable.ic_pause_black_36dp);
+                widgetRemoteViews.setImageViewResource(R.id.widgetPlayButton, R.drawable.ic_pause_black_36dp);
             } else {
-                remoteViews.setImageViewResource(R.id.widgetPlayButton, R.drawable.ic_play_arrow_black_36dp);
+                widgetRemoteViews.setImageViewResource(R.id.widgetPlayButton, R.drawable.ic_play_arrow_black_36dp);
             }
-            AppWidgetManager.getInstance(getApplicationContext()).updateAppWidget(widgetComponentName, remoteViews);
+            AppWidgetManager.getInstance(getApplicationContext()).updateAppWidget(widgetComponentName, widgetRemoteViews);
         }
     };
 
@@ -139,6 +139,7 @@ public class AudioPlayerService extends Service {
         return mBinder;
     }
 
+    @SuppressWarnings("SameReturnValue")
     public boolean variablePlaybackSpeedIsAvailable() {
         //TODO: Implement return mediaPlayer.canSetSpeed();
         return false;
@@ -186,9 +187,7 @@ public class AudioPlayerService extends Service {
                 }
             });
             mediaSession.setActive(true);
-        }
-
-        if (Build.VERSION.SDK_INT < 21) {
+        } else {
             myEventReceiver = new ComponentName(getPackageName(), RemoteControlReceiver.class.getName());
 
             //noinspection deprecation
@@ -210,45 +209,33 @@ public class AudioPlayerService extends Service {
 
         //state manager to update widget
         widgetComponentName = new ComponentName(this, WidgetProvider.class);
-        remoteViews = new RemoteViews(this.getPackageName(), R.layout.widget);
+        widgetRemoteViews = new RemoteViews(this.getPackageName(), R.layout.widget);
 
         stateManager.addStateChangeListener(onStateChangedListener);
     }
 
 
-    private void handleAction(Intent intent) {
-        String action = intent.getAction();
-        if (action != null) {
-            if (action.equals(CONTROL_PLAY_PAUSE)) {
-                if (stateManager.getState() == PlayerStates.STARTED) {
-                    // no need to stop foreground, pause does that
-                    pause();
-                } else {
-                    play();
-                }
-            } else if (action.equals(CONTROL_CHANGE_MEDIA_POSITION)) {
-                int position = intent.getIntExtra(CONTROL_CHANGE_MEDIA_POSITION, -1);
-                if (position != -1)
-                    changePosition(position);
-            } else if (action.equals(CONTROL_SLEEP)) {
-                toggleSleepSand();
-            }
-        }
-    }
-
-
     private boolean handleKeyCode(int keyCode) {
-
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "handling keycode, state is: " + stateManager.getState() + "keycode is: " + keyCode);
+        }
         switch (keyCode) {
-            case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-            case KeyEvent.KEYCODE_MEDIA_PAUSE:
             case KeyEvent.KEYCODE_MEDIA_PLAY:
+                play();
+                return true;
+            case KeyEvent.KEYCODE_MEDIA_PAUSE:
+                pause(false);
+                return true;
+            case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
                 if (stateManager.getState() == PlayerStates.STARTED) {
-                    pause();
-                    stopForeground(true);
+                    pause(false);
                 } else {
                     play();
                 }
+                return true;
+            case KeyEvent.KEYCODE_MEDIA_STOP:
+                pause(true);
+                finish();
                 return true;
             case KeyEvent.KEYCODE_MEDIA_NEXT:
             case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
@@ -305,7 +292,6 @@ public class AudioPlayerService extends Service {
                     initBook(newBookId);
             }
             if (book != null) {
-                handleAction(intent);
                 int keyCode = intent.getIntExtra(Intent.EXTRA_KEY_EVENT, -1);
                 handleKeyCode(keyCode);
                 updateGUI();
@@ -316,92 +302,95 @@ public class AudioPlayerService extends Service {
     }
 
 
-    private class StartNotificationAsync extends AsyncTask<Void, Void, Bitmap> {
-        @Override
-        protected void onPreExecute() {
-            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putInt(BookChoose.SHARED_PREFS_CURRENT, book.getId());
-            editor.apply();
+    private Notification getNotification() {
+        if (notificationBuilder == null) {
+            notificationBuilder = new NotificationCompat.Builder(AudioPlayerService.this);
         }
 
-        @Override
-        protected Bitmap doInBackground(Void... params) {
-            String coverPath = book.getCover();
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt(BookChoose.SHARED_PREFS_CURRENT, book.getId());
+        editor.apply();
 
-            if (coverPath == null || coverPath.equals("") || !new File(coverPath).exists() || new File(coverPath).isDirectory()) {
-                return ImageHelper.genCapital(book.getName(), getApplicationContext(), ImageHelper.TYPE_NOTIFICATION);
-            } else {
-                return ImageHelper.genBitmapFromFile(coverPath, getApplicationContext(), ImageHelper.TYPE_NOTIFICATION);
-            }
+        RemoteViews smallViewRemote = new RemoteViews(getPackageName(), R.layout.notification_small);
+        RemoteViews bigViewRemote = new RemoteViews(getPackageName(), R.layout.notification_big);
+
+        String coverPath = book.getCover();
+        Bitmap smallCover;
+        Bitmap bigCover;
+        if (coverPath == null || coverPath.equals("") || !new File(coverPath).exists() || new File(coverPath).isDirectory()) {
+            smallCover = ImageHelper.genCapital(book.getName(), this, ImageHelper.TYPE_NOTIFICATION_SMALL);
+            bigCover = ImageHelper.genCapital(book.getName(), this, ImageHelper.TYPE_NOTIFICATION_BIG);
+        } else {
+            smallCover = ImageHelper.genBitmapFromFile(coverPath, this, ImageHelper.TYPE_NOTIFICATION_SMALL);
+            bigCover = ImageHelper.genBitmapFromFile(coverPath, this, ImageHelper.TYPE_NOTIFICATION_BIG);
         }
 
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            Intent bookPlayIntent = new Intent(AudioPlayerService.this, BookPlay.class);
-            bookPlayIntent.putExtra(GUI_BOOK_ID, book.getId());
-            PendingIntent pendingIntent = android.support.v4.app.TaskStackBuilder.create(AudioPlayerService.this)
-                    .addNextIntentWithParentStack(bookPlayIntent)
-                    .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent rewindIntent = new Intent(AudioPlayerService.this, AudioPlayerService.class);
+        rewindIntent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_REWIND);
+        PendingIntent rewindPI = PendingIntent.getService(getApplicationContext(), 0, rewindIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            Notification.Builder builder = new Notification.Builder(AudioPlayerService.this);
-            builder.setContentTitle(book.getName())
-                    .setContentText(media.getName())
-                    .setLargeIcon(result)
-                    .setSmallIcon(R.drawable.notification)
-                    .setContentIntent(pendingIntent)
-                    .setOngoing(true)
-                    .setAutoCancel(true);
-
-            int pos = allMedia.indexOf(media);
-            if (allMedia.size() > 1 && pos != -1) {
-                builder.setContentInfo(String.valueOf(pos + 1) + "/" + String.valueOf(allMedia.size()));
-            }
-
-            if (Build.VERSION.SDK_INT >= 16) {
-                Intent rewindIntent = new Intent(AudioPlayerService.this, AudioPlayerService.class);
-                rewindIntent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_REWIND);
-                PendingIntent rewindPI = PendingIntent.getService(getApplicationContext(), 0, rewindIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-                builder.addAction(R.drawable.ic_fast_rewind_grey600_36dp, getString(R.string.rewind), rewindPI);
-
-                Intent pauseIntent = new Intent(AudioPlayerService.this, AudioPlayerService.class);
-                pauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_PAUSE);
-                PendingIntent pausePI = PendingIntent.getService(AudioPlayerService.this, 1, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                builder.addAction(R.drawable.ic_pause_grey600_36dp, getString(R.string.pause), pausePI);
-
-                Intent fastForwardIntent = new Intent(AudioPlayerService.this, AudioPlayerService.class);
-                fastForwardIntent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD);
-                PendingIntent fastForwardPI = PendingIntent.getService(AudioPlayerService.this, 2, fastForwardIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                builder.addAction(R.drawable.ic_fast_forward_grey600_36dp, getString(R.string.fast_forward), fastForwardPI);
-
-                builder.setPriority(NotificationCompat.PRIORITY_HIGH);
-            }
-
-            if (Build.VERSION.SDK_INT >= 17) {
-                builder.setShowWhen(false);
-            }
-
-            if (Build.VERSION.SDK_INT >= 21) {
-                builder.setCategory(NotificationCompat.CATEGORY_TRANSPORT);
-                builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
-
-                Notification.MediaStyle mediaStyle = new Notification.MediaStyle();
-                mediaStyle.setShowActionsInCompactView(0, 1, 2);
-                mediaStyle.setMediaSession(mediaSession.getSessionToken());
-                builder.setStyle(mediaStyle);
-            }
-
-            builder.setWhen(0);
-
-            @SuppressWarnings("deprecation") Notification notification = builder.getNotification();
-            startForeground(NOTIFICATION_ID, notification);
+        Intent playPauseIntent = new Intent(AudioPlayerService.this, AudioPlayerService.class);
+        if (stateManager.getState() == PlayerStates.STARTED) {
+            playPauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_PAUSE);
+            smallViewRemote.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_36dp);
+            bigViewRemote.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_36dp);
+        } else {
+            playPauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_PLAY);
+            smallViewRemote.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow_white_36dp);
+            bigViewRemote.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow_white_36dp);
         }
+        PendingIntent playPausePI = PendingIntent.getService(AudioPlayerService.this, 1, playPauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent fastForwardIntent = new Intent(AudioPlayerService.this, AudioPlayerService.class);
+        fastForwardIntent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD);
+        PendingIntent fastForwardPI = PendingIntent.getService(AudioPlayerService.this, 2, fastForwardIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent stopIntent = new Intent(AudioPlayerService.this, AudioPlayerService.class);
+        stopIntent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_STOP);
+        PendingIntent stopPI = PendingIntent.getService(AudioPlayerService.this, 3, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        smallViewRemote.setImageViewBitmap(R.id.imageView, smallCover);
+        smallViewRemote.setTextViewText(R.id.title, book.getName());
+        smallViewRemote.setTextViewText(R.id.summary, media.getName());
+
+        smallViewRemote.setOnClickPendingIntent(R.id.rewind, rewindPI);
+        smallViewRemote.setOnClickPendingIntent(R.id.playPause, playPausePI);
+        smallViewRemote.setOnClickPendingIntent(R.id.fast_forward, fastForwardPI);
+        smallViewRemote.setOnClickPendingIntent(R.id.closeButton, stopPI);
+
+        bigViewRemote.setImageViewBitmap(R.id.imageView, bigCover);
+        bigViewRemote.setTextViewText(R.id.title, book.getName());
+        bigViewRemote.setTextViewText(R.id.summary, media.getName());
+
+        bigViewRemote.setOnClickPendingIntent(R.id.rewind, rewindPI);
+        bigViewRemote.setOnClickPendingIntent(R.id.playPause, playPausePI);
+        bigViewRemote.setOnClickPendingIntent(R.id.fast_forward, fastForwardPI);
+        bigViewRemote.setOnClickPendingIntent(R.id.closeButton, stopPI);;
+
+        Intent bookPlayIntent = new Intent(AudioPlayerService.this, BookPlay.class);
+        bookPlayIntent.putExtra(GUI_BOOK_ID, book.getId());
+        PendingIntent pendingIntent = android.support.v4.app.TaskStackBuilder.create(AudioPlayerService.this)
+                .addNextIntentWithParentStack(bookPlayIntent)
+                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        notificationBuilder.setContent(smallViewRemote)
+                .setContentIntent(pendingIntent)
+                .setSmallIcon(R.drawable.notification)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true);
+
+        //noinspection deprecation
+        Notification notification = notificationBuilder.getNotification();
+
+        if (Build.VERSION.SDK_INT >= 16) {
+            notification.bigContentView = bigViewRemote;
+        }
+
+        return notification;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
+    private void finish() {
         stopForeground(true);
 
         if (stateManager.getState() != PlayerStates.DEAD)
@@ -419,6 +408,13 @@ public class AudioPlayerService extends Service {
     }
 
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        finish();
+    }
+
+
     /**
      * If audio is becoming noisy, pause the player.
      */
@@ -427,7 +423,7 @@ public class AudioPlayerService extends Service {
         public void onReceive(Context context, Intent intent) {
             if (stateManager.getState() == PlayerStates.STARTED)
                 pauseBecauseHeadset = true;
-            pause();
+            pause(false);
         }
     };
 
@@ -578,7 +574,7 @@ public class AudioPlayerService extends Service {
                     } else { //else unregister as playing
                         playerLock.lock();
                         try {
-                            pause();
+                            pause(true);
                             stopForeground(true);
                             if (stateManager.getState() != PlayerStates.DEAD)
                                 mediaPlayer.reset();
@@ -649,7 +645,7 @@ public class AudioPlayerService extends Service {
     }
 
 
-    private void toggleSleepSand() {
+    public void toggleSleepSand() {
         if (sleepSandActive()) {
             sleepSand.cancel(false);
             if (onSleepStateChangedListener != null) {
@@ -671,7 +667,7 @@ public class AudioPlayerService extends Service {
                 public void run() {
                     playerLock.lock();
                     try {
-                        pause();
+                        pause(true);
                         stopForeground(true);
                         if (BuildConfig.DEBUG) Log.d(TAG, "Good night everyone");
                         if (stateManager.getState() != PlayerStates.DEAD)
@@ -763,6 +759,9 @@ public class AudioPlayerService extends Service {
      * then the latest medium is being prepared again.
      */
     public void play() {
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "play() was called");
+        }
         playerLock.lock();
         try {
             switch (stateManager.getState()) {
@@ -777,22 +776,20 @@ public class AudioPlayerService extends Service {
                     handler.post(timeChangedRunner);
 
                     //requesting audio-focus and setting up lock-screen-controls
-                    if (audioFocus != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                        audioFocus = audioManager.requestAudioFocus(audioFocusChangeListener,
-                                AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-                        if (Build.VERSION.SDK_INT < 21) {
-                            if (BuildConfig.DEBUG)
-                                Log.d(TAG, "Setting up remote control client");
-                            //noinspection deprecation
-                            audioManager.registerMediaButtonEventReceiver(myEventReceiver);
-                            //noinspection deprecation
-                            audioManager.registerRemoteControlClient(mRemoteControlClient);
-                            //noinspection deprecation
-                            mRemoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
-                        }
+                    audioManager.requestAudioFocus(audioFocusChangeListener,
+                            AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+                    if (Build.VERSION.SDK_INT < 21) {
+                        if (BuildConfig.DEBUG)
+                            Log.d(TAG, "Setting up remote control client");
+                        //noinspection deprecation
+                        audioManager.registerMediaButtonEventReceiver(myEventReceiver);
+                        //noinspection deprecation
+                        audioManager.registerRemoteControlClient(mRemoteControlClient);
+                        //noinspection deprecation
+                        mRemoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
                     }
 
-                    new StartNotificationAsync().execute();
+                    startForeground(NOTIFICATION_ID, getNotification());
                     updateGUI();
                     break;
                 case IDLE:
@@ -814,10 +811,11 @@ public class AudioPlayerService extends Service {
     /**
      * Pauses the book. Does not stopForeground.
      */
-    public void pause() {
-        if (BuildConfig.DEBUG) Log.d(TAG, "pause called!");
+    public void pause(boolean removeNotification) {
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "pause called! with removeNotification: " + removeNotification);
+        }
 
-        stopForeground(true);
         if (stateManager.getState() == PlayerStates.STARTED) {
             playerLock.lock();
             try {
@@ -828,18 +826,25 @@ public class AudioPlayerService extends Service {
                     updateBookAsync(book);
                 }
 
-                //stop notification
-                stopForeground(false);
-
                 //stops runner who were updating gui frequently
                 handler.removeCallbacks(timeChangedRunner);
 
-                //abandon audio-focus and disabling lock-screen controls
-                audioManager.abandonAudioFocus(audioFocusChangeListener);
-                audioFocus = 0;
-
                 mediaPlayer.pause();
                 stateManager.setState(PlayerStates.PAUSED);
+
+                //stop notification if wished
+                NotificationManager notificationManager =
+                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                stopForeground(removeNotification);
+                if (removeNotification) {
+                    notificationManager.cancel(NOTIFICATION_ID);
+                } else {
+                    notificationManager.notify(NOTIFICATION_ID, getNotification());
+                }
+                if (Build.VERSION.SDK_INT < 21) {
+                    //noinspection deprecation
+                    mRemoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
+                }
             } finally {
                 playerLock.unlock();
             }
@@ -903,7 +908,7 @@ public class AudioPlayerService extends Service {
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "Paused by audio-focus loss transient.");
-                    pause();
+                    pause(false);
                     lastState = focusChange;
                     break;
                 case AudioManager.AUDIOFOCUS_GAIN:
@@ -915,7 +920,7 @@ public class AudioPlayerService extends Service {
                             break;
                         case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                             if (BuildConfig.DEBUG)
-                                Log.d(TAG, "increasing volume because of regain focus from tcanduck");
+                                Log.d(TAG, "increasing volume because of regain focus from transient-can-duck");
                             audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
                             break;
                         default:
@@ -925,7 +930,7 @@ public class AudioPlayerService extends Service {
                 case AudioManager.AUDIOFOCUS_LOSS:
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "paused by audioFocus loss");
-                    pause();
+                    pause(true);
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                     if (BuildConfig.DEBUG)

@@ -75,8 +75,8 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
 
     private int duration;
 
-    private AudioPlayerService mService;
-    private boolean mBound = false;
+    public AudioPlayerService mService;
+    public boolean mBound = false;
     private boolean sleepTimerActive = false;
 
     private final ServiceConnection mConnection = new ServiceConnection() {
@@ -378,8 +378,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
             switch (view.getId()) {
                 case R.id.play:
                     if (mService.stateManager.getState() == PlayerStates.STARTED) {
-                        mService.pause();
-                        mService.stopForeground(true);
+                        mService.pause(true);
                     } else
                         mService.play();
                     break;
@@ -405,12 +404,13 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
 
 
     private void launchJumpToPositionDialog() {
-        JumpToPosition jumpToPosition = new JumpToPosition();
+        JumpToPosition dialog = new JumpToPosition();
         Bundle bundle = new Bundle();
         bundle.putInt(JumpToPosition.DURATION, duration);
         bundle.putInt(JumpToPosition.POSITION, position);
-        jumpToPosition.setArguments(bundle);
-        jumpToPosition.show(getFragmentManager(), "timePicker");
+        dialog.setArguments(bundle);
+        dialog.setTargetFragment(this, 42);
+        dialog.show(getFragmentManager(), "timePicker");
     }
 
     @Override
@@ -423,9 +423,9 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
                 launchJumpToPositionDialog();
                 return true;
             case R.id.action_sleep:
-                Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
-                serviceIntent.setAction(AudioPlayerService.CONTROL_SLEEP);
-                getActivity().startService(serviceIntent);
+                if (mBound) {
+                    mService.toggleSleepSand();
+                }
                 return true;
             case R.id.action_time_lapse:
                 SetPlaybackSpeedDialog dialog = new SetPlaybackSpeedDialog();

@@ -3,4 +3,6 @@
     <dimen name="thumb_size">68dp</dimen>
     <dimen name="cover_edit_stroke_width">3dp</dimen>
     <dimen name="desired_medium_cover">180dp</dimen>
+    <dimen name="notification_small">64dp</dimen>
+    <dimen name="notification_big">128dp</dimen>
 </resources>

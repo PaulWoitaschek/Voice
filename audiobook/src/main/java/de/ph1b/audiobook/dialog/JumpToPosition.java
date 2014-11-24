@@ -4,9 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -16,7 +14,7 @@ import android.widget.NumberPicker;
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.service.AudioPlayerService;
+import de.ph1b.audiobook.fragment.BookPlayFragment;
 
 
 public class JumpToPosition extends DialogFragment {
@@ -96,15 +94,13 @@ public class JumpToPosition extends DialogFragment {
         builder.setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                Context c = getActivity().getApplication();
                 int h = hPicker.getValue();
                 int m = mPicker.getValue();
                 int newPosition = (m + 60 * h) * 60 * 1000;
-                Intent i = new Intent(c, AudioPlayerService.class);
-                i.setAction(AudioPlayerService.CONTROL_CHANGE_MEDIA_POSITION);
-                i.putExtra(AudioPlayerService.CONTROL_CHANGE_MEDIA_POSITION, newPosition);
-                c.startService(i);
-
+                BookPlayFragment fragment = (BookPlayFragment) getTargetFragment();
+                if (fragment.mBound) {
+                    fragment.mService.changePosition(newPosition);
+                }
             }
         });
         builder.setNegativeButton(R.string.dialog_cancel, null);

@@ -41,8 +41,11 @@ public class ImageHelper {
             case TYPE_THUMB:
                 rect = resolveImageType(TYPE_THUMB, c);
                 break;
-            case TYPE_NOTIFICATION:
-                rect = resolveImageType(TYPE_NOTIFICATION, c);
+            case TYPE_NOTIFICATION_SMALL:
+                rect = resolveImageType(TYPE_NOTIFICATION_SMALL, c);
+                break;
+            case TYPE_NOTIFICATION_BIG:
+                rect = resolveImageType(TYPE_NOTIFICATION_BIG, c);
                 break;
             default:
                 return null;
@@ -70,6 +73,8 @@ public class ImageHelper {
         int displayHeight = metrics.heightPixels;
         int squareCover = displayWidth < displayHeight ? displayWidth : displayHeight;
 
+        int height;
+        int width;
         switch (type) {
             case TYPE_COVER:
                 return new Rect(0, 0, squareCover, squareCover);
@@ -79,9 +84,13 @@ public class ImageHelper {
             case TYPE_THUMB:
                 int thumbSizePx = c.getResources().getDimensionPixelSize(R.dimen.thumb_size);
                 return new Rect(0, 0, thumbSizePx, thumbSizePx);
-            case TYPE_NOTIFICATION:
-                int height = c.getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_height);
-                int width = c.getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_width);
+            case TYPE_NOTIFICATION_SMALL:
+                height = c.getResources().getDimensionPixelSize(R.dimen.notification_small);
+                width = c.getResources().getDimensionPixelSize(R.dimen.notification_small);
+                return new Rect(0, 0, width, height);
+            case TYPE_NOTIFICATION_BIG:
+                height = c.getResources().getDimensionPixelSize(R.dimen.notification_big);
+                width = c.getResources().getDimensionPixelSize(R.dimen.notification_big);
                 return new Rect(0, 0, width, height);
             default:
                 return null;
@@ -151,7 +160,8 @@ public class ImageHelper {
     public static final int TYPE_COVER = 0;
     public static final int TYPE_MEDIUM = 1;
     public static final int TYPE_THUMB = 2;
-    public static final int TYPE_NOTIFICATION = 3;
+    public static final int TYPE_NOTIFICATION_SMALL = 3;
+    public static final int TYPE_NOTIFICATION_BIG = 4;
 
     public static Bitmap genBitmapFromFile(String pathName, Context c, int type) {
         Rect reqSize = resolveImageType(type, c);
