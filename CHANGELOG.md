@@ -1,3 +1,12 @@
+# v1.4.5
+
+## Additions
+* Notification reworked
+* Czech translation
+
+## Fixes
+* Crash in preferences fixed
+
 # v1.4.4
 
 ## Additions
