@@ -448,19 +448,28 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
 
     }
 
-    private void startAudioPlayerService() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        int currentBookId = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
-        for (BookDetail b : adapt.getData()) {
-            if (b.getId() == currentBookId) {
-                Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
-                serviceIntent.putExtra(AudioPlayerService.GUI_BOOK_ID, b.getId());
-                getActivity().startService(serviceIntent);
 
-                Intent intent = new Intent(getActivity(), AudioPlayerService.class);
-                getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    /**
+     * Starts the service (async, on background thread)
+     */
+    private void startAudioPlayerService() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                int currentBookId = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
+                for (BookDetail b : adapt.getData()) {
+                    if (b.getId() == currentBookId) {
+                        Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
+                        serviceIntent.putExtra(AudioPlayerService.GUI_BOOK_ID, b.getId());
+                        getActivity().startService(serviceIntent);
+
+                        Intent intent = new Intent(getActivity(), AudioPlayerService.class);
+                        getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+                    }
+                }
             }
-        }
+        }).start();
     }
 
 
