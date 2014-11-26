@@ -2,11 +2,13 @@ package de.ph1b.audiobook.fragment;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
@@ -213,13 +215,24 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                                 editBook.show(getFragmentManager(), TAG);
                                 return true;
                             case R.id.delete_book:
-                                //setting visibility of play widget at bottom to gone if book is gone
-                                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                                int currentBookId = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
-                                if (adapt.getItem(position).getId() == currentBookId)
-                                    current.setVisibility(View.GONE);
+                                BookDetail deleteBook = adapt.getItem(position);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                builder.setTitle(R.string.delete_book_title);
+                                builder.setMessage(deleteBook.getName());
+                                builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        //setting visibility of play widget at bottom to gone if book is gone
+                                        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                                        int currentBookId = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
+                                        if (adapt.getItem(position).getId() == currentBookId)
+                                            current.setVisibility(View.GONE);
 
-                                adapt.removeItem(position);
+                                        adapt.removeItem(position);
+                                    }
+                                });
+                                builder.setNegativeButton(R.string.delete_book_keep, null);
+                                builder.show();
                                 return true;
                             default:
                                 return false;
@@ -314,7 +327,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                         Log.d(TAG, endX + "/" + endY);
                         View endChild = recyclerView.findChildViewUnder(endX, endY);
                         int to = recyclerView.getChildPosition(endChild);
-    
+
                         if (from != -1 && to != -1) {
                             adapt.swapItems(from, to);
                             return true;

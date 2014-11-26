@@ -43,7 +43,7 @@
 
     <string name="edit_book_title">Upravit knihu</string>
     <string name="popup_edit_book">Upravit</string>
-    <string name="popup_delete_book">Smazat</string>
+    <string name="delete">Smazat</string>
     <string name="content_file_or_folder">Ukazuje jestli jde o
         soubor nebo adresář</string>
     <string name="error_in_file_title">Chyba souboru</string>

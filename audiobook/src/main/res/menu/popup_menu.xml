@@ -7,5 +7,5 @@
 
     <item
         android:id="@+id/delete_book"
-        android:title="@string/popup_delete_book" />
+        android:title="@string/delete" />
 </menu>
