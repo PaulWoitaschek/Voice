@@ -331,24 +331,29 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
         String bookName = book.getName();
         actionBar.setTitle(bookName);
 
-        adapter = new MediaSpinnerAdapter(getActivity(), db.getMediaFromBook(book.getId()));
-        bookSpinner.setAdapter(adapter);
-        bookSpinner.setSelection(adapter.getPositionByMediaDetailId(book.getCurrentMediaId()));
-        bookSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != oldPosition) {
-                    if (mBound)
-                        mService.changeBookPosition(allMedia.get(position).getId());
-                    oldPosition = position;
+        if (allMedia.size() > 1) {
+            bookSpinner.setVisibility(View.VISIBLE);
+            adapter = new MediaSpinnerAdapter(getActivity(), db.getMediaFromBook(book.getId()));
+            bookSpinner.setAdapter(adapter);
+            bookSpinner.setSelection(adapter.getPositionByMediaDetailId(book.getCurrentMediaId()));
+            bookSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (position != oldPosition) {
+                        if (mBound)
+                            mService.changeBookPosition(allMedia.get(position).getId());
+                        oldPosition = position;
+                    }
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
+                }
+            });
+        } else {
+            bookSpinner.setVisibility(View.GONE);
+        }
     }
 
 
