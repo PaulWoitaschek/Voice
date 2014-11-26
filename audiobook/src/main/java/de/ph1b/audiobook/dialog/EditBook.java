@@ -23,9 +23,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.io.InputStream;
 import java.lang.ref.WeakReference;
-import java.net.URLConnection;
 import java.util.ArrayList;
 
 import de.ph1b.audiobook.BuildConfig;
@@ -271,15 +269,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
 
         @Override
         protected void onCancelled() {
-            URLConnection urlConnection = CoverDownloader.connection;
-            if (urlConnection != null) {
-                try {
-                    InputStream inputStream = urlConnection.getInputStream();
-                    if (inputStream != null)
-                        inputStream.close();
-                } catch (Exception ignored) {
-                }
-            }
+            CoverDownloader.cancelDownload();
         }
     }
 }
