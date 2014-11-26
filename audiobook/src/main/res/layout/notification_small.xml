@@ -23,8 +23,7 @@
 
         <TextView
             android:id="@+id/title"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
+            style="@android:style/TextAppearance.StatusBar.EventContent.Title"
             android:singleLine="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -32,8 +31,7 @@
         <TextView
             android:id="@+id/summary"
             android:singleLine="true"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
+            style="@android:style/TextAppearance.StatusBar.EventContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
