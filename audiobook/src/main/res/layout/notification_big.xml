@@ -61,7 +61,7 @@
 
             <ImageButton
                 android:id="@+id/playPause"
-                android:src="@drawable/ic_play_arrow_white_36dp"
+                android:src="@drawable/ic_play_arrow_white_48dp"
                 android:adjustViewBounds="true"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

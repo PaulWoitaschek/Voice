@@ -334,12 +334,12 @@ public class AudioPlayerService extends Service {
         Intent playPauseIntent = new Intent(AudioPlayerService.this, AudioPlayerService.class);
         if (stateManager.getState() == PlayerStates.STARTED) {
             playPauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_PAUSE);
-            smallViewRemote.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_36dp);
-            bigViewRemote.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_36dp);
+            smallViewRemote.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_48dp);
+            bigViewRemote.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_48dp);
         } else {
             playPauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_PLAY);
-            smallViewRemote.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow_white_36dp);
-            bigViewRemote.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow_white_36dp);
+            smallViewRemote.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow_white_48dp);
+            bigViewRemote.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow_white_48dp);
         }
         PendingIntent playPausePI = PendingIntent.getService(AudioPlayerService.this, 1, playPauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
