@@ -21,20 +21,20 @@ public class DraggableBoxImageView extends ImageView {
 
     private Paint borderLinePaint;
 
-    private float left = 0;
-    private float right = 0;
-    private float top = 0;
-    private float bottom = 0;
+    private float left;
+    private float right;
+    private float top;
+    private float bottom;
 
-    private float imageViewWidth = 0;
-    private float imageViewHeight = 0;
+    private float imageViewWidth;
+    private float imageViewHeight;
 
     private float maxWidth;
     private float maxHeight;
 
     //where the finger last went down
-    private float fingerX = 0;
-    private float fingerY = 0;
+    private float fingerX;
+    private float fingerY;
 
 
     @Override
@@ -93,6 +93,7 @@ public class DraggableBoxImageView extends ImageView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 
+        init();
 
         imageViewWidth = w;
         imageViewHeight = h;
@@ -188,5 +189,20 @@ public class DraggableBoxImageView extends ImageView {
         borderLinePaint.setColor(getResources().getColor(R.color.primary));
         borderLinePaint.setStyle(Paint.Style.STROKE);
         borderLinePaint.setStrokeWidth(strokeWidth);
+
+        left = 0;
+        right = 0;
+        top = 0;
+        bottom = 0;
+
+        imageViewWidth = 0;
+        imageViewHeight = 0;
+
+        maxWidth = 0;
+        maxHeight = 0;
+
+        //where the finger last went down
+        fingerX = 0;
+        fingerY = 0;
     }
 }
