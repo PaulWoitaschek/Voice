@@ -1,3 +1,18 @@
+# v1.4.6
+
+## Additions
+* Album art on lockscreen for Lollipop
+* Notification visually improved
+* Confirmation on deleting book
+* Swapping book to empty (last) position now possible
+* Speed of book adding improved
+* Performance improvements
+
+## Fixes
+* Only resumes after call if player really was playing before
+* Cover crop weird border fixed
+* Correctly inits spinner in player
+
 # v1.4.5
 
 ## Additions
