@@ -82,7 +82,7 @@ public class AudioPlayerService extends Service {
     private NotificationCompat.Builder notificationBuilder = null;
 
 
-    private int lastState;
+    private boolean pauseBecauseLossTransient = false;
 
     private MediaDetail media;
     private ArrayList<MediaDetail> allMedia;
@@ -256,6 +256,7 @@ public class AudioPlayerService extends Service {
         allMedia = db.getMediaFromBook(bookId);
         stopForeground(true);
         prepare(book.getCurrentMediaId());
+        pauseBecauseLossTransient = false;
     }
 
 
@@ -366,7 +367,7 @@ public class AudioPlayerService extends Service {
         bigViewRemote.setOnClickPendingIntent(R.id.rewind, rewindPI);
         bigViewRemote.setOnClickPendingIntent(R.id.playPause, playPausePI);
         bigViewRemote.setOnClickPendingIntent(R.id.fast_forward, fastForwardPI);
-        bigViewRemote.setOnClickPendingIntent(R.id.closeButton, stopPI);;
+        bigViewRemote.setOnClickPendingIntent(R.id.closeButton, stopPI);
 
         Intent bookPlayIntent = new Intent(AudioPlayerService.this, BookPlay.class);
         bookPlayIntent.putExtra(GUI_BOOK_ID, book.getId());
@@ -767,6 +768,8 @@ public class AudioPlayerService extends Service {
             switch (stateManager.getState()) {
                 case PREPARED:
                 case PAUSED:
+                    pauseBecauseLossTransient = false;
+
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "starting MediaPlayer");
                     mediaPlayer.start();
@@ -906,25 +909,23 @@ public class AudioPlayerService extends Service {
         public void onAudioFocusChange(int focusChange) {
             switch (focusChange) {
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                    if (BuildConfig.DEBUG)
-                        Log.d(TAG, "Paused by audio-focus loss transient.");
-                    pause(false);
-                    lastState = focusChange;
+                    if (stateManager.getState() == PlayerStates.STARTED) {
+                        if (BuildConfig.DEBUG)
+                            Log.d(TAG, "Paused by audio-focus loss transient.");
+                        pause(false);
+                        pauseBecauseLossTransient = true;
+                    }
                     break;
                 case AudioManager.AUDIOFOCUS_GAIN:
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "started by audioFocus gained");
-                    switch (lastState) {
-                        case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                            play();
-                            break;
-                        case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                            if (BuildConfig.DEBUG)
-                                Log.d(TAG, "increasing volume because of regain focus from transient-can-duck");
-                            audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
-                            break;
-                        default:
-                            break;
+
+                    if (pauseBecauseLossTransient){
+                        play();
+                    } else {
+                        if (BuildConfig.DEBUG)
+                            Log.d(TAG, "increasing volume because of regain focus from transient-can-duck");
+                        audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
                     }
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS:
@@ -936,7 +937,7 @@ public class AudioPlayerService extends Service {
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "lowering volume because of af loss transcient can duck");
                     audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
-                    lastState = focusChange;
+                    pauseBecauseLossTransient = true;
                     break;
                 default:
                     break;
