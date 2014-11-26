@@ -27,6 +27,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.RemoteViews;
@@ -787,6 +788,7 @@ public class AudioPlayerService extends Service {
 
                     startForeground(NOTIFICATION_ID, getNotification());
                     updateGUI();
+                    setPlayStateForMediaSession(PlaybackStateCompat.STATE_PLAYING);
                     break;
                 case IDLE:
                 case DEAD:
@@ -801,6 +803,12 @@ public class AudioPlayerService extends Service {
         } finally {
             playerLock.unlock();
         }
+    }
+
+    private void setPlayStateForMediaSession(int playState){
+        PlaybackStateCompat.Builder stateBuilder = new PlaybackStateCompat.Builder();
+        stateBuilder.setState(playState, 0, 0);
+        mediaSession.setPlaybackState(stateBuilder.build());
     }
 
 
@@ -841,6 +849,7 @@ public class AudioPlayerService extends Service {
                     //noinspection deprecation
                     mRemoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
                 }
+                setPlayStateForMediaSession(PlaybackStateCompat.STATE_PAUSED);
             } finally {
                 playerLock.unlock();
             }
