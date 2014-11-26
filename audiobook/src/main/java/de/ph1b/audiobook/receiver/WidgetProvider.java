@@ -44,35 +44,38 @@ public class WidgetProvider extends AppWidgetProvider {
     }
 
     @Override
-    public void onReceive(@NonNull Context context, @NonNull Intent intent) {
+    public void onReceive(@NonNull final Context context, @NonNull Intent intent) {
         super.onReceive(context, intent);
         if (intent.getAction().equals(PLAY_CLICK)) {
-            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-            int position = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
+            final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+            final int position = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
 
-            DataBaseHelper db = DataBaseHelper.getInstance(context);
-            BookDetail book = db.getBook(position);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    final DataBaseHelper db = DataBaseHelper.getInstance(context);
+                    BookDetail book = db.getBook(position);
+                    Intent i = new Intent(context, AudioPlayerService.class);
+                    if (book != null) { // if a valid book is found start service
+                        i.putExtra(AudioPlayerService.GUI_BOOK_ID, book.getId());
+                        i.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+                        context.startService(i);
+                    } else { //if no valid book is found search for available books
+                        ArrayList<BookDetail> books = db.getAllBooks();
+                        if (books.size() > 0) { //if there are valid books start the first one
+                            book = books.get(0);
 
-            Intent i = new Intent(context, AudioPlayerService.class);
+                            SharedPreferences.Editor editor = settings.edit();
+                            editor.putInt(BookChoose.SHARED_PREFS_CURRENT, book.getId());
+                            editor.apply();
 
-            if (book != null) { // if a valid book is found start service
-                i.putExtra(AudioPlayerService.GUI_BOOK_ID, book.getId());
-                i.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
-                context.startService(i);
-            } else { //if no valid book is found search for available books
-                ArrayList<BookDetail> books = db.getAllBooks();
-                if (books.size() > 0) { //if there are valid books start the first one
-                    book = books.get(0);
-
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putInt(BookChoose.SHARED_PREFS_CURRENT, book.getId());
-                    editor.apply();
-
-                    i.putExtra(AudioPlayerService.GUI_BOOK_ID, book.getId());
-                    i.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
-                    context.startService(i);
+                            i.putExtra(AudioPlayerService.GUI_BOOK_ID, book.getId());
+                            i.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+                            context.startService(i);
+                        }
+                    }
                 }
-            }
+            }).start();
         }
     }
 }

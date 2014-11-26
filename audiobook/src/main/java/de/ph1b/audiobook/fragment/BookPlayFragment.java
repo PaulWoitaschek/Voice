@@ -236,10 +236,15 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
             noMediaFound();
         } else {
             //starting the service
-            if (BuildConfig.DEBUG) Log.d(TAG, "Starting service with id: " + book.getId());
-            Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
-            serviceIntent.putExtra(AudioPlayerService.GUI_BOOK_ID, book.getId());
-            getActivity().startService(serviceIntent);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (BuildConfig.DEBUG) Log.d(TAG, "Starting service with id: " + book.getId());
+                    Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
+                    serviceIntent.putExtra(AudioPlayerService.GUI_BOOK_ID, book.getId());
+                    getActivity().startService(serviceIntent);
+                }
+            }).start();
         }
     }
 

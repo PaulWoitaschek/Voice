@@ -14,14 +14,19 @@ public class RemoteControlReceiver extends BroadcastReceiver {
 
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(final Context context, Intent intent) {
         KeyEvent event = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
         if (event.getAction() == (KeyEvent.ACTION_DOWN)) {
-            int keyCode = event.getKeyCode();
+            final int keyCode = event.getKeyCode();
             if (BuildConfig.DEBUG) Log.d("rmcr", "retrieved keycode: " + keyCode);
-            Intent i = new Intent(context, AudioPlayerService.class);
-            i.putExtra(Intent.EXTRA_KEY_EVENT, keyCode);
-            context.startService(i);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Intent i = new Intent(context, AudioPlayerService.class);
+                    i.putExtra(Intent.EXTRA_KEY_EVENT, keyCode);
+                    context.startService(i);
+                }
+            }).start();
         }
     }
 }
