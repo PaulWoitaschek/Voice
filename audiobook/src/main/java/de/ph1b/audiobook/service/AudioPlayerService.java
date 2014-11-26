@@ -604,7 +604,7 @@ public class AudioPlayerService extends Service {
             public void run() {
                 db.updateBook(book);
             }
-        }).run();
+        }).start();
     }
 
 
