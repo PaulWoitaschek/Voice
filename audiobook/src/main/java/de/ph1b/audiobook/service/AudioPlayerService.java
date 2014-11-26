@@ -13,11 +13,9 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
-import android.media.MediaMetadata;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.media.RemoteControlClient;
-import android.media.session.MediaSession;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
@@ -27,6 +25,8 @@ import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.media.MediaMetadataCompat;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.RemoteViews;
@@ -94,7 +94,7 @@ public class AudioPlayerService extends Service {
 
     private ComponentName myEventReceiver;
 
-    private MediaSession mediaSession;
+    private MediaSessionCompat mediaSession;
 
     private final ReentrantLock playerLock = new ReentrantLock();
 
@@ -165,29 +165,29 @@ public class AudioPlayerService extends Service {
         mediaButtonIntent.setComponent(nmm);
         PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(this, 0, mediaButtonIntent, 0);
 
-        if (Build.VERSION.SDK_INT >= 21) {
-            mediaSession = new MediaSession(AudioPlayerService.this, TAG);
-            mediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS |
-                    MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
 
-            //callback
-            mediaSession.setCallback(new MediaSession.Callback() {
-                @Override
-                public boolean onMediaButtonEvent(Intent mediaButtonIntent) {
-                    String action = mediaButtonIntent.getAction();
-                    if (BuildConfig.DEBUG) Log.d(TAG, "onMediaButtonEvent was called");
-                    if (action.equals(Intent.ACTION_MEDIA_BUTTON)) {
-                        KeyEvent event = mediaButtonIntent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
-                        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                            int keyCode = event.getKeyCode();
-                            return handleKeyCode(keyCode);
-                        }
+        mediaSession = new MediaSessionCompat(AudioPlayerService.this, TAG);
+        mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
+                MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+
+        //callback
+        mediaSession.setCallback(new MediaSessionCompat.Callback() {
+            @Override
+            public boolean onMediaButtonEvent(Intent mediaButtonIntent) {
+                String action = mediaButtonIntent.getAction();
+                if (BuildConfig.DEBUG) Log.d(TAG, "onMediaButtonEvent was called");
+                if (action.equals(Intent.ACTION_MEDIA_BUTTON)) {
+                    KeyEvent event = mediaButtonIntent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
+                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                        int keyCode = event.getKeyCode();
+                        return handleKeyCode(keyCode);
                     }
-                    return false;
                 }
-            });
-            mediaSession.setActive(true);
-        } else {
+                return false;
+            }
+        });
+        mediaSession.setActive(true);
+        if (Build.VERSION.SDK_INT < 21) {
             myEventReceiver = new ComponentName(getPackageName(), RemoteControlReceiver.class.getName());
 
             //noinspection deprecation
@@ -510,34 +510,27 @@ public class AudioPlayerService extends Service {
                 e.printStackTrace();
             }
 
-            if (Build.VERSION.SDK_INT >= 21) {
-                // metadata
-                MediaMetadata.Builder builder = new MediaMetadata.Builder();
-                String coverPath = book.getCover();
-                Bitmap bitmap;
-                if (coverPath == null || !new File(coverPath).exists() || new File(coverPath).isDirectory()) {
-                    bitmap = ImageHelper.genCapital(book.getName(), getApplication(), ImageHelper.TYPE_COVER);
-                } else {
-                    bitmap = ImageHelper.genBitmapFromFile(coverPath, AudioPlayerService.this, ImageHelper.TYPE_COVER);
-                }
-                builder.putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, bitmap);
-                builder.putLong(MediaMetadata.METADATA_KEY_DURATION, media.getDuration());
-                builder.putString(MediaMetadata.METADATA_KEY_TITLE, media.getName());
-                builder.putString(MediaMetadata.METADATA_KEY_ALBUM_ARTIST, book.getName());
-                mediaSession.setMetadata(builder.build());
+
+            // metadata
+            MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();
+            String coverPath = book.getCover();
+            Bitmap bitmap;
+            if (coverPath == null || !new File(coverPath).exists() || new File(coverPath).isDirectory()) {
+                bitmap = ImageHelper.genCapital(book.getName(), getApplication(), ImageHelper.TYPE_COVER);
+            } else {
+                bitmap = ImageHelper.genBitmapFromFile(coverPath, AudioPlayerService.this, ImageHelper.TYPE_COVER);
             }
+            builder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap);
+            builder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, media.getDuration());
+            builder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, media.getName());
+            builder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, book.getName());
+            mediaSession.setMetadata(builder.build());
+
             if (Build.VERSION.SDK_INT < 21) {
                 //updates metadata for proper lock screen information
                 @SuppressWarnings("deprecation") RemoteControlClient.MetadataEditor editor = mRemoteControlClient.editMetadata(true);
                 editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, media.getName());
                 editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName());
-                String coverPath = book.getCover();
-                Bitmap bitmap;
-                if (coverPath == null || coverPath.equals("") || !new File(coverPath).exists() || new File(coverPath).isDirectory()) {
-                    bitmap = ImageHelper.genCapital(book.getName(), getApplication(), ImageHelper.TYPE_COVER);
-                } else {
-                    bitmap = ImageHelper.genBitmapFromFile(coverPath, AudioPlayerService.this, ImageHelper.TYPE_COVER);
-                }
                 //noinspection deprecation
                 editor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bitmap);
                 editor.apply();
@@ -920,7 +913,7 @@ public class AudioPlayerService extends Service {
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "started by audioFocus gained");
 
-                    if (pauseBecauseLossTransient){
+                    if (pauseBecauseLossTransient) {
                         play();
                     } else {
                         if (BuildConfig.DEBUG)
