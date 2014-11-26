@@ -419,7 +419,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     public void onEditBookFinished(String bookName, Bitmap cover, Boolean success) {
         if (success) {
             //adds book and launches progress dialog
-            new AddBookAsync(mediaFiles, bookName, cover).execute();
+            new AddBookAsync(mediaFiles, bookName, cover).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
 
