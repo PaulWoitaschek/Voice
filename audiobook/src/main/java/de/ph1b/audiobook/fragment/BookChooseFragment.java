@@ -287,7 +287,6 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                         scrollBy = 0;
                         if (y <= scrollArea && y > 0) {
                             scrollBy = maxScrollStrength * (y / scrollArea - 1);
-                            Log.d(TAG, String.valueOf(scrollBy));
                         } else if (y >= (height - scrollArea) && y <= height) {
                             scrollBy = maxScrollStrength * (1 - y / height);
 
@@ -312,15 +311,19 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
 
                         float endX = event.getX();
                         float endY = event.getY();
+                        Log.d(TAG, endX + "/" + endY);
                         View endChild = recyclerView.findChildViewUnder(endX, endY);
                         int to = recyclerView.getChildPosition(endChild);
-
-                        if (from == -1 || to == -1)
-                            return false;
-
-                        adapt.swapItems(from, to);
-
-                        return true;
+    
+                        if (from != -1 && to != -1) {
+                            adapt.swapItems(from, to);
+                            return true;
+                        } else if (from != -1) {
+                            to = adapt.getItemCount() - 1;
+                            adapt.swapItems(from, to);
+                            return true;
+                        }
+                        return false;
                     case DragEvent.ACTION_DRAG_ENDED:
                         handler.removeCallbacks(smoothScroll);
                         scrollBy = 0;
