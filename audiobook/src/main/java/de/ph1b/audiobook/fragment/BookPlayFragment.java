@@ -17,7 +17,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,7 +36,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookChoose;
 import de.ph1b.audiobook.activity.Settings;
@@ -231,15 +229,14 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
 
         int bookId = i.getIntExtra(AudioPlayerService.GUI_BOOK_ID, -1);
         book = db.getBook(bookId);
-        allMedia = db.getMediaFromBook(book.getId());
-        if (allMedia.size() == 0) {
+        if (book == null) {
             noMediaFound();
         } else {
+            allMedia = db.getMediaFromBook(book.getId());
             //starting the service
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    if (BuildConfig.DEBUG) Log.d(TAG, "Starting service with id: " + book.getId());
                     Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
                     serviceIntent.putExtra(AudioPlayerService.GUI_BOOK_ID, book.getId());
                     getActivity().startService(serviceIntent);
