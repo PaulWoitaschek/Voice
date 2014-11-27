@@ -400,8 +400,11 @@ public class AudioPlayerService extends Service {
         mediaPlayer.release();
         stateManager.setState(PlayerStates.DEAD);
 
-        unregisterReceiver(audioBecomingNoisyReceiver);
-        unregisterReceiver(headsetPlugReceiver);
+        try {
+            unregisterReceiver(audioBecomingNoisyReceiver);
+            unregisterReceiver(headsetPlugReceiver);
+        } catch (IllegalArgumentException ignored) {
+        }
 
         //noinspection deprecation
         audioManager.unregisterMediaButtonEventReceiver(myEventReceiver);
@@ -805,7 +808,7 @@ public class AudioPlayerService extends Service {
         }
     }
 
-    private void setPlayStateForMediaSession(int playState){
+    private void setPlayStateForMediaSession(int playState) {
         PlaybackStateCompat.Builder stateBuilder = new PlaybackStateCompat.Builder();
         stateBuilder.setState(playState, 0, 0);
         mediaSession.setPlaybackState(stateBuilder.build());
