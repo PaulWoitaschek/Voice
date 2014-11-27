@@ -927,7 +927,7 @@ public class AudioPlayerService extends Service {
 
                     if (pauseBecauseLossTransient) {
                         play();
-                    } else {
+                    } else if (stateManager.getState() == PlayerStates.STARTED) {
                         if (BuildConfig.DEBUG)
                             Log.d(TAG, "increasing volume because of regain focus from transient-can-duck");
                         audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
