@@ -1,3 +1,9 @@
+# v1.4.6.1
+
+## Fixes
+* Prevents media from resume playing after incoming notification when player was not pause.
+* Smaller bugfixes
+
 # v1.4.6
 
 ## Additions
