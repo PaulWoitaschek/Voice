@@ -32,7 +32,6 @@ import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.aocate.media.MediaPlayer.State;
 import com.aocate.presto.service.IDeathCallback_0_8;
 import com.aocate.presto.service.IOnBufferingUpdateListenerCallback_0_8;
 import com.aocate.presto.service.IOnCompletionListenerCallback_0_8;
@@ -45,6 +44,8 @@ import com.aocate.presto.service.IOnSpeedAdjustmentAvailableChangedListenerCallb
 import com.aocate.presto.service.IPlayMedia_0_8;
 
 import java.io.IOException;
+
+import de.ph1b.audiobook.BuildConfig;
 
 
 /**
@@ -217,7 +218,7 @@ public class ServiceBackedMediaPlayer extends MediaPlayerImpl {
         try {
             if (!this.isErroring) {
                 this.isErroring = true;
-                owningMediaPlayer.state = State.ERROR;
+                owningMediaPlayer.state = MediaPlayer.State.ERROR;
                 if (owningMediaPlayer.onErrorListener != null) {
                     if (owningMediaPlayer.onErrorListener.onError(owningMediaPlayer, what, extra)) {
                         return;

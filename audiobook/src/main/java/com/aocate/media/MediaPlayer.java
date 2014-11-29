@@ -162,9 +162,9 @@ public class MediaPlayer {
     private float mRightVolume = 1f;
     private float mSpeedMultiplier = 1f;
     private int mWakeMode = 0;
-    MediaPlayerImpl mpi = null;
+    com.aocate.media.MediaPlayerImpl mpi = null;
     protected boolean pitchAdjustmentAvailable = false;
-    private ServiceBackedMediaPlayer sbmp = null;
+    private com.aocate.media.ServiceBackedMediaPlayer sbmp = null;
     protected boolean speedAdjustmentAvailable = false;
 
     private Handler mServiceDisconnectedHandler = null;
