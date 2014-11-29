@@ -92,12 +92,18 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
             mService.stateManager.addStateChangeListener(onStateChangedListener);
             mService.stateManager.addTimeChangedListener(onTimeChangedListener);
             sleepTimerActive = mService.sleepSandActive();
-            getActivity().invalidateOptionsMenu();
+            Activity a = getActivity();
+            if (a != null) {
+                getActivity().invalidateOptionsMenu();
+            }
             mService.setOnSleepStateChangedListener(new AudioPlayerService.OnSleepStateChangedListener() {
                 @Override
                 public void onSleepStateChanged(boolean active) {
                     sleepTimerActive = active;
-                    getActivity().invalidateOptionsMenu();
+                    Activity a = getActivity();
+                    if (a != null) {
+                        a.invalidateOptionsMenu();
+                    }
                 }
             });
 
