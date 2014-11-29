@@ -46,13 +46,4 @@
         android:focusableInTouchMode="true"
         android:gravity="center_horizontal" />
 
-    <CheckBox
-        android:id="@+id/checkbox"
-        android:theme="@style/AppTheme"
-        style="@style/AppTheme"
-        android:text="@string/pref_play_chapter_end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-
 </LinearLayout>

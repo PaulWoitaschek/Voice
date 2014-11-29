@@ -79,8 +79,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
 
     private final ServiceConnection mConnection = new ServiceConnection() {
         @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
+        public void onServiceConnected(ComponentName className, IBinder service) {
             AudioPlayerService.LocalBinder binder = (AudioPlayerService.LocalBinder) service;
             mService = binder.getService();
 

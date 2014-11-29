@@ -679,7 +679,7 @@ public class AudioPlayerService extends Service {
         } else {
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
             int minutes = sp.getInt(getString(R.string.pref_key_sleep_time), 20);
-            stopAfterCurrentTrack = sp.getBoolean(getString(R.string.pref_key_play_track_to_end), false);
+            stopAfterCurrentTrack = sp.getBoolean(getString(R.string.pref_key_track_to_end), false);
 
             String message = getString(R.string.sleep_timer_started) + minutes + " " + getString(R.string.minutes);
             Toast sleepToast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
