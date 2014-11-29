@@ -104,6 +104,12 @@ public class AudioPlayerService extends Service {
 
     public StateManager stateManager;
 
+
+    /**
+     * If <code>true</code>, the current track will be played to the end after the sleep timer triggers.
+     */
+    private boolean stopAfterCurrentTrack = false;
+
     private final OnStateChangedListener onStateChangedListener = new OnStateChangedListener() {
         @Override
         public void onStateChanged(PlayerStates state) {
@@ -395,15 +401,25 @@ public class AudioPlayerService extends Service {
     private void finish() {
         stopForeground(true);
 
-        if (stateManager.getState() != PlayerStates.DEAD)
-            mediaPlayer.reset();
-        mediaPlayer.release();
-        stateManager.setState(PlayerStates.DEAD);
+        playerLock.lock();
+        try {
+            if (stateManager.getState() != PlayerStates.DEAD)
+                mediaPlayer.reset();
+            mediaPlayer.release();
+            stateManager.setState(PlayerStates.DEAD);
+        } finally {
+            playerLock.unlock();
+        }
 
         try {
             unregisterReceiver(audioBecomingNoisyReceiver);
             unregisterReceiver(headsetPlugReceiver);
         } catch (IllegalArgumentException ignored) {
+        }
+
+        stopAfterCurrentTrack = false;
+        if (onSleepStateChangedListener != null) {
+            onSleepStateChangedListener.onSleepStateChanged(false);
         }
 
         //noinspection deprecation
@@ -546,40 +562,47 @@ public class AudioPlayerService extends Service {
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    playerLock.lock();
-                    try {
-                        stateManager.setState(PlayerStates.PLAYBACK_COMPLETED);
-                    } finally {
-                        playerLock.unlock();
-                    }
-                    if (BuildConfig.DEBUG)
-                        Log.d(TAG, "Next Song by onCompletion");
-
-                    //setting book to last position
-                    book.setCurrentMediaPosition(media.getDuration());
-                    updateBookAsync(book);
-
-                    boolean wasPlaying = ((stateManager.getState() == PlayerStates.STARTED) ||
-                            (stateManager.getState() == PlayerStates.PLAYBACK_COMPLETED));
-
-                    int index = allMedia.indexOf(media);
-                    // play next one if there is any
-                    if (index < allMedia.size() - 1) {//-1 to prevent change when already last song reached
-                        prepare(allMedia.get(index + 1).getId());
-                        if (wasPlaying)
-                            play();
-                        updateGUI();
-                    } else { //else unregister as playing
+                    if (stopAfterCurrentTrack) {
+                        if (BuildConfig.DEBUG) {
+                            Log.d(TAG, "Stopping service because oncompletion has been triggered");
+                        }
+                        finish();
+                    } else {
                         playerLock.lock();
                         try {
-                            pause(true);
-                            stopForeground(true);
-                            if (stateManager.getState() != PlayerStates.DEAD)
-                                mediaPlayer.reset();
-                            mediaPlayer.release();
-                            stateManager.setState(PlayerStates.DEAD);
+                            stateManager.setState(PlayerStates.PLAYBACK_COMPLETED);
                         } finally {
                             playerLock.unlock();
+                        }
+                        if (BuildConfig.DEBUG)
+                            Log.d(TAG, "Next Song by onCompletion");
+
+                        //setting book to last position
+                        book.setCurrentMediaPosition(media.getDuration());
+                        updateBookAsync(book);
+
+                        boolean wasPlaying = ((stateManager.getState() == PlayerStates.STARTED) ||
+                                (stateManager.getState() == PlayerStates.PLAYBACK_COMPLETED));
+
+                        int index = allMedia.indexOf(media);
+                        // play next one if there is any
+                        if (index < allMedia.size() - 1) {//-1 to prevent change when already last song reached
+                            prepare(allMedia.get(index + 1).getId());
+                            if (wasPlaying)
+                                play();
+                            updateGUI();
+                        } else { //else unregister as playing
+                            playerLock.lock();
+                            try {
+                                pause(true);
+                                stopForeground(true);
+                                if (stateManager.getState() != PlayerStates.DEAD)
+                                    mediaPlayer.reset();
+                                mediaPlayer.release();
+                                stateManager.setState(PlayerStates.DEAD);
+                            } finally {
+                                playerLock.unlock();
+                            }
                         }
                     }
                 }
@@ -646,6 +669,7 @@ public class AudioPlayerService extends Service {
     public void toggleSleepSand() {
         if (sleepSandActive()) {
             sleepSand.cancel(false);
+            stopAfterCurrentTrack = false;
             if (onSleepStateChangedListener != null) {
                 onSleepStateChangedListener.onSleepStateChanged(false);
             }
@@ -655,6 +679,7 @@ public class AudioPlayerService extends Service {
         } else {
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
             int minutes = sp.getInt(getString(R.string.pref_key_sleep_time), 20);
+            stopAfterCurrentTrack = sp.getBoolean(getString(R.string.pref_key_play_track_to_end), false);
 
             String message = getString(R.string.sleep_timer_started) + minutes + " " + getString(R.string.minutes);
             Toast sleepToast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
@@ -663,20 +688,24 @@ public class AudioPlayerService extends Service {
             sleepSand = sandMan.schedule(new Runnable() {
                 @Override
                 public void run() {
-                    playerLock.lock();
-                    try {
-                        pause(true);
-                        stopForeground(true);
-                        if (BuildConfig.DEBUG) Log.d(TAG, "Good night everyone");
-                        if (stateManager.getState() != PlayerStates.DEAD)
-                            mediaPlayer.reset();
-                        mediaPlayer.release();
-                        stateManager.setState(PlayerStates.DEAD);
-                        if (onSleepStateChangedListener != null) {
-                            onSleepStateChangedListener.onSleepStateChanged(false);
+                    if (!stopAfterCurrentTrack) {
+                        playerLock.lock();
+                        try {
+                            pause(true);
+                            stopForeground(true);
+                            if (BuildConfig.DEBUG) Log.d(TAG, "Good night everyone");
+                            if (stateManager.getState() != PlayerStates.DEAD)
+                                mediaPlayer.reset();
+                            mediaPlayer.release();
+                            stateManager.setState(PlayerStates.DEAD);
+                            if (onSleepStateChangedListener != null) {
+                                onSleepStateChangedListener.onSleepStateChanged(false);
+                            }
+                        } finally {
+                            playerLock.unlock();
                         }
-                    } finally {
-                        playerLock.unlock();
+                    } else if (BuildConfig.DEBUG) {
+                        Log.d(TAG, "Sandman: We are not stopping right now. We stop after this track.");
                     }
                 }
             }, minutes, TimeUnit.MINUTES);

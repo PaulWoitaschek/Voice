@@ -24,4 +24,5 @@
     <de.ph1b.audiobook.dialog.SleepPreferenceDialog
         android:key="@string/pref_key_sleep_time"
         android:title="@string/pref_sleep_time" />
+
 </PreferenceScreen>
