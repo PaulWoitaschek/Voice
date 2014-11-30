@@ -61,15 +61,17 @@ public class WidgetProvider extends AppWidgetProvider {
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
             int bookId = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
             BookDetail book = db.getBook(bookId);
-            Bitmap cover;
-            if (book.getCover() != null && new File(book.getCover()).exists()) {
-                cover = ImageHelper.genBitmapFromFile(book.getCover(), context, ImageHelper.TYPE_NOTIFICATION_SMALL);
-            } else {
-                cover = ImageHelper.genCapital(book.getName(), context, ImageHelper.TYPE_NOTIFICATION_SMALL);
-            }
+            if (book != null) {
+                Bitmap cover;
+                if (book.getCover() != null && new File(book.getCover()).exists()) {
+                    cover = ImageHelper.genBitmapFromFile(book.getCover(), context, ImageHelper.TYPE_NOTIFICATION_SMALL);
+                } else {
+                    cover = ImageHelper.genCapital(book.getName(), context, ImageHelper.TYPE_NOTIFICATION_SMALL);
+                }
 
-            remoteViews.setImageViewBitmap(R.id.imageView, cover);
-            remoteViews.setTextViewText(R.id.title, book.getName());
+                remoteViews.setImageViewBitmap(R.id.imageView, cover);
+                remoteViews.setTextViewText(R.id.title, book.getName());
+            }
 
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
         }
