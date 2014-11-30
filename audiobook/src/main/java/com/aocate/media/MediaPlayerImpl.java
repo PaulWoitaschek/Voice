@@ -92,7 +92,7 @@ public abstract class MediaPlayerImpl {
 
     public abstract void stop();
 
-    protected ReentrantLock lockMuteOnPreparedCount = new ReentrantLock();
+    protected final ReentrantLock lockMuteOnPreparedCount = new ReentrantLock();
 
     public void muteNextOnPrepare() {
         lockMuteOnPreparedCount.lock();
@@ -104,7 +104,7 @@ public abstract class MediaPlayerImpl {
         }
     }
 
-    protected ReentrantLock lockMuteOnSeekCount = new ReentrantLock();
+    protected final ReentrantLock lockMuteOnSeekCount = new ReentrantLock();
 
     public void muteNextSeek() {
         lockMuteOnSeekCount.lock();

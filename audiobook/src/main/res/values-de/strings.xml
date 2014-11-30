@@ -36,7 +36,6 @@
     <string name="content_previous_cover">Wählt voriges Cover</string>
     <string name="content_next_cover">Wählt nächstes Cover</string>
     <string name="content_cover">Zeigt aktuelles Cover an</string>
-    <string name="content_widget_play">Spielt das aktuelle Buch</string>
     <string name="pref_seek_time">Vor- und zurückspulen</string>
     <string name="book_add_progress_title">Füge Buch hinzu</string>
     <string name="book_add_progress_message">Bitte einen Moment warten.</string>

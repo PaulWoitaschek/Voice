@@ -2,7 +2,7 @@
 <resources>
     <string translatable="false" name="app_name">Material Player</string>
     <string translatable="false" name="zeroTime">0:00:00</string>
-    <string translatable="false" name="widget_small">Material Player (1x1)</string>
+    <string translatable="false" name="widget_small">Material Player</string>
 
     <string translatable="false" name="pref_key_seek_time">SEEK_TIME</string>
     <string translatable="false" name="pref_key_sleep_time">SLEEP_TIME</string>

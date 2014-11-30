@@ -80,7 +80,7 @@ public class MediaPlayer {
         IDLE, INITIALIZED, PREPARED, STARTED, PAUSED, STOPPED, PREPARING, PLAYBACK_COMPLETED, END, ERROR
     }
 
-    private static Uri SPEED_ADJUSTMENT_MARKET_URI = Uri
+    private static final Uri SPEED_ADJUSTMENT_MARKET_URI = Uri
             .parse("market://details?id=com.aocate.presto");
 
     private static Intent prestoMarketIntent = null;
@@ -124,7 +124,7 @@ public class MediaPlayer {
      *
      * @return The Intent for the Presto library on the Android Market
      */
-    public static Intent getPrestoMarketIntent() {
+    private static Intent getPrestoMarketIntent() {
         if (prestoMarketIntent == null) {
             prestoMarketIntent = new Intent(Intent.ACTION_VIEW,
                     SPEED_ADJUSTMENT_MARKET_URI);
@@ -137,7 +137,7 @@ public class MediaPlayer {
      *
      * @param context The context from which to open the Android Market page
      */
-    public static void openPrestoMarketIntent(Context context) {
+    private static void openPrestoMarketIntent(Context context) {
         context.startActivity(getPrestoMarketIntent());
     }
 
@@ -148,14 +148,14 @@ public class MediaPlayer {
     private AndroidMediaPlayer amp = null;
     // This is whether speed adjustment should be enabled (by the Service)
     // To avoid the Service entirely, set useService to false
-    protected boolean enableSpeedAdjustment = true;
+    private boolean enableSpeedAdjustment = true;
     private int lastKnownPosition = 0;
     // In some cases, we're going to have to replace the
     // android.media.MediaPlayer on the fly, and we don't want to touch the
     // wrong media player, so lock it way too much.
-    ReentrantLock lock = new ReentrantLock();
+    final ReentrantLock lock = new ReentrantLock();
     private int mAudioStreamType = AudioManager.STREAM_MUSIC;
-    private Context mContext;
+    private final Context mContext;
     private boolean mIsLooping = false;
     private float mLeftVolume = 1f;
     private float mPitchStepsAdjustment = 0f;
@@ -163,9 +163,9 @@ public class MediaPlayer {
     private float mSpeedMultiplier = 1f;
     private int mWakeMode = 0;
     com.aocate.media.MediaPlayerImpl mpi = null;
-    protected boolean pitchAdjustmentAvailable = false;
+    private boolean pitchAdjustmentAvailable = false;
     private com.aocate.media.ServiceBackedMediaPlayer sbmp = null;
-    protected boolean speedAdjustmentAvailable = false;
+    private boolean speedAdjustmentAvailable = false;
 
     private Handler mServiceDisconnectedHandler = null;
 
@@ -173,8 +173,8 @@ public class MediaPlayer {
     // so store our own state. This also helps copy state when changing
     // implementations
     State state = State.INITIALIZED;
-    String stringDataSource = null;
-    Uri uriDataSource = null;
+    private String stringDataSource = null;
+    private Uri uriDataSource = null;
     private boolean useService = false;
 
     // Naming Convention for Listeners
@@ -216,9 +216,9 @@ public class MediaPlayer {
             }
         }
     };
-    OnPitchAdjustmentAvailableChangedListener pitchAdjustmentAvailableChangedListener = null;
+    private OnPitchAdjustmentAvailableChangedListener pitchAdjustmentAvailableChangedListener = null;
 
-    OnPreparedListener onPreparedListener = new OnPreparedListener() {
+    final OnPreparedListener onPreparedListener = new OnPreparedListener() {
         public void onPrepared(MediaPlayer arg0) {
             Log.d(MP_TAG, "onPreparedListener 242 setting state to PREPARED");
             MediaPlayer.this.state = State.PREPARED;
@@ -230,7 +230,7 @@ public class MediaPlayer {
         }
     };
 
-    OnPreparedListener preparedListener = null;
+    private OnPreparedListener preparedListener = null;
     OnSeekCompleteListener onSeekCompleteListener = null;
 
     // Special case. Speed adjustment ceases to be available when we switch
@@ -261,7 +261,7 @@ public class MediaPlayer {
             }
         }
     };
-    OnSpeedAdjustmentAvailableChangedListener speedAdjustmentAvailableChangedListener = null;
+    private OnSpeedAdjustmentAvailableChangedListener speedAdjustmentAvailableChangedListener = null;
 
     private int speedAdjustmentAlgorithm = SpeedAdjustmentAlgorithm.SONIC;
 
@@ -269,7 +269,7 @@ public class MediaPlayer {
         this(context, true);
     }
 
-    public MediaPlayer(final Context context, boolean useService) {
+    private MediaPlayer(final Context context, boolean useService) {
         this.mContext = context;
         this.useService = useService;
 
@@ -767,7 +767,7 @@ public class MediaPlayer {
      *
      * @return True if the Presto library is installed
      */
-    public boolean isPrestoLibraryInstalled() {
+    private boolean isPrestoLibraryInstalled() {
         return !((this.mpi == null) || (this.mpi.mContext == null)) && isPrestoLibraryInstalled(this.mpi.mContext);
     }
 

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="transparent_widget_background">#80ffffff</color>
     <color name="dark_red">#ffcc0000</color>
 
     <color name="primary">#ff7986cb</color>

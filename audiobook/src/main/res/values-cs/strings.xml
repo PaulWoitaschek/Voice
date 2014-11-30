@@ -36,7 +36,6 @@
     <string name="content_previous_cover">Vybere předchozí obal</string>
     <string name="content_next_cover">Vybere další obal</string>
     <string name="content_cover">Zobrazí obaly pro vybrání</string>
-    <string name="content_widget_play">Přehraje aktuální knihu</string>
     <string name="pref_seek_time">Přeskočit o</string>
     <string name="book_add_progress_title">Přidávání knihy</string>
     <string name="book_add_progress_message">Chvíli strpení, než bude kniha přidána.</string>

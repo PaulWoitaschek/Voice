@@ -27,9 +27,9 @@ public class AndroidMediaPlayer extends MediaPlayerImpl {
 
     // private static final long TIMEOUT_DURATION_MS = 500;
 
-    MediaPlayer mp = null;
+    private MediaPlayer mp = null;
 
-    private MediaPlayer.OnSeekCompleteListener onSeekCompleteListener = new MediaPlayer.OnSeekCompleteListener() {
+    private final MediaPlayer.OnSeekCompleteListener onSeekCompleteListener = new MediaPlayer.OnSeekCompleteListener() {
         public void onSeekComplete(MediaPlayer mp) {
             if (owningMediaPlayer != null) {
                 owningMediaPlayer.lock.lock();

@@ -19,5 +19,5 @@ public class SpeedAdjustmentAlgorithm {
     /**
 	 * Better for voice audio
 	 */
-	public static int SONIC = 1;
+	public static final int SONIC = 1;
 }

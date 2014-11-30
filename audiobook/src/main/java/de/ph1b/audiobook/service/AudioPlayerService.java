@@ -102,7 +102,7 @@ public class AudioPlayerService extends Service {
 
     private ComponentName widgetComponentName;
     private RemoteViews widgetRemoteViews;
-    
+
     public StateManager stateManager;
 
 
@@ -117,9 +117,9 @@ public class AudioPlayerService extends Service {
             if (BuildConfig.DEBUG)
                 Log.d(TAG, "state changed called: " + state);
             if (state == PlayerStates.STARTED) {
-                widgetRemoteViews.setImageViewResource(R.id.widgetPlayButton, R.drawable.ic_pause_black_36dp);
+                widgetRemoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_48dp);
             } else {
-                widgetRemoteViews.setImageViewResource(R.id.widgetPlayButton, R.drawable.ic_play_arrow_black_36dp);
+                widgetRemoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow_white_48dp);
             }
             AppWidgetManager.getInstance(getApplicationContext()).updateAppWidget(widgetComponentName, widgetRemoteViews);
         }
@@ -262,6 +262,9 @@ public class AudioPlayerService extends Service {
         stopForeground(true);
         prepare(book.getCurrentMediaId());
         pauseBecauseLossTransient = false;
+
+        updateWidget();
+        AppWidgetManager.getInstance(getApplicationContext()).updateAppWidget(widgetComponentName, widgetRemoteViews);
     }
 
 
@@ -305,6 +308,29 @@ public class AudioPlayerService extends Service {
         }
 
         return Service.START_STICKY;
+    }
+
+    private void updateWidget() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (allMedia.size() > 1) {
+                    widgetRemoteViews.setTextViewText(R.id.summary, media.getName());
+                } else {
+                    widgetRemoteViews.setTextViewText(R.id.summary, "");
+                }
+
+                Bitmap cover;
+                if (book.getCover() != null && new File(book.getCover()).exists()) {
+                    cover = ImageHelper.genBitmapFromFile(book.getCover(), AudioPlayerService.this, ImageHelper.TYPE_NOTIFICATION_SMALL);
+                } else {
+                    cover = ImageHelper.genCapital(book.getName(), AudioPlayerService.this, ImageHelper.TYPE_NOTIFICATION_SMALL);
+                }
+
+                widgetRemoteViews.setImageViewBitmap(R.id.imageView, cover);
+                widgetRemoteViews.setTextViewText(R.id.title, book.getName());
+            }
+        }).start();
     }
 
 
@@ -510,6 +536,9 @@ public class AudioPlayerService extends Service {
             } else {
                 position = book.getCurrentMediaPosition();
             }
+
+            updateWidget();
+
 
             String path = media.getPath();
 

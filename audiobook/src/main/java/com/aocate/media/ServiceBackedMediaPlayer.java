@@ -63,7 +63,7 @@ public class ServiceBackedMediaPlayer extends MediaPlayerImpl {
     private static final String SBMP_TAG = "AocateServiceBackedMediaPlayer";
 
     private ServiceConnection mPlayMediaServiceConnection = null;
-    protected IPlayMedia_0_8 pmInterface = null;
+    private IPlayMedia_0_8 pmInterface = null;
     private Intent playMediaServiceIntent = null;
     // In some cases, we're going to have to replace the
     // android.media.MediaPlayer on the fly, and we don't want to touch the
