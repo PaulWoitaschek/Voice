@@ -649,7 +649,13 @@ public class AudioPlayerService extends Service {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                db.updateBook(book);
+                if (playerLock.tryLock()) {
+                    try {
+                        db.updateBook(book);
+                    } finally {
+                        playerLock.unlock();
+                    }
+                }
             }
         }).start();
     }
