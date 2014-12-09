@@ -53,14 +53,6 @@
     <string name="fast_forward">Vorspulen</string>
     <string name="title_playback_speed">Verändere Geschwindigkeit</string>
     <string name="playback_speed">Geschwindigkeit</string>
-    <string name="pref_variable_playback_speed">Abspielgeschwindigkeit</string>
-    <string name="pref_variable_playback_speed_hint">Ermöglicht es, die Abspielgeschwindigkeit einzustellen.</string>
-    <string name="download_plugin">Download Plugin</string>
-    <string name="download_plugin_message">Um die Abspielgeschwindigkeit einzustellen, müssen Sie ein
-        Plugin aus dem Market namens \'Prestissimo\' herunterladen. Bitte berichten Sie alle Fehler, die
-        Sie bei dem Plugin finden an den Author. Danach können Sie die Geschwindigkeit einfach im Abspiel
-        Screen einstellen.
-    </string>
     <string name="pref_sleep_time">Einschlafzeit</string>
     <string name="sleep_timer_canceled">Einschlaftimer gestoppt.</string>
     <string name="sleep_timer_started">Einschlaftimer: </string>

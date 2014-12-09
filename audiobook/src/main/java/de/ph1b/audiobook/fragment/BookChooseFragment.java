@@ -227,7 +227,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                                 builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        //setting visibility of play widget at bottom to gone if book is gone
+                                        //setting visibility of start widget at bottom to gone if book is gone
                                         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
                                         int currentBookId = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
                                         if (adapt.getItem(position).getId() == currentBookId)

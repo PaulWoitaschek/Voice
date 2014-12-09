@@ -105,7 +105,7 @@ public class WidgetProvider extends AppWidgetProvider {
 
             RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.widget);
 
-            //sets all visibilities except of play button to gone
+            //sets all visibilities except of start button to gone
             widget.setViewVisibility(R.id.imageView, View.GONE);
             widget.setViewVisibility(R.id.title, View.GONE);
             widget.setViewVisibility(R.id.summary, View.GONE);

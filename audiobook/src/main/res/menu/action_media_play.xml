@@ -9,8 +9,7 @@
         android:title="@string/playback_speed"
         android:orderInCategory="70"
         android:icon="@drawable/ic_timelapse_white_24dp"
-        app:showAsAction="ifRoom"
-        android:visible="false" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_sleep"

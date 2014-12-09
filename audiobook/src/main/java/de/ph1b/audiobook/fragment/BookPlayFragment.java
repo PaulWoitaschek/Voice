@@ -123,7 +123,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
                     noMediaFound();
                 }
 
-                //hides control elements if there is only one media to play
+                //hides control elements if there is only one media to start
                 if (allMedia.size() == 1) {
                     bookSpinner.setVisibility(View.GONE);
                 } else {
@@ -349,11 +349,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        MenuItem timeLapseItem = menu.findItem(R.id.action_time_lapse);
-        timeLapseItem.setVisible(false);
         if (mBound) {
-            if (mService.variablePlaybackSpeedIsAvailable())
-                timeLapseItem.setVisible(true);
             MenuItem sleepTimerItem = menu.findItem(R.id.action_sleep);
 
             if (sleepTimerActive) {

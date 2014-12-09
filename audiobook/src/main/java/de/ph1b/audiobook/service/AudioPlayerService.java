@@ -15,12 +15,10 @@ import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.RemoteControlClient;
-import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -32,10 +30,7 @@ import android.view.KeyEvent;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import com.aocate.media.MediaPlayer;
-
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -54,6 +49,7 @@ import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.receiver.RemoteControlReceiver;
 import de.ph1b.audiobook.receiver.WidgetProvider;
 import de.ph1b.audiobook.utils.ImageHelper;
+import de.ph1b.audiobook.utils.MediaPlayer;
 
 public class AudioPlayerService extends Service {
 
@@ -65,13 +61,9 @@ public class AudioPlayerService extends Service {
     public static final String GUI_MEDIA = TAG + ".GUI_MEDIA";
     private final IBinder mBinder = new LocalBinder();
 
-    // public static final String CONTROL_PLAY_PAUSE = TAG + ".CONTROL_PLAY_PAUSE";
-    //  public static final String CONTROL_CHANGE_MEDIA_POSITION = TAG + ".CONTROL_CHANGE_MEDIA_POSITION";
-    //   public static final String CONTROL_SLEEP = TAG + ".CONTROL_SLEEP";
     private final ReentrantLock playerLock = new ReentrantLock();
     private final ScheduledExecutorService sandMan = Executors.newSingleThreadScheduledExecutor();
     public StateManager stateManager;
-    private float playbackSpeed = 1;
     private DataBaseHelper db;
     private LocalBroadcastManager bcm;
     private AudioManager audioManager;
@@ -187,21 +179,16 @@ public class AudioPlayerService extends Service {
     private OnSleepStateChangedListener onSleepStateChangedListener;
 
     public float getPlaybackSpeed() {
-        return playbackSpeed;
+        return mediaPlayer.getPlayBackSpeed();
     }
 
     public void setPlaybackSpeed(float playbackSpeed) {
-        this.playbackSpeed = playbackSpeed;
-        mediaPlayer.setPlaybackSpeed(playbackSpeed);
+        mediaPlayer.setPlayBackSpeed(playbackSpeed);
     }
 
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
-    }
-
-    public boolean variablePlaybackSpeedIsAvailable() {
-        return mediaPlayer.canSetSpeed();
     }
 
     @Override
@@ -555,17 +542,9 @@ public class AudioPlayerService extends Service {
             if (position == media.getDuration())
                 position = 0;
 
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
-            try {
-                mediaPlayer.setDataSource(this, Uri.parse(path));
-                stateManager.setState(PlayerStates.INITIALIZED);
-                mediaPlayer.prepare();
-                stateManager.setState(PlayerStates.PREPARED);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+            stateManager.setState(PlayerStates.INITIALIZED);
+            mediaPlayer.prepare(path);
+            stateManager.setState(PlayerStates.PREPARED);
 
             // metadata
             MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();
@@ -593,11 +572,10 @@ public class AudioPlayerService extends Service {
             }
 
             //requests wake-mode which is automatically released when pausing
-            mediaPlayer.setWakeMode(this, PowerManager.PARTIAL_WAKE_LOCK);
             mediaPlayer.seekTo(position);
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
-                public void onCompletion(MediaPlayer mp) {
+                public void onCompletion() {
                     if (stopAfterCurrentTrack) {
                         if (BuildConfig.DEBUG) {
                             Log.d(TAG, "Stopping service because oncompletion has been triggered");
@@ -621,7 +599,7 @@ public class AudioPlayerService extends Service {
                                 (stateManager.getState() == PlayerStates.PLAYBACK_COMPLETED));
 
                         int index = allMedia.indexOf(media);
-                        // play next one if there is any
+                        // start next one if there is any
                         if (index < allMedia.size() - 1) {//-1 to prevent change when already last song reached
                             prepare(allMedia.get(index + 1).getId());
                             if (wasPlaying)
@@ -794,7 +772,7 @@ public class AudioPlayerService extends Service {
     }
 
     /**
-     * Changes the current song in book and prepares the media. If the book was playing, it will play
+     * Changes the current song in book and prepares the media. If the book was playing, it will start
      * again after being prepared and it always calls {@link #updateGUI()}
      *
      * @param mediaId The new chosen mediaId
@@ -815,7 +793,7 @@ public class AudioPlayerService extends Service {
      */
     public void play() {
         if (BuildConfig.DEBUG) {
-            Log.d(TAG, "play() was called");
+            Log.d(TAG, "start() was called");
         }
         playerLock.lock();
         try {
@@ -945,7 +923,9 @@ public class AudioPlayerService extends Service {
         public AudioPlayerService getService() {
             return AudioPlayerService.this;
         }
-    }    /**
+    }
+
+    /**
      * Sets the {@link #stateManager} to the current position in the media. Also updates the book calling
      * {@link #updateBookAsync(de.ph1b.audiobook.content.BookDetail)} and repeats itself via the {@link #handler}
      * after a certain time.
@@ -970,7 +950,6 @@ public class AudioPlayerService extends Service {
             handler.postDelayed(timeChangedRunner, 100);
         }
     };
-
 
 
 }

@@ -52,16 +52,7 @@
         corrupt</string>
     <string tools:ignore="MissingTranslation" name="rewind">Rewind</string>
     <string tools:ignore="MissingTranslation" name="fast_forward">Fast forward</string>
-    <string tools:ignore="MissingTranslation" name="title_playback_speed">Change playback speed</string>
     <string tools:ignore="MissingTranslation" name="playback_speed">Playback speed</string>
-    <string tools:ignore="MissingTranslation" name="pref_variable_playback_speed">Playback speed</string>
-    <string tools:ignore="MissingTranslation" name="pref_variable_playback_speed_hint">Enables
-        the dynamic control of the playback speed.</string>
-    <string tools:ignore="MissingTranslation" name="download_plugin">Download plugin</string>
-    <string tools:ignore="MissingTranslation" name="download_plugin_message">For variable playback speed you have to download a plugin
-    called \'Prestissimo\' from the market. Please report any errors you find related to this to the
-    author of that plugin. After installing, you can change the playback speed from the play screen.
-    </string>
     <string tools:ignore="MissingTranslation" name="pref_sleep_time">Sleep time</string>
     <string tools:ignore="MissingTranslation" name="sleep_timer_started">Sleep timer: </string>
     <string tools:ignore="MissingTranslation" name="sleep_timer_canceled">Sleep timer canceled.</string>

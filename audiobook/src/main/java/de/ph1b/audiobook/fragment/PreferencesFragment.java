@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.fragment;
 
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -11,7 +10,6 @@ import android.support.v7.app.ActionBarActivity;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.dialog.SeekPreferenceDialog;
 import de.ph1b.audiobook.dialog.SleepPreferenceDialog;
-import de.ph1b.audiobook.dialog.VariablePlaybackSpeedPreferenceDialog;
 
 
 public class PreferencesFragment extends PreferenceFragment {
@@ -45,16 +43,6 @@ public class PreferencesFragment extends PreferenceFragment {
         String sleepSummary = String.valueOf(sleepAmount) + " " + getString(R.string.minutes);
         SleepPreferenceDialog sleepPreferenceDialog = (SleepPreferenceDialog) findPreference(getString(R.string.pref_key_sleep_time));
         sleepPreferenceDialog.setSummary(sleepSummary);
-
-
-        if (Build.VERSION.SDK_INT < 16 || com.aocate.media.MediaPlayer.isPrestoLibraryInstalled(getActivity())) {
-            VariablePlaybackSpeedPreferenceDialog speedDialog =
-                    (VariablePlaybackSpeedPreferenceDialog) findPreference
-                            (getString(R.string.pref_key_variable_playback_speed));
-            if (speedDialog != null) {
-                getPreferenceScreen().removePreference(speedDialog);
-            }
-        }
     }
 
     @Override

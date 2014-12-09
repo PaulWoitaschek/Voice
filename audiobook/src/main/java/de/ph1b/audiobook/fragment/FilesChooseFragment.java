@@ -32,6 +32,8 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.videolan.libvlc.Media;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.lang.ref.WeakReference;
@@ -64,7 +66,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     private static final Pattern DIR_SEPARATOR = Pattern.compile("/");
     private final LinkedList<String> link = new LinkedList<>();
     private final ArrayList<String> dirs = getStorageDirectories();
-    private final ArrayList<String> audioTypes = genAudioTypes();
     private final OnBackPressedListener onBackPressedListener = new OnBackPressedListener() {
         @Override
         public synchronized void backPressed() {
@@ -82,7 +83,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     private final FileFilter filterShowAudioAndFolder = new FileFilter() {
         @Override
         public boolean accept(File file) {
-            return !file.isHidden() && (file.isDirectory() || isAudio(file));
+            return !file.isHidden() && (file.isDirectory() || isAudio(file.getName()));
         }
     };
     private ArrayList<File> mediaFiles = new ArrayList<>();
@@ -93,32 +94,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     private ActionMode actionMode;
     private ActionMode.Callback mActionModeCallback;
 
-    private ArrayList<String> genAudioTypes() {
-        ArrayList<String> audioTypes = new ArrayList<>();
-        audioTypes.add(".3gp");
-        audioTypes.add(".mp4");
-        audioTypes.add(".m4a");
-        audioTypes.add(".m4b");
-        audioTypes.add(".mp3");
-        audioTypes.add(".mid");
-        audioTypes.add(".xmf");
-        audioTypes.add(".mxmf");
-        audioTypes.add(".rtttl");
-        audioTypes.add(".rtx");
-        audioTypes.add(".ota");
-        audioTypes.add(".imy");
-        audioTypes.add(".ogg");
-        audioTypes.add(".wav");
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
-            audioTypes.add(".aac");
-            audioTypes.add(".flac");
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-            audioTypes.add(".mkv");
-
-        return audioTypes;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -283,11 +258,16 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         }
     }
 
-    private boolean isAudio(File file) {
-        for (String s : audioTypes)
-            if (file.getName().toLowerCase().endsWith(s))
-                return true;
-        return false;
+    private boolean isAudio(String fileName) {
+        HashSet<String> audioTypes = Media.AUDIO_EXTENSIONS;
+
+        int dotIndex = fileName.lastIndexOf(".");
+        if (dotIndex != -1) {
+            String extension = fileName.toLowerCase().substring(dotIndex);
+            return audioTypes.contains(extension);
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -300,7 +280,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
     private Boolean isImage(File f) {
         String fileName = f.getName().toLowerCase();
-        return fileName.endsWith(".jpg") || fileName.endsWith(".png");
+        return fileName.endsWith(".jpg") || fileName.endsWith(".png") || fileName.endsWith(".bmp");
     }
 
     /**
@@ -450,7 +430,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
             mediaFiles = new ArrayList<>();
             for (File f : files) {
-                if (isAudio(f)) {
+                if (isAudio(f.getName())) {
                     mediaFiles.add(f);
                 } else if (isImage(f)) {
                     imageFiles.add(f);

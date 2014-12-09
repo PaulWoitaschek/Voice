@@ -52,16 +52,7 @@
         poškozeny</string>
     <string name="rewind">Přetočit</string>
     <string name="fast_forward">Posun vpřed</string>
-    <string name="title_playback_speed">Změnit rychlost přehrávání</string>
     <string name="playback_speed">Rychlost přehrávání</string>
-    <string name="pref_variable_playback_speed">Rychlost přehrávání</string>
-    <string name="pref_variable_playback_speed_hint">Povolí
-        dynamickou kontrolu rychlosti přehrávání.</string>
-    <string name="download_plugin">Stahovací plugin</string>
-    <string name="download_plugin_message">Pro proměnlivou rychlost přehrávání je třeba stáhnout
-    plugin \'Prestissimo\'. Všechny nalezené chyby spojené s tímto pluginem hlašte prosím jeho
-    autorovi. Po instalaci budete moci měnit rychlost přehrávání na obrazovce přehrávače.
-    </string>
     <string name="pref_sleep_time">Časovač vypnutí</string>
     <string name="sleep_timer_started">Časovač vypnutí: </string>
     <string name="sleep_timer_canceled">Časovač vypnutí zrušen.</string>
