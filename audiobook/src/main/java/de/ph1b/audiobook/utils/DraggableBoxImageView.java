@@ -37,6 +37,27 @@ public class DraggableBoxImageView extends ImageView {
     private float fingerY;
 
 
+    //constructor!
+    @SuppressWarnings("UnusedDeclaration")
+    public DraggableBoxImageView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        init();
+    }
+
+    //constructor!
+    @SuppressWarnings("UnusedDeclaration")
+    public DraggableBoxImageView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    //constructor!
+    @SuppressWarnings("UnusedDeclaration")
+    public DraggableBoxImageView(Context context) {
+        super(context);
+        init();
+    }
+
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         int action = event.getAction();
@@ -159,27 +180,6 @@ public class DraggableBoxImageView extends ImageView {
                         right - halfStrokeSize, bottom - halfStrokeSize, borderLinePaint);
             }
         }
-    }
-
-    //constructor!
-    @SuppressWarnings("UnusedDeclaration")
-    public DraggableBoxImageView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        init();
-    }
-
-    //constructor!
-    @SuppressWarnings("UnusedDeclaration")
-    public DraggableBoxImageView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
-
-    //constructor!
-    @SuppressWarnings("UnusedDeclaration")
-    public DraggableBoxImageView(Context context) {
-        super(context);
-        init();
     }
 
     private void init() {

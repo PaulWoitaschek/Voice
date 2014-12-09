@@ -1064,7 +1064,7 @@ public class ServiceBackedMediaPlayer extends MediaPlayerImpl {
                         owningMediaPlayer.lock.lock();
                         Log.d(SBMP_TAG, "setOnPreparedCallback.mOnPreparedCallback.onPrepared 1050");
                         try {
-                            Log.d(SBMP_TAG, "owningMediaPlayer.onPreparedListener is " + ((owningMediaPlayer.onPreparedListener == null) ? "null" : "non-null"));
+                            Log.d(SBMP_TAG, "owningMediaPlayer.onPreparedListener is " + ("non-null"));
                             Log.d(SBMP_TAG, "owningMediaPlayer.mpi is " + ((owningMediaPlayer.mpi == ServiceBackedMediaPlayer.this) ? "this" : "not this"));
                             ServiceBackedMediaPlayer.this.lockMuteOnPreparedCount.lock();
                             try {
@@ -1072,9 +1072,7 @@ public class ServiceBackedMediaPlayer extends MediaPlayerImpl {
                                     ServiceBackedMediaPlayer.this.muteOnPreparedCount--;
                                 } else {
                                     ServiceBackedMediaPlayer.this.muteOnPreparedCount = 0;
-                                    if (ServiceBackedMediaPlayer.this.owningMediaPlayer.onPreparedListener != null) {
-                                        owningMediaPlayer.onPreparedListener.onPrepared(owningMediaPlayer);
-                                    }
+                                    owningMediaPlayer.onPreparedListener.onPrepared(owningMediaPlayer);
                                 }
                             } finally {
                                 ServiceBackedMediaPlayer.this.lockMuteOnPreparedCount.unlock();

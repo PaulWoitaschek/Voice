@@ -65,24 +65,32 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
 
 
     private static final String TAG = "de.ph1b.audiobook.fragment.BookChooseFragment";
-
+    private final OnStateChangedListener onStateChangedListener = new OnStateChangedListener() {
+        @Override
+        public void onStateChanged(final PlayerStates state) {
+            Activity a = getActivity();
+            if (a != null)
+                a.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (state == PlayerStates.STARTED) {
+                            currentPlaying.setImageResource(R.drawable.ic_pause_black_36dp);
+                        } else {
+                            currentPlaying.setImageResource(R.drawable.ic_play_arrow_black_36dp);
+                        }
+                    }
+                });
+        }
+    };
     //private ArrayList<BookDetail> details;
     private DataBaseHelper db;
     private MediaAdapter adapt;
-
     private ImageView currentCover;
     private TextView currentText;
     private ImageButton currentPlaying;
     private ViewGroup current;
-
     private AudioPlayerService mService;
     private boolean mBound = false;
-    private GestureDetectorCompat detector;
-    private BookDetail bookToEdit;
-
-    private float scrollBy = 0;
-
-
     private final ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className,
@@ -103,6 +111,23 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
             mBound = false;
         }
     };
+    private GestureDetectorCompat detector;
+    private BookDetail bookToEdit;
+    private float scrollBy = 0;
+
+    /**
+     * Returns the amount of columns the main-grid will need
+     *
+     * @param c Application Context
+     * @return The amount of columns, but at least 2.
+     */
+    public static int getAmountOfColumns(Context c) {
+        Resources r = c.getResources();
+        DisplayMetrics displayMetrics = r.getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        int columns = Math.round(dpWidth / r.getDimension(R.dimen.desired_medium_cover));
+        return columns > 2 ? columns : 2;
+    }
 
     @Override
     public void onStart() {
@@ -122,25 +147,6 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    private final OnStateChangedListener onStateChangedListener = new OnStateChangedListener() {
-        @Override
-        public void onStateChanged(final PlayerStates state) {
-            Activity a = getActivity();
-            if (a != null)
-                a.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (state == PlayerStates.STARTED) {
-                            currentPlaying.setImageResource(R.drawable.ic_pause_black_36dp);
-                        } else {
-                            currentPlaying.setImageResource(R.drawable.ic_play_arrow_black_36dp);
-                        }
-                    }
-                });
-        }
-    };
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,7 +154,6 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         db = DataBaseHelper.getInstance(getActivity());
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -201,7 +206,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                                 EditBook editBook = new EditBook();
                                 Bundle bundle = new Bundle();
 
-                                ArrayList<Bitmap> bitmap = new ArrayList<Bitmap>();
+                                ArrayList<Bitmap> bitmap = new ArrayList<>();
                                 Bitmap defaultCover = BitmapFactory.decodeFile(bookToEdit.getCover());
                                 if (defaultCover != null)
                                     bitmap.add(defaultCover);
@@ -351,7 +356,6 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         return v;
     }
 
-
     private void initPlayerWidget() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
         int currentBookPosition = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
@@ -399,7 +403,6 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         initPlayerWidget();
     }
 
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.action_only_settings, menu);
@@ -416,7 +419,6 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
     @Override
     public void onClick(View view) {
@@ -464,7 +466,6 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
 
     }
 
-
     /**
      * Starts the service (async, on background thread)
      */
@@ -486,20 +487,5 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                 }
             }
         }).start();
-    }
-
-
-    /**
-     * Returns the amount of columns the main-grid will need
-     *
-     * @param c Application Context
-     * @return The amount of columns, but at least 2.
-     */
-    public static int getAmountOfColumns(Context c) {
-        Resources r = c.getResources();
-        DisplayMetrics displayMetrics = r.getDisplayMetrics();
-        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-        int columns = Math.round(dpWidth / r.getDimension(R.dimen.desired_medium_cover));
-        return columns > 2 ? columns : 2;
     }
 }

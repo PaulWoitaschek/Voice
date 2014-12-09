@@ -79,11 +79,6 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         return data;
     }
 
-    public interface OnCoverChangedListener {
-        public void onCoverChanged();
-    }
-
-
     /**
      * Removes an item from the grid, deletes it from database and notifys the adapter about the item removed
      *
@@ -179,12 +174,10 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         }
     }
 
-
     @Override
     public int getItemCount() {
         return data.size();
     }
-
 
     @Override
     public void onTrimMemory(int level) {
@@ -205,6 +198,35 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
 
     }
 
+    public interface OnCoverChangedListener {
+        public void onCoverChanged();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        final ImageView coverView;
+        final TextView titleView;
+        final ImageButton editBook;
+
+        public ViewHolder(View itemView, final OnItemClickListener onItemClickListener) {
+            super(itemView);
+            coverView = (ImageView) itemView.findViewById(R.id.cover);
+            titleView = (TextView) itemView.findViewById(R.id.title);
+            editBook = (ImageButton) itemView.findViewById(R.id.editBook);
+
+            coverView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.onCoverClicked(getPosition());
+                }
+            });
+            editBook.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.onPopupMenuClicked(v, getPosition());
+                }
+            });
+        }
+    }
 
     /**
      * Loads cover Async into the ViewHolder. If there is no cover specified and the devices is allowed
@@ -224,7 +246,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
 
         public LoadCoverAsync(int position, ImageView imageView) {
             this.position = position;
-            weakReference = new WeakReference<ImageView>(imageView);
+            weakReference = new WeakReference<>(imageView);
             book = data.get(position);
         }
 
@@ -270,33 +292,6 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
                     onCoverChangedListener.onCoverChanged();
                 }
             }
-        }
-    }
-
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        final ImageView coverView;
-        final TextView titleView;
-        final ImageButton editBook;
-
-        public ViewHolder(View itemView, final OnItemClickListener onItemClickListener) {
-            super(itemView);
-            coverView = (ImageView) itemView.findViewById(R.id.cover);
-            titleView = (TextView) itemView.findViewById(R.id.title);
-            editBook = (ImageButton) itemView.findViewById(R.id.editBook);
-
-            coverView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onItemClickListener.onCoverClicked(getPosition());
-                }
-            });
-            editBook.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onItemClickListener.onPopupMenuClicked(v, getPosition());
-                }
-            });
         }
     }
 

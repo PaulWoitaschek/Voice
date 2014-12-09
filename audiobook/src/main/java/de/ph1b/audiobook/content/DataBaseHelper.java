@@ -53,15 +53,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static DataBaseHelper instance;
     private final Context c;
 
+    private DataBaseHelper(Context c) {
+        super(c, DATABASE_NAME, null, DATABASE_VERSION);
+        this.c = c;
+    }
+
     public static synchronized DataBaseHelper getInstance(Context c) {
         if (instance == null)
             instance = new DataBaseHelper(c);
         return instance;
-    }
-
-    private DataBaseHelper(Context c) {
-        super(c, DATABASE_NAME, null, DATABASE_VERSION);
-        this.c = c;
     }
 
     @Override
@@ -344,7 +344,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 KEY_MEDIA_ID);
 
         if (cursor != null) {
-            ArrayList<MediaDetail> containingMedia = new ArrayList<MediaDetail>();
+            ArrayList<MediaDetail> containingMedia = new ArrayList<>();
             while (cursor.moveToNext()) {
                 MediaDetail media = new MediaDetail();
                 media.setId(Integer.parseInt(cursor.getString(0)));
@@ -362,7 +362,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 
     public ArrayList<BookDetail> getAllBooks() {
-        ArrayList<BookDetail> allBooks = new ArrayList<BookDetail>();
+        ArrayList<BookDetail> allBooks = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_BOOKS,

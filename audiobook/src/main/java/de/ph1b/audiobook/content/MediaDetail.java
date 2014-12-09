@@ -7,13 +7,37 @@ import android.os.Parcelable;
 
 public class MediaDetail implements Parcelable {
 
+    public static final Parcelable.Creator<MediaDetail> CREATOR = new Parcelable.Creator<MediaDetail>() {
+        @Override
+        public MediaDetail createFromParcel(Parcel in) {
+            return new MediaDetail(in);
+        }
+
+
+        @Override
+        public MediaDetail[] newArray(int size) {
+            return new MediaDetail[size];
+        }
+
+    };
     private String path;
     private String name;
-
     private int id;
     private int duration;
     private int bookId;
 
+
+    public MediaDetail() {
+
+    }
+
+    private MediaDetail(Parcel pc) {
+        path = pc.readString();
+        name = pc.readString();
+        id = pc.readInt();
+        duration = pc.readInt();
+        bookId = pc.readInt();
+    }
 
     /**
      * @param o the object to compare this instance with.
@@ -33,7 +57,6 @@ public class MediaDetail implements Parcelable {
         return false;
     }
 
-
     /**
      * @return the mediaId because they are unique because of database-autoincrement
      */
@@ -42,16 +65,12 @@ public class MediaDetail implements Parcelable {
         return id;
     }
 
-    public MediaDetail() {
-
+    public int getDuration() {
+        return duration;
     }
 
     public void setDuration(int duration) {
         this.duration = duration;
-    }
-
-    public int getDuration() {
-        return duration;
     }
 
     public int getBookId() {
@@ -62,28 +81,28 @@ public class MediaDetail implements Parcelable {
         this.bookId = bookId;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getId() {
         return id;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getPath() {
         return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     @Override
@@ -99,26 +118,4 @@ public class MediaDetail implements Parcelable {
         out.writeInt(duration);
         out.writeInt(bookId);
     }
-
-    private MediaDetail(Parcel pc) {
-        path = pc.readString();
-        name = pc.readString();
-        id = pc.readInt();
-        duration = pc.readInt();
-        bookId = pc.readInt();
-    }
-
-    public static final Parcelable.Creator<MediaDetail> CREATOR = new Parcelable.Creator<MediaDetail>() {
-        @Override
-        public MediaDetail createFromParcel(Parcel in) {
-            return new MediaDetail(in);
-        }
-
-
-        @Override
-        public MediaDetail[] newArray(int size) {
-            return new MediaDetail[size];
-        }
-
-    };
 }

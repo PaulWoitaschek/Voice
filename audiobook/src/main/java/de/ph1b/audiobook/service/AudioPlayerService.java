@@ -59,58 +59,113 @@ public class AudioPlayerService extends Service {
 
 
     private static final int NOTIFICATION_ID = 1;
-
-    private float playbackSpeed = 1;
-
-    private DataBaseHelper db;
-    private LocalBroadcastManager bcm;
-
-    private final IBinder mBinder = new LocalBinder();
-
     private static final String TAG = "de.ph1b.audiobook.AudioPlayerService";
+    public static final String GUI = TAG + ".GUI";
+    public static final String GUI_BOOK_ID = TAG + ".GUI_BOOK_ID";
+    public static final String GUI_MEDIA = TAG + ".GUI_MEDIA";
+    private final IBinder mBinder = new LocalBinder();
 
     // public static final String CONTROL_PLAY_PAUSE = TAG + ".CONTROL_PLAY_PAUSE";
     //  public static final String CONTROL_CHANGE_MEDIA_POSITION = TAG + ".CONTROL_CHANGE_MEDIA_POSITION";
     //   public static final String CONTROL_SLEEP = TAG + ".CONTROL_SLEEP";
-
-    public static final String GUI = TAG + ".GUI";
-    public static final String GUI_BOOK_ID = TAG + ".GUI_BOOK_ID";
-    public static final String GUI_MEDIA = TAG + ".GUI_MEDIA";
-
+    private final ReentrantLock playerLock = new ReentrantLock();
+    private final ScheduledExecutorService sandMan = Executors.newSingleThreadScheduledExecutor();
+    public StateManager stateManager;
+    private float playbackSpeed = 1;
+    private DataBaseHelper db;
+    private LocalBroadcastManager bcm;
     private AudioManager audioManager;
     private MediaPlayer mediaPlayer;
-
     private boolean pauseBecauseHeadset = false;
+    /**
+     * If audio is becoming noisy, pause the player.
+     */
+    private final BroadcastReceiver audioBecomingNoisyReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (stateManager.getState() == PlayerStates.STARTED)
+                pauseBecauseHeadset = true;
+            pause(false);
+        }
+    };
+    private final BroadcastReceiver headsetPlugReceiver = new BroadcastReceiver() {
+
+        private static final int CONNECTED = 1;
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action != null) {
+                if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
+                    int headsetState = intent.getIntExtra("state", -1);
+                    if (headsetState != -1) {
+                        if (headsetState == CONNECTED) {
+                            if (pauseBecauseHeadset) {
+                                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+                                boolean resumeOnReplug = sharedPref.getBoolean(context.getString(R.string.pref_key_resume_on_replug), true);
+                                if (resumeOnReplug)
+                                    play();
+                                pauseBecauseHeadset = false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    };
     private NotificationCompat.Builder notificationBuilder = null;
-
-
     private boolean pauseBecauseLossTransient = false;
+    private final AudioManager.OnAudioFocusChangeListener audioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
+        @Override
+        public void onAudioFocusChange(int focusChange) {
+            switch (focusChange) {
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                    if (stateManager.getState() == PlayerStates.STARTED) {
+                        if (BuildConfig.DEBUG)
+                            Log.d(TAG, "Paused by audio-focus loss transient.");
+                        pause(false);
+                        pauseBecauseLossTransient = true;
+                    }
+                    break;
+                case AudioManager.AUDIOFOCUS_GAIN:
+                    if (BuildConfig.DEBUG)
+                        Log.d(TAG, "started by audioFocus gained");
 
+                    if (pauseBecauseLossTransient) {
+                        play();
+                    } else if (stateManager.getState() == PlayerStates.STARTED) {
+                        if (BuildConfig.DEBUG)
+                            Log.d(TAG, "increasing volume because of regain focus from transient-can-duck");
+                        audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
+                    }
+                    break;
+                case AudioManager.AUDIOFOCUS_LOSS:
+                    if (BuildConfig.DEBUG)
+                        Log.d(TAG, "paused by audioFocus loss");
+                    pause(true);
+                    break;
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                    if (stateManager.getState() == PlayerStates.STARTED) {
+                        if (BuildConfig.DEBUG)
+                            Log.d(TAG, "lowering volume because of af loss transcient can duck");
+                        audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
     private MediaDetail media;
     private ArrayList<MediaDetail> allMedia;
     private BookDetail book;
     private Handler handler;
-
     @SuppressWarnings("deprecation")
     private RemoteControlClient mRemoteControlClient;
-
     private ComponentName myEventReceiver;
-
     private MediaSessionCompat mediaSession;
-
-    private final ReentrantLock playerLock = new ReentrantLock();
-
     private ComponentName widgetComponentName;
     private RemoteViews widgetRemoteViews;
-
-    public StateManager stateManager;
-
-
-    /**
-     * If <code>true</code>, the current track will be played to the end after the sleep timer triggers.
-     */
-    private boolean stopAfterCurrentTrack = false;
-
     private final OnStateChangedListener onStateChangedListener = new OnStateChangedListener() {
         @Override
         public void onStateChanged(PlayerStates state) {
@@ -124,13 +179,12 @@ public class AudioPlayerService extends Service {
             AppWidgetManager.getInstance(getApplicationContext()).updateAppWidget(widgetComponentName, widgetRemoteViews);
         }
     };
-
-
-    public class LocalBinder extends Binder {
-        public AudioPlayerService getService() {
-            return AudioPlayerService.this;
-        }
-    }
+    /**
+     * If <code>true</code>, the current track will be played to the end after the sleep timer triggers.
+     */
+    private boolean stopAfterCurrentTrack = false;
+    private ScheduledFuture<?> sleepSand;
+    private OnSleepStateChangedListener onSleepStateChangedListener;
 
     public float getPlaybackSpeed() {
         return playbackSpeed;
@@ -149,7 +203,6 @@ public class AudioPlayerService extends Service {
     public boolean variablePlaybackSpeedIsAvailable() {
         return mediaPlayer.canSetSpeed();
     }
-
 
     @Override
     public void onCreate() {
@@ -219,7 +272,6 @@ public class AudioPlayerService extends Service {
         stateManager.addStateChangeListener(onStateChangedListener);
     }
 
-
     private boolean handleKeyCode(int keyCode) {
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "handling keycode, state is: " + stateManager.getState() + "keycode is: " + keyCode);
@@ -266,7 +318,6 @@ public class AudioPlayerService extends Service {
         updateWidget();
         AppWidgetManager.getInstance(getApplicationContext()).updateAppWidget(widgetComponentName, widgetRemoteViews);
     }
-
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -332,7 +383,6 @@ public class AudioPlayerService extends Service {
             }
         }).start();
     }
-
 
     private Notification getNotification() {
         if (notificationBuilder == null) {
@@ -452,52 +502,11 @@ public class AudioPlayerService extends Service {
         audioManager.unregisterRemoteControlClient(mRemoteControlClient);
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         finish();
     }
-
-
-    /**
-     * If audio is becoming noisy, pause the player.
-     */
-    private final BroadcastReceiver audioBecomingNoisyReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (stateManager.getState() == PlayerStates.STARTED)
-                pauseBecauseHeadset = true;
-            pause(false);
-        }
-    };
-
-    private final BroadcastReceiver headsetPlugReceiver = new BroadcastReceiver() {
-
-        private static final int CONNECTED = 1;
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action != null) {
-                if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
-                    int headsetState = intent.getIntExtra("state", -1);
-                    if (headsetState != -1) {
-                        if (headsetState == CONNECTED) {
-                            if (pauseBecauseHeadset) {
-                                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-                                boolean resumeOnReplug = sharedPref.getBoolean(context.getString(R.string.pref_key_resume_on_replug), true);
-                                if (resumeOnReplug)
-                                    play();
-                                pauseBecauseHeadset = false;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    };
-
 
     /**
      * Prepares a new media. Also handles the onCompletion and updates the database. After preparing,
@@ -639,7 +648,6 @@ public class AudioPlayerService extends Service {
         }
     }
 
-
     /**
      * Updates the book Async via a new Thread.
      *
@@ -659,7 +667,6 @@ public class AudioPlayerService extends Service {
             }
         }).start();
     }
-
 
     /**
      * Sends a broadcast signaling that there are changes affecting the gui and sends the current
@@ -682,14 +689,6 @@ public class AudioPlayerService extends Service {
         }
     }
 
-    private final ScheduledExecutorService sandMan = Executors.newSingleThreadScheduledExecutor();
-    private ScheduledFuture<?> sleepSand;
-    private OnSleepStateChangedListener onSleepStateChangedListener;
-
-    public interface OnSleepStateChangedListener {
-        public void onSleepStateChanged(boolean active);
-    }
-
     public void setOnSleepStateChangedListener(OnSleepStateChangedListener onSleepStateChangedListener) {
         this.onSleepStateChangedListener = onSleepStateChangedListener;
     }
@@ -697,7 +696,6 @@ public class AudioPlayerService extends Service {
     public boolean sleepSandActive() {
         return sleepSand != null && !sleepSand.isCancelled() && !sleepSand.isDone();
     }
-
 
     public void toggleSleepSand() {
         if (sleepSandActive()) {
@@ -747,7 +745,6 @@ public class AudioPlayerService extends Service {
         }
     }
 
-
     public void fastForward() {
         PlayerStates state = stateManager.getState();
         if (state == PlayerStates.STARTED || state == PlayerStates.PREPARED || state == PlayerStates.PAUSED) {
@@ -796,7 +793,6 @@ public class AudioPlayerService extends Service {
         }
     }
 
-
     /**
      * Changes the current song in book and prepares the media. If the book was playing, it will play
      * again after being prepared and it always calls {@link #updateGUI()}
@@ -812,7 +808,6 @@ public class AudioPlayerService extends Service {
             updateGUI();
         }
     }
-
 
     /**
      * Plays the current file. Also sets up the controls. If state is {@link de.ph1b.audiobook.service.PlayerStates#PLAYBACK_COMPLETED}
@@ -876,7 +871,6 @@ public class AudioPlayerService extends Service {
         mediaSession.setPlaybackState(stateBuilder.build());
     }
 
-
     /**
      * Pauses the book. Does not stopForeground.
      */
@@ -921,7 +915,6 @@ public class AudioPlayerService extends Service {
         }
     }
 
-
     /**
      * Changes the position in the current track. Also updates the database accordingly.
      * Calls {@link #updateGUI()}
@@ -944,7 +937,15 @@ public class AudioPlayerService extends Service {
     }
 
 
-    /**
+    public interface OnSleepStateChangedListener {
+        public void onSleepStateChanged(boolean active);
+    }
+
+    public class LocalBinder extends Binder {
+        public AudioPlayerService getService() {
+            return AudioPlayerService.this;
+        }
+    }    /**
      * Sets the {@link #stateManager} to the current position in the media. Also updates the book calling
      * {@link #updateBookAsync(de.ph1b.audiobook.content.BookDetail)} and repeats itself via the {@link #handler}
      * after a certain time.
@@ -971,45 +972,5 @@ public class AudioPlayerService extends Service {
     };
 
 
-    private final AudioManager.OnAudioFocusChangeListener audioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
-        @Override
-        public void onAudioFocusChange(int focusChange) {
-            switch (focusChange) {
-                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                    if (stateManager.getState() == PlayerStates.STARTED) {
-                        if (BuildConfig.DEBUG)
-                            Log.d(TAG, "Paused by audio-focus loss transient.");
-                        pause(false);
-                        pauseBecauseLossTransient = true;
-                    }
-                    break;
-                case AudioManager.AUDIOFOCUS_GAIN:
-                    if (BuildConfig.DEBUG)
-                        Log.d(TAG, "started by audioFocus gained");
 
-                    if (pauseBecauseLossTransient) {
-                        play();
-                    } else if (stateManager.getState() == PlayerStates.STARTED) {
-                        if (BuildConfig.DEBUG)
-                            Log.d(TAG, "increasing volume because of regain focus from transient-can-duck");
-                        audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
-                    }
-                    break;
-                case AudioManager.AUDIOFOCUS_LOSS:
-                    if (BuildConfig.DEBUG)
-                        Log.d(TAG, "paused by audioFocus loss");
-                    pause(true);
-                    break;
-                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                    if (stateManager.getState() == PlayerStates.STARTED) {
-                        if (BuildConfig.DEBUG)
-                            Log.d(TAG, "lowering volume because of af loss transcient can duck");
-                        audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
 }

@@ -805,7 +805,7 @@ public class MediaPlayer {
         lock.lock();
         try {
             Log.d(MP_TAG, "prepare() 746 using " + ((this.mpi == null) ? "null (this shouldn't happen)" : this.mpi.getClass().toString()) + " state " + this.state.toString());
-            Log.d(MP_TAG, "onPreparedListener is: " + ((this.onPreparedListener == null) ? "null" : "non-null"));
+            Log.d(MP_TAG, "onPreparedListener is: " + ("non-null"));
             Log.d(MP_TAG, "preparedListener is: " + ((this.preparedListener == null) ? "null" : "non-null"));
             if (invalidServiceConnectionConfiguration()) {
                 setupMpi(this.mpi.mContext);

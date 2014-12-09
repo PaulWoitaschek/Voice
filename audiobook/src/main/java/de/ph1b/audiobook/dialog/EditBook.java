@@ -93,11 +93,6 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
         addCoverAsync.execute();
     }
 
-
-    public interface OnEditBookFinished {
-        public void onEditBookFinished(String bookName, Bitmap cover, Boolean success);
-    }
-
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -208,6 +203,9 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
         return editBook;
     }
 
+    public interface OnEditBookFinished {
+        public void onEditBookFinished(String bookName, Bitmap cover, Boolean success);
+    }
 
     private class AddCoverAsync extends AsyncTask<Void, Void, Bitmap> {
         private final String searchString;
@@ -216,13 +214,12 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
         private final WeakReference<ImageButton> previousCoverWeakReference;
         private final WeakReference<ImageButton> nextCoverWeakReference;
 
-
         public AddCoverAsync(String searchString) {
             this.searchString = searchString;
-            progressBarWeakReference = new WeakReference<ProgressBar>(coverReplacement);
+            progressBarWeakReference = new WeakReference<>(coverReplacement);
             imageViewWeakReference = new WeakReference<ImageView>(coverImageView);
-            previousCoverWeakReference = new WeakReference<ImageButton>(previousCover);
-            nextCoverWeakReference = new WeakReference<ImageButton>(nextCover);
+            previousCoverWeakReference = new WeakReference<>(previousCover);
+            nextCoverWeakReference = new WeakReference<>(nextCover);
         }
 
         @Override

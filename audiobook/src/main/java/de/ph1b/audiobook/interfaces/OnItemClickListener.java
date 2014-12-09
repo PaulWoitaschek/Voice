@@ -6,5 +6,5 @@ import android.view.View;
 public interface OnItemClickListener {
     public void onCoverClicked(int position);
 
-    public void onPopupMenuClicked(View view,  int position);
+    public void onPopupMenuClicked(View view, int position);
 }

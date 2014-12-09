@@ -46,15 +46,15 @@ public class WidgetProvider extends AppWidgetProvider {
                     (context, number++, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             remoteViews.setOnClickPendingIntent(R.id.whole_widget, wholeWidgetClick);
 
-            remoteViews.setOnClickPendingIntent(R.id.rewind, getPendingSelfIntent
-                    (context, number++, Intent.ACTION_MEDIA_BUTTON, KeyEvent.KEYCODE_MEDIA_REWIND));
+            remoteViews.setOnClickPendingIntent(R.id.rewind, getMediaButtonSelfIntent
+                    (context, number++, KeyEvent.KEYCODE_MEDIA_REWIND));
 
-            remoteViews.setOnClickPendingIntent(R.id.playPause, getPendingSelfIntent
-                    (context, number++, Intent.ACTION_MEDIA_BUTTON, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
+            remoteViews.setOnClickPendingIntent(R.id.playPause, getMediaButtonSelfIntent
+                    (context, number++, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
 
             //noinspection UnusedAssignment
-            remoteViews.setOnClickPendingIntent(R.id.fast_forward, getPendingSelfIntent
-                    (context, number++, Intent.ACTION_MEDIA_BUTTON, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD));
+            remoteViews.setOnClickPendingIntent(R.id.fast_forward, getMediaButtonSelfIntent
+                    (context, number++, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD));
 
 
             DataBaseHelper db = DataBaseHelper.getInstance(context);
@@ -78,9 +78,9 @@ public class WidgetProvider extends AppWidgetProvider {
     }
 
 
-    private PendingIntent getPendingSelfIntent(Context context, int number, String action, int keyEvent) {
+    private PendingIntent getMediaButtonSelfIntent(Context context, int number, int keyEvent) {
         Intent intent = new Intent(context, getClass());
-        intent.setAction(action);
+        intent.setAction(Intent.ACTION_MEDIA_BUTTON);
         intent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent);
         return PendingIntent.getBroadcast(context, number, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }

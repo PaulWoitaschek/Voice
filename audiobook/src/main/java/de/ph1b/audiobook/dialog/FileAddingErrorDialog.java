@@ -26,10 +26,6 @@ public class FileAddingErrorDialog extends DialogFragment {
     public static final String ARG_INTACT_FILES = TAG + ".ARG_INTACT_FILES";
     public static final String ARG_BOOK_ID = TAG + ".ARG_BOOK_ID";
 
-    public interface ConfirmationListener {
-        public void onButtonClicked(boolean keep, ArrayList<MediaDetail> intactFiles, int bookId);
-    }
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -46,7 +42,7 @@ public class FileAddingErrorDialog extends DialogFragment {
         ListView listView = (ListView) v.findViewById(R.id.listView);
         TextView textView = (TextView) v.findViewById(R.id.textView);
         textView.setText(getString(R.string.error_in_file_description));
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_list_item_1, errorFiles);
         listView.setAdapter(adapter);
 
@@ -71,5 +67,9 @@ public class FileAddingErrorDialog extends DialogFragment {
         });
 
         return builder.create();
+    }
+
+    public interface ConfirmationListener {
+        public void onButtonClicked(boolean keep, ArrayList<MediaDetail> intactFiles, int bookId);
     }
 }

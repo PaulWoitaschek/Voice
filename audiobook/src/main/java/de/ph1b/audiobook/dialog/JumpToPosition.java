@@ -19,14 +19,12 @@ import de.ph1b.audiobook.fragment.BookPlayFragment;
 
 public class JumpToPosition extends DialogFragment {
 
+    public static final String POSITION = "position";
+    public static final String DURATION = "duration";
     private int durationInMinutes;
     private int biggestHour;
     private NumberPicker mPicker;
     private NumberPicker hPicker;
-
-    public static final String POSITION = "position";
-    public static final String DURATION = "duration";
-
 
     @NonNull
     @Override

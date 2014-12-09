@@ -17,21 +17,10 @@ import de.ph1b.audiobook.R;
 
 public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
 
-    public interface ItemInteraction {
-        public void onCheckStateChanged();
-
-        public void onItemClicked(int position);
-    }
-
-    public interface CheckStateChanged {
-        public void onCheckStateChanged(int position, boolean isChecked);
-    }
-
     private final ArrayList<File> data;
     private final SparseBooleanArray checked;
     private final ItemInteraction itemInteraction;
     private final CheckStateChanged checkStateChanged;
-
     public FileAdapter(ArrayList<File> data, final ItemInteraction itemInteraction) {
         this.data = data;
         this.itemInteraction = itemInteraction;
@@ -46,7 +35,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
     }
 
     public ArrayList<File> getCheckedItems() {
-        ArrayList<File> checkedItems = new ArrayList<File>();
+        ArrayList<File> checkedItems = new ArrayList<>();
         for (int i = 0; i < getItemCount(); i++) {
             if (checked.get(i)) {
                 checkedItems.add(data.get(i));
@@ -54,7 +43,6 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
         }
         return checkedItems;
     }
-
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, final int i) {
@@ -99,6 +87,16 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
                 notifyItemChanged(i);
             }
         }
+    }
+
+    public interface ItemInteraction {
+        public void onCheckStateChanged();
+
+        public void onItemClicked(int position);
+    }
+
+    public interface CheckStateChanged {
+        public void onCheckStateChanged(int position, boolean isChecked);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

@@ -137,10 +137,8 @@ public class AndroidMediaPlayer extends MediaPlayerImpl {
                             AndroidMediaPlayer.this.muteOnPreparedCount--;
                         } else {
                             AndroidMediaPlayer.this.muteOnPreparedCount = 0;
-                            if (AndroidMediaPlayer.this.owningMediaPlayer.onPreparedListener != null) {
-                                Log.d(AMP_TAG, "Invoking AndroidMediaPlayer.this.owningMediaPlayer.onPreparedListener.onPrepared");
-                                AndroidMediaPlayer.this.owningMediaPlayer.onPreparedListener.onPrepared(AndroidMediaPlayer.this.owningMediaPlayer);
-                            }
+                            Log.d(AMP_TAG, "Invoking AndroidMediaPlayer.this.owningMediaPlayer.onPreparedListener.onPrepared");
+                            AndroidMediaPlayer.this.owningMediaPlayer.onPreparedListener.onPrepared(AndroidMediaPlayer.this.owningMediaPlayer);
                         }
                     } finally {
                         AndroidMediaPlayer.this.lockMuteOnPreparedCount.unlock();

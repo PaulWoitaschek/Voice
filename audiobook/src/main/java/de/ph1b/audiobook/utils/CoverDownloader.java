@@ -31,13 +31,13 @@ public class CoverDownloader {
 
     private static final String TAG = "CoverDownloader";
 
-    private static final HashMap<String, ArrayList<URL>> searchStringMap = new HashMap<String, ArrayList<URL>>();
+    private static final HashMap<String, ArrayList<URL>> searchStringMap = new HashMap<>();
     private static URLConnection connection = null;
     private static int connectTimeOut;
     private static int readTimeOut;
 
-    public static void cancelDownload(){
-        if (connection != null){
+    public static void cancelDownload() {
+        if (connection != null) {
             try {
                 connection.getInputStream().close();
             } catch (Exception ignore) {
@@ -82,7 +82,7 @@ public class CoverDownloader {
             } else {
                 if (BuildConfig.DEBUG)
                     Log.d(TAG, "Will look for a new eightSet because bitmapUrls is too small");
-                ArrayList<URL> newSetOfURL = new ArrayList<URL>();
+                ArrayList<URL> newSetOfURL = new ArrayList<>();
                 newSetOfURL.addAll(bitmapUrls);
                 ArrayList<URL> newUrls = genNewURLs(searchText, bitmapUrls.size() + 1);
                 if (newUrls == null)
@@ -170,7 +170,7 @@ public class CoverDownloader {
 
         searchText = searchText + " audiobook cover";
 
-        ArrayList<URL> eightSetOfURL = new ArrayList<URL>();
+        ArrayList<URL> eightSetOfURL = new ArrayList<>();
 
         try {
             URL url = new URL(

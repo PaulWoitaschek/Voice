@@ -26,8 +26,12 @@ import de.ph1b.audiobook.fragment.BookChooseFragment;
 
 public class ImageHelper {
 
+    public static final int TYPE_COVER = 0;
+    public static final int TYPE_MEDIUM = 1;
+    public static final int TYPE_THUMB = 2;
+    public static final int TYPE_NOTIFICATION_SMALL = 3;
+    public static final int TYPE_NOTIFICATION_BIG = 4;
     private static final String TAG = "CommonTasks";
-
 
     public static Bitmap genCapital(String bookName, Context c, int type) {
         Rect rect;
@@ -97,7 +101,6 @@ public class ImageHelper {
         }
     }
 
-
     /**
      * Saves a bitmap as a jpg file to the personal directory.
      *
@@ -155,13 +158,6 @@ public class ImageHelper {
         }
         return false;
     }
-
-
-    public static final int TYPE_COVER = 0;
-    public static final int TYPE_MEDIUM = 1;
-    public static final int TYPE_THUMB = 2;
-    public static final int TYPE_NOTIFICATION_SMALL = 3;
-    public static final int TYPE_NOTIFICATION_BIG = 4;
 
     public static Bitmap genBitmapFromFile(String pathName, Context c, int type) {
         Rect reqSize = resolveImageType(type, c);

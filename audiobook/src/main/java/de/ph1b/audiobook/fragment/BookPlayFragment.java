@@ -53,30 +53,94 @@ import de.ph1b.audiobook.utils.ImageHelper;
 
 public class BookPlayFragment extends Fragment implements OnClickListener, SetPlaybackSpeedDialog.PlaybackSpeedChanged {
 
+    private static final String TAG = "de.ph1b.audiobook.fragment.BookPlayFragment";
+    private final OnStateChangedListener onStateChangedListener = new OnStateChangedListener() {
+        @Override
+        public void onStateChanged(final PlayerStates state) {
+            Activity a = getActivity();
+            if (a != null) {
+                a.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (state == PlayerStates.STARTED) {
+                            play_button.setImageResource(R.drawable.ic_pause_black_36dp);
+                        } else {
+                            play_button.setImageResource(R.drawable.ic_play_arrow_black_36dp);
+                        }
+                    }
+                });
+            }
+        }
+    };
+    public AudioPlayerService mService;
+    public boolean mBound = false;
     private ImageButton play_button;
     private TextView playedTimeView;
     private SeekBar seekBar;
     private Spinner bookSpinner;
     private TextView maxTimeView;
     private int position;
-
     private DataBaseHelper db;
     private LocalBroadcastManager bcm;
-
     private int oldPosition = -1;
-    private static final String TAG = "de.ph1b.audiobook.fragment.BookPlayFragment";
-
     private boolean seekBarIsUpdating = false;
+    private final OnTimeChangedListener onTimeChangedListener = new OnTimeChangedListener() {
+        @Override
+        public void onTimeChanged(final int time) {
+            if (!seekBarIsUpdating) {
+                Activity a = getActivity();
+                if (a != null) {
+                    a.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            playedTimeView.setText(formatTime(time));
+                            seekBar.setProgress(time);
+                        }
+                    });
+                }
+            }
+        }
+    };
     private BookDetail book;
     private ArrayList<MediaDetail> allMedia;
     private MediaSpinnerAdapter adapter;
-
     private int duration;
+    private final BroadcastReceiver updateGUIReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(AudioPlayerService.GUI)) {
+                if (mBound) {
+                    //setting up time related stuff
+                    seekBar.setProgress(mService.stateManager.getTime());
+                    playedTimeView.setText(formatTime(mService.stateManager.getTime()));
+                }
 
-    public AudioPlayerService mService;
-    public boolean mBound = false;
+                MediaDetail media = intent.getParcelableExtra(AudioPlayerService.GUI_MEDIA);
+                //checks if file exists
+                File testFile = new File(media.getPath());
+                if (!testFile.exists()) {
+                    noMediaFound();
+                }
+
+                //hides control elements if there is only one media to play
+                if (allMedia.size() == 1) {
+                    bookSpinner.setVisibility(View.GONE);
+                } else {
+                    bookSpinner.setVisibility(View.VISIBLE);
+                    bookSpinner.setSelection(adapter.getPositionByMediaDetailId(media.getId()));
+                }
+
+                //sets duration of file
+                duration = media.getDuration();
+                maxTimeView.setText(formatTime(duration));
+
+                //sets seekBar to current position and correct length
+                seekBar.setMax(duration);
+            }
+        }
+    };
     private boolean sleepTimerActive = false;
-
     private final ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
@@ -138,82 +202,6 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
             mBound = false;
         }
     }
-
-
-    private final OnStateChangedListener onStateChangedListener = new OnStateChangedListener() {
-        @Override
-        public void onStateChanged(final PlayerStates state) {
-            Activity a = getActivity();
-            if (a != null) {
-                a.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (state == PlayerStates.STARTED) {
-                            play_button.setImageResource(R.drawable.ic_pause_black_36dp);
-                        } else {
-                            play_button.setImageResource(R.drawable.ic_play_arrow_black_36dp);
-                        }
-                    }
-                });
-            }
-        }
-    };
-
-    private final OnTimeChangedListener onTimeChangedListener = new OnTimeChangedListener() {
-        @Override
-        public void onTimeChanged(final int time) {
-            if (!seekBarIsUpdating) {
-                Activity a = getActivity();
-                if (a != null) {
-                    a.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            playedTimeView.setText(formatTime(time));
-                            seekBar.setProgress(time);
-                        }
-                    });
-                }
-            }
-        }
-    };
-
-
-    private final BroadcastReceiver updateGUIReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(AudioPlayerService.GUI)) {
-                if (mBound) {
-                    //setting up time related stuff
-                    seekBar.setProgress(mService.stateManager.getTime());
-                    playedTimeView.setText(formatTime(mService.stateManager.getTime()));
-                }
-
-                MediaDetail media = intent.getParcelableExtra(AudioPlayerService.GUI_MEDIA);
-                //checks if file exists
-                File testFile = new File(media.getPath());
-                if (!testFile.exists()) {
-                    noMediaFound();
-                }
-
-                //hides control elements if there is only one media to play
-                if (allMedia.size() == 1) {
-                    bookSpinner.setVisibility(View.GONE);
-                } else {
-                    bookSpinner.setVisibility(View.VISIBLE);
-                    bookSpinner.setSelection(adapter.getPositionByMediaDetailId(media.getId()));
-                }
-
-                //sets duration of file
-                duration = media.getDuration();
-                maxTimeView.setText(formatTime(duration));
-
-                //sets seekBar to current position and correct length
-                seekBar.setMax(duration);
-            }
-        }
-    };
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

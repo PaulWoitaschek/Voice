@@ -17,10 +17,6 @@ import de.ph1b.audiobook.R;
 
 public class SetPlaybackSpeedDialog extends DialogFragment {
 
-    public interface PlaybackSpeedChanged {
-        public void onSpeedChanged(float speed);
-    }
-
     public static final String DEFAULT_AMOUNT = "defaultAmount";
     private static final float speedDelta = 0.1f;
     private static final float minSpeed = 0.5f;
@@ -87,5 +83,9 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
     private String formatTime(float time) {
         DecimalFormat df = new DecimalFormat("0.00");
         return getString(R.string.playback_speed) + ": " + df.format(time) + "x";
+    }
+
+    public interface PlaybackSpeedChanged {
+        public void onSpeedChanged(float speed);
     }
 }

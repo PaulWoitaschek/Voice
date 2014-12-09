@@ -9,11 +9,10 @@ import de.ph1b.audiobook.interfaces.OnTimeChangedListener;
 
 public class StateManager {
 
+    private final List<OnStateChangedListener> allStateListener = new ArrayList<>();
+    private final List<OnTimeChangedListener> allTimeListener = new ArrayList<>();
     private PlayerStates state = PlayerStates.IDLE;
     private int time = 0;
-    private final List<OnStateChangedListener> allStateListener = new ArrayList<OnStateChangedListener>();
-    private final List<OnTimeChangedListener> allTimeListener = new ArrayList<OnTimeChangedListener>();
-
 
     public void addStateChangeListener(OnStateChangedListener listener) {
         allStateListener.add(listener);
@@ -31,23 +30,23 @@ public class StateManager {
         allTimeListener.remove(listener);
     }
 
+    public PlayerStates getState() {
+        return state;
+    }
+
     public void setState(PlayerStates state) {
         this.state = state;
         for (OnStateChangedListener s : allStateListener)
             s.onStateChanged(state);
     }
 
+    public int getTime() {
+        return time;
+    }
+
     public void setTime(int time) {
         this.time = time;
         for (OnTimeChangedListener s : allTimeListener)
             s.onTimeChanged(time);
-    }
-
-    public PlayerStates getState() {
-        return state;
-    }
-
-    public int getTime() {
-        return time;
     }
 }
