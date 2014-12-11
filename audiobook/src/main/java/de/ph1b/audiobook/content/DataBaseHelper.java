@@ -30,10 +30,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     private final String CREATE_MEDIA_TABLE = "CREATE TABLE " + TABLE_MEDIA + " ( " +
             KEY_MEDIA_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            KEY_MEDIA_PATH + " TEXT, " +
-            KEY_MEDIA_NAME + " TEXT, " +
-            KEY_MEDIA_DURATION + " INTEGER, " +
-            KEY_MEDIA_BOOK_ID + " INTEGER)";
+            KEY_MEDIA_PATH + " TEXT NOT NULL, " +
+            KEY_MEDIA_NAME + " TEXT NOT NULL, " +
+            KEY_MEDIA_DURATION + " INTEGER NOT NULL, " +
+            KEY_MEDIA_BOOK_ID + " INTEGER NOT NULL)";
 
     private static final String KEY_BOOK_ID = "KEY_BOOK_ID";
     private static final String KEY_BOOK_NAME = "KEY_BOOK_NAME";
@@ -44,7 +44,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     private final String CREATE_BOOK_TABLE = "CREATE TABLE " + TABLE_BOOKS + " ( " +
             KEY_BOOK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            KEY_BOOK_NAME + " TEXT, " +
+            KEY_BOOK_NAME + " TEXT NOT NULL, " +
             KEY_BOOK_COVER + " TEXT, " +
             KEY_BOOK_CURRENT_MEDIA_ID + " INTEGER, " +
             KEY_BOOK_CURRENT_MEDIA_POSITION + " INTEGER, " +
