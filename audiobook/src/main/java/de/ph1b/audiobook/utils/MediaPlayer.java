@@ -108,7 +108,11 @@ public class MediaPlayer {
     }
 
     public int getCurrentPosition() {
-        return Math.round(vlc.getTime());
+        if (time != -1) {
+            return (int) time;
+        } else {
+            return Math.round(vlc.getTime());
+        }
     }
 
     public void seekTo(long position) {
