@@ -45,11 +45,6 @@
     <string tools:ignore="MissingTranslation" name="delete">Delete</string>
     <string tools:ignore="MissingTranslation" name="content_file_or_folder">Indicates whether its a
         file or a folder</string>
-    <string tools:ignore="MissingTranslation" name="error_in_file_title">Error in file</string>
-    <string tools:ignore="MissingTranslation" name="error_in_file_description">The following files
-        seem to be corrupted. Add book without corrupted files?</string>
-    <string tools:ignore="MissingTranslation" name="error_in_file_all_defect">All files seem to be
-        corrupt</string>
     <string tools:ignore="MissingTranslation" name="rewind">Rewind</string>
     <string tools:ignore="MissingTranslation" name="fast_forward">Fast forward</string>
     <string tools:ignore="MissingTranslation" name="playback_speed">Playback speed</string>

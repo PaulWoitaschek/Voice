@@ -48,6 +48,7 @@ public class MediaPlayer {
         try {
             vlc = LibVLC.getInstance();
             vlc.setTimeStretching(true);
+            vlc.setHardwareAcceleration(LibVLC.HW_ACCELERATION_DECODING);
             vlc.init(c);
         } catch (LibVlcException e) {
             e.printStackTrace();
@@ -147,14 +148,5 @@ public class MediaPlayer {
             wakeLock.release();
         }
         state = InternState.PAUSED;
-    }
-
-
-    public enum State {
-        PREPARED,
-        PAUSED,
-        STARTED,
-        DEAD,
-        COMPLETED
     }
 }

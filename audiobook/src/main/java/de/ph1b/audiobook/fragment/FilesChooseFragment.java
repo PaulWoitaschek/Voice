@@ -4,6 +4,7 @@ package de.ph1b.audiobook.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,6 +33,8 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.videolan.libvlc.LibVLC;
+import org.videolan.libvlc.LibVlcException;
 import org.videolan.libvlc.Media;
 
 import java.io.File;
@@ -55,12 +58,11 @@ import de.ph1b.audiobook.content.BookDetail;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.content.MediaDetail;
 import de.ph1b.audiobook.dialog.EditBook;
-import de.ph1b.audiobook.dialog.FileAddingErrorDialog;
 import de.ph1b.audiobook.interfaces.OnBackPressedListener;
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
 
-public class FilesChooseFragment extends Fragment implements EditBook.OnEditBookFinished, FileAddingErrorDialog.ConfirmationListener {
+public class FilesChooseFragment extends Fragment implements EditBook.OnEditBookFinished {
 
     private static final String TAG = "de.ph1b.audiobook.fragment.FilesChooseFragment";
     private static final Pattern DIR_SEPARATOR = Pattern.compile("/");
@@ -242,21 +244,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         ((FilesChoose) getActivity()).setOnBackPressedListener(null);
     }
 
-    @Override
-    public void onButtonClicked(boolean keep, ArrayList<MediaDetail> intactFiles, int bookId) {
-        Activity a = getActivity();
-        if (a != null) {
-            DataBaseHelper db = DataBaseHelper.getInstance(a);
-            if (keep) {
-                db.addMedia(intactFiles);
-                Intent i = new Intent(a, BookChoose.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
-            } else {
-                db.deleteBook(db.getBook(bookId));
-            }
-        }
-    }
 
     private boolean isAudio(String fileName) {
         HashSet<String> audioTypes = Media.AUDIO_EXTENSIONS;
@@ -272,9 +259,10 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
     @Override
     public void onEditBookFinished(String bookName, Bitmap cover, Boolean success) {
-        if (success) {
+        Context c = getActivity();
+        if (success && c != null) {
             //adds book and launches progress dialog
-            new AddBookAsync(mediaFiles, bookName, cover).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            new AddBookAsync(mediaFiles, bookName, cover, c).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
 
@@ -508,20 +496,22 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         }
     }
 
-    private class AddBookAsync extends AsyncTask<Void, Integer, Boolean> {
+    private class AddBookAsync extends AsyncTask<Void, Integer, Void> {
         private final ArrayList<File> files;
         private final String defaultName;
         private final Bitmap cover;
-        private final ArrayList<String> errorFiles = new ArrayList<>();
-        private final ArrayList<MediaDetail> media = new ArrayList<>();
+        private final ArrayList<MediaDetail> mediaDetails = new ArrayList<>();
         private ProgressDialog progressDialog;
         private int bookId;
 
+        private final WeakReference<Context> contextWeakReference;
 
-        public AddBookAsync(ArrayList<File> files, String defaultName, Bitmap cover) {
+
+        public AddBookAsync(ArrayList<File> files, String defaultName, Bitmap cover, Context c) {
             this.files = files;
             this.defaultName = defaultName;
             this.cover = cover;
+            contextWeakReference = new WeakReference<>(c);
         }
 
         @Override
@@ -536,12 +526,13 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected Void doInBackground(Void... params) {
             DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
 
             BookDetail b = new BookDetail();
             b.setName(defaultName);
-            if (cover != null) {
+            Context c = contextWeakReference.get();
+            if (cover != null && c != null) {
                 String coverPath = ImageHelper.saveCover(cover, getActivity());
                 if (coverPath != null) {
                     b.setCover(coverPath);
@@ -549,65 +540,47 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
             }
             bookId = db.addBook(b);
 
-            for (File f : files) {
-                MediaDetail m = new MediaDetail();
-                String fileName = f.getName();
-                if (fileName.indexOf(".") > 0)
-                    fileName = fileName.substring(0, fileName.lastIndexOf("."));
-                m.setName(fileName);
-                String path = f.getAbsolutePath();
-                m.setPath(path);
-                MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
+            c = contextWeakReference.get();
+            if (c != null) {
+                LibVLC vlc = null;
                 try {
-                    metaRetriever.setDataSource(f.getAbsolutePath());
-                    int duration = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+                    vlc = LibVLC.getInstance();
+                    vlc.init(c);
+                } catch (LibVlcException e) {
+                    e.printStackTrace();
+                }
+
+                for (File f : files) {
+                    MediaDetail m = new MediaDetail();
+                    String fileName = f.getName();
+                    if (fileName.indexOf(".") > 0)
+                        fileName = fileName.substring(0, fileName.lastIndexOf("."));
+                    m.setName(fileName);
+                    String path = f.getAbsolutePath();
+                    m.setPath(path);
+
+
+                    Media libVlcMedia = new Media(vlc, LibVLC.PathToURI(f.getAbsolutePath()));
+                    int duration = (int) libVlcMedia.getLength();
+
                     m.setDuration(duration);
                     m.setBookId(bookId);
-                    media.add(m);
-                } catch (IllegalArgumentException e) {
-                    if (BuildConfig.DEBUG)
-                        Log.d(TAG, "IllegalArgumentException at getting duration of: " + f.getAbsolutePath());
-                    errorFiles.add(f.getName());
-                } catch (RuntimeException e) {
-                    if (BuildConfig.DEBUG)
-                        Log.d(TAG, "RuntimeException at getting duration of: " + f.getAbsolutePath());
-                    errorFiles.add(f.getName());
+                    mediaDetails.add(m);
                 }
-            }
 
-            if (errorFiles.size() == 0) {
-                db.addMedia(media);
-                return true;
-            } else {
-                return false;
+                db.addMedia(mediaDetails);
             }
+            return null;
         }
 
         @Override
-        protected void onPostExecute(Boolean result) {
-            Activity a = getActivity();
-            if (a != null) {
+        protected void onPostExecute(Void result) {
+            Context c = contextWeakReference.get();
+            if (c != null) {
                 progressDialog.cancel();
-                if (result) {
-                    Intent i = new Intent(a, BookChoose.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(i);
-                } else {
-                    if (media.size() == 0) {
-                        CharSequence text = getString(R.string.error_in_file_all_defect);
-                        Toast toast = Toast.makeText(a, text, Toast.LENGTH_SHORT);
-                        toast.show();
-                    } else {
-                        FileAddingErrorDialog dialog = new FileAddingErrorDialog();
-                        Bundle args = new Bundle();
-                        args.putStringArrayList(FileAddingErrorDialog.ARG_ERROR_FILES, errorFiles);
-                        args.putParcelableArrayList(FileAddingErrorDialog.ARG_INTACT_FILES, media);
-                        args.putInt(FileAddingErrorDialog.ARG_BOOK_ID, bookId);
-                        dialog.setArguments(args);
-                        dialog.setTargetFragment(FilesChooseFragment.this, 42);
-                        dialog.show(getFragmentManager(), FileAddingErrorDialog.TAG);
-                    }
-                }
+                Intent i = new Intent(c, BookChoose.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
             }
         }
     }

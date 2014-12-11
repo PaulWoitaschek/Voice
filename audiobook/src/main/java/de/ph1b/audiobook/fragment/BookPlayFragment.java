@@ -273,7 +273,6 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
         play_button.setOnClickListener(this);
         playedTimeView.setOnClickListener(this);
 
-        int mediaPosition = book.getCurrentMediaPosition();
         int mediaDuration = 0;
         for (MediaDetail m : allMedia) {
             if (m.getId() == book.getCurrentMediaId()) {
@@ -281,7 +280,9 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
                 break;
             }
         }
-        seekBar.setProgress(book.getCurrentMediaPosition());
+
+        int mediaPosition = book.getCurrentMediaPosition();
+        seekBar.setProgress(mediaPosition);
         seekBar.setMax(mediaDuration);
         maxTimeView.setText(formatTime(mediaDuration));
         playedTimeView.setText(formatTime(mediaPosition));

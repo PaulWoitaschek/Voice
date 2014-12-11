@@ -45,10 +45,6 @@
     <string name="popup_edit_book">Bearbeiten</string>
     <string name="content_file_or_folder">Zeit an, ob es sich um eine Datei oder einen Ordner
         handelt</string>
-    <string name="error_in_file_title">Dateifehler</string>
-    <string name="error_in_file_description">Die folgenden Dateien scheinen defekt zu sein. Buch
-        ohne diese Dateien hinzufügen?</string>
-    <string name="error_in_file_all_defect">Alle Dateien sind defekt.</string>
     <string name="rewind">Zurückspulen</string>
     <string name="fast_forward">Vorspulen</string>
     <string name="playback_speed">Geschwindigkeit</string>

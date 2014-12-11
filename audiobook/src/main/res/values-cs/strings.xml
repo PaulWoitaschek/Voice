@@ -45,11 +45,6 @@
     <string name="delete">Smazat</string>
     <string name="content_file_or_folder">Ukazuje jestli jde o
         soubor nebo adresář</string>
-    <string name="error_in_file_title">Chyba souboru</string>
-    <string name="error_in_file_description">Následující soubory
-        jsou nejspíše poškozeny. Přidat knihu bez poškozených souborů?</string>
-    <string name="error_in_file_all_defect">Všechny soubory jsou nejspíše
-        poškozeny</string>
     <string name="rewind">Přetočit</string>
     <string name="fast_forward">Posun vpřed</string>
     <string name="playback_speed">Rychlost přehrávání</string>
