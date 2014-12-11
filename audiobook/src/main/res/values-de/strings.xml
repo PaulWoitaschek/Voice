@@ -51,7 +51,6 @@
     <string name="error_in_file_all_defect">Alle Dateien sind defekt.</string>
     <string name="rewind">Zurückspulen</string>
     <string name="fast_forward">Vorspulen</string>
-    <string name="title_playback_speed">Verändere Geschwindigkeit</string>
     <string name="playback_speed">Geschwindigkeit</string>
     <string name="pref_sleep_time">Einschlafzeit</string>
     <string name="sleep_timer_canceled">Einschlaftimer gestoppt.</string>

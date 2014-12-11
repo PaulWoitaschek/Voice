@@ -8,7 +8,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 25
-        versionName '1.4.7-rc1'
+        versionName '1.5.0'
     }
 
     signingConfigs {
@@ -17,7 +17,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.pro'
             signingConfig signingConfigs.release
         }
@@ -51,5 +51,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.2'
     compile 'com.android.support:recyclerview-v7:21.0.2'
     compile 'com.melnykov:floatingactionbutton:1.1.0'
-    compile 'de.mrmaffen:vlc-android-sdk:1.0.4'
+    compile project(':libvlc')
 }
