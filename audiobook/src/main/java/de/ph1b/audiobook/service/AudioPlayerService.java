@@ -739,7 +739,7 @@ public class AudioPlayerService extends Service {
                     book.setCurrentMediaPosition(newPosition);
                     updateBookAsync(book);
                 }
-                stateManager.setTime(mediaPlayer.getCurrentPosition());
+                stateManager.setTime(newPosition);
 
             } finally {
                 playerLock.unlock();
@@ -764,7 +764,7 @@ public class AudioPlayerService extends Service {
                 mediaPlayer.seekTo(newPosition);
                 book.setCurrentMediaPosition(newPosition);
                 updateBookAsync(book);
-                stateManager.setTime(mediaPlayer.getCurrentPosition());
+                stateManager.setTime(newPosition);
             } finally {
                 playerLock.unlock();
             }

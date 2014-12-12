@@ -10,7 +10,6 @@ import android.util.Log;
 import org.videolan.libvlc.EventHandler;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.LibVlcException;
-import org.videolan.libvlc.MediaList;
 
 public class MediaPlayer {
 
@@ -36,15 +35,18 @@ public class MediaPlayer {
 
     private final PowerManager.WakeLock wakeLock;
 
-    private long time = -1;
+    private long cachedTime = 0;
 
     private InternState state = InternState.DEAD;
+
+    private String currentMrl = null;
 
     public void setOnCompletionListener(OnCompletionListener listener) {
         this.onCompletionListener = listener;
     }
 
     public MediaPlayer(Context c) {
+        Log.d(TAG, "new instance");
         try {
             vlc = LibVLC.getInstance();
             vlc.setTimeStretching(true);
@@ -80,9 +82,8 @@ public class MediaPlayer {
     }
 
     public void prepare(String path) {
-        MediaList list = vlc.getPrimaryMediaList();
-        list.clear();
-        list.add(LibVLC.PathToURI(path));
+        Log.d(TAG, "preparing");
+        currentMrl = LibVLC.PathToURI(path);
         state = InternState.PREPARED;
     }
 
@@ -109,16 +110,17 @@ public class MediaPlayer {
     }
 
     public int getCurrentPosition() {
-        if (time != -1) {
-            return (int) time;
+        if (state == InternState.PREPARED) {
+            return (int) cachedTime;
         } else {
-            return Math.round(vlc.getTime());
+            long vlcTime = vlc.getTime();
+            return (int) (vlcTime == 0 ? cachedTime : vlcTime); // because vlc is buggy, we have to return the cached time
         }
     }
 
     public void seekTo(long position) {
         vlc.setTime(position);
-        time = position;
+        cachedTime = position;
     }
 
 
@@ -127,17 +129,14 @@ public class MediaPlayer {
             wakeLock.acquire();
         }
 
-        Log.d(TAG, "start()");
         if (state == InternState.PREPARED) {
-            vlc.playIndex(0);
+            vlc.playMRL(currentMrl);
         } else {
             vlc.play();
         }
-        if (time != -1) {
-            vlc.setTime(time);
-            time = -1;
-        }
         vlc.setRate(playBackSpeed);
+        vlc.setTime(cachedTime);
+
         state = InternState.STARTED;
     }
 
