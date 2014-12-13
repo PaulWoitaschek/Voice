@@ -179,11 +179,11 @@ public class AudioPlayerService extends Service {
     private OnSleepStateChangedListener onSleepStateChangedListener;
 
     public float getPlaybackSpeed() {
-        return mediaPlayer.getPlayBackSpeed();
+        return mediaPlayer.getPlaybackSpeed();
     }
 
     public void setPlaybackSpeed(float playbackSpeed) {
-        mediaPlayer.setPlayBackSpeed(playbackSpeed);
+        mediaPlayer.setPlaybackSpeed(playbackSpeed);
     }
 
     @Override
@@ -542,8 +542,9 @@ public class AudioPlayerService extends Service {
             if (position == media.getDuration())
                 position = 0;
 
+            mediaPlayer.setDataSourceString(path);
             stateManager.setState(PlayerStates.INITIALIZED);
-            mediaPlayer.prepare(path);
+            mediaPlayer.prepare();
             stateManager.setState(PlayerStates.PREPARED);
 
             // metadata

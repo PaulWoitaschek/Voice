@@ -1,1 +1,1 @@
-include ':audiobook', ':libvlc'
+include ':audiobook'

@@ -61,4 +61,8 @@
     <string name="hardware_acceleration_decoding">Dekodierbeschleunigung</string>
     <string name="hardware_acceleration_disabled">Deaktiviert</string>
     <string name="hardware_acceleration_full">Volle Beschleunigung</string>
+
+    <string name="error_in_file_title">Dateifehler</string>
+    <string name="error_in_file_description">Die folgenden Dateien scheinen defekt zu sein. Buch ohne diese Dateien hinzufügen?</string>
+    <string name="error_in_file_all_defect">Alle Dateien sind defekt.</string>
 </resources>

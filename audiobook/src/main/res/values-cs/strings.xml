@@ -51,4 +51,7 @@
     <string name="pref_sleep_time">Časovač vypnutí</string>
     <string name="sleep_timer_started">Časovač vypnutí: </string>
     <string name="sleep_timer_canceled">Časovač vypnutí zrušen.</string>
+    <string name="error_in_file_title">Chyba souboru</string>
+    <string name="error_in_file_description">Následující soubory jsou nejspíše poškozeny. Přidat knihu bez poškozených souborů?</string>
+    <string name="error_in_file_all_defect">Všechny soubory jsou nejspíše poškozeny</string>
 </resources>

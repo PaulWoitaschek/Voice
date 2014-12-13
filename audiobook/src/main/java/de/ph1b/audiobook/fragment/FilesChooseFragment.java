@@ -1,10 +1,8 @@
 package de.ph1b.audiobook.fragment;
 
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -33,10 +31,6 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import org.videolan.libvlc.LibVLC;
-import org.videolan.libvlc.LibVlcException;
-import org.videolan.libvlc.Media;
-
 import java.io.File;
 import java.io.FileFilter;
 import java.lang.ref.WeakReference;
@@ -58,16 +52,17 @@ import de.ph1b.audiobook.content.BookDetail;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.content.MediaDetail;
 import de.ph1b.audiobook.dialog.EditBook;
+import de.ph1b.audiobook.dialog.FileAddingErrorDialog;
 import de.ph1b.audiobook.interfaces.OnBackPressedListener;
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
 
-public class FilesChooseFragment extends Fragment implements EditBook.OnEditBookFinished {
-
+public class FilesChooseFragment extends Fragment implements EditBook.OnEditBookFinished, FileAddingErrorDialog.ConfirmationListener {
     private static final String TAG = "de.ph1b.audiobook.fragment.FilesChooseFragment";
     private static final Pattern DIR_SEPARATOR = Pattern.compile("/");
     private final LinkedList<String> link = new LinkedList<>();
     private final ArrayList<String> dirs = getStorageDirectories();
+    private final ArrayList<String> audioTypes = genAudioTypes();
     private final OnBackPressedListener onBackPressedListener = new OnBackPressedListener() {
         @Override
         public synchronized void backPressed() {
@@ -85,7 +80,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     private final FileFilter filterShowAudioAndFolder = new FileFilter() {
         @Override
         public boolean accept(File file) {
-            return !file.isHidden() && (file.isDirectory() || isAudio(file.getName()));
+            return !file.isHidden() && (file.isDirectory() || isAudio(file));
         }
     };
     private ArrayList<File> mediaFiles = new ArrayList<>();
@@ -96,26 +91,44 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     private ActionMode actionMode;
     private ActionMode.Callback mActionModeCallback;
 
+    private ArrayList<String> genAudioTypes() {
+        ArrayList<String> audioTypes = new ArrayList<>();
+        audioTypes.add(".3gp");
+        audioTypes.add(".mp4");
+        audioTypes.add(".m4a");
+        audioTypes.add(".m4b");
+        audioTypes.add(".mp3");
+        audioTypes.add(".mid");
+        audioTypes.add(".xmf");
+        audioTypes.add(".mxmf");
+        audioTypes.add(".rtttl");
+        audioTypes.add(".rtx");
+        audioTypes.add(".ota");
+        audioTypes.add(".imy");
+        audioTypes.add(".ogg");
+        audioTypes.add(".wav");
+        audioTypes.add(".aac");
+        audioTypes.add(".flac");
+        audioTypes.add(".mkv");
+        audioTypes.add(".wma");
+        return audioTypes;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setHasOptionsMenu(true);
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_files_choose, container, false);
-
         dirSpinner = (Spinner) v.findViewById(R.id.dirSpinner);
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         progressBar = (ProgressBar) v.findViewById(R.id.progress);
-
         if (dirs.size() > 1) {
             dirSpinner.setVisibility(View.VISIBLE);
             ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getActivity(), R.layout.sd_spinner_layout, dirs);
@@ -131,42 +144,39 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
-
                 }
             });
         } else {
             dirSpinner.setVisibility(View.GONE);
         }
-
         if (dirs.size() > 0) {
             link.add(dirs.get(0)); //first element of file hierarchy
             populateList(); //Setting path to external storage directory to list it
         }
-
         return v;
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private ArrayList<String> getStorageDirectories() {
-        // Final set of paths
+// Final set of paths
         final Set<String> rv = new HashSet<>();
-        // Primary physical SD-CARD (not emulated)
+// Primary physical SD-CARD (not emulated)
         final String rawExternalStorage = System.getenv("EXTERNAL_STORAGE");
-        // All Secondary SD-CARDs (all exclude primary) separated by ":"
+// All Secondary SD-CARDs (all exclude primary) separated by ":"
         final String rawSecondaryStoragesStr = System.getenv("SECONDARY_STORAGE");
-        // Primary emulated SD-CARD
+// Primary emulated SD-CARD
         final String rawEmulatedStorageTarget = System.getenv("EMULATED_STORAGE_TARGET");
         if (TextUtils.isEmpty(rawEmulatedStorageTarget)) {
-            // Device has physical external storage; use plain paths.
+// Device has physical external storage; use plain paths.
             if (TextUtils.isEmpty(rawExternalStorage)) {
-                // EXTERNAL_STORAGE undefined; falling back to default.
+// EXTERNAL_STORAGE undefined; falling back to default.
                 rv.add("/storage/sdcard0");
             } else {
                 rv.add(rawExternalStorage);
             }
         } else {
-            // Device has emulated storage; external storage paths should have
-            // userId burned into them.
+// Device has emulated storage; external storage paths should have
+// userId burned into them.
             final String rawUserId;
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 rawUserId = "";
@@ -182,16 +192,16 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                 }
                 rawUserId = isDigit ? lastFolder : "";
             }
-            // /storage/emulated/0[1,2,...]
+// /storage/emulated/0[1,2,...]
             if (TextUtils.isEmpty(rawUserId)) {
                 rv.add(rawEmulatedStorageTarget);
             } else {
                 rv.add(rawEmulatedStorageTarget + File.separator + rawUserId);
             }
         }
-        // Add all secondary storages
+// Add all secondary storages
         if (!TextUtils.isEmpty(rawSecondaryStoragesStr)) {
-            // All Secondary SD-CARDs splited into array
+// All Secondary SD-CARDs splited into array
             final String[] rawSecondaryStorages = rawSecondaryStoragesStr.split(File.pathSeparator);
             Collections.addAll(rv, rawSecondaryStorages);
         }
@@ -203,7 +213,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         }
         rv.add("/storage/emulated/0");
         rv.add("/storage/sdcard1");
-
         ArrayList<String> paths = new ArrayList<>();
         for (String s : rv) {
             File f = new File(s);
@@ -215,7 +224,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+// Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.action_only_settings, menu);
     }
 
@@ -233,42 +242,49 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     @Override
     public void onResume() {
         super.onResume();
-
         ((FilesChoose) getActivity()).setOnBackPressedListener(onBackPressedListener);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
         ((FilesChoose) getActivity()).setOnBackPressedListener(null);
     }
 
-
-    private boolean isAudio(String fileName) {
-        HashSet<String> audioTypes = Media.AUDIO_EXTENSIONS;
-
-        int dotIndex = fileName.lastIndexOf(".");
-        if (dotIndex != -1) {
-            String extension = fileName.toLowerCase().substring(dotIndex);
-            return audioTypes.contains(extension);
-        } else {
-            return false;
+    @Override
+    public void onButtonClicked(boolean keep, ArrayList<MediaDetail> intactFiles, int bookId) {
+        Activity a = getActivity();
+        if (a != null) {
+            DataBaseHelper db = DataBaseHelper.getInstance(a);
+            if (keep) {
+                db.addMedia(intactFiles);
+                Intent i = new Intent(a, BookChoose.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+            } else {
+                db.deleteBook(db.getBook(bookId));
+            }
         }
+    }
+
+    private boolean isAudio(File file) {
+        for (String s : audioTypes)
+            if (file.getName().toLowerCase().endsWith(s))
+                return true;
+        return false;
     }
 
     @Override
     public void onEditBookFinished(String bookName, Bitmap cover, Boolean success) {
-        Context c = getActivity();
-        if (success && c != null) {
-            //adds book and launches progress dialog
-            new AddBookAsync(mediaFiles, bookName, cover, c).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        if (success) {
+//adds book and launches progress dialog
+            new AddBookAsync(mediaFiles, bookName, cover).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
 
     private Boolean isImage(File f) {
         String fileName = f.getName().toLowerCase();
-        return fileName.endsWith(".jpg") || fileName.endsWith(".png") || fileName.endsWith(".bmp");
+        return fileName.endsWith(".jpg") || fileName.endsWith(".png");
     }
 
     /**
@@ -280,10 +296,8 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
      */
     private ArrayList<File> addFilesRecursive(ArrayList<File> dir) {
         ArrayList<File> returnList = new ArrayList<>();
-
         ArrayList<File> fileList = new ArrayList<>();
         ArrayList<File> dirList = new ArrayList<>();
-
         for (File f : dir) {
             if (f.exists() && f.isFile())
                 fileList.add(f);
@@ -293,7 +307,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         }
         Collections.sort(fileList, new NaturalOrderComparator());
         returnList.addAll(fileList);
-
         Collections.sort(dirList, new NaturalOrderComparator());
         for (File f : dirList) {
             ArrayList<File> content = new ArrayList<>(Arrays.asList(f.listFiles()));
@@ -307,21 +320,17 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
     private synchronized void populateList() {
         String path = link.getLast();
-        //finishing action mode on populating new folder
+//finishing action mode on populating new folder
         if (actionMode != null)
             actionMode.finish();
-
         File f = new File(path);
         ArrayList<File> fileList = new ArrayList<>(Arrays.asList(f.listFiles(filterShowAudioAndFolder)));
         Collections.sort(fileList, new NaturalOrderComparator());
-
         FileAdapter.ItemInteraction itemInteraction = new FileAdapter.ItemInteraction() {
-
             @Override
             public void onCheckStateChanged() {
                 if (adapter.getCheckedItems().size() > 0 && mActionModeCallback == null) {
                     mActionModeCallback = new ActionMode.Callback() {
-
                         @Override
                         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                             MenuInflater inflater = mode.getMenuInflater();
@@ -352,7 +361,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                             mActionModeCallback = null;
                         }
                     };
-
                     actionMode = ((ActionBarActivity) getActivity()).startSupportActionMode(mActionModeCallback);
                 } else if (adapter.getCheckedItems().size() == 0) {
                     if (actionMode != null) {
@@ -370,14 +378,12 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                 }
             }
         };
-
         adapter = new FileAdapter(fileList, itemInteraction);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     private class LaunchEditDialog extends AsyncTask<Void, Void, Void> {
-
         private final ArrayList<File> imageFiles = new ArrayList<>();
         private final ArrayList<Bitmap> bitmaps = new ArrayList<>();
         private final WeakReference<Spinner> spinnerWeakReference;
@@ -407,25 +413,21 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
         @Override
         protected Void doInBackground(Void... params) {
-
-            //title
+//title
             File firstFile = files.get(0);
             bookTitle = firstFile.getName();
             if (firstFile.isFile())
                 bookTitle = bookTitle.substring(0, bookTitle.lastIndexOf("."));
-
             files = addFilesRecursive(files);
-
             mediaFiles = new ArrayList<>();
             for (File f : files) {
-                if (isAudio(f.getName())) {
+                if (isAudio(f)) {
                     mediaFiles.add(f);
                 } else if (isImage(f)) {
                     imageFiles.add(f);
                 }
             }
-
-            //checking media files for covers
+//checking media files for covers
             int attempt = 0;
             for (File media : mediaFiles) {
                 if (isCancelled())
@@ -453,8 +455,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                         Log.d(TAG, "RuntimeException at finding covers at: " + media.getAbsolutePath());
                 }
             }
-
-            //checking imageFiles for cover
+//checking imageFiles for cover
             for (File image : imageFiles) {
                 if (isCancelled())
                     return null;
@@ -477,16 +478,13 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
             } else {
                 EditBook editBook = new EditBook();
                 Bundle bundle = new Bundle();
-
                 bundle.putParcelableArrayList(EditBook.BOOK_COVER, bitmaps);
                 bundle.putString(EditBook.DIALOG_TITLE, getString(R.string.book_add));
                 bundle.putString(EditBook.BOOK_NAME, bookTitle);
-
                 editBook.setArguments(bundle);
                 editBook.setTargetFragment(FilesChooseFragment.this, 0);
                 editBook.show(getFragmentManager(), TAG);
             }
-
             Spinner spinner = spinnerWeakReference.get();
             RecyclerView recyclerView = recyclerViewWeakReference.get();
             ProgressBar progressBar = progressBarWeakReference.get();
@@ -496,22 +494,19 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         }
     }
 
-    private class AddBookAsync extends AsyncTask<Void, Integer, Void> {
+    private class AddBookAsync extends AsyncTask<Void, Integer, Boolean> {
         private final ArrayList<File> files;
         private final String defaultName;
         private final Bitmap cover;
-        private final ArrayList<MediaDetail> mediaDetails = new ArrayList<>();
+        private final ArrayList<String> errorFiles = new ArrayList<>();
+        private final ArrayList<MediaDetail> media = new ArrayList<>();
         private ProgressDialog progressDialog;
         private int bookId;
 
-        private final WeakReference<Context> contextWeakReference;
-
-
-        public AddBookAsync(ArrayList<File> files, String defaultName, Bitmap cover, Context c) {
+        public AddBookAsync(ArrayList<File> files, String defaultName, Bitmap cover) {
             this.files = files;
             this.defaultName = defaultName;
             this.cover = cover;
-            contextWeakReference = new WeakReference<>(c);
         }
 
         @Override
@@ -526,61 +521,75 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected Boolean doInBackground(Void... params) {
             DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
-
             BookDetail b = new BookDetail();
             b.setName(defaultName);
-            Context c = contextWeakReference.get();
-            if (cover != null && c != null) {
+            if (cover != null) {
                 String coverPath = ImageHelper.saveCover(cover, getActivity());
                 if (coverPath != null) {
                     b.setCover(coverPath);
                 }
             }
             bookId = db.addBook(b);
-
-            c = contextWeakReference.get();
-            if (c != null) {
-                LibVLC vlc = null;
+            for (File f : files) {
+                MediaDetail m = new MediaDetail();
+                String fileName = f.getName();
+                if (fileName.indexOf(".") > 0)
+                    fileName = fileName.substring(0, fileName.lastIndexOf("."));
+                m.setName(fileName);
+                String path = f.getAbsolutePath();
+                m.setPath(path);
+                MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
                 try {
-                    vlc = LibVLC.getInstance();
-                    vlc.init(c);
-                } catch (LibVlcException e) {
-                    e.printStackTrace();
-                }
-
-                for (File f : files) {
-                    MediaDetail m = new MediaDetail();
-                    String fileName = f.getName();
-                    if (fileName.indexOf(".") > 0)
-                        fileName = fileName.substring(0, fileName.lastIndexOf("."));
-                    m.setName(fileName);
-                    String path = f.getAbsolutePath();
-                    m.setPath(path);
-
-
-                    Media libVlcMedia = new Media(vlc, LibVLC.PathToURI(f.getAbsolutePath()));
-                    int duration = (int) libVlcMedia.getLength();
-
+                    metaRetriever.setDataSource(f.getAbsolutePath());
+                    int duration = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
                     m.setDuration(duration);
                     m.setBookId(bookId);
-                    mediaDetails.add(m);
+                    media.add(m);
+                } catch (IllegalArgumentException e) {
+                    if (BuildConfig.DEBUG)
+                        Log.d(TAG, "IllegalArgumentException at getting duration of: " + f.getAbsolutePath());
+                    errorFiles.add(f.getName());
+                } catch (RuntimeException e) {
+                    if (BuildConfig.DEBUG)
+                        Log.d(TAG, "RuntimeException at getting duration of: " + f.getAbsolutePath());
+                    errorFiles.add(f.getName());
                 }
-
-                db.addMedia(mediaDetails);
             }
-            return null;
+            if (errorFiles.size() == 0) {
+                db.addMedia(media);
+                return true;
+            } else {
+                return false;
+            }
         }
 
         @Override
-        protected void onPostExecute(Void result) {
-            Context c = contextWeakReference.get();
-            if (c != null) {
+        protected void onPostExecute(Boolean result) {
+            Activity a = getActivity();
+            if (a != null) {
                 progressDialog.cancel();
-                Intent i = new Intent(c, BookChoose.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
+                if (result) {
+                    Intent i = new Intent(a, BookChoose.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                } else {
+                    if (media.size() == 0) {
+                        CharSequence text = getString(R.string.error_in_file_all_defect);
+                        Toast toast = Toast.makeText(a, text, Toast.LENGTH_SHORT);
+                        toast.show();
+                    } else {
+                        FileAddingErrorDialog dialog = new FileAddingErrorDialog();
+                        Bundle args = new Bundle();
+                        args.putStringArrayList(FileAddingErrorDialog.ARG_ERROR_FILES, errorFiles);
+                        args.putParcelableArrayList(FileAddingErrorDialog.ARG_INTACT_FILES, media);
+                        args.putInt(FileAddingErrorDialog.ARG_BOOK_ID, bookId);
+                        dialog.setArguments(args);
+                        dialog.setTargetFragment(FilesChooseFragment.this, 42);
+                        dialog.show(getFragmentManager(), FileAddingErrorDialog.TAG);
+                    }
+                }
             }
         }
     }
