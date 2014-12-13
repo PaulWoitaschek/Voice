@@ -57,5 +57,22 @@
     <string tools:ignore="MissingTranslation" name="pref_title_track_to_end">Continue till end</string>
     <string tools:ignore="MissingTranslation" name="pref_summary_track_to_end">Continues playing till the end of the track, after sleep timer has triggered.</string>
 
+    <string tools:ignore="MissingTranslation" name="hardware_acceleration">Hardware acceleration</string>
+    <string tools:ignore="MissingTranslation" name="automatic">Automatic</string>
+    <string tools:ignore="MissingTranslation" name="hardware_acceleration_disabled">Disabled</string>
+    <string tools:ignore="MissingTranslation" name="hardware_acceleration_decoding">Decoding acceleration</string>
+    <string tools:ignore="MissingTranslation" name="hardware_acceleration_full">Full acceleration</string>
 
+    <string-array name="hardware_acceleration_list">
+        <item>@string/automatic</item>
+        <item>@string/hardware_acceleration_disabled</item>
+        <item>@string/hardware_acceleration_decoding</item>
+        <item>@string/hardware_acceleration_full</item>
+    </string-array>
+    <string-array name="hardware_acceleration_values" translatable="false">
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
 </resources>

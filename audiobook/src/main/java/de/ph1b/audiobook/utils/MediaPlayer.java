@@ -2,15 +2,24 @@ package de.ph1b.audiobook.utils;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.videolan.libvlc.EventHandler;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.LibVlcException;
 
+import de.ph1b.audiobook.R;
+
+
+/**
+ * Wrapper trying to mimic the behaviour of the default Android MediaPlayer. Sets wake-lock
+ * automatically to android.os.PowerManager.PARTIAL_WAKE_LOCK.
+ */
 public class MediaPlayer {
 
     private enum InternState {
@@ -35,22 +44,31 @@ public class MediaPlayer {
 
     private final PowerManager.WakeLock wakeLock;
 
-    private long cachedTime = 0;
+    private long cachedTime = -1;
 
     private InternState state = InternState.DEAD;
 
     private String currentMrl = null;
 
+    private Context c;
+
     public void setOnCompletionListener(OnCompletionListener listener) {
         this.onCompletionListener = listener;
     }
 
-    public MediaPlayer(Context c) {
+    public MediaPlayer(final Context c) {
         Log.d(TAG, "new instance");
+        this.c = c;
+
         try {
             vlc = LibVLC.getInstance();
             vlc.setTimeStretching(true);
-            vlc.setHardwareAcceleration(LibVLC.HW_ACCELERATION_DECODING);
+
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+            int hwAcceleration = Integer.valueOf(sp.getString(c.getString(R.string.pref_key_hardware_acceleration), String.valueOf(LibVLC.HW_ACCELERATION_FULL)));
+            vlc.setHardwareAcceleration(hwAcceleration);
+            vlc.setAout(LibVLC.AOUT_OPENSLES);
+
             vlc.init(c);
         } catch (LibVlcException e) {
             e.printStackTrace();
@@ -69,6 +87,30 @@ public class MediaPlayer {
                         if (onCompletionListener != null) {
                             onCompletionListener.onCompletion();
                         }
+                        break;
+                    case EventHandler.HardwareAccelerationError:
+                        int newHardwareAcceleration;
+
+                        switch (vlc.getHardwareAcceleration()) {
+                            case LibVLC.HW_ACCELERATION_FULL:
+                                newHardwareAcceleration = LibVLC.HW_ACCELERATION_DECODING;
+                                break;
+                            case LibVLC.HW_ACCELERATION_DECODING:
+                                newHardwareAcceleration = LibVLC.HW_ACCELERATION_AUTOMATIC;
+                                break;
+                            default:
+                                newHardwareAcceleration = LibVLC.HW_ACCELERATION_DISABLED;
+                                break;
+                        }
+
+                        vlc.setHardwareAcceleration(newHardwareAcceleration);
+
+                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.putInt(c.getString(R.string.pref_key_hardware_acceleration), newHardwareAcceleration);
+                        editor.apply();
+
+                        vlc.play();
                         break;
                     default:
                         break;
@@ -100,6 +142,7 @@ public class MediaPlayer {
         if (wakeLock.isHeld()) {
             wakeLock.release();
         }
+        state = InternState.DEAD;
     }
 
     public void release() {
@@ -110,11 +153,10 @@ public class MediaPlayer {
     }
 
     public int getCurrentPosition() {
-        if (state == InternState.PREPARED) {
-            return (int) cachedTime;
+        if (state == InternState.STARTED || state == InternState.PAUSED) {
+            return (int) vlc.getTime();
         } else {
-            long vlcTime = vlc.getTime();
-            return (int) (vlcTime == 0 ? cachedTime : vlcTime); // because vlc is buggy, we have to return the cached time
+            return (int) cachedTime;
         }
     }
 
@@ -135,7 +177,10 @@ public class MediaPlayer {
             vlc.play();
         }
         vlc.setRate(playBackSpeed);
-        vlc.setTime(cachedTime);
+        if (cachedTime != -1) {
+            vlc.setTime(cachedTime);
+            cachedTime = -1;
+        }
 
         state = InternState.STARTED;
     }

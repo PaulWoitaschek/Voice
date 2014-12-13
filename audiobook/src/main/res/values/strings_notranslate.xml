@@ -9,4 +9,6 @@
     <string translatable="false" name="pref_key_resume_on_replug">RESUME_ON_REPLUG</string>
     <string translatable="false" name="pref_key_cover_on_internet">COVER_ON_INTERNET</string>
     <string translatable="false" name="pref_key_track_to_end">PLAY_TRACK_TO_END</string>
+    
+    <string translatable="false" name="pref_key_hardware_acceleration">HARDWARE_ACC</string>
 </resources>
