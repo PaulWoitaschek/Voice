@@ -154,7 +154,6 @@ public class AudioPlayerService extends Service {
     private Handler handler;
     @SuppressWarnings("deprecation")
     private RemoteControlClient mRemoteControlClient;
-    private ComponentName myEventReceiver;
     private MediaSessionCompat mediaSession;
     private ComponentName widgetComponentName;
     private RemoteViews widgetRemoteViews;
@@ -233,8 +232,6 @@ public class AudioPlayerService extends Service {
         });
         mediaSession.setActive(true);
         if (Build.VERSION.SDK_INT < 21) {
-            myEventReceiver = new ComponentName(getPackageName(), RemoteControlReceiver.class.getName());
-
             //noinspection deprecation
             mRemoteControlClient = new RemoteControlClient(mediaPendingIntent);
             //noinspection deprecation
@@ -245,7 +242,6 @@ public class AudioPlayerService extends Service {
                             RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
                             RemoteControlClient.FLAG_KEY_MEDIA_REWIND |
                             RemoteControlClient.FLAG_KEY_MEDIA_FAST_FORWARD);
-
         }
 
         registerReceiver(audioBecomingNoisyReceiver, new IntentFilter
@@ -483,8 +479,6 @@ public class AudioPlayerService extends Service {
             onSleepStateChangedListener.onSleepStateChanged(false);
         }
 
-        //noinspection deprecation
-        audioManager.unregisterMediaButtonEventReceiver(myEventReceiver);
         //noinspection deprecation
         audioManager.unregisterRemoteControlClient(mRemoteControlClient);
     }
@@ -817,8 +811,6 @@ public class AudioPlayerService extends Service {
                     if (Build.VERSION.SDK_INT < 21) {
                         if (BuildConfig.DEBUG)
                             Log.d(TAG, "Setting up remote control client");
-                        //noinspection deprecation
-                        audioManager.registerMediaButtonEventReceiver(myEventReceiver);
                         //noinspection deprecation
                         audioManager.registerRemoteControlClient(mRemoteControlClient);
                         //noinspection deprecation
