@@ -13,6 +13,7 @@ package de.ph1b.audiobook.utils;//Copyright 2012 James Falcon
 //See the License for the specific language governing permissions and
 //limitations under the License.
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioManager;
@@ -30,8 +31,10 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class MediaPlayer {
+@TargetApi(16)
+class MediaPlayer {
     private AudioTrack track;
+
     private Sonic sonic;
     private MediaExtractor extractor;
     private MediaCodec codec;
@@ -44,7 +47,7 @@ public class MediaPlayer {
     private boolean mIsDecoding;
     private long mDuration;
     private float mCurrentSpeed;
-    private float mCurrentPitch;
+    private final float mCurrentPitch;
     private int mCurrentState;
     private final Context mContext;
     private final static int TRACK_NUM = 0;
@@ -59,7 +62,7 @@ public class MediaPlayer {
     private final static int STATE_ERROR = 9;
 
     private static final String TAG = "MediaPlayer";
-    private PowerManager.WakeLock wakeLock;
+    private final PowerManager.WakeLock wakeLock;
 
 
     public interface OnCompletionListener {
@@ -255,7 +258,7 @@ public class MediaPlayer {
         }
     }
 
-    public void setDataSourceString(String path) {
+    public void setDataSource(String path) {
         Log.d(TAG, "setDataSource: " + path);
         switch (mCurrentState) {
             case STATE_IDLE:

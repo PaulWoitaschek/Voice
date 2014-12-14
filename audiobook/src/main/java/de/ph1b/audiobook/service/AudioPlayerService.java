@@ -19,6 +19,7 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -49,7 +50,7 @@ import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.receiver.RemoteControlReceiver;
 import de.ph1b.audiobook.receiver.WidgetProvider;
 import de.ph1b.audiobook.utils.ImageHelper;
-import de.ph1b.audiobook.utils.MediaPlayer;
+import de.ph1b.audiobook.utils.MediaPlayerWrapper;
 
 public class AudioPlayerService extends Service {
 
@@ -67,7 +68,7 @@ public class AudioPlayerService extends Service {
     private DataBaseHelper db;
     private LocalBroadcastManager bcm;
     private AudioManager audioManager;
-    private MediaPlayer mediaPlayer;
+    private MediaPlayerWrapper mediaPlayer;
     private boolean pauseBecauseHeadset = false;
     /**
      * If audio is becoming noisy, pause the player.
@@ -196,7 +197,7 @@ public class AudioPlayerService extends Service {
 
         bcm = LocalBroadcastManager.getInstance(this);
         db = DataBaseHelper.getInstance(this);
-        mediaPlayer = new MediaPlayer(this);
+        mediaPlayer = new MediaPlayerWrapper(this);
         stateManager = new StateManager();
         stateManager.setState(PlayerStates.IDLE);
 
@@ -402,7 +403,7 @@ public class AudioPlayerService extends Service {
             smallViewRemote.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_48dp);
             bigViewRemote.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_48dp);
         } else {
-            playPauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_PLAY);
+            playPauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
             smallViewRemote.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow_white_48dp);
             bigViewRemote.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow_white_48dp);
         }
@@ -512,7 +513,7 @@ public class AudioPlayerService extends Service {
                 media = allMedia.get(0);
 
             if (stateManager.getState() == PlayerStates.DEAD)
-                mediaPlayer = new MediaPlayer(this);
+                mediaPlayer = new MediaPlayerWrapper(this);
             else
                 mediaPlayer.reset();
             stateManager.setState(PlayerStates.IDLE);
@@ -537,7 +538,7 @@ public class AudioPlayerService extends Service {
             if (position == media.getDuration())
                 position = 0;
 
-            mediaPlayer.setDataSourceString(path);
+            mediaPlayer.setDataSource(path);
             stateManager.setState(PlayerStates.INITIALIZED);
             mediaPlayer.prepare();
             stateManager.setState(PlayerStates.PREPARED);
@@ -568,8 +569,10 @@ public class AudioPlayerService extends Service {
             }
 
             //requests wake-mode which is automatically released when pausing
+            mediaPlayer.setWakeMode(this, PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE);
             mediaPlayer.seekTo(position);
-            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            mediaPlayer.setOnCompletionListener(new MediaPlayerWrapper.OnCompletionListener() {
+
                 @Override
                 public void onCompletion() {
                     if (stopAfterCurrentTrack) {
@@ -810,15 +813,20 @@ public class AudioPlayerService extends Service {
                                 RemoteControlReceiver.class.getName()));
                         //noinspection deprecation
                         audioManager.registerRemoteControlClient(remoteControlClient);
+                        //noinspection deprecation
                         remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
                     }
 
-                    startForeground(NOTIFICATION_ID, getNotification());
-
-                    if (BuildConfig.DEBUG)
+                    if (BuildConfig.DEBUG) {
                         Log.d(TAG, "starting MediaPlayer");
+                    }
                     mediaPlayer.start();
                     stateManager.setState(PlayerStates.STARTED);
+                    /**
+                     * startForeground has to be called after state was set, so the right buttons
+                     * will be set up.
+                     */
+                    startForeground(NOTIFICATION_ID, getNotification());
 
                     //starting runner to update gui
                     handler.post(timeChangedRunner);

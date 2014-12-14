@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -357,7 +358,11 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem timeLapseItem = menu.findItem(R.id.action_time_lapse);
+        timeLapseItem.setVisible(false);
         if (mBound) {
+            timeLapseItem.setVisible(Build.VERSION.SDK_INT >= 16);
+
             MenuItem sleepTimerItem = menu.findItem(R.id.action_sleep);
 
             if (sleepTimerActive) {

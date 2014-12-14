@@ -19,7 +19,7 @@ public class Sonic {
     }
 
     // Call this to clean up memory after you're done processing sound.
-    public void close() {
+    void close() {
         if (sonicID != 0) {
             closeNative(sonicID);
             sonicID = 0;

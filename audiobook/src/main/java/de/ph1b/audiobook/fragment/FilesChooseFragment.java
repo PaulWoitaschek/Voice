@@ -543,7 +543,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                 m.setPath(path);
 
                 try {
-                    long start = System.currentTimeMillis();
                     metaRetriever.setDataSource(f.getAbsolutePath());
                     int duration = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
                     m.setDuration(duration);

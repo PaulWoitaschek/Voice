@@ -24,12 +24,6 @@ public class MediaSpinnerAdapter extends BaseAdapter {
         this.data = data;
     }
 
-    public int getPositionByMediaDetailId(int givenId) {
-        for (int i = 0; i < getCount(); i++)
-            if (data.get(i).getId() == givenId)
-                return i;
-        return 0;
-    }
 
     @Override
     public int getCount() {
