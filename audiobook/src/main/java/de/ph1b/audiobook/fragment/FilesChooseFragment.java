@@ -276,7 +276,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     @Override
     public void onEditBookFinished(String bookName, Bitmap cover, Boolean success) {
         if (success) {
-//adds book and launches progress dialog
+            //adds book and launches progress dialog
             new AddBookAsync(mediaFiles, bookName, cover).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
@@ -319,7 +319,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
     private synchronized void populateList() {
         String path = link.getLast();
-//finishing action mode on populating new folder
+        //finishing action mode on populating new folder
         if (actionMode != null)
             actionMode.finish();
         File f = new File(path);
@@ -412,7 +412,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
         @Override
         protected Void doInBackground(Void... params) {
-//title
+            //title
             File firstFile = files.get(0);
             bookTitle = firstFile.getName();
             if (firstFile.isFile())
@@ -426,7 +426,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                     imageFiles.add(f);
                 }
             }
-//checking media files for covers
+            //checking media files for covers
             int attempt = 0;
             for (File media : mediaFiles) {
                 if (isCancelled())
@@ -454,7 +454,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                         Log.d(TAG, "RuntimeException at finding covers at: " + media.getAbsolutePath());
                 }
             }
-//checking imageFiles for cover
+            //checking imageFiles for cover
             for (File image : imageFiles) {
                 if (isCancelled())
                     return null;
@@ -530,10 +530,8 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                     b.setCover(coverPath);
                 }
             }
-            long mmdrPerformance = 0;
 
             MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
-
             bookId = db.addBook(b);
             for (File f : files) {
                 MediaDetail m = new MediaDetail();
@@ -544,12 +542,10 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                 String path = f.getAbsolutePath();
                 m.setPath(path);
 
-
                 try {
                     long start = System.currentTimeMillis();
                     metaRetriever.setDataSource(f.getAbsolutePath());
                     int duration = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
-                    mmdrPerformance += (System.currentTimeMillis() - start);
                     m.setDuration(duration);
                     m.setBookId(bookId);
                     media.add(m);
@@ -562,9 +558,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                         Log.d(TAG, "RuntimeException at getting duration of: " + f.getAbsolutePath());
                     errorFiles.add(f.getName());
                 }
-            }
-            if (BuildConfig.DEBUG) {
-                Log.d("MMDR", String.valueOf(mmdrPerformance));
             }
 
             metaRetriever.release();
