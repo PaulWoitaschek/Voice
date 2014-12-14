@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.content.MediaDetail;
+import de.ph1b.audiobook.utils.MaterialCompatThemer;
 
 public class FileAddingErrorDialog extends DialogFragment {
     public static final String TAG = "FileAddingErrorDialog";
@@ -63,5 +64,11 @@ public class FileAddingErrorDialog extends DialogFragment {
 
     public interface ConfirmationListener {
         public void onButtonClicked(boolean keep, ArrayList<MediaDetail> intactFiles, int bookId);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        MaterialCompatThemer.theme(getDialog());
     }
 }

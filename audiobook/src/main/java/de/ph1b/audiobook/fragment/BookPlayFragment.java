@@ -52,6 +52,7 @@ import de.ph1b.audiobook.interfaces.OnTimeChangedListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.utils.ImageHelper;
+import de.ph1b.audiobook.utils.MaterialCompatThemer;
 
 public class BookPlayFragment extends Fragment implements OnClickListener, SetPlaybackSpeedDialog.PlaybackSpeedChanged {
 
@@ -293,10 +294,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
         maxTimeView.setText(formatTime(mediaDuration));
         playedTimeView.setText(formatTime(mediaPosition));
 
-        seekBar.getProgressDrawable().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
-        if (Build.VERSION.SDK_INT >= 16) {
-            seekBar.getThumb().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
-        }
+        MaterialCompatThemer.theme(seekBar);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override

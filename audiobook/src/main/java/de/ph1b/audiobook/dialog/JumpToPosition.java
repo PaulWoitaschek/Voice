@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.fragment.BookPlayFragment;
+import de.ph1b.audiobook.utils.MaterialCompatThemer;
 
 
 public class JumpToPosition extends DialogFragment {
@@ -104,5 +105,11 @@ public class JumpToPosition extends DialogFragment {
         builder.setNegativeButton(R.string.dialog_cancel, null);
 
         return builder.create();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        MaterialCompatThemer.theme(getDialog());
     }
 }

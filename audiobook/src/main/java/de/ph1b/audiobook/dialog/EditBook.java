@@ -31,6 +31,7 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.utils.CoverDownloader;
 import de.ph1b.audiobook.utils.DraggableBoxImageView;
 import de.ph1b.audiobook.utils.ImageHelper;
+import de.ph1b.audiobook.utils.MaterialCompatThemer;
 
 public class EditBook extends DialogFragment implements View.OnClickListener {
 
@@ -49,6 +50,14 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
     private int coverPosition = -1;
     private ArrayList<Bitmap> covers;
     private int googleCount = 0;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        MaterialCompatThemer.theme(getDialog());
+    }
+
+
 
     @Override
     public void onClick(View view) {

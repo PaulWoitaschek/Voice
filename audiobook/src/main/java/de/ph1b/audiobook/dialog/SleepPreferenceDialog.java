@@ -2,6 +2,7 @@ package de.ph1b.audiobook.dialog;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.DialogPreference;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
@@ -10,6 +11,7 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.utils.MaterialCompatThemer;
 
 
 public class SleepPreferenceDialog extends DialogPreference {
@@ -46,6 +48,14 @@ public class SleepPreferenceDialog extends DialogPreference {
 
         //init text
         timeView.setText(" " + String.valueOf(numberPicker.getValue()) + " ");
+
+        MaterialCompatThemer.theme(numberPicker);
+    }
+
+    @Override
+    protected void showDialog(Bundle state) {
+        super.showDialog(state);
+        MaterialCompatThemer.theme(getDialog());
     }
 
     @Override

@@ -2,6 +2,7 @@ package de.ph1b.audiobook.dialog;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.DialogPreference;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
@@ -10,6 +11,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.utils.MaterialCompatThemer;
 
 
 public class SeekPreferenceDialog extends DialogPreference {
@@ -21,6 +23,12 @@ public class SeekPreferenceDialog extends DialogPreference {
         super(context, attrs);
         setDialogTitle(context.getString(R.string.pref_seek_time));
         setDialogLayoutResource(R.layout.dialog_amount_chooser);
+    }
+
+    @Override
+    protected void showDialog(Bundle state) {
+        super.showDialog(state);
+        MaterialCompatThemer.theme(getDialog());
     }
 
     @Override
@@ -53,6 +61,9 @@ public class SeekPreferenceDialog extends DialogPreference {
 
             }
         });
+
+
+        MaterialCompatThemer.theme(seekBar);
     }
 
     @Override

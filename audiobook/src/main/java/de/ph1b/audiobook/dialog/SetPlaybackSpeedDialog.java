@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.graphics.PorterDuff;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.utils.MaterialCompatThemer;
 
 public class SetPlaybackSpeedDialog extends DialogFragment {
 
@@ -42,6 +45,11 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
         seekBar.setMax(seekMaxSteps);
         int seekProgress = (int) ((speed - minSpeed) * (seekMaxSteps + 1) / (maxSpeed - minSpeed));
         seekBar.setProgress(seekProgress);
+
+        seekBar.getProgressDrawable().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+        if (Build.VERSION.SDK_INT >= 16) {
+            seekBar.getThumb().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+        }
 
         builder.setTitle(getString(R.string.playback_speed));
         builder.setView(v);
@@ -74,6 +82,12 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
         builder.setNegativeButton(getString(R.string.dialog_cancel), null);
 
         return builder.create();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        MaterialCompatThemer.theme(getDialog());
     }
 
     private float speedStepValueToSpeed(int step) {

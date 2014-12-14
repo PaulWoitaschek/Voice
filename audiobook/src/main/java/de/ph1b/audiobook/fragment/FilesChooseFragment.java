@@ -55,6 +55,7 @@ import de.ph1b.audiobook.dialog.EditBook;
 import de.ph1b.audiobook.dialog.FileAddingErrorDialog;
 import de.ph1b.audiobook.interfaces.OnBackPressedListener;
 import de.ph1b.audiobook.utils.ImageHelper;
+import de.ph1b.audiobook.utils.MaterialCompatThemer;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
 
 public class FilesChooseFragment extends Fragment implements EditBook.OnEditBookFinished, FileAddingErrorDialog.ConfirmationListener {
@@ -517,6 +518,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
             progressDialog.setMessage(getString(R.string.book_add_progress_message));
             progressDialog.setIndeterminate(true);
             progressDialog.show();
+            MaterialCompatThemer.theme(progressDialog);
         }
 
         @Override
