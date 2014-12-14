@@ -56,11 +56,6 @@
     <string name="delete_book_keep">Behalten</string>
     <string name="pref_title_track_to_end">Kapitel zu Ende spielen</string>
     <string name="pref_summary_track_to_end">Spielt den aktuellen Track noch zu Ende, nachdem die Einschlafzeit abgelaufen ist.</string>
-    <string name="automatic">Automatisch</string>
-    <string name="hardware_acceleration">Hardware Beschleunigung</string>
-    <string name="hardware_acceleration_decoding">Dekodierbeschleunigung</string>
-    <string name="hardware_acceleration_disabled">Deaktiviert</string>
-    <string name="hardware_acceleration_full">Volle Beschleunigung</string>
 
     <string name="error_in_file_title">Dateifehler</string>
     <string name="error_in_file_description">Die folgenden Dateien scheinen defekt zu sein. Buch ohne diese Dateien hinzufügen?</string>

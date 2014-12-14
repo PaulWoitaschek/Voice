@@ -62,11 +62,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
                 a.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (state == PlayerStates.STARTED) {
-                            play_button.setImageResource(R.drawable.ic_pause_black_36dp);
-                        } else {
-                            play_button.setImageResource(R.drawable.ic_play_arrow_black_36dp);
-                        }
+                        setPlayPauseButtons(state);
                     }
                 });
             }
@@ -80,7 +76,6 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
     private Spinner bookSpinner;
     private TextView maxTimeView;
     private int position;
-    private DataBaseHelper db;
     private LocalBroadcastManager bcm;
     private int oldPosition = -1;
     private boolean seekBarIsUpdating = false;
@@ -103,7 +98,6 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
     };
     private BookDetail book;
     private ArrayList<MediaDetail> allMedia;
-    private MediaSpinnerAdapter adapter;
     private int duration;
     private final BroadcastReceiver updateGUIReceiver = new BroadcastReceiver() {
         @Override
@@ -128,7 +122,11 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
                     bookSpinner.setVisibility(View.GONE);
                 } else {
                     bookSpinner.setVisibility(View.VISIBLE);
-                    bookSpinner.setSelection(adapter.getPositionByMediaDetailId(media.getId()));
+                    for (int i = 0; i < allMedia.size(); i++) {
+                        if (allMedia.get(i).getId() == media.getId()) {
+                            bookSpinner.setSelection(i);
+                        }
+                    }
                 }
 
                 //sets duration of file
@@ -147,11 +145,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
             AudioPlayerService.LocalBinder binder = (AudioPlayerService.LocalBinder) service;
             mService = binder.getService();
 
-            if (mService.stateManager.getState() == PlayerStates.STARTED) {
-                play_button.setImageResource(R.drawable.ic_pause_black_36dp);
-            } else {
-                play_button.setImageResource(R.drawable.ic_play_arrow_black_36dp);
-            }
+            setPlayPauseButtons(mService.stateManager.getState());
             mService.stateManager.addStateChangeListener(onStateChangedListener);
             mService.stateManager.addTimeChangedListener(onTimeChangedListener);
             sleepTimerActive = mService.sleepSandActive();
@@ -214,7 +208,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
         setHasOptionsMenu(true);
 
         bcm = LocalBroadcastManager.getInstance(getActivity());
-        db = DataBaseHelper.getInstance(getActivity());
+        DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
 
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
 
@@ -235,6 +229,14 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
                     getActivity().startService(serviceIntent);
                 }
             }).start();
+        }
+    }
+
+    private void setPlayPauseButtons(PlayerStates state) {
+        if (state == PlayerStates.STARTED) {
+            play_button.setImageResource(R.drawable.ic_pause_grey600_48dp);
+        } else {
+            play_button.setImageResource(R.drawable.ic_play_arrow_grey600_48dp);
         }
     }
 
@@ -324,9 +326,14 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
 
         if (allMedia.size() > 1) {
             bookSpinner.setVisibility(View.VISIBLE);
-            adapter = new MediaSpinnerAdapter(getActivity(), db.getMediaFromBook(book.getId()));
+
+            MediaSpinnerAdapter adapter = new MediaSpinnerAdapter(getActivity(), allMedia);
             bookSpinner.setAdapter(adapter);
-            bookSpinner.setSelection(adapter.getPositionByMediaDetailId(book.getCurrentMediaId()));
+            for (int i = 0; i < allMedia.size(); i++) {
+                if (allMedia.get(i).getId() == book.getCurrentMediaId()) {
+                    bookSpinner.setSelection(i);
+                }
+            }
             bookSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

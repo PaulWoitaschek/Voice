@@ -75,7 +75,7 @@ public class MediaSpinnerAdapter extends BaseAdapter {
         return convertView;
     }
 
-    static class ViewHolder {
+    private static class ViewHolder {
         TextView textView;
     }
 }
