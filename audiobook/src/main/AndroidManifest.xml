@@ -54,7 +54,9 @@
 
         <service android:name=".service.AudioPlayerService" />
 
-        <receiver android:name=".receiver.RemoteControlReceiver">
+        <receiver
+            android:name=".receiver.RemoteControlReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>

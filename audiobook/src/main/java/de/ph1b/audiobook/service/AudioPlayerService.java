@@ -153,7 +153,7 @@ public class AudioPlayerService extends Service {
     private BookDetail book;
     private Handler handler;
     @SuppressWarnings("deprecation")
-    private RemoteControlClient mRemoteControlClient;
+    private RemoteControlClient remoteControlClient;
     private MediaSessionCompat mediaSession;
     private ComponentName widgetComponentName;
     private RemoteViews widgetRemoteViews;
@@ -204,11 +204,6 @@ public class AudioPlayerService extends Service {
 
         handler = new Handler();
 
-        Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-        ComponentName nmm = new ComponentName(getPackageName(), RemoteControlReceiver.class.getName());
-        mediaButtonIntent.setComponent(nmm);
-        PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(this, 0, mediaButtonIntent, 0);
-
 
         mediaSession = new MediaSessionCompat(AudioPlayerService.this, TAG);
         mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
@@ -232,10 +227,16 @@ public class AudioPlayerService extends Service {
         });
         mediaSession.setActive(true);
         if (Build.VERSION.SDK_INT < 21) {
+
+            Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+            ComponentName nmm = new ComponentName(getPackageName(), RemoteControlReceiver.class.getName());
+            mediaButtonIntent.setComponent(nmm);
+            PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, mediaButtonIntent, 0);
+
             //noinspection deprecation
-            mRemoteControlClient = new RemoteControlClient(mediaPendingIntent);
+            remoteControlClient = new RemoteControlClient(mediaPendingIntent);
             //noinspection deprecation
-            mRemoteControlClient.setTransportControlFlags(
+            remoteControlClient.setTransportControlFlags(
                     RemoteControlClient.FLAG_KEY_MEDIA_PAUSE |
                             RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE |
                             RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS |
@@ -480,7 +481,7 @@ public class AudioPlayerService extends Service {
         }
 
         //noinspection deprecation
-        audioManager.unregisterRemoteControlClient(mRemoteControlClient);
+        audioManager.unregisterRemoteControlClient(remoteControlClient);
     }
 
     @Override
@@ -558,7 +559,7 @@ public class AudioPlayerService extends Service {
 
             if (Build.VERSION.SDK_INT < 21) {
                 //updates metadata for proper lock screen information
-                @SuppressWarnings("deprecation") RemoteControlClient.MetadataEditor editor = mRemoteControlClient.editMetadata(true);
+                @SuppressWarnings("deprecation") RemoteControlClient.MetadataEditor editor = remoteControlClient.editMetadata(true);
                 editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, media.getName());
                 editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName());
                 //noinspection deprecation
@@ -797,14 +798,6 @@ public class AudioPlayerService extends Service {
                 case PAUSED:
                     pauseBecauseLossTransient = false;
 
-                    if (BuildConfig.DEBUG)
-                        Log.d(TAG, "starting MediaPlayer");
-                    mediaPlayer.start();
-                    stateManager.setState(PlayerStates.STARTED);
-
-                    //starting runner to update gui
-                    handler.post(timeChangedRunner);
-
                     //requesting audio-focus and setting up lock-screen-controls
                     audioManager.requestAudioFocus(audioFocusChangeListener,
                             AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
@@ -812,14 +805,25 @@ public class AudioPlayerService extends Service {
                         if (BuildConfig.DEBUG)
                             Log.d(TAG, "Setting up remote control client");
                         //noinspection deprecation
-                        audioManager.registerRemoteControlClient(mRemoteControlClient);
+
+                        audioManager.registerMediaButtonEventReceiver(new ComponentName(AudioPlayerService.this.getPackageName(),
+                                RemoteControlReceiver.class.getName()));
                         //noinspection deprecation
-                        mRemoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
+                        audioManager.registerRemoteControlClient(remoteControlClient);
+                        remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
                     }
 
                     startForeground(NOTIFICATION_ID, getNotification());
-                    updateGUI();
+
+                    if (BuildConfig.DEBUG)
+                        Log.d(TAG, "starting MediaPlayer");
+                    mediaPlayer.start();
+                    stateManager.setState(PlayerStates.STARTED);
+
+                    //starting runner to update gui
+                    handler.post(timeChangedRunner);
                     setPlayStateForMediaSession(PlaybackStateCompat.STATE_PLAYING);
+                    updateGUI();
                     break;
                 case IDLE:
                 case DEAD:
@@ -877,7 +881,7 @@ public class AudioPlayerService extends Service {
                 }
                 if (Build.VERSION.SDK_INT < 21) {
                     //noinspection deprecation
-                    mRemoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
+                    remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
                 }
                 setPlayStateForMediaSession(PlaybackStateCompat.STATE_PAUSED);
             } finally {
