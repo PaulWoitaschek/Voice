@@ -110,7 +110,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         audioTypes.add(".aac");
         audioTypes.add(".flac");
         audioTypes.add(".mkv");
-        audioTypes.add(".wma");
         return audioTypes;
     }
 
