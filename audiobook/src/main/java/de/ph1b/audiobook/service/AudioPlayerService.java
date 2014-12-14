@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.service;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -191,6 +192,25 @@ public class AudioPlayerService extends Service {
         return mBinder;
     }
 
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    private void initRemoteControlClient() {
+        Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        ComponentName nmm = new ComponentName(getPackageName(), RemoteControlReceiver.class.getName());
+        mediaButtonIntent.setComponent(nmm);
+        PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, mediaButtonIntent, 0);
+
+        //noinspection deprecation
+        remoteControlClient = new RemoteControlClient(mediaPendingIntent);
+        //noinspection deprecation
+        remoteControlClient.setTransportControlFlags(
+                RemoteControlClient.FLAG_KEY_MEDIA_PAUSE |
+                        RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE |
+                        RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS |
+                        RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
+                        RemoteControlClient.FLAG_KEY_MEDIA_REWIND |
+                        RemoteControlClient.FLAG_KEY_MEDIA_FAST_FORWARD);
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -227,23 +247,8 @@ public class AudioPlayerService extends Service {
             }
         });
         mediaSession.setActive(true);
-        if (Build.VERSION.SDK_INT < 21) {
-
-            Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-            ComponentName nmm = new ComponentName(getPackageName(), RemoteControlReceiver.class.getName());
-            mediaButtonIntent.setComponent(nmm);
-            PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, mediaButtonIntent, 0);
-
-            //noinspection deprecation
-            remoteControlClient = new RemoteControlClient(mediaPendingIntent);
-            //noinspection deprecation
-            remoteControlClient.setTransportControlFlags(
-                    RemoteControlClient.FLAG_KEY_MEDIA_PAUSE |
-                            RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE |
-                            RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS |
-                            RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
-                            RemoteControlClient.FLAG_KEY_MEDIA_REWIND |
-                            RemoteControlClient.FLAG_KEY_MEDIA_FAST_FORWARD);
+        if (Build.VERSION.SDK_INT < 21 && Build.VERSION.SDK_INT > 14) {
+            initRemoteControlClient();
         }
 
         registerReceiver(audioBecomingNoisyReceiver, new IntentFilter
@@ -457,6 +462,7 @@ public class AudioPlayerService extends Service {
         return notification;
     }
 
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void finish() {
         stopForeground(true);
 
@@ -481,8 +487,10 @@ public class AudioPlayerService extends Service {
             onSleepStateChangedListener.onSleepStateChanged(false);
         }
 
-        //noinspection deprecation
-        audioManager.unregisterRemoteControlClient(remoteControlClient);
+        if (Build.VERSION.SDK_INT >= 14 && Build.VERSION.SDK_INT < 21) {
+            //noinspection deprecation
+            audioManager.unregisterRemoteControlClient(remoteControlClient);
+        }
     }
 
     @Override
@@ -558,14 +566,8 @@ public class AudioPlayerService extends Service {
             builder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, book.getName());
             mediaSession.setMetadata(builder.build());
 
-            if (Build.VERSION.SDK_INT < 21) {
-                //updates metadata for proper lock screen information
-                @SuppressWarnings("deprecation") RemoteControlClient.MetadataEditor editor = remoteControlClient.editMetadata(true);
-                editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, media.getName());
-                editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName());
-                //noinspection deprecation
-                editor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bitmap);
-                editor.apply();
+            if (Build.VERSION.SDK_INT < 21 && Build.VERSION.SDK_INT > 14) {
+                updateRemoteControlValues(bitmap);
             }
 
             //requests wake-mode which is automatically released when pausing
@@ -643,6 +645,17 @@ public class AudioPlayerService extends Service {
                 }
             }
         }).start();
+    }
+
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    private void updateRemoteControlValues(Bitmap bitmap) {
+        //updates metadata for proper lock screen information
+        @SuppressWarnings("deprecation") RemoteControlClient.MetadataEditor editor = remoteControlClient.editMetadata(true);
+        editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, media.getName());
+        editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName());
+        //noinspection deprecation
+        editor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bitmap);
+        editor.apply();
     }
 
     /**
@@ -790,6 +803,7 @@ public class AudioPlayerService extends Service {
      * Plays the current file. Also sets up the controls. If state is {@link de.ph1b.audiobook.service.PlayerStates#PLAYBACK_COMPLETED}
      * then the latest medium is being prepared again.
      */
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public void play() {
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "start() was called");
@@ -812,10 +826,15 @@ public class AudioPlayerService extends Service {
                         audioManager.registerMediaButtonEventReceiver(new ComponentName(AudioPlayerService.this.getPackageName(),
                                 RemoteControlReceiver.class.getName()));
                         //noinspection deprecation
+                    }
+
+                    if (Build.VERSION.SDK_INT >= 14 && Build.VERSION.SDK_INT < 21) {
+                        //noinspection deprecation
                         audioManager.registerRemoteControlClient(remoteControlClient);
                         //noinspection deprecation
                         remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
                     }
+
 
                     if (BuildConfig.DEBUG) {
                         Log.d(TAG, "starting MediaPlayer");
@@ -857,6 +876,7 @@ public class AudioPlayerService extends Service {
     /**
      * Pauses the book. Does not stopForeground.
      */
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public void pause(boolean removeNotification) {
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "pause called! with removeNotification: " + removeNotification);
@@ -887,7 +907,7 @@ public class AudioPlayerService extends Service {
                 } else {
                     notificationManager.notify(NOTIFICATION_ID, getNotification());
                 }
-                if (Build.VERSION.SDK_INT < 21) {
+                if (Build.VERSION.SDK_INT < 21 && Build.VERSION.SDK_INT >= 14) {
                     //noinspection deprecation
                     remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
                 }
@@ -897,6 +917,7 @@ public class AudioPlayerService extends Service {
             }
         }
     }
+
 
     /**
      * Changes the position in the current track. Also updates the database accordingly.

@@ -39,7 +39,6 @@
             android:layout_height="match_parent"
             style="?android:attr/borderlessButtonStyle"
             android:paddingLeft="10dp"
-            android:paddingStart="10dp"
             android:layout_gravity="center_vertical"
             android:src="@drawable/ic_more_vert_white_24dp"
             android:contentDescription="@string/popup_edit_book"

@@ -1,9 +1,7 @@
 package de.ph1b.audiobook.adapter;
 
 import android.app.ActivityManager;
-import android.content.ComponentCallbacks2;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v4.util.LruCache;
@@ -31,18 +29,18 @@ import de.ph1b.audiobook.utils.CoverDownloader;
 import de.ph1b.audiobook.utils.ImageHelper;
 
 
-public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> implements ComponentCallbacks2 {
+public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> {
 
     private final ArrayList<BookDetail> data;
     private final DataBaseHelper db;
     private final Context c;
     private final OnItemClickListener onItemClickListener;
     private final ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
-    private final ImageCache imageCache;
+    final ImageCache imageCache;
     private final OnCoverChangedListener onCoverChangedListener;
 
 
-    public MediaAdapter(ArrayList<BookDetail> data, Context c, OnItemClickListener onItemClickListener, OnCoverChangedListener onCoverChangedListener) {
+    MediaAdapter(ArrayList<BookDetail> data, Context c, OnItemClickListener onItemClickListener, OnCoverChangedListener onCoverChangedListener) {
         this.data = data;
         this.c = c;
         this.onItemClickListener = onItemClickListener;
@@ -179,25 +177,6 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         return data.size();
     }
 
-    @Override
-    public void onTrimMemory(int level) {
-        if (level >= TRIM_MEMORY_MODERATE) {
-            imageCache.evictAll();
-        } else if (level >= TRIM_MEMORY_BACKGROUND) {
-            imageCache.trimToSize(imageCache.size() / 2);
-        }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-
-    }
-
-    @Override
-    public void onLowMemory() {
-
-    }
-
     public interface OnCoverChangedListener {
         public void onCoverChanged();
     }
@@ -295,7 +274,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         }
     }
 
-    private class ImageCache extends LruCache<Integer, Bitmap> {
+    protected class ImageCache extends LruCache<Integer, Bitmap> {
 
         public ImageCache(int maxSizeBytes) {
             super(maxSizeBytes);
@@ -303,7 +282,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
 
         @Override
         protected int sizeOf(Integer key, Bitmap value) {
-            return value.getByteCount();
+            return value.getRowBytes() * value.getHeight();
         }
     }
 }

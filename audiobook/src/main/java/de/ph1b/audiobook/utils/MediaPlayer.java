@@ -180,12 +180,10 @@ class MediaPlayer {
     }
 
     private void stayAwake(boolean awake) {
-        if (wakeLock != null) {
-            if (awake && !wakeLock.isHeld()) {
-                wakeLock.acquire();
-            } else if (!awake && wakeLock.isHeld()) {
-                wakeLock.release();
-            }
+        if (awake && !wakeLock.isHeld()) {
+            wakeLock.acquire();
+        } else if (!awake && wakeLock.isHeld()) {
+            wakeLock.release();
         }
     }
 

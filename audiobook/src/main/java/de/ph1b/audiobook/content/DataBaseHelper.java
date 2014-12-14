@@ -105,9 +105,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             db.execSQL(CREATE_BOOK_TABLE);
 
             //now getting book table
-            try (Cursor bookTableCursor = db.query("tempBookTable",
-                    new String[]{"bookName", "bookCover", "bookMediaContaining", "bookPosition", "bookThumb"},
-                    null, null, null, null, null)) {
+            Cursor bookTableCursor = null;
+            try {
+                bookTableCursor = db.query("tempBookTable",
+                        new String[]{"bookName", "bookCover", "bookMediaContaining", "bookPosition", "bookThumb"},
+                        null, null, null, null, null);
                 while (bookTableCursor.moveToNext()) {
                     String bookName = bookTableCursor.getString(0);
                     String bookCover = bookTableCursor.getString(1);
@@ -133,9 +135,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     }
 
                     for (int i : mediaIDsAsSplittedInt) {
-                        try (Cursor mediaTableCursor = db.query("tempMediaTable",
-                                new String[]{"mediaPath", "mediaName", "mediaPosition", "mediaDuration"},
-                                "mediaID = " + i, null, null, null, null)) {
+                        Cursor mediaTableCursor = null;
+                        try {
+                            mediaTableCursor = db.query("tempMediaTable",
+                                    new String[]{"mediaPath", "mediaName", "mediaPosition", "mediaDuration"},
+                                    "mediaID = " + i, null, null, null, null);
                             if (mediaTableCursor.moveToFirst()) {
                                 String mediaPath = mediaTableCursor.getString(0);
                                 String mediaName = mediaTableCursor.getString(1);
@@ -151,9 +155,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                                 mediaValues.put("KEY_MEDIA_BOOK_ID", newBookId);
                                 db.insert("TABLE_MEDIA", null, mediaValues);
                             }
+                        } finally {
+                            if (mediaTableCursor != null) {
+                                mediaTableCursor.close();
+                            }
                         }
                     }
 
+                }
+
+            } finally {
+                if (bookTableCursor != null) {
+                    bookTableCursor.close();
                 }
             }
 
@@ -176,9 +189,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_BOOK_TABLE);
 
         // getting data from old table
-        try (Cursor bookTableCursor = db.query("TEMP_TABLE_BOOKS",
-                new String[]{"KEY_BOOK_ID", "KEY_BOOK_NAME", "KEY_BOOK_COVER", "KEY_BOOK_POSITION", "KEY_BOOK_SORT_ID", "KEY_BOOK_THUMB"},
-                null, null, null, null, null)) {
+        Cursor bookTableCursor = null;
+        try {
+            bookTableCursor = db.query("TEMP_TABLE_BOOKS",
+                    new String[]{"KEY_BOOK_ID", "KEY_BOOK_NAME", "KEY_BOOK_COVER", "KEY_BOOK_POSITION", "KEY_BOOK_SORT_ID", "KEY_BOOK_THUMB"},
+                    null, null, null, null, null);
             //going through all books and updating them with current values
             while (bookTableCursor.moveToNext()) {
                 int oldBookId = bookTableCursor.getInt(0);
@@ -211,10 +226,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     }
                 }
 
-                try (Cursor mediaPositionCursor = db.query("TEMP_TABLE_MEDIA",
-                        new String[]{"KEY_MEDIA_POSITION"},
-                        "KEY_MEDIA_BOOK_ID = " + oldBookId + " AND KEY_MEDIA_ID = " + bookPosition,
-                        null, null, null, null, null)) {
+                Cursor mediaPositionCursor = null;
+                try {
+                    mediaPositionCursor = db.query("TEMP_TABLE_MEDIA",
+                            new String[]{"KEY_MEDIA_POSITION"},
+                            "KEY_MEDIA_BOOK_ID = " + oldBookId + " AND KEY_MEDIA_ID = " + bookPosition,
+                            null, null, null, null, null);
                     int bookMediaPosition = 0;
                     if (mediaPositionCursor.moveToFirst())
                         bookMediaPosition = mediaPositionCursor.getInt(0);
@@ -227,10 +244,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
                     int newBookId = (int) db.insert("TABLE_BOOKS", null, bookValues);
 
-                    try (Cursor mediaTableCursor = db.query("TEMP_TABLE_MEDIA",
-                            new String[]{"KEY_MEDIA_PATH", "KEY_MEDIA_NAME", "KEY_MEDIA_DURATION"},
-                            "KEY_MEDIA_BOOK_ID = " + oldBookId,
-                            null, null, null, null)) {
+                    Cursor mediaTableCursor = null;
+                    try {
+                        mediaTableCursor = db.query("TEMP_TABLE_MEDIA",
+                                new String[]{"KEY_MEDIA_PATH", "KEY_MEDIA_NAME", "KEY_MEDIA_DURATION"},
+                                "KEY_MEDIA_BOOK_ID = " + oldBookId,
+                                null, null, null, null);
                         while (mediaTableCursor.moveToNext()) {
                             String mediaPath = mediaTableCursor.getString(0);
                             String mediaName = mediaTableCursor.getString(1);
@@ -242,8 +261,20 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                             mediaValues.put("KEY_MEDIA_BOOK_ID", newBookId);
                             db.insert("TABLE_MEDIA", null, mediaValues);
                         }
+                    } finally {
+                        if (mediaTableCursor != null) {
+                            mediaTableCursor.close();
+                        }
+                    }
+                } finally {
+                    if (mediaPositionCursor != null) {
+                        mediaPositionCursor.close();
                     }
                 }
+            }
+        } finally {
+            if (bookTableCursor != null) {
+                bookTableCursor.close();
             }
         }
 
@@ -274,9 +305,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public BookDetail getBook(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        try (Cursor cursor = db.query(TABLE_BOOKS,
-                null,
-                KEY_BOOK_ID + " = " + id, null, null, null, null)) {
+        Cursor cursor = null;
+        try {
+            cursor = db.query(TABLE_BOOKS,
+                    null,
+                    KEY_BOOK_ID + " = " + id, null, null, null, null);
             if (cursor.moveToFirst()) {
                 BookDetail book = new BookDetail();
                 book.setId(Integer.parseInt(cursor.getString(0)));
@@ -287,6 +320,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 book.setSortId(cursor.getInt(5));
 
                 return book;
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
             }
         }
         return null;
@@ -334,11 +371,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public ArrayList<MediaDetail> getMediaFromBook(int bookId) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        try (Cursor cursor = db.query(TABLE_MEDIA,
-                null,
-                KEY_MEDIA_BOOK_ID + " = " + bookId,
-                null, null, null,
-                KEY_MEDIA_ID)) {
+        Cursor cursor = null;
+        try {
+            cursor = db.query(TABLE_MEDIA,
+                    null,
+                    KEY_MEDIA_BOOK_ID + " = " + bookId,
+                    null, null, null,
+                    KEY_MEDIA_ID);
             ArrayList<MediaDetail> containingMedia = new ArrayList<>();
             while (cursor.moveToNext()) {
                 MediaDetail media = new MediaDetail();
@@ -350,6 +389,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 containingMedia.add(media);
             }
             return containingMedia;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
     }
 
@@ -358,9 +401,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         ArrayList<BookDetail> allBooks = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        try (Cursor cursor = db.query(TABLE_BOOKS,
-                null, null, null, null, null,
-                KEY_BOOK_SORT_ID)) {
+        Cursor cursor = null;
+        try {
+            cursor = db.query(TABLE_BOOKS,
+                    null, null, null, null, null,
+                    KEY_BOOK_SORT_ID);
             while (cursor.moveToNext()) {
                 BookDetail book = new BookDetail();
                 book.setId(Integer.parseInt(cursor.getString(0)));
@@ -370,6 +415,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 book.setCurrentMediaPosition(cursor.getInt(4));
                 book.setSortId(cursor.getInt(5));
                 allBooks.add(book);
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
             }
         }
         return allBooks;

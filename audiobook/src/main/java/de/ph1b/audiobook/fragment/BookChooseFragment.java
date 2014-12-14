@@ -49,6 +49,7 @@ import de.ph1b.audiobook.activity.BookPlay;
 import de.ph1b.audiobook.activity.FilesChoose;
 import de.ph1b.audiobook.activity.Settings;
 import de.ph1b.audiobook.adapter.MediaAdapter;
+import de.ph1b.audiobook.adapter.MediaAdapterChooser;
 import de.ph1b.audiobook.content.BookDetail;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.dialog.EditBook;
@@ -266,7 +267,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         };
 
         ArrayList<BookDetail> books = db.getAllBooks();
-        adapt = new MediaAdapter(books, getActivity(), onClickListener, onCoverChangedListener);
+        adapt = MediaAdapterChooser.getAdapter(books, getActivity(), onClickListener, onCoverChangedListener);
         recyclerView.setHasFixedSize(true);
 
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getAmountOfColumns(getActivity().getApplicationContext())));
