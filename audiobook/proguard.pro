@@ -1,1 +1,2 @@
 -dontobfuscate
+-keep class org.vinuxproject.sonic.Sonic
