@@ -62,6 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_gravity="center"
             android:orientation="horizontal">
 
             <ImageButton
@@ -74,11 +75,11 @@
 
             <ImageButton
                 android:id="@+id/play"
-                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                style="?android:attr/borderlessButtonStyle"
                 android:contentDescription="@string/play_pause"
-                android:src="@drawable/ic_play_arrow_grey600_48dp" />
+                android:src="@drawable/ic_ic_play_circle_fill_72dp" />
 
             <ImageButton
                 android:id="@+id/fast_forward"

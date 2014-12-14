@@ -38,11 +38,11 @@
             android:layout_width="35dp"
             android:layout_height="match_parent"
             style="?android:attr/borderlessButtonStyle"
-            android:paddingLeft="10dp"
+            android:paddingLeft="8dp"
             android:layout_gravity="center_vertical"
             android:src="@drawable/ic_more_vert_white_24dp"
             android:contentDescription="@string/popup_edit_book"
-            tools:ignore="RtlSymmetry" />
+            tools:ignore="RtlHardcoded,RtlSymmetry" />
 
     </LinearLayout>
 

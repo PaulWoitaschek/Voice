@@ -21,6 +21,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
     private final SparseBooleanArray checked;
     private final ItemInteraction itemInteraction;
     private final CheckStateChanged checkStateChanged;
+
     public FileAdapter(ArrayList<File> data, final ItemInteraction itemInteraction) {
         this.data = data;
         this.itemInteraction = itemInteraction;

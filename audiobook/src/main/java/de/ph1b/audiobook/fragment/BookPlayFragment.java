@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -235,9 +236,9 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
 
     private void setPlayPauseButtons(PlayerStates state) {
         if (state == PlayerStates.STARTED) {
-            play_button.setImageResource(R.drawable.ic_pause_grey600_48dp);
+            play_button.setImageResource(R.drawable.ic_ic_pause_circle_fill_72dp);
         } else {
-            play_button.setImageResource(R.drawable.ic_play_arrow_grey600_48dp);
+            play_button.setImageResource(R.drawable.ic_ic_play_circle_fill_72dp);
         }
     }
 
@@ -276,6 +277,8 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
         play_button.setOnClickListener(this);
         playedTimeView.setOnClickListener(this);
 
+        play_button.setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+
         int mediaDuration = 0;
         for (MediaDetail m : allMedia) {
             if (m.getId() == book.getCurrentMediaId()) {
@@ -289,6 +292,11 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
         seekBar.setMax(mediaDuration);
         maxTimeView.setText(formatTime(mediaDuration));
         playedTimeView.setText(formatTime(mediaPosition));
+
+        seekBar.getProgressDrawable().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+        if (Build.VERSION.SDK_INT >= 16) {
+            seekBar.getThumb().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+        }
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override

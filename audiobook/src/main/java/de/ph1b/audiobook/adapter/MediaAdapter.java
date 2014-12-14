@@ -274,7 +274,7 @@ public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.Vie
         }
     }
 
-    protected class ImageCache extends LruCache<Integer, Bitmap> {
+    class ImageCache extends LruCache<Integer, Bitmap> {
 
         public ImageCache(int maxSizeBytes) {
             super(maxSizeBytes);
