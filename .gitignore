@@ -5,6 +5,7 @@ build
 .idea
 *~
 *.log
+local.properties
 
 # Signing
 audiobook/release.keystore
