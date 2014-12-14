@@ -530,6 +530,10 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                     b.setCover(coverPath);
                 }
             }
+            long mmdrPerformance = 0;
+
+            MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
+
             bookId = db.addBook(b);
             for (File f : files) {
                 MediaDetail m = new MediaDetail();
@@ -539,10 +543,13 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                 m.setName(fileName);
                 String path = f.getAbsolutePath();
                 m.setPath(path);
-                MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
+
+
                 try {
+                    long start = System.currentTimeMillis();
                     metaRetriever.setDataSource(f.getAbsolutePath());
                     int duration = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+                    mmdrPerformance += (System.currentTimeMillis() - start);
                     m.setDuration(duration);
                     m.setBookId(bookId);
                     media.add(m);
@@ -556,6 +563,12 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                     errorFiles.add(f.getName());
                 }
             }
+            if (BuildConfig.DEBUG) {
+                Log.d("MMDR", String.valueOf(mmdrPerformance));
+            }
+
+            metaRetriever.release();
+
             if (errorFiles.size() == 0) {
                 db.addMedia(media);
                 return true;
