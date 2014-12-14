@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:id="@+id/whole_widget"
-    android:padding="8dp"
+    android:padding="@dimen/widget_margin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/widget_background"
@@ -12,6 +12,7 @@
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_margin="4dp"
         android:contentDescription="@string/content_cover" />
 
     <LinearLayout
@@ -19,6 +20,7 @@
         android:orientation="vertical"
         android:layout_weight="1"
         android:gravity="center"
+        android:layout_margin="4dp"
         android:layout_height="match_parent">
 
         <TextView
@@ -73,6 +75,4 @@
 
         </LinearLayout>
     </LinearLayout>
-
-
 </LinearLayout>
