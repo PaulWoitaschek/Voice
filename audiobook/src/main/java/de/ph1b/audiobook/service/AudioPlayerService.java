@@ -73,6 +73,7 @@ public class AudioPlayerService extends Service {
     private boolean pauseBecauseHeadset = false;
 
     private PlaybackStateCompat.Builder stateBuilder;
+
     /**
      * If audio is becoming noisy, pause the player.
      */
@@ -181,6 +182,9 @@ public class AudioPlayerService extends Service {
     private ScheduledFuture<?> sleepSand;
     private OnSleepStateChangedListener onSleepStateChangedListener;
 
+    public AudioPlayerService() {
+    }
+
     public float getPlaybackSpeed() {
         return mediaPlayer.getPlaybackSpeed();
     }
@@ -196,11 +200,13 @@ public class AudioPlayerService extends Service {
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void initRemoteControlClient() {
-        Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-        ComponentName nmm = new ComponentName(getPackageName(), RemoteControlReceiver.class.getName());
-        mediaButtonIntent.setComponent(nmm);
-        PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, mediaButtonIntent, 0);
+        ComponentName eventReceiver = new ComponentName(AudioPlayerService.this.getPackageName(), RemoteControlReceiver.class.getName());
+        //noinspection deprecation
+        audioManager.registerMediaButtonEventReceiver(eventReceiver);
 
+        Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        mediaButtonIntent.setComponent(eventReceiver);
+        PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, mediaButtonIntent, 0);
         //noinspection deprecation
         remoteControlClient = new RemoteControlClient(mediaPendingIntent);
         //noinspection deprecation
@@ -211,6 +217,8 @@ public class AudioPlayerService extends Service {
                         RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
                         RemoteControlClient.FLAG_KEY_MEDIA_REWIND |
                         RemoteControlClient.FLAG_KEY_MEDIA_FAST_FORWARD);
+        //noinspection deprecation
+        audioManager.registerRemoteControlClient(remoteControlClient);
     }
 
     @Override
@@ -226,7 +234,6 @@ public class AudioPlayerService extends Service {
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         handler = new Handler();
-
 
         mediaSession = new MediaSessionCompat(AudioPlayerService.this, TAG);
         mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
@@ -828,23 +835,11 @@ public class AudioPlayerService extends Service {
                     //requesting audio-focus and setting up lock-screen-controls
                     audioManager.requestAudioFocus(audioFocusChangeListener,
                             AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-                    if (Build.VERSION.SDK_INT < 21) {
-                        if (BuildConfig.DEBUG)
-                            Log.d(TAG, "Setting up remote control client");
-                        //noinspection deprecation
-
-                        audioManager.registerMediaButtonEventReceiver(new ComponentName(AudioPlayerService.this.getPackageName(),
-                                RemoteControlReceiver.class.getName()));
-                        //noinspection deprecation
-                    }
 
                     if (Build.VERSION.SDK_INT >= 14 && Build.VERSION.SDK_INT < 21) {
                         //noinspection deprecation
-                        audioManager.registerRemoteControlClient(remoteControlClient);
-                        //noinspection deprecation
                         remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
                     }
-
 
                     if (BuildConfig.DEBUG) {
                         Log.d(TAG, "starting MediaPlayer");
@@ -982,6 +977,4 @@ public class AudioPlayerService extends Service {
             handler.postDelayed(timeChangedRunner, 100);
         }
     };
-
-
 }
