@@ -414,7 +414,7 @@ public class AudioPlayerService extends Service {
 
         Intent playPauseIntent = new Intent(AudioPlayerService.this, AudioPlayerService.class);
         if (stateManager.getState() == PlayerStates.STARTED) {
-            playPauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_PAUSE);
+            playPauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
             smallViewRemote.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_48dp);
             bigViewRemote.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_48dp);
         } else {
