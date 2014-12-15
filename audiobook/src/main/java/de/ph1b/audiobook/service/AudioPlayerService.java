@@ -70,7 +70,7 @@ public class AudioPlayerService extends Service {
     private LocalBroadcastManager bcm;
     private AudioManager audioManager;
     private MediaPlayerWrapper mediaPlayer;
-    private boolean pauseBecauseHeadset = false;
+    private volatile boolean pauseBecauseHeadset = false;
 
     private PlaybackStateCompat.Builder stateBuilder;
 
