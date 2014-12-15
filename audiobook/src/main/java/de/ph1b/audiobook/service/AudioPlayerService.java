@@ -71,6 +71,8 @@ public class AudioPlayerService extends Service {
     private AudioManager audioManager;
     private MediaPlayerWrapper mediaPlayer;
     private boolean pauseBecauseHeadset = false;
+
+    private PlaybackStateCompat.Builder stateBuilder;
     /**
      * If audio is becoming noisy, pause the player.
      */
@@ -229,15 +231,14 @@ public class AudioPlayerService extends Service {
         mediaSession = new MediaSessionCompat(AudioPlayerService.this, TAG);
         mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
                 MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
-
         //callback
         mediaSession.setCallback(new MediaSessionCompat.Callback() {
             @Override
-            public boolean onMediaButtonEvent(Intent mediaButtonIntent) {
-                String action = mediaButtonIntent.getAction();
+            public boolean onMediaButtonEvent(Intent mediaButtonEvent) {
+                String action = mediaButtonEvent.getAction();
                 if (BuildConfig.DEBUG) Log.d(TAG, "onMediaButtonEvent was called");
                 if (action.equals(Intent.ACTION_MEDIA_BUTTON)) {
-                    KeyEvent event = mediaButtonIntent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
+                    KeyEvent event = mediaButtonEvent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
                     if (event.getAction() == KeyEvent.ACTION_DOWN) {
                         int keyCode = event.getKeyCode();
                         return handleKeyCode(keyCode);
@@ -246,7 +247,16 @@ public class AudioPlayerService extends Service {
                 return false;
             }
         });
+
         mediaSession.setActive(true);
+
+        //init builder
+        stateBuilder = new PlaybackStateCompat.Builder();
+        stateBuilder.setActions(PlaybackStateCompat.ACTION_PLAY | PlaybackStateCompat.ACTION_PAUSE |
+                PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_FAST_FORWARD |
+                PlaybackStateCompat.ACTION_REWIND | PlaybackStateCompat.ACTION_SKIP_TO_NEXT |
+                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS | PlaybackStateCompat.ACTION_STOP);
+
         if (Build.VERSION.SDK_INT < 21 && Build.VERSION.SDK_INT > 14) {
             initRemoteControlClient();
         }
@@ -849,7 +859,8 @@ public class AudioPlayerService extends Service {
 
                     //starting runner to update gui
                     handler.post(timeChangedRunner);
-                    setPlayStateForMediaSession(PlaybackStateCompat.STATE_PLAYING);
+                    stateBuilder.setState(PlaybackStateCompat.STATE_PLAYING, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 1);
+                    mediaSession.setPlaybackState(stateBuilder.build());
                     updateGUI();
                     break;
                 case IDLE:
@@ -865,12 +876,6 @@ public class AudioPlayerService extends Service {
         } finally {
             playerLock.unlock();
         }
-    }
-
-    private void setPlayStateForMediaSession(int playState) {
-        PlaybackStateCompat.Builder stateBuilder = new PlaybackStateCompat.Builder();
-        stateBuilder.setState(playState, 0, 0);
-        mediaSession.setPlaybackState(stateBuilder.build());
     }
 
     /**
@@ -911,7 +916,8 @@ public class AudioPlayerService extends Service {
                     //noinspection deprecation
                     remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
                 }
-                setPlayStateForMediaSession(PlaybackStateCompat.STATE_PAUSED);
+                stateBuilder.setState(PlaybackStateCompat.STATE_PAUSED, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 0);
+                mediaSession.setPlaybackState(stateBuilder.build());
             } finally {
                 playerLock.unlock();
             }
