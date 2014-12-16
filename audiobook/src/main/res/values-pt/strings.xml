@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="cover">Capa</string>
+    <string name="play_pause">Tocar / Pausar</string>
+
+    <string name="action_settings">Preferências</string>
+    <string name="action_add_badge">Adicionar mídia</string>
+    <string name="book_add">Adicionar livro</string>
+    <string name="book_add_empty_title">Adicionar um título</string>
+    <string name="book_no_media">Escolha não contém mídia.</string>
+    <string name="dialog_confirm">Confirmar</string>
+    <string name="dialog_cancel">Cancelar</string>
+    <string name="action_time_change">Pular para</string>
+    <string name="pref_resume_on_replug">Continuar a reprodução</string>
+    <string name="pref_resume_on_replug_hint">Se você pausar removendo o fone de ouvido, a reprodução 
+		vai continuar ao reconectar.</string>
+    <string name="action_sleep">Temporizador para dormir</string>
+    <string name="no_external_storage">Armazenamento não está disponível. Por favor verifique que 
+		ele está ligado e não montado em seu computador.</string>
+    <string name="no_external_storage_action_bar_title">Armazenamento</string>
+
+    <string name="action_sleep_title_hint_left">Pausa após</string>
+    <string name="action_sleep_title_hint_right">minutos</string>
+    <string name="action_jump_to">Mudar de posição</string>
+    <string name="hours">horas</string>
+    <string name="minutes">minutos</string>
+    <string name="seconds">segundos</string>
+
+    <string name="file_not_found">Parece que o audiolivro não pode ser encontrado no armazenamento. Por Favor
+		re-adicione o audiolivro.</string>
+    <string name="current_cover">Mostra a capa do audiolivro atualmente tocando.</string>
+    <string name="current_playing">Mostra estado de reprodução.</string>
+    <string name="pref_cover_on_internet">Use a Rede Móvel</string>
+    <string name="pref_cover_on_internet_hint">Use a Rede Móvel para achar a capa do audiolivro
+        atual.</string>
+    <string name="content_previous_cover">Escolher capa anterior</string>
+    <string name="content_next_cover">Escolher próxima capa</string>
+    <string name="content_cover">Mostra a capa para escolher</string>
+    <string name="pref_seek_time">Pular quantidade</string>
+    <string name="book_add_progress_title">Adicionando livro</string>
+    <string name="book_add_progress_message">Por favor aguarde enquanto o livro está sendo adicionado.</string>
+
+    <string tools:ignore="MissingTranslation" name="edit_book_title">Edit book</string>
+    <string tools:ignore="MissingTranslation" name="popup_edit_book">Edit</string>
+    <string tools:ignore="MissingTranslation" name="delete">Delete</string>
+    <string tools:ignore="MissingTranslation" name="content_file_or_folder">Indicates whether its a
+        file or a folder</string>
+    <string tools:ignore="MissingTranslation" name="rewind">Rewind</string>
+    <string tools:ignore="MissingTranslation" name="fast_forward">Fast forward</string>
+    <string tools:ignore="MissingTranslation" name="playback_speed">Playback speed</string>
+    <string tools:ignore="MissingTranslation" name="pref_sleep_time">Sleep time</string>
+    <string tools:ignore="MissingTranslation" name="sleep_timer_started">Sleep timer: </string>
+    <string tools:ignore="MissingTranslation" name="sleep_timer_canceled">Sleep timer canceled.</string>
+    <string tools:ignore="MissingTranslation" name="content_close_notification">Close player and notification.</string>
+    <string tools:ignore="MissingTranslation" name="delete_book_title">Do you want to delete this book?</string>
+    <string tools:ignore="MissingTranslation" name="delete_book_keep">Keep</string>
+    <string tools:ignore="MissingTranslation" name="pref_title_track_to_end">Continue till end</string>
+    <string tools:ignore="MissingTranslation" name="pref_summary_track_to_end">Continues playing till the end of the track, after sleep timer has triggered.</string>
+
+    <string tools:ignore="MissingTranslation" name="error_in_file_title">Error in file</string>
+    <string tools:ignore="MissingTranslation" name="error_in_file_description">The following files seem to be corrupted. Add book without corrupted files?</string>
+    <string tools:ignore="MissingTranslation" name="error_in_file_all_defect">All files seem to be corrupt</string>
+</resources>
