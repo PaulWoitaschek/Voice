@@ -9,11 +9,17 @@ android {
         targetSdkVersion 21
         versionCode 27
         versionName '1.5.2'
+
+        ndk {
+            moduleName "sonic"
+        }
+
     }
 
     signingConfigs {
         release
     }
+
 
     buildTypes {
         release {
