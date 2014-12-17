@@ -6,7 +6,7 @@ import android.os.Build;
 
 import java.io.IOException;
 
-public class MediaPlayerWrapper {
+public class MediaPlayerCompat {
 
     private android.media.MediaPlayer androidMediaPlayer;
     private MediaPlayer customMediaPlayer;
@@ -17,7 +17,7 @@ public class MediaPlayerWrapper {
         public void onCompletion();
     }
 
-    public MediaPlayerWrapper(Context c) {
+    public MediaPlayerCompat(Context c) {
         useCustomMediaPlayer = Build.VERSION.SDK_INT >= 16;
 
         if (useCustomMediaPlayer) {

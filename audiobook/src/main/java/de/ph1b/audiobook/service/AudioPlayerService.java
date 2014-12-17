@@ -51,7 +51,7 @@ import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.receiver.RemoteControlReceiver;
 import de.ph1b.audiobook.receiver.WidgetProvider;
 import de.ph1b.audiobook.utils.ImageHelper;
-import de.ph1b.audiobook.utils.MediaPlayerWrapper;
+import de.ph1b.audiobook.utils.MediaPlayerCompat;
 
 public class AudioPlayerService extends Service {
 
@@ -69,7 +69,7 @@ public class AudioPlayerService extends Service {
     private DataBaseHelper db;
     private LocalBroadcastManager bcm;
     private AudioManager audioManager;
-    private MediaPlayerWrapper mediaPlayer;
+    private MediaPlayerCompat mediaPlayer;
     private volatile boolean pauseBecauseHeadset = false;
 
     private PlaybackStateCompat.Builder stateBuilder;
@@ -227,7 +227,7 @@ public class AudioPlayerService extends Service {
 
         bcm = LocalBroadcastManager.getInstance(this);
         db = DataBaseHelper.getInstance(this);
-        mediaPlayer = new MediaPlayerWrapper(this);
+        mediaPlayer = new MediaPlayerCompat(this);
         stateManager = new StateManager();
         stateManager.setState(PlayerStates.IDLE);
 
@@ -538,7 +538,7 @@ public class AudioPlayerService extends Service {
                 media = allMedia.get(0);
 
             if (stateManager.getState() == PlayerStates.DEAD)
-                mediaPlayer = new MediaPlayerWrapper(this);
+                mediaPlayer = new MediaPlayerCompat(this);
             else
                 mediaPlayer.reset();
             stateManager.setState(PlayerStates.IDLE);
@@ -590,7 +590,7 @@ public class AudioPlayerService extends Service {
             //requests wake-mode which is automatically released when pausing
             mediaPlayer.setWakeMode(this, PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE);
             mediaPlayer.seekTo(position);
-            mediaPlayer.setOnCompletionListener(new MediaPlayerWrapper.OnCompletionListener() {
+            mediaPlayer.setOnCompletionListener(new MediaPlayerCompat.OnCompletionListener() {
 
                 @Override
                 public void onCompletion() {
