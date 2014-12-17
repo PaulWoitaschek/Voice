@@ -516,6 +516,40 @@ public class AudioPlayerService extends Service {
         finish();
     }
 
+    public void previous() {
+        playerLock.lock();
+        try {
+            int currentIndex = allMedia.indexOf(media);
+            if (currentIndex > 0) {
+                int newMediaId = allMedia.get(currentIndex - 1).getId();
+                book.setCurrentMediaId(newMediaId);
+                book.setCurrentMediaPosition(0);
+                updateBookAsync(book);
+                prepare(newMediaId);
+                play();
+            }
+        } finally {
+            playerLock.unlock();
+        }
+    }
+
+    public void next() {
+        playerLock.lock();
+        try {
+            int currentIndex = allMedia.indexOf(media);
+            if (currentIndex + 1 < allMedia.size()) {
+                int newMediaId = allMedia.get(currentIndex + 1).getId();
+                book.setCurrentMediaId(newMediaId);
+                book.setCurrentMediaPosition(0);
+                updateBookAsync(book);
+                prepare(newMediaId);
+                play();
+            }
+        } finally {
+            playerLock.unlock();
+        }
+    }
+
     /**
      * Prepares a new media. Also handles the onCompletion and updates the database. After preparing,
      * state should be PlayerStates.PREPARED

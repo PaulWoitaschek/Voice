@@ -78,6 +78,8 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
     private SeekBar seekBar;
     private Spinner bookSpinner;
     private TextView maxTimeView;
+    private ImageButton previous_button;
+    private ImageButton next_button;
     private int position;
     private LocalBroadcastManager bcm;
     private int oldPosition = -1;
@@ -123,8 +125,12 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
                 //hides control elements if there is only one media to start
                 if (allMedia.size() == 1) {
                     bookSpinner.setVisibility(View.GONE);
+                    previous_button.setVisibility(View.GONE);
+                    next_button.setVisibility(View.GONE);
                 } else {
                     bookSpinner.setVisibility(View.VISIBLE);
+                    previous_button.setVisibility(View.VISIBLE);
+                    next_button.setVisibility(View.VISIBLE);
                     for (int i = 0; i < allMedia.size(); i++) {
                         if (allMedia.get(i).getId() == media.getId()) {
                             bookSpinner.setSelection(i);
@@ -267,6 +273,8 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
         play_button = (ImageButton) v.findViewById(R.id.play);
         ImageButton rewind_button = (ImageButton) v.findViewById(R.id.rewind);
         ImageButton fast_forward_button = (ImageButton) v.findViewById(R.id.fast_forward);
+        previous_button = (ImageButton) v.findViewById(R.id.previous);
+        next_button = (ImageButton) v.findViewById(R.id.next);
         playedTimeView = (TextView) v.findViewById(R.id.played);
         ImageView coverView = (ImageView) v.findViewById(R.id.book_cover);
         maxTimeView = (TextView) v.findViewById(R.id.maxTime);
@@ -275,6 +283,8 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
         //setup buttons
         rewind_button.setOnClickListener(this);
         fast_forward_button.setOnClickListener(this);
+        previous_button.setOnClickListener(this);
+        next_button.setOnClickListener(this);
         play_button.setOnClickListener(this);
         playedTimeView.setOnClickListener(this);
 
@@ -326,13 +336,17 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
         } else
             coverView.setImageURI(Uri.parse(imagePath));
 
+
         //setting book name
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         String bookName = book.getName();
         actionBar.setTitle(bookName);
 
         if (allMedia.size() > 1) {
+
             bookSpinner.setVisibility(View.VISIBLE);
+            previous_button.setVisibility(View.VISIBLE);
+            next_button.setVisibility(View.VISIBLE);
 
             MediaSpinnerAdapter adapter = new MediaSpinnerAdapter(getActivity(), allMedia);
             bookSpinner.setAdapter(adapter);
@@ -358,6 +372,8 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
             });
         } else {
             bookSpinner.setVisibility(View.GONE);
+            previous_button.setVisibility(View.GONE);
+            next_button.setVisibility(View.GONE);
         }
     }
 
@@ -402,6 +418,12 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
                     break;
                 case R.id.fast_forward:
                     mService.fastForward();
+                    break;
+                case R.id.next:
+                    mService.next();
+                    break;
+                case R.id.previous:
+                    mService.previous();
                     break;
                 case R.id.played:
                     launchJumpToPositionDialog();
