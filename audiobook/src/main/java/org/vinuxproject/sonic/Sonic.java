@@ -5,6 +5,7 @@
  */
 package org.vinuxproject.sonic;
 
+@SuppressWarnings("ALL")
 public class Sonic {
     // Sonic is thread-safe, but to have multiple instances of it, we have to
     // store a pointer to it's data. We store that here as a long, just in case
