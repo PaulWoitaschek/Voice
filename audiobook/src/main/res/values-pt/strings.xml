@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="cover">Capa</string>
     <string name="play_pause">Tocar / Pausar</string>
 
@@ -40,24 +40,25 @@
     <string name="book_add_progress_title">Adicionando livro</string>
     <string name="book_add_progress_message">Por favor aguarde enquanto o livro está sendo adicionado.</string>
 
-    <string tools:ignore="MissingTranslation" name="edit_book_title">Editar livro</string>
-    <string tools:ignore="MissingTranslation" name="popup_edit_book">Editar</string>
-    <string tools:ignore="MissingTranslation" name="delete">Deletar</string>
-    <string tools:ignore="MissingTranslation" name="content_file_or_folder">Indica se é um
+    <string name="edit_book_title">Editar livro</string>
+    <string name="popup_edit_book">Editar</string>
+    <string name="delete">Deletar</string>
+    <string name="content_file_or_folder">Indica se é um
         arquivo ou uma pasta</string>
-    <string tools:ignore="MissingTranslation" name="rewind">Rebobinar</string>
-    <string tools:ignore="MissingTranslation" name="fast_forward">Avanço rápido</string>
-    <string tools:ignore="MissingTranslation" name="playback_speed">Velocidade de reprodução</string>
-    <string tools:ignore="MissingTranslation" name="pref_sleep_time">Temporizador para dormir</string>
-    <string tools:ignore="MissingTranslation" name="sleep_timer_started">Temporizador: </string>
-    <string tools:ignore="MissingTranslation" name="sleep_timer_canceled">Temporizador cancelado.</string>
-    <string tools:ignore="MissingTranslation" name="content_close_notification">Fechar tocador e notificação.</string>
-    <string tools:ignore="MissingTranslation" name="delete_book_title">Você deseja excluir este livro?</string>
-    <string tools:ignore="MissingTranslation" name="delete_book_keep">Manter</string>
-    <string tools:ignore="MissingTranslation" name="pref_title_track_to_end">Continuar até o fim</string>
-    <string tools:ignore="MissingTranslation" name="pref_summary_track_to_end">Continua a tocar até o fim, independentemente do temporizador.</string>
+    <string name="rewind">Rebobinar</string>
+    <string name="fast_forward">Avanço rápido</string>
+    <string name="playback_speed">Velocidade de reprodução</string>
+    <string name="pref_sleep_time">Temporizador para dormir</string>
+    <string name="sleep_timer_started">Temporizador: </string>
+    <string name="sleep_timer_canceled">Temporizador cancelado.</string>
+    <string name="content_close_notification">Fechar tocador e notificação.</string>
+    <string name="delete_book_title">Você deseja excluir este livro?</string>
+    <string name="delete_book_keep">Manter</string>
+    <string name="pref_title_track_to_end">Continuar até o fim</string>
+    <string name="pref_summary_track_to_end">Continua a tocar até o fim, independentemente do temporizador.</string>
 
-    <string tools:ignore="MissingTranslation" name="error_in_file_title">Erro no arquivo</string>
-    <string tools:ignore="MissingTranslation" name="error_in_file_description">Os seguintes arquivos parecem estar corrompidos. Adicionar livro excluindo arquivos corrompidos?</string>
-    <string tools:ignore="MissingTranslation" name="error_in_file_all_defect">Todos os arquivos parecem estar corrompidos</string>
+    <string name="error_in_file_title">Erro no arquivo</string>
+    <string name="error_in_file_description">Os seguintes arquivos parecem estar corrompidos.
+        Adicionar livro excluindo arquivos corrompidos?</string>
+    <string name="error_in_file_all_defect">Todos os arquivos parecem estar corrompidos</string>
 </resources>
