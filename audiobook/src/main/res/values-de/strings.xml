@@ -62,4 +62,9 @@
     <string name="error_in_file_all_defect">Alle Dateien sind defekt.</string>
     <string name="next_track">Nächster Song</string>
     <string name="previous_track">Voriger Song</string>
+
+    <string name="up">Ordner hoch</string>
+    <string name="chosen_folder_description">Gewählter Ordner: </string>
+    <string  name="choose">WÄHLEN</string>
+    <string  name="abort">ABBRECHEN</string>
 </resources>

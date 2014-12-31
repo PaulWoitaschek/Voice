@@ -62,4 +62,10 @@
     <string tools:ignore="MissingTranslation" name="error_in_file_all_defect">All files seem to be corrupt</string>
     <string tools:ignore="MissingTranslation" name="previous_track">Previous track</string>
     <string tools:ignore="MissingTranslation" name="next_track">Next track</string>
+
+    <string tools:ignore="MissingTranslation" name="up">Upper folder</string>
+    <string tools:ignore="MissingTranslation" name="chosen_folder_description">Chosen folder:</string>
+    <string tools:ignore="MissingTranslation" name="choose">CHOOSE</string>
+    <string tools:ignore="MissingTranslation" name="abort">ABORT</string>
+
 </resources>

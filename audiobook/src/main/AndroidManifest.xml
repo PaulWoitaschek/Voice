@@ -26,6 +26,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".activity.FolderChooserActivity" />
+
         <activity android:name=".activity.BookPlay">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

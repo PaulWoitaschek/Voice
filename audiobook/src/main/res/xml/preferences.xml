@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <de.ph1b.audiobook.dialog.FolderChooserPreference
+        android:title="lajölkajbsdf"
+        android:summary="lökjjasölkbj"/>
+
+
     <CheckBoxPreference
         android:key="@string/pref_key_resume_on_replug"
         android:title="@string/pref_resume_on_replug"
