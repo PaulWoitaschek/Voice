@@ -111,6 +111,9 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         audioTypes.add(".aac");
         audioTypes.add(".flac");
         audioTypes.add(".mkv");
+        if (Build.VERSION.SDK_INT >= 21) {
+            audioTypes.add(".opus");
+        }
         return audioTypes;
     }
 
@@ -157,26 +160,26 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    private ArrayList<String> getStorageDirectories() {
-// Final set of paths
+    public static ArrayList<String> getStorageDirectories() {
+        // Final set of paths
         final Set<String> rv = new HashSet<>();
-// Primary physical SD-CARD (not emulated)
+        // Primary physical SD-CARD (not emulated)
         final String rawExternalStorage = System.getenv("EXTERNAL_STORAGE");
-// All Secondary SD-CARDs (all exclude primary) separated by ":"
+        // All Secondary SD-CARDs (all exclude primary) separated by ":"
         final String rawSecondaryStoragesStr = System.getenv("SECONDARY_STORAGE");
-// Primary emulated SD-CARD
+        // Primary emulated SD-CARD
         final String rawEmulatedStorageTarget = System.getenv("EMULATED_STORAGE_TARGET");
         if (TextUtils.isEmpty(rawEmulatedStorageTarget)) {
-// Device has physical external storage; use plain paths.
+            // Device has physical external storage; use plain paths.
             if (TextUtils.isEmpty(rawExternalStorage)) {
-// EXTERNAL_STORAGE undefined; falling back to default.
+                // EXTERNAL_STORAGE undefined; falling back to default.
                 rv.add("/storage/sdcard0");
             } else {
                 rv.add(rawExternalStorage);
             }
         } else {
-// Device has emulated storage; external storage paths should have
-// userId burned into them.
+            // Device has emulated storage; external storage paths should have
+            // userId burned into them.
             final String rawUserId;
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 rawUserId = "";
@@ -192,16 +195,16 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                 }
                 rawUserId = isDigit ? lastFolder : "";
             }
-// /storage/emulated/0[1,2,...]
+            // /storage/emulated/0[1,2,...]
             if (TextUtils.isEmpty(rawUserId)) {
                 rv.add(rawEmulatedStorageTarget);
             } else {
                 rv.add(rawEmulatedStorageTarget + File.separator + rawUserId);
             }
         }
-// Add all secondary storages
+        // Add all secondary storages
         if (!TextUtils.isEmpty(rawSecondaryStoragesStr)) {
-// All Secondary SD-CARDs splited into array
+            // All Secondary SD-CARDs splited into array
             final String[] rawSecondaryStorages = rawSecondaryStoragesStr.split(File.pathSeparator);
             Collections.addAll(rv, rawSecondaryStorages);
         }
@@ -224,7 +227,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-// Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.action_only_settings, menu);
     }
 
