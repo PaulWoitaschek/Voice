@@ -58,6 +58,7 @@ import de.ph1b.audiobook.interfaces.OnItemLongClickListener;
 import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
+import de.ph1b.audiobook.service.StateManager;
 import de.ph1b.audiobook.utils.CustomOnSimpleGestureListener;
 import de.ph1b.audiobook.utils.ImageHelper;
 
@@ -99,12 +100,12 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
             AudioPlayerService.LocalBinder binder = (AudioPlayerService.LocalBinder) service;
             mService = binder.getService();
             mBound = true;
-            if (mService.stateManager.getState() == PlayerStates.STARTED) {
+            if (stateManager.getState() == PlayerStates.STARTED) {
                 currentPlaying.setImageResource(R.drawable.ic_pause_grey600_36dp);
             } else {
                 currentPlaying.setImageResource(R.drawable.ic_play_arrow_grey600_36dp);
             }
-            mService.stateManager.addStateChangeListener(onStateChangedListener);
+            stateManager.addStateChangeListener(onStateChangedListener);
         }
 
         @Override
@@ -115,6 +116,8 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     private GestureDetectorCompat detector;
     private BookDetail bookToEdit;
     private float scrollBy = 0;
+
+    private StateManager stateManager;
 
     /**
      * Returns the amount of columns the main-grid will need
@@ -142,7 +145,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         super.onStop();
         // Unbind from the service
         if (mBound) {
-            mService.stateManager.removeStateChangeListener(onStateChangedListener);
+            stateManager.removeStateChangeListener(onStateChangedListener);
             getActivity().unbindService(mConnection);
             mBound = false;
         }
@@ -151,6 +154,8 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        stateManager = StateManager.getInstance();
 
         db = DataBaseHelper.getInstance(getActivity());
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
@@ -426,7 +431,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         switch (view.getId()) {
             case R.id.current_playing:
                 if (mBound) {
-                    if (mService.stateManager.getState() == PlayerStates.STARTED) {
+                    if (stateManager.getState() == PlayerStates.STARTED) {
                         mService.pause(true);
                     } else {
                         mService.play();

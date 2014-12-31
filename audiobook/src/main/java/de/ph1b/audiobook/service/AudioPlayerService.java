@@ -65,7 +65,7 @@ public class AudioPlayerService extends Service {
 
     private final ReentrantLock playerLock = new ReentrantLock();
     private final ScheduledExecutorService sandMan = Executors.newSingleThreadScheduledExecutor();
-    public StateManager stateManager;
+    private StateManager stateManager;
     private DataBaseHelper db;
     private LocalBroadcastManager bcm;
     private AudioManager audioManager;
@@ -228,7 +228,7 @@ public class AudioPlayerService extends Service {
         bcm = LocalBroadcastManager.getInstance(this);
         db = DataBaseHelper.getInstance(this);
         mediaPlayer = new MediaPlayerCompat(this);
-        stateManager = new StateManager();
+        stateManager = StateManager.getInstance();
         stateManager.setState(PlayerStates.IDLE);
 
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);

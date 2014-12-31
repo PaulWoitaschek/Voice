@@ -51,6 +51,7 @@ import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.interfaces.OnTimeChangedListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
+import de.ph1b.audiobook.service.StateManager;
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
 
@@ -111,8 +112,8 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
             if (action.equals(AudioPlayerService.GUI)) {
                 if (mBound) {
                     //setting up time related stuff
-                    seekBar.setProgress(mService.stateManager.getTime());
-                    playedTimeView.setText(formatTime(mService.stateManager.getTime()));
+                    seekBar.setProgress(stateManager.getTime());
+                    playedTimeView.setText(formatTime(stateManager.getTime()));
                 }
 
                 MediaDetail media = intent.getParcelableExtra(AudioPlayerService.GUI_MEDIA);
@@ -154,9 +155,9 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
             AudioPlayerService.LocalBinder binder = (AudioPlayerService.LocalBinder) service;
             mService = binder.getService();
 
-            setPlayPauseButtons(mService.stateManager.getState());
-            mService.stateManager.addStateChangeListener(onStateChangedListener);
-            mService.stateManager.addTimeChangedListener(onTimeChangedListener);
+            setPlayPauseButtons(stateManager.getState());
+            stateManager.addStateChangeListener(onStateChangedListener);
+            stateManager.addTimeChangedListener(onTimeChangedListener);
             sleepTimerActive = mService.sleepSandActive();
             Activity a = getActivity();
             if (a != null) {
@@ -186,6 +187,8 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
         }
     };
 
+    private StateManager stateManager;
+
     @Override
     public void onStart() {
         super.onStart();
@@ -198,8 +201,8 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
         super.onStop();
         // Unbind from the service
         if (mBound) {
-            mService.stateManager.removeStateChangeListener(onStateChangedListener);
-            mService.stateManager.removeTimeChangedListener(onTimeChangedListener);
+            stateManager.removeStateChangeListener(onStateChangedListener);
+            stateManager.removeTimeChangedListener(onTimeChangedListener);
             mService.setOnSleepStateChangedListener(null);
             getActivity().unbindService(mConnection);
             mBound = false;
@@ -222,6 +225,8 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
 
         Intent i = getActivity().getIntent();
+
+        stateManager = StateManager.getInstance();
 
         int bookId = i.getIntExtra(AudioPlayerService.GUI_BOOK_ID, -1);
         book = db.getBook(bookId);
@@ -408,7 +413,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
         if (mBound) {
             switch (view.getId()) {
                 case R.id.play:
-                    if (mService.stateManager.getState() == PlayerStates.STARTED) {
+                    if (stateManager.getState() == PlayerStates.STARTED) {
                         mService.pause(true);
                     } else
                         mService.play();

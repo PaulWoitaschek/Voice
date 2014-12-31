@@ -14,6 +14,18 @@ public class StateManager {
     private PlayerStates state = PlayerStates.IDLE;
     private int time = 0;
 
+    private static StateManager instance;
+
+    public static synchronized StateManager getInstance() {
+        if (instance == null) {
+            instance = new StateManager();
+        }
+        return instance;
+    }
+
+    private StateManager() {
+    }
+
     public void addStateChangeListener(OnStateChangedListener listener) {
         allStateListener.add(listener);
     }
