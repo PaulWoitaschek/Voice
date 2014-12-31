@@ -7,15 +7,10 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.os.Build;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.util.TypedValue;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.RemoteViews;
 
 import java.io.File;
@@ -85,48 +80,6 @@ public class WidgetProvider extends AppWidgetProvider {
         return PendingIntent.getBroadcast(context, number, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private int dpToInt(int dp) {
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                dp, Resources.getSystem().getDisplayMetrics()));
-    }
-
-    @Override
-    public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
-        if (Build.VERSION.SDK_INT >= 16) {
-            Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
-
-            //-4 for some margins
-            int widthRewindButton = dpToInt(36);
-            int widthPlayButton = dpToInt(48);
-            int eightDPMargin = dpToInt(16);
-
-            int minWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
-            int minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
-
-            RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.widget);
-
-            //sets all visibilities except of start button to gone
-            widget.setViewVisibility(R.id.imageView, View.GONE);
-            widget.setViewVisibility(R.id.title, View.GONE);
-            widget.setViewVisibility(R.id.summary, View.GONE);
-            widget.setViewVisibility(R.id.rewind, View.GONE);
-            widget.setViewVisibility(R.id.fast_forward, View.GONE);
-
-            if (minWidth > (widthPlayButton + widthRewindButton - eightDPMargin)) {
-                widget.setViewVisibility(R.id.rewind, View.VISIBLE);
-            }
-            if (minWidth > (widthPlayButton + widthRewindButton + widthRewindButton - eightDPMargin)) {
-                widget.setViewVisibility(R.id.fast_forward, View.VISIBLE);
-                widget.setViewVisibility(R.id.title, View.VISIBLE);
-                widget.setViewVisibility(R.id.summary, View.VISIBLE);
-            }
-            if (minWidth > (widthPlayButton + widthRewindButton + widthRewindButton + minHeight - eightDPMargin)) {
-                widget.setViewVisibility(R.id.imageView, View.VISIBLE);
-            }
-
-            appWidgetManager.updateAppWidget(appWidgetId, widget);
-        }
-    }
 
     @Override
     public void onReceive(@NonNull final Context context, @NonNull final Intent intent) {
