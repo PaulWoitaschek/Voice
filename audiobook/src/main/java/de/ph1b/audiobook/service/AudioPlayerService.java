@@ -208,6 +208,7 @@ public class AudioPlayerService extends Service {
         mediaPlayer = new MediaPlayerCompat(this);
         stateManager = StateManager.getInstance(this);
         stateManager.setState(PlayerStates.IDLE);
+        notificationBuilder = new NotificationCompat.Builder(this);
 
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
@@ -349,10 +350,6 @@ public class AudioPlayerService extends Service {
     }
 
     private Notification getNotification() {
-        if (notificationBuilder == null) {
-            notificationBuilder = new NotificationCompat.Builder(AudioPlayerService.this);
-        }
-
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt(BookChoose.SHARED_PREFS_CURRENT, book.getId());
@@ -426,8 +423,7 @@ public class AudioPlayerService extends Service {
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true);
 
-        //noinspection deprecation
-        Notification notification = notificationBuilder.getNotification();
+        Notification notification = notificationBuilder.build();
 
         if (Build.VERSION.SDK_INT >= 16) {
             notification.bigContentView = bigViewRemote;
