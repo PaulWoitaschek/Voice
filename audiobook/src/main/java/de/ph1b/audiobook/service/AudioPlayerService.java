@@ -49,6 +49,7 @@ import de.ph1b.audiobook.content.MediaDetail;
 import de.ph1b.audiobook.receiver.RemoteControlReceiver;
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.MediaPlayerCompat;
+import de.ph1b.audiobook.utils.Prefs;
 
 public class AudioPlayerService extends Service {
 
@@ -165,14 +166,8 @@ public class AudioPlayerService extends Service {
     private ScheduledFuture<?> sleepSand;
     private OnSleepStateChangedListener onSleepStateChangedListener;
 
-    public AudioPlayerService() {
-    }
-
-    public float getPlaybackSpeed() {
-        return mediaPlayer.getPlaybackSpeed();
-    }
-
-    public void setPlaybackSpeed(float playbackSpeed) {
+    private void setPlaybackSpeed() {
+        float playbackSpeed = Prefs.getPlaybackSpeed(this);
         mediaPlayer.setPlaybackSpeed(playbackSpeed);
     }
 
@@ -333,6 +328,17 @@ public class AudioPlayerService extends Service {
                     initBook(newBookId);
             }
             if (book != null) {
+                String action = intent.getAction();
+                if (action != null) {
+                    switch (action) {
+                        case Controls.CONTROL_INFORM_SPEED_CHANGED:
+                            setPlaybackSpeed();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
                 int keyCode = intent.getIntExtra(Intent.EXTRA_KEY_EVENT, -1);
                 handleKeyCode(keyCode);
                 updateGUI();
@@ -568,6 +574,8 @@ public class AudioPlayerService extends Service {
             if (Build.VERSION.SDK_INT < 21 && Build.VERSION.SDK_INT > 14) {
                 updateRemoteControlValues(bitmap);
             }
+
+            setPlaybackSpeed();
 
             //requests wake-mode which is automatically released when pausing
             mediaPlayer.setWakeMode(this, PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE);

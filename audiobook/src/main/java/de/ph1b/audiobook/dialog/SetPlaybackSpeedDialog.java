@@ -16,11 +16,12 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.service.Controls;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
+import de.ph1b.audiobook.utils.Prefs;
 
 public class SetPlaybackSpeedDialog extends DialogFragment {
 
-    public static final String DEFAULT_AMOUNT = "defaultAmount";
     private static final float speedDelta = 0.1f;
     private static final float minSpeed = 0.5f;
     private static final float maxSpeed = 2f;
@@ -37,8 +38,7 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
         SeekBar seekBar = (SeekBar) v.findViewById(R.id.seekBar);
         final TextView textView = (TextView) v.findViewById(R.id.textView);
 
-        Bundle bundle = getArguments();
-        speed = bundle.getFloat(DEFAULT_AMOUNT, 1);
+        speed = Prefs.getPlaybackSpeed(getActivity());
         textView.setText(formatTime(speed));
 
         int seekMaxSteps = (int) ((maxSpeed - minSpeed) / speedDelta);
@@ -75,7 +75,8 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
         builder.setPositiveButton(getString(R.string.dialog_confirm), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ((PlaybackSpeedChanged) getTargetFragment()).onSpeedChanged(speed);
+                Prefs.setPlaybackSpeed(speed, getActivity());
+                new Controls(getActivity()).informSpeedChanged();
             }
         });
 
@@ -97,9 +98,5 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
     private String formatTime(float time) {
         DecimalFormat df = new DecimalFormat("0.00");
         return getString(R.string.playback_speed) + ": " + df.format(time) + "x";
-    }
-
-    public interface PlaybackSpeedChanged {
-        public void onSpeedChanged(float speed);
     }
 }

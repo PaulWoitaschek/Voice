@@ -55,7 +55,7 @@ import de.ph1b.audiobook.service.StateManager;
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
 
-public class BookPlayFragment extends Fragment implements OnClickListener, SetPlaybackSpeedDialog.PlaybackSpeedChanged {
+public class BookPlayFragment extends Fragment implements OnClickListener {
 
     private static final String TAG = "de.ph1b.audiobook.fragment.BookPlayFragment";
     private final OnStateChangedListener onStateChangedListener = new OnStateChangedListener() {
@@ -472,9 +472,6 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
             case R.id.action_time_lapse:
                 SetPlaybackSpeedDialog dialog = new SetPlaybackSpeedDialog();
                 dialog.setTargetFragment(this, 42);
-                Bundle args = new Bundle();
-                args.putFloat(SetPlaybackSpeedDialog.DEFAULT_AMOUNT, mService.getPlaybackSpeed());
-                dialog.setArguments(args);
                 dialog.show(getFragmentManager(), TAG);
                 return true;
             default:
@@ -504,13 +501,5 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
     public void onPause() {
         bcm.unregisterReceiver(updateGUIReceiver);
         super.onPause();
-    }
-
-
-    @Override
-    public void onSpeedChanged(float speed) {
-        if (mBound) {
-            mService.setPlaybackSpeed(speed);
-        }
     }
 }
