@@ -18,7 +18,7 @@
          conectado a su computadora.</string>
     <string name="no_external_storage_action_bar_title">Almacenamiento externo</string>
 
-    <string name="action_sleep_title_hint_left">Pausa despues</string>
+    <string name="action_sleep_title_hint_left">Pausa después</string>
     <string name="action_sleep_title_hint_right">minutos</string>
     <string name="action_jump_to">saltar a</string>
     <string name="hours">horas</string>
@@ -34,7 +34,7 @@
          audiolibro.</string>
     <string name="content_previous_cover">Elejir la portada anterior.</string>
     <string name="content_next_cover">Elejir la proxima portada.</string>
-	<string name="content_cover">Muenstre a portada para escojer</string>
+    <string name="content_cover">Muenstre a portada para escojer</string>
     <string name="pref_seek_time">Saltar cantidad</string>
     <string name="book_add_progress_title">Agregando libro</string>
     <string name="book_add_progress_message">Por favor, espere mientras se agrega el libro.</string>
@@ -42,7 +42,7 @@
     <string name="popup_edit_book">Editar</string>
     <string name="delete">Borrar</string>
     <string name="content_file_or_folder">Indica si es un archivo, o una carpeta</string>
-	<string name="rewind">Rebobinar</string>
+    <string name="rewind">Rebobinar</string>
     <string name="fast_forward">Avance rápido</string>
     <string name="playback_speed">Velocidad de reproducción</string>
     <string name="pref_sleep_time">Temporizador para dormir</string>
@@ -56,7 +56,7 @@
     <string name="error_in_file_title">Error en el archivo</string>
     <string name="error_in_file_description">Los siguientes archivos parecen estar dañado. Agregar libro sin archivos dañados??</string>
     <string name="error_in_file_all_defect">Todos los archivos parecen ser corrupto</string>
-	<string name="previous_track">Pista anterior</string>
+    <string name="previous_track">Pista anterior</string>
     <string name="next_track">Proxima pista </string>
     <string name="up">Carpeta superior</string>
     <string name="chosen_folder_description">Carpeta elegida:</string>
