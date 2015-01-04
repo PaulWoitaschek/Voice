@@ -111,7 +111,7 @@ public class AudioPlayerService extends Service {
         }
     };
     private NotificationCompat.Builder notificationBuilder = null;
-    private boolean pauseBecauseLossTransient = false;
+    private volatile boolean pauseBecauseLossTransient = false;
     private final AudioManager.OnAudioFocusChangeListener audioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
         @Override
         public void onAudioFocusChange(int focusChange) {
