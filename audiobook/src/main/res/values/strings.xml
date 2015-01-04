@@ -67,5 +67,4 @@
     <string tools:ignore="MissingTranslation" name="chosen_folder_description">Chosen folder:</string>
     <string tools:ignore="MissingTranslation" name="choose">CHOOSE</string>
     <string tools:ignore="MissingTranslation" name="abort">ABORT</string>
-
 </resources>
