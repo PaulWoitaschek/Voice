@@ -161,7 +161,7 @@ public class AudioPlayerService extends Service {
     /**
      * If <code>true</code>, the current track will be played to the end after the sleep timer triggers.
      */
-    private boolean stopAfterCurrentTrack = false; // TODO: VOLATILE
+    private volatile boolean stopAfterCurrentTrack = false;
     private ScheduledFuture<?> sleepSand;
     private OnSleepStateChangedListener onSleepStateChangedListener;
 
