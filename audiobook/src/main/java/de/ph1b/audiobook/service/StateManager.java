@@ -1,10 +1,16 @@
 package de.ph1b.audiobook.service;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.interfaces.OnTimeChangedListener;
+import de.ph1b.audiobook.receiver.WidgetProvider;
 
 
 public class StateManager {
@@ -15,15 +21,17 @@ public class StateManager {
     private int time = 0;
 
     private static StateManager instance;
+    private final Context c;
 
-    public static synchronized StateManager getInstance() {
+    public static synchronized StateManager getInstance(Context c) {
         if (instance == null) {
-            instance = new StateManager();
+            instance = new StateManager(c);
         }
         return instance;
     }
 
-    private StateManager() {
+    private StateManager(Context c) {
+        this.c = c;
     }
 
     public void addStateChangeListener(OnStateChangedListener listener) {
@@ -50,6 +58,7 @@ public class StateManager {
         this.state = state;
         for (OnStateChangedListener s : allStateListener)
             s.onStateChanged(state);
+        updateWidget();
     }
 
     public int getTime() {
@@ -60,5 +69,14 @@ public class StateManager {
         this.time = time;
         for (OnTimeChangedListener s : allTimeListener)
             s.onTimeChanged(time);
+    }
+
+    private void updateWidget() {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(c);
+        int ids[] = appWidgetManager.getAppWidgetIds(new ComponentName(c, WidgetProvider.class));
+        Intent intent = new Intent(c, WidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        c.sendBroadcast(intent);
     }
 }

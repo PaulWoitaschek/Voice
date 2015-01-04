@@ -35,7 +35,7 @@ public class FolderChooserPreference extends DialogPreference implements View.On
 
         ArrayList<String> folders = Prefs.getAudiobookDirs(getContext());
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, folders);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, folders);
 
         listView.setAdapter(adapter);
 

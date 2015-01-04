@@ -5,7 +5,6 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -47,9 +46,7 @@ import de.ph1b.audiobook.activity.BookPlay;
 import de.ph1b.audiobook.content.BookDetail;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.content.MediaDetail;
-import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.receiver.RemoteControlReceiver;
-import de.ph1b.audiobook.receiver.WidgetProvider;
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.MediaPlayerCompat;
 
@@ -160,25 +157,11 @@ public class AudioPlayerService extends Service {
     @SuppressWarnings("deprecation")
     private RemoteControlClient remoteControlClient;
     private MediaSessionCompat mediaSession;
-    private ComponentName widgetComponentName;
-    private RemoteViews widgetRemoteViews;
-    private final OnStateChangedListener onStateChangedListener = new OnStateChangedListener() {
-        @Override
-        public void onStateChanged(PlayerStates state) {
-            if (BuildConfig.DEBUG)
-                Log.d(TAG, "state changed called: " + state);
-            if (state == PlayerStates.STARTED) {
-                widgetRemoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_48dp);
-            } else {
-                widgetRemoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow_white_48dp);
-            }
-            AppWidgetManager.getInstance(getApplicationContext()).updateAppWidget(widgetComponentName, widgetRemoteViews);
-        }
-    };
+
     /**
      * If <code>true</code>, the current track will be played to the end after the sleep timer triggers.
      */
-    private boolean stopAfterCurrentTrack = false;
+    private boolean stopAfterCurrentTrack = false; // TODO: VOLATILE
     private ScheduledFuture<?> sleepSand;
     private OnSleepStateChangedListener onSleepStateChangedListener;
 
@@ -228,7 +211,7 @@ public class AudioPlayerService extends Service {
         bcm = LocalBroadcastManager.getInstance(this);
         db = DataBaseHelper.getInstance(this);
         mediaPlayer = new MediaPlayerCompat(this);
-        stateManager = StateManager.getInstance();
+        stateManager = StateManager.getInstance(this);
         stateManager.setState(PlayerStates.IDLE);
 
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -271,12 +254,6 @@ public class AudioPlayerService extends Service {
         registerReceiver(audioBecomingNoisyReceiver, new IntentFilter
                 (AudioManager.ACTION_AUDIO_BECOMING_NOISY));
         registerReceiver(headsetPlugReceiver, new IntentFilter(Intent.ACTION_HEADSET_PLUG));
-
-        //state manager to update widget
-        widgetComponentName = new ComponentName(this, WidgetProvider.class);
-        widgetRemoteViews = new RemoteViews(this.getPackageName(), R.layout.widget);
-
-        stateManager.addStateChangeListener(onStateChangedListener);
     }
 
     private boolean handleKeyCode(int keyCode) {
@@ -321,9 +298,6 @@ public class AudioPlayerService extends Service {
         stopForeground(true);
         prepare(book.getCurrentMediaId());
         pauseBecauseLossTransient = false;
-
-        updateWidget();
-        AppWidgetManager.getInstance(getApplicationContext()).updateAppWidget(widgetComponentName, widgetRemoteViews);
     }
 
     @Override
@@ -366,29 +340,6 @@ public class AudioPlayerService extends Service {
         }
 
         return Service.START_STICKY;
-    }
-
-    private void updateWidget() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (allMedia.size() > 1) {
-                    widgetRemoteViews.setTextViewText(R.id.summary, media.getName());
-                } else {
-                    widgetRemoteViews.setTextViewText(R.id.summary, "");
-                }
-
-                Bitmap cover;
-                if (book.getCover() != null && new File(book.getCover()).exists()) {
-                    cover = ImageHelper.genBitmapFromFile(book.getCover(), AudioPlayerService.this, ImageHelper.TYPE_NOTIFICATION_SMALL);
-                } else {
-                    cover = ImageHelper.genCapital(book.getName(), AudioPlayerService.this, ImageHelper.TYPE_NOTIFICATION_SMALL);
-                }
-
-                widgetRemoteViews.setImageViewBitmap(R.id.imageView, cover);
-                widgetRemoteViews.setTextViewText(R.id.title, book.getName());
-            }
-        }).start();
     }
 
     private Notification getNotification() {
@@ -587,9 +538,6 @@ public class AudioPlayerService extends Service {
             } else {
                 position = book.getCurrentMediaPosition();
             }
-
-            updateWidget();
-
 
             String path = media.getPath();
 

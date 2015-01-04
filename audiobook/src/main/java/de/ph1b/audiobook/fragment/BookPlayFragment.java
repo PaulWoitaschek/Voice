@@ -226,7 +226,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, SetPl
 
         Intent i = getActivity().getIntent();
 
-        stateManager = StateManager.getInstance();
+        stateManager = StateManager.getInstance(getActivity());
 
         int bookId = i.getIntExtra(AudioPlayerService.GUI_BOOK_ID, -1);
         book = db.getBook(bookId);
