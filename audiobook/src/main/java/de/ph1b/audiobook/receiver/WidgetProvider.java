@@ -20,6 +20,8 @@ import de.ph1b.audiobook.content.BookDetail;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.content.MediaDetail;
 import de.ph1b.audiobook.service.AudioPlayerService;
+import de.ph1b.audiobook.service.PlayerStates;
+import de.ph1b.audiobook.service.StateManager;
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.Prefs;
 
@@ -50,6 +52,12 @@ public class WidgetProvider extends AppWidgetProvider {
             DataBaseHelper db = DataBaseHelper.getInstance(context);
             int bookId = Prefs.getCurrentBookId(context);
             BookDetail book = db.getBook(bookId);
+
+            if (StateManager.getInstance(context).getState() == PlayerStates.STARTED) {
+                remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_48dp);
+            } else {
+                remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow_white_48dp);
+            }
 
             // if there is no current book, take the first one from all
             if (book == null) {
