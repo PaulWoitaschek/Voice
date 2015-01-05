@@ -6,4 +6,16 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="notification_big_text">
+        <item name="android:textColor">@color/notification_text_color_primary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="notification_small_text">
+        <item name="android:textColor">@color/notification_text_secondary</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>
