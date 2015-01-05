@@ -371,7 +371,7 @@ public class AudioPlayerService extends Service {
 
         Intent rewindIntent = new Intent(AudioPlayerService.this, AudioPlayerService.class);
         rewindIntent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_REWIND);
-        PendingIntent rewindPI = PendingIntent.getService(getApplicationContext(), 0, rewindIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent rewindPI = PendingIntent.getService(getApplicationContext(), KeyEvent.KEYCODE_MEDIA_REWIND, rewindIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent playPauseIntent = new Intent(AudioPlayerService.this, AudioPlayerService.class);
         if (stateManager.getState() == PlayerStates.STARTED) {
@@ -383,15 +383,15 @@ public class AudioPlayerService extends Service {
             smallViewRemote.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow_white_48dp);
             bigViewRemote.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow_white_48dp);
         }
-        PendingIntent playPausePI = PendingIntent.getService(AudioPlayerService.this, 1, playPauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent playPausePI = PendingIntent.getService(AudioPlayerService.this, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent fastForwardIntent = new Intent(AudioPlayerService.this, AudioPlayerService.class);
         fastForwardIntent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD);
-        PendingIntent fastForwardPI = PendingIntent.getService(AudioPlayerService.this, 2, fastForwardIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent fastForwardPI = PendingIntent.getService(AudioPlayerService.this, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, fastForwardIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent stopIntent = new Intent(AudioPlayerService.this, AudioPlayerService.class);
         stopIntent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_STOP);
-        PendingIntent stopPI = PendingIntent.getService(AudioPlayerService.this, 3, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent stopPI = PendingIntent.getService(AudioPlayerService.this, KeyEvent.KEYCODE_MEDIA_STOP, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         smallViewRemote.setImageViewBitmap(R.id.imageView, smallCover);
         smallViewRemote.setTextViewText(R.id.title, book.getName());

@@ -35,17 +35,17 @@ public class WidgetProvider extends AppWidgetProvider {
 
             Intent playPauseI = new Intent(context, AudioPlayerService.class);
             playPauseI.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
-            PendingIntent playPausePI = PendingIntent.getService(context, 0, playPauseI, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent playPausePI = PendingIntent.getService(context, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseI, PendingIntent.FLAG_UPDATE_CURRENT);
             remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI);
 
             Intent fastForwardI = new Intent(context, AudioPlayerService.class);
             fastForwardI.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD);
-            PendingIntent fastForwardPI = PendingIntent.getService(context, 1, fastForwardI, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent fastForwardPI = PendingIntent.getService(context, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, fastForwardI, PendingIntent.FLAG_UPDATE_CURRENT);
             remoteViews.setOnClickPendingIntent(R.id.fast_forward, fastForwardPI);
 
             Intent rewindI = new Intent(context, AudioPlayerService.class);
             rewindI.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_REWIND);
-            PendingIntent rewindPI = PendingIntent.getService(context, 2, rewindI, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent rewindPI = PendingIntent.getService(context, KeyEvent.KEYCODE_MEDIA_REWIND, rewindI, PendingIntent.FLAG_UPDATE_CURRENT);
             remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI);
 
             // get book from database
@@ -89,15 +89,16 @@ public class WidgetProvider extends AppWidgetProvider {
                     }
                 }
 
+
                 Intent wholeWidgetClickI = new Intent(context, BookPlay.class);
                 wholeWidgetClickI.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 wholeWidgetClickI.putExtra(AudioPlayerService.GUI_BOOK_ID, book.getId());
-                PendingIntent wholeWidgetClickPI = PendingIntent.getActivity(context, 3, wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent wholeWidgetClickPI = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
                 remoteViews.setOnClickPendingIntent(R.id.whole_widget, wholeWidgetClickPI);
             } else {
                 Intent wholeWidgetClickI = new Intent(context, BookChoose.class);
                 wholeWidgetClickI.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                PendingIntent wholeWidgetClickPI = PendingIntent.getActivity(context, 3, wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent wholeWidgetClickPI = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
                 remoteViews.setOnClickPendingIntent(R.id.whole_widget, wholeWidgetClickPI);
             }
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
