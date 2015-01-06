@@ -151,7 +151,7 @@ public class FolderChooseFragment extends Fragment {
     }
 
 
-    private ArrayList<File> getStorageDirectories() {
+    public static ArrayList<File> getStorageDirectories() {
         Pattern DIR_SEPARATOR = Pattern.compile("/");
 
         // Final set of paths
@@ -216,6 +216,7 @@ public class FolderChooseFragment extends Fragment {
             if (f.exists() && f.isDirectory() && !paths.contains(f) && f.canRead() && f.listFiles().length > 0)
                 paths.add(f);
         }
+        Collections.sort(paths, new NaturalOrderComparator());
         return paths;
     }
 
