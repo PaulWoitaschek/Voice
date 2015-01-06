@@ -109,6 +109,17 @@ class MediaPlayer {
         this.mCurrentSpeed = speed;
     }
 
+    public boolean isPlaying() {
+        switch (mCurrentState) {
+            case STATE_ERROR:
+                error();
+                break;
+            default:
+                return mCurrentState == STATE_STARTED;
+        }
+        return false;
+    }
+
 
     public void pause() {
         switch (mCurrentState) {

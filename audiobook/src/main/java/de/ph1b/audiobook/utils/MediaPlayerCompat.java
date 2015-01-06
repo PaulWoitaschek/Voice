@@ -73,6 +73,14 @@ public class MediaPlayerCompat {
         }
     }
 
+    public boolean isPlaying() {
+        if (useCustomMediaPlayer) {
+            return customMediaPlayer.isPlaying();
+        } else {
+            return androidMediaPlayer.isPlaying();
+        }
+    }
+
     public void seekTo(int position) {
         if (useCustomMediaPlayer) {
             customMediaPlayer.seekTo(position);
@@ -126,7 +134,8 @@ public class MediaPlayerCompat {
 
     /**
      * Sets wakeMode. Custom Mediaplayer handles wake mode on its own.
-     * @param c Context
+     *
+     * @param c    Context
      * @param mode PowerManager flags
      */
     public void setWakeMode(Context c, int mode) {

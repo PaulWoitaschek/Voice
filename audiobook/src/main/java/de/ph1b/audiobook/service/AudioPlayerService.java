@@ -478,8 +478,16 @@ public class AudioPlayerService extends Service {
                 book.setCurrentMediaId(newMediaId);
                 book.setCurrentMediaPosition(0);
                 updateBookAsync(book);
-                prepare(newMediaId);
-                play();
+                boolean wasPlaying = mediaPlayer.isPlaying();
+                if (mediaPlayer.getCurrentPosition() > 1000) {
+                    changePosition(0);
+                } else {
+                    prepare(newMediaId);
+                }
+                if (wasPlaying) {
+                    play();
+                }
+                updateGUI();
             }
         } finally {
             playerLock.unlock();
@@ -495,8 +503,12 @@ public class AudioPlayerService extends Service {
                 book.setCurrentMediaId(newMediaId);
                 book.setCurrentMediaPosition(0);
                 updateBookAsync(book);
+                boolean wasPlaying = mediaPlayer.isPlaying();
                 prepare(newMediaId);
-                play();
+                if (wasPlaying) {
+                    play();
+                }
+                updateGUI();
             }
         } finally {
             playerLock.unlock();
