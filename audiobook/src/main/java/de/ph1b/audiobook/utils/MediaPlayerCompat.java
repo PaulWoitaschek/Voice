@@ -27,14 +27,6 @@ public class MediaPlayerCompat {
         }
     }
 
-    public float getPlaybackSpeed() {
-        if (useCustomMediaPlayer) {
-            return customMediaPlayer.getPlaybackSpeed();
-        } else {
-            return 1;
-        }
-    }
-
     public void setPlaybackSpeed(float speed) {
         if (useCustomMediaPlayer) {
             customMediaPlayer.setPlaybackSpeed(speed);

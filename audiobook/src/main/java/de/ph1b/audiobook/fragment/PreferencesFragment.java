@@ -1,18 +1,23 @@
 package de.ph1b.audiobook.fragment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.activity.FolderChooserActivity;
 import de.ph1b.audiobook.dialog.SeekPreferenceDialog;
 import de.ph1b.audiobook.dialog.SleepPreferenceDialog;
+import de.ph1b.audiobook.utils.Prefs;
 
 
 public class PreferencesFragment extends PreferenceFragment {
+
 
 
     private final SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
@@ -43,6 +48,24 @@ public class PreferencesFragment extends PreferenceFragment {
         String sleepSummary = String.valueOf(sleepAmount) + " " + getString(R.string.minutes);
         SleepPreferenceDialog sleepPreferenceDialog = (SleepPreferenceDialog) findPreference(getString(R.string.pref_key_sleep_time));
         sleepPreferenceDialog.setSummary(sleepSummary);
+
+        Preference folderPreference = findPreference(getString(R.string.pref_key_root_folder));
+        if (folderPreference != null) {
+            String preferenceSummary = Prefs.getAudiobookFolder(getActivity());
+            if (preferenceSummary != null) {
+                folderPreference.setSummary(preferenceSummary);
+            }
+            folderPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    startActivity(new Intent(getActivity(), FolderChooserActivity.class));
+                    return true;
+                }
+            });
+
+            // TODO: Remove this line when screen is needed
+            getPreferenceScreen().removePreference(folderPreference);
+        }
     }
 
     @Override

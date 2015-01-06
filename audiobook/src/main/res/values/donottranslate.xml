@@ -9,4 +9,5 @@
     <string name="pref_key_resume_on_replug">RESUME_ON_REPLUG</string>
     <string name="pref_key_cover_on_internet">COVER_ON_INTERNET</string>
     <string name="pref_key_track_to_end">PLAY_TRACK_TO_END</string>
+    <string name="pref_key_root_folder">ROOT_FOLDER</string>
 </resources>

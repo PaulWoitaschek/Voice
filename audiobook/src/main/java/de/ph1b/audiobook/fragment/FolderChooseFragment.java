@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,8 +45,6 @@ public class FolderChooseFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Log.d("fcf", "onCreate");
 
         rootDirs = getStorageDirectories();
         currentFolderContent = new ArrayList<>(rootDirs);
@@ -126,11 +123,14 @@ public class FolderChooseFragment extends Fragment {
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<String> audioDirs = Prefs.getAudiobookDirs(getActivity());
-                if (!audioDirs.contains(chosenFolder.getAbsolutePath())) {
-                    audioDirs.add(chosenFolder.getAbsolutePath());
-                    Prefs.saveAudiobookDirs(getActivity(), audioDirs);
-                }
+                Prefs.setAudiobookFolder(chosenFolder.getAbsolutePath(), getActivity());
+            }
+        });
+
+        abortButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: implement
             }
         });
 
@@ -146,7 +146,7 @@ public class FolderChooseFragment extends Fragment {
         }
     }
 
-    public void setButtonEnabledDisabled() {
+    private void setButtonEnabledDisabled() {
         chooseButton.setEnabled(chosenFolder != null);
     }
 

@@ -5,15 +5,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-
+import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookChoose;
 
 public class Prefs {
 
-    private static final String PREF_KEY_AUDIO_DIRS = "audioDirs";
     private static final String PREF_KEY_PLAYBACK_SPEED = "playbackSpeed";
 
     private static SharedPreferences getSP(Context c) {
@@ -22,19 +18,6 @@ public class Prefs {
 
     private static SharedPreferences.Editor getED(Context c) {
         return getSP(c).edit();
-    }
-
-    public static ArrayList<String> getAudiobookDirs(Context c) {
-        SharedPreferences sp = getSP(c);
-        Set<String> dirs = sp.getStringSet(PREF_KEY_AUDIO_DIRS, new HashSet<String>());
-        return new ArrayList<>(dirs);
-    }
-
-    public static void saveAudiobookDirs(Context c, ArrayList<String> dirs) {
-        SharedPreferences.Editor editor = getED(c);
-        Set<String> save = new HashSet<>(dirs);
-        editor.putStringSet(PREF_KEY_AUDIO_DIRS, save);
-        editor.apply();
     }
 
     public static int getCurrentBookId(Context c) {
@@ -54,6 +37,16 @@ public class Prefs {
     public static void setPlaybackSpeed(float playbackSpeed, Context c) {
         SharedPreferences.Editor editor = getED(c);
         editor.putFloat(PREF_KEY_PLAYBACK_SPEED, playbackSpeed);
+        editor.apply();
+    }
+
+    public static String getAudiobookFolder(Context c) {
+        return getSP(c).getString(c.getString(R.string.pref_key_root_folder), null);
+    }
+
+    public static void setAudiobookFolder(String folder, Context c) {
+        SharedPreferences.Editor editor = getED(c);
+        editor.putString(c.getString(R.string.pref_key_root_folder), folder);
         editor.apply();
     }
 }

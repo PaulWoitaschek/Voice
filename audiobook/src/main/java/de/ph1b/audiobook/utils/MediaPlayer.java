@@ -109,10 +109,6 @@ class MediaPlayer {
         this.mCurrentSpeed = speed;
     }
 
-    public float getPlaybackSpeed() {
-        return mCurrentSpeed;
-    }
-
 
     public void pause() {
         switch (mCurrentState) {

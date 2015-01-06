@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <fragment
-        android:id="@+id/fragment_preferences"
+        android:id="@+id/pref_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         class="de.ph1b.audiobook.fragment.PreferencesFragment" />

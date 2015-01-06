@@ -89,7 +89,6 @@ public class WidgetProvider extends AppWidgetProvider {
                     }
                 }
 
-
                 Intent wholeWidgetClickI = new Intent(context, BookPlay.class);
                 wholeWidgetClickI.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 wholeWidgetClickI.putExtra(AudioPlayerService.GUI_BOOK_ID, book.getId());

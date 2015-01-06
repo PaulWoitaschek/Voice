@@ -160,7 +160,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static ArrayList<String> getStorageDirectories() {
+    private ArrayList<String> getStorageDirectories() {
         // Final set of paths
         final Set<String> rv = new HashSet<>();
         // Primary physical SD-CARD (not emulated)
