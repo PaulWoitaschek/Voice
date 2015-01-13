@@ -45,6 +45,7 @@ import de.ph1b.audiobook.adapter.MediaSpinnerAdapter;
 import de.ph1b.audiobook.content.BookDetail;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.content.MediaDetail;
+import de.ph1b.audiobook.dialog.BookmarkDialog;
 import de.ph1b.audiobook.dialog.JumpToPosition;
 import de.ph1b.audiobook.dialog.SetPlaybackSpeedDialog;
 import de.ph1b.audiobook.interfaces.OnStateChangedListener;
@@ -473,6 +474,10 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
                 SetPlaybackSpeedDialog dialog = new SetPlaybackSpeedDialog();
                 dialog.setTargetFragment(this, 42);
                 dialog.show(getFragmentManager(), TAG);
+                return true;
+            case R.id.action_bookmark:
+                BookmarkDialog bookmarkDialog = new BookmarkDialog();
+                bookmarkDialog.show(getFragmentManager(), TAG);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

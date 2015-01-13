@@ -19,6 +19,13 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/action_bookmark"
+        android:title="@string/bookmark"
+        android:orderInCategory="85"
+        android:icon="@drawable/ic_bookmark_outline_white_24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_time_change"
         android:title="@string/action_time_change"
         android:orderInCategory="90"
