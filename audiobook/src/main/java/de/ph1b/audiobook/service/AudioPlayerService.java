@@ -419,7 +419,7 @@ public class AudioPlayerService extends Service {
 
         notificationBuilder.setContent(smallViewRemote)
                 .setContentIntent(pendingIntent)
-                .setSmallIcon(R.drawable.notification)
+                .setSmallIcon(R.drawable.ic_notification)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true);
 
