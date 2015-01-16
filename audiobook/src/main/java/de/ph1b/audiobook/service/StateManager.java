@@ -8,6 +8,8 @@ import android.content.Intent;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.ph1b.audiobook.content.BookDetail;
+import de.ph1b.audiobook.content.MediaDetail;
 import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.interfaces.OnTimeChangedListener;
 import de.ph1b.audiobook.receiver.WidgetProvider;
@@ -19,6 +21,8 @@ public class StateManager {
     private final List<OnTimeChangedListener> allTimeListener = new ArrayList<>();
     private PlayerStates state = PlayerStates.IDLE;
     private int time = 0;
+    private BookDetail book;
+    private ArrayList<MediaDetail> media;
 
     private static StateManager instance;
     private final Context c;
@@ -28,6 +32,22 @@ public class StateManager {
             instance = new StateManager(c);
         }
         return instance;
+    }
+
+    public void setBook(BookDetail book) {
+        this.book = book;
+    }
+
+    public BookDetail getBook() {
+        return book;
+    }
+
+    public ArrayList<MediaDetail> getMedia() {
+        return media;
+    }
+
+    public void setMedia(ArrayList<MediaDetail> media) {
+        this.media = media;
     }
 
     private StateManager(Context c) {
