@@ -41,7 +41,7 @@
     <string name="book_add_progress_message">Por favor aguarde enquanto o livro está sendo adicionado.</string>
 
     <string name="edit_book_title">Editar livro</string>
-    <string name="popup_edit_book">Editar</string>
+    <string name="popup_edit">Editar</string>
     <string name="delete">Deletar</string>
     <string name="content_file_or_folder">Indica se é um
         arquivo ou uma pasta</string>

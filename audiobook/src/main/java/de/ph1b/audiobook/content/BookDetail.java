@@ -18,11 +18,11 @@ public class BookDetail implements Parcelable {
             return new BookDetail[0];
         }
     };
-    private int id;
-    private int sortId;
+    private long id;
+    private long sortId;
     private String name;
     private String cover;
-    private int currentMediaId;
+    private long currentMediaId;
     private int currentMediaPosition;
 
 
@@ -31,12 +31,12 @@ public class BookDetail implements Parcelable {
     }
 
     private BookDetail(Parcel pc) {
-        id = pc.readInt();
+        id = pc.readLong();
         name = pc.readString();
         cover = pc.readString();
-        currentMediaId = pc.readInt();
+        currentMediaId = pc.readLong();
         currentMediaPosition = pc.readInt();
-        sortId = pc.readInt();
+        sortId = pc.readLong();
     }
 
     /**
@@ -64,7 +64,7 @@ public class BookDetail implements Parcelable {
      */
     @Override
     public int hashCode() {
-        return id;
+        return (int) id;
     }
 
     @Override
@@ -72,19 +72,19 @@ public class BookDetail implements Parcelable {
         return "BookId: " + id;
     }
 
-    public int getSortId() {
+    public long getSortId() {
         return sortId;
     }
 
-    public void setSortId(int sortId) {
+    public void setSortId(long sortId) {
         this.sortId = sortId;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -104,11 +104,11 @@ public class BookDetail implements Parcelable {
         this.cover = cover;
     }
 
-    public int getCurrentMediaId() {
+    public long getCurrentMediaId() {
         return currentMediaId;
     }
 
-    public void setCurrentMediaId(int currentMediaId) {
+    public void setCurrentMediaId(long currentMediaId) {
         this.currentMediaId = currentMediaId;
     }
 
@@ -127,11 +127,11 @@ public class BookDetail implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel destination, int flags) {
-        destination.writeInt(id);
+        destination.writeLong(id);
         destination.writeString(name);
         destination.writeString(cover);
-        destination.writeInt(currentMediaId);
+        destination.writeLong(currentMediaId);
         destination.writeInt(currentMediaPosition);
-        destination.writeInt(sortId);
+        destination.writeLong(sortId);
     }
 }

@@ -190,6 +190,13 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
 
     private StateManager stateManager;
 
+    private String formatTime(int ms) {
+        String h = String.valueOf(TimeUnit.MILLISECONDS.toHours(ms));
+        String m = String.format("%02d", (TimeUnit.MILLISECONDS.toMinutes(ms) % 60));
+        String s = String.format("%02d", (TimeUnit.MILLISECONDS.toSeconds(ms) % 60));
+        return h + ":" + m + ":" + s;
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -229,7 +236,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
 
         stateManager = StateManager.getInstance(getActivity());
 
-        int bookId = i.getIntExtra(AudioPlayerService.GUI_BOOK_ID, -1);
+        long bookId = i.getLongExtra(AudioPlayerService.GUI_BOOK_ID, -1);
         book = db.getBook(bookId);
         if (book == null) {
             noMediaFound();
@@ -264,7 +271,6 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -383,7 +389,6 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
         }
     }
 
-
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         MenuItem timeLapseItem = menu.findItem(R.id.action_time_lapse);
@@ -400,13 +405,6 @@ public class BookPlayFragment extends Fragment implements OnClickListener {
             }
         }
         super.onPrepareOptionsMenu(menu);
-    }
-
-    private String formatTime(int ms) {
-        String h = String.valueOf(TimeUnit.MILLISECONDS.toHours(ms));
-        String m = String.format("%02d", (TimeUnit.MILLISECONDS.toMinutes(ms) % 60));
-        String s = String.format("%02d", (TimeUnit.MILLISECONDS.toSeconds(ms) % 60));
-        return h + ":" + m + ":" + s;
     }
 
     @Override

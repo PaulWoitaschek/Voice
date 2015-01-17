@@ -41,7 +41,7 @@
             android:paddingLeft="8dp"
             android:layout_gravity="center_vertical"
             android:src="@drawable/ic_more_vert_white_24dp"
-            android:contentDescription="@string/popup_edit_book"
+            android:contentDescription="@string/popup_edit"
             tools:ignore="RtlHardcoded,RtlSymmetry" />
 
     </LinearLayout>

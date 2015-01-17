@@ -41,7 +41,7 @@
     <string name="book_add_progress_message">Chvíli strpení, než bude kniha přidána.</string>
 
     <string name="edit_book_title">Upravit knihu</string>
-    <string name="popup_edit_book">Upravit</string>
+    <string name="popup_edit">Upravit</string>
     <string name="delete">Smazat</string>
     <string name="content_file_or_folder">Ukazuje jestli jde o
         soubor nebo adresář</string>

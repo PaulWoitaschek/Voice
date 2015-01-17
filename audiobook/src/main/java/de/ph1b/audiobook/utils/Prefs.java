@@ -6,47 +6,62 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.BookChoose;
 
 public class Prefs {
 
     private static final String PREF_KEY_PLAYBACK_SPEED = "playbackSpeed";
+    private static final String PREF_KEY_CURRENT_BOOK = "currentBook";
+    private final Context c;
+    private final SharedPreferences sp;
 
-    private static SharedPreferences getSP(Context c) {
-        return PreferenceManager.getDefaultSharedPreferences(c);
+    public Prefs(Context c) {
+        this.c = c;
+        sp = PreferenceManager.getDefaultSharedPreferences(c);
     }
 
-    private static SharedPreferences.Editor getED(Context c) {
-        return getSP(c).edit();
+    public long getCurrentBookId() {
+        return sp.getLong(PREF_KEY_CURRENT_BOOK, -1);
     }
 
-    public static int getCurrentBookId(Context c) {
-        return getSP(c).getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
-    }
-
-    public static void setCurrentBookId(int bookId, Context c) {
-        SharedPreferences.Editor editor = getED(c);
-        editor.putInt(BookChoose.SHARED_PREFS_CURRENT, bookId);
+    public void setCurrentBookId(long bookId) {
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putLong(PREF_KEY_CURRENT_BOOK, bookId);
         editor.apply();
     }
 
-    public static float getPlaybackSpeed(Context c) {
-        return getSP(c).getFloat(PREF_KEY_PLAYBACK_SPEED, 1);
+    public float getPlaybackSpeed() {
+        return sp.getFloat(PREF_KEY_PLAYBACK_SPEED, 1);
     }
 
-    public static void setPlaybackSpeed(float playbackSpeed, Context c) {
-        SharedPreferences.Editor editor = getED(c);
+    public void setPlaybackSpeed(float playbackSpeed) {
+        SharedPreferences.Editor editor = sp.edit();
         editor.putFloat(PREF_KEY_PLAYBACK_SPEED, playbackSpeed);
         editor.apply();
     }
 
-    public static String getAudiobookFolder(Context c) {
-        return getSP(c).getString(c.getString(R.string.pref_key_root_folder), null);
+    public String getAudiobookFolder() {
+        return sp.getString(c.getString(R.string.pref_key_root_folder), null);
     }
 
-    public static void setAudiobookFolder(String folder, Context c) {
-        SharedPreferences.Editor editor = getED(c);
+    public void setAudiobookFolder(String folder) {
+        SharedPreferences.Editor editor = sp.edit();
         editor.putString(c.getString(R.string.pref_key_root_folder), folder);
         editor.apply();
+    }
+
+    public boolean stopAfterCurrentTrack() {
+        return sp.getBoolean(c.getString(R.string.pref_key_track_to_end), false);
+    }
+
+    public int getSleepTime() {
+        return sp.getInt(c.getString(R.string.pref_key_sleep_time), 20);
+    }
+
+    public int getSeekTime() {
+        return sp.getInt(c.getString(R.string.pref_key_seek_time), 20) * 1000;
+    }
+
+    public boolean resumeOnReplug() {
+        return sp.getBoolean(c.getString(R.string.pref_key_resume_on_replug), true);
     }
 }

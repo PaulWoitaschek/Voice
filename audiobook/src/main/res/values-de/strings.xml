@@ -42,7 +42,7 @@
 
     <string name="edit_book_title">Buch bearbeiten</string>
     <string name="delete">Löschen</string>
-    <string name="popup_edit_book">Bearbeiten</string>
+    <string name="popup_edit">Bearbeiten</string>
     <string name="content_file_or_folder">Zeit an, ob es sich um eine Datei oder einen Ordner
         handelt</string>
     <string name="rewind">Zurückspulen</string>
@@ -68,4 +68,10 @@
     <string  name="choose">WÄHLEN</string>
     <string  name="abort">ABBRECHEN</string>
     <string name="pref_root_folder_title">Hörbuch Ordner</string>
+    <string name="bookmark">Lesezeichen</string>
+    <string name="bookmark_delete_title">Möchten Sie dieses Lesezeichen wirklich löschen?</string>
+    <string name="bookmark_edit_title">Lesezeichen bearbeiten</string>
+    <string name="bookmark_exists">Es existiert bereits ein Lesezeichen an dieser Stelle.</string>
+    <string name="acc_bookmark_title_edit">Verändert den Lesezeichentitel.</string>
+    <string name="acc_button_add_bookmark">Fügt an der aktuellen Stelle ein Lesezeichen hinzu.</string>
 </resources>

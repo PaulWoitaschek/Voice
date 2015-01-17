@@ -31,12 +31,12 @@ import de.ph1b.audiobook.utils.ImageHelper;
 
 public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> {
 
+    final ImageCache imageCache;
     private final ArrayList<BookDetail> data;
     private final DataBaseHelper db;
     private final Context c;
     private final OnItemClickListener onItemClickListener;
     private final ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
-    final ImageCache imageCache;
     private final OnCoverChangedListener onCoverChangedListener;
 
 
@@ -57,7 +57,7 @@ public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.Vie
         for (int position = 0; position < data.size(); position++) {
             if (data.get(position).getId() == book.getId()) {
                 data.set(position, book);
-                imageCache.remove(book.getId());
+                imageCache.remove((int) book.getId());
                 notifyItemChanged(position);
                 singleThreadExecutor.execute(new Runnable() {
                     @Override
@@ -131,8 +131,8 @@ public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.Vie
             Log.d("madapt", "swapInData:" + from + "/" + to);
         final BookDetail oldBook = data.get(from);
         final BookDetail newBook = data.get(to);
-        int oldSortId = oldBook.getSortId();
-        int newSortId = newBook.getSortId();
+        long oldSortId = oldBook.getSortId();
+        long newSortId = newBook.getSortId();
         oldBook.setSortId(newSortId);
         newBook.setSortId(oldSortId);
         data.set(from, newBook);
@@ -155,7 +155,7 @@ public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.Vie
         viewHolder.titleView.setText(name);
         viewHolder.titleView.setActivated(true);
 
-        Bitmap cached = imageCache.get(b.getId());
+        Bitmap cached = imageCache.get((int) b.getId());
         if (cached != null) {
             if (BuildConfig.DEBUG) Log.d("madapt", "cached bitmap! " + b.getId());
             viewHolder.coverView.setImageBitmap(cached);
@@ -257,7 +257,7 @@ public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.Vie
                 bitmap = ImageHelper.genCapital(book.getName(), c, ImageHelper.TYPE_MEDIUM);
 
             //save bitmap to lru cache
-            imageCache.put(book.getId(), bitmap);
+            imageCache.put((int) book.getId(), bitmap);
 
             return bitmap;
         }
@@ -266,7 +266,7 @@ public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.Vie
         protected void onPostExecute(Bitmap bitmap) {
             if (bitmap != null) {
                 ImageView imageView = weakReference.get();
-                if (imageView != null && (Integer) imageView.getTag() == book.getId()) {
+                if (imageView != null && (Long) imageView.getTag() == book.getId()) {
                     imageView.setImageBitmap(bitmap);
                     onCoverChangedListener.onCoverChanged();
                 }

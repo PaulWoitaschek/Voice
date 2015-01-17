@@ -32,21 +32,90 @@ import de.ph1b.audiobook.utils.Prefs;
 
 public class FolderChooseFragment extends Fragment {
 
+    private static final String CURRENT_FOLDER_NAME = "currentFolderName";
+    private Prefs prefs;
     private ArrayList<File> rootDirs;
     private File chosenFolder = null;
     private ArrayList<File> currentFolderContent;
     private TextView currentFolderName;
     private Button chooseButton;
-
-    private static final String CURRENT_FOLDER_NAME = "currentFolderName";
-
     private FolderAdapter adapter;
+
+    public static ArrayList<File> getStorageDirectories() {
+        Pattern DIR_SEPARATOR = Pattern.compile("/");
+
+        // Final set of paths
+        final Set<String> rv = new HashSet<>();
+        // Primary physical SD-CARD (not emulated)
+        final String rawExternalStorage = System.getenv("EXTERNAL_STORAGE");
+        // All Secondary SD-CARDs (all exclude primary) separated by ":"
+        final String rawSecondaryStoragesStr = System.getenv("SECONDARY_STORAGE");
+        // Primary emulated SD-CARD
+        final String rawEmulatedStorageTarget = System.getenv("EMULATED_STORAGE_TARGET");
+        if (TextUtils.isEmpty(rawEmulatedStorageTarget)) {
+            // Device has physical external storage; use plain paths.
+            if (TextUtils.isEmpty(rawExternalStorage)) {
+                // EXTERNAL_STORAGE undefined; falling back to default.
+                rv.add("/storage/sdcard0");
+            } else {
+                rv.add(rawExternalStorage);
+            }
+        } else {
+            // Device has emulated storage; external storage paths should have
+            // userId burned into them.
+            final String rawUserId;
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                rawUserId = "";
+            } else {
+                final String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+                final String[] folders = DIR_SEPARATOR.split(path);
+                final String lastFolder = folders[folders.length - 1];
+                boolean isDigit = false;
+                try {
+                    //noinspection ResultOfMethodCallIgnored
+                    Integer.valueOf(lastFolder);
+                    isDigit = true;
+                } catch (NumberFormatException ignored) {
+                }
+                rawUserId = isDigit ? lastFolder : "";
+            }
+            // /storage/emulated/0[1,2,...]
+            if (TextUtils.isEmpty(rawUserId)) {
+                rv.add(rawEmulatedStorageTarget);
+            } else {
+                rv.add(rawEmulatedStorageTarget + File.separator + rawUserId);
+            }
+        }
+        // Add all secondary storages
+        if (!TextUtils.isEmpty(rawSecondaryStoragesStr)) {
+            // All Secondary SD-CARDs splited into array
+            final String[] rawSecondaryStorages = rawSecondaryStoragesStr.split(File.pathSeparator);
+            Collections.addAll(rv, rawSecondaryStorages);
+        }
+        rv.add("/storage/extSdCard");
+        rv.add(Environment.getExternalStorageDirectory().getAbsolutePath());
+        if (BuildConfig.DEBUG) {
+            rv.add("/storage/sdcard0/Audiobooks");
+            rv.add("/mnt/shared");
+        }
+        rv.add("/storage/emulated/0");
+        rv.add("/storage/sdcard1");
+        ArrayList<File> paths = new ArrayList<>();
+        for (String s : rv) {
+            File f = new File(s);
+            if (f.exists() && f.isDirectory() && !paths.contains(f) && f.canRead() && f.listFiles().length > 0)
+                paths.add(f);
+        }
+        Collections.sort(paths, new NaturalOrderComparator());
+        return paths;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         rootDirs = getStorageDirectories();
+        prefs = new Prefs(getActivity());
         currentFolderContent = new ArrayList<>(rootDirs);
         adapter = new FolderAdapter(getActivity(), currentFolderContent);
     }
@@ -123,7 +192,7 @@ public class FolderChooseFragment extends Fragment {
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Prefs.setAudiobookFolder(chosenFolder.getAbsolutePath(), getActivity());
+                prefs.setAudiobookFolder(chosenFolder.getAbsolutePath());
             }
         });
 
@@ -148,76 +217,6 @@ public class FolderChooseFragment extends Fragment {
 
     private void setButtonEnabledDisabled() {
         chooseButton.setEnabled(chosenFolder != null);
-    }
-
-
-    public static ArrayList<File> getStorageDirectories() {
-        Pattern DIR_SEPARATOR = Pattern.compile("/");
-
-        // Final set of paths
-        final Set<String> rv = new HashSet<>();
-        // Primary physical SD-CARD (not emulated)
-        final String rawExternalStorage = System.getenv("EXTERNAL_STORAGE");
-        // All Secondary SD-CARDs (all exclude primary) separated by ":"
-        final String rawSecondaryStoragesStr = System.getenv("SECONDARY_STORAGE");
-        // Primary emulated SD-CARD
-        final String rawEmulatedStorageTarget = System.getenv("EMULATED_STORAGE_TARGET");
-        if (TextUtils.isEmpty(rawEmulatedStorageTarget)) {
-            // Device has physical external storage; use plain paths.
-            if (TextUtils.isEmpty(rawExternalStorage)) {
-                // EXTERNAL_STORAGE undefined; falling back to default.
-                rv.add("/storage/sdcard0");
-            } else {
-                rv.add(rawExternalStorage);
-            }
-        } else {
-            // Device has emulated storage; external storage paths should have
-            // userId burned into them.
-            final String rawUserId;
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                rawUserId = "";
-            } else {
-                final String path = Environment.getExternalStorageDirectory().getAbsolutePath();
-                final String[] folders = DIR_SEPARATOR.split(path);
-                final String lastFolder = folders[folders.length - 1];
-                boolean isDigit = false;
-                try {
-                    //noinspection ResultOfMethodCallIgnored
-                    Integer.valueOf(lastFolder);
-                    isDigit = true;
-                } catch (NumberFormatException ignored) {
-                }
-                rawUserId = isDigit ? lastFolder : "";
-            }
-            // /storage/emulated/0[1,2,...]
-            if (TextUtils.isEmpty(rawUserId)) {
-                rv.add(rawEmulatedStorageTarget);
-            } else {
-                rv.add(rawEmulatedStorageTarget + File.separator + rawUserId);
-            }
-        }
-        // Add all secondary storages
-        if (!TextUtils.isEmpty(rawSecondaryStoragesStr)) {
-            // All Secondary SD-CARDs splited into array
-            final String[] rawSecondaryStorages = rawSecondaryStoragesStr.split(File.pathSeparator);
-            Collections.addAll(rv, rawSecondaryStorages);
-        }
-        rv.add("/storage/extSdCard");
-        rv.add(Environment.getExternalStorageDirectory().getAbsolutePath());
-        if (BuildConfig.DEBUG) {
-            rv.add("/storage/sdcard0/Audiobooks");
-            rv.add("/mnt/shared");
-        }
-        rv.add("/storage/emulated/0");
-        rv.add("/storage/sdcard1");
-        ArrayList<File> paths = new ArrayList<>();
-        for (String s : rv) {
-            File f = new File(s);
-            if (f.exists() && f.isDirectory() && !paths.contains(f) && f.canRead() && f.listFiles().length > 0)
-                paths.add(f);
-        }
-        Collections.sort(paths, new NaturalOrderComparator());
-        return paths;
     }
 
     private ArrayList<File> getFilesFromFolder(File file) {

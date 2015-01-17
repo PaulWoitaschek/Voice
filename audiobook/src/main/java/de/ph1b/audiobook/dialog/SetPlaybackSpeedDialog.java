@@ -26,6 +26,7 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
     private static final float minSpeed = 0.5f;
     private static final float maxSpeed = 2f;
     private float speed;
+    private Prefs prefs;
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -38,7 +39,9 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
         SeekBar seekBar = (SeekBar) v.findViewById(R.id.seekBar);
         final TextView textView = (TextView) v.findViewById(R.id.textView);
 
-        speed = Prefs.getPlaybackSpeed(getActivity());
+        prefs = new Prefs(getActivity());
+
+        speed = prefs.getPlaybackSpeed();
         textView.setText(formatTime(speed));
 
         int seekMaxSteps = (int) ((maxSpeed - minSpeed) / speedDelta);
@@ -75,7 +78,7 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
         builder.setPositiveButton(getString(R.string.dialog_confirm), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Prefs.setPlaybackSpeed(speed, getActivity());
+                prefs.setPlaybackSpeed(speed);
                 new Controls(getActivity()).informSpeedChanged();
             }
         });

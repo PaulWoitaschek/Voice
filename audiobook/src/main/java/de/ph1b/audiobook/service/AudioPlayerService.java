@@ -10,7 +10,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
@@ -20,7 +19,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.media.MediaMetadataCompat;
@@ -32,7 +30,6 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -41,7 +38,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.BookChoose;
 import de.ph1b.audiobook.activity.BookPlay;
 import de.ph1b.audiobook.content.BookDetail;
 import de.ph1b.audiobook.content.DataBaseHelper;
@@ -60,18 +56,15 @@ public class AudioPlayerService extends Service {
     public static final String GUI_BOOK_ID = TAG + ".GUI_BOOK_ID";
     public static final String GUI_MEDIA = TAG + ".GUI_MEDIA";
     private final IBinder mBinder = new LocalBinder();
-
     private final ReentrantLock playerLock = new ReentrantLock();
     private final ScheduledExecutorService sandMan = Executors.newSingleThreadScheduledExecutor();
+    private Prefs prefs;
     private StateManager stateManager;
     private DataBaseHelper db;
     private LocalBroadcastManager bcm;
     private AudioManager audioManager;
     private MediaPlayerCompat mediaPlayer;
     private volatile boolean pauseBecauseHeadset = false;
-
-    private PlaybackStateCompat.Builder stateBuilder;
-
     /**
      * If audio is becoming noisy, pause the player.
      */
@@ -96,8 +89,7 @@ public class AudioPlayerService extends Service {
                     if (headsetState != -1) {
                         if (headsetState == CONNECTED) {
                             if (pauseBecauseHeadset) {
-                                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-                                boolean resumeOnReplug = sharedPref.getBoolean(context.getString(R.string.pref_key_resume_on_replug), true);
+                                boolean resumeOnReplug = prefs.resumeOnReplug();
                                 if (resumeOnReplug)
                                     play();
                                 pauseBecauseHeadset = false;
@@ -108,6 +100,7 @@ public class AudioPlayerService extends Service {
             }
         }
     };
+    private PlaybackStateCompat.Builder stateBuilder;
     private NotificationCompat.Builder notificationBuilder = null;
     private volatile boolean pauseBecauseLossTransient = false;
     private final AudioManager.OnAudioFocusChangeListener audioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
@@ -165,7 +158,7 @@ public class AudioPlayerService extends Service {
     private OnSleepStateChangedListener onSleepStateChangedListener;
 
     private void setPlaybackSpeed() {
-        float playbackSpeed = Prefs.getPlaybackSpeed(this);
+        float playbackSpeed = prefs.getPlaybackSpeed();
         mediaPlayer.setPlaybackSpeed(playbackSpeed);
     }
 
@@ -203,6 +196,7 @@ public class AudioPlayerService extends Service {
 
         bcm = LocalBroadcastManager.getInstance(this);
         db = DataBaseHelper.getInstance(this);
+        prefs = new Prefs(this);
         mediaPlayer = new MediaPlayerCompat(this);
         stateManager = StateManager.getInstance(this);
         stateManager.setState(PlayerStates.IDLE);
@@ -285,7 +279,7 @@ public class AudioPlayerService extends Service {
         }
     }
 
-    private void initBook(int bookId) {
+    private void initBook(long bookId) {
         if (BuildConfig.DEBUG) Log.d(TAG, "Initializing book with ID: " + bookId);
         stateManager.setBook(db.getBook(bookId));
         stateManager.setMedia(db.getMediaFromBook(bookId));
@@ -299,8 +293,7 @@ public class AudioPlayerService extends Service {
         super.onStartCommand(intent, flags, startId);
 
         Log.d(TAG, "onStartCommand was called!");
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        int defaultBookId = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
+        long defaultBookId = prefs.getCurrentBookId();
 
         /**
          * If intent is <code>null</code>, it means, that the service has been started because of
@@ -333,6 +326,13 @@ public class AudioPlayerService extends Service {
                         case Controls.CONTROL_INFORM_SPEED_CHANGED:
                             setPlaybackSpeed();
                             break;
+                        case Controls.CONTROL_CHANGE_BOOK_POSITION:
+                            long mediaId = intent.getLongExtra(Controls.CONTROL_CHANGE_BOOK_POSITION_EXTRA_MEDIA_ID, -1);
+                            int position = intent.getIntExtra(Controls.CONTROL_CHANGE_BOOK_POSITION_EXTRA_MEDIA_POSITION, 0);
+                            if (mediaId != -1) {
+                                changeBookPosition(mediaId);
+                                changePosition(position);
+                            }
                         default:
                             break;
                     }
@@ -348,10 +348,7 @@ public class AudioPlayerService extends Service {
     }
 
     private Notification getNotification() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putInt(BookChoose.SHARED_PREFS_CURRENT, stateManager.getBook().getId());
-        editor.apply();
+        prefs.setCurrentBookId(stateManager.getBook().getId());
 
         RemoteViews smallViewRemote = new RemoteViews(getPackageName(), R.layout.notification_small);
         RemoteViews bigViewRemote = new RemoteViews(getPackageName(), R.layout.notification_big);
@@ -472,7 +469,7 @@ public class AudioPlayerService extends Service {
         try {
             int currentIndex = stateManager.getMedia().indexOf(media);
             if (currentIndex > 0) {
-                int newMediaId = stateManager.getMedia().get(currentIndex - 1).getId();
+                long newMediaId = stateManager.getMedia().get(currentIndex - 1).getId();
                 stateManager.getBook().setCurrentMediaId(newMediaId);
                 stateManager.getBook().setCurrentMediaPosition(0);
                 updateBookAsync(stateManager.getBook());
@@ -497,7 +494,7 @@ public class AudioPlayerService extends Service {
         try {
             int currentIndex = stateManager.getMedia().indexOf(media);
             if (currentIndex + 1 < stateManager.getMedia().size()) {
-                int newMediaId = stateManager.getMedia().get(currentIndex + 1).getId();
+                long newMediaId = stateManager.getMedia().get(currentIndex + 1).getId();
                 stateManager.getBook().setCurrentMediaId(newMediaId);
                 stateManager.getBook().setCurrentMediaPosition(0);
                 updateBookAsync(stateManager.getBook());
@@ -519,7 +516,7 @@ public class AudioPlayerService extends Service {
      *
      * @param mediaId The mediaId to be prepared for playback
      */
-    private void prepare(int mediaId) {
+    private void prepare(long mediaId) {
         if (BuildConfig.DEBUG) Log.d(TAG, "prepare() mediaId: " + mediaId);
         playerLock.lock();
         try {
@@ -711,9 +708,8 @@ public class AudioPlayerService extends Service {
             Toast sleepToast = Toast.makeText(this, R.string.sleep_timer_canceled, Toast.LENGTH_SHORT);
             sleepToast.show();
         } else {
-            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-            int minutes = sp.getInt(getString(R.string.pref_key_sleep_time), 20);
-            stopAfterCurrentTrack = sp.getBoolean(getString(R.string.pref_key_track_to_end), false);
+            int minutes = prefs.getSleepTime();
+            stopAfterCurrentTrack = prefs.stopAfterCurrentTrack();
 
             String message = getString(R.string.sleep_timer_started) + minutes + " " + getString(R.string.minutes);
             Toast sleepToast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
@@ -754,8 +750,7 @@ public class AudioPlayerService extends Service {
             playerLock.lock();
             try {
                 int position = mediaPlayer.getCurrentPosition();
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-                int changeTimeAmount = sharedPref.getInt(getString(R.string.pref_key_seek_time), 20) * 1000;
+                int changeTimeAmount = prefs.getSeekTime();
                 int newPosition = position + changeTimeAmount;
                 if (newPosition > 0) {
                     if (newPosition > media.getDuration())
@@ -781,8 +776,7 @@ public class AudioPlayerService extends Service {
             playerLock.lock();
             try {
                 int position = mediaPlayer.getCurrentPosition();
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-                int changeTimeAmount = sharedPref.getInt(getString(R.string.pref_key_seek_time), 20) * 1000;
+                int changeTimeAmount = prefs.getSeekTime();
                 int newPosition = position - changeTimeAmount;
                 if (newPosition < 0)
                     newPosition = 0;
@@ -802,7 +796,7 @@ public class AudioPlayerService extends Service {
      *
      * @param mediaId The new chosen mediaId
      */
-    public void changeBookPosition(int mediaId) {
+    public void changeBookPosition(long mediaId) {
         if (mediaId != stateManager.getBook().getCurrentMediaId()) {
             boolean wasPlaying = (stateManager.getState() == PlayerStates.STARTED);
             prepare(mediaId);

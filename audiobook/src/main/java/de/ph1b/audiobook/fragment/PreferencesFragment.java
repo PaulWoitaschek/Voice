@@ -19,7 +19,6 @@ import de.ph1b.audiobook.utils.Prefs;
 public class PreferencesFragment extends PreferenceFragment {
 
 
-
     private final SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
@@ -51,7 +50,7 @@ public class PreferencesFragment extends PreferenceFragment {
 
         Preference folderPreference = findPreference(getString(R.string.pref_key_root_folder));
         if (folderPreference != null) {
-            String preferenceSummary = Prefs.getAudiobookFolder(getActivity());
+            String preferenceSummary = new Prefs(getActivity()).getAudiobookFolder();
             if (preferenceSummary != null) {
                 folderPreference.setSummary(preferenceSummary);
             }

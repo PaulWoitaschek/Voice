@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -44,7 +43,6 @@ import java.util.ArrayList;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.BookChoose;
 import de.ph1b.audiobook.activity.BookPlay;
 import de.ph1b.audiobook.activity.FilesChoose;
 import de.ph1b.audiobook.activity.Settings;
@@ -61,6 +59,7 @@ import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.service.StateManager;
 import de.ph1b.audiobook.utils.CustomOnSimpleGestureListener;
 import de.ph1b.audiobook.utils.ImageHelper;
+import de.ph1b.audiobook.utils.Prefs;
 
 
 public class BookChooseFragment extends Fragment implements View.OnClickListener, EditBook.OnEditBookFinished, RecyclerView.OnItemTouchListener {
@@ -113,6 +112,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
             mBound = false;
         }
     };
+    private Prefs prefs;
     private GestureDetectorCompat detector;
     private BookDetail bookToEdit;
     private float scrollBy = 0;
@@ -158,6 +158,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         stateManager = StateManager.getInstance(getActivity());
 
         db = DataBaseHelper.getInstance(getActivity());
+        prefs = new Prefs(getActivity());
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
     }
 
@@ -181,12 +182,9 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
             @Override
             public void onCoverClicked(int position) {
                 BookDetail book = adapt.getItem(position);
-                int bookId = book.getId();
+                long bookId = book.getId();
 
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putInt(BookChoose.SHARED_PREFS_CURRENT, bookId);
-                editor.apply();
+                prefs.setCurrentBookId(bookId);
 
                 Intent i = new Intent(getActivity(), BookPlay.class);
                 if (BuildConfig.DEBUG)
@@ -234,8 +232,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         //setting visibility of start widget at bottom to gone if book is gone
-                                        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                                        int currentBookId = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
+                                        long currentBookId = prefs.getCurrentBookId();
                                         if (adapt.getItem(position).getId() == currentBookId)
                                             current.setVisibility(View.GONE);
 
@@ -363,8 +360,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     }
 
     private void initPlayerWidget() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        int currentBookPosition = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
+        long currentBookPosition = prefs.getCurrentBookId();
 
         boolean widgetInitialized = false;
         for (final BookDetail b : adapt.getData()) {
@@ -479,8 +475,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         new Thread(new Runnable() {
             @Override
             public void run() {
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                int currentBookId = settings.getInt(BookChoose.SHARED_PREFS_CURRENT, -1);
+                long currentBookId = prefs.getCurrentBookId();
                 for (BookDetail b : adapt.getData()) {
                     if (b.getId() == currentBookId) {
                         Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);

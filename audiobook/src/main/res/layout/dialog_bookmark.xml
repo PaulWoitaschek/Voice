@@ -1,29 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_marginLeft="@dimen/horizontal_margin"
-    android:layout_marginRight="@dimen/horizontal_margin"
-    android:layout_marginTop="@dimen/vertical_margin"
-    android:layout_marginBottom="@dimen/vertical_margin"
+    android:paddingLeft="@dimen/horizontal_margin"
+    android:paddingRight="@dimen/horizontal_margin"
+    android:paddingTop="@dimen/vertical_margin"
+    android:paddingBottom="@dimen/vertical_margin"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.melnykov.fab.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_margin="@dimen/horizontal_margin"
-        android:src="@drawable/ic_add_white_24dp"
-        fab:fab_colorNormal="@color/primary"
-        fab:fab_colorPressed="@color/primaryDark"
-        fab:fab_type="mini"
-        fab:fab_shadow="false" />
+        android:gravity="center_vertical"
+        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="horizontal">
 
-    <ListView
-        android:id="@+id/list1"
+        <EditText
+            android:id="@+id/edit1"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:hint="@string/acc_bookmark_title_edit"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/add"
+            android:src="@drawable/ic_add_circle_outline_grey600_36dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/acc_button_add_bookmark" />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</FrameLayout>
+
+</LinearLayout>

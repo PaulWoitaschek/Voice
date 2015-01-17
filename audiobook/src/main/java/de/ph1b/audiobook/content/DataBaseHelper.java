@@ -2,10 +2,12 @@ package de.ph1b.audiobook.content;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.BitmapFactory;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.io.File;
@@ -17,23 +19,17 @@ import de.ph1b.audiobook.utils.ImageHelper;
 public class DataBaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "audioBookDB";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     private static final String TABLE_MEDIA = "TABLE_MEDIA";
     private static final String TABLE_BOOKS = "TABLE_BOOKS";
+    private static final String TABLE_BOOKMARKS = "TABLE_BOOKMARKS";
 
     private static final String KEY_MEDIA_ID = "KEY_MEDIA_ID";
     private static final String KEY_MEDIA_PATH = "KEY_MEDIA_PATH";
     private static final String KEY_MEDIA_NAME = "KEY_MEDIA_NAME";
     private static final String KEY_MEDIA_DURATION = "KEY_MEDIA_DURATION";
     private static final String KEY_MEDIA_BOOK_ID = "KEY_MEDIA_BOOK_ID";
-
-    private final String CREATE_MEDIA_TABLE = "CREATE TABLE " + TABLE_MEDIA + " ( " +
-            KEY_MEDIA_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            KEY_MEDIA_PATH + " TEXT NOT NULL, " +
-            KEY_MEDIA_NAME + " TEXT NOT NULL, " +
-            KEY_MEDIA_DURATION + " INTEGER NOT NULL, " +
-            KEY_MEDIA_BOOK_ID + " INTEGER NOT NULL)";
 
     private static final String KEY_BOOK_ID = "KEY_BOOK_ID";
     private static final String KEY_BOOK_NAME = "KEY_BOOK_NAME";
@@ -42,13 +38,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String KEY_BOOK_CURRENT_MEDIA_POSITION = "KEY_BOOK_CURRENT_MEDIA_POSITION";
     private static final String KEY_BOOK_SORT_ID = "KEY_BOOK_SORT_ID";
 
-    private final String CREATE_BOOK_TABLE = "CREATE TABLE " + TABLE_BOOKS + " ( " +
-            KEY_BOOK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            KEY_BOOK_NAME + " TEXT NOT NULL, " +
-            KEY_BOOK_COVER + " TEXT, " +
-            KEY_BOOK_CURRENT_MEDIA_ID + " INTEGER, " +
-            KEY_BOOK_CURRENT_MEDIA_POSITION + " INTEGER, " +
-            KEY_BOOK_SORT_ID + " INTEGER)";
+    private static final String KEY_BOOKMARK_ID = "KEY_BOOKMARK_ID";
+    private static final String KEY_BOOKMARK_POSITION = "KEY_BOOKMARK_POSITION";
+    private static final String KEY_BOOKMARK_TITLE = "KEY_BOOKMARK_TITLE";
 
     private static DataBaseHelper instance;
     private final Context c;
@@ -68,12 +60,49 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.beginTransaction();
         try {
+            String CREATE_MEDIA_TABLE = "CREATE TABLE " + TABLE_MEDIA + " ( " +
+                    KEY_MEDIA_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    KEY_MEDIA_PATH + " TEXT NOT NULL, " +
+                    KEY_MEDIA_NAME + " TEXT NOT NULL, " +
+                    KEY_MEDIA_DURATION + " INTEGER NOT NULL, " +
+                    KEY_MEDIA_BOOK_ID + " INTEGER NOT NULL)";
             db.execSQL(CREATE_MEDIA_TABLE);
+            String CREATE_BOOK_TABLE = "CREATE TABLE " + TABLE_BOOKS + " ( " +
+                    KEY_BOOK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    KEY_BOOK_NAME + " TEXT NOT NULL, " +
+                    KEY_BOOK_COVER + " TEXT, " +
+                    KEY_BOOK_CURRENT_MEDIA_ID + " INTEGER, " +
+                    KEY_BOOK_CURRENT_MEDIA_POSITION + " INTEGER, " +
+                    KEY_BOOK_SORT_ID + " INTEGER)";
             db.execSQL(CREATE_BOOK_TABLE);
+            String CREATE_BOOKMARK_TABLE = "CREATE TABLE " + TABLE_BOOKMARKS + " ( " +
+                    KEY_BOOKMARK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    KEY_BOOKMARK_TITLE + " TEXT NOT NULL, " +
+                    KEY_BOOKMARK_POSITION + " INTEGER NOT NULL, " +
+                    KEY_BOOK_ID + " INTEGER NOT NULL, " +
+                    KEY_MEDIA_ID + " INTEGER NOT NULL)";
+            db.execSQL(CREATE_BOOKMARK_TABLE);
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
         }
+    }
+
+    private void upgradeThree(SQLiteDatabase db) {
+        String CREATE_BOOKMARK_TABLE = "CREATE TABLE " + "TABLE_BOOKMARKS" + " ( " +
+                "KEY_BOOKMARK_ID" + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "KEY_BOOKMARK_TITLE" + " TEXT NOT NULL, " +
+                "KEY_BOOKMARK_POSITION" + " INTEGER NOT NULL, " +
+                "KEY_BOOK_ID" + " INTEGER NOT NULL, " +
+                "KEY_MEDIA_ID" + " INTEGER NOT NULL)";
+
+        db.execSQL(CREATE_BOOKMARK_TABLE);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        int integerBookId = sp.getInt("de.ph1b.audiobook.activity.BookChoose.SHARED_PREFS_CURRENT", -1);
+        long longBookId = (long) integerBookId;
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putLong("currentBook", longBookId);
+        editor.apply();
     }
 
     private void upgradeOne(SQLiteDatabase db) {
@@ -179,10 +208,26 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void upgradeTwo(SQLiteDatabase db) {
         // first rename old tables
         db.execSQL("ALTER TABLE TABLE_MEDIA RENAME TO TEMP_TABLE_MEDIA");
         db.execSQL("ALTER TABLE TABLE_BOOKS RENAME TO TEMP_TABLE_BOOKS");
+
+        String CREATE_MEDIA_TABLE = "CREATE TABLE " + "TABLE_MEDIA" + " ( " +
+                "KEY_MEDIA_ID" + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "KEY_MEDIA_PATH" + " TEXT, " +
+                "KEY_MEDIA_NAME" + " TEXT, " +
+                "KEY_MEDIA_DURATION" + " INTEGER, " +
+                "KEY_MEDIA_BOOK_ID" + " INTEGER)";
+
+        String CREATE_BOOK_TABLE = "CREATE TABLE " + "TABLE_BOOKS" + " ( " +
+                "KEY_BOOK_ID" + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "KEY_BOOK_NAME" + " TEXT, " +
+                "KEY_BOOK_COVER" + " TEXT, " +
+                "KEY_BOOK_CURRENT_MEDIA_ID" + " INTEGER, " +
+                "KEY_BOOK_CURRENT_MEDIA_POSITION" + " INTEGER, " +
+                "KEY_BOOK_SORT_ID" + " INTEGER)";
 
         // new create new tables
         db.execSQL(CREATE_MEDIA_TABLE);
@@ -296,13 +341,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 case 2:
                     upgradeTwo(db);
                     break;
+                case 3:
+                    upgradeThree(db);
+                    break;
             }
             oldVersion++;
         }
     }
 
 
-    public BookDetail getBook(int id) {
+    public BookDetail getBook(long id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = null;
@@ -312,7 +360,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     KEY_BOOK_ID + " = " + id, null, null, null, null);
             if (cursor.moveToFirst()) {
                 BookDetail book = new BookDetail();
-                book.setId(Integer.parseInt(cursor.getString(0)));
+                book.setId(cursor.getLong(0));
                 book.setName(cursor.getString(1));
                 book.setCover(cursor.getString(2));
                 book.setCurrentMediaId(cursor.getInt(3));
@@ -348,6 +396,58 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public long addBookmark(Bookmark bookmark) {
+        ContentValues cv = new ContentValues();
+        cv.put(KEY_BOOKMARK_TITLE, bookmark.getTitle());
+        cv.put(KEY_BOOKMARK_POSITION, bookmark.getPosition());
+        cv.put(KEY_BOOK_ID, bookmark.getBookId());
+        cv.put(KEY_MEDIA_ID, bookmark.getMediaId());
+        SQLiteDatabase db = getWritableDatabase();
+        return db.insertOrThrow(TABLE_BOOKMARKS, null, cv);
+    }
+
+    public ArrayList<Bookmark> getAllBookmarks(long bookId) {
+        ArrayList<Bookmark> allBookmarks = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(TABLE_BOOKMARKS,
+                new String[]{KEY_BOOKMARK_TITLE, KEY_BOOKMARK_POSITION, KEY_MEDIA_ID},
+                KEY_BOOK_ID + "=?",
+                new String[]{String.valueOf(bookId)},
+                null, null, KEY_MEDIA_ID);
+        try {
+            while (cursor.moveToNext()) {
+                Bookmark bookmark = new Bookmark();
+                String title = cursor.getString(0);
+                int position = cursor.getInt(1);
+                long mediaId = cursor.getLong(2);
+
+                bookmark.setTitle(title);
+                bookmark.setPosition(position);
+                bookmark.setBookId(bookId);
+                bookmark.setMediaId(mediaId);
+                allBookmarks.add(bookmark);
+            }
+        } finally {
+            cursor.close();
+        }
+        return allBookmarks;
+    }
+
+    public void updateBookmark(Bookmark bookmark) {
+        ContentValues cv = new ContentValues();
+        cv.put(KEY_BOOKMARK_TITLE, bookmark.getTitle());
+        cv.put(KEY_BOOKMARK_POSITION, bookmark.getPosition());
+        cv.put(KEY_BOOK_ID, bookmark.getBookId());
+        cv.put(KEY_MEDIA_ID, bookmark.getMediaId());
+        SQLiteDatabase db = getWritableDatabase();
+        db.update(TABLE_BOOKMARKS, cv, KEY_BOOKMARK_ID + "=?", new String[]{String.valueOf(bookmark.getId())});
+    }
+
+    public void deleteBookmark(Bookmark bookmark) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE_BOOKMARKS, bookmark.getId() + "=?", new String[]{String.valueOf(bookmark.getId())});
+    }
+
 
     public int addBook(BookDetail book) {
         ContentValues values = new ContentValues();
@@ -368,7 +468,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList<MediaDetail> getMediaFromBook(int bookId) {
+    public ArrayList<MediaDetail> getMediaFromBook(long bookId) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = null;
@@ -381,11 +481,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             ArrayList<MediaDetail> containingMedia = new ArrayList<>();
             while (cursor.moveToNext()) {
                 MediaDetail media = new MediaDetail();
-                media.setId(Integer.parseInt(cursor.getString(0)));
+                media.setId(cursor.getLong(0));
                 media.setPath(cursor.getString(1));
                 media.setName(cursor.getString(2));
-                media.setDuration(Integer.parseInt(cursor.getString(3)));
-                media.setBookId(Integer.parseInt(cursor.getString(4)));
+                media.setDuration(cursor.getInt(3));
+                media.setBookId(cursor.getLong(4));
                 containingMedia.add(media);
             }
             return containingMedia;
@@ -408,7 +508,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     KEY_BOOK_SORT_ID);
             while (cursor.moveToNext()) {
                 BookDetail book = new BookDetail();
-                book.setId(Integer.parseInt(cursor.getString(0)));
+                book.setId(cursor.getLong(0));
                 book.setName(cursor.getString(1));
                 book.setCover(cursor.getString(2));
                 book.setCurrentMediaId(cursor.getInt(3));
@@ -444,13 +544,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
         try {
-            int bookId = book.getId();
+            long bookId = book.getId();
             db.delete(TABLE_MEDIA,
-                    KEY_MEDIA_BOOK_ID + " = " + bookId,
-                    null);
+                    KEY_MEDIA_BOOK_ID + "=?",
+                    new String[]{String.valueOf(bookId)});
             db.delete(TABLE_BOOKS,
-                    KEY_BOOK_ID + " = " + bookId,
-                    null);
+                    KEY_BOOK_ID + "=?",
+                    new String[]{String.valueOf(bookId)});
+            db.delete(TABLE_BOOKMARKS,
+                    KEY_BOOK_ID + "=?",
+                    new String[]{String.valueOf(bookId)});
             String cover = book.getCover();
             if (cover != null) {
                 File f = new File(cover);

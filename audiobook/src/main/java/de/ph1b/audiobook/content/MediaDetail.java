@@ -22,9 +22,9 @@ public class MediaDetail implements Parcelable {
     };
     private String path;
     private String name;
-    private int id;
+    private long id;
     private int duration;
-    private int bookId;
+    private long bookId;
 
 
     public MediaDetail() {
@@ -34,9 +34,9 @@ public class MediaDetail implements Parcelable {
     private MediaDetail(Parcel pc) {
         path = pc.readString();
         name = pc.readString();
-        id = pc.readInt();
+        id = pc.readLong();
         duration = pc.readInt();
-        bookId = pc.readInt();
+        bookId = pc.readLong();
     }
 
     /**
@@ -62,7 +62,7 @@ public class MediaDetail implements Parcelable {
      */
     @Override
     public int hashCode() {
-        return id;
+        return (int) id;
     }
 
     public int getDuration() {
@@ -73,11 +73,11 @@ public class MediaDetail implements Parcelable {
         this.duration = duration;
     }
 
-    public int getBookId() {
+    public long getBookId() {
         return bookId;
     }
 
-    public void setBookId(int bookId) {
+    public void setBookId(long bookId) {
         this.bookId = bookId;
     }
 
@@ -89,11 +89,11 @@ public class MediaDetail implements Parcelable {
         this.name = name;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -114,8 +114,8 @@ public class MediaDetail implements Parcelable {
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(path);
         out.writeString(name);
-        out.writeInt(id);
+        out.writeLong(id);
         out.writeInt(duration);
-        out.writeInt(bookId);
+        out.writeLong(bookId);
     }
 }

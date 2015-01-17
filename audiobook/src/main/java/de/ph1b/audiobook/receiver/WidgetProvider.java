@@ -50,7 +50,8 @@ public class WidgetProvider extends AppWidgetProvider {
 
             // get book from database
             DataBaseHelper db = DataBaseHelper.getInstance(context);
-            int bookId = Prefs.getCurrentBookId(context);
+            Prefs prefs = new Prefs(context);
+            long bookId = prefs.getCurrentBookId();
             BookDetail book = db.getBook(bookId);
 
             if (StateManager.getInstance(context).getState() == PlayerStates.STARTED) {
@@ -64,7 +65,7 @@ public class WidgetProvider extends AppWidgetProvider {
                 ArrayList<BookDetail> books = db.getAllBooks();
                 if (books.size() > 0) {
                     book = books.get(0);
-                    Prefs.setCurrentBookId(book.getId(), context);
+                    prefs.setCurrentBookId(book.getId());
                 }
             }
 

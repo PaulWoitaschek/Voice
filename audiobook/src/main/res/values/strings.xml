@@ -41,7 +41,7 @@
     <string name="book_add_progress_message">Please wait while the book is being added.</string>
 
     <string tools:ignore="MissingTranslation" name="edit_book_title">Edit book</string>
-    <string tools:ignore="MissingTranslation" name="popup_edit_book">Edit</string>
+    <string tools:ignore="MissingTranslation" name="popup_edit">Edit</string>
     <string tools:ignore="MissingTranslation" name="delete">Delete</string>
     <string tools:ignore="MissingTranslation" name="content_file_or_folder">Indicates whether its a
         file or a folder</string>
@@ -69,4 +69,9 @@
     <string tools:ignore="MissingTranslation" name="abort">ABORT</string>
     <string tools:ignore="MissingTranslation" name="pref_root_folder_title">Audiobook folder</string>
     <string tools:ignore="MissingTranslation" name="bookmark">Bookmark</string>
+    <string tools:ignore="MissingTranslation" name="bookmark_exists">There is already a bookmark at that position.</string>
+    <string tools:ignore="MissingTranslation" name="bookmark_delete_title">Do you want to delete this bookmark?</string>
+    <string tools:ignore="MissingTranslation" name="bookmark_edit_title">Edit bookmark</string>
+    <string tools:ignore="MissingTranslation" name="acc_bookmark_title_edit">Change to bookmark title</string>
+    <string tools:ignore="MissingTranslation" name="acc_button_add_bookmark">Adds a bookmark at the current position</string>
 </resources>
