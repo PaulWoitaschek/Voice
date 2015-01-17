@@ -4,15 +4,16 @@
     android:layout_width="match_parent"
     android:gravity="center_vertical"
     android:descendantFocusability="blocksDescendants"
-    android:layout_height="72dp">
+    android:layout_height="wrap_content"
+    android:minHeight="72dp">
 
     <ImageButton
         android:id="@+id/edit"
         android:src="@drawable/ic_more_vert_grey600_24dp"
         android:background="?android:attr/selectableItemBackground"
         android:layout_width="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         android:layout_height="match_parent"
         android:contentDescription="@string/popup_edit" />
 
@@ -25,7 +26,6 @@
         <TextView
             android:id="@+id/text1"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:singleLine="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

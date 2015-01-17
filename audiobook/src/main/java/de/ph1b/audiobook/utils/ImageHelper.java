@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.utils;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -11,7 +10,6 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -148,8 +146,7 @@ public class ImageHelper {
         ConnectivityManager cm =
                 (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm != null) {
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(c);
-            boolean mobileConnectionAllowed = sharedPref.getBoolean(c.getString(R.string.pref_key_cover_on_internet), false);
+            boolean mobileConnectionAllowed = new Prefs(c).mobileConnectionAllowed();
 
             NetworkInfo info = cm.getActiveNetworkInfo();
             if (info != null && info.isConnected()) {

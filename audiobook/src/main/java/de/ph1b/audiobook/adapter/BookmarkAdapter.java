@@ -87,7 +87,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
                 index = i;
             }
         }
-        holder.summary.setText("(" + index + "/" + size + ") " + formatTime(b.getPosition()) + " /"
+        holder.summary.setText("(" + (index + 1) + "/" + size + ") " + formatTime(b.getPosition()) + " /"
                 + formatTime(allMedia.get(index).getDuration()));
     }
 

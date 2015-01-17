@@ -31,7 +31,7 @@ public class FileAddingErrorDialog extends DialogFragment {
         builder.setTitle(getString(R.string.error_in_file_title));
         ArrayList<String> errorFiles = getArguments().getStringArrayList(ARG_ERROR_FILES);
         final ArrayList<MediaDetail> intactFiles = getArguments().getParcelableArrayList(ARG_INTACT_FILES);
-        final int bookId = getArguments().getInt(ARG_BOOK_ID);
+        final long bookId = getArguments().getLong(ARG_BOOK_ID);
         //passing null is fine because of fragment
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_file_adding_error, null);
         ListView listView = (ListView) v.findViewById(R.id.listView);
@@ -62,13 +62,13 @@ public class FileAddingErrorDialog extends DialogFragment {
         return builder.create();
     }
 
-    public interface ConfirmationListener {
-        public void onButtonClicked(boolean keep, ArrayList<MediaDetail> intactFiles, int bookId);
-    }
-
     @Override
     public void onStart() {
         super.onStart();
         MaterialCompatThemer.theme(getDialog());
+    }
+
+    public interface ConfirmationListener {
+        public void onButtonClicked(boolean keep, ArrayList<MediaDetail> intactFiles, long bookId);
     }
 }

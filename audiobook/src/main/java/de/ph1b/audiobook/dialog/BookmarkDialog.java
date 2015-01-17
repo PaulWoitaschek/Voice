@@ -31,6 +31,7 @@ import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.content.MediaDetail;
 import de.ph1b.audiobook.service.Controls;
 import de.ph1b.audiobook.service.StateManager;
+import de.ph1b.audiobook.utils.DividerItemDecoration;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
 
 /**
@@ -140,8 +141,8 @@ public class BookmarkDialog extends DialogFragment {
         adapter = new BookmarkAdapter(getActivity(), allBookmarks, listener);
         recyclerView.setAdapter(adapter);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
         recyclerView.setLayoutManager(layoutManager);
-
 
         ImageView addButton = (ImageView) v.findViewById(R.id.add);
         final EditText bookmarkTitle = (EditText) v.findViewById(R.id.edit1);
@@ -180,6 +181,7 @@ public class BookmarkDialog extends DialogFragment {
                     bookMark.setId(id);
                     int index = adapter.addItem(bookMark);
                     recyclerView.smoothScrollToPosition(index);
+                    bookmarkTitle.setText("");
                 }
             }
         });

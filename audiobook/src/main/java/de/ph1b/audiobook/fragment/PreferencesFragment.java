@@ -18,13 +18,13 @@ import de.ph1b.audiobook.utils.Prefs;
 
 public class PreferencesFragment extends PreferenceFragment {
 
-
     private final SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
             initValues();
         }
     };
+    private Prefs prefs;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,17 +33,19 @@ public class PreferencesFragment extends PreferenceFragment {
 
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        prefs = new Prefs(getActivity());
     }
 
     private void initValues() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        int seekAmount = sp.getInt(getString(R.string.pref_key_seek_time), 20);
+        int seekAmount = prefs.getSeekTime();
         String seekSummary = String.valueOf(seekAmount) + " " + getString(R.string.seconds);
         SeekPreferenceDialog seekPreferenceDialog = (SeekPreferenceDialog) findPreference(getString(R.string.pref_key_seek_time));
         seekPreferenceDialog.setSummary(seekSummary);
 
-        int sleepAmount = sp.getInt(getString(R.string.pref_key_sleep_time), 20);
+        int sleepAmount = prefs.getSleepTime();
         String sleepSummary = String.valueOf(sleepAmount) + " " + getString(R.string.minutes);
         SleepPreferenceDialog sleepPreferenceDialog = (SleepPreferenceDialog) findPreference(getString(R.string.pref_key_sleep_time));
         sleepPreferenceDialog.setSummary(sleepSummary);

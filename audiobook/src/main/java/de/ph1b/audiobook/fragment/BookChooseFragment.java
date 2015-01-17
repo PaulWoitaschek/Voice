@@ -392,8 +392,9 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                 break;
             }
         }
-        if (!widgetInitialized)
+        if (!widgetInitialized) {
             current.setVisibility(View.GONE);
+        }
     }
 
     @Override

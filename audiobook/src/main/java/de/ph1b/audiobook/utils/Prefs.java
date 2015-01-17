@@ -57,11 +57,27 @@ public class Prefs {
         return sp.getInt(c.getString(R.string.pref_key_sleep_time), 20);
     }
 
+    public void setSleepTime(int time){
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt(c.getString(R.string.pref_key_sleep_time), time);
+        editor.apply();
+    }
+
     public int getSeekTime() {
-        return sp.getInt(c.getString(R.string.pref_key_seek_time), 20) * 1000;
+        return sp.getInt(c.getString(R.string.pref_key_seek_time), 20);
+    }
+
+    public void setSeekTime(int time) {
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt(c.getString(R.string.pref_key_seek_time), time);
+        editor.apply();
     }
 
     public boolean resumeOnReplug() {
         return sp.getBoolean(c.getString(R.string.pref_key_resume_on_replug), true);
+    }
+
+    public boolean mobileConnectionAllowed(){
+        return sp.getBoolean(c.getString(R.string.pref_key_cover_on_internet), false);
     }
 }

@@ -191,7 +191,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     }
 
     @Override
-    public void onButtonClicked(boolean keep, ArrayList<MediaDetail> intactFiles, int bookId) {
+    public void onButtonClicked(boolean keep, ArrayList<MediaDetail> intactFiles, long bookId) {
         Activity a = getActivity();
         if (a != null) {
             DataBaseHelper db = DataBaseHelper.getInstance(a);
@@ -440,7 +440,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         private final ArrayList<String> errorFiles = new ArrayList<>();
         private final ArrayList<MediaDetail> media = new ArrayList<>();
         private ProgressDialog progressDialog;
-        private int bookId;
+        private long bookId;
 
         public AddBookAsync(ArrayList<File> files, String defaultName, Bitmap cover) {
             this.files = files;
@@ -529,7 +529,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                         Bundle args = new Bundle();
                         args.putStringArrayList(FileAddingErrorDialog.ARG_ERROR_FILES, errorFiles);
                         args.putParcelableArrayList(FileAddingErrorDialog.ARG_INTACT_FILES, media);
-                        args.putInt(FileAddingErrorDialog.ARG_BOOK_ID, bookId);
+                        args.putLong(FileAddingErrorDialog.ARG_BOOK_ID, bookId);
                         dialog.setArguments(args);
                         dialog.setTargetFragment(FilesChooseFragment.this, 42);
                         dialog.show(getFragmentManager(), FileAddingErrorDialog.TAG);

@@ -18,6 +18,8 @@ import de.ph1b.audiobook.utils.ImageHelper;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 
+    private static final String TAG = "DataBaseHelper";
+
     private static final String DATABASE_NAME = "audioBookDB";
     private static final int DATABASE_VERSION = 4;
 
@@ -403,14 +405,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         cv.put(KEY_BOOK_ID, bookmark.getBookId());
         cv.put(KEY_MEDIA_ID, bookmark.getMediaId());
         SQLiteDatabase db = getWritableDatabase();
-        return db.insertOrThrow(TABLE_BOOKMARKS, null, cv);
+        return db.insert(TABLE_BOOKMARKS, null, cv);
     }
 
     public ArrayList<Bookmark> getAllBookmarks(long bookId) {
         ArrayList<Bookmark> allBookmarks = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query(TABLE_BOOKMARKS,
-                new String[]{KEY_BOOKMARK_TITLE, KEY_BOOKMARK_POSITION, KEY_MEDIA_ID},
+                new String[]{KEY_BOOKMARK_TITLE, KEY_BOOKMARK_POSITION, KEY_MEDIA_ID, KEY_BOOKMARK_ID},
                 KEY_BOOK_ID + "=?",
                 new String[]{String.valueOf(bookId)},
                 null, null, KEY_MEDIA_ID);
@@ -420,11 +422,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 String title = cursor.getString(0);
                 int position = cursor.getInt(1);
                 long mediaId = cursor.getLong(2);
+                long bookmarkId = cursor.getLong(3);
 
                 bookmark.setTitle(title);
                 bookmark.setPosition(position);
                 bookmark.setBookId(bookId);
                 bookmark.setMediaId(mediaId);
+                bookmark.setId(bookmarkId);
                 allBookmarks.add(bookmark);
             }
         } finally {
@@ -444,20 +448,26 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     public void deleteBookmark(Bookmark bookmark) {
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "Deleting bookmark from database: " + bookmark.getId());
+        }
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_BOOKMARKS, bookmark.getId() + "=?", new String[]{String.valueOf(bookmark.getId())});
+        int result = db.delete(TABLE_BOOKMARKS, KEY_BOOKMARK_ID + "=?", new String[]{String.valueOf(bookmark.getId())});
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "deleted n bookmarks: " + result);
+        }
     }
 
 
-    public int addBook(BookDetail book) {
+    public long addBook(BookDetail book) {
         ContentValues values = new ContentValues();
         values.put(KEY_BOOK_NAME, book.getName());
         values.put(KEY_BOOK_COVER, book.getCover());
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
-        int bookId = 0;
+        long bookId = 0;
         try {
-            bookId = (int) db.insert(TABLE_BOOKS, null, values);
+            bookId = db.insert(TABLE_BOOKS, null, values);
             values.put(KEY_BOOK_SORT_ID, bookId);
             db.update(TABLE_BOOKS, values, KEY_BOOK_ID + " = " + bookId, null);
             db.setTransactionSuccessful();

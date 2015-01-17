@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.dialog;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.DialogPreference;
 import android.support.annotation.NonNull;
@@ -12,17 +11,20 @@ import android.widget.TextView;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
+import de.ph1b.audiobook.utils.Prefs;
 
 
 public class SleepPreferenceDialog extends DialogPreference {
 
     private TextView timeView;
     private NumberPicker numberPicker;
+    private Prefs prefs;
 
     public SleepPreferenceDialog(Context context, AttributeSet attrs) {
         super(context, attrs);
         setDialogTitle(context.getResources().getString(R.string.pref_sleep_time));
         setDialogLayoutResource(R.layout.dialog_sleep_timer);
+        prefs = new Prefs(context);
     }
 
 
@@ -62,11 +64,8 @@ public class SleepPreferenceDialog extends DialogPreference {
     protected void onDialogClosed(boolean positiveResult) {
         super.onDialogClosed(positiveResult);
         if (positiveResult) {
-            SharedPreferences.Editor editor = getEditor();
-
             int sleepAmount = numberPicker.getValue();
-            editor.putInt(getContext().getString(R.string.pref_key_sleep_time), sleepAmount);
-            editor.apply();
+            prefs.setSleepTime(sleepAmount);
         }
     }
 }

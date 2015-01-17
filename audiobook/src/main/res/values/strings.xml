@@ -74,4 +74,5 @@
     <string tools:ignore="MissingTranslation" name="bookmark_edit_title">Edit bookmark</string>
     <string tools:ignore="MissingTranslation" name="acc_bookmark_title_edit">Change to bookmark title</string>
     <string tools:ignore="MissingTranslation" name="acc_button_add_bookmark">Adds a bookmark at the current position</string>
+    <string tools:ignore="MissingTranslation" name="bookmark_edit_hint">Bookmark name</string>
 </resources>

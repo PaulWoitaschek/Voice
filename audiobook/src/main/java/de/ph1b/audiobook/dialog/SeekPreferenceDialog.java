@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.dialog;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.DialogPreference;
 import android.support.annotation.NonNull;
@@ -12,15 +11,18 @@ import android.widget.TextView;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
+import de.ph1b.audiobook.utils.Prefs;
 
 
 public class SeekPreferenceDialog extends DialogPreference {
 
     private final int SEEK_BAR_MIN = 10;
     private SeekBar seekBar;
+    private Prefs prefs;
 
     public SeekPreferenceDialog(Context context, AttributeSet attrs) {
         super(context, attrs);
+        prefs = new Prefs(context);
         setDialogTitle(context.getString(R.string.pref_seek_time));
         setDialogLayoutResource(R.layout.dialog_amount_chooser);
     }
@@ -37,11 +39,9 @@ public class SeekPreferenceDialog extends DialogPreference {
         seekBar = (SeekBar) view.findViewById(R.id.seekBar);
         final TextView textView = (TextView) view.findViewById(R.id.textView);
         seekBar.setMax(60 - SEEK_BAR_MIN);
-        SharedPreferences sp = getSharedPreferences();
 
-        int position = sp.getInt(getContext().getString(R.string.pref_key_seek_time), 20);
+        int position = prefs.getSeekTime();
         seekBar.setProgress(position - SEEK_BAR_MIN);
-
 
         textView.setText(String.valueOf(seekBar.getProgress() + SEEK_BAR_MIN) + " " + getContext().getString(R.string.seconds));
 
@@ -71,9 +71,7 @@ public class SeekPreferenceDialog extends DialogPreference {
         super.onDialogClosed(positiveResult);
         if (positiveResult) {
             int seekAmount = seekBar.getProgress();
-            SharedPreferences.Editor editor = getEditor();
-            editor.putInt(getContext().getString(R.string.pref_key_seek_time), seekAmount + SEEK_BAR_MIN);
-            editor.apply();
+            prefs.setSeekTime(seekAmount + SEEK_BAR_MIN);
         }
     }
 }

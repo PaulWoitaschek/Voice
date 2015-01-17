@@ -312,7 +312,7 @@ public class AudioPlayerService extends Service {
              * If the <code>intent != null</code>, we will handle the <code>intent</code> or prepare
              * the new book if its id is different from the one already there.
              */
-            int newBookId = intent.getIntExtra(GUI_BOOK_ID, -1);
+            long newBookId = intent.getLongExtra(GUI_BOOK_ID, -1);
             if (stateManager.getBook() == null || (newBookId != -1 && (stateManager.getBook().getId() != newBookId))) {
                 if (newBookId == -1 && defaultBookId != -1) {
                     initBook(defaultBookId);
@@ -750,7 +750,7 @@ public class AudioPlayerService extends Service {
             playerLock.lock();
             try {
                 int position = mediaPlayer.getCurrentPosition();
-                int changeTimeAmount = prefs.getSeekTime();
+                int changeTimeAmount = prefs.getSeekTime() * 1000;
                 int newPosition = position + changeTimeAmount;
                 if (newPosition > 0) {
                     if (newPosition > media.getDuration())
@@ -776,7 +776,7 @@ public class AudioPlayerService extends Service {
             playerLock.lock();
             try {
                 int position = mediaPlayer.getCurrentPosition();
-                int changeTimeAmount = prefs.getSeekTime();
+                int changeTimeAmount = prefs.getSeekTime() * 1000;
                 int newPosition = position - changeTimeAmount;
                 if (newPosition < 0)
                     newPosition = 0;
