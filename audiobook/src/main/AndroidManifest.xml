@@ -56,7 +56,11 @@
 
         <service android:name=".service.AudioPlayerService" />
 
-        <receiver android:name=".receiver.RemoteControlReceiver" />
+        <receiver android:name=".receiver.RemoteControlReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
 
         <receiver
             android:icon="@mipmap/ic_launcher"
