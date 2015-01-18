@@ -18,7 +18,7 @@ public class SleepPreferenceDialog extends DialogPreference {
 
     private TextView timeView;
     private NumberPicker numberPicker;
-    private Prefs prefs;
+    private final Prefs prefs;
 
     public SleepPreferenceDialog(Context context, AttributeSet attrs) {
         super(context, attrs);

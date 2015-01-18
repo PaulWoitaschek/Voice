@@ -18,7 +18,7 @@ public class SeekPreferenceDialog extends DialogPreference {
 
     private final int SEEK_BAR_MIN = 10;
     private SeekBar seekBar;
-    private Prefs prefs;
+    private final Prefs prefs;
 
     public SeekPreferenceDialog(Context context, AttributeSet attrs) {
         super(context, attrs);

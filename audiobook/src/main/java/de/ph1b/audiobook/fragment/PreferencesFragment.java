@@ -38,8 +38,6 @@ public class PreferencesFragment extends PreferenceFragment {
     }
 
     private void initValues() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
         int seekAmount = prefs.getSeekTime();
         String seekSummary = String.valueOf(seekAmount) + " " + getString(R.string.seconds);
         SeekPreferenceDialog seekPreferenceDialog = (SeekPreferenceDialog) findPreference(getString(R.string.pref_key_seek_time));
