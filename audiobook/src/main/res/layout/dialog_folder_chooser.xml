@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    style="?android:buttonBarStyle"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    style="?android:buttonBarStyle">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-
         <ImageButton
             android:id="@+id/up"
             android:src="@drawable/ic_arrow_up_grey600_48dp"
-            android:background="?android:attr/selectableItemBackground"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/up" />
@@ -62,16 +60,16 @@
             android:layout_weight="1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/choose"
-            style="?android:attr/borderlessButtonStyle" />
+            style="?android:attr/buttonBarButtonStyle"
+            android:text="@string/choose" />
 
         <Button
             android:id="@+id/abort"
             android:layout_weight="1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/abort"
-            style="?android:attr/borderlessButtonStyle" />
+            style="?android:attr/buttonBarButtonStyle"
+            android:text="@string/abort" />
 
     </LinearLayout>
 

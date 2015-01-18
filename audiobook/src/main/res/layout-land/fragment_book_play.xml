@@ -87,7 +87,6 @@
                 <ImageButton
                     android:id="@+id/previous"
                     android:src="@drawable/ic_skip_previous_grey600_36dp"
-                    android:background="?android:attr/selectableItemBackground"
                     android:layout_marginRight="4dp"
                     android:layout_marginLeft="4dp"
                     android:layout_height="wrap_content"
@@ -98,7 +97,6 @@
                     android:id="@+id/rewind"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
                     android:contentDescription="@string/rewind"
                     android:layout_marginRight="4dp"
                     android:layout_marginLeft="4dp"
@@ -110,13 +108,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
                     android:layout_marginLeft="4dp"
-                    android:background="?android:attr/selectableItemBackground"
                     android:contentDescription="@string/play_pause"
                     android:src="@drawable/ic_ic_play_circle_fill_72dp" />
 
                 <ImageButton
                     android:id="@+id/fast_forward"
-                    android:background="?android:attr/selectableItemBackground"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
@@ -127,7 +123,6 @@
                 <ImageButton
                     android:id="@+id/next"
                     android:src="@drawable/ic_skip_next_grey600_36dp"
-                    android:background="?android:attr/selectableItemBackground"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"

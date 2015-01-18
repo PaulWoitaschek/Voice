@@ -77,12 +77,9 @@
                 android:id="@+id/current_playing"
                 android:layout_width="@dimen/thumb_size"
                 android:layout_height="@dimen/thumb_size"
-                android:layout_gravity="center"
-                style="?android:attr/borderlessButtonStyle"
-                android:src="@drawable/ic_play_arrow_grey600_36dp"
+                android:src="@drawable/ic_play_arrow_grey600_48dp"
                 android:contentDescription="@string/current_playing" />
 
         </LinearLayout>
-
     </LinearLayout>
 </LinearLayout>

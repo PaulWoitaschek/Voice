@@ -4,6 +4,12 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:imageButtonStyle">@style/CustomButtonStyle</item>
+    </style>
+
+
+    <style name="CustomButtonStyle" parent="@android:style/Widget.ImageButton">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
     </style>
 
     <style name="notification_big_text">

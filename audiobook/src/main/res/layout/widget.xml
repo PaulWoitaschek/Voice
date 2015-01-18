@@ -54,7 +54,6 @@
             <ImageButton
                 android:id="@+id/playPause"
                 android:src="@drawable/ic_play_arrow_white_48dp"
-                android:adjustViewBounds="true"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 style="?android:attr/borderlessButtonStyle"
@@ -66,11 +65,10 @@
                 android:adjustViewBounds="true"
                 android:layout_marginRight="8dp"
                 android:layout_marginEnd="8dp"
-                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                style="?android:attr/borderlessButtonStyle"
                 android:contentDescription="@string/fast_forward" />
-
 
         </LinearLayout>
     </LinearLayout>

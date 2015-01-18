@@ -37,7 +37,6 @@
             android:id="@+id/editBook"
             android:layout_width="35dp"
             android:layout_height="match_parent"
-            style="?android:attr/borderlessButtonStyle"
             android:paddingLeft="8dp"
             android:layout_gravity="center_vertical"
             android:src="@drawable/ic_more_vert_white_24dp"

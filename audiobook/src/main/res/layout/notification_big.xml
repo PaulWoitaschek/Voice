@@ -56,7 +56,6 @@
                 android:id="@+id/rewind"
                 android:src="@drawable/ic_fast_rewind_white_36dp"
                 android:adjustViewBounds="true"
-                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/rewind" />
@@ -67,7 +66,6 @@
                 android:adjustViewBounds="true"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                style="?android:attr/borderlessButtonStyle"
                 android:contentDescription="@string/play_pause" />
 
             <ImageButton
@@ -78,7 +76,6 @@
                 android:layout_marginEnd="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                style="?android:attr/borderlessButtonStyle"
                 android:contentDescription="@string/fast_forward" />
 
         </LinearLayout>
@@ -92,7 +89,6 @@
         android:layout_alignParentTop="true"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        style="?android:attr/borderlessButtonStyle"
         android:contentDescription="@string/content_close_notification" />
 
 </RelativeLayout>
