@@ -156,7 +156,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     bookValues.put("KEY_BOOK_POSITION", bookPosition);
                     long newBookId = db.insert("TABLE_BOOKS", null, bookValues);
                     bookValues.put("KEY_BOOK_SORT_ID", newBookId);
-                    db.update("TABLE_BOOKS", bookValues, "KEY_BOOK_ID" + " = " + newBookId, null);
+                    db.update("TABLE_BOOKS", bookValues, "KEY_BOOK_ID" + "=?",
+                            new String[]{String.valueOf(newBookId)});
 
                     //generate int array from string
                     String[] mediaIDsAsSplittedString = bookMediaContaining.split(",");
@@ -343,7 +344,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(TABLE_BOOKS,
                 null,
-                KEY_BOOK_ID + " = " + id, null, null, null, null);
+                KEY_BOOK_ID + "=?", new String[]{String.valueOf(id)}, null, null, null);
         try {
             if (cursor.moveToFirst()) {
                 BookDetail book = new BookDetail();
@@ -452,7 +453,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         try {
             bookId = db.insert(TABLE_BOOKS, null, values);
             values.put(KEY_BOOK_SORT_ID, bookId);
-            db.update(TABLE_BOOKS, values, KEY_BOOK_ID + " = " + bookId, null);
+            db.update(TABLE_BOOKS, values, KEY_BOOK_ID + "=?", new String[]{String.valueOf(bookId)});
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
@@ -466,8 +467,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(TABLE_MEDIA,
                 null,
-                KEY_MEDIA_BOOK_ID + " = " + bookId,
-                null, null, null,
+                KEY_MEDIA_BOOK_ID + "=?",
+                new String[]{String.valueOf(bookId)},
+                null, null,
                 KEY_MEDIA_ID);
         try {
             ArrayList<MediaDetail> containingMedia = new ArrayList<>();
@@ -523,7 +525,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         values.put(KEY_BOOK_CURRENT_MEDIA_POSITION, book.getCurrentMediaPosition());
         values.put(KEY_BOOK_SORT_ID, book.getSortId());
 
-        db.update(TABLE_BOOKS, values, KEY_BOOK_ID + " = " + book.getId(), null);
+        db.update(TABLE_BOOKS, values, KEY_BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
     }
 
 
