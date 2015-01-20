@@ -7,6 +7,7 @@
     <string name="pref_key_seek_time">SEEK_TIME</string>
     <string name="pref_key_sleep_time">SLEEP_TIME</string>
     <string name="pref_key_resume_on_replug">RESUME_ON_REPLUG</string>
+    <string name="pref_key_pause_on_transient_interrupt">PAUSE_ON_TRANSIENT</string>
     <string name="pref_key_cover_on_internet">COVER_ON_INTERNET</string>
     <string name="pref_key_track_to_end">PLAY_TRACK_TO_END</string>
     <string name="pref_key_root_folder">ROOT_FOLDER</string>
