@@ -251,6 +251,7 @@ public class AudioPlayerService extends Service {
             case KeyEvent.KEYCODE_MEDIA_PAUSE:
                 pause(false);
                 return true;
+            case KeyEvent.KEYCODE_HEADSETHOOK:
             case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
                 if (stateManager.getState() == PlayerStates.STARTED) {
                     pause(false);
