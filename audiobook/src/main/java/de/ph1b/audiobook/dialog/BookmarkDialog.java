@@ -30,9 +30,9 @@ import de.ph1b.audiobook.content.Bookmark;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.content.MediaDetail;
 import de.ph1b.audiobook.service.Controls;
-import de.ph1b.audiobook.service.StateManager;
 import de.ph1b.audiobook.utils.DividerItemDecoration;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
+import de.ph1b.audiobook.utils.Prefs;
 
 /**
  * @author <a href="mailto:woitaschek@posteo.de">Paul Woitaschek</a>
@@ -52,8 +52,9 @@ public class BookmarkDialog extends DialogFragment {
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_bookmark, null);
 
         final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
-        final StateManager stateManager = StateManager.getInstance(getActivity());
-        final BookDetail book = stateManager.getBook();
+        final Prefs prefs = new Prefs(getActivity());
+        final BookDetail book = db.getBook(prefs.getCurrentBookId());
+        final ArrayList<MediaDetail> allMedia = db.getMediaFromBook(book.getId());
         final ArrayList<Bookmark> allBookmarks = db.getAllBookmarks(book.getId());
 
         BookmarkAdapter.OnOptionsMenuClickedListener listener = new BookmarkAdapter.OnOptionsMenuClickedListener() {
@@ -138,7 +139,7 @@ public class BookmarkDialog extends DialogFragment {
         };
 
         final RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler);
-        adapter = new BookmarkAdapter(getActivity(), allBookmarks, listener);
+        adapter = new BookmarkAdapter(allBookmarks, listener, allMedia);
         recyclerView.setAdapter(adapter);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
@@ -153,13 +154,12 @@ public class BookmarkDialog extends DialogFragment {
                 Bookmark bookMark = new Bookmark();
 
                 long bookId = book.getId();
-                ArrayList<MediaDetail> media = stateManager.getMedia();
                 long mediaId = book.getCurrentMediaId();
                 int position = book.getCurrentMediaPosition();
                 String mediaName = "";
-                for (int i = 0; i < media.size(); i++) {
-                    if (media.get(i).getId() == mediaId) {
-                        mediaName = media.get(i).getName();
+                for (int i = 0; i < allMedia.size(); i++) {
+                    if (allMedia.get(i).getId() == mediaId) {
+                        mediaName = allMedia.get(i).getName();
                     }
                 }
 

@@ -20,7 +20,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -30,6 +29,7 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -52,18 +52,16 @@ public class AudioPlayerService extends Service {
 
     private static final int NOTIFICATION_ID = 1;
     private static final String TAG = "de.ph1b.audiobook.AudioPlayerService";
-    public static final String GUI = TAG + ".GUI";
     public static final String GUI_BOOK_ID = TAG + ".GUI_BOOK_ID";
-    public static final String GUI_MEDIA = TAG + ".GUI_MEDIA";
     private final IBinder mBinder = new LocalBinder();
     private final ReentrantLock playerLock = new ReentrantLock();
     private final ScheduledExecutorService sandMan = Executors.newSingleThreadScheduledExecutor();
-    private Prefs prefs;
-    private StateManager stateManager;
-    private DataBaseHelper db;
-    private LocalBroadcastManager bcm;
-    private AudioManager audioManager;
+    public StateManager stateManager;
+    private ArrayList<MediaDetail> allMedia;
     private MediaPlayerCompat mediaPlayer;
+    private Prefs prefs;
+    private DataBaseHelper db;
+    private AudioManager audioManager;
     private volatile boolean pauseBecauseHeadset = false;
     /**
      * If audio is becoming noisy, pause the player.
@@ -100,6 +98,7 @@ public class AudioPlayerService extends Service {
             }
         }
     };
+    private BookDetail book;
     private PlaybackStateCompat.Builder stateBuilder;
     private NotificationCompat.Builder notificationBuilder = null;
     private volatile boolean pauseBecauseLossTransient = false;
@@ -144,7 +143,6 @@ public class AudioPlayerService extends Service {
             }
         }
     };
-    private MediaDetail media;
     private Handler handler;
     @SuppressWarnings("deprecation")
     private RemoteControlClient remoteControlClient;
@@ -155,7 +153,6 @@ public class AudioPlayerService extends Service {
      */
     private volatile boolean stopAfterCurrentTrack = false;
     private ScheduledFuture<?> sleepSand;
-    private OnSleepStateChangedListener onSleepStateChangedListener;
 
     private void setPlaybackSpeed() {
         float playbackSpeed = prefs.getPlaybackSpeed();
@@ -194,7 +191,6 @@ public class AudioPlayerService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        bcm = LocalBroadcastManager.getInstance(this);
         db = DataBaseHelper.getInstance(this);
         prefs = new Prefs(this);
         mediaPlayer = new MediaPlayerCompat(this);
@@ -281,10 +277,10 @@ public class AudioPlayerService extends Service {
 
     private void initBook(long bookId) {
         if (BuildConfig.DEBUG) Log.d(TAG, "Initializing book with ID: " + bookId);
-        stateManager.setBook(db.getBook(bookId));
-        stateManager.setMedia(db.getMediaFromBook(bookId));
+        book = db.getBook(bookId);
+        allMedia = db.getMediaFromBook(bookId);
         stopForeground(true);
-        prepare(stateManager.getBook().getCurrentMediaId());
+        prepare(book.getCurrentMediaId());
         pauseBecauseLossTransient = false;
     }
 
@@ -295,70 +291,54 @@ public class AudioPlayerService extends Service {
         Log.d(TAG, "onStartCommand was called!");
         long defaultBookId = prefs.getCurrentBookId();
 
-        /**
-         * If intent is <code>null</code>, it means, that the service has been started because of
-         * <code>START_STICKY</code>. So we will prepare the current book defines in
-         * SharedPreferences and leave it as it is.
-         */
-        if (intent == null) {
-            if (defaultBookId != -1) {
-                initBook(defaultBookId);
-            } else {
-                if (BuildConfig.DEBUG) Log.d(TAG, "We found no default book. Stop self!");
-                stopSelf();
-            }
-        } else {
-            /**
-             * If the <code>intent != null</code>, we will handle the <code>intent</code> or prepare
-             * the new book if its id is different from the one already there.
-             */
-            long newBookId = intent.getLongExtra(GUI_BOOK_ID, -1);
-            if (stateManager.getBook() == null || (newBookId != -1 && (stateManager.getBook().getId() != newBookId))) {
-                if (newBookId == -1 && defaultBookId != -1) {
-                    initBook(defaultBookId);
-                } else if (newBookId != -1)
-                    initBook(newBookId);
-            }
-            if (stateManager.getBook() != null) {
-                String action = intent.getAction();
-                if (action != null) {
-                    switch (action) {
-                        case Controls.CONTROL_INFORM_SPEED_CHANGED:
-                            setPlaybackSpeed();
-                            break;
-                        case Controls.CONTROL_CHANGE_BOOK_POSITION:
-                            long mediaId = intent.getLongExtra(Controls.CONTROL_CHANGE_BOOK_POSITION_EXTRA_MEDIA_ID, -1);
-                            int position = intent.getIntExtra(Controls.CONTROL_CHANGE_BOOK_POSITION_EXTRA_MEDIA_POSITION, 0);
-                            if (mediaId != -1) {
-                                changeBookPosition(mediaId);
-                                changePosition(position);
-                            }
-                        default:
-                            break;
-                    }
-                }
-
-                int keyCode = intent.getIntExtra(Intent.EXTRA_KEY_EVENT, -1);
-                handleKeyCode(keyCode);
-                updateGUI();
-            }
+        if (defaultBookId == -1) {
+            stopSelf();
+            return Service.START_NOT_STICKY;
         }
 
+        if (book == null || book.getId() != defaultBookId) {
+            initBook(defaultBookId);
+        }
+
+        if (book != null && intent != null) {
+            String action = intent.getAction();
+            if (action != null) {
+                switch (action) {
+                    case Controls.CONTROL_INFORM_SPEED_CHANGED:
+                        setPlaybackSpeed();
+                        break;
+                    case Controls.CONTROL_CHANGE_BOOK_POSITION:
+                        long mediaId = intent.getLongExtra(Controls.CONTROL_CHANGE_BOOK_POSITION_EXTRA_MEDIA_ID, -1);
+                        int position = intent.getIntExtra(Controls.CONTROL_CHANGE_BOOK_POSITION_EXTRA_MEDIA_POSITION, 0);
+                        if (mediaId != -1) {
+                            changeBookPosition(mediaId);
+                            changePosition(position);
+                        }
+                    default:
+                        break;
+                }
+            }
+
+            int keyCode = intent.getIntExtra(Intent.EXTRA_KEY_EVENT, -1);
+            handleKeyCode(keyCode);
+        }
+
+        Log.d(TAG, "onStartcommand finished");
         return Service.START_STICKY;
     }
 
     private Notification getNotification() {
-        prefs.setCurrentBookId(stateManager.getBook().getId());
+        prefs.setCurrentBookId(book.getId());
 
         RemoteViews smallViewRemote = new RemoteViews(getPackageName(), R.layout.notification_small);
         RemoteViews bigViewRemote = new RemoteViews(getPackageName(), R.layout.notification_big);
 
-        String coverPath = stateManager.getBook().getCover();
+        String coverPath = book.getCover();
         Bitmap smallCover;
         Bitmap bigCover;
         if (coverPath == null || coverPath.equals("") || !new File(coverPath).exists() || new File(coverPath).isDirectory()) {
-            smallCover = ImageHelper.genCapital(stateManager.getBook().getName(), this, ImageHelper.TYPE_NOTIFICATION_SMALL);
-            bigCover = ImageHelper.genCapital(stateManager.getBook().getName(), this, ImageHelper.TYPE_NOTIFICATION_BIG);
+            smallCover = ImageHelper.genCapital(book.getName(), this, ImageHelper.TYPE_NOTIFICATION_SMALL);
+            bigCover = ImageHelper.genCapital(book.getName(), this, ImageHelper.TYPE_NOTIFICATION_BIG);
         } else {
             smallCover = ImageHelper.genBitmapFromFile(coverPath, this, ImageHelper.TYPE_NOTIFICATION_SMALL);
             bigCover = ImageHelper.genBitmapFromFile(coverPath, this, ImageHelper.TYPE_NOTIFICATION_BIG);
@@ -389,8 +369,8 @@ public class AudioPlayerService extends Service {
         PendingIntent stopPI = PendingIntent.getService(AudioPlayerService.this, KeyEvent.KEYCODE_MEDIA_STOP, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         smallViewRemote.setImageViewBitmap(R.id.imageView, smallCover);
-        smallViewRemote.setTextViewText(R.id.title, stateManager.getBook().getName());
-        smallViewRemote.setTextViewText(R.id.summary, media.getName());
+        smallViewRemote.setTextViewText(R.id.title, book.getName());
+        smallViewRemote.setTextViewText(R.id.summary, stateManager.getMedia().getName());
 
         smallViewRemote.setOnClickPendingIntent(R.id.rewind, rewindPI);
         smallViewRemote.setOnClickPendingIntent(R.id.playPause, playPausePI);
@@ -398,8 +378,8 @@ public class AudioPlayerService extends Service {
         smallViewRemote.setOnClickPendingIntent(R.id.closeButton, stopPI);
 
         bigViewRemote.setImageViewBitmap(R.id.imageView, bigCover);
-        bigViewRemote.setTextViewText(R.id.title, stateManager.getBook().getName());
-        bigViewRemote.setTextViewText(R.id.summary, media.getName());
+        bigViewRemote.setTextViewText(R.id.title, book.getName());
+        bigViewRemote.setTextViewText(R.id.summary, stateManager.getMedia().getName());
 
         bigViewRemote.setOnClickPendingIntent(R.id.rewind, rewindPI);
         bigViewRemote.setOnClickPendingIntent(R.id.playPause, playPausePI);
@@ -407,7 +387,7 @@ public class AudioPlayerService extends Service {
         bigViewRemote.setOnClickPendingIntent(R.id.closeButton, stopPI);
 
         Intent bookPlayIntent = new Intent(AudioPlayerService.this, BookPlay.class);
-        bookPlayIntent.putExtra(GUI_BOOK_ID, stateManager.getBook().getId());
+        bookPlayIntent.putExtra(GUI_BOOK_ID, book.getId());
         PendingIntent pendingIntent = android.support.v4.app.TaskStackBuilder.create(AudioPlayerService.this)
                 .addNextIntentWithParentStack(bookPlayIntent)
                 .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -448,8 +428,8 @@ public class AudioPlayerService extends Service {
         }
 
         stopAfterCurrentTrack = false;
-        if (onSleepStateChangedListener != null) {
-            onSleepStateChangedListener.onSleepStateChanged(false);
+        if (stateManager.onSleepStateChangedListener != null) {
+            stateManager.onSleepStateChangedListener.onSleepStateChanged();
         }
 
         if (Build.VERSION.SDK_INT >= 14 && Build.VERSION.SDK_INT < 21) {
@@ -467,12 +447,12 @@ public class AudioPlayerService extends Service {
     public void previous() {
         playerLock.lock();
         try {
-            int currentIndex = stateManager.getMedia().indexOf(media);
+            int currentIndex = allMedia.indexOf(stateManager.getMedia());
             if (currentIndex > 0) {
-                long newMediaId = stateManager.getMedia().get(currentIndex - 1).getId();
-                stateManager.getBook().setCurrentMediaId(newMediaId);
-                stateManager.getBook().setCurrentMediaPosition(0);
-                updateBookAsync(stateManager.getBook());
+                long newMediaId = allMedia.get(currentIndex - 1).getId();
+                book.setCurrentMediaId(newMediaId);
+                book.setCurrentMediaPosition(0);
+                updateBookAsync(book);
                 boolean wasPlaying = mediaPlayer.isPlaying();
                 if (mediaPlayer.getCurrentPosition() > 1000) {
                     changePosition(0);
@@ -482,7 +462,6 @@ public class AudioPlayerService extends Service {
                 if (wasPlaying) {
                     play();
                 }
-                updateGUI();
             }
         } finally {
             playerLock.unlock();
@@ -492,18 +471,17 @@ public class AudioPlayerService extends Service {
     public void next() {
         playerLock.lock();
         try {
-            int currentIndex = stateManager.getMedia().indexOf(media);
-            if (currentIndex + 1 < stateManager.getMedia().size()) {
-                long newMediaId = stateManager.getMedia().get(currentIndex + 1).getId();
-                stateManager.getBook().setCurrentMediaId(newMediaId);
-                stateManager.getBook().setCurrentMediaPosition(0);
-                updateBookAsync(stateManager.getBook());
+            int currentIndex = allMedia.indexOf(stateManager.getMedia());
+            if (currentIndex + 1 < allMedia.size()) {
+                long newMediaId = allMedia.get(currentIndex + 1).getId();
+                book.setCurrentMediaId(newMediaId);
+                book.setCurrentMediaPosition(0);
+                updateBookAsync(book);
                 boolean wasPlaying = mediaPlayer.isPlaying();
                 prepare(newMediaId);
                 if (wasPlaying) {
                     play();
                 }
-                updateGUI();
             }
         } finally {
             playerLock.unlock();
@@ -521,15 +499,18 @@ public class AudioPlayerService extends Service {
         playerLock.lock();
         try {
             //if no proper current song is found, use the first
-            media = null;
-            for (MediaDetail m : stateManager.getMedia()) {
+            MediaDetail candidate = null;
+            for (MediaDetail m : allMedia) {
                 if (m.getId() == mediaId) {
-                    media = m;
+                    candidate = m;
                     break;
                 }
             }
-            if (media == null)
-                media = stateManager.getMedia().get(0);
+            if (candidate == null) {
+                candidate = allMedia.get(0);
+            }
+
+            stateManager.setMedia(candidate);
 
             if (stateManager.getState() == PlayerStates.DEAD)
                 mediaPlayer = new MediaPlayerCompat(this);
@@ -539,19 +520,19 @@ public class AudioPlayerService extends Service {
 
             int position;
             //setting up new file depending on if it is the latest media in book
-            if (stateManager.getBook().getCurrentMediaId() != media.getId()) {
-                stateManager.getBook().setCurrentMediaId(media.getId());
+            if (book.getCurrentMediaId() != stateManager.getMedia().getId()) {
+                book.setCurrentMediaId(stateManager.getMedia().getId());
                 position = 0;
-                stateManager.getBook().setCurrentMediaPosition(0);
-                updateBookAsync(stateManager.getBook());
+                book.setCurrentMediaPosition(0);
+                updateBookAsync(book);
             } else {
-                position = stateManager.getBook().getCurrentMediaPosition();
+                position = book.getCurrentMediaPosition();
             }
 
-            String path = media.getPath();
+            String path = stateManager.getMedia().getPath();
 
             //setting position to 0 if last file was reached
-            if (position == media.getDuration())
+            if (position == stateManager.getMedia().getDuration())
                 position = 0;
 
             mediaPlayer.setDataSource(path);
@@ -561,17 +542,17 @@ public class AudioPlayerService extends Service {
 
             // metadata
             MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();
-            String coverPath = stateManager.getBook().getCover();
+            String coverPath = book.getCover();
             Bitmap bitmap;
             if (coverPath == null || !new File(coverPath).exists() || new File(coverPath).isDirectory()) {
-                bitmap = ImageHelper.genCapital(stateManager.getBook().getName(), getApplication(), ImageHelper.TYPE_COVER);
+                bitmap = ImageHelper.genCapital(book.getName(), getApplication(), ImageHelper.TYPE_COVER);
             } else {
                 bitmap = ImageHelper.genBitmapFromFile(coverPath, AudioPlayerService.this, ImageHelper.TYPE_COVER);
             }
             builder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap);
-            builder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, media.getDuration());
-            builder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, media.getName());
-            builder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, stateManager.getBook().getName());
+            builder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, stateManager.getMedia().getDuration());
+            builder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, stateManager.getMedia().getName());
+            builder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, book.getName());
             mediaSession.setMetadata(builder.build());
 
             if (Build.VERSION.SDK_INT < 21 && Build.VERSION.SDK_INT > 14) {
@@ -603,19 +584,18 @@ public class AudioPlayerService extends Service {
                             Log.d(TAG, "Next Song by onCompletion");
 
                         //setting book to last position
-                        stateManager.getBook().setCurrentMediaPosition(media.getDuration());
-                        updateBookAsync(stateManager.getBook());
+                        book.setCurrentMediaPosition(stateManager.getMedia().getDuration());
+                        updateBookAsync(book);
 
                         boolean wasPlaying = ((stateManager.getState() == PlayerStates.STARTED) ||
                                 (stateManager.getState() == PlayerStates.PLAYBACK_COMPLETED));
 
-                        int index = stateManager.getMedia().indexOf(media);
+                        int index = allMedia.indexOf(stateManager.getMedia());
                         // start next one if there is any
-                        if (index < stateManager.getMedia().size() - 1) {//-1 to prevent change when already last song reached
-                            prepare(stateManager.getMedia().get(index + 1).getId());
+                        if (index < allMedia.size() - 1) {//-1 to prevent change when already last song reached
+                            prepare(allMedia.get(index + 1).getId());
                             if (wasPlaying)
                                 play();
-                            updateGUI();
                         } else { //else unregister as playing
                             playerLock.lock();
                             try {
@@ -661,37 +641,13 @@ public class AudioPlayerService extends Service {
     private void updateRemoteControlValues(Bitmap bitmap) {
         //updates metadata for proper lock screen information
         @SuppressWarnings("deprecation") RemoteControlClient.MetadataEditor editor = remoteControlClient.editMetadata(true);
-        editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, media.getName());
-        editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, stateManager.getBook().getName());
+        editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, stateManager.getMedia().getName());
+        editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName());
         //noinspection deprecation
         editor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bitmap);
         editor.apply();
     }
 
-    /**
-     * Sends a broadcast signaling that there are changes affecting the gui and sends the current
-     * media as parcelable.
-     *
-     * @see de.ph1b.audiobook.fragment.BookPlayFragment#updateGUIReceiver
-     */
-    public void updateGUI() {
-        if (stateManager.getState() != PlayerStates.DEAD) {
-            if (playerLock.tryLock()) {
-                try {
-                    stateManager.setTime(mediaPlayer.getCurrentPosition());
-                    Intent i = new Intent(GUI);
-                    i.putExtra(GUI_MEDIA, media);
-                    bcm.sendBroadcast(i);
-                } finally {
-                    playerLock.unlock();
-                }
-            }
-        }
-    }
-
-    public void setOnSleepStateChangedListener(OnSleepStateChangedListener onSleepStateChangedListener) {
-        this.onSleepStateChangedListener = onSleepStateChangedListener;
-    }
 
     public boolean sleepSandActive() {
         return sleepSand != null && !sleepSand.isCancelled() && !sleepSand.isDone();
@@ -701,8 +657,8 @@ public class AudioPlayerService extends Service {
         if (sleepSandActive()) {
             sleepSand.cancel(false);
             stopAfterCurrentTrack = false;
-            if (onSleepStateChangedListener != null) {
-                onSleepStateChangedListener.onSleepStateChanged(false);
+            if (stateManager.onSleepStateChangedListener != null) {
+                stateManager.onSleepStateChangedListener.onSleepStateChanged();
             }
 
             Toast sleepToast = Toast.makeText(this, R.string.sleep_timer_canceled, Toast.LENGTH_SHORT);
@@ -728,8 +684,8 @@ public class AudioPlayerService extends Service {
                                 mediaPlayer.reset();
                             mediaPlayer.release();
                             stateManager.setState(PlayerStates.DEAD);
-                            if (onSleepStateChangedListener != null) {
-                                onSleepStateChangedListener.onSleepStateChanged(false);
+                            if (stateManager.onSleepStateChangedListener != null) {
+                                stateManager.onSleepStateChangedListener.onSleepStateChanged();
                             }
                         } finally {
                             playerLock.unlock();
@@ -739,8 +695,8 @@ public class AudioPlayerService extends Service {
                     }
                 }
             }, minutes, TimeUnit.MINUTES);
-            if (onSleepStateChangedListener != null)
-                onSleepStateChangedListener.onSleepStateChanged(true);
+            if (stateManager.onSleepStateChangedListener != null)
+                stateManager.onSleepStateChangedListener.onSleepStateChanged();
         }
     }
 
@@ -753,11 +709,11 @@ public class AudioPlayerService extends Service {
                 int changeTimeAmount = prefs.getSeekTime() * 1000;
                 int newPosition = position + changeTimeAmount;
                 if (newPosition > 0) {
-                    if (newPosition > media.getDuration())
-                        newPosition = media.getDuration();
+                    if (newPosition > stateManager.getMedia().getDuration())
+                        newPosition = stateManager.getMedia().getDuration();
                     mediaPlayer.seekTo(newPosition);
-                    stateManager.getBook().setCurrentMediaPosition(newPosition);
-                    updateBookAsync(stateManager.getBook());
+                    book.setCurrentMediaPosition(newPosition);
+                    updateBookAsync(book);
                 }
                 stateManager.setTime(newPosition);
 
@@ -770,7 +726,7 @@ public class AudioPlayerService extends Service {
     public void rewind() {
         PlayerStates state = stateManager.getState();
         if (state == PlayerStates.PLAYBACK_COMPLETED || state == PlayerStates.DEAD)
-            prepare(media.getId());
+            prepare(stateManager.getMedia().getId());
 
         if (state == PlayerStates.STARTED || state == PlayerStates.PREPARED || state == PlayerStates.PAUSED) {
             playerLock.lock();
@@ -781,8 +737,8 @@ public class AudioPlayerService extends Service {
                 if (newPosition < 0)
                     newPosition = 0;
                 mediaPlayer.seekTo(newPosition);
-                stateManager.getBook().setCurrentMediaPosition(newPosition);
-                updateBookAsync(stateManager.getBook());
+                book.setCurrentMediaPosition(newPosition);
+                updateBookAsync(book);
                 stateManager.setTime(newPosition);
             } finally {
                 playerLock.unlock();
@@ -792,17 +748,16 @@ public class AudioPlayerService extends Service {
 
     /**
      * Changes the current song in book and prepares the media. If the book was playing, it will start
-     * again after being prepared and it always calls {@link #updateGUI()}
+     * again after being prepared.
      *
      * @param mediaId The new chosen mediaId
      */
     public void changeBookPosition(long mediaId) {
-        if (mediaId != stateManager.getBook().getCurrentMediaId()) {
+        if (mediaId != book.getCurrentMediaId()) {
             boolean wasPlaying = (stateManager.getState() == PlayerStates.STARTED);
             prepare(mediaId);
             if (wasPlaying)
                 play();
-            updateGUI();
         }
     }
 
@@ -846,13 +801,12 @@ public class AudioPlayerService extends Service {
                     handler.post(timeChangedRunner);
                     stateBuilder.setState(PlaybackStateCompat.STATE_PLAYING, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 1);
                     mediaSession.setPlaybackState(stateBuilder.build());
-                    updateGUI();
                     break;
                 case IDLE:
                 case DEAD:
                 case STOPPED:
                 case PLAYBACK_COMPLETED:
-                    prepare(media.getId());
+                    prepare(stateManager.getMedia().getId());
                     play();
                     break;
                 default:
@@ -878,8 +832,8 @@ public class AudioPlayerService extends Service {
                 //saves current position, then pauses
                 int position = mediaPlayer.getCurrentPosition();
                 if (position > 0) {
-                    stateManager.getBook().setCurrentMediaPosition(position);
-                    updateBookAsync(stateManager.getBook());
+                    book.setCurrentMediaPosition(position);
+                    updateBookAsync(book);
                 }
 
                 //stops runner who were updating gui frequently
@@ -909,10 +863,9 @@ public class AudioPlayerService extends Service {
         }
     }
 
-
     /**
      * Changes the position in the current track. Also updates the database accordingly.
-     * Calls {@link #updateGUI()}
+     * *
      *
      * @param position The position in the current track to jump to
      */
@@ -922,10 +875,10 @@ public class AudioPlayerService extends Service {
             PlayerStates state = stateManager.getState();
             if (state == PlayerStates.STARTED || state == PlayerStates.PREPARED || state == PlayerStates.PAUSED) {
                 mediaPlayer.seekTo(position);
-                stateManager.getBook().setCurrentMediaPosition(position);
-                updateBookAsync(stateManager.getBook());
+                book.setCurrentMediaPosition(position);
+                stateManager.setTime(position);
+                updateBookAsync(book);
             }
-            updateGUI();
         } finally {
             playerLock.unlock();
         }
@@ -933,7 +886,7 @@ public class AudioPlayerService extends Service {
 
 
     public interface OnSleepStateChangedListener {
-        public void onSleepStateChanged(boolean active);
+        public void onSleepStateChanged();
     }
 
     public class LocalBinder extends Binder {
@@ -956,8 +909,8 @@ public class AudioPlayerService extends Service {
                         int position = mediaPlayer.getCurrentPosition();
                         stateManager.setTime(position);
                         if (position > 0) {
-                            stateManager.getBook().setCurrentMediaPosition(position);
-                            updateBookAsync(stateManager.getBook());
+                            book.setCurrentMediaPosition(position);
+                            updateBookAsync(book);
                         }
                     }
                 } finally {
@@ -967,4 +920,6 @@ public class AudioPlayerService extends Service {
             handler.postDelayed(timeChangedRunner, 100);
         }
     };
+
+
 }

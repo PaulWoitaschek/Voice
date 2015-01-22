@@ -25,7 +25,6 @@ public class BookDetail implements Parcelable {
     private long currentMediaId;
     private int currentMediaPosition;
 
-
     public BookDetail() {
 
     }

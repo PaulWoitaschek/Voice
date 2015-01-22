@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.content.Bookmark;
 import de.ph1b.audiobook.content.MediaDetail;
-import de.ph1b.audiobook.service.StateManager;
 
 /**
  * @author <a href="mailto:woitaschek@posteo.de">Paul Woitaschek</a>
@@ -28,12 +26,11 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
     private final OnOptionsMenuClickedListener listener;
     private final ArrayList<MediaDetail> allMedia;
 
-    public BookmarkAdapter(Context c, ArrayList<Bookmark> bookmarks,
-                           OnOptionsMenuClickedListener listener) {
+    public BookmarkAdapter(ArrayList<Bookmark> bookmarks, OnOptionsMenuClickedListener listener,
+                           ArrayList<MediaDetail> allMedia) {
         this.bookmarks = bookmarks;
         this.listener = listener;
-        StateManager stateManager = StateManager.getInstance(c);
-        allMedia = stateManager.getMedia();
+        this.allMedia = allMedia;
     }
 
     /**

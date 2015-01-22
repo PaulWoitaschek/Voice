@@ -26,7 +26,7 @@ public class Prefs {
     public void setCurrentBookId(long bookId) {
         SharedPreferences.Editor editor = sp.edit();
         editor.putLong(PREF_KEY_CURRENT_BOOK, bookId);
-        editor.apply();
+        editor.commit();
     }
 
     public float getPlaybackSpeed() {
@@ -57,7 +57,7 @@ public class Prefs {
         return sp.getInt(c.getString(R.string.pref_key_sleep_time), 20);
     }
 
-    public void setSleepTime(int time){
+    public void setSleepTime(int time) {
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt(c.getString(R.string.pref_key_sleep_time), time);
         editor.apply();
@@ -77,7 +77,7 @@ public class Prefs {
         return sp.getBoolean(c.getString(R.string.pref_key_resume_on_replug), true);
     }
 
-    public boolean mobileConnectionAllowed(){
+    public boolean mobileConnectionAllowed() {
         return sp.getBoolean(c.getString(R.string.pref_key_cover_on_internet), false);
     }
 }

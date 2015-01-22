@@ -41,7 +41,6 @@ import android.widget.TextView;
 import java.io.File;
 import java.util.ArrayList;
 
-import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookPlay;
 import de.ph1b.audiobook.activity.FilesChoose;
@@ -94,8 +93,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     private boolean mBound = false;
     private final ServiceConnection mConnection = new ServiceConnection() {
         @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
+        public void onServiceConnected(ComponentName className, IBinder service) {
             AudioPlayerService.LocalBinder binder = (AudioPlayerService.LocalBinder) service;
             mService = binder.getService();
             mBound = true;
@@ -187,9 +185,6 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                 prefs.setCurrentBookId(bookId);
 
                 Intent i = new Intent(getActivity(), BookPlay.class);
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, "Starting book with id: " + bookId);
-                i.putExtra(AudioPlayerService.GUI_BOOK_ID, bookId);
                 startActivity(i);
             }
 
@@ -401,7 +396,8 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     public void onResume() {
         super.onResume();
 
-        startAudioPlayerService();
+        Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
+        getActivity().startService(serviceIntent);
 
         initPlayerWidget();
     }
@@ -467,27 +463,5 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     @Override
     public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
 
-    }
-
-    /**
-     * Starts the service (async, on background thread)
-     */
-    private void startAudioPlayerService() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                long currentBookId = prefs.getCurrentBookId();
-                for (BookDetail b : adapt.getData()) {
-                    if (b.getId() == currentBookId) {
-                        Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
-                        serviceIntent.putExtra(AudioPlayerService.GUI_BOOK_ID, b.getId());
-                        getActivity().startService(serviceIntent);
-
-                        Intent intent = new Intent(getActivity(), AudioPlayerService.class);
-                        getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-                    }
-                }
-            }
-        }).start();
     }
 }
