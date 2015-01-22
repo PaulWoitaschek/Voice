@@ -133,9 +133,18 @@ public class AudioPlayerService extends Service {
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                     if (stateManager.getState() == PlayerStates.STARTED) {
-                        if (BuildConfig.DEBUG)
-                            Log.d(TAG, "lowering volume because of af loss transcient can duck");
-                        audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
+                        boolean pauseOnTransientDuck = prefs.pauseOnTransientAudioFocusLoss();
+                        if (pauseOnTransientDuck) {
+                            if (BuildConfig.DEBUG)
+                                Log.d(TAG, "pausing because of transient loss");
+                            pause(false);
+                            pauseBecauseLossTransient = true;
+                        }
+                        else {
+                            if (BuildConfig.DEBUG)
+                                Log.d(TAG, "lowering volume because of af loss transient can duck");
+                            audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
+                        }
                     }
                     break;
                 default:
