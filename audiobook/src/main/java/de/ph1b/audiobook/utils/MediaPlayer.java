@@ -22,6 +22,8 @@ import android.media.MediaCodec;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.PowerManager;
 import android.util.Log;
 
@@ -442,15 +444,14 @@ class MediaPlayer {
                 mIsDecoding = false;
                 if (mContinue && (sawInputEOS || sawOutputEOS)) {
                     mCurrentState = STATE_PLAYBACK_COMPLETED;
-                    Thread t = new Thread(new Runnable() {
+                    Handler onCompletionHandler = new Handler(Looper.getMainLooper());
+                    onCompletionHandler.post(new Runnable() {
                         @Override
                         public void run() {
                             onCompletionListener.onCompletion();
                             stayAwake(false);
                         }
                     });
-                    t.setDaemon(true);
-                    t.start();
                 } else {
                     Log.d(TAG,
                             "Loop ended before saw input eos or output eos");
