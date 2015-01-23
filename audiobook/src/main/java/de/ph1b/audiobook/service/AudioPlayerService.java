@@ -23,6 +23,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.RemoteViews;
@@ -105,19 +106,22 @@ public class AudioPlayerService extends Service {
     private final AudioManager.OnAudioFocusChangeListener audioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
         @Override
         public void onAudioFocusChange(int focusChange) {
+            TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            final int callState = (tm != null) ? tm.getCallState() : TelephonyManager.CALL_STATE_IDLE;
+            if (BuildConfig.DEBUG) {
+                Log.d(TAG, "Call state is: " + callState);
+            }
+
+            if (callState != TelephonyManager.CALL_STATE_IDLE) {
+                focusChange = AudioManager.AUDIOFOCUS_LOSS;
+                // if there is an incoming call, we pause permanently. (tricking switch condition)
+            }
+
+
             switch (focusChange) {
-                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                    if (stateManager.getState() == PlayerStates.STARTED) {
-                        if (BuildConfig.DEBUG)
-                            Log.d(TAG, "Paused by audio-focus loss transient.");
-                        pause(false);
-                        pauseBecauseLossTransient = true;
-                    }
-                    break;
                 case AudioManager.AUDIOFOCUS_GAIN:
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "started by audioFocus gained");
-
                     if (pauseBecauseLossTransient) {
                         play();
                     } else if (stateManager.getState() == PlayerStates.STARTED) {
@@ -131,19 +135,26 @@ public class AudioPlayerService extends Service {
                         Log.d(TAG, "paused by audioFocus loss");
                     pause(true);
                     break;
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                    if (stateManager.getState() == PlayerStates.STARTED) {
+                        if (BuildConfig.DEBUG)
+                            Log.d(TAG, "Paused by audio-focus loss transient.");
+                        pause(false);
+                        pauseBecauseLossTransient = true;
+                    }
+                    break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                     if (stateManager.getState() == PlayerStates.STARTED) {
-                        boolean pauseOnTransientDuck = prefs.pauseOnTransientAudioFocusLoss();
-                        if (pauseOnTransientDuck) {
+                        if (prefs.pauseOnTransientAudioFocusLoss()) {
                             if (BuildConfig.DEBUG)
                                 Log.d(TAG, "pausing because of transient loss");
                             pause(false);
                             pauseBecauseLossTransient = true;
-                        }
-                        else {
+                        } else {
                             if (BuildConfig.DEBUG)
                                 Log.d(TAG, "lowering volume because of af loss transient can duck");
                             audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
+                            pauseBecauseLossTransient = false;
                         }
                     }
                     break;

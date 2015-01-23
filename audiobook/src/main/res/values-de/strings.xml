@@ -74,4 +74,7 @@
     <string name="bookmark_exists">Es existiert bereits ein Lesezeichen an dieser Stelle.</string>
     <string name="acc_button_add_bookmark">Fügt an der aktuellen Stelle ein Lesezeichen hinzu.</string>
     <string name="bookmark_edit_hint">Lesezeichenname</string>
+    <string name="pref_title_pause_on_transient">Pause bei Unterbrechung</string>
+    <string name="pref_summary_pause_on_transient">Pausiert bei kurzer Unterbrechung. Ansonsten wird die Lautstärke kurz heruntergesetzt.</string>
+    <string name="pref_summary_pause_on_transient">P</string>
 </resources>
