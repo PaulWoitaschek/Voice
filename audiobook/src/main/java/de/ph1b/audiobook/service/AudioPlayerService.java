@@ -53,7 +53,11 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
     private RemoteControlClient remoteControlClient = null;
     private volatile boolean pauseBecauseLossTransient = false;
     private volatile boolean pauseBecauseHeadset = false;
-
+    private volatile long pauseTime = 0;
+    private volatile long pauseBookId;
+    /**
+     * If audio is becoming noisy, pause the player.
+     */
     private final BroadcastReceiver audioBecomingNoisyReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -396,7 +400,6 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         final int callState = (tm != null) ? tm.getCallState() : TelephonyManager.CALL_STATE_IDLE;
         L.d(TAG, "Call state is: " + callState);
-
 
         if (callState != TelephonyManager.CALL_STATE_IDLE) {
             focusChange = AudioManager.AUDIOFOCUS_LOSS;

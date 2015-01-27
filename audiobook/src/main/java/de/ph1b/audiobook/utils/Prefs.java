@@ -92,4 +92,8 @@ public class Prefs {
     public boolean pauseOnTransientAudioFocusLoss() {
         return sp.getBoolean(c.getString(R.string.pref_key_pause_on_transient_interrupt), false);
     }
+
+    public boolean autoRewindOnPause() {
+        return sp.getBoolean(c.getString(R.string.pref_key_auto_rewind_on_pause), false);
+    }
 }

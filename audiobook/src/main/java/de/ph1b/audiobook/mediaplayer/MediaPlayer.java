@@ -24,6 +24,7 @@ import android.media.MediaFormat;
 import android.net.Uri;
 import android.os.PowerManager;
 
+import de.ph1b.audiobook.utils.Prefs;
 import org.vinuxproject.sonic.Sonic;
 
 import java.io.IOException;
@@ -55,6 +56,10 @@ public class MediaPlayer {
     private State state;
     private long duration;
 
+    private Prefs prefs;
+    private long pauseTime;
+    private long pausedBookId;
+
     public MediaPlayer(Context context) {
         state = State.IDLE;
         speed = (float) 1.0;
@@ -62,6 +67,7 @@ public class MediaPlayer {
         mContinue = false;
         mIsDecoding = false;
         mContext = context;
+        prefs = new Prefs(mContext);
         path = null;
         uri = null;
         mDecoderLock = new Object();
@@ -98,6 +104,9 @@ public class MediaPlayer {
         }
         return 0;
     }
+    public float getPlaybackSpeed() {
+        return this.speed;
+    }
 
     public void setPlaybackSpeed(float speed) {
         this.speed = speed;
@@ -107,6 +116,8 @@ public class MediaPlayer {
         switch (state) {
             case STARTED:
             case PAUSED:
+                pauseTime = System.currentTimeMillis();
+                pausedBookId = prefs.getCurrentBookId();
                 track.pause();
                 state = State.PAUSED;
                 L.d(TAG, "State changed to STATE_PAUSED");
@@ -135,12 +146,31 @@ public class MediaPlayer {
         }
     }
 
+
+    private void handleAutoRewind() {
+        boolean isAutoRewindEnabled = prefs.autoRewindOnPause();
+        if (isAutoRewindEnabled && pauseTime > 0 && pausedBookId == prefs.getCurrentBookId()) {
+            long timeElapsedSincePause = Math.abs(pauseTime - System.currentTimeMillis());
+            final int threshold = 3000; //ms
+            int autoRewindAmount = (int) Math.ceil(2000 * getPlaybackSpeed()); //ms
+            if (timeElapsedSincePause > threshold) {
+                double timeElapsedSeconds = (double) timeElapsedSincePause / 1000;
+                autoRewindAmount += (int) (Math.log(timeElapsedSeconds) * 1000);
+            }
+            int newPosition = getCurrentPosition() - autoRewindAmount;
+            if (newPosition < 0)
+                newPosition = 0;
+            seekTo(newPosition);
+        }
+    }
+
     public void start() {
         switch (state) {
             case PREPARED:
             case PLAYBACK_COMPLETED:
                 state = State.STARTED;
                 mContinue = true;
+                handleAutoRewind();
                 track.play();
                 decode();
                 stayAwake(true);
@@ -151,6 +181,7 @@ public class MediaPlayer {
                 synchronized (mDecoderLock) {
                     mDecoderLock.notify();
                 }
+                handleAutoRewind();
                 track.play();
                 stayAwake(true);
                 break;
