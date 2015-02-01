@@ -39,48 +39,22 @@
 
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/rewind"
-        android:src="@drawable/ic_fast_rewind_white_36dp"
-        android:adjustViewBounds="true"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        style="?android:attr/borderlessButtonStyle"
-        android:contentDescription="@string/rewind" />
-
-    <ImageButton
-        android:id="@+id/playPause"
-        android:src="@drawable/ic_play_arrow_white_48dp"
-        android:adjustViewBounds="true"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        style="?android:attr/borderlessButtonStyle"
-        android:contentDescription="@string/play_pause" />
-
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
 
-        <ImageButton
-            android:id="@+id/fast_forward"
-            android:src="@drawable/ic_fast_forward_white_36dp"
-            android:adjustViewBounds="true"
-            android:layout_marginRight="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            style="?android:attr/borderlessButtonStyle"
-            android:contentDescription="@string/fast_forward" />
+        <include layout="@layout/notification_buttons" />
 
         <ImageButton
             android:id="@+id/closeButton"
             android:src="@drawable/ic_close_grey600_18dp"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_gravity="end|top"
-            android:layout_marginEnd="4dp"
-            android:layout_marginRight="4dp"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:contentDescription="@string/content_close_notification" />
+
     </FrameLayout>
+
+
 </LinearLayout>

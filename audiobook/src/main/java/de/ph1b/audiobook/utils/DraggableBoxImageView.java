@@ -8,12 +8,10 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
-import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 
 
@@ -96,9 +94,6 @@ public class DraggableBoxImageView extends ImageView {
                     top += deltaY;
                 }
 
-                if (BuildConfig.DEBUG)
-                    Log.d("dbim", "move!" + String.valueOf(deltaX) + ":" + String.valueOf(deltaY));
-
                 invalidate();
                 break;
             case MotionEvent.ACTION_UP:
@@ -132,10 +127,6 @@ public class DraggableBoxImageView extends ImageView {
 
             maxWidth = right - left;
             maxHeight = bottom - top;
-
-            Log.d("measured", String.valueOf(left) + "/" + String.valueOf(top) + "/" +
-                    String.valueOf(right) + "/" +
-                    String.valueOf(bottom));
         }
 
         super.onSizeChanged(w, h, oldw, oldh);
@@ -151,15 +142,6 @@ public class DraggableBoxImageView extends ImageView {
         int realTop = Math.round(top / imageViewHeight * origH);
         int realRight = Math.round(right / imageViewWidth * origW);
         int realBottom = Math.round(bottom / imageViewHeight * origH);
-
-
-        if (BuildConfig.DEBUG) {
-            Log.d("dbimv", "realright//origW");
-            Log.d("dmiv", String.valueOf(realRight) + "/" + String.valueOf(origW));
-            Log.d("dbmiv", "bottom//maxheight");
-            Log.d("dbmiv", String.valueOf(bottom) + "/" + String.valueOf(maxHeight));
-            Log.d("dbmiv", String.valueOf(origH));
-        }
 
         return new Rect(realLeft, realTop, realRight, realBottom);
     }

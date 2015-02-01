@@ -26,8 +26,6 @@
     <string name="minutes">Minuten</string>
     <string name="seconds">Sekunden</string>
 
-    <string name="file_not_found">Das Hörbuch konnte nicht gefunden werden. Bitte fügen Sie es
-        erneut hinzu.</string>
     <string name="current_cover">Zeigt das Cover des momentan spielenden Buchs.</string>
     <string name="current_playing">Zeigt an, ob momentan ein Buch abgespielt wird.</string>
     <string name="pref_cover_on_internet">Benutze Mobiles Internet</string>
@@ -49,7 +47,6 @@
     <string name="fast_forward">Vorspulen</string>
     <string name="playback_speed">Geschwindigkeit</string>
     <string name="pref_sleep_time">Einschlafzeit</string>
-    <string name="sleep_timer_canceled">Einschlaftimer gestoppt.</string>
     <string name="sleep_timer_started">Einschlaftimer: </string>
     <string name="content_close_notification">Player und Benachrichtigung schließen</string>
     <string name="delete_book_title">Möchten Sie dieses Buch löschen?</string>
@@ -57,9 +54,6 @@
     <string name="pref_title_track_to_end">Kapitel zu Ende spielen</string>
     <string name="pref_summary_track_to_end">Spielt den aktuellen Track noch zu Ende, nachdem die Einschlafzeit abgelaufen ist.</string>
 
-    <string name="error_in_file_title">Dateifehler</string>
-    <string name="error_in_file_description">Die folgenden Dateien scheinen defekt zu sein. Buch ohne diese Dateien hinzufügen?</string>
-    <string name="error_in_file_all_defect">Alle Dateien sind defekt.</string>
     <string name="next_track">Nächster Song</string>
     <string name="previous_track">Voriger Song</string>
 

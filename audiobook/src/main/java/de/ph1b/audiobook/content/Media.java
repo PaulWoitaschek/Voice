@@ -5,33 +5,35 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 
-public class MediaDetail implements Parcelable {
+public class Media implements Parcelable {
 
-    public static final Parcelable.Creator<MediaDetail> CREATOR = new Parcelable.Creator<MediaDetail>() {
+    public static final Parcelable.Creator<Media> CREATOR = new Parcelable.Creator<Media>() {
         @Override
-        public MediaDetail createFromParcel(Parcel in) {
-            return new MediaDetail(in);
+        public Media createFromParcel(Parcel in) {
+            return new Media(in);
         }
 
 
         @Override
-        public MediaDetail[] newArray(int size) {
-            return new MediaDetail[size];
+        public Media[] newArray(int size) {
+            return new Media[size];
         }
 
     };
-    private String path;
-    private String name;
+    private final String path;
+    private final String name;
+    private final long bookId;
     private long id;
     private int duration;
-    private long bookId;
 
 
-    public MediaDetail() {
-
+    public Media(String path, String name, long bookId) {
+        this.path = path;
+        this.name = name;
+        this.bookId = bookId;
     }
 
-    private MediaDetail(Parcel pc) {
+    private Media(Parcel pc) {
         path = pc.readString();
         name = pc.readString();
         id = pc.readLong();
@@ -49,9 +51,9 @@ public class MediaDetail implements Parcelable {
             return false;
         else if (o == this)
             return true;
-        else if (o instanceof MediaDetail) {
-            MediaDetail m = (MediaDetail) o;
-            if (m.getId() == this.getId())
+        else if (o instanceof Media) {
+            Media m = (Media) o;
+            if (m.id == this.id)
                 return true;
         }
         return false;
@@ -77,20 +79,8 @@ public class MediaDetail implements Parcelable {
         return bookId;
     }
 
-    public void setBookId(long bookId) {
-        this.bookId = bookId;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public long getId() {
-        return id;
     }
 
     public void setId(long id) {
@@ -99,10 +89,6 @@ public class MediaDetail implements Parcelable {
 
     public String getPath() {
         return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     @Override

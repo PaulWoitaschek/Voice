@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.utils;//Copyright 2012 James Falcon
+package de.ph1b.audiobook.mediaplayer;//Copyright 2012 James Falcon
 //Edited by Paul Woitaschek
 //
 //Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,6 @@ import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.net.Uri;
 import android.os.PowerManager;
-import android.util.Log;
 
 import org.vinuxproject.sonic.Sonic;
 
@@ -31,61 +30,40 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.concurrent.locks.ReentrantLock;
 
-@TargetApi(16)
-class MediaPlayer {
-    private AudioTrack track;
+import de.ph1b.audiobook.utils.L;
 
+@TargetApi(16)
+public class MediaPlayer {
+    private final static int TRACK_NUM = 0;
+    private static final String TAG = "MediaPlayer";
+    private final Uri uri;
+    private final ReentrantLock lock = new ReentrantLock();
+    private final Object mDecoderLock;
+    private final float pitch;
+    private final Context mContext;
+    private final PowerManager.WakeLock wakeLock;
+    private AudioTrack track;
     private Sonic sonic;
     private MediaExtractor extractor;
     private MediaCodec codec;
     private Thread decoderThread;
     private String path;
-    private final Uri uri;
-    private final ReentrantLock lock;
-    private final Object mDecoderLock;
     private boolean mContinue;
     private boolean mIsDecoding;
-    private long mDuration;
-    private float mCurrentSpeed;
-    private final float mCurrentPitch;
-    private int mCurrentState;
-    private final Context mContext;
-    private final static int TRACK_NUM = 0;
-    private final static int STATE_IDLE = 0;
-    private final static int STATE_INITIALIZED = 1;
-    private final static int STATE_PREPARED = 3;
-    private final static int STATE_STARTED = 4;
-    private final static int STATE_PAUSED = 5;
-    private final static int STATE_STOPPED = 6;
-    private final static int STATE_PLAYBACK_COMPLETED = 7;
-    private final static int STATE_END = 8;
-    private final static int STATE_ERROR = 9;
-
-    private static final String TAG = "MediaPlayer";
-    private final PowerManager.WakeLock wakeLock;
-
-
-    public interface OnCompletionListener {
-        public void onCompletion();
-    }
-
+    private float speed;
     private OnCompletionListener onCompletionListener;
-
-    public void setOnCompletionListener(OnCompletionListener listener) {
-        this.onCompletionListener = listener;
-    }
+    private State state;
 
 
     public MediaPlayer(Context context) {
-        mCurrentState = STATE_IDLE;
-        mCurrentSpeed = (float) 1.0;
-        mCurrentPitch = (float) 1.0;
+        state = State.IDLE;
+        speed = (float) 1.0;
+        pitch = (float) 1.0;
         mContinue = false;
         mIsDecoding = false;
         mContext = context;
         path = null;
         uri = null;
-        lock = new ReentrantLock();
         mDecoderLock = new Object();
 
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
@@ -93,11 +71,15 @@ class MediaPlayer {
         wakeLock.setReferenceCounted(false);
     }
 
+    public void setOnCompletionListener(OnCompletionListener listener) {
+        this.onCompletionListener = listener;
+    }
+
 
     public int getCurrentPosition() {
-        switch (mCurrentState) {
-            case STATE_ERROR:
-                error();
+        switch (state) {
+            case ERROR:
+                error("getCurrentPosition", state);
                 break;
             default:
                 return (int) (extractor.getSampleTime() / 1000);
@@ -106,69 +88,54 @@ class MediaPlayer {
     }
 
     public void setPlaybackSpeed(float speed) {
-        this.mCurrentSpeed = speed;
+        this.speed = speed;
     }
-
-    public boolean isPlaying() {
-        switch (mCurrentState) {
-            case STATE_ERROR:
-                error();
-                break;
-            default:
-                return mCurrentState == STATE_STARTED;
-        }
-        return false;
-    }
-
 
     public void pause() {
-        switch (mCurrentState) {
-            case STATE_STARTED:
-            case STATE_PAUSED:
+        switch (state) {
+            case STARTED:
+            case PAUSED:
                 track.pause();
-                mCurrentState = STATE_PAUSED;
-                Log.d(TAG, "State changed to STATE_PAUSED");
+                state = State.PAUSED;
+                L.d(TAG, "State changed to STATE_PAUSED");
                 stayAwake(false);
                 break;
             default:
-                error();
+                error("pause", state);
         }
     }
 
     public void prepare() {
-        switch (mCurrentState) {
-            case STATE_INITIALIZED:
-            case STATE_STOPPED:
+        switch (state) {
+            case INITIALIZED:
+            case STOPPED:
                 try {
                     initStream();
                 } catch (IOException e) {
-                    Log.e(TAG, "Failed setting data source!", e);
-                    error();
+                    error("Failed setting data source!:" + e.toString());
                     return;
                 }
-                mCurrentState = STATE_PREPARED;
-                Log.d(TAG, "State changed to STATE_PREPARED");
+                state = State.PREPARED;
+                L.d(TAG, "State changed to STATE_PREPARED");
                 break;
             default:
-                error();
+                error("prepare", state);
         }
     }
 
-
     public void start() {
-        Log.d(TAG, "start called");
-        switch (mCurrentState) {
-            case STATE_PREPARED:
-            case STATE_PLAYBACK_COMPLETED:
-                mCurrentState = STATE_STARTED;
+        switch (state) {
+            case PREPARED:
+            case PLAYBACK_COMPLETED:
+                state = State.STARTED;
                 mContinue = true;
                 track.play();
                 decode();
                 stayAwake(true);
-            case STATE_STARTED:
+            case STARTED:
                 break;
-            case STATE_PAUSED:
-                mCurrentState = STATE_STARTED;
+            case PAUSED:
+                state = State.STARTED;
                 synchronized (mDecoderLock) {
                     mDecoderLock.notify();
                 }
@@ -176,13 +143,8 @@ class MediaPlayer {
                 stayAwake(true);
                 break;
             default:
-                mCurrentState = STATE_ERROR;
-                if (track != null) {
-                    error();
-                } else {
-                    Log.d("start",
-                            "Attempting to start while in idle after construction. Not allowed by no callbacks called");
-                }
+                error("start", state);
+                break;
         }
     }
 
@@ -197,7 +159,7 @@ class MediaPlayer {
     public void release() {
         reset(); //reset will release wakelock
         onCompletionListener = null;
-        mCurrentState = STATE_END;
+        state = State.END;
     }
 
     public void reset() {
@@ -206,7 +168,7 @@ class MediaPlayer {
         mContinue = false;
         try {
             if (decoderThread != null
-                    && mCurrentState != STATE_PLAYBACK_COMPLETED) {
+                    && state != State.PLAYBACK_COMPLETED) {
                 while (mIsDecoding) {
                     synchronized (mDecoderLock) {
                         mDecoderLock.notify();
@@ -215,7 +177,7 @@ class MediaPlayer {
                 }
             }
         } catch (InterruptedException e) {
-            Log.e(TAG,
+            L.e(TAG,
                     "Interrupted in reset while waiting for decoder thread to stop.",
                     e);
         }
@@ -231,17 +193,16 @@ class MediaPlayer {
             track.release();
             track = null;
         }
-        mCurrentState = STATE_IDLE;
-        Log.d(TAG, "State changed to STATE_IDLE");
+        state = State.IDLE;
         lock.unlock();
     }
 
     public void seekTo(final int ms) {
-        switch (mCurrentState) {
-            case STATE_PREPARED:
-            case STATE_STARTED:
-            case STATE_PAUSED:
-            case STATE_PLAYBACK_COMPLETED:
+        switch (state) {
+            case PREPARED:
+            case STARTED:
+            case PAUSED:
+            case PLAYBACK_COMPLETED:
                 Thread t = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -250,8 +211,8 @@ class MediaPlayer {
                             return;
                         }
                         track.flush();
-                        extractor.seekTo(((long) ms * 1000),
-                                MediaExtractor.SEEK_TO_CLOSEST_SYNC);
+                        long to = ((long) ms * 1000);
+                        extractor.seekTo(to, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
                         lock.unlock();
                     }
                 });
@@ -259,30 +220,32 @@ class MediaPlayer {
                 t.start();
                 break;
             default:
-                error();
+                error("seekTo", state);
         }
     }
 
     public void setDataSource(String path) {
-        Log.d(TAG, "setDataSource: " + path);
-        switch (mCurrentState) {
-            case STATE_IDLE:
+        L.d(TAG, "setDataSource: " + path);
+        switch (state) {
+            case IDLE:
                 this.path = path;
-                mCurrentState = STATE_INITIALIZED;
-                Log.d(TAG, "Moving state to STATE_INITIALIZED");
+                state = State.INITIALIZED;
+                L.d(TAG, "Moving state to STATE_INITIALIZED");
                 break;
             default:
-                error();
+                error("setDataSource", state);
         }
     }
 
-
-    private void error() {
-        Log.e(TAG, "Moved to error state!");
-        stayAwake(false);
-        mCurrentState = STATE_ERROR;
+    private void error(String who, State cause) {
+        error("Moved to error state because " + who + " was called in state=" + cause);
     }
 
+    private void error(String reason) {
+        L.e(TAG, reason);
+        stayAwake(false);
+        state = State.ERROR;
+    }
 
     private int findFormatFromChannels(int numChannels) {
         switch (numChannels) {
@@ -309,9 +272,9 @@ class MediaPlayer {
         int sampleRate = oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
         int channelCount = oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
         final String mime = oFormat.getString(MediaFormat.KEY_MIME);
-        mDuration = oFormat.getLong(MediaFormat.KEY_DURATION);
-        Log.v(TAG, "Sample rate: " + sampleRate);
-        Log.v(TAG, "Mime type: " + mime);
+        // long duration = oFormat.getLong(MediaFormat.KEY_DURATION);
+        L.v(TAG, "Sample rate: " + sampleRate);
+        L.v(TAG, "Mime type: " + mime);
         initDevice(sampleRate, channelCount);
         extractor.selectTrack(TRACK_NUM);
         codec = MediaCodec.createDecoderByType(mime);
@@ -342,12 +305,10 @@ class MediaPlayer {
                 boolean sawInputEOS = false;
                 boolean sawOutputEOS = false;
                 while (!sawInputEOS && !sawOutputEOS && mContinue) {
-                    if (mCurrentState == STATE_PAUSED) {
-                        System.out.println("Decoder changed to PAUSED");
+                    if (state == State.PAUSED) {
                         try {
                             synchronized (mDecoderLock) {
                                 mDecoderLock.wait();
-                                System.out.println("Done with wait");
                             }
                         } catch (InterruptedException e) {
                             // Purposely not doing anything here
@@ -355,8 +316,8 @@ class MediaPlayer {
                         continue;
                     }
                     if (null != sonic) {
-                        sonic.setSpeed(mCurrentSpeed);
-                        sonic.setPitch(mCurrentPitch);
+                        sonic.setSpeed(speed);
+                        sonic.setPitch(pitch);
                     }
                     int inputBufIndex = codec.dequeueInputBuffer(200);
                     if (inputBufIndex >= 0) {
@@ -408,15 +369,12 @@ class MediaPlayer {
                             }
                         } else if (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED) {
                             outputBuffers = codec.getOutputBuffers();
-                            Log.d("PCM", "Output buffers changed");
                         } else if (res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
                             track.stop();
                             lock.lock();
                             track.release();
                             final MediaFormat oformat = codec
                                     .getOutputFormat();
-                            Log.d("PCM", "Output format has changed to"
-                                    + oformat);
                             initDevice(
                                     oformat.getInteger(MediaFormat.KEY_SAMPLE_RATE),
                                     oformat.getInteger(MediaFormat.KEY_CHANNEL_COUNT));
@@ -427,21 +385,12 @@ class MediaPlayer {
                     } while (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED
                             || res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED);
                 }
-                Log.d(TAG,
-                        "Decoding loop exited. Stopping codec and track");
-                Log.d(TAG, "Duration: " + (int) (mDuration / 1000));
-                Log.d(TAG,
-                        "Current position: "
-                                + (int) (extractor.getSampleTime() / 1000));
+
                 codec.stop();
                 track.stop();
-                Log.d(TAG, "Stopped codec and track");
-                Log.d(TAG,
-                        "Current position: "
-                                + (int) (extractor.getSampleTime() / 1000));
                 mIsDecoding = false;
                 if (mContinue && (sawInputEOS || sawOutputEOS)) {
-                    mCurrentState = STATE_PLAYBACK_COMPLETED;
+                    state = State.PLAYBACK_COMPLETED;
                     Thread t = new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -451,11 +400,6 @@ class MediaPlayer {
                     });
                     t.setDaemon(true);
                     t.start();
-                } else {
-                    Log.d(TAG,
-                            "Loop ended before saw input eos or output eos");
-                    Log.d(TAG, "sawInputEOS: " + sawInputEOS);
-                    Log.d(TAG, "sawOutputEOS: " + sawOutputEOS);
                 }
                 synchronized (mDecoderLock) {
                     mDecoderLock.notifyAll();
@@ -466,5 +410,21 @@ class MediaPlayer {
         );
         decoderThread.setDaemon(true);
         decoderThread.start();
+    }
+
+    private enum State {
+        IDLE,
+        ERROR,
+        INITIALIZED,
+        STARTED,
+        PAUSED,
+        PREPARED,
+        STOPPED,
+        PLAYBACK_COMPLETED,
+        END
+    }
+
+    public interface OnCompletionListener {
+        public void onCompletion();
     }
 }

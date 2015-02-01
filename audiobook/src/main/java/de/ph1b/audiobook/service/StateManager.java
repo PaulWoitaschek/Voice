@@ -4,27 +4,27 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ph1b.audiobook.content.MediaDetail;
-import de.ph1b.audiobook.interfaces.OnStateChangedListener;
-import de.ph1b.audiobook.interfaces.OnTimeChangedListener;
 import de.ph1b.audiobook.receiver.WidgetProvider;
+import de.ph1b.audiobook.utils.L;
 
 
 public class StateManager {
-
+    private static final String TAG = "StateManager";
     private static StateManager instance;
-    private final List<OnStateChangedListener> allStateListener = new ArrayList<>();
-    private final List<OnTimeChangedListener> allTimeListener = new ArrayList<>();
+    private final List<ChangeListener> listeners = new ArrayList<>();
+    private PlayerStates state = PlayerStates.STOPPED;
+    private int time;
+    private boolean sleepTimerActive = false;
+    private int position;
     private final Context c;
-    public AudioPlayerService.OnSleepStateChangedListener onSleepStateChangedListener;
-    private PlayerStates state = PlayerStates.IDLE;
-    private MediaDetail media;
-    private OnMediaChangedListener onMediaChangedListener;
+
+    public int getPosition(){
+        return position;
+    }
 
     private StateManager(Context c) {
         this.c = c;
@@ -32,46 +32,9 @@ public class StateManager {
 
     public static synchronized StateManager getInstance(Context c) {
         if (instance == null) {
-            instance = new StateManager(c);
+            instance = new StateManager(c.getApplicationContext());
         }
         return instance;
-    }
-
-    public MediaDetail getMedia() {
-        return media;
-    }
-
-    public void setMedia(MediaDetail media) {
-        Log.d("sman", "setting media:" + media.getName());
-        this.media = media;
-        if (onMediaChangedListener != null) {
-            onMediaChangedListener.onMediaChanged(media);
-        }
-    }
-
-    public void setOnSleepStateChangedListener(AudioPlayerService.OnSleepStateChangedListener onSleepStateChangedListener) {
-        this.onSleepStateChangedListener = onSleepStateChangedListener;
-    }
-
-
-    public void addStateChangeListener(OnStateChangedListener listener) {
-        allStateListener.add(listener);
-    }
-
-    public void setOnMediaChangedListener(OnMediaChangedListener onMediaChangedListener) {
-        this.onMediaChangedListener = onMediaChangedListener;
-    }
-
-    public void removeStateChangeListener(OnStateChangedListener listener) {
-        allStateListener.remove(listener);
-    }
-
-    public void addTimeChangedListener(OnTimeChangedListener listener) {
-        allTimeListener.add(listener);
-    }
-
-    public void removeTimeChangedListener(OnTimeChangedListener listener) {
-        allTimeListener.remove(listener);
     }
 
     public PlayerStates getState() {
@@ -79,16 +42,50 @@ public class StateManager {
     }
 
     public void setState(PlayerStates state) {
+        L.d(TAG, "setState:" + state);
         this.state = state;
-        for (OnStateChangedListener s : allStateListener)
-            s.onStateChanged(state);
+        for (ChangeListener l : listeners) {
+            l.onStateChanged(state);
+        }
         updateWidget();
     }
 
+    public int getTime() {
+        return time;
+    }
 
     public void setTime(int time) {
-        for (OnTimeChangedListener s : allTimeListener)
-            s.onTimeChanged(time);
+        this.time = time;
+        for (ChangeListener l : listeners) {
+            l.onTimeChanged(time);
+        }
+    }
+
+    public boolean isSleepTimerActive() {
+        return sleepTimerActive;
+    }
+
+    public void setSleepTimerActive(boolean sleepTimerActive) {
+        this.sleepTimerActive = sleepTimerActive;
+        for (ChangeListener l : listeners) {
+            l.onSleepTimerSet(sleepTimerActive);
+        }
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+        for (ChangeListener l : listeners) {
+            l.onPositionChanged(position);
+        }
+        updateWidget();
+    }
+
+    public void addChangeListener(ChangeListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeChangeListener(ChangeListener listener) {
+        listeners.remove(listener);
     }
 
     private void updateWidget() {
@@ -100,8 +97,13 @@ public class StateManager {
         c.sendBroadcast(intent);
     }
 
+    public interface ChangeListener {
+        public void onTimeChanged(int time);
 
-    public interface OnMediaChangedListener {
-        public void onMediaChanged(MediaDetail media);
+        public void onStateChanged(PlayerStates state);
+
+        public void onSleepTimerSet(boolean sleepTimerActive);
+
+        public void onPositionChanged(int position);
     }
 }

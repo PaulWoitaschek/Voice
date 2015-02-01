@@ -14,7 +14,7 @@ import android.widget.NumberPicker;
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.fragment.BookPlayFragment;
+import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
 
 
@@ -96,10 +96,7 @@ public class JumpToPosition extends DialogFragment {
                 int h = hPicker.getValue();
                 int m = mPicker.getValue();
                 int newPosition = (m + 60 * h) * 60 * 1000;
-                BookPlayFragment fragment = (BookPlayFragment) getTargetFragment();
-                if (fragment.mBound) {
-                    fragment.service.changePosition(newPosition);
-                }
+                new ServiceController(getActivity()).changeTime(newPosition);
             }
         });
         builder.setNegativeButton(R.string.dialog_cancel, null);

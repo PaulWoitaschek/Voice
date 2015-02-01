@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 
+import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.service.AudioPlayerService;
 
 /**
@@ -23,6 +24,13 @@ public abstract class BaseActivity extends ActionBarActivity {
             Intent i = new Intent(this, NoExternalStorage.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(new Intent(i));
+        } else {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    DataBaseHelper.getInstance(BaseActivity.this).fillMissingDurations();
+                }
+            }).start();
         }
     }
 }

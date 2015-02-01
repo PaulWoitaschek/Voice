@@ -8,14 +8,14 @@ import android.os.Build;
 
 import java.util.ArrayList;
 
-import de.ph1b.audiobook.content.BookDetail;
+import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.interfaces.OnItemClickListener;
 
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 class MediaAdapterV14 extends MediaAdapter implements ComponentCallbacks2 {
 
-    public MediaAdapterV14(ArrayList<BookDetail> data, Context c, OnItemClickListener onItemClickListener, OnCoverChangedListener onCoverChangedListener) {
+    public MediaAdapterV14(ArrayList<Book> data, Context c, OnItemClickListener onItemClickListener, OnCoverChangedListener onCoverChangedListener) {
         super(data, c, onItemClickListener, onCoverChangedListener);
     }
 

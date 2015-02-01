@@ -25,8 +25,6 @@
     <string name="minutes">minutos</string>
     <string name="seconds">segundos</string>
 
-    <string name="file_not_found">Parece que el libro de audio no se puede encontrar en el almacenamiento. Por favor
-         vuelve a agregar el audiolibro.</string>
     <string name="current_cover">Muestra la portada del libro que se está reproduciendo.</string>
     <string name="current_playing">Que se esta reproduciendo.</string>
     <string name="pref_cover_on_internet">Usar la red móvil.</string>
@@ -47,15 +45,11 @@
     <string name="playback_speed">Velocidad de reproducción</string>
     <string name="pref_sleep_time">Temporizador para dormir</string>
     <string name="sleep_timer_started">Temporizador: </string>
-    <string name="sleep_timer_canceled">Temporizador cancelado.</string>
     <string name="content_close_notification">Cerrar tocador y notificación.</string>
     <string name="delete_book_title">¿Quiere borrar este libro?</string>
     <string name="delete_book_keep">Mantener</string>
     <string name="pref_title_track_to_end">Continua asta el final</string>
     <string name="pref_summary_track_to_end">Sigue jugando hasta el final de la pista, después de temporizador ha desencadenado.</string>
-    <string name="error_in_file_title">Error en el archivo</string>
-    <string name="error_in_file_description">Los siguientes archivos parecen estar dañado. Agregar libro sin archivos dañados??</string>
-    <string name="error_in_file_all_defect">Todos los archivos parecen ser corrupto</string>
     <string name="previous_track">Pista anterior</string>
     <string name="next_track">Proxima pista </string>
     <string name="up">Carpeta superior</string>

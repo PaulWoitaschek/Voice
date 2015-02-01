@@ -7,14 +7,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
 
-import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.utils.ImageHelper;
+import de.ph1b.audiobook.utils.L;
 
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class DataBaseHelper extends SQLiteOpenHelper {
@@ -22,7 +22,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DataBaseHelper";
 
     private static final String DATABASE_NAME = "audioBookDB";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     private static final String TABLE_MEDIA = "TABLE_MEDIA";
     private static final String TABLE_BOOKS = "TABLE_BOOKS";
@@ -37,13 +37,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String KEY_BOOK_ID = "KEY_BOOK_ID";
     private static final String KEY_BOOK_NAME = "KEY_BOOK_NAME";
     private static final String KEY_BOOK_COVER = "KEY_BOOK_COVER";
-    private static final String KEY_BOOK_CURRENT_MEDIA_ID = "KEY_BOOK_CURRENT_MEDIA_ID";
-    private static final String KEY_BOOK_CURRENT_MEDIA_POSITION = "KEY_BOOK_CURRENT_MEDIA_POSITION";
+    private static final String KEY_BOOK_POSITION = "KEY_BOOK_POSITION";
+    private static final String KEY_BOOK_TIME = "KEY_BOOK_TIME";
     private static final String KEY_BOOK_SORT_ID = "KEY_BOOK_SORT_ID";
 
     private static final String KEY_BOOKMARK_ID = "KEY_BOOKMARK_ID";
     private static final String KEY_BOOKMARK_POSITION = "KEY_BOOKMARK_POSITION";
     private static final String KEY_BOOKMARK_TITLE = "KEY_BOOKMARK_TITLE";
+    private static final String KEY_BOOKMARK_TIME = "KEY_BOOKMARK_TIME";
 
     private static DataBaseHelper instance;
     private final Context c;
@@ -55,7 +56,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public static synchronized DataBaseHelper getInstance(Context c) {
         if (instance == null)
-            instance = new DataBaseHelper(c);
+            instance = new DataBaseHelper(c.getApplicationContext());
         return instance;
     }
 
@@ -74,8 +75,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     KEY_BOOK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     KEY_BOOK_NAME + " TEXT NOT NULL, " +
                     KEY_BOOK_COVER + " TEXT, " +
-                    KEY_BOOK_CURRENT_MEDIA_ID + " INTEGER, " +
-                    KEY_BOOK_CURRENT_MEDIA_POSITION + " INTEGER, " +
+                    KEY_BOOK_POSITION + " INTEGER, " +
+                    KEY_BOOK_TIME + " INTEGER, " +
                     KEY_BOOK_SORT_ID + " INTEGER)";
             db.execSQL(CREATE_BOOK_TABLE);
             String CREATE_BOOKMARK_TABLE = "CREATE TABLE " + TABLE_BOOKMARKS + " ( " +
@@ -83,7 +84,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     KEY_BOOKMARK_TITLE + " TEXT NOT NULL, " +
                     KEY_BOOKMARK_POSITION + " INTEGER NOT NULL, " +
                     KEY_BOOK_ID + " INTEGER NOT NULL, " +
-                    KEY_MEDIA_ID + " INTEGER NOT NULL)";
+                    KEY_BOOKMARK_TIME + " INTEGER NOT NULL)";
             db.execSQL(CREATE_BOOKMARK_TABLE);
             db.setTransactionSuccessful();
         } finally {
@@ -97,7 +98,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 "KEY_BOOKMARK_TITLE" + " TEXT NOT NULL, " +
                 "KEY_BOOKMARK_POSITION" + " INTEGER NOT NULL, " +
                 "KEY_BOOK_ID" + " INTEGER NOT NULL, " +
-                "KEY_MEDIA_ID" + " INTEGER NOT NULL)";
+                "KEY_BOOKMARK_TIME" + " INTEGER NOT NULL)";
 
         db.execSQL(CREATE_BOOKMARK_TABLE);
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
@@ -106,6 +107,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SharedPreferences.Editor editor = sp.edit();
         editor.putLong("currentBook", longBookId);
         editor.apply();
+
+        //TODO: Transition from media id to position
     }
 
     private void upgradeOne(SQLiteDatabase db) {
@@ -321,8 +324,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         while (oldVersion < newVersion) {
-            if (BuildConfig.DEBUG)
-                Log.d("dbh", "upgrading version" + oldVersion);
+            L.d("dbh", "upgrading version" + oldVersion);
             switch (oldVersion) {
                 case 1:
                     upgradeOne(db);
@@ -338,37 +340,135 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public ArrayList<Book> getAllBooks() {
+        ArrayList<Book> allBooks = new ArrayList<>();
 
-    public BookDetail getBook(long id) {
         SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.query(TABLE_BOOKS,
-                null,
-                KEY_BOOK_ID + "=?", new String[]{String.valueOf(id)}, null, null, null);
+        db.beginTransaction();
         try {
-            if (cursor.moveToFirst()) {
-                BookDetail book = new BookDetail();
-                book.setId(cursor.getLong(0));
-                book.setName(cursor.getString(1));
-                book.setCover(cursor.getString(2));
-                book.setCurrentMediaId(cursor.getInt(3));
-                book.setCurrentMediaPosition(cursor.getInt(4));
-                book.setSortId(cursor.getInt(5));
+            Cursor cursor = db.query(TABLE_BOOKS,
+                    new String[]{KEY_BOOK_ID}, null, null, null, null,
+                    KEY_BOOK_SORT_ID);
+            try {
+                while (cursor.moveToNext()) {
+                    long bookId = cursor.getLong(0);
+                    Book book = getBook(bookId, db);
+                    allBooks.add(book);
+                }
+            } finally {
+                cursor.close();
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
 
+
+        return allBooks;
+    }
+
+    public void fillMissingDurations() {
+        L.i(TAG, "fillMissingDurations() called");
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        try {
+            Cursor cursor = db.query(TABLE_MEDIA,
+                    new String[]{KEY_MEDIA_ID, KEY_MEDIA_PATH}, KEY_MEDIA_DURATION + "=?",
+                    new String[]{String.valueOf(0)},
+                    null, null, null);
+            L.i(TAG, "found n media with missing durations:" + cursor.getCount());
+            MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
+            while (cursor.moveToNext()) {
+                long id = cursor.getLong(0);
+                String path = cursor.getString(1);
+                try {
+                    metaRetriever.setDataSource(path);
+                    int duration = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+                    ContentValues values = new ContentValues();
+                    values.put(KEY_MEDIA_DURATION, duration);
+                    db.update(TABLE_MEDIA, //table
+                            values, //values
+                            KEY_MEDIA_ID + "=?", //selection
+                            new String[]{String.valueOf(id)}); //args
+                    L.i(TAG, "updated duration of media with id:" + id);
+                } catch (RuntimeException e) {
+                    e.printStackTrace();
+                }
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        L.i(TAG, "fillMissingDurations() finished");
+    }
+
+    private Book getBook(long bookId, SQLiteDatabase db) {
+        Cursor bookCursor = db.query(TABLE_BOOKS,
+                new String[]{KEY_BOOK_NAME, KEY_BOOK_COVER, KEY_BOOK_POSITION, KEY_BOOK_TIME, KEY_BOOK_SORT_ID},
+                KEY_BOOK_ID + "=?", new String[]{String.valueOf(bookId)}, null, null, null);
+        try {
+            if (bookCursor.moveToFirst()) {
+
+                String bookName = bookCursor.getString(0);
+                String cover = bookCursor.getString(1);
+                int position = bookCursor.getInt(2);
+                int time = bookCursor.getInt(3);
+                long sortId = bookCursor.getLong(4);
+
+                Book book = new Book();
+                book.setName(bookName);
+                book.setCover(cover);
+                book.setPosition(position);
+                book.setTime(time);
+                book.setSortId(sortId);
+                book.setId(bookId);
+
+                ArrayList<Media> containingMedia = new ArrayList<>();
+
+                Cursor mediaCursor = db.query(TABLE_MEDIA,
+                        new String[]{KEY_MEDIA_ID, KEY_MEDIA_PATH, KEY_MEDIA_NAME, KEY_MEDIA_DURATION},
+                        KEY_MEDIA_BOOK_ID + "=?",
+                        new String[]{String.valueOf(bookId)},
+                        null, null,
+                        KEY_MEDIA_ID);
+                try {
+                    while (mediaCursor.moveToNext()) {
+                        long id = mediaCursor.getLong(0);
+                        String path = mediaCursor.getString(1);
+                        String mediaName = mediaCursor.getString(2);
+                        int duration = mediaCursor.getInt(3);
+                        Media media = new Media(path, mediaName, bookId);
+                        media.setId(id);
+                        media.setDuration(duration);
+                        containingMedia.add(media);
+                    }
+                    L.d(TAG, "getMediaFromBook returned size: " + containingMedia.size());
+                } finally {
+                    mediaCursor.close();
+                }
+
+                book.setContainingMedia(containingMedia);
+                L.d(TAG, "got book with containing media size: " + book.getContainingMedia());
+                L.d(TAG, "so book is:" + book);
                 return book;
             }
         } finally {
-            cursor.close();
+            bookCursor.close();
         }
         return null;
     }
 
 
-    public void addMedia(ArrayList<MediaDetail> media) {
+    public Book getBook(long id) {
+        return getBook(id, getReadableDatabase());
+    }
+
+
+    public void addMedia(ArrayList<Media> media) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
         try {
-            for (MediaDetail m : media) {
+            for (Media m : media) {
                 ContentValues values = new ContentValues();
                 values.put(KEY_MEDIA_PATH, m.getPath()); // get title
                 values.put(KEY_MEDIA_NAME, m.getName());
@@ -387,7 +487,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         cv.put(KEY_BOOKMARK_TITLE, bookmark.getTitle());
         cv.put(KEY_BOOKMARK_POSITION, bookmark.getPosition());
         cv.put(KEY_BOOK_ID, bookmark.getBookId());
-        cv.put(KEY_MEDIA_ID, bookmark.getMediaId());
+        cv.put(KEY_BOOKMARK_TIME, bookmark.getTime());
         SQLiteDatabase db = getWritableDatabase();
         return db.insert(TABLE_BOOKMARKS, null, cv);
     }
@@ -396,7 +496,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         ArrayList<Bookmark> allBookmarks = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query(TABLE_BOOKMARKS,
-                new String[]{KEY_BOOKMARK_TITLE, KEY_BOOKMARK_POSITION, KEY_MEDIA_ID, KEY_BOOKMARK_ID},
+                new String[]{KEY_BOOKMARK_TITLE, KEY_BOOKMARK_POSITION, KEY_BOOKMARK_TIME, KEY_BOOKMARK_ID},
                 KEY_BOOK_ID + "=?",
                 new String[]{String.valueOf(bookId)},
                 null, null, KEY_MEDIA_ID);
@@ -405,13 +505,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 Bookmark bookmark = new Bookmark();
                 String title = cursor.getString(0);
                 int position = cursor.getInt(1);
-                long mediaId = cursor.getLong(2);
+                int time = cursor.getInt(2);
                 long bookmarkId = cursor.getLong(3);
 
                 bookmark.setTitle(title);
                 bookmark.setPosition(position);
                 bookmark.setBookId(bookId);
-                bookmark.setMediaId(mediaId);
+                bookmark.setTime(time);
                 bookmark.setId(bookmarkId);
                 allBookmarks.add(bookmark);
             }
@@ -426,24 +526,21 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         cv.put(KEY_BOOKMARK_TITLE, bookmark.getTitle());
         cv.put(KEY_BOOKMARK_POSITION, bookmark.getPosition());
         cv.put(KEY_BOOK_ID, bookmark.getBookId());
-        cv.put(KEY_MEDIA_ID, bookmark.getMediaId());
+        cv.put(KEY_BOOKMARK_TIME, bookmark.getTime());
         SQLiteDatabase db = getWritableDatabase();
         db.update(TABLE_BOOKMARKS, cv, KEY_BOOKMARK_ID + "=?", new String[]{String.valueOf(bookmark.getId())});
     }
 
     public void deleteBookmark(Bookmark bookmark) {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "Deleting bookmark from database: " + bookmark.getId());
-        }
+        L.d(TAG, "Deleting bookmark from database: " + bookmark.getId());
         SQLiteDatabase db = getWritableDatabase();
         int result = db.delete(TABLE_BOOKMARKS, KEY_BOOKMARK_ID + "=?", new String[]{String.valueOf(bookmark.getId())});
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "deleted n bookmarks: " + result);
-        }
+        L.d(TAG, "deleted n bookmarks: " + result);
     }
 
 
-    public long addBook(BookDetail book) {
+    public long addBook(Book book) {
+        L.d(TAG, "addBook called");
         ContentValues values = new ContentValues();
         values.put(KEY_BOOK_NAME, book.getName());
         values.put(KEY_BOOK_COVER, book.getCover());
@@ -462,74 +559,22 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList<MediaDetail> getMediaFromBook(long bookId) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.query(TABLE_MEDIA,
-                null,
-                KEY_MEDIA_BOOK_ID + "=?",
-                new String[]{String.valueOf(bookId)},
-                null, null,
-                KEY_MEDIA_ID);
-        try {
-            ArrayList<MediaDetail> containingMedia = new ArrayList<>();
-            while (cursor.moveToNext()) {
-                MediaDetail media = new MediaDetail();
-                media.setId(cursor.getLong(0));
-                media.setPath(cursor.getString(1));
-                media.setName(cursor.getString(2));
-                media.setDuration(cursor.getInt(3));
-                media.setBookId(cursor.getLong(4));
-                containingMedia.add(media);
-            }
-            return containingMedia;
-        } finally {
-            cursor.close();
-        }
-    }
-
-
-    public ArrayList<BookDetail> getAllBooks() {
-        ArrayList<BookDetail> allBooks = new ArrayList<>();
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_BOOKS,
-                null, null, null, null, null,
-                KEY_BOOK_SORT_ID);
-        try {
-            while (cursor.moveToNext()) {
-                BookDetail book = new BookDetail();
-                book.setId(cursor.getLong(0));
-                book.setName(cursor.getString(1));
-                book.setCover(cursor.getString(2));
-                book.setCurrentMediaId(cursor.getInt(3));
-                book.setCurrentMediaPosition(cursor.getInt(4));
-                book.setSortId(cursor.getInt(5));
-                allBooks.add(book);
-            }
-        } finally {
-            cursor.close();
-        }
-        return allBooks;
-    }
-
-
-    public void updateBook(BookDetail book) {
+    public void updateBook(Book book) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
 
         values.put(KEY_BOOK_NAME, book.getName());
         values.put(KEY_BOOK_COVER, book.getCover());
-        values.put(KEY_BOOK_CURRENT_MEDIA_ID, book.getCurrentMediaId());
-        values.put(KEY_BOOK_CURRENT_MEDIA_POSITION, book.getCurrentMediaPosition());
+        values.put(KEY_BOOK_TIME, book.getTime());
+        values.put(KEY_BOOK_POSITION, book.getPosition());
         values.put(KEY_BOOK_SORT_ID, book.getSortId());
 
         db.update(TABLE_BOOKS, values, KEY_BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
     }
 
 
-    public void deleteBook(BookDetail book) {
+    public void deleteBook(Book book) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
         try {

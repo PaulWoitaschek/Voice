@@ -16,7 +16,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,17 +42,17 @@ import de.ph1b.audiobook.activity.BookChoose;
 import de.ph1b.audiobook.activity.FilesChoose;
 import de.ph1b.audiobook.activity.Settings;
 import de.ph1b.audiobook.adapter.FileAdapter;
-import de.ph1b.audiobook.content.BookDetail;
+import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.DataBaseHelper;
-import de.ph1b.audiobook.content.MediaDetail;
+import de.ph1b.audiobook.content.Media;
 import de.ph1b.audiobook.dialog.EditBook;
-import de.ph1b.audiobook.dialog.FileAddingErrorDialog;
 import de.ph1b.audiobook.interfaces.OnBackPressedListener;
 import de.ph1b.audiobook.utils.ImageHelper;
+import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
 
-public class FilesChooseFragment extends Fragment implements EditBook.OnEditBookFinished, FileAddingErrorDialog.ConfirmationListener {
+public class FilesChooseFragment extends Fragment implements EditBook.OnEditBookFinished {
     private static final String TAG = "de.ph1b.audiobook.fragment.FilesChooseFragment";
     private final LinkedList<String> link = new LinkedList<>();
     private final ArrayList<String> dirs = getStorageDirectories();
@@ -117,6 +116,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         setHasOptionsMenu(true);
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        setRetainInstance(true);
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
     }
 
@@ -188,22 +188,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     public void onPause() {
         super.onPause();
         ((FilesChoose) getActivity()).setOnBackPressedListener(null);
-    }
-
-    @Override
-    public void onButtonClicked(boolean keep, ArrayList<MediaDetail> intactFiles, long bookId) {
-        Activity a = getActivity();
-        if (a != null) {
-            DataBaseHelper db = DataBaseHelper.getInstance(a);
-            if (keep) {
-                db.addMedia(intactFiles);
-                Intent i = new Intent(a, BookChoose.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
-            } else {
-                db.deleteBook(db.getBook(bookId));
-            }
-        }
     }
 
     private boolean isAudio(File file) {
@@ -383,15 +367,15 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                             if (cover != null)
                                 bitmaps.add(cover);
                         } catch (Exception e) {
-                            if (BuildConfig.DEBUG) Log.d(TAG, e.toString());
+                            L.d(TAG, e.toString());
                         }
                     }
                 } catch (IllegalArgumentException e) {
                     if (BuildConfig.DEBUG)
-                        Log.d(TAG, "IllegalArgumentException at finding covers at: " + media.getAbsolutePath());
+                        L.d(TAG, "IllegalArgumentException at finding covers at: " + media.getAbsolutePath());
                 } catch (RuntimeException e) {
                     if (BuildConfig.DEBUG)
-                        Log.d(TAG, "RuntimeException at finding covers at: " + media.getAbsolutePath());
+                        L.d(TAG, "RuntimeException at finding covers at: " + media.getAbsolutePath());
                 }
             }
             //checking imageFiles for cover
@@ -433,12 +417,11 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         }
     }
 
-    private class AddBookAsync extends AsyncTask<Void, Integer, Boolean> {
+    private class AddBookAsync extends AsyncTask<Void, Integer, Void> {
         private final ArrayList<File> files;
         private final String defaultName;
         private final Bitmap cover;
-        private final ArrayList<String> errorFiles = new ArrayList<>();
-        private final ArrayList<MediaDetail> media = new ArrayList<>();
+        private final ArrayList<Media> media = new ArrayList<>();
         private ProgressDialog progressDialog;
         private long bookId;
 
@@ -461,9 +444,9 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected Void doInBackground(Void... params) {
             DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
-            BookDetail b = new BookDetail();
+            Book b = new Book();
             b.setName(defaultName);
             if (cover != null) {
                 String coverPath = ImageHelper.saveCover(cover, getActivity());
@@ -472,69 +455,27 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                 }
             }
 
-            MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
             bookId = db.addBook(b);
             for (File f : files) {
-                MediaDetail m = new MediaDetail();
                 String fileName = f.getName();
+                String path = f.getAbsolutePath();
                 if (fileName.indexOf(".") > 0)
                     fileName = fileName.substring(0, fileName.lastIndexOf("."));
-                m.setName(fileName);
-                String path = f.getAbsolutePath();
-                m.setPath(path);
-
-                try {
-                    metaRetriever.setDataSource(f.getAbsolutePath());
-                    int duration = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
-                    m.setDuration(duration);
-                    m.setBookId(bookId);
-                    media.add(m);
-                } catch (IllegalArgumentException e) {
-                    if (BuildConfig.DEBUG)
-                        Log.d(TAG, "IllegalArgumentException at getting duration of: " + f.getAbsolutePath());
-                    errorFiles.add(f.getName());
-                } catch (RuntimeException e) {
-                    if (BuildConfig.DEBUG)
-                        Log.d(TAG, "RuntimeException at getting duration of: " + f.getAbsolutePath());
-                    errorFiles.add(f.getName());
-                }
+                media.add(new Media(path, fileName, bookId));
             }
 
-            metaRetriever.release();
-
-            if (errorFiles.size() == 0) {
-                db.addMedia(media);
-                return true;
-            } else {
-                return false;
-            }
+            db.addMedia(media);
+            return null;
         }
 
         @Override
-        protected void onPostExecute(Boolean result) {
+        protected void onPostExecute(Void result) {
             Activity a = getActivity();
             if (a != null) {
                 progressDialog.cancel();
-                if (result) {
-                    Intent i = new Intent(a, BookChoose.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(i);
-                } else {
-                    if (media.size() == 0) {
-                        CharSequence text = getString(R.string.error_in_file_all_defect);
-                        Toast toast = Toast.makeText(a, text, Toast.LENGTH_SHORT);
-                        toast.show();
-                    } else {
-                        FileAddingErrorDialog dialog = new FileAddingErrorDialog();
-                        Bundle args = new Bundle();
-                        args.putStringArrayList(FileAddingErrorDialog.ARG_ERROR_FILES, errorFiles);
-                        args.putParcelableArrayList(FileAddingErrorDialog.ARG_INTACT_FILES, media);
-                        args.putLong(FileAddingErrorDialog.ARG_BOOK_ID, bookId);
-                        dialog.setArguments(args);
-                        dialog.setTargetFragment(FilesChooseFragment.this, 42);
-                        dialog.show(getFragmentManager(), FileAddingErrorDialog.TAG);
-                    }
-                }
+                Intent i = new Intent(a, BookChoose.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
             }
         }
     }

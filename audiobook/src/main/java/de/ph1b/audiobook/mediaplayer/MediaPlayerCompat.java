@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.utils;
+package de.ph1b.audiobook.mediaplayer;
 
 
 import android.content.Context;
@@ -6,16 +6,13 @@ import android.os.Build;
 
 import java.io.IOException;
 
+import de.ph1b.audiobook.mediaplayer.MediaPlayer;
+
 public class MediaPlayerCompat {
 
+    private final boolean useCustomMediaPlayer;
     private android.media.MediaPlayer androidMediaPlayer;
     private MediaPlayer customMediaPlayer;
-
-    private final boolean useCustomMediaPlayer;
-
-    public interface OnCompletionListener {
-        public void onCompletion();
-    }
 
     public MediaPlayerCompat(Context c) {
         useCustomMediaPlayer = Build.VERSION.SDK_INT >= 16;
@@ -73,14 +70,6 @@ public class MediaPlayerCompat {
         }
     }
 
-    public boolean isPlaying() {
-        if (useCustomMediaPlayer) {
-            return customMediaPlayer.isPlaying();
-        } else {
-            return androidMediaPlayer.isPlaying();
-        }
-    }
-
     public void seekTo(int position) {
         if (useCustomMediaPlayer) {
             customMediaPlayer.seekTo(position);
@@ -131,7 +120,6 @@ public class MediaPlayerCompat {
         }
     }
 
-
     /**
      * Sets wakeMode. Custom Mediaplayer handles wake mode on its own.
      *
@@ -142,5 +130,10 @@ public class MediaPlayerCompat {
         if (!useCustomMediaPlayer) {
             androidMediaPlayer.setWakeMode(c, mode);
         }
+    }
+
+
+    public interface OnCompletionListener {
+        public void onCompletion();
     }
 }

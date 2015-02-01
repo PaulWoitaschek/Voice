@@ -2,18 +2,15 @@ package de.ph1b.audiobook.fragment;
 
 
 import android.app.Fragment;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,74 +29,57 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.BookChoose;
 import de.ph1b.audiobook.activity.Settings;
 import de.ph1b.audiobook.adapter.MediaSpinnerAdapter;
-import de.ph1b.audiobook.content.BookDetail;
+import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.DataBaseHelper;
-import de.ph1b.audiobook.content.MediaDetail;
 import de.ph1b.audiobook.dialog.BookmarkDialog;
 import de.ph1b.audiobook.dialog.JumpToPosition;
 import de.ph1b.audiobook.dialog.SetPlaybackSpeedDialog;
-import de.ph1b.audiobook.interfaces.OnStateChangedListener;
-import de.ph1b.audiobook.interfaces.OnTimeChangedListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
+import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.service.StateManager;
 import de.ph1b.audiobook.utils.ImageHelper;
+import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
 import de.ph1b.audiobook.utils.Prefs;
 
-public class BookPlayFragment extends Fragment implements OnClickListener, AudioPlayerService.OnSleepStateChangedListener, StateManager.OnMediaChangedListener, OnStateChangedListener, OnTimeChangedListener {
+public class BookPlayFragment extends Fragment implements OnClickListener, StateManager.ChangeListener {
 
     private static final String TAG = "de.ph1b.audiobook.fragment.BookPlayFragment";
-
-    public AudioPlayerService service;
-    public boolean mBound = false;
-    private final ServiceConnection mConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder iBinder) {
-            AudioPlayerService.LocalBinder binder = (AudioPlayerService.LocalBinder) iBinder;
-            BookPlayFragment.this.service = binder.getService();
-
-            service.stateManager.setOnMediaChangedListener(BookPlayFragment.this);
-            service.stateManager.addTimeChangedListener(BookPlayFragment.this);
-            service.stateManager.setOnSleepStateChangedListener(BookPlayFragment.this);
-            service.stateManager.addStateChangeListener(BookPlayFragment.this);
-
-            mBound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mBound = false;
-        }
-    };
-    private int duration = 0;
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private StateManager stateManager;
+    private volatile int duration = 0;
     private ImageButton play_button;
     private TextView playedTimeView;
     private SeekBar seekBar;
     private Spinner bookSpinner;
     private TextView maxTimeView;
-    private int position;
-    private int oldPosition = -1;
-    private boolean seekBarIsUpdating = false;
-    private ArrayList<MediaDetail> allMedia;
+    private Book book;
     private Prefs prefs;
     private DataBaseHelper db;
+    private ServiceController controller;
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume start");
 
-        Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
-        getActivity().startService(serviceIntent);
-        Log.d(TAG, "onResume end");
+        stateManager.addChangeListener(this);
+
+        onPositionChanged(stateManager.getPosition());
+        onTimeChanged(stateManager.getTime());
+        onStateChanged(stateManager.getState());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        stateManager.removeChangeListener(this);
     }
 
     private String formatTime(int ms) {
@@ -110,33 +90,13 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Audio
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        Log.d(TAG, "onstart start");
-        Intent intent = new Intent(getActivity(), AudioPlayerService.class);
-        getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-        Log.d(TAG, "onStartEnd");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        // Unbind from the service
-        if (mBound) {
-            service.stateManager.removeStateChangeListener(this);
-            service.stateManager.removeTimeChangedListener(this);
-            service.stateManager.setOnSleepStateChangedListener(null);
-            service.stateManager.setOnMediaChangedListener(null);
-            getActivity().unbindService(mConnection);
-        }
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         prefs = new Prefs(getActivity());
         db = DataBaseHelper.getInstance(getActivity());
+        controller = new ServiceController(getActivity());
+        stateManager = StateManager.getInstance(getActivity());
 
         //setup actionbar
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
@@ -149,10 +109,8 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Audio
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_book_play, container, false);
 
-
         long bookId = prefs.getCurrentBookId();
-        BookDetail book = db.getBook(bookId);
-        allMedia = db.getMediaFromBook(bookId);
+        book = db.getBook(bookId);
 
         //init buttons
         seekBar = (SeekBar) v.findViewById(R.id.seekBar);
@@ -180,36 +138,30 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Audio
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                position = progress;
                 playedTimeView.setText(formatTime(progress)); //sets text to adjust while using seekBar
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                seekBarIsUpdating = true;
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                if (mBound) {
-                    service.changePosition(position);
-                }
-
-                playedTimeView.setText(formatTime(position));
-                seekBarIsUpdating = false;
+                int progress = seekBar.getProgress();
+                controller.changeTime(progress);
+                playedTimeView.setText(formatTime(progress));
             }
         });
 
-        MediaSpinnerAdapter adapter = new MediaSpinnerAdapter(getActivity(), allMedia);
+        MediaSpinnerAdapter adapter = new MediaSpinnerAdapter(getActivity(), book);
         bookSpinner.setAdapter(adapter);
         bookSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != oldPosition) {
-                    if (mBound) {
-                        service.changeBookPosition(allMedia.get(position).getId());
-                    }
-                    oldPosition = position;
+            public void onItemSelected(AdapterView<?> parent, View view, int newPosition, long id) {
+                if (((int) parent.getTag()) != newPosition) {
+                    L.i(TAG, "spinner, onItemSelected, firing:" + newPosition);
+                    controller.changeBookPosition(newPosition, 0);
+                    parent.setTag(newPosition);
                 }
             }
 
@@ -229,13 +181,13 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Audio
         if (cover != null && new File(cover).isFile()) {
             Picasso.with(getActivity()).load(new File(cover)).into(coverView);
         } else {
-            Log.d(TAG, "cover is null or no file, setting replacment");
+            L.d(TAG, "cover is null or no file, setting replacment");
             Bitmap coverReplacement = ImageHelper.genCapital(bookName, getActivity(), ImageHelper.TYPE_COVER);
             coverView.setImageBitmap(coverReplacement);
         }
 
         // Next/Prev/spinner hiding
-        if (allMedia.size() == 1) {
+        if (book.getContainingMedia().size() == 1) {
             next_button.setVisibility(View.GONE);
             previous_button.setVisibility(View.GONE);
             bookSpinner.setVisibility(View.GONE);
@@ -245,75 +197,51 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Audio
             bookSpinner.setVisibility(View.VISIBLE);
         }
 
-        //invoke initially init chosen media
-        for (MediaDetail m : allMedia) {
-            if (m.getId() == book.getCurrentMediaId()) {
-                if (!new File(m.getPath()).exists()) {
-                    fileNotFound();
-                }
-                onMediaChanged(m);
-                break;
-            }
-        }
-        onTimeChanged(book.getCurrentMediaPosition());
+        getActivity().startService(new Intent(getActivity(), AudioPlayerService.class));
 
         return v;
     }
 
-    private void fileNotFound() {
-        String text = getString(R.string.file_not_found);
-        Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_LONG);
-        toast.show();
-        Intent i = new Intent(getActivity(), BookChoose.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
-    }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         MenuItem timeLapseItem = menu.findItem(R.id.action_time_lapse);
         timeLapseItem.setVisible(false);
-        if (mBound) {
-            timeLapseItem.setVisible(Build.VERSION.SDK_INT >= 16);
-            MenuItem sleepTimerItem = menu.findItem(R.id.action_sleep);
+        timeLapseItem.setVisible(Build.VERSION.SDK_INT >= 16);
+        MenuItem sleepTimerItem = menu.findItem(R.id.action_sleep);
 
-            if (service.sleepSandActive()) {
-                sleepTimerItem.setIcon(R.drawable.ic_alarm_on_white_24dp);
-            } else {
-                sleepTimerItem.setIcon(R.drawable.ic_snooze_white_24dp);
-            }
+        if (stateManager.isSleepTimerActive()) {
+            sleepTimerItem.setIcon(R.drawable.ic_alarm_on_white_24dp);
+        } else {
+            sleepTimerItem.setIcon(R.drawable.ic_snooze_white_24dp);
         }
+
         super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public void onClick(View view) {
-        if (mBound) {
-            switch (view.getId()) {
-                case R.id.play:
-                    if (service.stateManager.getState() == PlayerStates.STARTED) {
-                        service.pause(true);
-                    } else
-                        service.play();
-                    break;
-                case R.id.rewind:
-                    service.rewind();
-                    break;
-                case R.id.fast_forward:
-                    service.fastForward();
-                    break;
-                case R.id.next:
-                    service.next();
-                    break;
-                case R.id.previous:
-                    service.previous();
-                    break;
-                case R.id.played:
-                    launchJumpToPositionDialog();
-                    break;
-                default:
-                    break;
-            }
+        switch (view.getId()) {
+            case R.id.play:
+                controller.playPause();
+                break;
+            case R.id.rewind:
+                controller.rewind();
+                break;
+            case R.id.fast_forward:
+                controller.fastForward();
+                break;
+            case R.id.next:
+                controller.next();
+                break;
+            case R.id.previous:
+                controller.previous();
+                break;
+            case R.id.played:
+                launchJumpToPositionDialog();
+                break;
+            default:
+                break;
         }
     }
 
@@ -327,7 +255,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Audio
         JumpToPosition dialog = new JumpToPosition();
         Bundle bundle = new Bundle();
         bundle.putInt(JumpToPosition.DURATION, duration);
-        bundle.putInt(JumpToPosition.POSITION, position);
+        bundle.putInt(JumpToPosition.POSITION, stateManager.getTime());
         dialog.setArguments(bundle);
         dialog.setTargetFragment(this, 42);
         dialog.show(getFragmentManager(), "timePicker");
@@ -343,9 +271,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Audio
                 launchJumpToPositionDialog();
                 return true;
             case R.id.action_sleep:
-                if (mBound) {
-                    service.toggleSleepSand();
-                }
+                controller.toggleSleepSand();
                 return true;
             case R.id.action_time_lapse:
                 SetPlaybackSpeedDialog dialog = new SetPlaybackSpeedDialog();
@@ -362,34 +288,67 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Audio
     }
 
     @Override
-    public void onSleepStateChanged() {
-        getActivity().invalidateOptionsMenu();
+    public void onStateChanged(final PlayerStates state) {
+        L.d(TAG, "onStateChanged" + state);
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (state != PlayerStates.PLAYING) {
+                    play_button.setImageResource(R.drawable.ic_ic_play_circle_fill_72dp);
+                } else {
+                    play_button.setImageResource(R.drawable.ic_ic_pause_circle_fill_72dp);
+                }
+            }
+        });
     }
 
     @Override
-    public void onMediaChanged(MediaDetail media) {
-        bookSpinner.setSelection(allMedia.indexOf(media));
+    public void onSleepTimerSet(final boolean sleepTimerActive) {
 
-        duration = media.getDuration();
-        seekBar.setMax(duration);
-        maxTimeView.setText(formatTime(duration));
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                getActivity().invalidateOptionsMenu();
+                if (sleepTimerActive) {
+                    int minutes = prefs.getSleepTime();
+                    String message = getString(R.string.sleep_timer_started) + minutes + " " + getString(R.string.minutes);
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
-    public void onStateChanged(PlayerStates state) {
-        if (service.stateManager.getState() == PlayerStates.STARTED) {
-            play_button.setImageResource(R.drawable.ic_ic_pause_circle_fill_72dp);
-        } else {
-            play_button.setImageResource(R.drawable.ic_ic_play_circle_fill_72dp);
-        }
+    public void onPositionChanged(final int position) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                /**
+                 * Setting position as a tag, so we can make sure onItemSelected is only fired when
+                 * the user changes the position himself.
+                 */
+                bookSpinner.setTag(position);
+                bookSpinner.setSelection(position, true);
+
+                duration = book.getContainingMedia().get(position).getDuration();
+                L.d(TAG, "onPositionChanged, duration=" + duration);
+                seekBar.setMax(duration);
+                maxTimeView.setText(formatTime(duration));
+            }
+        });
     }
 
     @Override
-    public void onTimeChanged(int time) {
-        // Setting seekbar and played time view
-        if (!seekBarIsUpdating) {
-            seekBar.setProgress(time);
-            playedTimeView.setText(formatTime(time));
-        }
+    public void onTimeChanged(final int time) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                // Setting seekBar and played time view
+                if (!seekBar.isPressed()) {
+                    seekBar.setProgress(time);
+                    playedTimeView.setText(formatTime(time));
+                }
+            }
+        });
     }
 }

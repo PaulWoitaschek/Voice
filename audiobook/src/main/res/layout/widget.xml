@@ -3,8 +3,8 @@
     android:orientation="horizontal"
     android:id="@+id/whole_widget"
     android:padding="@dimen/widget_margin"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:background="@drawable/widget_background"
     android:gravity="center_vertical">
 
@@ -37,39 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+        <include layout="@layout/notification_buttons" />
 
-            <ImageButton
-                android:id="@+id/rewind"
-                android:src="@drawable/ic_fast_rewind_white_36dp"
-                android:adjustViewBounds="true"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                style="?android:attr/borderlessButtonStyle"
-                android:contentDescription="@string/rewind" />
-
-            <ImageButton
-                android:id="@+id/playPause"
-                android:src="@drawable/ic_play_arrow_white_48dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                style="?android:attr/borderlessButtonStyle"
-                android:contentDescription="@string/play_pause" />
-
-            <ImageButton
-                android:id="@+id/fast_forward"
-                android:src="@drawable/ic_fast_forward_white_36dp"
-                android:adjustViewBounds="true"
-                android:layout_marginRight="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                style="?android:attr/borderlessButtonStyle"
-                android:contentDescription="@string/fast_forward" />
-
-        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

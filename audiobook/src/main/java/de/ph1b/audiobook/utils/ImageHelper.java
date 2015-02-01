@@ -11,13 +11,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.fragment.BookChooseFragment;
 
@@ -135,7 +133,7 @@ public class ImageHelper {
             coverOut.close();
             coverPath = coverFile.getAbsolutePath();
         } catch (IOException e) {
-            if (BuildConfig.DEBUG) Log.d(TAG, e.getMessage());
+            L.d(TAG, e.getMessage());
             return null;
         }
 

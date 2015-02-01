@@ -1,0 +1,33 @@
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    style="?android:attr/buttonBarStyle"
+    android:layout_gravity="center"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageButton
+        android:id="@+id/rewind"
+        android:src="@drawable/ic_fast_rewind_white_36dp"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/rewind" />
+
+    <ImageButton
+        android:id="@+id/playPause"
+        android:src="@drawable/ic_play_arrow_white_48dp"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/play_pause" />
+
+    <ImageButton
+        android:id="@+id/fast_forward"
+        android:src="@drawable/ic_fast_forward_white_36dp"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/fast_forward" />
+
+</LinearLayout>

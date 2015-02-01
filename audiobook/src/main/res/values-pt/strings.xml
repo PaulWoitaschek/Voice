@@ -26,8 +26,6 @@
     <string name="minutes">minutos</string>
     <string name="seconds">segundos</string>
 
-    <string name="file_not_found">Parece que o audiolivro não pode ser encontrado no armazenamento. Por Favor
-		re-adicione o audiolivro.</string>
     <string name="current_cover">Mostra a capa do audiolivro atualmente tocando.</string>
     <string name="current_playing">Mostra estado de reprodução.</string>
     <string name="pref_cover_on_internet">Use a Rede Móvel</string>
@@ -50,15 +48,9 @@
     <string name="playback_speed">Velocidade de reprodução</string>
     <string name="pref_sleep_time">Temporizador para dormir</string>
     <string name="sleep_timer_started">Temporizador: </string>
-    <string name="sleep_timer_canceled">Temporizador cancelado.</string>
     <string name="content_close_notification">Fechar tocador e notificação.</string>
     <string name="delete_book_title">Você deseja excluir este livro?</string>
     <string name="delete_book_keep">Manter</string>
     <string name="pref_title_track_to_end">Continuar até o fim</string>
     <string name="pref_summary_track_to_end">Continua a tocar até o fim, independentemente do temporizador.</string>
-
-    <string name="error_in_file_title">Erro no arquivo</string>
-    <string name="error_in_file_description">Os seguintes arquivos parecem estar corrompidos.
-        Adicionar livro excluindo arquivos corrompidos?</string>
-    <string name="error_in_file_all_defect">Todos os arquivos parecem estar corrompidos</string>
 </resources>

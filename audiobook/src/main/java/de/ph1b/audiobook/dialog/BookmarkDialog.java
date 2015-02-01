@@ -25,11 +25,10 @@ import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.BookmarkAdapter;
-import de.ph1b.audiobook.content.BookDetail;
+import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.Bookmark;
 import de.ph1b.audiobook.content.DataBaseHelper;
-import de.ph1b.audiobook.content.MediaDetail;
-import de.ph1b.audiobook.service.Controls;
+import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.utils.DividerItemDecoration;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
 import de.ph1b.audiobook.utils.Prefs;
@@ -53,8 +52,7 @@ public class BookmarkDialog extends DialogFragment {
 
         final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
         final Prefs prefs = new Prefs(getActivity());
-        final BookDetail book = db.getBook(prefs.getCurrentBookId());
-        final ArrayList<MediaDetail> allMedia = db.getMediaFromBook(book.getId());
+        final Book book = db.getBook(prefs.getCurrentBookId());
         final ArrayList<Bookmark> allBookmarks = db.getAllBookmarks(book.getId());
 
         BookmarkAdapter.OnOptionsMenuClickedListener listener = new BookmarkAdapter.OnOptionsMenuClickedListener() {
@@ -132,14 +130,14 @@ public class BookmarkDialog extends DialogFragment {
             @Override
             public void onBookmarkClicked(int position) {
                 Bookmark bookmark = adapter.getItem(position);
-                Controls controls = new Controls(getActivity());
-                controls.changeBookPosition(bookmark.getMediaId(), bookmark.getPosition());
+                ServiceController controls = new ServiceController(getActivity());
+                controls.changeBookPosition(bookmark.getPosition(), bookmark.getTime());
                 dialog.cancel();
             }
         };
 
         final RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler);
-        adapter = new BookmarkAdapter(allBookmarks, listener, allMedia);
+        adapter = new BookmarkAdapter(allBookmarks, listener, book);
         recyclerView.setAdapter(adapter);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
@@ -154,14 +152,9 @@ public class BookmarkDialog extends DialogFragment {
                 Bookmark bookMark = new Bookmark();
 
                 long bookId = book.getId();
-                long mediaId = book.getCurrentMediaId();
-                int position = book.getCurrentMediaPosition();
-                String mediaName = "";
-                for (int i = 0; i < allMedia.size(); i++) {
-                    if (allMedia.get(i).getId() == mediaId) {
-                        mediaName = allMedia.get(i).getName();
-                    }
-                }
+                int time = book.getTime();
+                int position = book.getPosition();
+                String mediaName = book.getContainingMedia().get(position).getName();
 
                 String title = bookmarkTitle.getText().toString();
                 if (title == null || title.equals("")) {
@@ -169,7 +162,7 @@ public class BookmarkDialog extends DialogFragment {
                 }
 
                 bookMark.setTitle(title);
-                bookMark.setMediaId(mediaId);
+                bookMark.setTime(time);
                 bookMark.setBookId(bookId);
                 bookMark.setPosition(position);
 

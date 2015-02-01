@@ -5,7 +5,7 @@ import android.os.Build;
 
 import java.util.ArrayList;
 
-import de.ph1b.audiobook.content.BookDetail;
+import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.interfaces.OnItemClickListener;
 
 
@@ -15,7 +15,7 @@ import de.ph1b.audiobook.interfaces.OnItemClickListener;
  */
 public class MediaAdapterChooser {
 
-    public static MediaAdapter getAdapter(ArrayList<BookDetail> data, Context c, OnItemClickListener onItemClickListener, MediaAdapter.OnCoverChangedListener onCoverChangedListener) {
+    public static MediaAdapter getAdapter(ArrayList<Book> data, Context c, OnItemClickListener onItemClickListener, MediaAdapter.OnCoverChangedListener onCoverChangedListener) {
         if (Build.VERSION.SDK_INT >= 14) {
             return new MediaAdapterV14(data, c, onItemClickListener, onCoverChangedListener);
         } else {

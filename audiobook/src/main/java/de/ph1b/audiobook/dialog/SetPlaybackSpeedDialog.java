@@ -16,7 +16,7 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.service.Controls;
+import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
 import de.ph1b.audiobook.utils.Prefs;
 
@@ -79,7 +79,7 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 prefs.setPlaybackSpeed(speed);
-                new Controls(getActivity()).informSpeedChanged();
+                new ServiceController(getActivity()).informSpeedChanged();
             }
         });
 

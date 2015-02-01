@@ -24,7 +24,6 @@
     <string name="minutes">минут</string>
     <string name="seconds">секунд</string>
 
-    <string name="file_not_found">Аудиокнига не найдена по указанному пути. Пожалуйста, произведите добавление повторно.</string>
     <string name="current_cover">Показать обложку текущей аудиокниги.</string>
     <string name="current_playing">Показывать состояние проигрывания.</string>
     <string name="pref_cover_on_internet">Использовать 3G интернет</string>

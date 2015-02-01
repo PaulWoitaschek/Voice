@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.utils;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,7 +24,7 @@ public class CustomOnSimpleGestureListener extends GestureDetector.SimpleOnGestu
             int position = recyclerView.getChildPosition(child);
             itemListener.onItemLongClicked(position, child);
         }
-        Log.d("rtd", "onLongPress");
+        L.d("rtd", "onLongPress");
         super.onLongPress(e);
     }
 }

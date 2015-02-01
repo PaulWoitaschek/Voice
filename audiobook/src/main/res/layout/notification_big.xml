@@ -23,72 +23,51 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center_vertical|center_horizontal">
-
-            <TextView
-                android:id="@+id/title"
-                android:singleLine="true"
-                style="@style/notification_big_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/summary"
-                android:singleLine="true"
-                style="@style/notification_small_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_horizontal">
+            android:layout_weight="1">
 
-            <ImageButton
-                android:id="@+id/rewind"
-                android:src="@drawable/ic_fast_rewind_white_36dp"
-                android:adjustViewBounds="true"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/rewind" />
-
-            <ImageButton
-                android:id="@+id/playPause"
-                android:src="@drawable/ic_play_arrow_white_48dp"
-                android:adjustViewBounds="true"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/play_pause" />
-
-            <ImageButton
-                android:id="@+id/fast_forward"
-                android:src="@drawable/ic_fast_forward_white_36dp"
-                android:adjustViewBounds="true"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:contentDescription="@string/fast_forward" />
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center_vertical|center_horizontal"
+                tools:ignore="NestedWeights">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:singleLine="true"
+                    style="@style/notification_big_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/summary"
+                    android:singleLine="true"
+                    style="@style/notification_small_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/closeButton"
+                android:src="@drawable/ic_close_grey600_18dp"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_gravity="end|top"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:contentDescription="@string/content_close_notification" />
+
 
         </LinearLayout>
-    </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/closeButton"
-        android:src="@drawable/ic_close_grey600_18dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:contentDescription="@string/content_close_notification" />
+        <include
+            layout="@layout/notification_buttons"/>
+    </LinearLayout>
 
 </RelativeLayout>

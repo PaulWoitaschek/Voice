@@ -24,7 +24,6 @@
     <string name="minutes">분</string>
     <string name="seconds">초</string>
 
-    <string name="file_not_found">저장공간에서 책을 찾지 못했으니, 다시 추가해주세요.</string>
     <string name="current_cover">재생중인 책표지 보기</string>
     <string name="current_playing">재생상태 보기</string>
     <string name="pref_cover_on_internet">3G 사용</string>

@@ -4,38 +4,55 @@ package de.ph1b.audiobook.content;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 
-public class BookDetail implements Parcelable {
 
-    public static final Parcelable.Creator<BookDetail> CREATOR = new Parcelable.Creator<BookDetail>() {
+public class Book implements Parcelable {
+
+    public static final Parcelable.Creator<Book> CREATOR = new Parcelable.Creator<Book>() {
         @Override
-        public BookDetail createFromParcel(Parcel source) {
-            return new BookDetail(source);
+        public Book createFromParcel(Parcel source) {
+            return new Book(source);
         }
 
         @Override
-        public BookDetail[] newArray(int size) {
-            return new BookDetail[0];
+        public Book[] newArray(int size) {
+            return new Book[0];
         }
     };
     private long id;
     private long sortId;
     private String name;
     private String cover;
-    private long currentMediaId;
-    private int currentMediaPosition;
+    private int time;
+    private int position = 0;
+    private ArrayList<Media> containingMedia = new ArrayList<>();
 
-    public BookDetail() {
+    public Book() {
 
     }
 
-    private BookDetail(Parcel pc) {
+    private Book(Parcel pc) {
         id = pc.readLong();
         name = pc.readString();
         cover = pc.readString();
-        currentMediaId = pc.readLong();
-        currentMediaPosition = pc.readInt();
+        time = pc.readInt();
+        position = pc.readInt();
         sortId = pc.readLong();
+        pc.readTypedList(containingMedia, Media.CREATOR);
+    }
+
+    @Override
+    public String toString() {
+        return "id:" + id + " sortId:" + sortId + " name:" + name + " cover:" + cover + " time:" + time + " position:" + position + " containingMediaSize:" + containingMedia.size();
+    }
+
+    public ArrayList<Media> getContainingMedia() {
+        return containingMedia;
+    }
+
+    public void setContainingMedia(ArrayList<Media> containingMedia) {
+        this.containingMedia = containingMedia;
     }
 
     /**
@@ -49,8 +66,8 @@ public class BookDetail implements Parcelable {
             return false;
         } else if (o == this) {
             return true;
-        } else if (o instanceof BookDetail) {
-            BookDetail book = (BookDetail) o;
+        } else if (o instanceof Book) {
+            Book book = (Book) o;
             if (book.getId() == this.getId())
                 return true;
         }
@@ -66,10 +83,6 @@ public class BookDetail implements Parcelable {
         return (int) id;
     }
 
-    @Override
-    public String toString() {
-        return "BookId: " + id;
-    }
 
     public long getSortId() {
         return sortId;
@@ -103,20 +116,20 @@ public class BookDetail implements Parcelable {
         this.cover = cover;
     }
 
-    public long getCurrentMediaId() {
-        return currentMediaId;
+    public int getTime() {
+        return time;
     }
 
-    public void setCurrentMediaId(long currentMediaId) {
-        this.currentMediaId = currentMediaId;
+    public void setTime(int time) {
+        this.time = time;
     }
 
-    public int getCurrentMediaPosition() {
-        return currentMediaPosition;
+    public int getPosition() {
+        return position;
     }
 
-    public void setCurrentMediaPosition(int currentMediaPosition) {
-        this.currentMediaPosition = currentMediaPosition;
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     @Override
@@ -129,8 +142,9 @@ public class BookDetail implements Parcelable {
         destination.writeLong(id);
         destination.writeString(name);
         destination.writeString(cover);
-        destination.writeLong(currentMediaId);
-        destination.writeInt(currentMediaPosition);
+        destination.writeInt(time);
+        destination.writeInt(position);
         destination.writeLong(sortId);
+        destination.writeTypedList(containingMedia);
     }
 }

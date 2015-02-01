@@ -3,11 +3,10 @@ package de.ph1b.audiobook.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.KeyEvent;
 
-import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.service.AudioPlayerService;
+import de.ph1b.audiobook.utils.L;
 
 
 public class RemoteControlReceiver extends BroadcastReceiver {
@@ -18,11 +17,12 @@ public class RemoteControlReceiver extends BroadcastReceiver {
         KeyEvent event = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
         if (event.getAction() == (KeyEvent.ACTION_DOWN)) {
             final int keyCode = event.getKeyCode();
-            if (BuildConfig.DEBUG) Log.d("rmcr", "retrieved keycode: " + keyCode);
+            L.d("rmcr", "retrieved keycode: " + keyCode);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     Intent i = new Intent(context, AudioPlayerService.class);
+                    i.setAction(Intent.ACTION_MEDIA_BUTTON);
                     i.putExtra(Intent.EXTRA_KEY_EVENT, keyCode);
                     context.startService(i);
                 }

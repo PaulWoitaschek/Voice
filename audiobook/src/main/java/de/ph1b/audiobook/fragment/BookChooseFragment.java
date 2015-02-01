@@ -1,22 +1,19 @@
 package de.ph1b.audiobook.fragment;
 
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipDescription;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.ActionBar;
@@ -24,7 +21,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -47,75 +43,39 @@ import de.ph1b.audiobook.activity.FilesChoose;
 import de.ph1b.audiobook.activity.Settings;
 import de.ph1b.audiobook.adapter.MediaAdapter;
 import de.ph1b.audiobook.adapter.MediaAdapterChooser;
-import de.ph1b.audiobook.content.BookDetail;
+import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.dialog.EditBook;
 import de.ph1b.audiobook.interfaces.OnItemClickListener;
 import de.ph1b.audiobook.interfaces.OnItemLongClickListener;
-import de.ph1b.audiobook.interfaces.OnStateChangedListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
+import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.service.StateManager;
 import de.ph1b.audiobook.utils.CustomOnSimpleGestureListener;
 import de.ph1b.audiobook.utils.ImageHelper;
+import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.Prefs;
 
 
-public class BookChooseFragment extends Fragment implements View.OnClickListener, EditBook.OnEditBookFinished, RecyclerView.OnItemTouchListener {
+public class BookChooseFragment extends Fragment implements View.OnClickListener, EditBook.OnEditBookFinished, RecyclerView.OnItemTouchListener, StateManager.ChangeListener {
 
 
     private static final String TAG = "de.ph1b.audiobook.fragment.BookChooseFragment";
-    private final OnStateChangedListener onStateChangedListener = new OnStateChangedListener() {
-        @Override
-        public void onStateChanged(final PlayerStates state) {
-            Activity a = getActivity();
-            if (a != null)
-                a.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (state == PlayerStates.STARTED) {
-                            currentPlaying.setImageResource(R.drawable.ic_pause_grey600_48dp);
-                        } else {
-                            currentPlaying.setImageResource(R.drawable.ic_play_arrow_grey600_48dp);
-                        }
-                    }
-                });
-        }
-    };
-    //private ArrayList<BookDetail> details;
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    //private ArrayList<Book> details;
     private DataBaseHelper db;
     private MediaAdapter adapt;
     private ImageView currentCover;
     private TextView currentText;
     private ImageButton currentPlaying;
     private ViewGroup current;
-    private AudioPlayerService mService;
-    private boolean mBound = false;
-    private final ServiceConnection mConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            AudioPlayerService.LocalBinder binder = (AudioPlayerService.LocalBinder) service;
-            mService = binder.getService();
-            mBound = true;
-            if (stateManager.getState() == PlayerStates.STARTED) {
-                currentPlaying.setImageResource(R.drawable.ic_pause_grey600_48dp);
-            } else {
-                currentPlaying.setImageResource(R.drawable.ic_play_arrow_grey600_48dp);
-            }
-            stateManager.addStateChangeListener(onStateChangedListener);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mBound = false;
-        }
-    };
     private Prefs prefs;
     private GestureDetectorCompat detector;
-    private BookDetail bookToEdit;
+    private Book bookToEdit;
     private float scrollBy = 0;
-
     private StateManager stateManager;
+    private ServiceController controller;
 
     /**
      * Returns the amount of columns the main-grid will need
@@ -132,28 +92,14 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        Intent intent = new Intent(getActivity(), AudioPlayerService.class);
-        getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        // Unbind from the service
-        if (mBound) {
-            stateManager.removeStateChangeListener(onStateChangedListener);
-            getActivity().unbindService(mConnection);
-            mBound = false;
-        }
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         stateManager = StateManager.getInstance(getActivity());
+        controller = new ServiceController(getActivity());
+
+        Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
+        getActivity().startService(serviceIntent);
 
         db = DataBaseHelper.getInstance(getActivity());
         prefs = new Prefs(getActivity());
@@ -179,7 +125,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         OnItemClickListener onClickListener = new OnItemClickListener() {
             @Override
             public void onCoverClicked(int position) {
-                BookDetail book = adapt.getItem(position);
+                Book book = adapt.getItem(position);
                 long bookId = book.getId();
 
                 prefs.setCurrentBookId(bookId);
@@ -190,7 +136,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
 
             @Override
             public void onPopupMenuClicked(View v, final int position) {
-                Log.d(TAG, "popup" + String.valueOf(position));
+                L.d(TAG, "popup" + String.valueOf(position));
                 PopupMenu popup = new PopupMenu(getActivity(), v);
                 MenuInflater inflater = popup.getMenuInflater();
                 inflater.inflate(R.menu.popup_menu, popup.getMenu());
@@ -219,7 +165,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                                 editBook.show(getFragmentManager(), TAG);
                                 return true;
                             case R.id.delete_book:
-                                BookDetail deleteBook = adapt.getItem(position);
+                                Book deleteBook = adapt.getItem(position);
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                                 builder.setTitle(R.string.delete_book_title);
                                 builder.setMessage(deleteBook.getName());
@@ -263,7 +209,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
             }
         };
 
-        ArrayList<BookDetail> books = db.getAllBooks();
+        ArrayList<Book> books = db.getAllBooks();
         adapt = MediaAdapterChooser.getAdapter(books, getActivity(), onClickListener, onCoverChangedListener);
         recyclerView.setHasFixedSize(true);
 
@@ -283,7 +229,6 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         View.OnDragListener onDragListener = new View.OnDragListener() {
             @Override
             public boolean onDrag(View v, DragEvent event) {
-
 
                 int action = event.getAction();
                 switch (action) {
@@ -327,7 +272,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
 
                         float endX = event.getX();
                         float endY = event.getY();
-                        Log.d(TAG, endX + "/" + endY);
+                        L.d(TAG, endX + "/" + endY);
                         View endChild = recyclerView.findChildViewUnder(endX, endY);
                         int to = recyclerView.getChildPosition(endChild);
 
@@ -358,7 +303,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         long currentBookPosition = prefs.getCurrentBookId();
 
         boolean widgetInitialized = false;
-        for (final BookDetail b : adapt.getData()) {
+        for (final Book b : adapt.getData()) {
             if (b.getId() == currentBookPosition) {
                 //setting cover
                 String coverPath = b.getCover();
@@ -377,7 +322,6 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                     @Override
                     public void onClick(View v) {
                         Intent i = new Intent(getActivity(), BookPlay.class);
-                        i.putExtra(AudioPlayerService.GUI_BOOK_ID, b.getId());
                         startActivity(i);
                     }
                 });
@@ -396,10 +340,17 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     public void onResume() {
         super.onResume();
 
-        Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
-        getActivity().startService(serviceIntent);
+        stateManager.addChangeListener(this);
+        onStateChanged(stateManager.getState());
 
         initPlayerWidget();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        stateManager.removeChangeListener(this);
     }
 
     @Override
@@ -423,13 +374,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.current_playing:
-                if (mBound) {
-                    if (stateManager.getState() == PlayerStates.STARTED) {
-                        mService.pause(true);
-                    } else {
-                        mService.play();
-                    }
-                }
+                controller.playPause();
                 break;
             case R.id.fab:
                 Intent i = new Intent(getActivity(), FilesChoose.class);
@@ -462,6 +407,35 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public void onTimeChanged(int time) {
+
+    }
+
+    @Override
+    public void onStateChanged(final PlayerStates state) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (state == PlayerStates.PLAYING) {
+                    currentPlaying.setImageResource(R.drawable.ic_pause_grey600_48dp);
+                } else {
+                    currentPlaying.setImageResource(R.drawable.ic_play_arrow_grey600_48dp);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onSleepTimerSet(boolean sleepTimerActive) {
+
+    }
+
+    @Override
+    public void onPositionChanged(int position) {
 
     }
 }

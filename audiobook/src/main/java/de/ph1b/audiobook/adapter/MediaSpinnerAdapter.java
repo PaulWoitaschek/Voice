@@ -10,18 +10,19 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.content.MediaDetail;
+import de.ph1b.audiobook.content.Book;
+import de.ph1b.audiobook.content.Media;
 
 
 public class MediaSpinnerAdapter extends BaseAdapter {
 
     private final Context c;
-    private final ArrayList<MediaDetail> data;
+    private final ArrayList<Media> data;
 
-    public MediaSpinnerAdapter(Context c, ArrayList<MediaDetail> data) {
+    public MediaSpinnerAdapter(Context c, Book book) {
         super();
         this.c = c;
-        this.data = data;
+        this.data = book.getContainingMedia();
     }
 
 
@@ -31,7 +32,7 @@ public class MediaSpinnerAdapter extends BaseAdapter {
     }
 
     @Override
-    public MediaDetail getItem(int position) {
+    public Media getItem(int position) {
         return data.get(position);
     }
 

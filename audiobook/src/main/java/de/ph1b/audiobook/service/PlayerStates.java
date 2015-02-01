@@ -2,12 +2,7 @@ package de.ph1b.audiobook.service;
 
 
 public enum PlayerStates {
-    STARTED,
+    PLAYING,
     PAUSED,
-    STOPPED,
-    PREPARED,
-    IDLE,
-    PLAYBACK_COMPLETED,
-    INITIALIZED,
-    DEAD,
+    STOPPED
 }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
-import android.util.Log;
 
 import org.apache.http.conn.util.InetAddressUtils;
 import org.json.JSONArray;
@@ -23,8 +22,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-
-import de.ph1b.audiobook.BuildConfig;
 
 public class CoverDownloader {
 
@@ -61,12 +58,11 @@ public class CoverDownloader {
         readTimeOut = 5000;
 
         if (number > 64) {
-            Log.d(TAG, "Number exceeded results: " + number);
+            L.d(TAG, "Number exceeded results: " + number);
             return null;
         }
 
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "Loading Cover with " + searchText + " and #" + String.valueOf(number));
+        L.d(TAG, "Loading Cover with " + searchText + " and #" + String.valueOf(number));
 
         ArrayList<URL> bitmapUrls;
 
@@ -74,14 +70,13 @@ public class CoverDownloader {
 
         // if there is a value corresponding to searchText, use that one
         if (searchStringMap.containsKey(searchText)) {
-            if (BuildConfig.DEBUG) Log.d(TAG, "Found bitmapUrls");
+            L.d(TAG, "Found bitmapUrls");
             bitmapUrls = searchStringMap.get(searchText);
             if (number < bitmapUrls.size()) {
                 searchURL = bitmapUrls.get(number);
-                if (BuildConfig.DEBUG) Log.d(TAG, "Already got one in cache!:" + searchURL);
+                L.d(TAG, "Already got one in cache!:" + searchURL);
             } else {
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, "Will look for a new eightSet because bitmapUrls is too small");
+                L.d(TAG, "Will look for a new eightSet because bitmapUrls is too small");
                 ArrayList<URL> newSetOfURL = new ArrayList<>();
                 newSetOfURL.addAll(bitmapUrls);
                 ArrayList<URL> newUrls = genNewURLs(searchText, bitmapUrls.size() + 1);
@@ -90,16 +85,16 @@ public class CoverDownloader {
                 newSetOfURL.addAll(newUrls);
                 searchStringMap.put(searchText, newSetOfURL);
                 searchURL = newSetOfURL.get(0);
-                if (BuildConfig.DEBUG) Log.d(TAG, "Got one: " + searchURL);
+                L.d(TAG, "Got one: " + searchURL);
             }
         } else {
-            if (BuildConfig.DEBUG) Log.d(TAG, "Didn't find bitmapUrls");
+            L.d(TAG, "Didn't find bitmapUrls");
             ArrayList<URL> newUrls = genNewURLs(searchText, number);
             if (newUrls == null)
                 return null;
             searchStringMap.put(searchText, newUrls);
             searchURL = newUrls.get(0);
-            if (BuildConfig.DEBUG) Log.d(TAG, "But made a new one, returning:" + searchURL);
+            L.d(TAG, "But made a new one, returning:" + searchURL);
         }
 
 
@@ -131,7 +126,7 @@ public class CoverDownloader {
                 //returned bitmap in the desired 1:1 ratio and cropping automatically
                 return BitmapFactory.decodeStream(inputStream, null, options);
             } catch (IOException e) {
-                if (BuildConfig.DEBUG) Log.d(TAG, "Catched IOException!");
+                L.d(TAG, "Catched IOException!", e);
             }
         }
         return null;
@@ -151,7 +146,7 @@ public class CoverDownloader {
                 }
             }
         } catch (Exception e) {
-            if (BuildConfig.DEBUG) Log.d(TAG, e.getMessage());
+            L.d(TAG, e.getMessage());
         }
         return "";
     }
@@ -177,8 +172,7 @@ public class CoverDownloader {
                     "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&imgsz=large|xlarge&rsz=8&q=" +
                             URLEncoder.encode(searchText, "UTF-8") + "&start=" + startPage +
                             "&userip=" + getIPAddress());
-            if (BuildConfig.DEBUG)
-                Log.d(TAG, url.toString());
+            L.d(TAG, url.toString());
             connection = url.openConnection();
             connection.setReadTimeout(readTimeOut);
             connection.setConnectTimeout(connectTimeOut);
@@ -200,7 +194,7 @@ public class CoverDownloader {
                 eightSetOfURL.add(imageURL);
             }
         } catch (Exception e) {
-            if (BuildConfig.DEBUG) Log.d(TAG, e.toString());
+            L.d(TAG, e.toString());
         }
         return eightSetOfURL.size() > 0 ? eightSetOfURL : null;
     }

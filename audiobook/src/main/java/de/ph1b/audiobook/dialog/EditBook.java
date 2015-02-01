@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,11 +25,11 @@ import android.widget.TextView;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.utils.CoverDownloader;
 import de.ph1b.audiobook.utils.DraggableBoxImageView;
 import de.ph1b.audiobook.utils.ImageHelper;
+import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
 
 public class EditBook extends DialogFragment implements View.OnClickListener {
@@ -56,7 +55,6 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
         super.onStart();
         MaterialCompatThemer.theme(getDialog());
     }
-
 
 
     @Override
@@ -141,12 +139,12 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
         previousCover.setVisibility(View.INVISIBLE);
         boolean online = ImageHelper.isOnline(getActivity());
         int coverSize = covers.size();
-        if (BuildConfig.DEBUG) Log.d("ebk", String.valueOf(coverSize));
+        L.d("ebk", String.valueOf(coverSize));
 
         //sets up cover according to online state and amount of covers available
         if (coverSize == 0) {
             if (online) {
-                if (BuildConfig.DEBUG) Log.d("ebk", "p1");
+                L.d("ebk", "p1");
                 genCoverFromInternet(defaultName);
             } else {
                 coverLayout.setVisibility(View.GONE);
@@ -179,7 +177,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
                     Rect r = coverImageView.getCropPosition();
                     newCover = covers.get(coverPosition);
                     newCover = Bitmap.createBitmap(newCover, r.left, r.top, r.width(), r.height());
-                    Log.d("ebook", "Added with" + r.flattenToString());
+                    L.d("ebook", "Added with" + r.flattenToString());
                 }
                 ((OnEditBookFinished) getTargetFragment()).onEditBookFinished(bookName, newCover, true);
             }

@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v4.util.LruCache;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,19 +19,19 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.content.BookDetail;
+import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.interfaces.OnItemClickListener;
 import de.ph1b.audiobook.utils.CoverDownloader;
 import de.ph1b.audiobook.utils.ImageHelper;
+import de.ph1b.audiobook.utils.L;
 
 
 public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> {
 
     final ImageCache imageCache;
-    private final ArrayList<BookDetail> data;
+    private final ArrayList<Book> data;
     private final DataBaseHelper db;
     private final Context c;
     private final OnItemClickListener onItemClickListener;
@@ -40,7 +39,7 @@ public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.Vie
     private final OnCoverChangedListener onCoverChangedListener;
 
 
-    MediaAdapter(ArrayList<BookDetail> data, Context c, OnItemClickListener onItemClickListener, OnCoverChangedListener onCoverChangedListener) {
+    MediaAdapter(ArrayList<Book> data, Context c, OnItemClickListener onItemClickListener, OnCoverChangedListener onCoverChangedListener) {
         this.data = data;
         this.c = c;
         this.onItemClickListener = onItemClickListener;
@@ -53,7 +52,7 @@ public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.Vie
         db = DataBaseHelper.getInstance(c);
     }
 
-    public void updateItem(final BookDetail book) {
+    public void updateItem(final Book book) {
         for (int position = 0; position < data.size(); position++) {
             if (data.get(position).getId() == book.getId()) {
                 data.set(position, book);
@@ -69,11 +68,11 @@ public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.Vie
         }
     }
 
-    public BookDetail getItem(int position) {
+    public Book getItem(int position) {
         return data.get(position);
     }
 
-    public ArrayList<BookDetail> getData() {
+    public ArrayList<Book> getData() {
         return data;
     }
 
@@ -83,7 +82,7 @@ public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.Vie
      * @param position The position of the item to be removed
      */
     public void removeItem(int position) {
-        final BookDetail bookToRemove = getItem(position);
+        final Book bookToRemove = getItem(position);
         data.remove(position);
         notifyItemRemoved(position);
         singleThreadExecutor.execute(new Runnable() {
@@ -107,8 +106,7 @@ public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.Vie
      * @param to   The second book to swap
      */
     public void swapItems(int from, int to) {
-        if (BuildConfig.DEBUG)
-            Log.d("madapt", "swap items from to" + String.valueOf(from) + "/" + String.valueOf(to));
+        L.d("madapt", "swap items from to" + String.valueOf(from) + "/" + String.valueOf(to));
         final int finalFrom = from;
         if (from != to) {
             if (from > to) {
@@ -121,16 +119,14 @@ public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.Vie
                 }
             }
         }
-        if (BuildConfig.DEBUG)
-            Log.d("madapt", "notifyItemMoved" + finalFrom + "/" + to);
+        L.d("madapt", "notifyItemMoved" + finalFrom + "/" + to);
         notifyItemMoved(finalFrom, to);
     }
 
     private void swapItemsInData(int from, int to) {
-        if (BuildConfig.DEBUG)
-            Log.d("madapt", "swapInData:" + from + "/" + to);
-        final BookDetail oldBook = data.get(from);
-        final BookDetail newBook = data.get(to);
+        L.d("madapt", "swapInData:" + from + "/" + to);
+        final Book oldBook = data.get(from);
+        final Book newBook = data.get(to);
         long oldSortId = oldBook.getSortId();
         long newSortId = newBook.getSortId();
         oldBook.setSortId(newSortId);
@@ -148,7 +144,7 @@ public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.Vie
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        BookDetail b = data.get(position);
+        Book b = data.get(position);
 
         //setting text
         String name = b.getName();
@@ -157,7 +153,7 @@ public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.Vie
 
         Bitmap cached = imageCache.get((int) b.getId());
         if (cached != null) {
-            if (BuildConfig.DEBUG) Log.d("madapt", "cached bitmap! " + b.getId());
+            L.d("madapt", "cached bitmap! " + b.getId());
             viewHolder.coverView.setImageBitmap(cached);
         } else {
             viewHolder.coverView.setImageBitmap(null);
@@ -221,7 +217,7 @@ public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.Vie
 
         private final WeakReference<ImageView> weakReference;
         private final int position;
-        private final BookDetail book;
+        private final Book book;
 
         public LoadCoverAsync(int position, ImageView imageView) {
             this.position = position;

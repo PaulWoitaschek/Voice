@@ -26,8 +26,6 @@
     <string name="minutes">minut</string>
     <string name="seconds">sekund</string>
 
-    <string name="file_not_found">Vypadá to, že audiokniha není v úložišti nalezena. Znovu ji
-        prosím přidejte.</string>
     <string name="current_cover">Zobrazit obal právě přehrávané knihy.</string>
     <string name="current_playing">Zobrazit stav přehrávání.</string>
     <string name="pref_cover_on_internet">Používat mobilní připojení</string>
@@ -50,8 +48,4 @@
     <string name="playback_speed">Rychlost přehrávání</string>
     <string name="pref_sleep_time">Časovač vypnutí</string>
     <string name="sleep_timer_started">Časovač vypnutí: </string>
-    <string name="sleep_timer_canceled">Časovač vypnutí zrušen.</string>
-    <string name="error_in_file_title">Chyba souboru</string>
-    <string name="error_in_file_description">Následující soubory jsou nejspíše poškozeny. Přidat knihu bez poškozených souborů?</string>
-    <string name="error_in_file_all_defect">Všechny soubory jsou nejspíše poškozeny</string>
 </resources>

@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.os.Build;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.NumberPicker;
@@ -46,7 +45,7 @@ public class MaterialCompatThemer {
                             ((EditText) child).setTextColor(r.getColor(R.color.colorAccent));
                             numberPicker.invalidate();
                         } catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
-                            Log.w("setNumberPickerTextColor", e);
+                            e.printStackTrace();
                         }
                     }
                 }

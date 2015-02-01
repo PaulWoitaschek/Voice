@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,9 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.Bookmark;
-import de.ph1b.audiobook.content.MediaDetail;
+import de.ph1b.audiobook.content.Media;
 
 /**
  * @author <a href="mailto:woitaschek@posteo.de">Paul Woitaschek</a>
@@ -24,13 +24,13 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
 
     private final ArrayList<Bookmark> bookmarks;
     private final OnOptionsMenuClickedListener listener;
-    private final ArrayList<MediaDetail> allMedia;
+    private final ArrayList<Media> allMedia;
 
     public BookmarkAdapter(ArrayList<Bookmark> bookmarks, OnOptionsMenuClickedListener listener,
-                           ArrayList<MediaDetail> allMedia) {
+                           Book book) {
         this.bookmarks = bookmarks;
         this.listener = listener;
-        this.allMedia = allMedia;
+        this.allMedia = book.getContainingMedia();
     }
 
     /**
@@ -39,14 +39,12 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
      * @param bookmark The bookmark to be added
      */
     public int addItem(Bookmark bookmark) {
-        Log.d("bma", "added bookmark has index: " + bookmark.getMediaId());
         int preferredIndex = 0;
         for (int i = 0; i < bookmarks.size(); i++) {
             Bookmark atIndex = bookmarks.get(i);
-            if ((bookmark.getMediaId() > atIndex.getMediaId()) ||
-                    ((atIndex.getMediaId() == bookmark.getMediaId()) &&
-                            (atIndex.getPosition() < bookmark.getPosition()))) {
-                Log.d("bma", "swapping:" + atIndex.getMediaId());
+            if ((bookmark.getPosition() > atIndex.getPosition()) ||
+                    ((atIndex.getPosition() == bookmark.getPosition()) &&
+                            (atIndex.getTime() < bookmark.getTime()))) {
                 preferredIndex = i + 1;
             }
         }
@@ -74,18 +72,12 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Bookmark b = bookmarks.get(position);
-        holder.title.setText(b.getTitle());
+        Bookmark bookmark = bookmarks.get(position);
+        holder.title.setText(bookmark.getTitle());
 
         int size = allMedia.size();
-        int index = 1;
-        for (int i = 0; i < allMedia.size(); i++) {
-            if (allMedia.get(i).getId() == b.getMediaId()) {
-                index = i;
-            }
-        }
-        holder.summary.setText("(" + (index + 1) + "/" + size + ") " + formatTime(b.getPosition()) + " /"
-                + formatTime(allMedia.get(index).getDuration()));
+        holder.summary.setText("(" + (bookmark.getPosition() + 1) + "/" + size + ") " + formatTime(bookmark.getTime()) + " /"
+                + formatTime(allMedia.get(bookmark.getPosition()).getDuration()));
     }
 
     @Override

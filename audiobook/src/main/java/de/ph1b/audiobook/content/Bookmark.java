@@ -1,7 +1,5 @@
 package de.ph1b.audiobook.content;
 
-import android.util.Log;
-
 /**
  * @author <a href="mailto:woitaschek@posteo.de">Paul Woitaschek</a>
  * @link {http://www.paul-woitaschek.de}
@@ -11,7 +9,7 @@ public class Bookmark {
 
     private String title;
     private long id;
-    private long mediaId;
+    private int time;
     private long bookId;
     private int position;
 
@@ -23,18 +21,15 @@ public class Bookmark {
         }
         if (o instanceof Bookmark) {
             Bookmark that = (Bookmark) o;
-            Log.d("bm", "comparing:");
-            Log.d("bm", mediaId + "/" + bookId + "/" + position);
-            Log.d("bm", that.getMediaId() + "/" + that.getBookId() + "/" + that.getPosition());
-            return (that.getMediaId() == mediaId && that.getBookId() == bookId
-                    && that.getPosition() == position);
+            return (that.time == time && that.bookId == bookId
+                    && that.position == position);
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return (int) mediaId + (int) bookId + position;
+        return time + (int) bookId + position;
     }
 
     public String getTitle() {
@@ -43,14 +38,6 @@ public class Bookmark {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public long getMediaId() {
-        return mediaId;
-    }
-
-    public void setMediaId(long mediaId) {
-        this.mediaId = mediaId;
     }
 
     public long getId() {
@@ -75,5 +62,13 @@ public class Bookmark {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
     }
 }

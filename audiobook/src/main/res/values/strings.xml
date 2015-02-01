@@ -26,8 +26,6 @@
     <string name="minutes">minutes</string>
     <string name="seconds">seconds</string>
 
-    <string name="file_not_found">It seems that the audiobook cannot be found on storage. Please
-        re-add the audiobook.</string>
     <string name="current_cover">Shows cover of currently playing book.</string>
     <string name="current_playing">Shows playing state.</string>
     <string name="pref_cover_on_internet">Use Mobile Network</string>
@@ -50,7 +48,6 @@
     <string tools:ignore="MissingTranslation" name="playback_speed">Playback speed</string>
     <string tools:ignore="MissingTranslation" name="pref_sleep_time">Sleep time</string>
     <string tools:ignore="MissingTranslation" name="sleep_timer_started">Sleep timer: </string>
-    <string tools:ignore="MissingTranslation" name="sleep_timer_canceled">Sleep timer canceled.</string>
     <string tools:ignore="MissingTranslation" name="content_close_notification">Close player and notification.</string>
     <string tools:ignore="MissingTranslation" name="delete_book_title">Do you want to delete this book?</string>
     <string tools:ignore="MissingTranslation" name="delete_book_keep">Keep</string>
@@ -59,9 +56,6 @@
     <string tools:ignore="MissingTranslation" name="pref_title_pause_on_transient">Pause on Interruption</string>
     <string tools:ignore="MissingTranslation" name="pref_summary_pause_on_transient">Pause when interrupted, otherwise lower the volume for the duration of the interruption.</string>
 
-    <string tools:ignore="MissingTranslation" name="error_in_file_title">Error in file</string>
-    <string tools:ignore="MissingTranslation" name="error_in_file_description">The following files seem to be corrupted. Add book without corrupted files?</string>
-    <string tools:ignore="MissingTranslation" name="error_in_file_all_defect">All files seem to be corrupt</string>
     <string tools:ignore="MissingTranslation" name="previous_track">Previous track</string>
     <string tools:ignore="MissingTranslation" name="next_track">Next track</string>
 
