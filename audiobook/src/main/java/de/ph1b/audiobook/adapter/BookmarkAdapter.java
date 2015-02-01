@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
@@ -34,24 +35,16 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
     }
 
     /**
-     * Adds an item and scrolls to that one.
      *
      * @param bookmark The bookmark to be added
+     * @return The position at which the bookmark was added.
      */
     public int addItem(Bookmark bookmark) {
-        int preferredIndex = 0;
-        for (int i = 0; i < bookmarks.size(); i++) {
-            Bookmark atIndex = bookmarks.get(i);
-            if ((bookmark.getPosition() > atIndex.getPosition()) ||
-                    ((atIndex.getPosition() == bookmark.getPosition()) &&
-                            (atIndex.getTime() < bookmark.getTime()))) {
-                preferredIndex = i + 1;
-            }
-        }
-
-        bookmarks.add(preferredIndex, bookmark);
-        notifyItemInserted(preferredIndex);
-        return preferredIndex;
+        bookmarks.add(bookmark);
+        Collections.sort(bookmarks);
+        int index = bookmarks.indexOf(bookmark);
+        notifyItemInserted(index);
+        return index;
     }
 
     public void removeItem(int position) {

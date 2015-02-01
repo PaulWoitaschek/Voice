@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
@@ -566,7 +567,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 new String[]{KEY_BOOKMARK_TITLE, KEY_BOOKMARK_POSITION, KEY_BOOKMARK_TIME, KEY_BOOKMARK_ID},
                 KEY_BOOK_ID + "=?",
                 new String[]{String.valueOf(bookId)},
-                null, null, KEY_MEDIA_ID);
+                null, null, null);
         try {
             while (cursor.moveToNext()) {
                 Bookmark bookmark = new Bookmark();
@@ -585,6 +586,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         } finally {
             cursor.close();
         }
+        Collections.sort(allBookmarks);
         return allBookmarks;
     }
 

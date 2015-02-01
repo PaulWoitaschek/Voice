@@ -1,11 +1,13 @@
 package de.ph1b.audiobook.content;
 
+import android.support.annotation.NonNull;
+
 /**
  * @author <a href="mailto:woitaschek@posteo.de">Paul Woitaschek</a>
  * @link {http://www.paul-woitaschek.de}
  * @see <a href="http://www.paul-woitaschek.de">http://www.paul-woitaschek.de</a>
  */
-public class Bookmark {
+public class Bookmark implements Comparable<Bookmark> {
 
     private String title;
     private long id;
@@ -26,6 +28,7 @@ public class Bookmark {
         }
         return false;
     }
+
 
     @Override
     public int hashCode() {
@@ -70,5 +73,35 @@ public class Bookmark {
 
     public void setTime(int time) {
         this.time = time;
+    }
+
+
+    /**
+     * @param another the Bookmark to be compared
+     * @return -1 if position in book is smaller, 0 if its the same position in the book or +1 if its
+     * a later position in the book
+     */
+
+    @Override
+    public int compareTo(@NonNull Bookmark another) {
+        if (bookId > another.bookId) {
+            return 1;
+        } else if (bookId < another.bookId) {
+            return -1;
+        }
+
+        if (position > another.position) {
+            return 1;
+        } else if (position < another.position) {
+            return -1;
+        }
+
+        if (time > another.time) {
+            return 1;
+        } else if (time < another.time) {
+            return -1;
+        }
+
+        return 0;
     }
 }
