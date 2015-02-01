@@ -9,11 +9,17 @@ import android.support.annotation.NonNull;
  */
 public class Bookmark implements Comparable<Bookmark> {
 
+    private final int time;
+    private final long bookId;
+    private final int position;
     private String title;
     private long id;
-    private int time;
-    private long bookId;
-    private int position;
+
+    public Bookmark(long bookId, int position, int time) {
+        this.bookId = bookId;
+        this.position = position;
+        this.time = time;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -55,24 +61,12 @@ public class Bookmark implements Comparable<Bookmark> {
         return bookId;
     }
 
-    public void setBookId(long bookId) {
-        this.bookId = bookId;
-    }
-
     public int getPosition() {
         return position;
     }
 
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
     public int getTime() {
         return time;
-    }
-
-    public void setTime(int time) {
-        this.time = time;
     }
 
 

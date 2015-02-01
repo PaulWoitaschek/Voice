@@ -69,7 +69,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         holder.title.setText(bookmark.getTitle());
 
         int size = allMedia.size();
-        holder.summary.setText("(" + (bookmark.getPosition() + 1) + "/" + size + ") " + formatTime(bookmark.getTime()) + " /"
+        holder.summary.setText("(" + (bookmark.getPosition() + 1) + "/" + size + ") " + formatTime(bookmark.getTime()) + " / "
                 + formatTime(allMedia.get(bookmark.getPosition()).getDuration()));
     }
 

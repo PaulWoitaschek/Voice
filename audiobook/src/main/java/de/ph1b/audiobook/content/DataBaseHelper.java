@@ -570,16 +570,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 null, null, null);
         try {
             while (cursor.moveToNext()) {
-                Bookmark bookmark = new Bookmark();
                 String title = cursor.getString(0);
                 int position = cursor.getInt(1);
                 int time = cursor.getInt(2);
                 long bookmarkId = cursor.getLong(3);
 
+                Bookmark bookmark = new Bookmark(bookId, position, time);
                 bookmark.setTitle(title);
-                bookmark.setPosition(position);
-                bookmark.setBookId(bookId);
-                bookmark.setTime(time);
                 bookmark.setId(bookmarkId);
                 allBookmarks.add(bookmark);
             }
