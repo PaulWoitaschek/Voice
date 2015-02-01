@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
+import de.ph1b.audiobook.utils.Prefs;
 
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class DataBaseHelper extends SQLiteOpenHelper {
@@ -93,22 +94,88 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     private void upgradeThree(SQLiteDatabase db) {
-        String CREATE_BOOKMARK_TABLE = "CREATE TABLE " + "TABLE_BOOKMARKS" + " ( " +
-                "KEY_BOOKMARK_ID" + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "KEY_BOOKMARK_TITLE" + " TEXT NOT NULL, " +
-                "KEY_BOOKMARK_POSITION" + " INTEGER NOT NULL, " +
-                "KEY_BOOK_ID" + " INTEGER NOT NULL, " +
-                "KEY_BOOKMARK_TIME" + " INTEGER NOT NULL)";
+        Prefs prefs = new Prefs(c);
+        long oldCurrentBookId = prefs.getCurrentBookId();
 
-        db.execSQL(CREATE_BOOKMARK_TABLE);
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
-        int integerBookId = sp.getInt("de.ph1b.audiobook.activity.BookChoose.SHARED_PREFS_CURRENT", -1);
-        long longBookId = (long) integerBookId;
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putLong("currentBook", longBookId);
-        editor.apply();
+        db.beginTransaction();
+        try {
+            //bookmarks
+            String CREATE_BOOKMARK_TABLE = "CREATE TABLE " + "TABLE_BOOKMARKS" + " ( " +
+                    "KEY_BOOKMARK_ID" + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "KEY_BOOKMARK_TITLE" + " TEXT NOT NULL, " +
+                    "KEY_BOOKMARK_POSITION" + " INTEGER NOT NULL, " +
+                    "KEY_BOOK_ID" + " INTEGER NOT NULL, " +
+                    "KEY_BOOKMARK_TIME" + " INTEGER NOT NULL)";
+            db.execSQL(CREATE_BOOKMARK_TABLE);
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+            int integerBookId = sp.getInt("de.ph1b.audiobook.activity.BookChoose.SHARED_PREFS_CURRENT", -1);
+            long longBookId = (long) integerBookId;
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putLong("currentBook", longBookId);
+            editor.apply();
 
-        //TODO: Transition from media id to position
+            //updating tables to represent a position instead the id.
+            db.execSQL("ALTER TABLE TABLE_BOOKS RENAME TO TABLE_BOOKS_TEMP");
+            String CREATE_BOOK_TABLE = "CREATE TABLE " + "TABLE_BOOKS" + " ( " +
+                    "KEY_BOOK_ID" + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "KEY_BOOK_NAME" + " TEXT NOT NULL, " +
+                    "KEY_BOOK_COVER" + " TEXT, " +
+                    "KEY_BOOK_POSITION" + " INTEGER, " +
+                    "KEY_BOOK_TIME" + " INTEGER, " +
+                    "KEY_BOOK_SORT_ID" + " INTEGER)";
+            db.execSQL(CREATE_BOOK_TABLE);
+
+            Cursor books = db.query("TABLE_BOOKS_TEMP",
+                    new String[]{"KEY_BOOK_ID", "KEY_BOOK_NAME", "KEY_BOOK_COVER",
+                            "KEY_BOOK_CURRENT_MEDIA_ID", "KEY_BOOK_CURRENT_MEDIA_POSITION"},
+                    null, null, null, null, null);
+            try {
+                while (books.moveToNext()) {
+                    long oldBookId = books.getLong(0);
+                    String bookName = books.getString(1);
+                    String bookCover = books.getString(2);
+                    long currentMediaId = books.getLong(3);
+                    int currentMediaPosition = books.getInt(4);
+                    Cursor media = db.query("TABLE_MEDIA", //table
+                            new String[]{"KEY_MEDIA_ID"}, //query
+                            "KEY_MEDIA_BOOK_ID" + "=?", //selection
+                            new String[]{String.valueOf(oldBookId)}, //selection args
+                            null, null,
+                            "KEY_MEDIA_ID"); //sort by
+                    try {
+                        int position = -1; //get position in the future Media Array
+                        while (media.moveToNext()) {
+                            position++;
+                            if (media.getLong(0) == currentMediaId) {
+                                break;
+                            }
+                        }
+                        ContentValues cv = new ContentValues();
+                        cv.put("KEY_BOOK_NAME", bookName);
+                        cv.put("KEY_BOOK_COVER", bookCover);
+                        cv.put("KEY_BOOK_POSITION", position);
+                        cv.put("KEY_BOOK_TIME", currentMediaPosition);
+                        cv.put("KEY_BOOK_SORT_ID", 0);
+                        long newBookId = db.insert("TABLE_BOOKS", null, cv);
+                        cv.put("KEY_BOOK_SORT_ID", newBookId);
+                        db.update("TABLE_BOOKS", cv, "KEY_BOOK_ID" + "=?", new String[]{String.valueOf(newBookId)});
+
+                        // updating current book
+                        if (oldBookId == oldCurrentBookId) {
+                            prefs.setCurrentBookId(newBookId);
+                        }
+                    } finally {
+                        media.close();
+                    }
+                }
+            } finally {
+                books.close();
+            }
+            db.execSQL("DROP TABLE TABLE_BOOKS_TEMP");
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
     }
 
     private void upgradeOne(SQLiteDatabase db) {
