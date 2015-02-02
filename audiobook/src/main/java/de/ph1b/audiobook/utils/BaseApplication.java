@@ -13,7 +13,7 @@ import de.ph1b.audiobook.BuildConfig;
 public class BaseApplication extends Application implements Thread.UncaughtExceptionHandler {
 
 
-    private Thread.UncaughtExceptionHandler defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
+    private final Thread.UncaughtExceptionHandler defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
 
     @Override
     public void onCreate() {

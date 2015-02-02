@@ -16,15 +16,10 @@ public class StateManager {
     private static final String TAG = "StateManager";
     private static StateManager instance;
     private final List<ChangeListener> listeners = new ArrayList<>();
+    private final Context c;
     private PlayerStates state = PlayerStates.STOPPED;
     private int time;
     private boolean sleepTimerActive = false;
-    private int position;
-    private final Context c;
-
-    public int getPosition(){
-        return position;
-    }
 
     private StateManager(Context c) {
         this.c = c;
@@ -35,6 +30,14 @@ public class StateManager {
             instance = new StateManager(c.getApplicationContext());
         }
         return instance;
+    }
+
+    public void setPosition(int position) {
+        L.v(TAG, "setPosition to:" + position);
+        for (ChangeListener l : listeners) {
+            l.onPositionChanged(position);
+        }
+        updateWidget();
     }
 
     public PlayerStates getState() {
@@ -70,14 +73,6 @@ public class StateManager {
         for (ChangeListener l : listeners) {
             l.onSleepTimerSet(sleepTimerActive);
         }
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-        for (ChangeListener l : listeners) {
-            l.onPositionChanged(position);
-        }
-        updateWidget();
     }
 
     public void addChangeListener(ChangeListener listener) {

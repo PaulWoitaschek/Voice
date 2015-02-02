@@ -59,7 +59,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, State
     private ImageButton play_button;
     private TextView playedTimeView;
     private SeekBar seekBar;
-    private Spinner bookSpinner;
+    private volatile Spinner bookSpinner;
     private TextView maxTimeView;
     private volatile Book book;
     private Prefs prefs;
@@ -72,16 +72,16 @@ public class BookPlayFragment extends Fragment implements OnClickListener, State
 
         stateManager.addChangeListener(this);
 
-        onPositionChanged(stateManager.getPosition());
-        onTimeChanged(stateManager.getTime());
+        onPositionChanged(book.getPosition());
+        onTimeChanged(book.getTime());
         onStateChanged(stateManager.getState());
     }
 
     @Override
     public void onPause() {
-        super.onPause();
-
         stateManager.removeChangeListener(this);
+
+        super.onPause();
     }
 
     private String formatTime(int ms) {
@@ -335,6 +335,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, State
 
     @Override
     public void onPositionChanged(final int position) {
+        L.v(TAG, "onPositionChanged called: " + position);
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -342,6 +343,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, State
                  * Setting position as a tag, so we can make sure onItemSelected is only fired when
                  * the user changes the position himself.
                  */
+                L.v(TAG, "onPositionChanged executed:" + position);
                 bookSpinner.setTag(position);
                 bookSpinner.setSelection(position, true);
 

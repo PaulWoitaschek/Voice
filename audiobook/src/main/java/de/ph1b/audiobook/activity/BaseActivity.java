@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 
-import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.service.AudioPlayerService;
 
 /**
