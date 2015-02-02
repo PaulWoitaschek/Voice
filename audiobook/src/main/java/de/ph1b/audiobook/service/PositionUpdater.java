@@ -2,7 +2,11 @@ package de.ph1b.audiobook.service;
 
 
 import android.content.Context;
-import android.os.Handler;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.DataBaseHelper;
@@ -12,19 +16,12 @@ public class PositionUpdater {
 
     private final MediaPlayerCompat mp;
     private final StateManager stateManager;
-    private final Handler handler = new Handler();
     private final Book book;
-    private final Runnable runner = new Runnable() {
-        @Override
-        public void run() {
-            int pos = mp.getCurrentPosition();
-            stateManager.setTime(pos);
-            book.setTime(pos);
-            db.updateBook(book);
-            handler.postDelayed(this, 1000);
-        }
-    };
+
     private final DataBaseHelper db;
+
+    private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+    private ScheduledFuture updater = null;
 
     public PositionUpdater(MediaPlayerCompat mp, Context c, Book book) {
         this.mp = mp;
@@ -33,12 +30,27 @@ public class PositionUpdater {
         this.db = DataBaseHelper.getInstance(c);
     }
 
+    private boolean updaterActive() {
+        return updater != null && !updater.isCancelled() && !updater.isDone();
+    }
+
     public void startUpdating() {
-        handler.removeCallbacks(runner);
-        handler.post(runner);
+        if (!updaterActive()) {
+            updater = executor.scheduleAtFixedRate(new Runnable() {
+                @Override
+                public void run() {
+                    int pos = mp.getCurrentPosition();
+                    stateManager.setTime(pos);
+                    book.setTime(pos);
+                    db.updateBook(book);
+                }
+            }, 0, 1, TimeUnit.SECONDS);
+        }
     }
 
     public void stopUpdating() {
-        handler.removeCallbacks(runner);
+        if (updaterActive()) {
+            updater.cancel(true);
+        }
     }
 }
