@@ -100,6 +100,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
         audioTypes.add(".ota");
         audioTypes.add(".imy");
         audioTypes.add(".ogg");
+        audioTypes.add(".oga");
         audioTypes.add(".wav");
         audioTypes.add(".aac");
         audioTypes.add(".flac");
