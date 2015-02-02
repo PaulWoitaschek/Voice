@@ -466,6 +466,18 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                 media.add(new Media(path, fileName, bookId));
             }
 
+            // adding duration in first media file to have the first duration when book is started.
+            // rest will be completed when needed
+            if (media.size() > 0) {
+                Media m = media.get(0);
+                MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+                try {
+                    DataBaseHelper.setMissingDuration(m, mmr);
+                } finally {
+                    mmr.release();
+                }
+            }
+
             db.addMedia(media);
             return null;
         }

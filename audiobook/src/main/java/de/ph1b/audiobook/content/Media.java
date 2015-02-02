@@ -87,6 +87,10 @@ public class Media implements Parcelable {
         this.id = id;
     }
 
+    public long getId(){
+        return id;
+    }
+
     public String getPath() {
         return path;
     }

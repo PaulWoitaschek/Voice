@@ -435,39 +435,45 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return allBooks;
     }
 
-    public void fillMissingDurations() {
-        L.i(TAG, "fillMissingDurations() called");
+    public static void setMissingDuration(Media m, MediaMetadataRetriever metaRetriever) {
+        try {
+            metaRetriever.setDataSource(m.getPath());
+            int duration = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+            m.setDuration(duration);
+        } catch (RuntimeException e) { //undocumented exception
+            L.e(TAG, "Error at retrieving duration from file=" + m.getPath(), e);
+        }
+    }
+
+    public void setMissingDurations(ArrayList<Media> medias) {
+        MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
+        try {
+            for (Media m : medias) {
+                setMissingDuration(m, metaRetriever);
+            }
+        } finally {
+            metaRetriever.release();
+        }
+
+        ArrayList<ContentValues> cvs = new ArrayList<>();
+        for (Media m : medias) {
+            ContentValues cv = new ContentValues();
+            cv.put(KEY_MEDIA_DURATION, m.getDuration());
+        }
+
+        // updating these media in database
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
-            Cursor cursor = db.query(TABLE_MEDIA,
-                    new String[]{KEY_MEDIA_ID, KEY_MEDIA_PATH}, KEY_MEDIA_DURATION + "=?",
-                    new String[]{String.valueOf(0)},
-                    null, null, null);
-            L.i(TAG, "found n media with missing durations:" + cursor.getCount());
-            MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
-            while (cursor.moveToNext()) {
-                long id = cursor.getLong(0);
-                String path = cursor.getString(1);
-                try {
-                    metaRetriever.setDataSource(path);
-                    int duration = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
-                    ContentValues values = new ContentValues();
-                    values.put(KEY_MEDIA_DURATION, duration);
-                    db.update(TABLE_MEDIA, //table
-                            values, //values
-                            KEY_MEDIA_ID + "=?", //selection
-                            new String[]{String.valueOf(id)}); //args
-                    L.i(TAG, "updated duration of media with id:" + id);
-                } catch (RuntimeException e) {
-                    e.printStackTrace();
-                }
+            for (Media m : medias) {
+                ContentValues cv = new ContentValues();
+                cv.put(KEY_MEDIA_DURATION, m.getDuration());
+                db.update(TABLE_MEDIA, cv, KEY_MEDIA_ID + "=?", new String[]{String.valueOf(m.getId())});
             }
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
         }
-        L.i(TAG, "fillMissingDurations() finished");
     }
 
     private Book getBook(long bookId, SQLiteDatabase db) {
