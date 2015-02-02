@@ -6,8 +6,6 @@ import android.os.Build;
 
 import java.io.IOException;
 
-import de.ph1b.audiobook.mediaplayer.MediaPlayer;
-
 public class MediaPlayerCompat {
 
     private final boolean useCustomMediaPlayer;
@@ -36,6 +34,10 @@ public class MediaPlayerCompat {
         } else {
             androidMediaPlayer.reset();
         }
+    }
+
+    public int getDuration() {
+        return (useCustomMediaPlayer ? customMediaPlayer.getDuration() : androidMediaPlayer.getDuration());
     }
 
     public void release() {
@@ -97,11 +99,7 @@ public class MediaPlayerCompat {
     }
 
     public int getCurrentPosition() {
-        if (useCustomMediaPlayer) {
-            return customMediaPlayer.getCurrentPosition();
-        } else {
-            return androidMediaPlayer.getCurrentPosition();
-        }
+        return (useCustomMediaPlayer ? customMediaPlayer.getCurrentPosition() : androidMediaPlayer.getCurrentPosition());
     }
 
     public void start() {

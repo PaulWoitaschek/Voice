@@ -261,7 +261,7 @@ public class MediaPlayerController {
                 case PAUSED:
                 case PLAYBACK_COMPLETED:
                     int delta = prefs.getSeekTime() * 1000;
-                    int duration = book.getContainingMedia().get(book.getPosition()).getDuration();
+                    int duration = mediaPlayer.getDuration();
                     int intendedPosition = mediaPlayer.getCurrentPosition() +
                             (direction == Direction.BACKWARD ? -delta : delta);
                     if (intendedPosition > duration) {

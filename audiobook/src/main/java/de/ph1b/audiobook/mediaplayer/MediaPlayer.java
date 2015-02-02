@@ -53,7 +53,7 @@ public class MediaPlayer {
     private float speed;
     private OnCompletionListener onCompletionListener;
     private State state;
-
+    private long duration;
 
     public MediaPlayer(Context context) {
         state = State.IDLE;
@@ -75,7 +75,6 @@ public class MediaPlayer {
         this.onCompletionListener = listener;
     }
 
-
     public int getCurrentPosition() {
         switch (state) {
             case ERROR:
@@ -83,6 +82,19 @@ public class MediaPlayer {
                 break;
             default:
                 return (int) (extractor.getSampleTime() / 1000);
+        }
+        return 0;
+    }
+
+    public int getDuration() {
+        switch (state) {
+            case INITIALIZED:
+            case IDLE:
+            case ERROR:
+                error("getDuration()", State.ERROR);
+                break;
+            default:
+                return (int) (duration / 1000);
         }
         return 0;
     }
@@ -272,7 +284,7 @@ public class MediaPlayer {
         int sampleRate = oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
         int channelCount = oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
         final String mime = oFormat.getString(MediaFormat.KEY_MIME);
-        // long duration = oFormat.getLong(MediaFormat.KEY_DURATION);
+        duration = oFormat.getLong(MediaFormat.KEY_DURATION);
         L.v(TAG, "Sample rate: " + sampleRate);
         L.v(TAG, "Mime type: " + mime);
         initDevice(sampleRate, channelCount);
