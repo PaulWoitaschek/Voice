@@ -20,7 +20,6 @@ public class MediaSpinnerAdapter extends BaseAdapter {
     private final ArrayList<Media> data;
 
     public MediaSpinnerAdapter(Context c, Book book) {
-        super();
         this.c = c;
         this.data = book.getContainingMedia();
     }

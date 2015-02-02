@@ -62,18 +62,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return instance;
     }
 
-    public static void setMissingDuration(Media m, MediaMetadataRetriever metaRetriever) {
-        try {
-            if (m.getDuration() != 0) {
-                metaRetriever.setDataSource(m.getPath());
-                int duration = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
-                m.setDuration(duration);
-            }
-        } catch (RuntimeException e) { //undocumented exception
-            L.e(TAG, "Error at retrieving duration from file=" + m.getPath(), e);
-        }
-    }
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.beginTransaction();
@@ -446,36 +434,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return allBooks;
     }
 
-    public void setMissingDurations(ArrayList<Media> medias) {
-        MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
-        try {
-            for (Media m : medias) {
-                setMissingDuration(m, metaRetriever);
-            }
-        } finally {
-            metaRetriever.release();
-        }
-
-        ArrayList<ContentValues> cvs = new ArrayList<>();
-        for (Media m : medias) {
-            ContentValues cv = new ContentValues();
-            cv.put(KEY_MEDIA_DURATION, m.getDuration());
-        }
-
-        // updating these media in database
-        SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
-        try {
-            for (Media m : medias) {
-                ContentValues cv = new ContentValues();
-                cv.put(KEY_MEDIA_DURATION, m.getDuration());
-                db.update(TABLE_MEDIA, cv, KEY_MEDIA_ID + "=?", new String[]{String.valueOf(m.getId())});
-            }
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
-    }
 
     private Book getBook(long bookId, SQLiteDatabase db) {
         Cursor bookCursor = db.query(TABLE_BOOKS,
@@ -629,6 +587,20 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             db.endTransaction();
         }
         return bookId;
+    }
+
+    /**
+     * Updating Media. Only mutable fields will be updated.
+     *
+     * @param media The media to update.
+     */
+    public void updateMedia(Media media) {
+        SQLiteDatabase db = getWritableDatabase();
+        int duration = media.getDuration();
+        long id = media.getId();
+        ContentValues cv = new ContentValues();
+        cv.put(KEY_MEDIA_DURATION, duration);
+        db.update(TABLE_MEDIA, cv, KEY_MEDIA_ID + "=?", new String[]{String.valueOf(id)});
     }
 
 

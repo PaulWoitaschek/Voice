@@ -50,6 +50,7 @@ import de.ph1b.audiobook.interfaces.OnBackPressedListener;
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
+import de.ph1b.audiobook.utils.MusicUtil;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
 
 public class FilesChooseFragment extends Fragment implements EditBook.OnEditBookFinished {
@@ -469,13 +470,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
             // adding duration in first media file to have the first duration when book is started.
             // rest will be completed when needed
             if (media.size() > 0) {
-                Media m = media.get(0);
-                MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-                try {
-                    DataBaseHelper.setMissingDuration(m, mmr);
-                } finally {
-                    mmr.release();
-                }
+                MusicUtil.fillMissingDuration(media.get(0));
             }
 
             db.addMedia(media);

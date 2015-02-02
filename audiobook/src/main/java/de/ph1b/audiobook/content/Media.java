@@ -26,12 +26,12 @@ public class Media implements Parcelable {
     private long id;
     private int duration;
 
-
     public Media(String path, String name, long bookId) {
         this.path = path;
         this.name = name;
         this.bookId = bookId;
     }
+
 
     private Media(Parcel pc) {
         path = pc.readString();
@@ -39,6 +39,11 @@ public class Media implements Parcelable {
         id = pc.readLong();
         duration = pc.readInt();
         bookId = pc.readLong();
+    }
+
+    @Override
+    public String toString() {
+        return "path=" + path + ", name=" + name + ", bookId=" + bookId + ", id=" + id + ", duration=" + duration;
     }
 
     /**
@@ -83,12 +88,12 @@ public class Media implements Parcelable {
         return name;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public long getId() {
+        return id;
     }
 
-    public long getId(){
-        return id;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getPath() {

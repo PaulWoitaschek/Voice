@@ -24,13 +24,6 @@ public abstract class BaseActivity extends ActionBarActivity {
             Intent i = new Intent(this, NoExternalStorage.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(new Intent(i));
-        } else {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    DataBaseHelper.getInstance(BaseActivity.this).fillMissingDurations();
-                }
-            }).start();
         }
     }
 }

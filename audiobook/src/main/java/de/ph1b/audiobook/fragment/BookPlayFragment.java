@@ -36,6 +36,7 @@ import de.ph1b.audiobook.activity.Settings;
 import de.ph1b.audiobook.adapter.MediaSpinnerAdapter;
 import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.DataBaseHelper;
+import de.ph1b.audiobook.content.Media;
 import de.ph1b.audiobook.dialog.BookmarkDialog;
 import de.ph1b.audiobook.dialog.JumpToPosition;
 import de.ph1b.audiobook.dialog.SetPlaybackSpeedDialog;
@@ -46,6 +47,7 @@ import de.ph1b.audiobook.service.StateManager;
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
+import de.ph1b.audiobook.utils.MusicUtil;
 import de.ph1b.audiobook.utils.Prefs;
 
 public class BookPlayFragment extends Fragment implements OnClickListener, StateManager.ChangeListener {
@@ -59,7 +61,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, State
     private SeekBar seekBar;
     private Spinner bookSpinner;
     private TextView maxTimeView;
-    private Book book;
+    private volatile Book book;
     private Prefs prefs;
     private DataBaseHelper db;
     private ServiceController controller;
@@ -111,6 +113,19 @@ public class BookPlayFragment extends Fragment implements OnClickListener, State
 
         long bookId = prefs.getCurrentBookId();
         book = db.getBook(bookId);
+
+        // filling missing durations in the background
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (Media m : book.getContainingMedia()) {
+                    if (m.getDuration() == 0) {
+                        MusicUtil.fillMissingDuration(m);
+                        db.updateMedia(m);
+                    }
+                }
+            }
+        }).start();
 
         //init buttons
         seekBar = (SeekBar) v.findViewById(R.id.seekBar);
