@@ -54,9 +54,35 @@ import de.ph1b.audiobook.utils.NaturalOrderComparator;
 
 public class FilesChooseFragment extends Fragment implements EditBook.OnEditBookFinished {
     private static final String TAG = "de.ph1b.audiobook.fragment.FilesChooseFragment";
+    private static final ArrayList<String> audioTypes;
+
+    static {
+        audioTypes = new ArrayList<>();
+        audioTypes.add(".3gp");
+        audioTypes.add(".mp4");
+        audioTypes.add(".m4a");
+        audioTypes.add(".m4b");
+        audioTypes.add(".mp3");
+        audioTypes.add(".mid");
+        audioTypes.add(".xmf");
+        audioTypes.add(".mxmf");
+        audioTypes.add(".rtttl");
+        audioTypes.add(".rtx");
+        audioTypes.add(".ota");
+        audioTypes.add(".imy");
+        audioTypes.add(".ogg");
+        audioTypes.add(".oga");
+        audioTypes.add(".wav");
+        audioTypes.add(".aac");
+        audioTypes.add(".flac");
+        audioTypes.add(".mkv");
+        if (Build.VERSION.SDK_INT >= 21) {
+            audioTypes.add(".opus");
+        }
+    }
+
     private final LinkedList<String> link = new LinkedList<>();
     private final ArrayList<String> dirs = getStorageDirectories();
-    private final ArrayList<String> audioTypes = genAudioTypes();
     private final OnBackPressedListener onBackPressedListener = new OnBackPressedListener() {
         @Override
         public synchronized void backPressed() {
@@ -85,31 +111,6 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     private ActionMode actionMode;
     private ActionMode.Callback mActionModeCallback;
 
-    private ArrayList<String> genAudioTypes() {
-        ArrayList<String> audioTypes = new ArrayList<>();
-        audioTypes.add(".3gp");
-        audioTypes.add(".mp4");
-        audioTypes.add(".m4a");
-        audioTypes.add(".m4b");
-        audioTypes.add(".mp3");
-        audioTypes.add(".mid");
-        audioTypes.add(".xmf");
-        audioTypes.add(".mxmf");
-        audioTypes.add(".rtttl");
-        audioTypes.add(".rtx");
-        audioTypes.add(".ota");
-        audioTypes.add(".imy");
-        audioTypes.add(".ogg");
-        audioTypes.add(".oga");
-        audioTypes.add(".wav");
-        audioTypes.add(".aac");
-        audioTypes.add(".flac");
-        audioTypes.add(".mkv");
-        if (Build.VERSION.SDK_INT >= 21) {
-            audioTypes.add(".opus");
-        }
-        return audioTypes;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
