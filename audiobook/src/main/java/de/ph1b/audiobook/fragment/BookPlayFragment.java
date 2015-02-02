@@ -72,6 +72,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, State
 
         stateManager.addChangeListener(this);
 
+        book = db.getBook(prefs.getCurrentBookId());
         onPositionChanged(book.getPosition());
         onTimeChanged(book.getTime());
         onStateChanged(stateManager.getState());
