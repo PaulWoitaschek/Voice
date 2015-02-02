@@ -62,6 +62,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return instance;
     }
 
+    public static void setMissingDuration(Media m, MediaMetadataRetriever metaRetriever) {
+        try {
+            if (m.getDuration() != 0) {
+                metaRetriever.setDataSource(m.getPath());
+                int duration = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+                m.setDuration(duration);
+            }
+        } catch (RuntimeException e) { //undocumented exception
+            L.e(TAG, "Error at retrieving duration from file=" + m.getPath(), e);
+        }
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.beginTransaction();
@@ -388,7 +400,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE TEMP_TABLE_BOOKS");
     }
 
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         while (oldVersion < newVersion) {
@@ -433,16 +444,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 
         return allBooks;
-    }
-
-    public static void setMissingDuration(Media m, MediaMetadataRetriever metaRetriever) {
-        try {
-            metaRetriever.setDataSource(m.getPath());
-            int duration = Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
-            m.setDuration(duration);
-        } catch (RuntimeException e) { //undocumented exception
-            L.e(TAG, "Error at retrieving duration from file=" + m.getPath(), e);
-        }
     }
 
     public void setMissingDurations(ArrayList<Media> medias) {
