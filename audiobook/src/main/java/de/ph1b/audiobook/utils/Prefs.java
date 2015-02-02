@@ -10,7 +10,7 @@ import de.ph1b.audiobook.R;
 
 public class Prefs {
 
-    private static final String PREF_KEY_PLAYBACK_SPEED = "playbackSpeed";
+    public static final String PREF_KEY_PLAYBACK_SPEED = "playbackSpeed";
     private static final String PREF_KEY_CURRENT_BOOK = "currentBook";
     private final Context c;
     private final SharedPreferences sp;
