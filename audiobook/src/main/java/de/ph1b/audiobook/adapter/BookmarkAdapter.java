@@ -35,7 +35,6 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
     }
 
     /**
-     *
      * @param bookmark The bookmark to be added
      * @return The position at which the bookmark was added.
      */
@@ -69,8 +68,8 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         holder.title.setText(bookmark.getTitle());
 
         int size = allMedia.size();
-        holder.summary.setText("(" + (bookmark.getPosition() + 1) + "/" + size + ") " + formatTime(bookmark.getTime()) + " / "
-                + formatTime(allMedia.get(bookmark.getPosition()).getDuration()));
+        holder.summary.setText("(" + (bookmark.getPosition() + 1) + "/" + size + ") ");
+        holder.time.setText(formatTime(bookmark.getTime()) + " / " + formatTime(allMedia.get(bookmark.getPosition()).getDuration()));
     }
 
     @Override
@@ -106,12 +105,14 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         final ImageButton imageButton;
         final TextView title;
         final TextView summary;
+        final TextView time;
 
         public ViewHolder(View itemView, final OnOptionsMenuClickedListener listener) {
             super(itemView);
             imageButton = (ImageButton) itemView.findViewById(R.id.edit);
             title = (TextView) itemView.findViewById(R.id.text1);
             summary = (TextView) itemView.findViewById(R.id.text2);
+            time = (TextView) itemView.findViewById(R.id.text3);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
