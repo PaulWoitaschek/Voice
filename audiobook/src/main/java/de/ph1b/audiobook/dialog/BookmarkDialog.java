@@ -29,6 +29,7 @@ import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.Bookmark;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.service.ServiceController;
+import de.ph1b.audiobook.service.StateManager;
 import de.ph1b.audiobook.utils.DividerItemDecoration;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
 import de.ph1b.audiobook.utils.Prefs;
@@ -54,6 +55,7 @@ public class BookmarkDialog extends DialogFragment {
         final Prefs prefs = new Prefs(getActivity());
         final Book book = db.getBook(prefs.getCurrentBookId());
         final ArrayList<Bookmark> allBookmarks = db.getAllBookmarks(book.getId());
+        final StateManager stateManager = StateManager.getInstance(getActivity());
 
         BookmarkAdapter.OnOptionsMenuClickedListener listener = new BookmarkAdapter.OnOptionsMenuClickedListener() {
             @Override
@@ -151,8 +153,8 @@ public class BookmarkDialog extends DialogFragment {
             public void onClick(View v) {
 
                 long bookId = book.getId();
-                int time = book.getTime();
-                int position = book.getPosition();
+                int time = stateManager.getTime();
+                int position = stateManager.getPosition();
                 String mediaName = book.getContainingMedia().get(position).getName();
 
                 String title = bookmarkTitle.getText().toString();

@@ -20,6 +20,7 @@ public class StateManager {
     private PlayerStates state = PlayerStates.STOPPED;
     private int time;
     private boolean sleepTimerActive = false;
+    private int position;
 
     private StateManager(Context c) {
         this.c = c;
@@ -32,8 +33,13 @@ public class StateManager {
         return instance;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
     public void setPosition(int position) {
         L.v(TAG, "setPosition to:" + position);
+        this.position = position;
         for (ChangeListener l : listeners) {
             l.onPositionChanged(position);
         }
