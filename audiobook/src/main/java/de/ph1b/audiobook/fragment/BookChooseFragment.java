@@ -3,7 +3,6 @@ package de.ph1b.audiobook.fragment;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.app.backup.BackupManager;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
@@ -56,6 +55,7 @@ import de.ph1b.audiobook.service.StateManager;
 import de.ph1b.audiobook.utils.CustomOnSimpleGestureListener;
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
+import de.ph1b.audiobook.utils.MaterialCompatThemer;
 import de.ph1b.audiobook.utils.Prefs;
 
 
@@ -182,7 +182,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                                     }
                                 });
                                 builder.setNegativeButton(R.string.delete_book_keep, null);
-                                builder.show();
+                                MaterialCompatThemer.theme(builder.show());
                                 return true;
                             default:
                                 return false;
