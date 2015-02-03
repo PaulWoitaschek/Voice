@@ -53,8 +53,7 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
     private RemoteControlClient remoteControlClient = null;
     private volatile boolean pauseBecauseLossTransient = false;
     private volatile boolean pauseBecauseHeadset = false;
-    private volatile long pauseTime = 0;
-    private volatile long pauseBookId;
+
     /**
      * If audio is becoming noisy, pause the player.
      */

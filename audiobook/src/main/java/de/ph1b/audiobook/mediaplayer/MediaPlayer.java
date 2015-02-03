@@ -104,9 +104,6 @@ public class MediaPlayer {
         }
         return 0;
     }
-    public float getPlaybackSpeed() {
-        return this.speed;
-    }
 
     public void setPlaybackSpeed(float speed) {
         this.speed = speed;
@@ -152,7 +149,7 @@ public class MediaPlayer {
         if (isAutoRewindEnabled && pauseTime > 0 && pausedBookId == prefs.getCurrentBookId()) {
             long timeElapsedSincePause = Math.abs(pauseTime - System.currentTimeMillis());
             final int threshold = 3000; //ms
-            int autoRewindAmount = (int) Math.ceil(2000 * getPlaybackSpeed()); //ms
+            int autoRewindAmount = (int) Math.ceil(2000 * this.speed); //ms
             if (timeElapsedSincePause > threshold) {
                 double timeElapsedSeconds = (double) timeElapsedSincePause / 1000;
                 autoRewindAmount += (int) (Math.log(timeElapsedSeconds) * 1000);
