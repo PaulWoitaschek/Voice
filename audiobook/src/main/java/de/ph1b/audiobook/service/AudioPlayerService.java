@@ -188,8 +188,9 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
                                     break;
                             }
                             break;
-                        case ServiceController.CONTROL_INFORM_SPEED_CHANGED:
-                            controller.setPlaybackSpeed();
+                        case ServiceController.CONTROL_SET_PLAYBACK_SPEED:
+                            float speed = intent.getFloatExtra(ServiceController.CONTROL_SET_PLAYBACK_SPEED_EXTRA_SPEED, 1);
+                            controller.setPlaybackSpeed(speed);
                             break;
                         case ServiceController.CONTROL_CHANGE_BOOK_POSITION:
                             int position = intent.getIntExtra(ServiceController.CONTROL_CHANGE_BOOK_POSITION_EXTRA_MEDIA_POSITION, 0);

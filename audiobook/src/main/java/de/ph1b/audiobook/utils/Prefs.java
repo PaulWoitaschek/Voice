@@ -10,7 +10,6 @@ import de.ph1b.audiobook.R;
 
 public class Prefs {
 
-    public static final String PREF_KEY_PLAYBACK_SPEED = "playbackSpeed";
     private static final String PREF_KEY_CURRENT_BOOK = "currentBook";
     private final Context c;
     private final SharedPreferences sp;
@@ -37,15 +36,6 @@ public class Prefs {
         editor.commit();
     }
 
-    public float getPlaybackSpeed() {
-        return sp.getFloat(PREF_KEY_PLAYBACK_SPEED, 1);
-    }
-
-    public void setPlaybackSpeed(float playbackSpeed) {
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putFloat(PREF_KEY_PLAYBACK_SPEED, playbackSpeed);
-        editor.apply();
-    }
 
     public String getAudiobookFolder() {
         return sp.getString(c.getString(R.string.pref_key_root_folder), null);

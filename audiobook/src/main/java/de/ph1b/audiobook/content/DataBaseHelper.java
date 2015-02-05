@@ -23,7 +23,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DataBaseHelper";
 
     private static final String DATABASE_NAME = "audioBookDB";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 4;
 
     private static final String TABLE_MEDIA = "TABLE_MEDIA";
     private static final String TABLE_BOOKS = "TABLE_BOOKS";
@@ -41,6 +41,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String KEY_BOOK_POSITION = "KEY_BOOK_POSITION";
     private static final String KEY_BOOK_TIME = "KEY_BOOK_TIME";
     private static final String KEY_BOOK_SORT_ID = "KEY_BOOK_SORT_ID";
+    private static final String KEY_BOOK_SPEED = "KEY_BOOK_SPEED";
 
     private static final String KEY_BOOKMARK_ID = "KEY_BOOKMARK_ID";
     private static final String KEY_BOOKMARK_POSITION = "KEY_BOOKMARK_POSITION";
@@ -78,6 +79,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     KEY_BOOK_COVER + " TEXT, " +
                     KEY_BOOK_POSITION + " INTEGER, " +
                     KEY_BOOK_TIME + " INTEGER, " +
+                    KEY_BOOK_SPEED + " INTEGER, " +
                     KEY_BOOK_SORT_ID + " INTEGER)";
             db.execSQL(CREATE_BOOK_TABLE);
             String CREATE_BOOKMARK_TABLE = "CREATE TABLE " + TABLE_BOOKMARKS + " ( " +
@@ -122,6 +124,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     "KEY_BOOK_COVER" + " TEXT, " +
                     "KEY_BOOK_POSITION" + " INTEGER, " +
                     "KEY_BOOK_TIME" + " INTEGER, " +
+                    "KEY_BOOK_SPEED" + " INTEGER, " +
                     "KEY_BOOK_SORT_ID" + " INTEGER)";
             db.execSQL(CREATE_BOOK_TABLE);
 
@@ -156,6 +159,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         cv.put("KEY_BOOK_POSITION", position);
                         cv.put("KEY_BOOK_TIME", currentMediaPosition);
                         cv.put("KEY_BOOK_SORT_ID", 0);
+                        cv.put("KEY_BOOK_SPEED", 1);
                         long newBookId = db.insert("TABLE_BOOKS", null, cv);
                         cv.put("KEY_BOOK_SORT_ID", newBookId);
                         db.update("TABLE_BOOKS", cv, "KEY_BOOK_ID" + "=?", new String[]{String.valueOf(newBookId)});
@@ -196,7 +200,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     "KEY_BOOK_THUMB" + " TEXT, " +
                     "KEY_BOOK_POSITION" + " INTEGER, " +
                     "KEY_BOOK_SORT_ID" + " INTEGER)";
-
 
             //first rename old tables
             db.execSQL("ALTER TABLE mediaTable RENAME TO tempMediaTable");
@@ -436,7 +439,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     private Book getBook(long bookId, SQLiteDatabase db) {
         Cursor bookCursor = db.query(TABLE_BOOKS,
-                new String[]{KEY_BOOK_NAME, KEY_BOOK_COVER, KEY_BOOK_POSITION, KEY_BOOK_TIME, KEY_BOOK_SORT_ID},
+                new String[]{KEY_BOOK_NAME, KEY_BOOK_COVER, KEY_BOOK_POSITION, KEY_BOOK_TIME, KEY_BOOK_SORT_ID, KEY_BOOK_SPEED},
                 KEY_BOOK_ID + "=?", new String[]{String.valueOf(bookId)}, null, null, null);
         try {
             if (bookCursor.moveToFirst()) {
@@ -446,6 +449,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 int position = bookCursor.getInt(2);
                 int time = bookCursor.getInt(3);
                 long sortId = bookCursor.getLong(4);
+                float speed = bookCursor.getFloat(5);
 
                 Book book = new Book();
                 book.setName(bookName);
@@ -454,6 +458,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 book.setTime(time);
                 book.setSortId(sortId);
                 book.setId(bookId);
+                book.setPlaybackSpeed(speed);
 
                 ArrayList<Media> containingMedia = new ArrayList<>();
 
@@ -574,6 +579,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_BOOK_NAME, book.getName());
         values.put(KEY_BOOK_COVER, book.getCover());
+        values.put(KEY_BOOK_SPEED, book.getPlaybackSpeed());
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
         long bookId = 0;
@@ -613,6 +619,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         values.put(KEY_BOOK_TIME, book.getTime());
         values.put(KEY_BOOK_POSITION, book.getPosition());
         values.put(KEY_BOOK_SORT_ID, book.getSortId());
+        values.put(KEY_BOOK_SPEED, book.getPlaybackSpeed());
 
         db.update(TABLE_BOOKS, values, KEY_BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
     }

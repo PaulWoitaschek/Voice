@@ -27,24 +27,34 @@ public class Book implements Parcelable {
     private int time;
     private int position = 0;
     private ArrayList<Media> containingMedia = new ArrayList<>();
+    private float playbackSpeed = 1;
 
     public Book() {
 
     }
 
-    private Book(Parcel pc) {
-        id = pc.readLong();
-        name = pc.readString();
-        cover = pc.readString();
-        time = pc.readInt();
-        position = pc.readInt();
-        sortId = pc.readLong();
-        pc.readTypedList(containingMedia, Media.CREATOR);
+    private Book(Parcel in) {
+        id = in.readLong();
+        name = in.readString();
+        cover = in.readString();
+        time = in.readInt();
+        position = in.readInt();
+        sortId = in.readLong();
+        in.readTypedList(containingMedia, Media.CREATOR);
+        playbackSpeed = in.readFloat();
+    }
+
+    public float getPlaybackSpeed() {
+        return playbackSpeed;
+    }
+
+    public void setPlaybackSpeed(float playbackSpeed) {
+        this.playbackSpeed = playbackSpeed;
     }
 
     @Override
     public String toString() {
-        return "id:" + id + " sortId:" + sortId + " name:" + name + " cover:" + cover + " time:" + time + " position:" + position + " containingMediaSize:" + containingMedia.size();
+        return "id:" + id + " sortId:" + sortId + " name:" + name + " cover:" + cover + " time:" + time + " position:" + position + " containingMediaSize:" + containingMedia.size() + ", playbackSpeed=" + playbackSpeed;
     }
 
     public ArrayList<Media> getContainingMedia() {
@@ -138,13 +148,14 @@ public class Book implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel destination, int flags) {
-        destination.writeLong(id);
-        destination.writeString(name);
-        destination.writeString(cover);
-        destination.writeInt(time);
-        destination.writeInt(position);
-        destination.writeLong(sortId);
-        destination.writeTypedList(containingMedia);
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeLong(id);
+        out.writeString(name);
+        out.writeString(cover);
+        out.writeInt(time);
+        out.writeInt(position);
+        out.writeLong(sortId);
+        out.writeTypedList(containingMedia);
+        out.writeFloat(playbackSpeed);
     }
 }

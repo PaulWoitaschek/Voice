@@ -16,17 +16,18 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.content.Book;
+import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
 import de.ph1b.audiobook.utils.Prefs;
 
 public class SetPlaybackSpeedDialog extends DialogFragment {
 
-    private static final float speedDelta = 0.1f;
-    private static final float minSpeed = 0.5f;
-    private static final float maxSpeed = 2f;
+    private static final float SPEED_DELTA = 0.1f;
+    private static final float SPEED_MIN = 0.5f;
+    private static final float SPEED_MAX = 2f;
     private float speed;
-    private Prefs prefs;
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -39,14 +40,15 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
         SeekBar seekBar = (SeekBar) v.findViewById(R.id.seekBar);
         final TextView textView = (TextView) v.findViewById(R.id.textView);
 
-        prefs = new Prefs(getActivity());
-
-        speed = prefs.getPlaybackSpeed();
+        // setting current speed
+        Prefs prefs = new Prefs(getActivity());
+        Book book = DataBaseHelper.getInstance(getActivity()).getBook(prefs.getCurrentBookId());
+        speed = book.getPlaybackSpeed();
         textView.setText(formatTime(speed));
 
-        int seekMaxSteps = (int) ((maxSpeed - minSpeed) / speedDelta);
+        int seekMaxSteps = (int) ((SPEED_MAX - SPEED_MIN) / SPEED_DELTA);
         seekBar.setMax(seekMaxSteps);
-        int seekProgress = (int) ((speed - minSpeed) * (seekMaxSteps + 1) / (maxSpeed - minSpeed));
+        int seekProgress = (int) ((speed - SPEED_MIN) * (seekMaxSteps + 1) / (SPEED_MAX - SPEED_MIN));
         seekBar.setProgress(seekProgress);
 
         seekBar.getProgressDrawable().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
@@ -78,8 +80,7 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
         builder.setPositiveButton(getString(R.string.dialog_confirm), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                prefs.setPlaybackSpeed(speed);
-                new ServiceController(getActivity()).informSpeedChanged();
+                new ServiceController(getActivity()).setPlaybackSpeed(speed);
             }
         });
 
@@ -95,7 +96,7 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
     }
 
     private float speedStepValueToSpeed(int step) {
-        return (minSpeed + (step * speedDelta));
+        return (SPEED_MIN + (step * SPEED_DELTA));
     }
 
     private String formatTime(float time) {

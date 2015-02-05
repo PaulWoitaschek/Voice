@@ -11,7 +11,8 @@ import android.view.KeyEvent;
  */
 public class ServiceController {
 
-    public static final String CONTROL_INFORM_SPEED_CHANGED = "informSpeedChanged";
+    public static final String CONTROL_SET_PLAYBACK_SPEED = "CONTROL_SET_PLAYBACK_SPEED";
+    public static final String CONTROL_SET_PLAYBACK_SPEED_EXTRA_SPEED = "CONTROL_SET_PLAYBACK_SPEED_EXTRA_SPEED";
 
     public static final String CONTROL_CHANGE_BOOK_POSITION = "CONTROL_CHANGE_BOOK_POSITION";
     public static final String CONTROL_CHANGE_BOOK_POSITION_EXTRA_MEDIA_POSITION = "CONTROL_CHANGE_BOOK_POSITION_EXTRA_MEDIA_POSITION";
@@ -60,9 +61,10 @@ public class ServiceController {
         return intent;
     }
 
-    public void informSpeedChanged() {
+    public void setPlaybackSpeed(float speed) {
         Intent i = new Intent(c, AudioPlayerService.class);
-        i.setAction(CONTROL_INFORM_SPEED_CHANGED);
+        i.setAction(CONTROL_SET_PLAYBACK_SPEED);
+        i.putExtra(CONTROL_SET_PLAYBACK_SPEED_EXTRA_SPEED, speed);
         c.startService(i);
     }
 

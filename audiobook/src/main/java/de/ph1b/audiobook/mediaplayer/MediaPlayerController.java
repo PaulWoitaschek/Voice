@@ -72,7 +72,7 @@ public class MediaPlayerController {
         mediaPlayer.seekTo(book.getTime());
         extState.setTime(book.getTime());
         extState.setPosition(book.getPosition());
-        setPlaybackSpeed();
+        setPlaybackSpeed(book.getPlaybackSpeed());
         state = State.PREPARED;
     }
 
@@ -210,11 +210,13 @@ public class MediaPlayerController {
         return book;
     }
 
-    public void setPlaybackSpeed() {
+    public void setPlaybackSpeed(float speed) {
         lock.lock();
         try {
+            book.setPlaybackSpeed(speed);
+            db.updateBook(book);
             if (state != State.DEAD) {
-                mediaPlayer.setPlaybackSpeed(prefs.getPlaybackSpeed());
+                mediaPlayer.setPlaybackSpeed(speed);
             } else {
                 L.e(TAG, "setPlaybackSpeed called in illegal state: " + state);
             }
