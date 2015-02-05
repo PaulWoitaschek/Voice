@@ -1,2 +1,4 @@
 -dontobfuscate
 -keep class org.vinuxproject.sonic.Sonic
+-dontwarn com.squareup.okhttp.**
+-dontwarn okio.**
