@@ -5,14 +5,17 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
 import org.apache.http.conn.util.InetAddressUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.URL;
@@ -90,8 +93,9 @@ public class CoverDownloader {
         } else {
             L.d(TAG, "Didn't find bitmapUrls");
             ArrayList<URL> newUrls = genNewURLs(searchText, number);
-            if (newUrls == null)
+            if (newUrls.size() == 0) {
                 return null;
+            }
             searchStringMap.put(searchText, newUrls);
             searchURL = newUrls.get(0);
             L.d(TAG, "But made a new one, returning:" + searchURL);
@@ -157,46 +161,35 @@ public class CoverDownloader {
      *
      * @param searchText The name of the audiobook
      * @param startPage  the (google-) page to begin with
-     * @return the new URLs, or <code>null</code> if none were found
+     * @return the new URLs
      */
     private static ArrayList<URL> genNewURLs(String searchText, int startPage) {
-        readTimeOut = 5000;
-        connectTimeOut = 3000;
-
-        searchText = searchText + " audiobook cover";
-
-        ArrayList<URL> eightSetOfURL = new ArrayList<>();
+        searchText = searchText + " cover";
+        ArrayList<URL> urls = new ArrayList<>();
 
         try {
-            URL url = new URL(
-                    "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&imgsz=large|xlarge&rsz=8&q=" +
-                            URLEncoder.encode(searchText, "UTF-8") + "&start=" + startPage +
-                            "&userip=" + getIPAddress());
-            L.d(TAG, url.toString());
-            connection = url.openConnection();
-            connection.setReadTimeout(readTimeOut);
-            connection.setConnectTimeout(connectTimeOut);
+            String url = "https://ajax.googleapis.com/ajax/services/search/" +
+                    "images?v=1.0&imgsz=large%7Cxlarge&rsz=8&q=" +
+                    URLEncoder.encode(searchText, "UTF-8") + //query
+                    "&start=" + startPage + //startpage
+                    "&userip=" + getIPAddress(); //ip
+            
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
 
-            InputStream inputStream = connection.getInputStream();
-
-            String line;
-            StringBuilder builder = new StringBuilder();
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-            BufferedReader reader = new BufferedReader(inputStreamReader);
-            while ((line = reader.readLine()) != null) {
-                builder.append(line);
-            }
-            JSONObject obj = new JSONObject(builder.toString());
-            JSONObject responseData = obj.getJSONObject("responseData");
+            Response response = client.newCall(request).execute();
+            JSONObject jsonObject = new JSONObject(response.body().string());
+            JSONObject responseData = jsonObject.getJSONObject("responseData");
             JSONArray results = responseData.getJSONArray("results");
-            for (int i = 0; i < results.length(); i++) {
-                URL imageURL = new URL(results.getJSONObject(i).getString("url"));
-                eightSetOfURL.add(imageURL);
-            }
-        } catch (Exception e) {
-            L.d(TAG, e.toString());
-        }
-        return eightSetOfURL.size() > 0 ? eightSetOfURL : null;
-    }
 
+            for (int i = 0; i < results.length(); i++) {
+                urls.add(new URL(results.getJSONObject(i).getString("url")));
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+        return urls;
+    }
 }
