@@ -2,12 +2,13 @@ package de.ph1b.audiobook.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 
+import com.squareup.okhttp.Call;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import com.squareup.picasso.Picasso;
 
 import org.apache.http.conn.util.InetAddressUtils;
 import org.json.JSONArray;
@@ -15,11 +16,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,38 +27,30 @@ import java.util.List;
 
 public class CoverDownloader {
 
-
     private static final String TAG = "CoverDownloader";
-
     private static final HashMap<String, ArrayList<URL>> searchStringMap = new HashMap<>();
-    private static URLConnection connection = null;
-    private static int connectTimeOut;
-    private static int readTimeOut;
+    private final Context c;
 
-    public static void cancelDownload() {
-        if (connection != null) {
-            try {
-                connection.getInputStream().close();
-            } catch (Exception ignore) {
-            }
+    private Call call = null;
+
+    public CoverDownloader(Context c) {
+        this.c = c;
+    }
+
+    public void cancelDownload() {
+        if (call != null) {
+            call.cancel();
         }
-        connectTimeOut = 0;
-        readTimeOut = 0;
     }
 
     /**
      * Returns a bitmap from google, defined by the searchText
      *
      * @param searchText The Audiobook to look for
-     * @param c          Application context
      * @param number     The nth result
      * @return the generated bitmap. If no bitmap was found, returns null
      */
-    public static Bitmap getCover(String searchText, Context c, int number) {
-
-        connectTimeOut = 3000;
-        readTimeOut = 5000;
-
+    public Bitmap getCover(String searchText, int number) {
         if (number > 64) {
             L.d(TAG, "Number exceeded results: " + number);
             return null;
@@ -101,42 +92,20 @@ public class CoverDownloader {
             L.d(TAG, "But made a new one, returning:" + searchURL);
         }
 
-
-        InputStream inputStream;
-
         if (searchURL != null) {
+            Rect reqSize = ImageHelper.resolveImageType(ImageHelper.TYPE_COVER, c);
+            //returned bitmap in the desired 1:1 ratio and cropping automatically
             try {
-                connection = searchURL.openConnection();
-                connection.setConnectTimeout(connectTimeOut);
-                connection.setReadTimeout(readTimeOut);
-                inputStream = connection.getInputStream();
-
-                // First decode with inJustDecodeBounds=true to check dimensions
-                final BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inJustDecodeBounds = true;
-                BitmapFactory.decodeStream(inputStream, null, options);
-
-                // Calculate inSampleSize
-                Rect reqSize = ImageHelper.resolveImageType(ImageHelper.TYPE_COVER, c);
-                options.inSampleSize = ImageHelper.calculateInSampleSize(reqSize, options);
-
-                // Decode bitmap with inSampleSize set
-                options.inJustDecodeBounds = false;
-                connection = searchURL.openConnection();
-                connection.setConnectTimeout(connectTimeOut);
-                connection.setReadTimeout(readTimeOut);
-                inputStream = connection.getInputStream();
-
-                //returned bitmap in the desired 1:1 ratio and cropping automatically
-                return BitmapFactory.decodeStream(inputStream, null, options);
+                return Picasso.with(c).load(searchURL.toString()).resize(reqSize.width(), reqSize.height()).get();
             } catch (IOException e) {
-                L.d(TAG, "Catched IOException!", e);
+                e.printStackTrace();
             }
+
         }
         return null;
     }
 
-    private static String getIPAddress() {
+    private String getIPAddress() {
         try {
             List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
             for (NetworkInterface i : interfaces) {
@@ -163,7 +132,7 @@ public class CoverDownloader {
      * @param startPage  the (google-) page to begin with
      * @return the new URLs
      */
-    private static ArrayList<URL> genNewURLs(String searchText, int startPage) {
+    private ArrayList<URL> genNewURLs(String searchText, int startPage) {
         searchText = searchText + " cover";
         ArrayList<URL> urls = new ArrayList<>();
 
@@ -173,13 +142,14 @@ public class CoverDownloader {
                     URLEncoder.encode(searchText, "UTF-8") + //query
                     "&start=" + startPage + //startpage
                     "&userip=" + getIPAddress(); //ip
-            
+
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(url)
                     .build();
 
-            Response response = client.newCall(request).execute();
+            call = client.newCall(request);
+            Response response = call.execute();
             JSONObject jsonObject = new JSONObject(response.body().string());
             JSONObject responseData = jsonObject.getJSONObject("responseData");
             JSONArray results = responseData.getJSONArray("results");

@@ -236,7 +236,8 @@ public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.Vie
             if (coverNotExists) {
                 if (ImageHelper.isOnline(c))
                     for (int i = 0; i < 3; i++) {
-                        bitmap = CoverDownloader.getCover(book.getName(), c, i);
+                        CoverDownloader coverDownloader = new CoverDownloader(c);
+                        bitmap = coverDownloader.getCover(book.getName(), i);
                         if (bitmap != null) {
                             String savedCoverPath = ImageHelper.saveCover(bitmap, c);
                             book.setCover(savedCoverPath);

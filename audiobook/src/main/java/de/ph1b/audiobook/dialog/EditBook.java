@@ -37,15 +37,13 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
     public static final String BOOK_NAME = "BOOK_NAME";
     public static final String BOOK_COVER = "BOOK_COVER";
     public static final String DIALOG_TITLE = "DIALOG_TITLE";
-
+    private CoverDownloader coverDownloader;
     private DraggableBoxImageView coverImageView;
     private ProgressBar coverReplacement;
     private ImageButton previousCover;
     private ImageButton nextCover;
     private EditText nameEditText;
-
     private AddCoverAsync addCoverAsync;
-
     private int coverPosition = -1;
     private ArrayList<Bitmap> covers;
     private int googleCount = 0;
@@ -55,7 +53,6 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
         super.onStart();
         MaterialCompatThemer.theme(getDialog());
     }
-
 
     @Override
     public void onClick(View view) {
@@ -105,6 +102,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        coverDownloader = new CoverDownloader(getActivity());
 
         Bundle b = getArguments();
         String defaultName = b.getString(BOOK_NAME);
@@ -240,7 +238,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
 
         @Override
         protected Bitmap doInBackground(Void... voids) {
-            return CoverDownloader.getCover(searchString, getActivity(), googleCount);
+            return coverDownloader.getCover(searchString, googleCount);
         }
 
         @Override
@@ -273,7 +271,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
 
         @Override
         protected void onCancelled() {
-            CoverDownloader.cancelDownload();
+            coverDownloader.cancelDownload();
         }
     }
 }
