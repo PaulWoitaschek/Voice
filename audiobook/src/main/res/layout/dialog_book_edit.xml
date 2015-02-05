@@ -51,6 +51,8 @@
             android:id="@+id/previous_cover"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:src="@drawable/ic_navigate_before_black_36dp"
             android:contentDescription="@string/content_previous_cover" />
 
@@ -81,6 +83,8 @@
             android:id="@+id/next_cover"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:src="@drawable/ic_navigate_next_black_36dp"
             android:contentDescription="@string/content_next_cover" />
     </LinearLayout>
