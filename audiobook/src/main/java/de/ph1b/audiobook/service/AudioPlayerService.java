@@ -142,7 +142,10 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
         }
 
         audioManager.abandonAudioFocus(this);
-        controller.release();
+
+        if (controller != null) {
+            controller.release();
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
