@@ -125,20 +125,31 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
         stateManager.addChangeListener(this);
     }
 
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
+    private void finish() {
         stateManager.removeChangeListener(this);
 
-        unregisterReceiver(audioBecomingNoisyReceiver);
-        unregisterReceiver(headsetPlugReceiver);
+        try {
+            unregisterReceiver(audioBecomingNoisyReceiver);
+            unregisterReceiver(headsetPlugReceiver);
+        } catch (IllegalArgumentException ignored) {
+        }
+
+        stopForeground(true);
 
         if (Build.VERSION.SDK_INT >= 14) {
             //noinspection deprecation
             audioManager.unregisterRemoteControlClient(remoteControlClient);
         }
+
+        audioManager.abandonAudioFocus(this);
+        controller.release();
+    }
+
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    @Override
+    public void onDestroy() {
+        finish();
+        super.onDestroy();
     }
 
     @Override
@@ -172,7 +183,7 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
                                     }
                                     break;
                                 case KeyEvent.KEYCODE_MEDIA_STOP:
-                                    controller.release();
+                                    finish();
                                     break;
                                 case KeyEvent.KEYCODE_MEDIA_NEXT:
                                     controller.next();
@@ -416,7 +427,7 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
                 break;
             case AudioManager.AUDIOFOCUS_LOSS:
                 L.d(TAG, "paused by audioFocus loss");
-                controller.release();
+                finish();
                 break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                 if (stateManager.getState() == PlayerStates.PLAYING) {
