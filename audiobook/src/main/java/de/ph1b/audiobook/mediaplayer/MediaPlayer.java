@@ -123,7 +123,7 @@ public class MediaPlayer {
             case STOPPED:
                 try {
                     initStream();
-                } catch (IOException e) {
+                } catch (IOException | IllegalArgumentException e) {
                     error("Failed setting data source!:" + e.toString());
                     return;
                 }
@@ -270,7 +270,7 @@ public class MediaPlayer {
         }
     }
 
-    private void initStream() throws IOException {
+    private void initStream() throws IOException, IllegalArgumentException {
         lock.lock();
         extractor = new MediaExtractor();
         if (path != null) {
@@ -289,13 +289,8 @@ public class MediaPlayer {
         L.v(TAG, "Mime type: " + mime);
         initDevice(sampleRate, channelCount);
         extractor.selectTrack(TRACK_NUM);
-        try {
-            codec = MediaCodec.createDecoderByType(mime);
-            codec.configure(oFormat, null, null, 0);
-        } catch (IllegalArgumentException e) {
-            L.e(TAG, "Error at initializing: " + path, e);
-            error("initStream()");
-        }
+        codec = MediaCodec.createDecoderByType(mime);
+        codec.configure(oFormat, null, null, 0);
         lock.unlock();
     }
 
