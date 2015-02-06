@@ -55,6 +55,8 @@
     <string tools:ignore="MissingTranslation" name="pref_summary_track_to_end">Continues playing till the end of the track, after sleep timer has triggered.</string>
     <string tools:ignore="MissingTranslation" name="pref_title_pause_on_transient">Pause on Interruption</string>
     <string tools:ignore="MissingTranslation" name="pref_summary_pause_on_transient">Pause when interrupted, otherwise lower the volume for the duration of the interruption.</string>
+    <string tools:ignore="MissingTranslation" name="pref_title_auto_rewind">Auto Rewind</string>
+    <string tools:ignore="MissingTranslation" name="pref_summary_auto_rewind">Automatically rewinds a small amount after being paused, based on the length of the pause.</string>
 
     <string tools:ignore="MissingTranslation" name="previous_track">Previous track</string>
     <string tools:ignore="MissingTranslation" name="next_track">Next track</string>

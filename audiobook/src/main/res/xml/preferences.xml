@@ -29,4 +29,9 @@
         android:summary="@string/pref_summary_pause_on_transient"
         android:title="@string/pref_title_pause_on_transient"
         android:defaultValue="false" />
+    <CheckBoxPreference
+        android:key="@string/pref_key_auto_rewind_on_pause"
+        android:summary="@string/pref_summary_auto_rewind"
+        android:title="@string/pref_title_auto_rewind"
+        android:defaultValue="false" />
 </PreferenceScreen>
