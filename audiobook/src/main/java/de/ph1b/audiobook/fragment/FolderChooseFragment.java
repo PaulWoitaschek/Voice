@@ -163,7 +163,6 @@ public class FolderChooseFragment extends Fragment {
                 if (chosenFolder != null) {
                     File parent = chosenFolder.getParentFile();
 
-
                     ArrayList<File> parentContaining = getFilesFromFolder(parent);
                     boolean weAreOnTop = false;
                     for (File f : parentContaining) {

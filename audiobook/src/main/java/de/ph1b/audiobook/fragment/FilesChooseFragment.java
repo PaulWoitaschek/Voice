@@ -423,8 +423,8 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     private class AddBookAsync extends AsyncTask<Void, Integer, Void> {
         private final ArrayList<File> files;
         private final String defaultName;
-        private final Bitmap cover;
         private final ArrayList<Media> media = new ArrayList<>();
+        private Bitmap cover;
         private ProgressDialog progressDialog;
         private long bookId;
 
@@ -451,11 +451,12 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
             DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
             Book b = new Book();
             b.setName(defaultName);
-            if (cover != null) {
-                String coverPath = ImageHelper.saveCover(cover, getActivity());
-                if (coverPath != null) {
-                    b.setCover(coverPath);
-                }
+            if (cover == null) {
+                cover = ImageHelper.genCapital(defaultName, getActivity(), ImageHelper.TYPE_COVER);
+            }
+            String coverPath = ImageHelper.saveCover(cover, getActivity());
+            if (coverPath != null) {
+                b.setCover(coverPath);
             }
 
             bookId = db.addBook(b);
