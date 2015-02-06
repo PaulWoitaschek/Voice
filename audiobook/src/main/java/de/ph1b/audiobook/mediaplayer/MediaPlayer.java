@@ -289,8 +289,13 @@ public class MediaPlayer {
         L.v(TAG, "Mime type: " + mime);
         initDevice(sampleRate, channelCount);
         extractor.selectTrack(TRACK_NUM);
-        codec = MediaCodec.createDecoderByType(mime);
-        codec.configure(oFormat, null, null, 0);
+        try {
+            codec = MediaCodec.createDecoderByType(mime);
+            codec.configure(oFormat, null, null, 0);
+        } catch (IllegalArgumentException e) {
+            L.e(TAG, "Error at initializing: " + path, e);
+            error("initStream()");
+        }
         lock.unlock();
     }
 
