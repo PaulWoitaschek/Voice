@@ -17,8 +17,8 @@ import de.ph1b.audiobook.utils.Prefs;
 public class SeekPreferenceDialog extends DialogPreference {
 
     private final int SEEK_BAR_MIN = 10;
-    private SeekBar seekBar;
     private final Prefs prefs;
+    private SeekBar seekBar;
 
     public SeekPreferenceDialog(Context context, AttributeSet attrs) {
         super(context, attrs);

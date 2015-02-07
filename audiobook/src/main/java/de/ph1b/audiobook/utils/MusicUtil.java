@@ -5,7 +5,6 @@ import android.media.MediaMetadataRetriever;
 import de.ph1b.audiobook.content.Media;
 
 
-
 public class MusicUtil {
 
     private static final String TAG = "MusicUtil";

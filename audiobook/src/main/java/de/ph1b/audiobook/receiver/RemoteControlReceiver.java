@@ -11,13 +11,14 @@ import de.ph1b.audiobook.utils.L;
 
 public class RemoteControlReceiver extends BroadcastReceiver {
 
+    private static final String TAG = "RemoteControlReceiver";
 
     @Override
     public void onReceive(final Context context, Intent intent) {
         KeyEvent event = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
         if (event.getAction() == (KeyEvent.ACTION_DOWN)) {
             final int keyCode = event.getKeyCode();
-            L.d("rmcr", "retrieved keycode: " + keyCode);
+            L.d(TAG, "retrieved keycode: " + keyCode);
             new Thread(new Runnable() {
                 @Override
                 public void run() {

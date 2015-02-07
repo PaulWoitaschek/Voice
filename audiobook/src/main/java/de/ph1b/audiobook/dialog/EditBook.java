@@ -30,7 +30,6 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.utils.CoverDownloader;
 import de.ph1b.audiobook.utils.DraggableBoxImageView;
 import de.ph1b.audiobook.utils.ImageHelper;
-import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
 
 public class EditBook extends DialogFragment implements View.OnClickListener {
@@ -44,7 +43,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
      * Variable representing if the first cover is a letter - cover. This is recognized by checking
      * if the pixels on the borders are the same as the color accent
      */
-    boolean firstCoverIsLetterReplacement = false;
+    private boolean firstCoverIsLetterReplacement = false;
     private CoverDownloader coverDownloader;
     private DraggableBoxImageView coverImageView;
     private ProgressBar coverReplacement;
@@ -62,7 +61,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
         MaterialCompatThemer.theme(getDialog());
     }
 
-    public boolean isCoverReplacement(Bitmap bitmap) {
+    private boolean isCoverReplacement(Bitmap bitmap) {
         /**
          * Checking if the first color is a letter replacement by checking if the pixels on the edges
          * are the same as the accent color (the replacement was made of).
@@ -92,7 +91,6 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
                 if (addCoverAsync != null && !addCoverAsync.isCancelled()) {
                     addCoverAsync.cancel(true);
                 }
-
                 if (coverPosition > 0)
                     coverPosition--;
                 coverImageView.setImageBitmap(covers.get(coverPosition));

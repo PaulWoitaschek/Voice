@@ -422,7 +422,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         while (oldVersion < newVersion) {
-            L.d("dbh", "upgrading version" + oldVersion);
+            L.d(TAG, "upgrading version" + oldVersion);
             switch (oldVersion) {
                 case 1:
                     upgradeOne(db);

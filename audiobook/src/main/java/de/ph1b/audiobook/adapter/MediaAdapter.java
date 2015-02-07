@@ -25,12 +25,12 @@ import de.ph1b.audiobook.utils.L;
 
 public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> {
 
+    private static final String TAG = "MediaAdapter";
     private final ArrayList<Book> data;
     private final DataBaseHelper db;
     private final Context c;
     private final OnItemClickListener onItemClickListener;
     private final ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
-
 
     public MediaAdapter(ArrayList<Book> data, Context c, OnItemClickListener onItemClickListener) {
         this.data = data;
@@ -92,7 +92,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
      * @param to   The second book to swap
      */
     public void swapItems(int from, int to) {
-        L.d("madapt", "swap items from to" + String.valueOf(from) + "/" + String.valueOf(to));
+        L.v(TAG, "swap items from to" + String.valueOf(from) + "/" + String.valueOf(to));
         final int finalFrom = from;
         if (from != to) {
             if (from > to) {
@@ -109,7 +109,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
     }
 
     private void swapItemsInData(int from, int to) {
-        L.d("madapt", "swapInData:" + from + "/" + to);
+        L.d(TAG, "swapInData:" + from + "/" + to);
         final Book oldBook = data.get(from);
         final Book newBook = data.get(to);
         long oldSortId = oldBook.getSortId();

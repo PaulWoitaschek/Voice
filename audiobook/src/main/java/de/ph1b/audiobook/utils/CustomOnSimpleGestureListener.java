@@ -24,7 +24,6 @@ public class CustomOnSimpleGestureListener extends GestureDetector.SimpleOnGestu
             int position = recyclerView.getChildPosition(child);
             itemListener.onItemLongClicked(position, child);
         }
-        L.d("rtd", "onLongPress");
         super.onLongPress(e);
     }
 }

@@ -40,19 +40,14 @@ public class Sonic {
         flushNative(sonicID);
     }
 
-    // Set the sample rate of the stream. This will drop any samples that have not been read.
-    public void setSampleRate(int newSampleRate) {
-        setSampleRateNative(sonicID, newSampleRate);
-    }
-
     // Get the sample rate of the stream.
     public int getSampleRate() {
         return getSampleRateNative(sonicID);
     }
 
-    // Set the number of channels. This will drop any samples that have not been read.
-    public void setNumChannels(int newNumChannels) {
-        setNumChannelsNative(sonicID, newNumChannels);
+    // Set the sample rate of the stream. This will drop any samples that have not been read.
+    public void setSampleRate(int newSampleRate) {
+        setSampleRateNative(sonicID, newSampleRate);
     }
 
     // Get the number of channels.
@@ -60,9 +55,9 @@ public class Sonic {
         return getNumChannelsNative(sonicID);
     }
 
-    // Set the pitch of the stream.
-    public void setPitch(float newPitch) {
-        setPitchNative(sonicID, newPitch);
+    // Set the number of channels. This will drop any samples that have not been read.
+    public void setNumChannels(int newNumChannels) {
+        setNumChannelsNative(sonicID, newNumChannels);
     }
 
     // Get the pitch of the stream.
@@ -70,14 +65,24 @@ public class Sonic {
         return getPitchNative(sonicID);
     }
 
-    //Set the speed of the stream.
-    public void setSpeed(float newSpeed) {
-        setSpeedNative(sonicID, newSpeed);
+    // Set the pitch of the stream.
+    public void setPitch(float newPitch) {
+        setPitchNative(sonicID, newPitch);
     }
 
     // Get the speed of the stream.
     public float getSpeed() {
         return getSpeedNative(sonicID);
+    }
+
+    //Set the speed of the stream.
+    public void setSpeed(float newSpeed) {
+        setSpeedNative(sonicID, newSpeed);
+    }
+
+    // Get the rate of the stream.
+    public float getRate() {
+        return getRateNative(sonicID);
     }
 
     // Set the rate of the stream. Rate means how fast we play, without pitch correction
@@ -86,20 +91,15 @@ public class Sonic {
         setRateNative(sonicID, newRate);
     }
 
-    // Get the rate of the stream.
-    public float getRate() {
-        return getRateNative(sonicID);
+    // Get the chord pitch setting.
+    public boolean getChordPitch() {
+        return getChordPitchNative(sonicID);
     }
 
     // Set chord pitch mode on or off. Default is off. See the documentation
     // page for a description of this feature.
     public void setChordPitch(boolean useChordPitch) {
         setChordPitchNative(sonicID, useChordPitch);
-    }
-
-    // Get the chord pitch setting.
-    public boolean getChordPitch() {
-        return getChordPitchNative(sonicID);
     }
 
     // Use this to write 16-bit data to be speed up or down into the stream.
@@ -119,14 +119,14 @@ public class Sonic {
         return availableBytesNative(sonicID);
     }
 
-    // Set the scaling factor of the stream.
-    public void setVolume(float newVolume) {
-        setVolumeNative(sonicID, newVolume);
-    }
-
     // Get the scaling factor of the stream.
     public float getVolume() {
         return getVolumeNative(sonicID);
+    }
+
+    // Set the scaling factor of the stream.
+    public void setVolume(float newVolume) {
+        setVolumeNative(sonicID, newVolume);
     }
 
     private native long initNative(int sampleRate, int channels);

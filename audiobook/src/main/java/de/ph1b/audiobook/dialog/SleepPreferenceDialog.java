@@ -16,9 +16,9 @@ import de.ph1b.audiobook.utils.Prefs;
 
 public class SleepPreferenceDialog extends DialogPreference {
 
+    private final Prefs prefs;
     private TextView timeView;
     private NumberPicker numberPicker;
-    private final Prefs prefs;
 
     public SleepPreferenceDialog(Context context, AttributeSet attrs) {
         super(context, attrs);
