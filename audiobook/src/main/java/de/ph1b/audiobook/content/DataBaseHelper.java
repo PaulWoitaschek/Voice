@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
 
@@ -155,6 +156,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         }
                         ContentValues cv = new ContentValues();
                         cv.put("KEY_BOOK_NAME", bookName);
+
+                        if (bookCover == null || bookCover.equals("") || !new File(bookCover).exists()) {
+                            Bitmap cover = ImageHelper.genCapital(bookName, c, ImageHelper.TYPE_COVER);
+                            bookCover = ImageHelper.saveCover(cover, c);
+                        }
+
                         cv.put("KEY_BOOK_COVER", bookCover);
                         cv.put("KEY_BOOK_POSITION", position);
                         cv.put("KEY_BOOK_TIME", currentMediaPosition);
