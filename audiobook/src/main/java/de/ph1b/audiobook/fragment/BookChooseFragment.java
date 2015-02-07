@@ -36,6 +36,8 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookPlay;
@@ -65,7 +67,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     private final Handler handler = new Handler(Looper.getMainLooper());
     //private ArrayList<Book> details;
     private DataBaseHelper db;
-    private MediaAdapter adapt;
+    private MediaAdapter adapter;
     private ImageView currentCover;
     private TextView currentText;
     private ImageButton currentPlaying;
@@ -123,7 +125,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         OnItemClickListener onClickListener = new OnItemClickListener() {
             @Override
             public void onCoverClicked(int position) {
-                Book book = adapt.getItem(position);
+                Book book = adapter.getItem(position);
                 long bookId = book.getId();
 
                 prefs.setCurrentBookId(bookId);
@@ -139,7 +141,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                 MenuInflater inflater = popup.getMenuInflater();
                 inflater.inflate(R.menu.popup_menu, popup.getMenu());
 
-                bookToEdit = adapt.getItem(position);
+                bookToEdit = adapter.getItem(position);
 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -163,7 +165,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                                 editBook.show(getFragmentManager(), TAG);
                                 return true;
                             case R.id.delete_book:
-                                Book deleteBook = adapt.getItem(position);
+                                Book deleteBook = adapter.getItem(position);
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                                 builder.setTitle(R.string.delete_book_title);
                                 builder.setMessage(deleteBook.getName());
@@ -172,10 +174,10 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                                     public void onClick(DialogInterface dialog, int which) {
                                         //setting visibility of start widget at bottom to gone if book is gone
                                         long currentBookId = prefs.getCurrentBookId();
-                                        if (adapt.getItem(position).getId() == currentBookId)
+                                        if (adapter.getItem(position).getId() == currentBookId)
                                             current.setVisibility(View.GONE);
 
-                                        adapt.removeItem(position);
+                                        adapter.removeItem(position);
                                     }
                                 });
                                 builder.setNegativeButton(R.string.delete_book_keep, null);
@@ -199,12 +201,24 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
             }
         };
 
-        ArrayList<Book> books = db.getAllBooks();
-        adapt = new MediaAdapter(books, getActivity(), onClickListener);
+        final ArrayList<Book> books = db.getAllBooks();
+        adapter = new MediaAdapter(books, getActivity(), onClickListener);
         recyclerView.setHasFixedSize(true);
 
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                db.fillMissingCovers();
+                ArrayList<Book> updatdBooks = db.getAllBooks();
+                books.clear();
+                books.addAll(updatdBooks);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getAmountOfColumns()));
-        recyclerView.setAdapter(adapt);
+        recyclerView.setAdapter(adapter);
         recyclerView.addOnItemTouchListener(this);
         final Handler handler = new Handler();
 
@@ -267,11 +281,11 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                         int to = recyclerView.getChildPosition(endChild);
 
                         if (from != -1 && to != -1) {
-                            adapt.swapItems(from, to);
+                            adapter.swapItems(from, to);
                             return true;
                         } else if (from != -1) {
-                            to = adapt.getItemCount() - 1;
-                            adapt.swapItems(from, to);
+                            to = adapter.getItemCount() - 1;
+                            adapter.swapItems(from, to);
                             return true;
                         }
                         return false;
@@ -293,7 +307,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         long currentBookPosition = prefs.getCurrentBookId();
 
         boolean widgetInitialized = false;
-        for (final Book b : adapt.getData()) {
+        for (final Book b : adapter.getData()) {
             if (b.getId() == currentBookPosition) {
                 //setting cover
                 Picasso.with(getActivity()).load(new File(b.getCover())).into(currentCover);
@@ -376,7 +390,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                 String coverPath = ImageHelper.saveCover(cover, getActivity());
                 bookToEdit.setCover(coverPath);
             }
-            adapt.updateItem(bookToEdit);
+            adapter.updateItem(bookToEdit);
             initPlayerWidget();
         }
     }

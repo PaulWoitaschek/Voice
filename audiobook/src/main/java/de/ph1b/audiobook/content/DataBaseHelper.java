@@ -189,6 +189,28 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void fillMissingCovers() {
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.query(TABLE_BOOKS, new String[]{KEY_BOOK_ID, KEY_BOOK_COVER, KEY_BOOK_NAME}, null, null, null, null, null);
+        try {
+            while (cursor.moveToNext()) {
+                long id = cursor.getLong(0);
+                String coverPath = cursor.getString(1);
+                String name = cursor.getString(2);
+                if (coverPath == null || !new File(coverPath).exists()) {
+                    Bitmap cover = ImageHelper.genCapital(name, c);
+                    coverPath = ImageHelper.saveCover(cover, c);
+                    ContentValues cv = new ContentValues();
+                    cv.put(KEY_BOOK_COVER, coverPath);
+                    int updated = db.update(TABLE_BOOKS, cv, KEY_BOOK_ID + "=?", new String[]{String.valueOf(id)});
+                    L.d(TAG, "updated cover: name=" + name + ", updated=" + updated);
+                }
+            }
+        } finally {
+            cursor.close();
+        }
+    }
+
     private void upgradeOne(SQLiteDatabase db) {
         db.beginTransaction();
         try {

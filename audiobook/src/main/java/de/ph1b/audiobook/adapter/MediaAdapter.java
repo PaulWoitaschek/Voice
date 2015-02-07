@@ -143,7 +143,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         return data.size();
     }
 
-    
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         final ImageView coverView;
         final TextView titleView;
