@@ -309,11 +309,11 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
         Bitmap smallCover;
         Bitmap bigCover;
         if (coverPath == null || coverPath.equals("") || !new File(coverPath).exists() || new File(coverPath).isDirectory()) {
-            smallCover = ImageHelper.genCapital(book.getName(), this, ImageHelper.TYPE_NOTIFICATION_SMALL);
-            bigCover = ImageHelper.genCapital(book.getName(), this, ImageHelper.TYPE_NOTIFICATION_BIG);
+            smallCover = ImageHelper.genCapital(book.getName(), this, ImageHelper.CoverType.NOTIFICATION_SMALL);
+            bigCover = ImageHelper.genCapital(book.getName(), this, ImageHelper.CoverType.NOTIFICATION_BIG);
         } else {
-            smallCover = ImageHelper.genBitmapFromFile(coverPath, this, ImageHelper.TYPE_NOTIFICATION_SMALL);
-            bigCover = ImageHelper.genBitmapFromFile(coverPath, this, ImageHelper.TYPE_NOTIFICATION_BIG);
+            smallCover = ImageHelper.genBitmapFromFile(coverPath, this, ImageHelper.CoverType.NOTIFICATION_SMALL);
+            bigCover = ImageHelper.genBitmapFromFile(coverPath, this, ImageHelper.CoverType.NOTIFICATION_BIG);
         }
 
         Intent rewindIntent = ServiceController.getRewindIntent(this);
@@ -385,9 +385,9 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
         String coverPath = book.getCover();
         Bitmap bitmap;
         if (coverPath == null || !new File(coverPath).exists() || new File(coverPath).isDirectory()) {
-            bitmap = ImageHelper.genCapital(book.getName(), getApplication(), ImageHelper.TYPE_COVER);
+            bitmap = ImageHelper.genCapital(book.getName(), getApplication(), ImageHelper.CoverType.COVER);
         } else {
-            bitmap = ImageHelper.genBitmapFromFile(coverPath, AudioPlayerService.this, ImageHelper.TYPE_COVER);
+            bitmap = ImageHelper.genBitmapFromFile(coverPath, AudioPlayerService.this, ImageHelper.CoverType.COVER);
         }
         @SuppressWarnings("deprecation") RemoteControlClient.MetadataEditor editor = remoteControlClient.editMetadata(true);
         editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, book.getContainingMedia().get(book.getPosition()).getName());

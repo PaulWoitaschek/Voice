@@ -198,7 +198,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, State
             Picasso.with(getActivity()).load(new File(cover)).into(coverView);
         } else {
             L.d(TAG, "cover is null or no file, setting replacment");
-            Bitmap coverReplacement = ImageHelper.genCapital(bookName, getActivity(), ImageHelper.TYPE_COVER);
+            Bitmap coverReplacement = ImageHelper.genCapital(bookName, getActivity(), ImageHelper.CoverType.COVER);
             coverView.setImageBitmap(coverReplacement);
         }
 

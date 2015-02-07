@@ -63,9 +63,9 @@ public class WidgetProvider extends AppWidgetProvider {
             if (book != null) {
                 Bitmap cover;
                 if (book.getCover() != null && new File(book.getCover()).exists()) {
-                    cover = ImageHelper.genBitmapFromFile(book.getCover(), context, ImageHelper.TYPE_NOTIFICATION_SMALL);
+                    cover = ImageHelper.genBitmapFromFile(book.getCover(), context, ImageHelper.CoverType.NOTIFICATION_SMALL);
                 } else {
-                    cover = ImageHelper.genCapital(book.getName(), context, ImageHelper.TYPE_NOTIFICATION_SMALL);
+                    cover = ImageHelper.genCapital(book.getName(), context, ImageHelper.CoverType.NOTIFICATION_SMALL);
                 }
 
                 remoteViews.setImageViewBitmap(R.id.imageView, cover);

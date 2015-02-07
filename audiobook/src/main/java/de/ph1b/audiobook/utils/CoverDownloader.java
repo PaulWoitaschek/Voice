@@ -93,7 +93,7 @@ public class CoverDownloader {
         }
 
         if (searchURL != null) {
-            Rect reqSize = ImageHelper.resolveImageType(ImageHelper.TYPE_COVER, c);
+            Rect reqSize = ImageHelper.resolveImageType(ImageHelper.CoverType.COVER, c);
             //returned bitmap in the desired 1:1 ratio and cropping automatically
             try {
                 return Picasso.with(c).load(searchURL.toString()).resize(reqSize.width(), reqSize.height()).get();

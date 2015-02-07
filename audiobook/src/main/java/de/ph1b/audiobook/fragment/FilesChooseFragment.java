@@ -387,7 +387,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                     return null;
                 Activity activity = getActivity();
                 if (activity != null) {
-                    Bitmap cover = ImageHelper.genBitmapFromFile(image.getAbsolutePath(), activity, ImageHelper.TYPE_COVER);
+                    Bitmap cover = ImageHelper.genBitmapFromFile(image.getAbsolutePath(), activity, ImageHelper.CoverType.COVER);
                     if (cover != null)
                         bitmaps.add(cover);
                 }
@@ -452,7 +452,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
             Book b = new Book();
             b.setName(defaultName);
             if (cover == null) {
-                cover = ImageHelper.genCapital(defaultName, getActivity(), ImageHelper.TYPE_COVER);
+                cover = ImageHelper.genCapital(defaultName, getActivity(), ImageHelper.CoverType.COVER);
             }
             String coverPath = ImageHelper.saveCover(cover, getActivity());
             if (coverPath != null) {

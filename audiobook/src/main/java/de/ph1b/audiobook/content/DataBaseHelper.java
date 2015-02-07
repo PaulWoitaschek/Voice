@@ -158,7 +158,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         cv.put("KEY_BOOK_NAME", bookName);
 
                         if (bookCover == null || bookCover.equals("") || !new File(bookCover).exists()) {
-                            Bitmap cover = ImageHelper.genCapital(bookName, c, ImageHelper.TYPE_COVER);
+                            Bitmap cover = ImageHelper.genCapital(bookName, c, ImageHelper.CoverType.COVER);
                             bookCover = ImageHelper.saveCover(cover, c);
                         }
 

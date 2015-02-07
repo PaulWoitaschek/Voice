@@ -301,10 +301,10 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                 String coverPath = b.getCover();
                 if (coverPath == null || coverPath.equals("") || !new File(coverPath).exists() || new File(coverPath).isDirectory()) {
                     String bookName = b.getName();
-                    Bitmap thumb = ImageHelper.genCapital(bookName, getActivity(), ImageHelper.TYPE_THUMB);
+                    Bitmap thumb = ImageHelper.genCapital(bookName, getActivity(), ImageHelper.CoverType.THUMB);
                     currentCover.setImageBitmap(thumb);
                 } else if (new File(coverPath).isFile()) {
-                    Bitmap bitmap = ImageHelper.genBitmapFromFile(coverPath, getActivity(), ImageHelper.TYPE_THUMB);
+                    Bitmap bitmap = ImageHelper.genBitmapFromFile(coverPath, getActivity(), ImageHelper.CoverType.THUMB);
                     currentCover.setImageBitmap(bitmap);
                 }
 
