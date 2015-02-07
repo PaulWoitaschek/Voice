@@ -112,6 +112,8 @@ public class MediaPlayer {
                 L.d(TAG, "State changed to STATE_PAUSED");
                 stayAwake(false);
                 break;
+            case PLAYBACK_COMPLETED:
+                break;
             default:
                 error("pause", state);
         }
