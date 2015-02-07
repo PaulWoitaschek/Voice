@@ -65,6 +65,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
 
     private static final String TAG = "de.ph1b.audiobook.fragment.BookChooseFragment";
     private final Handler handler = new Handler(Looper.getMainLooper());
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
     //private ArrayList<Book> details;
     private DataBaseHelper db;
     private MediaAdapter adapter;
@@ -78,6 +79,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     private float scrollBy = 0;
     private StateManager stateManager;
     private ServiceController controller;
+    private ArrayList<Book> books;
 
     /**
      * Returns the amount of columns the main-grid will need
@@ -91,6 +93,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         return columns > 2 ? columns : 2;
     }
 
+   
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -201,21 +204,9 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
             }
         };
 
-        final ArrayList<Book> books = db.getAllBooks();
+        books = db.getAllBooks();
         adapter = new MediaAdapter(books, getActivity(), onClickListener);
         recyclerView.setHasFixedSize(true);
-
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                db.fillMissingCovers();
-                ArrayList<Book> updatedBooks = db.getAllBooks();
-                books.clear();
-                books.addAll(updatedBooks);
-                adapter.notifyDataSetChanged();
-            }
-        });
 
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getAmountOfColumns()));
         recyclerView.setAdapter(adapter);
@@ -338,6 +329,17 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
 
         stateManager.addChangeListener(this);
         onStateChanged(stateManager.getState());
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                db.fillMissingCovers();
+                ArrayList<Book> updatedBooks = db.getAllBooks();
+                books.clear();
+                books.addAll(updatedBooks);
+                adapter.notifyDataSetChanged();
+            }
+        });
 
         initPlayerWidget();
     }
