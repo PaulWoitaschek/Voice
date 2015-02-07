@@ -5,10 +5,8 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipDescription;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -34,6 +32,9 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
@@ -79,14 +80,12 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     /**
      * Returns the amount of columns the main-grid will need
      *
-     * @param c Application Context
      * @return The amount of columns, but at least 2.
      */
-    public static int getAmountOfColumns(Context c) {
-        Resources r = c.getResources();
-        DisplayMetrics displayMetrics = r.getDisplayMetrics();
+    private int getAmountOfColumns() {
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-        int columns = Math.round(dpWidth / r.getDimension(R.dimen.desired_medium_cover));
+        int columns = Math.round(dpWidth / getResources().getDimension(R.dimen.desired_medium_cover));
         return columns > 2 ? columns : 2;
     }
 
@@ -204,7 +203,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         adapt = new MediaAdapter(books, getActivity(), onClickListener);
         recyclerView.setHasFixedSize(true);
 
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getAmountOfColumns(getActivity().getApplicationContext())));
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getAmountOfColumns()));
         recyclerView.setAdapter(adapt);
         recyclerView.addOnItemTouchListener(this);
         final Handler handler = new Handler();
@@ -297,9 +296,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         for (final Book b : adapt.getData()) {
             if (b.getId() == currentBookPosition) {
                 //setting cover
-                String coverPath = b.getCover();
-                Bitmap bitmap = ImageHelper.genBitmapFromFile(coverPath, getActivity(), ImageHelper.CoverType.THUMB);
-                currentCover.setImageBitmap(bitmap);
+                Picasso.with(getActivity()).load(new File(b.getCover())).into(currentCover);
 
                 //setting text
                 currentText.setText(b.getName());

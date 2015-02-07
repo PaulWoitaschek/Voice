@@ -21,6 +21,10 @@ import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.widget.RemoteViews;
 
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -31,7 +35,6 @@ import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.content.Media;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.receiver.RemoteControlReceiver;
-import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.Prefs;
 
@@ -124,7 +127,9 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
         stateManager.addChangeListener(this);
     }
 
-    private void finish() {
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    @Override
+    public void onDestroy() {
         stateManager.removeChangeListener(this);
 
         try {
@@ -145,12 +150,7 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
         if (controller != null) {
             controller.release();
         }
-    }
 
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    @Override
-    public void onDestroy() {
-        finish();
         super.onDestroy();
     }
 
@@ -185,7 +185,7 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
                                     }
                                     break;
                                 case KeyEvent.KEYCODE_MEDIA_STOP:
-                                    finish();
+                                    controller.release();
                                     break;
                                 case KeyEvent.KEYCODE_MEDIA_NEXT:
                                     controller.next();
@@ -298,18 +298,11 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
     }
 
     private Notification getNotification() {
-        Book book = controller.getBook();
+        final Book book = controller.getBook();
         Media media = book.getContainingMedia().get(book.getPosition());
 
-        RemoteViews smallViewRemote = new RemoteViews(getPackageName(), R.layout.notification_small);
-        RemoteViews bigViewRemote = new RemoteViews(getPackageName(), R.layout.notification_big);
-
-        String coverPath = book.getCover();
-        Bitmap smallCover;
-        Bitmap bigCover;
-
-        smallCover = ImageHelper.genBitmapFromFile(coverPath, this, ImageHelper.CoverType.NOTIFICATION_SMALL);
-        bigCover = ImageHelper.genBitmapFromFile(coverPath, this, ImageHelper.CoverType.NOTIFICATION_BIG);
+        final RemoteViews smallViewRemote = new RemoteViews(getPackageName(), R.layout.notification_small);
+        final RemoteViews bigViewRemote = new RemoteViews(getPackageName(), R.layout.notification_big);
 
         Intent rewindIntent = ServiceController.getRewindIntent(this);
         PendingIntent rewindPI = PendingIntent.getService(getApplicationContext(), KeyEvent.KEYCODE_MEDIA_REWIND, rewindIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -330,7 +323,6 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
         Intent stopIntent = ServiceController.getStopIntent(this);
         PendingIntent stopPI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_STOP, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        smallViewRemote.setImageViewBitmap(R.id.imageView, smallCover);
         smallViewRemote.setTextViewText(R.id.title, book.getName());
         smallViewRemote.setTextViewText(R.id.summary, media.getName());
 
@@ -339,7 +331,6 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
         smallViewRemote.setOnClickPendingIntent(R.id.fast_forward, fastForwardPI);
         smallViewRemote.setOnClickPendingIntent(R.id.closeButton, stopPI);
 
-        bigViewRemote.setImageViewBitmap(R.id.imageView, bigCover);
         bigViewRemote.setTextViewText(R.id.title, book.getName());
         bigViewRemote.setTextViewText(R.id.summary, media.getName());
 
@@ -347,6 +338,14 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
         bigViewRemote.setOnClickPendingIntent(R.id.playPause, playPausePI);
         bigViewRemote.setOnClickPendingIntent(R.id.fast_forward, fastForwardPI);
         bigViewRemote.setOnClickPendingIntent(R.id.closeButton, stopPI);
+
+        try {
+            Bitmap cover = Picasso.with(AudioPlayerService.this).load(new File(book.getCover())).get();
+            smallViewRemote.setImageViewBitmap(R.id.imageView, cover);
+            bigViewRemote.setImageViewBitmap(R.id.imageView, cover);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         Intent bookPlayIntent = new Intent(AudioPlayerService.this, BookPlay.class);
         PendingIntent pendingIntent = android.support.v4.app.TaskStackBuilder.create(AudioPlayerService.this)
@@ -359,7 +358,7 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true);
 
-        Notification notification = notificationBuilder.build();
+        final Notification notification = notificationBuilder.build();
 
         if (Build.VERSION.SDK_INT >= 16) {
             notification.bigContentView = bigViewRemote;
@@ -375,16 +374,28 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void updateRemoteControlClient() {
-        Book book = controller.getBook();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Book book = controller.getBook();
 
-        Bitmap bitmap = ImageHelper.genBitmapFromFile(book.getCover(), AudioPlayerService.this, ImageHelper.CoverType.COVER);
+                Bitmap bitmap = null;
+                try {
+                    bitmap = Picasso.with(AudioPlayerService.this).load(new File(book.getCover())).get();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-        @SuppressWarnings("deprecation") RemoteControlClient.MetadataEditor editor = remoteControlClient.editMetadata(true);
-        editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, book.getContainingMedia().get(book.getPosition()).getName());
-        editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName());
-        //noinspection deprecation
-        editor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bitmap);
-        editor.apply();
+                @SuppressWarnings("deprecation") RemoteControlClient.MetadataEditor editor = remoteControlClient.editMetadata(true);
+                editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, book.getContainingMedia().get(book.getPosition()).getName());
+                editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName());
+                if (bitmap != null) {
+                    //noinspection deprecation
+                    editor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bitmap.copy(bitmap.getConfig(), true));
+                }
+                editor.apply();
+            }
+        });
     }
 
     @Override
@@ -420,7 +431,7 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
                 break;
             case AudioManager.AUDIOFOCUS_LOSS:
                 L.d(TAG, "paused by audioFocus loss");
-                finish();
+                controller.release();
                 break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                 if (stateManager.getState() == PlayerStates.PLAYING) {

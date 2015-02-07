@@ -2,7 +2,6 @@ package de.ph1b.audiobook.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Rect;
 
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.OkHttpClient;
@@ -93,10 +92,10 @@ public class CoverDownloader {
         }
 
         if (searchURL != null) {
-            Rect reqSize = ImageHelper.resolveImageType(ImageHelper.CoverType.COVER, c);
+            int reqLength = ImageHelper.getCoverLength(c);
             //returned bitmap in the desired 1:1 ratio and cropping automatically
             try {
-                return Picasso.with(c).load(searchURL.toString()).resize(reqSize.width(), reqSize.height()).get();
+                return Picasso.with(c).load(searchURL.toString()).resize(reqLength, reqLength).get();
             } catch (IOException e) {
                 e.printStackTrace();
             }
