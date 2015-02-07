@@ -9,23 +9,33 @@ import de.ph1b.audiobook.BuildConfig;
 public class L {
 
     public static void d(String tag, Object msg) {
-        Log.d(tag, getMessage(msg));
+        if (BuildConfig.DEBUG) {
+            Log.d(tag, getMessage(msg));
+        }
     }
 
     public static void e(String tag, Object msg) {
-        Log.e(tag, getMessage(msg));
+        if (BuildConfig.DEBUG) {
+            Log.e(tag, getMessage(msg));
+        }
     }
 
     public static void e(String tag, Object msg, Throwable tr) {
-        Log.e(tag, getMessage(msg), tr);
+        if (BuildConfig.DEBUG) {
+            Log.e(tag, getMessage(msg), tr);
+        }
     }
 
     public static void i(String tag, Object msg) {
-        Log.i(tag, getMessage(msg));
+        if (BuildConfig.DEBUG) {
+            Log.i(tag, getMessage(msg));
+        }
     }
 
     public static void v(String tag, Object msg) {
-        Log.v(tag, getMessage(msg));
+        if (BuildConfig.DEBUG) {
+            Log.v(tag, getMessage(msg));
+        }
     }
 
     private static String getMessage(Object msg) {
