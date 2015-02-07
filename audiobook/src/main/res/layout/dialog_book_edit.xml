@@ -40,7 +40,6 @@
         android:textColor="@color/dark_red" />
 
     <LinearLayout
-        android:id="@+id/cover_layout"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_marginBottom="10dp"

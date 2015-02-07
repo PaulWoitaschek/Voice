@@ -15,7 +15,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -40,6 +39,12 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
     public static final String BOOK_COVER = "BOOK_COVER";
     public static final String DIALOG_TITLE = "DIALOG_TITLE";
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
+
+    /**
+     * Variable representing if the first cover is a letter - cover. This is recognized by checking
+     * if the pixels on the borders are the same as the color accent
+     */
+    boolean firstCoverIsLetterReplacement = false;
     private CoverDownloader coverDownloader;
     private DraggableBoxImageView coverImageView;
     private ProgressBar coverReplacement;
@@ -55,6 +60,29 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
     public void onStart() {
         super.onStart();
         MaterialCompatThemer.theme(getDialog());
+    }
+
+    public boolean isCoverReplacement(Bitmap bitmap) {
+        /**
+         * Checking if the first color is a letter replacement by checking if the pixels on the edges
+         * are the same as the accent color (the replacement was made of).
+         */
+
+        ArrayList<Float> colors = new ArrayList<>();
+        int height = bitmap.getHeight() - 1;
+        int width = bitmap.getWidth() - 1;
+        colors.add((float) bitmap.getPixel(0, 0));
+        colors.add((float) bitmap.getPixel(0, height));
+        colors.add((float) bitmap.getPixel(width, 0));
+        colors.add((float) bitmap.getPixel(width, height));
+        float colorAccent = getResources().getColor(R.color.colorAccent);
+        for (float c : colors) {
+            float diff = Math.abs(c / colorAccent);
+            if (diff < 0.9F || diff > 1.1F) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -79,6 +107,9 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
                     coverPosition++;
                     coverImageView.setImageBitmap(covers.get(coverPosition));
                     previousCover.setVisibility(View.VISIBLE);
+                    if (!ImageHelper.isOnline(getActivity()) && coverPosition == covers.size() - 1) {
+                        nextCover.setVisibility(View.INVISIBLE);
+                    }
                 } else {
                     genCoverFromInternet(nameEditText.getText().toString());
                 }
@@ -112,6 +143,16 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
         String dialogTitle = b.getString(DIALOG_TITLE);
         covers = b.getParcelableArrayList(BOOK_COVER);
 
+        if (covers.size() > 0) {
+            Bitmap firstCover = covers.get(0);
+            firstCoverIsLetterReplacement = isCoverReplacement(firstCover);
+        }
+
+
+        if (!firstCoverIsLetterReplacement) {
+            covers.add(0, ImageHelper.genCapital(defaultName, getActivity()));
+        }
+
         //init view
         //passing null is fine because of fragment
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -119,7 +160,6 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
         builder.setView(v);
 
         //init items
-        ViewGroup coverLayout = (ViewGroup) v.findViewById(R.id.cover_layout);
         nameEditText = (EditText) v.findViewById(R.id.book_name);
         coverImageView = (DraggableBoxImageView) v.findViewById(R.id.cover);
         coverReplacement = (ProgressBar) v.findViewById(R.id.cover_replacement);
@@ -137,27 +177,21 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
         //init values
         nameEditText.setText(defaultName);
 
-        previousCover.setVisibility(View.INVISIBLE);
         boolean online = ImageHelper.isOnline(getActivity());
-        int coverSize = covers.size();
-        L.d("ebk", String.valueOf(coverSize));
 
-        //sets up cover according to online state and amount of covers available
-        if (coverSize == 0) {
-            if (online) {
-                L.d("ebk", "p1");
-                genCoverFromInternet(defaultName);
-            } else {
-                coverLayout.setVisibility(View.GONE);
-            }
-        }
-        if (coverSize > 0) {
-            coverImageView.setImageBitmap(covers.get(0));
+        // defaulting only to capital cover when its the only one.
+        if (covers.size() == 1) {
             coverPosition = 0;
-            if (!online && coverSize == 1)
-                nextCover.setVisibility(View.INVISIBLE);
+        } else {
+            coverPosition = 1;
         }
-
+        coverImageView.setImageBitmap(covers.get(coverPosition));
+        if (!online && (coverPosition == (covers.size() - 1))) {
+            nextCover.setVisibility(View.INVISIBLE);
+        }
+        if (coverPosition == 0) {
+            previousCover.setVisibility(View.INVISIBLE);
+        }
 
         builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
             @Override
@@ -178,7 +212,6 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
                     Rect r = coverImageView.getCropPosition();
                     newCover = covers.get(coverPosition);
                     newCover = Bitmap.createBitmap(newCover, r.left, r.top, r.width(), r.height());
-                    L.d("ebook", "Added with" + r.flattenToString());
                 }
                 ((OnEditBookFinished) getTargetFragment()).onEditBookFinished(bookName, newCover, true);
             }
@@ -194,12 +227,21 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                if (charSequence.toString().length() == 0) {
+                String newName = charSequence.toString();
+                int textLength = newName.length();
+                if (textLength == 0) {
                     emptyTitleText.setVisibility(View.VISIBLE);
                     editBook.getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
                 } else {
                     emptyTitleText.setVisibility(View.INVISIBLE);
                     editBook.getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
+                    if (textLength == 1 && !firstCoverIsLetterReplacement) {
+                        Bitmap newLetterCover = ImageHelper.genCapital(newName, getActivity());
+                        covers.set(0, newLetterCover);
+                        if (coverPosition == 0) {
+                            coverImageView.setImageBitmap(newLetterCover);
+                        }
+                    }
                 }
             }
 
