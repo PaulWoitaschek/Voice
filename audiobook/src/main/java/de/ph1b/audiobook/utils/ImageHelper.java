@@ -23,7 +23,7 @@ import de.ph1b.audiobook.fragment.BookChooseFragment;
 public class ImageHelper {
 
     public static final int TYPE_COVER = 0;
-    public static final int TYPE_MEDIUM = 1;
+    private static final int TYPE_MEDIUM = 1;
     public static final int TYPE_THUMB = 2;
     public static final int TYPE_NOTIFICATION_SMALL = 3;
     public static final int TYPE_NOTIFICATION_BIG = 4;
@@ -171,7 +171,7 @@ public class ImageHelper {
     }
 
 
-    public static int calculateInSampleSize(Rect reqRect, BitmapFactory.Options options) {
+    private static int calculateInSampleSize(Rect reqRect, BitmapFactory.Options options) {
 
         // Raw height and width of image
         final int height = options.outHeight;

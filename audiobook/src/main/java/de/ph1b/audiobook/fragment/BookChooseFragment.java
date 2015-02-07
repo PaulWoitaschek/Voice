@@ -42,7 +42,6 @@ import de.ph1b.audiobook.activity.BookPlay;
 import de.ph1b.audiobook.activity.FilesChoose;
 import de.ph1b.audiobook.activity.Settings;
 import de.ph1b.audiobook.adapter.MediaAdapter;
-import de.ph1b.audiobook.adapter.MediaAdapterChooser;
 import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.dialog.EditBook;
@@ -202,16 +201,8 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
             }
         };
 
-        MediaAdapter.OnCoverChangedListener onCoverChangedListener = new MediaAdapter.OnCoverChangedListener() {
-            @Override
-            public void onCoverChanged() {
-                if (getActivity() != null)
-                    initPlayerWidget();
-            }
-        };
-
         ArrayList<Book> books = db.getAllBooks();
-        adapt = MediaAdapterChooser.getAdapter(books, getActivity(), onClickListener, onCoverChangedListener);
+        adapt = new MediaAdapter(books, getActivity(), onClickListener);
         recyclerView.setHasFixedSize(true);
 
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getAmountOfColumns(getActivity().getApplicationContext())));

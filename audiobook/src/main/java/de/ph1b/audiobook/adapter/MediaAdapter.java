@@ -1,10 +1,6 @@
 package de.ph1b.audiobook.adapter;
 
-import android.app.ActivityManager;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.support.v4.util.LruCache;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +9,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.File;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,32 +20,22 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.interfaces.OnItemClickListener;
-import de.ph1b.audiobook.utils.CoverDownloader;
-import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
 
 
-public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> {
+public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> {
 
-    final ImageCache imageCache;
     private final ArrayList<Book> data;
     private final DataBaseHelper db;
     private final Context c;
     private final OnItemClickListener onItemClickListener;
     private final ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
-    private final OnCoverChangedListener onCoverChangedListener;
 
 
-    MediaAdapter(ArrayList<Book> data, Context c, OnItemClickListener onItemClickListener, OnCoverChangedListener onCoverChangedListener) {
+    public MediaAdapter(ArrayList<Book> data, Context c, OnItemClickListener onItemClickListener) {
         this.data = data;
         this.c = c;
         this.onItemClickListener = onItemClickListener;
-        this.onCoverChangedListener = onCoverChangedListener;
-
-        ActivityManager am = (ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
-        int memoryClassBytes = am.getMemoryClass() * 1024 * 1024;
-        imageCache = new ImageCache(memoryClassBytes / 8);
-
         db = DataBaseHelper.getInstance(c);
     }
 
@@ -56,7 +43,6 @@ public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.Vie
         for (int position = 0; position < data.size(); position++) {
             if (data.get(position).getId() == book.getId()) {
                 data.set(position, book);
-                imageCache.remove((int) book.getId());
                 notifyItemChanged(position);
                 singleThreadExecutor.execute(new Runnable() {
                     @Override
@@ -119,7 +105,6 @@ public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.Vie
                 }
             }
         }
-        L.d("madapt", "notifyItemMoved" + finalFrom + "/" + to);
         notifyItemMoved(finalFrom, to);
     }
 
@@ -150,22 +135,7 @@ public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.Vie
         String name = b.getName();
         viewHolder.titleView.setText(name);
         viewHolder.titleView.setActivated(true);
-
-        Bitmap cached = imageCache.get((int) b.getId());
-        if (cached != null) {
-            L.d("madapt", "cached bitmap! " + b.getId());
-            viewHolder.coverView.setImageBitmap(cached);
-        } else {
-            viewHolder.coverView.setImageBitmap(null);
-            viewHolder.coverView.setTag(b.getId());
-            String coverPath = b.getCover();
-            boolean coverNotExists = (coverPath == null || coverPath.equals("") || new File(coverPath).isDirectory() || !(new File(coverPath).exists()));
-            LoadCoverAsync loadCoverAsync = new LoadCoverAsync(position, viewHolder.coverView);
-            if (coverNotExists)
-                loadCoverAsync.execute();
-            else
-                loadCoverAsync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        }
+        Picasso.with(c).load(new File(b.getCover())).into(viewHolder.coverView);
     }
 
     @Override
@@ -173,10 +143,7 @@ public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.Vie
         return data.size();
     }
 
-    public interface OnCoverChangedListener {
-        public void onCoverChanged();
-    }
-
+    
     public static class ViewHolder extends RecyclerView.ViewHolder {
         final ImageView coverView;
         final TextView titleView;
@@ -200,86 +167,6 @@ public abstract class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.Vie
                     onItemClickListener.onPopupMenuClicked(v, getPosition());
                 }
             });
-        }
-    }
-
-    /**
-     * Loads cover Async into the ViewHolder. If there is no cover specified and the devices is allowed
-     * to go online, it will download an image from the internet and save it to the database.
-     * If there is no cover and the device is not allowed to go online, a default capital-letter will
-     * be generated and NOT be written to the database.
-     * In any case the bitmap will be put to the lru cache.
-     *
-     * @see de.ph1b.audiobook.adapter.MediaAdapter.ImageCache
-     * @see de.ph1b.audiobook.utils.CoverDownloader
-     */
-    private class LoadCoverAsync extends AsyncTask<Void, Void, Bitmap> {
-
-        private final WeakReference<ImageView> weakReference;
-        private final int position;
-        private final Book book;
-
-        public LoadCoverAsync(int position, ImageView imageView) {
-            this.position = position;
-            weakReference = new WeakReference<>(imageView);
-            book = data.get(position);
-        }
-
-        @Override
-        protected Bitmap doInBackground(Void... params) {
-
-            String coverPath = book.getCover();
-            boolean coverNotExists = (coverPath == null || coverPath.equals("") || new File(coverPath).isDirectory() || !(new File(coverPath).exists()));
-            Bitmap bitmap = null;
-
-            //try to load a cover 3 times
-            if (coverNotExists) {
-                if (ImageHelper.isOnline(c))
-                    for (int i = 0; i < 3; i++) {
-                        CoverDownloader coverDownloader = new CoverDownloader(c);
-                        bitmap = coverDownloader.getCover(book.getName(), i);
-                        if (bitmap != null) {
-                            String savedCoverPath = ImageHelper.saveCover(bitmap, c);
-                            book.setCover(savedCoverPath);
-                            data.set(position, book);
-                            db.updateBook(book);
-                            break;
-                        }
-                    }
-            } else {
-                bitmap = ImageHelper.genBitmapFromFile(coverPath, c, ImageHelper.TYPE_MEDIUM);
-            }
-
-            if (bitmap == null)
-                bitmap = ImageHelper.genCapital(book.getName(), c, ImageHelper.TYPE_MEDIUM);
-
-            //save bitmap to lru cache
-            imageCache.put((int) book.getId(), bitmap);
-
-            return bitmap;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            if (bitmap != null) {
-                ImageView imageView = weakReference.get();
-                if (imageView != null && (Long) imageView.getTag() == book.getId()) {
-                    imageView.setImageBitmap(bitmap);
-                    onCoverChangedListener.onCoverChanged();
-                }
-            }
-        }
-    }
-
-    class ImageCache extends LruCache<Integer, Bitmap> {
-
-        public ImageCache(int maxSizeBytes) {
-            super(maxSizeBytes);
-        }
-
-        @Override
-        protected int sizeOf(Integer key, Bitmap value) {
-            return value.getRowBytes() * value.getHeight();
         }
     }
 }

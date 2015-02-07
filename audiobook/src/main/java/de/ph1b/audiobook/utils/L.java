@@ -8,12 +8,6 @@ import de.ph1b.audiobook.BuildConfig;
 @SuppressWarnings("SameParameterValue")
 public class L {
 
-    public static void d(String tag, Object msg, Exception e) {
-        if (BuildConfig.DEBUG) {
-            Log.d(tag, getMessage(msg), e);
-        }
-    }
-
     public static void d(String tag, Object msg) {
         Log.d(tag, getMessage(msg));
     }
