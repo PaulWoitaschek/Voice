@@ -6,7 +6,6 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.widget.RemoteViews;
 
@@ -14,8 +13,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookChoose;
@@ -28,8 +25,6 @@ import de.ph1b.audiobook.service.StateManager;
 import de.ph1b.audiobook.utils.Prefs;
 
 public class WidgetProvider extends AppWidgetProvider {
-
-    private final ExecutorService executor = Executors.newCachedThreadPool();
 
     private void initButtons(RemoteViews remoteViews, Context context) {
         Intent playPauseI = ServiceController.getPlayPauseIntent(context);

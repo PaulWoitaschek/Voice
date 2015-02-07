@@ -16,6 +16,8 @@
             android:id="@+id/book_name"
             android:focusableInTouchMode="true"
             android:textSize="20sp"
+            android:layout_marginLeft="@dimen/horizontal_margin"
+            android:layout_marginRight="@dimen/horizontal_margin"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
