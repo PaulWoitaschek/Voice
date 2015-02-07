@@ -24,6 +24,8 @@ import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.utils.CoverDownloader;
@@ -37,6 +39,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
     public static final String BOOK_NAME = "BOOK_NAME";
     public static final String BOOK_COVER = "BOOK_COVER";
     public static final String DIALOG_TITLE = "DIALOG_TITLE";
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private CoverDownloader coverDownloader;
     private DraggableBoxImageView coverImageView;
     private ProgressBar coverReplacement;
@@ -271,7 +274,12 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
 
         @Override
         protected void onCancelled() {
-            coverDownloader.cancelDownload();
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    coverDownloader.cancelDownload();
+                }
+            });
         }
     }
 }
