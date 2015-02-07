@@ -3,7 +3,6 @@ package de.ph1b.audiobook.fragment;
 
 import android.app.Fragment;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
@@ -44,7 +43,6 @@ import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.service.StateManager;
-import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
 import de.ph1b.audiobook.utils.MusicUtil;
@@ -193,14 +191,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, State
         actionBar.setTitle(bookName);
 
         // (Cover)
-        String cover = book.getCover();
-        if (cover != null && new File(cover).isFile()) {
-            Picasso.with(getActivity()).load(new File(cover)).into(coverView);
-        } else {
-            L.d(TAG, "cover is null or no file, setting replacment");
-            Bitmap coverReplacement = ImageHelper.genCapital(bookName, getActivity(), ImageHelper.CoverType.COVER);
-            coverView.setImageBitmap(coverReplacement);
-        }
+        Picasso.with(getActivity()).load(new File(book.getCover())).into(coverView);
 
         // Next/Prev/spinner hiding
         if (book.getContainingMedia().size() == 1) {

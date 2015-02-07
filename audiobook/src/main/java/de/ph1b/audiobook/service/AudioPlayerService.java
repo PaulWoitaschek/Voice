@@ -21,7 +21,6 @@ import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.widget.RemoteViews;
 
-import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -308,13 +307,9 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
         String coverPath = book.getCover();
         Bitmap smallCover;
         Bitmap bigCover;
-        if (coverPath == null || coverPath.equals("") || !new File(coverPath).exists() || new File(coverPath).isDirectory()) {
-            smallCover = ImageHelper.genCapital(book.getName(), this, ImageHelper.CoverType.NOTIFICATION_SMALL);
-            bigCover = ImageHelper.genCapital(book.getName(), this, ImageHelper.CoverType.NOTIFICATION_BIG);
-        } else {
-            smallCover = ImageHelper.genBitmapFromFile(coverPath, this, ImageHelper.CoverType.NOTIFICATION_SMALL);
-            bigCover = ImageHelper.genBitmapFromFile(coverPath, this, ImageHelper.CoverType.NOTIFICATION_BIG);
-        }
+
+        smallCover = ImageHelper.genBitmapFromFile(coverPath, this, ImageHelper.CoverType.NOTIFICATION_SMALL);
+        bigCover = ImageHelper.genBitmapFromFile(coverPath, this, ImageHelper.CoverType.NOTIFICATION_BIG);
 
         Intent rewindIntent = ServiceController.getRewindIntent(this);
         PendingIntent rewindPI = PendingIntent.getService(getApplicationContext(), KeyEvent.KEYCODE_MEDIA_REWIND, rewindIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -382,13 +377,8 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
     private void updateRemoteControlClient() {
         Book book = controller.getBook();
 
-        String coverPath = book.getCover();
-        Bitmap bitmap;
-        if (coverPath == null || !new File(coverPath).exists() || new File(coverPath).isDirectory()) {
-            bitmap = ImageHelper.genCapital(book.getName(), getApplication(), ImageHelper.CoverType.COVER);
-        } else {
-            bitmap = ImageHelper.genBitmapFromFile(coverPath, AudioPlayerService.this, ImageHelper.CoverType.COVER);
-        }
+        Bitmap bitmap = ImageHelper.genBitmapFromFile(book.getCover(), AudioPlayerService.this, ImageHelper.CoverType.COVER);
+
         @SuppressWarnings("deprecation") RemoteControlClient.MetadataEditor editor = remoteControlClient.editMetadata(true);
         editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, book.getContainingMedia().get(book.getPosition()).getName());
         editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName());

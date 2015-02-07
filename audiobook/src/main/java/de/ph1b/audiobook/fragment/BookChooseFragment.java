@@ -34,7 +34,6 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
@@ -299,14 +298,8 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
             if (b.getId() == currentBookPosition) {
                 //setting cover
                 String coverPath = b.getCover();
-                if (coverPath == null || coverPath.equals("") || !new File(coverPath).exists() || new File(coverPath).isDirectory()) {
-                    String bookName = b.getName();
-                    Bitmap thumb = ImageHelper.genCapital(bookName, getActivity(), ImageHelper.CoverType.THUMB);
-                    currentCover.setImageBitmap(thumb);
-                } else if (new File(coverPath).isFile()) {
-                    Bitmap bitmap = ImageHelper.genBitmapFromFile(coverPath, getActivity(), ImageHelper.CoverType.THUMB);
-                    currentCover.setImageBitmap(bitmap);
-                }
+                Bitmap bitmap = ImageHelper.genBitmapFromFile(coverPath, getActivity(), ImageHelper.CoverType.THUMB);
+                currentCover.setImageBitmap(bitmap);
 
                 //setting text
                 currentText.setText(b.getName());

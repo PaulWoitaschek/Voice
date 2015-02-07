@@ -10,7 +10,6 @@ import android.graphics.Bitmap;
 import android.view.KeyEvent;
 import android.widget.RemoteViews;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
@@ -61,17 +60,12 @@ public class WidgetProvider extends AppWidgetProvider {
             // if we have any book, init the views and have a click on the whole widget start BookPlay.
             // if we have no book, simply have a click on the whole widget start BookChoose.
             if (book != null) {
-                Bitmap cover;
-                if (book.getCover() != null && new File(book.getCover()).exists()) {
-                    cover = ImageHelper.genBitmapFromFile(book.getCover(), context, ImageHelper.CoverType.NOTIFICATION_SMALL);
-                } else {
-                    cover = ImageHelper.genCapital(book.getName(), context, ImageHelper.CoverType.NOTIFICATION_SMALL);
-                }
+                Bitmap cover = ImageHelper.genBitmapFromFile(book.getCover(), context, ImageHelper.CoverType.NOTIFICATION_SMALL);
 
                 remoteViews.setImageViewBitmap(R.id.imageView, cover);
                 remoteViews.setTextViewText(R.id.title, book.getName());
 
-                if (StateManager.getInstance(context).getState() == PlayerStates.PLAYING){
+                if (StateManager.getInstance(context).getState() == PlayerStates.PLAYING) {
                     remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_48dp);
                 } else {
                     remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow_white_48dp);
