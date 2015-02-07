@@ -66,7 +66,6 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     private static final String TAG = "de.ph1b.audiobook.fragment.BookChooseFragment";
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    //private ArrayList<Book> details;
     private DataBaseHelper db;
     private MediaAdapter adapter;
     private ImageView currentCover;
@@ -93,7 +92,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         return columns > 2 ? columns : 2;
     }
 
-   
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -337,7 +336,12 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                 ArrayList<Book> updatedBooks = db.getAllBooks();
                 books.clear();
                 books.addAll(updatedBooks);
-                adapter.notifyDataSetChanged();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
             }
         });
 
