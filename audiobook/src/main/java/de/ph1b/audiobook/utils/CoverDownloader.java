@@ -17,7 +17,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,20 +26,20 @@ import java.util.List;
 public class CoverDownloader {
 
     private static final String TAG = "CoverDownloader";
-    private static final HashMap<String, ArrayList<URL>> searchStringMap = new HashMap<>();
-    private final Context c;
-
+    private static final HashMap<String, ArrayList<String>> searchMapping = new HashMap<>();
+    private final Picasso picasso;
     private Call call = null;
 
     public CoverDownloader(Context c) {
-        this.c = c;
+        picasso = Picasso.with(c);
     }
 
-    public void cancelDownload() {
+    public void cancel() {
         if (call != null) {
             call.cancel();
         }
     }
+
 
     /**
      * Returns a bitmap from google, defined by the searchText
@@ -50,56 +49,12 @@ public class CoverDownloader {
      * @return the generated bitmap. If no bitmap was found, returns null
      */
     public Bitmap getCover(String searchText, int number) {
-        if (number > 64) {
-            L.d(TAG, "Number exceeded results: " + number);
-            return null;
-        }
-
-        L.d(TAG, "Loading Cover with " + searchText + " and #" + String.valueOf(number));
-
-        ArrayList<URL> bitmapUrls;
-
-        URL searchURL;
-
-        // if there is a value corresponding to searchText, use that one
-        if (searchStringMap.containsKey(searchText)) {
-            L.d(TAG, "Found bitmapUrls");
-            bitmapUrls = searchStringMap.get(searchText);
-            if (number < bitmapUrls.size()) {
-                searchURL = bitmapUrls.get(number);
-                L.d(TAG, "Already got one in cache!:" + searchURL);
-            } else {
-                L.d(TAG, "Will look for a new eightSet because bitmapUrls is too small");
-                ArrayList<URL> newSetOfURL = new ArrayList<>();
-                newSetOfURL.addAll(bitmapUrls);
-                ArrayList<URL> newUrls = genNewURLs(searchText, bitmapUrls.size() + 1);
-                if (newUrls == null)
-                    return null;
-                newSetOfURL.addAll(newUrls);
-                searchStringMap.put(searchText, newSetOfURL);
-                searchURL = newSetOfURL.get(0);
-                L.d(TAG, "Got one: " + searchURL);
-            }
-        } else {
-            L.d(TAG, "Didn't find bitmapUrls");
-            ArrayList<URL> newUrls = genNewURLs(searchText, number);
-            if (newUrls.size() == 0) {
-                return null;
-            }
-            searchStringMap.put(searchText, newUrls);
-            searchURL = newUrls.get(0);
-            L.d(TAG, "But made a new one, returning:" + searchURL);
-        }
-
-        if (searchURL != null) {
-            int reqLength = ImageHelper.getCoverLength(c);
-            //returned bitmap in the desired 1:1 ratio and cropping automatically
-            try {
-                return Picasso.with(c).load(searchURL.toString()).resize(reqLength, reqLength).get();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+        String bitmapUrl = getBitmapUrl(searchText, number);
+        try {
+            L.v(TAG, "number=" + number + ", url=" + bitmapUrl);
+            return picasso.load(bitmapUrl).get();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -124,22 +79,42 @@ public class CoverDownloader {
     }
 
 
-    /**
-     * Gens a new set of urls pointing to covers.
-     *
-     * @param searchText The name of the audiobook
-     * @param startPage  the (google-) page to begin with
-     * @return the new URLs
-     */
-    private ArrayList<URL> genNewURLs(String searchText, int startPage) {
-        searchText = searchText + " cover";
-        ArrayList<URL> urls = new ArrayList<>();
+    public String getBitmapUrl(String searchText, int number) {
+        if (searchMapping.containsKey(searchText)) {
+            ArrayList<String> containing = searchMapping.get(searchText);
+            if (number < containing.size()) {
+                return containing.get(number);
+            } else {
+                int startPoint = containing.size();
+                L.v(TAG, "looking for new set at startPoint=" + startPoint);
+                ArrayList<String> newSet = getNewLinks(searchText, startPoint);
+                if (newSet.size() > 0) {
+                    containing.addAll(newSet);
+                    return newSet.get(0);
+                } else {
+                    return null;
+                }
+            }
+        } else {
+            ArrayList<String> newSet = getNewLinks(searchText, 0);
+            if (newSet.size() > 0) {
+                searchMapping.put(searchText, newSet);
+                return newSet.get(0);
+            } else {
+                return null;
+            }
+        }
+    }
 
+    private ArrayList<String> getNewLinks(String searchText, int startPage) {
+        ArrayList<String> newStrings = new ArrayList<>();
+
+        searchText = searchText + " cover";
         try {
             String url = "https://ajax.googleapis.com/ajax/services/search/" +
                     "images?v=1.0&imgsz=large%7Cxlarge&rsz=8&q=" +
                     URLEncoder.encode(searchText, "UTF-8") + //query
-                    "&start=" + startPage + //startpage
+                    "&start=" + startPage + //start-page
                     "&userip=" + getIPAddress(); //ip
 
             OkHttpClient client = new OkHttpClient();
@@ -154,11 +129,12 @@ public class CoverDownloader {
             JSONArray results = responseData.getJSONArray("results");
 
             for (int i = 0; i < results.length(); i++) {
-                urls.add(new URL(results.getJSONObject(i).getString("url")));
+                newStrings.add(results.getJSONObject(i).getString("url"));
             }
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
-        return urls;
+
+        return newStrings;
     }
 }

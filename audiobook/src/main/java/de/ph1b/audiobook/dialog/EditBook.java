@@ -277,7 +277,7 @@ public class EditBook extends DialogFragment implements View.OnClickListener {
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    coverDownloader.cancelDownload();
+                    coverDownloader.cancel();
                 }
             });
         }

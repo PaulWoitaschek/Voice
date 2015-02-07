@@ -41,7 +41,7 @@ public class ImageHelper {
     }
 
 
-    public static int getCoverLength(Context c) {
+    private static int getCoverLength(Context c) {
         c.getResources().getDisplayMetrics();
         DisplayMetrics metrics = c.getResources().getDisplayMetrics();
         int displayWidth = metrics.widthPixels;
