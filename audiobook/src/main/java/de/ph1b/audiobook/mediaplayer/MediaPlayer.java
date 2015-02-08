@@ -78,7 +78,7 @@ public class MediaPlayer {
     public int getCurrentPosition() {
         switch (state) {
             case ERROR:
-                error("getCurrentPosition", state);
+                error("getcurrentposition", state);
                 break;
             default:
                 return (int) (extractor.getSampleTime() / 1000);
@@ -107,28 +107,29 @@ public class MediaPlayer {
         switch (state) {
             case STARTED:
             case PAUSED:
+            case PLAYBACK_COMPLETED:
                 track.pause();
                 state = State.PAUSED;
                 L.d(TAG, "State changed to STATE_PAUSED");
                 stayAwake(false);
-                break;
-            case PLAYBACK_COMPLETED:
                 break;
             default:
                 error("pause", state);
         }
     }
 
-    public void prepare() {
+    private void error(String methodName, State lastState) {
+        State oldState = State.values()[lastState.ordinal()];
+        state = State.ERROR;
+        stayAwake(false);
+        throw new IllegalStateException("Called " + methodName + " in state=" + oldState);
+    }
+
+    public void prepare() throws IOException {
         switch (state) {
             case INITIALIZED:
             case STOPPED:
-                try {
-                    initStream();
-                } catch (IOException | IllegalArgumentException e) {
-                    error("Failed setting data source!:" + e.toString());
-                    return;
-                }
+                initStream();
                 state = State.PREPARED;
                 L.d(TAG, "State changed to STATE_PREPARED");
                 break;
@@ -146,6 +147,7 @@ public class MediaPlayer {
                 track.play();
                 decode();
                 stayAwake(true);
+                break;
             case STARTED:
                 break;
             case PAUSED:
@@ -191,9 +193,7 @@ public class MediaPlayer {
                 }
             }
         } catch (InterruptedException e) {
-            L.e(TAG,
-                    "Interrupted in reset while waiting for decoder thread to stop.",
-                    e);
+            L.e(TAG, "Interrupted in reset while waiting for decoder thread to stop.", e);
         }
         if (codec != null) {
             codec.release();
@@ -251,15 +251,6 @@ public class MediaPlayer {
         }
     }
 
-    private void error(String who, State cause) {
-        error("Moved to error state because " + who + " was called in state=" + cause);
-    }
-
-    private void error(String reason) {
-        L.e(TAG, reason);
-        stayAwake(false);
-        state = State.ERROR;
-    }
 
     private int findFormatFromChannels(int numChannels) {
         switch (numChannels) {

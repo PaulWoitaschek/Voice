@@ -49,14 +49,14 @@ public class MediaPlayerCompat {
     }
 
     public void prepare() {
-        if (useCustomMediaPlayer) {
-            customMediaPlayer.prepare();
-        } else {
-            try {
+        try {
+            if (useCustomMediaPlayer) {
+                customMediaPlayer.prepare();
+            } else {
                 androidMediaPlayer.prepare();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
