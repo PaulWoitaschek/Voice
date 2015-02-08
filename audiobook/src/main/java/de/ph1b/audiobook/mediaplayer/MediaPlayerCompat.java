@@ -13,7 +13,7 @@ public class MediaPlayerCompat {
     private MediaPlayer customMediaPlayer;
 
     public MediaPlayerCompat(Context c) {
-        useCustomMediaPlayer = Build.VERSION.SDK_INT >= 16;
+        useCustomMediaPlayer = (Build.VERSION.SDK_INT >= 16);
 
         if (useCustomMediaPlayer) {
             customMediaPlayer = new MediaPlayer(c);

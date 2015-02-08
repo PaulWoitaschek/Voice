@@ -261,40 +261,45 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
-    public void onStateChanged(PlayerStates state) {
-        if (controller != null) {
-            switch (state) {
-                case PLAYING:
-                    audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+    public void onStateChanged(final PlayerStates state) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                if (controller != null) {
+                    switch (state) {
+                        case PLAYING:
+                            audioManager.requestAudioFocus(AudioPlayerService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
-                    startForeground(NOTIFICATION_ID, getNotification());
+                            startForeground(NOTIFICATION_ID, getNotification());
 
-                    if (Build.VERSION.SDK_INT >= 14) {
-                        //noinspection deprecation
-                        remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
-                        updateRemoteControlClient();
+                            if (Build.VERSION.SDK_INT >= 14) {
+                                //noinspection deprecation
+                                remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
+                                updateRemoteControlClient();
+                            }
+                            break;
+                        case PAUSED:
+                            // audioManager.abandonAudioFocus(this);
+                            notificationManager.notify(NOTIFICATION_ID, getNotification());
+                            stopForeground(false);
+                            if (Build.VERSION.SDK_INT >= 14) {
+                                //noinspection deprecation
+                                remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
+                            }
+                            break;
+                        case STOPPED:
+                            audioManager.abandonAudioFocus(AudioPlayerService.this);
+                            notificationManager.cancel(NOTIFICATION_ID);
+                            stopForeground(true);
+                            if (Build.VERSION.SDK_INT >= 14) {
+                                //noinspection deprecation
+                                remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_STOPPED);
+                            }
+                            break;
                     }
-                    break;
-                case PAUSED:
-                    // audioManager.abandonAudioFocus(this);
-                    notificationManager.notify(NOTIFICATION_ID, getNotification());
-                    stopForeground(false);
-                    if (Build.VERSION.SDK_INT >= 14) {
-                        //noinspection deprecation
-                        remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
-                    }
-                    break;
-                case STOPPED:
-                    audioManager.abandonAudioFocus(this);
-                    notificationManager.cancel(NOTIFICATION_ID);
-                    stopForeground(true);
-                    if (Build.VERSION.SDK_INT >= 14) {
-                        //noinspection deprecation
-                        remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_STOPPED);
-                    }
-                    break;
+                }
             }
-        }
+        });
     }
 
     private Notification getNotification() {
@@ -340,9 +345,16 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
         bigViewRemote.setOnClickPendingIntent(R.id.closeButton, stopPI);
 
         try {
-            Bitmap cover = Picasso.with(AudioPlayerService.this).load(new File(book.getCover())).get();
-            smallViewRemote.setImageViewBitmap(R.id.imageView, cover);
-            bigViewRemote.setImageViewBitmap(R.id.imageView, cover);
+            int smallNotificationSize = getResources().getDimensionPixelSize(R.dimen.notification_small);
+            Bitmap smallCover = Picasso.with(AudioPlayerService.this).load(new File(book.getCover()))
+                    .resize(smallNotificationSize, smallNotificationSize).get();
+            smallViewRemote.setImageViewBitmap(R.id.imageView, smallCover);
+
+            int bigNotificationSize = getResources().getDimensionPixelSize(R.dimen.notification_big);
+            Bitmap bigCover = Picasso.with(AudioPlayerService.this).load(new File(book.getCover()))
+                    .resize(bigNotificationSize, bigNotificationSize).get();
+            bigViewRemote.setImageViewBitmap(R.id.imageView, bigCover);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
