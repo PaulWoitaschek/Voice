@@ -56,6 +56,7 @@ public class MediaPlayer {
     private long duration;
 
     public MediaPlayer(Context context) {
+        L.v(TAG, "constructor called");
         state = State.IDLE;
         speed = (float) 1.0;
         pitch = (float) 1.0;
@@ -104,13 +105,18 @@ public class MediaPlayer {
     }
 
     public void pause() {
+        L.v(TAG, "pause called");
         switch (state) {
+            case PLAYBACK_COMPLETED:
+                state = State.PAUSED;
+                L.d(TAG, "State changed to: " + state);
+                stayAwake(false);
+                break;
             case STARTED:
             case PAUSED:
-            case PLAYBACK_COMPLETED:
                 track.pause();
                 state = State.PAUSED;
-                L.d(TAG, "State changed to STATE_PAUSED");
+                L.d(TAG, "State changed to: " + state);
                 stayAwake(false);
                 break;
             default:
@@ -121,17 +127,19 @@ public class MediaPlayer {
     private void error(String methodName, State lastState) {
         State oldState = State.values()[lastState.ordinal()];
         state = State.ERROR;
+        L.d(TAG, "State changed to: " + state);
         stayAwake(false);
         throw new IllegalStateException("Called " + methodName + " in state=" + oldState);
     }
 
     public void prepare() throws IOException {
+        L.v(TAG, "prepare called in state: " + state);
         switch (state) {
             case INITIALIZED:
             case STOPPED:
                 initStream();
                 state = State.PREPARED;
-                L.d(TAG, "State changed to STATE_PREPARED");
+                L.d(TAG, "State changed to: " + state);
                 break;
             default:
                 error("prepare", state);
@@ -139,10 +147,17 @@ public class MediaPlayer {
     }
 
     public void start() {
+        L.v(TAG, "start called in state:" + state);
         switch (state) {
-            case PREPARED:
             case PLAYBACK_COMPLETED:
+                try {
+                    initStream();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            case PREPARED:
                 state = State.STARTED;
+                L.d(TAG, "State changed to: " + state);
                 mContinue = true;
                 track.play();
                 decode();
@@ -152,6 +167,7 @@ public class MediaPlayer {
                 break;
             case PAUSED:
                 state = State.STARTED;
+                L.d(TAG, "State changed to: " + state);
                 synchronized (mDecoderLock) {
                     mDecoderLock.notify();
                 }
@@ -173,12 +189,15 @@ public class MediaPlayer {
     }
 
     public void release() {
+        L.v(TAG, "release called in state:" + state);
         reset(); //reset will release wakelock
         onCompletionListener = null;
         state = State.END;
+        L.d(TAG, "State changed to: " + state);
     }
 
     public void reset() {
+        L.v(TAG, "reste called in state: " + state);
         stayAwake(false);
         lock.lock();
         mContinue = false;
@@ -208,6 +227,7 @@ public class MediaPlayer {
             track = null;
         }
         state = State.IDLE;
+        L.d(TAG, "State changed to: " + state);
         lock.unlock();
     }
 
@@ -244,7 +264,7 @@ public class MediaPlayer {
             case IDLE:
                 this.path = path;
                 state = State.INITIALIZED;
-                L.d(TAG, "Moving state to STATE_INITIALIZED");
+                L.d(TAG, "State changed to: " + state);
                 break;
             default:
                 error("setDataSource", state);
@@ -264,6 +284,7 @@ public class MediaPlayer {
     }
 
     private void initStream() throws IOException, IllegalArgumentException {
+        L.v(TAG, "inistream called in state=" + state);
         lock.lock();
         extractor = new MediaExtractor();
         if (path != null) {
@@ -288,6 +309,7 @@ public class MediaPlayer {
     }
 
     private void initDevice(int sampleRate, int numChannels) {
+        L.d(TAG, "initdevice called in state:" + state);
         lock.lock();
         final int format = findFormatFromChannels(numChannels);
         final int minSize = AudioTrack.getMinBufferSize(sampleRate, format,
@@ -300,6 +322,7 @@ public class MediaPlayer {
     }
 
     private void decode() {
+        L.d(TAG, "decode called ins state=" + state);
         decoderThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -396,6 +419,7 @@ public class MediaPlayer {
                 mIsDecoding = false;
                 if (mContinue && (sawInputEOS || sawOutputEOS)) {
                     state = State.PLAYBACK_COMPLETED;
+                    L.d(TAG, "State changed to: " + state);
                     Thread t = new Thread(new Runnable() {
                         @Override
                         public void run() {

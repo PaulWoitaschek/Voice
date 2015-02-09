@@ -30,6 +30,7 @@ public class MediaPlayerController {
     private final MediaPlayerCompat mediaPlayer;
     private final DataBaseHelper db;
     private final ScheduledExecutorService sandMan = Executors.newSingleThreadScheduledExecutor();
+    private volatile State state;
     private final MediaPlayerCompat.OnCompletionListener onCompletionListener = new MediaPlayerCompat.OnCompletionListener() {
         @Override
         public void onCompletion() {
@@ -37,10 +38,11 @@ public class MediaPlayerController {
                 next();
             } else {
                 positionUpdater.stopUpdating();
+                extState.setState(PlayerStates.STOPPED);
+                state = State.PLAYBACK_COMPLETED;
             }
         }
     };
-    private volatile State state;
     private ScheduledFuture<?> sleepSand;
     private volatile boolean stopAfterCurrentTrack = false;
 
