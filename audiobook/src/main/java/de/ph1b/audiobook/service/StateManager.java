@@ -5,8 +5,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import de.ph1b.audiobook.receiver.WidgetProvider;
 import de.ph1b.audiobook.utils.L;
@@ -15,7 +15,7 @@ import de.ph1b.audiobook.utils.L;
 public class StateManager {
     private static final String TAG = "StateManager";
     private static StateManager instance;
-    private final List<ChangeListener> listeners = new ArrayList<>();
+    private final List<ChangeListener> listeners = new CopyOnWriteArrayList<>(); //to avoid massive synchronization
     private final Context c;
     private PlayerStates state = PlayerStates.STOPPED;
     private int time;
