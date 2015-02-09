@@ -21,7 +21,6 @@ import android.media.AudioTrack;
 import android.media.MediaCodec;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
-import android.net.Uri;
 import android.os.PowerManager;
 
 import org.vinuxproject.sonic.Sonic;
@@ -36,11 +35,9 @@ import de.ph1b.audiobook.utils.L;
 public class MediaPlayer {
     private final static int TRACK_NUM = 0;
     private static final String TAG = "MediaPlayer";
-    private final Uri uri;
     private final ReentrantLock lock = new ReentrantLock();
     private final Object mDecoderLock;
     private final float pitch;
-    private final Context mContext;
     private final PowerManager.WakeLock wakeLock;
     private AudioTrack track;
     private Sonic sonic;
@@ -62,9 +59,7 @@ public class MediaPlayer {
         pitch = (float) 1.0;
         mContinue = false;
         mIsDecoding = false;
-        mContext = context;
         path = null;
-        uri = null;
         mDecoderLock = new Object();
 
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
@@ -289,8 +284,6 @@ public class MediaPlayer {
         extractor = new MediaExtractor();
         if (path != null) {
             extractor.setDataSource(path);
-        } else if (uri != null) {
-            extractor.setDataSource(mContext, uri, null);
         } else {
             throw new IOException();
         }
