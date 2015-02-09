@@ -122,9 +122,8 @@ public class MediaPlayer {
     private void error(String methodName, State lastState) {
         State oldState = State.values()[lastState.ordinal()];
         state = State.ERROR;
-        L.d(TAG, "State changed to: " + state);
         stayAwake(false);
-        throw new IllegalStateException("Called " + methodName + " in state=" + oldState);
+        L.e(TAG, "Called " + methodName + " in state=" + oldState);
     }
 
     public void prepare() throws IOException {
