@@ -25,6 +25,7 @@
             android:layout_weight="1"
             android:hint="@string/bookmark_edit_hint"
             android:inputType="textCapSentences|textAutoCorrect"
+            android:imeOptions="actionDone"
             android:layout_marginRight="8dp"
             android:layout_marginEnd="8dp"
             android:layout_height="wrap_content" />

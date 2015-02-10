@@ -11,14 +11,17 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -145,8 +148,18 @@ public class BookmarkDialog extends DialogFragment {
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
         recyclerView.setLayoutManager(layoutManager);
 
-        ImageView addButton = (ImageView) v.findViewById(R.id.add);
+        final ImageView addButton = (ImageView) v.findViewById(R.id.add);
         final EditText bookmarkTitle = (EditText) v.findViewById(R.id.edit1);
+        bookmarkTitle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    addButton.performClick(); //same as clicking on the +
+                    return true;
+                }
+                return false;
+            }
+        });
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
