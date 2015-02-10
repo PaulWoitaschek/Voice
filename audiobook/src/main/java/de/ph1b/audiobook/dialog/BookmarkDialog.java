@@ -151,7 +151,6 @@ public class BookmarkDialog extends DialogFragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 long bookId = book.getId();
                 int time = stateManager.getTime();
                 int position = stateManager.getPosition();
@@ -165,16 +164,13 @@ public class BookmarkDialog extends DialogFragment {
                 Bookmark bookmark = new Bookmark(bookId, position, time);
                 bookmark.setTitle(title);
 
-                boolean alreadyContaining = allBookmarks.contains(bookmark);
-                if (alreadyContaining) {
-                    Toast.makeText(getActivity(), R.string.bookmark_exists, Toast.LENGTH_SHORT).show();
-                } else {
-                    long id = db.addBookmark(bookmark);
-                    bookmark.setId(id);
-                    int index = adapter.addItem(bookmark);
-                    recyclerView.smoothScrollToPosition(index);
-                    bookmarkTitle.setText("");
-                }
+                long id = db.addBookmark(bookmark);
+                bookmark.setId(id);
+                int index = adapter.addItem(bookmark);
+                recyclerView.smoothScrollToPosition(index);
+                bookmarkTitle.setText("");
+                Toast.makeText(getActivity(), R.string.bookmark_added, Toast.LENGTH_SHORT).show();
+                dismiss();
             }
         });
 
