@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.TaskStackBuilder;
 import android.view.KeyEvent;
 import android.widget.RemoteViews;
 
@@ -15,7 +16,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.BookChoose;
 import de.ph1b.audiobook.activity.BookPlay;
 import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.DataBaseHelper;
@@ -49,23 +49,25 @@ public class WidgetProvider extends AppWidgetProvider {
     private void initBookRelated(RemoteViews remoteViews, Context context, Book book) {
         // if we have any book, init the views and have a click on the whole widget start BookPlay.
         // if we have no book, simply have a click on the whole widget start BookChoose.
+        PendingIntent wholeWidgetClickPI;
+        Intent wholeWidgetClickI = new Intent(context, BookPlay.class);
         if (book != null) {
-            //   Picasso.with(context).load(new File(book.getCover())).into(remoteViews, R.id.imageView, appWidgetIds);
             remoteViews.setTextViewText(R.id.title, book.getName());
-
             String name = book.getContainingMedia().get(book.getPosition()).getName();
             remoteViews.setTextViewText(R.id.summary, name);
 
-            Intent wholeWidgetClickI = new Intent(context, BookPlay.class);
+            // building back-stack.
             wholeWidgetClickI.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            PendingIntent wholeWidgetClickPI = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
-            remoteViews.setOnClickPendingIntent(R.id.imageView, wholeWidgetClickPI);
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+            stackBuilder.addParentStack(BookPlay.class);
+            stackBuilder.addNextIntent(wholeWidgetClickI);
+            wholeWidgetClickPI = stackBuilder.getPendingIntent((int) System.currentTimeMillis(), PendingIntent.FLAG_UPDATE_CURRENT);
         } else {
-            Intent wholeWidgetClickI = new Intent(context, BookChoose.class);
-            wholeWidgetClickI.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            PendingIntent wholeWidgetClickPI = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
-            remoteViews.setOnClickPendingIntent(R.id.imageView, wholeWidgetClickPI);
+            // directly going back to bookChoose
+            wholeWidgetClickPI = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
         }
+
+        remoteViews.setOnClickPendingIntent(R.id.imageView, wholeWidgetClickPI);
     }
 
     private Book getCurrentBook(Context context) {
