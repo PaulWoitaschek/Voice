@@ -181,7 +181,7 @@ public class BookmarkDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(v);
         builder.setTitle(R.string.bookmark);
-        builder.setNegativeButton(R.string.abort, null);
+        builder.setNegativeButton(R.string.dialog_cancel, null);
         dialog = builder.create();
         return dialog;
     }
