@@ -96,6 +96,14 @@ public class Bookmark implements Comparable<Bookmark> {
             return -1;
         }
 
+        if (title.length() > 0) {
+            if (title.charAt(0) > another.title.charAt(0)) {
+                return 1;
+            } else if (title.charAt(0) < another.title.charAt(0)) {
+                return -1;
+            }
+        }
+
         return 0;
     }
 }
