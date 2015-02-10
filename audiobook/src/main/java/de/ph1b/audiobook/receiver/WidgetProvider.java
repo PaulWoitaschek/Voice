@@ -67,7 +67,7 @@ public class WidgetProvider extends AppWidgetProvider {
             wholeWidgetClickPI = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
-        remoteViews.setOnClickPendingIntent(R.id.imageView, wholeWidgetClickPI);
+        remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI);
     }
 
     private Book getCurrentBook(Context context) {
