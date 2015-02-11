@@ -4,6 +4,7 @@
     android:id="@+id/wholeWidget"
     android:orientation="vertical"
     android:background="@drawable/widget_background"
+    android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/widget_margin"
