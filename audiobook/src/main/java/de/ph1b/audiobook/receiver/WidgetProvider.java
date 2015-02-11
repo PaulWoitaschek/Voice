@@ -90,19 +90,16 @@ public class WidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(final Context context, final AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
-
-
         Book book = getCurrentBook(context);
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget);
-
-        for (int appWidgetId : appWidgetIds) {
-            initButtons(remoteViews, context);
-            initBookRelated(remoteViews, context, book);
-            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-        }
-
+        initButtons(remoteViews, context);
+        initBookRelated(remoteViews, context, book);
         if (book != null) {
             Picasso.with(context).load(new File(book.getCover())).into(remoteViews, R.id.imageView, appWidgetIds);
+        }
+
+        for (int appWidgetId : appWidgetIds) {
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
         }
     }
 }
