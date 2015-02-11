@@ -2,7 +2,6 @@ package de.ph1b.audiobook.receiver;
 
 
 import android.app.PendingIntent;
-import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
@@ -24,9 +23,9 @@ import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.service.StateManager;
 import de.ph1b.audiobook.utils.Prefs;
 
-public class WidgetProvider extends AppWidgetProvider {
+public abstract class BaseWidgetProvider extends AppWidgetProvider {
 
-    private void initButtons(RemoteViews remoteViews, Context context) {
+    protected void initButtons(RemoteViews remoteViews, Context context, Book book) {
         Intent playPauseI = ServiceController.getPlayPauseIntent(context);
         PendingIntent playPausePI = PendingIntent.getService(context, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseI, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI);
@@ -44,9 +43,7 @@ public class WidgetProvider extends AppWidgetProvider {
         } else {
             remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow_white_48dp);
         }
-    }
 
-    private void initBookRelated(RemoteViews remoteViews, Context context, Book book) {
         // if we have any book, init the views and have a click on the whole widget start BookPlay.
         // if we have no book, simply have a click on the whole widget start BookChoose.
         PendingIntent wholeWidgetClickPI;
@@ -70,7 +67,8 @@ public class WidgetProvider extends AppWidgetProvider {
         remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI);
     }
 
-    private Book getCurrentBook(Context context) {
+
+    protected Book getCurrentBook(Context context) {
         // get book from database
         DataBaseHelper db = DataBaseHelper.getInstance(context);
         Prefs prefs = new Prefs(context);
@@ -88,18 +86,10 @@ public class WidgetProvider extends AppWidgetProvider {
         return book;
     }
 
-    @Override
-    public void onUpdate(final Context context, final AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
-        Book book = getCurrentBook(context);
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget);
-        initButtons(remoteViews, context);
-        initBookRelated(remoteViews, context, book);
+
+    protected void initCover(Book book, RemoteViews remoteViews, Context context, int[] appWidgetIds) {
         if (book != null) {
             Picasso.with(context).load(new File(book.getCover())).into(remoteViews, R.id.imageView, appWidgetIds);
-        }
-
-        for (int appWidgetId : appWidgetIds) {
-            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
         }
     }
 }
