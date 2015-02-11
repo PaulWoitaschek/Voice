@@ -25,7 +25,7 @@ import de.ph1b.audiobook.utils.Prefs;
 
 public abstract class BaseWidgetProvider extends AppWidgetProvider {
 
-    protected void initButtons(RemoteViews remoteViews, Context context, Book book) {
+    void initButtons(RemoteViews remoteViews, Context context, Book book) {
         Intent playPauseI = ServiceController.getPlayPauseIntent(context);
         PendingIntent playPausePI = PendingIntent.getService(context, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseI, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI);
@@ -68,7 +68,7 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
     }
 
 
-    protected Book getCurrentBook(Context context) {
+    Book getCurrentBook(Context context) {
         // get book from database
         DataBaseHelper db = DataBaseHelper.getInstance(context);
         Prefs prefs = new Prefs(context);
@@ -87,7 +87,7 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
     }
 
 
-    protected void initCover(Book book, RemoteViews remoteViews, Context context, int[] appWidgetIds) {
+    void initCover(Book book, RemoteViews remoteViews, Context context, int[] appWidgetIds) {
         if (book != null) {
             Picasso.with(context).load(new File(book.getCover())).into(remoteViews, R.id.imageView, appWidgetIds);
         }

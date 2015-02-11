@@ -65,7 +65,6 @@
     <string name="bookmark">Lesezeichen</string>
     <string name="bookmark_delete_title">Möchten Sie dieses Lesezeichen wirklich löschen?</string>
     <string name="bookmark_edit_title">Lesezeichen bearbeiten</string>
-    <string name="bookmark_exists">Es existiert bereits ein Lesezeichen an dieser Stelle.</string>
     <string name="acc_button_add_bookmark">Fügt an der aktuellen Stelle ein Lesezeichen hinzu.</string>
     <string name="bookmark_edit_hint">Lesezeichenname</string>
     <string name="pref_title_pause_on_transient">Pause bei Unterbrechung</string>
