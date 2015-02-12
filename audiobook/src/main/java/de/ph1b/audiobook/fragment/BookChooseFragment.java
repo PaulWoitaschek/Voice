@@ -63,7 +63,7 @@ import de.ph1b.audiobook.utils.Prefs;
 public class BookChooseFragment extends Fragment implements View.OnClickListener, EditBook.OnEditBookFinished, RecyclerView.OnItemTouchListener, StateManager.ChangeListener {
 
 
-    private static final String TAG = "de.ph1b.audiobook.fragment.BookChooseFragment";
+    private static final String TAG = BookChooseFragment.class.getSimpleName();
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private DataBaseHelper db;

@@ -25,7 +25,7 @@ import de.ph1b.audiobook.utils.L;
 
 public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> {
 
-    private static final String TAG = "MediaAdapter";
+    private static final String TAG = MediaAdapter.class.getSimpleName();
     private final ArrayList<Book> data;
     private final DataBaseHelper db;
     private final Context c;

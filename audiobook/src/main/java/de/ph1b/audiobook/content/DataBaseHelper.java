@@ -21,7 +21,7 @@ import de.ph1b.audiobook.utils.Prefs;
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class DataBaseHelper extends SQLiteOpenHelper {
 
-    private static final String TAG = "DataBaseHelper";
+    private static final String TAG = DataBaseHelper.class.getSimpleName();
 
     private static final String DATABASE_NAME = "audioBookDB";
     private static final int DATABASE_VERSION = 4;

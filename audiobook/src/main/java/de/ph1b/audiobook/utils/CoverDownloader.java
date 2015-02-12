@@ -25,7 +25,7 @@ import java.util.List;
 
 public class CoverDownloader {
 
-    private static final String TAG = "CoverDownloader";
+    private static final String TAG = CoverDownloader.class.getSimpleName();
     private static final HashMap<String, ArrayList<String>> searchMapping = new HashMap<>();
     private final Picasso picasso;
     private Call call = null;

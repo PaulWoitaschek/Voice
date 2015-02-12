@@ -54,7 +54,7 @@ import de.ph1b.audiobook.utils.MusicUtil;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
 
 public class FilesChooseFragment extends Fragment implements EditBook.OnEditBookFinished {
-    private static final String TAG = "de.ph1b.audiobook.fragment.FilesChooseFragment";
+    private static final String TAG = FilesChooseFragment.class.getSimpleName();
     private static final ArrayList<String> audioTypes;
 
     static {

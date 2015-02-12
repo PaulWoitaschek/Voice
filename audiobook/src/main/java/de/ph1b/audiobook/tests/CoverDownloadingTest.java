@@ -12,7 +12,7 @@ import de.ph1b.audiobook.utils.L;
 
 public class CoverDownloadingTest extends InstrumentationTestCase {
 
-    private static final String TAG = "CoverDownloadingTest";
+    private static final String TAG = CoverDownloadingTest.class.getSimpleName();
 
 
     /**

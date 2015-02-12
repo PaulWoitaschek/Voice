@@ -50,7 +50,7 @@ import de.ph1b.audiobook.utils.Prefs;
 
 public class BookPlayFragment extends Fragment implements OnClickListener, StateManager.ChangeListener {
 
-    private static final String TAG = "de.ph1b.audiobook.fragment.BookPlayFragment";
+    private static final String TAG = BookPlayFragment.class.getSimpleName();
     private final Handler handler = new Handler(Looper.getMainLooper());
     private StateManager stateManager;
     private volatile int duration = 0;

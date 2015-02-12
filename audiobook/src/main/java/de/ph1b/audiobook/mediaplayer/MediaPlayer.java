@@ -34,7 +34,7 @@ import de.ph1b.audiobook.utils.L;
 @TargetApi(16)
 public class MediaPlayer {
     private final static int TRACK_NUM = 0;
-    private static final String TAG = "MediaPlayer";
+    private static final String TAG = MediaPlayer.class.getSimpleName();
     private final ReentrantLock lock = new ReentrantLock();
     private final Object mDecoderLock;
     private final float pitch;

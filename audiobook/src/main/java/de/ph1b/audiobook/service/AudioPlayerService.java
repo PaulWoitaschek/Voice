@@ -41,7 +41,7 @@ import de.ph1b.audiobook.utils.Prefs;
 public class AudioPlayerService extends Service implements StateManager.ChangeListener, AudioManager.OnAudioFocusChangeListener {
 
 
-    private static final String TAG = "AudioPlayerService";
+    private static final String TAG = AudioPlayerService.class.getSimpleName();
     private static final int NOTIFICATION_ID = 42;
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private NotificationManager notificationManager;

@@ -20,7 +20,7 @@ import de.ph1b.audiobook.R;
 
 public class ImageHelper {
 
-    private static final String TAG = "CommonTasks";
+    private static final String TAG = ImageHelper.class.getSimpleName();
 
     public static Bitmap genCapital(String bookName, Context c) {
         int reqLength = getCoverLength(c);

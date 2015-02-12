@@ -20,7 +20,7 @@ import de.ph1b.audiobook.utils.Prefs;
 
 public class MediaPlayerController {
 
-    private static final String TAG = "MediaPlayerController";
+    private static final String TAG = MediaPlayerController.class.getSimpleName();
     private final Book book;
     private final Context c;
     private final StateManager extState;

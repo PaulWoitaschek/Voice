@@ -11,7 +11,7 @@ import de.ph1b.audiobook.utils.L;
 
 public class RemoteControlReceiver extends BroadcastReceiver {
 
-    private static final String TAG = "RemoteControlReceiver";
+    private static final String TAG = RemoteControlReceiver.class.getSimpleName();
 
     @Override
     public void onReceive(final Context context, Intent intent) {

@@ -7,7 +7,7 @@ import de.ph1b.audiobook.content.Media;
 
 public class MusicUtil {
 
-    private static final String TAG = "MusicUtil";
+    private static final String TAG = MusicUtil.class.getSimpleName();
 
     public static void fillMissingDuration(Media media) {
         MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();

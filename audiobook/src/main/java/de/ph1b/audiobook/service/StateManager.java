@@ -14,7 +14,7 @@ import de.ph1b.audiobook.utils.L;
 
 
 public class StateManager {
-    private static final String TAG = "StateManager";
+    private static final String TAG = StateManager.class.getSimpleName();
     private static StateManager instance;
     private final List<ChangeListener> listeners = new CopyOnWriteArrayList<>(); //to avoid massive synchronization
     private final Context c;
