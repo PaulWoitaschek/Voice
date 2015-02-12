@@ -454,15 +454,9 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
                 break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                 if (stateManager.getState() == PlayerStates.PLAYING) {
-                    if (prefs.pauseOnTransientAudioFocusLoss()) {
-                        L.d(TAG, "pausing because of transient loss");
-                        controller.pause();
-                        pauseBecauseLossTransient = true;
-                    } else {
-                        L.d(TAG, "lowering volume because of af loss transient can duck");
-                        audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
-                        pauseBecauseLossTransient = false;
-                    }
+                    L.d(TAG, "pausing because of transient loss");
+                    controller.pause();
+                    pauseBecauseLossTransient = true;
                 }
                 break;
             default:

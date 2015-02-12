@@ -78,8 +78,4 @@ public class PrefsManager {
     public boolean mobileConnectionAllowed() {
         return sp.getBoolean(c.getString(R.string.pref_key_cover_on_internet), false);
     }
-
-    public boolean pauseOnTransientAudioFocusLoss() {
-        return sp.getBoolean(c.getString(R.string.pref_key_pause_on_transient_interrupt), false);
-    }
 }

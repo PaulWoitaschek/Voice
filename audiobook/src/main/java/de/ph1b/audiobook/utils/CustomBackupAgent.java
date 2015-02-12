@@ -18,11 +18,9 @@ public class CustomBackupAgent extends BackupAgentHelper {
         String seekTime = getString(R.string.pref_key_seek_time);
         String sleepTime = getString(R.string.pref_key_sleep_time);
         String trackToEnd = getString(R.string.pref_key_track_to_end);
-        String pauseOnTransientInterrupt = getString(R.string.pref_key_pause_on_transient_interrupt);
 
         SharedPreferencesBackupHelper helper = new SharedPreferencesBackupHelper(this,
-                resumeOnReplug, coverOnInternet, seekTime, sleepTime, trackToEnd,
-                pauseOnTransientInterrupt);
+                resumeOnReplug, coverOnInternet, seekTime, sleepTime, trackToEnd);
         addHelper(BACKUP_KEY, helper);
     }
 }

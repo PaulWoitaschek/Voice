@@ -24,9 +24,4 @@
         android:summary="@string/pref_summary_track_to_end"
         android:title="@string/pref_title_track_to_end"
         android:defaultValue="false" />
-    <CheckBoxPreference
-        android:key="@string/pref_key_pause_on_transient_interrupt"
-        android:summary="@string/pref_summary_pause_on_transient"
-        android:title="@string/pref_title_pause_on_transient"
-        android:defaultValue="false" />
 </PreferenceScreen>
