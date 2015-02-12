@@ -32,7 +32,7 @@ import de.ph1b.audiobook.utils.DraggableBoxImageView;
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
 
-public class EditBook extends DialogFragment implements View.OnClickListener {
+public class EditBookDialog extends DialogFragment implements View.OnClickListener {
 
     public static final String BOOK_NAME = "BOOK_NAME";
     public static final String BOOK_COVER = "BOOK_COVER";

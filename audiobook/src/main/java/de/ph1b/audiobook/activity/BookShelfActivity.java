@@ -6,7 +6,7 @@ import android.preference.PreferenceManager;
 
 import de.ph1b.audiobook.R;
 
-public class BookChoose extends BaseActivity {
+public class BookShelfActivity extends BaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -28,12 +28,12 @@ import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.FolderAdapter;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
-import de.ph1b.audiobook.utils.Prefs;
+import de.ph1b.audiobook.utils.PrefsManager;
 
 public class FolderChooseFragment extends Fragment {
 
     private static final String CURRENT_FOLDER_NAME = "currentFolderName";
-    private Prefs prefs;
+    private PrefsManager prefs;
     private ArrayList<File> rootDirs;
     private File chosenFolder = null;
     private ArrayList<File> currentFolderContent;
@@ -115,7 +115,7 @@ public class FolderChooseFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         rootDirs = getStorageDirectories();
-        prefs = new Prefs(getActivity());
+        prefs = new PrefsManager(getActivity());
         currentFolderContent = new ArrayList<>(rootDirs);
         adapter = new FolderAdapter(getActivity(), currentFolderContent);
     }

@@ -18,10 +18,10 @@ import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
 
 
-public class JumpToPosition extends DialogFragment {
+public class JumpToPositionDialog extends DialogFragment {
 
-    public static final String POSITION = "position";
-    public static final String DURATION = "duration";
+    public static final String POSITION = "POSITION";
+    public static final String DURATION = "DURATION";
     private int durationInMinutes;
     private int biggestHour;
     private NumberPicker mPicker;

@@ -13,7 +13,7 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.FolderChooserActivity;
 import de.ph1b.audiobook.dialog.SeekPreferenceDialog;
 import de.ph1b.audiobook.dialog.SleepPreferenceDialog;
-import de.ph1b.audiobook.utils.Prefs;
+import de.ph1b.audiobook.utils.PrefsManager;
 
 
 public class PreferencesFragment extends PreferenceFragment {
@@ -24,7 +24,7 @@ public class PreferencesFragment extends PreferenceFragment {
             initValues();
         }
     };
-    private Prefs prefs;
+    private PrefsManager prefs;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class PreferencesFragment extends PreferenceFragment {
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        prefs = new Prefs(getActivity());
+        prefs = new PrefsManager(getActivity());
     }
 
     private void initValues() {
@@ -50,7 +50,7 @@ public class PreferencesFragment extends PreferenceFragment {
 
         Preference folderPreference = findPreference(getString(R.string.pref_key_root_folder));
         if (folderPreference != null) {
-            String preferenceSummary = new Prefs(getActivity()).getAudiobookFolder();
+            String preferenceSummary = new PrefsManager(getActivity()).getAudiobookFolder();
             if (preferenceSummary != null) {
                 folderPreference.setSummary(preferenceSummary);
             }

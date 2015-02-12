@@ -11,18 +11,18 @@ import android.widget.TextView;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
-import de.ph1b.audiobook.utils.Prefs;
+import de.ph1b.audiobook.utils.PrefsManager;
 
 
 public class SeekPreferenceDialog extends DialogPreference {
 
     private final int SEEK_BAR_MIN = 10;
-    private final Prefs prefs;
+    private final PrefsManager prefs;
     private SeekBar seekBar;
 
     public SeekPreferenceDialog(Context context, AttributeSet attrs) {
         super(context, attrs);
-        prefs = new Prefs(context);
+        prefs = new PrefsManager(context);
         setDialogTitle(context.getString(R.string.pref_seek_time));
         setDialogLayoutResource(R.layout.dialog_amount_chooser);
     }

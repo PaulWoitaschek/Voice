@@ -11,12 +11,12 @@ import android.widget.TextView;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
-import de.ph1b.audiobook.utils.Prefs;
+import de.ph1b.audiobook.utils.PrefsManager;
 
 
 public class SleepPreferenceDialog extends DialogPreference {
 
-    private final Prefs prefs;
+    private final PrefsManager prefs;
     private TextView timeView;
     private NumberPicker numberPicker;
 
@@ -24,7 +24,7 @@ public class SleepPreferenceDialog extends DialogPreference {
         super(context, attrs);
         setDialogTitle(context.getResources().getString(R.string.pref_sleep_time));
         setDialogLayoutResource(R.layout.dialog_sleep_timer);
-        prefs = new Prefs(context);
+        prefs = new PrefsManager(context);
     }
 
 

@@ -40,13 +40,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.BookPlay;
-import de.ph1b.audiobook.activity.FilesChoose;
-import de.ph1b.audiobook.activity.Settings;
+import de.ph1b.audiobook.activity.BookPlayActivity;
+import de.ph1b.audiobook.activity.FilesChooseActivity;
+import de.ph1b.audiobook.activity.SettingsActivity;
 import de.ph1b.audiobook.adapter.MediaAdapter;
 import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.DataBaseHelper;
-import de.ph1b.audiobook.dialog.EditBook;
+import de.ph1b.audiobook.dialog.EditBookDialog;
 import de.ph1b.audiobook.interfaces.OnItemClickListener;
 import de.ph1b.audiobook.interfaces.OnItemLongClickListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
@@ -57,13 +57,13 @@ import de.ph1b.audiobook.utils.CustomOnSimpleGestureListener;
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
-import de.ph1b.audiobook.utils.Prefs;
+import de.ph1b.audiobook.utils.PrefsManager;
 
 
-public class BookChooseFragment extends Fragment implements View.OnClickListener, EditBook.OnEditBookFinished, RecyclerView.OnItemTouchListener, StateManager.ChangeListener {
+public class BookShelfFragment extends Fragment implements View.OnClickListener, EditBookDialog.OnEditBookFinished, RecyclerView.OnItemTouchListener, StateManager.ChangeListener {
 
 
-    private static final String TAG = BookChooseFragment.class.getSimpleName();
+    private static final String TAG = BookShelfFragment.class.getSimpleName();
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private DataBaseHelper db;
@@ -72,7 +72,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     private TextView currentText;
     private ImageButton currentPlaying;
     private ViewGroup current;
-    private Prefs prefs;
+    private PrefsManager prefs;
     private GestureDetectorCompat detector;
     private Book bookToEdit;
     private float scrollBy = 0;
@@ -104,7 +104,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
         getActivity().startService(serviceIntent);
 
         db = DataBaseHelper.getInstance(getActivity());
-        prefs = new Prefs(getActivity());
+        prefs = new PrefsManager(getActivity());
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
     }
 
@@ -132,7 +132,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
 
                 prefs.setCurrentBookId(bookId);
 
-                Intent i = new Intent(getActivity(), BookPlay.class);
+                Intent i = new Intent(getActivity(), BookPlayActivity.class);
                 startActivity(i);
             }
 
@@ -150,7 +150,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.edit_book:
-                                EditBook editBook = new EditBook();
+                                EditBookDialog editBookDialog = new EditBookDialog();
                                 Bundle bundle = new Bundle();
 
                                 ArrayList<Bitmap> bitmap = new ArrayList<>();
@@ -158,13 +158,13 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                                 if (defaultCover != null)
                                     bitmap.add(defaultCover);
 
-                                bundle.putParcelableArrayList(EditBook.BOOK_COVER, bitmap);
-                                bundle.putString(EditBook.DIALOG_TITLE, getString(R.string.edit_book_title));
-                                bundle.putString(EditBook.BOOK_NAME, bookToEdit.getName());
+                                bundle.putParcelableArrayList(EditBookDialog.BOOK_COVER, bitmap);
+                                bundle.putString(EditBookDialog.DIALOG_TITLE, getString(R.string.edit_book_title));
+                                bundle.putString(EditBookDialog.BOOK_NAME, bookToEdit.getName());
 
-                                editBook.setArguments(bundle);
-                                editBook.setTargetFragment(BookChooseFragment.this, 0);
-                                editBook.show(getFragmentManager(), TAG);
+                                editBookDialog.setArguments(bundle);
+                                editBookDialog.setTargetFragment(BookShelfFragment.this, 0);
+                                editBookDialog.show(getFragmentManager(), TAG);
                                 return true;
                             case R.id.delete_book:
                                 Book deleteBook = adapter.getItem(position);
@@ -307,7 +307,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                 current.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent i = new Intent(getActivity(), BookPlay.class);
+                        Intent i = new Intent(getActivity(), BookPlayActivity.class);
                         startActivity(i);
                     }
                 });
@@ -365,7 +365,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                startActivity(new Intent(getActivity(), Settings.class));
+                startActivity(new Intent(getActivity(), SettingsActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -379,7 +379,7 @@ public class BookChooseFragment extends Fragment implements View.OnClickListener
                 controller.playPause();
                 break;
             case R.id.fab:
-                Intent i = new Intent(getActivity(), FilesChoose.class);
+                Intent i = new Intent(getActivity(), FilesChooseActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
                 break;

@@ -20,7 +20,7 @@ import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
-import de.ph1b.audiobook.utils.Prefs;
+import de.ph1b.audiobook.utils.PrefsManager;
 
 public class SetPlaybackSpeedDialog extends DialogFragment {
 
@@ -41,7 +41,7 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
         final TextView textView = (TextView) v.findViewById(R.id.textView);
 
         // setting current speed
-        Prefs prefs = new Prefs(getActivity());
+        PrefsManager prefs = new PrefsManager(getActivity());
         Book book = DataBaseHelper.getInstance(getActivity()).getBook(prefs.getCurrentBookId());
         speed = book.getPlaybackSpeed();
         textView.setText(formatTime(speed));

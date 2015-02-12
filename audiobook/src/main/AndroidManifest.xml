@@ -11,7 +11,7 @@
 
     <application
         android:name=".utils.BaseApplication"
-        android:backupAgent=".utils.BAgent"
+        android:backupAgent=".utils.CustomBackupAgent"
         android:allowBackup="true"
         android:supportsRtl="true"
         android:icon="@mipmap/ic_launcher"
@@ -24,7 +24,7 @@
             android:value="AEdPqrEAAAAIjeSB6A5JNJpRSV5yPq22PvZtl95fWDzDIuk63w" />
 
         <activity
-            android:name=".activity.BookChoose"
+            android:name=".activity.BookShelfActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,33 +35,33 @@
         <activity android:name=".activity.FolderChooserActivity" />
 
         <activity
-            android:name=".activity.BookPlay"
-            android:parentActivityName=".activity.BookChoose">
+            android:name=".activity.BookPlayActivity"
+            android:parentActivityName=".activity.BookShelfActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.BookChoose" />
+                android:value=".activity.BookShelfActivity" />
         </activity>
 
         <activity
-            android:name=".activity.FilesChoose"
+            android:name=".activity.FilesChooseActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".activity.BookChoose">
+            android:parentActivityName=".activity.BookShelfActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.BookChoose" />
+                android:value=".activity.BookShelfActivity" />
         </activity>
 
         <activity
-            android:name=".activity.Settings"
+            android:name=".activity.SettingsActivity"
             android:label="@string/action_settings"
-            android:parentActivityName=".activity.BookChoose">
+            android:parentActivityName=".activity.BookShelfActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.BookChoose" />
+                android:value=".activity.BookShelfActivity" />
         </activity>
 
         <activity
-            android:name=".activity.NoExternalStorage"
+            android:name=".activity.NoExternalStorageActivity"
             android:label="@string/action_settings" />
 
         <service android:name=".service.AudioPlayerService" />

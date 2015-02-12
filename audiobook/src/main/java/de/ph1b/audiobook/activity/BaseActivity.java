@@ -20,7 +20,7 @@ public abstract class BaseActivity extends ActionBarActivity {
             Intent serviceIntent = new Intent(this, AudioPlayerService.class);
             stopService(serviceIntent);
 
-            Intent i = new Intent(this, NoExternalStorage.class);
+            Intent i = new Intent(this, NoExternalStorageActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(new Intent(i));
         }

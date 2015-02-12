@@ -32,9 +32,9 @@ import java.util.concurrent.locks.ReentrantLock;
 import de.ph1b.audiobook.utils.L;
 
 @TargetApi(16)
-public class MediaPlayer {
+public class CustomMediaPlayer {
     private final static int TRACK_NUM = 0;
-    private static final String TAG = MediaPlayer.class.getSimpleName();
+    private static final String TAG = CustomMediaPlayer.class.getSimpleName();
     private final ReentrantLock lock = new ReentrantLock();
     private final Object mDecoderLock;
     private final float pitch;
@@ -52,7 +52,7 @@ public class MediaPlayer {
     private State state;
     private long duration;
 
-    public MediaPlayer(Context context) {
+    public CustomMediaPlayer(Context context) {
         L.v(TAG, "constructor called");
         state = State.IDLE;
         speed = (float) 1.0;
@@ -63,7 +63,7 @@ public class MediaPlayer {
         mDecoderLock = new Object();
 
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, MediaPlayer.class.getName());
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, CustomMediaPlayer.class.getName());
         wakeLock.setReferenceCounted(false);
     }
 

@@ -10,13 +10,13 @@ public class MediaPlayerCompat {
 
     private final boolean useCustomMediaPlayer;
     private android.media.MediaPlayer androidMediaPlayer;
-    private MediaPlayer customMediaPlayer;
+    private CustomMediaPlayer customCustomMediaPlayer;
 
     public MediaPlayerCompat(Context c) {
         useCustomMediaPlayer = (Build.VERSION.SDK_INT >= 16);
 
         if (useCustomMediaPlayer) {
-            customMediaPlayer = new MediaPlayer(c);
+            customCustomMediaPlayer = new CustomMediaPlayer(c);
         } else {
             androidMediaPlayer = new android.media.MediaPlayer();
         }
@@ -24,25 +24,25 @@ public class MediaPlayerCompat {
 
     public void setPlaybackSpeed(float speed) {
         if (useCustomMediaPlayer) {
-            customMediaPlayer.setPlaybackSpeed(speed);
+            customCustomMediaPlayer.setPlaybackSpeed(speed);
         }
     }
 
     public void reset() {
         if (useCustomMediaPlayer) {
-            customMediaPlayer.reset();
+            customCustomMediaPlayer.reset();
         } else {
             androidMediaPlayer.reset();
         }
     }
 
     public int getDuration() {
-        return (useCustomMediaPlayer ? customMediaPlayer.getDuration() : androidMediaPlayer.getDuration());
+        return (useCustomMediaPlayer ? customCustomMediaPlayer.getDuration() : androidMediaPlayer.getDuration());
     }
 
     public void release() {
         if (useCustomMediaPlayer) {
-            customMediaPlayer.release();
+            customCustomMediaPlayer.release();
         } else {
             androidMediaPlayer.release();
         }
@@ -51,7 +51,7 @@ public class MediaPlayerCompat {
     public void prepare() {
         try {
             if (useCustomMediaPlayer) {
-                customMediaPlayer.prepare();
+                customCustomMediaPlayer.prepare();
             } else {
                 androidMediaPlayer.prepare();
             }
@@ -62,7 +62,7 @@ public class MediaPlayerCompat {
 
     public void setDataSource(String path) {
         if (useCustomMediaPlayer) {
-            customMediaPlayer.setDataSource(path);
+            customCustomMediaPlayer.setDataSource(path);
         } else {
             try {
                 androidMediaPlayer.setDataSource(path);
@@ -74,7 +74,7 @@ public class MediaPlayerCompat {
 
     public void seekTo(int position) {
         if (useCustomMediaPlayer) {
-            customMediaPlayer.seekTo(position);
+            customCustomMediaPlayer.seekTo(position);
         } else {
             androidMediaPlayer.seekTo(position);
         }
@@ -82,7 +82,7 @@ public class MediaPlayerCompat {
 
     public void setOnCompletionListener(final OnCompletionListener listener) {
         if (useCustomMediaPlayer) {
-            customMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            customCustomMediaPlayer.setOnCompletionListener(new CustomMediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion() {
                     listener.onCompletion();
@@ -99,12 +99,12 @@ public class MediaPlayerCompat {
     }
 
     public int getCurrentPosition() {
-        return (useCustomMediaPlayer ? customMediaPlayer.getCurrentPosition() : androidMediaPlayer.getCurrentPosition());
+        return (useCustomMediaPlayer ? customCustomMediaPlayer.getCurrentPosition() : androidMediaPlayer.getCurrentPosition());
     }
 
     public void start() {
         if (useCustomMediaPlayer) {
-            customMediaPlayer.start();
+            customCustomMediaPlayer.start();
         } else {
             androidMediaPlayer.start();
         }
@@ -112,7 +112,7 @@ public class MediaPlayerCompat {
 
     public void pause() {
         if (useCustomMediaPlayer) {
-            customMediaPlayer.pause();
+            customCustomMediaPlayer.pause();
         } else {
             androidMediaPlayer.pause();
         }

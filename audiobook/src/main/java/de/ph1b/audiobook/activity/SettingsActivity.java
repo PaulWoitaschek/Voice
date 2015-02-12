@@ -5,7 +5,7 @@ import android.os.Bundle;
 import de.ph1b.audiobook.R;
 
 
-public class Settings extends BaseActivity {
+public class SettingsActivity extends BaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

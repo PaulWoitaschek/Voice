@@ -15,13 +15,13 @@ import java.io.File;
 import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.BookPlay;
+import de.ph1b.audiobook.activity.BookPlayActivity;
 import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.service.StateManager;
-import de.ph1b.audiobook.utils.Prefs;
+import de.ph1b.audiobook.utils.PrefsManager;
 
 public abstract class BaseWidgetProvider extends AppWidgetProvider {
 
@@ -47,7 +47,7 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
         // if we have any book, init the views and have a click on the whole widget start BookPlay.
         // if we have no book, simply have a click on the whole widget start BookChoose.
         PendingIntent wholeWidgetClickPI;
-        Intent wholeWidgetClickI = new Intent(context, BookPlay.class);
+        Intent wholeWidgetClickI = new Intent(context, BookPlayActivity.class);
         if (book != null) {
             remoteViews.setTextViewText(R.id.title, book.getName());
             String name = book.getContainingMedia().get(book.getPosition()).getName();
@@ -56,7 +56,7 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
             // building back-stack.
             wholeWidgetClickI.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-            stackBuilder.addParentStack(BookPlay.class);
+            stackBuilder.addParentStack(BookPlayActivity.class);
             stackBuilder.addNextIntent(wholeWidgetClickI);
             wholeWidgetClickPI = stackBuilder.getPendingIntent((int) System.currentTimeMillis(), PendingIntent.FLAG_UPDATE_CURRENT);
         } else {
@@ -71,7 +71,7 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
     Book getCurrentBook(Context context) {
         // get book from database
         DataBaseHelper db = DataBaseHelper.getInstance(context);
-        Prefs prefs = new Prefs(context);
+        PrefsManager prefs = new PrefsManager(context);
         long bookId = prefs.getCurrentBookId();
         Book book = db.getBook(bookId);
 

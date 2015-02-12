@@ -31,13 +31,13 @@ import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.Settings;
+import de.ph1b.audiobook.activity.SettingsActivity;
 import de.ph1b.audiobook.adapter.MediaSpinnerAdapter;
 import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.content.Media;
 import de.ph1b.audiobook.dialog.BookmarkDialog;
-import de.ph1b.audiobook.dialog.JumpToPosition;
+import de.ph1b.audiobook.dialog.JumpToPositionDialog;
 import de.ph1b.audiobook.dialog.SetPlaybackSpeedDialog;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
@@ -46,7 +46,7 @@ import de.ph1b.audiobook.service.StateManager;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
 import de.ph1b.audiobook.utils.MusicUtil;
-import de.ph1b.audiobook.utils.Prefs;
+import de.ph1b.audiobook.utils.PrefsManager;
 
 public class BookPlayFragment extends Fragment implements OnClickListener, StateManager.ChangeListener {
 
@@ -60,7 +60,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, State
     private volatile Spinner bookSpinner;
     private TextView maxTimeView;
     private volatile Book book;
-    private Prefs prefs;
+    private PrefsManager prefs;
     private DataBaseHelper db;
     private ServiceController controller;
 
@@ -94,7 +94,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, State
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        prefs = new Prefs(getActivity());
+        prefs = new PrefsManager(getActivity());
         db = DataBaseHelper.getInstance(getActivity());
         controller = new ServiceController(getActivity());
         stateManager = StateManager.getInstance(getActivity());
@@ -259,10 +259,10 @@ public class BookPlayFragment extends Fragment implements OnClickListener, State
 
 
     private void launchJumpToPositionDialog() {
-        JumpToPosition dialog = new JumpToPosition();
+        JumpToPositionDialog dialog = new JumpToPositionDialog();
         Bundle bundle = new Bundle();
-        bundle.putInt(JumpToPosition.DURATION, duration);
-        bundle.putInt(JumpToPosition.POSITION, stateManager.getTime());
+        bundle.putInt(JumpToPositionDialog.DURATION, duration);
+        bundle.putInt(JumpToPositionDialog.POSITION, stateManager.getTime());
         dialog.setArguments(bundle);
         dialog.setTargetFragment(this, 42);
         dialog.show(getFragmentManager(), "timePicker");
@@ -272,7 +272,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, State
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                startActivity(new Intent(getActivity(), Settings.class));
+                startActivity(new Intent(getActivity(), SettingsActivity.class));
                 return true;
             case R.id.action_time_change:
                 launchJumpToPositionDialog();

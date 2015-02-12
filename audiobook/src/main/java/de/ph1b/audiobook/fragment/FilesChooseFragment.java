@@ -38,14 +38,14 @@ import java.util.LinkedList;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.BookChoose;
-import de.ph1b.audiobook.activity.FilesChoose;
-import de.ph1b.audiobook.activity.Settings;
+import de.ph1b.audiobook.activity.BookShelfActivity;
+import de.ph1b.audiobook.activity.FilesChooseActivity;
+import de.ph1b.audiobook.activity.SettingsActivity;
 import de.ph1b.audiobook.adapter.FileAdapter;
 import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.content.Media;
-import de.ph1b.audiobook.dialog.EditBook;
+import de.ph1b.audiobook.dialog.EditBookDialog;
 import de.ph1b.audiobook.interfaces.OnBackPressedListener;
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
@@ -53,7 +53,7 @@ import de.ph1b.audiobook.utils.MaterialCompatThemer;
 import de.ph1b.audiobook.utils.MusicUtil;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
 
-public class FilesChooseFragment extends Fragment implements EditBook.OnEditBookFinished {
+public class FilesChooseFragment extends Fragment implements EditBookDialog.OnEditBookFinished {
     private static final String TAG = FilesChooseFragment.class.getSimpleName();
     private static final ArrayList<String> audioTypes;
 
@@ -90,7 +90,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
             if (link.size() < 2) {
                 //setting onBackPressedListener to null and invoke new onBackPressed
                 //to invoke super.onBackPressed();
-                ((FilesChoose) getActivity()).setOnBackPressedListener(null);
+                ((FilesChooseActivity) getActivity()).setOnBackPressedListener(null);
                 getActivity().onBackPressed();
             } else {
                 link.removeLast();
@@ -174,7 +174,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                startActivity(new Intent(getActivity(), Settings.class));
+                startActivity(new Intent(getActivity(), SettingsActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -184,13 +184,13 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
     @Override
     public void onResume() {
         super.onResume();
-        ((FilesChoose) getActivity()).setOnBackPressedListener(onBackPressedListener);
+        ((FilesChooseActivity) getActivity()).setOnBackPressedListener(onBackPressedListener);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        ((FilesChoose) getActivity()).setOnBackPressedListener(null);
+        ((FilesChooseActivity) getActivity()).setOnBackPressedListener(null);
     }
 
     private boolean isAudio(File file) {
@@ -402,14 +402,14 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
                 Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT);
                 toast.show();
             } else {
-                EditBook editBook = new EditBook();
+                EditBookDialog editBookDialog = new EditBookDialog();
                 Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList(EditBook.BOOK_COVER, bitmaps);
-                bundle.putString(EditBook.DIALOG_TITLE, getString(R.string.book_add));
-                bundle.putString(EditBook.BOOK_NAME, bookTitle);
-                editBook.setArguments(bundle);
-                editBook.setTargetFragment(FilesChooseFragment.this, 0);
-                editBook.show(getFragmentManager(), TAG);
+                bundle.putParcelableArrayList(EditBookDialog.BOOK_COVER, bitmaps);
+                bundle.putString(EditBookDialog.DIALOG_TITLE, getString(R.string.book_add));
+                bundle.putString(EditBookDialog.BOOK_NAME, bookTitle);
+                editBookDialog.setArguments(bundle);
+                editBookDialog.setTargetFragment(FilesChooseFragment.this, 0);
+                editBookDialog.show(getFragmentManager(), TAG);
             }
             Spinner spinner = spinnerWeakReference.get();
             RecyclerView recyclerView = recyclerViewWeakReference.get();
@@ -483,7 +483,7 @@ public class FilesChooseFragment extends Fragment implements EditBook.OnEditBook
             Activity a = getActivity();
             if (a != null) {
                 progressDialog.cancel();
-                Intent i = new Intent(a, BookChoose.class);
+                Intent i = new Intent(a, BookShelfActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
             }

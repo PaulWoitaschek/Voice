@@ -16,7 +16,7 @@ import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.service.PositionUpdater;
 import de.ph1b.audiobook.service.StateManager;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.Prefs;
+import de.ph1b.audiobook.utils.PrefsManager;
 
 public class MediaPlayerController {
 
@@ -25,7 +25,7 @@ public class MediaPlayerController {
     private final Context c;
     private final StateManager extState;
     private final ReentrantLock lock = new ReentrantLock();
-    private final Prefs prefs;
+    private final PrefsManager prefs;
     private final PositionUpdater positionUpdater;
     private final MediaPlayerCompat mediaPlayer;
     private final DataBaseHelper db;
@@ -51,7 +51,7 @@ public class MediaPlayerController {
         this.book = book;
         this.c = c;
         extState = StateManager.getInstance(c);
-        prefs = new Prefs(c);
+        prefs = new PrefsManager(c);
         db = DataBaseHelper.getInstance(c);
 
         mediaPlayer = new MediaPlayerCompat(c);

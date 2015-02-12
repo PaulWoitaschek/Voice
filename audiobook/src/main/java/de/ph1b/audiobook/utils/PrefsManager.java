@@ -8,13 +8,13 @@ import android.preference.PreferenceManager;
 
 import de.ph1b.audiobook.R;
 
-public class Prefs {
+public class PrefsManager {
 
     private static final String PREF_KEY_CURRENT_BOOK = "currentBook";
     private final Context c;
     private final SharedPreferences sp;
 
-    public Prefs(Context c) {
+    public PrefsManager(Context c) {
         this.c = c;
         sp = PreferenceManager.getDefaultSharedPreferences(c);
     }
@@ -29,7 +29,7 @@ public class Prefs {
         editor.putLong(PREF_KEY_CURRENT_BOOK, bookId);
         /**
          * We do a commit instead of apply, because when we set the prefs, we directly start a new
-         * activity when {@link de.ph1b.audiobook.fragment.BookChooseFragment} ->
+         * activity when {@link de.ph1b.audiobook.fragment.BookShelfFragment} ->
          * {@link de.ph1b.audiobook.fragment.BookPlayFragment}
          * directly.
          */

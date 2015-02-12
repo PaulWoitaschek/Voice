@@ -35,7 +35,7 @@ import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.service.StateManager;
 import de.ph1b.audiobook.utils.DividerItemDecoration;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
-import de.ph1b.audiobook.utils.Prefs;
+import de.ph1b.audiobook.utils.PrefsManager;
 
 /**
  * @author <a href="mailto:woitaschek@posteo.de">Paul Woitaschek</a>
@@ -55,7 +55,7 @@ public class BookmarkDialog extends DialogFragment {
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_bookmark, null);
 
         final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
-        final Prefs prefs = new Prefs(getActivity());
+        final PrefsManager prefs = new PrefsManager(getActivity());
         final Book book = db.getBook(prefs.getCurrentBookId());
         final ArrayList<Bookmark> allBookmarks = db.getAllBookmarks(book.getId());
         final StateManager stateManager = StateManager.getInstance(getActivity());

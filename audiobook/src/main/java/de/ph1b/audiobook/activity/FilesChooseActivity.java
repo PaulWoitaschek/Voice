@@ -6,7 +6,7 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.interfaces.OnBackPressedListener;
 
 
-public class FilesChoose extends BaseActivity {
+public class FilesChooseActivity extends BaseActivity {
 
 
     private OnBackPressedListener onBackPressedListener;

@@ -16,7 +16,7 @@ import java.util.Collections;
 
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.Prefs;
+import de.ph1b.audiobook.utils.PrefsManager;
 
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class DataBaseHelper extends SQLiteOpenHelper {
@@ -97,7 +97,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     private void upgradeThree(SQLiteDatabase db) {
-        Prefs prefs = new Prefs(c);
+        PrefsManager prefs = new PrefsManager(c);
         long oldCurrentBookId = prefs.getCurrentBookId();
 
         db.beginTransaction();

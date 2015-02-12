@@ -29,14 +29,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.BookPlay;
+import de.ph1b.audiobook.activity.BookPlayActivity;
 import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.content.Media;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.receiver.RemoteControlReceiver;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.Prefs;
+import de.ph1b.audiobook.utils.PrefsManager;
 
 public class AudioPlayerService extends Service implements StateManager.ChangeListener, AudioManager.OnAudioFocusChangeListener {
 
@@ -45,7 +45,7 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
     private static final int NOTIFICATION_ID = 42;
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private NotificationManager notificationManager;
-    private Prefs prefs;
+    private PrefsManager prefs;
     private MediaPlayerController controller = null;
     private DataBaseHelper db;
     private AudioManager audioManager;
@@ -91,7 +91,7 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
     public void onCreate() {
         super.onCreate();
 
-        prefs = new Prefs(this);
+        prefs = new PrefsManager(this);
         db = DataBaseHelper.getInstance(this);
         notificationBuilder = new NotificationCompat.Builder(this);
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -359,7 +359,7 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
             e.printStackTrace();
         }
 
-        Intent bookPlayIntent = new Intent(AudioPlayerService.this, BookPlay.class);
+        Intent bookPlayIntent = new Intent(AudioPlayerService.this, BookPlayActivity.class);
         PendingIntent pendingIntent = android.support.v4.app.TaskStackBuilder.create(AudioPlayerService.this)
                 .addNextIntentWithParentStack(bookPlayIntent)
                 .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);

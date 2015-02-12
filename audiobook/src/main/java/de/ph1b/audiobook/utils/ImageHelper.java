@@ -96,7 +96,7 @@ public class ImageHelper {
         ConnectivityManager cm =
                 (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm != null) {
-            boolean mobileConnectionAllowed = new Prefs(c).mobileConnectionAllowed();
+            boolean mobileConnectionAllowed = new PrefsManager(c).mobileConnectionAllowed();
 
             NetworkInfo info = cm.getActiveNetworkInfo();
             if (info != null && info.isConnected()) {
