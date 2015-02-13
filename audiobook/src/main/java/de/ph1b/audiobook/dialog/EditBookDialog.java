@@ -249,6 +249,12 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
                 googleCount = 0;
             }
         });
+
+        // if we are online and at the first (always replacement) cover, immediately load a cover
+        if (coverPosition == 0 && ImageHelper.isOnline(getActivity())) {
+            nextCover.performClick();
+        }
+
         return editBook;
     }
 
