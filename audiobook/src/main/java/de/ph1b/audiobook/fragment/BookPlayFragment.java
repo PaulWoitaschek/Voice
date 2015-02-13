@@ -8,8 +8,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -99,6 +99,10 @@ public class BookPlayFragment extends Fragment implements OnClickListener, State
         controller = new ServiceController(getActivity());
         stateManager = StateManager.getInstance(getActivity());
 
+        //setup actionbar
+        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         setHasOptionsMenu(true);
     }
 
@@ -183,11 +187,8 @@ public class BookPlayFragment extends Fragment implements OnClickListener, State
 
         // (ActionBarTitle)
         String bookName = book.getName();
-        Toolbar toolbar = (Toolbar) v.findViewById(R.id.toolbar);
-        toolbar.setTitle(bookName);
-        ActionBarActivity actionBarActivity = ((ActionBarActivity) getActivity());
-        actionBarActivity.setSupportActionBar(toolbar);
-        actionBarActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+        actionBar.setTitle(bookName);
 
         // (Cover)
         Picasso.with(getActivity()).load(new File(book.getCover())).into(coverView);

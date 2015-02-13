@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_height="wrap_content"
-        android:background="@color/toolbar_background"
+        android:background="#55000000"
         android:layout_gravity="bottom">
 
         <TextView

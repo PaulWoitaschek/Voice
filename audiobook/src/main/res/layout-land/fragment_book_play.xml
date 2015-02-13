@@ -1,154 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
     android:orientation="horizontal"
     android:baselineAligned="false">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
-
-        <LinearLayout
-            android:layout_width="0dp"
+        <ImageView
+            android:id="@+id/book_cover"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <ImageView
-                android:id="@+id/book_cover"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/cover"
-                android:scaleType="centerCrop" />
-
-        </LinearLayout>
-
-        <View
-            android:id="@+id/div1"
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:background="@color/primary" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:gravity="bottom">
-
-            <Spinner
-                android:id="@+id/book_spinner"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-
-            <LinearLayout
-                android:id="@+id/bottom_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center_vertical|center_horizontal">
-
-                    <TextView
-                        android:id="@+id/played"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/zeroTime" />
-
-                    <SeekBar
-                        android:id="@+id/seekBar"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginRight="2dp"
-                        android:layout_marginLeft="2dp" />
-
-                    <TextView
-                        android:id="@+id/maxTime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/zeroTime" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:orientation="horizontal">
-
-                    <ImageButton
-                        android:id="@+id/previous"
-                        android:src="@drawable/ic_skip_previous_grey600_36dp"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginLeft="4dp"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:contentDescription="@string/previous_track" />
-
-                    <ImageButton
-                        android:id="@+id/rewind"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/rewind"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginLeft="4dp"
-                        android:src="@drawable/ic_fast_rewind_grey600_36dp" />
-
-                    <ImageButton
-                        android:id="@+id/play"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginLeft="4dp"
-                        android:contentDescription="@string/play_pause"
-                        android:src="@drawable/ic_ic_play_circle_fill_72dp" />
-
-                    <ImageButton
-                        android:id="@+id/fast_forward"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginLeft="4dp"
-                        android:contentDescription="@string/fast_forward"
-                        android:src="@drawable/ic_fast_forward_grey600_36dp" />
-
-                    <ImageButton
-                        android:id="@+id/next"
-                        android:src="@drawable/ic_skip_next_grey600_36dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginLeft="4dp"
-                        android:contentDescription="@string/next_track" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-        </LinearLayout>
-
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/cover"
+            android:scaleType="centerCrop" />
 
     </LinearLayout>
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@color/toolbar_background"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <View
+        android:id="@+id/div1"
+        android:layout_width="2dp"
+        android:layout_height="match_parent"
+        android:background="@color/primary" />
 
-</FrameLayout>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:gravity="center_vertical">
+
+        <Spinner
+            android:id="@+id/book_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center_vertical|center_horizontal">
+
+                <TextView
+                    android:id="@+id/played"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/zeroTime" />
+
+                <SeekBar
+                    android:id="@+id/seekBar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginRight="2dp"
+                    android:layout_marginLeft="2dp" />
+
+                <TextView
+                    android:id="@+id/maxTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/zeroTime" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/previous"
+                    android:src="@drawable/ic_skip_previous_grey600_36dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:contentDescription="@string/previous_track" />
+
+                <ImageButton
+                    android:id="@+id/rewind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/rewind"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:src="@drawable/ic_fast_rewind_grey600_36dp" />
+
+                <ImageButton
+                    android:id="@+id/play"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:contentDescription="@string/play_pause"
+                    android:src="@drawable/ic_ic_play_circle_fill_72dp" />
+
+                <ImageButton
+                    android:id="@+id/fast_forward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:contentDescription="@string/fast_forward"
+                    android:src="@drawable/ic_fast_forward_grey600_36dp" />
+
+                <ImageButton
+                    android:id="@+id/next"
+                    android:src="@drawable/ic_skip_next_grey600_36dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:contentDescription="@string/next_track" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>
