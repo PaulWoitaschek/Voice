@@ -1,0 +1,258 @@
+package de.ph1b.audiobook.service;
+
+
+import android.app.PendingIntent;
+import android.app.Service;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.support.v4.app.TaskStackBuilder;
+import android.util.TypedValue;
+import android.view.Display;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.RemoteViews;
+
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.activity.BookPlayActivity;
+import de.ph1b.audiobook.content.Book;
+import de.ph1b.audiobook.content.DataBaseHelper;
+import de.ph1b.audiobook.receiver.BaseWidgetProvider;
+import de.ph1b.audiobook.utils.L;
+import de.ph1b.audiobook.utils.PrefsManager;
+
+public class WidgetUpdateService extends Service implements StateManager.ChangeListener {
+    private static final String TAG = WidgetUpdateService.class.getSimpleName();
+    private final ExecutorService executor = Executors.newCachedThreadPool();
+    private StateManager stateManager;
+    private AppWidgetManager appWidgetManager;
+    private DataBaseHelper db;
+    private PrefsManager prefs;
+
+    private void updateWidget() {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                L.v(TAG, "updateWidget called");
+                boolean isPortrait = isPortrait();
+                int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(WidgetUpdateService.this, BaseWidgetProvider.class));
+                Book book = getCurrentBook();
+
+                for (int widgetId : ids) {
+                    RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.widget);
+                    initElements(remoteViews, book);
+
+                    if (Build.VERSION.SDK_INT >= 16) {
+                        Bundle opts = appWidgetManager.getAppWidgetOptions(widgetId);
+                        int minHeight = opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
+                        int maxHeight = opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT);
+                        int minWidth = opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
+                        int maxWidth = opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH);
+
+                        int useWidth;
+                        int useHeight;
+
+                        if (isPortrait) {
+                            useWidth = minWidth;
+                            useHeight = maxHeight;
+                        } else {
+                            useWidth = maxWidth;
+                            useHeight = minHeight;
+                        }
+                        if (useWidth > 0 && useHeight > 0) {
+                            hideElements(remoteViews, useWidth, useHeight);
+                        }
+
+                        appWidgetManager.updateAppWidget(widgetId, remoteViews);
+                    }
+                }
+            }
+
+        });
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        stateManager = StateManager.getInstance(this);
+        stateManager.addChangeListener(this);
+
+        appWidgetManager = AppWidgetManager.getInstance(this);
+        db = DataBaseHelper.getInstance(this);
+        prefs = new PrefsManager(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        stateManager.removeChangeListener(this);
+
+        super.onDestroy();
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        updateWidget();
+        return Service.START_STICKY;
+    }
+
+    @Override
+    public void onTimeChanged(int time) {
+
+    }
+
+    @Override
+    public void onStateChanged(PlayerStates state) {
+
+    }
+
+    @Override
+    public void onSleepTimerSet(boolean sleepTimerActive) {
+
+    }
+
+    @Override
+    public void onPositionChanged(int position) {
+
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newCfg) {
+        int oldOrientation = this.getResources().getConfiguration().orientation;
+        int newOrientation = newCfg.orientation;
+
+        if (newOrientation != oldOrientation) {
+            updateWidget();
+        }
+    }
+
+    /**
+     * Returning if the current orientation is portrait. If it is unknown, measure the display-spec
+     * and return accordingly.
+     *
+     * @return if the current orientation is portrait
+     */
+    private boolean isPortrait() {
+        int orientation = getResources().getConfiguration().orientation;
+        WindowManager window = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        Display display = window.getDefaultDisplay();
+
+        @SuppressWarnings("deprecation") int displayWidth = display.getWidth();
+        @SuppressWarnings("deprecation") int displayHeight = display.getHeight();
+
+        return orientation != Configuration.ORIENTATION_LANDSCAPE && (orientation == Configuration.ORIENTATION_PORTRAIT || displayWidth == displayHeight || displayWidth < displayHeight);
+    }
+
+    private int intToDp(int dp) {
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics()));
+    }
+
+    private void hideElements(RemoteViews remoteViews, int width, int coverSize) {
+        L.v(TAG, "hideElements called");
+        int rewindButtonSize = intToDp(4 + 36 + 4);
+        int playButtonSize = intToDp(4 + 48 + 4);
+        int fastForwardButtonSize = intToDp(4 + 36 + 4);
+
+        remoteViews.setViewVisibility(R.id.imageView, View.VISIBLE);
+        remoteViews.setViewVisibility(R.id.rewind, View.VISIBLE);
+        remoteViews.setViewVisibility(R.id.fast_forward, View.VISIBLE);
+
+        if (coverSize + rewindButtonSize + playButtonSize + fastForwardButtonSize < width) {
+            return;
+        }
+        remoteViews.setViewVisibility(R.id.imageView, View.GONE);
+        if (rewindButtonSize + playButtonSize + fastForwardButtonSize < width) {
+            return;
+        }
+        remoteViews.setViewVisibility(R.id.fast_forward, View.GONE);
+        if (playButtonSize + rewindButtonSize < width) {
+            return;
+        }
+        remoteViews.setViewVisibility(R.id.rewind, View.GONE);
+    }
+
+    private void initElements(RemoteViews remoteViews, Book book) {
+        Intent playPauseI = ServiceController.getPlayPauseIntent(this);
+        PendingIntent playPausePI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseI, PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI);
+
+        Intent fastForwardI = ServiceController.getFastForwardIntent(this);
+        PendingIntent fastForwardPI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, fastForwardI, PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setOnClickPendingIntent(R.id.fast_forward, fastForwardPI);
+
+        Intent rewindI = ServiceController.getRewindIntent(this);
+        PendingIntent rewindPI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_REWIND, rewindI, PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI);
+
+        if (stateManager.getState() == PlayerStates.PLAYING) {
+            remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_48dp);
+        } else {
+            remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow_white_48dp);
+        }
+
+        // if we have any book, init the views and have a click on the whole widget start BookPlay.
+        // if we have no book, simply have a click on the whole widget start BookChoose.
+        PendingIntent wholeWidgetClickPI;
+        Intent wholeWidgetClickI = new Intent(this, BookPlayActivity.class);
+        if (book != null) {
+            remoteViews.setTextViewText(R.id.title, book.getName());
+            String name = book.getContainingMedia().get(book.getPosition()).getName();
+            remoteViews.setTextViewText(R.id.summary, name);
+
+            // building back-stack.
+            wholeWidgetClickI.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+            stackBuilder.addParentStack(BookPlayActivity.class);
+            stackBuilder.addNextIntent(wholeWidgetClickI);
+            wholeWidgetClickPI = stackBuilder.getPendingIntent((int) System.currentTimeMillis(), PendingIntent.FLAG_UPDATE_CURRENT);
+
+            try {
+                Bitmap cover = Picasso.with(WidgetUpdateService.this).load(new File(book.getCover())).get();
+                remoteViews.setImageViewBitmap(R.id.imageView, cover);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            // directly going back to bookChoose
+            wholeWidgetClickPI = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
+
+        remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI);
+    }
+
+    private Book getCurrentBook() {
+        // get book from database
+        long bookId = prefs.getCurrentBookId();
+        Book book = db.getBook(bookId);
+
+        // if there is no current book, take the first one from all
+        if (book == null) {
+            ArrayList<Book> books = db.getAllBooks();
+            if (books.size() > 0) {
+                book = books.get(0);
+                prefs.setCurrentBookId(book.getId());
+            }
+        }
+        return book;
+    }
+}

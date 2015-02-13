@@ -53,8 +53,6 @@
     <string tools:ignore="MissingTranslation" name="delete_book_keep">Keep</string>
     <string tools:ignore="MissingTranslation" name="pref_title_track_to_end">Continue till end</string>
     <string tools:ignore="MissingTranslation" name="pref_summary_track_to_end">Continues playing till the end of the track, after sleep timer has triggered.</string>
-    <string tools:ignore="MissingTranslation" name="pref_title_pause_on_transient">Pause on Interruption</string>
-    <string tools:ignore="MissingTranslation" name="pref_summary_pause_on_transient">Pause when interrupted, otherwise lower the volume for the duration of the interruption.</string>
 
     <string tools:ignore="MissingTranslation" name="previous_track">Previous track</string>
     <string tools:ignore="MissingTranslation" name="next_track">Next track</string>

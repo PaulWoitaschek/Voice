@@ -1,15 +1,11 @@
 package de.ph1b.audiobook.service;
 
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import de.ph1b.audiobook.receiver.LargeWidgetProvider;
-import de.ph1b.audiobook.receiver.MediumWidgetProvider;
 import de.ph1b.audiobook.utils.L;
 
 
@@ -91,19 +87,7 @@ public class StateManager {
     }
 
     private void updateWidget() {
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(c);
-
-        int largeWidgetIds[] = appWidgetManager.getAppWidgetIds(new ComponentName(c, LargeWidgetProvider.class));
-        Intent largeIntent = new Intent(c, LargeWidgetProvider.class);
-        largeIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        largeIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, largeWidgetIds);
-        c.sendBroadcast(largeIntent);
-
-        int mediumWidgetIds[] = appWidgetManager.getAppWidgetIds(new ComponentName(c, MediumWidgetProvider.class));
-        Intent mediumIntent = new Intent(c, MediumWidgetProvider.class);
-        mediumIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        mediumIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, mediumWidgetIds);
-        c.sendBroadcast(mediumIntent);
+        c.startService(new Intent(c, WidgetUpdateService.class));
     }
 
     public interface ChangeListener {

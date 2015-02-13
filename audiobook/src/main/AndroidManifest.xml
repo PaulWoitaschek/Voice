@@ -67,6 +67,8 @@
 
         <service android:name=".service.AudioPlayerService" />
 
+        <service android:name=".service.WidgetUpdateService" />
+
         <receiver android:name=".receiver.RemoteControlReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
@@ -75,7 +77,7 @@
 
         <receiver
             android:icon="@mipmap/ic_launcher"
-            android:name=".receiver.LargeWidgetProvider"
+            android:name=".receiver.BaseWidgetProvider"
             android:label="@string/widget_large">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -83,12 +85,12 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/widget_large_info" />
+                android:resource="@xml/widget_info_large" />
         </receiver>
 
         <receiver
             android:icon="@mipmap/ic_launcher"
-            android:name=".receiver.MediumWidgetProvider"
+            android:name=".receiver.BaseWidgetProvider"
             android:label="@string/widget_medium">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -96,7 +98,7 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/widget_medium_info" />
+                android:resource="@xml/widget_info_medium" />
         </receiver>
 
     </application>
