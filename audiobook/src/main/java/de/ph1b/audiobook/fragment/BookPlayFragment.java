@@ -168,7 +168,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, State
         bookSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int newPosition, long id) {
-                if (((int) parent.getTag()) != newPosition) {
+                if (parent.getTag() != null && ((int) parent.getTag()) != newPosition) {
                     L.i(TAG, "spinner, onItemSelected, firing:" + newPosition);
                     controller.changeBookPosition(newPosition, 0);
                     parent.setTag(newPosition);
