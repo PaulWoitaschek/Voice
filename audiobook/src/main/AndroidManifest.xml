@@ -36,7 +36,8 @@
 
         <activity
             android:name=".activity.BookPlayActivity"
-            android:parentActivityName=".activity.BookShelfActivity">
+            android:parentActivityName=".activity.BookShelfActivity"
+            android:theme="@style/BookPlayTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.BookShelfActivity" />
