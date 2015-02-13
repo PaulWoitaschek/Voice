@@ -78,29 +78,15 @@
         <receiver
             android:icon="@mipmap/ic_launcher"
             android:name=".receiver.BaseWidgetProvider"
-            android:label="@string/widget_large">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/widget_info_large" />
+                android:resource="@xml/widget_info" />
         </receiver>
-
-        <receiver
-            android:icon="@mipmap/ic_launcher"
-            android:name=".receiver.BaseWidgetProvider"
-            android:label="@string/widget_medium">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_info_medium" />
-        </receiver>
-
     </application>
 
 </manifest>
