@@ -30,6 +30,7 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.utils.CoverDownloader;
 import de.ph1b.audiobook.utils.DraggableBoxImageView;
 import de.ph1b.audiobook.utils.ImageHelper;
+import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
 
 public class EditBookDialog extends DialogFragment implements View.OnClickListener {
@@ -37,8 +38,8 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
     public static final String BOOK_NAME = "BOOK_NAME";
     public static final String BOOK_COVER = "BOOK_COVER";
     public static final String DIALOG_TITLE = "DIALOG_TITLE";
+    private static final String TAG = EditBookDialog.class.getSimpleName();
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-
     /**
      * Variable representing if the first cover is a letter - cover. This is recognized by checking
      * if the pixels on the borders are the same as the color accent
@@ -233,12 +234,12 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
                 } else {
                     emptyTitleText.setVisibility(View.INVISIBLE);
                     editBook.getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
-                    if (textLength == 1 && !firstCoverIsLetterReplacement) {
-                        Bitmap newLetterCover = ImageHelper.genCapital(newName, getActivity());
-                        covers.set(0, newLetterCover);
-                        if (coverPosition == 0) {
-                            coverImageView.setImageBitmap(newLetterCover);
-                        }
+                    Bitmap newLetterCover = ImageHelper.genCapital(newName, getActivity());
+                    covers.set(0, newLetterCover);
+                    L.d(TAG, "onTextChanged, setting new cover with newName=" + newName);
+                    if (textLength > 0 && coverPosition == 0) {
+                        L.d(TAG, "textLength > 0 and position==0, so setting new image");
+                        coverImageView.setImageBitmap(newLetterCover);
                     }
                 }
             }
