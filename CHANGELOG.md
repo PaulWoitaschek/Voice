@@ -1,3 +1,24 @@
+# v1.5.4
+
+## Additions
+* Now with bookmarks
+* New Icons
+* Automatically backs up preferences
+* Completely rewritten underlaying mediaPlayer code
+* Can now play .oga files
+* Layout improvements
+* Minimize data useage on cover loading
+* Its now possible to use the replacement cover permanently
+* Performance improvements
+
+## Fixes
+* Some theming fixed
+* Headset buttons should work now
+* Correctly pauses on incoming notification
+* Correctly pauses player on incoming call
+* Some theming fixed
+* Minor fixes
+
 # v1.4.6.1
 
 ## Fixes
