@@ -209,8 +209,12 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
                 Bitmap newCover = null;
                 if (covers.size() > 0) {
                     Rect r = coverImageView.getCropPosition();
-                    newCover = covers.get(coverPosition);
-                    newCover = Bitmap.createBitmap(newCover, r.left, r.top, r.width(), r.height());
+                    if (r.width() > 0 && r.height() > 0) {
+                        newCover = covers.get(coverPosition);
+                        newCover = Bitmap.createBitmap(newCover, r.left, r.top, r.width(), r.height());
+                    } else {
+                        newCover = covers.get(0); // use the replacement if this is not valid
+                    }
                 }
                 ((OnEditBookFinished) getTargetFragment()).onEditBookFinished(bookName, newCover, true);
             }
