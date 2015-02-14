@@ -245,11 +245,15 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
                 pauseBecauseLossTransient = false;
             }
             Book book = db.getBook(defaultBookId);
-            L.d(TAG, "init new book:" + book.getName());
-            controller = new MediaPlayerController(book, this);
+            if (book != null) {
+                L.d(TAG, "init new book:" + book.getName());
+                controller = new MediaPlayerController(book, this);
+            }
         }
 
-        handleIntent(intent);
+        if (controller != null) {
+            handleIntent(intent);
+        }
 
         return Service.START_STICKY;
     }
