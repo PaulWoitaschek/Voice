@@ -25,6 +25,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -394,22 +395,25 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
             @Override
             public void run() {
                 Book book = controller.getBook();
+                int bookPosition = book.getPosition();
+                ArrayList<Media> containingMedia = book.getContainingMedia();
+                if (bookPosition < containingMedia.size()) {
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = Picasso.with(AudioPlayerService.this).load(new File(book.getCover())).get();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                Bitmap bitmap = null;
-                try {
-                    bitmap = Picasso.with(AudioPlayerService.this).load(new File(book.getCover())).get();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    @SuppressWarnings("deprecation") RemoteControlClient.MetadataEditor editor = remoteControlClient.editMetadata(true);
+                    editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, book.getContainingMedia().get(book.getPosition()).getName());
+                    editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName());
+                    if (bitmap != null) {
+                        //noinspection deprecation
+                        editor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bitmap.copy(bitmap.getConfig(), true));
+                    }
+                    editor.apply();
                 }
-
-                @SuppressWarnings("deprecation") RemoteControlClient.MetadataEditor editor = remoteControlClient.editMetadata(true);
-                editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, book.getContainingMedia().get(book.getPosition()).getName());
-                editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName());
-                if (bitmap != null) {
-                    //noinspection deprecation
-                    editor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bitmap.copy(bitmap.getConfig(), true));
-                }
-                editor.apply();
             }
         });
     }

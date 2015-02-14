@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
@@ -336,13 +337,18 @@ public class BookPlayFragment extends Fragment implements OnClickListener, State
                  * the user changes the position himself.
                  */
                 L.v(TAG, "onPositionChanged executed:" + position);
-                bookSpinner.setTag(position);
-                bookSpinner.setSelection(position, true);
+                ArrayList<Media> containingMedia = book.getContainingMedia();
+                if (position < containingMedia.size()) {
+                    bookSpinner.setTag(position);
+                    bookSpinner.setSelection(position, true);
 
-                duration = book.getContainingMedia().get(position).getDuration();
-                L.d(TAG, "onPositionChanged, duration=" + duration);
-                seekBar.setMax(duration);
-                maxTimeView.setText(formatTime(duration));
+                    duration = containingMedia.get(position).getDuration();
+                    L.d(TAG, "onPositionChanged, duration=" + duration);
+                    seekBar.setMax(duration);
+                    maxTimeView.setText(formatTime(duration));
+                } else {
+                    L.e(TAG, "onPositionCalled in invalid state: position=" + position + ", size=" + containingMedia.size());
+                }
             }
         });
     }

@@ -66,6 +66,12 @@ public class MediaPlayerController {
             mediaPlayer.reset();
             state = State.IDLE;
         }
+
+        if (book.getContainingMedia().size() <= book.getPosition()) {
+            state = State.DEAD;
+            extState.setState(PlayerStates.STOPPED);
+            return; // aborting when there is no media to play
+        }
         mediaPlayer.setWakeMode(c, PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE);
         mediaPlayer.setOnCompletionListener(onCompletionListener);
         mediaPlayer.setDataSource(book.getContainingMedia().get(book.getPosition()).getPath());

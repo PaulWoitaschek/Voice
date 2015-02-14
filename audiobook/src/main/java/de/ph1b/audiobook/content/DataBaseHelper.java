@@ -24,7 +24,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String TAG = DataBaseHelper.class.getSimpleName();
 
     private static final String DATABASE_NAME = "audioBookDB";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     private static final String TABLE_MEDIA = "TABLE_MEDIA";
     private static final String TABLE_BOOKS = "TABLE_BOOKS";
@@ -111,10 +111,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     "KEY_BOOKMARK_TIME" + " INTEGER NOT NULL)";
             db.execSQL(CREATE_BOOKMARK_TABLE);
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
-            int integerBookId = sp.getInt("de.ph1b.audiobook.activity.BookChoose.SHARED_PREFS_CURRENT", -1);
-            long longBookId = (long) integerBookId;
             SharedPreferences.Editor editor = sp.edit();
-            editor.putLong("currentBook", longBookId);
+            editor.putLong("currentBook", -1);
             editor.apply();
 
             //updating tables to represent a position instead the id.
@@ -130,53 +128,34 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             db.execSQL(CREATE_BOOK_TABLE);
 
             Cursor books = db.query("TABLE_BOOKS_TEMP",
-                    new String[]{"KEY_BOOK_ID", "KEY_BOOK_NAME", "KEY_BOOK_COVER",
-                            "KEY_BOOK_CURRENT_MEDIA_ID", "KEY_BOOK_CURRENT_MEDIA_POSITION"},
+                    new String[]{"KEY_BOOK_ID", "KEY_BOOK_NAME", "KEY_BOOK_COVER"},
                     null, null, null, null, null);
             try {
                 while (books.moveToNext()) {
                     long oldBookId = books.getLong(0);
                     String bookName = books.getString(1);
                     String bookCover = books.getString(2);
-                    long currentMediaId = books.getLong(3);
-                    int currentMediaPosition = books.getInt(4);
-                    Cursor media = db.query("TABLE_MEDIA", //table
-                            new String[]{"KEY_MEDIA_ID"}, //query
-                            "KEY_MEDIA_BOOK_ID" + "=?", //selection
-                            new String[]{String.valueOf(oldBookId)}, //selection args
-                            null, null,
-                            "KEY_MEDIA_ID"); //sort by
-                    try {
-                        int position = -1; //get position in the future Media Array
-                        while (media.moveToNext()) {
-                            position++;
-                            if (media.getLong(0) == currentMediaId) {
-                                break;
-                            }
-                        }
-                        ContentValues cv = new ContentValues();
-                        cv.put("KEY_BOOK_NAME", bookName);
 
-                        if (bookCover == null || bookCover.equals("") || !new File(bookCover).exists()) {
-                            Bitmap cover = ImageHelper.genCapital(bookName, c);
-                            bookCover = ImageHelper.saveCover(cover, c);
-                        }
+                    ContentValues cv = new ContentValues();
+                    cv.put("KEY_BOOK_NAME", bookName);
 
-                        cv.put("KEY_BOOK_COVER", bookCover);
-                        cv.put("KEY_BOOK_POSITION", position);
-                        cv.put("KEY_BOOK_TIME", currentMediaPosition);
-                        cv.put("KEY_BOOK_SORT_ID", 0);
-                        cv.put("KEY_BOOK_SPEED", 1);
-                        long newBookId = db.insert("TABLE_BOOKS", null, cv);
-                        cv.put("KEY_BOOK_SORT_ID", newBookId);
-                        db.update("TABLE_BOOKS", cv, "KEY_BOOK_ID" + "=?", new String[]{String.valueOf(newBookId)});
+                    if (bookCover == null || bookCover.equals("") || !new File(bookCover).exists()) {
+                        Bitmap cover = ImageHelper.genCapital(bookName, c);
+                        bookCover = ImageHelper.saveCover(cover, c);
+                    }
 
-                        // updating current book
-                        if (oldBookId == oldCurrentBookId) {
-                            prefs.setCurrentBookId(newBookId);
-                        }
-                    } finally {
-                        media.close();
+                    cv.put("KEY_BOOK_COVER", bookCover);
+                    cv.put("KEY_BOOK_POSITION", 0);
+                    cv.put("KEY_BOOK_TIME", 0);
+                    cv.put("KEY_BOOK_SORT_ID", 0);
+                    cv.put("KEY_BOOK_SPEED", 1);
+                    long newBookId = db.insert("TABLE_BOOKS", null, cv);
+                    cv.put("KEY_BOOK_SORT_ID", newBookId);
+                    db.update("TABLE_BOOKS", cv, "KEY_BOOK_ID" + "=?", new String[]{String.valueOf(newBookId)});
+
+                    // updating current book
+                    if (oldBookId == oldCurrentBookId) {
+                        prefs.setCurrentBookId(newBookId);
                     }
                 }
             } finally {
