@@ -30,6 +30,7 @@ import java.util.concurrent.Executors;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookPlayActivity;
+import de.ph1b.audiobook.activity.BookShelfActivity;
 import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.receiver.BaseWidgetProvider;
@@ -184,8 +185,8 @@ public class WidgetUpdateService extends Service {
         // if we have any book, init the views and have a click on the whole widget start BookPlay.
         // if we have no book, simply have a click on the whole widget start BookChoose.
         PendingIntent wholeWidgetClickPI;
-        Intent wholeWidgetClickI = new Intent(this, BookPlayActivity.class);
         if (book != null) {
+            Intent wholeWidgetClickI = new Intent(this, BookPlayActivity.class);
             remoteViews.setTextViewText(R.id.title, book.getName());
             String name = book.getContainingMedia().get(book.getPosition()).getName();
             remoteViews.setTextViewText(R.id.summary, name);
@@ -205,6 +206,7 @@ public class WidgetUpdateService extends Service {
             }
         } else {
             // directly going back to bookChoose
+            Intent wholeWidgetClickI = new Intent(this, BookShelfActivity.class);
             wholeWidgetClickPI = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
