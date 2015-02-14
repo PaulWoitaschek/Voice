@@ -9,6 +9,7 @@
 * Layout improvements
 * Minimize data useage on cover loading
 * Its now possible to use the replacement cover permanently
+* Save speed for each book individually
 * Performance improvements
 
 ## Fixes
