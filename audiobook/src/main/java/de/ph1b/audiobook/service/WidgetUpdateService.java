@@ -36,7 +36,7 @@ import de.ph1b.audiobook.receiver.BaseWidgetProvider;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
-public class WidgetUpdateService extends Service implements StateManager.ChangeListener {
+public class WidgetUpdateService extends Service {
     private static final String TAG = WidgetUpdateService.class.getSimpleName();
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private StateManager stateManager;
@@ -96,44 +96,15 @@ public class WidgetUpdateService extends Service implements StateManager.ChangeL
         super.onCreate();
 
         stateManager = StateManager.getInstance(this);
-        stateManager.addChangeListener(this);
-
         appWidgetManager = AppWidgetManager.getInstance(this);
         db = DataBaseHelper.getInstance(this);
         prefs = new PrefsManager(this);
     }
 
     @Override
-    public void onDestroy() {
-        stateManager.removeChangeListener(this);
-
-        super.onDestroy();
-    }
-
-    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         updateWidget();
         return Service.START_STICKY;
-    }
-
-    @Override
-    public void onTimeChanged(int time) {
-
-    }
-
-    @Override
-    public void onStateChanged(PlayerStates state) {
-
-    }
-
-    @Override
-    public void onSleepTimerSet(boolean sleepTimerActive) {
-
-    }
-
-    @Override
-    public void onPositionChanged(int position) {
-
     }
 
     @Override
