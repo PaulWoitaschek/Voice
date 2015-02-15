@@ -9,9 +9,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import de.ph1b.audiobook.utils.L;
 
 
-public class StateManager {
-    private static final String TAG = StateManager.class.getSimpleName();
-    private static StateManager instance;
+public class GlobalState {
+    private static final String TAG = GlobalState.class.getSimpleName();
+    private static GlobalState instance;
     private final List<ChangeListener> listeners = new CopyOnWriteArrayList<>(); //to avoid massive synchronization
     private final Context c;
     private PlayerStates state = PlayerStates.STOPPED;
@@ -19,13 +19,13 @@ public class StateManager {
     private boolean sleepTimerActive = false;
     private int position;
 
-    private StateManager(Context c) {
+    private GlobalState(Context c) {
         this.c = c;
     }
 
-    public static synchronized StateManager getInstance(Context c) {
+    public static synchronized GlobalState getInstance(Context c) {
         if (instance == null) {
-            instance = new StateManager(c.getApplicationContext());
+            instance = new GlobalState(c.getApplicationContext());
         }
         return instance;
     }

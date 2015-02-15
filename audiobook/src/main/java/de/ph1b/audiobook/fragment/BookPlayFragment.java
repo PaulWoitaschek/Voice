@@ -41,19 +41,19 @@ import de.ph1b.audiobook.dialog.BookmarkDialog;
 import de.ph1b.audiobook.dialog.JumpToPositionDialog;
 import de.ph1b.audiobook.dialog.SetPlaybackSpeedDialog;
 import de.ph1b.audiobook.service.AudioPlayerService;
+import de.ph1b.audiobook.service.GlobalState;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.service.ServiceController;
-import de.ph1b.audiobook.service.StateManager;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
 import de.ph1b.audiobook.utils.MusicUtil;
 import de.ph1b.audiobook.utils.PrefsManager;
 
-public class BookPlayFragment extends Fragment implements OnClickListener, StateManager.ChangeListener {
+public class BookPlayFragment extends Fragment implements OnClickListener, GlobalState.ChangeListener {
 
     private static final String TAG = BookPlayFragment.class.getSimpleName();
     private final Handler handler = new Handler(Looper.getMainLooper());
-    private StateManager stateManager;
+    private GlobalState globalState;
     private volatile int duration = 0;
     private ImageButton play_button;
     private TextView playedTimeView;
@@ -69,17 +69,17 @@ public class BookPlayFragment extends Fragment implements OnClickListener, State
     public void onResume() {
         super.onResume();
 
-        stateManager.addChangeListener(this);
+        globalState.addChangeListener(this);
 
         book = db.getBook(prefs.getCurrentBookId());
         onPositionChanged(book.getPosition());
         onTimeChanged(book.getTime());
-        onStateChanged(stateManager.getState());
+        onStateChanged(globalState.getState());
     }
 
     @Override
     public void onPause() {
-        stateManager.removeChangeListener(this);
+        globalState.removeChangeListener(this);
 
         super.onPause();
     }
@@ -98,7 +98,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, State
         prefs = new PrefsManager(getActivity());
         db = DataBaseHelper.getInstance(getActivity());
         controller = new ServiceController(getActivity());
-        stateManager = StateManager.getInstance(getActivity());
+        globalState = GlobalState.getInstance(getActivity());
 
         //setup actionbar
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
@@ -218,7 +218,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, State
         timeLapseItem.setVisible(Build.VERSION.SDK_INT >= 16);
         MenuItem sleepTimerItem = menu.findItem(R.id.action_sleep);
 
-        if (stateManager.isSleepTimerActive()) {
+        if (globalState.isSleepTimerActive()) {
             sleepTimerItem.setIcon(R.drawable.ic_alarm_on_white_24dp);
         } else {
             sleepTimerItem.setIcon(R.drawable.ic_snooze_white_24dp);
@@ -263,7 +263,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, State
         JumpToPositionDialog dialog = new JumpToPositionDialog();
         Bundle bundle = new Bundle();
         bundle.putInt(JumpToPositionDialog.DURATION, duration);
-        bundle.putInt(JumpToPositionDialog.POSITION, stateManager.getTime());
+        bundle.putInt(JumpToPositionDialog.POSITION, globalState.getTime());
         dialog.setArguments(bundle);
         dialog.setTargetFragment(this, 42);
         dialog.show(getFragmentManager(), "timePicker");

@@ -52,7 +52,7 @@ import de.ph1b.audiobook.interfaces.OnItemLongClickListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.service.ServiceController;
-import de.ph1b.audiobook.service.StateManager;
+import de.ph1b.audiobook.service.GlobalState;
 import de.ph1b.audiobook.utils.CustomOnSimpleGestureListener;
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
@@ -60,7 +60,7 @@ import de.ph1b.audiobook.utils.MaterialCompatThemer;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 
-public class BookShelfFragment extends Fragment implements View.OnClickListener, EditBookDialog.OnEditBookFinished, RecyclerView.OnItemTouchListener, StateManager.ChangeListener {
+public class BookShelfFragment extends Fragment implements View.OnClickListener, EditBookDialog.OnEditBookFinished, RecyclerView.OnItemTouchListener, GlobalState.ChangeListener {
 
 
     private static final String TAG = BookShelfFragment.class.getSimpleName();
@@ -76,7 +76,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     private GestureDetectorCompat detector;
     private Book bookToEdit;
     private float scrollBy = 0;
-    private StateManager stateManager;
+    private GlobalState globalState;
     private ServiceController controller;
     private ArrayList<Book> books;
 
@@ -97,7 +97,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        stateManager = StateManager.getInstance(getActivity());
+        globalState = GlobalState.getInstance(getActivity());
         controller = new ServiceController(getActivity());
 
         Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
@@ -326,8 +326,8 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public void onResume() {
         super.onResume();
 
-        stateManager.addChangeListener(this);
-        onStateChanged(stateManager.getState());
+        globalState.addChangeListener(this);
+        onStateChanged(globalState.getState());
 
         executor.execute(new Runnable() {
             @Override
@@ -352,7 +352,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public void onPause() {
         super.onPause();
 
-        stateManager.removeChangeListener(this);
+        globalState.removeChangeListener(this);
     }
 
     @Override

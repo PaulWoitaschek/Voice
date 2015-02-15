@@ -40,7 +40,7 @@ import de.ph1b.audiobook.utils.PrefsManager;
 public class WidgetUpdateService extends Service {
     private static final String TAG = WidgetUpdateService.class.getSimpleName();
     private final ExecutorService executor = Executors.newCachedThreadPool();
-    private StateManager stateManager;
+    private GlobalState globalState;
     private AppWidgetManager appWidgetManager;
     private DataBaseHelper db;
     private PrefsManager prefs;
@@ -96,7 +96,7 @@ public class WidgetUpdateService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        stateManager = StateManager.getInstance(this);
+        globalState = GlobalState.getInstance(this);
         appWidgetManager = AppWidgetManager.getInstance(this);
         db = DataBaseHelper.getInstance(this);
         prefs = new PrefsManager(this);
@@ -176,7 +176,7 @@ public class WidgetUpdateService extends Service {
         PendingIntent rewindPI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_REWIND, rewindI, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI);
 
-        if (stateManager.getState() == PlayerStates.PLAYING) {
+        if (globalState.getState() == PlayerStates.PLAYING) {
             remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_48dp);
         } else {
             remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow_white_48dp);

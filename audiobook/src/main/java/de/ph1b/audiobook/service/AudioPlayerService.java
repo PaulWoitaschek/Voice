@@ -39,7 +39,7 @@ import de.ph1b.audiobook.receiver.RemoteControlReceiver;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
-public class AudioPlayerService extends Service implements StateManager.ChangeListener, AudioManager.OnAudioFocusChangeListener {
+public class AudioPlayerService extends Service implements GlobalState.ChangeListener, AudioManager.OnAudioFocusChangeListener {
 
 
     private static final String TAG = AudioPlayerService.class.getSimpleName();
@@ -50,7 +50,7 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
     private MediaPlayerController controller = null;
     private DataBaseHelper db;
     private AudioManager audioManager;
-    private StateManager stateManager;
+    private GlobalState globalState;
     private NotificationCompat.Builder notificationBuilder;
     @SuppressWarnings("deprecation")
     private RemoteControlClient remoteControlClient = null;
@@ -60,7 +60,7 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
     private final BroadcastReceiver audioBecomingNoisyReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (stateManager.getState() == PlayerStates.PLAYING) {
+            if (globalState.getState() == PlayerStates.PLAYING) {
                 pauseBecauseHeadset = true;
                 controller.pause();
             }
@@ -97,7 +97,7 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
         notificationBuilder = new NotificationCompat.Builder(this);
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        stateManager = StateManager.getInstance(this);
+        globalState = GlobalState.getInstance(this);
 
         if (Build.VERSION.SDK_INT >= 14) {
             ComponentName eventReceiver = new ComponentName(AudioPlayerService.this.getPackageName(), RemoteControlReceiver.class.getName());
@@ -125,13 +125,13 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
                 AudioManager.ACTION_AUDIO_BECOMING_NOISY));
         registerReceiver(headsetPlugReceiver, new IntentFilter(Intent.ACTION_HEADSET_PLUG));
 
-        stateManager.addChangeListener(this);
+        globalState.addChangeListener(this);
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public void onDestroy() {
-        stateManager.removeChangeListener(this);
+        globalState.removeChangeListener(this);
 
         try {
             unregisterReceiver(audioBecomingNoisyReceiver);
@@ -179,7 +179,7 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
                                     break;
                                 case KeyEvent.KEYCODE_HEADSETHOOK:
                                 case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-                                    if (stateManager.getState() == PlayerStates.PLAYING) {
+                                    if (globalState.getState() == PlayerStates.PLAYING) {
                                         controller.pause();
                                     } else {
                                         controller.play();
@@ -318,7 +318,7 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
         PendingIntent rewindPI = PendingIntent.getService(getApplicationContext(), KeyEvent.KEYCODE_MEDIA_REWIND, rewindIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent playPauseIntent = ServiceController.getPlayPauseIntent(this);
-        if (stateManager.getState() == PlayerStates.PLAYING) {
+        if (globalState.getState() == PlayerStates.PLAYING) {
             smallViewRemote.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_48dp);
             bigViewRemote.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_48dp);
         } else {
@@ -444,7 +444,7 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
                 L.d(TAG, "started by audioFocus gained");
                 if (pauseBecauseLossTransient) {
                     controller.play();
-                } else if (stateManager.getState() == PlayerStates.PLAYING) {
+                } else if (globalState.getState() == PlayerStates.PLAYING) {
                     L.d(TAG, "increasing volume because of regain focus from transient-can-duck");
                     audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
                 }
@@ -454,14 +454,14 @@ public class AudioPlayerService extends Service implements StateManager.ChangeLi
                 controller.release();
                 break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                if (stateManager.getState() == PlayerStates.PLAYING) {
+                if (globalState.getState() == PlayerStates.PLAYING) {
                     L.d(TAG, "Paused by audio-focus loss transient.");
                     controller.pause();
                     pauseBecauseLossTransient = true;
                 }
                 break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                if (stateManager.getState() == PlayerStates.PLAYING) {
+                if (globalState.getState() == PlayerStates.PLAYING) {
                     L.d(TAG, "pausing because of transient loss");
                     controller.pause();
                     pauseBecauseLossTransient = true;

@@ -14,7 +14,7 @@ import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.service.PositionUpdater;
-import de.ph1b.audiobook.service.StateManager;
+import de.ph1b.audiobook.service.GlobalState;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
@@ -23,7 +23,7 @@ public class MediaPlayerController {
     private static final String TAG = MediaPlayerController.class.getSimpleName();
     private final Book book;
     private final Context c;
-    private final StateManager extState;
+    private final GlobalState extState;
     private final ReentrantLock lock = new ReentrantLock();
     private final PrefsManager prefs;
     private final PositionUpdater positionUpdater;
@@ -50,7 +50,7 @@ public class MediaPlayerController {
         L.i(TAG, "new MediaPlayerController with book:" + book);
         this.book = book;
         this.c = c;
-        extState = StateManager.getInstance(c);
+        extState = GlobalState.getInstance(c);
         prefs = new PrefsManager(c);
         db = DataBaseHelper.getInstance(c);
 

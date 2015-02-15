@@ -15,7 +15,7 @@ import de.ph1b.audiobook.mediaplayer.MediaPlayerCompat;
 public class PositionUpdater {
 
     private final MediaPlayerCompat mp;
-    private final StateManager stateManager;
+    private final GlobalState globalState;
     private final Book book;
 
     private final DataBaseHelper db;
@@ -25,7 +25,7 @@ public class PositionUpdater {
 
     public PositionUpdater(MediaPlayerCompat mp, Context c, Book book) {
         this.mp = mp;
-        this.stateManager = StateManager.getInstance(c);
+        this.globalState = GlobalState.getInstance(c);
         this.book = book;
         this.db = DataBaseHelper.getInstance(c);
     }
@@ -40,7 +40,7 @@ public class PositionUpdater {
                 @Override
                 public void run() {
                     int pos = mp.getCurrentPosition();
-                    stateManager.setTime(pos);
+                    globalState.setTime(pos);
                     book.setTime(pos);
                     db.updateBook(book);
                 }
