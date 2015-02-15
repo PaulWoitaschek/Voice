@@ -71,4 +71,5 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.2.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
     compile 'com.squareup.picasso:picasso:2.4.0'
+    compile 'com.afollestad:material-dialogs:0.6.3.0'
 }

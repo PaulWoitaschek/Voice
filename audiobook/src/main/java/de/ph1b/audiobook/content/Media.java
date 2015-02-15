@@ -22,7 +22,7 @@ public class Media implements Parcelable {
     };
     private final String path;
     private final String name;
-    private final long bookId;
+    private long bookId;
     private long id;
     private int duration;
 
@@ -30,6 +30,11 @@ public class Media implements Parcelable {
         this.path = path;
         this.name = name;
         this.bookId = bookId;
+    }
+
+    public Media(String path, String name) {
+        this.path = path;
+        this.name = name;
     }
 
 
@@ -78,10 +83,6 @@ public class Media implements Parcelable {
 
     public void setDuration(int duration) {
         this.duration = duration;
-    }
-
-    public long getBookId() {
-        return bookId;
     }
 
     public String getName() {

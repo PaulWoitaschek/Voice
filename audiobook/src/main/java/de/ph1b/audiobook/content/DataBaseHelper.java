@@ -457,16 +457,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 int position = bookCursor.getInt(2);
                 int time = bookCursor.getInt(3);
                 long sortId = bookCursor.getLong(4);
-                float speed = bookCursor.getFloat(5);
-
-                Book book = new Book();
-                book.setName(bookName);
-                book.setCover(cover);
-                book.setPosition(position);
-                book.setTime(time);
-                book.setSortId(sortId);
-                book.setId(bookId);
-                book.setPlaybackSpeed(speed);
+                float playbackSpeed = bookCursor.getFloat(5);
 
                 ArrayList<Media> containingMedia = new ArrayList<>();
 
@@ -492,10 +483,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     mediaCursor.close();
                 }
 
-                book.setContainingMedia(containingMedia);
-                L.d(TAG, "got book with containing media size: " + book.getContainingMedia());
-                L.d(TAG, "so book is:" + book);
-                return book;
+                return new Book(bookName, cover, containingMedia, position, time, sortId, bookId, playbackSpeed);
             }
         } finally {
             bookCursor.close();
@@ -506,25 +494,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public Book getBook(long id) {
         return getBook(id, getReadableDatabase());
-    }
-
-
-    public void addMedia(ArrayList<Media> media) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.beginTransaction();
-        try {
-            for (Media m : media) {
-                ContentValues values = new ContentValues();
-                values.put(KEY_MEDIA_PATH, m.getPath()); // get title
-                values.put(KEY_MEDIA_NAME, m.getName());
-                values.put(KEY_MEDIA_DURATION, m.getDuration());
-                values.put(KEY_MEDIA_BOOK_ID, m.getBookId());
-                db.insert(TABLE_MEDIA, null, values);
-            }
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
     }
 
     public long addBookmark(Bookmark bookmark) {
@@ -582,24 +551,31 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public long addBook(Book book) {
+    public void addBook(Book book) {
         L.d(TAG, "addBook called");
-        ContentValues values = new ContentValues();
-        values.put(KEY_BOOK_NAME, book.getName());
-        values.put(KEY_BOOK_COVER, book.getCover());
-        values.put(KEY_BOOK_SPEED, book.getPlaybackSpeed());
+        ContentValues bookValues = new ContentValues();
+        bookValues.put(KEY_BOOK_NAME, book.getName());
+        bookValues.put(KEY_BOOK_COVER, book.getCover());
+        bookValues.put(KEY_BOOK_SPEED, book.getPlaybackSpeed());
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
-        long bookId = 0;
         try {
-            bookId = db.insert(TABLE_BOOKS, null, values);
-            values.put(KEY_BOOK_SORT_ID, bookId);
-            db.update(TABLE_BOOKS, values, KEY_BOOK_ID + "=?", new String[]{String.valueOf(bookId)});
+            long bookId = db.insert(TABLE_BOOKS, null, bookValues); // adding book
+            bookValues.put(KEY_BOOK_SORT_ID, bookId);
+            db.update(TABLE_BOOKS, bookValues, KEY_BOOK_ID + "=?", new String[]{String.valueOf(bookId)}); // setting sortid to same id
+            ArrayList<Media> containingMedia = book.getContainingMedia();
+            for (Media m : containingMedia) {
+                ContentValues mediaCV = new ContentValues();
+                mediaCV.put(KEY_MEDIA_PATH, m.getPath());
+                mediaCV.put(KEY_MEDIA_NAME, m.getName());
+                mediaCV.put(KEY_MEDIA_DURATION, m.getDuration());
+                mediaCV.put(KEY_MEDIA_BOOK_ID, bookId);
+                db.insert(TABLE_MEDIA, null, mediaCV);
+            }
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
         }
-        return bookId;
     }
 
     /**

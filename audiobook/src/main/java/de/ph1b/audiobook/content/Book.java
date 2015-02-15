@@ -29,8 +29,19 @@ public class Book implements Parcelable {
     private ArrayList<Media> containingMedia = new ArrayList<>();
     private float playbackSpeed = 1;
 
-    public Book() {
+    public Book(String name, String cover, ArrayList<Media> containingMedia) {
+        this.name = name;
+        this.cover = cover;
+        this.containingMedia = containingMedia;
+    }
 
+    public Book(String name, String cover, ArrayList<Media> containingMedia, int position, int time, long sortId, long id, float playbackSpeed) {
+        this(name, cover, containingMedia);
+        this.position = position;
+        this.time = time;
+        this.sortId = sortId;
+        this.id = id;
+        this.playbackSpeed = playbackSpeed;
     }
 
     private Book(Parcel in) {
@@ -59,10 +70,6 @@ public class Book implements Parcelable {
 
     public ArrayList<Media> getContainingMedia() {
         return containingMedia;
-    }
-
-    public void setContainingMedia(ArrayList<Media> containingMedia) {
-        this.containingMedia = containingMedia;
     }
 
     /**
@@ -104,10 +111,6 @@ public class Book implements Parcelable {
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {

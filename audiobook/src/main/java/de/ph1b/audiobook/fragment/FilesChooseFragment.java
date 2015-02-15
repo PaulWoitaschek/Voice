@@ -426,7 +426,6 @@ public class FilesChooseFragment extends Fragment implements EditBookDialog.OnEd
         private final ArrayList<Media> media = new ArrayList<>();
         private Bitmap cover;
         private ProgressDialog progressDialog;
-        private long bookId;
 
         public AddBookAsync(ArrayList<File> files, String defaultName, Bitmap cover) {
             this.files = files;
@@ -449,23 +448,17 @@ public class FilesChooseFragment extends Fragment implements EditBookDialog.OnEd
         @Override
         protected Void doInBackground(Void... params) {
             DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
-            Book b = new Book();
-            b.setName(defaultName);
             if (cover == null) {
                 cover = ImageHelper.genCapital(defaultName, getActivity());
             }
             String coverPath = ImageHelper.saveCover(cover, getActivity());
-            if (coverPath != null) {
-                b.setCover(coverPath);
-            }
 
-            bookId = db.addBook(b);
             for (File f : files) {
                 String fileName = f.getName();
                 String path = f.getAbsolutePath();
                 if (fileName.indexOf(".") > 0)
                     fileName = fileName.substring(0, fileName.lastIndexOf("."));
-                media.add(new Media(path, fileName, bookId));
+                media.add(new Media(path, fileName));
             }
 
             // adding duration in first media file to have the first duration when book is started.
@@ -474,7 +467,8 @@ public class FilesChooseFragment extends Fragment implements EditBookDialog.OnEd
                 MusicUtil.fillMissingDuration(media.get(0));
             }
 
-            db.addMedia(media);
+            Book book = new Book(defaultName, coverPath, media);
+            db.addBook(book);
             return null;
         }
 
