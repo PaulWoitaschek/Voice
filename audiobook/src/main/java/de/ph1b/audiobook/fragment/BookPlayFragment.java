@@ -34,7 +34,6 @@ import java.util.concurrent.TimeUnit;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.SettingsActivity;
 import de.ph1b.audiobook.adapter.MediaSpinnerAdapter;
-import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.content.Media;
 import de.ph1b.audiobook.dialog.BookmarkDialog;
@@ -60,7 +59,6 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Globa
     private SeekBar seekBar;
     private volatile Spinner bookSpinner;
     private TextView maxTimeView;
-    private volatile Book book;
     private PrefsManager prefs;
     private DataBaseHelper db;
     private ServiceController controller;
@@ -71,9 +69,8 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Globa
 
         globalState.addChangeListener(this);
 
-        book = db.getBook(prefs.getCurrentBookId());
-        onPositionChanged(book.getPosition());
-        onTimeChanged(book.getTime());
+        onPositionChanged(globalState.getPosition());
+        onTimeChanged(globalState.getTime());
         onStateChanged(globalState.getState());
     }
 
@@ -111,14 +108,11 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Globa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_book_play, container, false);
 
-        long bookId = prefs.getCurrentBookId();
-        book = db.getBook(bookId);
-
         // filling missing durations in the background
         new Thread(new Runnable() {
             @Override
             public void run() {
-                for (Media m : book.getContainingMedia()) {
+                for (Media m : globalState.getBook().getContainingMedia()) {
                     if (m.getDuration() == 0) {
                         MusicUtil.fillMissingDuration(m);
                         db.updateMedia(m);
@@ -168,7 +162,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Globa
             }
         });
 
-        MediaSpinnerAdapter adapter = new MediaSpinnerAdapter(getActivity(), book);
+        MediaSpinnerAdapter adapter = new MediaSpinnerAdapter(getActivity(), globalState.getBook());
         bookSpinner.setAdapter(adapter);
         bookSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -187,15 +181,15 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Globa
         });
 
         // (ActionBarTitle)
-        String bookName = book.getName();
+        String bookName = globalState.getBook().getName();
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setTitle(bookName);
 
         // (Cover)
-        Picasso.with(getActivity()).load(new File(book.getCover())).into(coverView);
+        Picasso.with(getActivity()).load(new File(globalState.getBook().getCover())).into(coverView);
 
         // Next/Prev/spinner hiding
-        if (book.getContainingMedia().size() == 1) {
+        if (globalState.getBook().getContainingMedia().size() == 1) {
             next_button.setVisibility(View.GONE);
             previous_button.setVisibility(View.GONE);
             bookSpinner.setVisibility(View.GONE);
@@ -337,7 +331,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Globa
                  * the user changes the position himself.
                  */
                 L.v(TAG, "onPositionChanged executed:" + position);
-                ArrayList<Media> containingMedia = book.getContainingMedia();
+                ArrayList<Media> containingMedia = globalState.getBook().getContainingMedia();
                 if (position < containingMedia.size()) {
                     bookSpinner.setTag(position);
                     bookSpinner.setSelection(position, true);

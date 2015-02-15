@@ -6,6 +6,7 @@ import android.content.Intent;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.utils.L;
 
 
@@ -20,7 +21,19 @@ public enum GlobalState {
     private int time;
     private boolean sleepTimerActive = false;
     private int position;
+    private Book book;
 
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        if (this.book != book) {
+            setTime(book.getTime());
+            setPosition(book.getPosition());
+            this.book = book;
+        }
+    }
 
     public void init(Context c) {
         this.c = c.getApplicationContext();

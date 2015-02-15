@@ -128,10 +128,9 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             @Override
             public void onCoverClicked(int position) {
                 Book book = adapter.getItem(position);
-                long bookId = book.getId();
-
-                prefs.setCurrentBookId(bookId);
-
+                prefs.setCurrentBookId(book.getId());
+                
+                globalState.setBook(book);
                 Intent i = new Intent(getActivity(), BookPlayActivity.class);
                 startActivity(i);
             }
