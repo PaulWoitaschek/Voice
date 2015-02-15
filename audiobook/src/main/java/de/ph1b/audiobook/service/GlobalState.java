@@ -9,25 +9,21 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import de.ph1b.audiobook.utils.L;
 
 
-public class GlobalState {
+public enum GlobalState {
+
+    INSTANCE;
+
     private static final String TAG = GlobalState.class.getSimpleName();
-    private static GlobalState instance;
     private final List<ChangeListener> listeners = new CopyOnWriteArrayList<>(); //to avoid massive synchronization
-    private final Context c;
+    private Context c;
     private PlayerStates state = PlayerStates.STOPPED;
     private int time;
     private boolean sleepTimerActive = false;
     private int position;
 
-    private GlobalState(Context c) {
-        this.c = c;
-    }
 
-    public static synchronized GlobalState getInstance(Context c) {
-        if (instance == null) {
-            instance = new GlobalState(c.getApplicationContext());
-        }
-        return instance;
+    public void init(Context c) {
+        this.c = c.getApplicationContext();
     }
 
     public int getPosition() {

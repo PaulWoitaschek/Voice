@@ -40,7 +40,7 @@ import de.ph1b.audiobook.utils.PrefsManager;
 public class WidgetUpdateService extends Service {
     private static final String TAG = WidgetUpdateService.class.getSimpleName();
     private final ExecutorService executor = Executors.newCachedThreadPool();
-    private GlobalState globalState;
+    private final GlobalState globalState = GlobalState.INSTANCE;
     private AppWidgetManager appWidgetManager;
     private DataBaseHelper db;
     private PrefsManager prefs;
@@ -96,7 +96,7 @@ public class WidgetUpdateService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        globalState = GlobalState.getInstance(this);
+        globalState.init(this);
         appWidgetManager = AppWidgetManager.getInstance(this);
         db = DataBaseHelper.getInstance(this);
         prefs = new PrefsManager(this);

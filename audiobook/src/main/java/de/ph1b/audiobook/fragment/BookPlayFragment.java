@@ -53,7 +53,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Globa
 
     private static final String TAG = BookPlayFragment.class.getSimpleName();
     private final Handler handler = new Handler(Looper.getMainLooper());
-    private GlobalState globalState;
+    private final GlobalState globalState = GlobalState.INSTANCE;
     private volatile int duration = 0;
     private ImageButton play_button;
     private TextView playedTimeView;
@@ -98,7 +98,7 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Globa
         prefs = new PrefsManager(getActivity());
         db = DataBaseHelper.getInstance(getActivity());
         controller = new ServiceController(getActivity());
-        globalState = GlobalState.getInstance(getActivity());
+        globalState.init(getActivity());
 
         //setup actionbar
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();

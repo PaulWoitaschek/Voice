@@ -45,12 +45,12 @@ public class AudioPlayerService extends Service implements GlobalState.ChangeLis
     private static final String TAG = AudioPlayerService.class.getSimpleName();
     private static final int NOTIFICATION_ID = 42;
     private final ExecutorService executor = Executors.newCachedThreadPool();
+    private final GlobalState globalState = GlobalState.INSTANCE;
     private NotificationManager notificationManager;
     private PrefsManager prefs;
     private MediaPlayerController controller = null;
     private DataBaseHelper db;
     private AudioManager audioManager;
-    private GlobalState globalState;
     private NotificationCompat.Builder notificationBuilder;
     @SuppressWarnings("deprecation")
     private RemoteControlClient remoteControlClient = null;
@@ -97,7 +97,7 @@ public class AudioPlayerService extends Service implements GlobalState.ChangeLis
         notificationBuilder = new NotificationCompat.Builder(this);
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        globalState = GlobalState.getInstance(this);
+        globalState.init(this);
 
         if (Build.VERSION.SDK_INT >= 14) {
             ComponentName eventReceiver = new ComponentName(AudioPlayerService.this.getPackageName(), RemoteControlReceiver.class.getName());

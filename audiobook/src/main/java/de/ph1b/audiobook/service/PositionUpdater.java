@@ -15,7 +15,7 @@ import de.ph1b.audiobook.mediaplayer.MediaPlayerCompat;
 public class PositionUpdater {
 
     private final MediaPlayerCompat mp;
-    private final GlobalState globalState;
+    private final GlobalState globalState = GlobalState.INSTANCE;
     private final Book book;
 
     private final DataBaseHelper db;
@@ -25,7 +25,7 @@ public class PositionUpdater {
 
     public PositionUpdater(MediaPlayerCompat mp, Context c, Book book) {
         this.mp = mp;
-        this.globalState = GlobalState.getInstance(c);
+        globalState.init(c);
         this.book = book;
         this.db = DataBaseHelper.getInstance(c);
     }

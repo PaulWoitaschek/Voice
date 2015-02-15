@@ -50,9 +50,9 @@ import de.ph1b.audiobook.dialog.EditBookDialog;
 import de.ph1b.audiobook.interfaces.OnItemClickListener;
 import de.ph1b.audiobook.interfaces.OnItemLongClickListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
+import de.ph1b.audiobook.service.GlobalState;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.service.ServiceController;
-import de.ph1b.audiobook.service.GlobalState;
 import de.ph1b.audiobook.utils.CustomOnSimpleGestureListener;
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
@@ -66,6 +66,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     private static final String TAG = BookShelfFragment.class.getSimpleName();
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final GlobalState globalState = GlobalState.INSTANCE;
     private DataBaseHelper db;
     private MediaAdapter adapter;
     private ImageView currentCover;
@@ -76,7 +77,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     private GestureDetectorCompat detector;
     private Book bookToEdit;
     private float scrollBy = 0;
-    private GlobalState globalState;
     private ServiceController controller;
     private ArrayList<Book> books;
 
@@ -97,7 +97,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        globalState = GlobalState.getInstance(getActivity());
+        globalState.init(getActivity());
         controller = new ServiceController(getActivity());
 
         Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);

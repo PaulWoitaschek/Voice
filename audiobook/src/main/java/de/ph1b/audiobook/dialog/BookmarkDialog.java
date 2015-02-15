@@ -31,8 +31,8 @@ import de.ph1b.audiobook.adapter.BookmarkAdapter;
 import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.Bookmark;
 import de.ph1b.audiobook.content.DataBaseHelper;
-import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.service.GlobalState;
+import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.utils.DividerItemDecoration;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
 import de.ph1b.audiobook.utils.PrefsManager;
@@ -58,7 +58,8 @@ public class BookmarkDialog extends DialogFragment {
         final PrefsManager prefs = new PrefsManager(getActivity());
         final Book book = db.getBook(prefs.getCurrentBookId());
         final ArrayList<Bookmark> allBookmarks = db.getAllBookmarks(book.getId());
-        final GlobalState globalState = GlobalState.getInstance(getActivity());
+        final GlobalState globalState = GlobalState.INSTANCE;
+        globalState.init(getActivity());
 
         BookmarkAdapter.OnOptionsMenuClickedListener listener = new BookmarkAdapter.OnOptionsMenuClickedListener() {
             @Override
