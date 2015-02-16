@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import de.ph1b.audiobook.content.Book;
+import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.utils.L;
+import de.ph1b.audiobook.utils.PrefsManager;
 
 
 public enum GlobalState {
@@ -18,10 +20,12 @@ public enum GlobalState {
     private final List<ChangeListener> listeners = new CopyOnWriteArrayList<>(); //to avoid massive synchronization
     private Context c;
     private PlayerStates state = PlayerStates.STOPPED;
+    private PrefsManager prefs = null;
+    private DataBaseHelper db = null;
     private int time;
     private boolean sleepTimerActive = false;
     private int position;
-    private Book book;
+    private Book book = null;
 
     public Book getBook() {
         return book;
@@ -37,6 +41,13 @@ public enum GlobalState {
 
     public void init(Context c) {
         this.c = c.getApplicationContext();
+        db = DataBaseHelper.getInstance(c);
+        prefs = new PrefsManager(c);
+
+        if (book == null) {
+            long bookId = prefs.getCurrentBookId();
+            setBook(db.getBook(bookId));
+        }
     }
 
     public int getPosition() {
