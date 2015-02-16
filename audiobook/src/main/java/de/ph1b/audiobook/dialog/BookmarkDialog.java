@@ -24,6 +24,8 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.AlertDialogWrapper;
+
 import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
@@ -34,7 +36,6 @@ import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.service.GlobalState;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.utils.DividerItemDecoration;
-import de.ph1b.audiobook.utils.MaterialCompatThemer;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 /**
@@ -70,7 +71,7 @@ public class BookmarkDialog extends DialogFragment {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        AlertDialogWrapper.Builder builder = new AlertDialogWrapper.Builder(getActivity());
                         switch (item.getItemId()) {
                             case R.id.edit_book:
                                 final Bookmark editBookmark = adapter.getItem(position);
@@ -91,7 +92,6 @@ public class BookmarkDialog extends DialogFragment {
                                 });
                                 builder.setNegativeButton(R.string.abort, null);
                                 AlertDialog dialog = builder.show();
-                                MaterialCompatThemer.theme(dialog);
                                 final Button positive = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
                                 positive.setEnabled(editText.getText().toString().length() > 0);
                                 editText.addTextChangedListener(new TextWatcher() {
@@ -123,7 +123,6 @@ public class BookmarkDialog extends DialogFragment {
                                     }
                                 });
                                 builder.setNegativeButton(R.string.delete_book_keep, null);
-                                MaterialCompatThemer.theme(builder.show());
                                 return true;
                             default:
                                 return false;
@@ -188,17 +187,11 @@ public class BookmarkDialog extends DialogFragment {
             }
         });
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialogWrapper.Builder builder = new AlertDialogWrapper.Builder(getActivity());
         builder.setView(v);
         builder.setTitle(R.string.bookmark);
         builder.setNegativeButton(R.string.dialog_cancel, null);
         dialog = builder.create();
         return dialog;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        MaterialCompatThemer.theme(getDialog());
     }
 }

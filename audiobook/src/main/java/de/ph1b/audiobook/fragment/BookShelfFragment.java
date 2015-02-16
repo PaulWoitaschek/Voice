@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.fragment;
 
 
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipDescription;
@@ -32,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.AlertDialogWrapper;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -56,7 +56,6 @@ import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.utils.CustomOnSimpleGestureListener;
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.MaterialCompatThemer;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 
@@ -129,7 +128,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             public void onCoverClicked(int position) {
                 Book book = adapter.getItem(position);
                 prefs.setCurrentBookId(book.getId());
-                
+
                 globalState.setBook(book);
                 Intent i = new Intent(getActivity(), BookPlayActivity.class);
                 startActivity(i);
@@ -167,7 +166,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                                 return true;
                             case R.id.delete_book:
                                 Book deleteBook = adapter.getItem(position);
-                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                AlertDialogWrapper.Builder builder = new AlertDialogWrapper.Builder(getActivity());
                                 builder.setTitle(R.string.delete_book_title);
                                 builder.setMessage(deleteBook.getName());
                                 builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
@@ -182,7 +181,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                                     }
                                 });
                                 builder.setNegativeButton(R.string.delete_book_keep, null);
-                                MaterialCompatThemer.theme(builder.show());
                                 return true;
                             default:
                                 return false;

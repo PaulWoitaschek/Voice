@@ -21,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.AlertDialogWrapper;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
@@ -31,7 +33,6 @@ import de.ph1b.audiobook.utils.CoverDownloader;
 import de.ph1b.audiobook.utils.DraggableBoxImageView;
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.MaterialCompatThemer;
 
 public class EditBookDialog extends DialogFragment implements View.OnClickListener {
 
@@ -56,11 +57,6 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
     private ArrayList<Bitmap> covers;
     private int googleCount = 0;
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        MaterialCompatThemer.theme(getDialog());
-    }
 
     private boolean isCoverReplacement(Bitmap bitmap) {
         /**
@@ -134,7 +130,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialogWrapper.Builder builder = new AlertDialogWrapper.Builder(getActivity());
         coverDownloader = new CoverDownloader(getActivity());
 
         Bundle b = getArguments();

@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.dialog;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
@@ -11,11 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
 
+import com.afollestad.materialdialogs.AlertDialogWrapper;
+
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.service.ServiceController;
-import de.ph1b.audiobook.utils.MaterialCompatThemer;
 
 
 public class JumpToPositionDialog extends DialogFragment {
@@ -32,7 +32,7 @@ public class JumpToPositionDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialogWrapper.Builder builder = new AlertDialogWrapper.Builder(getActivity());
 
         //passing null is fine because of fragment
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_time_picker, null);
@@ -102,11 +102,5 @@ public class JumpToPositionDialog extends DialogFragment {
         builder.setNegativeButton(R.string.dialog_cancel, null);
 
         return builder.create();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        MaterialCompatThemer.theme(getDialog());
     }
 }

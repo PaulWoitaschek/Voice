@@ -28,12 +28,6 @@ public class SeekPreferenceDialog extends DialogPreference {
     }
 
     @Override
-    protected void showDialog(Bundle state) {
-        super.showDialog(state);
-        MaterialCompatThemer.theme(getDialog());
-    }
-
-    @Override
     protected void onBindDialogView(@NonNull View view) {
         super.onBindDialogView(view);
         seekBar = (SeekBar) view.findViewById(R.id.seekBar);
@@ -73,5 +67,11 @@ public class SeekPreferenceDialog extends DialogPreference {
             int seekAmount = seekBar.getProgress();
             prefs.setSeekTime(seekAmount + SEEK_BAR_MIN);
         }
+    }
+
+    @Override
+    protected void showDialog(Bundle state) {
+        super.showDialog(state);
+        MaterialCompatThemer.theme(getDialog());
     }
 }

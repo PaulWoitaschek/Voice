@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.dialog;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
@@ -13,13 +12,14 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.AlertDialogWrapper;
+
 import java.text.DecimalFormat;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.service.ServiceController;
-import de.ph1b.audiobook.utils.MaterialCompatThemer;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 public class SetPlaybackSpeedDialog extends DialogFragment {
@@ -32,7 +32,7 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialogWrapper.Builder builder = new AlertDialogWrapper.Builder(getActivity());
 
         //passing null is fine because of fragment
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_amount_chooser, null);
@@ -87,12 +87,6 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
         builder.setNegativeButton(getString(R.string.dialog_cancel), null);
 
         return builder.create();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        MaterialCompatThemer.theme(getDialog());
     }
 
     private float speedStepValueToSpeed(int step) {

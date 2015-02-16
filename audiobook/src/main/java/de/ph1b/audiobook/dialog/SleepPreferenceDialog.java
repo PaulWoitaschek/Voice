@@ -55,17 +55,17 @@ public class SleepPreferenceDialog extends DialogPreference {
     }
 
     @Override
-    protected void showDialog(Bundle state) {
-        super.showDialog(state);
-        MaterialCompatThemer.theme(getDialog());
-    }
-
-    @Override
     protected void onDialogClosed(boolean positiveResult) {
         super.onDialogClosed(positiveResult);
         if (positiveResult) {
             int sleepAmount = numberPicker.getValue();
             prefs.setSleepTime(sleepAmount);
         }
+    }
+
+    @Override
+    protected void showDialog(Bundle state) {
+        super.showDialog(state);
+        MaterialCompatThemer.theme(getDialog());
     }
 }

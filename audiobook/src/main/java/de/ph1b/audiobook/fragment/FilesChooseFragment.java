@@ -2,7 +2,6 @@ package de.ph1b.audiobook.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -28,6 +27,8 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.lang.ref.WeakReference;
@@ -49,7 +50,6 @@ import de.ph1b.audiobook.dialog.EditBookDialog;
 import de.ph1b.audiobook.interfaces.OnBackPressedListener;
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.MaterialCompatThemer;
 import de.ph1b.audiobook.utils.MusicUtil;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
 
@@ -425,7 +425,7 @@ public class FilesChooseFragment extends Fragment implements EditBookDialog.OnEd
         private final String defaultName;
         private final ArrayList<Media> media = new ArrayList<>();
         private Bitmap cover;
-        private ProgressDialog progressDialog;
+        private MaterialDialog progressDialog;
 
         public AddBookAsync(ArrayList<File> files, String defaultName, Bitmap cover) {
             this.files = files;
@@ -435,14 +435,12 @@ public class FilesChooseFragment extends Fragment implements EditBookDialog.OnEd
 
         @Override
         protected void onPreExecute() {
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setCancelable(false);
-            progressDialog.setTitle(getString(R.string.book_add_progress_title));
-            progressDialog.setMessage(getString(R.string.book_add_progress_message));
-            progressDialog.setIndeterminate(true);
-            progressDialog.show();
-            MaterialCompatThemer.theme(progressDialog);
+            progressDialog = new MaterialDialog.Builder(getActivity())
+                    .cancelable(false)
+                    .title(R.string.book_add_progress_title)
+                    .content(R.string.book_add_progress_message)
+                    .progress(true, 0)
+                    .show();
         }
 
         @Override
