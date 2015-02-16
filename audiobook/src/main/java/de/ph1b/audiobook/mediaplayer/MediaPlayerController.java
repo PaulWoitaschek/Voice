@@ -113,6 +113,7 @@ public class MediaPlayerController implements GlobalState.ChangeListener {
                     state = State.STARTED;
                     break;
                 case DEAD:
+                case IDLE:
                     prepare();
                     play();
                     break;
