@@ -444,9 +444,6 @@ public class AudioPlayerService extends Service implements GlobalState.ChangeLis
                 L.d(TAG, "started by audioFocus gained");
                 if (pauseBecauseLossTransient) {
                     controller.play();
-                } else if (globalState.getState() == PlayerStates.PLAYING) {
-                    L.d(TAG, "increasing volume because of regain focus from transient-can-duck");
-                    audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
                 }
                 break;
             case AudioManager.AUDIOFOCUS_LOSS:
