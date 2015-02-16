@@ -181,6 +181,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                                     }
                                 });
                                 builder.setNegativeButton(R.string.delete_book_keep, null);
+                                builder.show();
                                 return true;
                             default:
                                 return false;
