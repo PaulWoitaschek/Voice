@@ -20,7 +20,6 @@ public enum GlobalState {
     private final List<ChangeListener> listeners = new CopyOnWriteArrayList<>(); //to avoid massive synchronization
     private Context c;
     private PlayerStates state = PlayerStates.STOPPED;
-    private PrefsManager prefs = null;
     private DataBaseHelper db = null;
     private int time;
     private boolean sleepTimerActive = false;
@@ -32,17 +31,23 @@ public enum GlobalState {
     }
 
     public void setBook(Book book) {
-        if (this.book != book) {
+        if (this.book == null || !this.book.equals(book)) {
+            L.v(TAG, "new book set.");
+            L.v(TAG, "oldBook=" + this.book + ", newBook=" + book);
+            this.book = book;
             setTime(book.getTime());
             setPosition(book.getPosition());
-            this.book = book;
+            for (ChangeListener l : listeners) {
+                l.onBookChanged(book);
+            }
+            updateWidget();
         }
     }
 
     public void init(Context c) {
         this.c = c.getApplicationContext();
         db = DataBaseHelper.getInstance(c);
-        prefs = new PrefsManager(c);
+        PrefsManager prefs = new PrefsManager(c);
 
         if (book == null) {
             long bookId = prefs.getCurrentBookId();
@@ -118,5 +123,7 @@ public enum GlobalState {
         public void onSleepTimerSet(boolean sleepTimerActive);
 
         public void onPositionChanged(int position);
+
+        public void onBookChanged(Book book);
     }
 }

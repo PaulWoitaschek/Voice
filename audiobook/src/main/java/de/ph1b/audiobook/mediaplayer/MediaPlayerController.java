@@ -18,23 +18,22 @@ import de.ph1b.audiobook.service.PositionUpdater;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
-public class MediaPlayerController {
+public class MediaPlayerController implements GlobalState.ChangeListener {
 
     private static final String TAG = MediaPlayerController.class.getSimpleName();
-    private final Book book;
     private final Context c;
     private final GlobalState extState = GlobalState.INSTANCE;
     private final ReentrantLock lock = new ReentrantLock();
     private final PrefsManager prefs;
-    private final PositionUpdater positionUpdater;
     private final MediaPlayerCompat mediaPlayer;
     private final DataBaseHelper db;
     private final ScheduledExecutorService sandMan = Executors.newSingleThreadScheduledExecutor();
+    private PositionUpdater positionUpdater;
     private volatile State state;
     private final MediaPlayerCompat.OnCompletionListener onCompletionListener = new MediaPlayerCompat.OnCompletionListener() {
         @Override
         public void onCompletion() {
-            if (book.getPosition() + 1 < book.getContainingMedia().size()) {
+            if (extState.getBook().getPosition() + 1 < extState.getBook().getContainingMedia().size()) {
                 next();
             } else {
                 positionUpdater.stopUpdating();
@@ -46,9 +45,7 @@ public class MediaPlayerController {
     private ScheduledFuture<?> sleepSand;
     private volatile boolean stopAfterCurrentTrack = false;
 
-    public MediaPlayerController(Book book, Context c) {
-        L.i(TAG, "new MediaPlayerController with book:" + book);
-        this.book = book;
+    public MediaPlayerController(Context c) {
         this.c = c;
         extState.init(c);
         prefs = new PrefsManager(c);
@@ -57,8 +54,7 @@ public class MediaPlayerController {
         mediaPlayer = new MediaPlayerCompat(c);
         state = State.IDLE;
 
-        prepare();
-        positionUpdater = new PositionUpdater(mediaPlayer, c, book);
+        extState.addChangeListener(this);
     }
 
     private void prepare() {
@@ -67,20 +63,21 @@ public class MediaPlayerController {
             state = State.IDLE;
         }
 
-        if (book.getContainingMedia().size() <= book.getPosition()) {
+        if (extState.getBook().getContainingMedia().size() <= extState.getBook().getPosition()) {
+            L.e(TAG, "preparing illegal position. Setting to sate stopped");
             state = State.DEAD;
             extState.setState(PlayerStates.STOPPED);
             return; // aborting when there is no media to play
         }
         mediaPlayer.setWakeMode(c, PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE);
         mediaPlayer.setOnCompletionListener(onCompletionListener);
-        mediaPlayer.setDataSource(book.getContainingMedia().get(book.getPosition()).getPath());
+        mediaPlayer.setDataSource(extState.getBook().getContainingMedia().get(extState.getBook().getPosition()).getPath());
 
         mediaPlayer.prepare();
-        mediaPlayer.seekTo(book.getTime());
-        extState.setTime(book.getTime());
-        extState.setPosition(book.getPosition());
-        setPlaybackSpeed(book.getPlaybackSpeed());
+        mediaPlayer.seekTo(extState.getBook().getTime());
+        extState.setTime(extState.getBook().getTime());
+        extState.setPosition(extState.getBook().getPosition());
+        setPlaybackSpeed(extState.getBook().getPlaybackSpeed());
         state = State.PREPARED;
     }
 
@@ -94,6 +91,7 @@ public class MediaPlayerController {
             extState.setState(PlayerStates.STOPPED);
             extState.setSleepTimerActive(false);
             state = State.DEAD;
+            extState.removeChangeListener(this);
         } finally {
             lock.unlock();
         }
@@ -178,8 +176,8 @@ public class MediaPlayerController {
                 case PLAYBACK_COMPLETED:
                     mediaPlayer.seekTo(time);
                     extState.setTime(time);
-                    book.setTime(time);
-                    db.updateBook(book);
+                    extState.getBook().setTime(time);
+                    db.updateBook(extState.getBook());
                     break;
                 default:
                     L.e(TAG, "changeTime called in illegal state:" + state);
@@ -214,15 +212,11 @@ public class MediaPlayerController {
         }
     }
 
-    public Book getBook() {
-        return book;
-    }
-
     public void setPlaybackSpeed(float speed) {
         lock.lock();
         try {
-            book.setPlaybackSpeed(speed);
-            db.updateBook(book);
+            extState.getBook().setPlaybackSpeed(speed);
+            db.updateBook(extState.getBook());
             if (state != State.DEAD) {
                 mediaPlayer.setPlaybackSpeed(speed);
             } else {
@@ -241,9 +235,9 @@ public class MediaPlayerController {
             mediaPlayer.reset();
             state = State.IDLE;
 
-            book.setPosition(position);
-            book.setTime(0);
-            db.updateBook(book);
+            extState.getBook().setPosition(position);
+            extState.getBook().setTime(0);
+            db.updateBook(extState.getBook());
 
             prepare();
 
@@ -282,8 +276,8 @@ public class MediaPlayerController {
                         }
                         mediaPlayer.seekTo(intendedPosition);
                         extState.setTime(intendedPosition);
-                        book.setTime(intendedPosition);
-                        db.updateBook(book);
+                        extState.getBook().setTime(intendedPosition);
+                        db.updateBook(extState.getBook());
                     }
                     break;
                 default:
@@ -299,8 +293,8 @@ public class MediaPlayerController {
     public void next() {
         lock.lock();
         try {
-            int possibleNewPosition = book.getPosition() + 1;
-            if (possibleNewPosition < book.getContainingMedia().size()) {
+            int possibleNewPosition = extState.getBook().getPosition() + 1;
+            if (possibleNewPosition < extState.getBook().getContainingMedia().size()) {
                 changeBookPosition(possibleNewPosition);
             } else {
                 L.e(TAG, "Next will be dumped. reached last file.");
@@ -313,18 +307,49 @@ public class MediaPlayerController {
     public void previous() {
         lock.lock();
         try {
-            if (mediaPlayer.getCurrentPosition() > 2000 || book.getPosition() == 0) {
+            if (mediaPlayer.getCurrentPosition() > 2000 || extState.getBook().getPosition() == 0) {
                 mediaPlayer.seekTo(0);
                 extState.setTime(0);
-                book.setTime(0);
-                db.updateBook(book);
+                extState.getBook().setTime(0);
+                db.updateBook(extState.getBook());
             } else {
-                int newPosition = book.getPosition() - 1;
+                int newPosition = extState.getBook().getPosition() - 1;
                 changeBookPosition(newPosition);
             }
         } finally {
             lock.unlock();
         }
+    }
+
+    @Override
+    public void onTimeChanged(int time) {
+
+    }
+
+    @Override
+    public void onStateChanged(PlayerStates state) {
+
+    }
+
+    @Override
+    public void onSleepTimerSet(boolean sleepTimerActive) {
+
+    }
+
+    @Override
+    public void onPositionChanged(int position) {
+
+    }
+
+    @Override
+    public void onBookChanged(Book book) {
+        L.v(TAG, "onBookChanged, book=" + book);
+        if (positionUpdater != null) {
+            positionUpdater.stopUpdating();
+        }
+        positionUpdater = new PositionUpdater(mediaPlayer, c, book);
+        prepare();
+        extState.setState(PlayerStates.STOPPED);
     }
 
     public enum Direction {

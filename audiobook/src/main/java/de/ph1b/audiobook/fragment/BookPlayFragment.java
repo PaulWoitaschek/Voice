@@ -34,6 +34,7 @@ import java.util.concurrent.TimeUnit;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.SettingsActivity;
 import de.ph1b.audiobook.adapter.MediaSpinnerAdapter;
+import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.content.Media;
 import de.ph1b.audiobook.dialog.BookmarkDialog;
@@ -345,6 +346,11 @@ public class BookPlayFragment extends Fragment implements OnClickListener, Globa
                 }
             }
         });
+    }
+
+    @Override
+    public void onBookChanged(Book book) {
+
     }
 
     @Override

@@ -32,7 +32,6 @@ import java.util.concurrent.Executors;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookPlayActivity;
 import de.ph1b.audiobook.content.Book;
-import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.content.Media;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.receiver.RemoteControlReceiver;
@@ -49,7 +48,6 @@ public class AudioPlayerService extends Service implements GlobalState.ChangeLis
     private NotificationManager notificationManager;
     private PrefsManager prefs;
     private MediaPlayerController controller = null;
-    private DataBaseHelper db;
     private AudioManager audioManager;
     private NotificationCompat.Builder notificationBuilder;
     @SuppressWarnings("deprecation")
@@ -93,7 +91,7 @@ public class AudioPlayerService extends Service implements GlobalState.ChangeLis
         super.onCreate();
 
         prefs = new PrefsManager(this);
-        db = DataBaseHelper.getInstance(this);
+        controller = new MediaPlayerController(this);
         notificationBuilder = new NotificationCompat.Builder(this);
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -240,18 +238,6 @@ public class AudioPlayerService extends Service implements GlobalState.ChangeLis
             return Service.START_NOT_STICKY;
         }
 
-        if (controller == null || defaultBookId != controller.getBook().getId()) {
-            if (controller != null) {
-                controller.release();
-                pauseBecauseLossTransient = false;
-            }
-            Book book = db.getBook(defaultBookId);
-            if (book != null) {
-                L.d(TAG, "init new book:" + book.getName());
-                controller = new MediaPlayerController(book, this);
-            }
-        }
-
         if (controller != null) {
             handleIntent(intent);
         }
@@ -308,7 +294,7 @@ public class AudioPlayerService extends Service implements GlobalState.ChangeLis
     }
 
     private Notification getNotification() {
-        final Book book = controller.getBook();
+        final Book book = globalState.getBook();
         Media media = book.getContainingMedia().get(book.getPosition());
 
         final RemoteViews smallViewRemote = new RemoteViews(getPackageName(), R.layout.notification_small);
@@ -394,7 +380,7 @@ public class AudioPlayerService extends Service implements GlobalState.ChangeLis
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                Book book = controller.getBook();
+                Book book = globalState.getBook();
                 int bookPosition = book.getPosition();
                 ArrayList<Media> containingMedia = book.getContainingMedia();
                 if (bookPosition < containingMedia.size()) {
@@ -420,11 +406,15 @@ public class AudioPlayerService extends Service implements GlobalState.ChangeLis
 
     @Override
     public void onPositionChanged(int position) {
-        if (controller != null) {
-            if (Build.VERSION.SDK_INT >= 14) {
-                updateRemoteControlClient();
-            }
+        if (controller != null && Build.VERSION.SDK_INT >= 14) {
+            updateRemoteControlClient();
         }
+    }
+
+    @Override
+    public void onBookChanged(Book book) {
+        pauseBecauseLossTransient = false;
+        pauseBecauseHeadset = false;
     }
 
     @Override

@@ -438,4 +438,9 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public void onPositionChanged(int position) {
 
     }
+
+    @Override
+    public void onBookChanged(Book book) {
+
+    }
 }

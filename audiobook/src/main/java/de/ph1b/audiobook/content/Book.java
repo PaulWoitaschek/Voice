@@ -72,22 +72,18 @@ public class Book implements Parcelable {
         return containingMedia;
     }
 
-    /**
-     * @param o the object to compare this instance with.
-     * @return true if the objects are identically, have the same id or if an integer was set to compare,
-     * if the integer interpreted as an bookId matches to the current book.
-     */
+
     @Override
     public boolean equals(Object o) {
-        if (o == null) {
-            return false;
-        } else if (o == this) {
+        if (this == o) {
             return true;
-        } else if (o instanceof Book) {
-            Book book = (Book) o;
-            if (book.getId() == this.getId())
-                return true;
         }
+
+        if (o instanceof Book) {
+            Book that = (Book) o;
+            return this.id == that.id;
+        }
+
         return false;
     }
 
@@ -97,7 +93,7 @@ public class Book implements Parcelable {
      */
     @Override
     public int hashCode() {
-        return (int) id;
+        return (int) (31 * id);
     }
 
 
