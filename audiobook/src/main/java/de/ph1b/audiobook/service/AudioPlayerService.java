@@ -431,17 +431,15 @@ public class AudioPlayerService extends Service implements GlobalState.ChangeLis
     public void onAudioFocusChange(int focusChange) {
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         final int callState = (tm != null) ? tm.getCallState() : TelephonyManager.CALL_STATE_IDLE;
-        L.d(TAG, "Call state is: " + callState);
-
-
+        // if there is an incoming call, we pause permanently. (tricking switch condition)
         if (callState != TelephonyManager.CALL_STATE_IDLE) {
+            L.d(TAG, "There is an incoming call, so we set focusChange to AUDIOFOCUS_LOSS");
             focusChange = AudioManager.AUDIOFOCUS_LOSS;
-            // if there is an incoming call, we pause permanently. (tricking switch condition)
         }
 
         switch (focusChange) {
             case AudioManager.AUDIOFOCUS_GAIN:
-                L.d(TAG, "started by audioFocus gained");
+                L.d(TAG, "AUDIOFOCUS_GAIN, pauseBecauseLossTransient=" + pauseBecauseLossTransient);
                 if (pauseBecauseLossTransient) {
                     controller.play();
                 }
@@ -451,20 +449,12 @@ public class AudioPlayerService extends Service implements GlobalState.ChangeLis
                 controller.release();
                 break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                if (globalState.getState() == PlayerStates.PLAYING) {
-                    L.d(TAG, "Paused by audio-focus loss transient.");
-                    controller.pause();
-                    pauseBecauseLossTransient = true;
-                }
-                break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                L.d(TAG, "AUDIOFOCUS_LOSS_TRANSIENT, state = " + globalState.getState());
                 if (globalState.getState() == PlayerStates.PLAYING) {
-                    L.d(TAG, "pausing because of transient loss");
                     controller.pause();
                     pauseBecauseLossTransient = true;
                 }
-                break;
-            default:
                 break;
         }
     }
