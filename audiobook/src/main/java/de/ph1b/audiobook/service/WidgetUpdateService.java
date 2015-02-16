@@ -24,7 +24,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -32,18 +31,14 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookPlayActivity;
 import de.ph1b.audiobook.activity.BookShelfActivity;
 import de.ph1b.audiobook.content.Book;
-import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.receiver.BaseWidgetProvider;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.PrefsManager;
 
 public class WidgetUpdateService extends Service {
     private static final String TAG = WidgetUpdateService.class.getSimpleName();
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private final GlobalState globalState = GlobalState.INSTANCE;
     private AppWidgetManager appWidgetManager;
-    private DataBaseHelper db;
-    private PrefsManager prefs;
 
     private void updateWidget() {
         executor.execute(new Runnable() {
@@ -52,7 +47,7 @@ public class WidgetUpdateService extends Service {
                 L.v(TAG, "updateWidget called");
                 boolean isPortrait = isPortrait();
                 int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(WidgetUpdateService.this, BaseWidgetProvider.class));
-                Book book = getCurrentBook();
+                Book book = globalState.getBook();
 
                 for (int widgetId : ids) {
                     RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.widget);
@@ -98,8 +93,6 @@ public class WidgetUpdateService extends Service {
 
         globalState.init(this);
         appWidgetManager = AppWidgetManager.getInstance(this);
-        db = DataBaseHelper.getInstance(this);
-        prefs = new PrefsManager(this);
     }
 
     @Override
@@ -211,21 +204,5 @@ public class WidgetUpdateService extends Service {
         }
 
         remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI);
-    }
-
-    private Book getCurrentBook() {
-        // get book from database
-        long bookId = prefs.getCurrentBookId();
-        Book book = db.getBook(bookId);
-
-        // if there is no current book, take the first one from all
-        if (book == null) {
-            ArrayList<Book> books = db.getAllBooks();
-            if (books.size() > 0) {
-                book = books.get(0);
-                prefs.setCurrentBookId(book.getId());
-            }
-        }
-        return book;
     }
 }

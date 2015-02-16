@@ -57,7 +57,8 @@ public class BookmarkDialog extends DialogFragment {
 
         final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
         final PrefsManager prefs = new PrefsManager(getActivity());
-        final Book book = db.getBook(prefs.getCurrentBookId());
+        GlobalState.INSTANCE.init(getActivity());
+        final Book book = GlobalState.INSTANCE.getBook();
         final ArrayList<Bookmark> allBookmarks = db.getAllBookmarks(book.getId());
         final GlobalState globalState = GlobalState.INSTANCE;
         globalState.init(getActivity());

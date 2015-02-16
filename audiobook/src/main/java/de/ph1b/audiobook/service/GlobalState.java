@@ -3,6 +3,7 @@ package de.ph1b.audiobook.service;
 import android.content.Context;
 import android.content.Intent;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -27,6 +28,16 @@ public enum GlobalState {
     private Book book = null;
 
     public Book getBook() {
+        if (book == null) {
+            long bookId = new PrefsManager(c).getCurrentBookId();
+            book = db.getBook(bookId);
+            if (book == null) {
+                ArrayList<Book> books = db.getAllBooks();
+                if (books.size() > 0) {
+                    book = books.get(0);
+                }
+            }
+        }
         return book;
     }
 
