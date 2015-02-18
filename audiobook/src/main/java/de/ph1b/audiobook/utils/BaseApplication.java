@@ -2,11 +2,15 @@ package de.ph1b.audiobook.utils;
 
 import android.app.Application;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.content.Book;
@@ -16,8 +20,9 @@ import de.ph1b.audiobook.content.DataBaseHelper;
 public class BaseApplication extends Application implements Thread.UncaughtExceptionHandler {
 
 
+    private static final String TAG = BaseApplication.class.getSimpleName();
     private final Thread.UncaughtExceptionHandler defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
-
+    private final ExecutorService executor = Executors.newCachedThreadPool();
     private ArrayList<Book> allBooks;
     private DataBaseHelper db;
 
@@ -31,6 +36,12 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
 
         db = DataBaseHelper.getInstance(this);
         allBooks = db.getAllBooks();
+
+        fillMissingCovers(allBooks);
+    }
+
+    public ArrayList<Book> getAllBooks() {
+        return allBooks;
     }
 
     @Override
@@ -53,5 +64,23 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
         getApplicationContext().startActivity(startClientIntent);
 
         defaultUEH.uncaughtException(thread, ex);
+    }
+
+    public void fillMissingCovers(final ArrayList<Book> allBooks) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (Book b : allBooks) {
+                    String coverPath = b.getCover();
+                    if (coverPath == null || !new File(coverPath).exists()) {
+                        Bitmap cover = ImageHelper.genCapital(b.getName(), BaseApplication.this);
+                        coverPath = ImageHelper.saveCover(cover, BaseApplication.this);
+                        b.setCover(coverPath);
+                        db.updateBook(b);
+                        L.d(TAG, "updated cover from book=" + b);
+                    }
+                }
+            }
+        });
     }
 }

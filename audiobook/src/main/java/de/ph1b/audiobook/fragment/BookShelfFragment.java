@@ -36,8 +36,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookPlayActivity;
@@ -45,7 +43,6 @@ import de.ph1b.audiobook.activity.FilesChooseActivity;
 import de.ph1b.audiobook.activity.SettingsActivity;
 import de.ph1b.audiobook.adapter.MediaAdapter;
 import de.ph1b.audiobook.content.Book;
-import de.ph1b.audiobook.content.DataBaseHelper;
 import de.ph1b.audiobook.dialog.EditBookDialog;
 import de.ph1b.audiobook.interfaces.OnItemClickListener;
 import de.ph1b.audiobook.interfaces.OnItemLongClickListener;
@@ -53,6 +50,7 @@ import de.ph1b.audiobook.service.AudioPlayerService;
 import de.ph1b.audiobook.service.GlobalState;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.service.ServiceController;
+import de.ph1b.audiobook.utils.BookUtil;
 import de.ph1b.audiobook.utils.CustomOnSimpleGestureListener;
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
@@ -64,9 +62,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
     private static final String TAG = BookShelfFragment.class.getSimpleName();
     private final Handler handler = new Handler(Looper.getMainLooper());
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final GlobalState globalState = GlobalState.INSTANCE;
-    private DataBaseHelper db;
     private MediaAdapter adapter;
     private ImageView currentCover;
     private TextView currentText;
@@ -77,7 +73,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     private Book bookToEdit;
     private float scrollBy = 0;
     private ServiceController controller;
-    private ArrayList<Book> books;
 
     /**
      * Returns the amount of columns the main-grid will need
@@ -102,7 +97,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
         getActivity().startService(serviceIntent);
 
-        db = DataBaseHelper.getInstance(getActivity());
         prefs = new PrefsManager(getActivity());
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
     }
@@ -201,8 +195,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             }
         };
 
-        books = db.getAllBooks();
-        adapter = new MediaAdapter(books, getActivity(), onClickListener);
+        adapter = new MediaAdapter(BookUtil.getAllBooks(getActivity()), getActivity(), onClickListener);
         recyclerView.setHasFixedSize(true);
 
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getAmountOfColumns()));
@@ -326,22 +319,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
         globalState.addChangeListener(this);
         onStateChanged(globalState.getState());
-
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                db.fillMissingCovers();
-                ArrayList<Book> updatedBooks = db.getAllBooks();
-                books.clear();
-                books.addAll(updatedBooks);
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.notifyDataSetChanged();
-                    }
-                });
-            }
-        });
 
         initPlayerWidget();
     }
