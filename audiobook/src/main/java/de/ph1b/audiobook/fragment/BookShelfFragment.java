@@ -47,9 +47,9 @@ import de.ph1b.audiobook.dialog.EditBookDialog;
 import de.ph1b.audiobook.interfaces.OnItemClickListener;
 import de.ph1b.audiobook.interfaces.OnItemLongClickListener;
 import de.ph1b.audiobook.service.AudioPlayerService;
-import de.ph1b.audiobook.service.GlobalState;
 import de.ph1b.audiobook.service.PlayerStates;
 import de.ph1b.audiobook.service.ServiceController;
+import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.BookUtil;
 import de.ph1b.audiobook.utils.CustomOnSimpleGestureListener;
 import de.ph1b.audiobook.utils.ImageHelper;
@@ -57,12 +57,11 @@ import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 
-public class BookShelfFragment extends Fragment implements View.OnClickListener, EditBookDialog.OnEditBookFinished, RecyclerView.OnItemTouchListener, GlobalState.ChangeListener {
+public class BookShelfFragment extends Fragment implements View.OnClickListener, EditBookDialog.OnEditBookFinished, RecyclerView.OnItemTouchListener, BaseApplication.OnPlayStateChangedListener {
 
 
     private static final String TAG = BookShelfFragment.class.getSimpleName();
     private final Handler handler = new Handler(Looper.getMainLooper());
-    private final GlobalState globalState = GlobalState.INSTANCE;
     private MediaAdapter adapter;
     private ImageView currentCover;
     private TextView currentText;
@@ -73,6 +72,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     private Book bookToEdit;
     private float scrollBy = 0;
     private ServiceController controller;
+    private BookUtil bookUtil;
 
     /**
      * Returns the amount of columns the main-grid will need
@@ -91,13 +91,13 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        globalState.init(getActivity());
         controller = new ServiceController(getActivity());
 
         Intent serviceIntent = new Intent(getActivity(), AudioPlayerService.class);
         getActivity().startService(serviceIntent);
 
         prefs = new PrefsManager(getActivity());
+        bookUtil = new BookUtil(getActivity());
         PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
     }
 
@@ -121,9 +121,8 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             @Override
             public void onCoverClicked(int position) {
                 Book book = adapter.getItem(position);
-                prefs.setCurrentBookId(book.getId());
+                bookUtil.setCurrentBookId(book.getId());
 
-                globalState.setBook(book);
                 Intent i = new Intent(getActivity(), BookPlayActivity.class);
                 startActivity(i);
             }
@@ -195,7 +194,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             }
         };
 
-        adapter = new MediaAdapter(BookUtil.getAllBooks(getActivity()), getActivity(), onClickListener);
+        adapter = new MediaAdapter(bookUtil.getAllBooks(), getActivity(), onClickListener);
         recyclerView.setHasFixedSize(true);
 
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getAmountOfColumns()));
@@ -317,8 +316,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public void onResume() {
         super.onResume();
 
-        globalState.addChangeListener(this);
-        onStateChanged(globalState.getState());
+        bookUtil.addOnPlayStateChangedListener(this);
 
         initPlayerWidget();
     }
@@ -327,7 +325,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public void onPause() {
         super.onPause();
 
-        globalState.removeChangeListener(this);
+        bookUtil.addOnPlayStateChangedListener(this);
     }
 
     @Override
@@ -388,12 +386,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onTimeChanged(int time) {
-
-    }
-
-    @Override
-    public void onStateChanged(final PlayerStates state) {
+    public void onPlayStateChanged(final PlayerStates state) {
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -404,20 +397,5 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                 }
             }
         });
-    }
-
-    @Override
-    public void onSleepTimerSet(boolean sleepTimerActive) {
-
-    }
-
-    @Override
-    public void onPositionChanged(int position) {
-
-    }
-
-    @Override
-    public void onBookChanged(Book book) {
-
     }
 }

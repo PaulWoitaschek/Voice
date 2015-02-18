@@ -9,12 +9,14 @@ import android.util.Log;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.content.Book;
 import de.ph1b.audiobook.content.DataBaseHelper;
+import de.ph1b.audiobook.service.PlayerStates;
 
 
 public class BaseApplication extends Application implements Thread.UncaughtExceptionHandler {
@@ -23,8 +25,26 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
     private static final String TAG = BaseApplication.class.getSimpleName();
     private final Thread.UncaughtExceptionHandler defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
     private final ExecutorService executor = Executors.newCachedThreadPool();
+    private final CopyOnWriteArrayList<OnPlayStateChangedListener> onPlayStateChangedListeners = new CopyOnWriteArrayList<>();
     private ArrayList<Book> allBooks;
     private DataBaseHelper db;
+    private Book currentBook;
+    private PrefsManager prefs;
+
+    public Book getCurrentBook() {
+        return currentBook;
+    }
+
+    public void setCurrentBook(long bookId) {
+        for (Book b : allBooks) {
+            if (b.getId() == bookId) {
+                currentBook = b;
+                prefs.setCurrentBookId(bookId);
+                return;
+            }
+        }
+        prefs.setCurrentBookId(-1);
+    }
 
     @Override
     public void onCreate() {
@@ -35,7 +55,10 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
         }
 
         db = DataBaseHelper.getInstance(this);
+        prefs = new PrefsManager(this);
         allBooks = db.getAllBooks();
+
+        setCurrentBook(prefs.getCurrentBookId());
 
         fillMissingCovers(allBooks);
     }
@@ -82,5 +105,17 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
                 }
             }
         });
+    }
+
+    public void addOnPlayStateChangedListener(OnPlayStateChangedListener listener) {
+        onPlayStateChangedListeners.add(listener);
+    }
+
+    public void removeOnPlayStateChangedListener(OnPlayStateChangedListener listener) {
+        onPlayStateChangedListeners.remove(listener);
+    }
+
+    public interface OnPlayStateChangedListener {
+        public void onPlayStateChanged(PlayerStates state);
     }
 }
