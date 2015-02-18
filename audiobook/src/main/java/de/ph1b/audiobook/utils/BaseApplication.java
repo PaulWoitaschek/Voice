@@ -5,15 +5,21 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import de.ph1b.audiobook.BuildConfig;
+import de.ph1b.audiobook.content.Book;
+import de.ph1b.audiobook.content.DataBaseHelper;
 
 
 public class BaseApplication extends Application implements Thread.UncaughtExceptionHandler {
 
 
     private final Thread.UncaughtExceptionHandler defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
+
+    private ArrayList<Book> allBooks;
+    private DataBaseHelper db;
 
     @Override
     public void onCreate() {
@@ -22,6 +28,9 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
         if (BuildConfig.DEBUG) {
             Thread.setDefaultUncaughtExceptionHandler(this);
         }
+
+        db = DataBaseHelper.getInstance(this);
+        allBooks = db.getAllBooks();
     }
 
     @Override
