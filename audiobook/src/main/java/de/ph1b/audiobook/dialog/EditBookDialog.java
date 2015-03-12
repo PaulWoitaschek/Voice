@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.dialog;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.graphics.Bitmap;
@@ -19,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.lang.ref.WeakReference;
@@ -207,7 +207,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
             }
         };
 
-        final AlertDialog editBook = new MaterialDialog.Builder(getActivity())
+        final MaterialDialog editBook = new MaterialDialog.Builder(getActivity())
                 .customView(customView, true)
                 .title(dialogTitle)
                 .positiveText(R.string.dialog_confirm)
@@ -227,10 +227,10 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
                 int textLength = newName.length();
                 if (textLength == 0) {
                     emptyTitleText.setVisibility(View.VISIBLE);
-                    editBook.getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
+                    editBook.getActionButton(DialogAction.POSITIVE).setEnabled(false);
                 } else {
                     emptyTitleText.setVisibility(View.INVISIBLE);
-                    editBook.getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
+                    editBook.getActionButton(DialogAction.POSITIVE).setEnabled(true);
                     Bitmap newLetterCover = ImageHelper.genCapital(newName, getActivity());
                     covers.set(0, newLetterCover);
                     L.d(TAG, "onTextChanged, setting new cover with newName=" + newName);

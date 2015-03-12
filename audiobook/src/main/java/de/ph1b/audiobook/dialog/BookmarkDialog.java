@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,13 +16,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.Collections;
@@ -98,8 +97,8 @@ public class BookmarkDialog extends DialogFragment {
                                         })
                                         .customView(editText, true);
 
-                                AlertDialog dialog = builder.show();
-                                final Button positive = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                                MaterialDialog dialog = builder.show();
+                                final View positive = dialog.getActionButton(DialogAction.NEGATIVE);
                                 positive.setEnabled(editText.getText().toString().length() > 0);
                                 editText.addTextChangedListener(new TextWatcher() {
                                     @Override
