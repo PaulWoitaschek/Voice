@@ -52,6 +52,8 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     private MediaPlayerInterface.OnCompletionListener onCompletionListener;
     private State state;
     private MediaPlayer.OnErrorListener onErrorListener;
+    private long duration;
+
 
     public CustomMediaPlayer() {
         L.v(TAG, "constructor called");
@@ -63,7 +65,6 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
         path = null;
         mDecoderLock = new Object();
     }
-
 
     @Override
     public int getCurrentPosition() {
@@ -170,7 +171,6 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
             }
         }
     }
-
 
     @Override
     public void release() {
@@ -283,6 +283,11 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
         wakeLock.setReferenceCounted(false);
     }
 
+    @Override
+    public int getDuration() {
+        return (int) duration;
+    }
+
     private int findFormatFromChannels(int numChannels) {
         switch (numChannels) {
             case 1:
@@ -308,7 +313,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
             int sampleRate = oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
             int channelCount = oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
             final String mime = oFormat.getString(MediaFormat.KEY_MIME);
-            //long duration = oFormat.getLong(MediaFormat.KEY_DURATION);
+            duration = oFormat.getLong(MediaFormat.KEY_DURATION);
             L.v(TAG, "Sample rate: " + sampleRate);
             L.v(TAG, "Mime type: " + mime);
             initDevice(sampleRate, channelCount);

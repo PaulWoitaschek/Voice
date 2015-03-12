@@ -42,7 +42,6 @@ public class ExoUnstableMediaPlayer implements MediaPlayerInterface, ExoPlayer.L
                 state = State.STARTED;
                 break;
             default:
-                state = State.ERROR;
                 throw new IllegalStateException("start must not be called in state=" + state);
         }
     }
@@ -71,7 +70,6 @@ public class ExoUnstableMediaPlayer implements MediaPlayerInterface, ExoPlayer.L
                 state = State.PREPARED;
                 break;
             default:
-                state = State.ERROR;
                 throw new IllegalStateException("prepare must not be called in state=" + state);
         }
     }
@@ -88,7 +86,6 @@ public class ExoUnstableMediaPlayer implements MediaPlayerInterface, ExoPlayer.L
                 exoPlayer.seekTo(seekPosition);
                 break;
             default:
-                state = State.ERROR;
                 throw new IllegalStateException("seekTo must not be called in state=" + state);
         }
     }
@@ -110,7 +107,6 @@ public class ExoUnstableMediaPlayer implements MediaPlayerInterface, ExoPlayer.L
             case PLAYBACK_COMPLETED:
                 return exoPlayer.getCurrentPosition() == ExoPlayer.UNKNOWN_TIME ? 0 : (int) exoPlayer.getCurrentPosition();
             default:
-                state = State.ERROR;
                 throw new IllegalStateException("getCurrentPosition must not be called in state=" + state);
         }
     }
@@ -125,7 +121,6 @@ public class ExoUnstableMediaPlayer implements MediaPlayerInterface, ExoPlayer.L
                 state = State.PAUSED;
                 break;
             default:
-                state = State.ERROR;
                 throw new IllegalStateException("pause must not be called in state=" + state);
         }
     }
@@ -143,7 +138,6 @@ public class ExoUnstableMediaPlayer implements MediaPlayerInterface, ExoPlayer.L
                 state = State.INITIALIZED;
                 break;
             default:
-                state = State.ERROR;
                 throw new IllegalStateException("setDataSource must not be called in state=" + state);
         }
     }
@@ -177,6 +171,7 @@ public class ExoUnstableMediaPlayer implements MediaPlayerInterface, ExoPlayer.L
 
     @Override
     public void onPlayerError(ExoPlaybackException error) {
+        state = State.IDLE;
     }
 
     private enum State {
