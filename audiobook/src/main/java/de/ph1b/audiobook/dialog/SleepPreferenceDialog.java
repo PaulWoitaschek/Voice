@@ -1,13 +1,16 @@
 package de.ph1b.audiobook.dialog;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.preference.DialogPreference;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
@@ -15,24 +18,21 @@ import de.ph1b.audiobook.utils.PrefsManager;
 
 public class SleepPreferenceDialog extends DialogPreference {
 
-    private final PrefsManager prefs;
-    private TextView timeView;
-    private NumberPicker numberPicker;
 
     public SleepPreferenceDialog(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setDialogTitle(context.getResources().getString(R.string.pref_sleep_time));
-        setDialogLayoutResource(R.layout.dialog_sleep_timer);
-        prefs = new PrefsManager(context);
     }
 
+
     @Override
-    protected void onBindDialogView(@NonNull View view) {
-        super.onBindDialogView(view);
+    protected void showDialog(Bundle state) {
+        @SuppressLint("InflateParams") View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_sleep_timer, null);
+        final PrefsManager prefs = new PrefsManager(getContext());
 
         //init views
-        timeView = (TextView) view.findViewById(R.id.minute_text);
-        numberPicker = (NumberPicker) view.findViewById(R.id.minute);
+        final TextView timeView = (TextView) view.findViewById(R.id.minute_text);
+        final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.minute);
+        MaterialCompatThemer.theme(numberPicker);
 
         //init number picker
         int currentSleepValue = getSharedPreferences().getInt(getContext().getString(R.string.pref_key_sleep_time), 20);
@@ -49,21 +49,19 @@ public class SleepPreferenceDialog extends DialogPreference {
         //init text
         timeView.setText(" " + String.valueOf(numberPicker.getValue()) + " ");
 
-        MaterialCompatThemer.theme(numberPicker);
-    }
+        new MaterialDialog.Builder(getContext())
+                .title(R.string.pref_sleep_time)
+                .positiveText(R.string.dialog_confirm)
+                .negativeText(R.string.dialog_cancel)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
 
-    @Override
-    protected void onDialogClosed(boolean positiveResult) {
-        super.onDialogClosed(positiveResult);
-        if (positiveResult) {
-            int sleepAmount = numberPicker.getValue();
-            prefs.setSleepTime(sleepAmount);
-        }
-    }
-
-    @Override
-    protected void showDialog(Bundle state) {
-        super.showDialog(state);
-        MaterialCompatThemer.theme(getDialog());
+                        int sleepAmount = numberPicker.getValue();
+                        prefs.setSleepTime(sleepAmount);
+                    }
+                })
+                .customView(view, true)
+                .show();
     }
 }
