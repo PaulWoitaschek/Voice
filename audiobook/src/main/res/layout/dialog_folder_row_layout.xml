@@ -13,12 +13,12 @@
         android:layout_weight="1"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
-
     <ImageView
         android:id="@+id/more"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:scaleType="center"
-        android:src="@drawable/ic_delete_grey600_24dp" />
+        android:src="@drawable/ic_delete_grey600_24dp"
+        android:contentDescription="@string/delete" />
 
 </LinearLayout>
