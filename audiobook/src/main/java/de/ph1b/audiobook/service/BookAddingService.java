@@ -33,7 +33,7 @@ import de.ph1b.audiobook.utils.PrefsManager;
 
 public class BookAddingService extends Service {
 
-    public static final String ACTION_UPDATE_BOOKS = "actionUpdateBooks";
+    private static final String ACTION_UPDATE_BOOKS = "actionUpdateBooks";
     private static final String TAG = BookAddingService.class.getSimpleName();
     private static final ArrayList<String> audioTypes = new ArrayList<>();
     private static final ArrayList<String> imageTypes = new ArrayList<>();
@@ -124,7 +124,7 @@ public class BookAddingService extends Service {
         }
     }
 
-    public void scanForFiles() {
+    private void scanForFiles() {
         stopScanner = true;
         L.d(TAG, "scan files abort requested");
         executor.execute(new Runnable() {
