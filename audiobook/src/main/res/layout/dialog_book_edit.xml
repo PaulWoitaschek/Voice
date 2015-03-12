@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/book_name"
-            android:focusableInTouchMode="true"
-            android:textSize="20sp"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:inputType="textCapSentences"
             android:layout_gravity="center_vertical"
-            android:singleLine="true" />
+            android:layout_weight="1"
+            android:focusableInTouchMode="true"
+            android:inputType="textCapSentences"
+            android:singleLine="true"
+            android:textSize="20sp" />
 
     </LinearLayout>
 
     <TextView
         android:id="@+id/empty_title"
-        android:text="@string/book_add_empty_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:visibility="invisible"
-        android:layout_marginTop="2dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="2dp"
         android:gravity="center_vertical"
-        android:textColor="@color/dark_red" />
+        android:text="@string/book_add_empty_title"
+        android:textColor="@color/dark_red"
+        android:textSize="15sp"
+        android:visibility="invisible" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -47,10 +47,10 @@
             android:id="@+id/previous_cover"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:contentDescription="@string/content_previous_cover"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:src="@drawable/ic_navigate_before_black_36dp"
-            android:contentDescription="@string/content_previous_cover" />
+            android:src="@drawable/ic_navigate_before_black_36dp" />
 
         <FrameLayout
             android:layout_width="0dp"
@@ -60,18 +60,18 @@
             <ProgressBar
                 android:id="@+id/cover_replacement"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:visibility="gone"
-                android:layout_height="wrap_content" />
+                android:visibility="gone" />
 
             <de.ph1b.audiobook.utils.DraggableBoxImageView
                 android:id="@+id/cover"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:scaleType="fitCenter"
                 android:adjustViewBounds="true"
-                android:contentDescription="@string/content_cover" />
+                android:contentDescription="@string/content_cover"
+                android:scaleType="fitCenter" />
         </FrameLayout>
 
 
@@ -79,9 +79,9 @@
             android:id="@+id/next_cover"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:contentDescription="@string/content_next_cover"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:src="@drawable/ic_navigate_next_black_36dp"
-            android:contentDescription="@string/content_next_cover" />
+            android:src="@drawable/ic_navigate_next_black_36dp" />
     </LinearLayout>
 </LinearLayout>

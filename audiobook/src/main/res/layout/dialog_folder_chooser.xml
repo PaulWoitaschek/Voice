@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     style="?android:buttonBarStyle"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,33 +12,33 @@
 
         <ImageButton
             android:id="@+id/up"
-            android:src="@drawable/ic_arrow_up_grey600_48dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:contentDescription="@string/up" />
+            android:contentDescription="@string/up"
+            android:src="@drawable/ic_arrow_up_grey600_48dp" />
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
             android:orientation="vertical">
 
             <TextView
-                android:text="@string/chosen_folder_description"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@string/chosen_folder_description"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
             <TextView
                 android:id="@+id/chosenFolder"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
         </LinearLayout>
 
@@ -47,30 +47,30 @@
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:minHeight="400dp"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:minHeight="400dp" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        style="?android:buttonBarStyle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        style="?android:buttonBarStyle">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/choose"
-            android:layout_weight="1"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            style="?android:attr/buttonBarButtonStyle"
+            android:layout_weight="1"
             android:text="@string/choose" />
 
         <Button
             android:id="@+id/abort"
-            android:layout_weight="1"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            style="?android:attr/buttonBarButtonStyle"
+            android:layout_weight="1"
             android:text="@string/abort" />
 
     </LinearLayout>

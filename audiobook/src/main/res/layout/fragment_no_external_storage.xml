@@ -2,26 +2,26 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerVertical="true"
     android:gravity="center"
+    android:orientation="vertical"
     tools:ignore="UseCompoundDrawables">
 
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/ic_usb_black_36dp"
-        android:contentDescription="@string/no_external_storage_action_bar_title" />
+        android:contentDescription="@string/no_external_storage_action_bar_title"
+        android:src="@drawable/ic_usb_black_36dp" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_margin="30dp"
-        android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:text="@string/no_external_storage"
         android:id="@+id/textView"
-        android:layout_gravity="center" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="30dp"
+        android:text="@string/no_external_storage"
+        android:textSize="25sp" />
 
 </LinearLayout>

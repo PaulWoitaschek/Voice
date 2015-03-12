@@ -6,34 +6,34 @@
 
     <item
         android:id="@+id/action_time_lapse"
-        android:title="@string/playback_speed"
-        android:orderInCategory="70"
         android:icon="@drawable/ic_clock_fast_white_24dp"
+        android:orderInCategory="70"
+        android:title="@string/playback_speed"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_sleep"
-        android:title="@string/action_sleep"
-        android:orderInCategory="80"
         android:icon="@drawable/ic_snooze_white_24dp"
+        android:orderInCategory="80"
+        android:title="@string/action_sleep"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_bookmark"
-        android:title="@string/bookmark"
-        android:orderInCategory="85"
         android:icon="@drawable/ic_bookmark_outline_white_24dp"
+        android:orderInCategory="85"
+        android:title="@string/bookmark"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_time_change"
-        android:title="@string/action_time_change"
         android:orderInCategory="90"
+        android:title="@string/action_time_change"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_settings"
-        android:title="@string/action_settings"
         android:orderInCategory="100"
+        android:title="@string/action_settings"
         app:showAsAction="never" />
 </menu>

@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:gravity="center_vertical"
-    android:descendantFocusability="blocksDescendants"
     android:layout_height="wrap_content"
-    android:minHeight="72dp">
+    android:descendantFocusability="blocksDescendants"
+    android:gravity="center_vertical"
+    android:minHeight="72dp"
+    android:orientation="horizontal">
 
     <ImageButton
         android:id="@+id/edit"
-        android:src="@drawable/ic_more_vert_grey600_24dp"
         android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/popup_edit"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:layout_height="match_parent"
-        android:contentDescription="@string/popup_edit" />
+        android:src="@drawable/ic_more_vert_grey600_24dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_vertical"
         android:layout_marginRight="@dimen/horizontal_margin"
+        android:gravity="center_vertical"
         android:orientation="vertical"
         tools:ignore="RtlSymmetry">
 
         <TextView
             android:id="@+id/text1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,19 +39,19 @@
 
             <TextView
                 android:id="@+id/text2"
-                android:layout_gravity="left"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:singleLine="true"
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
                 android:layout_weight="1"
-                android:layout_height="wrap_content" />
+                android:singleLine="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <TextView
                 android:id="@+id/text3"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:singleLine="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
         </LinearLayout>
 
