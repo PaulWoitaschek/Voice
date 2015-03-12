@@ -33,13 +33,13 @@ import java.util.concurrent.locks.ReentrantLock;
 import de.ph1b.audiobook.utils.L;
 
 @TargetApi(16)
-public class CustomMediaPlayer {
+public class CustomMediaPlayer implements MediaPlayerInterface {
     private final static int TRACK_NUM = 0;
     private static final String TAG = CustomMediaPlayer.class.getSimpleName();
     private final ReentrantLock lock = new ReentrantLock();
     private final Object mDecoderLock;
     private final float pitch;
-    private final PowerManager.WakeLock wakeLock;
+    private PowerManager.WakeLock wakeLock = null;
     private AudioTrack track;
     private Sonic sonic;
     private MediaExtractor extractor;
@@ -49,11 +49,11 @@ public class CustomMediaPlayer {
     private boolean mContinue;
     private boolean mIsDecoding;
     private float speed;
-    private OnCompletionListener onCompletionListener;
+    private MediaPlayerInterface.OnCompletionListener onCompletionListener;
     private State state;
     private MediaPlayer.OnErrorListener onErrorListener;
 
-    public CustomMediaPlayer(Context context) {
+    public CustomMediaPlayer() {
         L.v(TAG, "constructor called");
         state = State.IDLE;
         speed = (float) 1.0;
@@ -62,16 +62,10 @@ public class CustomMediaPlayer {
         mIsDecoding = false;
         path = null;
         mDecoderLock = new Object();
-
-        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, CustomMediaPlayer.class.getName());
-        wakeLock.setReferenceCounted(false);
     }
 
-    public void setOnCompletionListener(OnCompletionListener listener) {
-        this.onCompletionListener = listener;
-    }
 
+    @Override
     public int getCurrentPosition() {
         switch (state) {
             case ERROR:
@@ -84,10 +78,12 @@ public class CustomMediaPlayer {
         return 0;
     }
 
+    @Override
     public void setPlaybackSpeed(float speed) {
         this.speed = speed;
     }
 
+    @Override
     public void pause() {
         L.v(TAG, "pause called");
         switch (state) {
@@ -115,6 +111,7 @@ public class CustomMediaPlayer {
         L.e(TAG, "Called " + methodName + " in state=" + oldState);
     }
 
+    @Override
     public void prepare() throws IOException {
         L.v(TAG, "prepare called in state: " + state);
         switch (state) {
@@ -129,6 +126,7 @@ public class CustomMediaPlayer {
         }
     }
 
+    @Override
     public void start() {
         L.v(TAG, "start called in state:" + state);
         switch (state) {
@@ -164,13 +162,17 @@ public class CustomMediaPlayer {
     }
 
     private void stayAwake(boolean awake) {
-        if (awake && !wakeLock.isHeld()) {
-            wakeLock.acquire();
-        } else if (!awake && wakeLock.isHeld()) {
-            wakeLock.release();
+        if (wakeLock != null) {
+            if (awake && !wakeLock.isHeld()) {
+                wakeLock.acquire();
+            } else if (!awake && wakeLock.isHeld()) {
+                wakeLock.release();
+            }
         }
     }
 
+
+    @Override
     public void release() {
         L.v(TAG, "release called in state:" + state);
         reset(); //reset will release wakelock
@@ -179,6 +181,7 @@ public class CustomMediaPlayer {
         L.d(TAG, "State changed to: " + state);
     }
 
+    @Override
     public void reset() {
         L.v(TAG, "reste called in state: " + state);
         stayAwake(false);
@@ -218,6 +221,7 @@ public class CustomMediaPlayer {
         }
     }
 
+    @Override
     public void seekTo(final int ms) {
         switch (state) {
             case PREPARED:
@@ -235,7 +239,7 @@ public class CustomMediaPlayer {
                             track.flush();
                             long to = ((long) ms * 1000);
                             extractor.seekTo(to, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
-                        }finally {
+                        } finally {
                             lock.unlock();
                         }
                     }
@@ -248,6 +252,7 @@ public class CustomMediaPlayer {
         }
     }
 
+    @Override
     public void setDataSource(String path) {
         L.d(TAG, "setDataSource: " + path);
         switch (state) {
@@ -261,8 +266,21 @@ public class CustomMediaPlayer {
         }
     }
 
+    @Override
     public void setOnErrorListener(MediaPlayer.OnErrorListener onErrorListener) {
         this.onErrorListener = onErrorListener;
+    }
+
+    @Override
+    public void setOnCompletionListener(MediaPlayerInterface.OnCompletionListener listener) {
+        this.onCompletionListener = listener;
+    }
+
+    @Override
+    public void setWakeMode(Context context, int mode) {
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, CustomMediaPlayer.class.getName());
+        wakeLock.setReferenceCounted(false);
     }
 
     private int findFormatFromChannels(int numChannels) {
@@ -423,7 +441,7 @@ public class CustomMediaPlayer {
                     Thread t = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            onCompletionListener.onCompletion();
+                            onCompletionListener.onCompletion(CustomMediaPlayer.this);
                             stayAwake(false);
                         }
                     });
@@ -451,9 +469,5 @@ public class CustomMediaPlayer {
         STOPPED,
         PLAYBACK_COMPLETED,
         END
-    }
-
-    public interface OnCompletionListener {
-        public void onCompletion();
     }
 }

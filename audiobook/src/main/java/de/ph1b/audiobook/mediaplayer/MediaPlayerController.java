@@ -3,9 +3,11 @@ package de.ph1b.audiobook.mediaplayer;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.PowerManager;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -20,13 +22,13 @@ import de.ph1b.audiobook.utils.BaseApplication.PlayState;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
-public class MediaPlayerController implements MediaPlayerCompat.OnCompletionListener, MediaPlayer.OnErrorListener {
+public class MediaPlayerController implements MediaPlayer.OnErrorListener, MediaPlayerInterface.OnCompletionListener {
 
     private static final String TAG = MediaPlayerController.class.getSimpleName();
     private final Context c;
     private final ReentrantLock lock = new ReentrantLock();
     private final PrefsManager prefs;
-    private final MediaPlayerCompat mediaPlayer;
+    private final MediaPlayerInterface mediaPlayer;
     private final DataBaseHelper db;
     private final BaseApplication baseApplication;
     private final Book book;
@@ -42,7 +44,11 @@ public class MediaPlayerController implements MediaPlayerCompat.OnCompletionList
         prefs = new PrefsManager(c);
         db = DataBaseHelper.getInstance(c);
         this.baseApplication = baseApplication;
-        mediaPlayer = new MediaPlayerCompat(c);
+        if (Build.VERSION.SDK_INT >= 16) {
+            mediaPlayer = new CustomMediaPlayer();
+        } else {
+            mediaPlayer = new AndroidMediaPlayer();
+        }
         mediaPlayer.setOnErrorListener(this);
 
         prepare();
@@ -60,13 +66,19 @@ public class MediaPlayerController implements MediaPlayerCompat.OnCompletionList
 
         mediaPlayer.setWakeMode(c, PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE);
         mediaPlayer.setOnCompletionListener(this);
-        mediaPlayer.setDataSource(book.getRoot() + "/" + book.getCurrentChapter().getPath());
 
-        mediaPlayer.prepare();
-        int seekTo = book.getTime();
-        mediaPlayer.seekTo(seekTo);
-        setPlaybackSpeed(book.getPlaybackSpeed());
-        state = State.PREPARED;
+        try {
+            mediaPlayer.setDataSource(book.getRoot() + "/" + book.getCurrentChapter().getPath());
+            mediaPlayer.prepare();
+            int seekTo = book.getTime();
+            mediaPlayer.seekTo(seekTo);
+            setPlaybackSpeed(book.getPlaybackSpeed());
+            state = State.PREPARED;
+        } catch (IOException e) {
+            e.printStackTrace();
+            state = State.DEAD;
+        }
+
     }
 
     public void release() {
@@ -309,18 +321,6 @@ public class MediaPlayerController implements MediaPlayerCompat.OnCompletionList
     }
 
     @Override
-    public void onCompletion() {
-        if (book.getNextChapter() != null) {
-            next();
-        } else {
-            L.v(TAG, "Reached last track. Stopping player");
-            stopUpdating();
-            baseApplication.setPlayState(PlayState.STOPPED);
-            state = State.PLAYBACK_COMPLETED;
-        }
-    }
-
-    @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
         File currentFile = new File(book.getCurrentChapter().getPath());
         if (!currentFile.exists()) {
@@ -331,6 +331,18 @@ public class MediaPlayerController implements MediaPlayerCompat.OnCompletionList
             c.startActivity(bookShelfIntent);
         }
         return false;
+    }
+
+    @Override
+    public void onCompletion(MediaPlayerInterface mp) {
+        if (book.getNextChapter() != null) {
+            next();
+        } else {
+            L.v(TAG, "Reached last track. Stopping player");
+            stopUpdating();
+            baseApplication.setPlayState(PlayState.STOPPED);
+            state = State.PLAYBACK_COMPLETED;
+        }
     }
 
     public enum Direction {
