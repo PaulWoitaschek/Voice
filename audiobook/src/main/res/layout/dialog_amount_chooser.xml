@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingBottom="16dp"
-    android:paddingLeft="24dp"
-    android:paddingRight="24dp"
-    android:paddingTop="24dp">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:layout_marginBottom="8dp"
-        android:textSize="22sp" />
+        android:layout_gravity="center_vertical"
+        android:textSize="@dimen/dialog_content_text_size"
+        tools:text="10 seconds"
+        android:layout_marginBottom="8dp" />
 
     <SeekBar
         android:id="@+id/seekBar"

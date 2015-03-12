@@ -7,4 +7,6 @@
 
     <dimen name="horizontal_margin">16dp</dimen>
     <dimen name="vertical_margin">16dp</dimen>
+    
+    <dimen name="dialog_content_text_size">18sp</dimen>
 </resources>

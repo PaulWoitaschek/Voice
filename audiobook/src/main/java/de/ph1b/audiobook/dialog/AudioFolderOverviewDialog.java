@@ -92,7 +92,7 @@ public class AudioFolderOverviewDialog extends DialogFragment {
                 .title(R.string.audiobook_folders_title)
                 .positiveText(R.string.dialog_confirm)
                 .negativeText(R.string.dialog_cancel)
-                .customView(customView, true)
+                .customView(customView, false)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {

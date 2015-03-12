@@ -191,7 +191,7 @@ public class BookmarkDialog extends DialogFragment {
         });
 
         dialog = new MaterialDialog.Builder(getActivity())
-                .customView(v, true)
+                .customView(v, false)
                 .title(R.string.bookmark)
                 .negativeText(R.string.dialog_cancel)
                 .build();
