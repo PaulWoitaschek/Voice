@@ -1,7 +1,5 @@
 package de.ph1b.audiobook.utils;
 
-import android.app.Dialog;
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -10,7 +8,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import java.lang.reflect.Field;
 
@@ -48,25 +45,6 @@ public class MaterialCompatThemer {
                             e.printStackTrace();
                         }
                     }
-                }
-            }
-        }
-    }
-
-    public static void theme(Dialog dialog) {
-        if (Build.VERSION.SDK_INT < 21) {
-            if (dialog != null) {
-                Context c = dialog.getContext();
-                Resources resources = dialog.getContext().getResources();
-                int alertTitleId = resources.getIdentifier("alertTitle", "id", "android");
-                TextView alertTitle = (TextView) dialog.getWindow().getDecorView().findViewById(alertTitleId);
-                if (alertTitle != null) {
-                    alertTitle.setTextAppearance(c, R.style.TextAppearance_AppCompat_Title);
-                }
-                int titleDividerId = resources.getIdentifier("titleDivider", "id", "android");
-                View titleDivider = dialog.getWindow().getDecorView().findViewById(titleDividerId);
-                if (titleDivider != null) {
-                    titleDivider.setBackgroundColor(resources.getColor(android.R.color.transparent)); // change divider color
                 }
             }
         }
