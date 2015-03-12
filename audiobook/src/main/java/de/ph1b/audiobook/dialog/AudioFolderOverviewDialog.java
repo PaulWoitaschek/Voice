@@ -21,6 +21,7 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.FolderChooserActivity;
 import de.ph1b.audiobook.adapter.FolderOverviewAdapter;
 import de.ph1b.audiobook.service.BookAddingService;
+import de.ph1b.audiobook.utils.DividerItemDecoration;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
@@ -72,6 +73,7 @@ public class AudioFolderOverviewDialog extends DialogFragment {
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
         adapter = new FolderOverviewAdapter(folders);
         recyclerView.setAdapter(adapter);
         adapter.setOnFolderMoreClickedListener(new FolderOverviewAdapter.OnFolderMoreClickedListener() {
