@@ -9,7 +9,6 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.squareup.picasso.Picasso;
 
-import org.apache.http.conn.util.InetAddressUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,9 +64,7 @@ public class CoverDownloader {
                 List<InetAddress> internetAdresses = Collections.list(i.getInetAddresses());
                 for (InetAddress a : internetAdresses) {
                     if (!a.isLoopbackAddress()) {
-                        String address = a.getHostAddress().toUpperCase();
-                        if (InetAddressUtils.isIPv4Address(address))
-                            return address;
+                        return a.getHostAddress().toUpperCase();
                     }
                 }
             }
