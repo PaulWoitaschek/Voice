@@ -1,4 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="audiobook_dialog_left"></string>
+    <string name="cover">Portada</string>
+    <string name="play_pause">Tocar / Pausa</string>
+
+    <string name="action_settings">Preferencias</string>
+    <string name="book_add_empty_title">Agregar titulo</string>
+    <string name="dialog_confirm">Confirmar</string>
+    <string name="dialog_cancel">Cancelar</string>
+    <string name="action_time_change">Saltar a</string>
+    <string name="pref_resume_on_replug">Reanudar la reproduccion</string>
+    <string name="pref_resume_on_replug_hint">Si usted hizo una pausa por desconnectando el cable, se reanudara cuando conecten el cable.</string>
+    <string name="action_sleep">sueño acción</string>
+    <string name="no_external_storage">Almacenamiento externo no está disponible. Por favor, asegúrese que esta
+         conectado a su computadora.</string>
+    <string name="no_external_storage_action_bar_title">Almacenamiento externo</string>
+
+    <string name="action_sleep_title_hint_left">Pausa después</string>
+    <string name="action_sleep_title_hint_right">minutos</string>
+    <string name="action_jump_to">saltar a</string>
+    <string name="minutes">minutos</string>
+    <string name="seconds">segundos</string>
+
+    <string name="current_cover">Muestra la portada del libro que se está reproduciendo.</string>
+    <string name="current_playing">Que se esta reproduciendo.</string>
+    <string name="pref_cover_on_internet">Usar la red móvil.</string>
+    <string name="pref_cover_on_internet_hint">Utiliza la red móvil para buscar la portada del actual
+         audiolibro.</string>
+    <string name="content_previous_cover">Elejir la portada anterior.</string>
+    <string name="content_next_cover">Elejir la proxima portada.</string>
+    <string name="content_cover">Muenstre a portada para escojer</string>
+    <string name="pref_seek_time">Saltar cantidad</string>
+    <string name="edit_book_title">Editar libro</string>
+    <string name="popup_edit">Editar</string>
+    <string name="delete">Borrar</string>
+    <string name="rewind">Rebobinar</string>
+    <string name="fast_forward">Avance rápido</string>
+    <string name="playback_speed">Velocidad de reproducción</string>
+    <string name="pref_sleep_time">Temporizador para dormir</string>
+    <string name="sleep_timer_started">Temporizador: </string>
+    <string name="keep">Mantener</string>
+    <string name="pref_title_track_to_end">Continua asta el final</string>
+    <string name="pref_summary_track_to_end">Sigue jugando hasta el final de la pista, después de temporizador ha desencadenado.</string>
+    <string name="previous_track">Pista anterior</string>
+    <string name="next_track">Proxima pista </string>
+    <string name="up">Carpeta superior</string>
+    <string name="chosen_folder_description">Carpeta elegida:</string>
+    <string name="choose">ELEGIR</string>
+    <string name="abort">ABORTO</string>
 </resources>
