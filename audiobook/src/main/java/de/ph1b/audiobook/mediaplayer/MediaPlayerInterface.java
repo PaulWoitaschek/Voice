@@ -32,6 +32,8 @@ public interface MediaPlayerInterface {
 
     public void setWakeMode(Context context, int mode);
 
+    public int getDuration();
+
     public interface OnCompletionListener {
         public void onCompletion(MediaPlayerInterface mp);
     }

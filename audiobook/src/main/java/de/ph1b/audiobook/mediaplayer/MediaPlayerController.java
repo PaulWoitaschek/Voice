@@ -14,6 +14,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
+import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.activity.BookShelfActivity;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.DataBaseHelper;
@@ -47,8 +48,8 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
 
         boolean useUnstableMediaPlayer = true;
         //noinspection ConstantConditions
-        if (useUnstableMediaPlayer) {
-            mediaPlayer = new ExoUnstableMediaPlayer();
+        if (useUnstableMediaPlayer && BuildConfig.DEBUG) {
+            mediaPlayer = new ExoUnstableMediaPlayer(c);
         } else if (Build.VERSION.SDK_INT >= 16) {
             mediaPlayer = new CustomMediaPlayer();
         } else {
