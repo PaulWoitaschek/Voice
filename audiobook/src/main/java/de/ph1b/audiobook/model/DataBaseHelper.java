@@ -134,7 +134,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         Collections.sort(bookmarks, new BookmarkComparator(book.getChapters()));
         book.getBookmarks().addAll(bookmarks);
         L.d(TAG, "added book to db:" + book);
-        return book;
     }
 
     public ArrayList<Book> getAllBooks() {
