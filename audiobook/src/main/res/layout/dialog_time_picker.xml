@@ -1,47 +1,61 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/timePickerLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_horizontal|center_vertical"
     android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/numberLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <NumberPicker
+            android:id="@+id/number_hour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/colon"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text=":"
+            android:textSize="28sp"
+            tools:ignore="HardcodedText" />
+
+        <NumberPicker
+            android:id="@+id/number_minute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/hours"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:text="@string/hours"
-        android:textColor="@color/primary"
-        android:textSize="20sp" />
-
-    <NumberPicker
-        android:id="@+id/number_hour"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical" />
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:text="@string/hours_short"
+        android:layout_toLeftOf="@id/numberLayout"
+        android:layout_margin="@dimen/horizontal_margin"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/dialog_content_text_size" />
 
     <TextView
-        android:id="@+id/colon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:text=":"
-        android:textSize="25sp"
-        tools:ignore="HardcodedText" />
-
-    <NumberPicker
-        android:id="@+id/number_minute"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical" />
-
-    <TextView
+        android:layout_toRightOf="@id/numberLayout"
         android:id="@+id/minutes"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:gravity="center_vertical"
-        android:text="@string/minutes"
+        android:layout_margin="@dimen/horizontal_margin"
+        android:text="@string/minutes_short"
         android:textColor="@color/colorAccent"
-        android:textSize="20sp" />
-</LinearLayout>
+        android:textSize="@dimen/dialog_content_text_size" />
+</RelativeLayout>

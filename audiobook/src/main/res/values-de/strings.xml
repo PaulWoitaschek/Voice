@@ -67,4 +67,6 @@
     <string name="pause">Pause</string>
     <string name="play">Abspielen</string>
     <string name="stop">Stop</string>
+    <string name="hours_short">s</string>
+    <string name="minutes_short">m</string>
 </resources>

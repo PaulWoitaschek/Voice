@@ -26,7 +26,6 @@
 
     </FrameLayout>
 
-
     <LinearLayout
         android:id="@+id/current"
         android:layout_width="match_parent"
@@ -76,7 +75,6 @@
                     android:layout_height="@dimen/thumb_size"
                     android:contentDescription="@string/current_playing"
                     android:src="@drawable/ic_play_arrow_grey600_48dp" />
-
 
             </LinearLayout>
 
