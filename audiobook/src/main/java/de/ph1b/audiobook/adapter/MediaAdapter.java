@@ -148,13 +148,13 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
             coverView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onCoverClicked(getPosition());
+                    onItemClickListener.onCoverClicked(getAdapterPosition());
                 }
             });
             editBook.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onMenuClicked(getPosition());
+                    onItemClickListener.onMenuClicked(getAdapterPosition());
                 }
             });
         }
