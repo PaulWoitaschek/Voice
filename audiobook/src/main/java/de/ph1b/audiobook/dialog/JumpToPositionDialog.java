@@ -91,7 +91,7 @@ public class JumpToPositionDialog extends DialogFragment {
 
         return new MaterialDialog.Builder(getActivity())
                 .customView(v, true)
-                .title(R.string.action_jump_to)
+                .title(R.string.action_time_change)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {

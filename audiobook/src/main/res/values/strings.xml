@@ -1,58 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="cover">Cover</string>
-    <string name="play_pause">Play / Pause</string>
 
-    <string name="action_settings">Preferences</string>
-    <string name="book_add_empty_title">Add a title</string>
-    <string name="dialog_confirm">Set</string>
-    <string name="dialog_cancel">Cancel</string>
-    <string name="action_time_change">Jump to</string>
-    <string name="pref_resume_on_replug">Resume playback</string>
-    <string name="pref_resume_on_replug_hint">If you paused by plugging headset out, it will resume
-        on replug.</string>
-    <string name="action_sleep">Sleep-Timer</string>
-    <string name="no_external_storage">External Storage is not available. Please make sure it is
-        connected and not mounted in your computer.</string>
-    <string name="no_external_storage_action_bar_title">External Storage</string>
-
-    <string name="action_sleep_title_hint_left">Pauses after</string>
-    <string name="action_sleep_title_hint_right">minutes</string>
-    <string name="action_jump_to">Position changer</string>
-    <string name="hours_short" tools:ignore="MissingTranslation">h</string>
-    <string name="minutes_short" tools:ignore="MissingTranslation">m</string>
-    <string name="minutes">minutes</string>
-    <string name="seconds">seconds</string>
-
+    <!-- BookShelf -->
     <string name="current_cover">Shows cover of currently playing book.</string>
     <string name="current_playing">Shows playing state.</string>
-    <string name="pref_cover_on_internet">Use Mobile Network</string>
-    <string name="pref_cover_on_internet_hint">Uses mobile network to find cover for the current
-        audiobook.</string>
+
+    <!-- BookPlayActivity -->
+    <string name="cover">Cover</string>
+    <string name="play_pause">Play / Pause</string>
+    <string name="action_sleep">Sleep-Timer</string>
+    <string name="action_sleep_title_hint_left">Pauses after</string>
+    <string name="action_sleep_title_hint_right">minutes</string>
+    <string name="rewind" tools:ignore="MissingTranslation">Rewind</string>
+    <string name="fast_forward" tools:ignore="MissingTranslation">Fast forward</string>
+    <string name="previous_track" tools:ignore="MissingTranslation">Previous track</string>
+    <string name="next_track" tools:ignore="MissingTranslation">Next track</string>
+    <string name="play" tools:ignore="MissingTranslation">Play</string>
+    <string name="pause" tools:ignore="MissingTranslation">Pause</string>
+    <string name="stop" tools:ignore="MissingTranslation">Stop</string>
+    <string name="sleep_timer_started" tools:ignore="MissingTranslation">Sleep timer: </string>
+
+    <!-- NoExternalStorage -->
+    <string name="no_external_storage">External Storage is not available. Please make sure it is connected and not mounted in your computer.</string>
+    <string name="no_external_storage_action_bar_title">External Storage</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_confirm">Set</string>
+    <string name="dialog_cancel">Cancel</string>
+
+    <!-- EditBookDialog -->
+    <string name="book_add_empty_title">Add a title</string>
     <string name="content_previous_cover">Chooses previous cover</string>
     <string name="content_next_cover">Chooses next cover</string>
     <string name="content_cover">Shows cover to choose</string>
-    <string name="pref_seek_time">Skip amount</string>
-
     <string name="edit_book_title" tools:ignore="MissingTranslation">Edit book</string>
-    <string name="popup_edit" tools:ignore="MissingTranslation">Edit</string>
-    <string name="delete" tools:ignore="MissingTranslation">Delete</string>
-    <string name="rewind" tools:ignore="MissingTranslation">Rewind</string>
-    <string name="fast_forward" tools:ignore="MissingTranslation">Fast forward</string>
-    <string name="playback_speed" tools:ignore="MissingTranslation">Playback speed</string>
-    <string name="pref_sleep_time" tools:ignore="MissingTranslation">Sleep time</string>
-    <string name="sleep_timer_started" tools:ignore="MissingTranslation">Sleep timer: </string>
-    <string name="pref_title_track_to_end" tools:ignore="MissingTranslation">Continue till end</string>
-    <string name="pref_summary_track_to_end" tools:ignore="MissingTranslation">Continues playing till the end of the track, after sleep timer has triggered.</string>
 
-    <string name="previous_track" tools:ignore="MissingTranslation">Previous track</string>
-    <string name="next_track" tools:ignore="MissingTranslation">Next track</string>
+    <!-- JumpToPosition -->
+    <string name="action_time_change">Jump to</string>
+    <string name="hours_short" tools:ignore="MissingTranslation">h</string>
+    <string name="minutes_short" tools:ignore="MissingTranslation">m</string>
 
+    <!-- BookAdding -->
+    <string name="audiobook_dialog_left" tools:ignore="MissingTranslation">The folder</string>
+    <string name="audiobook_dialog_right" tools:ignore="MissingTranslation">must not be a subfolder of</string>
+    <string name="audiobook_folders_title" tools:ignore="MissingTranslation">Audiobook folders</string>
+    <string name="no_audiobook_folders_title" tools:ignore="MissingTranslation">Choose folder now</string>
+    <string name="no_audiobook_folders_summary" tools:ignore="MissingTranslation">Please choose your audiobook folder now. You can change this later in the settings.</string>
     <string name="up" tools:ignore="MissingTranslation">Upper folder</string>
     <string name="chosen_folder_description" tools:ignore="MissingTranslation">Chosen folder:</string>
     <string name="choose" tools:ignore="MissingTranslation">CHOOSE</string>
     <string name="abort" tools:ignore="MissingTranslation">ABORT</string>
-    <string name="pref_root_folder_title" tools:ignore="MissingTranslation">Audiobook folder</string>
+
+    <!-- PlaybackSpeed -->
+    <string name="playback_speed" tools:ignore="MissingTranslation">Playback speed</string>
+
+    <!-- Bookmarks -->
     <string name="bookmark" tools:ignore="MissingTranslation">Bookmark</string>
     <string name="bookmark_edit_title" tools:ignore="MissingTranslation">Edit bookmark</string>
     <string name="acc_button_add_bookmark" tools:ignore="MissingTranslation">Adds a bookmark at the current position</string>
@@ -60,13 +62,23 @@
     <string name="bookmark_added" tools:ignore="MissingTranslation">Bookmark added</string>
     <string name="bookmark_delete_title" tools:ignore="MissingTranslation">Delete this bookmark?</string>
     <string name="keep" tools:ignore="MissingTranslation">Keep</string>
-    <string name="play" tools:ignore="MissingTranslation">Play</string>
-    <string name="pause" tools:ignore="MissingTranslation">Pause</string>
-    <string name="stop" tools:ignore="MissingTranslation">Stop</string>
 
-    <string name="audiobook_dialog_left" tools:ignore="MissingTranslation">The folder</string>
-    <string name="audiobook_dialog_right" tools:ignore="MissingTranslation">must not be a subfolder of</string>
-    <string name="audiobook_folders_title" tools:ignore="MissingTranslation">Audiobook folders</string>
-    <string name="no_audiobook_folders_title" tools:ignore="MissingTranslation">Choose folder now</string>
-    <string name="no_audiobook_folders_summary" tools:ignore="MissingTranslation">Please choose your audiobook folder now. You can change this later in the settings.</string>
+    <!-- Settings -->
+    <string name="action_settings">Preferences</string>
+    <string name="pref_resume_on_replug">Resume playback</string>
+    <string name="pref_resume_on_replug_hint">If you paused by plugging headset out, it will resume on replug.</string>
+    <string name="minutes">minutes</string>
+    <string name="seconds">seconds</string>
+    <string name="pref_cover_on_internet">Use Mobile Network</string>
+    <string name="pref_cover_on_internet_hint">Uses mobile network to find cover for the current audiobook.</string>
+    <string name="pref_seek_time">Skip amount</string>
+    <string name="pref_title_track_to_end" tools:ignore="MissingTranslation">Continue till end</string>
+    <string name="pref_summary_track_to_end" tools:ignore="MissingTranslation">Continues playing till the end of the track, after sleep timer has triggered.</string>
+    <string name="pref_sleep_time" tools:ignore="MissingTranslation">Sleep time</string>
+    <string name="pref_root_folder_title" tools:ignore="MissingTranslation">Audiobook folder</string>
+
+    <!-- Misc -->
+    <string name="popup_edit" tools:ignore="MissingTranslation">Edit</string>
+    <string name="delete" tools:ignore="MissingTranslation">Delete</string>
+
 </resources>
