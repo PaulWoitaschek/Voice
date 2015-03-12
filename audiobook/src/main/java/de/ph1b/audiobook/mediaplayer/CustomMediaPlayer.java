@@ -183,35 +183,39 @@ public class CustomMediaPlayer {
         L.v(TAG, "reste called in state: " + state);
         stayAwake(false);
         lock.lock();
-        mContinue = false;
         try {
-            if (decoderThread != null
-                    && state != State.PLAYBACK_COMPLETED) {
-                while (mIsDecoding) {
-                    synchronized (mDecoderLock) {
-                        mDecoderLock.notify();
-                        mDecoderLock.wait();
+            mContinue = false;
+            try {
+                if (decoderThread != null
+                        && state != State.PLAYBACK_COMPLETED) {
+                    while (mIsDecoding) {
+                        synchronized (mDecoderLock) {
+                            mDecoderLock.notify();
+                            mDecoderLock.wait();
+                        }
                     }
                 }
+            } catch (InterruptedException e) {
+                L.e(TAG, "Interrupted in reset while waiting for decoder thread to stop.", e);
             }
-        } catch (InterruptedException e) {
-            L.e(TAG, "Interrupted in reset while waiting for decoder thread to stop.", e);
+            if (codec != null) {
+                codec.release();
+                L.d(TAG, "releasing codec");
+                codec = null;
+            }
+            if (extractor != null) {
+                extractor.release();
+                extractor = null;
+            }
+            if (track != null) {
+                track.release();
+                track = null;
+            }
+            state = State.IDLE;
+            L.d(TAG, "State changed to: " + state);
+        } finally {
+            lock.unlock();
         }
-        if (codec != null) {
-            codec.release();
-            codec = null;
-        }
-        if (extractor != null) {
-            extractor.release();
-            extractor = null;
-        }
-        if (track != null) {
-            track.release();
-            track = null;
-        }
-        state = State.IDLE;
-        L.d(TAG, "State changed to: " + state);
-        lock.unlock();
     }
 
     public void seekTo(final int ms) {
@@ -224,13 +228,16 @@ public class CustomMediaPlayer {
                     @Override
                     public void run() {
                         lock.lock();
-                        if (track == null) {
-                            return;
+                        try {
+                            if (track == null) {
+                                return;
+                            }
+                            track.flush();
+                            long to = ((long) ms * 1000);
+                            extractor.seekTo(to, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
+                        }finally {
+                            lock.unlock();
                         }
-                        track.flush();
-                        long to = ((long) ms * 1000);
-                        extractor.seekTo(to, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
-                        lock.unlock();
                     }
                 });
                 t.setDaemon(true);
@@ -272,37 +279,43 @@ public class CustomMediaPlayer {
     private void initStream() throws IOException, IllegalArgumentException {
         L.v(TAG, "inistream called in state=" + state);
         lock.lock();
-        extractor = new MediaExtractor();
-        if (path != null) {
-            extractor.setDataSource(path);
-        } else {
-            throw new IOException();
+        try {
+            extractor = new MediaExtractor();
+            if (path != null) {
+                extractor.setDataSource(path);
+            } else {
+                throw new IOException();
+            }
+            final MediaFormat oFormat = extractor.getTrackFormat(TRACK_NUM);
+            int sampleRate = oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
+            int channelCount = oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
+            final String mime = oFormat.getString(MediaFormat.KEY_MIME);
+            //long duration = oFormat.getLong(MediaFormat.KEY_DURATION);
+            L.v(TAG, "Sample rate: " + sampleRate);
+            L.v(TAG, "Mime type: " + mime);
+            initDevice(sampleRate, channelCount);
+            extractor.selectTrack(TRACK_NUM);
+            codec = MediaCodec.createDecoderByType(mime);
+            codec.configure(oFormat, null, null, 0);
+        } finally {
+            lock.unlock();
         }
-        final MediaFormat oFormat = extractor.getTrackFormat(TRACK_NUM);
-        int sampleRate = oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
-        int channelCount = oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
-        final String mime = oFormat.getString(MediaFormat.KEY_MIME);
-        //long duration = oFormat.getLong(MediaFormat.KEY_DURATION);
-        L.v(TAG, "Sample rate: " + sampleRate);
-        L.v(TAG, "Mime type: " + mime);
-        initDevice(sampleRate, channelCount);
-        extractor.selectTrack(TRACK_NUM);
-        codec = MediaCodec.createDecoderByType(mime);
-        codec.configure(oFormat, null, null, 0);
-        lock.unlock();
     }
 
     private void initDevice(int sampleRate, int numChannels) {
         L.d(TAG, "initdevice called in state:" + state);
         lock.lock();
-        final int format = findFormatFromChannels(numChannels);
-        final int minSize = AudioTrack.getMinBufferSize(sampleRate, format,
-                AudioFormat.ENCODING_PCM_16BIT);
-        track = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, format,
-                AudioFormat.ENCODING_PCM_16BIT, minSize * 4,
-                AudioTrack.MODE_STREAM);
-        sonic = new Sonic(sampleRate, numChannels);
-        lock.unlock();
+        try {
+            final int format = findFormatFromChannels(numChannels);
+            final int minSize = AudioTrack.getMinBufferSize(sampleRate, format,
+                    AudioFormat.ENCODING_PCM_16BIT);
+            track = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, format,
+                    AudioFormat.ENCODING_PCM_16BIT, minSize * 4,
+                    AudioTrack.MODE_STREAM);
+            sonic = new Sonic(sampleRate, numChannels);
+        } finally {
+            lock.unlock();
+        }
     }
 
     private void decode() {
@@ -384,15 +397,18 @@ public class CustomMediaPlayer {
                         } else if (res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
                             track.stop();
                             lock.lock();
-                            track.release();
-                            final MediaFormat oformat = codec
-                                    .getOutputFormat();
-                            initDevice(
-                                    oformat.getInteger(MediaFormat.KEY_SAMPLE_RATE),
-                                    oformat.getInteger(MediaFormat.KEY_CHANNEL_COUNT));
-                            outputBuffers = codec.getOutputBuffers();
-                            track.play();
-                            lock.unlock();
+                            try {
+                                track.release();
+                                final MediaFormat oformat = codec
+                                        .getOutputFormat();
+                                initDevice(
+                                        oformat.getInteger(MediaFormat.KEY_SAMPLE_RATE),
+                                        oformat.getInteger(MediaFormat.KEY_CHANNEL_COUNT));
+                                outputBuffers = codec.getOutputBuffers();
+                                track.play();
+                            } finally {
+                                lock.unlock();
+                            }
                         }
                     } while (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED
                             || res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED);
