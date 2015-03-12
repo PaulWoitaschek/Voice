@@ -19,6 +19,7 @@
     <string name="pause" tools:ignore="MissingTranslation">Pause</string>
     <string name="stop" tools:ignore="MissingTranslation">Stop</string>
     <string name="sleep_timer_started" tools:ignore="MissingTranslation">Sleep timer: </string>
+    <string name="sleep_timer_stopped" tools:ignore="MissingTranslation">Sleep timer stopped</string>
 
     <!-- NoExternalStorage -->
     <string name="no_external_storage">External Storage is not available. Please make sure it is connected and not mounted in your computer.</string>

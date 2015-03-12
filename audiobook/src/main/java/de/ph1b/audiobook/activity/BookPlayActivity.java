@@ -303,6 +303,8 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                     int minutes = prefs.getSleepTime();
                     String message = getString(R.string.sleep_timer_started) + minutes + " " + getString(R.string.minutes);
                     Toast.makeText(BookPlayActivity.this, message, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(BookPlayActivity.this, R.string.sleep_timer_stopped, Toast.LENGTH_LONG).show();
                 }
             }
         });
