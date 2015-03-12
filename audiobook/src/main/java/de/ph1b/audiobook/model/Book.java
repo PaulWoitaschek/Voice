@@ -125,7 +125,7 @@ public class Book implements Comparable<Book> {
     public Chapter getPreviousChapter() {
         int currentIndex = chapters.indexOf(getCurrentChapter());
         if (currentIndex > 0) {
-            return chapters.get(currentIndex + 1);
+            return chapters.get(currentIndex - 1);
         }
         return null;
     }
