@@ -46,7 +46,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
         db = DataBaseHelper.getInstance(c);
         this.baseApplication = baseApplication;
 
-        boolean useUnstableMediaPlayer = true;
+        boolean useUnstableMediaPlayer = false;
         //noinspection ConstantConditions
         if (useUnstableMediaPlayer && BuildConfig.DEBUG) {
             mediaPlayer = new ExoUnstableMediaPlayer(c);
