@@ -43,6 +43,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     private static final String TAG = AudioService.class.getSimpleName();
     private static final int NOTIFICATION_ID = 42;
     private final ExecutorService executor = Executors.newCachedThreadPool();
+    private final ExecutorService mediaPlayerExecutor = Executors.newSingleThreadExecutor();
     private NotificationManager notificationManager;
     private PrefsManager prefs;
     private MediaPlayerController controller = null;
@@ -149,7 +150,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
     private void handleIntent(final Intent intent) {
         if (intent != null && intent.getAction() != null) {
-            executor.submit(new Runnable() {
+            mediaPlayerExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
                     L.v(TAG, "handling intent action:" + intent.getAction());
