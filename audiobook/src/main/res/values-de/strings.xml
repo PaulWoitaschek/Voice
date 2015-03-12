@@ -17,7 +17,6 @@
 
     <string name="action_sleep_title_hint_left">Pausiert nach</string>
     <string name="action_sleep_title_hint_right">Minuten</string>
-    <string name="action_jump_to">Zu Stelle springen</string>
     <string name="minutes">Minuten</string>
     <string name="seconds">Sekunden</string>
 
