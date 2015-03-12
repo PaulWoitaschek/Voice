@@ -10,9 +10,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:layout_marginBottom="8dp"
         android:textSize="@dimen/dialog_content_text_size"
-        tools:text="10 seconds"
-        android:layout_marginBottom="8dp" />
+        tools:text="10 seconds" />
 
     <SeekBar
         android:id="@+id/seekBar"
