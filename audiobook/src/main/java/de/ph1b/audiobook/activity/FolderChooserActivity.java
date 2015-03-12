@@ -122,7 +122,7 @@ public class FolderChooserActivity extends ActionBarActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.dialog_folder_chooser);
+        setContentView(R.layout.activity_folder_chooser);
         rootDirs = getStorageDirectories();
         prefs = new PrefsManager(this);
         currentFolderContent = new ArrayList<>(rootDirs);
