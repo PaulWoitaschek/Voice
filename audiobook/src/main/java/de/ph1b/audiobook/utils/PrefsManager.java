@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.utils;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -28,17 +27,10 @@ public class PrefsManager {
         return sp.getLong(PREF_KEY_CURRENT_BOOK, -1);
     }
 
-    @SuppressLint("CommitPrefEdits")
     public void setCurrentBookId(long bookId) {
         SharedPreferences.Editor editor = sp.edit();
         editor.putLong(PREF_KEY_CURRENT_BOOK, bookId);
-        /**
-         * We do a commit instead of apply, because when we set the prefs, we directly start a new
-         * activity when {@link de.ph1b.audiobook.fragment.BookShelfFragment} ->
-         * {@link de.ph1b.audiobook.fragment.BookPlayFragment}
-         * directly.
-         */
-        editor.commit();
+        editor.apply();
     }
 
     public ArrayList<String> getAudiobookFolders() {
@@ -51,7 +43,7 @@ public class PrefsManager {
         set.addAll(folders);
         SharedPreferences.Editor editor = sp.edit();
         editor.putStringSet(PREF_KEY_AUDIOBOOK_FOLDERS, set);
-        editor.commit();
+        editor.apply();
     }
 
     public String latestAudiobookFolder() {
