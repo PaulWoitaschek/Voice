@@ -172,14 +172,10 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                                     releaseController();
                                     break;
                                 case KeyEvent.KEYCODE_MEDIA_NEXT:
-                                    controller.next();
-                                    break;
                                 case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
                                     controller.skip(MediaPlayerController.Direction.FORWARD);
                                     break;
                                 case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
-                                    controller.previous();
-                                    break;
                                 case KeyEvent.KEYCODE_MEDIA_REWIND:
                                     controller.skip(MediaPlayerController.Direction.BACKWARD);
                                     break;
