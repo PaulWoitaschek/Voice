@@ -80,7 +80,7 @@ public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAd
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onFolderMoreClicked(getPosition());
+                    listener.onFolderMoreClicked(getAdapterPosition());
                 }
             });
         }
