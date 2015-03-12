@@ -19,9 +19,8 @@
     <string name="action_sleep_title_hint_left">Pauses after</string>
     <string name="action_sleep_title_hint_right">minutes</string>
     <string name="action_jump_to">Position changer</string>
-    <string name="hours_short">h</string>
-    <string name="minutes_short">m</string>
-    <string name="hours">hours</string>
+    <string name="hours_short" tools:ignore="MissingTranslation">h</string>
+    <string name="minutes_short" tools:ignore="MissingTranslation">m</string>
     <string name="minutes">minutes</string>
     <string name="seconds">seconds</string>
 
@@ -69,5 +68,5 @@
     <string name="audiobook_dialog_right" tools:ignore="MissingTranslation">must not be a subfolder of</string>
     <string name="audiobook_folders_title" tools:ignore="MissingTranslation">Audiobook folders</string>
     <string name="no_audiobook_folders_title" tools:ignore="MissingTranslation">Choose folder now</string>
-    <string name="no_audiobook_folders_summary">Please choose your audiobook folder now. You can change this later in the settings.</string>
+    <string name="no_audiobook_folders_summary" tools:ignore="MissingTranslation">Please choose your audiobook folder now. You can change this later in the settings.</string>
 </resources>

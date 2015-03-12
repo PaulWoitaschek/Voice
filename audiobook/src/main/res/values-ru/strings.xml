@@ -17,7 +17,6 @@
     <string name="action_sleep_title_hint_left">Отключить через</string>
     <string name="action_sleep_title_hint_right">минут</string>
     <string name="action_jump_to">Изменение позиции</string>
-    <string name="hours">часов</string>
     <string name="minutes">минут</string>
     <string name="seconds">секунд</string>
 

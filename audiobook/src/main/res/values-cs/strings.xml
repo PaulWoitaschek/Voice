@@ -19,7 +19,6 @@
     <string name="action_sleep_title_hint_left">Pozastavit po</string>
     <string name="action_sleep_title_hint_right">minutách</string>
     <string name="action_jump_to">Změna pozice</string>
-    <string name="hours">hodin</string>
     <string name="minutes">minut</string>
     <string name="seconds">sekund</string>
 

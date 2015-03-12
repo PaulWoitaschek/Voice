@@ -18,7 +18,6 @@
     <string name="action_sleep_title_hint_left">Pausa después</string>
     <string name="action_sleep_title_hint_right">minutos</string>
     <string name="action_jump_to">saltar a</string>
-    <string name="hours">horas</string>
     <string name="minutes">minutos</string>
     <string name="seconds">segundos</string>
 

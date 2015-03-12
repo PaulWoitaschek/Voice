@@ -19,7 +19,6 @@
     <string name="action_sleep_title_hint_left">Pausa após</string>
     <string name="action_sleep_title_hint_right">minutos</string>
     <string name="action_jump_to">Mudar de posição</string>
-    <string name="hours">horas</string>
     <string name="minutes">minutos</string>
     <string name="seconds">segundos</string>
 
