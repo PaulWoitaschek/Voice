@@ -54,6 +54,8 @@ public class AudioFolderOverviewDialog extends DialogFragment {
             }
             if (shouldAddFolder) {
                 adapter.addItem(newFolder);
+                prefs.setAudiobookFolders(folders);
+                getActivity().startService(BookAddingService.getUpdateIntent(getActivity()));
             }
         }
     }
@@ -88,6 +90,8 @@ public class AudioFolderOverviewDialog extends DialogFragment {
                             @Override
                             public void onPositive(MaterialDialog dialog) {
                                 adapter.removeItem(position);
+                                prefs.setAudiobookFolders(folders);
+                                getActivity().startService(BookAddingService.getUpdateIntent(getActivity()));
                             }
                         })
                         .show();
@@ -103,16 +107,7 @@ public class AudioFolderOverviewDialog extends DialogFragment {
 
         return new MaterialDialog.Builder(getActivity())
                 .title(R.string.audiobook_folders_title)
-                .positiveText(R.string.dialog_confirm)
-                .negativeText(R.string.dialog_cancel)
                 .customView(customView, false)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        prefs.setAudiobookFolders(folders);
-                        getActivity().startService(BookAddingService.getUpdateIntent(getActivity()));
-                    }
-                })
                 .build();
     }
 }
