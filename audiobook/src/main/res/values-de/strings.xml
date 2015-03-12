@@ -9,8 +9,7 @@
     <string name="dialog_cancel">Abbrechen</string>
     <string name="action_time_change">Zu Stelle springen</string>
     <string name="pref_resume_on_replug">Wiedergabe fortsetzen</string>
-    <string name="pref_resume_on_replug_hint">Nimmt die Wiedergabe beim Einstecken der Kopfhörer
-        wieder auf.</string>
+    <string name="pref_resume_on_replug_hint">Nimmt die Wiedergabe beim Einstecken der Kopfhörer wieder auf.</string>
     <string name="action_sleep">Einschlaf-Timer</string>
     <string name="no_external_storage">Der externe Speicher ist nicht verfügbar. Prüfen Sie, ob Ihre
         Speicherkarte eingesteckt und nicht mit dem Computer verbunden ist.</string>
@@ -61,7 +60,7 @@
     <string name="audiobook_dialog_left">Der Ordner</string>
     <string name="audiobook_dialog_right">darf kein Unterordner sein von</string>
     <string name="audiobook_folders_title">Hörbuch Ordner</string>
-    <string name="no_audiobook_folders_summary">Bitte wählen Sie jetzt Ihren Hörbuchordner. Keine Sorge, Sie können das später in den Einstellungen ändern.</string>
+    <string name="no_audiobook_folders_summary">Bitte wählen Sie jetzt Ihren Hörbuchordner. Keine Sorge, Sie können diesen später in den Einstellungen ändern.</string>
     <string name="no_audiobook_folders_title">Ordner wählen</string>
     <string name="pause">Pause</string>
     <string name="play">Abspielen</string>
