@@ -18,7 +18,7 @@ public class CustomOnSimpleGestureListener extends GestureDetector.SimpleOnGestu
     public void onLongPress(MotionEvent e) {
         View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
         if (child != null) {
-            int position = recyclerView.getChildPosition(child);
+            int position = recyclerView.getChildAdapterPosition(child);
             itemListener.onItemLongClicked(position, child);
         }
         super.onLongPress(e);
