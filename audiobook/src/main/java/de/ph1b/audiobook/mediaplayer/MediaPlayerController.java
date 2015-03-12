@@ -44,7 +44,12 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
         prefs = new PrefsManager(c);
         db = DataBaseHelper.getInstance(c);
         this.baseApplication = baseApplication;
-        if (Build.VERSION.SDK_INT >= 16) {
+
+        boolean useUnstableMediaPlayer = true;
+        //noinspection ConstantConditions
+        if (useUnstableMediaPlayer) {
+            mediaPlayer = new ExoUnstableMediaPlayer();
+        } else if (Build.VERSION.SDK_INT >= 16) {
             mediaPlayer = new CustomMediaPlayer();
         } else {
             mediaPlayer = new AndroidMediaPlayer();

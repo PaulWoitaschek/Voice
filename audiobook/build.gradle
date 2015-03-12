@@ -67,6 +67,7 @@ repositories {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile project(':ExoPlayer:library')
     compile 'com.android.support:appcompat-v7:22.0.0'
     compile 'com.android.support:recyclerview-v7:22.0.0'
     compile 'com.android.support:cardview-v7:22.0.0'

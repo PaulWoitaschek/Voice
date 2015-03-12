@@ -6,6 +6,7 @@ import android.content.ClipDescription;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,6 +26,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.exoplayer.ExoPlayer;
+import com.google.android.exoplayer.MediaCodecAudioTrackRenderer;
+import com.google.android.exoplayer.TrackRenderer;
+import com.google.android.exoplayer.source.DefaultSampleSource;
+import com.google.android.exoplayer.source.FrameworkSampleExtractor;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;

@@ -59,7 +59,7 @@ public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAd
         notifyItemInserted(folders.indexOf(folder));
     }
 
-    public String getItem(int position){
+    public String getItem(int position) {
         return folders.get(position);
     }
 
