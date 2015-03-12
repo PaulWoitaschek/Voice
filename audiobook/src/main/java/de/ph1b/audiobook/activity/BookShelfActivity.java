@@ -212,7 +212,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                         float endY = event.getY();
                         L.d(TAG, endX + "/" + endY);
                         View endChild = recyclerView.findChildViewUnder(endX, endY);
-                        int to = recyclerView.getChildPosition(endChild);
+                        int to = recyclerView.getChildAdapterPosition(endChild);
 
                         if (from != -1 && to != -1) {
                             adapter.swapItems(from, to);
