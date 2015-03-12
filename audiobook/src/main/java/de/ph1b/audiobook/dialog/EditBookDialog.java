@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.AsyncTask;
@@ -20,7 +19,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.AlertDialogWrapper;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -128,7 +127,6 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        final AlertDialogWrapper.Builder builder = new AlertDialogWrapper.Builder(getActivity());
         coverDownloader = new CoverDownloader(getActivity());
 
         Bundle b = getArguments();
@@ -148,23 +146,19 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
         //init view
         //passing null is fine because of fragment
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_book_edit, null);
-        builder.setView(v);
+        @SuppressLint("InflateParams") View customView = inflater.inflate(R.layout.dialog_book_edit, null);
 
         //init items
-        nameEditText = (EditText) v.findViewById(R.id.book_name);
-        coverImageView = (DraggableBoxImageView) v.findViewById(R.id.cover);
-        coverReplacement = (ProgressBar) v.findViewById(R.id.cover_replacement);
-        previousCover = (ImageButton) v.findViewById(R.id.previous_cover);
-        nextCover = (ImageButton) v.findViewById(R.id.next_cover);
-        final TextView emptyTitleText = (TextView) v.findViewById(R.id.empty_title);
+        nameEditText = (EditText) customView.findViewById(R.id.book_name);
+        coverImageView = (DraggableBoxImageView) customView.findViewById(R.id.cover);
+        coverReplacement = (ProgressBar) customView.findViewById(R.id.cover_replacement);
+        previousCover = (ImageButton) customView.findViewById(R.id.previous_cover);
+        nextCover = (ImageButton) customView.findViewById(R.id.next_cover);
+        final TextView emptyTitleText = (TextView) customView.findViewById(R.id.empty_title);
 
         //init listeners
         nextCover.setOnClickListener(this);
         previousCover.setOnClickListener(this);
-
-        builder.setTitle(R.string.action_jump_to);
-        builder.setNegativeButton(R.string.dialog_cancel, null);
 
         //init values
         nameEditText.setText(defaultName);
@@ -185,17 +179,9 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
             previousCover.setVisibility(View.INVISIBLE);
         }
 
-        builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+        MaterialDialog.ButtonCallback buttonCallback = new MaterialDialog.ButtonCallback() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (addCoverAsync != null && !addCoverAsync.isCancelled())
-                    addCoverAsync.cancel(true);
-                ((OnEditBookFinished) getActivity()).onEditBookFinished(null, null, false);
-            }
-        });
-        builder.setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+            public void onPositive(MaterialDialog dialog) {
                 if (addCoverAsync != null && !addCoverAsync.isCancelled())
                     addCoverAsync.cancel(true);
                 String bookName = nameEditText.getText().toString();
@@ -211,10 +197,24 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
                 }
                 ((OnEditBookFinished) getActivity()).onEditBookFinished(bookName, newCover, true);
             }
-        });
-        builder.setTitle(dialogTitle);
 
-        final AlertDialog editBook = builder.create();
+            @Override
+            public void onNegative(MaterialDialog dialog) {
+
+                if (addCoverAsync != null && !addCoverAsync.isCancelled())
+                    addCoverAsync.cancel(true);
+                ((OnEditBookFinished) getActivity()).onEditBookFinished(null, null, false);
+            }
+        };
+
+        final AlertDialog editBook = new MaterialDialog.Builder(getActivity())
+                .customView(customView, true)
+                .title(dialogTitle)
+                .positiveText(R.string.dialog_confirm)
+                .negativeText(R.string.dialog_cancel)
+                .callback(buttonCallback)
+                .build();
+
         nameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {

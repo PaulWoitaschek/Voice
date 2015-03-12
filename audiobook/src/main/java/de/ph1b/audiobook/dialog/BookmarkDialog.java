@@ -24,7 +24,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.AlertDialogWrapper;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.Collections;
 
@@ -71,27 +71,33 @@ public class BookmarkDialog extends DialogFragment {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        AlertDialogWrapper.Builder builder = new AlertDialogWrapper.Builder(getActivity());
+                        MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity());
                         switch (item.getItemId()) {
                             case R.id.edit_book:
                                 final Bookmark editBookmark = adapter.getItem(position);
-                                builder.setTitle(R.string.bookmark_edit_title);
+
+                                // custom view
                                 final EditText editText = new EditText(getActivity());
                                 editText.setInputType(InputType.TYPE_CLASS_TEXT);
                                 int padding = getResources().getDimensionPixelSize(R.dimen.horizontal_margin);
                                 editText.setPadding(padding, padding, padding, padding);
-                                builder.setView(editText);
                                 editText.setText(editBookmark.getTitle());
-                                builder.setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Bookmark oldBookmark = new Bookmark(editBookmark);
-                                        editBookmark.setTitle(editText.getText().toString());
-                                        db.updateBookmark(editBookmark, oldBookmark, book);
-                                        adapter.notifyItemChanged(position);
-                                    }
-                                });
-                                builder.setNegativeButton(R.string.abort, null);
+
+                                builder.title(R.string.bookmark_edit_title)
+                                        .positiveText(R.string.dialog_confirm)
+                                        .negativeText(R.string.dialog_cancel)
+                                        .callback(new MaterialDialog.ButtonCallback() {
+                                            @Override
+                                            public void onPositive(MaterialDialog dialog) {
+
+                                                Bookmark oldBookmark = new Bookmark(editBookmark);
+                                                editBookmark.setTitle(editText.getText().toString());
+                                                db.updateBookmark(editBookmark, oldBookmark, book);
+                                                adapter.notifyItemChanged(position);
+                                            }
+                                        })
+                                        .customView(editText, true);
+
                                 AlertDialog dialog = builder.show();
                                 final Button positive = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
                                 positive.setEnabled(editText.getText().toString().length() > 0);
@@ -114,17 +120,19 @@ public class BookmarkDialog extends DialogFragment {
                                 return true;
                             case R.id.delete_book:
                                 final Bookmark deleteBookmark = adapter.getItem(position);
-                                builder.setTitle(R.string.bookmark_delete_title);
-                                builder.setMessage(deleteBookmark.getTitle());
-                                builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        adapter.removeItem(position);
-                                        db.updateBook(book);
-                                    }
-                                });
-                                builder.setNegativeButton(R.string.keep, null);
-                                builder.show();
+
+                                builder.title(R.string.bookmark_delete_title)
+                                        .content(deleteBookmark.getTitle())
+                                        .positiveText(R.string.delete)
+                                        .negativeText(R.string.keep)
+                                        .callback(new MaterialDialog.ButtonCallback() {
+                                            @Override
+                                            public void onPositive(MaterialDialog dialog) {
+                                                adapter.removeItem(position);
+                                                db.updateBook(book);
+                                            }
+                                        })
+                                        .show();
                                 return true;
                             default:
                                 return false;
@@ -182,12 +190,12 @@ public class BookmarkDialog extends DialogFragment {
             }
         });
 
-        AlertDialogWrapper.Builder builder = new AlertDialogWrapper.Builder(getActivity());
-        builder.setView(v);
-        builder.setTitle(R.string.bookmark);
-        builder.setNegativeButton(R.string.dialog_cancel, null);
-        dialog = builder.create();
+        dialog = new MaterialDialog.Builder(getActivity())
+                .customView(v, true)
+                .title(R.string.bookmark)
+                .negativeText(R.string.dialog_cancel)
+                .build();
+
         return dialog;
     }
-
 }

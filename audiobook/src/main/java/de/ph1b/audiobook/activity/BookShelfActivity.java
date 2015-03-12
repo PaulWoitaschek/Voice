@@ -3,7 +3,6 @@ package de.ph1b.audiobook.activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipDescription;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,7 +24,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.AlertDialogWrapper;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -87,17 +86,17 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         baseApplication = (BaseApplication) getApplication();
         prefs = new PrefsManager(this);
         controller = new ServiceController(this);
-        noFolderWarning = new AlertDialogWrapper.Builder(this)
-                .setTitle(R.string.no_audiobook_folders_title)
-                .setMessage(R.string.no_audiobook_folders_summary)
-                .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
+        noFolderWarning = new MaterialDialog.Builder(this)
+                .title(R.string.no_audiobook_folders_title)
+                .positiveText(R.string.dialog_confirm)
+                .callback(new MaterialDialog.ButtonCallback() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onPositive(MaterialDialog dialog) {
                         audioFolderOverviewDialog.show(getFragmentManager(), TAG);
                     }
                 })
-                .setCancelable(false)
-                .create();
+                .cancelable(false)
+                .build();
 
         current = (ViewGroup) findViewById(R.id.current);
         currentCover = (ImageView) findViewById(R.id.current_cover);

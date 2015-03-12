@@ -3,14 +3,13 @@ package de.ph1b.audiobook.dialog;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
 
-import com.afollestad.materialdialogs.AlertDialogWrapper;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.concurrent.TimeUnit;
 
@@ -31,7 +30,6 @@ public class JumpToPositionDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        AlertDialogWrapper.Builder builder = new AlertDialogWrapper.Builder(getActivity());
 
         //passing null is fine because of fragment
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_time_picker, null);
@@ -87,20 +85,20 @@ public class JumpToPositionDialog extends DialogFragment {
             }
         });
 
-        builder.setView(v);
-        builder.setTitle(R.string.action_jump_to);
-
-        builder.setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                int h = hPicker.getValue();
-                int m = mPicker.getValue();
-                int newPosition = (m + 60 * h) * 60 * 1000;
-                new ServiceController(getActivity()).changeTime(newPosition, book.getCurrentChapter().getPath());
-            }
-        });
-        builder.setNegativeButton(R.string.dialog_cancel, null);
-
-        return builder.create();
+        return new MaterialDialog.Builder(getActivity())
+                .customView(v, true)
+                .title(R.string.action_jump_to)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        int h = hPicker.getValue();
+                        int m = mPicker.getValue();
+                        int newPosition = (m + 60 * h) * 60 * 1000;
+                        new ServiceController(getActivity()).changeTime(newPosition, book.getCurrentChapter().getPath());
+                    }
+                })
+                .positiveText(R.string.dialog_confirm)
+                .negativeText(R.string.dialog_cancel)
+                .build();
     }
 }

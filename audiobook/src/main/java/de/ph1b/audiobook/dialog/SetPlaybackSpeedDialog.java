@@ -3,7 +3,6 @@ package de.ph1b.audiobook.dialog;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,7 +11,7 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.AlertDialogWrapper;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.text.DecimalFormat;
 
@@ -31,7 +30,6 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        AlertDialogWrapper.Builder builder = new AlertDialogWrapper.Builder(getActivity());
 
         //passing null is fine because of fragment
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_amount_chooser, null);
@@ -55,9 +53,6 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
             seekBar.getThumb().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
         }
 
-        builder.setTitle(getString(R.string.playback_speed));
-        builder.setView(v);
-
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int step, boolean fromUser) {
@@ -76,16 +71,18 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
             }
         });
 
-        builder.setPositiveButton(getString(R.string.dialog_confirm), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                new ServiceController(getActivity()).setPlaybackSpeed(speed);
-            }
-        });
-
-        builder.setNegativeButton(getString(R.string.dialog_cancel), null);
-
-        return builder.create();
+        return new MaterialDialog.Builder(getActivity())
+                .title(R.string.playback_speed)
+                .negativeText(R.string.dialog_cancel)
+                .positiveText(R.string.dialog_confirm)
+                .customView(v, true)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        new ServiceController(getActivity()).setPlaybackSpeed(speed);
+                    }
+                })
+                .build();
     }
 
     private float speedStepValueToSpeed(int step) {

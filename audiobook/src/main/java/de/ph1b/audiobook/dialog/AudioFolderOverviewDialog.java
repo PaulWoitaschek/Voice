@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.AlertDialogWrapper;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -59,18 +58,11 @@ public class AudioFolderOverviewDialog extends DialogFragment {
     }
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-
         prefs = new PrefsManager(getActivity());
         folders = prefs.getAudiobookFolders();
-        AlertDialogWrapper.Builder builder = new AlertDialogWrapper.Builder(getActivity());
 
-        builder.setTitle(R.string.audiobook_folders_title);
-
-        //passing null is fine because of fragment
+        LayoutInflater inflater = getActivity().getLayoutInflater();
         @SuppressLint("InflateParams") View customView = inflater.inflate(R.layout.dialog_folder_overview, null);
-        builder.setView(customView);
 
         //init views
         RecyclerView recyclerView = (RecyclerView) customView.findViewById(R.id.recycler);
@@ -96,15 +88,18 @@ public class AudioFolderOverviewDialog extends DialogFragment {
             }
         });
 
-        builder.setNegativeButton(R.string.dialog_cancel, null);
-        builder.setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                prefs.setAudiobookFolders(folders);
-                getActivity().startService(BookAddingService.getUpdateIntent(getActivity()));
-            }
-        });
-
-        return builder.create();
+        return new MaterialDialog.Builder(getActivity())
+                .title(R.string.audiobook_folders_title)
+                .positiveText(R.string.dialog_confirm)
+                .negativeText(R.string.dialog_cancel)
+                .customView(customView, true)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        prefs.setAudiobookFolders(folders);
+                        getActivity().startService(BookAddingService.getUpdateIntent(getActivity()));
+                    }
+                })
+                .build();
     }
 }
