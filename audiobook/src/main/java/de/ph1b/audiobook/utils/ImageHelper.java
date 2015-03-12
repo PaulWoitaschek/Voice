@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.media.MediaMetadataRetriever;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
@@ -16,7 +17,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import de.ph1b.audiobook.R;
-
 
 public class ImageHelper {
 
@@ -40,8 +40,7 @@ public class ImageHelper {
         return bitmap;
     }
 
-
-    private static int getCoverLength(Context c) {
+    public static int getCoverLength(Context c) {
         c.getResources().getDisplayMetrics();
         DisplayMetrics metrics = c.getResources().getDisplayMetrics();
         int displayWidth = metrics.widthPixels;
@@ -106,18 +105,25 @@ public class ImageHelper {
         return false;
     }
 
-    public static Bitmap genBitmapFromFile(String pathName, Context c) {
-        // First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(pathName, options);
-
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, c);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFile(pathName, options);
+    public static Bitmap getEmbeddedCover(File f, Context c) {
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        try {
+            mmr.setDataSource(f.getAbsolutePath());
+            byte[] data = mmr.getEmbeddedPicture();
+            if (data != null) {
+                final BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeByteArray(data, 0, data.length, options);
+                // Calculate inSampleSize
+                options.inSampleSize = calculateInSampleSize(options, c);
+                // Decode bitmap with inSampleSize set
+                options.inJustDecodeBounds = false;
+                return BitmapFactory.decodeByteArray(data, 0, data.length, options);
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private static int calculateInSampleSize(BitmapFactory.Options options, Context c) {

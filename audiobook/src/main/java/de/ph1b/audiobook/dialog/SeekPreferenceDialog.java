@@ -13,7 +13,6 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
 import de.ph1b.audiobook.utils.PrefsManager;
 
-
 public class SeekPreferenceDialog extends DialogPreference {
 
     private final int SEEK_BAR_MIN = 10;
@@ -55,7 +54,6 @@ public class SeekPreferenceDialog extends DialogPreference {
 
             }
         });
-
 
         MaterialCompatThemer.theme(seekBar);
     }

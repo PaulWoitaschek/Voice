@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.utils;
 
-
 import android.util.Log;
 
 import de.ph1b.audiobook.BuildConfig;

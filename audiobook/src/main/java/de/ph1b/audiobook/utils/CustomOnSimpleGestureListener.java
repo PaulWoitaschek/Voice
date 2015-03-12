@@ -5,12 +5,9 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-import de.ph1b.audiobook.interfaces.OnItemLongClickListener;
-
 public class CustomOnSimpleGestureListener extends GestureDetector.SimpleOnGestureListener {
     private final RecyclerView recyclerView;
     private final OnItemLongClickListener itemListener;
-
 
     public CustomOnSimpleGestureListener(RecyclerView recyclerView, OnItemLongClickListener itemListener) {
         this.recyclerView = recyclerView;
@@ -26,4 +23,9 @@ public class CustomOnSimpleGestureListener extends GestureDetector.SimpleOnGestu
         }
         super.onLongPress(e);
     }
+
+    public interface OnItemLongClickListener {
+        public void onItemLongClicked(int position, View view);
+    }
+
 }

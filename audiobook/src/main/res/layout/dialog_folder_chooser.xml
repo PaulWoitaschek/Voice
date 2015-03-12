@@ -15,6 +15,8 @@
             android:src="@drawable/ic_arrow_up_grey600_48dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:contentDescription="@string/up" />
 
         <LinearLayout

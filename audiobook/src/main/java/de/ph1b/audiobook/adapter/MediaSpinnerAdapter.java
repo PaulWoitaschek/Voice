@@ -10,29 +10,27 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.content.Book;
-import de.ph1b.audiobook.content.Media;
-
+import de.ph1b.audiobook.model.Book;
+import de.ph1b.audiobook.model.Chapter;
 
 public class MediaSpinnerAdapter extends BaseAdapter {
 
     private final Context c;
-    private final ArrayList<Media> data;
+    private final ArrayList<Chapter> chapters;
 
     public MediaSpinnerAdapter(Context c, Book book) {
         this.c = c;
-        this.data = book.getContainingMedia();
+        this.chapters = book.getChapters();
     }
-
 
     @Override
     public int getCount() {
-        return data != null ? data.size() : 0;
+        return chapters != null ? chapters.size() : 0;
     }
 
     @Override
-    public Media getItem(int position) {
-        return data.get(position);
+    public Chapter getItem(int position) {
+        return chapters.get(position);
     }
 
     @Override
@@ -50,7 +48,6 @@ public class MediaSpinnerAdapter extends BaseAdapter {
         return getCustomView(position, convertView, parent);
     }
 
-
     private View getCustomView(int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
         if (convertView == null) {
@@ -65,7 +62,7 @@ public class MediaSpinnerAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.textView.setText(data.get(position).getName());
+        viewHolder.textView.setText(chapters.get(position).getName());
         return convertView;
     }
 

@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.dialog;
 
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -56,7 +55,6 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
     private int coverPosition = -1;
     private ArrayList<Bitmap> covers;
     private int googleCount = 0;
-
 
     private boolean isCoverReplacement(Bitmap bitmap) {
         /**
@@ -143,7 +141,6 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
             firstCoverIsLetterReplacement = isCoverReplacement(firstCover);
         }
 
-
         if (!firstCoverIsLetterReplacement) {
             covers.add(0, ImageHelper.genCapital(defaultName, getActivity()));
         }
@@ -193,7 +190,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (addCoverAsync != null && !addCoverAsync.isCancelled())
                     addCoverAsync.cancel(true);
-                ((OnEditBookFinished) getTargetFragment()).onEditBookFinished(null, null, false);
+                ((OnEditBookFinished) getActivity()).onEditBookFinished(null, null, false);
             }
         });
         builder.setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
@@ -212,7 +209,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
                         newCover = covers.get(0); // use the replacement if this is not valid
                     }
                 }
-                ((OnEditBookFinished) getTargetFragment()).onEditBookFinished(bookName, newCover, true);
+                ((OnEditBookFinished) getActivity()).onEditBookFinished(bookName, newCover, true);
             }
         });
         builder.setTitle(dialogTitle);

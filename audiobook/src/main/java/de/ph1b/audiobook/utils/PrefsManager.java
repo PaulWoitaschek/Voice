@@ -1,16 +1,21 @@
 package de.ph1b.audiobook.utils;
 
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import de.ph1b.audiobook.R;
 
 public class PrefsManager {
 
     private static final String PREF_KEY_CURRENT_BOOK = "currentBook";
+    private static final String PREF_KEY_AUDIOBOOK_FOLDERS = "folders";
+    private static final String PREF_KEY_LAST_FOLDER = "prefKeyLastFolder";
     private final Context c;
     private final SharedPreferences sp;
 
@@ -36,14 +41,26 @@ public class PrefsManager {
         editor.commit();
     }
 
-
-    public String getAudiobookFolder() {
-        return sp.getString(c.getString(R.string.pref_key_root_folder), null);
+    public ArrayList<String> getAudiobookFolders() {
+        Set<String> set = sp.getStringSet(PREF_KEY_AUDIOBOOK_FOLDERS, new HashSet<String>());
+        return new ArrayList<>(set);
     }
 
-    public void setAudiobookFolder(String folder) {
+    public void setAudiobookFolders(ArrayList<String> folders) {
+        Set<String> set = new HashSet<>();
+        set.addAll(folders);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString(c.getString(R.string.pref_key_root_folder), folder);
+        editor.putStringSet(PREF_KEY_AUDIOBOOK_FOLDERS, set);
+        editor.commit();
+    }
+
+    public String latestAudiobookFolder() {
+        return sp.getString(PREF_KEY_LAST_FOLDER, "");
+    }
+
+    public void setLatestChosenFolder(String folder) {
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(PREF_KEY_LAST_FOLDER, folder);
         editor.apply();
     }
 

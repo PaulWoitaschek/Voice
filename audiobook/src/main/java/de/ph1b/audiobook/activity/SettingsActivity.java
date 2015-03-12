@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import de.ph1b.audiobook.R;
 
-
 public class SettingsActivity extends BaseActivity {
 
     @Override

@@ -5,9 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.KeyEvent;
 
-import de.ph1b.audiobook.service.AudioPlayerService;
+import de.ph1b.audiobook.service.AudioService;
 import de.ph1b.audiobook.utils.L;
-
 
 public class RemoteControlReceiver extends BroadcastReceiver {
 
@@ -22,7 +21,7 @@ public class RemoteControlReceiver extends BroadcastReceiver {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    Intent i = new Intent(context, AudioPlayerService.class);
+                    Intent i = new Intent(context, AudioService.class);
                     i.setAction(Intent.ACTION_MEDIA_BUTTON);
                     i.putExtra(Intent.EXTRA_KEY_EVENT, keyCode);
                     context.startService(i);

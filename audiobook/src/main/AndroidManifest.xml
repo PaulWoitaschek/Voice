@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="de.ph1b.audiobook">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="de.ph1b.audiobook">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
-        android:name=".utils.BaseApplication"
-        android:backupAgent=".utils.CustomBackupAgent"
+        android:name="de.ph1b.audiobook.utils.BaseApplication"
+        android:backupAgent="de.ph1b.audiobook.utils.CustomBackupAgent"
         android:allowBackup="true"
         android:supportsRtl="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,70 +21,63 @@
 
         <meta-data
             android:name="com.google.android.backup.api_key"
-            android:value="AEdPqrEAAAAIjeSB6A5JNJpRSV5yPq22PvZtl95fWDzDIuk63w" />
+            android:value="AEdPqrEAAAAIjeSB6A5JNJpRSV5yPq22PvZtl95fWDzDIuk63w"/>
 
         <activity
-            android:name=".activity.BookShelfActivity"
+            android:name="de.ph1b.audiobook.activity.BookShelfActivity"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.FolderChooserActivity" />
-
         <activity
-            android:name=".activity.BookPlayActivity"
-            android:parentActivityName=".activity.BookShelfActivity">
+            android:name="de.ph1b.audiobook.activity.BookPlayActivity"
+            android:parentActivityName="de.ph1b.audiobook.activity.BookShelfActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.BookShelfActivity" />
+                android:value="de.ph1b.audiobook.activity.BookShelfActivity"/>
         </activity>
 
         <activity
-            android:name=".activity.FilesChooseActivity"
-            android:label="@string/app_name"
-            android:parentActivityName=".activity.BookShelfActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.BookShelfActivity" />
-        </activity>
-
-        <activity
-            android:name=".activity.SettingsActivity"
+            android:name="de.ph1b.audiobook.activity.SettingsActivity"
             android:label="@string/action_settings"
-            android:parentActivityName=".activity.BookShelfActivity">
+            android:parentActivityName="de.ph1b.audiobook.activity.BookShelfActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.BookShelfActivity" />
+                android:value="de.ph1b.audiobook.activity.BookShelfActivity"/>
         </activity>
 
         <activity
-            android:name=".activity.NoExternalStorageActivity"
-            android:label="@string/action_settings" />
+            android:name="de.ph1b.audiobook.activity.NoExternalStorageActivity"
+            android:label="@string/action_settings"/>
 
-        <service android:name=".service.AudioPlayerService" />
+        <activity android:name=".activity.FolderChooserActivity"/>
 
-        <service android:name=".service.WidgetUpdateService" />
+        <service android:name="de.ph1b.audiobook.service.AudioService"/>
 
-        <receiver android:name=".receiver.RemoteControlReceiver">
+        <service android:name="de.ph1b.audiobook.service.WidgetUpdateService"/>
+
+        <service android:name=".service.BookAddingService"/>
+
+        <receiver android:name="de.ph1b.audiobook.receiver.RemoteControlReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.MEDIA_BUTTON" />
+                <action android:name="android.intent.action.MEDIA_BUTTON"/>
             </intent-filter>
         </receiver>
 
         <receiver
             android:icon="@mipmap/ic_launcher"
-            android:name=".receiver.BaseWidgetProvider"
+            android:name="de.ph1b.audiobook.receiver.BaseWidgetProvider"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/widget_info" />
+                android:resource="@xml/widget_info"/>
         </receiver>
     </application>
 

@@ -8,13 +8,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.content.Book;
-import de.ph1b.audiobook.content.Bookmark;
-import de.ph1b.audiobook.content.Media;
+import de.ph1b.audiobook.model.Book;
+import de.ph1b.audiobook.model.Bookmark;
+import de.ph1b.audiobook.model.Chapter;
 
 /**
  * @author <a href="mailto:woitaschek@posteo.de">Paul Woitaschek</a>
@@ -25,25 +24,12 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
 
     private final ArrayList<Bookmark> bookmarks;
     private final OnOptionsMenuClickedListener listener;
-    private final ArrayList<Media> allMedia;
+    private final Book book;
 
-    public BookmarkAdapter(ArrayList<Bookmark> bookmarks, OnOptionsMenuClickedListener listener,
-                           Book book) {
-        this.bookmarks = bookmarks;
+    public BookmarkAdapter(Book book, OnOptionsMenuClickedListener listener) {
+        this.book = book;
         this.listener = listener;
-        this.allMedia = book.getContainingMedia();
-    }
-
-    /**
-     * @param bookmark The bookmark to be added
-     * @return The position at which the bookmark was added.
-     */
-    public int addItem(Bookmark bookmark) {
-        bookmarks.add(bookmark);
-        Collections.sort(bookmarks);
-        int index = bookmarks.indexOf(bookmark);
-        notifyItemInserted(index);
-        return index;
+        this.bookmarks = book.getBookmarks();
     }
 
     public void removeItem(int position) {
@@ -67,9 +53,20 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         Bookmark bookmark = bookmarks.get(position);
         holder.title.setText(bookmark.getTitle());
 
-        int size = allMedia.size();
-        holder.summary.setText("(" + (bookmark.getPosition() + 1) + "/" + size + ") ");
-        holder.time.setText(formatTime(bookmark.getTime()) + " / " + formatTime(allMedia.get(bookmark.getPosition()).getDuration()));
+        int size = book.getChapters().size();
+        Chapter currentChapter = null;
+        for (Chapter c : book.getChapters()) {
+            if (c.getPath().equals(bookmark.getPath())) {
+                currentChapter = c;
+            }
+        }
+        if (currentChapter == null) {
+            throw new IllegalArgumentException("Current chapter not found with bookmark=" + bookmark);
+        }
+        int index = book.getChapters().indexOf(currentChapter);
+
+        holder.summary.setText("(" + (index + 1) + "/" + size + ") ");
+        holder.time.setText(formatTime(bookmark.getTime()) + " / " + formatTime(currentChapter.getDuration()));
     }
 
     @Override

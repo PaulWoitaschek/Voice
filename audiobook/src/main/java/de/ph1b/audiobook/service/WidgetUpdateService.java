@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.service;
 
-
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
@@ -30,14 +29,16 @@ import java.util.concurrent.Executors;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookPlayActivity;
 import de.ph1b.audiobook.activity.BookShelfActivity;
-import de.ph1b.audiobook.content.Book;
+import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.receiver.BaseWidgetProvider;
+import de.ph1b.audiobook.utils.BaseApplication;
+import de.ph1b.audiobook.utils.BaseApplication.PlayState;
 import de.ph1b.audiobook.utils.L;
 
-public class WidgetUpdateService extends Service {
+public class WidgetUpdateService extends Service implements BaseApplication.OnPositionChangedListener, BaseApplication.OnCurrentBookChangedListener, BaseApplication.OnPlayStateChangedListener {
     private static final String TAG = WidgetUpdateService.class.getSimpleName();
     private final ExecutorService executor = Executors.newCachedThreadPool();
-    private final GlobalState globalState = GlobalState.INSTANCE;
+    private BaseApplication baseApplication;
     private AppWidgetManager appWidgetManager;
 
     private void updateWidget() {
@@ -47,7 +48,7 @@ public class WidgetUpdateService extends Service {
                 L.v(TAG, "updateWidget called");
                 boolean isPortrait = isPortrait();
                 int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(WidgetUpdateService.this, BaseWidgetProvider.class));
-                Book book = globalState.getBook();
+                Book book = baseApplication.getCurrentBook();
 
                 for (int widgetId : ids) {
                     RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.widget);
@@ -91,7 +92,10 @@ public class WidgetUpdateService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        globalState.init(this);
+        baseApplication = (BaseApplication) getApplication();
+        baseApplication.addOnPlayStateChangedListener(this);
+        baseApplication.addOnCurrentBookChangedListener(this);
+        baseApplication.addOnPositionChangedListener(this);
         appWidgetManager = AppWidgetManager.getInstance(this);
     }
 
@@ -156,6 +160,16 @@ public class WidgetUpdateService extends Service {
         remoteViews.setViewVisibility(R.id.rewind, View.GONE);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        baseApplication.removeOnPlayStateChangedListener(this);
+        baseApplication.removeOnCurrentBookChangedListener(this);
+        baseApplication.removeOnPositionChangedListener(this);
+        executor.shutdown();
+    }
+
     private void initElements(RemoteViews remoteViews, Book book) {
         Intent playPauseI = ServiceController.getPlayPauseIntent(this);
         PendingIntent playPausePI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseI, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -169,7 +183,7 @@ public class WidgetUpdateService extends Service {
         PendingIntent rewindPI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_REWIND, rewindI, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI);
 
-        if (globalState.getState() == PlayerStates.PLAYING) {
+        if (baseApplication.getPlayState() == PlayState.PLAYING) {
             remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_48dp);
         } else {
             remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow_white_48dp);
@@ -181,7 +195,8 @@ public class WidgetUpdateService extends Service {
         if (book != null) {
             Intent wholeWidgetClickI = new Intent(this, BookPlayActivity.class);
             remoteViews.setTextViewText(R.id.title, book.getName());
-            String name = book.getContainingMedia().get(book.getPosition()).getName();
+            String name = book.getCurrentChapter().getName();
+
             remoteViews.setTextViewText(R.id.summary, name);
 
             // building back-stack.
@@ -204,5 +219,20 @@ public class WidgetUpdateService extends Service {
         }
 
         remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI);
+    }
+
+    @Override
+    public void onPositionChanged() {
+        updateWidget();
+    }
+
+    @Override
+    public void onCurrentBookChanged(Book book) {
+        updateWidget();
+    }
+
+    @Override
+    public void onPlayStateChanged(PlayState state) {
+        updateWidget();
     }
 }

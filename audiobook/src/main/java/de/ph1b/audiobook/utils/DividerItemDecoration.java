@@ -10,19 +10,16 @@ import android.view.View;
 
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
-
     private static final int[] ATTRS = new int[]{
             android.R.attr.listDivider
     };
     private final Drawable mDivider;
-
 
     public DividerItemDecoration(Context context) {
         final TypedArray a = context.obtainStyledAttributes(ATTRS);
         mDivider = a.getDrawable(0);
         a.recycle();
     }
-
 
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {

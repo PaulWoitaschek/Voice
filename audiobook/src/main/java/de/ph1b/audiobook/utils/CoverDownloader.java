@@ -40,7 +40,6 @@ public class CoverDownloader {
         }
     }
 
-
     /**
      * Returns a bitmap from google, defined by the searchText
      *
@@ -78,8 +77,7 @@ public class CoverDownloader {
         return "";
     }
 
-
-    public String getBitmapUrl(String searchText, int number) {
+    private String getBitmapUrl(String searchText, int number) {
         if (searchMapping.containsKey(searchText)) {
             ArrayList<String> containing = searchMapping.get(searchText);
             if (number < containing.size()) {

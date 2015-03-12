@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
 
-
 public class FolderAdapter extends BaseAdapter {
 
     private final Context c;
@@ -23,7 +22,6 @@ public class FolderAdapter extends BaseAdapter {
         this.c = c;
         this.data = data;
     }
-
 
     @Override
     public int getCount() {
@@ -49,7 +47,6 @@ public class FolderAdapter extends BaseAdapter {
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         return getCustomView(position, convertView, parent);
     }
-
 
     private View getCustomView(int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;

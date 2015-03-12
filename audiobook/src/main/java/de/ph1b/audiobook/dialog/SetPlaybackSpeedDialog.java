@@ -17,9 +17,9 @@ import com.afollestad.materialdialogs.AlertDialogWrapper;
 import java.text.DecimalFormat;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.content.Book;
-import de.ph1b.audiobook.service.GlobalState;
+import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.service.ServiceController;
+import de.ph1b.audiobook.utils.BaseApplication;
 
 public class SetPlaybackSpeedDialog extends DialogFragment {
 
@@ -40,8 +40,8 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
         final TextView textView = (TextView) v.findViewById(R.id.textView);
 
         // setting current speed
-        GlobalState.INSTANCE.init(getActivity());
-        Book book = GlobalState.INSTANCE.getBook();
+        BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
+        Book book = baseApplication.getCurrentBook();
         speed = book.getPlaybackSpeed();
         textView.setText(formatTime(speed));
 

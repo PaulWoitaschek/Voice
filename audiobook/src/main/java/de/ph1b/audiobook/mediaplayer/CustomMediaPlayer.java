@@ -21,6 +21,7 @@ import android.media.AudioTrack;
 import android.media.MediaCodec;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
+import android.media.MediaPlayer;
 import android.os.PowerManager;
 
 import org.vinuxproject.sonic.Sonic;
@@ -50,7 +51,7 @@ public class CustomMediaPlayer {
     private float speed;
     private OnCompletionListener onCompletionListener;
     private State state;
-    private long duration;
+    private MediaPlayer.OnErrorListener onErrorListener;
 
     public CustomMediaPlayer(Context context) {
         L.v(TAG, "constructor called");
@@ -75,22 +76,10 @@ public class CustomMediaPlayer {
         switch (state) {
             case ERROR:
                 error("getcurrentposition", state);
+                onErrorListener.onError(null, 0, 0);
                 break;
             default:
                 return (int) (extractor.getSampleTime() / 1000);
-        }
-        return 0;
-    }
-
-    public int getDuration() {
-        switch (state) {
-            case INITIALIZED:
-            case IDLE:
-            case ERROR:
-                error("getDuration()", State.ERROR);
-                break;
-            default:
-                return (int) (duration / 1000);
         }
         return 0;
     }
@@ -265,6 +254,9 @@ public class CustomMediaPlayer {
         }
     }
 
+    public void setOnErrorListener(MediaPlayer.OnErrorListener onErrorListener) {
+        this.onErrorListener = onErrorListener;
+    }
 
     private int findFormatFromChannels(int numChannels) {
         switch (numChannels) {
@@ -290,7 +282,7 @@ public class CustomMediaPlayer {
         int sampleRate = oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
         int channelCount = oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
         final String mime = oFormat.getString(MediaFormat.KEY_MIME);
-        duration = oFormat.getLong(MediaFormat.KEY_DURATION);
+        //long duration = oFormat.getLong(MediaFormat.KEY_DURATION);
         L.v(TAG, "Sample rate: " + sampleRate);
         L.v(TAG, "Mime type: " + mime);
         initDevice(sampleRate, channelCount);

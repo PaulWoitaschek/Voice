@@ -16,7 +16,6 @@ import java.lang.reflect.Field;
 
 import de.ph1b.audiobook.R;
 
-
 public class MaterialCompatThemer {
 
     public static void theme(SeekBar seekBar) {

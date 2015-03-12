@@ -1,0 +1,88 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.BookShelfActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/listMediaView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp" />
+
+        <View
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:background="@drawable/rect_shadow"
+            android:layout_height="8dp" />
+
+        </FrameLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/current"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/current_cover"
+            android:background="@color/primary"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:contentDescription="@string/current_cover" />
+
+        <FrameLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ProgressBar
+                android:id="@+id/progress"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:max="1000"
+                android:progressDrawable="@drawable/progress_horizontal"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/current_text"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="20sp" />
+
+                <ImageButton
+                    android:id="@+id/current_playing"
+                    android:layout_width="@dimen/thumb_size"
+                    android:layout_height="@dimen/thumb_size"
+                    android:src="@drawable/ic_play_arrow_grey600_48dp"
+                    android:contentDescription="@string/current_playing" />
+
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

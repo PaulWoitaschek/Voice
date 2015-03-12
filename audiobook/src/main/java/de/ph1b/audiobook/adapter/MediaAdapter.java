@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,32 +18,30 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.content.Book;
-import de.ph1b.audiobook.content.DataBaseHelper;
-import de.ph1b.audiobook.interfaces.OnItemClickListener;
+import de.ph1b.audiobook.model.Book;
+import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.utils.L;
-
 
 public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> {
 
     private static final String TAG = MediaAdapter.class.getSimpleName();
-    private final ArrayList<Book> data;
+    private final ArrayList<Book> books;
     private final DataBaseHelper db;
     private final Context c;
     private final OnItemClickListener onItemClickListener;
     private final ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
 
-    public MediaAdapter(ArrayList<Book> data, Context c, OnItemClickListener onItemClickListener) {
-        this.data = data;
-        this.c = c;
+    public MediaAdapter(ArrayList<Book> books, Activity a, OnItemClickListener onItemClickListener) {
+        this.books = books;
+        this.c = a;
         this.onItemClickListener = onItemClickListener;
-        db = DataBaseHelper.getInstance(c);
+        db = DataBaseHelper.getInstance(a);
     }
 
     public void updateItem(final Book book) {
-        for (int position = 0; position < data.size(); position++) {
-            if (data.get(position).getId() == book.getId()) {
-                data.set(position, book);
+        for (int position = 0; position < books.size(); position++) {
+            if (books.get(position).getId() == book.getId()) {
+                books.set(position, book);
                 notifyItemChanged(position);
                 singleThreadExecutor.execute(new Runnable() {
                     @Override
@@ -55,28 +54,11 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
     }
 
     public Book getItem(int position) {
-        return data.get(position);
+        return books.get(position);
     }
 
-    public ArrayList<Book> getData() {
-        return data;
-    }
-
-    /**
-     * Removes an item from the grid, deletes it from database and notifys the adapter about the item removed
-     *
-     * @param position The position of the item to be removed
-     */
-    public void removeItem(int position) {
-        final Book bookToRemove = getItem(position);
-        data.remove(position);
-        notifyItemRemoved(position);
-        singleThreadExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                db.deleteBook(bookToRemove);
-            }
-        });
+    public ArrayList<Book> getBooks() {
+        return books;
     }
 
     @Override
@@ -110,14 +92,14 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
 
     private void swapItemsInData(int from, int to) {
         L.d(TAG, "swapInData:" + from + "/" + to);
-        final Book oldBook = data.get(from);
-        final Book newBook = data.get(to);
+        final Book oldBook = books.get(from);
+        final Book newBook = books.get(to);
         long oldSortId = oldBook.getSortId();
         long newSortId = newBook.getSortId();
         oldBook.setSortId(newSortId);
         newBook.setSortId(oldSortId);
-        data.set(from, newBook);
-        data.set(to, oldBook);
+        books.set(from, newBook);
+        books.set(to, oldBook);
         singleThreadExecutor.execute(new Runnable() {
             @Override
             public void run() {
@@ -129,20 +111,28 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        Book b = data.get(position);
+        Book b = books.get(position);
 
         //setting text
         String name = b.getName();
         viewHolder.titleView.setText(name);
         viewHolder.titleView.setActivated(true);
-        Picasso.with(c).load(new File(b.getCover())).into(viewHolder.coverView);
+        if (b.getCover() != null) {
+            Picasso.with(c).load(new File(b.getCover())).into(viewHolder.coverView);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return books.size();
     }
 
+    public interface OnItemClickListener {
+        public void onCoverClicked(int position);
+
+        public void onMenuClicked(int position);
+
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         final ImageView coverView;
@@ -164,7 +154,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
             editBook.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onPopupMenuClicked(v, getPosition());
+                    onItemClickListener.onMenuClicked(getPosition());
                 }
             });
         }

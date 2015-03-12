@@ -15,13 +15,12 @@ import com.afollestad.materialdialogs.AlertDialogWrapper;
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.service.ServiceController;
-
+import de.ph1b.audiobook.utils.BaseApplication;
 
 public class JumpToPositionDialog extends DialogFragment {
 
-    public static final String POSITION = "POSITION";
-    public static final String DURATION = "DURATION";
     private int durationInMinutes;
     private int biggestHour;
     private NumberPicker mPicker;
@@ -39,10 +38,11 @@ public class JumpToPositionDialog extends DialogFragment {
 
         hPicker = (NumberPicker) v.findViewById(R.id.number_hour);
         mPicker = (NumberPicker) v.findViewById(R.id.number_minute);
+        BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
 
-        Bundle bundle = this.getArguments();
-        int duration = bundle.getInt(DURATION, 0);
-        int position = bundle.getInt(POSITION, 0);
+        final Book book = baseApplication.getCurrentBook();
+        int duration = book.getCurrentChapter().getDuration();
+        int position = book.getTime();
         biggestHour = (int) TimeUnit.MILLISECONDS.toHours(duration);
         durationInMinutes = (int) TimeUnit.MILLISECONDS.toMinutes(duration);
         if (biggestHour == 0) { //sets visibility of hour related things to gone if max.hour is zero
@@ -96,7 +96,7 @@ public class JumpToPositionDialog extends DialogFragment {
                 int h = hPicker.getValue();
                 int m = mPicker.getValue();
                 int newPosition = (m + 60 * h) * 60 * 1000;
-                new ServiceController(getActivity()).changeTime(newPosition);
+                new ServiceController(getActivity()).changeTime(newPosition, book.getCurrentChapter().getPath());
             }
         });
         builder.setNegativeButton(R.string.dialog_cancel, null);

@@ -5,7 +5,6 @@ import android.app.backup.SharedPreferencesBackupHelper;
 
 import de.ph1b.audiobook.R;
 
-
 public class CustomBackupAgent extends BackupAgentHelper {
 
     private static final String BACKUP_KEY = "BACKUP_KEY";

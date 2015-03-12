@@ -9,6 +9,7 @@
 
     <TextView
         android:id="@+id/text1"
+        android:gravity="center_vertical"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:drawableLeft="@drawable/ic_folder_grey600_48dp"

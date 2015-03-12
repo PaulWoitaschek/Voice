@@ -13,7 +13,6 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.utils.MaterialCompatThemer;
 import de.ph1b.audiobook.utils.PrefsManager;
 
-
 public class SleepPreferenceDialog extends DialogPreference {
 
     private final PrefsManager prefs;
@@ -26,7 +25,6 @@ public class SleepPreferenceDialog extends DialogPreference {
         setDialogLayoutResource(R.layout.dialog_sleep_timer);
         prefs = new PrefsManager(context);
     }
-
 
     @Override
     protected void onBindDialogView(@NonNull View view) {

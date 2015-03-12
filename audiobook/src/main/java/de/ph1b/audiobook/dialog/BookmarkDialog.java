@@ -26,17 +26,18 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.AlertDialogWrapper;
 
-import java.util.ArrayList;
+import java.util.Collections;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.BookmarkAdapter;
-import de.ph1b.audiobook.content.Book;
-import de.ph1b.audiobook.content.Bookmark;
-import de.ph1b.audiobook.content.DataBaseHelper;
-import de.ph1b.audiobook.service.GlobalState;
+import de.ph1b.audiobook.model.Book;
+import de.ph1b.audiobook.model.Bookmark;
+import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.service.ServiceController;
+import de.ph1b.audiobook.utils.BaseApplication;
+import de.ph1b.audiobook.utils.BookmarkComparator;
 import de.ph1b.audiobook.utils.DividerItemDecoration;
-import de.ph1b.audiobook.utils.PrefsManager;
+import de.ph1b.audiobook.utils.L;
 
 /**
  * @author <a href="mailto:woitaschek@posteo.de">Paul Woitaschek</a>
@@ -44,6 +45,8 @@ import de.ph1b.audiobook.utils.PrefsManager;
  * @see <a href="http://www.paul-woitaschek.de">http://www.paul-woitaschek.de</a>
  */
 public class BookmarkDialog extends DialogFragment {
+
+    private static final String TAG = BookmarkDialog.class.getSimpleName();
 
     private BookmarkAdapter adapter;
     private AlertDialog dialog;
@@ -56,12 +59,8 @@ public class BookmarkDialog extends DialogFragment {
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_bookmark, null);
 
         final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
-        final PrefsManager prefs = new PrefsManager(getActivity());
-        GlobalState.INSTANCE.init(getActivity());
-        final Book book = GlobalState.INSTANCE.getBook();
-        final ArrayList<Bookmark> allBookmarks = db.getAllBookmarks(book.getId());
-        final GlobalState globalState = GlobalState.INSTANCE;
-        globalState.init(getActivity());
+        final ServiceController controller = new ServiceController(getActivity());
+        final Book book = ((BaseApplication) getActivity().getApplication()).getCurrentBook();
 
         BookmarkAdapter.OnOptionsMenuClickedListener listener = new BookmarkAdapter.OnOptionsMenuClickedListener() {
             @Override
@@ -86,8 +85,9 @@ public class BookmarkDialog extends DialogFragment {
                                 builder.setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
+                                        Bookmark oldBookmark = new Bookmark(editBookmark);
                                         editBookmark.setTitle(editText.getText().toString());
-                                        db.updateBookmark(editBookmark);
+                                        db.updateBookmark(editBookmark, oldBookmark, book);
                                         adapter.notifyItemChanged(position);
                                     }
                                 });
@@ -119,11 +119,12 @@ public class BookmarkDialog extends DialogFragment {
                                 builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        db.deleteBookmark(deleteBookmark);
                                         adapter.removeItem(position);
+                                        db.updateBook(book);
                                     }
                                 });
-                                builder.setNegativeButton(R.string.delete_book_keep, null);
+                                builder.setNegativeButton(R.string.keep, null);
+                                builder.show();
                                 return true;
                             default:
                                 return false;
@@ -136,14 +137,13 @@ public class BookmarkDialog extends DialogFragment {
             @Override
             public void onBookmarkClicked(int position) {
                 Bookmark bookmark = adapter.getItem(position);
-                ServiceController controls = new ServiceController(getActivity());
-                controls.changeBookPosition(bookmark.getPosition(), bookmark.getTime());
+                controller.changeTime(bookmark.getTime(), bookmark.getPath());
                 dialog.cancel();
             }
         };
 
         final RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler);
-        adapter = new BookmarkAdapter(allBookmarks, listener, book);
+        adapter = new BookmarkAdapter(book, listener);
         recyclerView.setAdapter(adapter);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
@@ -165,23 +165,17 @@ public class BookmarkDialog extends DialogFragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                long bookId = book.getId();
-                int time = globalState.getTime();
-                int position = globalState.getPosition();
-                String mediaName = book.getContainingMedia().get(position).getName();
-
                 String title = bookmarkTitle.getText().toString();
                 if (title == null || title.equals("")) {
-                    title = mediaName;
+                    title = book.getCurrentChapter().getName();
                 }
 
-                Bookmark bookmark = new Bookmark(bookId, position, time);
-                bookmark.setTitle(title);
+                Bookmark bookmark = new Bookmark(book.getCurrentChapter().getPath(), title, book.getTime());
+                L.v(TAG, "Added bookmark=" + bookmark);
 
-                long id = db.addBookmark(bookmark);
-                bookmark.setId(id);
-                int index = adapter.addItem(bookmark);
-                recyclerView.smoothScrollToPosition(index);
+                book.getBookmarks().add(bookmark);
+                Collections.sort(book.getBookmarks(), new BookmarkComparator(book.getChapters()));
+                db.updateBook(book);
                 bookmarkTitle.setText("");
                 Toast.makeText(getActivity(), R.string.bookmark_added, Toast.LENGTH_SHORT).show();
                 dismiss();
@@ -195,4 +189,5 @@ public class BookmarkDialog extends DialogFragment {
         dialog = builder.create();
         return dialog;
     }
+
 }

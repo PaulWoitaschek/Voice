@@ -4,10 +4,7 @@
     <string name="play_pause">Tocar / Pausa</string>
 
     <string name="action_settings">Preferencias</string>
-    <string name="action_add_badge">Agregar medios de comunicacion</string>
-    <string name="book_add">Agregar libro</string>
     <string name="book_add_empty_title">Agregar titulo</string>
-    <string name="book_no_media">Eleccion no contiene medios.</string>
     <string name="dialog_confirm">Confirmar</string>
     <string name="dialog_cancel">Cancelar</string>
     <string name="action_time_change">Saltar a</string>
@@ -34,20 +31,15 @@
     <string name="content_next_cover">Elejir la proxima portada.</string>
     <string name="content_cover">Muenstre a portada para escojer</string>
     <string name="pref_seek_time">Saltar cantidad</string>
-    <string name="book_add_progress_title">Agregando libro</string>
-    <string name="book_add_progress_message">Por favor, espere mientras se agrega el libro.</string>
     <string name="edit_book_title">Editar libro</string>
     <string name="popup_edit">Editar</string>
     <string name="delete">Borrar</string>
-    <string name="content_file_or_folder">Indica si es un archivo, o una carpeta</string>
     <string name="rewind">Rebobinar</string>
     <string name="fast_forward">Avance rápido</string>
     <string name="playback_speed">Velocidad de reproducción</string>
     <string name="pref_sleep_time">Temporizador para dormir</string>
     <string name="sleep_timer_started">Temporizador: </string>
-    <string name="content_close_notification">Cerrar tocador y notificación.</string>
-    <string name="delete_book_title">¿Quiere borrar este libro?</string>
-    <string name="delete_book_keep">Mantener</string>
+    <string name="keep">Mantener</string>
     <string name="pref_title_track_to_end">Continua asta el final</string>
     <string name="pref_summary_track_to_end">Sigue jugando hasta el final de la pista, después de temporizador ha desencadenado.</string>
     <string name="previous_track">Pista anterior</string>

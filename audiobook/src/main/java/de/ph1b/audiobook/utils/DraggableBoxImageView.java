@@ -14,7 +14,6 @@ import android.widget.ImageView;
 
 import de.ph1b.audiobook.R;
 
-
 public class DraggableBoxImageView extends ImageView {
 
     private Paint borderLinePaint;
@@ -33,7 +32,6 @@ public class DraggableBoxImageView extends ImageView {
     //where the finger last went down
     private float fingerX;
     private float fingerY;
-
 
     //constructor!
     @SuppressWarnings("UnusedDeclaration")

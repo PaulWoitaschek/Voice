@@ -1,12 +1,12 @@
 package de.ph1b.audiobook.mediaplayer;
 
-
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.os.Build;
 
 import java.io.IOException;
 
-public class MediaPlayerCompat {
+class MediaPlayerCompat {
 
     private final boolean useCustomMediaPlayer;
     private android.media.MediaPlayer androidMediaPlayer;
@@ -22,6 +22,14 @@ public class MediaPlayerCompat {
         }
     }
 
+    public void setOnErrorListener(MediaPlayer.OnErrorListener onErrorListener) {
+        if (useCustomMediaPlayer) {
+            customCustomMediaPlayer.setOnErrorListener(onErrorListener);
+        } else {
+            androidMediaPlayer.setOnErrorListener(onErrorListener);
+        }
+    }
+
     public void setPlaybackSpeed(float speed) {
         if (useCustomMediaPlayer) {
             customCustomMediaPlayer.setPlaybackSpeed(speed);
@@ -34,10 +42,6 @@ public class MediaPlayerCompat {
         } else {
             androidMediaPlayer.reset();
         }
-    }
-
-    public int getDuration() {
-        return (useCustomMediaPlayer ? customCustomMediaPlayer.getDuration() : androidMediaPlayer.getDuration());
     }
 
     public void release() {
@@ -129,7 +133,6 @@ public class MediaPlayerCompat {
             androidMediaPlayer.setWakeMode(c, mode);
         }
     }
-
 
     public interface OnCompletionListener {
         public void onCompletion();
