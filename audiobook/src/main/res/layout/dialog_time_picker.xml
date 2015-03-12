@@ -7,10 +7,10 @@
 
     <LinearLayout
         android:id="@+id/numberLayout"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
 
         <NumberPicker
             android:id="@+id/number_hour"
@@ -40,21 +40,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_margin="@dimen/horizontal_margin"
+        android:layout_toLeftOf="@id/numberLayout"
         android:gravity="center_vertical"
         android:text="@string/hours_short"
-        android:layout_toLeftOf="@id/numberLayout"
-        android:layout_margin="@dimen/horizontal_margin"
         android:textColor="@color/colorAccent"
-        android:textSize="@dimen/dialog_content_text_size" />
+        android:textSize="@dimen/dialog_content_text_size"
+        tools:ignore="RelativeOverlap" />
 
     <TextView
-        android:layout_toRightOf="@id/numberLayout"
         android:id="@+id/minutes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:gravity="center_vertical"
         android:layout_margin="@dimen/horizontal_margin"
+        android:layout_toRightOf="@id/numberLayout"
+        android:gravity="center_vertical"
         android:text="@string/minutes_short"
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/dialog_content_text_size" />
