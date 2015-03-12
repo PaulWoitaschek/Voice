@@ -68,4 +68,6 @@
     <string name="stop">Stop</string>
     <string name="hours_short">s</string>
     <string name="minutes_short">m</string>
+    <string name="delete_folder">Ordner entfernen</string>
+    <string name="delete_folder_content">Möchten Sie den folgenden Ordner aus Ihrer Bücherei entfernen?</string>
 </resources>

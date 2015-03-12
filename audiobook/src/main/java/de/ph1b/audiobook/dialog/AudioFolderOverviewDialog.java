@@ -78,8 +78,19 @@ public class AudioFolderOverviewDialog extends DialogFragment {
         recyclerView.setAdapter(adapter);
         adapter.setOnFolderMoreClickedListener(new FolderOverviewAdapter.OnFolderMoreClickedListener() {
             @Override
-            public void onFolderMoreClicked(int position) {
-                adapter.removeItem(position);
+            public void onFolderMoreClicked(final int position) {
+                new MaterialDialog.Builder(getActivity())
+                        .title(R.string.delete_folder)
+                        .content(getString(R.string.delete_folder_content) + "\n" + adapter.getItem(position))
+                        .positiveText(R.string.delete)
+                        .negativeText(R.string.keep)
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                adapter.removeItem(position);
+                            }
+                        })
+                        .show();
             }
         });
 
