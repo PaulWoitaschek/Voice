@@ -114,14 +114,14 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onBookmarkClicked(getPosition());
+                    listener.onBookmarkClicked(getAdapterPosition());
                 }
             });
 
             imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onOptionsMenuClicked(getPosition(), imageButton);
+                    listener.onOptionsMenuClicked(getAdapterPosition(), imageButton);
                 }
             });
         }
