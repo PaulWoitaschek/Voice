@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 
 import com.squareup.picasso.Picasso;
 
@@ -19,6 +20,7 @@ import java.util.Collections;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.locks.ReentrantLock;
 
 import de.ph1b.audiobook.model.Book;
@@ -103,8 +105,15 @@ public class BookAddingService extends Service {
     }
 
     private void addNewBooks() {
-        final int READ_FILES_AT_ONCE = 7;
-        ExecutorService bookAdder = Executors.newFixedThreadPool(READ_FILES_AT_ONCE);
+        final int READ_FILES_AT_ONCE = Runtime.getRuntime().availableProcessors();
+        ExecutorService bookAdder = Executors.newFixedThreadPool(READ_FILES_AT_ONCE, new ThreadFactory() {
+            @Override
+            public Thread newThread(@NonNull Runnable r) {
+                Thread thread = new Thread(r);
+                thread.setPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+                return thread;
+            }
+        });
 
         ArrayList<File> containingFiles = getContainingFiles();
         final CountDownLatch countDownLatch = new CountDownLatch(containingFiles.size());
