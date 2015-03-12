@@ -28,7 +28,7 @@ public interface MediaPlayerInterface {
 
     public void setOnErrorListener(MediaPlayer.OnErrorListener onErrorListener);
 
-    public void setOnCompletionListener(OnCompletionListener listener);
+    public void setOnCompletionListener(OnCompletionListener onCompletionListener);
 
     public void setWakeMode(Context context, int mode);
 
