@@ -85,7 +85,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return instance;
     }
 
-    public Book addBook(Book book) {
+    public void addBook(Book book) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
 
