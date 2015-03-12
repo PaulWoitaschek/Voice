@@ -50,7 +50,7 @@
                 android:id="@+id/progress"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="3dp"
+                android:layout_height="5dp"
                 android:max="1000"
                 android:progressDrawable="@drawable/progress_horizontal" />
 
