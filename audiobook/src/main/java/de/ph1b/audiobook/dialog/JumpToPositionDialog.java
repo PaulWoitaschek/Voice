@@ -17,6 +17,7 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.utils.BaseApplication;
+import de.ph1b.audiobook.utils.MaterialCompatThemer;
 
 public class JumpToPositionDialog extends DialogFragment {
 
@@ -84,6 +85,9 @@ public class JumpToPositionDialog extends DialogFragment {
                     hPicker.setValue(--hValue);
             }
         });
+
+        MaterialCompatThemer.theme(mPicker);
+        MaterialCompatThemer.theme(hPicker);
 
         return new MaterialDialog.Builder(getActivity())
                 .customView(v, true)
