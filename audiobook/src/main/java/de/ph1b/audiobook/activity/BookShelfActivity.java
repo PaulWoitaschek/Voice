@@ -88,6 +88,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         controller = new ServiceController(this);
         noFolderWarning = new MaterialDialog.Builder(this)
                 .title(R.string.no_audiobook_folders_title)
+                .content(R.string.no_audiobook_folders_summary)
                 .positiveText(R.string.dialog_confirm)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
