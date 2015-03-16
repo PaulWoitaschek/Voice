@@ -2,6 +2,7 @@ package de.ph1b.audiobook.mediaplayer;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.PowerManager;
 
 import com.google.android.exoplayer.ExoPlaybackException;
 import com.google.android.exoplayer.ExoPlayer;
@@ -40,6 +41,7 @@ public class MediaPlayerController implements ExoPlayer.Listener {
     private ScheduledFuture<?> sleepSand;
     private volatile boolean stopAfterCurrentTrack = false;
     private ScheduledFuture updater = null;
+    private PowerManager.WakeLock wakeLock = null;
 
     public MediaPlayerController(BaseApplication baseApplication, Book book) {
         L.e(TAG, "constructor called with book=" + book);
@@ -49,6 +51,9 @@ public class MediaPlayerController implements ExoPlayer.Listener {
         prefs = new PrefsManager(c);
         db = DataBaseHelper.getInstance(c);
         this.baseApplication = baseApplication;
+        PowerManager pm = (PowerManager) c.getSystemService(Context.POWER_SERVICE);
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, MediaPlayerController.class.getName());
+        wakeLock.setReferenceCounted(false);
 
         player = ExoPlayer.Factory.newInstance(1);
         player.addListener(this);
@@ -69,10 +74,10 @@ public class MediaPlayerController implements ExoPlayer.Listener {
         state = State.PREPARED;
     }
 
-
     public void pause() {
         lock.lock();
         try {
+            stayAwake(false);
             switch (state) {
                 case STARTED:
                     player.setPlayWhenReady(false);
@@ -89,7 +94,6 @@ public class MediaPlayerController implements ExoPlayer.Listener {
         }
     }
 
-
     public void play() {
         lock.lock();
         try {
@@ -102,6 +106,8 @@ public class MediaPlayerController implements ExoPlayer.Listener {
                     startUpdating();
                     baseApplication.setPlayState(BaseApplication.PlayState.PLAYING);
                     state = State.STARTED;
+
+                    stayAwake(true);
                     break;
                 case DEAD:
                 case IDLE:
@@ -152,6 +158,14 @@ public class MediaPlayerController implements ExoPlayer.Listener {
             }
         } finally {
             lock.unlock();
+        }
+    }
+
+    private void stayAwake(boolean awake) {
+        if (awake && !wakeLock.isHeld()) {
+            wakeLock.acquire();
+        } else if (!awake && wakeLock.isHeld()) {
+            wakeLock.release();
         }
     }
 
@@ -290,6 +304,7 @@ public class MediaPlayerController implements ExoPlayer.Listener {
             player.release();
             baseApplication.setPlayState(BaseApplication.PlayState.STOPPED);
             baseApplication.setSleepTimerActive(false);
+            stayAwake(false);
             executor.shutdown();
             state = State.DEAD;
         } finally {
@@ -311,6 +326,8 @@ public class MediaPlayerController implements ExoPlayer.Listener {
             L.v(TAG, "Reached last track. Stopping player");
             stopUpdating();
             baseApplication.setPlayState(BaseApplication.PlayState.STOPPED);
+
+            stayAwake(false);
             state = State.PLAYBACK_COMPLETED;
         }
     }
@@ -329,7 +346,7 @@ public class MediaPlayerController implements ExoPlayer.Listener {
 
     @Override
     public void onPlayerError(ExoPlaybackException error) {
-
+        stayAwake(false);
     }
 
 
