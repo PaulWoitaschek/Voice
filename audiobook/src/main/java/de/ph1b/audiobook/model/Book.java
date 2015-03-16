@@ -23,6 +23,9 @@ public class Book implements Comparable<Book> {
 
     public Book(String root, String name, ArrayList<Chapter> chapters, ArrayList<Bookmark> bookmarks, String cover, float playbackSpeed) {
         ArgumentValidator.validate(root, name, chapters, bookmarks, cover);
+        if (chapters.size() == 0) {
+            throw new IllegalArgumentException("Book must have any containing chapters.");
+        }
         this.root = root;
         this.name = name;
         this.chapters = chapters;
