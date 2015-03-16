@@ -35,7 +35,7 @@ public class MediaPlayerController implements ExoPlayer.Listener {
     private final BaseApplication baseApplication;
     private final Book book;
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
-    private ExoPlayer player;
+    private final ExoPlayer player;
     private volatile State state;
     private ScheduledFuture<?> sleepSand;
     private volatile boolean stopAfterCurrentTrack = false;
@@ -196,7 +196,8 @@ public class MediaPlayerController implements ExoPlayer.Listener {
         }
     }
 
-    public void setPlaybackSpeed(float speed) {
+    @SuppressWarnings("EmptyMethod")
+    public void setPlaybackSpeed(@SuppressWarnings("UnusedParameters") float speed) {
         //TODO: Implement
     }
 

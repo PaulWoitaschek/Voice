@@ -27,6 +27,7 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
     private static final float SPEED_MAX = 2f;
     private float speed;
 
+    @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();

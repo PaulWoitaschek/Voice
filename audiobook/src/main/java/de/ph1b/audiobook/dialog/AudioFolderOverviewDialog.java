@@ -60,6 +60,7 @@ public class AudioFolderOverviewDialog extends DialogFragment {
         }
     }
 
+    @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         prefs = new PrefsManager(getActivity());
         folders = prefs.getAudiobookFolders();

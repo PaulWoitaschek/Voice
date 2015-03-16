@@ -50,6 +50,7 @@ public class BookmarkDialog extends DialogFragment {
     private BookmarkAdapter adapter;
     private AlertDialog dialog;
 
+    @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
