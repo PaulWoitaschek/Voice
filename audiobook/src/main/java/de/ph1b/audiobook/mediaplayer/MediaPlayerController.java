@@ -196,9 +196,19 @@ public class MediaPlayerController implements ExoPlayer.Listener {
         }
     }
 
-    @SuppressWarnings("EmptyMethod")
-    public void setPlaybackSpeed(@SuppressWarnings("UnusedParameters") float speed) {
-        //TODO: Implement
+    public void setPlaybackSpeed(float speed) {
+        lock.lock();
+        try {
+            book.setPlaybackSpeed(speed);
+            db.updateBook(book);
+            if (state != State.DEAD) {
+                //mediaPlayer.setPlaybackSpeed(speed); TODO: IMPLEMENT
+            } else {
+                L.e(TAG, "setPlaybackSpeed called in illegal state: " + state);
+            }
+        } finally {
+            lock.unlock();
+        }
     }
 
     private boolean sleepSandActive() {
