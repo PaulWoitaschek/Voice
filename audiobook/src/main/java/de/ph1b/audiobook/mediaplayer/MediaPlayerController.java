@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.mediaplayer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.PowerManager;
 
@@ -19,6 +20,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
+import de.ph1b.audiobook.activity.BookShelfActivity;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.utils.ArgumentValidator;
@@ -215,6 +217,7 @@ public class MediaPlayerController implements ExoPlayer.Listener {
         try {
             book.setPlaybackSpeed(speed);
             db.updateBook(book);
+            //noinspection StatementWithEmptyBody
             if (state != State.DEAD) {
                 //mediaPlayer.setPlaybackSpeed(speed); TODO: IMPLEMENT
             } else {
@@ -347,6 +350,15 @@ public class MediaPlayerController implements ExoPlayer.Listener {
     @Override
     public void onPlayerError(ExoPlaybackException error) {
         stayAwake(false);
+
+        File currentFile = new File(book.getCurrentChapter().getPath());
+        if (!currentFile.exists()) {
+            db.deleteBook(book);
+            baseApplication.getAllBooks().remove(book);
+            Intent bookShelfIntent = new Intent(c, BookShelfActivity.class);
+            bookShelfIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            c.startActivity(bookShelfIntent);
+        }
     }
 
 
