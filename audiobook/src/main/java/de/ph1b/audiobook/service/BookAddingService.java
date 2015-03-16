@@ -232,12 +232,14 @@ public class BookAddingService extends Service {
     private void addNewBook(File f) {
         Book bookExisting = getBookByRoot(f);
         Book newBook = rootFileToBook(f);
-        if (newBook == null) { //no book was found. most likely beacuse scanner was stopped
+
+        // this check is important
+        if (stopScanner) {
             return;
         }
 
         // delete old book if it exists and is different from the new book
-        if (bookExisting != null && !bookExisting.equals(newBook)) {
+        if (!stopScanner && (bookExisting != null && (newBook == null || !newBook.equals(bookExisting)))){
             bookLock.lock();
             try {
                 L.d(TAG, "addNewBook deletes existing book=" + bookExisting + " because it is different from newBook=" + newBook);
@@ -250,12 +252,14 @@ public class BookAddingService extends Service {
         }
 
         // if there are no changes, we can skip this one
-        if (bookExisting != null && bookExisting.equals(newBook)) {
+        // skip it if there is no new book or if there is a new and an old book and they are not the same.
+        if (newBook == null || (bookExisting != null && bookExisting.equals(newBook))) {
             return;
         }
 
         if (stopScanner) {
             L.d(TAG, "addNewBook(); stopScanner requested");
+            return;
         }
 
         bookLock.lock();
@@ -376,7 +380,9 @@ public class BookAddingService extends Service {
                 mp.reset();
 
                 String chapterName = f.getName().substring(0, f.getName().lastIndexOf("."));
-                containingMedia.add(new Chapter(f.getAbsolutePath().substring(bookRoot.length() + 1), chapterName, duration));
+                if (duration > 0) {
+                    containingMedia.add(new Chapter(f.getAbsolutePath().substring(bookRoot.length() + 1), chapterName, duration));
+                }
 
                 if (i < MAX_TRIES_FOR_EMBEDDED_COVER && cover == null) {
                     cover = ImageHelper.getEmbeddedCover(f, this);
