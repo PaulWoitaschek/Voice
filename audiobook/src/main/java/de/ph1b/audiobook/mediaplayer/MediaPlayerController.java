@@ -22,6 +22,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import de.ph1b.audiobook.activity.BookShelfActivity;
 import de.ph1b.audiobook.model.Book;
+import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.utils.ArgumentValidator;
 import de.ph1b.audiobook.utils.BaseApplication;
@@ -320,14 +321,14 @@ public class MediaPlayerController implements ExoPlayer.Listener {
     }
 
     /**
-     * Plays the next chapter. If there is none, dont do anything.
+     * Plays the next chapter. If there is none, don't do anything.
      */
     public void next() {
         lock.lock();
         try {
-            String nextChapter = book.getNextChapter().getPath();
+            Chapter nextChapter = book.getNextChapter();
             if (nextChapter != null) {
-                changePosition(0, nextChapter);
+                changePosition(0, nextChapter.getPath());
             }
         } finally {
             lock.unlock();
