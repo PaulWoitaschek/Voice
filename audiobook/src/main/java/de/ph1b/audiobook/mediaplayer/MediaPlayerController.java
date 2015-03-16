@@ -341,7 +341,7 @@ public class MediaPlayerController implements ExoPlayer.Listener {
     public void previous(boolean toNullOfNewTrack) {
         lock.lock();
         try {
-            if (player.getCurrentPosition() > 2000 || book.getChapters().indexOf(book.getCurrentChapter()) == 0) {
+            if (player.getCurrentPosition() > 2000 || book.getPreviousChapter() == null) {
                 player.seekTo(0);
                 book.setPosition(0, book.getRelativeMediaPath());
                 db.updateBook(book);
