@@ -2,7 +2,6 @@ package de.ph1b.audiobook.activity;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -153,8 +152,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem timeLapseItem = menu.findItem(R.id.action_time_lapse);
-        timeLapseItem.setVisible(false);
-        timeLapseItem.setVisible(Build.VERSION.SDK_INT >= 16);
+        timeLapseItem.setVisible(false); //TODO: Enable this when we have the functionality back
         MenuItem sleepTimerItem = menu.findItem(R.id.action_sleep);
         if (baseApplication.isSleepTimerActive()) {
             sleepTimerItem.setIcon(R.drawable.ic_alarm_on_white_24dp);

@@ -240,7 +240,7 @@ public class BookAddingService extends Service {
         }
 
         // delete old book if it exists and is different from the new book
-        if (!stopScanner && (bookExisting != null && (newBook == null || !newBook.equals(bookExisting)))){
+        if (!stopScanner && (bookExisting != null && (newBook == null || !newBook.equals(bookExisting)))) {
             bookLock.lock();
             try {
                 L.d(TAG, "addNewBook deletes existing book=" + bookExisting + " because it is different from newBook=" + newBook);
