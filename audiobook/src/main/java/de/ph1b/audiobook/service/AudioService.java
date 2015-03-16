@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.locks.ReentrantLock;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookPlayActivity;
@@ -48,6 +49,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     private PrefsManager prefs;
     private MediaPlayerController controller = null;
     private AudioManager audioManager;
+    private final ReentrantLock controllerLock = new ReentrantLock();
     private BaseApplication baseApplication;
     @SuppressWarnings("deprecation")
     private RemoteControlClient remoteControlClient = null;
@@ -120,6 +122,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
         Book book = baseApplication.getCurrentBook();
         if (book != null) {
+            L.d(TAG, "onCreated initialized book=" + book);
             controller = new MediaPlayerController(baseApplication, book);
         }
     }
@@ -192,7 +195,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                         case ServiceController.CONTROL_CHANGE_TIME:
                             int time1 = intent.getIntExtra(ServiceController.CONTROL_CHANGE_TIME_EXTRA_TIME, 0);
                             String relativePath = intent.getStringExtra(ServiceController.CONTROL_CHANGE_TIME_EXTRA_PATH_RELATIVE);
-                            controller.changeTime(time1, relativePath);
+                            controller.changePosition(time1, relativePath);
                             break;
                         case ServiceController.CONTROL_NEXT:
                             controller.next();
@@ -421,8 +424,10 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     @Override
     public void onCurrentBookChanged(Book book) {
         releaseController();
-        L.d(TAG, "init new book=" + book);
-        controller = new MediaPlayerController(baseApplication, book);
+        if (book != null) {
+            L.d(TAG, "init new book=" + book);
+            controller = new MediaPlayerController(baseApplication, book);
+        }
     }
 
     @Override
