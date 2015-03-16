@@ -199,7 +199,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                             controller.next();
                             break;
                         case ServiceController.CONTROL_PREVIOUS:
-                            controller.previous();
+                            controller.previous(true);
                             break;
                     }
                 }

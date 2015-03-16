@@ -171,16 +171,26 @@ public class MediaPlayerController implements ExoPlayer.Listener {
 
     /**
      * Skips by the amount, specified in the settings.
-     * @param direction
+     *
+     * @param direction The direction to skip
      */
     public void skip(Direction direction) {
         lock.lock();
         try {
-            int delta = prefs.getSeekTime() * 1000;
-            if (direction == Direction.BACKWARD) {
-                changePosition(book.getTime() - delta, book.getRelativeMediaPath());
-            } else {
-                changePosition(book.getTime() + delta, book.getRelativeMediaPath());
+            int currentPos = (int) player.getCurrentPosition();
+            int duration = (int) player.getDuration();
+            if (currentPos != ExoPlayer.UNKNOWN_TIME && duration != ExoPlayer.UNKNOWN_TIME) {
+                int delta = prefs.getSeekTime() * 1000;
+
+                int seekTo = (direction == Direction.FORWARD) ? currentPos + delta : currentPos - delta;
+
+                if (seekTo < 0) {
+                    previous(false);
+                } else if (seekTo > duration) {
+                    next();
+                } else {
+                    changePosition(seekTo, book.getRelativeMediaPath());
+                }
             }
         } finally {
             lock.unlock();
@@ -199,7 +209,8 @@ public class MediaPlayerController implements ExoPlayer.Listener {
     /**
      * Changes the current position in book. If the path is the same, continues playing the song.
      * Else calls {@link #prepare()} to prepare the next file
-     * @param time The time in chapter at which to start
+     *
+     * @param time    The time in chapter at which to start
      * @param relPath The relative path of the media to play (relative to the books root path)
      */
     public void changePosition(int time, String relPath) {
@@ -246,6 +257,7 @@ public class MediaPlayerController implements ExoPlayer.Listener {
 
     /**
      * Sets the current playback speed
+     *
      * @param speed The playback-speed. 1.0 for normal playback, 2.0 for twice the speed, etc.
      */
     public void setPlaybackSpeed(float speed) {
@@ -325,7 +337,7 @@ public class MediaPlayerController implements ExoPlayer.Listener {
     /**
      * If current time is > 2000ms, seek to 0. Else play previous chapter if there is one.
      */
-    public void previous() {
+    public void previous(boolean toNullOfNewTrack) {
         lock.lock();
         try {
             if (player.getCurrentPosition() > 2000 || book.getChapters().indexOf(book.getCurrentChapter()) == 0) {
@@ -334,7 +346,11 @@ public class MediaPlayerController implements ExoPlayer.Listener {
                 db.updateBook(book);
                 baseApplication.notifyPositionChanged();
             } else {
-                changePosition(0, book.getPreviousChapter().getPath());
+                if (toNullOfNewTrack) {
+                    changePosition(0, book.getPreviousChapter().getPath());
+                } else {
+                    changePosition(book.getPreviousChapter().getDuration() - (prefs.getSeekTime() * 1000), book.getPreviousChapter().getPath());
+                }
             }
         } finally {
             lock.unlock();
