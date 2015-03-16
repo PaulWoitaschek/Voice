@@ -269,7 +269,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                  * Setting position as a tag, so we can make sure onItemSelected is only fired when
                  * the user changes the position himself.
                  */
-                L.v(TAG, "onPositionChanged executing.");
                 ArrayList<Chapter> chapters = book.getChapters();
                 Chapter chapter = book.getCurrentChapter();
                 if (chapter == null) {
