@@ -63,6 +63,10 @@ public class MediaPlayerController implements ExoPlayer.Listener {
         prepare();
     }
 
+
+    /**
+     * Prepares the current chapter set in book.
+     */
     private void prepare() {
         File rootFile = new File(book.getRoot() + "/" + book.getCurrentChapter().getPath());
         SampleExtractor sampleExtractor = new FrameworkSampleExtractor(c, Uri.fromFile(rootFile), null);
@@ -76,6 +80,11 @@ public class MediaPlayerController implements ExoPlayer.Listener {
         state = State.PREPARED;
     }
 
+
+    /**
+     * Pauses the player. Also stops the updating mechanism which constantly updates the book to the
+     * database.
+     */
     public void pause() {
         lock.lock();
         try {
@@ -96,6 +105,10 @@ public class MediaPlayerController implements ExoPlayer.Listener {
         }
     }
 
+
+    /**
+     * Plays the prepared file.
+     */
     public void play() {
         lock.lock();
         try {
@@ -125,6 +138,11 @@ public class MediaPlayerController implements ExoPlayer.Listener {
         }
     }
 
+
+    /**
+     * Updates the current time and position of the book, writes it to the database and sends
+     * updates to the GUI.
+     */
     private void startUpdating() {
         if (!updaterActive()) {
             updater = executor.scheduleAtFixedRate(new Runnable() {
@@ -145,10 +163,16 @@ public class MediaPlayerController implements ExoPlayer.Listener {
         }
     }
 
+
     private boolean updaterActive() {
         return updater != null && !updater.isCancelled() && !updater.isDone();
     }
 
+
+    /**
+     * Skips by the amount, specified in the settings.
+     * @param direction
+     */
     public void skip(Direction direction) {
         lock.lock();
         try {
@@ -171,6 +195,13 @@ public class MediaPlayerController implements ExoPlayer.Listener {
         }
     }
 
+
+    /**
+     * Changes the current position in book. If the path is the same, continues playing the song.
+     * Else calls {@link #prepare()} to prepare the next file
+     * @param time The time in chapter at which to start
+     * @param relPath The relative path of the media to play (relative to the books root path)
+     */
     public void changePosition(int time, String relPath) {
         L.v(TAG, "changePosition(" + time + "/" + relPath + ")");
         lock.lock();
@@ -212,6 +243,11 @@ public class MediaPlayerController implements ExoPlayer.Listener {
         }
     }
 
+
+    /**
+     * Sets the current playback speed
+     * @param speed The playback-speed. 1.0 for normal playback, 2.0 for twice the speed, etc.
+     */
     public void setPlaybackSpeed(float speed) {
         lock.lock();
         try {
@@ -232,12 +268,16 @@ public class MediaPlayerController implements ExoPlayer.Listener {
         return sleepSand != null && !sleepSand.isCancelled() && !sleepSand.isDone();
     }
 
+
+    /**
+     * Turns the sleep timer on or off.
+     */
     public void toggleSleepSand() {
         L.i(TAG, "toggleSleepSand. Old state was:" + sleepSandActive());
         lock.lock();
         try {
             if (sleepSandActive()) {
-                L.i(TAG, "sleepsand is active. cancelling now");
+                L.i(TAG, "sleepSand is active. cancelling now");
                 sleepSand.cancel(false);
                 stopAfterCurrentTrack = true;
                 baseApplication.setSleepTimerActive(false);
@@ -267,6 +307,9 @@ public class MediaPlayerController implements ExoPlayer.Listener {
         }
     }
 
+    /**
+     * Plays the next chapter. If there is none, dont do anything.
+     */
     public void next() {
         lock.lock();
         try {
@@ -279,6 +322,9 @@ public class MediaPlayerController implements ExoPlayer.Listener {
         }
     }
 
+    /**
+     * If current time is > 2000ms, seek to 0. Else play previous chapter if there is one.
+     */
     public void previous() {
         lock.lock();
         try {
@@ -299,6 +345,10 @@ public class MediaPlayerController implements ExoPlayer.Listener {
         return book;
     }
 
+
+    /**
+     * Releases the controller. After this, this object should no longer be used.
+     */
     public void release() {
         L.i(TAG, "release called");
         lock.lock();
@@ -321,6 +371,11 @@ public class MediaPlayerController implements ExoPlayer.Listener {
         }
     }
 
+
+    /**
+     * After the current song has ended, prepare the next one if there is one. Else release the
+     * resources.
+     */
     private void onCompletion() {
         L.v(TAG, "onCompletion called, nextChapter=" + book.getNextChapter());
         if (book.getNextChapter() != null) {

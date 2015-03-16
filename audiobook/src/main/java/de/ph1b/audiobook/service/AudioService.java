@@ -26,7 +26,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.locks.ReentrantLock;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookPlayActivity;
@@ -49,7 +48,6 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     private PrefsManager prefs;
     private MediaPlayerController controller = null;
     private AudioManager audioManager;
-    private final ReentrantLock controllerLock = new ReentrantLock();
     private BaseApplication baseApplication;
     @SuppressWarnings("deprecation")
     private RemoteControlClient remoteControlClient = null;
