@@ -200,7 +200,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         Book oldBookValues = getBook(newBook.getId(), getReadableDatabase());
 
         // if name has changed we must rename the file containing the track information
-        if (!oldBookValues.getName().equals(newBook.getName())) {
+        if (oldBookValues != null && !oldBookValues.getName().equals(newBook.getName())) {
             File configFile = getConfigFile(oldBookValues.getRoot(), oldBookValues.getName());
             //noinspection ResultOfMethodCallIgnored
             configFile.renameTo(new File(configFile.getParent(), newBook.getName() + JSON_EXTENSION));
