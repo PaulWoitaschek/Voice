@@ -252,7 +252,7 @@ public class MediaPlayerController implements ExoPlayer.Listener {
                         if (!stopAfterCurrentTrack) {
                             lock.lock();
                             try {
-                                release();
+                                pause();
                             } finally {
                                 lock.unlock();
                             }
