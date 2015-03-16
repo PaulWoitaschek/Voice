@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.squareup.picasso.Picasso;
 
@@ -316,6 +317,7 @@ public class BookAddingService extends Service {
         }
     }
 
+    @Nullable
     private Book rootFileToBook(File rootFile) {
         if (stopScanner) {
             return null;
@@ -410,6 +412,7 @@ public class BookAddingService extends Service {
         return new Book(bookRoot, bookName, containingMedia, new ArrayList<Bookmark>(), coverPath, 1);
     }
 
+    @Nullable
     private Book getBookByRoot(File rootFile) {
         if (rootFile.isDirectory()) {
             for (Book b : allBooks) {

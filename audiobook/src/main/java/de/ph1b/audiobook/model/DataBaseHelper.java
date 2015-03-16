@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.Nullable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -158,6 +159,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return allBooks;
     }
 
+    @Nullable
     private Book getBook(long id, SQLiteDatabase db) {
         Cursor cursor = db.query(TABLE_BOOK,
                 new String[]{BOOK_ROOT, BOOK_COVER, BOOK_NAME, BOOK_SORT_ID, BOOK_SPEED},

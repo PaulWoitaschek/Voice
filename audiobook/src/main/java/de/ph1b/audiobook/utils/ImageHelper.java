@@ -10,6 +10,7 @@ import android.media.MediaMetadataRetriever;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 
 import java.io.File;
@@ -55,6 +56,7 @@ public class ImageHelper {
      * @param c      Application context
      * @return the path where the bitmap has been saved.
      */
+    @Nullable
     public static String saveCover(Bitmap bitmap, Context c) {
         String coverPath;
 
@@ -105,6 +107,7 @@ public class ImageHelper {
         return false;
     }
 
+    @Nullable
     public static Bitmap getEmbeddedCover(File f, Context c) {
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         try {

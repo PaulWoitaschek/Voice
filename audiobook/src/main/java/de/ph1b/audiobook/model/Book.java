@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.model;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 
@@ -117,6 +118,7 @@ public class Book implements Comparable<Book> {
         this.relativeMediaPath = relativeMediaPath;
     }
 
+    @Nullable
     public Chapter getNextChapter() {
         int currentIndex = chapters.indexOf(getCurrentChapter());
         if (currentIndex < chapters.size() - 1) {
@@ -125,6 +127,7 @@ public class Book implements Comparable<Book> {
         return null;
     }
 
+    @Nullable
     public Chapter getPreviousChapter() {
         int currentIndex = chapters.indexOf(getCurrentChapter());
         if (currentIndex > 0) {

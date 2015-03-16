@@ -2,6 +2,7 @@ package de.ph1b.audiobook.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.annotation.Nullable;
 
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.OkHttpClient;
@@ -46,6 +47,7 @@ public class CoverDownloader {
      * @param number     The nth result
      * @return the generated bitmap. If no bitmap was found, returns null
      */
+    @Nullable
     public Bitmap getCover(String searchText, int number) {
         String bitmapUrl = getBitmapUrl(searchText, number);
         try {
@@ -74,6 +76,7 @@ public class CoverDownloader {
         return "";
     }
 
+    @Nullable
     private String getBitmapUrl(String searchText, int number) {
         if (searchMapping.containsKey(searchText)) {
             ArrayList<String> containing = searchMapping.get(searchText);
