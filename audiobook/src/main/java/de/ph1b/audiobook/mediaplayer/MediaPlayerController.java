@@ -2,18 +2,12 @@ package de.ph1b.audiobook.mediaplayer;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.PowerManager;
 
-import com.google.android.exoplayer.ExoPlaybackException;
-import com.google.android.exoplayer.ExoPlayer;
-import com.google.android.exoplayer.MediaCodecAudioTrackRenderer;
-import com.google.android.exoplayer.TrackRenderer;
-import com.google.android.exoplayer.source.DefaultSampleSource;
-import com.google.android.exoplayer.source.FrameworkSampleExtractor;
-import com.google.android.exoplayer.source.SampleExtractor;
-
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -29,9 +23,10 @@ import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
-public class MediaPlayerController implements ExoPlayer.Listener {
+public class MediaPlayerController implements MediaPlayer.OnErrorListener, MediaPlayerInterface.OnCompletionListener {
 
     private static final String TAG = MediaPlayerController.class.getSimpleName();
+    public static boolean playerCanSetSpeed = Build.VERSION.SDK_INT >= 16;
     private final Context c;
     private final ReentrantLock lock = new ReentrantLock();
     private final PrefsManager prefs;
@@ -39,12 +34,11 @@ public class MediaPlayerController implements ExoPlayer.Listener {
     private final BaseApplication baseApplication;
     private final Book book;
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
-    private final ExoPlayer player;
+    private final MediaPlayerInterface player;
     private volatile State state;
     private ScheduledFuture<?> sleepSand;
     private volatile boolean stopAfterCurrentTrack = false;
     private ScheduledFuture updater = null;
-    private PowerManager.WakeLock wakeLock = null;
 
     public MediaPlayerController(BaseApplication baseApplication, Book book) {
         L.e(TAG, "constructor called with book=" + book);
@@ -54,12 +48,12 @@ public class MediaPlayerController implements ExoPlayer.Listener {
         prefs = new PrefsManager(c);
         db = DataBaseHelper.getInstance(c);
         this.baseApplication = baseApplication;
-        PowerManager pm = (PowerManager) c.getSystemService(Context.POWER_SERVICE);
-        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, MediaPlayerController.class.getName());
-        wakeLock.setReferenceCounted(false);
 
-        player = ExoPlayer.Factory.newInstance(1);
-        player.addListener(this);
+        if (playerCanSetSpeed) {
+            player = new CustomMediaPlayer();
+        } else {
+            player = new AndroidMediaPlayer();
+        }
 
         prepare();
     }
@@ -69,16 +63,22 @@ public class MediaPlayerController implements ExoPlayer.Listener {
      * Prepares the current chapter set in book.
      */
     private void prepare() {
-        File rootFile = new File(book.getRoot() + "/" + book.getCurrentChapter().getPath());
-        SampleExtractor sampleExtractor = new FrameworkSampleExtractor(c, Uri.fromFile(rootFile), null);
-        DefaultSampleSource sampleSource = new DefaultSampleSource(sampleExtractor, 1);
-        TrackRenderer audioRenderer = new MediaCodecAudioTrackRenderer(sampleSource);
+        player.reset();
 
-        player.stop();
-        player.seekTo(book.getTime());
-        player.prepare(audioRenderer);
+        player.setOnCompletionListener(this);
+        player.setOnErrorListener(this);
+        player.setWakeMode(c, PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE);
 
-        state = State.PREPARED;
+        try {
+            player.setDataSource(book.getRoot() + "/" + book.getCurrentChapter().getPath());
+            player.prepare();
+            player.seekTo(book.getTime());
+            player.setPlaybackSpeed(book.getPlaybackSpeed());
+            state = State.PREPARED;
+        } catch (IOException e) {
+            e.printStackTrace();
+            state = State.DEAD;
+        }
     }
 
 
@@ -89,10 +89,9 @@ public class MediaPlayerController implements ExoPlayer.Listener {
     public void pause() {
         lock.lock();
         try {
-            stayAwake(false);
             switch (state) {
                 case STARTED:
-                    player.setPlayWhenReady(false);
+                    player.pause();
                     stopUpdating();
                     baseApplication.setPlayState(BaseApplication.PlayState.PAUSED);
                     state = State.PAUSED;
@@ -118,12 +117,10 @@ public class MediaPlayerController implements ExoPlayer.Listener {
                     player.seekTo(0);
                 case PREPARED:
                 case PAUSED:
-                    player.setPlayWhenReady(true);
+                    player.start();
                     startUpdating();
                     baseApplication.setPlayState(BaseApplication.PlayState.PLAYING);
                     state = State.STARTED;
-
-                    stayAwake(true);
                     break;
                 case DEAD:
                 case IDLE:
@@ -151,11 +148,9 @@ public class MediaPlayerController implements ExoPlayer.Listener {
                 public void run() {
                     lock.lock();
                     try {
-                        if (player.getCurrentPosition() != ExoPlayer.UNKNOWN_TIME) {
-                            book.setPosition((int) player.getCurrentPosition(), book.getRelativeMediaPath());
-                            db.updateBook(book);
-                            baseApplication.notifyPositionChanged();
-                        }
+                        book.setPosition(player.getCurrentPosition(), book.getRelativeMediaPath());
+                        db.updateBook(book);
+                        baseApplication.notifyPositionChanged();
                     } finally {
                         lock.unlock();
                     }
@@ -178,34 +173,23 @@ public class MediaPlayerController implements ExoPlayer.Listener {
     public void skip(Direction direction) {
         lock.lock();
         try {
-            int currentPos = (int) player.getCurrentPosition();
-            int duration = (int) player.getDuration();
-            if (currentPos != ExoPlayer.UNKNOWN_TIME && duration != ExoPlayer.UNKNOWN_TIME) {
-                int delta = prefs.getSeekTime() * 1000;
+            int currentPos = player.getCurrentPosition();
+            int duration = player.getDuration();
+            int delta = prefs.getSeekTime() * 1000;
 
-                int seekTo = (direction == Direction.FORWARD) ? currentPos + delta : currentPos - delta;
+            int seekTo = (direction == Direction.FORWARD) ? currentPos + delta : currentPos - delta;
 
-                if (seekTo < 0) {
-                    previous(false);
-                } else if (seekTo > duration) {
-                    next();
-                } else {
-                    changePosition(seekTo, book.getRelativeMediaPath());
-                }
+            if (seekTo < 0) {
+                previous(false);
+            } else if (seekTo > duration) {
+                next();
+            } else {
+                changePosition(seekTo, book.getRelativeMediaPath());
             }
         } finally {
             lock.unlock();
         }
     }
-
-    private void stayAwake(boolean awake) {
-        if (awake && !wakeLock.isHeld()) {
-            wakeLock.acquire();
-        } else if (!awake && wakeLock.isHeld()) {
-            wakeLock.release();
-        }
-    }
-
 
     /**
      * Changes the current position in book. If the path is the same, continues playing the song.
@@ -226,7 +210,7 @@ public class MediaPlayerController implements ExoPlayer.Listener {
                 baseApplication.notifyPositionChanged();
                 prepare();
                 if (wasPlaying) {
-                    player.setPlayWhenReady(true);
+                    player.start();
                     state = State.STARTED;
                     baseApplication.setPlayState(BaseApplication.PlayState.PLAYING);
                 } else {
@@ -266,9 +250,8 @@ public class MediaPlayerController implements ExoPlayer.Listener {
         try {
             book.setPlaybackSpeed(speed);
             db.updateBook(book);
-            //noinspection StatementWithEmptyBody
             if (state != State.DEAD) {
-                //mediaPlayer.setPlaybackSpeed(speed); TODO: IMPLEMENT
+                player.setPlaybackSpeed(speed);
             } else {
                 L.e(TAG, "setPlaybackSpeed called in illegal state: " + state);
             }
@@ -374,7 +357,6 @@ public class MediaPlayerController implements ExoPlayer.Listener {
             player.release();
             baseApplication.setPlayState(BaseApplication.PlayState.STOPPED);
             baseApplication.setSleepTimerActive(false);
-            stayAwake(false);
             executor.shutdown();
             state = State.DEAD;
         } finally {
@@ -393,7 +375,24 @@ public class MediaPlayerController implements ExoPlayer.Listener {
      * After the current song has ended, prepare the next one if there is one. Else release the
      * resources.
      */
-    private void onCompletion() {
+
+
+    @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        File currentFile = new File(book.getCurrentChapter().getPath());
+        if (!currentFile.exists()) {
+            db.deleteBook(book);
+            baseApplication.getAllBooks().remove(book);
+            Intent bookShelfIntent = new Intent(c, BookShelfActivity.class);
+            bookShelfIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            c.startActivity(bookShelfIntent);
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onCompletion() {
         L.v(TAG, "onCompletion called, nextChapter=" + book.getNextChapter());
         if (book.getNextChapter() != null) {
             next();
@@ -402,34 +401,7 @@ public class MediaPlayerController implements ExoPlayer.Listener {
             stopUpdating();
             baseApplication.setPlayState(BaseApplication.PlayState.STOPPED);
 
-            stayAwake(false);
             state = State.PLAYBACK_COMPLETED;
-        }
-    }
-
-    @Override
-    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        if (playbackState == ExoPlayer.STATE_ENDED && playWhenReady) {
-            onCompletion();
-        }
-    }
-
-    @Override
-    public void onPlayWhenReadyCommitted() {
-
-    }
-
-    @Override
-    public void onPlayerError(ExoPlaybackException error) {
-        stayAwake(false);
-
-        File currentFile = new File(book.getCurrentChapter().getPath());
-        if (!currentFile.exists()) {
-            db.deleteBook(book);
-            baseApplication.getAllBooks().remove(book);
-            Intent bookShelfIntent = new Intent(c, BookShelfActivity.class);
-            bookShelfIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            c.startActivity(bookShelfIntent);
         }
     }
 

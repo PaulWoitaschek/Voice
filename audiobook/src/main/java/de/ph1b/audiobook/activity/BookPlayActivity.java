@@ -27,6 +27,7 @@ import de.ph1b.audiobook.adapter.MediaSpinnerAdapter;
 import de.ph1b.audiobook.dialog.BookmarkDialog;
 import de.ph1b.audiobook.dialog.JumpToPositionDialog;
 import de.ph1b.audiobook.dialog.SetPlaybackSpeedDialog;
+import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.service.ServiceController;
@@ -152,7 +153,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem timeLapseItem = menu.findItem(R.id.action_time_lapse);
-        timeLapseItem.setVisible(false); //TODO: Enable this when we have the functionality back
+        timeLapseItem.setVisible(MediaPlayerController.playerCanSetSpeed);
         MenuItem sleepTimerItem = menu.findItem(R.id.action_sleep);
         if (baseApplication.isSleepTimerActive()) {
             sleepTimerItem.setIcon(R.drawable.ic_alarm_on_white_24dp);
