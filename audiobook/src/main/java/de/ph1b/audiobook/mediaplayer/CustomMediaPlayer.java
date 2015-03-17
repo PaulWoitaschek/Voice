@@ -46,11 +46,11 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     private MediaCodec codec;
     private Thread decoderThread;
     private String path;
-    private boolean mContinue;
-    private boolean mIsDecoding;
+    private volatile boolean mContinue;
+    private volatile boolean mIsDecoding;
     private float speed;
     private MediaPlayerInterface.OnCompletionListener onCompletionListener;
-    private State state;
+    private volatile State state;
     private MediaPlayer.OnErrorListener onErrorListener;
     private long duration;
 
@@ -183,14 +183,13 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
 
     @Override
     public void reset() {
-        L.v(TAG, "reste called in state: " + state);
+        L.v(TAG, "reset called in state: " + state);
         stayAwake(false);
         lock.lock();
         try {
             mContinue = false;
             try {
-                if (decoderThread != null
-                        && state != State.PLAYBACK_COMPLETED) {
+                if (decoderThread != null && state != State.PLAYBACK_COMPLETED) {
                     while (mIsDecoding) {
                         synchronized (mDecoderLock) {
                             mDecoderLock.notify();
