@@ -26,6 +26,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookPlayActivity;
@@ -43,7 +46,12 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     private static final String TAG = AudioService.class.getSimpleName();
     private static final int NOTIFICATION_ID = 42;
     private final ExecutorService executor = Executors.newCachedThreadPool();
-    private final ExecutorService mediaPlayerExecutor = Executors.newSingleThreadExecutor();
+    private final ExecutorService playerExecutor = new ThreadPoolExecutor(
+            1, 1, // single thread
+            5, TimeUnit.SECONDS,
+            new LinkedBlockingQueue<Runnable>(2), // queue capacity
+            new ThreadPoolExecutor.DiscardOldestPolicy()
+    );
     private NotificationManager notificationManager;
     private PrefsManager prefs;
     private MediaPlayerController controller = null;
@@ -151,7 +159,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
     private void handleIntent(final Intent intent) {
         if (intent != null && intent.getAction() != null) {
-            mediaPlayerExecutor.execute(new Runnable() {
+            playerExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
                     L.v(TAG, "handling intent action:" + intent.getAction());
