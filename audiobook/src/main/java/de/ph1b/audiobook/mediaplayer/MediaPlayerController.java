@@ -63,21 +63,27 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
      * Prepares the current chapter set in book.
      */
     private void prepare() {
-        player.reset();
-
-        player.setOnCompletionListener(this);
-        player.setOnErrorListener(this);
-        player.setWakeMode(c, PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE);
-
+        L.v(TAG, "prepare called in state=" + state);
+        lock.lock();
         try {
-            player.setDataSource(book.getRoot() + "/" + book.getCurrentChapter().getPath());
-            player.prepare();
-            player.seekTo(book.getTime());
-            player.setPlaybackSpeed(book.getPlaybackSpeed());
-            state = State.PREPARED;
-        } catch (IOException e) {
-            e.printStackTrace();
-            state = State.DEAD;
+            player.reset();
+
+            player.setOnCompletionListener(this);
+            player.setOnErrorListener(this);
+            player.setWakeMode(c, PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE);
+
+            try {
+                player.setDataSource(book.getRoot() + "/" + book.getCurrentChapter().getPath());
+                player.prepare();
+                player.seekTo(book.getTime());
+                player.setPlaybackSpeed(book.getPlaybackSpeed());
+                state = State.PREPARED;
+            } catch (IOException e) {
+                e.printStackTrace();
+                state = State.DEAD;
+            }
+        } finally {
+            lock.unlock();
         }
     }
 
@@ -87,8 +93,10 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
      * database.
      */
     public void pause() {
+        L.v(TAG, "pause called in state=" + state);
         lock.lock();
         try {
+            L.v(TAG, "pause auired lock. state is=" + state);
             switch (state) {
                 case STARTED:
                     player.pause();
@@ -110,6 +118,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
      * Plays the prepared file.
      */
     public void play() {
+        L.v(TAG, "play called in state=" + state);
         lock.lock();
         try {
             switch (state) {
@@ -171,6 +180,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
      * @param direction The direction to skip
      */
     public void skip(Direction direction) {
+        L.v(TAG, "skip called in state=" + state);
         lock.lock();
         try {
             int currentPos = player.getCurrentPosition();
@@ -199,7 +209,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
      * @param relPath The relative path of the media to play (relative to the books root path)
      */
     public void changePosition(int time, String relPath) {
-        L.v(TAG, "changePosition(" + time + "/" + relPath + ")");
+        L.v(TAG, "changePosition(" + time + "/" + relPath + ") called in state=" + state);
         lock.lock();
         try {
             boolean changeFile = (!book.getCurrentChapter().getPath().equals(relPath));
@@ -261,7 +271,12 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
     }
 
     private boolean sleepSandActive() {
-        return sleepSand != null && !sleepSand.isCancelled() && !sleepSand.isDone();
+        lock.lock();
+        try {
+            return sleepSand != null && !sleepSand.isCancelled() && !sleepSand.isDone();
+        } finally {
+            lock.unlock();
+        }
     }
 
 
@@ -307,6 +322,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
      * Plays the next chapter. If there is none, don't do anything.
      */
     public void next() {
+        L.v(TAG, "next called in state=" + state);
         lock.lock();
         try {
             Chapter nextChapter = book.getNextChapter();
@@ -322,6 +338,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
      * If current time is > 2000ms, seek to 0. Else play previous chapter if there is one.
      */
     public void previous(boolean toNullOfNewTrack) {
+        L.v(TAG, "previous called in state=" + state);
         lock.lock();
         try {
             if (player.getCurrentPosition() > 2000 || book.getPreviousChapter() == null) {
@@ -350,7 +367,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
      * Releases the controller. After this, this object should no longer be used.
      */
     public void release() {
-        L.i(TAG, "release called");
+        L.i(TAG, "release called in state=" + state);
         lock.lock();
         try {
             stopUpdating();
@@ -379,6 +396,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
+        L.e(TAG, "onError");
         File currentFile = new File(book.getCurrentChapter().getPath());
         if (!currentFile.exists()) {
             db.deleteBook(book);
@@ -388,20 +406,28 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
             c.startActivity(bookShelfIntent);
         }
 
+        state = State.DEAD;
+
         return false;
     }
 
     @Override
     public void onCompletion() {
-        L.v(TAG, "onCompletion called, nextChapter=" + book.getNextChapter());
-        if (book.getNextChapter() != null) {
-            next();
-        } else {
-            L.v(TAG, "Reached last track. Stopping player");
-            stopUpdating();
-            baseApplication.setPlayState(BaseApplication.PlayState.STOPPED);
+        L.d(TAG, "onCompletion in state=" + state);
+        lock.lock();
+        try {
+            L.v(TAG, "onCompletion called, nextChapter=" + book.getNextChapter());
+            if (book.getNextChapter() != null) {
+                next();
+            } else {
+                L.v(TAG, "Reached last track. Stopping player");
+                stopUpdating();
+                baseApplication.setPlayState(BaseApplication.PlayState.STOPPED);
 
-            state = State.PLAYBACK_COMPLETED;
+                state = State.PLAYBACK_COMPLETED;
+            }
+        } finally {
+            lock.unlock();
         }
     }
 
