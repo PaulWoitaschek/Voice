@@ -27,7 +27,7 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
     private final Thread.UncaughtExceptionHandler defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
     private ArrayList<Book> allBooks;
     private Book currentBook = null;
-    private PlayState currentState = PlayState.STOPPED;
+    private volatile PlayState currentState = PlayState.STOPPED;
     private PrefsManager prefs;
     private boolean sleepTimerActive = false;
 
