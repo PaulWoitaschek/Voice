@@ -58,20 +58,20 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/choose"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/choose" />
-
-        <Button
             android:id="@+id/abort"
             style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/abort" />
+
+        <Button
+            android:id="@+id/choose"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/choose" />
 
     </LinearLayout>
 
