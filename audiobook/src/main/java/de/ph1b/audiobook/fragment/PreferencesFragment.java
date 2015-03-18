@@ -8,6 +8,8 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 
+import com.afollestad.materialdialogs.prefs.MaterialListPreference;
+
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.dialog.AudioFolderOverviewDialog;
 import de.ph1b.audiobook.dialog.SeekPreferenceDialog;
@@ -15,6 +17,7 @@ import de.ph1b.audiobook.dialog.SleepPreferenceDialog;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 public class PreferencesFragment extends PreferenceFragment {
+
     private static final String TAG = PreferencesFragment.class.getSimpleName();
     private final SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
@@ -23,6 +26,7 @@ public class PreferencesFragment extends PreferenceFragment {
         }
     };
     private PrefsManager prefs;
+    private SharedPreferences sp;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,6 +35,7 @@ public class PreferencesFragment extends PreferenceFragment {
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         prefs = new PrefsManager(getActivity());
+        sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
     }
 
     private void initValues() {
@@ -57,21 +62,24 @@ public class PreferencesFragment extends PreferenceFragment {
                 return true;
             }
         });
+
+        // theme pref
+        MaterialListPreference themePreference = (MaterialListPreference) findPreference(getString(R.string.pref_key_theme));
+        String themeSummary = sp.getString(getString(R.string.pref_key_theme), getString(R.string.pref_theme_light));
+        themePreference.setSummary(themeSummary);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         initValues();
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        sharedPreferences.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
+        sp.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
+        sp.unregisterOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
     }
 
 }

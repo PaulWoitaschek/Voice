@@ -1,55 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Settings -->
+    <string name="action_settings">Einstellungen</string>
+    <string name="pref_resume_on_replug">Wiedergabe fortsetzen</string>
+    <string name="pref_resume_on_replug_hint">Nimmt die Wiedergabe beim Einstecken der Kopfhörer wieder auf.</string>
+    <string name="minutes">Minuten</string>
+    <string name="seconds">Sekunden</string>
+    <string name="pref_cover_on_internet">Benutze Mobiles Internet</string>
+    <string name="pref_cover_on_internet_hint">Benutze auch die mobile Datenverbindung um Cover herunterzuladen.</string>
+    <string name="pref_seek_time">Vor- und zurückspulen</string>
+    <string name="pref_title_track_to_end">Kapitel zu Ende spielen</string>
+    <string name="pref_summary_track_to_end">Spielt den aktuellen Track noch zu Ende, nachdem die Einschlafzeit abgelaufen ist.</string>
+    <string name="pref_sleep_time">Einschlafzeit</string>
+    <string name="pref_root_folder_title">Hörbuch Ordner</string>
+    <string name="pref_theme_title">Thema</string>
+    <string name="pref_theme_light">Hell</string>
+    <string name="pref_theme_dark">Dunkel</string>
+
+    <!-- Unsorted -->
     <string name="cover">Cover</string>
     <string name="play_pause">Play / Pause</string>
-
-    <string name="action_settings">Einstellungen</string>
     <string name="book_add_empty_title">Geben Sie einen Titel ein</string>
     <string name="dialog_confirm">Okay</string>
     <string name="dialog_cancel">Abbrechen</string>
     <string name="action_time_change">Zu Stelle springen</string>
-    <string name="pref_resume_on_replug">Wiedergabe fortsetzen</string>
-    <string name="pref_resume_on_replug_hint">Nimmt die Wiedergabe beim Einstecken der Kopfhörer wieder auf.</string>
     <string name="action_sleep">Einschlaf-Timer</string>
-    <string name="no_external_storage">Der externe Speicher ist nicht verfügbar. Prüfen Sie, ob Ihre
-        Speicherkarte eingesteckt und nicht mit dem Computer verbunden ist.</string>
+    <string name="no_external_storage">Der externe Speicher ist nicht verfügbar. Prüfen Sie, ob Ihre Speicherkarte eingesteckt und nicht mit dem Computer verbunden ist.</string>
     <string name="no_external_storage_action_bar_title">Externer Speicher</string>
-
     <string name="action_sleep_title_hint_left">Pausiert nach</string>
     <string name="action_sleep_title_hint_right">Minuten</string>
-    <string name="minutes">Minuten</string>
-    <string name="seconds">Sekunden</string>
-
     <string name="current_cover">Zeigt das Cover des momentan spielenden Buchs.</string>
     <string name="current_playing">Zeigt an, ob momentan ein Buch abgespielt wird.</string>
-    <string name="pref_cover_on_internet">Benutze Mobiles Internet</string>
-    <string name="pref_cover_on_internet_hint">Benutze auch die mobile Datenverbindung um Cover
-        herunterzuladen.</string>
     <string name="content_previous_cover">Wählt voriges Cover</string>
     <string name="content_next_cover">Wählt nächstes Cover</string>
     <string name="content_cover">Zeigt aktuelles Cover an</string>
-    <string name="pref_seek_time">Vor- und zurückspulen</string>
-
     <string name="edit_book_title">Buch bearbeiten</string>
     <string name="delete">Löschen</string>
     <string name="popup_edit">Bearbeiten</string>
     <string name="rewind">Zurückspulen</string>
     <string name="fast_forward">Vorspulen</string>
     <string name="playback_speed">Geschwindigkeit</string>
-    <string name="pref_sleep_time">Einschlafzeit</string>
     <string name="sleep_timer_started">Einschlaftimer: </string>
     <string name="keep">Behalten</string>
-    <string name="pref_title_track_to_end">Kapitel zu Ende spielen</string>
-    <string name="pref_summary_track_to_end">Spielt den aktuellen Track noch zu Ende, nachdem die Einschlafzeit abgelaufen ist.</string>
-
     <string name="next_track">Nächster Song</string>
     <string name="previous_track">Voriger Song</string>
-
     <string name="up">Ordner hoch</string>
     <string name="chosen_folder_description">Gewählter Ordner: </string>
     <string name="choose">WÄHLEN</string>
     <string name="abort">ABBRECHEN</string>
-    <string name="pref_root_folder_title">Hörbuch Ordner</string>
     <string name="bookmark">Lesezeichen</string>
     <string name="bookmark_delete_title">Möchten Sie dieses Lesezeichen löschen?</string>
     <string name="bookmark_edit_title">Lesezeichen bearbeiten</string>
