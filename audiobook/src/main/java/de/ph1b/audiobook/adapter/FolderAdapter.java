@@ -62,7 +62,11 @@ public class FolderAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.textView.setText(data.get(position).getName());
+        File selectedFile = data.get(position);
+
+        convertView.setEnabled(selectedFile.isDirectory());
+
+        viewHolder.textView.setText(selectedFile.getName());
         return convertView;
     }
 

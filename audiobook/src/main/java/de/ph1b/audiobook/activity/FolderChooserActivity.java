@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,7 +15,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,13 +26,15 @@ import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.FolderAdapter;
 import de.ph1b.audiobook.service.BookAddingService;
+import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
 import de.ph1b.audiobook.utils.PrefsManager;
 
-public class FolderChooserActivity extends ActionBarActivity {
+public class FolderChooserActivity extends ActionBarActivity implements View.OnClickListener {
 
     public static final String CHOSEN_FOLDER = "chosenFolder";
     private static final String CURRENT_FOLDER_NAME = "currentFolderName";
+    private static final String TAG = FolderChooserActivity.class.getSimpleName();
     private PrefsManager prefs;
     private ArrayList<File> rootDirs;
     private File chosenFolder = null;
@@ -120,37 +122,42 @@ public class FolderChooserActivity extends ActionBarActivity {
     }
 
 
-    /**
-     * @return true if we are in the first level of the folder hierarchy.
-     */
-    private boolean weAreOnTop() {
-        if (chosenFolder != null) {
-            File parent = chosenFolder.getParentFile();
-            ArrayList<File> parentContaining = getFilesFromFolder(parent);
-            for (File f : parentContaining) {
-                if (rootDirs.contains(f)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // init fields
         setContentView(R.layout.activity_folder_chooser);
         rootDirs = getStorageDirectories();
         prefs = new PrefsManager(this);
         currentFolderContent = new ArrayList<>(rootDirs);
-        adapter = new FolderAdapter(this, currentFolderContent);
 
+        //get views
         ListView listView = (ListView) findViewById(R.id.listView);
         upButton = (ImageButton) findViewById(R.id.up);
         currentFolderName = (TextView) findViewById(R.id.chosenFolder);
         chooseButton = (Button) findViewById(R.id.choose);
         Button abortButton = (Button) findViewById(R.id.abort);
+
+        //set listener
+        upButton.setOnClickListener(this);
+        chooseButton.setOnClickListener(this);
+        abortButton.setOnClickListener(this);
+
+        //setup
+        adapter = new FolderAdapter(this, currentFolderContent);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                File selectedFile = adapter.getItem(position);
+                if (selectedFile.isDirectory()) {
+                    changeFolder(adapter.getItem(position));
+                }
+            }
+        });
+
+        //handle runtime
         if (savedInstanceState != null) {
             String savedFolderPath = savedInstanceState.getString(CURRENT_FOLDER_NAME);
             if (savedFolderPath != null) {
@@ -162,53 +169,7 @@ public class FolderChooserActivity extends ActionBarActivity {
                 changeFolder(prefsAudiobookFolder);
             }
         }
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                changeFolder(adapter.getItem(position));
-            }
-        });
-        upButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (chosenFolder != null) {
-                    if (weAreOnTop()) {
-                        chosenFolder = null;
-                        currentFolderName.setText("");
-                        currentFolderContent.clear();
-                        currentFolderContent.addAll(rootDirs);
-                        adapter.notifyDataSetChanged();
-                    } else {
-                        File parent = chosenFolder.getParentFile();
-                        chosenFolder = parent;
-                        currentFolderName.setText(chosenFolder.getName());
-                        currentFolderContent.clear();
-                        ArrayList<File> parentContaining = getFilesFromFolder(parent);
-                        currentFolderContent.addAll(parentContaining);
-                        adapter.notifyDataSetChanged();
-                    }
-                }
-                setButtonEnabledDisabled();
-            }
-        });
-        chooseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String path = chosenFolder.getAbsolutePath();
-                prefs.setLatestChosenFolder(path);
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra(CHOSEN_FOLDER, path);
-                setResult(RESULT_OK, returnIntent);
-                finish();
-            }
-        });
-        abortButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+
         setButtonEnabledDisabled();
     }
 
@@ -224,13 +185,19 @@ public class FolderChooserActivity extends ActionBarActivity {
      * Sets the choose button enabled or disabled, depending on where we are in the hierarchy
      */
     private void setButtonEnabledDisabled() {
-        chooseButton.setEnabled(chosenFolder != null);
-        upButton.setEnabled(weAreOnTop());
+        boolean enableButtons = chosenFolder != null;
+
+        chooseButton.setEnabled(enableButtons);
+        upButton.setEnabled(enableButtons);
+
+        @SuppressWarnings("deprecation") Drawable upIcon = enableButtons ? getResources().getDrawable(R.drawable.ic_arrow_up_grey600_48dp) : null;
+        upButton.setImageDrawable(upIcon);
     }
 
     /**
      * Gets the containing files of a folder (restricted to music and folders) in a naturally sorted
      * order.
+     *
      * @param file The file to look for containing files
      * @return The containing files
      */
@@ -239,5 +206,48 @@ public class FolderChooserActivity extends ActionBarActivity {
         ArrayList<File> asList = new ArrayList<>(Arrays.asList(containing));
         Collections.sort(asList, new NaturalOrderComparator());
         return asList;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.up:
+                L.d(TAG, "upButton clicked. chosenFolder=" + chosenFolder);
+
+                boolean chosenFolderIsInRoot = false;
+                for (File f : rootDirs) {
+                    if (f.equals(chosenFolder)) {
+                        L.d(TAG, "chosen folder is in root");
+                        chosenFolderIsInRoot = true;
+                    }
+                }
+                if (chosenFolderIsInRoot) {
+                    chosenFolder = null;
+                    currentFolderName.setText("");
+                    currentFolderContent.clear();
+                    currentFolderContent.addAll(rootDirs);
+                    adapter.notifyDataSetChanged();
+                } else {
+                    chosenFolder = chosenFolder.getParentFile();
+                    currentFolderName.setText(chosenFolder.getName());
+                    ArrayList<File> parentContaining = getFilesFromFolder(chosenFolder);
+                    currentFolderContent.clear();
+                    currentFolderContent.addAll(parentContaining);
+                    adapter.notifyDataSetChanged();
+                }
+                setButtonEnabledDisabled();
+                break;
+            case R.id.choose:
+                String path = chosenFolder.getAbsolutePath();
+                prefs.setLatestChosenFolder(path);
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra(CHOSEN_FOLDER, path);
+                setResult(RESULT_OK, returnIntent);
+                finish();
+                break;
+            case R.id.abort:
+                finish();
+                break;
+        }
     }
 }
