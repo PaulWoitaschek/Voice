@@ -5,6 +5,8 @@
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:imageButtonStyle">@style/CustomButtonStyle</item>
+
+        <item name="md_dark_theme">false</item>
     </style>
 
     <style name="DarkTheme" parent="Theme.AppCompat">
@@ -12,6 +14,8 @@
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:imageButtonStyle">@style/CustomButtonStyle</item>
+        
+        <item name="md_dark_theme">true</item>
     </style>
 
     <style name="CustomButtonStyle" parent="@android:style/Widget.ImageButton">
