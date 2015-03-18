@@ -209,33 +209,46 @@ public class FolderChooserActivity extends ActionBarActivity implements View.OnC
     }
 
     @Override
+    public void onBackPressed() {
+        if (chosenFolder == null) {
+            super.onBackPressed();
+        } else {
+            up();
+        }
+    }
+
+    private void up() {
+        L.d(TAG, "up called. chosenFolder=" + chosenFolder);
+
+        boolean chosenFolderIsInRoot = false;
+        for (File f : rootDirs) {
+            if (f.equals(chosenFolder)) {
+                L.d(TAG, "chosen folder is in root");
+                chosenFolderIsInRoot = true;
+            }
+        }
+        if (chosenFolderIsInRoot) {
+            chosenFolder = null;
+            currentFolderName.setText("");
+            currentFolderContent.clear();
+            currentFolderContent.addAll(rootDirs);
+            adapter.notifyDataSetChanged();
+        } else {
+            chosenFolder = chosenFolder.getParentFile();
+            currentFolderName.setText(chosenFolder.getName());
+            ArrayList<File> parentContaining = getFilesFromFolder(chosenFolder);
+            currentFolderContent.clear();
+            currentFolderContent.addAll(parentContaining);
+            adapter.notifyDataSetChanged();
+        }
+        setButtonEnabledDisabled();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.up:
-                L.d(TAG, "upButton clicked. chosenFolder=" + chosenFolder);
-
-                boolean chosenFolderIsInRoot = false;
-                for (File f : rootDirs) {
-                    if (f.equals(chosenFolder)) {
-                        L.d(TAG, "chosen folder is in root");
-                        chosenFolderIsInRoot = true;
-                    }
-                }
-                if (chosenFolderIsInRoot) {
-                    chosenFolder = null;
-                    currentFolderName.setText("");
-                    currentFolderContent.clear();
-                    currentFolderContent.addAll(rootDirs);
-                    adapter.notifyDataSetChanged();
-                } else {
-                    chosenFolder = chosenFolder.getParentFile();
-                    currentFolderName.setText(chosenFolder.getName());
-                    ArrayList<File> parentContaining = getFilesFromFolder(chosenFolder);
-                    currentFolderContent.clear();
-                    currentFolderContent.addAll(parentContaining);
-                    adapter.notifyDataSetChanged();
-                }
-                setButtonEnabledDisabled();
+                up();
                 break;
             case R.id.choose:
                 String path = chosenFolder.getAbsolutePath();
