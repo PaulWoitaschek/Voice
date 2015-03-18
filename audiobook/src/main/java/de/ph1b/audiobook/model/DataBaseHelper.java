@@ -262,11 +262,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void deleteBook(Book book) {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_BOOK, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
-        File coverFile = new File(book.getCover());
-        if (coverFile.exists() && coverFile.canWrite()) {
-            //noinspection ResultOfMethodCallIgnored
-            coverFile.delete();
-        }
     }
 
     @Override
