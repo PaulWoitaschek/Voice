@@ -118,6 +118,23 @@ public class FolderChooserActivity extends ActionBarActivity {
         setButtonEnabledDisabled();
     }
 
+
+    /**
+     * @return true if we are in the first level of the folder hierarchy.
+     */
+    private boolean weAreOnTop() {
+        if (chosenFolder != null) {
+            File parent = chosenFolder.getParentFile();
+            ArrayList<File> parentContaining = getFilesFromFolder(parent);
+            for (File f : parentContaining) {
+                if (rootDirs.contains(f)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -155,24 +172,18 @@ public class FolderChooserActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 if (chosenFolder != null) {
-                    File parent = chosenFolder.getParentFile();
-                    ArrayList<File> parentContaining = getFilesFromFolder(parent);
-                    boolean weAreOnTop = false;
-                    for (File f : parentContaining) {
-                        if (rootDirs.contains(f)) {
-                            weAreOnTop = true;
-                        }
-                    }
-                    if (weAreOnTop) {
+                    if (weAreOnTop()) {
                         chosenFolder = null;
                         currentFolderName.setText("");
                         currentFolderContent.clear();
                         currentFolderContent.addAll(rootDirs);
                         adapter.notifyDataSetChanged();
                     } else {
+                        File parent = chosenFolder.getParentFile();
                         chosenFolder = parent;
                         currentFolderName.setText(chosenFolder.getName());
                         currentFolderContent.clear();
+                        ArrayList<File> parentContaining = getFilesFromFolder(parent);
                         currentFolderContent.addAll(parentContaining);
                         adapter.notifyDataSetChanged();
                     }
@@ -208,9 +219,12 @@ public class FolderChooserActivity extends ActionBarActivity {
         }
     }
 
+    /**
+     * Sets the choose button enabled or disabled, depending on where we are in the hierarchy
+     */
     private void setButtonEnabledDisabled() {
         chooseButton.setEnabled(chosenFolder != null);
-        upButton.setEnabled(chosenFolder != null);
+        upButton.setEnabled(weAreOnTop());
     }
 
     private ArrayList<File> getFilesFromFolder(File file) {
