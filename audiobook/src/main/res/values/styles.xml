@@ -7,6 +7,7 @@
         <item name="colorAccentDark">@color/light_accent_dark</item>
         <item name="android:imageButtonStyle">@style/CustomButtonStyle</item>
         <item name="md_dark_theme">false</item>
+        <item name="theme_name">@string/pref_theme_light</item>
     </style>
 
     <style name="DarkTheme" parent="Theme.AppCompat">
@@ -16,6 +17,7 @@
         <item name="colorAccentDark">@color/dark_accent_dark</item>
         <item name="android:imageButtonStyle">@style/CustomButtonStyle</item>
         <item name="md_dark_theme">true</item>
+        <item name="theme_name">@string/pref_theme_dark</item>
     </style>
 
     <style name="CustomButtonStyle" parent="@android:style/Widget.ImageButton">

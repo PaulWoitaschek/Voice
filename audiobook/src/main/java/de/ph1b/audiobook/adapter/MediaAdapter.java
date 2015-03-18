@@ -20,6 +20,7 @@ import java.util.concurrent.Executors;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.DataBaseHelper;
+import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
 
 public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> {
@@ -117,8 +118,13 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         String name = b.getName();
         viewHolder.titleView.setText(name);
         viewHolder.titleView.setActivated(true);
-        if (b.getCover() != null) {
-            Picasso.with(c).load(new File(b.getCover())).into(viewHolder.coverView);
+
+        // (Cover)
+        File coverFile = b.getCoverFile();
+        if (coverFile != null) {
+            Picasso.with(c).load(coverFile).into(viewHolder.coverView);
+        } else {
+            viewHolder.coverView.setImageBitmap(ImageHelper.genCapital(b.getName(), c));
         }
     }
 

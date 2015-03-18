@@ -28,7 +28,7 @@ import de.ph1b.audiobook.utils.L;
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class DataBaseHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 17;
+    private static final int DATABASE_VERSION = 19;
     private static final String DATABASE_NAME = "autoBookDB";
 
     private static final String TABLE_BOOK = "TABLE_BOOK";
@@ -42,7 +42,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             BOOK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             BOOK_SORT_ID + " INTEGER, " +
             BOOK_NAME + " TEXT NOT NULL, " +
-            BOOK_COVER + " TEXT NOT NULL, " +
+            BOOK_COVER + " TEXT, " +
             BOOK_SPEED + " REAL NOT NULL, " +
             BOOK_ROOT + " TEXT NOT NULL)";
 
@@ -95,7 +95,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             ContentValues cv = new ContentValues();
             cv.put(BOOK_ROOT, book.getRoot());
             cv.put(BOOK_NAME, book.getName());
-            cv.put(BOOK_COVER, book.getCover());
+            cv.put(BOOK_COVER, book.getCoverPath());
             cv.put(BOOK_SPEED, book.getPlaybackSpeed());
             bookId = db.insert(TABLE_BOOK, null, cv);
             cv.put(BOOK_SORT_ID, bookId);
@@ -208,7 +208,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         ContentValues cv = new ContentValues();
         cv.put(BOOK_NAME, newBook.getName());
-        cv.put(BOOK_COVER, newBook.getCover());
+        cv.put(BOOK_COVER, newBook.getCoverPath());
         cv.put(BOOK_SORT_ID, newBook.getSortId());
         cv.put(BOOK_SPEED, newBook.getPlaybackSpeed());
 

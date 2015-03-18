@@ -384,11 +384,11 @@ public class BookAddingService extends Service {
             return null;
         }
 
-        // if we still have not found any cover, we make a capital-cover
-        if (cover == null) {
-            cover = ImageHelper.genCapital(bookName, this);
+
+        String coverPath = null;
+        if (cover != null) {
+            coverPath = ImageHelper.saveCover(cover, this);
         }
-        String coverPath = ImageHelper.saveCover(cover, this);
 
         return new Book(bookRoot, bookName, containingMedia, new ArrayList<Bookmark>(), coverPath, 1);
     }

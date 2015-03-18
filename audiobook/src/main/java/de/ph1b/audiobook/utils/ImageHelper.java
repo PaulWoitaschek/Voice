@@ -21,8 +21,7 @@ public class ImageHelper {
 
     private static final String TAG = ImageHelper.class.getSimpleName();
 
-    public static Bitmap genCapital(String bookName, Context c) {
-        int reqLength = getCoverLength(c);
+    public static Bitmap genCapital(String bookName, Context c, int reqLength) {
         Bitmap bitmap = Bitmap.createBitmap(reqLength, reqLength, Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(bitmap);
         Paint textPaint = new Paint();
@@ -32,11 +31,16 @@ public class ImageHelper {
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTypeface(Typeface.SANS_SERIF);
         Paint backgroundPaint = new Paint();
-        backgroundPaint.setColor(ThemeUtil.getColorAccent(c));
+        backgroundPaint.setColor(ThemeUtil.getColorPrimaryDark(c));
         canvas.drawRect(0, 0, reqLength, reqLength, backgroundPaint);
         int y = (int) ((canvas.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2));
         canvas.drawText(bookName.substring(0, 1).toUpperCase(), reqLength / 2, y, textPaint);
         return bitmap;
+    }
+
+    public static Bitmap genCapital(String bookName, Context c) {
+        int reqLength = getCoverLength(c);
+        return genCapital(bookName, c, reqLength);
     }
 
     public static int getCoverLength(Context c) {

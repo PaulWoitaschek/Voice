@@ -3,6 +3,7 @@ package de.ph1b.audiobook.model;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import de.ph1b.audiobook.utils.ArgumentValidator;
@@ -22,8 +23,8 @@ public class Book implements Comparable<Book> {
     private float playbackSpeed = 1;
     private String relativeMediaPath;
 
-    public Book(String root, String name, ArrayList<Chapter> chapters, ArrayList<Bookmark> bookmarks, String cover, float playbackSpeed) {
-        ArgumentValidator.validate(root, name, chapters, bookmarks, cover);
+    public Book(@NonNull String root, @NonNull String name, @NonNull ArrayList<Chapter> chapters, @NonNull ArrayList<Bookmark> bookmarks, String cover, float playbackSpeed) {
+        ArgumentValidator.validate(root, name, chapters, bookmarks);
         if (chapters.size() == 0) {
             throw new IllegalArgumentException("Book must have any containing chapters.");
         }
@@ -169,8 +170,19 @@ public class Book implements Comparable<Book> {
     }
 
     @Nullable
-    public String getCover() {
+    public String getCoverPath() {
         return cover;
+    }
+
+    @Nullable
+    public File getCoverFile() {
+        if (cover != null) {
+            File coverFile = new File(cover);
+            if (coverFile.exists() && coverFile.canRead()) {
+                return coverFile;
+            }
+        }
+        return null;
     }
 
     public void setCover(@Nullable String cover) {

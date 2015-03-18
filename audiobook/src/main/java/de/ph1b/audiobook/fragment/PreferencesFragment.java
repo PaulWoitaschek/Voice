@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarActivity;
 import com.afollestad.materialdialogs.prefs.MaterialListPreference;
 
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.activity.BaseActivity;
 import de.ph1b.audiobook.dialog.AudioFolderOverviewDialog;
 import de.ph1b.audiobook.dialog.SeekPreferenceDialog;
 import de.ph1b.audiobook.dialog.SleepPreferenceDialog;
@@ -60,6 +61,9 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
         MaterialListPreference themePreference = (MaterialListPreference) findPreference(getString(R.string.pref_key_theme));
         String themeSummary = sp.getString(getString(R.string.pref_key_theme), getString(R.string.pref_theme_light));
         themePreference.setSummary(themeSummary);
+
+        BaseActivity baseActivity = (BaseActivity) getActivity();
+        baseActivity.recreateIfThemeChanged();
     }
 
     @Override

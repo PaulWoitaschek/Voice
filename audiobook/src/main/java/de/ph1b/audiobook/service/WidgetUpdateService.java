@@ -33,6 +33,7 @@ import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.receiver.BaseWidgetProvider;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.BaseApplication.PlayState;
+import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
 
 public class WidgetUpdateService extends Service implements BaseApplication.OnPositionChangedListener, BaseApplication.OnCurrentBookChangedListener, BaseApplication.OnPlayStateChangedListener {
@@ -206,12 +207,20 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
             stackBuilder.addNextIntent(wholeWidgetClickI);
             wholeWidgetClickPI = stackBuilder.getPendingIntent((int) System.currentTimeMillis(), PendingIntent.FLAG_UPDATE_CURRENT);
 
+            Bitmap cover = null;
             try {
-                Bitmap cover = Picasso.with(WidgetUpdateService.this).load(new File(book.getCover())).get();
-                remoteViews.setImageViewBitmap(R.id.imageView, cover);
+                File coverFile = book.getCoverFile();
+                if (coverFile != null) {
+                    cover = Picasso.with(WidgetUpdateService.this).load(coverFile).get();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            if (cover == null) {
+                cover = ImageHelper.genCapital(book.getName(), this);
+            }
+            remoteViews.setImageViewBitmap(R.id.imageView, cover);
+
         } else {
             // directly going back to bookChoose
             Intent wholeWidgetClickI = new Intent(this, BookShelfActivity.class);

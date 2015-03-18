@@ -38,6 +38,7 @@ import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.receiver.RemoteControlReceiver;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.BaseApplication.PlayState;
+import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
@@ -241,19 +242,22 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // cover
-        File coverFile = new File(book.getCover());
-        if (coverFile.exists()) {
-            try {
-                int width = getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_width);
-                int height = getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_height);
-                Bitmap cover = Picasso.with(AudioService.this).load(new File(book.getCover()))
-                        .resize(width, height).get();
-                if (cover != null) {
-                    notificationBuilder.setLargeIcon(cover);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+        try {
+            int width = getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_width);
+            int height = getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_height);
+
+            File coverFile = book.getCoverFile();
+            Bitmap cover = null;
+            if (coverFile != null) {
+                cover = Picasso.with(AudioService.this).load(coverFile).resize(width, height).get();
             }
+            if (cover == null) {
+                cover = ImageHelper.genCapital(book.getName(), this, width);
+            }
+            notificationBuilder.setLargeIcon(cover);
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         // stop intent
@@ -323,10 +327,16 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
             public void run() {
                 Book book = controller.getBook();
                 Bitmap bitmap = null;
-                try {
-                    bitmap = Picasso.with(AudioService.this).load(new File(book.getCover())).get();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                File coverFile = book.getCoverFile();
+                if (coverFile != null) {
+                    try {
+                        bitmap = Picasso.with(AudioService.this).load(coverFile).get();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (bitmap == null) {
+                    bitmap = ImageHelper.genCapital(book.getName(), AudioService.this.getApplicationContext());
                 }
                 @SuppressWarnings("deprecation") RemoteControlClient.MetadataEditor editor = remoteControlClient.editMetadata(true);
                 Chapter c = book.getCurrentChapter();

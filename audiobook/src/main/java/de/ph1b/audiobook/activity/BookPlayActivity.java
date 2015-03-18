@@ -32,9 +32,10 @@ import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.utils.BaseApplication;
+import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.ThemeUtil;
 import de.ph1b.audiobook.utils.PrefsManager;
+import de.ph1b.audiobook.utils.ThemeUtil;
 
 public class BookPlayActivity extends BaseActivity implements View.OnClickListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener, BaseApplication.OnSleepStateChangedListener {
 
@@ -129,7 +130,13 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         });
 
         // (Cover)
-        Picasso.with(this).load(new File(book.getCover())).into(coverView);
+        File coverFile = book.getCoverFile();
+        if (coverFile != null) {
+            Picasso.with(this).load(coverFile).into(coverView);
+        } else {
+            coverView.setImageBitmap(ImageHelper.genCapital(book.getName(), this));
+        }
+
         // Next/Prev/spinner hiding
         if (book.getChapters().size() == 1) {
             next_button.setVisibility(View.GONE);

@@ -3,8 +3,6 @@ package de.ph1b.audiobook.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.os.Build;
@@ -30,23 +28,19 @@ public class ThemeUtil {
         }
     }
 
-    public static int getTextColorPrimary(Context c) {
-        int[] attrs = new int[]{R.attr.colorPrimary};
-        TypedArray ta = c.obtainStyledAttributes(attrs);
-        try {
-            return ta.getColor(0, Color.BLACK);
-        } finally {
-            ta.recycle();
+    public static int getColorAccent(Context c) {
+        if (getTheme(c) == R.style.LightTheme) {
+            return c.getResources().getColor(R.color.light_accent);
+        } else {
+            return c.getResources().getColor(R.color.dark_accent);
         }
     }
 
-    public static int getColorAccent(Context c) {
-        int[] attrs = new int[]{R.attr.colorAccent};
-        TypedArray ta = c.obtainStyledAttributes(attrs);
-        try {
-            return ta.getColor(0, Color.BLACK);
-        } finally {
-            ta.recycle();
+    public static int getColorPrimaryDark(Context c){
+        if (getTheme(c) == R.style.LightTheme){
+            return c.getResources().getColor(R.color.light_primary_dark);
+        } else {
+            return c.getResources().getColor(R.color.dark_primary_dark);
         }
     }
 

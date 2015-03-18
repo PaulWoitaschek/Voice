@@ -136,9 +136,13 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 Bundle bundle = new Bundle();
 
                 ArrayList<Bitmap> bitmap = new ArrayList<>();
-                Bitmap defaultCover = BitmapFactory.decodeFile(bookToEdit.getCover());
-                if (defaultCover != null)
-                    bitmap.add(defaultCover);
+                File coverFile = bookToEdit.getCoverFile();
+                if (coverFile != null){
+                    Bitmap defaultCover = BitmapFactory.decodeFile(coverFile.getAbsolutePath());
+                    if (defaultCover != null) {
+                        bitmap.add(defaultCover);
+                    }
+                }
 
                 bundle.putParcelableArrayList(EditBookDialog.BOOK_COVER, bitmap);
                 bundle.putString(EditBookDialog.DIALOG_TITLE, getString(R.string.edit_book_title));
@@ -252,7 +256,12 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         for (final Book b : adapter.getBooks()) {
             if (b.getId() == currentBookPosition) {
                 //setting cover
-                Picasso.with(this).load(new File(b.getCover())).into(currentCover);
+                File coverFile = b.getCoverFile();
+                if (coverFile != null) {
+                    Picasso.with(this).load(coverFile).into(currentCover);
+                } else {
+                    currentCover.setImageBitmap(ImageHelper.genCapital(b.getName(), this));
+                }
 
                 //setting text
                 currentText.setText(b.getName());
