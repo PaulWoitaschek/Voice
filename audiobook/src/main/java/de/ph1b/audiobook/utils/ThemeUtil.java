@@ -13,7 +13,11 @@ import java.lang.reflect.Field;
 
 import de.ph1b.audiobook.R;
 
-public class MaterialCompatThemer {
+public class ThemeUtil {
+
+    public static int getCurrentTheme(){
+        return 0;
+    }
 
     public static void theme(SeekBar seekBar) {
         if (Build.VERSION.SDK_INT < 21) {

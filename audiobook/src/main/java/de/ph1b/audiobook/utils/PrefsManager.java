@@ -2,6 +2,7 @@ package de.ph1b.audiobook.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.preference.PreferenceManager;
 
 import java.util.ArrayList;
@@ -44,6 +45,22 @@ public class PrefsManager {
         SharedPreferences.Editor editor = sp.edit();
         editor.putStringSet(PREF_KEY_AUDIOBOOK_FOLDERS, set);
         editor.apply();
+    }
+
+    public int getTheme() {
+        Resources r = c.getResources();
+        String themeLight = r.getString(R.string.pref_theme_light);
+        String themeDark = r.getString(R.string.pref_theme_dark);
+
+        String theme = sp.getString(r.getString(R.string.pref_key_theme), themeLight);
+
+        if (theme.equals(themeLight)) {
+            return R.style.LightTheme;
+        } else if (theme.equals(themeDark)) {
+            return R.style.DarkTheme;
+        } else {
+            throw new IllegalArgumentException("Unknown theme found=" + theme);
+        }
     }
 
     public boolean stopAfterCurrentTrack() {

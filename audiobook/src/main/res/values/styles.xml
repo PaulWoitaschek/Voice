@@ -1,12 +1,18 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="LightTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:imageButtonStyle">@style/CustomButtonStyle</item>
     </style>
 
+    <style name="DarkTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:imageButtonStyle">@style/CustomButtonStyle</item>
+    </style>
 
     <style name="CustomButtonStyle" parent="@android:style/Widget.ImageButton">
         <item name="android:background">?android:attr/selectableItemBackground</item>
