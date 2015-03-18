@@ -34,6 +34,7 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.MediaAdapter;
 import de.ph1b.audiobook.dialog.AudioFolderOverviewDialog;
 import de.ph1b.audiobook.dialog.EditBookDialog;
+import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.service.BookAddingService;
@@ -82,6 +83,14 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setTitle(this.getString(R.string.app_name));
+
+        if (getIntent().hasExtra(MediaPlayerController.MALFORMED_FILE)) {
+            String malformedFile = getIntent().getStringExtra(MediaPlayerController.MALFORMED_FILE);
+            new MaterialDialog.Builder(this)
+                    .title(R.string.mal_file_title)
+                    .content(getString(R.string.mal_file_message) + "\n\n" + malformedFile)
+                    .show();
+        }
 
         baseApplication = (BaseApplication) getApplication();
         prefs = new PrefsManager(this);

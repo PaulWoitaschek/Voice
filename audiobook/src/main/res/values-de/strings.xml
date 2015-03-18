@@ -69,4 +69,6 @@
     <string name="delete_folder">Ordner entfernen</string>
     <string name="delete_folder_content">Möchten Sie den folgenden Ordner aus Ihrer Bücherei entfernen?</string>
     <string name="sleep_timer_stopped">Einschlaftimer gestoppt</string>
+    <string name="mal_file_message">Die folgende Datei könnte defekt sein:</string>
+    <string name="mal_file_title">Beschädigte Datei</string>
 </resources>

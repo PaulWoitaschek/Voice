@@ -6,7 +6,6 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.PowerManager;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -25,6 +24,12 @@ import de.ph1b.audiobook.utils.PrefsManager;
 
 public class MediaPlayerController implements MediaPlayer.OnErrorListener, MediaPlayerInterface.OnCompletionListener {
 
+    /**
+     * After the current song has ended, prepare the next one if there is one. Else release the
+     * resources.
+     */
+
+    public static final String MALFORMED_FILE = "malformedFile";
     private static final String TAG = MediaPlayerController.class.getSimpleName();
     public static boolean playerCanSetSpeed = Build.VERSION.SDK_INT >= 16;
     private final Context c;
@@ -39,6 +44,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
     private ScheduledFuture<?> sleepSand;
     private volatile boolean stopAfterCurrentTrack = false;
     private ScheduledFuture updater = null;
+
 
     public MediaPlayerController(BaseApplication baseApplication, Book book) {
         L.e(TAG, "constructor called with book=" + book);
@@ -57,7 +63,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
 
         prepare();
     }
-
 
     /**
      * Prepares the current chapter set in book.
@@ -87,7 +92,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
         }
     }
 
-
     /**
      * Pauses the player. Also stops the updating mechanism which constantly updates the book to the
      * database.
@@ -112,7 +116,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
             lock.unlock();
         }
     }
-
 
     /**
      * Plays the prepared file.
@@ -145,7 +148,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
         }
     }
 
-
     /**
      * Updates the current time and position of the book, writes it to the database and sends
      * updates to the GUI.
@@ -168,11 +170,9 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
         }
     }
 
-
     private boolean updaterActive() {
         return updater != null && !updater.isCancelled() && !updater.isDone();
     }
-
 
     /**
      * Skips by the amount, specified in the settings.
@@ -249,7 +249,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
         }
     }
 
-
     /**
      * Sets the current playback speed
      *
@@ -278,7 +277,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
             lock.unlock();
         }
     }
-
 
     /**
      * Turns the sleep timer on or off.
@@ -362,7 +360,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
         return book;
     }
 
-
     /**
      * Releases the controller. After this, this object should no longer be used.
      */
@@ -387,24 +384,15 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
         }
     }
 
-
-    /**
-     * After the current song has ended, prepare the next one if there is one. Else release the
-     * resources.
-     */
-
-
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
         L.e(TAG, "onError");
-        File currentFile = new File(book.getCurrentChapter().getPath());
-        if (!currentFile.exists()) {
-            db.deleteBook(book);
-            baseApplication.getAllBooks().remove(book);
-            Intent bookShelfIntent = new Intent(c, BookShelfActivity.class);
-            bookShelfIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            c.startActivity(bookShelfIntent);
-        }
+        db.deleteBook(book);
+        baseApplication.getAllBooks().remove(book);
+        Intent bookShelfIntent = new Intent(c, BookShelfActivity.class);
+        bookShelfIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        bookShelfIntent.putExtra(MALFORMED_FILE, book.getRoot() + "/" + book.getCurrentChapter().getPath());
+        c.startActivity(bookShelfIntent);
 
         state = State.DEAD;
 
