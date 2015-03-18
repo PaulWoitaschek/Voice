@@ -31,7 +31,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
 
     public static final String MALFORMED_FILE = "malformedFile";
     private static final String TAG = MediaPlayerController.class.getSimpleName();
-    public static boolean playerCanSetSpeed = Build.VERSION.SDK_INT >= 16;
+    public static final boolean playerCanSetSpeed = Build.VERSION.SDK_INT >= 16;
     private final Context c;
     private final ReentrantLock lock = new ReentrantLock();
     private final PrefsManager prefs;

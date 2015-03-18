@@ -6,7 +6,7 @@ import android.media.MediaPlayer;
 
 import java.io.IOException;
 
-public interface MediaPlayerInterface {
+interface MediaPlayerInterface {
 
     public void start();
 
@@ -24,12 +24,14 @@ public interface MediaPlayerInterface {
 
     public void setPlaybackSpeed(float speed);
 
+    @SuppressWarnings("RedundantThrows")
     public void setDataSource(String source) throws IOException;
 
     public void setOnErrorListener(MediaPlayer.OnErrorListener onErrorListener);
 
     public void setOnCompletionListener(OnCompletionListener onCompletionListener);
 
+    @SuppressWarnings("UnusedParameters")
     public void setWakeMode(Context context, int mode);
 
     public int getDuration();

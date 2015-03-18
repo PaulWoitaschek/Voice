@@ -5,6 +5,7 @@
     <string name="current_cover">Shows cover of currently playing book.</string>
     <string name="current_playing">Shows playing state.</string>
     <string name="mal_file_message" tools:ignore="MissingTranslation">The following file may be corrupt:</string>
+    <string name="mal_file_title" tools:ignore="MissingTranslation">Defect file</string>
 
     <!-- BookPlayActivity -->
     <string name="cover">Cover</string>
@@ -84,6 +85,5 @@
     <!-- Misc -->
     <string name="popup_edit" tools:ignore="MissingTranslation">Edit</string>
     <string name="delete" tools:ignore="MissingTranslation">Delete</string>
-    <string name="mal_file_title">Defect file</string>
 
 </resources>
