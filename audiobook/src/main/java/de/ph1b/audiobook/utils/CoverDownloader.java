@@ -2,6 +2,7 @@ package de.ph1b.audiobook.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 
 import com.squareup.okhttp.Call;
@@ -17,7 +18,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.net.URLEncoder;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -107,13 +108,23 @@ public class CoverDownloader {
     private ArrayList<String> getNewLinks(String searchText, int startPage) {
         ArrayList<String> newStrings = new ArrayList<>();
 
-        searchText = searchText + " cover";
         try {
-            String url = "https://ajax.googleapis.com/ajax/services/search/" +
-                    "images?v=1.0&imgsz=large%7Cxlarge&rsz=8&q=" +
-                    URLEncoder.encode(searchText, "UTF-8") + //query
-                    "&start=" + startPage + //start-page
-                    "&userip=" + getIPAddress(); //ip
+            Uri uri = new Uri.Builder()
+                    .scheme("https")
+                    .authority("ajax.googleapis.com")
+                    .appendPath("ajax")
+                    .appendPath("services")
+                    .appendPath("search")
+                    .appendPath("images")
+                    .appendQueryParameter("v", "1.0")
+                    .appendQueryParameter("imgsz", "large|xlarge")
+                    .appendQueryParameter("rsz", "8")
+                    .appendQueryParameter("q", searchText + " cover")
+                    .appendQueryParameter("start", String.valueOf(startPage))
+                    .appendQueryParameter("userip", getIPAddress())
+                    .build();
+
+            URL url = new URL(uri.toString());
 
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
