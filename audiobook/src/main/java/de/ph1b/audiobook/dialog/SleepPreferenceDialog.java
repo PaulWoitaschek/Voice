@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.utils.MaterialCompatThemer;
+import de.ph1b.audiobook.utils.ThemeUtil;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 public class SleepPreferenceDialog extends DialogPreference {
@@ -32,7 +32,7 @@ public class SleepPreferenceDialog extends DialogPreference {
         //init views
         final TextView timeView = (TextView) view.findViewById(R.id.minute_text);
         final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.minute);
-        MaterialCompatThemer.theme(numberPicker);
+        ThemeUtil.theme(numberPicker);
 
         //init number picker
         int currentSleepValue = getSharedPreferences().getInt(getContext().getString(R.string.pref_key_sleep_time), 20);

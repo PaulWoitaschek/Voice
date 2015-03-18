@@ -33,7 +33,7 @@ import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.MaterialCompatThemer;
+import de.ph1b.audiobook.utils.ThemeUtil;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 public class BookPlayActivity extends BaseActivity implements View.OnClickListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener, BaseApplication.OnSleepStateChangedListener {
@@ -93,7 +93,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         play_button.setOnClickListener(this);
         playedTimeView.setOnClickListener(this);
         play_button.setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
-        MaterialCompatThemer.theme(seekBar);
+        ThemeUtil.theme(seekBar);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

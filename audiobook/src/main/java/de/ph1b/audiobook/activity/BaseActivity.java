@@ -1,16 +1,25 @@
 package de.ph1b.audiobook.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 
 import de.ph1b.audiobook.service.AudioService;
+import de.ph1b.audiobook.utils.PrefsManager;
 
 /**
  * Base class for all Activities which extends ActionBarActivity and checks in onResume, if the storage
  * is mounted. Shuts down service if not.
  */
 public abstract class BaseActivity extends ActionBarActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        PrefsManager prefs = new PrefsManager(this);
+        setTheme(prefs.getTheme());
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     protected void onResume() {
