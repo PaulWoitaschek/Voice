@@ -1,20 +1,20 @@
 <resources>
 
     <style name="LightTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/light_primary</item>
+        <item name="colorPrimaryDark">@color/light_primary_dark</item>
+        <item name="colorAccent">@color/light_accent</item>
+        <item name="colorAccentDark">@color/light_accent_dark</item>
         <item name="android:imageButtonStyle">@style/CustomButtonStyle</item>
-
         <item name="md_dark_theme">false</item>
     </style>
 
     <style name="DarkTheme" parent="Theme.AppCompat">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/dark_primary</item>
+        <item name="colorPrimaryDark">@color/dark_primary_dark</item>
+        <item name="colorAccent">@color/dark_accent</item>
+        <item name="colorAccentDark">@color/dark_accent_dark</item>
         <item name="android:imageButtonStyle">@style/CustomButtonStyle</item>
-        
         <item name="md_dark_theme">true</item>
     </style>
 

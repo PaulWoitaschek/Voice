@@ -92,7 +92,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         next_button.setOnClickListener(this);
         play_button.setOnClickListener(this);
         playedTimeView.setOnClickListener(this);
-        play_button.setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+        play_button.setColorFilter(ThemeUtil.getColorAccent(this), PorterDuff.Mode.SRC_ATOP);
         ThemeUtil.theme(seekBar);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override

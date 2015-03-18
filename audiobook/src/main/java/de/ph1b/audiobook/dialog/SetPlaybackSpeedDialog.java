@@ -19,6 +19,7 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.utils.BaseApplication;
+import de.ph1b.audiobook.utils.ThemeUtil;
 
 public class SetPlaybackSpeedDialog extends DialogFragment {
 
@@ -49,9 +50,9 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
         int seekProgress = (int) ((speed - SPEED_MIN) * (seekMaxSteps + 1) / (SPEED_MAX - SPEED_MIN));
         seekBar.setProgress(seekProgress);
 
-        seekBar.getProgressDrawable().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+        seekBar.getProgressDrawable().setColorFilter(ThemeUtil.getColorAccent(getActivity()), PorterDuff.Mode.SRC_ATOP);
         if (Build.VERSION.SDK_INT >= 16) {
-            seekBar.getThumb().setColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+            seekBar.getThumb().setColorFilter(ThemeUtil.getColorAccent(getActivity()), PorterDuff.Mode.SRC_ATOP);
         }
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

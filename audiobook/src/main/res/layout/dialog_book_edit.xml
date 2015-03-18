@@ -33,7 +33,7 @@
         android:layout_marginTop="2dp"
         android:gravity="center_vertical"
         android:text="@string/book_add_empty_title"
-        android:textColor="@color/dark_red"
+        android:textColor="?attr/colorAccent"
         android:textSize="15sp"
         android:visibility="invisible" />
 

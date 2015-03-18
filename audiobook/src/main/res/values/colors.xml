@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="dark_red">#ffcc0000</color>
-
-    <color name="primary">#ff7986cb</color>
-    <color name="primaryDark">#ff5c6bc0</color>
-    <color name="colorAccent">#ff009688</color>
+    <color name="dark_primary">#455a64</color>
+    <color name="dark_primary_dark">#37474f</color>
+    <color name="dark_accent">#e91e63</color>
+    <color name="dark_accent_dark">#c2185b</color>
+    <color name="light_primary">#ff7986cb</color>
+    <color name="light_primary_dark">#ff5c6bc0</color>
+    <color name="light_accent">#ff009688</color>
+    <color name="light_accent_dark">#00796b</color>
 
     <color name="notification_background_color">#ff181818</color>
     <color name="notification_text_color_primary">@android:color/primary_text_dark</color>

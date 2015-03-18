@@ -31,6 +31,7 @@ import de.ph1b.audiobook.utils.CoverDownloader;
 import de.ph1b.audiobook.utils.DraggableBoxImageView;
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
+import de.ph1b.audiobook.utils.ThemeUtil;
 
 public class EditBookDialog extends DialogFragment implements View.OnClickListener {
 
@@ -68,7 +69,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
         colors.add((float) bitmap.getPixel(0, height));
         colors.add((float) bitmap.getPixel(width, 0));
         colors.add((float) bitmap.getPixel(width, height));
-        float colorAccent = getResources().getColor(R.color.colorAccent);
+        float colorAccent = (float) ThemeUtil.getColorAccent(getActivity());
         for (float c : colors) {
             float diff = Math.abs(c / colorAccent);
             if (diff < 0.9F || diff > 1.1F) {

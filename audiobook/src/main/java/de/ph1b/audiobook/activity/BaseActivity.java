@@ -6,7 +6,7 @@ import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 
 import de.ph1b.audiobook.service.AudioService;
-import de.ph1b.audiobook.utils.PrefsManager;
+import de.ph1b.audiobook.utils.ThemeUtil;
 
 /**
  * Base class for all Activities which extends ActionBarActivity and checks in onResume, if the storage
@@ -16,8 +16,7 @@ public abstract class BaseActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        PrefsManager prefs = new PrefsManager(this);
-        setTheme(prefs.getTheme());
+        setTheme(ThemeUtil.getTheme(this));
         super.onCreate(savedInstanceState);
     }
 

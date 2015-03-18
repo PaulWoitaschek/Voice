@@ -37,7 +37,7 @@
             android:id="@+id/current_cover"
             android:layout_width="72dp"
             android:layout_height="72dp"
-            android:background="@color/primary"
+            android:background="?attr/colorPrimary"
             android:contentDescription="@string/current_cover" />
 
         <FrameLayout

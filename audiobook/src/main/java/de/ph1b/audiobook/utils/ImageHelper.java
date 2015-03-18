@@ -17,8 +17,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import de.ph1b.audiobook.R;
-
 public class ImageHelper {
 
     private static final String TAG = ImageHelper.class.getSimpleName();
@@ -34,7 +32,7 @@ public class ImageHelper {
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTypeface(Typeface.SANS_SERIF);
         Paint backgroundPaint = new Paint();
-        backgroundPaint.setColor(c.getResources().getColor(R.color.colorAccent));
+        backgroundPaint.setColor(ThemeUtil.getColorAccent(c));
         canvas.drawRect(0, 0, reqLength, reqLength, backgroundPaint);
         int y = (int) ((canvas.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2));
         canvas.drawText(bookName.substring(0, 1).toUpperCase(), reqLength / 2, y, textPaint);

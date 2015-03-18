@@ -44,7 +44,7 @@
         android:layout_toLeftOf="@id/numberLayout"
         android:gravity="center_vertical"
         android:text="@string/hours_short"
-        android:textColor="@color/colorAccent"
+        android:textColor="?attr/colorAccent"
         android:textSize="@dimen/dialog_content_text_size"
         tools:ignore="RelativeOverlap" />
 
@@ -57,6 +57,6 @@
         android:layout_toRightOf="@id/numberLayout"
         android:gravity="center_vertical"
         android:text="@string/minutes_short"
-        android:textColor="@color/colorAccent"
+        android:textColor="?attr/colorAccent"
         android:textSize="@dimen/dialog_content_text_size" />
 </RelativeLayout>
