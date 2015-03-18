@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.afollestad.materialdialogs.prefs.MaterialListPreference
+        android:defaultValue="@string/pref_theme_light"
+        android:entries="@array/pref_themes_values"
+        android:entryValues="@array/pref_themes_values"
+        android:key="@string/pref_key_theme"
+        android:summary="@string/pref_theme_light"
+        android:title="@string/pref_theme_title" />
     <Preference
         android:key="@string/pref_key_audiobook_folders"
         android:title="@string/pref_root_folder_title" />
