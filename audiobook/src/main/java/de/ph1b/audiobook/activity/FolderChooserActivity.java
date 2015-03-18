@@ -40,7 +40,7 @@ public class FolderChooserActivity extends ActionBarActivity implements View.OnC
     private static final String CURRENT_FOLDER_NAME = "currentFolderName";
     private static final String TAG = FolderChooserActivity.class.getSimpleName();
     private final ArrayList<File> currentFolderContent = new ArrayList<>();
-    boolean multiSd = true;
+    private boolean multiSd = true;
     private ArrayList<File> rootDirs;
     private File chosenFolder = null;
     private TextView currentFolderName;

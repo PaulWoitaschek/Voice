@@ -14,7 +14,6 @@ public class PrefsManager {
 
     private static final String PREF_KEY_CURRENT_BOOK = "currentBook";
     private static final String PREF_KEY_AUDIOBOOK_FOLDERS = "folders";
-    private static final String PREF_KEY_LAST_FOLDER = "prefKeyLastFolder";
     private final Context c;
     private final SharedPreferences sp;
 
