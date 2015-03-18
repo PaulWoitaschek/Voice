@@ -164,12 +164,6 @@ public class BookAddingService extends Service {
                     return;
                 }
 
-                fillMissingCovers();
-                if (stopScanner) {
-                    L.d(TAG, "aborting scanFiles after fillMissingCovers");
-                    return;
-                }
-
                 L.d(TAG, "scanner finished normally");
             }
         });
@@ -302,19 +296,6 @@ public class BookAddingService extends Service {
             }
         }
         return returnList;
-    }
-
-    private void fillMissingCovers() {
-        for (Book b : allBooks) {
-            String coverPath = b.getCover();
-            if (coverPath == null || !new File(coverPath).exists()) {
-                Bitmap cover = ImageHelper.genCapital(b.getName(), this);
-                coverPath = ImageHelper.saveCover(cover, this);
-                b.setCover(coverPath);
-                db.updateBook(b);
-                L.d(TAG, "updated cover from book=" + b);
-            }
-        }
     }
 
     @Nullable
