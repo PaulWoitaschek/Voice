@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.FolderAdapter;
+import de.ph1b.audiobook.service.BookAddingService;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
 import de.ph1b.audiobook.utils.PrefsManager;
 
@@ -227,14 +228,14 @@ public class FolderChooserActivity extends ActionBarActivity {
         upButton.setEnabled(weAreOnTop());
     }
 
+    /**
+     * Gets the containing files of a folder (restricted to music and folders) in a naturally sorted
+     * order.
+     * @param file The file to look for containing files
+     * @return The containing files
+     */
     private ArrayList<File> getFilesFromFolder(File file) {
-        FileFilter directoryFilter = new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                return pathname.isDirectory();
-            }
-        };
-        File[] containing = file.listFiles(directoryFilter);
+        File[] containing = file.listFiles(BookAddingService.folderAndMusicFilter);
         ArrayList<File> asList = new ArrayList<>(Arrays.asList(containing));
         Collections.sort(asList, new NaturalOrderComparator());
         return asList;

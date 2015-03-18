@@ -36,6 +36,12 @@ import de.ph1b.audiobook.utils.PrefsManager;
 
 public class BookAddingService extends Service {
 
+    public static final FileFilter folderAndMusicFilter = new FileFilter() {
+        @Override
+        public boolean accept(File pathname) {
+            return isAudio(pathname) || pathname.isDirectory();
+        }
+    };
     private static final String ACTION_UPDATE_BOOKS = "actionUpdateBooks";
     private static final String TAG = BookAddingService.class.getSimpleName();
     private static final ArrayList<String> audioTypes = new ArrayList<>();
@@ -72,12 +78,6 @@ public class BookAddingService extends Service {
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final ReentrantLock bookLock = new ReentrantLock();
-    private final FileFilter folderAndMusicFilter = new FileFilter() {
-        @Override
-        public boolean accept(File pathname) {
-            return isAudio(pathname) || pathname.isDirectory();
-        }
-    };
     private BaseApplication baseApplication;
     private ArrayList<Book> allBooks;
     private PrefsManager prefs;
@@ -88,6 +88,15 @@ public class BookAddingService extends Service {
         Intent i = new Intent(c, BookAddingService.class);
         i.setAction(ACTION_UPDATE_BOOKS);
         return i;
+    }
+
+    private static boolean isAudio(File f) {
+        for (String s : audioTypes) {
+            if (f.getName().endsWith(s)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -168,15 +177,6 @@ public class BookAddingService extends Service {
 
     private boolean isImage(File f) {
         for (String s : imageTypes) {
-            if (f.getName().endsWith(s)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isAudio(File f) {
-        for (String s : audioTypes) {
             if (f.getName().endsWith(s)) {
                 return true;
             }
