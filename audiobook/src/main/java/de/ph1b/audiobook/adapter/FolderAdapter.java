@@ -65,8 +65,13 @@ public class FolderAdapter extends BaseAdapter {
         File selectedFile = data.get(position);
 
         convertView.setEnabled(selectedFile.isDirectory());
-
         viewHolder.textView.setText(selectedFile.getName());
+
+        if (selectedFile.isDirectory()) {
+            viewHolder.textView.setTextAppearance(c, R.style.Base_TextAppearance_AppCompat_Medium);
+        } else {
+            viewHolder.textView.setTextColor(c.getResources().getColor(R.color.text_diabled));
+        }
         return convertView;
     }
 
