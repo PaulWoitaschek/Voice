@@ -16,15 +16,9 @@ import de.ph1b.audiobook.dialog.SeekPreferenceDialog;
 import de.ph1b.audiobook.dialog.SleepPreferenceDialog;
 import de.ph1b.audiobook.utils.PrefsManager;
 
-public class PreferencesFragment extends PreferenceFragment {
+public class PreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = PreferencesFragment.class.getSimpleName();
-    private final SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-            initValues();
-        }
-    };
     private PrefsManager prefs;
     private SharedPreferences sp;
 
@@ -39,7 +33,6 @@ public class PreferencesFragment extends PreferenceFragment {
     }
 
     private void initValues() {
-
         // seek pref
         int seekAmount = prefs.getSeekTime();
         String seekSummary = String.valueOf(seekAmount) + " " + getString(R.string.seconds);
@@ -73,13 +66,17 @@ public class PreferencesFragment extends PreferenceFragment {
     public void onResume() {
         super.onResume();
         initValues();
-        sp.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
+        sp.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        sp.unregisterOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
+        sp.unregisterOnSharedPreferenceChangeListener(this);
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        initValues();
+    }
 }
