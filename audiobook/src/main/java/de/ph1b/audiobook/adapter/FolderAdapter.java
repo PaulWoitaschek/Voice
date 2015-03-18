@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,7 @@ public class FolderAdapter extends BaseAdapter {
         return getCustomView(position, convertView, parent);
     }
 
+    @SuppressWarnings("deprecation")
     private View getCustomView(int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
         if (convertView == null) {
@@ -63,15 +65,20 @@ public class FolderAdapter extends BaseAdapter {
         }
 
         File selectedFile = data.get(position);
+        boolean isDirectory = selectedFile.isDirectory();
 
-        convertView.setEnabled(selectedFile.isDirectory());
+        convertView.setEnabled(isDirectory);
         viewHolder.textView.setText(selectedFile.getName());
 
-        if (selectedFile.isDirectory()) {
+        if (isDirectory) {
             viewHolder.textView.setTextAppearance(c, R.style.Base_TextAppearance_AppCompat_Medium);
         } else {
             viewHolder.textView.setTextColor(c.getResources().getColor(R.color.text_diabled));
         }
+        Drawable icon = isDirectory ? c.getResources().getDrawable(R.drawable.ic_folder_grey600_48dp) :
+                c.getResources().getDrawable(R.drawable.ic_audiotrack_grey600_48dp);
+        viewHolder.textView.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
+
         return convertView;
     }
 
