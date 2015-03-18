@@ -28,17 +28,21 @@ import de.ph1b.audiobook.adapter.FolderAdapter;
 import de.ph1b.audiobook.service.BookAddingService;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
-import de.ph1b.audiobook.utils.PrefsManager;
 
+/**
+ * Activity for choosing an audiobook folder. If there are multiple SD-Cards, the Activity unifies
+ * them to a fake-folder structure. We must make sure that this is not chosable. When there are no
+ * multiple sd-cards, we will directly show the content of the 1 SD Card.
+ */
 public class FolderChooserActivity extends ActionBarActivity implements View.OnClickListener {
 
     public static final String CHOSEN_FOLDER = "chosenFolder";
     private static final String CURRENT_FOLDER_NAME = "currentFolderName";
     private static final String TAG = FolderChooserActivity.class.getSimpleName();
-    private PrefsManager prefs;
+    private final ArrayList<File> currentFolderContent = new ArrayList<>();
+    boolean multiSd = true;
     private ArrayList<File> rootDirs;
     private File chosenFolder = null;
-    private ArrayList<File> currentFolderContent;
     private TextView currentFolderName;
     private Button chooseButton;
     private FolderAdapter adapter;
@@ -109,6 +113,7 @@ public class FolderChooserActivity extends ActionBarActivity implements View.OnC
                 paths.add(f);
         }
         Collections.sort(paths, new NaturalOrderComparator());
+        //return new ArrayList<>(Arrays.asList(paths.get(0)));
         return paths;
     }
 
@@ -121,16 +126,12 @@ public class FolderChooserActivity extends ActionBarActivity implements View.OnC
         setButtonEnabledDisabled();
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // init fields
         setContentView(R.layout.activity_folder_chooser);
-        rootDirs = getStorageDirectories();
-        prefs = new PrefsManager(this);
-        currentFolderContent = new ArrayList<>(rootDirs);
 
         //get views
         ListView listView = (ListView) findViewById(R.id.listView);
@@ -151,22 +152,28 @@ public class FolderChooserActivity extends ActionBarActivity implements View.OnC
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 File selectedFile = adapter.getItem(position);
-                if (selectedFile.isDirectory()) {
+                if (selectedFile.isDirectory() && selectedFile.canRead()) {
                     changeFolder(adapter.getItem(position));
                 }
             }
         });
 
+        rootDirs = getStorageDirectories();
+        if (rootDirs.size() == 1) {
+            changeFolder(rootDirs.get(0));
+            multiSd = false;
+        } else {
+            currentFolderContent.addAll(rootDirs);
+        }
+
         //handle runtime
         if (savedInstanceState != null) {
             String savedFolderPath = savedInstanceState.getString(CURRENT_FOLDER_NAME);
             if (savedFolderPath != null) {
-                changeFolder(new File(savedFolderPath));
-            }
-        } else {
-            File prefsAudiobookFolder = new File(prefs.latestAudiobookFolder());
-            if (prefsAudiobookFolder.exists() && prefsAudiobookFolder.isDirectory() && prefsAudiobookFolder.canRead()) {
-                changeFolder(prefsAudiobookFolder);
+                File f = new File(savedFolderPath);
+                if (f.exists() && f.canRead()) {
+                    changeFolder(f);
+                }
             }
         }
 
@@ -181,16 +188,29 @@ public class FolderChooserActivity extends ActionBarActivity implements View.OnC
         }
     }
 
+    private boolean canGoBack() {
+        if (multiSd) {
+            return chosenFolder != null;
+        } else {
+            for (File f : rootDirs) {
+                if (f.equals(chosenFolder)) {
+                    return false; //to go up we must not already be in top level
+                }
+            }
+            return true;
+        }
+    }
+
     /**
      * Sets the choose button enabled or disabled, depending on where we are in the hierarchy
      */
     private void setButtonEnabledDisabled() {
-        boolean enableButtons = chosenFolder != null;
+        boolean upEnabled = canGoBack();
+        boolean chooseEnabled = !multiSd || upEnabled;
 
-        chooseButton.setEnabled(enableButtons);
-        upButton.setEnabled(enableButtons);
-
-        @SuppressWarnings("deprecation") Drawable upIcon = enableButtons ? getResources().getDrawable(R.drawable.ic_arrow_up_grey600_48dp) : null;
+        chooseButton.setEnabled(chooseEnabled);
+        upButton.setEnabled(upEnabled);
+        @SuppressWarnings("deprecation") Drawable upIcon = upEnabled ? getResources().getDrawable(R.drawable.ic_arrow_up_grey600_48dp) : null;
         upButton.setImageDrawable(upIcon);
     }
 
@@ -210,10 +230,10 @@ public class FolderChooserActivity extends ActionBarActivity implements View.OnC
 
     @Override
     public void onBackPressed() {
-        if (chosenFolder == null) {
-            super.onBackPressed();
-        } else {
+        if (canGoBack()) {
             up();
+        } else {
+            super.onBackPressed();
         }
     }
 
@@ -227,7 +247,7 @@ public class FolderChooserActivity extends ActionBarActivity implements View.OnC
                 chosenFolderIsInRoot = true;
             }
         }
-        if (chosenFolderIsInRoot) {
+        if (multiSd && chosenFolderIsInRoot) {
             chosenFolder = null;
             currentFolderName.setText("");
             currentFolderContent.clear();
@@ -252,7 +272,6 @@ public class FolderChooserActivity extends ActionBarActivity implements View.OnC
                 break;
             case R.id.choose:
                 String path = chosenFolder.getAbsolutePath();
-                prefs.setLatestChosenFolder(path);
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra(CHOSEN_FOLDER, path);
                 setResult(RESULT_OK, returnIntent);

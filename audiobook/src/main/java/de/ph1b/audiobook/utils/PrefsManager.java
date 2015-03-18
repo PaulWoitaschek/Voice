@@ -46,16 +46,6 @@ public class PrefsManager {
         editor.apply();
     }
 
-    public String latestAudiobookFolder() {
-        return sp.getString(PREF_KEY_LAST_FOLDER, "");
-    }
-
-    public void setLatestChosenFolder(String folder) {
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString(PREF_KEY_LAST_FOLDER, folder);
-        editor.apply();
-    }
-
     public boolean stopAfterCurrentTrack() {
         return sp.getBoolean(c.getString(R.string.pref_key_track_to_end), false);
     }
