@@ -7,7 +7,7 @@
         <item name="android:imageButtonStyle">@style/CustomButtonStyle</item>
     </style>
 
-    <style name="DarkTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    <style name="DarkTheme" parent="Theme.AppCompat">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
