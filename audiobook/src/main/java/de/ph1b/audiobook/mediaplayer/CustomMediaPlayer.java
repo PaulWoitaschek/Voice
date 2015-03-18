@@ -278,7 +278,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     @Override
     public void setWakeMode(Context context, int mode) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, CustomMediaPlayer.class.getName());
+        wakeLock = pm.newWakeLock(mode, TAG);
         wakeLock.setReferenceCounted(false);
     }
 
