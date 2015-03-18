@@ -69,7 +69,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.0.0'
     compile 'com.android.support:recyclerview-v7:22.0.0'
     compile 'com.android.support:cardview-v7:22.0.0'
-    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     compile 'com.squareup.okhttp:okhttp:2.2.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
     compile 'com.squareup.picasso:picasso:2.4.0'
