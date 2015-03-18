@@ -168,14 +168,12 @@ public class Book implements Comparable<Book> {
         this.name = name;
     }
 
+    @Nullable
     public String getCover() {
         return cover;
     }
 
-    public void setCover(String cover) {
-        if (cover == null) {
-            throw new NullPointerException("cover must not be null");
-        }
+    public void setCover(@Nullable String cover) {
         this.cover = cover;
     }
 
