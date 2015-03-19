@@ -3,16 +3,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
-    android:gravity="center_vertical"
     android:layout_gravity="center_vertical"
     android:baselineAligned="false"
+    android:gravity="center_vertical"
     android:orientation="horizontal">
 
     <include
         layout="@layout/activity_book_play_cover"
-        android:layout_weight="1"
         android:layout_width="0dp"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
     <View
         android:layout_width="2dp"
@@ -21,9 +21,9 @@
 
     <include
         layout="@layout/activity_book_play_player"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="1"
         android:layout_width="0dp"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1" />
 
 </LinearLayout>

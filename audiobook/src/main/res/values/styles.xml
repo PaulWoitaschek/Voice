@@ -26,6 +26,8 @@
 
         <item name="text_primary">@color/light_text_primary</item>
         <item name="text_secondary">@color/light_text_secondary</item>
+
+        <item name="folder_overview_trash">@drawable/ic_delete_grey600_24dp</item>
     </style>
 
     <style name="DarkTheme" parent="Theme.AppCompat">
@@ -54,6 +56,8 @@
 
         <item name="text_primary">@color/dark_text_primary</item>
         <item name="text_secondary">@color/dark_text_secondary</item>
+
+        <item name="folder_overview_trash">@drawable/ic_delete_white_24dp</item>
     </style>
 
     <style name="CustomButtonStyle" parent="@android:style/Widget.ImageButton">

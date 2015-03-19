@@ -12,7 +12,7 @@
     <attr name="book_play_fast_forward" format="reference" />
     <attr name="book_play_next" format="reference" />
     <attr name="book_play_previous" format="reference" />
-    
+
     <!-- FolderChoose -->
     <attr name="folder_choose_folder" format="reference" />
     <attr name="folder_choose_track" format="reference" />
@@ -20,4 +20,7 @@
     <attr name="folder_choose" format="reference" />
     <attr name="text_primary" format="reference" />
     <attr name="text_secondary" format="reference" />
+
+    <!-- Folder Overview Dialog -->
+    <attr name="folder_overview_trash" format="reference" />
 </resources>

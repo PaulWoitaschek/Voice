@@ -2,9 +2,9 @@
     android:id="@+id/bottom_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
     android:layout_marginBottom="@dimen/vertical_margin"
     android:layout_marginTop="@dimen/vertical_margin"
-    android:layout_gravity="center_vertical"
     android:gravity="center_vertical"
     android:orientation="vertical">
 
