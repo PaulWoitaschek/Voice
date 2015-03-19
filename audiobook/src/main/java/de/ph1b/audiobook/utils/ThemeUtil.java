@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;

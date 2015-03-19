@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.utils;
 
 import android.app.Application;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.preference.PreferenceManager;
@@ -173,16 +174,20 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
         String stackTrace = Log.getStackTraceString(ex);
         String time = new Date(System.currentTimeMillis()).toString();
         String message = ex.getMessage();
-        String report = "occured_at\n" + time + "\n\n" +
+        String report = "occurred_at\n" + time + "\n\n" +
                 "message\n" + message + "\n\n" +
                 "stacktrace\n" + stackTrace;
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                "mailto", "woitaschek@gmail.com", null));
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Bugreport");
+                "mailTo", "woitaschek@gmail.com", null));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Bug report");
         emailIntent.putExtra(Intent.EXTRA_TEXT, report);
-        Intent startClientIntent = Intent.createChooser(emailIntent, "Sending mail...");
-        startClientIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        getApplicationContext().startActivity(startClientIntent);
+        try {
+            Intent startClientIntent = Intent.createChooser(emailIntent, "Sending mail...");
+            startClientIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            getApplicationContext().startActivity(startClientIntent);
+        } catch (ActivityNotFoundException ignored) {
+
+        }
         defaultUEH.uncaughtException(thread, ex);
     }
 
