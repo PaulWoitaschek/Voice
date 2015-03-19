@@ -23,4 +23,8 @@
 
     <!-- Folder Overview Dialog -->
     <attr name="folder_overview_trash" format="reference" />
+
+    <!-- BookEditDialog -->
+    <attr name="edit_next" format="reference" />
+    <attr name="edit_prev" format="reference" />
 </resources>
