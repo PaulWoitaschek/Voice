@@ -27,6 +27,9 @@
         <!-- BookEditDialog -->
         <item name="edit_next">@drawable/ic_navigate_next_grey600_36dp</item>
         <item name="edit_prev">@drawable/ic_navigate_before_grey600_36dp</item>
+        
+        <!-- Bookmark -->
+        <item name="bookmark_add_button">@drawable/ic_add_circle_outline_grey600_36dp</item>
 
         <item name="text_primary">@color/light_text_primary</item>
         <item name="text_secondary">@color/light_text_secondary</item>
@@ -61,6 +64,9 @@
         <!-- BookEditDialog -->
         <item name="edit_next">@drawable/ic_navigate_next_white_36dp</item>
         <item name="edit_prev">@drawable/ic_navigate_before_white_36dp</item>
+
+        <!-- Bookmark -->
+        <item name="bookmark_add_button">@drawable/ic_bookmark_outline_white_24dp</item>
 
         <item name="text_primary">@color/dark_text_primary</item>
         <item name="text_secondary">@color/dark_text_secondary</item>
