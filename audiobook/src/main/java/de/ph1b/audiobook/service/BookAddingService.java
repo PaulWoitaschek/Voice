@@ -18,10 +18,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 import de.ph1b.audiobook.model.Book;
@@ -115,8 +115,7 @@ public class BookAddingService extends Service {
     }
 
     private void addNewBooks() {
-        final int READ_FILES_AT_ONCE = Runtime.getRuntime().availableProcessors();
-        ExecutorService bookAdder = Executors.newFixedThreadPool(READ_FILES_AT_ONCE, new ThreadFactory() {
+        ExecutorService bookAdder = Executors.newSingleThreadExecutor(new ThreadFactory() {
             @Override
             public Thread newThread(@NonNull Runnable r) {
                 Thread thread = new Thread(r);
@@ -126,18 +125,16 @@ public class BookAddingService extends Service {
         });
 
         ArrayList<File> containingFiles = getContainingFiles();
-        final CountDownLatch countDownLatch = new CountDownLatch(containingFiles.size());
         for (final File f : containingFiles) {
             bookAdder.execute(new Runnable() {
                 @Override
                 public void run() {
                     addNewBook(f);
-                    countDownLatch.countDown();
                 }
             });
         }
         try {
-            countDownLatch.await();
+            bookAdder.awaitTermination(10, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
