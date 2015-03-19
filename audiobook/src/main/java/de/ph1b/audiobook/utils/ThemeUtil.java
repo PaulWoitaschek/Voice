@@ -1,12 +1,15 @@
 package de.ph1b.audiobook.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.NumberPicker;
@@ -36,12 +39,25 @@ public class ThemeUtil {
         }
     }
 
-    public static int getColorPrimaryDark(Context c){
-        if (getTheme(c) == R.style.LightTheme){
+    public static int getColorPrimaryDark(Context c) {
+        if (getTheme(c) == R.style.LightTheme) {
             return c.getResources().getColor(R.color.light_primary_dark);
         } else {
             return c.getResources().getColor(R.color.dark_primary_dark);
         }
+    }
+
+    public static int getIcon(Context c, int attr) {
+        TypedValue typedValue = new TypedValue();
+        c.getTheme().resolveAttribute(attr, typedValue, true);
+        int[] attrArray = new int[]{attr};
+        TypedArray typedArray = c.obtainStyledAttributes(typedValue.data, attrArray);
+        int icon = typedArray.getResourceId(0, -1);
+        if (icon == -1) {
+            throw new IllegalArgumentException("Icon with attr=" + attr + " not found");
+        }
+        typedArray.recycle();
+        return icon;
     }
 
 

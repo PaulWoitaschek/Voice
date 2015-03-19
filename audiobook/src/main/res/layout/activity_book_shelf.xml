@@ -74,7 +74,7 @@
                     android:layout_width="@dimen/thumb_size"
                     android:layout_height="@dimen/thumb_size"
                     android:contentDescription="@string/current_playing"
-                    android:src="@drawable/ic_play_arrow_grey600_48dp" />
+                    android:src="?attr/book_shelf_play" />
 
             </LinearLayout>
 

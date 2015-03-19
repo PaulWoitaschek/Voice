@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="colorAccentDark" format="reference"/>
+    <attr name="colorAccentDark" format="reference" />
     <attr name="theme_name" format="reference" />
+
+    <!--Bookshelf-->
+    <attr name="book_shelf_play" format="reference" />
+    <attr name="book_shelf_pause" format="reference" />
 </resources>

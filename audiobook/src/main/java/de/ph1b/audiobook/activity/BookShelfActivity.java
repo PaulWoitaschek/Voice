@@ -44,6 +44,7 @@ import de.ph1b.audiobook.utils.CustomOnSimpleGestureListener;
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
+import de.ph1b.audiobook.utils.ThemeUtil;
 
 public class BookShelfActivity extends BaseActivity implements View.OnClickListener, EditBookDialog.OnEditBookFinished, RecyclerView.OnItemTouchListener, BaseApplication.OnBookAddedListener, BaseApplication.OnBookDeletedListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener {
 
@@ -137,7 +138,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
                 ArrayList<Bitmap> bitmap = new ArrayList<>();
                 File coverFile = bookToEdit.getCoverFile();
-                if (coverFile != null){
+                if (coverFile != null) {
                     Bitmap defaultCover = BitmapFactory.decodeFile(coverFile.getAbsolutePath());
                     if (defaultCover != null) {
                         bitmap.add(defaultCover);
@@ -399,9 +400,9 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void run() {
                 if (state == BaseApplication.PlayState.PLAYING) {
-                    currentPlaying.setImageResource(R.drawable.ic_pause_grey600_48dp);
+                    currentPlaying.setImageResource(ThemeUtil.getIcon(BookShelfActivity.this, R.attr.book_shelf_pause));
                 } else {
-                    currentPlaying.setImageResource(R.drawable.ic_play_arrow_grey600_48dp);
+                    currentPlaying.setImageResource(ThemeUtil.getIcon(BookShelfActivity.this, R.attr.book_shelf_play));
                 }
             }
         });
