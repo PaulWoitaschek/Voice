@@ -219,7 +219,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         if (oldBookValues != null && !oldBookValues.getName().equals(newBook.getName())) {
             File configFile = getConfigFile(oldBookValues.getRoot(), oldBookValues.getName());
             //noinspection ResultOfMethodCallIgnored
-            configFile.renameTo(new File(configFile.getParent(), newBook.getName() + JSON_EXTENSION));
+            configFile.renameTo(new File(configFile.getParent(), "." + newBook.getName() + JSON_EXTENSION));
         }
 
         ContentValues cv = new ContentValues();
@@ -351,21 +351,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         try {
             File root = new File(rootPath);
             if (root.isDirectory()) {
-                configFile = new File(root, bookName + JSON_EXTENSION);
+                configFile = new File(root, "." + bookName + JSON_EXTENSION);
                 if (!configFile.exists()) {
                     File[] containingJsonFiles = root.listFiles(jsonFilter);
                     if (containingJsonFiles.length == 1) {
                         configFile = containingJsonFiles[0];
-                        configFile.renameTo(new File(root, bookName + JSON_EXTENSION));
+                        configFile.renameTo(new File(root, "." + bookName + JSON_EXTENSION));
                     } else {
                         configFile.createNewFile();
                     }
-                }
-            } else {
-                File parent = root.getParentFile();
-                configFile = new File(parent, bookName + JSON_EXTENSION);
-                if (!configFile.exists()) {
-                    configFile.createNewFile();
                 }
             }
         } catch (IOException e) {
