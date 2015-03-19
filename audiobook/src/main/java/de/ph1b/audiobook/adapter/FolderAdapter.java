@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.utils.ThemeUtil;
 
 public class FolderAdapter extends BaseAdapter {
 
@@ -67,16 +68,15 @@ public class FolderAdapter extends BaseAdapter {
         File selectedFile = data.get(position);
         boolean isDirectory = selectedFile.isDirectory();
 
-        convertView.setEnabled(isDirectory);
         viewHolder.textView.setText(selectedFile.getName());
 
         if (isDirectory) {
-            viewHolder.textView.setTextAppearance(c, R.style.Base_TextAppearance_AppCompat_Medium);
+            viewHolder.textView.setTextColor(c.getResources().getColor(ThemeUtil.getResourceId(c, R.attr.text_primary)));
         } else {
-            viewHolder.textView.setTextColor(c.getResources().getColor(R.color.text_diabled));
+            viewHolder.textView.setTextColor(c.getResources().getColor(ThemeUtil.getResourceId(c, R.attr.text_secondary)));
         }
-        Drawable icon = isDirectory ? c.getResources().getDrawable(R.drawable.ic_folder_grey600_48dp) :
-                c.getResources().getDrawable(R.drawable.ic_audiotrack_grey600_48dp);
+        Drawable icon = isDirectory ? c.getResources().getDrawable(ThemeUtil.getResourceId(c, R.attr.folder_choose_folder)) :
+                c.getResources().getDrawable(ThemeUtil.getResourceId(c, R.attr.folder_choose_track));
         viewHolder.textView.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
 
         return convertView;

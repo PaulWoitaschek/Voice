@@ -13,5 +13,8 @@
     <color name="notification_text_color_primary">@android:color/primary_text_dark</color>
     <color name="notification_text_secondary">@android:color/secondary_text_dark</color>
 
-    <color name="text_diabled">#28000000</color>
+    <color name="dark_text_primary">#deffffff</color>
+    <color name="dark_text_secondary">#73ffffff</color>
+    <color name="light_text_primary">#de000000</color>
+    <color name="light_text_secondary">#73000000</color>
 </resources>

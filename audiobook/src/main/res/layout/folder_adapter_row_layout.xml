@@ -15,10 +15,10 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_weight="1"
-        android:drawableLeft="@drawable/ic_folder_grey600_48dp"
-        android:drawableStart="@drawable/ic_folder_grey600_48dp"
+        android:drawableLeft="?attr/folder_choose_folder"
+        android:drawableStart="?attr/folder_choose_folder"
         android:gravity="center_vertical"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textSize="16sp"
         tools:text="ExampleFolder" />
 
 </LinearLayout>

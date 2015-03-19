@@ -18,6 +18,14 @@
         <item name="book_play_fast_forward">@drawable/ic_fast_forward_grey600_36dp</item>
         <item name="book_play_next">@drawable/ic_skip_next_grey600_36dp</item>
         <item name="book_play_previous">@drawable/ic_skip_previous_grey600_36dp</item>
+
+        <!-- FolderChoose -->
+        <item name="folder_choose_folder">@drawable/ic_folder_grey600_48dp</item>
+        <item name="folder_choose_track">@drawable/ic_audiotrack_grey600_48dp</item>
+        <item name="folder_choose_up">@drawable/ic_arrow_up_grey600_48dp</item>
+
+        <item name="text_primary">@color/light_text_primary</item>
+        <item name="text_secondary">@color/light_text_secondary</item>
     </style>
 
     <style name="DarkTheme" parent="Theme.AppCompat">
@@ -38,6 +46,14 @@
         <item name="book_play_fast_forward">@drawable/ic_fast_forward_white_36dp</item>
         <item name="book_play_next">@drawable/ic_skip_next_white_36dp</item>
         <item name="book_play_previous">@drawable/ic_skip_previous_white_36dp</item>
+
+        <!-- FolderChoose -->
+        <item name="folder_choose_folder">@drawable/ic_folder_white_48dp</item>
+        <item name="folder_choose_track">@drawable/ic_audiotrack_white_48dp</item>
+        <item name="folder_choose_up">@drawable/ic_arrow_up_white_48dp</item>
+
+        <item name="text_primary">@color/dark_text_primary</item>
+        <item name="text_secondary">@color/dark_text_secondary</item>
     </style>
 
     <style name="CustomButtonStyle" parent="@android:style/Widget.ImageButton">

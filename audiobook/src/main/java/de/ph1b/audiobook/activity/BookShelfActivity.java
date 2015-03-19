@@ -400,9 +400,9 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void run() {
                 if (state == BaseApplication.PlayState.PLAYING) {
-                    currentPlaying.setImageResource(ThemeUtil.getIcon(BookShelfActivity.this, R.attr.book_shelf_pause));
+                    currentPlaying.setImageResource(ThemeUtil.getResourceId(BookShelfActivity.this, R.attr.book_shelf_pause));
                 } else {
-                    currentPlaying.setImageResource(ThemeUtil.getIcon(BookShelfActivity.this, R.attr.book_shelf_play));
+                    currentPlaying.setImageResource(ThemeUtil.getResourceId(BookShelfActivity.this, R.attr.book_shelf_play));
                 }
             }
         });

@@ -12,4 +12,12 @@
     <attr name="book_play_fast_forward" format="reference" />
     <attr name="book_play_next" format="reference" />
     <attr name="book_play_previous" format="reference" />
+    
+    <!-- FolderChoose -->
+    <attr name="folder_choose_folder" format="reference" />
+    <attr name="folder_choose_track" format="reference" />
+    <attr name="folder_choose_up" format="reference" />
+    <attr name="folder_choose" format="reference" />
+    <attr name="text_primary" format="reference" />
+    <attr name="text_secondary" format="reference" />
 </resources>

@@ -46,19 +46,18 @@ public class ThemeUtil {
         }
     }
 
-    public static int getIcon(Context c, int attr) {
+    public static int getResourceId(Context c, int attr) {
         TypedValue typedValue = new TypedValue();
         c.getTheme().resolveAttribute(attr, typedValue, true);
         int[] attrArray = new int[]{attr};
         TypedArray typedArray = c.obtainStyledAttributes(typedValue.data, attrArray);
-        int icon = typedArray.getResourceId(0, -1);
-        if (icon == -1) {
+        int resId = typedArray.getResourceId(0, -1);
+        if (resId == -1) {
             throw new IllegalArgumentException("Icon with attr=" + attr + " not found");
         }
         typedArray.recycle();
-        return icon;
+        return resId;
     }
-
 
     public static int getTheme(Context c) {
         Resources r = c.getResources();

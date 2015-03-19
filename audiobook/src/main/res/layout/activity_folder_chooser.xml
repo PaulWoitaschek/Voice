@@ -17,7 +17,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:contentDescription="@string/up"
-            android:src="@drawable/ic_arrow_up_grey600_48dp" />
+            android:src="?attr/folder_choose_up" />
 
         <LinearLayout
             android:layout_width="0dp"

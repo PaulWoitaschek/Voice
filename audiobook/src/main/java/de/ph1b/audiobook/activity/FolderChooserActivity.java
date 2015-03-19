@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,13 +27,14 @@ import de.ph1b.audiobook.adapter.FolderAdapter;
 import de.ph1b.audiobook.service.BookAddingService;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
+import de.ph1b.audiobook.utils.ThemeUtil;
 
 /**
  * Activity for choosing an audiobook folder. If there are multiple SD-Cards, the Activity unifies
  * them to a fake-folder structure. We must make sure that this is not chosable. When there are no
  * multiple sd-cards, we will directly show the content of the 1 SD Card.
  */
-public class FolderChooserActivity extends ActionBarActivity implements View.OnClickListener {
+public class FolderChooserActivity extends BaseActivity implements View.OnClickListener {
 
     public static final String CHOSEN_FOLDER = "chosenFolder";
     private static final String CURRENT_FOLDER_NAME = "currentFolderName";
@@ -210,7 +210,7 @@ public class FolderChooserActivity extends ActionBarActivity implements View.OnC
 
         chooseButton.setEnabled(chooseEnabled);
         upButton.setEnabled(upEnabled);
-        @SuppressWarnings("deprecation") Drawable upIcon = upEnabled ? getResources().getDrawable(R.drawable.ic_arrow_up_grey600_48dp) : null;
+        @SuppressWarnings("deprecation") Drawable upIcon = upEnabled ? getResources().getDrawable(ThemeUtil.getResourceId(this, R.attr.folder_choose_up)) : null;
         upButton.setImageDrawable(upIcon);
     }
 
