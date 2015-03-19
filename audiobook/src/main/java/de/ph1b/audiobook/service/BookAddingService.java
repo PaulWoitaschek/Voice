@@ -92,7 +92,7 @@ public class BookAddingService extends Service {
 
     private static boolean isAudio(File f) {
         for (String s : audioTypes) {
-            if (f.getName().endsWith(s)) {
+            if (f.getName().toLowerCase().endsWith(s)) {
                 return true;
             }
         }
@@ -171,7 +171,7 @@ public class BookAddingService extends Service {
 
     private boolean isImage(File f) {
         for (String s : imageTypes) {
-            if (f.getName().endsWith(s)) {
+            if (f.getName().toLowerCase().endsWith(s)) {
                 return true;
             }
         }
