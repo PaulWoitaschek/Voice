@@ -31,7 +31,6 @@ import de.ph1b.audiobook.utils.CoverDownloader;
 import de.ph1b.audiobook.utils.DraggableBoxImageView;
 import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.ThemeUtil;
 
 public class EditBookDialog extends DialogFragment implements View.OnClickListener {
 
@@ -39,12 +38,12 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
     public static final String BOOK_COVER = "BOOK_COVER";
     public static final String DIALOG_TITLE = "DIALOG_TITLE";
     private static final String TAG = EditBookDialog.class.getSimpleName();
+    private static final int COVER_REPLACEMENT_POS = 0;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     /**
      * Variable representing if the first cover is a letter - cover. This is recognized by checking
      * if the pixels on the borders are the same as the color accent
      */
-    private boolean firstCoverIsLetterReplacement = false;
     private CoverDownloader coverDownloader;
     private DraggableBoxImageView coverImageView;
     private ProgressBar coverReplacement;
@@ -55,29 +54,6 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
     private int coverPosition = -1;
     private ArrayList<Bitmap> covers;
     private int googleCount = 0;
-
-    private boolean isCoverReplacement(Bitmap bitmap) {
-        /**
-         * Checking if the first color is a letter replacement by checking if the pixels on the edges
-         * are the same as the accent color (the replacement was made of).
-         */
-
-        ArrayList<Float> colors = new ArrayList<>();
-        int height = bitmap.getHeight() - 1;
-        int width = bitmap.getWidth() - 1;
-        colors.add((float) bitmap.getPixel(0, 0));
-        colors.add((float) bitmap.getPixel(0, height));
-        colors.add((float) bitmap.getPixel(width, 0));
-        colors.add((float) bitmap.getPixel(width, height));
-        float colorAccent = (float) ThemeUtil.getColorAccent(getActivity());
-        for (float c : colors) {
-            float diff = Math.abs(c / colorAccent);
-            if (diff < 0.9F || diff > 1.1F) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     @Override
     public void onClick(View view) {
@@ -135,14 +111,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
         String dialogTitle = b.getString(DIALOG_TITLE);
         covers = b.getParcelableArrayList(BOOK_COVER);
 
-        if (covers.size() > 0) {
-            Bitmap firstCover = covers.get(0);
-            firstCoverIsLetterReplacement = isCoverReplacement(firstCover);
-        }
-
-        if (!firstCoverIsLetterReplacement) {
-            covers.add(0, ImageHelper.genCapital(defaultName, getActivity()));
-        }
+        covers.add(COVER_REPLACEMENT_POS, ImageHelper.genCapital(defaultName, getActivity()));
 
         //init view
         //passing null is fine because of fragment
@@ -192,8 +161,9 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
                     if (r.width() > 0 && r.height() > 0) {
                         newCover = covers.get(coverPosition);
                         newCover = Bitmap.createBitmap(newCover, r.left, r.top, r.width(), r.height());
-                    } else {
-                        newCover = covers.get(0); // use the replacement if this is not valid
+                    }
+                    if (coverPosition == COVER_REPLACEMENT_POS) {
+                        newCover = null;
                     }
                 }
                 ((OnEditBookFinished) getActivity()).onEditBookFinished(bookName, newCover, true);
@@ -233,9 +203,9 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
                     emptyTitleText.setVisibility(View.INVISIBLE);
                     editBook.getActionButton(DialogAction.POSITIVE).setEnabled(true);
                     Bitmap newLetterCover = ImageHelper.genCapital(newName, getActivity());
-                    covers.set(0, newLetterCover);
+                    covers.set(COVER_REPLACEMENT_POS, newLetterCover);
                     L.d(TAG, "onTextChanged, setting new cover with newName=" + newName);
-                    if (textLength > 0 && coverPosition == 0) {
+                    if (textLength > 0 && coverPosition == COVER_REPLACEMENT_POS) {
                         L.d(TAG, "textLength > 0 and position==0, so setting new image");
                         coverImageView.setImageBitmap(newLetterCover);
                     }
@@ -249,7 +219,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
         });
 
         // if we are online and at the first (always replacement) cover, immediately load a cover
-        if (coverPosition == 0 && ImageHelper.isOnline(getActivity())) {
+        if (coverPosition == COVER_REPLACEMENT_POS && ImageHelper.isOnline(getActivity())) {
             nextCover.performClick();
         }
 
@@ -310,8 +280,9 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
                     //if we found no bitmap, set old one
                     if (coverPosition != -1) {
                         cover.setImageBitmap(covers.get(coverPosition));
-                        if (coverPosition == 0)
+                        if (coverPosition == 0) {
                             previousCover.setVisibility(View.INVISIBLE);
+                        }
                     }
                 }
             }

@@ -315,8 +315,8 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             // delete old cover
             File oldCover = bookToEdit.getCoverFile();
             if (oldCover != null) {
-                //noinspection ResultOfMethodCallIgnored
                 L.d(TAG, "deleting old cover=" + oldCover);
+                //noinspection ResultOfMethodCallIgnored
                 oldCover.delete();
             }
 
