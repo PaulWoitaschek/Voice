@@ -174,7 +174,23 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 float speed = cursor.getFloat(4);
                 int currentTime = getTimeFromBook(root, name);
                 ArrayList<Chapter> chapters = getChapters(id, db);
-                ArrayList<Bookmark> bookmarks = getBookmarks(root, name);
+                ArrayList<Bookmark> unsafeBookmarks = getBookmarks(root, name);
+
+                ArrayList<Bookmark> safeBookmarks = new ArrayList<>();
+                for (Bookmark b : unsafeBookmarks) {
+                    boolean bookmarkExists = false;
+                    for (Chapter c : chapters) {
+                        if (c.getPath().equals(b.getPath())) {
+                            bookmarkExists = true;
+                            break;
+                        }
+                    }
+                    if (bookmarkExists) {
+                        safeBookmarks.add(b);
+                    } else {
+                        L.e(TAG, "deleted bookmark=" + b + " because it was not in chapters=" + chapters);
+                    }
+                }
 
                 String relPath = getRelPathFromBook(root, name);
                 boolean relPathExists = false;
@@ -188,7 +204,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     currentTime = 0;
                 }
 
-                return new Book(root, name, chapters, bookmarks, cover, speed, id, sortId, currentTime, relPath);
+                return new Book(root, name, chapters, safeBookmarks, cover, speed, id, sortId, currentTime, relPath);
             }
         } finally {
             cursor.close();

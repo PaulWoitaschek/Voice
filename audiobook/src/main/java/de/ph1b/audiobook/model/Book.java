@@ -31,7 +31,23 @@ public class Book implements Comparable<Book> {
         this.root = root;
         this.name = name;
         this.chapters = chapters;
+
+
+        //check if bookmark exists
+        for (Bookmark b : bookmarks) {
+            boolean bookmarkExists = false;
+            for (Chapter c : chapters) {
+                if (b.getPath().equals(c.getPath())) {
+                    bookmarkExists = true;
+                    break;
+                }
+            }
+            if (!bookmarkExists) {
+                throw new IllegalArgumentException("Cannot add bookmark=" + b + " because it is not in chapters=" + chapters);
+            }
+        }
         this.bookmarks = bookmarks;
+
         this.cover = cover;
         this.playbackSpeed = playbackSpeed;
     }
