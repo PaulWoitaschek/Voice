@@ -8,9 +8,16 @@
         <item name="android:imageButtonStyle">@style/CustomButtonStyle</item>
         <item name="md_dark_theme">false</item>
         <item name="theme_name">@string/pref_theme_light</item>
-        
+
+        <!-- BookShelf -->
         <item name="book_shelf_play">@drawable/ic_play_arrow_grey600_48dp</item>
         <item name="book_shelf_pause">@drawable/ic_pause_grey600_48dp</item>
+
+        <!-- BookPlay -->
+        <item name="book_play_rewind">@drawable/ic_fast_rewind_grey600_36dp</item>
+        <item name="book_play_fast_forward">@drawable/ic_fast_forward_grey600_36dp</item>
+        <item name="book_play_next">@drawable/ic_skip_next_grey600_36dp</item>
+        <item name="book_play_previous">@drawable/ic_skip_previous_grey600_36dp</item>
     </style>
 
     <style name="DarkTheme" parent="Theme.AppCompat">
@@ -22,8 +29,15 @@
         <item name="md_dark_theme">true</item>
         <item name="theme_name">@string/pref_theme_dark</item>
 
+        <!-- BookShelf -->
         <item name="book_shelf_play">@drawable/ic_play_arrow_white_48dp</item>
         <item name="book_shelf_pause">@drawable/ic_pause_white_48dp</item>
+
+        <!-- BookPlay -->
+        <item name="book_play_rewind">@drawable/ic_fast_rewind_white_36dp</item>
+        <item name="book_play_fast_forward">@drawable/ic_fast_forward_white_36dp</item>
+        <item name="book_play_next">@drawable/ic_skip_next_white_36dp</item>
+        <item name="book_play_previous">@drawable/ic_skip_previous_white_36dp</item>
     </style>
 
     <style name="CustomButtonStyle" parent="@android:style/Widget.ImageButton">

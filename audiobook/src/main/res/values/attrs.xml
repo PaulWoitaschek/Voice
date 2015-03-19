@@ -6,4 +6,10 @@
     <!--Bookshelf-->
     <attr name="book_shelf_play" format="reference" />
     <attr name="book_shelf_pause" format="reference" />
+
+    <!-- BookPlay -->
+    <attr name="book_play_rewind" format="reference" />
+    <attr name="book_play_fast_forward" format="reference" />
+    <attr name="book_play_next" format="reference" />
+    <attr name="book_play_previous" format="reference" />
 </resources>

@@ -15,7 +15,6 @@
         android:layout_height="match_parent" />
 
     <View
-        android:id="@+id/div1"
         android:layout_width="2dp"
         android:layout_height="match_parent"
         android:background="?attr/colorAccent" />
