@@ -9,7 +9,6 @@ import android.graphics.Typeface;
 import android.media.MediaMetadataRetriever;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 
@@ -56,43 +55,32 @@ public class ImageHelper {
      *
      * @param bitmap The bitmap to be saved
      * @param c      Application context
-     * @return the path where the bitmap has been saved.
      */
-    @Nullable
-    public static String saveCover(Bitmap bitmap, Context c) {
-        String coverPath;
-
+    public static void saveCover(Bitmap bitmap, Context c, String bookRoot, String bookName) {
         int width = bitmap.getWidth();
-        int heigth = bitmap.getHeight();
-        int relation = width / heigth;
+        int height = bitmap.getHeight();
+        int relation = width / height;
         if (relation > 1.05 || relation > 0.95) {
-            int size = Math.min(width, heigth);
+            int size = Math.min(width, height);
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, size, size);
         }
-
-        String storagePlace = Environment.getExternalStorageDirectory().getAbsolutePath() +
-                "/Android/data/" + c.getPackageName() + "/";
-        String fileName = String.valueOf(System.currentTimeMillis()) + ".jpg";
 
         // saving cover
         int coverLength = getCoverLength(c);
         Bitmap cover = Bitmap.createScaledBitmap(bitmap, coverLength, coverLength, true);
-        File coverDir = new File(storagePlace + "cover");
-        File coverFile = new File(coverDir, fileName);
-        //noinspection ResultOfMethodCallIgnored
-        coverDir.mkdirs();
+        File coverFile = new File(bookRoot, "." + bookName + ".jpg");
+        if (coverFile.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            coverFile.delete();
+        }
         try {
             FileOutputStream coverOut = new FileOutputStream(coverFile);
             cover.compress(Bitmap.CompressFormat.JPEG, 90, coverOut);
             coverOut.flush();
             coverOut.close();
-            coverPath = coverFile.getAbsolutePath();
         } catch (IOException e) {
             L.d(TAG, e.getMessage());
-            return null;
         }
-
-        return coverPath;
     }
 
     public static boolean isOnline(Context c) {

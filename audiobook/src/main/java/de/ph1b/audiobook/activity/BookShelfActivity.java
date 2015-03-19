@@ -312,10 +312,17 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onEditBookFinished(String bookName, Bitmap cover, Boolean success) {
         if (success) {
+            // delete old cover
+            File oldCover = bookToEdit.getCoverFile();
+            if (oldCover != null) {
+                //noinspection ResultOfMethodCallIgnored
+                L.d(TAG, "deleting old cover=" + oldCover);
+                oldCover.delete();
+            }
+
             bookToEdit.setName(bookName);
             if (cover != null) {
-                String coverPath = ImageHelper.saveCover(cover, this);
-                bookToEdit.setCover(coverPath);
+                ImageHelper.saveCover(cover, this, bookToEdit.getRoot(), bookName);
             }
             adapter.updateItem(bookToEdit);
             initPlayerWidget();

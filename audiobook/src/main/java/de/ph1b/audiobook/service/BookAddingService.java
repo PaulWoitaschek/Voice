@@ -373,10 +373,8 @@ public class BookAddingService extends Service {
             return null;
         }
 
-
-        String coverPath = null;
-        if (cover != null) {
-            coverPath = ImageHelper.saveCover(cover, this);
+        if (cover != null && !new File(bookRoot, bookName + ".jpg").exists()) {
+            ImageHelper.saveCover(cover, this, bookRoot, bookName);
         }
 
         return new Book(bookRoot, bookName, containingMedia, new ArrayList<Bookmark>(), 1);

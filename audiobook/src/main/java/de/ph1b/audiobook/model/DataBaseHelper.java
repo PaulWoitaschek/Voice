@@ -165,9 +165,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         try {
             if (cursor.moveToFirst()) {
                 String root = cursor.getString(0);
-                String name = cursor.getString(2);
-                long sortId = cursor.getLong(3);
-                float speed = cursor.getFloat(4);
+                String name = cursor.getString(1);
+                long sortId = cursor.getLong(2);
+                float speed = cursor.getFloat(3);
                 int currentTime = getTimeFromBook(root, name);
                 ArrayList<Chapter> chapters = getChapters(id, db);
                 ArrayList<Bookmark> unsafeBookmarks = getBookmarks(root, name);

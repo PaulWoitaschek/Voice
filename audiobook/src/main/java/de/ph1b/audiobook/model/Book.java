@@ -15,7 +15,6 @@ public class Book implements Comparable<Book> {
     private final String root;
     private final ArrayList<Chapter> chapters;
     private final ArrayList<Bookmark> bookmarks;
-    private String cover;
     private long id;
     private long sortId = -1;
     private String name;
@@ -93,7 +92,6 @@ public class Book implements Comparable<Book> {
                 "root=" + root + ", " +
                 "chapters=" + chapters + ", " +
                 "bookmarks=" + bookmarks + ", " +
-                "cover=" + cover + ", " +
                 "id=" + id + ", " +
                 "sortId=" + sortId + ", " +
                 "name=" + name +
@@ -184,23 +182,12 @@ public class Book implements Comparable<Book> {
     }
 
     @Nullable
-    public String getCoverPath() {
-        return cover;
-    }
-
-    @Nullable
     public File getCoverFile() {
-        if (cover != null) {
-            File coverFile = new File(cover);
-            if (coverFile.exists() && coverFile.canRead()) {
-                return coverFile;
-            }
+        File coverFile = new File(root, "." + name + ".jpg");
+        if (coverFile.exists() && coverFile.canRead()) {
+            return coverFile;
         }
         return null;
-    }
-
-    public void setCover(@Nullable String cover) {
-        this.cover = cover;
     }
 
     public long getId() {
