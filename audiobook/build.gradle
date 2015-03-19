@@ -66,6 +66,6 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.3.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.3.0'
     compile 'com.squareup.picasso:picasso:2.5.0'
-    compile 'com.afollestad:material-dialogs:0.6.4.5'
+    compile 'com.afollestad:material-dialogs:0.6.4.6'
     compile 'com.melnykov:floatingactionbutton:1.2.0'
 }
