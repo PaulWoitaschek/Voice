@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.squareup.picasso.Picasso;
@@ -20,7 +19,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -115,14 +113,7 @@ public class BookAddingService extends Service {
     }
 
     private void addNewBooks() {
-        ExecutorService bookAdder = Executors.newSingleThreadExecutor(new ThreadFactory() {
-            @Override
-            public Thread newThread(@NonNull Runnable r) {
-                Thread thread = new Thread(r);
-                thread.setPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-                return thread;
-            }
-        });
+        ExecutorService bookAdder = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
         ArrayList<File> containingFiles = getContainingFiles();
         for (final File f : containingFiles) {
@@ -134,6 +125,7 @@ public class BookAddingService extends Service {
             });
         }
         try {
+            bookAdder.shutdown();
             bookAdder.awaitTermination(10, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
             e.printStackTrace();
