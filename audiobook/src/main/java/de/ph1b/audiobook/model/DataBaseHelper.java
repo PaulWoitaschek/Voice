@@ -28,7 +28,7 @@ import de.ph1b.audiobook.utils.L;
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class DataBaseHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 19;
+    private static final int DATABASE_VERSION = 20;
     private static final String DATABASE_NAME = "autoBookDB";
 
     private static final String TABLE_BOOK = "TABLE_BOOK";
@@ -36,13 +36,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String BOOK_SORT_ID = "BOOK_SORT_ID";
     private static final String BOOK_ROOT = "BOOK_ROOT";
     private static final String BOOK_NAME = "BOOK_NAME";
-    private static final String BOOK_COVER = "BOOK_COVER";
     private static final String BOOK_SPEED = "BOOK_SPEED";
     private static final String CREATE_TABLE_BOOK = "CREATE TABLE " + TABLE_BOOK + " ( " +
             BOOK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             BOOK_SORT_ID + " INTEGER, " +
             BOOK_NAME + " TEXT NOT NULL, " +
-            BOOK_COVER + " TEXT, " +
             BOOK_SPEED + " REAL NOT NULL, " +
             BOOK_ROOT + " TEXT NOT NULL)";
 
@@ -95,7 +93,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             ContentValues cv = new ContentValues();
             cv.put(BOOK_ROOT, book.getRoot());
             cv.put(BOOK_NAME, book.getName());
-            cv.put(BOOK_COVER, book.getCoverPath());
             cv.put(BOOK_SPEED, book.getPlaybackSpeed());
             bookId = db.insert(TABLE_BOOK, null, cv);
             cv.put(BOOK_SORT_ID, bookId);
@@ -162,13 +159,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @Nullable
     private Book getBook(long id, SQLiteDatabase db) {
         Cursor cursor = db.query(TABLE_BOOK,
-                new String[]{BOOK_ROOT, BOOK_COVER, BOOK_NAME, BOOK_SORT_ID, BOOK_SPEED},
+                new String[]{BOOK_ROOT, BOOK_NAME, BOOK_SORT_ID, BOOK_SPEED},
                 BOOK_ID + "=?", new String[]{String.valueOf(id)},
                 null, null, null);
         try {
             if (cursor.moveToFirst()) {
                 String root = cursor.getString(0);
-                String cover = cursor.getString(1);
                 String name = cursor.getString(2);
                 long sortId = cursor.getLong(3);
                 float speed = cursor.getFloat(4);
@@ -204,7 +200,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     currentTime = 0;
                 }
 
-                return new Book(root, name, chapters, safeBookmarks, cover, speed, id, sortId, currentTime, relPath);
+                return new Book(root, name, chapters, safeBookmarks, speed, id, sortId, currentTime, relPath);
             }
         } finally {
             cursor.close();
@@ -224,7 +220,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         ContentValues cv = new ContentValues();
         cv.put(BOOK_NAME, newBook.getName());
-        cv.put(BOOK_COVER, newBook.getCoverPath());
         cv.put(BOOK_SORT_ID, newBook.getSortId());
         cv.put(BOOK_SPEED, newBook.getPlaybackSpeed());
 

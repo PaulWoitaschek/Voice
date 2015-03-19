@@ -379,7 +379,7 @@ public class BookAddingService extends Service {
             coverPath = ImageHelper.saveCover(cover, this);
         }
 
-        return new Book(bookRoot, bookName, containingMedia, new ArrayList<Bookmark>(), coverPath, 1);
+        return new Book(bookRoot, bookName, containingMedia, new ArrayList<Bookmark>(), 1);
     }
 
     @Nullable

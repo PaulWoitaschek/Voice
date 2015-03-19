@@ -23,7 +23,7 @@ public class Book implements Comparable<Book> {
     private float playbackSpeed = 1;
     private String relativeMediaPath;
 
-    public Book(@NonNull String root, @NonNull String name, @NonNull ArrayList<Chapter> chapters, @NonNull ArrayList<Bookmark> bookmarks, String cover, float playbackSpeed) {
+    public Book(@NonNull String root, @NonNull String name, @NonNull ArrayList<Chapter> chapters, @NonNull ArrayList<Bookmark> bookmarks, float playbackSpeed) {
         ArgumentValidator.validate(root, name, chapters, bookmarks);
         if (chapters.size() == 0) {
             throw new IllegalArgumentException("Book must have any containing chapters.");
@@ -47,13 +47,11 @@ public class Book implements Comparable<Book> {
             }
         }
         this.bookmarks = bookmarks;
-
-        this.cover = cover;
         this.playbackSpeed = playbackSpeed;
     }
 
-    public Book(String root, String name, ArrayList<Chapter> chapters, ArrayList<Bookmark> bookmarks, String cover, float playbackSpeed, long id, long sortId, int time, String relativeMediaPath) {
-        this(root, name, chapters, bookmarks, cover, playbackSpeed);
+    public Book(@NonNull String root, @NonNull String name, @NonNull ArrayList<Chapter> chapters, @NonNull ArrayList<Bookmark> bookmarks, float playbackSpeed, long id, long sortId, int time, @NonNull String relativeMediaPath) {
+        this(root, name, chapters, bookmarks, playbackSpeed);
         this.id = id;
         this.sortId = sortId;
         ArgumentValidator.validate(relativeMediaPath);
