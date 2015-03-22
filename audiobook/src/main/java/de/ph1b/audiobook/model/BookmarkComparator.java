@@ -3,9 +3,6 @@ package de.ph1b.audiobook.model;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import de.ph1b.audiobook.model.Bookmark;
-import de.ph1b.audiobook.model.Chapter;
-
 public class BookmarkComparator implements Comparator<Bookmark> {
 
     private final ArrayList<Chapter> chapters;

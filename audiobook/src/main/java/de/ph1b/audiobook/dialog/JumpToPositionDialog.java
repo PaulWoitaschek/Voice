@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.service.ServiceController;
-import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.uitools.ThemeUtil;
+import de.ph1b.audiobook.utils.BaseApplication;
 
 public class JumpToPositionDialog extends DialogFragment {
 

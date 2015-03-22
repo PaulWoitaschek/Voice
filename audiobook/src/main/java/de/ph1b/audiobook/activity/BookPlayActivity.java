@@ -32,11 +32,11 @@ import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.service.ServiceController;
-import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.uitools.CoverReplacement;
+import de.ph1b.audiobook.uitools.ThemeUtil;
+import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
-import de.ph1b.audiobook.uitools.ThemeUtil;
 
 public class BookPlayActivity extends BaseActivity implements View.OnClickListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener, BaseApplication.OnSleepStateChangedListener {
 

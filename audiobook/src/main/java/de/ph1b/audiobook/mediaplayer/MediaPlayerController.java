@@ -100,7 +100,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
         L.v(TAG, "pause called in state=" + state);
         lock.lock();
         try {
-            L.v(TAG, "pause auired lock. state is=" + state);
+            L.v(TAG, "pause acquired lock. state is=" + state);
             switch (state) {
                 case STARTED:
                     player.pause();
@@ -291,7 +291,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
                 stopAfterCurrentTrack = true;
                 baseApplication.setSleepTimerActive(false);
             } else {
-                L.i(TAG, "preparing new sleepsand");
+                L.i(TAG, "preparing new sleep sand");
                 int minutes = prefs.getSleepTime();
                 stopAfterCurrentTrack = prefs.stopAfterCurrentTrack();
                 baseApplication.setSleepTimerActive(true);

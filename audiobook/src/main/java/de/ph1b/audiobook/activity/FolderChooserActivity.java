@@ -21,13 +21,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.FolderAdapter;
 import de.ph1b.audiobook.service.BookAddingService;
+import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
-import de.ph1b.audiobook.uitools.ThemeUtil;
 
 /**
  * Activity for choosing an audiobook folder. If there are multiple SD-Cards, the Activity unifies
@@ -100,10 +99,6 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         }
         rv.add("/storage/extSdCard");
         rv.add(Environment.getExternalStorageDirectory().getAbsolutePath());
-        if (BuildConfig.DEBUG) {
-            rv.add("/storage/sdcard0/Audiobooks");
-            rv.add("/mnt/shared");
-        }
         rv.add("/storage/emulated/0");
         rv.add("/storage/sdcard1");
         ArrayList<File> paths = new ArrayList<>();
@@ -113,7 +108,6 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
                 paths.add(f);
         }
         Collections.sort(paths, new NaturalOrderComparator());
-        //return new ArrayList<>(Arrays.asList(paths.get(0)));
         return paths;
     }
 
