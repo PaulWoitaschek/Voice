@@ -341,25 +341,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private File getConfigFile(String rootPath, String bookName) {
-        File configFile = null;
+        File configFile = new File(rootPath, "." + bookName + JSON_EXTENSION);
         try {
-            File root = new File(rootPath);
-            if (root.isDirectory()) {
-                configFile = new File(root, "." + bookName + JSON_EXTENSION);
-                if (!configFile.exists()) {
-                    File[] containingJsonFiles = root.listFiles(jsonFilter);
-                    if (containingJsonFiles.length == 1) {
-                        configFile = containingJsonFiles[0];
-                        configFile.renameTo(new File(root, "." + bookName + JSON_EXTENSION));
-                    } else {
-                        configFile.createNewFile();
-                    }
-                }
+            if (!configFile.exists()) {
+                configFile.createNewFile();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return configFile;
     }
 
