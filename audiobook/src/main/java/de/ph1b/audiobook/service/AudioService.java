@@ -355,7 +355,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                     bitmap = ImageHelper.drawableToBitmap(
                             replacement,
                             ImageHelper.getSmallerScreenSize(AudioService.this),
-                            ImageHelper.getLargerScreenSize(AudioService.this));
+                            ImageHelper.getSmallerScreenSize(AudioService.this));
                 }
                 @SuppressWarnings("deprecation") RemoteControlClient.MetadataEditor editor = remoteControlClient.editMetadata(true);
                 Chapter c = book.getCurrentChapter();

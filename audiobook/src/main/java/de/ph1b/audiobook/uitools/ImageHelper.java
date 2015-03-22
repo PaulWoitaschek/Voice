@@ -38,14 +38,6 @@ public class ImageHelper {
         return displayWidth < displayHeight ? displayWidth : displayHeight;
     }
 
-    @SuppressWarnings("deprecation")
-    public static int getLargerScreenSize(Context c) {
-        Display display = ((WindowManager) c.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        int displayWidth = display.getWidth();
-        int displayHeight = display.getHeight();
-        return displayWidth < displayHeight ? displayHeight : displayWidth;
-    }
-
     /**
      * Saves a bitmap as a jpg file to the personal directory.
      *

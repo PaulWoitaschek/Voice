@@ -218,7 +218,7 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
             if (cover == null) {
                 cover = ImageHelper.drawableToBitmap(new CoverReplacement(
                         book.getName(),
-                        WidgetUpdateService.this), ImageHelper.getSmallerScreenSize(this), ImageHelper.getLargerScreenSize(this));
+                        WidgetUpdateService.this), ImageHelper.getSmallerScreenSize(this), ImageHelper.getSmallerScreenSize(this));
             }
             remoteViews.setImageViewBitmap(R.id.imageView, cover);
 
