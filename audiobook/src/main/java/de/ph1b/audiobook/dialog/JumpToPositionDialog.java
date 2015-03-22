@@ -45,7 +45,6 @@ public class JumpToPositionDialog extends DialogFragment {
         biggestHour = (int) TimeUnit.MILLISECONDS.toHours(duration);
         durationInMinutes = (int) TimeUnit.MILLISECONDS.toMinutes(duration);
         if (biggestHour == 0) { //sets visibility of hour related things to gone if max.hour is zero
-            v.findViewById(R.id.hours).setVisibility(View.GONE);
             v.findViewById(R.id.colon).setVisibility(View.GONE);
             hPicker.setVisibility(View.GONE);
         }
