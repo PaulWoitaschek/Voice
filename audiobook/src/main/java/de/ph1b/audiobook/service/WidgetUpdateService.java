@@ -58,10 +58,10 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
 
                     if (Build.VERSION.SDK_INT >= 16) {
                         Bundle opts = appWidgetManager.getAppWidgetOptions(widgetId);
-                        int minHeight = opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
-                        int maxHeight = opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT);
-                        int minWidth = opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
-                        int maxWidth = opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH);
+                        int minHeight = dpToPx(opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT));
+                        int maxHeight = dpToPx(opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT));
+                        int minWidth = dpToPx(opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH));
+                        int maxWidth = dpToPx(opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH));
 
                         int useWidth;
                         int useHeight;
