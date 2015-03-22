@@ -23,9 +23,6 @@
 
     <string name="current_cover">Mostra a capa do audiolivro atualmente tocando.</string>
     <string name="current_playing">Mostra estado de reprodução.</string>
-    <string name="pref_cover_on_internet">Use a Rede Móvel</string>
-    <string name="pref_cover_on_internet_hint">Use a Rede Móvel para achar a capa do audiolivro
-        atual.</string>
     <string name="content_previous_cover">Escolher capa anterior</string>
     <string name="content_next_cover">Escolher próxima capa</string>
     <string name="content_cover">Mostra a capa para escolher</string>

@@ -40,8 +40,6 @@
 
     <!-- JumpToPosition -->
     <string name="action_time_change">Jump to</string>
-    <string name="hours_short" tools:ignore="MissingTranslation">h</string>
-    <string name="minutes_short" tools:ignore="MissingTranslation">m</string>
 
     <!-- BookAdding -->
     <string name="audiobook_dialog_left" tools:ignore="MissingTranslation">The folder</string>
@@ -71,8 +69,6 @@
     <string name="pref_resume_on_replug_hint">If you paused by plugging headset out, it will resume on replug.</string>
     <string name="minutes">minutes</string>
     <string name="seconds">seconds</string>
-    <string name="pref_cover_on_internet">Use Mobile Network</string>
-    <string name="pref_cover_on_internet_hint">Uses mobile network to find cover for the current audiobook.</string>
     <string name="pref_seek_time">Skip amount</string>
     <string name="pref_title_track_to_end" tools:ignore="MissingTranslation">Continue till end</string>
     <string name="pref_summary_track_to_end" tools:ignore="MissingTranslation">Continues playing till the end of the track, after sleep timer has triggered.</string>

@@ -21,8 +21,6 @@
 
     <string name="current_cover">Показать обложку текущей аудиокниги.</string>
     <string name="current_playing">Показывать состояние проигрывания.</string>
-    <string name="pref_cover_on_internet">Использовать 3G интернет</string>
-    <string name="pref_cover_on_internet_hint">Использовать 3G интернет для поиска обложек аудиокниг.</string>
     <string name="content_previous_cover">Выбрать предыдущую обложку</string>
     <string name="content_next_cover">Выбрать следующую обложку</string>
     <string name="content_cover">Показать выбранную обложку</string>

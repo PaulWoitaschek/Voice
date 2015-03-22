@@ -23,9 +23,6 @@
 
     <string name="current_cover">Zobrazit obal právě přehrávané knihy.</string>
     <string name="current_playing">Zobrazit stav přehrávání.</string>
-    <string name="pref_cover_on_internet">Používat mobilní připojení</string>
-    <string name="pref_cover_on_internet_hint">Používá mobilní síť pro nalezení obalu aktuální
-        audioknihy.</string>
     <string name="content_previous_cover">Vybere předchozí obal</string>
     <string name="content_next_cover">Vybere další obal</string>
     <string name="content_cover">Zobrazí obaly pro vybrání</string>

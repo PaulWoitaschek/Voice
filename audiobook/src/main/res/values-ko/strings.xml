@@ -21,8 +21,6 @@
 
     <string name="current_cover">재생중인 책표지 보기</string>
     <string name="current_playing">재생상태 보기</string>
-    <string name="pref_cover_on_internet">3G 사용</string>
-    <string name="pref_cover_on_internet_hint">3G 데이터로 책표지 검색하기</string>
     <string name="content_previous_cover">전 표지 고르기</string>
     <string name="content_next_cover">다음표지 고르기</string>
     <string name="content_cover">책표지 보여주기</string>

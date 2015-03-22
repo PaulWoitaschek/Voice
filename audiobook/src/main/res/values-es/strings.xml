@@ -22,9 +22,6 @@
 
     <string name="current_cover">Muestra la portada del libro que se está reproduciendo.</string>
     <string name="current_playing">Que se esta reproduciendo.</string>
-    <string name="pref_cover_on_internet">Usar la red móvil.</string>
-    <string name="pref_cover_on_internet_hint">Utiliza la red móvil para buscar la portada del actual
-         audiolibro.</string>
     <string name="content_previous_cover">Elejir la portada anterior.</string>
     <string name="content_next_cover">Elejir la proxima portada.</string>
     <string name="content_cover">Muenstre a portada para escojer</string>

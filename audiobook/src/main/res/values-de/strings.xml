@@ -6,8 +6,6 @@
     <string name="pref_resume_on_replug_hint">Nimmt die Wiedergabe beim Einstecken der Kopfhörer wieder auf.</string>
     <string name="minutes">Minuten</string>
     <string name="seconds">Sekunden</string>
-    <string name="pref_cover_on_internet">Benutze Mobiles Internet</string>
-    <string name="pref_cover_on_internet_hint">Benutze auch die mobile Datenverbindung um Cover herunterzuladen.</string>
     <string name="pref_seek_time">Vor- und zurückspulen</string>
     <string name="pref_title_track_to_end">Kapitel zu Ende spielen</string>
     <string name="pref_summary_track_to_end">Spielt den aktuellen Track noch zu Ende, nachdem die Einschlafzeit abgelaufen ist.</string>
@@ -61,8 +59,6 @@
     <string name="pause">Pause</string>
     <string name="play">Abspielen</string>
     <string name="stop">Stop</string>
-    <string name="hours_short">s</string>
-    <string name="minutes_short">m</string>
     <string name="delete_folder">Ordner entfernen</string>
     <string name="delete_folder_content">Möchten Sie den folgenden Ordner aus Ihrer Bücherei entfernen?</string>
     <string name="sleep_timer_stopped">Einschlaftimer gestoppt</string>
