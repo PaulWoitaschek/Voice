@@ -27,7 +27,7 @@ import de.ph1b.audiobook.utils.L;
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class DataBaseHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 20;
+    private static final int DATABASE_VERSION = 21;
     private static final String DATABASE_NAME = "autoBookDB";
 
     private static final String TABLE_BOOK = "TABLE_BOOK";
@@ -35,12 +35,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String BOOK_SORT_ID = "BOOK_SORT_ID";
     private static final String BOOK_ROOT = "BOOK_ROOT";
     private static final String BOOK_NAME = "BOOK_NAME";
-    private static final String BOOK_SPEED = "BOOK_SPEED";
     private static final String CREATE_TABLE_BOOK = "CREATE TABLE " + TABLE_BOOK + " ( " +
             BOOK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             BOOK_SORT_ID + " INTEGER, " +
             BOOK_NAME + " TEXT NOT NULL, " +
-            BOOK_SPEED + " REAL NOT NULL, " +
             BOOK_ROOT + " TEXT NOT NULL)";
 
     private static final String TABLE_CHAPTERS = "TABLE_CHAPTERS";
@@ -59,6 +57,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String JSON_TIME = "time";
     private static final String JSON_BOOKMARK_TIME = "time";
     private static final String JSON_BOOKMARK_TITLE = "title";
+    private static final String JSON_SPEED = "speed";
     private static final String JSON_EXTENSION = "-map.json";
     private final FileFilter jsonFilter = new FileFilter() {
         @Override
@@ -92,7 +91,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             ContentValues cv = new ContentValues();
             cv.put(BOOK_ROOT, book.getRoot());
             cv.put(BOOK_NAME, book.getName());
-            cv.put(BOOK_SPEED, book.getPlaybackSpeed());
             bookId = db.insert(TABLE_BOOK, null, cv);
             cv.put(BOOK_SORT_ID, bookId);
             db.update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(bookId)});
@@ -112,6 +110,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         book.setId(bookId);
         int time = getTimeFromBook(book.getRoot(), book.getName());
         String relPath = getRelPathFromBook(book.getRoot(), book.getName());
+
+        float speed = getSpeed(book.getRoot(), book.getName());
+        book.setPlaybackSpeed(speed);
 
         // if the current rel path is defect, use a new one
         boolean relPathExists = false;
@@ -158,7 +159,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @Nullable
     private Book getBook(long id, SQLiteDatabase db) {
         Cursor cursor = db.query(TABLE_BOOK,
-                new String[]{BOOK_ROOT, BOOK_NAME, BOOK_SORT_ID, BOOK_SPEED},
+                new String[]{BOOK_ROOT, BOOK_NAME, BOOK_SORT_ID},
                 BOOK_ID + "=?", new String[]{String.valueOf(id)},
                 null, null, null);
         try {
@@ -166,7 +167,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 String root = cursor.getString(0);
                 String name = cursor.getString(1);
                 long sortId = cursor.getLong(2);
-                float speed = cursor.getFloat(3);
                 int currentTime = getTimeFromBook(root, name);
                 ArrayList<Chapter> chapters = getChapters(id, db);
                 ArrayList<Bookmark> unsafeBookmarks = getBookmarks(root, name);
@@ -199,6 +199,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     currentTime = 0;
                 }
 
+                float speed = getSpeed(root, name);
+
                 return new Book(root, name, chapters, safeBookmarks, speed, id, sortId, currentTime, relPath);
             }
         } finally {
@@ -220,7 +222,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         cv.put(BOOK_NAME, newBook.getName());
         cv.put(BOOK_SORT_ID, newBook.getSortId());
-        cv.put(BOOK_SPEED, newBook.getPlaybackSpeed());
 
         JSONObject playingInformation = getPlayingInformation(newBook.getRoot(), newBook.getName());
         try {
@@ -229,6 +230,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             String relPath = newBook.getCurrentChapter().getPath();
             playingInformation.put(JSON_TIME, time);
             playingInformation.put(JSON_REL_PATH, relPath);
+            playingInformation.put(JSON_SPEED, String.valueOf(newBook.getPlaybackSpeed()));
 
             // updating bookmarks. Creating new array and overwriting old values
             playingInformation.put(JSON_BOOKMARKS, new JSONArray());
@@ -306,6 +308,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
+
     private ArrayList<Bookmark> getBookmarks(String root, String bookName) {
         ArrayList<Bookmark> bookmarks = new ArrayList<>();
         try {
@@ -372,6 +375,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return 0;
     }
 
+
+    private float getSpeed(String root, String bookName) {
+        JSONObject playingInformation = getPlayingInformation(root, bookName);
+        try {
+            return Float.valueOf(playingInformation.getString(JSON_SPEED));
+        } catch (JSONException | NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return 1f;
+    }
+
     private JSONObject getPlayingInformation(String root, String bookName) {
         JSONObject rootJ = new JSONObject();
 
@@ -422,6 +436,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 }
             } else {
                 rootJ.put(JSON_REL_PATH, "");
+            }
+
+            // speed
+            if (rootJ.has(JSON_SPEED)) {
+                Object o = rootJ.get(JSON_SPEED);
+                if (!(o instanceof String)) {
+                    rootJ.put(JSON_SPEED, "1.0");
+                }
+            } else {
+                rootJ.put(JSON_SPEED, "1.0");
             }
 
         } catch (JSONException e) {
