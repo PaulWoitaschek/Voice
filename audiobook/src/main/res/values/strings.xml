@@ -81,6 +81,8 @@
     <string name="pref_theme_title" tools:ignore="MissingTranslation">Theme</string>
     <string name="pref_theme_light" tools:ignore="MissingTranslation">Light</string>
     <string name="pref_theme_dark" tools:ignore="MissingTranslation">Dark</string>
+    <string name="pref_pause_on_can_duck_title" tools:ignore="MissingTranslation">Pause on Interruption</string>
+    <string name="pref_pause_on_can_duck_summary" tools:ignore="MissingTranslation">Pause when interrupted instead of lowering the volume for the duration of the interruption.</string>
 
     <!-- Misc -->
     <string name="popup_edit" tools:ignore="MissingTranslation">Edit</string>

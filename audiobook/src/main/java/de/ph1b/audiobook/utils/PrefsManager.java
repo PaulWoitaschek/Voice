@@ -72,4 +72,8 @@ public class PrefsManager {
     public boolean resumeOnReplug() {
         return sp.getBoolean(c.getString(R.string.pref_key_resume_on_replug), true);
     }
+
+    public boolean pauseOnTempFocusLoss() {
+        return sp.getBoolean(c.getString(R.string.pref_key_pause_on_can_duck), false);
+    }
 }

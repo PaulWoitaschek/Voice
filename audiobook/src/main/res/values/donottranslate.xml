@@ -9,4 +9,5 @@
     <string name="pref_key_track_to_end">PLAY_TRACK_TO_END</string>
     <string name="pref_key_audiobook_folders">ROOT_FOLDER</string>
     <string name="pref_key_theme">THEME</string>
+    <string name="pref_key_pause_on_can_duck">PAUSE_ON_CAN_DUCK</string>
 </resources>

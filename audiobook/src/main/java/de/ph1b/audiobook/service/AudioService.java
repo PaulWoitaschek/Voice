@@ -386,6 +386,9 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 if (pauseBecauseLossTransient) {
                     controller.play();
                     pauseBecauseLossTransient = false;
+                } else {
+                    L.d(TAG, "increasing volume");
+                    audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
                 }
                 break;
             case AudioManager.AUDIOFOCUS_LOSS:
@@ -393,6 +396,19 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 releaseController();
                 break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                if (!prefs.pauseOnTempFocusLoss()) {
+                    if (baseApplication.getPlayState() == PlayState.PLAYING) {
+                        L.d(TAG, "lowering volume");
+                        audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
+                        pauseBecauseHeadset = false;
+                    }
+
+                    /**
+                     * Only break here. if we should pause, AUDIOFOCUS_LOSS_TRANSIENT will handle
+                     * that for us.
+                     */
+                    break;
+                }
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                 if (baseApplication.getPlayState() == PlayState.PLAYING) {
                     L.d(TAG, "Paused by audio-focus loss transient.");
