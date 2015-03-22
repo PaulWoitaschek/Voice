@@ -38,7 +38,7 @@ public class CoverReplacement extends Drawable {
         textPaint.setTextSize(2f * width / 3f);
 
         canvas.drawRect(0, 0, width, height, backgroundPaint);
-        float y = (height / 2f) - ((textPaint.descent() + textPaint.ascent() / 2f));
+        float y = (height / 2f) - ((textPaint.descent() + textPaint.ascent()) / 2f);
         canvas.drawText(text.substring(0, 1), width / 2f, y, textPaint);
     }
 
