@@ -80,7 +80,6 @@ public class ThemeUtil {
     public static void theme(NumberPicker numberPicker) {
         if (Build.VERSION.SDK_INT < 21) {
             if (numberPicker != null) {
-                Resources r = numberPicker.getResources();
                 final int count = numberPicker.getChildCount();
                 for (int i = 0; i < count; i++) {
                     View child = numberPicker.getChildAt(i);
@@ -90,7 +89,7 @@ public class ThemeUtil {
                             selectorWheelPaintField.setAccessible(true);
                             int colorAccent = getColorAccent(numberPicker.getContext());
                             ((Paint) selectorWheelPaintField.get(numberPicker)).setColor(colorAccent);
-                            ((EditText) child).setTextColor(r.getColor(colorAccent));
+                            ((EditText) child).setTextColor(colorAccent);
                             numberPicker.invalidate();
                         } catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
                             e.printStackTrace();
