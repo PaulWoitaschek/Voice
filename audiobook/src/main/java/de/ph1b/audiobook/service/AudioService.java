@@ -129,6 +129,8 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         baseApplication.addOnCurrentBookChangedListener(this);
         baseApplication.addOnPositionChangedListener(this);
 
+        baseApplication.setPlayState(PlayState.STOPPED);
+
         Book book = baseApplication.getCurrentBook();
         if (book != null) {
             L.d(TAG, "onCreated initialized book=" + book);
@@ -145,6 +147,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         baseApplication.removeOnPlayStateChangedListener(this);
         baseApplication.removeOnCurrentBookChangedListener(this);
         baseApplication.removeOnPositionChangedListener(this);
+        baseApplication.setPlayState(PlayState.STOPPED);
 
         try {
             unregisterReceiver(audioBecomingNoisyReceiver);
@@ -251,7 +254,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
          * set the size to the correct notification sizes, otherwise notification will look ugly.
          */
         int width = Build.VERSION.SDK_INT >= 21 ? ImageHelper.getSmallerScreenSize(this) : getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_width);
-        int height = Build.VERSION.SDK_INT >= 21 ? ImageHelper.getLargerScreenSize(this) : getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_height);
+        int height = Build.VERSION.SDK_INT >= 21 ? ImageHelper.getSmallerScreenSize(this) : getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_height);
 
         Bitmap cover = null;
         try {
@@ -446,11 +449,11 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     private void releaseController() {
         if (controller != null) {
             controller.release();
-            pauseBecauseHeadset = false;
-            pauseBecauseLossTransient = false;
             controller = null;
-            baseApplication.setPlayState(PlayState.STOPPED);
         }
+        pauseBecauseHeadset = false;
+        pauseBecauseLossTransient = false;
+        baseApplication.setPlayState(PlayState.STOPPED);
     }
 
     @Override
