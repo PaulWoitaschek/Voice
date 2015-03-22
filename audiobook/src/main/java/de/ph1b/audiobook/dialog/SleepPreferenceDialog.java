@@ -37,7 +37,7 @@ public class SleepPreferenceDialog extends DialogPreference {
         //init number picker
         int currentSleepValue = getSharedPreferences().getInt(getContext().getString(R.string.pref_key_sleep_time), 20);
         numberPicker.setMinValue(1);
-        numberPicker.setMaxValue(60);
+        numberPicker.setMaxValue(120);
         numberPicker.setValue(currentSleepValue);
         numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
