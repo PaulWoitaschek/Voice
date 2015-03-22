@@ -41,6 +41,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
     private static final String TAG = EditBookDialog.class.getSimpleName();
     private static final int COVER_REPLACEMENT_POS = 0;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final int REPLACEMENT_DIMEN = 500;
     /**
      * Variable representing if the first cover is a letter - cover. This is recognized by checking
      * if the pixels on the borders are the same as the color accent
@@ -127,7 +128,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
 
         covers.add(COVER_REPLACEMENT_POS, ImageHelper.drawableToBitmap(new CoverReplacement(
                 defaultName,
-                getActivity()), coverImageView.getWidth(), coverImageView.getHeight()));
+                getActivity()), REPLACEMENT_DIMEN, REPLACEMENT_DIMEN));
 
         //init listeners
         nextCover.setOnClickListener(this);
@@ -208,7 +209,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
                     Bitmap newLetterCover = ImageHelper.drawableToBitmap(new CoverReplacement(
                                     newName,
                                     getActivity()),
-                            coverImageView.getWidth(), coverImageView.getHeight());
+                            REPLACEMENT_DIMEN, REPLACEMENT_DIMEN);
 
                     covers.set(COVER_REPLACEMENT_POS, newLetterCover);
                     L.d(TAG, "onTextChanged, setting new cover with newName=" + newName);

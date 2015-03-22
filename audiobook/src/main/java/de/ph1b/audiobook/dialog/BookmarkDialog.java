@@ -89,10 +89,8 @@ public class BookmarkDialog extends DialogFragment {
                                         .callback(new MaterialDialog.ButtonCallback() {
                                             @Override
                                             public void onPositive(MaterialDialog dialog) {
-
-                                                Bookmark oldBookmark = new Bookmark(editBookmark);
                                                 editBookmark.setTitle(editText.getText().toString());
-                                                db.updateBookmark(editBookmark, oldBookmark, book);
+                                                db.updateBook(book);
                                                 adapter.notifyItemChanged(position);
                                             }
                                         })

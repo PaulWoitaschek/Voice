@@ -16,10 +16,6 @@ public class Bookmark {
         this.path = path;
     }
 
-    public Bookmark(Bookmark bookmark) {
-        this(bookmark.path, bookmark.title, bookmark.time);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {

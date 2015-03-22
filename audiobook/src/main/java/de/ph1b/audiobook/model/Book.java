@@ -24,6 +24,9 @@ public class Book implements Comparable<Book> {
 
     public Book(@NonNull String root, @NonNull String name, @NonNull ArrayList<Chapter> chapters, @NonNull ArrayList<Bookmark> bookmarks, float playbackSpeed) {
         ArgumentValidator.validate(root, name, chapters, bookmarks);
+        if (name.equals("")) {
+            throw new IllegalArgumentException("name must not be empty");
+        }
         if (chapters.size() == 0) {
             throw new IllegalArgumentException("Book must have any containing chapters.");
         }
@@ -123,7 +126,7 @@ public class Book implements Comparable<Book> {
             }
         }
         if (!relativeMediaPathExists) {
-            throw new IllegalArgumentException("Creating book with name=" + name + " failed because relaltiveMediaPath=" + relativeMediaPath + " does not exist in chapters");
+            throw new IllegalArgumentException("Creating book with name=" + name + " failed because relativeMediaPath=" + relativeMediaPath + " does not exist in chapters");
         }
 
         this.relativeMediaPath = relativeMediaPath;
@@ -175,8 +178,8 @@ public class Book implements Comparable<Book> {
     }
 
     public void setName(String name) {
-        if (name == null) {
-            throw new NullPointerException("name must not be null");
+        if (name == null || name.equals("")) {
+            throw new NullPointerException("name must not be empty");
         }
         this.name = name;
     }
