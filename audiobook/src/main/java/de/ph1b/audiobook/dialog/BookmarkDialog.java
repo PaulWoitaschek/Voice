@@ -121,8 +121,8 @@ public class BookmarkDialog extends DialogFragment {
 
                                 builder.title(R.string.bookmark_delete_title)
                                         .content(deleteBookmark.getTitle())
-                                        .positiveText(R.string.delete)
-                                        .negativeText(R.string.keep)
+                                        .positiveText(R.string.remove)
+                                        .negativeText(R.string.dialog_cancel)
                                         .callback(new MaterialDialog.ButtonCallback() {
                                             @Override
                                             public void onPositive(MaterialDialog dialog) {

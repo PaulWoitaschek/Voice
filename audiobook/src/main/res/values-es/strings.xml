@@ -31,19 +31,16 @@
     <string name="pref_seek_time">Saltar cantidad</string>
     <string name="edit_book_title">Editar libro</string>
     <string name="popup_edit">Editar</string>
-    <string name="delete">Borrar</string>
+    <string name="remove">Borrar</string>
     <string name="rewind">Rebobinar</string>
     <string name="fast_forward">Avance rápido</string>
     <string name="playback_speed">Velocidad de reproducción</string>
     <string name="pref_sleep_time">Temporizador para dormir</string>
     <string name="sleep_timer_started">Temporizador: </string>
-    <string name="keep">Mantener</string>
     <string name="pref_title_track_to_end">Continua asta el final</string>
     <string name="pref_summary_track_to_end">Sigue jugando hasta el final de la pista, después de temporizador ha desencadenado.</string>
     <string name="previous_track">Pista anterior</string>
     <string name="next_track">Proxima pista </string>
     <string name="up">Carpeta superior</string>
     <string name="chosen_folder_description">Carpeta elegida:</string>
-    <string name="choose">ELEGIR</string>
-    <string name="abort">ABORTO</string>
 </resources>

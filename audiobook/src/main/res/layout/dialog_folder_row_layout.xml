@@ -18,7 +18,7 @@
         android:id="@+id/more"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:contentDescription="@string/delete"
+        android:contentDescription="@string/remove"
         android:scaleType="center"
         android:src="?attr/folder_overview_trash" />
 

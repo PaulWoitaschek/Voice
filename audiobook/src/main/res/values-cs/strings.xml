@@ -33,7 +33,7 @@
 
     <string name="edit_book_title">Upravit knihu</string>
     <string name="popup_edit">Upravit</string>
-    <string name="delete">Smazat</string>
+    <string name="remove">Smazat</string>
     <string name="rewind">Přetočit</string>
     <string name="fast_forward">Posun vpřed</string>
     <string name="playback_speed">Rychlost přehrávání</string>

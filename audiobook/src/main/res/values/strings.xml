@@ -51,8 +51,6 @@
     <string name="no_audiobook_folders_summary" tools:ignore="MissingTranslation">Please choose your audiobook folder now. You can change this later in the settings.</string>
     <string name="up" tools:ignore="MissingTranslation">Upper folder</string>
     <string name="chosen_folder_description" tools:ignore="MissingTranslation">Chosen folder:</string>
-    <string name="choose" tools:ignore="MissingTranslation">CHOOSE</string>
-    <string name="abort" tools:ignore="MissingTranslation">ABORT</string>
     <string name="delete_folder" tools:ignore="MissingTranslation">Remove from Library?</string>
     <string name="delete_folder_content" tools:ignore="MissingTranslation">Dou you want to remove the following folder from the library?</string>
 
@@ -66,7 +64,6 @@
     <string name="bookmark_edit_hint" tools:ignore="MissingTranslation">Bookmark name</string>
     <string name="bookmark_added" tools:ignore="MissingTranslation">Bookmark added</string>
     <string name="bookmark_delete_title" tools:ignore="MissingTranslation">Delete this bookmark?</string>
-    <string name="keep" tools:ignore="MissingTranslation">Keep</string>
 
     <!-- Settings -->
     <string name="action_settings">Preferences</string>
@@ -87,6 +84,6 @@
 
     <!-- Misc -->
     <string name="popup_edit" tools:ignore="MissingTranslation">Edit</string>
-    <string name="delete" tools:ignore="MissingTranslation">Delete</string>
+    <string name="remove" tools:ignore="MissingTranslation">Remove</string>
 
 </resources>

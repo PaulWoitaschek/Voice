@@ -29,6 +29,6 @@
     <string name="pref_seek_time">건너뛸 시간</string>
 
     <string name="edit_book_title">제목 수정</string>
-    <string name="delete">삭제</string>
+    <string name="remove">삭제</string>
     <string name="popup_edit">수정</string>
 </resources>

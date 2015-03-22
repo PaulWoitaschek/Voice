@@ -33,13 +33,12 @@
 
     <string name="edit_book_title">Editar livro</string>
     <string name="popup_edit">Editar</string>
-    <string name="delete">Deletar</string>
+    <string name="remove">Deletar</string>
     <string name="rewind">Rebobinar</string>
     <string name="fast_forward">Avanço rápido</string>
     <string name="playback_speed">Velocidade de reprodução</string>
     <string name="pref_sleep_time">Temporizador para dormir</string>
     <string name="sleep_timer_started">Temporizador: </string>
-    <string name="keep">Manter</string>
     <string name="pref_title_track_to_end">Continuar até o fim</string>
     <string name="pref_summary_track_to_end">Continua a tocar até o fim, independentemente do temporizador.</string>
 </resources>
