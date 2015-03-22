@@ -4,7 +4,7 @@
     android:initialLayout="@layout/widget"
     android:minHeight="48dp"
     android:minResizeHeight="48dp"
-    android:minResizeWidth="56dp"
+    android:minResizeWidth="48dp"
     android:minWidth="250dp"
     android:resizeMode="horizontal"
     tools:ignore="UnusedAttribute" />

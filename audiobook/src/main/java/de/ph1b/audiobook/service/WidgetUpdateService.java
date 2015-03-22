@@ -74,7 +74,7 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
                             useHeight = minHeight;
                         }
                         if (useWidth > 0 && useHeight > 0) {
-                            hideElements(remoteViews, useWidth, useHeight);
+                            hideElements(remoteViews, useWidth, useHeight, book.getChapters().size() == 1);
                         }
 
                         appWidgetManager.updateAppWidget(widgetId, remoteViews);
@@ -134,19 +134,16 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
         return orientation != Configuration.ORIENTATION_LANDSCAPE && (orientation == Configuration.ORIENTATION_PORTRAIT || displayWidth == displayHeight || displayWidth < displayHeight);
     }
 
-    private int intToDp(int dp) {
+    private int dpToPx(int dp) {
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics()));
     }
 
-    private void hideElements(RemoteViews remoteViews, int width, int coverSize) {
-        L.v(TAG, "hideElements called");
-        int buttonSize = intToDp(4 + 36 + 4);
-
+    private void hideX(RemoteViews remoteViews, int width, int height) {
+        int buttonSize = dpToPx(4 + 36 + 4);
         remoteViews.setViewVisibility(R.id.imageView, View.VISIBLE);
         remoteViews.setViewVisibility(R.id.rewind, View.VISIBLE);
         remoteViews.setViewVisibility(R.id.fast_forward, View.VISIBLE);
-
-        if (width > 3 * buttonSize + coverSize) {
+        if (width > 3 * buttonSize + height) {
             return;
         }
         remoteViews.setViewVisibility(R.id.imageView, View.GONE);
@@ -158,6 +155,33 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
             return;
         }
         remoteViews.setViewVisibility(R.id.rewind, View.GONE);
+    }
+
+    private void hideY(RemoteViews remoteViews, int height, boolean singleChapter) {
+        int buttonSize = dpToPx(4 + 36 + 4);
+        int titleSize = getResources().getDimensionPixelSize(R.dimen.widget_title_size);
+        int summarySize = getResources().getDimensionPixelSize(R.dimen.widget_summary_size);
+        int stackedHeight = buttonSize + titleSize + summarySize;
+
+        if (height > stackedHeight) {
+            if (singleChapter) {
+                remoteViews.setViewVisibility(R.id.summary, View.GONE);
+            }
+            return;
+        }
+        remoteViews.setViewVisibility(R.id.summary, View.GONE);
+        stackedHeight = buttonSize + titleSize;
+        if (height > stackedHeight) {
+            return;
+        }
+        remoteViews.setViewVisibility(R.id.title, View.GONE);
+    }
+
+    private void hideElements(RemoteViews remoteViews, int width, int height, boolean singleChapter) {
+        L.v(TAG, "hideElements called");
+
+        hideX(remoteViews, width, height);
+        hideY(remoteViews, height, singleChapter);
     }
 
     @Override
