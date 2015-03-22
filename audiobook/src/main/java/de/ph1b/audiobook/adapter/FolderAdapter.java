@@ -12,7 +12,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.utils.ThemeUtil;
+import de.ph1b.audiobook.uitools.ThemeUtil;
 
 public class FolderAdapter extends BaseAdapter {
 

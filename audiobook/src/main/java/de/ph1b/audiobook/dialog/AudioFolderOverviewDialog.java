@@ -21,7 +21,7 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.FolderChooserActivity;
 import de.ph1b.audiobook.adapter.FolderOverviewAdapter;
 import de.ph1b.audiobook.service.BookAddingService;
-import de.ph1b.audiobook.utils.DividerItemDecoration;
+import de.ph1b.audiobook.uitools.DividerItemDecoration;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 

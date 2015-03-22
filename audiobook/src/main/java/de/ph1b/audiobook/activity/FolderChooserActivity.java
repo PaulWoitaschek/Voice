@@ -27,7 +27,7 @@ import de.ph1b.audiobook.adapter.FolderAdapter;
 import de.ph1b.audiobook.service.BookAddingService;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
-import de.ph1b.audiobook.utils.ThemeUtil;
+import de.ph1b.audiobook.uitools.ThemeUtil;
 
 /**
  * Activity for choosing an audiobook folder. If there are multiple SD-Cards, the Activity unifies

@@ -70,7 +70,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     public int getCurrentPosition() {
         switch (state) {
             case ERROR:
-                error("getcurrentposition", state);
+                error("getCurrentPosition", state);
                 onErrorListener.onError(null, 0, 0);
                 break;
             default:
@@ -299,7 +299,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     }
 
     private void initStream() throws IOException, IllegalArgumentException {
-        L.v(TAG, "inistream called in state=" + state);
+        L.v(TAG, "initStream called in state=" + state);
         lock.lock();
         try {
             extractor = new MediaExtractor();
@@ -325,7 +325,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     }
 
     private void initDevice(int sampleRate, int numChannels) {
-        L.d(TAG, "initdevice called in state:" + state);
+        L.d(TAG, "initDevice called in state:" + state);
         lock.lock();
         try {
             final int format = findFormatFromChannels(numChannels);

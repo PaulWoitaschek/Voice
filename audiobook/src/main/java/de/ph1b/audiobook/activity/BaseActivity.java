@@ -8,7 +8,7 @@ import android.util.TypedValue;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.service.AudioService;
-import de.ph1b.audiobook.utils.ThemeUtil;
+import de.ph1b.audiobook.uitools.ThemeUtil;
 
 /**
  * Base class for all Activities which extends ActionBarActivity and checks in onResume, if the storage

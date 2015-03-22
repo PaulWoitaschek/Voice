@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.RemoteControlClient;
@@ -36,9 +37,10 @@ import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.receiver.RemoteControlReceiver;
+import de.ph1b.audiobook.uitools.CoverReplacement;
+import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.BaseApplication.PlayState;
-import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
@@ -242,23 +244,30 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // cover
-        try {
-            int width = getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_width);
-            int height = getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_height);
+        // note: On Android 21 + the MediaStyle will use the cover as the background. So it has to be a large image.
+        /**
+         * Cover. NOTE: On Android 21 + the MediaStyle will use the cover as the background. So it
+         * has to be a large image. On Android < 21 there will be a wrong cropping, so there we must
+         * set the size to the correct notification sizes, otherwise notification will look ugly.
+         */
+        int width = Build.VERSION.SDK_INT >= 21 ? ImageHelper.getSmallerScreenSize(this) : getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_width);
+        int height = Build.VERSION.SDK_INT >= 21 ? ImageHelper.getLargerScreenSize(this) : getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_height);
 
+        Bitmap cover = null;
+        try {
             File coverFile = book.getCoverFile();
-            Bitmap cover = null;
             if (coverFile != null) {
                 cover = Picasso.with(AudioService.this).load(coverFile).resize(width, height).get();
             }
-            if (cover == null) {
-                cover = ImageHelper.genCapital(book.getName(), this, width);
-            }
-            notificationBuilder.setLargeIcon(cover);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (cover == null) {
+            cover = ImageHelper.drawableToBitmap(new CoverReplacement(
+                    book.getName(),
+                    this), width, height);
+        }
+        notificationBuilder.setLargeIcon(cover);
 
         // stop intent
         Intent stopIntent = ServiceController.getStopIntent(this);
@@ -336,7 +345,14 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                     }
                 }
                 if (bitmap == null) {
-                    bitmap = ImageHelper.genCapital(book.getName(), AudioService.this.getApplicationContext());
+                    Drawable replacement = new CoverReplacement(
+                            book.getName(),
+                            AudioService.this);
+                    L.d(TAG, "replacement dimen: " + replacement.getIntrinsicWidth() + ":" + replacement.getIntrinsicHeight());
+                    bitmap = ImageHelper.drawableToBitmap(
+                            replacement,
+                            ImageHelper.getSmallerScreenSize(AudioService.this),
+                            ImageHelper.getLargerScreenSize(AudioService.this));
                 }
                 @SuppressWarnings("deprecation") RemoteControlClient.MetadataEditor editor = remoteControlClient.editMetadata(true);
                 Chapter c = book.getCurrentChapter();

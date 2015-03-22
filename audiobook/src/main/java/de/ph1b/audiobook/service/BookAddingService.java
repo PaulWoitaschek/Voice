@@ -27,7 +27,7 @@ import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.utils.BaseApplication;
-import de.ph1b.audiobook.utils.ImageHelper;
+import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.NaturalOrderComparator;
 import de.ph1b.audiobook.utils.PrefsManager;
@@ -314,7 +314,7 @@ public class BookAddingService extends Service {
         Bitmap cover = null;
 
         // if there are images, get the first one.
-        int dimen = ImageHelper.getCoverLength(this);
+        int dimen = ImageHelper.getSmallerScreenSize(this);
         for (File f : coverFiles) {
             if (cover == null) {
                 try {

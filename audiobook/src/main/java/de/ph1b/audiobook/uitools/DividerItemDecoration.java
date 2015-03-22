@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.utils;
+package de.ph1b.audiobook.uitools;
 
 import android.content.Context;
 import android.content.res.TypedArray;

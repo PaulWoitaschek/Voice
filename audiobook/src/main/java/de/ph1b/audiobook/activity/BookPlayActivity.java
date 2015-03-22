@@ -2,6 +2,7 @@ package de.ph1b.audiobook.activity;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -32,10 +33,10 @@ import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.utils.BaseApplication;
-import de.ph1b.audiobook.utils.ImageHelper;
+import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
-import de.ph1b.audiobook.utils.ThemeUtil;
+import de.ph1b.audiobook.uitools.ThemeUtil;
 
 public class BookPlayActivity extends BaseActivity implements View.OnClickListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener, BaseApplication.OnSleepStateChangedListener {
 
@@ -131,10 +132,11 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
 
         // (Cover)
         File coverFile = book.getCoverFile();
+        Drawable coverReplacement = new CoverReplacement(book.getName(), this);
         if (coverFile != null) {
-            Picasso.with(this).load(coverFile).into(coverView);
+            Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(coverView);
         } else {
-            coverView.setImageBitmap(ImageHelper.genCapital(book.getName(), this));
+            coverView.setImageDrawable(coverReplacement);
         }
 
         // Next/Prev/spinner hiding

@@ -14,7 +14,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.utils.PrefsManager;
-import de.ph1b.audiobook.utils.ThemeUtil;
+import de.ph1b.audiobook.uitools.ThemeUtil;
 
 public class SeekPreferenceDialog extends DialogPreference {
 

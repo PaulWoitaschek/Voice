@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.utils;
+package de.ph1b.audiobook.uitools;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+
+import de.ph1b.audiobook.utils.L;
 
 public class CoverDownloader {
 
@@ -64,8 +66,8 @@ public class CoverDownloader {
         try {
             List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
             for (NetworkInterface i : interfaces) {
-                List<InetAddress> internetAdresses = Collections.list(i.getInetAddresses());
-                for (InetAddress a : internetAdresses) {
+                List<InetAddress> internetAddresses = Collections.list(i.getInetAddresses());
+                for (InetAddress a : internetAddresses) {
                     if (!a.isLoopbackAddress()) {
                         return a.getHostAddress().toUpperCase();
                     }

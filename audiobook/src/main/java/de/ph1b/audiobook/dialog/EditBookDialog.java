@@ -27,9 +27,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.utils.CoverDownloader;
-import de.ph1b.audiobook.utils.DraggableBoxImageView;
-import de.ph1b.audiobook.utils.ImageHelper;
+import de.ph1b.audiobook.uitools.CoverDownloader;
+import de.ph1b.audiobook.uitools.CoverReplacement;
+import de.ph1b.audiobook.uitools.DraggableBoxImageView;
+import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.L;
 
 public class EditBookDialog extends DialogFragment implements View.OnClickListener {
@@ -111,8 +112,6 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
         String dialogTitle = b.getString(DIALOG_TITLE);
         covers = b.getParcelableArrayList(BOOK_COVER);
 
-        covers.add(COVER_REPLACEMENT_POS, ImageHelper.genCapital(defaultName, getActivity()));
-
         //init view
         //passing null is fine because of fragment
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -125,6 +124,10 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
         previousCover = (ImageButton) customView.findViewById(R.id.previous_cover);
         nextCover = (ImageButton) customView.findViewById(R.id.next_cover);
         final TextView emptyTitleText = (TextView) customView.findViewById(R.id.empty_title);
+
+        covers.add(COVER_REPLACEMENT_POS, ImageHelper.drawableToBitmap(new CoverReplacement(
+                defaultName,
+                getActivity()), coverImageView.getWidth(), coverImageView.getHeight()));
 
         //init listeners
         nextCover.setOnClickListener(this);
@@ -202,7 +205,11 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
                 } else {
                     emptyTitleText.setVisibility(View.INVISIBLE);
                     editBook.getActionButton(DialogAction.POSITIVE).setEnabled(true);
-                    Bitmap newLetterCover = ImageHelper.genCapital(newName, getActivity());
+                    Bitmap newLetterCover = ImageHelper.drawableToBitmap(new CoverReplacement(
+                                    newName,
+                                    getActivity()),
+                            coverImageView.getWidth(), coverImageView.getHeight());
+
                     covers.set(COVER_REPLACEMENT_POS, newLetterCover);
                     L.d(TAG, "onTextChanged, setting new cover with newName=" + newName);
                     if (textLength > 0 && coverPosition == COVER_REPLACEMENT_POS) {

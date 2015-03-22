@@ -34,8 +34,8 @@ import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.utils.BaseApplication;
-import de.ph1b.audiobook.utils.BookmarkComparator;
-import de.ph1b.audiobook.utils.DividerItemDecoration;
+import de.ph1b.audiobook.model.BookmarkComparator;
+import de.ph1b.audiobook.uitools.DividerItemDecoration;
 import de.ph1b.audiobook.utils.L;
 
 /**

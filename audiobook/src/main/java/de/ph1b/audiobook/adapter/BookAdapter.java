@@ -2,6 +2,7 @@ package de.ph1b.audiobook.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,22 +21,24 @@ import java.util.concurrent.Executors;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.DataBaseHelper;
-import de.ph1b.audiobook.utils.ImageHelper;
+import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.utils.L;
 
-public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> {
+public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
 
-    private static final String TAG = MediaAdapter.class.getSimpleName();
+    private static final String TAG = BookAdapter.class.getSimpleName();
     private final ArrayList<Book> books;
     private final DataBaseHelper db;
     private final Context c;
     private final OnItemClickListener onItemClickListener;
-    private final ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final Picasso picasso;
 
-    public MediaAdapter(ArrayList<Book> books, Activity a, OnItemClickListener onItemClickListener) {
+    public BookAdapter(ArrayList<Book> books, Activity a, OnItemClickListener onItemClickListener) {
         this.books = books;
         this.c = a;
         this.onItemClickListener = onItemClickListener;
+        this.picasso = Picasso.with(c);
         db = DataBaseHelper.getInstance(a);
     }
 
@@ -44,7 +47,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
             if (books.get(position).getId() == book.getId()) {
                 books.set(position, book);
                 notifyItemChanged(position);
-                singleThreadExecutor.execute(new Runnable() {
+                executor.execute(new Runnable() {
                     @Override
                     public void run() {
                         db.updateBook(book);
@@ -64,7 +67,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.media_chooser_recycler_grid_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_book_shelf_row_layout, parent, false);
         return new ViewHolder(v, onItemClickListener);
     }
 
@@ -101,7 +104,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
         newBook.setSortId(oldSortId);
         books.set(from, newBook);
         books.set(to, oldBook);
-        singleThreadExecutor.execute(new Runnable() {
+        executor.execute(new Runnable() {
             @Override
             public void run() {
                 db.updateBook(newBook);
@@ -121,10 +124,12 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
 
         // (Cover)
         File coverFile = b.getCoverFile();
+        Drawable coverReplacement = new CoverReplacement(b.getName().substring(0, 1), c);
         if (coverFile != null) {
-            Picasso.with(c).load(coverFile).into(viewHolder.coverView);
+            picasso.load(coverFile).placeholder(coverReplacement).into(viewHolder.coverView);
         } else {
-            viewHolder.coverView.setImageBitmap(ImageHelper.genCapital(b.getName(), c));
+            picasso.cancelRequest(viewHolder.coverView);
+            viewHolder.coverView.setImageDrawable(coverReplacement);
         }
     }
 

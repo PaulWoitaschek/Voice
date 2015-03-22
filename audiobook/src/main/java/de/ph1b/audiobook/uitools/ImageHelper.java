@@ -1,53 +1,50 @@
-package de.ph1b.audiobook.utils;
+package de.ph1b.audiobook.uitools;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.Nullable;
-import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.WindowManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import de.ph1b.audiobook.utils.L;
+import de.ph1b.audiobook.utils.PrefsManager;
+
 public class ImageHelper {
 
     private static final String TAG = ImageHelper.class.getSimpleName();
 
-    public static Bitmap genCapital(String bookName, Context c, int reqLength) {
-        Bitmap bitmap = Bitmap.createBitmap(reqLength, reqLength, Bitmap.Config.RGB_565);
+    public static Bitmap drawableToBitmap(Drawable drawable, int width, int height) {
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
-        Paint textPaint = new Paint();
-        textPaint.setTextSize(2 * reqLength / 3);
-        textPaint.setColor(c.getResources().getColor(android.R.color.white));
-        textPaint.setAntiAlias(true);
-        textPaint.setTextAlign(Paint.Align.CENTER);
-        textPaint.setTypeface(Typeface.SANS_SERIF);
-        Paint backgroundPaint = new Paint();
-        backgroundPaint.setColor(ThemeUtil.getColorPrimaryDark(c));
-        canvas.drawRect(0, 0, reqLength, reqLength, backgroundPaint);
-        int y = (int) ((canvas.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2));
-        canvas.drawText(bookName.substring(0, 1).toUpperCase(), reqLength / 2, y, textPaint);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
         return bitmap;
     }
 
-    public static Bitmap genCapital(String bookName, Context c) {
-        int reqLength = getCoverLength(c);
-        return genCapital(bookName, c, reqLength);
+    @SuppressWarnings("deprecation")
+    public static int getSmallerScreenSize(Context c) {
+        Display display = ((WindowManager) c.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int displayWidth = display.getWidth();
+        int displayHeight = display.getHeight();
+        return displayWidth < displayHeight ? displayWidth : displayHeight;
     }
 
-    public static int getCoverLength(Context c) {
-        c.getResources().getDisplayMetrics();
-        DisplayMetrics metrics = c.getResources().getDisplayMetrics();
-        int displayWidth = metrics.widthPixels;
-        int displayHeight = metrics.heightPixels;
-        return displayWidth < displayHeight ? displayWidth : displayHeight;
+    @SuppressWarnings("deprecation")
+    public static int getLargerScreenSize(Context c) {
+        Display display = ((WindowManager) c.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int displayWidth = display.getWidth();
+        int displayHeight = display.getHeight();
+        return displayWidth < displayHeight ? displayHeight : displayWidth;
     }
 
     /**
@@ -66,7 +63,7 @@ public class ImageHelper {
         }
 
         // saving cover
-        int coverLength = getCoverLength(c);
+        int coverLength = getSmallerScreenSize(c);
         Bitmap cover = Bitmap.createScaledBitmap(bitmap, coverLength, coverLength, true);
         File coverFile = new File(bookRoot, "." + bookName + ".jpg");
         if (coverFile.exists()) {
@@ -124,7 +121,7 @@ public class ImageHelper {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
-        int reqLength = getCoverLength(c);
+        int reqLength = getSmallerScreenSize(c);
 
         //setting reqWidth matching to desired 1:1 ratio and screen-size
         if (width < height) {

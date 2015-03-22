@@ -6,6 +6,7 @@ import android.content.ClipDescription;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -31,7 +32,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.adapter.MediaAdapter;
+import de.ph1b.audiobook.adapter.BookAdapter;
 import de.ph1b.audiobook.dialog.AudioFolderOverviewDialog;
 import de.ph1b.audiobook.dialog.EditBookDialog;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
@@ -39,19 +40,20 @@ import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.service.BookAddingService;
 import de.ph1b.audiobook.service.ServiceController;
+import de.ph1b.audiobook.uitools.CoverReplacement;
+import de.ph1b.audiobook.uitools.ImageHelper;
+import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.CustomOnSimpleGestureListener;
-import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
-import de.ph1b.audiobook.utils.ThemeUtil;
 
 public class BookShelfActivity extends BaseActivity implements View.OnClickListener, EditBookDialog.OnEditBookFinished, RecyclerView.OnItemTouchListener, BaseApplication.OnBookAddedListener, BaseApplication.OnBookDeletedListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener {
 
     private static final String TAG = BookShelfActivity.class.getSimpleName();
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final AudioFolderOverviewDialog audioFolderOverviewDialog = new AudioFolderOverviewDialog();
-    private MediaAdapter adapter;
+    private BookAdapter adapter;
     private ImageView currentCover;
     private TextView currentText;
     private ViewGroup current;
@@ -118,7 +120,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
         current.setOnClickListener(this);
         currentPlaying.setOnClickListener(this);
-        MediaAdapter.OnItemClickListener onClickListener = new MediaAdapter.OnItemClickListener() {
+        BookAdapter.OnItemClickListener onClickListener = new BookAdapter.OnItemClickListener() {
             @Override
             public void onCoverClicked(int position) {
                 Book book = adapter.getItem(position);
@@ -163,7 +165,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             }
         };
 
-        adapter = new MediaAdapter(baseApplication.getAllBooks(), this, onClickListener);
+        adapter = new BookAdapter(baseApplication.getAllBooks(), this, onClickListener);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, getAmountOfColumns()));
         recyclerView.setAdapter(adapter);
@@ -258,10 +260,11 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             if (b.getId() == currentBookPosition) {
                 //setting cover
                 File coverFile = b.getCoverFile();
+                Drawable coverReplacement = new CoverReplacement(b.getName(), this);
                 if (coverFile != null) {
-                    Picasso.with(this).load(coverFile).into(currentCover);
+                    Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(currentCover);
                 } else {
-                    currentCover.setImageBitmap(ImageHelper.genCapital(b.getName(), this));
+                    currentCover.setImageDrawable(coverReplacement);
                 }
 
                 //setting text

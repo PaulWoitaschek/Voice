@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -73,6 +74,7 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
         prefs = new PrefsManager(this);
         DataBaseHelper db = DataBaseHelper.getInstance(this);
         allBooks = db.getAllBooks();
+        Collections.sort(allBooks);
 
         for (Book b : allBooks) {
             if (b.getId() == prefs.getCurrentBookId()) {

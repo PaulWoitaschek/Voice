@@ -31,9 +31,10 @@ import de.ph1b.audiobook.activity.BookPlayActivity;
 import de.ph1b.audiobook.activity.BookShelfActivity;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.receiver.BaseWidgetProvider;
+import de.ph1b.audiobook.uitools.CoverReplacement;
+import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.BaseApplication.PlayState;
-import de.ph1b.audiobook.utils.ImageHelper;
 import de.ph1b.audiobook.utils.L;
 
 public class WidgetUpdateService extends Service implements BaseApplication.OnPositionChangedListener, BaseApplication.OnCurrentBookChangedListener, BaseApplication.OnPlayStateChangedListener {
@@ -217,7 +218,9 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
                 e.printStackTrace();
             }
             if (cover == null) {
-                cover = ImageHelper.genCapital(book.getName(), this);
+                cover = ImageHelper.drawableToBitmap(new CoverReplacement(
+                        book.getName(),
+                        WidgetUpdateService.this), ImageHelper.getSmallerScreenSize(this), ImageHelper.getLargerScreenSize(this));
             }
             remoteViews.setImageViewBitmap(R.id.imageView, cover);
 

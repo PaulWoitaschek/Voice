@@ -22,7 +22,6 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import de.ph1b.audiobook.utils.BookmarkComparator;
 import de.ph1b.audiobook.utils.L;
 
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
