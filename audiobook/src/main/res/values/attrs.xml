@@ -6,6 +6,7 @@
     <!--Bookshelf-->
     <attr name="book_shelf_play" format="reference" />
     <attr name="book_shelf_pause" format="reference" />
+    <attr name="progress_drawable" format="reference" /> <!-- necessary because we cant use attr in custom drawable on pre lollipop!-->
 
     <!-- BookPlay -->
     <attr name="book_play_rewind" format="reference" />

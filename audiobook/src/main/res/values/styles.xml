@@ -12,6 +12,7 @@
         <!-- BookShelf -->
         <item name="book_shelf_play">@drawable/ic_play_arrow_grey600_48dp</item>
         <item name="book_shelf_pause">@drawable/ic_pause_grey600_48dp</item>
+        <item name="progress_drawable">@drawable/light_progress</item>
 
         <!-- BookPlay -->
         <item name="book_play_rewind">@drawable/ic_fast_rewind_grey600_36dp</item>
@@ -27,7 +28,7 @@
         <!-- BookEditDialog -->
         <item name="edit_next">@drawable/ic_navigate_next_grey600_36dp</item>
         <item name="edit_prev">@drawable/ic_navigate_before_grey600_36dp</item>
-        
+
         <!-- Bookmark -->
         <item name="bookmark_add_button">@drawable/ic_add_circle_outline_grey600_36dp</item>
 
@@ -49,6 +50,7 @@
         <!-- BookShelf -->
         <item name="book_shelf_play">@drawable/ic_play_arrow_white_48dp</item>
         <item name="book_shelf_pause">@drawable/ic_pause_white_48dp</item>
+        <item name="progress_drawable">@drawable/dark_progress</item>
 
         <!-- BookPlay -->
         <item name="book_play_rewind">@drawable/ic_fast_rewind_white_36dp</item>
