@@ -140,23 +140,21 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
 
     private void hideElements(RemoteViews remoteViews, int width, int coverSize) {
         L.v(TAG, "hideElements called");
-        int rewindButtonSize = intToDp(4 + 36 + 4);
-        int playButtonSize = intToDp(4 + 48 + 4);
-        int fastForwardButtonSize = intToDp(4 + 36 + 4);
+        int buttonSize = intToDp(4 + 36 + 4);
 
         remoteViews.setViewVisibility(R.id.imageView, View.VISIBLE);
         remoteViews.setViewVisibility(R.id.rewind, View.VISIBLE);
         remoteViews.setViewVisibility(R.id.fast_forward, View.VISIBLE);
 
-        if (coverSize + rewindButtonSize + playButtonSize + fastForwardButtonSize < width) {
+        if (width > 3 * buttonSize + coverSize) {
             return;
         }
         remoteViews.setViewVisibility(R.id.imageView, View.GONE);
-        if (rewindButtonSize + playButtonSize + fastForwardButtonSize < width) {
+        if (width > 3 * buttonSize) {
             return;
         }
         remoteViews.setViewVisibility(R.id.fast_forward, View.GONE);
-        if (playButtonSize + rewindButtonSize < width) {
+        if (width > 2 * buttonSize) {
             return;
         }
         remoteViews.setViewVisibility(R.id.rewind, View.GONE);
@@ -186,9 +184,9 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
         remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI);
 
         if (baseApplication.getPlayState() == PlayState.PLAYING) {
-            remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_48dp);
+            remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_36dp);
         } else {
-            remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow_white_48dp);
+            remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow_white_36dp);
         }
 
         // if we have any book, init the views and have a click on the whole widget start BookPlay.
