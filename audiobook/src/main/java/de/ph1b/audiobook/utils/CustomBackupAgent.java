@@ -13,13 +13,12 @@ public class CustomBackupAgent extends BackupAgentHelper {
     public void onCreate() {
 
         String resumeOnReplug = getString(R.string.pref_key_resume_on_replug);
-        String coverOnInternet = getString(R.string.pref_key_cover_on_internet);
         String seekTime = getString(R.string.pref_key_seek_time);
         String sleepTime = getString(R.string.pref_key_sleep_time);
         String trackToEnd = getString(R.string.pref_key_track_to_end);
 
         SharedPreferencesBackupHelper helper = new SharedPreferencesBackupHelper(this,
-                resumeOnReplug, coverOnInternet, seekTime, sleepTime, trackToEnd);
+                resumeOnReplug, seekTime, sleepTime, trackToEnd);
         addHelper(BACKUP_KEY, helper);
     }
 }

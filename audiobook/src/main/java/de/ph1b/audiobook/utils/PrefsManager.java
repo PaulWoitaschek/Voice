@@ -72,8 +72,4 @@ public class PrefsManager {
     public boolean resumeOnReplug() {
         return sp.getBoolean(c.getString(R.string.pref_key_resume_on_replug), true);
     }
-
-    public boolean mobileConnectionAllowed() {
-        return sp.getBoolean(c.getString(R.string.pref_key_cover_on_internet), false);
-    }
 }

@@ -14,12 +14,7 @@
         android:defaultValue="true"
         android:key="@string/pref_key_resume_on_replug"
         android:summary="@string/pref_resume_on_replug_hint"
-        android:title="@string/pref_resume_on_replug" />
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="@string/pref_key_cover_on_internet"
-        android:summary="@string/pref_cover_on_internet_hint"
-        android:title="@string/pref_cover_on_internet" />
+        android:title="@string/pref_resume_on_replug" />´
     <de.ph1b.audiobook.dialog.SeekPreferenceDialog
         android:key="@string/pref_key_seek_time"
         android:title="@string/pref_seek_time" />

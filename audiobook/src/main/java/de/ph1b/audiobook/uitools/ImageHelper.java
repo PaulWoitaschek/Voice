@@ -17,7 +17,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.PrefsManager;
 
 public class ImageHelper {
 
@@ -81,14 +80,11 @@ public class ImageHelper {
     }
 
     public static boolean isOnline(Context c) {
-        ConnectivityManager cm =
-                (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm != null) {
-            boolean mobileConnectionAllowed = new PrefsManager(c).mobileConnectionAllowed();
-
             NetworkInfo info = cm.getActiveNetworkInfo();
             if (info != null && info.isConnected()) {
-                return !(info.getType() == ConnectivityManager.TYPE_MOBILE && !mobileConnectionAllowed);
+                return true;
             }
         }
         return false;
