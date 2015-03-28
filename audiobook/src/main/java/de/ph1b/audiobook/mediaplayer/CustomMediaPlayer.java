@@ -28,6 +28,8 @@ import org.vinuxproject.sonic.Sonic;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
 
 import de.ph1b.audiobook.utils.L;
@@ -39,12 +41,13 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     private final ReentrantLock lock = new ReentrantLock();
     private final Object mDecoderLock = new Object();
     private final float pitch = 1;
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
     private PowerManager.WakeLock wakeLock = null;
     private AudioTrack track;
     private Sonic sonic;
     private MediaExtractor extractor;
     private MediaCodec codec;
-    private Thread decoderThread;
+    private Runnable decoderRunnable = null;
     private String path = null;
     private volatile boolean mContinue = false;
     private volatile boolean mIsDecoding = false;
@@ -169,6 +172,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
         L.v(TAG, "release called in state:" + state);
         reset(); //reset will release wakelock
         onCompletionListener = null;
+        executor.shutdown();
         state = State.END;
         L.d(TAG, "State changed to: " + state);
     }
@@ -181,7 +185,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
         try {
             mContinue = false;
             try {
-                if (decoderThread != null && state != State.PLAYBACK_COMPLETED) {
+                if (decoderRunnable != null && state != State.PLAYBACK_COMPLETED) {
                     while (mIsDecoding) {
                         synchronized (mDecoderLock) {
                             mDecoderLock.notify();
@@ -334,7 +338,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
 
     private void decode() {
         L.d(TAG, "decode called ins state=" + state);
-        decoderThread = new Thread(new Runnable() {
+        decoderRunnable = new Runnable() {
             @Override
             public void run() {
                 mIsDecoding = true;
@@ -448,11 +452,9 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                     mDecoderLock.notifyAll();
                 }
             }
-        }
+        };
 
-        );
-        decoderThread.setDaemon(true);
-        decoderThread.start();
+        executor.execute(decoderRunnable);
     }
 
     private enum State {
