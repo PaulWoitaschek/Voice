@@ -27,7 +27,7 @@ import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.NaturalOrderComparator;
+import de.ph1b.audiobook.model.NaturalOrderComparator;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 public class BookAddingService extends Service {

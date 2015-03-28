@@ -46,7 +46,7 @@ import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.BaseApplication;
-import de.ph1b.audiobook.utils.CustomOnSimpleGestureListener;
+import de.ph1b.audiobook.uitools.CustomOnSimpleGestureListener;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 

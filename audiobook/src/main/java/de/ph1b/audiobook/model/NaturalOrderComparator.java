@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.utils;
+package de.ph1b.audiobook.model;
 
 import java.io.File;
 import java.util.Comparator;

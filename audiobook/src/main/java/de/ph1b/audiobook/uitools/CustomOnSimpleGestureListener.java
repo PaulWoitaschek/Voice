@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.utils;
+package de.ph1b.audiobook.uitools;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
