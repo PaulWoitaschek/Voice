@@ -13,13 +13,17 @@ public class Book implements Comparable<Book> {
     private static final String TAG = Book.class.getSimpleName();
 
     private final String root;
+    @NonNull
     private final ArrayList<Chapter> chapters;
+    @NonNull
     private final ArrayList<Bookmark> bookmarks;
     private long id;
     private long sortId = -1;
+    @NonNull
     private String name;
     private int time = 0;
     private float playbackSpeed = 1;
+    @NonNull
     private String relativeMediaPath;
 
     public Book(@NonNull String root, @NonNull String name, @NonNull ArrayList<Chapter> chapters, @NonNull ArrayList<Bookmark> bookmarks, float playbackSpeed) {
@@ -92,15 +96,15 @@ public class Book implements Comparable<Book> {
     @Override
     public String toString() {
         return TAG + "[" +
-                "root=" + root + ", " +
-                "chapters=" + chapters + ", " +
-                "bookmarks=" + bookmarks + ", " +
-                "id=" + id + ", " +
-                "sortId=" + sortId + ", " +
-                "name=" + name +
-                ", time=" + time + ", " +
-                "playbackSpeed=" + playbackSpeed + ", " +
-                "relativeMediaPath=" + relativeMediaPath +
+                "root=" + root +
+                ",chapters=" + chapters +
+                ",bookmarks=" + bookmarks +
+                ",id=" + id + ", " +
+                ",sortId=" + sortId +
+                ",name=" + name +
+                ",time=" + time +
+                ",playbackSpeed=" + playbackSpeed +
+                ",relativeMediaPath=" + relativeMediaPath +
                 "]";
     }
 
@@ -114,6 +118,7 @@ public class Book implements Comparable<Book> {
         return result;
     }
 
+    @NonNull
     public String getRelativeMediaPath() {
         return relativeMediaPath;
     }
@@ -173,12 +178,13 @@ public class Book implements Comparable<Book> {
         this.sortId = sortId;
     }
 
+    @NonNull
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        if (name == null || name.equals("")) {
+    public void setName(@NonNull String name) {
+        if (name.equals("")) {
             throw new NullPointerException("name must not be empty");
         }
         this.name = name;
@@ -201,10 +207,12 @@ public class Book implements Comparable<Book> {
         this.id = id;
     }
 
+    @NonNull
     public ArrayList<Chapter> getChapters() {
         return chapters;
     }
 
+    @NonNull
     public ArrayList<Bookmark> getBookmarks() {
         return bookmarks;
     }
