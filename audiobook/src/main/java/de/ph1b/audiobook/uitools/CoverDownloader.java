@@ -3,6 +3,7 @@ package de.ph1b.audiobook.uitools;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.squareup.okhttp.Call;
@@ -33,7 +34,7 @@ public class CoverDownloader {
     private final Picasso picasso;
     private Call call = null;
 
-    public CoverDownloader(Context c) {
+    public CoverDownloader(@NonNull Context c) {
         picasso = Picasso.with(c);
     }
 
@@ -51,7 +52,7 @@ public class CoverDownloader {
      * @return the generated bitmap. If no bitmap was found, returns null
      */
     @Nullable
-    public Bitmap getCover(String searchText, int number) {
+    public Bitmap getCover(@NonNull String searchText, int number) {
         String bitmapUrl = getBitmapUrl(searchText, number);
         try {
             L.v(TAG, "number=" + number + ", url=" + bitmapUrl);
@@ -62,6 +63,7 @@ public class CoverDownloader {
         return null;
     }
 
+    @NonNull
     private String getIPAddress() {
         try {
             List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
@@ -80,7 +82,7 @@ public class CoverDownloader {
     }
 
     @Nullable
-    private String getBitmapUrl(String searchText, int number) {
+    private String getBitmapUrl(@NonNull String searchText, int number) {
         if (searchMapping.containsKey(searchText)) {
             ArrayList<String> containing = searchMapping.get(searchText);
             if (number < containing.size()) {
@@ -107,7 +109,7 @@ public class CoverDownloader {
         }
     }
 
-    private ArrayList<String> getNewLinks(String searchText, int startPage) {
+    private ArrayList<String> getNewLinks(@NonNull String searchText, int startPage) {
         ArrayList<String> newStrings = new ArrayList<>();
 
         try {
