@@ -236,7 +236,7 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
             Bitmap cover = null;
             try {
                 File coverFile = book.getCoverFile();
-                if (coverFile != null) {
+                if (coverFile.exists() && coverFile.canRead()) {
                     cover = Picasso.with(WidgetUpdateService.this).load(coverFile).get();
                 }
             } catch (IOException e) {

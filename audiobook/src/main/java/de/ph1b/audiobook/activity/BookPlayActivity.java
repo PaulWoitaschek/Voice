@@ -136,7 +136,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         // (Cover)
         File coverFile = book.getCoverFile();
         Drawable coverReplacement = new CoverReplacement(baseApplication.getCurrentBook().getName(), this);
-        if (coverFile != null) {
+        if (coverFile.exists() && coverFile.canRead()) {
             Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(coverView);
         } else {
             coverView.setImageDrawable(coverReplacement);

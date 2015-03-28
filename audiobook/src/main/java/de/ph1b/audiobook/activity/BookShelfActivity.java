@@ -140,7 +140,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
                 ArrayList<Bitmap> bitmap = new ArrayList<>();
                 File coverFile = bookToEdit.getCoverFile();
-                if (coverFile != null) {
+                if (coverFile.exists() && coverFile.canRead()) {
                     Bitmap defaultCover = BitmapFactory.decodeFile(coverFile.getAbsolutePath());
                     if (defaultCover != null) {
                         bitmap.add(defaultCover);
@@ -261,7 +261,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 //setting cover
                 File coverFile = b.getCoverFile();
                 Drawable coverReplacement = new CoverReplacement(b.getName(), this);
-                if (coverFile != null) {
+                if (coverFile.exists() && coverFile.canRead()) {
                     Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(currentCover);
                 } else {
                     currentCover.setImageDrawable(coverReplacement);
@@ -317,7 +317,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         if (success) {
             // delete old cover
             File oldCover = bookToEdit.getCoverFile();
-            if (oldCover != null) {
+            if (oldCover.exists() && oldCover.canRead()) {
                 L.d(TAG, "deleting old cover=" + oldCover);
                 //noinspection ResultOfMethodCallIgnored
                 oldCover.delete();
@@ -331,7 +331,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             }
 
             if (cover != null) {
-                ImageHelper.saveCover(cover, this, bookToEdit.getRoot(), bookName);
+                ImageHelper.saveCover(cover, this, bookToEdit.getRoot(), bookToEdit.getChapters());
             }
             adapter.updateItem(bookToEdit);
             initPlayerWidget();

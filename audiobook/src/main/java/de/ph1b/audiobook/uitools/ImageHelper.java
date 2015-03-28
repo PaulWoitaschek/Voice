@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.Display;
 import android.view.WindowManager;
@@ -15,7 +16,10 @@ import android.view.WindowManager;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
+import de.ph1b.audiobook.model.Book;
+import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.utils.L;
 
 public class ImageHelper {
@@ -44,7 +48,7 @@ public class ImageHelper {
      * @param bitmap The bitmap to be saved
      * @param c      Application context
      */
-    public static void saveCover(Bitmap bitmap, Context c, String bookRoot, String bookName) {
+    public static void saveCover(Bitmap bitmap, Context c, @NonNull String root, @NonNull ArrayList<Chapter> chapters) {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
         int relation = width / height;
@@ -56,8 +60,8 @@ public class ImageHelper {
         // saving cover
         int coverLength = getSmallerScreenSize(c);
         Bitmap cover = Bitmap.createScaledBitmap(bitmap, coverLength, coverLength, true);
-        File coverFile = new File(bookRoot, "." + bookName + ".jpg");
-        if (coverFile.exists()) {
+        File coverFile = Book.getCoverFile(root, chapters);
+        if (coverFile.exists() && coverFile.canWrite()) {
             //noinspection ResultOfMethodCallIgnored
             coverFile.delete();
         }

@@ -259,7 +259,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         Bitmap cover = null;
         try {
             File coverFile = book.getCoverFile();
-            if (coverFile != null) {
+            if (coverFile.exists() && coverFile.canRead()) {
                 cover = Picasso.with(AudioService.this).load(coverFile).resize(width, height).get();
             }
         } catch (IOException e) {
@@ -340,7 +340,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 Book book = controller.getBook();
                 Bitmap bitmap = null;
                 File coverFile = book.getCoverFile();
-                if (coverFile != null) {
+                if (coverFile.exists() && coverFile.canRead()) {
                     try {
                         bitmap = Picasso.with(AudioService.this).load(coverFile).get();
                     } catch (IOException e) {

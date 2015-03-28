@@ -290,7 +290,7 @@ public class BookAddingService extends Service {
         }
 
         if (musicFiles.size() == 0) {
-            L.d(TAG, "assAsBook with file=" + rootFiles + " aborted because it contains no audiofiles");
+            L.d(TAG, "assAsBook with file=" + rootFiles + " aborted because it contains no audio files");
         }
 
         Bitmap cover = null;
@@ -356,7 +356,7 @@ public class BookAddingService extends Service {
         }
 
         if (cover != null && !new File(bookRoot, bookName + ".jpg").exists()) {
-            ImageHelper.saveCover(cover, this, bookRoot, bookName);
+            ImageHelper.saveCover(cover, this, bookRoot, containingMedia);
         }
 
         return new Book(bookRoot, bookName, containingMedia, new ArrayList<Bookmark>(), 1.0f, Book.ID_UNKNOWN, Book.ID_UNKNOWN, 0, containingMedia.get(0).getPath());
