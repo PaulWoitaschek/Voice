@@ -16,7 +16,7 @@ import de.ph1b.audiobook.utils.L;
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class DataBaseHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 21;
+    private static final int DATABASE_VERSION = 22;
     private static final String DATABASE_NAME = "autoBookDB";
 
     private static final String TABLE_BOOK = "TABLE_BOOK";

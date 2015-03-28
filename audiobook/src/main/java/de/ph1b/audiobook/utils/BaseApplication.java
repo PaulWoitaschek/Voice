@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import net.jcip.annotations.GuardedBy;
@@ -119,6 +120,7 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
         }
     }
 
+    @Nullable
     public Book getCurrentBook() {
         bookLock.lock();
         try {
