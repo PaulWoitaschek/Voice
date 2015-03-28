@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,11 +23,14 @@ import de.ph1b.audiobook.model.Chapter;
  */
 public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHolder> {
 
+    @NonNull
     private final ArrayList<Bookmark> bookmarks;
+    @NonNull
     private final OnOptionsMenuClickedListener listener;
+    @NonNull
     private final Book book;
 
-    public BookmarkAdapter(Book book, OnOptionsMenuClickedListener listener) {
+    public BookmarkAdapter(@NonNull Book book, @NonNull OnOptionsMenuClickedListener listener) {
         this.book = book;
         this.listener = listener;
         this.bookmarks = book.getBookmarks();
@@ -37,6 +41,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         notifyItemRemoved(position);
     }
 
+    @NonNull
     public Bookmark getItem(int position) {
         return bookmarks.get(position);
     }
@@ -74,6 +79,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         return position;
     }
 
+    @NonNull
     private String formatTime(int ms) {
         String h = String.valueOf(TimeUnit.MILLISECONDS.toHours(ms));
         String m = String.format("%02d", (TimeUnit.MILLISECONDS.toMinutes(ms) % 60));
