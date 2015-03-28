@@ -279,9 +279,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                  */
                 ArrayList<Chapter> chapters = book.getChapters();
                 Chapter chapter = book.getCurrentChapter();
-                if (chapter == null) {
-                    throw new RuntimeException("onPositionChanged did not find a chapter");
-                }
 
                 int position = chapters.indexOf(chapter);
                 bookSpinner.setTag(position);

@@ -30,7 +30,7 @@ import de.ph1b.audiobook.utils.NaturalOrderComparator;
 
 /**
  * Activity for choosing an audiobook folder. If there are multiple SD-Cards, the Activity unifies
- * them to a fake-folder structure. We must make sure that this is not chosable. When there are no
+ * them to a fake-folder structure. We must make sure that this is not choosable. When there are no
  * multiple sd-cards, we will directly show the content of the 1 SD Card.
  */
 public class FolderChooserActivity extends BaseActivity implements View.OnClickListener {
@@ -54,7 +54,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         // Primary physical SD-CARD (not emulated)
         final String rawExternalStorage = System.getenv("EXTERNAL_STORAGE");
         // All Secondary SD-CARDs (all exclude primary) separated by ":"
-        final String rawSecondaryStoragesStr = System.getenv("SECONDARY_STORAGE");
+        final String rawSecondaryStorageStr = System.getenv("SECONDARY_STORAGE");
         // Primary emulated SD-CARD
         final String rawEmulatedStorageTarget = System.getenv("EMULATED_STORAGE_TARGET");
         if (TextUtils.isEmpty(rawEmulatedStorageTarget)) {
@@ -91,11 +91,11 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
                 rv.add(rawEmulatedStorageTarget + File.separator + rawUserId);
             }
         }
-        // Add all secondary storages
-        if (!TextUtils.isEmpty(rawSecondaryStoragesStr)) {
-            // All Secondary SD-CARDs splited into array
-            final String[] rawSecondaryStorages = rawSecondaryStoragesStr.split(File.pathSeparator);
-            Collections.addAll(rv, rawSecondaryStorages);
+        // Add all secondary storage
+        if (!TextUtils.isEmpty(rawSecondaryStorageStr)) {
+            // All Secondary SD-CARDs splitted into array
+            final String[] rawSecondaryStorage = rawSecondaryStorageStr.split(File.pathSeparator);
+            Collections.addAll(rv, rawSecondaryStorage);
         }
         rv.add("/storage/extSdCard");
         rv.add(Environment.getExternalStorageDirectory().getAbsolutePath());

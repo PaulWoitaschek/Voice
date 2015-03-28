@@ -421,11 +421,11 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                             lock.lock();
                             try {
                                 track.release();
-                                final MediaFormat oformat = codec
+                                final MediaFormat oFormat = codec
                                         .getOutputFormat();
                                 initDevice(
-                                        oformat.getInteger(MediaFormat.KEY_SAMPLE_RATE),
-                                        oformat.getInteger(MediaFormat.KEY_CHANNEL_COUNT));
+                                        oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE),
+                                        oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT));
                                 outputBuffers = codec.getOutputBuffers();
                                 track.play();
                             } finally {

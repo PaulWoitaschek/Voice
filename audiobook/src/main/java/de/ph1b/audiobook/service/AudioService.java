@@ -404,7 +404,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                     }
 
                     /**
-                     * Only break here. if we should pause, AUDIOFOCUS_LOSS_TRANSIENT will handle
+                     * Only break here. if we should pause, AUDIO_FOCUS_LOSS_TRANSIENT will handle
                      * that for us.
                      */
                     break;

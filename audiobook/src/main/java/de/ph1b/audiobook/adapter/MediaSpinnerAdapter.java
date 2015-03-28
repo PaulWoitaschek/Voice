@@ -25,7 +25,7 @@ public class MediaSpinnerAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return chapters != null ? chapters.size() : 0;
+        return chapters.size();
     }
 
     @Override

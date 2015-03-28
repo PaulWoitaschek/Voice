@@ -105,7 +105,7 @@ public class DraggableBoxImageView extends ImageView {
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    protected void onSizeChanged(int w, int h, int oldW, int oldH) {
 
         init();
 
@@ -127,7 +127,7 @@ public class DraggableBoxImageView extends ImageView {
             maxHeight = bottom - top;
         }
 
-        super.onSizeChanged(w, h, oldw, oldh);
+        super.onSizeChanged(w, h, oldW, oldH);
     }
 
     public Rect getCropPosition() {
