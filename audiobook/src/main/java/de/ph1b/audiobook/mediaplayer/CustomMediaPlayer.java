@@ -37,33 +37,25 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     private final static int TRACK_NUM = 0;
     private static final String TAG = CustomMediaPlayer.class.getSimpleName();
     private final ReentrantLock lock = new ReentrantLock();
-    private final Object mDecoderLock;
-    private final float pitch;
+    private final Object mDecoderLock = new Object();
+    private final float pitch = 1;
     private PowerManager.WakeLock wakeLock = null;
     private AudioTrack track;
     private Sonic sonic;
     private MediaExtractor extractor;
     private MediaCodec codec;
     private Thread decoderThread;
-    private String path;
-    private volatile boolean mContinue;
-    private volatile boolean mIsDecoding;
-    private float speed;
+    private String path = null;
+    private volatile boolean mContinue = false;
+    private volatile boolean mIsDecoding = false;
+    private float speed = 1;
     private MediaPlayerInterface.OnCompletionListener onCompletionListener;
-    private volatile State state;
+    private volatile State state = State.IDLE;
     private MediaPlayer.OnErrorListener onErrorListener;
     private long duration;
 
 
     public CustomMediaPlayer() {
-        L.v(TAG, "constructor called");
-        state = State.IDLE;
-        speed = (float) 1.0;
-        pitch = (float) 1.0;
-        mContinue = false;
-        mIsDecoding = false;
-        path = null;
-        mDecoderLock = new Object();
     }
 
     @Override
