@@ -41,7 +41,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     private final ReentrantLock lock = new ReentrantLock();
     private final Object mDecoderLock = new Object();
     private final float pitch = 1;
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private PowerManager.WakeLock wakeLock = null;
     private AudioTrack track;
     private Sonic sonic;
