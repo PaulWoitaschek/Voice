@@ -60,7 +60,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         // saving new values
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
-        long bookId = -1;
+        long bookId = Book.ID_UNKNOWN;
         try {
             ContentValues cv = new ContentValues();
             cv.put(BOOK_ROOT, book.getRoot());
