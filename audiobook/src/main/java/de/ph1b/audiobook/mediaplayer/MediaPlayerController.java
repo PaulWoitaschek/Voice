@@ -364,7 +364,9 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
             stopUpdating();
             player.release();
             baseApplication.setPlayState(BaseApplication.PlayState.STOPPED);
-            baseApplication.setSleepTimerActive(false);
+            if (sleepSandActive()) {
+                toggleSleepSand();
+            }
             executor.shutdown();
             state = State.DEAD;
         } finally {
