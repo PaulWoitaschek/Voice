@@ -61,6 +61,9 @@ public class BookmarkDialog extends DialogFragment {
         final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
         final ServiceController controller = new ServiceController(getActivity());
         final Book book = ((BaseApplication) getActivity().getApplication()).getCurrentBook();
+        if (book == null) {
+            throw new AssertionError("Cannot instantiate " + TAG + " without a current book");
+        }
 
         BookmarkAdapter.OnOptionsMenuClickedListener listener = new BookmarkAdapter.OnOptionsMenuClickedListener() {
             @Override
