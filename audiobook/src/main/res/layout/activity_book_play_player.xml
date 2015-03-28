@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
     android:gravity="center_vertical"
+    android:layout_marginBottom="@dimen/vertical_margin"
     android:orientation="vertical">
 
     <Spinner
