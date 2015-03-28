@@ -211,7 +211,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.action_media_play, menu);
+        getMenuInflater().inflate(R.menu.book_play, menu);
         return true;
     }
 

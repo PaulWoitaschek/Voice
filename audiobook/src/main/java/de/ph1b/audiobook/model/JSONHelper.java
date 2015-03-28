@@ -107,7 +107,7 @@ class JSONHelper {
         }
     }
 
-    public void setUseCoverReplacement(boolean useCoverReplacement){
+    public void setUseCoverReplacement(boolean useCoverReplacement) {
         try {
             playingInformation.put(JSON_USE_COVER_REPLACEMENT, useCoverReplacement);
         } catch (JSONException e) {

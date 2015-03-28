@@ -70,13 +70,13 @@ public class BookmarkDialog extends DialogFragment {
             public void onOptionsMenuClicked(final int position, View v) {
                 PopupMenu popup = new PopupMenu(getActivity(), v);
                 MenuInflater inflater = popup.getMenuInflater();
-                inflater.inflate(R.menu.popup_menu, popup.getMenu());
+                inflater.inflate(R.menu.bookmark_popup, popup.getMenu());
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity());
                         switch (item.getItemId()) {
-                            case R.id.edit_book:
+                            case R.id.edit:
                                 final Bookmark editBookmark = adapter.getItem(position);
 
                                 // custom view
@@ -119,7 +119,7 @@ public class BookmarkDialog extends DialogFragment {
                                     }
                                 });
                                 return true;
-                            case R.id.delete_book:
+                            case R.id.delete:
                                 final Bookmark deleteBookmark = adapter.getItem(position);
 
                                 builder.title(R.string.bookmark_delete_title)

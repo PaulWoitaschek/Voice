@@ -12,7 +12,7 @@ public class NoExternalStorageActivity extends ActionBarActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_no_external_storage);
+        setContentView(R.layout.activity_no_external);
 
         getSupportActionBar().setTitle(R.string.no_external_storage_action_bar_title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);

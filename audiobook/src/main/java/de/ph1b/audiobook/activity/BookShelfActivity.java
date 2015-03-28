@@ -284,7 +284,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.action_only_settings, menu);
+        getMenuInflater().inflate(R.menu.book_shelf, menu);
         return true;
     }
 

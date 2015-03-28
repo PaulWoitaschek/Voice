@@ -55,7 +55,7 @@ public class FolderAdapter extends BaseAdapter {
         final ViewHolder viewHolder;
         if (convertView == null) {
             LayoutInflater vi = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = vi.inflate(R.layout.folder_adapter_row_layout, parent, false);
+            convertView = vi.inflate(R.layout.activity_folder_chooser_row_layout, parent, false);
 
             viewHolder = new ViewHolder();
             viewHolder.textView = (TextView) convertView.findViewById(R.id.text1);
