@@ -29,6 +29,7 @@ import de.ph1b.audiobook.dialog.BookmarkDialog;
 import de.ph1b.audiobook.dialog.JumpToPositionDialog;
 import de.ph1b.audiobook.dialog.SetPlaybackSpeedDialog;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
+import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.CoverReplacement;
@@ -50,6 +51,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     private PrefsManager prefs;
     private ServiceController controller;
     private BaseApplication baseApplication;
+    private Book book;
 
     private String formatTime(int ms) {
         String h = String.valueOf(TimeUnit.MILLISECONDS.toHours(ms));
@@ -66,10 +68,15 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         prefs = new PrefsManager(this);
         controller = new ServiceController(this);
         baseApplication = (BaseApplication) getApplication();
+        book = baseApplication.getCurrentBook();
+
+        if (book == null) {
+            throw new AssertionError("Cant instantiate " + TAG + " without a current book");
+        }
 
         //setup actionbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(baseApplication.getCurrentBook().getName());
+        getSupportActionBar().setTitle(book.getName());
 
         //init buttons
         seekBar = (SeekBar) findViewById(R.id.seekBar);
@@ -127,7 +134,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         });
 
         // (Cover)
-        File coverFile = baseApplication.getCurrentBook().getCoverFile();
+        File coverFile = book.getCoverFile();
         Drawable coverReplacement = new CoverReplacement(baseApplication.getCurrentBook().getName(), this);
         if (coverFile != null) {
             Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(coverView);
@@ -273,8 +280,8 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                  * Setting position as a tag, so we can make sure onItemSelected is only fired when
                  * the user changes the position himself.
                  */
-                ArrayList<Chapter> chapters = baseApplication.getCurrentBook().getChapters();
-                Chapter chapter = baseApplication.getCurrentBook().getCurrentChapter();
+                ArrayList<Chapter> chapters = book.getChapters();
+                Chapter chapter = book.getCurrentChapter();
 
                 int position = chapters.indexOf(chapter);
                 bookSpinner.setTag(position);
@@ -285,7 +292,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
 
                 // Setting seekBar and played time view
                 if (!seekBar.isPressed()) {
-                    int progress = baseApplication.getCurrentBook().getTime();
+                    int progress = book.getTime();
                     seekBar.setProgress(progress);
                     playedTimeView.setText(formatTime(progress));
                 }
