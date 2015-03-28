@@ -316,7 +316,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onEditBookFinished(@NonNull String bookName, @Nullable Bitmap cover) {
-
         if (cover != null) {
             File oldCover = bookToEdit.getCoverFile();
             if (oldCover.exists() && oldCover.canRead()) {

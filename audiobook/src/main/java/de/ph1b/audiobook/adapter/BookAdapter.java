@@ -1,8 +1,8 @@
 package de.ph1b.audiobook.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,19 +27,18 @@ import de.ph1b.audiobook.utils.L;
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
 
     private static final String TAG = BookAdapter.class.getSimpleName();
+    @NonNull
     private final ArrayList<Book> books;
     private final DataBaseHelper db;
     private final Context c;
     private final OnItemClickListener onItemClickListener;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    private final Picasso picasso;
 
-    public BookAdapter(ArrayList<Book> books, Activity a, OnItemClickListener onItemClickListener) {
+    public BookAdapter(@NonNull ArrayList<Book> books, Context c, OnItemClickListener onItemClickListener) {
         this.books = books;
-        this.c = a;
+        this.c = c;
         this.onItemClickListener = onItemClickListener;
-        this.picasso = Picasso.with(c);
-        db = DataBaseHelper.getInstance(a);
+        db = DataBaseHelper.getInstance(c);
     }
 
     public void updateItem(final Book book) {
@@ -50,10 +49,12 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         }
     }
 
+    @NonNull
     public Book getItem(int position) {
         return books.get(position);
     }
 
+    @NonNull
     public ArrayList<Book> getBooks() {
         return books;
     }
@@ -119,9 +120,9 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         File coverFile = b.getCoverFile();
         Drawable coverReplacement = new CoverReplacement(b.getName().substring(0, 1), c);
         if (!b.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-            picasso.load(coverFile).placeholder(coverReplacement).into(viewHolder.coverView);
+            Picasso.with(c).load(coverFile).placeholder(coverReplacement).into(viewHolder.coverView);
         } else {
-            picasso.cancelRequest(viewHolder.coverView);
+            Picasso.with(c).cancelRequest(viewHolder.coverView);
             viewHolder.coverView.setImageDrawable(coverReplacement);
         }
     }
