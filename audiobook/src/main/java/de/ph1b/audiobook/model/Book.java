@@ -10,17 +10,16 @@ import de.ph1b.audiobook.utils.Validate;
 
 public class Book implements Comparable<Book> {
 
-    private static final String TAG = Book.class.getSimpleName();
     public static final int ID_UNKNOWN = -1;
-
+    private long id = ID_UNKNOWN;
+    private long sortId = ID_UNKNOWN;
+    private static final String TAG = Book.class.getSimpleName();
     @NonNull
     private final String root;
     @NonNull
     private final ArrayList<Chapter> chapters;
     @NonNull
     private final ArrayList<Bookmark> bookmarks;
-    private long id = ID_UNKNOWN;
-    private long sortId = ID_UNKNOWN;
     @NonNull
     private String name;
     private int time = 0;
@@ -32,7 +31,7 @@ public class Book implements Comparable<Book> {
     public Book(@NonNull String root, @NonNull String name, @NonNull ArrayList<Chapter> chapters, @NonNull ArrayList<Bookmark> bookmarks, float playbackSpeed, long id, long sortId, int time, @NonNull String relativeMediaPath) {
         Validate.notNull(root, name, chapters, bookmarks, relativeMediaPath);
         Validate.notEmpty(root, name, relativeMediaPath);
-        Validate.notEmpty(chapters, bookmarks);
+        Validate.notEmpty(chapters);
 
 
         //check if bookmark exists
