@@ -18,8 +18,8 @@
     <CheckBoxPreference
         android:defaultValue="false"
         android:key="@string/pref_key_pause_on_can_duck"
-        android:title="@string/pref_pause_on_can_duck_title"
-        android:summary="@string/pref_pause_on_can_duck_summary" />
+        android:summary="@string/pref_pause_on_can_duck_summary"
+        android:title="@string/pref_pause_on_can_duck_title" />
     <de.ph1b.audiobook.dialog.SeekPreferenceDialog
         android:key="@string/pref_key_seek_time"
         android:title="@string/pref_seek_time" />
