@@ -278,7 +278,7 @@ public class BookAddingService extends Service {
         ArrayList<File> rootFiles = new ArrayList<>();
         rootFiles.add(rootFile);
         rootFiles = addFilesRecursive(rootFiles);
-        ArrayList<Chapter> containingMedia = new ArrayList<>();
+        ArrayList<Chapter> chapters = new ArrayList<>();
         ArrayList<File> coverFiles = new ArrayList<>();
         ArrayList<File> musicFiles = new ArrayList<>();
         for (File f : rootFiles) {
@@ -307,15 +307,12 @@ public class BookAddingService extends Service {
             }
         }
 
-        String bookRoot;
-        String bookName;
-        if (rootFile.isDirectory()) {
-            bookRoot = rootFile.getAbsolutePath();
-            bookName = rootFile.getName();
-        } else {
-            bookRoot = rootFile.getParent();
-            bookName = rootFile.getName().substring(0, rootFile.getName().lastIndexOf("."));
-        }
+        String bookRoot = rootFile.isDirectory() ?
+                rootFile.getAbsolutePath() :
+                rootFile.getParent();
+        String bookName = rootFile.isDirectory() ?
+                rootFile.getName() :
+                rootFile.getName().substring(0, rootFile.getName().lastIndexOf("."));
 
         // get duration and if there is no cover yet, try to get an embedded dover (up to 5 times)
         final int MAX_TRIES_FOR_EMBEDDED_COVER = 5;
@@ -335,7 +332,7 @@ public class BookAddingService extends Service {
 
                 String chapterName = f.getName().substring(0, f.getName().lastIndexOf("."));
                 if (duration > 0) {
-                    containingMedia.add(new Chapter(f.getAbsolutePath().substring(bookRoot.length() + 1), chapterName, duration));
+                    chapters.add(new Chapter(f.getAbsolutePath().substring(bookRoot.length() + 1), chapterName, duration));
                 }
 
                 if (i < MAX_TRIES_FOR_EMBEDDED_COVER && cover == null) {
@@ -350,16 +347,16 @@ public class BookAddingService extends Service {
             mp.release();
         }
 
-        if (containingMedia.size() == 0) {
+        if (chapters.size() == 0) {
             L.e(TAG, "Book with root=" + rootFiles + " contains no media");
             return null;
         }
 
-        if (cover != null && !new File(bookRoot, bookName + ".jpg").exists()) {
-            ImageHelper.saveCover(cover, this, bookRoot, containingMedia);
+        if (cover != null && !Book.getCoverFile(bookRoot, chapters).exists()) {
+            ImageHelper.saveCover(cover, this, bookRoot, chapters);
         }
 
-        return new Book(bookRoot, bookName, containingMedia, new ArrayList<Bookmark>(), 1.0f, Book.ID_UNKNOWN, Book.ID_UNKNOWN, 0, containingMedia.get(0).getPath());
+        return new Book(bookRoot, bookName, chapters, new ArrayList<Bookmark>(), 1.0f, Book.ID_UNKNOWN, Book.ID_UNKNOWN, 0, chapters.get(0).getPath());
     }
 
     @Nullable

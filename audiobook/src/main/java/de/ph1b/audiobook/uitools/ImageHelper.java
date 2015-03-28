@@ -43,7 +43,7 @@ public class ImageHelper {
     }
 
     /**
-     * Saves a bitmap as a jpg file to the personal directory.
+     * Saves a bitmap as a file to the personal directory.
      *
      * @param bitmap The bitmap to be saved
      * @param c      Application context
@@ -71,7 +71,7 @@ public class ImageHelper {
             coverOut.flush();
             coverOut.close();
         } catch (IOException e) {
-            L.d(TAG, e.getMessage());
+            L.e(TAG, e.getMessage());
         }
     }
 
