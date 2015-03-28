@@ -21,6 +21,7 @@ import de.ph1b.audiobook.utils.BaseApplication;
 
 public class JumpToPositionDialog extends DialogFragment {
 
+    private static final String TAG = JumpToPositionDialog.class.getSimpleName();
     private int durationInMinutes;
     private int biggestHour;
     private NumberPicker mPicker;
@@ -40,6 +41,9 @@ public class JumpToPositionDialog extends DialogFragment {
         BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
 
         final Book book = baseApplication.getCurrentBook();
+        if (book == null) {
+            throw new AssertionError("Cannot instantiate " + TAG + " without a current book");
+        }
         int duration = book.getCurrentChapter().getDuration();
         int position = book.getTime();
         biggestHour = (int) TimeUnit.MILLISECONDS.toHours(duration);
