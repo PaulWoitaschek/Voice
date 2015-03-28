@@ -299,6 +299,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
                             lock.lock();
                             try {
                                 pause();
+                                baseApplication.setSleepTimerActive(false);
                             } finally {
                                 lock.unlock();
                             }
