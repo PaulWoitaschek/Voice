@@ -77,9 +77,7 @@ public class AudioFolderOverviewDialog extends DialogFragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
-        adapter = new FolderOverviewAdapter(folders);
-        recyclerView.setAdapter(adapter);
-        adapter.setOnFolderMoreClickedListener(new FolderOverviewAdapter.OnFolderMoreClickedListener() {
+        adapter = new FolderOverviewAdapter(folders, new FolderOverviewAdapter.OnFolderMoreClickedListener() {
             @Override
             public void onFolderMoreClicked(final int position) {
                 new MaterialDialog.Builder(getActivity())
@@ -98,6 +96,7 @@ public class AudioFolderOverviewDialog extends DialogFragment {
                         .show();
             }
         });
+        recyclerView.setAdapter(adapter);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

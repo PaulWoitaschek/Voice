@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,20 +11,17 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.utils.L;
 
 public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAdapter.ViewHolder> {
 
-    private static final String TAG = FolderOverviewAdapter.class.getSimpleName();
+    @NonNull
     private final ArrayList<String> folders;
-    private OnFolderMoreClickedListener listener = null;
+    @NonNull
+    private final OnFolderMoreClickedListener listener;
 
-    public FolderOverviewAdapter(ArrayList<String> folders) {
+    public FolderOverviewAdapter(@NonNull ArrayList<String> folders, @NonNull OnFolderMoreClickedListener listener) {
         this.folders = folders;
-        L.d(TAG, "created adapter with folders.size()=" + folders.size());
-        for (String s : folders) {
-            L.d(TAG, s);
-        }
+        this.listener = listener;
     }
 
     @Override
@@ -54,17 +52,14 @@ public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAd
         notifyItemRemoved(position);
     }
 
-    public void addItem(String folder) {
+    public void addItem(@NonNull String folder) {
         folders.add(folder);
         notifyItemInserted(folders.indexOf(folder));
     }
 
+    @NonNull
     public String getItem(int position) {
         return folders.get(position);
-    }
-
-    public void setOnFolderMoreClickedListener(OnFolderMoreClickedListener listener) {
-        this.listener = listener;
     }
 
     public interface OnFolderMoreClickedListener {
