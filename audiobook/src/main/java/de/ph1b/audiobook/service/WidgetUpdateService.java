@@ -48,40 +48,43 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
             @Override
             public void run() {
                 L.v(TAG, "updateWidget called");
-                boolean isPortrait = isPortrait();
-                int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(WidgetUpdateService.this, BaseWidgetProvider.class));
+
                 Book book = baseApplication.getCurrentBook();
+                if (book != null) {
 
-                for (int widgetId : ids) {
-                    RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.widget);
-                    initElements(remoteViews, book);
+                    boolean isPortrait = isPortrait();
+                    int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(WidgetUpdateService.this, BaseWidgetProvider.class));
 
-                    if (Build.VERSION.SDK_INT >= 16) {
-                        Bundle opts = appWidgetManager.getAppWidgetOptions(widgetId);
-                        int minHeight = dpToPx(opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT));
-                        int maxHeight = dpToPx(opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT));
-                        int minWidth = dpToPx(opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH));
-                        int maxWidth = dpToPx(opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH));
+                    for (int widgetId : ids) {
+                        RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.widget);
+                        initElements(remoteViews, book);
 
-                        int useWidth;
-                        int useHeight;
+                        if (Build.VERSION.SDK_INT >= 16) {
+                            Bundle opts = appWidgetManager.getAppWidgetOptions(widgetId);
+                            int minHeight = dpToPx(opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT));
+                            int maxHeight = dpToPx(opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT));
+                            int minWidth = dpToPx(opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH));
+                            int maxWidth = dpToPx(opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH));
 
-                        if (isPortrait) {
-                            useWidth = minWidth;
-                            useHeight = maxHeight;
-                        } else {
-                            useWidth = maxWidth;
-                            useHeight = minHeight;
+                            int useWidth;
+                            int useHeight;
+
+                            if (isPortrait) {
+                                useWidth = minWidth;
+                                useHeight = maxHeight;
+                            } else {
+                                useWidth = maxWidth;
+                                useHeight = minHeight;
+                            }
+                            if (useWidth > 0 && useHeight > 0) {
+                                hideElements(remoteViews, useWidth, useHeight, book.getChapters().size() == 1);
+                            }
+
+                            appWidgetManager.updateAppWidget(widgetId, remoteViews);
                         }
-                        if (useWidth > 0 && useHeight > 0) {
-                            hideElements(remoteViews, useWidth, useHeight, book.getChapters().size() == 1);
-                        }
-
-                        appWidgetManager.updateAppWidget(widgetId, remoteViews);
                     }
                 }
             }
-
         });
     }
 
