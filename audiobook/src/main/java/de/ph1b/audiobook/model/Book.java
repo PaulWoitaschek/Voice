@@ -27,9 +27,9 @@ public class Book implements Comparable<Book> {
     private float playbackSpeed = 1;
     @NonNull
     private String relativeMediaPath;
+    private boolean useCoverReplacement;
 
-
-    public Book(@NonNull String root, @NonNull String name, @NonNull ArrayList<Chapter> chapters, @NonNull ArrayList<Bookmark> bookmarks, float playbackSpeed, long id, long sortId, int time, @NonNull String relativeMediaPath) {
+    public Book(@NonNull String root, @NonNull String name, @NonNull ArrayList<Chapter> chapters, @NonNull ArrayList<Bookmark> bookmarks, float playbackSpeed, long id, long sortId, int time, @NonNull String relativeMediaPath, boolean useCoverReplacement) {
         Validate.notNull(root, name, chapters, bookmarks, relativeMediaPath);
         Validate.notEmpty(root, name, relativeMediaPath);
         Validate.notEmpty(chapters);
@@ -56,6 +56,7 @@ public class Book implements Comparable<Book> {
         this.chapters = chapters;
         this.id = id;
         this.sortId = sortId;
+        this.useCoverReplacement = useCoverReplacement;
         setPosition(time, relativeMediaPath);
     }
 
@@ -68,6 +69,14 @@ public class Book implements Comparable<Book> {
             String fileName = "." + (new File(root).getName()) + IMAGE_EXTENSION;
             return new File(root, fileName);
         }
+    }
+
+    public boolean isUseCoverReplacement() {
+        return useCoverReplacement;
+    }
+
+    public void setUseCoverReplacement(boolean useCoverReplacement) {
+        this.useCoverReplacement = useCoverReplacement;
     }
 
     @Override
@@ -111,6 +120,7 @@ public class Book implements Comparable<Book> {
                 ",time=" + time +
                 ",playbackSpeed=" + playbackSpeed +
                 ",relativeMediaPath=" + relativeMediaPath +
+                ",useCoverReplacement=" + useCoverReplacement +
                 "]";
     }
 

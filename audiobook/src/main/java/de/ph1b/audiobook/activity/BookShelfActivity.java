@@ -332,6 +332,8 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
             if (cover != null) {
                 ImageHelper.saveCover(cover, this, bookToEdit.getRoot(), bookToEdit.getChapters());
+            } else {
+                bookToEdit.setUseCoverReplacement(true);
             }
             // invalidate cache to have picasso reload
             Picasso.with(this).invalidate(bookToEdit.getCoverFile());

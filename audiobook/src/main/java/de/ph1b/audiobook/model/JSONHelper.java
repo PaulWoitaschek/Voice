@@ -27,6 +27,7 @@ class JSONHelper {
     private static final String JSON_BOOKMARKS = "bookmarks";
     private static final String JSON_REL_PATH = "relPath";
     private static final String JSON_BOOKMARK_REL_PATH = "relPath";
+    private static final String JSON_USE_COVER_REPLACEMENT = "useCoverReplacement";
 
     @NonNull
     private final File configFile;
@@ -79,6 +80,11 @@ class JSONHelper {
             if (!(playingInformation.has(JSON_NAME)) || (playingInformation.has(JSON_NAME) && !(playingInformation.get(JSON_NAME) instanceof String))) {
                 playingInformation.put(JSON_NAME, "");
             }
+
+            // cover replacement
+            if (!(playingInformation.has(JSON_USE_COVER_REPLACEMENT)) || (playingInformation.has(JSON_USE_COVER_REPLACEMENT) && !(playingInformation.get(JSON_USE_COVER_REPLACEMENT) instanceof Boolean))) {
+                playingInformation.put(JSON_USE_COVER_REPLACEMENT, false);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -89,8 +95,8 @@ class JSONHelper {
             return Float.valueOf(playingInformation.getString(JSON_SPEED));
         } catch (JSONException | NumberFormatException e) {
             e.printStackTrace();
+            return 1f;
         }
-        return 1f;
     }
 
     public void setSpeed(float speed) {
@@ -98,6 +104,23 @@ class JSONHelper {
             playingInformation.put(JSON_SPEED, String.valueOf(speed));
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void setUseCoverReplacement(boolean useCoverReplacement){
+        try {
+            playingInformation.put(JSON_USE_COVER_REPLACEMENT, useCoverReplacement);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean useCoverReplacement() {
+        try {
+            return playingInformation.getBoolean(JSON_USE_COVER_REPLACEMENT);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 

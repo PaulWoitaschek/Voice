@@ -118,7 +118,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         // (Cover)
         File coverFile = b.getCoverFile();
         Drawable coverReplacement = new CoverReplacement(b.getName().substring(0, 1), c);
-        if (coverFile.exists() && coverFile.canRead()) {
+        if (!b.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
             picasso.load(coverFile).placeholder(coverReplacement).into(viewHolder.coverView);
         } else {
             picasso.cancelRequest(viewHolder.coverView);

@@ -230,7 +230,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     }
                 }
 
-                return new Book(root, name, chapters, safeBookmarks, speed, id, sortId, currentTime, relPath);
+                boolean useCoverReplacement = helper.useCoverReplacement();
+
+                return new Book(root, name, chapters, safeBookmarks, speed, id, sortId, currentTime, relPath, useCoverReplacement);
             }
         } finally {
             cursor.close();
@@ -246,6 +248,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         helper.setRelPath(book.getCurrentChapter().getPath());
         helper.setBookmarks(book.getBookmarks());
         helper.setName(book.getName());
+        helper.setUseCoverReplacement(book.isUseCoverReplacement());
         helper.writeJSON();
 
         ContentValues cv = new ContentValues();

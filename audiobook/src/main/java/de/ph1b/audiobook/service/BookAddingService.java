@@ -278,7 +278,7 @@ public class BookAddingService extends Service {
         ArrayList<File> rootFiles = new ArrayList<>();
         rootFiles.add(rootFile);
         rootFiles = addFilesRecursive(rootFiles);
-        ArrayList<Chapter> chapters = new ArrayList<>();
+        ArrayList<Chapter> containingMedia = new ArrayList<>();
         ArrayList<File> coverFiles = new ArrayList<>();
         ArrayList<File> musicFiles = new ArrayList<>();
         for (File f : rootFiles) {
@@ -332,7 +332,7 @@ public class BookAddingService extends Service {
 
                 String chapterName = f.getName().substring(0, f.getName().lastIndexOf("."));
                 if (duration > 0) {
-                    chapters.add(new Chapter(f.getAbsolutePath().substring(bookRoot.length() + 1), chapterName, duration));
+                    containingMedia.add(new Chapter(f.getAbsolutePath().substring(bookRoot.length() + 1), chapterName, duration));
                 }
 
                 if (i < MAX_TRIES_FOR_EMBEDDED_COVER && cover == null) {
@@ -347,16 +347,16 @@ public class BookAddingService extends Service {
             mp.release();
         }
 
-        if (chapters.size() == 0) {
+        if (containingMedia.size() == 0) {
             L.e(TAG, "Book with root=" + rootFiles + " contains no media");
             return null;
         }
 
-        if (cover != null && !Book.getCoverFile(bookRoot, chapters).exists()) {
-            ImageHelper.saveCover(cover, this, bookRoot, chapters);
+        if (cover != null && !Book.getCoverFile(bookRoot, containingMedia).exists()) {
+            ImageHelper.saveCover(cover, this, bookRoot, containingMedia);
         }
 
-        return new Book(bookRoot, bookName, chapters, new ArrayList<Bookmark>(), 1.0f, Book.ID_UNKNOWN, Book.ID_UNKNOWN, 0, chapters.get(0).getPath());
+        return new Book(bookRoot, bookName, containingMedia, new ArrayList<Bookmark>(), 1.0f, Book.ID_UNKNOWN, Book.ID_UNKNOWN, 0, containingMedia.get(0).getPath(), false);
     }
 
     @Nullable
