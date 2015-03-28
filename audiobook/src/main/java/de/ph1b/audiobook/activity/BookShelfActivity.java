@@ -10,6 +10,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -313,34 +315,28 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    public void onEditBookFinished(String bookName, Bitmap cover, Boolean success) {
-        if (success) {
-            // delete old cover
+    public void onEditBookFinished(@NonNull String bookName, @Nullable Bitmap cover) {
+
+        if (cover != null) {
             File oldCover = bookToEdit.getCoverFile();
             if (oldCover.exists() && oldCover.canRead()) {
                 L.d(TAG, "deleting old cover=" + oldCover);
                 //noinspection ResultOfMethodCallIgnored
                 oldCover.delete();
             }
-
-            baseApplication.bookLock.lock();
-            try {
-                bookToEdit.setName(bookName);
-            } finally {
-                baseApplication.bookLock.unlock();
-            }
-
-            if (cover != null) {
-                ImageHelper.saveCover(cover, this, bookToEdit.getRoot(), bookToEdit.getChapters());
-            } else {
-                bookToEdit.setUseCoverReplacement(true);
-            }
-            // invalidate cache to have picasso reload
-            Picasso.with(this).invalidate(bookToEdit.getCoverFile());
-
-            adapter.updateItem(bookToEdit);
-            initPlayerWidget();
+            ImageHelper.saveCover(cover, this, bookToEdit.getRoot(), bookToEdit.getChapters());
         }
+
+        //setting updated values
+        bookToEdit.setName(bookName);
+        bookToEdit.setUseCoverReplacement(cover == null);
+
+        // invalidate cache to have picasso reload
+        Picasso.with(this).invalidate(bookToEdit.getCoverFile());
+
+
+        adapter.updateItem(bookToEdit);
+        initPlayerWidget();
     }
 
     @Override

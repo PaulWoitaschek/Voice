@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -170,15 +171,13 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
                         newCover = null;
                     }
                 }
-                ((OnEditBookFinished) getActivity()).onEditBookFinished(bookName, newCover, true);
+                ((OnEditBookFinished) getActivity()).onEditBookFinished(bookName, newCover);
             }
 
             @Override
             public void onNegative(MaterialDialog dialog) {
-
                 if (addCoverAsync != null && !addCoverAsync.isCancelled())
                     addCoverAsync.cancel(true);
-                ((OnEditBookFinished) getActivity()).onEditBookFinished(null, null, false);
             }
         };
 
@@ -235,7 +234,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
     }
 
     public interface OnEditBookFinished {
-        public void onEditBookFinished(String bookName, Bitmap cover, Boolean success);
+        public void onEditBookFinished(@NonNull String bookName, @Nullable Bitmap cover);
     }
 
     private class AddCoverAsync extends AsyncTask<Void, Void, Bitmap> {
@@ -256,8 +255,9 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
         @Override
         protected void onPreExecute() {
             nextCover.setVisibility(View.INVISIBLE);
-            if (covers.size() > 0)
+            if (covers.size() > 0) {
                 previousCover.setVisibility(View.VISIBLE);
+            }
             coverReplacement.setVisibility(View.VISIBLE);
             coverImageView.setVisibility(View.GONE);
         }
