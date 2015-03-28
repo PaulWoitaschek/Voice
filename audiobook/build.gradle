@@ -65,7 +65,7 @@ dependencies {
     compile 'com.android.support:cardview-v7:22.0.0'
     compile 'com.squareup.okhttp:okhttp:2.3.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.3.0'
-    compile 'com.squareup.picasso:picasso:2.5.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.afollestad:material-dialogs:0.6.4.6'
     compile 'com.melnykov:floatingactionbutton:1.2.0'
     compile 'net.jcip:jcip-annotations:1.0'
