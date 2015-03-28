@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -24,7 +25,6 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.adapter.MediaSpinnerAdapter;
 import de.ph1b.audiobook.dialog.BookmarkDialog;
 import de.ph1b.audiobook.dialog.JumpToPositionDialog;
 import de.ph1b.audiobook.dialog.SetPlaybackSpeedDialog;
@@ -116,8 +116,16 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                 playedTimeView.setText(formatTime(progress));
             }
         });
-        MediaSpinnerAdapter adapter = new MediaSpinnerAdapter(this, baseApplication.getCurrentBook());
+
+        // adapter
+        ArrayList<String> chaptersAsStrings = new ArrayList<>();
+        for (Chapter c : baseApplication.getCurrentBook().getChapters()) {
+            chaptersAsStrings.add(c.getName());
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, chaptersAsStrings);
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         bookSpinner.setAdapter(adapter);
+
         bookSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int newPosition, long id) {
