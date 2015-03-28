@@ -68,4 +68,5 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.0'
     compile 'com.afollestad:material-dialogs:0.6.4.6'
     compile 'com.melnykov:floatingactionbutton:1.2.0'
+    compile 'net.jcip:jcip-annotations:1.0'
 }
