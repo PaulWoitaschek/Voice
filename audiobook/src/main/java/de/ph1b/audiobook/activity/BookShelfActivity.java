@@ -351,12 +351,12 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onBookAdded() {
-        handler.postDelayed(new Runnable() {
+        handler.post(new Runnable() {
             @Override
             public void run() {
-                adapter.notifyDataSetChanged();
+                adapter.notifyItemInserted(adapter.getItemCount() - 1);
             }
-        }, 100); // Necessary because of bug in RecyclerView: https://code.google.com/p/android/issues/detail?id=77232
+        });
     }
 
     @Override
@@ -402,12 +402,12 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onBookDeleted() {
-        handler.postDelayed(new Runnable() {
+        handler.post(new Runnable() {
             @Override
             public void run() {
-                adapter.notifyDataSetChanged();
+                adapter.notifyItemRemoved(adapter.getItemCount());
             }
-        }, 100); // Necessary because of bug in RecyclerView: https://code.google.com/p/android/issues/detail?id=77232
+        });
     }
 
     @Override
