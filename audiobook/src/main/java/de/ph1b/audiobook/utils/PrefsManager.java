@@ -3,6 +3,7 @@ package de.ph1b.audiobook.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -32,12 +33,13 @@ public class PrefsManager {
         editor.apply();
     }
 
+    @NonNull
     public ArrayList<String> getAudiobookFolders() {
         Set<String> set = sp.getStringSet(PREF_KEY_AUDIOBOOK_FOLDERS, new HashSet<String>());
         return new ArrayList<>(set);
     }
 
-    public void setAudiobookFolders(ArrayList<String> folders) {
+    public void setAudiobookFolders(@NonNull ArrayList<String> folders) {
         Set<String> set = new HashSet<>();
         set.addAll(folders);
         SharedPreferences.Editor editor = sp.edit();
