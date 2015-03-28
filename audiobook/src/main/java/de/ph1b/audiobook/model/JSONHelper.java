@@ -1,6 +1,8 @@
 package de.ph1b.audiobook.model;
 
 
+import android.support.annotation.NonNull;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,11 +28,13 @@ class JSONHelper {
     private static final String JSON_REL_PATH = "relPath";
     private static final String JSON_BOOKMARK_REL_PATH = "relPath";
 
+    @NonNull
     private final File configFile;
+    @NonNull
     private JSONObject playingInformation = new JSONObject();
 
 
-    public JSONHelper(File configFile) {
+    public JSONHelper(@NonNull File configFile) {
         this.configFile = configFile;
 
         if (configFile.length() > 0) {
@@ -97,6 +101,7 @@ class JSONHelper {
         }
     }
 
+    @NonNull
     public ArrayList<Bookmark> getBookmarks() {
         ArrayList<Bookmark> bookmarks = new ArrayList<>();
         try {
@@ -114,7 +119,7 @@ class JSONHelper {
         return bookmarks;
     }
 
-    public void setBookmarks(ArrayList<Bookmark> bookmarks) {
+    public void setBookmarks(@NonNull ArrayList<Bookmark> bookmarks) {
         try {
             JSONArray bookmarksJ = new JSONArray();
             for (Bookmark b : bookmarks) {
@@ -140,6 +145,7 @@ class JSONHelper {
         }
     }
 
+    @NonNull
     public String getRelPath() {
         try {
             return playingInformation.getString(JSON_REL_PATH);
@@ -149,7 +155,7 @@ class JSONHelper {
         }
     }
 
-    public void setRelPath(String relPath) {
+    public void setRelPath(@NonNull String relPath) {
         try {
             playingInformation.put(JSON_REL_PATH, relPath);
         } catch (JSONException e) {
@@ -157,6 +163,7 @@ class JSONHelper {
         }
     }
 
+    @NonNull
     public String getName() {
         try {
             return playingInformation.getString(JSON_NAME);
@@ -166,7 +173,7 @@ class JSONHelper {
         }
     }
 
-    public void setName(String name) {
+    public void setName(@NonNull String name) {
         try {
             playingInformation.put(JSON_NAME, name);
         } catch (JSONException e) {

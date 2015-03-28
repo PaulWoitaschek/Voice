@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.io.File;
@@ -56,7 +57,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return instance;
     }
 
-    public void addBook(Book book) {
+    public void addBook(@NonNull Book book) {
         // saving new values
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
@@ -139,6 +140,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         L.d(TAG, "added book to db:" + book);
     }
 
+    @NonNull
     public ArrayList<Book> getAllBooks() {
         ArrayList<Book> allBooks = new ArrayList<>();
 
@@ -161,7 +163,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return allBooks;
     }
 
-    private File getConfigFile(String root, ArrayList<Chapter> chapters) {
+    @NonNull
+    private File getConfigFile(@NonNull String root, @NonNull ArrayList<Chapter> chapters) {
         if (chapters.size() == 1) {
             String fileName = "." + chapters.get(0).getName() + JSONHelper.JSON_EXTENSION;
             return new File(root, fileName);
@@ -172,7 +175,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     @Nullable
-    private Book getBook(long id, SQLiteDatabase db) {
+    private Book getBook(long id, @NonNull SQLiteDatabase db) {
         Cursor cursor = db.query(TABLE_BOOK,
                 new String[]{BOOK_ROOT, BOOK_SORT_ID},
                 BOOK_ID + "=?", new String[]{String.valueOf(id)},
@@ -235,7 +238,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return null;
     }
 
-    public void updateBook(Book book) {
+    public void updateBook(@NonNull Book book) {
         JSONHelper helper = new JSONHelper(getConfigFile(book.getRoot(), book.getChapters()));
 
         helper.setTime(book.getTime());
@@ -250,7 +253,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
     }
 
-    private ArrayList<Chapter> getChapters(long bookId, SQLiteDatabase db) {
+    @NonNull
+    private ArrayList<Chapter> getChapters(long bookId, @NonNull SQLiteDatabase db) {
         ArrayList<Chapter> chapters = new ArrayList<>();
         Cursor cursor = db.query(TABLE_CHAPTERS, new String[]{CHAPTER_PATH, CHAPTER_DURATION, CHAPTER_NAME},
                 BOOK_ID + "=?", new String[]{String.valueOf(bookId)},
@@ -268,7 +272,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return chapters;
     }
 
-    public void deleteBook(Book book) {
+    public void deleteBook(@NonNull Book book) {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_BOOK, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
     }
