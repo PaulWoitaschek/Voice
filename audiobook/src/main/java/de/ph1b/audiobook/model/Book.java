@@ -13,6 +13,7 @@ public class Book implements Comparable<Book> {
     public static final int ID_UNKNOWN = -1;
     private long id = ID_UNKNOWN;
     private long sortId = ID_UNKNOWN;
+    private static final String IMAGE_EXTENSION = ".jpg";
     private static final String TAG = Book.class.getSimpleName();
     @NonNull
     private final String root;
@@ -186,11 +187,20 @@ public class Book implements Comparable<Book> {
 
     @Nullable
     public File getCoverFile() {
-        File coverFile = new File(root, "." + name + ".jpg");
+        File coverFile;
+        if (chapters.size() == 1) {
+            String fileName = "." + chapters.get(0).getName() + IMAGE_EXTENSION;
+            coverFile = new File(root, fileName);
+        } else {
+            String fileName = "." + (new File(root).getName()) + IMAGE_EXTENSION;
+            coverFile = new File(root, fileName);
+        }
+
         if (coverFile.exists() && coverFile.canRead()) {
             return coverFile;
+        } else {
+            return null;
         }
-        return null;
     }
 
     public long getId() {
