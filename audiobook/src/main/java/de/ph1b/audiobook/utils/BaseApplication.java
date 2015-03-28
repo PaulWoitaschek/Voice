@@ -7,10 +7,13 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.locks.ReentrantLock;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
@@ -18,8 +21,12 @@ import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.service.WidgetUpdateService;
 
+@ThreadSafe
 public class BaseApplication extends Application implements Thread.UncaughtExceptionHandler {
     private static final String TAG = BaseApplication.class.getSimpleName();
+    public final ReentrantLock bookLock = new ReentrantLock();
+    @GuardedBy("bookLock")
+    private final ArrayList<Book> allBooks = new ArrayList<>();
     private final CopyOnWriteArrayList<OnBookAddedListener> onBookAddedListeners = new CopyOnWriteArrayList<>();
     private final CopyOnWriteArrayList<OnBookDeletedListener> onBookDeletedListeners = new CopyOnWriteArrayList<>();
     private final CopyOnWriteArrayList<OnPositionChangedListener> onPositionChangedListeners = new CopyOnWriteArrayList<>();
@@ -27,7 +34,8 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
     private final CopyOnWriteArrayList<OnPlayStateChangedListener> onPlayStateChangedListeners = new CopyOnWriteArrayList<>();
     private final CopyOnWriteArrayList<OnCurrentBookChangedListener> onCurrentBookChangedListeners = new CopyOnWriteArrayList<>();
     private final Thread.UncaughtExceptionHandler defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
-    private ArrayList<Book> allBooks;
+    private DataBaseHelper db;
+    @GuardedBy("bookLock")
     private Book currentBook = null;
     private volatile PlayState currentState = PlayState.STOPPED;
     private PrefsManager prefs;
@@ -36,6 +44,20 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
     public void addOnBookAddedListener(OnBookAddedListener listener) {
         onBookAddedListeners.add(listener);
     }
+
+    public void addBook(Book book) {
+        bookLock.lock();
+        try {
+            db.addBook(book);
+            allBooks.add(book);
+            for (OnBookAddedListener l : onBookAddedListeners) {
+                l.onBookAdded();
+            }
+        } finally {
+            bookLock.unlock();
+        }
+    }
+
 
     public void removeOnBookAddedListener(OnBookAddedListener listener) {
         onBookAddedListeners.remove(listener);
@@ -72,41 +94,72 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         prefs = new PrefsManager(this);
-        DataBaseHelper db = DataBaseHelper.getInstance(this);
-        allBooks = db.getAllBooks();
-        Collections.sort(allBooks);
+        db = DataBaseHelper.getInstance(this);
 
-        for (Book b : allBooks) {
-            if (b.getId() == prefs.getCurrentBookId()) {
-                currentBook = b;
-                break;
+        bookLock.lock();
+        try {
+            allBooks.addAll(db.getAllBooks());
+            for (Book b : allBooks) {
+                if (b.getId() == prefs.getCurrentBookId()) {
+                    currentBook = b;
+                    break;
+                }
             }
+        } finally {
+            bookLock.unlock();
         }
     }
 
     public ArrayList<Book> getAllBooks() {
-        return allBooks;
+        bookLock.lock();
+        try {
+            return allBooks;
+        } finally {
+            bookLock.unlock();
+        }
     }
 
     public Book getCurrentBook() {
-        if (currentBook == null) {
-            for (Book b : allBooks) {
-                if (b.getId() == prefs.getCurrentBookId()) {
-                    currentBook = b;
+        bookLock.lock();
+        try {
+            if (currentBook == null) {
+                for (Book b : allBooks) {
+                    if (b.getId() == prefs.getCurrentBookId()) {
+                        currentBook = b;
+                    }
+                }
+                if (currentBook == null && allBooks.size() > 0) {
+                    currentBook = allBooks.get(0);
                 }
             }
-            if (currentBook == null && allBooks.size() > 0) {
-                currentBook = allBooks.get(0);
-            }
+            return currentBook;
+        } finally {
+            bookLock.unlock();
         }
-
-        return currentBook;
     }
 
     public void setCurrentBook(Book book) {
-        this.currentBook = book;
-        for (OnCurrentBookChangedListener l : onCurrentBookChangedListeners) {
-            l.onCurrentBookChanged(currentBook);
+        bookLock.lock();
+        try {
+            this.currentBook = book;
+            for (OnCurrentBookChangedListener l : onCurrentBookChangedListeners) {
+                l.onCurrentBookChanged(currentBook);
+            }
+        } finally {
+            bookLock.unlock();
+        }
+    }
+
+    public void deleteBook(Book book) {
+        bookLock.lock();
+        try {
+            allBooks.remove(book);
+            db.deleteBook(book);
+            for (OnBookDeletedListener l : onBookDeletedListeners) {
+                l.onBookDeleted();
+            }
+        } finally {
+            bookLock.unlock();
         }
     }
 
@@ -116,12 +169,6 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
 
     public void removeOnCurrentBookChangedListener(OnCurrentBookChangedListener listener) {
         onCurrentBookChangedListeners.remove(listener);
-    }
-
-    public void notifyBookDeleted() {
-        for (OnBookDeletedListener l : onBookDeletedListeners) {
-            l.onBookDeleted();
-        }
     }
 
     public void addOnSleepStateChangedListener(OnSleepStateChangedListener listener) {
@@ -143,12 +190,6 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
     public void notifyPositionChanged() {
         for (OnPositionChangedListener l : onPositionChangedListeners) {
             l.onPositionChanged();
-        }
-    }
-
-    public void notifyBookAdded() {
-        for (OnBookAddedListener l : onBookAddedListeners) {
-            l.onBookAdded();
         }
     }
 

@@ -20,12 +20,10 @@ import java.util.Collections;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantLock;
 
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
-import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
@@ -75,11 +73,8 @@ public class BookAddingService extends Service {
     }
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    private final ReentrantLock bookLock = new ReentrantLock();
     private BaseApplication baseApplication;
-    private ArrayList<Book> allBooks;
     private PrefsManager prefs;
-    private DataBaseHelper db;
     private volatile boolean stopScanner = false;
 
     public static Intent getUpdateIntent(Context c) {
@@ -107,9 +102,7 @@ public class BookAddingService extends Service {
         super.onCreate();
 
         baseApplication = (BaseApplication) getApplication();
-        allBooks = baseApplication.getAllBooks();
         prefs = new PrefsManager(this);
-        db = DataBaseHelper.getInstance(this);
     }
 
     private void addNewBooks() {
@@ -184,32 +177,35 @@ public class BookAddingService extends Service {
         ArrayList<File> containingFiles = getContainingFiles();
 
         //getting books to remove
-        ArrayList<Book> booksToRemove = new ArrayList<>();
-        for (Book book : allBooks) {
-            boolean bookExists = false;
-            for (File f : containingFiles) {
-                if (f.isDirectory()) { // multi file book
-                    if (book.getRoot().equals(f.getAbsolutePath())) {
-                        bookExists = true;
-                    }
-                } else if (f.isFile()) { // single file book
-                    ArrayList<Chapter> chapters = book.getChapters();
-                    String singleBookChapterPath = book.getRoot() + "/" + chapters.get(0).getPath();
-                    if (singleBookChapterPath.equals(f.getAbsolutePath())) {
-                        bookExists = true;
+        baseApplication.bookLock.lock();
+        try {
+            ArrayList<Book> booksToRemove = new ArrayList<>();
+            for (Book book : baseApplication.getAllBooks()) {
+                boolean bookExists = false;
+                for (File f : containingFiles) {
+                    if (f.isDirectory()) { // multi file book
+                        if (book.getRoot().equals(f.getAbsolutePath())) {
+                            bookExists = true;
+                        }
+                    } else if (f.isFile()) { // single file book
+                        ArrayList<Chapter> chapters = book.getChapters();
+                        String singleBookChapterPath = book.getRoot() + "/" + chapters.get(0).getPath();
+                        if (singleBookChapterPath.equals(f.getAbsolutePath())) {
+                            bookExists = true;
+                        }
                     }
                 }
+                if (!bookExists) {
+                    booksToRemove.add(book);
+                }
             }
-            if (!bookExists) {
-                booksToRemove.add(book);
-            }
-        }
 
-        for (Book b : booksToRemove) {
-            L.d(TAG, "deleting book=" + b);
-            db.deleteBook(b);
-            allBooks.remove(b);
-            baseApplication.notifyBookDeleted();
+            for (Book b : booksToRemove) {
+                L.d(TAG, "deleting book=" + b);
+                baseApplication.deleteBook(b);
+            }
+        } finally {
+            baseApplication.bookLock.unlock();
         }
     }
 
@@ -224,15 +220,8 @@ public class BookAddingService extends Service {
 
         // delete old book if it exists and is different from the new book
         if (!stopScanner && (bookExisting != null && (newBook == null || !newBook.equals(bookExisting)))) {
-            bookLock.lock();
-            try {
-                L.d(TAG, "addNewBook deletes existing book=" + bookExisting + " because it is different from newBook=" + newBook);
-                db.deleteBook(bookExisting);
-                allBooks.remove(bookExisting);
-                baseApplication.notifyBookDeleted();
-            } finally {
-                bookLock.unlock();
-            }
+            L.d(TAG, "addNewBook deletes existing book=" + bookExisting + " because it is different from newBook=" + newBook);
+            baseApplication.deleteBook(bookExisting);
         }
 
         // if there are no changes, we can skip this one
@@ -246,14 +235,7 @@ public class BookAddingService extends Service {
             return;
         }
 
-        bookLock.lock();
-        try {
-            db.addBook(newBook);
-            allBooks.add(newBook);
-            baseApplication.notifyBookAdded();
-        } finally {
-            bookLock.unlock();
-        }
+        baseApplication.addBook(newBook);
     }
 
     /**
@@ -383,13 +365,13 @@ public class BookAddingService extends Service {
     @Nullable
     private Book getBookByRoot(File rootFile) {
         if (rootFile.isDirectory()) {
-            for (Book b : allBooks) {
+            for (Book b : baseApplication.getAllBooks()) {
                 if (rootFile.getAbsolutePath().equals(b.getRoot())) {
                     return b;
                 }
             }
         } else if (rootFile.isFile()) {
-            for (Book b : allBooks) {
+            for (Book b : baseApplication.getAllBooks()) {
                 if (rootFile.getParentFile().getAbsolutePath().equals(b.getRoot())) {
                     Chapter singleChapter = b.getChapters().get(0);
                     if ((b.getRoot() + "/" + singleChapter.getPath()).equals(rootFile.getAbsolutePath())) {

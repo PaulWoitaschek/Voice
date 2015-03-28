@@ -323,7 +323,13 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 oldCover.delete();
             }
 
-            bookToEdit.setName(bookName);
+            baseApplication.bookLock.lock();
+            try {
+                bookToEdit.setName(bookName);
+            } finally {
+                baseApplication.bookLock.unlock();
+            }
+
             if (cover != null) {
                 ImageHelper.saveCover(cover, this, bookToEdit.getRoot(), bookName);
             }

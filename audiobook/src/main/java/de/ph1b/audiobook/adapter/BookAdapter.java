@@ -45,14 +45,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     public void updateItem(final Book book) {
         for (int position = 0; position < books.size(); position++) {
             if (books.get(position).getId() == book.getId()) {
-                books.set(position, book);
                 notifyItemChanged(position);
-                executor.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        db.updateBook(book);
-                    }
-                });
             }
         }
     }
