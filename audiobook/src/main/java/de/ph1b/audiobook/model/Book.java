@@ -6,12 +6,13 @@ import android.support.annotation.Nullable;
 import java.io.File;
 import java.util.ArrayList;
 
-import de.ph1b.audiobook.utils.ArgumentValidator;
+import de.ph1b.audiobook.utils.Validate;
 
 public class Book implements Comparable<Book> {
 
     private static final String TAG = Book.class.getSimpleName();
 
+    @NonNull
     private final String root;
     @NonNull
     private final ArrayList<Chapter> chapters;
@@ -27,7 +28,7 @@ public class Book implements Comparable<Book> {
     private String relativeMediaPath;
 
     public Book(@NonNull String root, @NonNull String name, @NonNull ArrayList<Chapter> chapters, @NonNull ArrayList<Bookmark> bookmarks, float playbackSpeed) {
-        ArgumentValidator.validate(root, name, chapters, bookmarks);
+        Validate.notNull(root, name, chapters, bookmarks);
         if (name.equals("")) {
             throw new IllegalArgumentException("name must not be empty");
         }
@@ -60,7 +61,7 @@ public class Book implements Comparable<Book> {
         this(root, name, chapters, bookmarks, playbackSpeed);
         this.id = id;
         this.sortId = sortId;
-        ArgumentValidator.validate(relativeMediaPath);
+        Validate.notNull(relativeMediaPath);
         setPosition(time, relativeMediaPath);
     }
 
@@ -157,6 +158,7 @@ public class Book implements Comparable<Book> {
         return null;
     }
 
+    @NonNull
     public Chapter getCurrentChapter() {
         for (Chapter c : chapters) {
             if (c.getPath().equals(relativeMediaPath)) {
@@ -225,6 +227,7 @@ public class Book implements Comparable<Book> {
         this.playbackSpeed = playbackSpeed;
     }
 
+    @NonNull
     public String getRoot() {
         return root;
     }

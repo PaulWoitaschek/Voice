@@ -20,7 +20,7 @@ import de.ph1b.audiobook.activity.BookShelfActivity;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.model.DataBaseHelper;
-import de.ph1b.audiobook.utils.ArgumentValidator;
+import de.ph1b.audiobook.utils.Validate;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
@@ -50,7 +50,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
 
     public MediaPlayerController(BaseApplication baseApplication, Book book) {
         L.e(TAG, "constructor called with book=" + book);
-        ArgumentValidator.validate(baseApplication, book);
+        Validate.notNull(baseApplication, book);
         this.c = baseApplication.getApplicationContext();
         this.book = book;
         prefs = new PrefsManager(c);

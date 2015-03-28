@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.model;
 
-import de.ph1b.audiobook.utils.ArgumentValidator;
+import de.ph1b.audiobook.utils.Validate;
 
 public class Bookmark {
 
@@ -10,7 +10,7 @@ public class Bookmark {
     private String title;
 
     public Bookmark(String path, String title, int time) {
-        ArgumentValidator.validate(path, title);
+        Validate.notNull(path, title);
         this.title = title;
         this.time = time;
         this.path = path;

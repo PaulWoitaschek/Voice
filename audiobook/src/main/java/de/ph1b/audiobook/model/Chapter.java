@@ -1,6 +1,6 @@
 package de.ph1b.audiobook.model;
 
-import de.ph1b.audiobook.utils.ArgumentValidator;
+import de.ph1b.audiobook.utils.Validate;
 
 public class Chapter {
 
@@ -11,7 +11,7 @@ public class Chapter {
     private final String name;
 
     public Chapter(String path, String name, int duration) {
-        ArgumentValidator.validate(path, name);
+        Validate.notNull(path, name);
         this.path = path;
         this.name = name;
         this.duration = duration;
