@@ -1,17 +1,24 @@
 package de.ph1b.audiobook.model;
 
+import android.support.annotation.NonNull;
+
+import net.jcip.annotations.Immutable;
+
 import de.ph1b.audiobook.utils.Validate;
 
+@Immutable
 public class Chapter {
 
     private static final String TAG = Chapter.class.getSimpleName();
 
+    @NonNull
     private final String path;
     private final int duration;
+    @NonNull
     private final String name;
 
-    public Chapter(String path, String name, int duration) {
-        Validate.notNull(path, name);
+    public Chapter(@NonNull String path, @NonNull String name, int duration) {
+        Validate.notEmpty(path, name);
         this.path = path;
         this.name = name;
         this.duration = duration;
@@ -20,9 +27,9 @@ public class Chapter {
     @Override
     public String toString() {
         return TAG + "[" +
-                "path=" + path + ", " +
-                "duration=" + duration + ", " +
-                "name=" + name +
+                "path=" + path +
+                ",duration=" + duration +
+                ",name=" + name +
                 "]";
     }
 
@@ -50,6 +57,7 @@ public class Chapter {
         return result;
     }
 
+    @NonNull
     public String getName() {
         return name;
     }
@@ -58,8 +66,8 @@ public class Chapter {
         return duration;
     }
 
+    @NonNull
     public String getPath() {
         return path;
     }
-
 }
