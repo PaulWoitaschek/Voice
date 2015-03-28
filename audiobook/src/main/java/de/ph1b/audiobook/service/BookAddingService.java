@@ -19,15 +19,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
+import de.ph1b.audiobook.model.NaturalOrderComparator;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.model.NaturalOrderComparator;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 public class BookAddingService extends Service {
@@ -106,22 +105,9 @@ public class BookAddingService extends Service {
     }
 
     private void addNewBooks() {
-        ExecutorService bookAdder = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-
         ArrayList<File> containingFiles = getContainingFiles();
         for (final File f : containingFiles) {
-            bookAdder.execute(new Runnable() {
-                @Override
-                public void run() {
-                    addNewBook(f);
-                }
-            });
-        }
-        try {
-            bookAdder.shutdown();
-            bookAdder.awaitTermination(10, TimeUnit.MINUTES);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            addNewBook(f);
         }
     }
 
