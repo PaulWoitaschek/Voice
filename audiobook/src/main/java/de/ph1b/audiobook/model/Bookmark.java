@@ -1,19 +1,24 @@
 package de.ph1b.audiobook.model;
 
+import android.support.annotation.NonNull;
+
 import de.ph1b.audiobook.utils.Validate;
 
 public class Bookmark {
 
     private static final String TAG = Bookmark.class.getSimpleName();
     private final int time;
+    @NonNull
     private final String path;
+    @NonNull
     private String title;
 
-    public Bookmark(String path, String title, int time) {
-        Validate.notNull(path, title);
+    public Bookmark(@NonNull String path, @NonNull String title, int time) {
+        Validate.notEmpty(path, title);
+
+        this.path = path;
         this.title = title;
         this.time = time;
-        this.path = path;
     }
 
     @Override
@@ -42,6 +47,7 @@ public class Bookmark {
         return result;
     }
 
+    @NonNull
     public String getPath() {
         return path;
     }
@@ -49,20 +55,19 @@ public class Bookmark {
     @Override
     public String toString() {
         return TAG + "[" +
-                "title=" + title + ", " +
-                "time=" + time + ", " +
-                "path=" + path +
+                ",title=" + title +
+                ",time=" + time +
+                ",path=" + path +
                 "]";
     }
 
+    @NonNull
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        if (title == null) {
-            throw new IllegalArgumentException("title must not be null");
-        }
+    public void setTitle(@NonNull String title) {
+        Validate.notEmpty(title);
         this.title = title;
     }
 
