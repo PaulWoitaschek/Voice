@@ -20,10 +20,10 @@ import de.ph1b.audiobook.activity.BookShelfActivity;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.model.DataBaseHelper;
-import de.ph1b.audiobook.utils.Validate;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
+import de.ph1b.audiobook.utils.Validate;
 
 @ThreadSafe
 public class MediaPlayerController implements MediaPlayer.OnErrorListener, MediaPlayerInterface.OnCompletionListener {

@@ -11,6 +11,7 @@ import de.ph1b.audiobook.utils.Validate;
 public class Book implements Comparable<Book> {
 
     private static final String TAG = Book.class.getSimpleName();
+    public static final int ID_UNKNOWN = -1;
 
     @NonNull
     private final String root;
@@ -18,8 +19,8 @@ public class Book implements Comparable<Book> {
     private final ArrayList<Chapter> chapters;
     @NonNull
     private final ArrayList<Bookmark> bookmarks;
-    private long id;
-    private long sortId = -1;
+    private long id = ID_UNKNOWN;
+    private long sortId = ID_UNKNOWN;
     @NonNull
     private String name;
     private int time = 0;
@@ -27,17 +28,11 @@ public class Book implements Comparable<Book> {
     @NonNull
     private String relativeMediaPath;
 
-    public Book(@NonNull String root, @NonNull String name, @NonNull ArrayList<Chapter> chapters, @NonNull ArrayList<Bookmark> bookmarks, float playbackSpeed) {
-        Validate.notNull(root, name, chapters, bookmarks);
-        if (name.equals("")) {
-            throw new IllegalArgumentException("name must not be empty");
-        }
-        if (chapters.size() == 0) {
-            throw new IllegalArgumentException("Book must have any containing chapters.");
-        }
-        this.root = root;
-        this.name = name;
-        this.chapters = chapters;
+
+    public Book(@NonNull String root, @NonNull String name, @NonNull ArrayList<Chapter> chapters, @NonNull ArrayList<Bookmark> bookmarks, float playbackSpeed, long id, long sortId, int time, @NonNull String relativeMediaPath) {
+        Validate.notNull(root, name, chapters, bookmarks, relativeMediaPath);
+        Validate.notEmpty(root, name, relativeMediaPath);
+        Validate.notEmpty(chapters, bookmarks);
 
 
         //check if bookmark exists
@@ -53,15 +48,14 @@ public class Book implements Comparable<Book> {
                 throw new IllegalArgumentException("Cannot add bookmark=" + b + " because it is not in chapters=" + chapters);
             }
         }
+
         this.bookmarks = bookmarks;
         this.playbackSpeed = playbackSpeed;
-    }
-
-    public Book(@NonNull String root, @NonNull String name, @NonNull ArrayList<Chapter> chapters, @NonNull ArrayList<Bookmark> bookmarks, float playbackSpeed, long id, long sortId, int time, @NonNull String relativeMediaPath) {
-        this(root, name, chapters, bookmarks, playbackSpeed);
+        this.root = root;
+        this.name = name;
+        this.chapters = chapters;
         this.id = id;
         this.sortId = sortId;
-        Validate.notNull(relativeMediaPath);
         setPosition(time, relativeMediaPath);
     }
 
@@ -124,7 +118,9 @@ public class Book implements Comparable<Book> {
         return relativeMediaPath;
     }
 
-    public void setPosition(int time, String relativeMediaPath) {
+    public void setPosition(int time, @NonNull String relativeMediaPath) {
+        Validate.notEmpty(relativeMediaPath);
+
         boolean relativeMediaPathExists = false;
         for (Chapter c : chapters) {
             if (c.getPath().equals(relativeMediaPath)) {
@@ -135,7 +131,6 @@ public class Book implements Comparable<Book> {
             throw new IllegalArgumentException("Creating book with name=" + name + " failed because relativeMediaPath=" + relativeMediaPath + " does not exist in chapters");
         }
 
-        this.relativeMediaPath = relativeMediaPath;
         this.time = time;
         this.relativeMediaPath = relativeMediaPath;
     }
@@ -186,9 +181,7 @@ public class Book implements Comparable<Book> {
     }
 
     public void setName(@NonNull String name) {
-        if (name.equals("")) {
-            throw new NullPointerException("name must not be empty");
-        }
+        Validate.notEmpty(name);
         this.name = name;
     }
 
