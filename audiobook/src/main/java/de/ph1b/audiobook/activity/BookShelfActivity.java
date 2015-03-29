@@ -105,7 +105,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        startActivity(new Intent(BookShelfActivity.this, FolderOverviewActivity.class));
+                        startActivity(new Intent(BookShelfActivity.this, FolderChooserActivity.class));
                     }
                 })
                 .cancelable(false)
