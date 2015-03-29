@@ -118,6 +118,7 @@ public class BookAddingService extends Service {
             @Override
             public void run() {
                 L.d(TAG, "started new scanner");
+                baseApplication.setScannerActive(true);
                 stopScanner = false;
 
                 deleteOldBooks();
@@ -133,6 +134,7 @@ public class BookAddingService extends Service {
                 }
 
                 L.d(TAG, "scanner finished normally");
+                baseApplication.setScannerActive(false);
             }
         });
     }
@@ -373,5 +375,11 @@ public class BookAddingService extends Service {
         }
 
         return START_NOT_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        baseApplication.setScannerActive(false);
     }
 }

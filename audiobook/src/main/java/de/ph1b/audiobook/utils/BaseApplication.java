@@ -35,12 +35,33 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
     private final CopyOnWriteArrayList<OnPlayStateChangedListener> onPlayStateChangedListeners = new CopyOnWriteArrayList<>();
     private final CopyOnWriteArrayList<OnCurrentBookChangedListener> onCurrentBookChangedListeners = new CopyOnWriteArrayList<>();
     private final Thread.UncaughtExceptionHandler defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
+    private final CopyOnWriteArrayList<OnScannerStateChangedListener> onScannerStateChangedListeners = new CopyOnWriteArrayList<>();
     private DataBaseHelper db;
     @GuardedBy("bookLock")
     private Book currentBook = null;
     private volatile PlayState currentState = PlayState.STOPPED;
     private PrefsManager prefs;
     private boolean sleepTimerActive = false;
+    private volatile boolean scannerActive = false;
+
+    public void addOnScannerStateChangedListener(OnScannerStateChangedListener listener) {
+        onScannerStateChangedListeners.add(listener);
+    }
+
+    public boolean isScannerActive() {
+        return scannerActive;
+    }
+
+    public void setScannerActive(boolean scannerActive) {
+        scannerActive = scannerActive;
+        for (OnScannerStateChangedListener l : onScannerStateChangedListeners) {
+            l.onScannerStateChanged(scannerActive);
+        }
+    }
+
+    public void removeOnScannerStateChangedListener(OnScannerStateChangedListener listener) {
+        onScannerStateChangedListeners.remove(listener);
+    }
 
     public void addOnBookAddedListener(OnBookAddedListener listener) {
         onBookAddedListeners.add(listener);
@@ -58,7 +79,6 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
             bookLock.unlock();
         }
     }
-
 
     public void removeOnBookAddedListener(OnBookAddedListener listener) {
         onBookAddedListeners.remove(listener);
@@ -242,6 +262,10 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
         PLAYING,
         PAUSED,
         STOPPED,
+    }
+
+    public interface OnScannerStateChangedListener {
+        public void onScannerStateChanged(boolean active);
     }
 
     public interface OnBookAddedListener {

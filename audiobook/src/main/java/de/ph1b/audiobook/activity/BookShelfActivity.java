@@ -49,7 +49,7 @@ import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
-public class BookShelfActivity extends BaseActivity implements View.OnClickListener, EditBookDialog.OnEditBookFinished, RecyclerView.OnItemTouchListener, BaseApplication.OnBookAddedListener, BaseApplication.OnBookDeletedListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener {
+public class BookShelfActivity extends BaseActivity implements View.OnClickListener, EditBookDialog.OnEditBookFinished, RecyclerView.OnItemTouchListener, BaseApplication.OnBookAddedListener, BaseApplication.OnBookDeletedListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener, BaseApplication.OnScannerStateChangedListener {
 
     private static final String TAG = BookShelfActivity.class.getSimpleName();
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -66,6 +66,8 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     private ImageButton currentPlaying;
     private ProgressBar progressBar;
     private AlertDialog noFolderWarning;
+    private RecyclerView recyclerView;
+    private ProgressBar recyclerReplacementView;
 
     /**
      * Returns the amount of columns the main-grid will need
@@ -116,7 +118,8 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         currentText = (TextView) findViewById(R.id.current_text);
         currentPlaying = (ImageButton) findViewById(R.id.current_playing);
         progressBar = (ProgressBar) findViewById(R.id.progress);
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.listMediaView);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerReplacementView = (ProgressBar) findViewById(R.id.recyclerReplacement);
 
         current.setOnClickListener(this);
         currentPlaying.setOnClickListener(this);
@@ -352,6 +355,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         handler.post(new Runnable() {
             @Override
             public void run() {
+                toggleRecyclerVisibilities(baseApplication.isScannerActive());
                 adapter.notifyItemInserted(adapter.getItemCount() - 1);
             }
         });
@@ -365,6 +369,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         baseApplication.removeOnBookDeletedListener(this);
         baseApplication.removeOnPlayStateChangedListener(this);
         baseApplication.removeOnPositionChangedListener(this);
+        baseApplication.removeOnScannerStateChangedListener(this);
     }
 
     @Override
@@ -383,6 +388,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         }, 100);
         baseApplication.addOnBookAddedListener(this);
         baseApplication.addOnBookDeletedListener(this);
+        baseApplication.addOnScannerStateChangedListener(this);
 
         startService(BookAddingService.getUpdateIntent(this));
 
@@ -395,13 +401,26 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         if (audioFoldersEmpty && !noFolderWarningIsShowing) {
             noFolderWarning.show();
         }
+        toggleRecyclerVisibilities(baseApplication.isScannerActive());
+    }
+
+    private void toggleRecyclerVisibilities(boolean scannerActive) {
+        if (baseApplication.getAllBooks().size() == 0 && scannerActive) {
+            recyclerReplacementView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            recyclerReplacementView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void onBookDeleted() {
+
         handler.post(new Runnable() {
             @Override
             public void run() {
+                toggleRecyclerVisibilities(baseApplication.isScannerActive());
                 adapter.notifyItemRemoved(adapter.getItemCount());
             }
         });
@@ -441,6 +460,16 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                     int progress = Math.round((timeTillBeginOfCurrentChapter + book.getTime()) * 1000 / duration);
                     progressBar.setProgress(progress);
                 }
+            }
+        });
+    }
+
+    @Override
+    public void onScannerStateChanged(final boolean active) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                toggleRecyclerVisibilities(active);
             }
         });
     }
