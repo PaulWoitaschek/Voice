@@ -40,6 +40,10 @@ public class FolderOverviewActivity extends BaseActivity {
             boolean firstAddedFolder = folders.size() == 0;
             boolean sameFolder = false;
             for (String s : folders) {
+                if (s.equals(newFolder)) {
+                    sameFolder = true;
+                }
+
                 String[] oldParts = s.split("/");
                 String[] newParts = newFolder.split("/");
                 for (int i = 0; i < Math.min(oldParts.length, newParts.length); i++) {
@@ -47,11 +51,11 @@ public class FolderOverviewActivity extends BaseActivity {
                         filesAreSubsets = false;
                     }
                 }
-                if (s.equals(newFolder)) {
-                    sameFolder = true;
-                }
                 if (!sameFolder && filesAreSubsets) {
                     Toast.makeText(this, getString(R.string.adding_failed_subfolder) + "\n" + s + "\n" + newFolder, Toast.LENGTH_LONG).show();
+                }
+                if (filesAreSubsets) {
+                    break;
                 }
             }
 
