@@ -53,7 +53,7 @@
     <string name="bookmark_edit_hint">Lesezeichenname</string>
     <string name="bookmark_added">Lesezeichen hinzugefügt</string>
     <string name="audiobook_folders_title">Hörbuch Ordner</string>
-    <string name="no_audiobook_folders_summary">Bitte wählen Sie jetzt Ihren Hörbuchordner. Keine Sorge, Sie können diesen später in den Einstellungen ändern.</string>
+    <string name="no_audiobook_folders_summary">Bitte wählen Sie jetzt Ihren Hörbuchordner.\n\nJeder Unterordner wird als eigenes Buch erkannt!</string>
     <string name="no_audiobook_folders_title">Ordner wählen</string>
     <string name="pause">Pause</string>
     <string name="play">Abspielen</string>

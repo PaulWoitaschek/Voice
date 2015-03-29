@@ -45,7 +45,7 @@
     <string name="adding_failed_subfolder" tools:ignore="MissingTranslation">The folders must not be a subfolder of each other:</string>
     <string name="audiobook_folders_title" tools:ignore="MissingTranslation">Audiobook folders</string>
     <string name="no_audiobook_folders_title" tools:ignore="MissingTranslation">Choose folder now</string>
-    <string name="no_audiobook_folders_summary" tools:ignore="MissingTranslation">Please choose your audiobook folder now. You can change this later in the settings.</string>
+    <string name="no_audiobook_folders_summary" tools:ignore="MissingTranslation">Please choose your audiobook folder now.\n\nEvery subfolder is being recognized as a single book!</string>
     <string name="up" tools:ignore="MissingTranslation">Upper folder</string>
     <string name="chosen_folder_description" tools:ignore="MissingTranslation">Chosen folder:</string>
     <string name="delete_folder" tools:ignore="MissingTranslation">Remove from Library?</string>
