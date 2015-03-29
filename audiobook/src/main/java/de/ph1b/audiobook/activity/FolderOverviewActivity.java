@@ -1,13 +1,11 @@
 package de.ph1b.audiobook.activity;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.melnykov.fab.FloatingActionButton;
@@ -18,55 +16,13 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.FolderOverviewAdapter;
 import de.ph1b.audiobook.service.BookAddingService;
 import de.ph1b.audiobook.uitools.DividerItemDecoration;
-import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 public class FolderOverviewActivity extends BaseActivity {
 
-    private static final int REQUEST_NEW_FOLDER = 1;
-    private static final String TAG = FolderOverviewActivity.class.getSimpleName();
+    private final ArrayList<String> folders = new ArrayList<>();
     private PrefsManager prefs;
     private FolderOverviewAdapter adapter;
-    private ArrayList<String> folders;
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        L.d(TAG, "onActivityResult, requestCode=" + requestCode + ", resultCode=" + resultCode + ", data=" + data);
-        if (requestCode == REQUEST_NEW_FOLDER && resultCode == Activity.RESULT_OK) {
-            String newFolder = data.getStringExtra(FolderChooserActivity.CHOSEN_FOLDER);
-
-            // checking if the folders are a subset of each other
-            boolean filesAreSubsets = true;
-            boolean firstAddedFolder = folders.size() == 0;
-            boolean sameFolder = false;
-            for (String s : folders) {
-                if (s.equals(newFolder)) {
-                    sameFolder = true;
-                }
-
-                String[] oldParts = s.split("/");
-                String[] newParts = newFolder.split("/");
-                for (int i = 0; i < Math.min(oldParts.length, newParts.length); i++) {
-                    if (!oldParts[i].equals(newParts[i])) {
-                        filesAreSubsets = false;
-                    }
-                }
-                if (!sameFolder && filesAreSubsets) {
-                    Toast.makeText(this, getString(R.string.adding_failed_subfolder) + "\n" + s + "\n" + newFolder, Toast.LENGTH_LONG).show();
-                }
-                if (filesAreSubsets) {
-                    break;
-                }
-            }
-
-            if (firstAddedFolder || (!sameFolder && !filesAreSubsets)) {
-                adapter.addItem(newFolder);
-                prefs.setAudiobookFolders(folders);
-                this.startService(BookAddingService.getUpdateIntent(this));
-            }
-        }
-    }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,10 +30,9 @@ public class FolderOverviewActivity extends BaseActivity {
         setContentView(R.layout.activity_folder_overview);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(this.getString(R.string.audiobook_folders_title));
+        getSupportActionBar().setTitle(getString(R.string.audiobook_folders_title));
 
         prefs = new PrefsManager(this);
-        folders = prefs.getAudiobookFolders();
 
         //init views
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
@@ -112,9 +67,18 @@ public class FolderOverviewActivity extends BaseActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(FolderOverviewActivity.this, FolderChooserActivity.class), REQUEST_NEW_FOLDER);
+                startActivity(new Intent(FolderOverviewActivity.this, FolderChooserActivity.class));
             }
         });
         fab.attachToRecyclerView(recyclerView);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        folders.clear();
+        folders.addAll(prefs.getAudiobookFolders());
+        adapter.notifyDataSetChanged();
     }
 }

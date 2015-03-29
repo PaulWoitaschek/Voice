@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.activity;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,10 +23,11 @@ import java.util.regex.Pattern;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.FolderAdapter;
+import de.ph1b.audiobook.model.NaturalOrderComparator;
 import de.ph1b.audiobook.service.BookAddingService;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.model.NaturalOrderComparator;
+import de.ph1b.audiobook.utils.PrefsManager;
 
 /**
  * Activity for choosing an audiobook folder. If there are multiple SD-Cards, the Activity unifies
@@ -35,7 +36,6 @@ import de.ph1b.audiobook.model.NaturalOrderComparator;
  */
 public class FolderChooserActivity extends BaseActivity implements View.OnClickListener {
 
-    public static final String CHOSEN_FOLDER = "chosenFolder";
     private static final String CURRENT_FOLDER_NAME = "currentFolderName";
     private static final String TAG = FolderChooserActivity.class.getSimpleName();
     private final ArrayList<File> currentFolderContent = new ArrayList<>();
@@ -265,10 +265,37 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
                 up();
                 break;
             case R.id.choose:
-                String path = chosenFolder.getAbsolutePath();
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra(CHOSEN_FOLDER, path);
-                setResult(RESULT_OK, returnIntent);
+                String newFolder = chosenFolder.getAbsolutePath();
+                PrefsManager prefs = new PrefsManager(this);
+                ArrayList<String> folders = prefs.getAudiobookFolders();
+                boolean filesAreSubsets = true;
+                boolean firstAddedFolder = folders.size() == 0;
+                boolean sameFolder = false;
+                for (String s : folders) {
+                    if (s.equals(newFolder)) {
+                        sameFolder = true;
+                    }
+                    String[] oldParts = s.split("/");
+                    String[] newParts = newFolder.split("/");
+                    for (int i = 0; i < Math.min(oldParts.length, newParts.length); i++) {
+                        if (!oldParts[i].equals(newParts[i])) {
+                            filesAreSubsets = false;
+                        }
+                    }
+                    if (!sameFolder && filesAreSubsets) {
+                        Toast.makeText(this, getString(R.string.adding_failed_subfolder) + "\n" + s + "\n" + newFolder, Toast.LENGTH_LONG).show();
+                    }
+                    if (filesAreSubsets) {
+                        break;
+                    }
+                }
+
+                if (firstAddedFolder || (!sameFolder && !filesAreSubsets)) {
+                    folders.add(newFolder);
+                    prefs.setAudiobookFolders(folders);
+                    startService(BookAddingService.getUpdateIntent(this));
+                }
+
                 finish();
                 break;
             case R.id.abort:

@@ -20,7 +20,6 @@ import de.ph1b.audiobook.utils.PrefsManager;
 
 public class PreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private static final String TAG = PreferencesFragment.class.getSimpleName();
     private PrefsManager prefs;
     private SharedPreferences sp;
 

@@ -9,7 +9,6 @@
     <dimen name="vertical_margin">16dp</dimen>
 
     <dimen name="dialog_content_text_size">18sp</dimen>
-    <dimen name="dialog_custom_view_margin">24dp</dimen>
 
     <dimen name="widget_title_size">16sp</dimen>
     <dimen name="widget_summary_size">12sp</dimen>

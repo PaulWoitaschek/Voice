@@ -52,11 +52,6 @@ public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAd
         notifyItemRemoved(position);
     }
 
-    public void addItem(@NonNull String folder) {
-        folders.add(folder);
-        notifyItemInserted(folders.indexOf(folder));
-    }
-
     @NonNull
     public String getItem(int position) {
         return folders.get(position);
