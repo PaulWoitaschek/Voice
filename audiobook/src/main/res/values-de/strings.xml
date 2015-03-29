@@ -18,6 +18,7 @@
     <string name="pref_pause_on_can_duck_summary">Pausiert bei kurzer Unterbrechung anstelle die Lautstärke kurz herunterzusetzen.</string>
 
     <!-- Unsorted -->
+    <string name="adding_failed_subfolder">Die Ordner dürfen kein Unterordner von einander sein:</string>
     <string name="cover">Cover</string>
     <string name="play_pause">Play / Pause</string>
     <string name="book_add_empty_title">Geben Sie einen Titel ein</string>
@@ -51,8 +52,6 @@
     <string name="acc_button_add_bookmark">Fügt an der aktuellen Stelle ein Lesezeichen hinzu.</string>
     <string name="bookmark_edit_hint">Lesezeichenname</string>
     <string name="bookmark_added">Lesezeichen hinzugefügt</string>
-    <string name="audiobook_dialog_left">Der Ordner</string>
-    <string name="audiobook_dialog_right">darf kein Unterordner sein von</string>
     <string name="audiobook_folders_title">Hörbuch Ordner</string>
     <string name="no_audiobook_folders_summary">Bitte wählen Sie jetzt Ihren Hörbuchordner. Keine Sorge, Sie können diesen später in den Einstellungen ändern.</string>
     <string name="no_audiobook_folders_title">Ordner wählen</string>

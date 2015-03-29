@@ -35,20 +35,27 @@ public class FolderOverviewActivity extends BaseActivity {
         if (requestCode == REQUEST_NEW_FOLDER && resultCode == Activity.RESULT_OK) {
             String newFolder = data.getStringExtra(FolderChooserActivity.CHOSEN_FOLDER);
 
-            boolean shouldAddFolder = true;
-            String theFolder = getString(R.string.audiobook_dialog_left);
-            String mustNotBe = getString(R.string.audiobook_dialog_right);
+            // checking if the folders are a subset of each other
+            boolean filesAreSubsets = true;
+            boolean firstAddedFolder = folders.size() == 0;
+            boolean sameFolder = false;
             for (String s : folders) {
-                if (s.contains(newFolder)) {
-                    Toast.makeText(this, theFolder + "\n" + newFolder + "\n" + mustNotBe + "\n" + s, Toast.LENGTH_LONG).show();
-                    shouldAddFolder = false;
+                String[] oldParts = s.split("/");
+                String[] newParts = newFolder.split("/");
+                for (int i = 0; i < Math.min(oldParts.length, newParts.length); i++) {
+                    if (!oldParts[i].equals(newParts[i])) {
+                        filesAreSubsets = false;
+                    }
                 }
-                if (newFolder.contains(s)) {
-                    Toast.makeText(this, theFolder + "\n" + s + "\n" + mustNotBe + "\n" + newFolder, Toast.LENGTH_LONG).show();
-                    shouldAddFolder = false;
+                if (s.equals(newFolder)) {
+                    sameFolder = true;
+                }
+                if (!sameFolder && filesAreSubsets) {
+                    Toast.makeText(this, getString(R.string.adding_failed_subfolder) + "\n" + s + "\n" + newFolder, Toast.LENGTH_LONG).show();
                 }
             }
-            if (shouldAddFolder) {
+
+            if (firstAddedFolder || (!sameFolder && !filesAreSubsets)) {
                 adapter.addItem(newFolder);
                 prefs.setAudiobookFolders(folders);
                 this.startService(BookAddingService.getUpdateIntent(this));
@@ -64,7 +71,6 @@ public class FolderOverviewActivity extends BaseActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(this.getString(R.string.audiobook_folders_title));
-
 
         prefs = new PrefsManager(this);
         folders = prefs.getAudiobookFolders();

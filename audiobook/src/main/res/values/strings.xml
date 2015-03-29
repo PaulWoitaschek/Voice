@@ -42,8 +42,7 @@
     <string name="action_time_change">Jump to</string>
 
     <!-- BookAdding -->
-    <string name="audiobook_dialog_left" tools:ignore="MissingTranslation">The folder</string>
-    <string name="audiobook_dialog_right" tools:ignore="MissingTranslation">must not be a subfolder of</string>
+    <string name="adding_failed_subfolder" tools:ignore="MissingTranslation">The folders must not be a subfolder of each other:</string>
     <string name="audiobook_folders_title" tools:ignore="MissingTranslation">Audiobook folders</string>
     <string name="no_audiobook_folders_title" tools:ignore="MissingTranslation">Choose folder now</string>
     <string name="no_audiobook_folders_summary" tools:ignore="MissingTranslation">Please choose your audiobook folder now. You can change this later in the settings.</string>
