@@ -35,7 +35,6 @@ import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.BookAdapter;
-import de.ph1b.audiobook.dialog.AudioFolderOverviewDialog;
 import de.ph1b.audiobook.dialog.EditBookDialog;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
@@ -43,10 +42,10 @@ import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.service.BookAddingService;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.CoverReplacement;
+import de.ph1b.audiobook.uitools.CustomOnSimpleGestureListener;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.BaseApplication;
-import de.ph1b.audiobook.uitools.CustomOnSimpleGestureListener;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
@@ -54,7 +53,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
     private static final String TAG = BookShelfActivity.class.getSimpleName();
     private final Handler handler = new Handler(Looper.getMainLooper());
-    private final AudioFolderOverviewDialog audioFolderOverviewDialog = new AudioFolderOverviewDialog();
     private BookAdapter adapter;
     private ImageView currentCover;
     private TextView currentText;
@@ -107,7 +105,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        audioFolderOverviewDialog.show(getFragmentManager(), TAG);
+                        startActivity(new Intent(BookShelfActivity.this, FolderOverviewActivity.class));
                     }
                 })
                 .cancelable(false)
@@ -392,10 +390,9 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         onPlayStateChanged(baseApplication.getPlayState());
         onPositionChanged();
 
-        boolean audioFolderOverviewDialogIsVisible = audioFolderOverviewDialog.getDialog() != null && audioFolderOverviewDialog.getDialog().isShowing();
         boolean audioFoldersEmpty = prefs.getAudiobookFolders().size() == 0;
         boolean noFolderWarningIsShowing = noFolderWarning.isShowing();
-        if (audioFoldersEmpty && !audioFolderOverviewDialogIsVisible && !noFolderWarningIsShowing) {
+        if (audioFoldersEmpty && !noFolderWarningIsShowing) {
             noFolderWarning.show();
         }
     }

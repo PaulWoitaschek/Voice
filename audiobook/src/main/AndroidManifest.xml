@@ -50,10 +50,25 @@
         </activity>
 
         <activity
-            android:name="de.ph1b.audiobook.activity.NoExternalStorageActivity"
-            android:label="@string/action_settings" />
+            android:name="de.ph1b.audiobook.activity.FolderOverviewActivity"
+            android:label="@string/audiobook_folders_title"
+            android:parentActivityName="de.ph1b.audiobook.activity.SettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.ph1b.audiobook.activity.SettingsActivity" />
+        </activity>
 
-        <activity android:name=".activity.FolderChooserActivity" />
+        <activity
+            android:name="de.ph1b.audiobook.activity.NoExternalStorageActivity"
+            android:label="@string/no_external_storage_action_bar_title" />
+
+        <activity
+            android:name="de.ph1b.audiobook.activity.FolderChooserActivity"
+            android:parentActivityName=".activity.FolderOverviewActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.FolderOverviewActivity" />
+        </activity>
 
         <service android:name="de.ph1b.audiobook.service.AudioService" />
 

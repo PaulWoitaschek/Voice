@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.fragment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -12,7 +13,7 @@ import com.afollestad.materialdialogs.prefs.MaterialListPreference;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BaseActivity;
-import de.ph1b.audiobook.dialog.AudioFolderOverviewDialog;
+import de.ph1b.audiobook.activity.FolderOverviewActivity;
 import de.ph1b.audiobook.dialog.SeekPreferenceDialog;
 import de.ph1b.audiobook.dialog.SleepPreferenceDialog;
 import de.ph1b.audiobook.utils.PrefsManager;
@@ -51,8 +52,7 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
         folderPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                AudioFolderOverviewDialog dialog = new AudioFolderOverviewDialog();
-                dialog.show(getFragmentManager(), TAG);
+                startActivity(new Intent(getActivity(), FolderOverviewActivity.class));
                 return true;
             }
         });

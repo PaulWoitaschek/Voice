@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="56dp"
+    android:layout_height="72dp"
     android:orientation="horizontal">
 
     <TextView
@@ -16,8 +16,8 @@
 
     <ImageView
         android:id="@+id/more"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:contentDescription="@string/remove"
         android:scaleType="center"
         android:src="?attr/folder_overview_trash" />

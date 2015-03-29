@@ -27,7 +27,7 @@ public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAd
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate
-                (R.layout.dialog_folder_overview_row_layout, parent, false);
+                (R.layout.activity_folder_overview_row_layout, parent, false);
         return new ViewHolder(v, listener);
     }
 
