@@ -79,6 +79,11 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         return position;
     }
 
+    @Override
+    public int getItemCount() {
+        return bookmarks.size();
+    }
+
     @NonNull
     private String formatTime(int ms) {
         String h = String.valueOf(TimeUnit.MILLISECONDS.toHours(ms));
@@ -90,11 +95,6 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         }
         returnString += m + ":" + s;
         return returnString;
-    }
-
-    @Override
-    public int getItemCount() {
-        return bookmarks.size();
     }
 
     public interface OnOptionsMenuClickedListener {

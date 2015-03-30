@@ -91,12 +91,12 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
                 .build();
     }
 
-    private float speedStepValueToSpeed(int step) {
-        return (SPEED_MIN + (step * SPEED_DELTA));
-    }
-
     private String formatTime(float time) {
         DecimalFormat df = new DecimalFormat("0.00");
         return getString(R.string.playback_speed) + ": " + df.format(time) + "x";
+    }
+
+    private float speedStepValueToSpeed(int step) {
+        return (SPEED_MIN + (step * SPEED_DELTA));
     }
 }

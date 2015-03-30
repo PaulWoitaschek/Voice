@@ -69,18 +69,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     private RecyclerView recyclerView;
     private ProgressBar recyclerReplacementView;
 
-    /**
-     * Returns the amount of columns the main-grid will need
-     *
-     * @return The amount of columns, but at least 2.
-     */
-    private int getAmountOfColumns() {
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-        int columns = Math.round(dpWidth / getResources().getDimension(R.dimen.desired_medium_cover));
-        return columns > 2 ? columns : 2;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -255,32 +243,86 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 new CustomOnSimpleGestureListener(recyclerView, onLongClickListener));
     }
 
-    private void initPlayerWidget() {
-        long currentBookPosition = prefs.getCurrentBookId();
+    /**
+     * Returns the amount of columns the main-grid will need
+     *
+     * @return The amount of columns, but at least 2.
+     */
+    private int getAmountOfColumns() {
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        int columns = Math.round(dpWidth / getResources().getDimension(R.dimen.desired_medium_cover));
+        return columns > 2 ? columns : 2;
+    }
 
-        boolean widgetInitialized = false;
-        for (final Book b : adapter.getBooks()) {
-            if (b.getId() == currentBookPosition) {
-                //setting cover
-                File coverFile = b.getCoverFile();
-                Drawable coverReplacement = new CoverReplacement(b.getName(), this);
-                if (coverFile.exists() && coverFile.canRead()) {
-                    Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(currentCover);
-                } else {
-                    currentCover.setImageDrawable(coverReplacement);
-                }
+    @Override
+    public void onResume() {
+        super.onResume();
 
-                //setting text
-                currentText.setText(b.getName());
-                widgetInitialized = true;
-                break;
+        baseApplication.addOnPlayStateChangedListener(this);
+        baseApplication.addOnPositionChangedListener(this);
+
+        // Scanning for new files here in case there are changes on the drive.
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
             }
+        }, 100);
+        baseApplication.addOnBookAddedListener(this);
+        baseApplication.addOnBookDeletedListener(this);
+        baseApplication.addOnScannerStateChangedListener(this);
+
+        startService(BookAddingService.getUpdateIntent(this));
+
+        initPlayerWidget();
+        onPlayStateChanged(baseApplication.getPlayState());
+        onPositionChanged();
+
+        boolean audioFoldersEmpty = prefs.getAudiobookFolders().size() == 0;
+        boolean noFolderWarningIsShowing = noFolderWarning.isShowing();
+        if (audioFoldersEmpty && !noFolderWarningIsShowing) {
+            noFolderWarning.show();
         }
-        if (!widgetInitialized) {
-            current.setVisibility(View.GONE);
-        } else {
-            current.setVisibility(View.VISIBLE);
-        }
+        toggleRecyclerVisibilities(baseApplication.isScannerActive());
+    }
+
+    @Override
+    public void onPlayStateChanged(final BaseApplication.PlayState state) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (state == BaseApplication.PlayState.PLAYING) {
+                    currentPlaying.setImageResource(ThemeUtil.getResourceId(BookShelfActivity.this, R.attr.book_shelf_pause));
+                } else {
+                    currentPlaying.setImageResource(ThemeUtil.getResourceId(BookShelfActivity.this, R.attr.book_shelf_play));
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onPositionChanged() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Book book = baseApplication.getCurrentBook();
+                if (book != null) {
+                    ArrayList<Chapter> allChapters = book.getChapters();
+                    Chapter currentChapter = book.getCurrentChapter();
+                    float duration = 0;
+                    float timeTillBeginOfCurrentChapter = 0;
+                    for (Chapter c : allChapters) {
+                        duration += c.getDuration();
+                        if (allChapters.indexOf(c) < allChapters.indexOf(currentChapter)) {
+                            timeTillBeginOfCurrentChapter += c.getDuration();
+                        }
+                    }
+                    int progress = Math.round((timeTillBeginOfCurrentChapter + book.getTime()) * 1000 / duration);
+                    progressBar.setProgress(progress);
+                }
+            }
+        });
     }
 
     @Override
@@ -339,6 +381,34 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         initPlayerWidget();
     }
 
+    private void initPlayerWidget() {
+        long currentBookPosition = prefs.getCurrentBookId();
+
+        boolean widgetInitialized = false;
+        for (final Book b : adapter.getBooks()) {
+            if (b.getId() == currentBookPosition) {
+                //setting cover
+                File coverFile = b.getCoverFile();
+                Drawable coverReplacement = new CoverReplacement(b.getName(), this);
+                if (coverFile.exists() && coverFile.canRead()) {
+                    Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(currentCover);
+                } else {
+                    currentCover.setImageDrawable(coverReplacement);
+                }
+
+                //setting text
+                currentText.setText(b.getName());
+                widgetInitialized = true;
+                break;
+            }
+        }
+        if (!widgetInitialized) {
+            current.setVisibility(View.GONE);
+        } else {
+            current.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
         detector.onTouchEvent(motionEvent);
@@ -361,6 +431,16 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         });
     }
 
+    private void toggleRecyclerVisibilities(boolean scannerActive) {
+        if (baseApplication.getAllBooks().size() == 0 && scannerActive) {
+            recyclerReplacementView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            recyclerReplacementView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -373,48 +453,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-        baseApplication.addOnPlayStateChangedListener(this);
-        baseApplication.addOnPositionChangedListener(this);
-
-        // Scanning for new files here in case there are changes on the drive.
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyDataSetChanged();
-            }
-        }, 100);
-        baseApplication.addOnBookAddedListener(this);
-        baseApplication.addOnBookDeletedListener(this);
-        baseApplication.addOnScannerStateChangedListener(this);
-
-        startService(BookAddingService.getUpdateIntent(this));
-
-        initPlayerWidget();
-        onPlayStateChanged(baseApplication.getPlayState());
-        onPositionChanged();
-
-        boolean audioFoldersEmpty = prefs.getAudiobookFolders().size() == 0;
-        boolean noFolderWarningIsShowing = noFolderWarning.isShowing();
-        if (audioFoldersEmpty && !noFolderWarningIsShowing) {
-            noFolderWarning.show();
-        }
-        toggleRecyclerVisibilities(baseApplication.isScannerActive());
-    }
-
-    private void toggleRecyclerVisibilities(boolean scannerActive) {
-        if (baseApplication.getAllBooks().size() == 0 && scannerActive) {
-            recyclerReplacementView.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
-        } else {
-            recyclerReplacementView.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
     public void onBookDeleted() {
 
         handler.post(new Runnable() {
@@ -422,44 +460,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             public void run() {
                 toggleRecyclerVisibilities(baseApplication.isScannerActive());
                 adapter.notifyItemRemoved(adapter.getItemCount());
-            }
-        });
-    }
-
-    @Override
-    public void onPlayStateChanged(final BaseApplication.PlayState state) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (state == BaseApplication.PlayState.PLAYING) {
-                    currentPlaying.setImageResource(ThemeUtil.getResourceId(BookShelfActivity.this, R.attr.book_shelf_pause));
-                } else {
-                    currentPlaying.setImageResource(ThemeUtil.getResourceId(BookShelfActivity.this, R.attr.book_shelf_play));
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onPositionChanged() {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Book book = baseApplication.getCurrentBook();
-                if (book != null) {
-                    ArrayList<Chapter> allChapters = book.getChapters();
-                    Chapter currentChapter = book.getCurrentChapter();
-                    float duration = 0;
-                    float timeTillBeginOfCurrentChapter = 0;
-                    for (Chapter c : allChapters) {
-                        duration += c.getDuration();
-                        if (allChapters.indexOf(c) < allChapters.indexOf(currentChapter)) {
-                            timeTillBeginOfCurrentChapter += c.getDuration();
-                        }
-                    }
-                    int progress = Math.round((timeTillBeginOfCurrentChapter + book.getTime()) * 1000 / duration);
-                    progressBar.setProgress(progress);
-                }
             }
         });
     }

@@ -34,14 +34,6 @@ public class ImageHelper {
         return bitmap;
     }
 
-    @SuppressWarnings("deprecation")
-    public static int getSmallerScreenSize(Context c) {
-        Display display = ((WindowManager) c.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        int displayWidth = display.getWidth();
-        int displayHeight = display.getHeight();
-        return displayWidth < displayHeight ? displayWidth : displayHeight;
-    }
-
     /**
      * Saves a bitmap as a file to the personal directory.
      *
@@ -73,6 +65,14 @@ public class ImageHelper {
         } catch (IOException e) {
             L.e(TAG, e.getMessage());
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    public static int getSmallerScreenSize(Context c) {
+        Display display = ((WindowManager) c.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int displayWidth = display.getWidth();
+        int displayHeight = display.getHeight();
+        return displayWidth < displayHeight ? displayWidth : displayHeight;
     }
 
     public static boolean isOnline(Context c) {

@@ -94,30 +94,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
     }
 
     /**
-     * Pauses the player. Also stops the updating mechanism which constantly updates the book to the
-     * database.
-     */
-    public void pause() {
-        lock.lock();
-        try {
-            L.v(TAG, "pause acquired lock. state is=" + state);
-            switch (state) {
-                case STARTED:
-                    player.pause();
-                    stopUpdating();
-                    baseApplication.setPlayState(BaseApplication.PlayState.PAUSED);
-                    state = State.PAUSED;
-                    break;
-                default:
-                    L.e(TAG, "pause called in illegal state=" + state);
-                    break;
-            }
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    /**
      * Plays the prepared file.
      */
     public void play() {
@@ -169,10 +145,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
         }
     }
 
-    private boolean updaterActive() {
-        return updater != null && !updater.isCancelled() && !updater.isDone();
-    }
-
     /**
      * Skips by the amount, specified in the settings.
      *
@@ -200,53 +172,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
     }
 
     /**
-     * Changes the current position in book. If the path is the same, continues playing the song.
-     * Else calls {@link #prepare()} to prepare the next file
-     *
-     * @param time    The time in chapter at which to start
-     * @param relPath The relative path of the media to play (relative to the books root path)
-     */
-    public void changePosition(int time, String relPath) {
-        lock.lock();
-        try {
-            boolean changeFile = (!book.getCurrentChapter().getPath().equals(relPath));
-            if (changeFile) {
-                boolean wasPlaying = (state == State.STARTED);
-                book.setPosition(time, relPath);
-                db.updateBook(book);
-                baseApplication.notifyPositionChanged();
-                prepare();
-                if (wasPlaying) {
-                    player.start();
-                    state = State.STARTED;
-                    baseApplication.setPlayState(BaseApplication.PlayState.PLAYING);
-                } else {
-                    state = State.PREPARED;
-                    baseApplication.setPlayState(BaseApplication.PlayState.PAUSED);
-                }
-                baseApplication.notifyPositionChanged();
-            } else {
-                switch (state) {
-                    case PREPARED:
-                    case STARTED:
-                    case PAUSED:
-                    case PLAYBACK_COMPLETED:
-                        player.seekTo(time);
-                        book.setPosition(time, book.getCurrentChapter().getPath());
-                        db.updateBook(book);
-                        baseApplication.notifyPositionChanged();
-                        break;
-                    default:
-                        L.e(TAG, "changePosition called in illegal state:" + state);
-                        break;
-                }
-            }
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    /**
      * Sets the current playback speed
      *
      * @param speed The playback-speed. 1.0 for normal playback, 2.0 for twice the speed, etc.
@@ -260,69 +185,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
                 player.setPlaybackSpeed(speed);
             } else {
                 L.e(TAG, "setPlaybackSpeed called in illegal state: " + state);
-            }
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    private boolean sleepSandActive() {
-        lock.lock();
-        try {
-            return sleepSand != null && !sleepSand.isCancelled() && !sleepSand.isDone();
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    /**
-     * Turns the sleep timer on or off.
-     */
-    public void toggleSleepSand() {
-        L.i(TAG, "toggleSleepSand. Old state was:" + sleepSandActive());
-        lock.lock();
-        try {
-            if (sleepSandActive()) {
-                L.i(TAG, "sleepSand is active. cancelling now");
-                sleepSand.cancel(false);
-                stopAfterCurrentTrack = true;
-                baseApplication.setSleepTimerActive(false);
-            } else {
-                L.i(TAG, "preparing new sleep sand");
-                int minutes = prefs.getSleepTime();
-                stopAfterCurrentTrack = prefs.stopAfterCurrentTrack();
-                baseApplication.setSleepTimerActive(true);
-                sleepSand = executor.schedule(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!stopAfterCurrentTrack) {
-                            lock.lock();
-                            try {
-                                pause();
-                                baseApplication.setSleepTimerActive(false);
-                            } finally {
-                                lock.unlock();
-                            }
-                        } else {
-                            L.d(TAG, "Sandman: We are not stopping right now. We stop after this track.");
-                        }
-                    }
-                }, minutes, TimeUnit.MINUTES);
-            }
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    /**
-     * Plays the next chapter. If there is none, don't do anything.
-     */
-    public void next() {
-        lock.lock();
-        try {
-            Chapter nextChapter = book.getNextChapter();
-            if (nextChapter != null) {
-                changePosition(0, nextChapter.getPath());
             }
         } finally {
             lock.unlock();
@@ -381,6 +243,82 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
         }
     }
 
+    private boolean sleepSandActive() {
+        lock.lock();
+        try {
+            return sleepSand != null && !sleepSand.isCancelled() && !sleepSand.isDone();
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    /**
+     * Turns the sleep timer on or off.
+     */
+    public void toggleSleepSand() {
+        L.i(TAG, "toggleSleepSand. Old state was:" + sleepSandActive());
+        lock.lock();
+        try {
+            if (sleepSandActive()) {
+                L.i(TAG, "sleepSand is active. cancelling now");
+                sleepSand.cancel(false);
+                stopAfterCurrentTrack = true;
+                baseApplication.setSleepTimerActive(false);
+            } else {
+                L.i(TAG, "preparing new sleep sand");
+                int minutes = prefs.getSleepTime();
+                stopAfterCurrentTrack = prefs.stopAfterCurrentTrack();
+                baseApplication.setSleepTimerActive(true);
+                sleepSand = executor.schedule(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!stopAfterCurrentTrack) {
+                            lock.lock();
+                            try {
+                                pause();
+                                baseApplication.setSleepTimerActive(false);
+                            } finally {
+                                lock.unlock();
+                            }
+                        } else {
+                            L.d(TAG, "Sandman: We are not stopping right now. We stop after this track.");
+                        }
+                    }
+                }, minutes, TimeUnit.MINUTES);
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private boolean updaterActive() {
+        return updater != null && !updater.isCancelled() && !updater.isDone();
+    }
+
+    /**
+     * Pauses the player. Also stops the updating mechanism which constantly updates the book to the
+     * database.
+     */
+    public void pause() {
+        lock.lock();
+        try {
+            L.v(TAG, "pause acquired lock. state is=" + state);
+            switch (state) {
+                case STARTED:
+                    player.pause();
+                    stopUpdating();
+                    baseApplication.setPlayState(BaseApplication.PlayState.PAUSED);
+                    state = State.PAUSED;
+                    break;
+                default:
+                    L.e(TAG, "pause called in illegal state=" + state);
+                    break;
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
         lock.lock();
@@ -400,7 +338,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
         return false;
     }
 
-
     /**
      * After the current song has ended, prepare the next one if there is one. Else release the
      * resources.
@@ -418,6 +355,68 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
                 baseApplication.setPlayState(BaseApplication.PlayState.STOPPED);
 
                 state = State.PLAYBACK_COMPLETED;
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    /**
+     * Plays the next chapter. If there is none, don't do anything.
+     */
+    public void next() {
+        lock.lock();
+        try {
+            Chapter nextChapter = book.getNextChapter();
+            if (nextChapter != null) {
+                changePosition(0, nextChapter.getPath());
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    /**
+     * Changes the current position in book. If the path is the same, continues playing the song.
+     * Else calls {@link #prepare()} to prepare the next file
+     *
+     * @param time    The time in chapter at which to start
+     * @param relPath The relative path of the media to play (relative to the books root path)
+     */
+    public void changePosition(int time, String relPath) {
+        lock.lock();
+        try {
+            boolean changeFile = (!book.getCurrentChapter().getPath().equals(relPath));
+            if (changeFile) {
+                boolean wasPlaying = (state == State.STARTED);
+                book.setPosition(time, relPath);
+                db.updateBook(book);
+                baseApplication.notifyPositionChanged();
+                prepare();
+                if (wasPlaying) {
+                    player.start();
+                    state = State.STARTED;
+                    baseApplication.setPlayState(BaseApplication.PlayState.PLAYING);
+                } else {
+                    state = State.PREPARED;
+                    baseApplication.setPlayState(BaseApplication.PlayState.PAUSED);
+                }
+                baseApplication.notifyPositionChanged();
+            } else {
+                switch (state) {
+                    case PREPARED:
+                    case STARTED:
+                    case PAUSED:
+                    case PLAYBACK_COMPLETED:
+                        player.seekTo(time);
+                        book.setPosition(time, book.getCurrentChapter().getPath());
+                        db.updateBook(book);
+                        baseApplication.notifyPositionChanged();
+                        break;
+                    default:
+                        L.e(TAG, "changePosition called in illegal state:" + state);
+                        break;
+                }
             }
         } finally {
             lock.unlock();

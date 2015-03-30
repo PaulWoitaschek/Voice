@@ -104,8 +104,9 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         ArrayList<File> paths = new ArrayList<>();
         for (String s : rv) {
             File f = new File(s);
-            if (f.exists() && f.isDirectory() && !paths.contains(f) && f.canRead() && f.listFiles().length > 0)
+            if (f.exists() && f.isDirectory() && !paths.contains(f) && f.canRead() && f.listFiles().length > 0) {
                 paths.add(f);
+            }
         }
         Collections.sort(paths, new NaturalOrderComparator());
         return paths;
@@ -182,6 +183,15 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (canGoBack()) {
+            up();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     private boolean canGoBack() {
         if (multiSd) {
             return chosenFolder != null;
@@ -192,42 +202,6 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
                 }
             }
             return true;
-        }
-    }
-
-    /**
-     * Sets the choose button enabled or disabled, depending on where we are in the hierarchy
-     */
-    private void setButtonEnabledDisabled() {
-        boolean upEnabled = canGoBack();
-        boolean chooseEnabled = !multiSd || upEnabled;
-
-        chooseButton.setEnabled(chooseEnabled);
-        upButton.setEnabled(upEnabled);
-        @SuppressWarnings("deprecation") Drawable upIcon = upEnabled ? getResources().getDrawable(ThemeUtil.getResourceId(this, R.attr.folder_choose_up)) : null;
-        upButton.setImageDrawable(upIcon);
-    }
-
-    /**
-     * Gets the containing files of a folder (restricted to music and folders) in a naturally sorted
-     * order.
-     *
-     * @param file The file to look for containing files
-     * @return The containing files
-     */
-    private ArrayList<File> getFilesFromFolder(File file) {
-        File[] containing = file.listFiles(BookAddingService.folderAndMusicFilter);
-        ArrayList<File> asList = new ArrayList<>(Arrays.asList(containing));
-        Collections.sort(asList, new NaturalOrderComparator());
-        return asList;
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (canGoBack()) {
-            up();
-        } else {
-            super.onBackPressed();
         }
     }
 
@@ -256,6 +230,33 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
             adapter.notifyDataSetChanged();
         }
         setButtonEnabledDisabled();
+    }
+
+    /**
+     * Gets the containing files of a folder (restricted to music and folders) in a naturally sorted
+     * order.
+     *
+     * @param file The file to look for containing files
+     * @return The containing files
+     */
+    private ArrayList<File> getFilesFromFolder(File file) {
+        File[] containing = file.listFiles(BookAddingService.folderAndMusicFilter);
+        ArrayList<File> asList = new ArrayList<>(Arrays.asList(containing));
+        Collections.sort(asList, new NaturalOrderComparator());
+        return asList;
+    }
+
+    /**
+     * Sets the choose button enabled or disabled, depending on where we are in the hierarchy
+     */
+    private void setButtonEnabledDisabled() {
+        boolean upEnabled = canGoBack();
+        boolean chooseEnabled = !multiSd || upEnabled;
+
+        chooseButton.setEnabled(chooseEnabled);
+        upButton.setEnabled(upEnabled);
+        @SuppressWarnings("deprecation") Drawable upIcon = upEnabled ? getResources().getDrawable(ThemeUtil.getResourceId(this, R.attr.folder_choose_up)) : null;
+        upButton.setImageDrawable(upIcon);
     }
 
     @Override

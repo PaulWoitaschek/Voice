@@ -92,16 +92,31 @@ public class BookAddingService extends Service {
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
     public void onCreate() {
         super.onCreate();
 
         baseApplication = (BaseApplication) getApplication();
         prefs = new PrefsManager(this);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent != null && intent.getAction() != null && intent.getAction().equals(ACTION_UPDATE_BOOKS)) {
+            scanForFiles();
+        }
+
+        return START_NOT_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        baseApplication.setScannerActive(false);
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     private void addNewBooks() {
@@ -238,9 +253,9 @@ public class BookAddingService extends Service {
         ArrayList<File> fileList = new ArrayList<>();
         ArrayList<File> dirList = new ArrayList<>();
         for (File f : dir) {
-            if (f.exists() && f.isFile())
+            if (f.exists() && f.isFile()) {
                 fileList.add(f);
-            else if (f.exists() && f.isDirectory()) {
+            } else if (f.exists() && f.isDirectory()) {
                 dirList.add(f);
             }
         }
@@ -366,20 +381,5 @@ public class BookAddingService extends Service {
             }
         }
         return null;
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null && intent.getAction() != null && intent.getAction().equals(ACTION_UPDATE_BOOKS)) {
-            scanForFiles();
-        }
-
-        return START_NOT_STICKY;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        baseApplication.setScannerActive(false);
     }
 }

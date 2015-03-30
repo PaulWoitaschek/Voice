@@ -13,6 +13,16 @@ public class L {
         }
     }
 
+    private static String getMessage(Object msg) {
+        if (msg == null) {
+            return "null";
+        } else if (msg.equals("")) {
+            return "empty";
+        } else {
+            return String.valueOf(msg);
+        }
+    }
+
     public static void e(String tag, Object msg) {
         if (BuildConfig.DEBUG) {
             Log.e(tag, getMessage(msg));
@@ -34,16 +44,6 @@ public class L {
     public static void v(String tag, Object msg) {
         if (BuildConfig.DEBUG) {
             Log.v(tag, getMessage(msg));
-        }
-    }
-
-    private static String getMessage(Object msg) {
-        if (msg == null) {
-            return "null";
-        } else if (msg.equals("")) {
-            return "empty";
-        } else {
-            return String.valueOf(msg);
         }
     }
 }

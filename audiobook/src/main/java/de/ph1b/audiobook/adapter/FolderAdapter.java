@@ -45,11 +45,6 @@ public class FolderAdapter extends BaseAdapter {
         return getCustomView(position, convertView, parent);
     }
 
-    @Override
-    public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        return getCustomView(position, convertView, parent);
-    }
-
     @SuppressWarnings("deprecation")
     private View getCustomView(int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
@@ -80,6 +75,11 @@ public class FolderAdapter extends BaseAdapter {
         viewHolder.textView.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
 
         return convertView;
+    }
+
+    @Override
+    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        return getCustomView(position, convertView, parent);
     }
 
     private static class ViewHolder {

@@ -63,24 +63,6 @@ public class CoverDownloader {
         return null;
     }
 
-    @NonNull
-    private String getIPAddress() {
-        try {
-            List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
-            for (NetworkInterface i : interfaces) {
-                List<InetAddress> internetAddresses = Collections.list(i.getInetAddresses());
-                for (InetAddress a : internetAddresses) {
-                    if (!a.isLoopbackAddress()) {
-                        return a.getHostAddress().toUpperCase();
-                    }
-                }
-            }
-        } catch (Exception e) {
-            L.d(TAG, e.getMessage());
-        }
-        return "";
-    }
-
     @Nullable
     private String getBitmapUrl(@NonNull String searchText, int number) {
         if (searchMapping.containsKey(searchText)) {
@@ -149,5 +131,23 @@ public class CoverDownloader {
         }
 
         return newStrings;
+    }
+
+    @NonNull
+    private String getIPAddress() {
+        try {
+            List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface i : interfaces) {
+                List<InetAddress> internetAddresses = Collections.list(i.getInetAddresses());
+                for (InetAddress a : internetAddresses) {
+                    if (!a.isLoopbackAddress()) {
+                        return a.getHostAddress().toUpperCase();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            L.d(TAG, e.getMessage());
+        }
+        return "";
     }
 }

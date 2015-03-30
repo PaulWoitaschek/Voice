@@ -55,10 +55,11 @@ public class JumpToPositionDialog extends DialogFragment {
 
         //set maximum values
         hPicker.setMaxValue(biggestHour);
-        if (biggestHour == 0)
+        if (biggestHour == 0) {
             mPicker.setMaxValue((int) TimeUnit.MILLISECONDS.toMinutes(duration));
-        else
+        } else {
             mPicker.setMaxValue(59);
+        }
 
         //set default values
         int defaultHour = (int) TimeUnit.MILLISECONDS.toHours(position);
@@ -83,9 +84,13 @@ public class JumpToPositionDialog extends DialogFragment {
                 int hValue = hPicker.getValue();
 
                 if (oldVal == 59 && newVal == 0) //scrolling forward
+                {
                     hPicker.setValue(++hValue);
+                }
                 if (oldVal == 0 && newVal == 59) //scrolling backward
+                {
                     hPicker.setValue(--hValue);
+                }
             }
         });
 

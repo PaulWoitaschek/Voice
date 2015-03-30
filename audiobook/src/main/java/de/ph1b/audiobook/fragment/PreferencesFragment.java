@@ -33,6 +33,13 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
         sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        initValues();
+        sp.registerOnSharedPreferenceChangeListener(this);
+    }
+
     private void initValues() {
         // seek pref
         int seekAmount = prefs.getSeekTime();
@@ -63,13 +70,6 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
 
         BaseActivity baseActivity = (BaseActivity) getActivity();
         baseActivity.recreateIfThemeChanged();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        initValues();
-        sp.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override

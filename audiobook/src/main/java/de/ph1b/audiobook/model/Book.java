@@ -60,15 +60,21 @@ public class Book implements Comparable<Book> {
         setPosition(time, relativeMediaPath);
     }
 
-    @NonNull
-    public static File getCoverFile(@NonNull String root, @NonNull ArrayList<Chapter> chapters) {
-        if (chapters.size() == 1) {
-            String fileName = "." + chapters.get(0).getName() + IMAGE_EXTENSION;
-            return new File(root, fileName);
-        } else {
-            String fileName = "." + (new File(root).getName()) + IMAGE_EXTENSION;
-            return new File(root, fileName);
+    public void setPosition(int time, @NonNull String relativeMediaPath) {
+        Validate.notEmpty(relativeMediaPath);
+
+        boolean relativeMediaPathExists = false;
+        for (Chapter c : chapters) {
+            if (c.getPath().equals(relativeMediaPath)) {
+                relativeMediaPathExists = true;
+            }
         }
+        if (!relativeMediaPathExists) {
+            throw new IllegalArgumentException("Creating book with name=" + name + " failed because relativeMediaPath=" + relativeMediaPath + " does not exist in chapters");
+        }
+
+        this.time = time;
+        this.relativeMediaPath = relativeMediaPath;
     }
 
     public boolean isUseCoverReplacement() {
@@ -109,6 +115,16 @@ public class Book implements Comparable<Book> {
     }
 
     @Override
+    public int hashCode() {
+        final int PRIME = 31;
+        int result = PRIME + root.hashCode();
+        for (Chapter c : chapters) {
+            result = PRIME * result + c.hashCode();
+        }
+        return result;
+    }
+
+    @Override
     public String toString() {
         return TAG + "[" +
                 "root=" + root +
@@ -124,36 +140,9 @@ public class Book implements Comparable<Book> {
                 "]";
     }
 
-    @Override
-    public int hashCode() {
-        final int PRIME = 31;
-        int result = PRIME + root.hashCode();
-        for (Chapter c : chapters) {
-            result = PRIME * result + c.hashCode();
-        }
-        return result;
-    }
-
     @NonNull
     public String getRelativeMediaPath() {
         return relativeMediaPath;
-    }
-
-    public void setPosition(int time, @NonNull String relativeMediaPath) {
-        Validate.notEmpty(relativeMediaPath);
-
-        boolean relativeMediaPathExists = false;
-        for (Chapter c : chapters) {
-            if (c.getPath().equals(relativeMediaPath)) {
-                relativeMediaPathExists = true;
-            }
-        }
-        if (!relativeMediaPathExists) {
-            throw new IllegalArgumentException("Creating book with name=" + name + " failed because relativeMediaPath=" + relativeMediaPath + " does not exist in chapters");
-        }
-
-        this.time = time;
-        this.relativeMediaPath = relativeMediaPath;
     }
 
     @Nullable
@@ -161,15 +150,6 @@ public class Book implements Comparable<Book> {
         int currentIndex = chapters.indexOf(getCurrentChapter());
         if (currentIndex < chapters.size() - 1) {
             return chapters.get(currentIndex + 1);
-        }
-        return null;
-    }
-
-    @Nullable
-    public Chapter getPreviousChapter() {
-        int currentIndex = chapters.indexOf(getCurrentChapter());
-        if (currentIndex > 0) {
-            return chapters.get(currentIndex - 1);
         }
         return null;
     }
@@ -182,6 +162,15 @@ public class Book implements Comparable<Book> {
             }
         }
         throw new IllegalArgumentException("getCurrentChapter has no valid path with relativeMediaPath=" + relativeMediaPath);
+    }
+
+    @Nullable
+    public Chapter getPreviousChapter() {
+        int currentIndex = chapters.indexOf(getCurrentChapter());
+        if (currentIndex > 0) {
+            return chapters.get(currentIndex - 1);
+        }
+        return null;
     }
 
     public int getTime() {
@@ -209,6 +198,17 @@ public class Book implements Comparable<Book> {
     @NonNull
     public File getCoverFile() {
         return getCoverFile(root, chapters);
+    }
+
+    @NonNull
+    public static File getCoverFile(@NonNull String root, @NonNull ArrayList<Chapter> chapters) {
+        if (chapters.size() == 1) {
+            String fileName = "." + chapters.get(0).getName() + IMAGE_EXTENSION;
+            return new File(root, fileName);
+        } else {
+            String fileName = "." + (new File(root).getName()) + IMAGE_EXTENSION;
+            return new File(root, fileName);
+        }
     }
 
     public long getId() {

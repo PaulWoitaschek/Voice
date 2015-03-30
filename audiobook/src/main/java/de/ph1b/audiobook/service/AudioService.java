@@ -146,6 +146,19 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         }
     }
 
+    @Override
+    public int onStartCommand(final Intent intent, int flags, int startId) {
+
+        if (controller == null && baseApplication.getCurrentBook() != null) {
+            controller = new MediaPlayerController(baseApplication, baseApplication.getCurrentBook());
+        }
+
+        if (controller != null) {
+            handleIntent(intent);
+        }
+        return Service.START_STICKY;
+    }
+
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public void onDestroy() {
@@ -169,6 +182,17 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    private void releaseController() {
+        if (controller != null) {
+            controller.release();
+            controller = null;
+        }
+        remoteControlClientMetaDataEditor = null;
+        pauseBecauseHeadset = false;
+        pauseBecauseLossTransient = false;
+        baseApplication.setPlayState(PlayState.STOPPED);
     }
 
     private void handleIntent(final Intent intent) {
@@ -230,16 +254,94 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     }
 
     @Override
-    public int onStartCommand(final Intent intent, int flags, int startId) {
-
-        if (controller == null && baseApplication.getCurrentBook() != null) {
-            controller = new MediaPlayerController(baseApplication, baseApplication.getCurrentBook());
+    public void onAudioFocusChange(int focusChange) {
+        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        final int callState = (tm != null) ? tm.getCallState() : TelephonyManager.CALL_STATE_IDLE;
+        L.d(TAG, "Call state is: " + callState);
+        if (callState != TelephonyManager.CALL_STATE_IDLE) {
+            focusChange = AudioManager.AUDIOFOCUS_LOSS;
+            // if there is an incoming call, we pause permanently. (tricking switch condition)
         }
+        switch (focusChange) {
+            case AudioManager.AUDIOFOCUS_GAIN:
+                L.d(TAG, "started by audioFocus gained");
+                if (pauseBecauseLossTransient) {
+                    controller.play();
+                    pauseBecauseLossTransient = false;
+                } else {
+                    L.d(TAG, "increasing volume");
+                    audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
+                }
+                break;
+            case AudioManager.AUDIOFOCUS_LOSS:
+                L.d(TAG, "paused by audioFocus loss");
+                releaseController();
+                break;
+            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                if (!prefs.pauseOnTempFocusLoss()) {
+                    if (baseApplication.getPlayState() == PlayState.PLAYING) {
+                        L.d(TAG, "lowering volume");
+                        audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
+                        pauseBecauseHeadset = false;
+                    }
 
-        if (controller != null) {
-            handleIntent(intent);
+                    /**
+                     * Only break here. if we should pause, AUDIO_FOCUS_LOSS_TRANSIENT will handle
+                     * that for us.
+                     */
+                    break;
+                }
+            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                if (baseApplication.getPlayState() == PlayState.PLAYING) {
+                    L.d(TAG, "Paused by audio-focus loss transient.");
+                    controller.pause();
+                    pauseBecauseLossTransient = true;
+                }
+                break;
         }
-        return Service.START_STICKY;
+    }
+
+    @Override
+    public void onPlayStateChanged(final PlayState state) {
+        L.d(TAG, "onPlayStateChanged:" + state);
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                L.d(TAG, "onPlayStateChanged executed:" + state);
+                switch (state) {
+                    case PLAYING:
+                        if (controller != null) {
+                            audioManager.requestAudioFocus(AudioService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+                            startForeground(NOTIFICATION_ID, getNotification());
+                            if (Build.VERSION.SDK_INT >= 14) {
+                                //noinspection deprecation
+                                remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
+                                updateRemoteControlClient();
+                            }
+                        }
+                        break;
+                    case PAUSED:
+                        if (controller != null) {
+                            stopForeground(false);
+                            notificationManager.notify(NOTIFICATION_ID, getNotification());
+                            if (Build.VERSION.SDK_INT >= 14) {
+                                //noinspection deprecation
+                                remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
+                            }
+                        }
+                        break;
+                    case STOPPED:
+                        audioManager.abandonAudioFocus(AudioService.this);
+                        notificationManager.cancel(NOTIFICATION_ID);
+                        stopForeground(true);
+                        if (Build.VERSION.SDK_INT >= 14) {
+                            //noinspection deprecation
+                            remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_STOPPED);
+                        }
+                        break;
+                }
+            }
+        });
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -379,108 +481,6 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 remoteControlClientMetaDataEditor.apply();
             }
         });
-    }
-
-    @Override
-    public void onAudioFocusChange(int focusChange) {
-        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        final int callState = (tm != null) ? tm.getCallState() : TelephonyManager.CALL_STATE_IDLE;
-        L.d(TAG, "Call state is: " + callState);
-        if (callState != TelephonyManager.CALL_STATE_IDLE) {
-            focusChange = AudioManager.AUDIOFOCUS_LOSS;
-            // if there is an incoming call, we pause permanently. (tricking switch condition)
-        }
-        switch (focusChange) {
-            case AudioManager.AUDIOFOCUS_GAIN:
-                L.d(TAG, "started by audioFocus gained");
-                if (pauseBecauseLossTransient) {
-                    controller.play();
-                    pauseBecauseLossTransient = false;
-                } else {
-                    L.d(TAG, "increasing volume");
-                    audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
-                }
-                break;
-            case AudioManager.AUDIOFOCUS_LOSS:
-                L.d(TAG, "paused by audioFocus loss");
-                releaseController();
-                break;
-            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                if (!prefs.pauseOnTempFocusLoss()) {
-                    if (baseApplication.getPlayState() == PlayState.PLAYING) {
-                        L.d(TAG, "lowering volume");
-                        audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
-                        pauseBecauseHeadset = false;
-                    }
-
-                    /**
-                     * Only break here. if we should pause, AUDIO_FOCUS_LOSS_TRANSIENT will handle
-                     * that for us.
-                     */
-                    break;
-                }
-            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                if (baseApplication.getPlayState() == PlayState.PLAYING) {
-                    L.d(TAG, "Paused by audio-focus loss transient.");
-                    controller.pause();
-                    pauseBecauseLossTransient = true;
-                }
-                break;
-        }
-    }
-
-    @Override
-    public void onPlayStateChanged(final PlayState state) {
-        L.d(TAG, "onPlayStateChanged:" + state);
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                L.d(TAG, "onPlayStateChanged executed:" + state);
-                switch (state) {
-                    case PLAYING:
-                        if (controller != null) {
-                            audioManager.requestAudioFocus(AudioService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-                            startForeground(NOTIFICATION_ID, getNotification());
-                            if (Build.VERSION.SDK_INT >= 14) {
-                                //noinspection deprecation
-                                remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
-                                updateRemoteControlClient();
-                            }
-                        }
-                        break;
-                    case PAUSED:
-                        if (controller != null) {
-                            stopForeground(false);
-                            notificationManager.notify(NOTIFICATION_ID, getNotification());
-                            if (Build.VERSION.SDK_INT >= 14) {
-                                //noinspection deprecation
-                                remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
-                            }
-                        }
-                        break;
-                    case STOPPED:
-                        audioManager.abandonAudioFocus(AudioService.this);
-                        notificationManager.cancel(NOTIFICATION_ID);
-                        stopForeground(true);
-                        if (Build.VERSION.SDK_INT >= 14) {
-                            //noinspection deprecation
-                            remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_STOPPED);
-                        }
-                        break;
-                }
-            }
-        });
-    }
-
-    private void releaseController() {
-        if (controller != null) {
-            controller.release();
-            controller = null;
-        }
-        remoteControlClientMetaDataEditor = null;
-        pauseBecauseHeadset = false;
-        pauseBecauseLossTransient = false;
-        baseApplication.setPlayState(PlayState.STOPPED);
     }
 
     @Override

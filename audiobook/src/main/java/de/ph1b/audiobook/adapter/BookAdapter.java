@@ -65,6 +65,31 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         return new ViewHolder(v, onItemClickListener);
     }
 
+    @Override
+    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+        Book b = books.get(position);
+
+        //setting text
+        String name = b.getName();
+        viewHolder.titleView.setText(name);
+        viewHolder.titleView.setActivated(true);
+
+        // (Cover)
+        File coverFile = b.getCoverFile();
+        Drawable coverReplacement = new CoverReplacement(b.getName().substring(0, 1), c);
+        if (!b.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
+            Picasso.with(c).load(coverFile).placeholder(coverReplacement).into(viewHolder.coverView);
+        } else {
+            Picasso.with(c).cancelRequest(viewHolder.coverView);
+            viewHolder.coverView.setImageDrawable(coverReplacement);
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return books.size();
+    }
+
     /**
      * Swaps elements in the detailList and saves them to the database.
      *
@@ -105,31 +130,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
                 db.updateBook(oldBook);
             }
         });
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        Book b = books.get(position);
-
-        //setting text
-        String name = b.getName();
-        viewHolder.titleView.setText(name);
-        viewHolder.titleView.setActivated(true);
-
-        // (Cover)
-        File coverFile = b.getCoverFile();
-        Drawable coverReplacement = new CoverReplacement(b.getName().substring(0, 1), c);
-        if (!b.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-            Picasso.with(c).load(coverFile).placeholder(coverReplacement).into(viewHolder.coverView);
-        } else {
-            Picasso.with(c).cancelRequest(viewHolder.coverView);
-            viewHolder.coverView.setImageDrawable(coverReplacement);
-        }
-    }
-
-    @Override
-    public int getItemCount() {
-        return books.size();
     }
 
     public interface OnItemClickListener {

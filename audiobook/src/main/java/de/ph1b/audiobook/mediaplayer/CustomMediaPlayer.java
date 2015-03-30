@@ -62,67 +62,6 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     }
 
     @Override
-    public int getCurrentPosition() {
-        switch (state) {
-            case ERROR:
-                error("getCurrentPosition", state);
-                onErrorListener.onError(null, 0, 0);
-                break;
-            default:
-                return (int) (extractor.getSampleTime() / 1000);
-        }
-        return 0;
-    }
-
-    @Override
-    public void setPlaybackSpeed(float speed) {
-        this.speed = speed;
-    }
-
-    @Override
-    public void pause() {
-        L.v(TAG, "pause called");
-        switch (state) {
-            case PLAYBACK_COMPLETED:
-                state = State.PAUSED;
-                L.d(TAG, "State changed to: " + state);
-                stayAwake(false);
-                break;
-            case STARTED:
-            case PAUSED:
-                track.pause();
-                state = State.PAUSED;
-                L.d(TAG, "State changed to: " + state);
-                stayAwake(false);
-                break;
-            default:
-                error("pause", state);
-        }
-    }
-
-    private void error(String methodName, State lastState) {
-        State oldState = State.values()[lastState.ordinal()];
-        state = State.ERROR;
-        stayAwake(false);
-        L.e(TAG, "Called " + methodName + " in state=" + oldState);
-    }
-
-    @Override
-    public void prepare() throws IOException {
-        L.v(TAG, "prepare called in state: " + state);
-        switch (state) {
-            case INITIALIZED:
-            case STOPPED:
-                initStream();
-                state = State.PREPARED;
-                L.d(TAG, "State changed to: " + state);
-                break;
-            default:
-                error("prepare", state);
-        }
-    }
-
-    @Override
     public void start() {
         L.v(TAG, "start called in state:" + state);
         switch (state) {
@@ -155,26 +94,6 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                 error("start", state);
                 break;
         }
-    }
-
-    private void stayAwake(boolean awake) {
-        if (wakeLock != null) {
-            if (awake && !wakeLock.isHeld()) {
-                wakeLock.acquire();
-            } else if (!awake && wakeLock.isHeld()) {
-                wakeLock.release();
-            }
-        }
-    }
-
-    @Override
-    public void release() {
-        L.v(TAG, "release called in state:" + state);
-        reset(); //reset will release wakelock
-        onCompletionListener = null;
-        executor.shutdown();
-        state = State.END;
-        L.d(TAG, "State changed to: " + state);
     }
 
     @Override
@@ -217,6 +136,31 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     }
 
     @Override
+    public void release() {
+        L.v(TAG, "release called in state:" + state);
+        reset(); //reset will release wakelock
+        onCompletionListener = null;
+        executor.shutdown();
+        state = State.END;
+        L.d(TAG, "State changed to: " + state);
+    }
+
+    @Override
+    public void prepare() throws IOException {
+        L.v(TAG, "prepare called in state: " + state);
+        switch (state) {
+            case INITIALIZED:
+            case STOPPED:
+                initStream();
+                state = State.PREPARED;
+                L.d(TAG, "State changed to: " + state);
+                break;
+            default:
+                error("prepare", state);
+        }
+    }
+
+    @Override
     public void seekTo(final int ms) {
         switch (state) {
             case PREPARED:
@@ -245,6 +189,45 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
             default:
                 error("seekTo", state);
         }
+    }
+
+    @Override
+    public int getCurrentPosition() {
+        switch (state) {
+            case ERROR:
+                error("getCurrentPosition", state);
+                onErrorListener.onError(null, 0, 0);
+                break;
+            default:
+                return (int) (extractor.getSampleTime() / 1000);
+        }
+        return 0;
+    }
+
+    @Override
+    public void pause() {
+        L.v(TAG, "pause called");
+        switch (state) {
+            case PLAYBACK_COMPLETED:
+                state = State.PAUSED;
+                L.d(TAG, "State changed to: " + state);
+                stayAwake(false);
+                break;
+            case STARTED:
+            case PAUSED:
+                track.pause();
+                state = State.PAUSED;
+                L.d(TAG, "State changed to: " + state);
+                stayAwake(false);
+                break;
+            default:
+                error("pause", state);
+        }
+    }
+
+    @Override
+    public void setPlaybackSpeed(float speed) {
+        this.speed = speed;
     }
 
     @Override
@@ -283,14 +266,20 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
         return (int) duration;
     }
 
-    private int findFormatFromChannels(int numChannels) {
-        switch (numChannels) {
-            case 1:
-                return AudioFormat.CHANNEL_OUT_MONO;
-            case 2:
-                return AudioFormat.CHANNEL_OUT_STEREO;
-            default:
-                return -1; // Error
+    private void error(String methodName, State lastState) {
+        State oldState = State.values()[lastState.ordinal()];
+        state = State.ERROR;
+        stayAwake(false);
+        L.e(TAG, "Called " + methodName + " in state=" + oldState);
+    }
+
+    private void stayAwake(boolean awake) {
+        if (wakeLock != null) {
+            if (awake && !wakeLock.isHeld()) {
+                wakeLock.acquire();
+            } else if (!awake && wakeLock.isHeld()) {
+                wakeLock.release();
+            }
         }
     }
 
@@ -333,6 +322,17 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
             sonic = new Sonic(sampleRate, numChannels);
         } finally {
             lock.unlock();
+        }
+    }
+
+    private int findFormatFromChannels(int numChannels) {
+        switch (numChannels) {
+            case 1:
+                return AudioFormat.CHANNEL_OUT_MONO;
+            case 2:
+                return AudioFormat.CHANNEL_OUT_STEREO;
+            default:
+                return -1; // Error
         }
     }
 

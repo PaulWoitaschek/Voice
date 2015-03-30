@@ -26,27 +26,6 @@ public class ServiceController {
         this.c = c;
     }
 
-    public static Intent getPlayPauseIntent(Context c) {
-        Intent intent = new Intent(c, AudioService.class);
-        intent.setAction(Intent.ACTION_MEDIA_BUTTON);
-        intent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
-        return intent;
-    }
-
-    public static Intent getFastForwardIntent(Context c) {
-        Intent intent = new Intent(c, AudioService.class);
-        intent.setAction(Intent.ACTION_MEDIA_BUTTON);
-        intent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD);
-        return intent;
-    }
-
-    public static Intent getRewindIntent(Context c) {
-        Intent intent = new Intent(c, AudioService.class);
-        intent.setAction(Intent.ACTION_MEDIA_BUTTON);
-        intent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_REWIND);
-        return intent;
-    }
-
     public static Intent getStopIntent(Context c) {
         Intent intent = new Intent(c, AudioService.class);
         intent.setAction(Intent.ACTION_MEDIA_BUTTON);
@@ -73,12 +52,33 @@ public class ServiceController {
         c.startService(getPlayPauseIntent(c));
     }
 
+    public static Intent getPlayPauseIntent(Context c) {
+        Intent intent = new Intent(c, AudioService.class);
+        intent.setAction(Intent.ACTION_MEDIA_BUTTON);
+        intent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+        return intent;
+    }
+
     public void fastForward() {
         c.startService(getFastForwardIntent(c));
     }
 
+    public static Intent getFastForwardIntent(Context c) {
+        Intent intent = new Intent(c, AudioService.class);
+        intent.setAction(Intent.ACTION_MEDIA_BUTTON);
+        intent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD);
+        return intent;
+    }
+
     public void rewind() {
         c.startService(getRewindIntent(c));
+    }
+
+    public static Intent getRewindIntent(Context c) {
+        Intent intent = new Intent(c, AudioService.class);
+        intent.setAction(Intent.ACTION_MEDIA_BUTTON);
+        intent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_REWIND);
+        return intent;
     }
 
     public void next() {

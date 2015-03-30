@@ -43,6 +43,23 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
     private BaseApplication baseApplication;
     private AppWidgetManager appWidgetManager;
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        baseApplication = (BaseApplication) getApplication();
+        baseApplication.addOnPlayStateChangedListener(this);
+        baseApplication.addOnCurrentBookChangedListener(this);
+        baseApplication.addOnPositionChangedListener(this);
+        appWidgetManager = AppWidgetManager.getInstance(this);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        updateWidget();
+        return Service.START_STICKY;
+    }
+
     private void updateWidget() {
         executor.execute(new Runnable() {
             @Override
@@ -88,38 +105,6 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
         });
     }
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        baseApplication = (BaseApplication) getApplication();
-        baseApplication.addOnPlayStateChangedListener(this);
-        baseApplication.addOnCurrentBookChangedListener(this);
-        baseApplication.addOnPositionChangedListener(this);
-        appWidgetManager = AppWidgetManager.getInstance(this);
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        updateWidget();
-        return Service.START_STICKY;
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newCfg) {
-        int oldOrientation = this.getResources().getConfiguration().orientation;
-        int newOrientation = newCfg.orientation;
-
-        if (newOrientation != oldOrientation) {
-            updateWidget();
-        }
-    }
-
     /**
      * Returning if the current orientation is portrait. If it is unknown, measure the display-spec
      * and return accordingly.
@@ -135,66 +120,6 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
         @SuppressWarnings("deprecation") int displayHeight = display.getHeight();
 
         return orientation != Configuration.ORIENTATION_LANDSCAPE && (orientation == Configuration.ORIENTATION_PORTRAIT || displayWidth == displayHeight || displayWidth < displayHeight);
-    }
-
-    private int dpToPx(int dp) {
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics()));
-    }
-
-    private void hideX(RemoteViews remoteViews, int width, int height) {
-        int buttonSize = dpToPx(4 + 36 + 4);
-        remoteViews.setViewVisibility(R.id.imageView, View.VISIBLE);
-        remoteViews.setViewVisibility(R.id.rewind, View.VISIBLE);
-        remoteViews.setViewVisibility(R.id.fast_forward, View.VISIBLE);
-        if (width > 3 * buttonSize + height) {
-            return;
-        }
-        remoteViews.setViewVisibility(R.id.imageView, View.GONE);
-        if (width > 3 * buttonSize) {
-            return;
-        }
-        remoteViews.setViewVisibility(R.id.fast_forward, View.GONE);
-        if (width > 2 * buttonSize) {
-            return;
-        }
-        remoteViews.setViewVisibility(R.id.rewind, View.GONE);
-    }
-
-    private void hideY(RemoteViews remoteViews, int height, boolean singleChapter) {
-        int buttonSize = dpToPx(4 + 36 + 4);
-        int titleSize = getResources().getDimensionPixelSize(R.dimen.widget_title_size);
-        int summarySize = getResources().getDimensionPixelSize(R.dimen.widget_summary_size);
-        int stackedHeight = buttonSize + titleSize + summarySize;
-
-        if (height > stackedHeight) {
-            if (singleChapter) {
-                remoteViews.setViewVisibility(R.id.summary, View.GONE);
-            }
-            return;
-        }
-        remoteViews.setViewVisibility(R.id.summary, View.GONE);
-        stackedHeight = buttonSize + titleSize;
-        if (height > stackedHeight) {
-            return;
-        }
-        remoteViews.setViewVisibility(R.id.title, View.GONE);
-    }
-
-    private void hideElements(RemoteViews remoteViews, int width, int height, boolean singleChapter) {
-        L.v(TAG, "hideElements called");
-
-        hideX(remoteViews, width, height);
-        hideY(remoteViews, height, singleChapter);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        baseApplication.removeOnPlayStateChangedListener(this);
-        baseApplication.removeOnCurrentBookChangedListener(this);
-        baseApplication.removeOnPositionChangedListener(this);
-        executor.shutdown();
     }
 
     private void initElements(RemoteViews remoteViews, Book book) {
@@ -256,6 +181,81 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
         }
 
         remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI);
+    }
+
+    private int dpToPx(int dp) {
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics()));
+    }
+
+    private void hideElements(RemoteViews remoteViews, int width, int height, boolean singleChapter) {
+        L.v(TAG, "hideElements called");
+
+        hideX(remoteViews, width, height);
+        hideY(remoteViews, height, singleChapter);
+    }
+
+    private void hideX(RemoteViews remoteViews, int width, int height) {
+        int buttonSize = dpToPx(4 + 36 + 4);
+        remoteViews.setViewVisibility(R.id.imageView, View.VISIBLE);
+        remoteViews.setViewVisibility(R.id.rewind, View.VISIBLE);
+        remoteViews.setViewVisibility(R.id.fast_forward, View.VISIBLE);
+        if (width > 3 * buttonSize + height) {
+            return;
+        }
+        remoteViews.setViewVisibility(R.id.imageView, View.GONE);
+        if (width > 3 * buttonSize) {
+            return;
+        }
+        remoteViews.setViewVisibility(R.id.fast_forward, View.GONE);
+        if (width > 2 * buttonSize) {
+            return;
+        }
+        remoteViews.setViewVisibility(R.id.rewind, View.GONE);
+    }
+
+    private void hideY(RemoteViews remoteViews, int height, boolean singleChapter) {
+        int buttonSize = dpToPx(4 + 36 + 4);
+        int titleSize = getResources().getDimensionPixelSize(R.dimen.widget_title_size);
+        int summarySize = getResources().getDimensionPixelSize(R.dimen.widget_summary_size);
+        int stackedHeight = buttonSize + titleSize + summarySize;
+
+        if (height > stackedHeight) {
+            if (singleChapter) {
+                remoteViews.setViewVisibility(R.id.summary, View.GONE);
+            }
+            return;
+        }
+        remoteViews.setViewVisibility(R.id.summary, View.GONE);
+        stackedHeight = buttonSize + titleSize;
+        if (height > stackedHeight) {
+            return;
+        }
+        remoteViews.setViewVisibility(R.id.title, View.GONE);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        baseApplication.removeOnPlayStateChangedListener(this);
+        baseApplication.removeOnCurrentBookChangedListener(this);
+        baseApplication.removeOnPositionChangedListener(this);
+        executor.shutdown();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newCfg) {
+        int oldOrientation = this.getResources().getConfiguration().orientation;
+        int newOrientation = newCfg.orientation;
+
+        if (newOrientation != oldOrientation) {
+            updateWidget();
+        }
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     @Override

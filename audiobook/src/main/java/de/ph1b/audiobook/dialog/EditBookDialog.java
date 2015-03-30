@@ -65,14 +65,16 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
                 if (addCoverAsync != null && !addCoverAsync.isCancelled()) {
                     addCoverAsync.cancel(true);
                 }
-                if (coverPosition > 0)
+                if (coverPosition > 0) {
                     coverPosition--;
+                }
                 coverImageView.setImageBitmap(covers.get(coverPosition));
                 coverImageView.setVisibility(View.VISIBLE);
                 coverReplacement.setVisibility(View.GONE);
                 nextCover.setVisibility(View.VISIBLE);
-                if (coverPosition == 0)
+                if (coverPosition == 0) {
                     previousCover.setVisibility(View.INVISIBLE);
+                }
                 break;
             case R.id.next_cover:
                 if (coverPosition < covers.size() - 1) {
@@ -157,8 +159,9 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
         MaterialDialog.ButtonCallback buttonCallback = new MaterialDialog.ButtonCallback() {
             @Override
             public void onPositive(MaterialDialog dialog) {
-                if (addCoverAsync != null && !addCoverAsync.isCancelled())
+                if (addCoverAsync != null && !addCoverAsync.isCancelled()) {
                     addCoverAsync.cancel(true);
+                }
                 String bookName = nameEditText.getText().toString();
                 Bitmap newCover = null;
                 if (covers.size() > 0) {
@@ -176,8 +179,9 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
 
             @Override
             public void onNegative(MaterialDialog dialog) {
-                if (addCoverAsync != null && !addCoverAsync.isCancelled())
+                if (addCoverAsync != null && !addCoverAsync.isCancelled()) {
                     addCoverAsync.cancel(true);
+                }
             }
         };
 
@@ -253,6 +257,11 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
         }
 
         @Override
+        protected Bitmap doInBackground(Void... voids) {
+            return coverDownloader.getCover(searchString, googleCount);
+        }
+
+        @Override
         protected void onPreExecute() {
             nextCover.setVisibility(View.INVISIBLE);
             if (covers.size() > 0) {
@@ -260,11 +269,6 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
             }
             coverReplacement.setVisibility(View.VISIBLE);
             coverImageView.setVisibility(View.GONE);
-        }
-
-        @Override
-        protected Bitmap doInBackground(Void... voids) {
-            return coverDownloader.getCover(searchString, googleCount);
         }
 
         @Override
@@ -282,8 +286,9 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
                     covers.add(bitmap);
                     coverPosition = covers.indexOf(bitmap);
                     cover.setImageBitmap(bitmap);
-                    if (covers.size() > 1)
+                    if (covers.size() > 1) {
                         previousCover.setVisibility(View.VISIBLE);
+                    }
                 } else {
                     //if we found no bitmap, set old one
                     if (coverPosition != -1) {

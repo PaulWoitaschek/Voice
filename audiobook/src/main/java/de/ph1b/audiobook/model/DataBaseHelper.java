@@ -141,6 +141,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     @NonNull
+    private File getConfigFile(@NonNull String root, @NonNull ArrayList<Chapter> chapters) {
+        if (chapters.size() == 1) {
+            String fileName = "." + chapters.get(0).getName() + JSONHelper.JSON_EXTENSION;
+            return new File(root, fileName);
+        } else {
+            String fileName = "." + (new File(root).getName()) + JSONHelper.JSON_EXTENSION;
+            return new File(root, fileName);
+        }
+    }
+
+    @NonNull
     public ArrayList<Book> getAllBooks() {
         ArrayList<Book> allBooks = new ArrayList<>();
 
@@ -161,17 +172,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         Collections.sort(allBooks);
 
         return allBooks;
-    }
-
-    @NonNull
-    private File getConfigFile(@NonNull String root, @NonNull ArrayList<Chapter> chapters) {
-        if (chapters.size() == 1) {
-            String fileName = "." + chapters.get(0).getName() + JSONHelper.JSON_EXTENSION;
-            return new File(root, fileName);
-        } else {
-            String fileName = "." + (new File(root).getName()) + JSONHelper.JSON_EXTENSION;
-            return new File(root, fileName);
-        }
     }
 
     @Nullable
@@ -240,22 +240,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return null;
     }
 
-    public void updateBook(@NonNull Book book) {
-        JSONHelper helper = new JSONHelper(getConfigFile(book.getRoot(), book.getChapters()));
-
-        helper.setTime(book.getTime());
-        helper.setSpeed(book.getPlaybackSpeed());
-        helper.setRelPath(book.getCurrentChapter().getPath());
-        helper.setBookmarks(book.getBookmarks());
-        helper.setName(book.getName());
-        helper.setUseCoverReplacement(book.isUseCoverReplacement());
-        helper.writeJSON();
-
-        ContentValues cv = new ContentValues();
-        cv.put(BOOK_SORT_ID, book.getSortId());
-        getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
-    }
-
     @NonNull
     private ArrayList<Chapter> getChapters(long bookId, @NonNull SQLiteDatabase db) {
         ArrayList<Chapter> chapters = new ArrayList<>();
@@ -273,6 +257,22 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             cursor.close();
         }
         return chapters;
+    }
+
+    public void updateBook(@NonNull Book book) {
+        JSONHelper helper = new JSONHelper(getConfigFile(book.getRoot(), book.getChapters()));
+
+        helper.setTime(book.getTime());
+        helper.setSpeed(book.getPlaybackSpeed());
+        helper.setRelPath(book.getCurrentChapter().getPath());
+        helper.setBookmarks(book.getBookmarks());
+        helper.setName(book.getName());
+        helper.setUseCoverReplacement(book.isUseCoverReplacement());
+        helper.writeJSON();
+
+        ContentValues cv = new ContentValues();
+        cv.put(BOOK_SORT_ID, book.getSortId());
+        getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
     }
 
     public void deleteBook(@NonNull Book book) {

@@ -40,6 +40,30 @@ public class DraggableBoxImageView extends ImageView {
         init();
     }
 
+    private void init() {
+        int strokeWidth = getContext().getResources().getDimensionPixelSize(R.dimen.cover_edit_stroke_width);
+
+        borderLinePaint = new Paint();
+        borderLinePaint.setColor(ThemeUtil.getColorAccent(getContext()));
+        borderLinePaint.setStyle(Paint.Style.STROKE);
+        borderLinePaint.setStrokeWidth(strokeWidth);
+
+        left = 0;
+        right = 0;
+        top = 0;
+        bottom = 0;
+
+        imageViewWidth = 0;
+        imageViewHeight = 0;
+
+        maxWidth = 0;
+        maxHeight = 0;
+
+        //where the finger last went down
+        fingerX = 0;
+        fingerY = 0;
+    }
+
     //constructor!
     @SuppressWarnings("UnusedDeclaration")
     public DraggableBoxImageView(Context context, AttributeSet attrs) {
@@ -160,29 +184,5 @@ public class DraggableBoxImageView extends ImageView {
                         right - halfStrokeSize, bottom - halfStrokeSize, borderLinePaint);
             }
         }
-    }
-
-    private void init() {
-        int strokeWidth = getContext().getResources().getDimensionPixelSize(R.dimen.cover_edit_stroke_width);
-
-        borderLinePaint = new Paint();
-        borderLinePaint.setColor(ThemeUtil.getColorAccent(getContext()));
-        borderLinePaint.setStyle(Paint.Style.STROKE);
-        borderLinePaint.setStrokeWidth(strokeWidth);
-
-        left = 0;
-        right = 0;
-        top = 0;
-        bottom = 0;
-
-        imageViewWidth = 0;
-        imageViewHeight = 0;
-
-        maxWidth = 0;
-        maxHeight = 0;
-
-        //where the finger last went down
-        fingerX = 0;
-        fingerY = 0;
     }
 }

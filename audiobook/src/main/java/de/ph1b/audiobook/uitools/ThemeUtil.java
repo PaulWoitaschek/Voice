@@ -38,6 +38,23 @@ public class ThemeUtil {
         }
     }
 
+    public static int getTheme(Context c) {
+        Resources r = c.getResources();
+        String themeLight = r.getString(R.string.pref_theme_light);
+        String themeDark = r.getString(R.string.pref_theme_dark);
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        String theme = sp.getString(r.getString(R.string.pref_key_theme), themeLight);
+
+        if (theme.equals(themeLight)) {
+            return R.style.LightTheme;
+        } else if (theme.equals(themeDark)) {
+            return R.style.DarkTheme;
+        } else {
+            throw new IllegalArgumentException("Unknown theme found=" + theme);
+        }
+    }
+
     public static int getColorPrimaryDark(Context c) {
         if (getTheme(c) == R.style.LightTheme) {
             return c.getResources().getColor(R.color.light_primary_dark);
@@ -58,24 +75,6 @@ public class ThemeUtil {
         typedArray.recycle();
         return resId;
     }
-
-    public static int getTheme(Context c) {
-        Resources r = c.getResources();
-        String themeLight = r.getString(R.string.pref_theme_light);
-        String themeDark = r.getString(R.string.pref_theme_dark);
-
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
-        String theme = sp.getString(r.getString(R.string.pref_key_theme), themeLight);
-
-        if (theme.equals(themeLight)) {
-            return R.style.LightTheme;
-        } else if (theme.equals(themeDark)) {
-            return R.style.DarkTheme;
-        } else {
-            throw new IllegalArgumentException("Unknown theme found=" + theme);
-        }
-    }
-
 
     public static void theme(NumberPicker numberPicker) {
         if (Build.VERSION.SDK_INT < 21) {

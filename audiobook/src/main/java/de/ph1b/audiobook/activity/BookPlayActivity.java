@@ -53,13 +53,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     private BaseApplication baseApplication;
     private Book book;
 
-    private String formatTime(int ms) {
-        String h = String.valueOf(TimeUnit.MILLISECONDS.toHours(ms));
-        String m = String.format("%02d", (TimeUnit.MILLISECONDS.toMinutes(ms) % 60));
-        String s = String.format("%02d", (TimeUnit.MILLISECONDS.toSeconds(ms) % 60));
-        return h + ":" + m + ":" + s;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,6 +155,13 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    private String formatTime(int ms) {
+        String h = String.valueOf(TimeUnit.MILLISECONDS.toHours(ms));
+        String m = String.format("%02d", (TimeUnit.MILLISECONDS.toMinutes(ms) % 60));
+        String s = String.format("%02d", (TimeUnit.MILLISECONDS.toSeconds(ms) % 60));
+        return h + ":" + m + ":" + s;
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -171,16 +171,46 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem timeLapseItem = menu.findItem(R.id.action_time_lapse);
-        timeLapseItem.setVisible(MediaPlayerController.playerCanSetSpeed);
-        MenuItem sleepTimerItem = menu.findItem(R.id.action_sleep);
-        if (baseApplication.isSleepTimerActive()) {
-            sleepTimerItem.setIcon(R.drawable.ic_alarm_on_white_24dp);
-        } else {
-            sleepTimerItem.setIcon(R.drawable.ic_snooze_white_24dp);
-        }
-        return true;
+    public void onPositionChanged() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                /**
+                 * Setting position as a tag, so we can make sure onItemSelected is only fired when
+                 * the user changes the position himself.
+                 */
+                ArrayList<Chapter> chapters = book.getChapters();
+                Chapter chapter = book.getCurrentChapter();
+
+                int position = chapters.indexOf(chapter);
+                bookSpinner.setTag(position);
+                bookSpinner.setSelection(position, true);
+                duration = chapter.getDuration();
+                seekBar.setMax(duration);
+                maxTimeView.setText(formatTime(duration));
+
+                // Setting seekBar and played time view
+                if (!seekBar.isPressed()) {
+                    int progress = book.getTime();
+                    seekBar.setProgress(progress);
+                    playedTimeView.setText(formatTime(progress));
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onPlayStateChanged(final BaseApplication.PlayState state) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (state == BaseApplication.PlayState.PLAYING) {
+                    play_button.setImageResource(R.drawable.ic_pause_circle_fill_black_72dp);
+                } else {
+                    play_button.setImageResource(R.drawable.ic_play_circle_fill_black_72dp);
+                }
+            }
+        });
     }
 
     @Override
@@ -209,17 +239,30 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    private void launchJumpToPositionDialog() {
+        JumpToPositionDialog dialog = new JumpToPositionDialog();
+        Bundle bundle = new Bundle();
+        dialog.setArguments(bundle);
+        dialog.show(getFragmentManager(), "timePicker");
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.book_play, menu);
         return true;
     }
 
-    private void launchJumpToPositionDialog() {
-        JumpToPositionDialog dialog = new JumpToPositionDialog();
-        Bundle bundle = new Bundle();
-        dialog.setArguments(bundle);
-        dialog.show(getFragmentManager(), "timePicker");
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem timeLapseItem = menu.findItem(R.id.action_time_lapse);
+        timeLapseItem.setVisible(MediaPlayerController.playerCanSetSpeed);
+        MenuItem sleepTimerItem = menu.findItem(R.id.action_sleep);
+        if (baseApplication.isSleepTimerActive()) {
+            sleepTimerItem.setIcon(R.drawable.ic_alarm_on_white_24dp);
+        } else {
+            sleepTimerItem.setIcon(R.drawable.ic_snooze_white_24dp);
+        }
+        return true;
     }
 
     @Override
@@ -263,49 +306,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         baseApplication.removeOnPlayStateChangedListener(this);
         baseApplication.removeOnPositionChangedListener(this);
         baseApplication.removeOnSleepStateChangedListener(this);
-    }
-
-    @Override
-    public void onPlayStateChanged(final BaseApplication.PlayState state) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (state == BaseApplication.PlayState.PLAYING) {
-                    play_button.setImageResource(R.drawable.ic_pause_circle_fill_black_72dp);
-                } else {
-                    play_button.setImageResource(R.drawable.ic_play_circle_fill_black_72dp);
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onPositionChanged() {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                /**
-                 * Setting position as a tag, so we can make sure onItemSelected is only fired when
-                 * the user changes the position himself.
-                 */
-                ArrayList<Chapter> chapters = book.getChapters();
-                Chapter chapter = book.getCurrentChapter();
-
-                int position = chapters.indexOf(chapter);
-                bookSpinner.setTag(position);
-                bookSpinner.setSelection(position, true);
-                duration = chapter.getDuration();
-                seekBar.setMax(duration);
-                maxTimeView.setText(formatTime(duration));
-
-                // Setting seekBar and played time view
-                if (!seekBar.isPressed()) {
-                    int progress = book.getTime();
-                    seekBar.setProgress(progress);
-                    playedTimeView.setText(formatTime(progress));
-                }
-            }
-        });
     }
 
     @Override

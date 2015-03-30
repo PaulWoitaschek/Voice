@@ -20,9 +20,9 @@ public class NoExternalStorageActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()))
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             super.onBackPressed();
-        else {
+        } else {
             Intent i = new Intent(Intent.ACTION_MAIN);
             i.addCategory(Intent.CATEGORY_HOME);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

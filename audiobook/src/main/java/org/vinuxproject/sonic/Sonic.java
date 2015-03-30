@@ -27,6 +27,11 @@ public class Sonic {
         }
     }
 
+    private native long initNative(int sampleRate, int channels);
+
+    // When done with sound processing, it's best to call this method to clean up memory.
+    private native void closeNative(long sonicID);
+
     // Just insure that close gets called, in case the user forgot.
     protected void finalize() {
         // It is safe to call this twice, in case the user already did.
@@ -40,6 +45,8 @@ public class Sonic {
         flushNative(sonicID);
     }
 
+    private native void flushNative(long sonicID);
+
     // Get the sample rate of the stream.
     public int getSampleRate() {
         return getSampleRateNative(sonicID);
@@ -49,6 +56,11 @@ public class Sonic {
     public void setSampleRate(int newSampleRate) {
         setSampleRateNative(sonicID, newSampleRate);
     }
+
+    // Note that changing the sample rate or num channels will cause a flush.
+    private native void setSampleRateNative(long sonicID, int newSampleRate);
+
+    private native int getSampleRateNative(long sonicID);
 
     // Get the number of channels.
     public int getNumChannels() {
@@ -60,6 +72,10 @@ public class Sonic {
         setNumChannelsNative(sonicID, newNumChannels);
     }
 
+    private native void setNumChannelsNative(long sonicID, int newNumChannels);
+
+    private native int getNumChannelsNative(long sonicID);
+
     // Get the pitch of the stream.
     public float getPitch() {
         return getPitchNative(sonicID);
@@ -70,6 +86,10 @@ public class Sonic {
         setPitchNative(sonicID, newPitch);
     }
 
+    private native void setPitchNative(long sonicID, float newPitch);
+
+    private native float getPitchNative(long sonicID);
+
     // Get the speed of the stream.
     public float getSpeed() {
         return getSpeedNative(sonicID);
@@ -79,6 +99,10 @@ public class Sonic {
     public void setSpeed(float newSpeed) {
         setSpeedNative(sonicID, newSpeed);
     }
+
+    private native void setSpeedNative(long sonicID, float newSpeed);
+
+    private native float getSpeedNative(long sonicID);
 
     // Get the rate of the stream.
     public float getRate() {
@@ -91,6 +115,10 @@ public class Sonic {
         setRateNative(sonicID, newRate);
     }
 
+    private native void setRateNative(long sonicID, float newRate);
+
+    private native float getRateNative(long sonicID);
+
     // Get the chord pitch setting.
     public boolean getChordPitch() {
         return getChordPitchNative(sonicID);
@@ -102,11 +130,17 @@ public class Sonic {
         setChordPitchNative(sonicID, useChordPitch);
     }
 
+    private native void setChordPitchNative(long sonicID, boolean useChordPitch);
+
+    private native boolean getChordPitchNative(long sonicID);
+
     // Use this to write 16-bit data to be speed up or down into the stream.
     // Return false if memory realloc failed, otherwise true.
     public boolean putBytes(byte[] buffer, int lenBytes) {
         return putBytesNative(sonicID, buffer, lenBytes);
     }
+
+    private native boolean putBytesNative(long sonicID, byte[] buffer, int lenBytes);
 
     // Use this to read 16-bit data out of the stream. Sometimes no data will
     // be available, and zero is returned, which is not an error condition.
@@ -114,10 +148,14 @@ public class Sonic {
         return receiveBytesNative(sonicID, ret, lenBytes);
     }
 
+    private native int receiveBytesNative(long sonicID, byte[] ret, int lenBytes);
+
     // Return the number of samples in the output buffer
     public int availableBytes() {
         return availableBytesNative(sonicID);
     }
+
+    private native int availableBytesNative(long sonicID);
 
     // Get the scaling factor of the stream.
     public float getVolume() {
@@ -128,44 +166,6 @@ public class Sonic {
     public void setVolume(float newVolume) {
         setVolumeNative(sonicID, newVolume);
     }
-
-    private native long initNative(int sampleRate, int channels);
-
-    // When done with sound processing, it's best to call this method to clean up memory.
-    private native void closeNative(long sonicID);
-
-    private native void flushNative(long sonicID);
-
-    // Note that changing the sample rate or num channels will cause a flush.
-    private native void setSampleRateNative(long sonicID, int newSampleRate);
-
-    private native int getSampleRateNative(long sonicID);
-
-    private native void setNumChannelsNative(long sonicID, int newNumChannels);
-
-    private native int getNumChannelsNative(long sonicID);
-
-    private native void setPitchNative(long sonicID, float newPitch);
-
-    private native float getPitchNative(long sonicID);
-
-    private native void setSpeedNative(long sonicID, float newSpeed);
-
-    private native float getSpeedNative(long sonicID);
-
-    private native void setRateNative(long sonicID, float newRate);
-
-    private native float getRateNative(long sonicID);
-
-    private native void setChordPitchNative(long sonicID, boolean useChordPitch);
-
-    private native boolean getChordPitchNative(long sonicID);
-
-    private native boolean putBytesNative(long sonicID, byte[] buffer, int lenBytes);
-
-    private native int receiveBytesNative(long sonicID, byte[] ret, int lenBytes);
-
-    private native int availableBytesNative(long sonicID);
 
     private native void setVolumeNative(long sonicID, float newVolume);
 

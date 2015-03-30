@@ -47,11 +47,6 @@ public class Bookmark {
         return result;
     }
 
-    @NonNull
-    public String getPath() {
-        return path;
-    }
-
     @Override
     public String toString() {
         return TAG + "[" +
@@ -59,6 +54,11 @@ public class Bookmark {
                 ",time=" + time +
                 ",path=" + path +
                 "]";
+    }
+
+    @NonNull
+    public String getPath() {
+        return path;
     }
 
     @NonNull

@@ -25,15 +25,6 @@ public class Chapter {
     }
 
     @Override
-    public String toString() {
-        return TAG + "[" +
-                "path=" + path +
-                ",duration=" + duration +
-                ",name=" + name +
-                "]";
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (o == this) {
             return true;
@@ -55,6 +46,15 @@ public class Chapter {
         result = PRIME * result + duration;
         result = PRIME * result + name.hashCode();
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return TAG + "[" +
+                "path=" + path +
+                ",duration=" + duration +
+                ",name=" + name +
+                "]";
     }
 
     @NonNull
