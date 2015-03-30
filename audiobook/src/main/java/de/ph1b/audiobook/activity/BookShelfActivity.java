@@ -287,6 +287,34 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         toggleRecyclerVisibilities(baseApplication.isScannerActive());
     }
 
+    private void initPlayerWidget() {
+        long currentBookPosition = prefs.getCurrentBookId();
+
+        boolean widgetInitialized = false;
+        for (final Book b : adapter.getBooks()) {
+            if (b.getId() == currentBookPosition) {
+                //setting cover
+                File coverFile = b.getCoverFile();
+                Drawable coverReplacement = new CoverReplacement(b.getName(), this);
+                if (!b.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
+                    Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(currentCover);
+                } else {
+                    currentCover.setImageDrawable(coverReplacement);
+                }
+
+                //setting text
+                currentText.setText(b.getName());
+                widgetInitialized = true;
+                break;
+            }
+        }
+        if (!widgetInitialized) {
+            current.setVisibility(View.GONE);
+        } else {
+            current.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public void onPlayStateChanged(final BaseApplication.PlayState state) {
         handler.post(new Runnable() {
@@ -323,6 +351,16 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 }
             }
         });
+    }
+
+    private void toggleRecyclerVisibilities(boolean scannerActive) {
+        if (baseApplication.getAllBooks().size() == 0 && scannerActive) {
+            recyclerReplacementView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            recyclerReplacementView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -381,34 +419,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         initPlayerWidget();
     }
 
-    private void initPlayerWidget() {
-        long currentBookPosition = prefs.getCurrentBookId();
-
-        boolean widgetInitialized = false;
-        for (final Book b : adapter.getBooks()) {
-            if (b.getId() == currentBookPosition) {
-                //setting cover
-                File coverFile = b.getCoverFile();
-                Drawable coverReplacement = new CoverReplacement(b.getName(), this);
-                if (coverFile.exists() && coverFile.canRead()) {
-                    Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(currentCover);
-                } else {
-                    currentCover.setImageDrawable(coverReplacement);
-                }
-
-                //setting text
-                currentText.setText(b.getName());
-                widgetInitialized = true;
-                break;
-            }
-        }
-        if (!widgetInitialized) {
-            current.setVisibility(View.GONE);
-        } else {
-            current.setVisibility(View.VISIBLE);
-        }
-    }
-
     @Override
     public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
         detector.onTouchEvent(motionEvent);
@@ -429,16 +439,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 adapter.notifyItemInserted(adapter.getItemCount() - 1);
             }
         });
-    }
-
-    private void toggleRecyclerVisibilities(boolean scannerActive) {
-        if (baseApplication.getAllBooks().size() == 0 && scannerActive) {
-            recyclerReplacementView.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
-        } else {
-            recyclerReplacementView.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override

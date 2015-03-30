@@ -244,7 +244,6 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
 
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                 "mailto", "woitaschek@gmail.com", null));
-        //emailIntent.setType("message/rfc822");
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Bugreport Material Audiobook Player");
         emailIntent.putExtra(Intent.EXTRA_TEXT, report);
         Intent startClientIntent = Intent.createChooser(emailIntent, "Sending MAP Bugreport...");

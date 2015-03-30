@@ -184,17 +184,6 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         return null;
     }
 
-    private void releaseController() {
-        if (controller != null) {
-            controller.release();
-            controller = null;
-        }
-        remoteControlClientMetaDataEditor = null;
-        pauseBecauseHeadset = false;
-        pauseBecauseLossTransient = false;
-        baseApplication.setPlayState(PlayState.STOPPED);
-    }
-
     private void handleIntent(final Intent intent) {
         if (intent != null && intent.getAction() != null) {
             playerExecutor.execute(new Runnable() {
@@ -251,6 +240,17 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 }
             });
         }
+    }
+
+    private void releaseController() {
+        if (controller != null) {
+            controller.release();
+            controller = null;
+        }
+        remoteControlClientMetaDataEditor = null;
+        pauseBecauseHeadset = false;
+        pauseBecauseLossTransient = false;
+        baseApplication.setPlayState(PlayState.STOPPED);
     }
 
     @Override
@@ -369,7 +369,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         Bitmap cover = null;
         try {
             File coverFile = book.getCoverFile();
-            if (coverFile.exists() && coverFile.canRead()) {
+            if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
                 cover = Picasso.with(AudioService.this).load(coverFile).resize(width, height).get();
             }
         } catch (IOException e) {
@@ -450,7 +450,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 Book book = controller.getBook();
                 Bitmap bitmap = null;
                 File coverFile = book.getCoverFile();
-                if (coverFile.exists() && coverFile.canRead()) {
+                if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
                     try {
                         bitmap = Picasso.with(AudioService.this).load(coverFile).get();
                     } catch (IOException e) {

@@ -266,23 +266,6 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
         return (int) duration;
     }
 
-    private void error(String methodName, State lastState) {
-        State oldState = State.values()[lastState.ordinal()];
-        state = State.ERROR;
-        stayAwake(false);
-        L.e(TAG, "Called " + methodName + " in state=" + oldState);
-    }
-
-    private void stayAwake(boolean awake) {
-        if (wakeLock != null) {
-            if (awake && !wakeLock.isHeld()) {
-                wakeLock.acquire();
-            } else if (!awake && wakeLock.isHeld()) {
-                wakeLock.release();
-            }
-        }
-    }
-
     private void initStream() throws IOException, IllegalArgumentException {
         L.v(TAG, "initStream called in state=" + state);
         lock.lock();
@@ -309,6 +292,13 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
         }
     }
 
+    private void error(String methodName, State lastState) {
+        State oldState = State.values()[lastState.ordinal()];
+        state = State.ERROR;
+        stayAwake(false);
+        L.e(TAG, "Called " + methodName + " in state=" + oldState);
+    }
+
     private void initDevice(int sampleRate, int numChannels) {
         L.d(TAG, "initDevice called in state:" + state);
         lock.lock();
@@ -333,6 +323,16 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                 return AudioFormat.CHANNEL_OUT_STEREO;
             default:
                 return -1; // Error
+        }
+    }
+
+    private void stayAwake(boolean awake) {
+        if (wakeLock != null) {
+            if (awake && !wakeLock.isHeld()) {
+                wakeLock.acquire();
+            } else if (!awake && wakeLock.isHeld()) {
+                wakeLock.release();
+            }
         }
     }
 
