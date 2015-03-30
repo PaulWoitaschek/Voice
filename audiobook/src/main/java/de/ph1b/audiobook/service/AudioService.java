@@ -17,6 +17,7 @@ import android.media.MediaMetadataRetriever;
 import android.media.RemoteControlClient;
 import android.os.Build;
 import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
@@ -92,6 +93,13 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
             }
         }
     };
+
+    /**
+     * We must reuse this. Else the lock screen cover will flicker repeatedly.
+     */
+    @Nullable
+    @SuppressWarnings("deprecation")
+    private RemoteControlClient.MetadataEditor remoteControlClientMetaDataEditor = null;
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
@@ -357,16 +365,18 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                             ImageHelper.getSmallerScreenSize(AudioService.this),
                             ImageHelper.getSmallerScreenSize(AudioService.this));
                 }
-                @SuppressWarnings("deprecation") RemoteControlClient.MetadataEditor editor = remoteControlClient.editMetadata(true);
+                if (remoteControlClientMetaDataEditor == null) {
+                    remoteControlClientMetaDataEditor = remoteControlClient.editMetadata(true);
+                }
                 Chapter c = book.getCurrentChapter();
-                editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, c.getName());
-                editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName());
+                remoteControlClientMetaDataEditor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, c.getName());
+                remoteControlClientMetaDataEditor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName());
 
                 if (bitmap != null) {
                     //noinspection deprecation
-                    editor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bitmap.copy(bitmap.getConfig(), true));
+                    remoteControlClientMetaDataEditor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bitmap.copy(bitmap.getConfig(), true));
                 }
-                editor.apply();
+                remoteControlClientMetaDataEditor.apply();
             }
         });
     }
@@ -467,6 +477,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
             controller.release();
             controller = null;
         }
+        remoteControlClientMetaDataEditor = null;
         pauseBecauseHeadset = false;
         pauseBecauseLossTransient = false;
         baseApplication.setPlayState(PlayState.STOPPED);
