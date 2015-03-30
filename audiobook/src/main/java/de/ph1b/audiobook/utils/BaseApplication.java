@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
-import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.DataBaseHelper;
@@ -109,9 +108,9 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
     public void onCreate() {
         super.onCreate();
 
-        if (BuildConfig.DEBUG) {
-            Thread.setDefaultUncaughtExceptionHandler(this);
-        }
+        //if (BuildConfig.DEBUG) {
+        Thread.setDefaultUncaughtExceptionHandler(this);
+        //}
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         prefs = new PrefsManager(this);
