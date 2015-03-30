@@ -53,7 +53,7 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
     }
 
     public void setScannerActive(boolean scannerActive) {
-        scannerActive = scannerActive;
+        this.scannerActive = scannerActive;
         for (OnScannerStateChangedListener l : onScannerStateChangedListeners) {
             l.onScannerStateChanged(scannerActive);
         }
