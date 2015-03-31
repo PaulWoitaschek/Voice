@@ -40,6 +40,20 @@ public class DraggableBoxImageView extends ImageView {
         init();
     }
 
+    //constructor!
+    @SuppressWarnings("UnusedDeclaration")
+    public DraggableBoxImageView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    //constructor!
+    @SuppressWarnings("UnusedDeclaration")
+    public DraggableBoxImageView(Context context) {
+        super(context);
+        init();
+    }
+
     private void init() {
         int strokeWidth = getContext().getResources().getDimensionPixelSize(R.dimen.cover_edit_stroke_width);
 
@@ -62,20 +76,6 @@ public class DraggableBoxImageView extends ImageView {
         //where the finger last went down
         fingerX = 0;
         fingerY = 0;
-    }
-
-    //constructor!
-    @SuppressWarnings("UnusedDeclaration")
-    public DraggableBoxImageView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
-
-    //constructor!
-    @SuppressWarnings("UnusedDeclaration")
-    public DraggableBoxImageView(Context context) {
-        super(context);
-        init();
     }
 
     @Override

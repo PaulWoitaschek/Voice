@@ -60,6 +60,17 @@ public class Book implements Comparable<Book> {
         setPosition(time, relativeMediaPath);
     }
 
+    @NonNull
+    public static File getCoverFile(@NonNull String root, @NonNull ArrayList<Chapter> chapters) {
+        if (chapters.size() == 1) {
+            String fileName = "." + chapters.get(0).getName() + IMAGE_EXTENSION;
+            return new File(root, fileName);
+        } else {
+            String fileName = "." + (new File(root).getName()) + IMAGE_EXTENSION;
+            return new File(root, fileName);
+        }
+    }
+
     public void setPosition(int time, @NonNull String relativeMediaPath) {
         Validate.notEmpty(relativeMediaPath);
 
@@ -198,17 +209,6 @@ public class Book implements Comparable<Book> {
     @NonNull
     public File getCoverFile() {
         return getCoverFile(root, chapters);
-    }
-
-    @NonNull
-    public static File getCoverFile(@NonNull String root, @NonNull ArrayList<Chapter> chapters) {
-        if (chapters.size() == 1) {
-            String fileName = "." + chapters.get(0).getName() + IMAGE_EXTENSION;
-            return new File(root, fileName);
-        } else {
-            String fileName = "." + (new File(root).getName()) + IMAGE_EXTENSION;
-            return new File(root, fileName);
-        }
     }
 
     public long getId() {
