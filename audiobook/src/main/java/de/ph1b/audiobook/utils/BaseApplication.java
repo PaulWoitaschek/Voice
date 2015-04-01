@@ -21,7 +21,7 @@ import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.service.WidgetUpdateService;
 
-@ReportsCrashes(formKey = "",
+@ReportsCrashes(
         httpMethod = HttpSender.Method.PUT,
         reportType = HttpSender.Type.JSON,
         formUri = "http://acra-63e870.smileupps.com/acra-material/_design/acra-storage/_update/report",
