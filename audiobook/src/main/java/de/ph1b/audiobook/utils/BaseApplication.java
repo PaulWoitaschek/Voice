@@ -76,8 +76,9 @@ public class BaseApplication extends Application {
         try {
             db.addBook(book);
             allBooks.add(book);
+            int position = allBooks.indexOf(book);
             for (OnBookAddedListener l : onBookAddedListeners) {
-                l.onBookAdded();
+                l.onBookAdded(position);
             }
         } finally {
             bookLock.unlock();
@@ -247,7 +248,7 @@ public class BaseApplication extends Application {
     }
 
     public interface OnBookAddedListener {
-        public void onBookAdded();
+        public void onBookAdded(int position);
     }
 
     public interface OnCurrentBookChangedListener {

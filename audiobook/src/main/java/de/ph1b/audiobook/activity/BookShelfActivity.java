@@ -430,12 +430,12 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    public void onBookAdded() {
+    public void onBookAdded(final int position) {
         handler.post(new Runnable() {
             @Override
             public void run() {
                 toggleRecyclerVisibilities(baseApplication.isScannerActive());
-                adapter.notifyItemInserted(adapter.getItemCount() - 1);
+                adapter.notifyItemInserted(position);
             }
         });
     }
