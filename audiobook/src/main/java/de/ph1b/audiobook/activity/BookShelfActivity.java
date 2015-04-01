@@ -263,14 +263,21 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         baseApplication.addOnPositionChangedListener(this);
 
         // Scanning for new files here in case there are changes on the drive.
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyDataSetChanged();
-            }
-        }, 100);
-        baseApplication.addOnBookAddedListener(this);
-        baseApplication.addOnBookDeletedListener(this);
+        baseApplication.bookLock.lock();
+        try {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            });
+            baseApplication.addOnBookAddedListener(this);
+            baseApplication.addOnBookDeletedListener(this);
+        } finally {
+            baseApplication.bookLock.unlock();
+        }
+
+
         baseApplication.addOnScannerStateChangedListener(this);
 
         startService(BookAddingService.getUpdateIntent(this));
