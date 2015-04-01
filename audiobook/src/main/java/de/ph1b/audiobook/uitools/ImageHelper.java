@@ -34,13 +34,14 @@ public class ImageHelper {
         return bitmap;
     }
 
+
     /**
      * Saves a bitmap as a file to the personal directory.
      *
      * @param bitmap The bitmap to be saved
      * @param c      Application context
      */
-    public static void saveCover(@NonNull Bitmap bitmap, Context c, @NonNull String root, @NonNull ArrayList<Chapter> chapters) {
+    public static synchronized void saveCover(@NonNull Bitmap bitmap, Context c, @NonNull String root, @NonNull ArrayList<Chapter> chapters) {
         // make bitmap square
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
