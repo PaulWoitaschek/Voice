@@ -280,7 +280,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
         baseApplication.addOnScannerStateChangedListener(this);
 
-        startService(BookAddingService.getUpdateIntent(this));
+        startService(BookAddingService.getRescanIntent(this, false));
 
         initPlayerWidget();
         onPlayStateChanged(baseApplication.getPlayState());

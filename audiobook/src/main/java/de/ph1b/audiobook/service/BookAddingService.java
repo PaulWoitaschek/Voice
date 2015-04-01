@@ -38,6 +38,8 @@ public class BookAddingService extends Service {
         }
     };
     private static final String ACTION_UPDATE_BOOKS = "actionUpdateBooks";
+    private static final String ACTION_UPDATE_BOOKS_INTERRUPTING = "actionUpdateBooksInterrupting";
+
     private static final String TAG = BookAddingService.class.getSimpleName();
     private static final ArrayList<String> audioTypes = new ArrayList<>();
     private static final ArrayList<String> imageTypes = new ArrayList<>();
@@ -76,9 +78,10 @@ public class BookAddingService extends Service {
     private PrefsManager prefs;
     private volatile boolean stopScanner = false;
 
-    public static Intent getUpdateIntent(Context c) {
+    public static Intent getRescanIntent(Context c, boolean interrupting) {
         Intent i = new Intent(c, BookAddingService.class);
         i.setAction(ACTION_UPDATE_BOOKS);
+        i.putExtra(ACTION_UPDATE_BOOKS_INTERRUPTING, interrupting);
         return i;
     }
 
@@ -102,7 +105,8 @@ public class BookAddingService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && intent.getAction() != null && intent.getAction().equals(ACTION_UPDATE_BOOKS)) {
-            scanForFiles();
+            boolean interrupting = intent.getBooleanExtra(ACTION_UPDATE_BOOKS_INTERRUPTING, true);
+            scanForFiles(interrupting);
         }
 
         return START_NOT_STICKY;
@@ -126,32 +130,24 @@ public class BookAddingService extends Service {
         }
     }
 
-    private void scanForFiles() {
-        stopScanner = true;
-        L.d(TAG, "scan files abort requested");
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                L.d(TAG, "started new scanner");
-                baseApplication.setScannerActive(true);
-                stopScanner = false;
+    private void scanForFiles(boolean interrupting) {
+        L.d(TAG, "scanForFiles called. scannerActive=" + baseApplication.isScannerActive() + ", interrupting=" + interrupting);
+        if (!baseApplication.isScannerActive() || interrupting) {
+            stopScanner = true;
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    baseApplication.setScannerActive(true);
+                    stopScanner = false;
 
-                deleteOldBooks();
-                if (stopScanner) {
-                    L.d(TAG, "aborting scanFiles after deleteOldBooks");
-                    return;
+                    deleteOldBooks();
+                    addNewBooks();
+
+                    stopScanner = false;
+                    baseApplication.setScannerActive(false);
                 }
-
-                addNewBooks();
-                if (stopScanner) {
-                    L.d(TAG, "aborting scanFiles after addNewBooks");
-                    return;
-                }
-
-                L.d(TAG, "scanner finished normally");
-                baseApplication.setScannerActive(false);
-            }
-        });
+            });
+        }
     }
 
     private boolean isImage(File f) {

@@ -56,7 +56,7 @@ public class FolderOverviewActivity extends BaseActivity {
                             public void onPositive(MaterialDialog dialog) {
                                 adapter.removeItem(position);
                                 prefs.setAudiobookFolders(folders);
-                                startService(BookAddingService.getUpdateIntent(FolderOverviewActivity.this));
+                                startService(BookAddingService.getRescanIntent(FolderOverviewActivity.this, true));
                             }
                         })
                         .show();

@@ -294,7 +294,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
                 if (firstAddedFolder || (!sameFolder && !filesAreSubsets)) {
                     folders.add(newFolder);
                     prefs.setAudiobookFolders(folders);
-                    startService(BookAddingService.getUpdateIntent(this));
+                    startService(BookAddingService.getRescanIntent(this, true));
                 }
 
                 finish();
