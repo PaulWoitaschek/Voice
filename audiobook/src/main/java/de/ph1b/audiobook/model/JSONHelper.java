@@ -38,20 +38,22 @@ class JSONHelper {
     public JSONHelper(@NonNull File configFile) {
         this.configFile = configFile;
 
-        if (configFile.length() > 0) {
-            try {
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(configFile)));
-                StringBuilder stringBuilder = new StringBuilder();
+        synchronized (JSONHelper.class) {
+            if (configFile.length() > 0) {
+                try {
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(configFile)));
+                    StringBuilder stringBuilder = new StringBuilder();
 
-                String line;
-                while ((line = bufferedReader.readLine()) != null) {
-                    stringBuilder.append(line);
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        stringBuilder.append(line);
+                    }
+
+                    bufferedReader.close();
+                    this.playingInformation = new JSONObject(stringBuilder.toString());
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
                 }
-
-                bufferedReader.close();
-                this.playingInformation = new JSONObject(stringBuilder.toString());
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
             }
         }
 
@@ -159,12 +161,14 @@ class JSONHelper {
     }
 
     public void writeJSON() {
-        try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(configFile));
-            outputStreamWriter.write(playingInformation.toString());
-            outputStreamWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        synchronized (JSONHelper.class) {
+            try {
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(configFile));
+                outputStreamWriter.write(playingInformation.toString());
+                outputStreamWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
