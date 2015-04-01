@@ -85,7 +85,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         book.setSortId(bookId);
 
         // retrieving existing values
-        JSONHelper helper = new JSONHelper(getConfigFile(book.getRoot(), book.getChapters()));
+        JSONHelper helper = new JSONHelper(Book.getConfigFile(book.getRoot(), book.getChapters()));
 
         // name
         String name = helper.getName();
@@ -140,16 +140,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         L.d(TAG, "added book to db:" + book);
     }
 
-    @NonNull
-    private File getConfigFile(@NonNull String root, @NonNull ArrayList<Chapter> chapters) {
-        if (chapters.size() == 1) {
-            String fileName = "." + chapters.get(0).getName() + JSONHelper.JSON_EXTENSION;
-            return new File(root, fileName);
-        } else {
-            String fileName = "." + (new File(root).getName()) + JSONHelper.JSON_EXTENSION;
-            return new File(root, fileName);
-        }
-    }
 
     @NonNull
     public ArrayList<Book> getAllBooks() {
@@ -186,7 +176,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 long sortId = cursor.getLong(1);
                 ArrayList<Chapter> chapters = getChapters(id, db);
 
-                JSONHelper helper = new JSONHelper(getConfigFile(root, chapters));
+                JSONHelper helper = new JSONHelper(Book.getConfigFile(root, chapters));
 
                 int currentTime = helper.getTime();
 
@@ -260,7 +250,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     public void updateBook(@NonNull Book book) {
-        JSONHelper helper = new JSONHelper(getConfigFile(book.getRoot(), book.getChapters()));
+        JSONHelper helper = new JSONHelper(Book.getConfigFile(book.getRoot(), book.getChapters()));
 
         helper.setTime(book.getTime());
         helper.setSpeed(book.getPlaybackSpeed());

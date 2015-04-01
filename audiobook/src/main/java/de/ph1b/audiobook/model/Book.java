@@ -71,6 +71,18 @@ public class Book implements Comparable<Book> {
         }
     }
 
+
+    @NonNull
+    public static File getConfigFile(@NonNull String root, @NonNull ArrayList<Chapter> chapters) {
+        if (chapters.size() == 1) {
+            String fileName = "." + chapters.get(0).getName() + JSONHelper.JSON_EXTENSION;
+            return new File(root, fileName);
+        } else {
+            String fileName = "." + (new File(root).getName()) + JSONHelper.JSON_EXTENSION;
+            return new File(root, fileName);
+        }
+    }
+
     public void setPosition(int time, @NonNull String relativeMediaPath) {
         Validate.notEmpty(relativeMediaPath);
 
