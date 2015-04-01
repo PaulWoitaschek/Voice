@@ -104,7 +104,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         ArrayList<File> paths = new ArrayList<>();
         for (String s : rv) {
             File f = new File(s);
-            if (f.exists() && f.isDirectory() && !paths.contains(f) && f.canRead() && f.listFiles().length > 0) {
+            if (f.exists() && f.isDirectory() && !paths.contains(f) && f.canRead() && f.listFiles() != null && f.listFiles().length > 0) {
                 paths.add(f);
             }
         }
@@ -240,9 +240,12 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
      * @return The containing files
      */
     private ArrayList<File> getFilesFromFolder(File file) {
+        ArrayList<File> asList = new ArrayList<>();
         File[] containing = file.listFiles(BookAddingService.folderAndMusicFilter);
-        ArrayList<File> asList = new ArrayList<>(Arrays.asList(containing));
-        Collections.sort(asList, new NaturalOrderComparator());
+        if (containing != null) {
+            asList = new ArrayList<>(Arrays.asList(containing));
+            Collections.sort(asList, new NaturalOrderComparator());
+        }
         return asList;
     }
 

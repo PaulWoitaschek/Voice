@@ -166,7 +166,10 @@ public class BookAddingService extends Service {
         for (String s : folders) {
             File f = new File(s);
             if (f.exists() && f.isDirectory()) {
-                containingFiles.addAll(Arrays.asList(f.listFiles(folderAndMusicFilter)));
+                File[] containing = f.listFiles(folderAndMusicFilter);
+                if (containing != null) {
+                    containingFiles.addAll(Arrays.asList(containing));
+                }
             }
         }
         return containingFiles;
@@ -259,7 +262,11 @@ public class BookAddingService extends Service {
         returnList.addAll(fileList);
         Collections.sort(dirList, new NaturalOrderComparator());
         for (File f : dirList) {
-            ArrayList<File> content = new ArrayList<>(Arrays.asList(f.listFiles()));
+            ArrayList<File> content = new ArrayList<>();
+            File[] containing = f.listFiles();
+            if (containing != null) {
+                content = new ArrayList<>(Arrays.asList(containing));
+            }
             if (content.size() > 0) {
                 ArrayList<File> tempReturn = addFilesRecursive(content);
                 returnList.addAll(tempReturn);
