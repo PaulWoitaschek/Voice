@@ -291,7 +291,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
         initPlayerWidget();
         onPlayStateChanged(baseApplication.getPlayState());
-        onPositionChanged();
+        onPositionChanged(true);
 
         boolean audioFoldersEmpty = prefs.getAudiobookFolders().size() == 0;
         boolean noFolderWarningIsShowing = noFolderWarning.isShowing();
@@ -344,7 +344,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    public void onPositionChanged() {
+    public void onPositionChanged(boolean positionChanged) {
         handler.post(new Runnable() {
             @Override
             public void run() {

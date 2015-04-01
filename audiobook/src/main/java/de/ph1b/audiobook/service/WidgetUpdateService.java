@@ -260,7 +260,7 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
     }
 
     @Override
-    public void onPositionChanged() {
+    public void onPositionChanged(boolean positionChanged) {
         updateWidget();
     }
 

@@ -168,12 +168,12 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     public void onResume() {
         super.onResume();
 
-        onPositionChanged();
+        onPositionChanged(true);
         onPlayStateChanged(baseApplication.getPlayState());
     }
 
     @Override
-    public void onPositionChanged() {
+    public void onPositionChanged(boolean positionChanged) {
         handler.post(new Runnable() {
             @Override
             public void run() {

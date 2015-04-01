@@ -136,7 +136,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
                     try {
                         book.setPosition(player.getCurrentPosition(), book.getRelativeMediaPath());
                         db.updateBook(book);
-                        baseApplication.notifyPositionChanged();
+                        baseApplication.notifyPositionChanged(false);
                     } finally {
                         lock.unlock();
                     }
@@ -201,7 +201,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
                 player.seekTo(0);
                 book.setPosition(0, book.getRelativeMediaPath());
                 db.updateBook(book);
-                baseApplication.notifyPositionChanged();
+                baseApplication.notifyPositionChanged(false);
             } else {
                 if (toNullOfNewTrack) {
                     changePosition(0, book.getPreviousChapter().getPath());
@@ -390,7 +390,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
                 boolean wasPlaying = (state == State.STARTED);
                 book.setPosition(time, relPath);
                 db.updateBook(book);
-                baseApplication.notifyPositionChanged();
                 prepare();
                 if (wasPlaying) {
                     player.start();
@@ -400,7 +399,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
                     state = State.PREPARED;
                     baseApplication.setPlayState(BaseApplication.PlayState.PAUSED);
                 }
-                baseApplication.notifyPositionChanged();
+                baseApplication.notifyPositionChanged(true);
             } else {
                 switch (state) {
                     case PREPARED:
@@ -410,7 +409,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
                         player.seekTo(time);
                         book.setPosition(time, book.getCurrentChapter().getPath());
                         db.updateBook(book);
-                        baseApplication.notifyPositionChanged();
+                        baseApplication.notifyPositionChanged(false);
                         break;
                     default:
                         L.e(TAG, "changePosition called in illegal state:" + state);

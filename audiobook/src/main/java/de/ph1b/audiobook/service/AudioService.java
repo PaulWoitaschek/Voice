@@ -17,7 +17,6 @@ import android.media.MediaMetadataRetriever;
 import android.media.RemoteControlClient;
 import android.os.Build;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
@@ -93,13 +92,6 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
             }
         }
     };
-
-    /**
-     * We must reuse this. Else the lock screen cover will flicker repeatedly.
-     */
-    @Nullable
-    @SuppressWarnings("deprecation")
-    private RemoteControlClient.MetadataEditor remoteControlClientMetaDataEditor = null;
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
@@ -247,7 +239,6 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
             controller.release();
             controller = null;
         }
-        remoteControlClientMetaDataEditor = null;
         pauseBecauseHeadset = false;
         pauseBecauseLossTransient = false;
         baseApplication.setPlayState(PlayState.STOPPED);
@@ -447,6 +438,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         executor.execute(new Runnable() {
             @Override
             public void run() {
+                L.d(TAG, "updateRemoteControlClient called");
                 Book book = controller.getBook();
                 Bitmap bitmap = null;
                 File coverFile = book.getCoverFile();
@@ -467,18 +459,13 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                             ImageHelper.getSmallerScreenSize(AudioService.this),
                             ImageHelper.getSmallerScreenSize(AudioService.this));
                 }
-                if (remoteControlClientMetaDataEditor == null) {
-                    remoteControlClientMetaDataEditor = remoteControlClient.editMetadata(true);
-                }
-                Chapter c = book.getCurrentChapter();
-                remoteControlClientMetaDataEditor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, c.getName());
-                remoteControlClientMetaDataEditor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName());
 
-                if (bitmap != null) {
-                    //noinspection deprecation
-                    remoteControlClientMetaDataEditor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bitmap.copy(bitmap.getConfig(), true));
-                }
-                remoteControlClientMetaDataEditor.apply();
+                Chapter c = book.getCurrentChapter();
+                //noinspection deprecation
+                remoteControlClient.editMetadata(true).putString(MediaMetadataRetriever.METADATA_KEY_TITLE, c.getName())
+                        .putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName())
+                        .putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bitmap.copy(bitmap.getConfig(), true))
+                        .apply();
             }
         });
     }
@@ -493,8 +480,8 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     }
 
     @Override
-    public void onPositionChanged() {
-        if (Build.VERSION.SDK_INT >= 14) {
+    public void onPositionChanged(boolean positionChanged) {
+        if (Build.VERSION.SDK_INT >= 14 && positionChanged) {
             updateRemoteControlClient();
         }
     }

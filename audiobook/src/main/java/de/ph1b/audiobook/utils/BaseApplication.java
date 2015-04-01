@@ -212,9 +212,9 @@ public class BaseApplication extends Application {
         onPositionChangedListeners.remove(listener);
     }
 
-    public void notifyPositionChanged() {
+    public void notifyPositionChanged(boolean fileChanged) {
         for (OnPositionChangedListener l : onPositionChangedListeners) {
-            l.onPositionChanged();
+            l.onPositionChanged(fileChanged);
         }
     }
 
@@ -260,7 +260,7 @@ public class BaseApplication extends Application {
     }
 
     public interface OnPositionChangedListener {
-        public void onPositionChanged();
+        public void onPositionChanged(boolean fileChanged);
     }
 
     public interface OnPlayStateChangedListener {
