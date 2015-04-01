@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -121,8 +122,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         long newSortId = newBook.getSortId();
         oldBook.setSortId(newSortId);
         newBook.setSortId(oldSortId);
-        books.set(from, newBook);
-        books.set(to, oldBook);
+        Collections.swap(books, from, to);
         executor.execute(new Runnable() {
             @Override
             public void run() {
