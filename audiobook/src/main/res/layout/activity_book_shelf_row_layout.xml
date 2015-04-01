@@ -9,7 +9,7 @@
     card_view:cardCornerRadius="4dp"
     card_view:cardPreventCornerOverlap="false">
 
-    <de.ph1b.audiobook2.uitools.SquareImageView
+    <de.paul_woitaschek.audiobook.uitools.SquareImageView
         android:id="@+id/cover"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

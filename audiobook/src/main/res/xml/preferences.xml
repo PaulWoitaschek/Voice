@@ -20,10 +20,10 @@
         android:key="@string/pref_key_pause_on_can_duck"
         android:summary="@string/pref_pause_on_can_duck_summary"
         android:title="@string/pref_pause_on_can_duck_title" />
-    <de.ph1b.audiobook2.dialog.SeekPreferenceDialog
+    <de.paul_woitaschek.audiobook.dialog.SeekPreferenceDialog
         android:key="@string/pref_key_seek_time"
         android:title="@string/pref_seek_time" />
-    <de.ph1b.audiobook2.dialog.SleepPreferenceDialog
+    <de.paul_woitaschek.audiobook.dialog.SleepPreferenceDialog
         android:key="@string/pref_key_sleep_time"
         android:title="@string/pref_sleep_time" />
     <CheckBoxPreference
@@ -32,8 +32,8 @@
         android:summary="@string/pref_summary_track_to_end"
         android:title="@string/pref_title_track_to_end" />
     <CheckBoxPreference
+        android:defaultValue="true"
         android:key="acra.enable"
-        android:title="@string/pref_send_bugs_title"
         android:summary="@string/pref_send_bugs_summary"
-        android:defaultValue="true" />
+        android:title="@string/pref_send_bugs_title" />
 </PreferenceScreen>
