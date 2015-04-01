@@ -64,8 +64,6 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                L.v(TAG, "updateWidget called");
-
                 Book book = baseApplication.getCurrentBook();
                 if (book != null) {
 
