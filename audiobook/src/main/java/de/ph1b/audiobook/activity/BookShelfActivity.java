@@ -414,7 +414,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         // invalidate cache to have picasso reload
         Picasso.with(this).invalidate(bookToEdit.getCoverFile());
 
-        adapter.updateItem(bookToEdit);
+        adapter.notifyItemChanged(adapter.getBooks().indexOf(bookToEdit));
         initPlayerWidget();
     }
 
