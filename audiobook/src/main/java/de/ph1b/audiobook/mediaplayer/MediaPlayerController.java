@@ -325,8 +325,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
         try {
             L.e(TAG, "onError");
             baseApplication.deleteBook(book);
-            Intent bookShelfIntent = new Intent(c, BookShelfActivity.class);
-            bookShelfIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            Intent bookShelfIntent = BookShelfActivity.getClearStarterIntent(c);
             bookShelfIntent.putExtra(MALFORMED_FILE, book.getRoot() + "/" + book.getCurrentChapter().getPath());
             c.startActivity(bookShelfIntent);
 

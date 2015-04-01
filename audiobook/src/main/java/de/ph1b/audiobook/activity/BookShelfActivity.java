@@ -3,6 +3,7 @@ package de.ph1b.audiobook.activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipDescription;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -68,6 +69,12 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     private AlertDialog noFolderWarning;
     private RecyclerView recyclerView;
     private ProgressBar recyclerReplacementView;
+
+    public static Intent getClearStarterIntent(Context c) {
+        Intent intent = new Intent(c, BookShelfActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        return intent;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

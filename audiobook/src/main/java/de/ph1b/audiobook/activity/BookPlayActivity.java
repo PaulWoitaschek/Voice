@@ -64,7 +64,9 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         book = baseApplication.getCurrentBook();
 
         if (book == null) {
-            throw new AssertionError("Cant instantiate " + TAG + " without a current book");
+            startActivity(BookShelfActivity.getClearStarterIntent(this));
+            finish();
+            return;
         }
 
         //setup actionbar

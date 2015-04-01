@@ -174,7 +174,7 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
 
         } else {
             // directly going back to bookChoose
-            Intent wholeWidgetClickI = new Intent(this, BookShelfActivity.class);
+            Intent wholeWidgetClickI = BookShelfActivity.getClearStarterIntent(this);
             wholeWidgetClickPI = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
