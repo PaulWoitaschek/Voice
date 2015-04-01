@@ -24,7 +24,7 @@ import de.ph1b.audiobook.service.WidgetUpdateService;
 @ReportsCrashes(formKey = "",
         httpMethod = HttpSender.Method.PUT,
         reportType = HttpSender.Type.JSON,
-        formUri = "http://acra-63e870.smileupps.com/acra-myapp-1ca2d5/_design/acra-storage/_update/report",
+        formUri = "http://acra-63e870.smileupps.com/acra-material/_design/acra-storage/_update/report",
         formUriBasicAuthLogin = "defaultreporter",
         formUriBasicAuthPassword = "KA0Kc8h4dV4lCZBz")
 @ThreadSafe
