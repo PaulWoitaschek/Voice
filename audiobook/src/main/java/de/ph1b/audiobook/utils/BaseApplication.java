@@ -176,10 +176,11 @@ public class BaseApplication extends Application {
     public void deleteBook(Book book) {
         bookLock.lock();
         try {
+            int position = allBooks.indexOf(book);
             allBooks.remove(book);
             db.deleteBook(book);
             for (OnBookDeletedListener l : onBookDeletedListeners) {
-                l.onBookDeleted();
+                l.onBookDeleted(position);
             }
         } finally {
             bookLock.unlock();
@@ -266,6 +267,6 @@ public class BaseApplication extends Application {
     }
 
     public interface OnBookDeletedListener {
-        public void onBookDeleted();
+        public void onBookDeleted(int position);
     }
 }

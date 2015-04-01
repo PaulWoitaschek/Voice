@@ -414,7 +414,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         // invalidate cache to have picasso reload
         Picasso.with(this).invalidate(bookToEdit.getCoverFile());
 
-
         adapter.updateItem(bookToEdit);
         initPlayerWidget();
     }
@@ -453,13 +452,12 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    public void onBookDeleted() {
-
+    public void onBookDeleted(final int position) {
         handler.post(new Runnable() {
             @Override
             public void run() {
                 toggleRecyclerVisibilities(baseApplication.isScannerActive());
-                adapter.notifyItemRemoved(adapter.getItemCount());
+                adapter.notifyItemRemoved(position);
             }
         });
     }
