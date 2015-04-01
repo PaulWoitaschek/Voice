@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.TypedValue;
 import android.view.Display;
@@ -65,15 +66,14 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
             @Override
             public void run() {
                 Book book = baseApplication.getCurrentBook();
-                if (book != null) {
+                boolean isPortrait = isPortrait();
+                int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(WidgetUpdateService.this, BaseWidgetProvider.class));
 
-                    boolean isPortrait = isPortrait();
-                    int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(WidgetUpdateService.this, BaseWidgetProvider.class));
+                for (int widgetId : ids) {
+                    RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.widget);
 
-                    for (int widgetId : ids) {
-                        RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.widget);
+                    if (book != null) {
                         initElements(remoteViews, book);
-
                         if (Build.VERSION.SDK_INT >= 16) {
                             Bundle opts = appWidgetManager.getAppWidgetOptions(widgetId);
                             int minHeight = dpToPx(opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT));
@@ -94,10 +94,21 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
                             if (useWidth > 0 && useHeight > 0) {
                                 hideElements(remoteViews, useWidth, useHeight, book.getChapters().size() == 1);
                             }
-
-                            appWidgetManager.updateAppWidget(widgetId, remoteViews);
                         }
+                    } else {
+                        // directly going back to bookChoose
+                        Intent wholeWidgetClickI = BookShelfActivity.getClearStarterIntent(WidgetUpdateService.this);
+                        PendingIntent wholeWidgetClickPI = PendingIntent.getActivity
+                                (WidgetUpdateService.this, (int) System.currentTimeMillis(), wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
+                        //noinspection deprecation
+                        remoteViews.setImageViewBitmap(R.id.imageView,
+                                ImageHelper.drawableToBitmap(getResources().getDrawable(R.drawable.icon_108dp),
+                                        ImageHelper.getSmallerScreenSize(WidgetUpdateService.this),
+                                        ImageHelper.getSmallerScreenSize(WidgetUpdateService.this)));
+                        remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI);
                     }
+
+                    appWidgetManager.updateAppWidget(widgetId, remoteViews);
                 }
             }
         });
@@ -120,7 +131,7 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
         return orientation != Configuration.ORIENTATION_LANDSCAPE && (orientation == Configuration.ORIENTATION_PORTRAIT || displayWidth == displayHeight || displayWidth < displayHeight);
     }
 
-    private void initElements(RemoteViews remoteViews, Book book) {
+    private void initElements(RemoteViews remoteViews, @NonNull Book book) {
         Intent playPauseI = ServiceController.getPlayPauseIntent(this);
         PendingIntent playPausePI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseI, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI);
@@ -142,42 +153,34 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
         // if we have any book, init the views and have a click on the whole widget start BookPlay.
         // if we have no book, simply have a click on the whole widget start BookChoose.
         PendingIntent wholeWidgetClickPI;
-        if (book != null) {
-            Intent wholeWidgetClickI = new Intent(this, BookPlayActivity.class);
-            remoteViews.setTextViewText(R.id.title, book.getName());
-            String name = book.getCurrentChapter().getName();
+        Intent wholeWidgetClickI = new Intent(this, BookPlayActivity.class);
+        remoteViews.setTextViewText(R.id.title, book.getName());
+        String name = book.getCurrentChapter().getName();
 
-            remoteViews.setTextViewText(R.id.summary, name);
+        remoteViews.setTextViewText(R.id.summary, name);
 
-            // building back-stack.
-            wholeWidgetClickI.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-            stackBuilder.addParentStack(BookPlayActivity.class);
-            stackBuilder.addNextIntent(wholeWidgetClickI);
-            wholeWidgetClickPI = stackBuilder.getPendingIntent((int) System.currentTimeMillis(), PendingIntent.FLAG_UPDATE_CURRENT);
+        // building back-stack.
+        wholeWidgetClickI.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(BookPlayActivity.class);
+        stackBuilder.addNextIntent(wholeWidgetClickI);
+        wholeWidgetClickPI = stackBuilder.getPendingIntent((int) System.currentTimeMillis(), PendingIntent.FLAG_UPDATE_CURRENT);
 
-            Bitmap cover = null;
-            try {
-                File coverFile = book.getCoverFile();
-                if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-                    cover = Picasso.with(WidgetUpdateService.this).load(coverFile).get();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+        Bitmap cover = null;
+        try {
+            File coverFile = book.getCoverFile();
+            if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
+                cover = Picasso.with(WidgetUpdateService.this).load(coverFile).get();
             }
-            if (cover == null) {
-                cover = ImageHelper.drawableToBitmap(new CoverReplacement(
-                        book.getName(),
-                        WidgetUpdateService.this), ImageHelper.getSmallerScreenSize(this), ImageHelper.getSmallerScreenSize(this));
-            }
-            remoteViews.setImageViewBitmap(R.id.imageView, cover);
-
-        } else {
-            // directly going back to bookChoose
-            Intent wholeWidgetClickI = BookShelfActivity.getClearStarterIntent(this);
-            wholeWidgetClickPI = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
+        if (cover == null) {
+            cover = ImageHelper.drawableToBitmap(new CoverReplacement(
+                    book.getName(),
+                    WidgetUpdateService.this), ImageHelper.getSmallerScreenSize(this), ImageHelper.getSmallerScreenSize(this));
+        }
+        remoteViews.setImageViewBitmap(R.id.imageView, cover);
         remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI);
     }
 
