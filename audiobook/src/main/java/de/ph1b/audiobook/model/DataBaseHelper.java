@@ -85,7 +85,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         book.setSortId(bookId);
 
         // retrieving existing values
-        JSONHelper helper = new JSONHelper(Book.getConfigFile(book.getRoot(), book.getChapters()));
+        JSONHelper helper = new JSONHelper(book.getRoot(), book.getChapters());
 
         // name
         String name = helper.getName();
@@ -176,7 +176,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 long sortId = cursor.getLong(1);
                 ArrayList<Chapter> chapters = getChapters(id, db);
 
-                JSONHelper helper = new JSONHelper(Book.getConfigFile(root, chapters));
+                JSONHelper helper = new JSONHelper(root, chapters);
 
                 int currentTime = helper.getTime();
 
@@ -250,7 +250,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     public void updateBook(@NonNull Book book) {
-        JSONHelper helper = new JSONHelper(Book.getConfigFile(book.getRoot(), book.getChapters()));
+        JSONHelper helper = new JSONHelper(book.getRoot(), book.getChapters());
 
         helper.setTime(book.getTime());
         helper.setSpeed(book.getPlaybackSpeed());

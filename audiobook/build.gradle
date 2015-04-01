@@ -70,4 +70,5 @@ dependencies {
     compile 'com.melnykov:floatingactionbutton:1.2.0'
     compile 'net.jcip:jcip-annotations:1.0'
     compile 'ch.acra:acra:4.5.0'
+    compile 'commons-io:commons-io:2.4'
 }

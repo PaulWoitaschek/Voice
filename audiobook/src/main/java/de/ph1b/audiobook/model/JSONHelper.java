@@ -2,23 +2,19 @@ package de.ph1b.audiobook.model;
 
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
+import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 class JSONHelper {
 
-    public static final String JSON_EXTENSION = "-map.json";
     private static final String JSON_TIME = "time";
     private static final String JSON_BOOKMARK_TIME = "time";
     private static final String JSON_BOOKMARK_TITLE = "title";
@@ -32,29 +28,31 @@ class JSONHelper {
     @NonNull
     private final File configFile;
     @NonNull
+    private final File backupFile;
+    @NonNull
     private JSONObject playingInformation = new JSONObject();
 
-
-    public JSONHelper(@NonNull File configFile) {
-        this.configFile = configFile;
+    public JSONHelper(@NonNull String root, @NonNull ArrayList<Chapter> chapters) {
+        this.configFile = Book.getConfigFile(root, chapters);
+        this.backupFile = Book.getBackupFile(root, chapters);
 
         synchronized (JSONHelper.class) {
-            if (configFile.length() > 0) {
-                try {
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(configFile)));
-                    StringBuilder stringBuilder = new StringBuilder();
 
-                    String line;
-                    while ((line = bufferedReader.readLine()) != null) {
-                        stringBuilder.append(line);
-                    }
+            boolean configFileValid = configFile.exists() && configFile.canRead() && configFile.length() > 0;
+            boolean backupFileValid = backupFile.exists() && backupFile.canRead() && backupFile.length() > 0;
 
-                    bufferedReader.close();
-                    this.playingInformation = new JSONObject(stringBuilder.toString());
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
-                }
+            JSONObject tempInformation = null;
+            if (configFileValid) {
+                tempInformation = fileToJSONObject(configFile);
             }
+            if (tempInformation == null && backupFileValid) {
+                tempInformation = fileToJSONObject(backupFile);
+            }
+            if (tempInformation == null) {
+                tempInformation = new JSONObject();
+            }
+            playingInformation = tempInformation;
+
         }
 
         try {
@@ -90,6 +88,17 @@ class JSONHelper {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @Nullable
+    private JSONObject fileToJSONObject(@NonNull File file) {
+        try {
+            String returnString = FileUtils.readFileToString(file);
+            if (returnString.length() > 0) return new JSONObject(returnString);
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public float getSpeed() {
@@ -163,9 +172,10 @@ class JSONHelper {
     public void writeJSON() {
         synchronized (JSONHelper.class) {
             try {
-                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(configFile));
-                outputStreamWriter.write(playingInformation.toString());
-                outputStreamWriter.close();
+                if (configFile.exists()) {
+                    FileUtils.copyFile(configFile, backupFile);
+                }
+                FileUtils.write(configFile, playingInformation.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }

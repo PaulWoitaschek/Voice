@@ -10,11 +10,14 @@ import de.ph1b.audiobook.utils.Validate;
 
 public class Book implements Comparable<Book> {
 
+
     public static final int ID_UNKNOWN = -1;
     private long id = ID_UNKNOWN;
     private long sortId = ID_UNKNOWN;
     private static final String IMAGE_EXTENSION = ".jpg";
     private static final String TAG = Book.class.getSimpleName();
+    private static final String FILE_EXTENSION = "-map.json";
+    private static final String BACKUP_SUFFIX = ".backup";
     @NonNull
     private final String root;
     @NonNull
@@ -71,16 +74,20 @@ public class Book implements Comparable<Book> {
         }
     }
 
-
     @NonNull
     public static File getConfigFile(@NonNull String root, @NonNull ArrayList<Chapter> chapters) {
         if (chapters.size() == 1) {
-            String fileName = "." + chapters.get(0).getName() + JSONHelper.JSON_EXTENSION;
+            String fileName = "." + chapters.get(0).getName() + FILE_EXTENSION;
             return new File(root, fileName);
         } else {
-            String fileName = "." + (new File(root).getName()) + JSONHelper.JSON_EXTENSION;
+            String fileName = "." + (new File(root).getName()) + FILE_EXTENSION;
             return new File(root, fileName);
         }
+    }
+
+    @NonNull
+    public static File getBackupFile(@NonNull String root, @NonNull ArrayList<Chapter> chapters) {
+        return new File(getConfigFile(root, chapters).getAbsolutePath() + BACKUP_SUFFIX);
     }
 
     public void setPosition(int time, @NonNull String relativeMediaPath) {
