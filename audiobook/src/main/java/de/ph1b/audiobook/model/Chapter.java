@@ -18,6 +18,7 @@ public class Chapter {
     private final String name;
 
     public Chapter(@NonNull String path, @NonNull String name, int duration) {
+        Validate.notNull(path, name);
         Validate.notEmpty(path, name);
         this.path = path;
         this.name = name;

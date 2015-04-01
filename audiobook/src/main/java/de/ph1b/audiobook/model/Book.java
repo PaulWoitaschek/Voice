@@ -91,6 +91,7 @@ public class Book implements Comparable<Book> {
     }
 
     public void setPosition(int time, @NonNull String relativeMediaPath) {
+        Validate.notNull(relativeMediaPath);
         Validate.notEmpty(relativeMediaPath);
 
         boolean relativeMediaPathExists = false;
@@ -221,6 +222,7 @@ public class Book implements Comparable<Book> {
     }
 
     public void setName(@NonNull String name) {
+        Validate.notNull(name);
         Validate.notEmpty(name);
         this.name = name;
     }

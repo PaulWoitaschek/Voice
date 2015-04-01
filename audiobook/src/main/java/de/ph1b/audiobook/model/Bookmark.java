@@ -14,6 +14,7 @@ public class Bookmark {
     private String title;
 
     public Bookmark(@NonNull String path, @NonNull String title, int time) {
+        Validate.notNull(path, title);
         Validate.notEmpty(path, title);
 
         this.path = path;
@@ -67,6 +68,7 @@ public class Bookmark {
     }
 
     public void setTitle(@NonNull String title) {
+        Validate.notNull(title);
         Validate.notEmpty(title);
         this.title = title;
     }
