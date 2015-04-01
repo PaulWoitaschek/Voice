@@ -40,30 +40,30 @@ public class ImageHelper {
      * @param bitmap The bitmap to be saved
      * @param c      Application context
      */
-    public static void saveCover(Bitmap bitmap, Context c, @NonNull String root, @NonNull ArrayList<Chapter> chapters) {
+    public static void saveCover(@NonNull Bitmap bitmap, Context c, @NonNull String root, @NonNull ArrayList<Chapter> chapters) {
+        // make bitmap square
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
-        int relation = width / height;
-        if (relation > 1.05 || relation > 0.95) {
-            int size = Math.min(width, height);
+        int size = Math.min(width, height);
+        if (width != height) {
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, size, size);
         }
 
-        // saving cover
-        int coverLength = getSmallerScreenSize(c);
-        Bitmap cover = Bitmap.createScaledBitmap(bitmap, coverLength, coverLength, true);
-        File coverFile = Book.getCoverFile(root, chapters);
-        if (coverFile.exists() && coverFile.canWrite()) {
-            //noinspection ResultOfMethodCallIgnored
-            coverFile.delete();
+        // scale down if bitmap is too large
+        int preferredSize = getSmallerScreenSize(c);
+        if (size > preferredSize) {
+            bitmap = Bitmap.createScaledBitmap(bitmap, preferredSize, preferredSize, true);
         }
+
+        // save bitmap to storage
         try {
+            File coverFile = Book.getCoverFile(root, chapters);
             FileOutputStream coverOut = new FileOutputStream(coverFile);
-            cover.compress(Bitmap.CompressFormat.JPEG, 90, coverOut);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, coverOut);
             coverOut.flush();
             coverOut.close();
         } catch (IOException e) {
-            L.e(TAG, e.getMessage());
+            L.e(TAG, "Error at saving image with book root=" + root, e);
         }
     }
 
