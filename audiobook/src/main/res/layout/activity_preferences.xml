@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/pref_container"
-        class="de.ph1b.audiobook.fragment.PreferencesFragment"
+        class="de.ph1b.audiobook2.fragment.PreferencesFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
