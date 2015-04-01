@@ -78,6 +78,8 @@
     <string name="pref_theme_dark" tools:ignore="MissingTranslation">Dark</string>
     <string name="pref_pause_on_can_duck_title" tools:ignore="MissingTranslation">Pause on Interruption</string>
     <string name="pref_pause_on_can_duck_summary" tools:ignore="MissingTranslation">Pause when interrupted instead of lowering the volume for the duration of the interruption.</string>
+    <string name="pref_send_bugs_title" tools:ignore="MissingTranslation">Report bugs</string>
+    <string name="pref_send_bugs_summary" tools:ignore="MissingTranslation">Automatically sends anonymous reports about crashes to help development.</string>
 
     <!-- Misc -->
     <string name="popup_edit" tools:ignore="MissingTranslation">Edit</string>

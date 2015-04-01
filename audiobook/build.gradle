@@ -69,4 +69,5 @@ dependencies {
     compile 'com.afollestad:material-dialogs:0.6.4.6'
     compile 'com.melnykov:floatingactionbutton:1.2.0'
     compile 'net.jcip:jcip-annotations:1.0'
+    compile 'ch.acra:acra:4.5.0'
 }

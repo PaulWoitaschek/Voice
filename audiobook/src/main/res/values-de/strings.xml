@@ -16,6 +16,8 @@
     <string name="pref_theme_dark">Dunkel</string>
     <string name="pref_pause_on_can_duck_title">Pause bei Unterbrechung</string>
     <string name="pref_pause_on_can_duck_summary">Pausiert bei kurzer Unterbrechung anstelle die Lautstärke kurz herunterzusetzen.</string>
+    <string name="pref_send_bugs_title">Sende Fehlerberichte</string>
+    <string name="pref_send_bugs_summary">Sendet automatische anonymisierte Fehlerberichte um die Entwicklung zu vereinfachen.</string>
 
     <!-- Unsorted -->
     <string name="adding_failed_subfolder">Die Ordner dürfen kein Unterordner von einander sein:</string>

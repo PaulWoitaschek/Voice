@@ -1,18 +1,18 @@
 package de.ph1b.audiobook.utils;
 
 import android.app.Application;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
+import org.acra.ACRA;
+import org.acra.annotation.ReportsCrashes;
+import org.acra.sender.HttpSender;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -21,8 +21,14 @@ import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.service.WidgetUpdateService;
 
+@ReportsCrashes(formKey = "",
+        httpMethod = HttpSender.Method.PUT,
+        reportType = HttpSender.Type.JSON,
+        formUri = "http://acra-63e870.smileupps.com/acra-myapp-1ca2d5/_design/acra-storage/_update/report",
+        formUriBasicAuthLogin = "defaultreporter",
+        formUriBasicAuthPassword = "KA0Kc8h4dV4lCZBz")
 @ThreadSafe
-public class BaseApplication extends Application implements Thread.UncaughtExceptionHandler {
+public class BaseApplication extends Application {
     private static final String TAG = BaseApplication.class.getSimpleName();
     public final ReentrantLock bookLock = new ReentrantLock();
     @GuardedBy("bookLock")
@@ -33,7 +39,6 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
     private final CopyOnWriteArrayList<OnSleepStateChangedListener> onSleepStateChangedListeners = new CopyOnWriteArrayList<>();
     private final CopyOnWriteArrayList<OnPlayStateChangedListener> onPlayStateChangedListeners = new CopyOnWriteArrayList<>();
     private final CopyOnWriteArrayList<OnCurrentBookChangedListener> onCurrentBookChangedListeners = new CopyOnWriteArrayList<>();
-    private final Thread.UncaughtExceptionHandler defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
     private final CopyOnWriteArrayList<OnScannerStateChangedListener> onScannerStateChangedListeners = new CopyOnWriteArrayList<>();
     private DataBaseHelper db;
     @GuardedBy("bookLock")
@@ -107,10 +112,7 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
     @Override
     public void onCreate() {
         super.onCreate();
-
-        //if (BuildConfig.DEBUG) {
-        Thread.setDefaultUncaughtExceptionHandler(this);
-        //}
+        ACRA.init(this);
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         prefs = new PrefsManager(this);
@@ -231,29 +233,6 @@ public class BaseApplication extends Application implements Thread.UncaughtExcep
 
     public void removeOnBookDeletedListener(OnBookDeletedListener listener) {
         onBookDeletedListeners.remove(listener);
-    }
-
-    @Override
-    public void uncaughtException(Thread thread, Throwable ex) {
-        String stackTrace = Log.getStackTraceString(ex);
-        String time = new Date(System.currentTimeMillis()).toString();
-        String message = ex.getMessage();
-        String report = "occurred_at\n" + time + "\n\n" +
-                "message\n" + message + "\n\n" +
-                "stacktrace\n" + stackTrace;
-
-        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                "mailto", "woitaschek@gmail.com", null));
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Bugreport Material Audiobook Player");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, report);
-        Intent startClientIntent = Intent.createChooser(emailIntent, "Sending MAP Bugreport...");
-        startClientIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        try {
-            getApplicationContext().startActivity(startClientIntent);
-        } catch (ActivityNotFoundException ignored) {
-        }
-
-        defaultUEH.uncaughtException(thread, ex);
     }
 
     public enum PlayState {

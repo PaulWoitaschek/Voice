@@ -31,4 +31,9 @@
         android:key="@string/pref_key_track_to_end"
         android:summary="@string/pref_summary_track_to_end"
         android:title="@string/pref_title_track_to_end" />
+    <CheckBoxPreference
+        android:key="acra.enable"
+        android:title="@string/pref_send_bugs_title"
+        android:summary="@string/pref_send_bugs_summary"
+        android:defaultValue="true" />
 </PreferenceScreen>
