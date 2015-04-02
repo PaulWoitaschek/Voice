@@ -40,18 +40,16 @@ public class ThemeUtil {
 
     public static int getTheme(Context c) {
         Resources r = c.getResources();
-        String themeLight = r.getString(R.string.pref_theme_light);
-        String themeDark = r.getString(R.string.pref_theme_dark);
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
-        String theme = sp.getString(r.getString(R.string.pref_key_theme), themeLight);
-
-        if (theme.equals(themeLight)) {
-            return R.style.LightTheme;
-        } else if (theme.equals(themeDark)) {
-            return R.style.DarkTheme;
-        } else {
-            throw new IllegalArgumentException("Unknown theme found=" + theme);
+        String theme = sp.getString(r.getString(R.string.pref_key_theme), "light");
+        switch (theme) {
+            case "light":
+                return R.style.LightTheme;
+            case "dark":
+                return R.style.DarkTheme;
+            default:
+                throw new AssertionError("Unknown theme found=" + theme);
         }
     }
 

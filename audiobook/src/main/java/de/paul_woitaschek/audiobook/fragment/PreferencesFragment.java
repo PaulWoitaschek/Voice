@@ -65,9 +65,19 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
 
         // theme pref
         MaterialListPreference themePreference = (MaterialListPreference) findPreference(getString(R.string.pref_key_theme));
-        String themeSummary = sp.getString(getString(R.string.pref_key_theme), getString(R.string.pref_theme_light));
+        String theme = sp.getString(getString(R.string.pref_key_theme), "light");
+        String themeSummary;
+        switch (theme) {
+            case "light":
+                themeSummary = getString(R.string.pref_theme_light);
+                break;
+            case "dark":
+                themeSummary = getString(R.string.pref_theme_dark);
+                break;
+            default:
+                throw new AssertionError("This should not have happened. There is no theme for key=" + theme);
+        }
         themePreference.setSummary(themeSummary);
-
         BaseActivity baseActivity = (BaseActivity) getActivity();
         baseActivity.recreateIfThemeChanged();
     }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <com.afollestad.materialdialogs.prefs.MaterialListPreference
-        android:defaultValue="@string/pref_theme_light"
-        android:entries="@array/pref_themes_values"
-        android:entryValues="@array/pref_themes_values"
+        android:defaultValue="light"
+        android:entries="@array/pref_theme_entries"
+        android:entryValues="@array/pref_theme_values"
         android:key="@string/pref_key_theme"
         android:summary="@string/pref_theme_light"
         android:title="@string/pref_theme_title" />
