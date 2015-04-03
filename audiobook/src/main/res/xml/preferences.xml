@@ -20,10 +20,10 @@
         android:key="@string/pref_key_pause_on_can_duck"
         android:summary="@string/pref_pause_on_can_duck_summary"
         android:title="@string/pref_pause_on_can_duck_title" />
-    <de.paul_woitaschek.audiobook.dialog.SeekPreferenceDialog
+    <de.ph1b.audiobook.dialog.SeekPreferenceDialog
         android:key="@string/pref_key_seek_time"
         android:title="@string/pref_seek_time" />
-    <de.paul_woitaschek.audiobook.dialog.SleepPreferenceDialog
+    <de.ph1b.audiobook.dialog.SleepPreferenceDialog
         android:key="@string/pref_key_sleep_time"
         android:title="@string/pref_sleep_time" />
     <CheckBoxPreference
