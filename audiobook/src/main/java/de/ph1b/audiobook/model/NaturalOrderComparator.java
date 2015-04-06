@@ -3,9 +3,72 @@ package de.ph1b.audiobook.model;
 import java.io.File;
 import java.util.Comparator;
 
-public class NaturalOrderComparator implements Comparator<File> {
+public class NaturalOrderComparator implements Comparator {
+
 
     @Override
+    public int compare(Object lhs, Object rhs) {
+        if (lhs instanceof File && rhs instanceof File) {
+            File f1 = (File) lhs;
+            File f2 = (File) rhs;
+            return compare(f1, f2);
+        } else {
+            return compare(lhs.toString(), rhs.toString());
+        }
+    }
+
+    public int compare(String lhs, String rhs) {
+        int ia = 0, ib = 0;
+        int nza, nzb;
+        char ca, cb;
+        int result;
+        while (true) {
+            // only count the number of zeroes leading the last number
+            // compared
+            nza = nzb = 0;
+            ca = charAt(lhs, ia);
+            cb = charAt(rhs, ib);
+            // skip over leading spaces or zeros
+            while (Character.isSpaceChar(ca) || ca == '0') {
+                if (ca == '0') {
+                    nza++;
+                } else {
+                    // only count consecutive zeroes
+                    nza = 0;
+                }
+                ca = charAt(lhs, ++ia);
+            }
+            while (Character.isSpaceChar(cb) || cb == '0') {
+                if (cb == '0') {
+                    nzb++;
+                } else {
+                    // only count consecutive zeroes
+                    nzb = 0;
+                }
+                cb = charAt(rhs, ++ib);
+            }
+            // process run of digits
+            if (Character.isDigit(ca) && Character.isDigit(cb)) {
+                if ((result = compareRight(lhs.substring(ia),
+                        rhs.substring(ib))) != 0) {
+                    return result;
+                }
+            }
+            if (ca == 0 && cb == 0) {
+                // The strings compare the same. Perhaps the caller
+                // will want to call str-cmp to break the tie.
+                return nza - nzb;
+            }
+            if (ca < cb) {
+                return -1;
+            } else if (ca > cb) {
+                return +1;
+            }
+            ++ia;
+            ++ib;
+        }
+    }
+
     public int compare(File f1, File f2) {
         if (f1.isDirectory() && !f2.isDirectory()) {
             // Directory before non-directory
@@ -17,55 +80,7 @@ public class NaturalOrderComparator implements Comparator<File> {
             // Alphabetic order otherwise, ignoring Capital
             String a = f1.getName();
             String b = f2.getName();
-            int ia = 0, ib = 0;
-            int nza, nzb;
-            char ca, cb;
-            int result;
-            while (true) {
-                // only count the number of zeroes leading the last number
-                // compared
-                nza = nzb = 0;
-                ca = charAt(a, ia);
-                cb = charAt(b, ib);
-                // skip over leading spaces or zeros
-                while (Character.isSpaceChar(ca) || ca == '0') {
-                    if (ca == '0') {
-                        nza++;
-                    } else {
-                        // only count consecutive zeroes
-                        nza = 0;
-                    }
-                    ca = charAt(a, ++ia);
-                }
-                while (Character.isSpaceChar(cb) || cb == '0') {
-                    if (cb == '0') {
-                        nzb++;
-                    } else {
-                        // only count consecutive zeroes
-                        nzb = 0;
-                    }
-                    cb = charAt(b, ++ib);
-                }
-                // process run of digits
-                if (Character.isDigit(ca) && Character.isDigit(cb)) {
-                    if ((result = compareRight(a.substring(ia),
-                            b.substring(ib))) != 0) {
-                        return result;
-                    }
-                }
-                if (ca == 0 && cb == 0) {
-                    // The strings compare the same. Perhaps the caller
-                    // will want to call str-cmp to break the tie.
-                    return nza - nzb;
-                }
-                if (ca < cb) {
-                    return -1;
-                } else if (ca > cb) {
-                    return +1;
-                }
-                ++ia;
-                ++ib;
-            }
+            return compare(a, b);
         }
     }
 

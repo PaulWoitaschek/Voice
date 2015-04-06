@@ -6,6 +6,7 @@ import java.util.Comparator;
 public class BookmarkComparator implements Comparator<Bookmark> {
 
     private final ArrayList<Chapter> chapters;
+    private final NaturalOrderComparator naturalOrderComparator = new NaturalOrderComparator();
 
     public BookmarkComparator(ArrayList<Chapter> chapters) {
         this.chapters = chapters;
@@ -50,6 +51,6 @@ public class BookmarkComparator implements Comparator<Bookmark> {
         }
 
         // if there is nothing else to compare, compare the titles.
-        return lhs.getTitle().compareTo(rhs.getTitle());
+        return naturalOrderComparator.compare(lhs.getTitle(), rhs.getTitle());
     }
 }

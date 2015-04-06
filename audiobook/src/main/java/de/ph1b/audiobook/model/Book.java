@@ -253,7 +253,7 @@ public class Book implements Comparable<Book> {
 
     @Override
     public int compareTo(@NonNull Book that) {
-        return this.name.compareTo(that.name);
+        return new NaturalOrderComparator().compare(this.name, that.name);
     }
 }
 
