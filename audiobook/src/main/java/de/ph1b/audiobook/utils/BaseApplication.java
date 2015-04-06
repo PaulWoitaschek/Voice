@@ -49,6 +49,20 @@ public class BaseApplication extends Application {
     private boolean sleepTimerActive = false;
     private volatile boolean scannerActive = false;
 
+    public Book getBook(long id) {
+        bookLock.lock();
+        try {
+            for (Book b : allBooks) {
+                if (b.getId() == id) {
+                    return b;
+                }
+            }
+        } finally {
+            bookLock.unlock();
+        }
+        throw new AssertionError("Get book with id=" + id + " did not find a book");
+    }
+
     public void addOnScannerStateChangedListener(OnScannerStateChangedListener listener) {
         onScannerStateChangedListeners.add(listener);
     }

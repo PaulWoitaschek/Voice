@@ -28,15 +28,16 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.uitools.CoverDownloader;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.DraggableBoxImageView;
 import de.ph1b.audiobook.uitools.ImageHelper;
+import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
 
 public class EditBookDialog extends DialogFragment implements View.OnClickListener {
 
-    public static final String BOOK_NAME = "BOOK_NAME";
     public static final String BOOK_COVER = "BOOK_COVER";
     public static final String DIALOG_TITLE = "DIALOG_TITLE";
     private static final String TAG = EditBookDialog.class.getSimpleName();
@@ -110,10 +111,12 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         coverDownloader = new CoverDownloader(getActivity());
+        BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
 
         Bundle b = getArguments();
-        String defaultName = b.getString(BOOK_NAME);
         String dialogTitle = b.getString(DIALOG_TITLE);
+        long bookId = b.getLong(Book.TAG);
+        Book book = baseApplication.getBook(bookId);
         covers = b.getParcelableArrayList(BOOK_COVER);
 
         //init view
@@ -130,7 +133,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
         final TextView emptyTitleText = (TextView) customView.findViewById(R.id.empty_title);
 
         covers.add(COVER_REPLACEMENT_POS, ImageHelper.drawableToBitmap(new CoverReplacement(
-                defaultName,
+                book.getName(),
                 getActivity()), REPLACEMENT_DIMEN, REPLACEMENT_DIMEN));
 
         //init listeners
@@ -138,7 +141,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
         previousCover.setOnClickListener(this);
 
         //init values
-        nameEditText.setText(defaultName);
+        nameEditText.setText(book.getName());
 
         boolean online = ImageHelper.isOnline(getActivity());
 
