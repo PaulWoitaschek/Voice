@@ -40,6 +40,7 @@ import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.service.BookAddingService;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.CoverReplacement;
+import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.PrefsManager;
@@ -125,22 +126,26 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
             @Override
             public void onMenuClicked(final int position) {
-                Book bookToEdit = adapter.getItem(position);
+                Book book = adapter.getItem(position);
 
                 EditBookDialog editBookDialog = new EditBookDialog();
                 Bundle bundle = new Bundle();
 
-                ArrayList<Bitmap> bitmap = new ArrayList<>();
-                File coverFile = bookToEdit.getCoverFile();
+                ArrayList<Bitmap> covers = new ArrayList<>();
+                CoverReplacement replacement = new CoverReplacement(book.getName(), BookShelfActivity.this);
+                covers.add(ImageHelper.drawableToBitmap(replacement,
+                        EditBookDialog.REPLACEMENT_DIMEN, EditBookDialog.REPLACEMENT_DIMEN));
+
+                File coverFile = book.getCoverFile();
                 if (coverFile.exists() && coverFile.canRead()) {
                     Bitmap defaultCover = BitmapFactory.decodeFile(coverFile.getAbsolutePath());
                     if (defaultCover != null) {
-                        bitmap.add(defaultCover);
+                        covers.add(defaultCover);
                     }
                 }
 
-                bundle.putParcelableArrayList(EditBookDialog.BOOK_COVER, bitmap);
-                bundle.putLong(Book.TAG, bookToEdit.getId());
+                bundle.putParcelableArrayList(EditBookDialog.BOOK_COVER, covers);
+                bundle.putLong(Book.TAG, book.getId());
 
                 editBookDialog.setArguments(bundle);
                 editBookDialog.show(getFragmentManager(), TAG);

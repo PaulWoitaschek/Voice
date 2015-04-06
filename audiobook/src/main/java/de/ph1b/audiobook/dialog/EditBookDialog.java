@@ -40,10 +40,10 @@ import de.ph1b.audiobook.utils.L;
 public class EditBookDialog extends DialogFragment implements View.OnClickListener {
 
     public static final String BOOK_COVER = "BOOK_COVER";
+    private static final String COVER_POSITION = "COVER_POSITION";
     private static final String TAG = EditBookDialog.class.getSimpleName();
-    private static final int COVER_REPLACEMENT_POS = 0;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    private final int REPLACEMENT_DIMEN = 500;
+    public static final int REPLACEMENT_DIMEN = 500;
     /**
      * Variable representing if the first cover is a letter - cover. This is recognized by checking
      * if the pixels on the borders are the same as the color accent
@@ -58,6 +58,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
     private int coverPosition = -1;
     private ArrayList<Bitmap> covers;
     private int googleCount = 0;
+    private Book book;
 
     @Override
     public void onClick(View view) {
@@ -106,19 +107,47 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
         addCoverAsync.execute();
     }
 
-    @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         coverDownloader = new CoverDownloader(getActivity());
-        final BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
-        final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
+        baseApplication = (BaseApplication) getActivity().getApplication();
+        db = DataBaseHelper.getInstance(getActivity());
 
         Bundle b = getArguments();
         long bookId = b.getLong(Book.TAG);
-        final Book book = baseApplication.getBook(bookId);
-        covers = b.getParcelableArrayList(BOOK_COVER);
+        book = baseApplication.getBook(bookId);
+        if (savedInstanceState == null) {
+            covers = b.getParcelableArrayList(BOOK_COVER);
 
+            // defaulting only to capital cover when its the only one.
+            if (covers.size() == 1) {
+                coverPosition = 0;
+            } else {
+                coverPosition = 1;
+            }
+        } else {
+            covers = savedInstanceState.getParcelableArrayList(BOOK_COVER);
+            coverPosition = savedInstanceState.getInt(COVER_POSITION);
+        }
+
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putParcelableArrayList(BOOK_COVER, covers);
+        outState.putInt(COVER_POSITION, coverPosition);
+    }
+
+    private BaseApplication baseApplication;
+    private DataBaseHelper db;
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         //init view
         //passing null is fine because of fragment
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -132,10 +161,6 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
         nextCover = (ImageButton) customView.findViewById(R.id.next_cover);
         final TextView emptyTitleText = (TextView) customView.findViewById(R.id.empty_title);
 
-        covers.add(COVER_REPLACEMENT_POS, ImageHelper.drawableToBitmap(new CoverReplacement(
-                book.getName(),
-                getActivity()), REPLACEMENT_DIMEN, REPLACEMENT_DIMEN));
-
         //init listeners
         nextCover.setOnClickListener(this);
         previousCover.setOnClickListener(this);
@@ -145,12 +170,6 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
 
         boolean online = ImageHelper.isOnline(getActivity());
 
-        // defaulting only to capital cover when its the only one.
-        if (covers.size() == 1) {
-            coverPosition = 0;
-        } else {
-            coverPosition = 1;
-        }
         coverImageView.setImageBitmap(covers.get(coverPosition));
         if (!online && (coverPosition == (covers.size() - 1))) {
             nextCover.setVisibility(View.INVISIBLE);
@@ -176,7 +195,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
                             cover = Bitmap.createBitmap(cover, r.left, r.top, r.width(), r.height());
                             ImageHelper.saveCover(cover, getActivity(), book.getRoot(), book.getChapters());
                             book.setUseCoverReplacement(false);
-                        } else if (coverPosition == COVER_REPLACEMENT_POS) {
+                        } else if (coverPosition == 0) {
                             book.setUseCoverReplacement(true);
                         }
                     }
@@ -228,9 +247,9 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
                                     getActivity()),
                             REPLACEMENT_DIMEN, REPLACEMENT_DIMEN);
 
-                    covers.set(COVER_REPLACEMENT_POS, newLetterCover);
+                    covers.set(0, newLetterCover);
                     L.d(TAG, "onTextChanged, setting new cover with newName=" + newName);
-                    if (textLength > 0 && coverPosition == COVER_REPLACEMENT_POS) {
+                    if (textLength > 0 && coverPosition == 0) {
                         L.d(TAG, "textLength > 0 and position==0, so setting new image");
                         coverImageView.setImageBitmap(newLetterCover);
                     }
@@ -244,7 +263,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
         });
 
         // if we are online and at the first (always replacement) cover, immediately load a cover
-        if (coverPosition == COVER_REPLACEMENT_POS && ImageHelper.isOnline(getActivity())) {
+        if (coverPosition == 0 && ImageHelper.isOnline(getActivity())) {
             nextCover.performClick();
         }
 
