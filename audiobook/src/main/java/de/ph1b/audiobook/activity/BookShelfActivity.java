@@ -59,7 +59,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     private BookAdapter adapter;
     private ImageView currentCover;
     private TextView currentText;
-    private ViewGroup current;
+    private ViewGroup playerWidget;
     private PrefsManager prefs;
     private GestureDetectorCompat detector;
     private Book bookToEdit;
@@ -110,7 +110,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 .cancelable(false)
                 .build();
 
-        current = (ViewGroup) findViewById(R.id.current);
+        playerWidget = (ViewGroup) findViewById(R.id.current);
         currentCover = (ImageView) findViewById(R.id.current_cover);
         currentText = (TextView) findViewById(R.id.current_text);
         currentPlaying = (ImageButton) findViewById(R.id.current_playing);
@@ -118,25 +118,20 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerReplacementView = (ProgressBar) findViewById(R.id.recyclerReplacement);
 
-        current.setOnClickListener(this);
+        playerWidget.setOnClickListener(this);
         currentPlaying.setOnClickListener(this);
         BookAdapter.OnItemClickListener onClickListener = new BookAdapter.OnItemClickListener() {
             @Override
             public void onCoverClicked(int position, ImageView imageView) {
                 Book book = adapter.getItem(position);
-                if (baseApplication.getCurrentBook() != book) {
-                    baseApplication.setCurrentBook(book);
-                }
+                baseApplication.setCurrentBook(book);
                 prefs.setCurrentBookId(book.getId());
                 Intent intent = new Intent(BookShelfActivity.this, BookPlayActivity.class);
-                String transitionName = getString(R.string.cover_transition);
-
                 ActivityOptionsCompat options =
                         ActivityOptionsCompat.makeSceneTransitionAnimation(BookShelfActivity.this,
-                                imageView,   // The view which starts the transition
-                                transitionName    // The transitionName of the view we’re transitioning to
-                        );
+                                imageView, getString(R.string.cover_transition));
                 ActivityCompat.startActivity(BookShelfActivity.this, intent, options.toBundle());
+                initPlayerWidget();
             }
 
             @Override
@@ -312,30 +307,23 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void initPlayerWidget() {
-        long currentBookPosition = prefs.getCurrentBookId();
-
-        boolean widgetInitialized = false;
-        for (final Book b : adapter.getBooks()) {
-            if (b.getId() == currentBookPosition) {
-                //setting cover
-                File coverFile = b.getCoverFile();
-                Drawable coverReplacement = new CoverReplacement(b.getName(), this);
-                if (!b.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-                    Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(currentCover);
-                } else {
-                    currentCover.setImageDrawable(coverReplacement);
-                }
-
-                //setting text
-                currentText.setText(b.getName());
-                widgetInitialized = true;
-                break;
+        Book book = baseApplication.getCurrentBook();
+        if (book != null) {
+            // cover
+            File coverFile = book.getCoverFile();
+            String bookName = book.getName();
+            Drawable coverReplacement = new CoverReplacement(bookName, this);
+            if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
+                Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(currentCover);
+            } else {
+                currentCover.setImageDrawable(coverReplacement);
             }
-        }
-        if (!widgetInitialized) {
-            current.setVisibility(View.GONE);
+
+            //setting text
+            currentText.setText(bookName);
+            playerWidget.setVisibility(View.VISIBLE);
         } else {
-            current.setVisibility(View.VISIBLE);
+            playerWidget.setVisibility(View.GONE);
         }
     }
 
@@ -411,8 +399,11 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 controller.playPause();
                 break;
             case R.id.current:
-                Intent i = new Intent(BookShelfActivity.this, BookPlayActivity.class);
-                startActivity(i);
+                Intent intent = new Intent(BookShelfActivity.this, BookPlayActivity.class);
+                ActivityOptionsCompat options =
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(BookShelfActivity.this,
+                                currentCover, getString(R.string.cover_transition));
+                ActivityCompat.startActivity(BookShelfActivity.this, intent, options.toBundle());
                 break;
             default:
                 break;

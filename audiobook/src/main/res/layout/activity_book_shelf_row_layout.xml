@@ -14,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
-        android:transitionName="@string/cover_transition"
         android:scaleType="fitXY"
         tools:ignore="UnusedAttribute" />
 
