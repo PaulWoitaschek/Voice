@@ -17,16 +17,14 @@ import de.ph1b.audiobook.utils.L;
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class DataBaseHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 22;
+    private static final int DATABASE_VERSION = 23;
     private static final String DATABASE_NAME = "autoBookDB";
 
     private static final String TABLE_BOOK = "TABLE_BOOK";
     private static final String BOOK_ID = "BOOK_ID";
-    private static final String BOOK_SORT_ID = "BOOK_SORT_ID";
     private static final String BOOK_ROOT = "BOOK_ROOT";
     private static final String CREATE_TABLE_BOOK = "CREATE TABLE " + TABLE_BOOK + " ( " +
             BOOK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            BOOK_SORT_ID + " INTEGER, " +
             BOOK_ROOT + " TEXT NOT NULL)";
 
     private static final String TABLE_CHAPTERS = "TABLE_CHAPTERS";
@@ -66,8 +64,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             ContentValues cv = new ContentValues();
             cv.put(BOOK_ROOT, book.getRoot());
             bookId = db.insert(TABLE_BOOK, null, cv);
-            cv.put(BOOK_SORT_ID, bookId);
-            db.update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(bookId)});
 
             for (Chapter c : book.getChapters()) {
                 cv = new ContentValues();
@@ -82,7 +78,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             db.endTransaction();
         }
         book.setId(bookId);
-        book.setSortId(bookId);
 
         // retrieving existing values
         JSONHelper helper = new JSONHelper(book.getRoot(), book.getChapters());
@@ -167,13 +162,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @Nullable
     private Book getBook(long id, @NonNull SQLiteDatabase db) {
         Cursor cursor = db.query(TABLE_BOOK,
-                new String[]{BOOK_ROOT, BOOK_SORT_ID},
+                new String[]{BOOK_ROOT},
                 BOOK_ID + "=?", new String[]{String.valueOf(id)},
                 null, null, null);
         try {
             if (cursor.moveToFirst()) {
                 String root = cursor.getString(0);
-                long sortId = cursor.getLong(1);
                 ArrayList<Chapter> chapters = getChapters(id, db);
 
                 JSONHelper helper = new JSONHelper(root, chapters);
@@ -222,7 +216,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
                 boolean useCoverReplacement = helper.useCoverReplacement();
 
-                return new Book(root, name, chapters, safeBookmarks, speed, id, sortId, currentTime, relPath, useCoverReplacement);
+                return new Book(root, name, chapters, safeBookmarks, speed, id, currentTime, relPath, useCoverReplacement);
             }
         } finally {
             cursor.close();
@@ -259,10 +253,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         helper.setName(book.getName());
         helper.setUseCoverReplacement(book.isUseCoverReplacement());
         helper.writeJSON();
-
-        ContentValues cv = new ContentValues();
-        cv.put(BOOK_SORT_ID, book.getSortId());
-        getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
     }
 
     public void deleteBook(@NonNull Book book) {

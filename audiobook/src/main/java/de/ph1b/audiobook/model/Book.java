@@ -13,7 +13,6 @@ public class Book implements Comparable<Book> {
 
     public static final int ID_UNKNOWN = -1;
     private long id = ID_UNKNOWN;
-    private long sortId = ID_UNKNOWN;
     private static final String IMAGE_EXTENSION = ".jpg";
     private static final String TAG = Book.class.getSimpleName();
     private static final String FILE_EXTENSION = "-map.json";
@@ -32,7 +31,7 @@ public class Book implements Comparable<Book> {
     private String relativeMediaPath;
     private boolean useCoverReplacement;
 
-    public Book(@NonNull String root, @NonNull String name, @NonNull ArrayList<Chapter> chapters, @NonNull ArrayList<Bookmark> bookmarks, float playbackSpeed, long id, long sortId, int time, @NonNull String relativeMediaPath, boolean useCoverReplacement) {
+    public Book(@NonNull String root, @NonNull String name, @NonNull ArrayList<Chapter> chapters, @NonNull ArrayList<Bookmark> bookmarks, float playbackSpeed, long id, int time, @NonNull String relativeMediaPath, boolean useCoverReplacement) {
         Validate.notNull(root, name, chapters, bookmarks, relativeMediaPath);
         Validate.notEmpty(root, name, relativeMediaPath);
         Validate.notEmpty(chapters);
@@ -58,7 +57,6 @@ public class Book implements Comparable<Book> {
         this.name = name;
         this.chapters = chapters;
         this.id = id;
-        this.sortId = sortId;
         this.useCoverReplacement = useCoverReplacement;
         setPosition(time, relativeMediaPath);
     }
@@ -162,7 +160,6 @@ public class Book implements Comparable<Book> {
                 ",chapters=" + chapters +
                 ",bookmarks=" + bookmarks +
                 ",id=" + id + ", " +
-                ",sortId=" + sortId +
                 ",name=" + name +
                 ",time=" + time +
                 ",playbackSpeed=" + playbackSpeed +
@@ -206,14 +203,6 @@ public class Book implements Comparable<Book> {
 
     public int getTime() {
         return time;
-    }
-
-    public long getSortId() {
-        return sortId;
-    }
-
-    public void setSortId(long sortId) {
-        this.sortId = sortId;
     }
 
     @NonNull
@@ -265,13 +254,7 @@ public class Book implements Comparable<Book> {
 
     @Override
     public int compareTo(@NonNull Book that) {
-        if (this.sortId > that.sortId) {
-            return 1;
-        } else if (this.sortId < that.sortId) {
-            return -1;
-        } else {
-            return 0;
-        }
+        return this.name.compareTo(that.name);
     }
 }
 

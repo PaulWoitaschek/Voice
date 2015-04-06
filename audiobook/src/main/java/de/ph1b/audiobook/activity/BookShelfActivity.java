@@ -1,8 +1,6 @@
 package de.ph1b.audiobook.activity;
 
 import android.app.AlertDialog;
-import android.content.ClipData;
-import android.content.ClipDescription;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,14 +13,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -45,14 +40,13 @@ import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.service.BookAddingService;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.CoverReplacement;
-import de.ph1b.audiobook.uitools.CustomOnSimpleGestureListener;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
-public class BookShelfActivity extends BaseActivity implements View.OnClickListener, EditBookDialog.OnEditBookFinished, RecyclerView.OnItemTouchListener, BaseApplication.OnBookAddedListener, BaseApplication.OnBookDeletedListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener, BaseApplication.OnScannerStateChangedListener, BaseApplication.OnCurrentBookChangedListener {
+public class BookShelfActivity extends BaseActivity implements View.OnClickListener, EditBookDialog.OnEditBookFinished, BaseApplication.OnBookAddedListener, BaseApplication.OnBookDeletedListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener, BaseApplication.OnScannerStateChangedListener, BaseApplication.OnCurrentBookChangedListener {
 
     private static final String TAG = BookShelfActivity.class.getSimpleName();
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -61,9 +55,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     private TextView currentText;
     private ViewGroup playerWidget;
     private PrefsManager prefs;
-    private GestureDetectorCompat detector;
     private Book bookToEdit;
-    private float scrollBy = 0;
     private BaseApplication baseApplication;
     private ServiceController controller;
     private ImageButton currentPlaying;
@@ -159,100 +151,10 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             }
         };
 
-        CustomOnSimpleGestureListener.OnItemLongClickListener onLongClickListener = new CustomOnSimpleGestureListener.OnItemLongClickListener() {
-            @Override
-            public void onItemLongClicked(int position, View view) {
-                ClipData cData = ClipData.newPlainText("position", String.valueOf(position));
-                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
-                view.startDrag(cData, shadowBuilder, view, 0);
-            }
-        };
-
         adapter = new BookAdapter(baseApplication.getAllBooks(), this, onClickListener);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, getAmountOfColumns()));
         recyclerView.setAdapter(adapter);
-        recyclerView.addOnItemTouchListener(this);
-        final Handler handler = new Handler();
-
-        final Runnable smoothScroll = new Runnable() {
-            @Override
-            public void run() {
-                recyclerView.smoothScrollBy(0, Math.round(scrollBy));
-                handler.postDelayed(this, 50);
-            }
-        };
-
-        View.OnDragListener onDragListener = new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-
-                int action = event.getAction();
-                switch (action) {
-                    case DragEvent.ACTION_DRAG_STARTED:
-                        return event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN);
-                    case DragEvent.ACTION_DRAG_ENTERED:
-                        return true;
-                    case DragEvent.ACTION_DRAG_LOCATION:
-
-                        int height = recyclerView.getMeasuredHeight();
-
-                        float scrollArea = height / 4;
-                        float maxScrollStrength = scrollArea / 3;
-
-                        float y = event.getY();
-
-                        scrollBy = 0;
-                        if (y <= scrollArea && y > 0) {
-                            scrollBy = maxScrollStrength * (y / scrollArea - 1);
-                        } else if (y >= (height - scrollArea) && y <= height) {
-                            scrollBy = maxScrollStrength * (1 - y / height);
-
-                            float factor = 1 + (y * y - height * height) /
-                                    (2 * scrollArea * height - scrollArea * scrollArea);
-
-                            scrollBy = maxScrollStrength * factor;
-                        }
-                        handler.removeCallbacks(smoothScroll);
-                        if (scrollBy != 0) {
-                            handler.removeCallbacks(smoothScroll);
-                            handler.post(smoothScroll);
-                        }
-
-                        return true;
-                    case DragEvent.ACTION_DRAG_EXITED:
-                        return true;
-                    case DragEvent.ACTION_DROP:
-                        ClipData.Item item = event.getClipData().getItemAt(0);
-                        String dragData = String.valueOf(item.getText());
-                        int from = Integer.valueOf(dragData);
-
-                        float endX = event.getX();
-                        float endY = event.getY();
-                        L.d(TAG, endX + "/" + endY);
-                        View endChild = recyclerView.findChildViewUnder(endX, endY);
-                        int to = recyclerView.getChildAdapterPosition(endChild);
-
-                        if (from != -1 && to != -1) {
-                            adapter.swapItems(from, to);
-                            return true;
-                        } else if (from != -1) {
-                            to = adapter.getItemCount() - 1;
-                            adapter.swapItems(from, to);
-                            return true;
-                        }
-                        return false;
-                    case DragEvent.ACTION_DRAG_ENDED:
-                        handler.removeCallbacks(smoothScroll);
-                        scrollBy = 0;
-                        return true;
-                }
-                return false;
-            }
-        };
-        recyclerView.setOnDragListener(onDragListener);
-        detector = new GestureDetectorCompat(this,
-                new CustomOnSimpleGestureListener(recyclerView, onLongClickListener));
     }
 
     /**
@@ -434,17 +336,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
         adapter.notifyItemChanged(adapter.getBooks().indexOf(bookToEdit));
         initPlayerWidget();
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
-        detector.onTouchEvent(motionEvent);
-        return false;
-    }
-
-    @Override
-    public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
-
     }
 
     @Override

@@ -13,6 +13,7 @@ import org.acra.annotation.ReportsCrashes;
 import org.acra.sender.HttpSender;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -76,6 +77,7 @@ public class BaseApplication extends Application {
         try {
             db.addBook(book);
             allBooks.add(book);
+            Collections.sort(allBooks);
             int position = allBooks.indexOf(book);
             for (OnBookAddedListener l : onBookAddedListeners) {
                 l.onBookAdded(position);
