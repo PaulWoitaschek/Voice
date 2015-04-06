@@ -45,11 +45,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         return books.get(position);
     }
 
-    @NonNull
-    public ArrayList<Book> getBooks() {
-        return books;
-    }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_book_shelf_row_layout, parent, false);

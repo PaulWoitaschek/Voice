@@ -30,6 +30,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.BookAdapter;
@@ -37,6 +38,7 @@ import de.ph1b.audiobook.dialog.EditBookDialog;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
+import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.service.BookAddingService;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.CoverReplacement;
@@ -328,14 +330,26 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         }
 
         //setting updated values
-        bookToEdit.setName(bookName);
-        bookToEdit.setUseCoverReplacement(cover == null);
+        baseApplication.bookLock.lock();
+        try {
+            bookToEdit.setName(bookName);
+            bookToEdit.setUseCoverReplacement(cover == null);
+            DataBaseHelper db = DataBaseHelper.getInstance(this);
+            db.updateBook(bookToEdit);
 
-        // invalidate cache to have picasso reload
-        Picasso.with(this).invalidate(bookToEdit.getCoverFile());
+            // invalidate cache to have picasso reload
+            Picasso.with(this).invalidate(bookToEdit.getCoverFile());
 
-        adapter.notifyItemChanged(adapter.getBooks().indexOf(bookToEdit));
-        initPlayerWidget();
+            int oldIndex = baseApplication.getAllBooks().indexOf(bookToEdit);
+            Collections.sort(baseApplication.getAllBooks());
+            int newIndex = baseApplication.getAllBooks().indexOf(bookToEdit);
+            adapter.notifyItemMoved(oldIndex, newIndex);
+            adapter.notifyItemChanged(newIndex);
+
+            initPlayerWidget();
+        } finally {
+            baseApplication.bookLock.unlock();
+        }
     }
 
     @Override
