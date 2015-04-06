@@ -45,7 +45,6 @@ import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.BaseApplication;
-import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 public class BookShelfActivity extends BaseActivity implements View.OnClickListener, EditBookDialog.OnEditBookFinished, BaseApplication.OnBookAddedListener, BaseApplication.OnBookDeletedListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener, BaseApplication.OnScannerStateChangedListener, BaseApplication.OnCurrentBookChangedListener {
@@ -320,12 +319,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onEditBookFinished(@NonNull String bookName, @Nullable Bitmap cover) {
         if (cover != null) {
-            File oldCover = bookToEdit.getCoverFile();
-            if (oldCover.exists() && oldCover.canRead()) {
-                L.d(TAG, "deleting old cover=" + oldCover);
-                //noinspection ResultOfMethodCallIgnored
-                oldCover.delete();
-            }
             ImageHelper.saveCover(cover, this, bookToEdit.getRoot(), bookToEdit.getChapters());
         }
 
