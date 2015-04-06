@@ -38,8 +38,7 @@
         android:id="@+id/current"
         android:layout_width="match_parent"
         android:layout_height="72dp"
-        android:orientation="horizontal"
-        android:visibility="visible">
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/current_cover"

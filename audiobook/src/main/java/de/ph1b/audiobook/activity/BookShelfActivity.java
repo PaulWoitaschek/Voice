@@ -52,7 +52,7 @@ import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
-public class BookShelfActivity extends BaseActivity implements View.OnClickListener, EditBookDialog.OnEditBookFinished, RecyclerView.OnItemTouchListener, BaseApplication.OnBookAddedListener, BaseApplication.OnBookDeletedListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener, BaseApplication.OnScannerStateChangedListener {
+public class BookShelfActivity extends BaseActivity implements View.OnClickListener, EditBookDialog.OnEditBookFinished, RecyclerView.OnItemTouchListener, BaseApplication.OnBookAddedListener, BaseApplication.OnBookDeletedListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener, BaseApplication.OnScannerStateChangedListener, BaseApplication.OnCurrentBookChangedListener {
 
     private static final String TAG = BookShelfActivity.class.getSimpleName();
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -131,7 +131,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                         ActivityOptionsCompat.makeSceneTransitionAnimation(BookShelfActivity.this,
                                 imageView, getString(R.string.cover_transition));
                 ActivityCompat.startActivity(BookShelfActivity.this, intent, options.toBundle());
-                initPlayerWidget();
+                //  initPlayerWidget();
             }
 
             @Override
@@ -273,6 +273,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
         baseApplication.addOnPlayStateChangedListener(this);
         baseApplication.addOnPositionChangedListener(this);
+        baseApplication.addOnCurrentBookChangedListener(this);
 
         // Scanning for new files here in case there are changes on the drive.
         baseApplication.bookLock.lock();
@@ -289,10 +290,15 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             baseApplication.bookLock.unlock();
         }
 
-
         baseApplication.addOnScannerStateChangedListener(this);
 
         startService(BookAddingService.getRescanIntent(this, false));
+
+        if (baseApplication.getCurrentBook() == null) {
+            playerWidget.setVisibility(View.GONE);
+        } else {
+            playerWidget.setVisibility(View.VISIBLE);
+        }
 
         initPlayerWidget();
         onPlayStateChanged(baseApplication.getPlayState());
@@ -319,11 +325,22 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 currentCover.setImageDrawable(coverReplacement);
             }
 
-            //setting text
+            // text
             currentText.setText(bookName);
-            playerWidget.setVisibility(View.VISIBLE);
-        } else {
-            playerWidget.setVisibility(View.GONE);
+
+            // progress
+            ArrayList<Chapter> allChapters = book.getChapters();
+            Chapter currentChapter = book.getCurrentChapter();
+            float duration = 0;
+            float timeTillBeginOfCurrentChapter = 0;
+            for (Chapter c : allChapters) {
+                duration += c.getDuration();
+                if (allChapters.indexOf(c) < allChapters.indexOf(currentChapter)) {
+                    timeTillBeginOfCurrentChapter += c.getDuration();
+                }
+            }
+            int progress = Math.round((timeTillBeginOfCurrentChapter + book.getTime()) * 1000 / duration);
+            progressBar.setProgress(progress);
         }
     }
 
@@ -346,21 +363,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         handler.post(new Runnable() {
             @Override
             public void run() {
-                Book book = baseApplication.getCurrentBook();
-                if (book != null) {
-                    ArrayList<Chapter> allChapters = book.getChapters();
-                    Chapter currentChapter = book.getCurrentChapter();
-                    float duration = 0;
-                    float timeTillBeginOfCurrentChapter = 0;
-                    for (Chapter c : allChapters) {
-                        duration += c.getDuration();
-                        if (allChapters.indexOf(c) < allChapters.indexOf(currentChapter)) {
-                            timeTillBeginOfCurrentChapter += c.getDuration();
-                        }
-                    }
-                    int progress = Math.round((timeTillBeginOfCurrentChapter + book.getTime()) * 1000 / duration);
-                    progressBar.setProgress(progress);
-                }
+                initPlayerWidget();
             }
         });
     }
@@ -461,6 +464,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
         baseApplication.removeOnBookAddedListener(this);
         baseApplication.removeOnBookDeletedListener(this);
+        baseApplication.removeOnCurrentBookChangedListener(this);
         baseApplication.removeOnPlayStateChangedListener(this);
         baseApplication.removeOnPositionChangedListener(this);
         baseApplication.removeOnScannerStateChangedListener(this);
@@ -483,6 +487,16 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void run() {
                 toggleRecyclerVisibilities(active);
+            }
+        });
+    }
+
+    @Override
+    public void onCurrentBookChanged(Book book) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                initPlayerWidget();
             }
         });
     }
