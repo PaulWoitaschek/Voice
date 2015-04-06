@@ -40,6 +40,13 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         this.c = c;
         this.onItemClickListener = onItemClickListener;
         db = DataBaseHelper.getInstance(c);
+
+        setHasStableIds(true);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return books.get(position).getId();
     }
 
     @NonNull
