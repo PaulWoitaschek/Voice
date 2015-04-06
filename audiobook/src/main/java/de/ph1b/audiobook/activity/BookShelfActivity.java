@@ -37,7 +37,6 @@ import de.ph1b.audiobook.dialog.EditBookDialog;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
-import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.service.BookAddingService;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.CoverReplacement;
@@ -54,7 +53,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     private TextView currentText;
     private ViewGroup playerWidget;
     private PrefsManager prefs;
-    private Book bookToEdit;
     private BaseApplication baseApplication;
     private ServiceController controller;
     private ImageButton currentPlaying;
@@ -127,7 +125,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
             @Override
             public void onMenuClicked(final int position) {
-                bookToEdit = adapter.getItem(position);
+                Book bookToEdit = adapter.getItem(position);
 
                 EditBookDialog editBookDialog = new EditBookDialog();
                 Bundle bundle = new Bundle();
@@ -314,20 +312,12 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    public void onEditBookFinished(@NonNull String bookName) {
-        //setting updated values
+    public void onEditBookFinished(@NonNull Book book) {
         baseApplication.bookLock.lock();
         try {
-            bookToEdit.setName(bookName);
-            DataBaseHelper db = DataBaseHelper.getInstance(this);
-            db.updateBook(bookToEdit);
-
-            // invalidate cache to have picasso reload
-            Picasso.with(this).invalidate(bookToEdit.getCoverFile());
-
-            int oldIndex = baseApplication.getAllBooks().indexOf(bookToEdit);
+            int oldIndex = baseApplication.getAllBooks().indexOf(book);
             Collections.sort(baseApplication.getAllBooks());
-            int newIndex = baseApplication.getAllBooks().indexOf(bookToEdit);
+            int newIndex = baseApplication.getAllBooks().indexOf(book);
             adapter.notifyItemMoved(oldIndex, newIndex);
             adapter.notifyItemChanged(newIndex);
 

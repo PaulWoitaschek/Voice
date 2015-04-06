@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import java.util.concurrent.Executors;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
+import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.uitools.CoverDownloader;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.DraggableBoxImageView;
@@ -110,6 +112,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
 
         coverDownloader = new CoverDownloader(getActivity());
         final BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
+        final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
 
         Bundle b = getArguments();
         long bookId = b.getLong(Book.TAG);
@@ -177,7 +180,12 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
                             book.setUseCoverReplacement(true);
                         }
                     }
-                    ((OnEditBookFinished) getActivity()).onEditBookFinished(bookName);
+                    book.setName(bookName);
+                    db.updateBook(book);
+                    Picasso.with(getActivity()).invalidate(book.getCoverFile());
+
+
+                    ((OnEditBookFinished) getActivity()).onEditBookFinished(book);
                 } finally {
                     baseApplication.bookLock.unlock();
                 }
@@ -244,7 +252,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
     }
 
     public interface OnEditBookFinished {
-        public void onEditBookFinished(@NonNull String bookName);
+        public void onEditBookFinished(@NonNull Book book);
     }
 
     private class AddCoverAsync extends AsyncTask<Void, Void, Bitmap> {
