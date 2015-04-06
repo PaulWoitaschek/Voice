@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.app.ActivityCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -286,6 +287,10 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             case R.id.action_bookmark:
                 BookmarkDialog bookmarkDialog = new BookmarkDialog();
                 bookmarkDialog.show(getFragmentManager(), TAG);
+                return true;
+            case android.R.id.home:
+            case R.id.home:
+                ActivityCompat.finishAfterTransition(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
