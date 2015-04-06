@@ -8,7 +8,6 @@ import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -110,11 +109,11 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         coverDownloader = new CoverDownloader(getActivity());
-        BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
+        final BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
 
         Bundle b = getArguments();
         long bookId = b.getLong(Book.TAG);
-        Book book = baseApplication.getBook(bookId);
+        final Book book = baseApplication.getBook(bookId);
         covers = b.getParcelableArrayList(BOOK_COVER);
 
         //init view
@@ -163,19 +162,25 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
                 if (addCoverAsync != null && !addCoverAsync.isCancelled()) {
                     addCoverAsync.cancel(true);
                 }
-                String bookName = nameEditText.getText().toString();
-                Bitmap newCover = null;
-                if (covers.size() > 0) {
-                    Rect r = coverImageView.getCropPosition();
-                    if (r.width() > 0 && r.height() > 0) {
-                        newCover = covers.get(coverPosition);
-                        newCover = Bitmap.createBitmap(newCover, r.left, r.top, r.width(), r.height());
+
+                baseApplication.bookLock.lock();
+                try {
+                    String bookName = nameEditText.getText().toString();
+                    if (covers.size() > 0) {
+                        Rect r = coverImageView.getCropPosition();
+                        if (r.width() > 0 && r.height() > 0) {
+                            Bitmap cover = covers.get(coverPosition);
+                            cover = Bitmap.createBitmap(cover, r.left, r.top, r.width(), r.height());
+                            ImageHelper.saveCover(cover, getActivity(), book.getRoot(), book.getChapters());
+                            book.setUseCoverReplacement(false);
+                        } else if (coverPosition == COVER_REPLACEMENT_POS) {
+                            book.setUseCoverReplacement(true);
+                        }
                     }
-                    if (coverPosition == COVER_REPLACEMENT_POS) {
-                        newCover = null;
-                    }
+                    ((OnEditBookFinished) getActivity()).onEditBookFinished(bookName);
+                } finally {
+                    baseApplication.bookLock.unlock();
                 }
-                ((OnEditBookFinished) getActivity()).onEditBookFinished(bookName, newCover);
             }
 
             @Override
@@ -239,7 +244,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
     }
 
     public interface OnEditBookFinished {
-        public void onEditBookFinished(@NonNull String bookName, @Nullable Bitmap cover);
+        public void onEditBookFinished(@NonNull String bookName);
     }
 
     private class AddCoverAsync extends AsyncTask<Void, Void, Bitmap> {

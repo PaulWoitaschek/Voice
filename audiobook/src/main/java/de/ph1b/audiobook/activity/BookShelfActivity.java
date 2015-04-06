@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.GridLayoutManager;
@@ -42,7 +41,6 @@ import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.service.BookAddingService;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.CoverReplacement;
-import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.PrefsManager;
@@ -316,16 +314,11 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    public void onEditBookFinished(@NonNull String bookName, @Nullable Bitmap cover) {
-        if (cover != null) {
-            ImageHelper.saveCover(cover, this, bookToEdit.getRoot(), bookToEdit.getChapters());
-        }
-
+    public void onEditBookFinished(@NonNull String bookName) {
         //setting updated values
         baseApplication.bookLock.lock();
         try {
             bookToEdit.setName(bookName);
-            bookToEdit.setUseCoverReplacement(cover == null);
             DataBaseHelper db = DataBaseHelper.getInstance(this);
             db.updateBook(bookToEdit);
 
