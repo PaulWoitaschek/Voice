@@ -145,7 +145,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
                 bundle.putParcelableArrayList(EditBookDialog.BOOK_COVER, bitmap);
                 bundle.putLong(Book.TAG, bookToEdit.getId());
-                bundle.putString(EditBookDialog.DIALOG_TITLE, getString(R.string.edit_book_title));
 
                 editBookDialog.setArguments(bundle);
                 editBookDialog.show(getFragmentManager(), TAG);

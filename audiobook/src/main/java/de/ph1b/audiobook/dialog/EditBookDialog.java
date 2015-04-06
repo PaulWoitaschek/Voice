@@ -39,7 +39,6 @@ import de.ph1b.audiobook.utils.L;
 public class EditBookDialog extends DialogFragment implements View.OnClickListener {
 
     public static final String BOOK_COVER = "BOOK_COVER";
-    public static final String DIALOG_TITLE = "DIALOG_TITLE";
     private static final String TAG = EditBookDialog.class.getSimpleName();
     private static final int COVER_REPLACEMENT_POS = 0;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -114,7 +113,6 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
         BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
 
         Bundle b = getArguments();
-        String dialogTitle = b.getString(DIALOG_TITLE);
         long bookId = b.getLong(Book.TAG);
         Book book = baseApplication.getBook(bookId);
         covers = b.getParcelableArrayList(BOOK_COVER);
@@ -190,7 +188,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
 
         final MaterialDialog editBook = new MaterialDialog.Builder(getActivity())
                 .customView(customView, true)
-                .title(dialogTitle)
+                .title(R.string.edit_book_title)
                 .positiveText(R.string.dialog_confirm)
                 .negativeText(R.string.dialog_cancel)
                 .callback(buttonCallback)
