@@ -13,6 +13,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -120,13 +122,21 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         currentPlaying.setOnClickListener(this);
         BookAdapter.OnItemClickListener onClickListener = new BookAdapter.OnItemClickListener() {
             @Override
-            public void onCoverClicked(int position) {
+            public void onCoverClicked(int position, ImageView imageView) {
                 Book book = adapter.getItem(position);
                 if (baseApplication.getCurrentBook() != book) {
                     baseApplication.setCurrentBook(book);
                 }
                 prefs.setCurrentBookId(book.getId());
-                startActivity(new Intent(BookShelfActivity.this, BookPlayActivity.class));
+                Intent intent = new Intent(BookShelfActivity.this, BookPlayActivity.class);
+                String transitionName = getString(R.string.cover_transition);
+
+                ActivityOptionsCompat options =
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(BookShelfActivity.this,
+                                imageView,   // The view which starts the transition
+                                transitionName    // The transitionName of the view we’re transitioning to
+                        );
+                ActivityCompat.startActivity(BookShelfActivity.this, intent, options.toBundle());
             }
 
             @Override
