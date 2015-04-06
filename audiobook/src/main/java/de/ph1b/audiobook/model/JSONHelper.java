@@ -169,13 +169,26 @@ class JSONHelper {
         }
     }
 
+
+    /**
+     * Stores the book information. Creates a backup of the old config file, so if there is an error
+     * on writing (ie the devices goes off) the information is not lost.
+     */
     public void writeJSON() {
         synchronized (JSONHelper.class) {
             try {
+                // make backup
                 if (configFile.exists()) {
                     FileUtils.copyFile(configFile, backupFile);
                 }
+
+                // write new file
                 FileUtils.write(configFile, playingInformation.toString());
+
+                // delete backup
+                if (backupFile.exists()) {
+                    FileUtils.deleteQuietly(backupFile);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
