@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.activity;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -59,7 +58,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     private ServiceController controller;
     private ImageButton currentPlaying;
     private ProgressBar progressBar;
-    private AlertDialog noFolderWarning;
+    private MaterialDialog noFolderWarning;
     private RecyclerView recyclerView;
     private ProgressBar recyclerReplacementView;
 
