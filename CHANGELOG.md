@@ -1,3 +1,52 @@
+# v2.0.5 More Transitions
+
+## Additions
+* More transitions
+* Layout improved
+* Layout performance improved
+
+## Fixes
+* Fixed bug that caused replacement cover to be stored permanently
+
+# v2.0.4 Material Transitions
+
+## Additions
+* Cover transitions
+* BookShelf speed optimized
+* No more manual ordering, sorts by name now
+* Bookmarks with the same name sorted by natural ordering
+* Deletes backup file on writing success
+
+## Fixes
+* Bug with RuntimeChanges on EditBookDialog fixed
+
+# v2.0.3 Minor changes
+
+## Changes
+* Auto Bugreport opt-out now
+
+## Fixes
+* Minor bugs fixed
+
+# v2.0.2 Minor changes
+
+## Changes
+* Reverted package name
+
+# v2.0.1 Hotfix
+
+## Fixes
+* Fixed a rare crash after language change
+
+# v2.0.0 Complete rewrite
+
+There is a huge rewrite since the last release, so getting all the changes seems impossible. So I just name the biggest two.
+
+## Change number one
+You choose only your audiobook root now. Every folder in there (the main hieararchy) will be recognized as a single book. That means no more adding books. No more removing books. Just choose the folder and done.
+## Change number two
+The app stores the config for the books directly next to the book. That means you can move your folders, reinstall the app and the app will keep the books.
+
 # v1.5.4
 
 ## Additions
