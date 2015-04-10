@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
+import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.DataBaseHelper;
@@ -129,7 +130,10 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        ACRA.init(this);
+
+        if (!BuildConfig.DEBUG) {
+            ACRA.init(this);
+        }
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         prefs = new PrefsManager(this);
