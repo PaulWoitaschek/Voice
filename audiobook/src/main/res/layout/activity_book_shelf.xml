@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,26 +7,31 @@
 
     <include layout="@layout/toolbar" />
 
-    <FrameLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="72dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="?attr/actionBarSize" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="2dp" />
+    <ProgressBar
+        android:id="@+id/recyclerReplacement"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
-        <ProgressBar
-            android:id="@+id/recyclerReplacement"
-            style="@style/Widget.AppCompat.ProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
+    <RelativeLayout
+        android:id="@+id/current"
+        android:layout_width="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
 
         <View
             android:layout_width="match_parent"
@@ -34,61 +39,55 @@
             android:layout_gravity="bottom"
             android:background="@drawable/rect_shadow" />
 
-    </FrameLayout>
-
-    <LinearLayout
-        android:id="@+id/current"
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:orientation="horizontal">
-
         <ImageView
+            android:paddingTop="8dp"
             android:id="@+id/current_cover"
             android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:background="?attr/colorPrimary"
+            android:layout_centerVertical="true"
+            android:layout_height="match_parent"
+            tools:src="@drawable/icon_108dp"
             android:contentDescription="@string/current_cover" />
 
-        <FrameLayout
+        <ProgressBar
+            android:paddingTop="8dp"
+            android:id="@+id/progress"
+            android:layout_toRightOf="@id/current_cover"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="3dp"
+            tools:progress="500"
+            android:max="1000"
+            android:progressDrawable="?attr/progress_drawable" />
 
-            <ProgressBar
-                android:id="@+id/progress"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:max="1000"
-                android:progressDrawable="?attr/progress_drawable" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+        <ImageButton
+            android:paddingTop="8dp"
+            android:id="@+id/current_playing"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_width="@dimen/thumb_size"
+            android:layout_height="@dimen/thumb_size"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/current_playing"
+            android:src="?attr/book_shelf_play" />
 
-                <TextView
-                    android:id="@+id/current_text"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:textSize="20sp" />
+        <TextView
+            android:paddingTop="8dp"
+            android:id="@+id/current_text"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_toRightOf="@id/current_cover"
+            android:layout_toEndOf="@id/current_cover"
+            android:layout_toLeftOf="@id/current_playing"
+            android:layout_toStartOf="@id/current_playing"
+            tools:text="Adyashanti - Leaping beyond all fear"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:singleLine="true"
+            android:textSize="20sp" />
 
-                <ImageButton
-                    android:id="@+id/current_playing"
-                    android:layout_width="@dimen/thumb_size"
-                    android:layout_height="@dimen/thumb_size"
-                    android:contentDescription="@string/current_playing"
-                    android:src="?attr/book_shelf_play" />
+    </RelativeLayout>
 
-            </LinearLayout>
-
-        </FrameLayout>
-
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>
