@@ -12,8 +12,8 @@ public class Book implements Comparable<Book> {
 
     public static final int ID_UNKNOWN = -1;
     private long id = ID_UNKNOWN;
-    private static final String IMAGE_EXTENSION = ".jpg";
     public static final String TAG = Book.class.getSimpleName();
+    private static final String IMAGE_EXTENSION = ".jpg";
     private static final String FILE_EXTENSION = "-map.json";
     private static final String BACKUP_SUFFIX = ".backup";
     @NonNull
@@ -253,7 +253,7 @@ public class Book implements Comparable<Book> {
 
     @Override
     public int compareTo(@NonNull Book that) {
-        return new NaturalOrderComparator().compare(this.name, that.name);
+        return new NaturalStringComparator().compare(this.name, that.name);
     }
 }
 

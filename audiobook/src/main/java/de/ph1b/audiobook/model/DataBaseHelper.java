@@ -126,7 +126,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 }
             }
         }
-        Collections.sort(safeBookmarks, new BookmarkComparator(book.getChapters()));
+        Collections.sort(safeBookmarks, new NaturalBookmarkComparator(book.getChapters()));
         helper.setBookmarks(safeBookmarks);
         book.getBookmarks().addAll(safeBookmarks);
 

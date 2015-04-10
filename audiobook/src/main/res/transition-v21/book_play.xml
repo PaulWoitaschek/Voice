@@ -29,8 +29,8 @@
         </targets>
     </fade>
     <slide
-        android:slideEdge="top"
-        android:duration="300">
+        android:duration="300"
+        android:slideEdge="top">
         <targets>
             <target android:targetId="@id/previous" />
             <target android:targetId="@id/rewind" />

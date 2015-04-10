@@ -23,7 +23,7 @@ import java.util.concurrent.Executors;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
-import de.ph1b.audiobook.model.NaturalOrderComparator;
+import de.ph1b.audiobook.model.NaturalFileComparator;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
@@ -258,9 +258,9 @@ public class BookAddingService extends Service {
                 dirList.add(f);
             }
         }
-        Collections.sort(fileList, new NaturalOrderComparator());
+        Collections.sort(fileList, new NaturalFileComparator());
         returnList.addAll(fileList);
-        Collections.sort(dirList, new NaturalOrderComparator());
+        Collections.sort(dirList, new NaturalFileComparator());
         for (File f : dirList) {
             ArrayList<File> content = new ArrayList<>();
             File[] containing = f.listFiles();

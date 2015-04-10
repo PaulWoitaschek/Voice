@@ -11,9 +11,9 @@
     <include layout="@layout/toolbar" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
         <include
             layout="@layout/activity_book_play_cover"

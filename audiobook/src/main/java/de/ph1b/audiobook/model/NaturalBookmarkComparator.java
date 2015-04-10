@@ -3,12 +3,11 @@ package de.ph1b.audiobook.model;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class BookmarkComparator implements Comparator<Bookmark> {
+public class NaturalBookmarkComparator implements Comparator<Bookmark> {
 
     private final ArrayList<Chapter> chapters;
-    private final NaturalOrderComparator naturalOrderComparator = new NaturalOrderComparator();
 
-    public BookmarkComparator(ArrayList<Chapter> chapters) {
+    public NaturalBookmarkComparator(ArrayList<Chapter> chapters) {
         this.chapters = chapters;
     }
 
@@ -51,6 +50,6 @@ public class BookmarkComparator implements Comparator<Bookmark> {
         }
 
         // if there is nothing else to compare, compare the titles.
-        return naturalOrderComparator.compare(lhs.getTitle(), rhs.getTitle());
+        return NaturalComparator.compare(lhs.getTitle(), rhs.getTitle());
     }
 }

@@ -31,8 +31,8 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.BookmarkAdapter;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
-import de.ph1b.audiobook.model.BookmarkComparator;
 import de.ph1b.audiobook.model.DataBaseHelper;
+import de.ph1b.audiobook.model.NaturalBookmarkComparator;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.DividerItemDecoration;
 import de.ph1b.audiobook.utils.BaseApplication;
@@ -183,7 +183,7 @@ public class BookmarkDialog extends DialogFragment {
                 L.v(TAG, "Added bookmark=" + bookmark);
 
                 book.getBookmarks().add(bookmark);
-                Collections.sort(book.getBookmarks(), new BookmarkComparator(book.getChapters()));
+                Collections.sort(book.getBookmarks(), new NaturalBookmarkComparator(book.getChapters()));
                 db.updateBook(book);
                 bookmarkTitle.setText("");
                 Toast.makeText(getActivity(), R.string.bookmark_added, Toast.LENGTH_SHORT).show();

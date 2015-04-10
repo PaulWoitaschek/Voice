@@ -40,10 +40,10 @@ import de.ph1b.audiobook.utils.L;
 public class EditBookDialog extends DialogFragment implements View.OnClickListener {
 
     public static final String BOOK_COVER = "BOOK_COVER";
+    public static final int REPLACEMENT_DIMEN = 500;
     private static final String COVER_POSITION = "COVER_POSITION";
     private static final String TAG = EditBookDialog.class.getSimpleName();
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    public static final int REPLACEMENT_DIMEN = 500;
     /**
      * Variable representing if the first cover is a letter - cover. This is recognized by checking
      * if the pixels on the borders are the same as the color accent
@@ -59,6 +59,8 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
     private ArrayList<Bitmap> covers;
     private int googleCount = 0;
     private Book book;
+    private BaseApplication baseApplication;
+    private DataBaseHelper db;
 
     @Override
     public void onClick(View view) {
@@ -141,9 +143,6 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
         outState.putParcelableArrayList(BOOK_COVER, covers);
         outState.putInt(COVER_POSITION, coverPosition);
     }
-
-    private BaseApplication baseApplication;
-    private DataBaseHelper db;
 
     @NonNull
     @Override

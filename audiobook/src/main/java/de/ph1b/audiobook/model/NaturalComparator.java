@@ -1,23 +1,9 @@
 package de.ph1b.audiobook.model;
 
-import java.io.File;
-import java.util.Comparator;
 
-public class NaturalOrderComparator implements Comparator {
+class NaturalComparator {
 
-
-    @Override
-    public int compare(Object lhs, Object rhs) {
-        if (lhs instanceof File && rhs instanceof File) {
-            File f1 = (File) lhs;
-            File f2 = (File) rhs;
-            return compare(f1, f2);
-        } else {
-            return compare(lhs.toString(), rhs.toString());
-        }
-    }
-
-    public int compare(String lhs, String rhs) {
+    static int compare(String lhs, String rhs) {
         int ia = 0, ib = 0;
         int nza, nzb;
         char ca, cb;
@@ -69,22 +55,7 @@ public class NaturalOrderComparator implements Comparator {
         }
     }
 
-    public int compare(File f1, File f2) {
-        if (f1.isDirectory() && !f2.isDirectory()) {
-            // Directory before non-directory
-            return -1;
-        } else if (!f1.isDirectory() && f2.isDirectory()) {
-            // Non-directory after directory
-            return 1;
-        } else {
-            // Alphabetic order otherwise, ignoring Capital
-            String a = f1.getName();
-            String b = f2.getName();
-            return compare(a, b);
-        }
-    }
-
-    char charAt(String s, int i) {
+    private static char charAt(String s, int i) {
         if (i >= s.length()) {
             return 0;
         } else {
@@ -93,7 +64,7 @@ public class NaturalOrderComparator implements Comparator {
         }
     }
 
-    int compareRight(String a, String b) {
+    private static int compareRight(String a, String b) {
         int bias = 0;
         int ia = 0;
         int ib = 0;

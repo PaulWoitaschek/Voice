@@ -11,11 +11,11 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="72dp"
-        android:clipToPadding="false"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="?attr/actionBarSize" />
+        android:layout_marginTop="?attr/actionBarSize"
+        android:clipToPadding="false"
+        android:paddingBottom="72dp" />
 
     <ProgressBar
         android:id="@+id/recyclerReplacement"
@@ -82,8 +82,8 @@
     <View
         android:id="@+id/background_shadow"
         android:layout_width="match_parent"
-        android:layout_above="@id/current"
         android:layout_height="8dp"
+        android:layout_above="@id/current"
         android:layout_gravity="bottom"
         android:background="@drawable/rect_shadow" />
 
