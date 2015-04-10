@@ -6,14 +6,19 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
+import android.transition.Transition;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -71,8 +76,11 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_book_shelf);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setTitle(this.getString(R.string.app_name));
 
@@ -116,12 +124,10 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 Book book = adapter.getItem(position);
                 baseApplication.setCurrentBook(book);
                 prefs.setCurrentBookId(book.getId());
+                ViewCompat.setTransitionName(imageView, getString(R.string.cover_transition));
                 Intent intent = new Intent(BookShelfActivity.this, BookPlayActivity.class);
-                ActivityOptionsCompat options =
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(BookShelfActivity.this,
-                                imageView, getString(R.string.cover_transition));
+                @SuppressWarnings("unchecked") ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(BookShelfActivity.this, imageView, getString(R.string.cover_transition));
                 ActivityCompat.startActivity(BookShelfActivity.this, intent, options.toBundle());
-                //  initPlayerWidget();
             }
 
             @Override
@@ -305,11 +311,9 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 controller.playPause();
                 break;
             case R.id.current:
-                Intent intent = new Intent(BookShelfActivity.this, BookPlayActivity.class);
-                ActivityOptionsCompat options =
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(BookShelfActivity.this,
-                                currentCover, getString(R.string.cover_transition));
-                ActivityCompat.startActivity(BookShelfActivity.this, intent, options.toBundle());
+                Intent intent = new Intent(this, BookPlayActivity.class);
+                @SuppressWarnings("unchecked") ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(BookShelfActivity.this);
+                ActivityCompat.startActivity(this, intent, options.toBundle());
                 break;
             default:
                 break;

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 
 import de.ph1b.audiobook.R;
 
@@ -14,6 +15,8 @@ public class NoExternalStorageActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_no_external);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.no_external_storage_action_bar_title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }

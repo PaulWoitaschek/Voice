@@ -9,6 +9,8 @@
     android:orientation="vertical"
     tools:ignore="UseCompoundDrawables">
 
+    <include layout="@layout/toolbar" />
+
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"

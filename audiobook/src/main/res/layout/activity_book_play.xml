@@ -4,6 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include layout="@layout/toolbar" />
+
     <include layout="@layout/activity_book_play_cover" />
 
     <include layout="@layout/activity_book_play_player" />

@@ -18,7 +18,7 @@ import de.ph1b.audiobook.dialog.SeekPreferenceDialog;
 import de.ph1b.audiobook.dialog.SleepPreferenceDialog;
 import de.ph1b.audiobook.utils.PrefsManager;
 
-public class PreferencesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private PrefsManager prefs;
     private SharedPreferences sp;
@@ -26,11 +26,17 @@ public class PreferencesFragment extends PreferenceFragment implements SharedPre
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        prefs = new PrefsManager(getActivity());
+        sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
         addPreferencesFromResource(R.xml.preferences);
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        prefs = new PrefsManager(getActivity());
-        sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
     }
 
     @Override

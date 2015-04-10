@@ -3,10 +3,14 @@ package de.ph1b.audiobook.activity;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.widget.Toolbar;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,6 +61,16 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            Transition ts = TransitionInflater.from(this)
+                    .inflateTransition(R.transition.book_play);
+            View decor = getWindow().getDecorView();
+            int actionBarId = R.id.action_bar_container;
+            ts.excludeTarget(decor.findViewById(actionBarId), true);
+            getWindow().setEnterTransition(ts);
+        }
+
         setContentView(R.layout.activity_book_play);
 
         prefs = new PrefsManager(this);
@@ -71,6 +85,8 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         }
 
         //setup actionbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(book.getName());
 

@@ -1,6 +1,13 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="LightTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="LightTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowContentTransitions" tools:ignore="NewApi">true</item>
+        <item name="android:windowNoTitle">true</item>
+
+        <!-- Toolbar -->
+        <item name="toolbar_theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="toolbar_popup_theme">@style/ThemeOverlay.AppCompat.Light</item>
+
         <item name="colorPrimary">@color/light_primary</item>
         <item name="colorPrimaryDark">@color/light_primary_dark</item>
         <item name="colorAccent">@color/light_accent</item>
@@ -38,7 +45,14 @@
         <item name="folder_overview_trash">@drawable/ic_delete_grey600_24dp</item>
     </style>
 
-    <style name="DarkTheme" parent="Theme.AppCompat">
+    <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowContentTransitions" tools:ignore="NewApi">true</item>
+        <item name="android:windowNoTitle">true</item>
+
+        <!-- Toolbar -->
+        <item name="toolbar_theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="toolbar_popup_theme">@style/ThemeOverlay.AppCompat.Dark</item>
+
         <item name="colorPrimary">@color/dark_primary</item>
         <item name="colorPrimaryDark">@color/dark_primary_dark</item>
         <item name="colorAccent">@color/dark_accent</item>

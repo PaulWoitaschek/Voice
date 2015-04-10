@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -127,6 +128,10 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
 
         // init fields
         setContentView(R.layout.activity_folder_chooser);
+
+        // toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         //get views
         ListView listView = (ListView) findViewById(R.id.listView);
