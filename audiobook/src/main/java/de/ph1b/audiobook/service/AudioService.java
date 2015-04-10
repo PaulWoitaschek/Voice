@@ -481,7 +481,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
     @Override
     public void onPositionChanged(boolean positionChanged) {
-        if (Build.VERSION.SDK_INT >= 14 && positionChanged) {
+        if (Build.VERSION.SDK_INT >= 14 && positionChanged && controller != null) {
             updateRemoteControlClient();
         }
     }
