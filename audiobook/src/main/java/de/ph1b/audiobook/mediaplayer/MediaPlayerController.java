@@ -46,7 +46,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
     private ScheduledFuture<?> sleepSand;
     private volatile boolean stopAfterCurrentTrack = false;
     private ScheduledFuture updater = null;
-
+    private volatile int prepareTries = 0;
 
     public MediaPlayerController(BaseApplication baseApplication, Book book) {
         L.e(TAG, "constructor called with book=" + book);
@@ -108,10 +108,17 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
                     startUpdating();
                     baseApplication.setPlayState(BaseApplication.PlayState.PLAYING);
                     state = State.STARTED;
+                    prepareTries = 0;
                     break;
                 case DEAD:
                 case IDLE:
+                    if (prepareTries > 5) {
+                        prepareTries = 0;
+                        state = State.DEAD;
+                        break;
+                    }
                     prepare();
+                    prepareTries++;
                     play();
                     break;
                 default:
