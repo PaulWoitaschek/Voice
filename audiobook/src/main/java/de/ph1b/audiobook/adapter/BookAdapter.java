@@ -77,13 +77,13 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     }
 
     public interface OnItemClickListener {
-        public void onCoverClicked(int position, ImageView imageView);
+        void onCoverClicked(final int position, final ImageView imageView);
 
-        public void onMenuClicked(int position);
+        void onMenuClicked(final int position);
 
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         final ImageView coverView;
         final TextView titleView;
         final ImageButton editBook;

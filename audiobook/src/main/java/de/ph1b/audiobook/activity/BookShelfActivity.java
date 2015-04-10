@@ -12,7 +12,6 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -47,7 +46,7 @@ import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.PrefsManager;
 
-public class BookShelfActivity extends BaseActivity implements View.OnClickListener, EditBookDialog.OnEditBookFinished, BaseApplication.OnBookAddedListener, BaseApplication.OnBookDeletedListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener, BaseApplication.OnScannerStateChangedListener, BaseApplication.OnCurrentBookChangedListener {
+public class BookShelfActivity extends BaseActivity implements View.OnClickListener, EditBookDialog.OnEditBookFinished, BaseApplication.OnBookAddedListener, BaseApplication.OnBookDeletedListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener, BaseApplication.OnScannerStateChangedListener {
 
     private static final String TAG = BookShelfActivity.class.getSimpleName();
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -73,7 +72,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_book_shelf);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -117,14 +115,15 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         currentPlaying.setOnClickListener(this);
         BookAdapter.OnItemClickListener onClickListener = new BookAdapter.OnItemClickListener() {
             @Override
-            public void onCoverClicked(int position, ImageView imageView) {
+            public void onCoverClicked(int position, final ImageView imageView) {
                 Book book = adapter.getItem(position);
                 baseApplication.setCurrentBook(book);
                 prefs.setCurrentBookId(book.getId());
-                ViewCompat.setTransitionName(imageView, getString(R.string.cover_transition));
-                Intent intent = new Intent(BookShelfActivity.this, BookPlayActivity.class);
-                @SuppressWarnings("unchecked") ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(BookShelfActivity.this, imageView, getString(R.string.cover_transition));
-                ActivityCompat.startActivity(BookShelfActivity.this, intent, options.toBundle());
+
+                ActivityCompat.startActivity(
+                        BookShelfActivity.this,
+                        new Intent(BookShelfActivity.this, BookPlayActivity.class),
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(BookShelfActivity.this, imageView, getString(R.string.cover_transition)).toBundle());
             }
 
             @Override
@@ -179,7 +178,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
         baseApplication.addOnPlayStateChangedListener(this);
         baseApplication.addOnPositionChangedListener(this);
-        baseApplication.addOnCurrentBookChangedListener(this);
 
         // Scanning for new files here in case there are changes on the drive.
         baseApplication.bookLock.lock();
@@ -309,7 +307,8 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.current:
                 Intent intent = new Intent(this, BookPlayActivity.class);
-                @SuppressWarnings("unchecked") ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(BookShelfActivity.this);
+                @SuppressWarnings("unchecked") ActivityOptionsCompat options =
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(BookShelfActivity.this);
                 ActivityCompat.startActivity(this, intent, options.toBundle());
                 break;
             default:
@@ -350,7 +349,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
         baseApplication.removeOnBookAddedListener(this);
         baseApplication.removeOnBookDeletedListener(this);
-        baseApplication.removeOnCurrentBookChangedListener(this);
         baseApplication.removeOnPlayStateChangedListener(this);
         baseApplication.removeOnPositionChangedListener(this);
         baseApplication.removeOnScannerStateChangedListener(this);
@@ -373,16 +371,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void run() {
                 toggleRecyclerVisibilities(active);
-            }
-        });
-    }
-
-    @Override
-    public void onCurrentBookChanged(Book book) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                initPlayerWidget();
             }
         });
     }

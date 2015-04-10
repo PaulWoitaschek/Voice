@@ -1,32 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
-    android:transitionOrdering="sequential">
-    <fade android:duration="100">
+    android:transitionOrdering="together">
+    <changeImageTransform>
+        <targets>
+            <target android:targetName="@string/cover_transition" />
+            <target android:targetId="@id/book_cover" />
+        </targets>
+    </changeImageTransform>
+    <changeBounds>
+        <targets>
+            <target android:targetName="@string/cover_transition" />
+            <target android:targetId="@id/book_cover" />
+        </targets>
+    </changeBounds>
+    <fade>
         <targets>
             <target android:excludeId="@android:id/statusBarBackground" />
             <target android:excludeId="@android:id/navigationBarBackground" />
             <target android:excludeId="@id/toolbar" />
         </targets>
     </fade>
-    <changeImageTransform android:duration="20">
-        <targets>
-            <target android:targetName="@string/cover_transition" />
-            <target android:targetName="@string/cover_transition" />
-        </targets>
-    </changeImageTransform>
-    <slide
-        android:slideEdge="top"
-        android:duration="200">
+    <fade android:duration="300">
         <targets>
             <target android:targetId="@id/book_spinner" />
             <target android:targetId="@id/played" />
             <target android:targetId="@id/seekBar" />
             <target android:targetId="@id/maxTime" />
         </targets>
-    </slide>
+    </fade>
     <slide
         android:slideEdge="top"
-        android:duration="200">
+        android:duration="300">
         <targets>
             <target android:targetId="@id/previous" />
             <target android:targetId="@id/rewind" />

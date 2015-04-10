@@ -7,7 +7,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
@@ -61,17 +60,12 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_book_play);
 
         if (Build.VERSION.SDK_INT >= 21) {
-            Transition ts = TransitionInflater.from(this)
-                    .inflateTransition(R.transition.book_play);
-            View decor = getWindow().getDecorView();
-            int actionBarId = R.id.action_bar_container;
-            ts.excludeTarget(decor.findViewById(actionBarId), true);
-            getWindow().setEnterTransition(ts);
+            Transition transition = TransitionInflater.from(this).inflateTransition(R.transition.book_play);
+            getWindow().setEnterTransition(transition);
         }
-
-        setContentView(R.layout.activity_book_play);
 
         prefs = new PrefsManager(this);
         controller = new ServiceController(this);
@@ -306,7 +300,8 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                 return true;
             case android.R.id.home:
             case R.id.home:
-                ActivityCompat.finishAfterTransition(this);
+                onBackPressed();
+                //ActivityCompat.finishAfterTransition(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
