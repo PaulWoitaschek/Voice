@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,8 +16,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.transition.Fade;
-import android.transition.Transition;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -229,7 +226,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             String bookName = book.getName();
             Drawable coverReplacement = new CoverReplacement(bookName, this);
             if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-                Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(currentCover);
+                Picasso.with(this).load(coverFile).fit().placeholder(coverReplacement).into(currentCover);
             } else {
                 currentCover.setImageDrawable(coverReplacement);
             }
