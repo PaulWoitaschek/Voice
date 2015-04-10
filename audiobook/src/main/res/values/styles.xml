@@ -2,6 +2,9 @@
 
     <style name="LightTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowContentTransitions" tools:ignore="NewApi">true</item>
+        <item name="android:windowActivityTransitions" tools:ignore="NewApi">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap" tools:ignore="NewApi">false</item>
+        <item name="android:windowAllowReturnTransitionOverlap" tools:ignore="NewApi">false</item>
         <item name="android:windowNoTitle">true</item>
 
         <!-- Toolbar -->
@@ -47,6 +50,9 @@
 
     <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowContentTransitions" tools:ignore="NewApi">true</item>
+        <item name="android:windowActivityTransitions" tools:ignore="NewApi">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap" tools:ignore="NewApi">false</item>
+        <item name="android:windowAllowReturnTransitionOverlap" tools:ignore="NewApi">false</item>
         <item name="android:windowNoTitle">true</item>
 
         <!-- Toolbar -->
