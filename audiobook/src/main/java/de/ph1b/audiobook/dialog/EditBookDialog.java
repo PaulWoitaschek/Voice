@@ -55,7 +55,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
     private ImageButton nextCover;
     private EditText nameEditText;
     private AddCoverAsync addCoverAsync;
-    private int coverPosition = -1;
+    private int coverPosition = 0;
     private ArrayList<Bitmap> covers;
     private int googleCount = 0;
     private Book book;
@@ -133,7 +133,6 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
             covers = savedInstanceState.getParcelableArrayList(BOOK_COVER);
             coverPosition = savedInstanceState.getInt(COVER_POSITION);
         }
-
     }
 
     @Override
@@ -180,6 +179,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
         MaterialDialog.ButtonCallback buttonCallback = new MaterialDialog.ButtonCallback() {
             @Override
             public void onPositive(MaterialDialog dialog) {
+                L.d(TAG, "edit book positive clicked. CoverPosition=" + coverPosition);
                 if (addCoverAsync != null && !addCoverAsync.isCancelled()) {
                     addCoverAsync.cancel(true);
                 }
@@ -187,21 +187,19 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
                 baseApplication.bookLock.lock();
                 try {
                     String bookName = nameEditText.getText().toString();
-                    if (covers.size() > 0) {
-                        Rect r = coverImageView.getCropPosition();
-                        if (r.width() > 0 && r.height() > 0) {
-                            Bitmap cover = covers.get(coverPosition);
-                            cover = Bitmap.createBitmap(cover, r.left, r.top, r.width(), r.height());
-                            ImageHelper.saveCover(cover, getActivity(), book.getRoot(), book.getChapters());
-                            book.setUseCoverReplacement(false);
-                        } else if (coverPosition == 0) {
-                            book.setUseCoverReplacement(true);
-                        }
+                    Rect r = coverImageView.getCropPosition();
+                    if (coverPosition > 0 && r.width() > 0 && r.height() > 0) {
+                        Bitmap cover = covers.get(coverPosition);
+                        cover = Bitmap.createBitmap(cover, r.left, r.top, r.width(), r.height());
+                        ImageHelper.saveCover(cover, getActivity(), book.getRoot(), book.getChapters());
+                        book.setUseCoverReplacement(false);
+                    } else {
+                        book.setUseCoverReplacement(true);
                     }
+
                     book.setName(bookName);
                     db.updateBook(book);
                     Picasso.with(getActivity()).invalidate(book.getCoverFile());
-
 
                     ((OnEditBookFinished) getActivity()).onEditBookFinished(book);
                 } finally {
@@ -323,11 +321,9 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
                     }
                 } else {
                     //if we found no bitmap, set old one
-                    if (coverPosition != -1) {
-                        cover.setImageBitmap(covers.get(coverPosition));
-                        if (coverPosition == 0) {
-                            previousCover.setVisibility(View.INVISIBLE);
-                        }
+                    cover.setImageBitmap(covers.get(coverPosition));
+                    if (coverPosition == 0) {
+                        previousCover.setVisibility(View.INVISIBLE);
                     }
                 }
             }
