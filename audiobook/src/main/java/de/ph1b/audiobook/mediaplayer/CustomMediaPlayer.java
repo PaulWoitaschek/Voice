@@ -277,6 +277,9 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                 throw new IOException();
             }
             final MediaFormat oFormat = extractor.getTrackFormat(TRACK_NUM);
+            if (oFormat == null) {
+                error("initStream", state);
+            }
             int sampleRate = oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
             int channelCount = oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
             final String mime = oFormat.getString(MediaFormat.KEY_MIME);
