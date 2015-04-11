@@ -63,6 +63,7 @@ public class BookAddingService extends Service {
         audioTypes.add(".aac");
         audioTypes.add(".flac");
         audioTypes.add(".mkv");
+        audioTypes.add(".wma");
         if (Build.VERSION.SDK_INT >= 21) {
             audioTypes.add(".opus");
         }
