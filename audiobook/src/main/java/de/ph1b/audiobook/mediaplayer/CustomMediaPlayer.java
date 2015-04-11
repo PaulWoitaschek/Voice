@@ -274,11 +274,13 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
             if (path != null) {
                 extractor.setDataSource(path);
             } else {
+                error("initStream", state);
                 throw new IOException();
             }
             final MediaFormat oFormat = extractor.getTrackFormat(TRACK_NUM);
             if (oFormat == null) {
                 error("initStream", state);
+                throw new IOException();
             }
             int sampleRate = oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
             int channelCount = oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
