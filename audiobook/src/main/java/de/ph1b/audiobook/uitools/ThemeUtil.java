@@ -22,19 +22,11 @@ public class ThemeUtil {
 
     public static void theme(SeekBar seekBar) {
         if (Build.VERSION.SDK_INT < 21) {
-            int colorAccent = getColorAccent(seekBar.getContext());
+            int colorAccent = seekBar.getResources().getColor(ThemeUtil.getResourceId(seekBar.getContext(), R.attr.colorAccent));
             seekBar.getProgressDrawable().setColorFilter(colorAccent, PorterDuff.Mode.SRC_ATOP);
             if (Build.VERSION.SDK_INT >= 16) {
                 seekBar.getThumb().setColorFilter(colorAccent, PorterDuff.Mode.SRC_ATOP);
             }
-        }
-    }
-
-    public static int getColorAccent(Context c) {
-        if (getTheme(c) == R.style.LightTheme) {
-            return c.getResources().getColor(R.color.light_accent);
-        } else {
-            return c.getResources().getColor(R.color.dark_accent);
         }
     }
 
@@ -53,14 +45,6 @@ public class ThemeUtil {
         }
     }
 
-    public static int getColorPrimaryDark(Context c) {
-        if (getTheme(c) == R.style.LightTheme) {
-            return c.getResources().getColor(R.color.light_primary_dark);
-        } else {
-            return c.getResources().getColor(R.color.dark_primary_dark);
-        }
-    }
-
     public static int getResourceId(Context c, int attr) {
         TypedValue typedValue = new TypedValue();
         c.getTheme().resolveAttribute(attr, typedValue, true);
@@ -68,7 +52,7 @@ public class ThemeUtil {
         TypedArray typedArray = c.obtainStyledAttributes(typedValue.data, attrArray);
         int resId = typedArray.getResourceId(0, -1);
         if (resId == -1) {
-            throw new IllegalArgumentException("Icon with attr=" + attr + " not found");
+            throw new IllegalArgumentException("Resource with attr=" + attr + " not found");
         }
         typedArray.recycle();
         return resId;
@@ -84,7 +68,7 @@ public class ThemeUtil {
                         try {
                             Field selectorWheelPaintField = numberPicker.getClass().getDeclaredField("mSelectorWheelPaint");
                             selectorWheelPaintField.setAccessible(true);
-                            int colorAccent = getColorAccent(numberPicker.getContext());
+                            int colorAccent = numberPicker.getResources().getColor(ThemeUtil.getResourceId(numberPicker.getContext(), R.attr.colorAccent));
                             ((Paint) selectorWheelPaintField.get(numberPicker)).setColor(colorAccent);
                             ((EditText) child).setTextColor(colorAccent);
                             numberPicker.invalidate();

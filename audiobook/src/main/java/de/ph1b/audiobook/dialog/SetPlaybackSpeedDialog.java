@@ -54,9 +54,10 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
         int seekProgress = (int) ((speed - SPEED_MIN) * (seekMaxSteps + 1) / (SPEED_MAX - SPEED_MIN));
         seekBar.setProgress(seekProgress);
 
-        seekBar.getProgressDrawable().setColorFilter(ThemeUtil.getColorAccent(getActivity()), PorterDuff.Mode.SRC_ATOP);
+        int color = getResources().getColor(ThemeUtil.getResourceId(getActivity(), R.attr.colorAccent));
+        seekBar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
         if (Build.VERSION.SDK_INT >= 16) {
-            seekBar.getThumb().setColorFilter(ThemeUtil.getColorAccent(getActivity()), PorterDuff.Mode.SRC_ATOP);
+            seekBar.getThumb().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
         }
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

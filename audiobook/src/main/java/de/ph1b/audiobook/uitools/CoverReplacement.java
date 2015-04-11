@@ -10,6 +10,8 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 
+import de.ph1b.audiobook.R;
+
 
 public class CoverReplacement extends Drawable {
 
@@ -27,7 +29,14 @@ public class CoverReplacement extends Drawable {
         textPaint.setTypeface(Typeface.SANS_SERIF);
 
         backgroundPaint = new Paint();
-        backgroundPaint.setColor(ThemeUtil.getColorPrimaryDark(c));
+
+        int color;
+        if (ThemeUtil.getTheme(c) == R.style.LightTheme) {
+            color = c.getResources().getColor(R.color.light_primary_dark);
+        } else {
+            color = c.getResources().getColor(R.color.dark_primary_dark);
+        }
+        backgroundPaint.setColor(color);
     }
 
     @Override

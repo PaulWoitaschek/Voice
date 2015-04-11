@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- dark theme -->
+    <!-- # dark theme -->
+    <!-- blue grey 700 -->
     <color name="dark_primary">#ff455a64</color>
-    <color name="dark_primary_dark">#ff37474f</color>
+    <!-- blue grey 900 -->
+    <color name="dark_primary_dark">#ff263238</color>
+    <!-- pink 500 -->
     <color name="dark_accent">#ffe91e63</color>
-    <color name="dark_accent_dark">#ffc2185b</color>
-    <color name="dark_text_primary">@color/primary_text_default_material_dark</color>
-    <color name="dark_text_secondary">@color/secondary_text_default_material_dark</color>
+    <!-- ## text colors -->
+    <color name="dark_text_primary">@color/abc_primary_text_material_dark</color>
+    <color name="dark_text_secondary">@color/abc_secondary_text_material_dark</color>
 
-    <!-- light theme -->
-    <color name="light_primary">#ff7986cb</color>
-    <color name="light_primary_dark">#ff5c6bc0</color>
-    <color name="light_accent">#ff009688</color>
-    <color name="light_accent_dark">#ff00796b</color>
-    <color name="light_text_primary">@color/primary_text_default_material_light</color>
-    <color name="light_text_secondary">@color/secondary_text_default_material_light</color>
+    <!-- # light theme -->
+    <!-- indigo 500 -->
+    <color name="light_primary">#ff3f51b5</color>
+    <!-- indigo 700 -->
+    <color name="light_primary_dark">#ff303f9f</color>
+    <!-- pink 500 -->
+    <color name="light_accent">#ffe91e63</color>
+    <!-- ## text colors -->
+    <color name="light_text_primary">@color/abc_primary_text_material_light</color>
+    <color name="light_text_secondary">@color/abc_primary_text_material_light</color>
 
-    <color name="notification_background_color">@color/background_material_dark</color>
-    <color name="notification_text_color_primary">@color/dark_text_primary</color>
-    <color name="notification_text_secondary">@color/dark_text_secondary</color>
+    <!-- # widget -->
+    <color name="widget_background">@color/background_material_dark</color>
 </resources>
