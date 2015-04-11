@@ -2,7 +2,7 @@ package de.ph1b.audiobook.model;
 
 import java.util.Comparator;
 
-public class NaturalStringComparator implements Comparator<String> {
+class NaturalStringComparator implements Comparator<String> {
 
 
     @Override
