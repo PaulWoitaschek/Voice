@@ -36,10 +36,8 @@ import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.BaseApplication.PlayState;
-import de.ph1b.audiobook.utils.L;
 
 public class WidgetUpdateService extends Service implements BaseApplication.OnPositionChangedListener, BaseApplication.OnCurrentBookChangedListener, BaseApplication.OnPlayStateChangedListener {
-    private static final String TAG = WidgetUpdateService.class.getSimpleName();
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private BaseApplication baseApplication;
     private AppWidgetManager appWidgetManager;
@@ -56,11 +54,14 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(final Intent intent, final int flags, final int startId) {
         updateWidget();
         return Service.START_STICKY;
     }
 
+    /**
+     * Asynchronously updates the widget
+     */
     private void updateWidget() {
         executor.execute(new Runnable() {
             @Override
@@ -92,7 +93,7 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
                                 useHeight = minHeight;
                             }
                             if (useWidth > 0 && useHeight > 0) {
-                                hideElements(remoteViews, useWidth, useHeight, book.getChapters().size() == 1);
+                                setVisibilities(remoteViews, useWidth, useHeight, book.getChapters().size() == 1);
                             }
                         }
                     } else {
@@ -118,7 +119,7 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
      * Returning if the current orientation is portrait. If it is unknown, measure the display-spec
      * and return accordingly.
      *
-     * @return if the current orientation is portrait
+     * @return true if the current orientation is portrait
      */
     private boolean isPortrait() {
         int orientation = getResources().getConfiguration().orientation;
@@ -131,7 +132,14 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
         return orientation != Configuration.ORIENTATION_LANDSCAPE && (orientation == Configuration.ORIENTATION_PORTRAIT || displayWidth == displayHeight || displayWidth < displayHeight);
     }
 
-    private void initElements(RemoteViews remoteViews, @NonNull Book book) {
+
+    /**
+     * Initializes the elements of the widgets with a book
+     *
+     * @param remoteViews The Widget RemoteViews
+     * @param book        The book to be initalized
+     */
+    private void initElements(@NonNull final RemoteViews remoteViews, @NonNull final Book book) {
         Intent playPauseI = ServiceController.getPlayPauseIntent(this);
         PendingIntent playPausePI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseI, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI);
@@ -184,54 +192,94 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
         remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI);
     }
 
-    private int dpToPx(int dp) {
+    /**
+     * Converts dp to px
+     *
+     * @param dp the dp to be converted
+     * @return the px the dp represent
+     */
+    private int dpToPx(final int dp) {
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics()));
     }
 
-    private void hideElements(RemoteViews remoteViews, int width, int height, boolean singleChapter) {
-        L.v(TAG, "hideElements called");
 
-        hideX(remoteViews, width, height);
-        hideY(remoteViews, height, singleChapter);
+    /**
+     * Sets visibilities on widgets element, depending on the size of the widget
+     *
+     * @param remoteViews   the widget the widget RemoteViews
+     * @param width         the width of the widget
+     * @param height        the height of the widget
+     * @param singleChapter if true if the book has only one chapter
+     */
+    private void setVisibilities(@NonNull final RemoteViews remoteViews, final int width, final int height, final boolean singleChapter) {
+        setXVisibility(remoteViews, width, height);
+        setYVisibility(remoteViews, height, singleChapter);
     }
 
-    private void hideX(RemoteViews remoteViews, int width, int height) {
-        int buttonSize = dpToPx(4 + 36 + 4);
+
+    /**
+     * Set visibilities dependent on widget width.
+     *
+     * @param remoteViews the widget RemoteViews
+     * @param widgetWidth The widget width
+     * @param coverSize   The cover size
+     */
+    private void setXVisibility(@NonNull final RemoteViews remoteViews, final int widgetWidth, final int coverSize) {
+        int singleButtonSize = dpToPx(4 + 36 + 4);
+        int summarizedItemWidth = 3 * singleButtonSize + coverSize; // widget height because cover is square
+
+        // set all views visible
         remoteViews.setViewVisibility(R.id.imageView, View.VISIBLE);
         remoteViews.setViewVisibility(R.id.rewind, View.VISIBLE);
         remoteViews.setViewVisibility(R.id.fast_forward, View.VISIBLE);
-        if (width > 3 * buttonSize + height) {
-            return;
+
+        // hide cover if we need space
+        if (summarizedItemWidth > widgetWidth) {
+            remoteViews.setViewVisibility(R.id.imageView, View.GONE);
+            summarizedItemWidth -= coverSize;
         }
-        remoteViews.setViewVisibility(R.id.imageView, View.GONE);
-        if (width > 3 * buttonSize) {
-            return;
+
+        // hide fast forward if we need space
+        if (summarizedItemWidth > widgetWidth) {
+            remoteViews.setViewVisibility(R.id.fast_forward, View.GONE);
+            summarizedItemWidth -= singleButtonSize;
         }
-        remoteViews.setViewVisibility(R.id.fast_forward, View.GONE);
-        if (width > 2 * buttonSize) {
-            return;
+
+        // hide rewind if we need space
+        if (summarizedItemWidth > widgetWidth) {
+            remoteViews.setViewVisibility(R.id.rewind, View.GONE);
         }
-        remoteViews.setViewVisibility(R.id.rewind, View.GONE);
     }
 
-    private void hideY(RemoteViews remoteViews, int height, boolean singleChapter) {
-        int buttonSize = dpToPx(4 + 36 + 4);
-        int titleSize = getResources().getDimensionPixelSize(R.dimen.widget_title_size);
-        int summarySize = getResources().getDimensionPixelSize(R.dimen.widget_summary_size);
-        int stackedHeight = buttonSize + titleSize + summarySize;
 
-        if (height > stackedHeight) {
-            if (singleChapter) {
-                remoteViews.setViewVisibility(R.id.summary, View.GONE);
-            }
-            return;
+    /**
+     * Sets visibilities dependent on widget height.
+     *
+     * @param remoteViews   The Widget RemoteViews
+     * @param widgetHeight  The widget height
+     * @param singleChapter true if the book has only one chapter
+     */
+    private void setYVisibility(@NonNull final RemoteViews remoteViews, final int widgetHeight, final boolean singleChapter) {
+        int buttonSize = dpToPx(4 + 36 + 4);
+        int titleSize = getResources().getDimensionPixelSize(R.dimen.list_text_primary_size);
+        int summarySize = getResources().getDimensionPixelSize(R.dimen.list_text_secondary_size);
+
+        int summarizedItemsHeight = buttonSize + titleSize + summarySize;
+
+        // first setting all views visible
+        remoteViews.setViewVisibility(R.id.summary, View.VISIBLE);
+        remoteViews.setViewVisibility(R.id.title, View.VISIBLE);
+
+        // when we are in a single chapter or we are to high, hide summary
+        if (singleChapter || widgetHeight < summarizedItemsHeight) {
+            remoteViews.setViewVisibility(R.id.summary, View.GONE);
+            summarizedItemsHeight -= summarySize;
         }
-        remoteViews.setViewVisibility(R.id.summary, View.GONE);
-        stackedHeight = buttonSize + titleSize;
-        if (height > stackedHeight) {
-            return;
+
+        // if we ar still to high, hide title
+        if (summarizedItemsHeight > widgetHeight) {
+            remoteViews.setViewVisibility(R.id.title, View.GONE);
         }
-        remoteViews.setViewVisibility(R.id.title, View.GONE);
     }
 
     @Override
@@ -245,7 +293,7 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newCfg) {
+    public void onConfigurationChanged(final Configuration newCfg) {
         int oldOrientation = this.getResources().getConfiguration().orientation;
         int newOrientation = newCfg.orientation;
 
@@ -255,22 +303,22 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
+    public IBinder onBind(final Intent intent) {
         return null;
     }
 
     @Override
-    public void onPositionChanged(boolean positionChanged) {
+    public void onPositionChanged(final boolean positionChanged) {
         updateWidget();
     }
 
     @Override
-    public void onCurrentBookChanged(Book book) {
+    public void onCurrentBookChanged(final Book book) {
         updateWidget();
     }
 
     @Override
-    public void onPlayStateChanged(PlayState state) {
+    public void onPlayStateChanged(final PlayState state) {
         updateWidget();
     }
 }
