@@ -5,8 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
-import android.graphics.PixelFormat;
-import android.graphics.Typeface;
+import android.graphics.Paint.Align;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 
@@ -22,27 +22,27 @@ public class CoverReplacement extends Drawable {
     public CoverReplacement(String text, Context c) {
         this.text = text;
 
-        textPaint = new TextPaint();
+        // text
+        textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setColor(Color.WHITE);
-        textPaint.setAntiAlias(true);
-        textPaint.setTextAlign(Paint.Align.CENTER);
-        textPaint.setTypeface(Typeface.SANS_SERIF);
+        textPaint.setTextAlign(Align.CENTER);
 
-        backgroundPaint = new Paint();
-
+        // background
         int color;
         if (ThemeUtil.getTheme(c) == R.style.LightTheme) {
             color = c.getResources().getColor(R.color.light_primary_dark);
         } else {
             color = c.getResources().getColor(R.color.dark_primary_dark);
         }
+        backgroundPaint = new Paint();
         backgroundPaint.setColor(color);
     }
 
     @Override
     public void draw(Canvas canvas) {
-        int height = getBounds().height();
-        int width = getBounds().width();
+        Rect rect = getBounds();
+        int height = rect.height();
+        int width = rect.width();
 
         textPaint.setTextSize(2f * width / 3f);
 
@@ -65,6 +65,6 @@ public class CoverReplacement extends Drawable {
 
     @Override
     public int getOpacity() {
-        return PixelFormat.TRANSLUCENT;
+        return textPaint.getAlpha();
     }
 }
