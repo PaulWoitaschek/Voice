@@ -146,7 +146,7 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
 
         Intent fastForwardI = ServiceController.getFastForwardIntent(this);
         PendingIntent fastForwardPI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, fastForwardI, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.fast_forward, fastForwardPI);
+        remoteViews.setOnClickPendingIntent(R.id.fastForward, fastForwardPI);
 
         Intent rewindI = ServiceController.getRewindIntent(this);
         PendingIntent rewindPI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_REWIND, rewindI, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -231,7 +231,7 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
         // set all views visible
         remoteViews.setViewVisibility(R.id.imageView, View.VISIBLE);
         remoteViews.setViewVisibility(R.id.rewind, View.VISIBLE);
-        remoteViews.setViewVisibility(R.id.fast_forward, View.VISIBLE);
+        remoteViews.setViewVisibility(R.id.fastForward, View.VISIBLE);
 
         // hide cover if we need space
         if (summarizedItemWidth > widgetWidth) {
@@ -241,7 +241,7 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
 
         // hide fast forward if we need space
         if (summarizedItemWidth > widgetWidth) {
-            remoteViews.setViewVisibility(R.id.fast_forward, View.GONE);
+            remoteViews.setViewVisibility(R.id.fastForward, View.GONE);
             summarizedItemWidth -= singleButtonSize;
         }
 

@@ -8,8 +8,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
+import android.transition.TransitionSet;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -63,8 +67,35 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         setContentView(R.layout.activity_book_play);
 
         if (Build.VERSION.SDK_INT >= 21) {
-            Transition transition = TransitionInflater.from(this).inflateTransition(R.transition.book_play);
-            getWindow().setEnterTransition(transition);
+            Transition sharedElementEnterTransition = TransitionInflater.from(this).inflateTransition(android.R.transition.move);
+            sharedElementEnterTransition.setStartDelay(100);
+            sharedElementEnterTransition.excludeTarget(android.R.id.statusBarBackground, true);
+            sharedElementEnterTransition.excludeTarget(android.R.id.navigationBarBackground, true);
+            sharedElementEnterTransition.excludeTarget(R.id.toolbar, true);
+            getWindow().setSharedElementEnterTransition(sharedElementEnterTransition);
+
+            TransitionSet enterTransitionSet = new TransitionSet();
+            enterTransitionSet.setOrdering(TransitionSet.ORDERING_SEQUENTIAL);
+            enterTransitionSet.excludeTarget(android.R.id.statusBarBackground, true);
+            enterTransitionSet.excludeTarget(android.R.id.navigationBarBackground, true);
+            enterTransitionSet.excludeTarget(R.id.toolbar, true);
+
+            Transition player = new Slide(Gravity.TOP);
+            player.addTarget(R.id.previous);
+            player.addTarget(R.id.rewind);
+            player.addTarget(R.id.play);
+            player.addTarget(R.id.fastForward);
+            player.addTarget(R.id.next);
+            enterTransitionSet.addTransition(player);
+
+            Transition info = new Fade();
+            info.addTarget(R.id.book_spinner);
+            info.addTarget(R.id.played);
+            info.addTarget(R.id.seekBar);
+            info.addTarget(R.id.maxTime);
+            enterTransitionSet.addTransition(info);
+
+            getWindow().setEnterTransition(enterTransitionSet);
         }
 
         prefs = new PrefsManager(this);
@@ -88,7 +119,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         seekBar = (SeekBar) findViewById(R.id.seekBar);
         play_button = (ImageButton) findViewById(R.id.play);
         ImageButton rewind_button = (ImageButton) findViewById(R.id.rewind);
-        ImageButton fast_forward_button = (ImageButton) findViewById(R.id.fast_forward);
+        ImageButton fast_forward_button = (ImageButton) findViewById(R.id.fastForward);
         ImageButton previous_button = (ImageButton) findViewById(R.id.previous);
         ImageButton next_button = (ImageButton) findViewById(R.id.next);
         playedTimeView = (TextView) findViewById(R.id.played);
@@ -235,7 +266,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             case R.id.rewind:
                 controller.rewind();
                 break;
-            case R.id.fast_forward:
+            case R.id.fastForward:
                 controller.fastForward();
                 break;
             case R.id.next:

@@ -78,7 +78,7 @@
             android:src="@drawable/ic_play_circle_fill_black_72dp" />
 
         <ImageButton
-            android:id="@+id/fast_forward"
+            android:id="@+id/fastForward"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"

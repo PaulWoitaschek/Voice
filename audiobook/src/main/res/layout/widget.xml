@@ -76,7 +76,7 @@
                 android:src="@drawable/ic_play_arrow_white_36dp" />
 
             <ImageButton
-                android:id="@+id/fast_forward"
+                android:id="@+id/fastForward"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

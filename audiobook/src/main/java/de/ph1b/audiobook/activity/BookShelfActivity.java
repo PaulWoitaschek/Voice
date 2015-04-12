@@ -5,16 +5,18 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
+import android.transition.Transition;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -69,10 +71,19 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         return intent;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_shelf);
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            Transition exitTransition = new Fade();
+            exitTransition.excludeTarget(android.R.id.statusBarBackground, true);
+            exitTransition.excludeTarget(android.R.id.navigationBarBackground, true);
+            exitTransition.excludeTarget(R.id.toolbar, true);
+            getWindow().setExitTransition(exitTransition);
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -115,17 +126,17 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         currentPlaying.setOnClickListener(this);
         BookAdapter.OnItemClickListener onClickListener = new BookAdapter.OnItemClickListener() {
             @Override
-            public void onCoverClicked(int position, final ImageView imageView) {
+            public void onCoverClicked(int position, final ViewGroup itemView) {
                 Book book = adapter.getItem(position);
                 baseApplication.setCurrentBook(book);
                 prefs.setCurrentBookId(book.getId());
 
-                ViewCompat.setTransitionName(imageView, getString(R.string.cover_transition));
-
                 ActivityCompat.startActivity(
                         BookShelfActivity.this,
                         new Intent(BookShelfActivity.this, BookPlayActivity.class),
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(BookShelfActivity.this, imageView, getString(R.string.cover_transition)).toBundle());
+                        ActivityOptionsCompat
+                                .makeSceneTransitionAnimation
+                                        (BookShelfActivity.this, itemView, getString(R.string.cover_transition)).toBundle());
             }
 
             @Override
@@ -309,8 +320,9 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.current:
                 Intent intent = new Intent(this, BookPlayActivity.class);
-                @SuppressWarnings("unchecked") ActivityOptionsCompat options =
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(BookShelfActivity.this);
+
+                ActivityOptionsCompat options = ActivityOptionsCompat
+                        .makeSceneTransitionAnimation(BookShelfActivity.this, currentCover, getString(R.string.cover_transition));
                 ActivityCompat.startActivity(this, intent, options.toBundle());
                 break;
             default:

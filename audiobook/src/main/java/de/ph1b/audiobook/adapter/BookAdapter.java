@@ -47,7 +47,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_book_shelf_row_layout, parent, false);
+        ViewGroup v = (ViewGroup) LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_book_shelf_row_layout, parent, false);
         return new ViewHolder(v, onItemClickListener);
     }
 
@@ -77,7 +77,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     }
 
     public interface OnItemClickListener {
-        void onCoverClicked(final int position, final ImageView imageView);
+        void onCoverClicked(final int position, final ViewGroup itemView);
 
         void onMenuClicked(final int position);
 
@@ -88,7 +88,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         final TextView titleView;
         final ImageButton editBook;
 
-        public ViewHolder(View itemView, final OnItemClickListener onItemClickListener) {
+        public ViewHolder(final ViewGroup itemView, final OnItemClickListener onItemClickListener) {
             super(itemView);
             coverView = (ImageView) itemView.findViewById(R.id.cover);
             titleView = (TextView) itemView.findViewById(R.id.title);
@@ -97,7 +97,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
             coverView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onCoverClicked(getAdapterPosition(), coverView);
+                    onItemClickListener.onCoverClicked(getAdapterPosition(), itemView);
                 }
             });
             editBook.setOnClickListener(new View.OnClickListener() {
