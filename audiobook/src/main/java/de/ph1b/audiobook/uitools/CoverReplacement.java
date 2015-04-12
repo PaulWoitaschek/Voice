@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.utils.Validate;
 
 
 public class CoverReplacement extends Drawable {
@@ -20,6 +21,8 @@ public class CoverReplacement extends Drawable {
     private final Paint backgroundPaint;
 
     public CoverReplacement(String text, Context c) {
+        Validate.notNull(text);
+        Validate.notEmpty(text);
         this.text = text;
 
         // text
@@ -48,7 +51,7 @@ public class CoverReplacement extends Drawable {
 
         canvas.drawRect(0, 0, width, height, backgroundPaint);
         float y = (height / 2f) - ((textPaint.descent() + textPaint.ascent()) / 2f);
-        canvas.drawText(text.substring(0, 1), width / 2f, y, textPaint);
+        canvas.drawText(text, 0, 1, width / 2f, y, textPaint);
     }
 
     @Override
