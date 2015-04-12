@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
     android:transitionOrdering="together">
-    <changeImageTransform>
-        <targets>
-            <target android:targetName="@string/cover_transition" />
-            <target android:targetId="@id/book_cover" />
-        </targets>
-    </changeImageTransform>
-    <changeBounds>
-        <targets>
-            <target android:targetName="@string/cover_transition" />
-            <target android:targetId="@id/book_cover" />
-        </targets>
-    </changeBounds>
     <fade>
         <targets>
             <target android:excludeId="@android:id/statusBarBackground" />
