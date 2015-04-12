@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.text.TextPaint;
 
 import de.ph1b.audiobook.R;
@@ -20,9 +21,9 @@ public class CoverReplacement extends Drawable {
     private final Paint textPaint;
     private final Paint backgroundPaint;
 
-    public CoverReplacement(String text, Context c) {
-        Validate.notNull(text);
-        Validate.notEmpty(text);
+    public CoverReplacement(@NonNull String text, @NonNull Context c) {
+        new Validate().notNull(text)
+                .notEmpty(text);
         this.text = text;
 
         // text

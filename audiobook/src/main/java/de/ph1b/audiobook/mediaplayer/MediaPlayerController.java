@@ -50,7 +50,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
 
     public MediaPlayerController(BaseApplication baseApplication, Book book) {
         L.e(TAG, "constructor called with book=" + book);
-        Validate.notNull(baseApplication, book);
+        new Validate().notNull(baseApplication, book);
         this.c = baseApplication.getApplicationContext();
         this.book = book;
         prefs = new PrefsManager(c);

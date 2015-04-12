@@ -31,10 +31,9 @@ public class Book implements Comparable<Book> {
     private boolean useCoverReplacement;
 
     public Book(@NonNull String root, @NonNull String name, @NonNull ArrayList<Chapter> chapters, @NonNull ArrayList<Bookmark> bookmarks, float playbackSpeed, long id, int time, @NonNull String relativeMediaPath, boolean useCoverReplacement) {
-        Validate.notNull(root, name, chapters, bookmarks, relativeMediaPath);
-        Validate.notEmpty(root, name, relativeMediaPath);
-        Validate.notEmpty(chapters);
-
+        new Validate().notNull(root, name, chapters, bookmarks, relativeMediaPath)
+                .notEmpty(root, name, relativeMediaPath)
+                .notEmpty(chapters);
 
         //check if bookmark exists
         for (Bookmark b : bookmarks) {
@@ -88,8 +87,8 @@ public class Book implements Comparable<Book> {
     }
 
     public void setPosition(int time, @NonNull String relativeMediaPath) {
-        Validate.notNull(relativeMediaPath);
-        Validate.notEmpty(relativeMediaPath);
+        new Validate().notNull(relativeMediaPath)
+                .notEmpty(relativeMediaPath);
 
         boolean relativeMediaPathExists = false;
         for (Chapter c : chapters) {
@@ -210,8 +209,8 @@ public class Book implements Comparable<Book> {
     }
 
     public void setName(@NonNull String name) {
-        Validate.notNull(name);
-        Validate.notEmpty(name);
+        new Validate().notNull(name)
+                .notEmpty(name);
         this.name = name;
     }
 
