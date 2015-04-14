@@ -82,7 +82,9 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             exitTransition.excludeTarget(android.R.id.statusBarBackground, true);
             exitTransition.excludeTarget(android.R.id.navigationBarBackground, true);
             exitTransition.excludeTarget(R.id.toolbar, true);
+            exitTransition.setDuration(500);
             getWindow().setExitTransition(exitTransition);
+            getWindow().setTransitionBackgroundFadeDuration(500);
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

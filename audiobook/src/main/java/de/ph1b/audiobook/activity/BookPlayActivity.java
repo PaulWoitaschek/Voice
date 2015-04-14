@@ -68,13 +68,15 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
 
         if (Build.VERSION.SDK_INT >= 21) {
             Transition sharedElementEnterTransition = TransitionInflater.from(this).inflateTransition(android.R.transition.move);
-            sharedElementEnterTransition.setStartDelay(100);
+            //sharedElementEnterTransition.setStartDelay(100);
             sharedElementEnterTransition.excludeTarget(android.R.id.statusBarBackground, true);
             sharedElementEnterTransition.excludeTarget(android.R.id.navigationBarBackground, true);
             sharedElementEnterTransition.excludeTarget(R.id.toolbar, true);
+            sharedElementEnterTransition.setDuration(500);
             getWindow().setSharedElementEnterTransition(sharedElementEnterTransition);
 
             TransitionSet enterTransitionSet = new TransitionSet();
+            enterTransitionSet.setDuration(500);
             enterTransitionSet.setOrdering(TransitionSet.ORDERING_SEQUENTIAL);
             enterTransitionSet.excludeTarget(android.R.id.statusBarBackground, true);
             enterTransitionSet.excludeTarget(android.R.id.navigationBarBackground, true);
@@ -89,13 +91,20 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             enterTransitionSet.addTransition(player);
 
             Transition info = new Fade();
-            info.addTarget(R.id.book_spinner);
-            info.addTarget(R.id.played);
-            info.addTarget(R.id.seekBar);
-            info.addTarget(R.id.maxTime);
+            info.setDuration(500);
             enterTransitionSet.addTransition(info);
 
             getWindow().setEnterTransition(enterTransitionSet);
+
+            Transition returnTransition = new Fade();
+            returnTransition.setDuration(100);
+            returnTransition.excludeTarget(android.R.id.statusBarBackground, true);
+            returnTransition.excludeTarget(android.R.id.navigationBarBackground, true);
+            returnTransition.excludeTarget(R.id.toolbar, true);
+            getWindow().setReturnTransition(returnTransition);
+            getWindow().setExitTransition(returnTransition);
+
+            getWindow().setTransitionBackgroundFadeDuration(500);
         }
 
         prefs = new PrefsManager(this);
