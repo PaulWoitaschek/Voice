@@ -12,6 +12,7 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -145,6 +146,8 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                     options = ActivityOptionsCompat.makeSceneTransitionAnimation(BookShelfActivity.this,
                             itemView, getString(R.string.cover_transition));
                 }
+
+                ViewCompat.setTransitionName(itemView, getString(R.string.cover_transition));
 
                 ActivityCompat.startActivity(BookShelfActivity.this, new Intent
                         (BookShelfActivity.this, BookPlayActivity.class), options.toBundle());
@@ -344,6 +347,9 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                     options = ActivityOptionsCompat.makeSceneTransitionAnimation
                             (BookShelfActivity.this, currentCover, getString(R.string.cover_transition));
                 }
+
+                ViewCompat.setTransitionName(currentCover, getString(R.string.cover_transition));
+
                 ActivityCompat.startActivity(this, intent, options.toBundle());
                 break;
             default:

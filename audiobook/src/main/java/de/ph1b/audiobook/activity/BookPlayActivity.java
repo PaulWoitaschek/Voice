@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.activity;
 
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
