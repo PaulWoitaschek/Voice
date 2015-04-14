@@ -19,7 +19,7 @@ public class CoverReplacement extends Drawable {
 
     private final String text;
     private final Paint textPaint;
-    private final Paint backgroundPaint;
+    private final int backgroundColor;
 
     public CoverReplacement(@NonNull String text, @NonNull Context c) {
         new Validate().notNull(text)
@@ -32,14 +32,11 @@ public class CoverReplacement extends Drawable {
         textPaint.setTextAlign(Align.CENTER);
 
         // background
-        int color;
         if (ThemeUtil.getTheme(c) == R.style.LightTheme) {
-            color = c.getResources().getColor(R.color.light_primary_dark);
+            backgroundColor = c.getResources().getColor(R.color.light_primary_dark);
         } else {
-            color = c.getResources().getColor(R.color.dark_primary_dark);
+            backgroundColor = c.getResources().getColor(R.color.dark_primary_dark);
         }
-        backgroundPaint = new Paint();
-        backgroundPaint.setColor(color);
     }
 
     @Override
@@ -50,7 +47,7 @@ public class CoverReplacement extends Drawable {
 
         textPaint.setTextSize(2f * width / 3f);
 
-        canvas.drawRect(0, 0, width, height, backgroundPaint);
+        canvas.drawColor(backgroundColor);
         float y = (height / 2f) - ((textPaint.descent() + textPaint.ascent()) / 2f);
         canvas.drawText(text, 0, 1, width / 2f, y, textPaint);
     }
@@ -58,13 +55,11 @@ public class CoverReplacement extends Drawable {
     @Override
     public void setAlpha(int alpha) {
         textPaint.setAlpha(alpha);
-        backgroundPaint.setAlpha(alpha);
     }
 
     @Override
     public void setColorFilter(ColorFilter cf) {
         textPaint.setColorFilter(cf);
-        backgroundPaint.setColorFilter(cf);
     }
 
     @Override
