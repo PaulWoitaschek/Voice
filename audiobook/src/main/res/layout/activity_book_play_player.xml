@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:id="@+id/bottom_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -68,14 +69,15 @@
             android:contentDescription="@string/rewind"
             android:src="?attr/book_play_rewind" />
 
-        <ImageButton
+        <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
             android:id="@+id/play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
+            fab:fab_icon="@drawable/ic_play_arrow_white_24dp"
             android:contentDescription="@string/play_pause"
-            android:src="@drawable/ic_play_circle_fill_black_72dp" />
+            android:layout_margin="8dp"
+            fab:fab_colorNormal="?attr/colorAccent"
+            fab:fab_colorPressed="?attr/colorAccentDark" />
 
         <ImageButton
             android:id="@+id/fastForward"

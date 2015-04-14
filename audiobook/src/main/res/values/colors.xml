@@ -7,6 +7,8 @@
     <color name="dark_primary_dark">#ff263238</color>
     <!-- pink 500 -->
     <color name="dark_accent">#ffe91e63</color>
+    <!-- pink 700 -->
+    <color name="dark_accent_dark">#ffc2185b</color>
     <!-- ## text colors -->
     <color name="dark_text_primary">@color/abc_primary_text_material_dark</color>
     <color name="dark_text_secondary">@color/abc_secondary_text_material_dark</color>
@@ -18,6 +20,8 @@
     <color name="light_primary_dark">#ff303f9f</color>
     <!-- pink 500 -->
     <color name="light_accent">#ffe91e63</color>
+    <!-- pink 700 -->
+    <color name="light_accent_dark">#ffc2185b</color>
     <!-- ## text colors -->
     <color name="light_text_primary">@color/abc_primary_text_material_light</color>
     <color name="light_text_secondary">@color/abc_primary_text_material_light</color>

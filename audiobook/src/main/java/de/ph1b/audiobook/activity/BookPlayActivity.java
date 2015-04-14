@@ -28,6 +28,8 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -51,7 +53,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     private static final String TAG = BookPlayActivity.class.getSimpleName();
     private final Handler handler = new Handler(Looper.getMainLooper());
     private volatile int duration = 0;
-    private ImageButton play_button;
+    private FloatingActionButton playButton;
     private TextView playedTimeView;
     private SeekBar seekBar;
     private volatile Spinner bookSpinner;
@@ -126,7 +128,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
 
         //init buttons
         seekBar = (SeekBar) findViewById(R.id.seekBar);
-        play_button = (ImageButton) findViewById(R.id.play);
+        playButton = (FloatingActionButton) findViewById(R.id.play);
         ImageButton rewind_button = (ImageButton) findViewById(R.id.rewind);
         ImageButton fast_forward_button = (ImageButton) findViewById(R.id.fastForward);
         ImageButton previous_button = (ImageButton) findViewById(R.id.previous);
@@ -141,9 +143,8 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         fast_forward_button.setOnClickListener(this);
         previous_button.setOnClickListener(this);
         next_button.setOnClickListener(this);
-        play_button.setOnClickListener(this);
+        playButton.setOnClickListener(this);
         playedTimeView.setOnClickListener(this);
-        play_button.setColorFilter(getResources().getColor(ThemeUtil.getResourceId(this, R.attr.colorAccent)), PorterDuff.Mode.SRC_ATOP);
         ThemeUtil.theme(seekBar);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -258,9 +259,9 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void run() {
                 if (state == BaseApplication.PlayState.PLAYING) {
-                    play_button.setImageResource(R.drawable.ic_pause_circle_fill_black_72dp);
+                    playButton.setIcon(R.drawable.ic_pause_white_24dp);
                 } else {
-                    play_button.setImageResource(R.drawable.ic_play_circle_fill_black_72dp);
+                    playButton.setIcon(R.drawable.ic_play_arrow_white_24dp);
                 }
             }
         });

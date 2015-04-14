@@ -9,7 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.melnykov.fab.FloatingActionButton;
+
+import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -73,7 +74,6 @@ public class FolderOverviewActivity extends BaseActivity {
                 startActivity(new Intent(FolderOverviewActivity.this, FolderChooserActivity.class));
             }
         });
-        fab.attachToRecyclerView(recyclerView);
     }
 
     @Override

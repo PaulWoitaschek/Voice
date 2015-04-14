@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="theme_name" format="reference" />
+    <attr name="colorAccentDark" format="reference" />
 
     <!-- Toolbar-->
     <attr name="toolbar_theme" format="reference" />
