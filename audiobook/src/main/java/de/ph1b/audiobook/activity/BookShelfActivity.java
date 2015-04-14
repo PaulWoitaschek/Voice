@@ -131,12 +131,21 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 baseApplication.setCurrentBook(book);
                 prefs.setCurrentBookId(book.getId());
 
-                ActivityCompat.startActivity(
-                        BookShelfActivity.this,
-                        new Intent(BookShelfActivity.this, BookPlayActivity.class),
-                        ActivityOptionsCompat
-                                .makeSceneTransitionAnimation
-                                        (BookShelfActivity.this, itemView, getString(R.string.cover_transition)).toBundle());
+                /**
+                 * Workaround. If we use a fake cover image transition will fail. So we don't du image transition in that case.
+                 */
+                boolean fakeCover = book.isUseCoverReplacement() || !book.getCoverFile().exists();
+                ActivityOptionsCompat options;
+                if (fakeCover) {
+                    //noinspection unchecked
+                    options = ActivityOptionsCompat.makeSceneTransitionAnimation(BookShelfActivity.this);
+                } else {
+                    options = ActivityOptionsCompat.makeSceneTransitionAnimation(BookShelfActivity.this,
+                            itemView, getString(R.string.cover_transition));
+                }
+
+                ActivityCompat.startActivity(BookShelfActivity.this, new Intent
+                        (BookShelfActivity.this, BookPlayActivity.class), options.toBundle());
             }
 
             @Override
@@ -321,8 +330,18 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             case R.id.current:
                 Intent intent = new Intent(this, BookPlayActivity.class);
 
-                ActivityOptionsCompat options = ActivityOptionsCompat
-                        .makeSceneTransitionAnimation(BookShelfActivity.this, currentCover, getString(R.string.cover_transition));
+                /**
+                 * Workaround. If we use a fake cover image transition will fail. So we don't du image transition in that case.
+                 */
+                boolean fakeCover = baseApplication.getCurrentBook() != null && (baseApplication.getCurrentBook().isUseCoverReplacement() || !baseApplication.getCurrentBook().getCoverFile().exists());
+                ActivityOptionsCompat options;
+                if (fakeCover) {
+                    //noinspection unchecked
+                    options = ActivityOptionsCompat.makeSceneTransitionAnimation(BookShelfActivity.this);
+                } else {
+                    options = ActivityOptionsCompat.makeSceneTransitionAnimation
+                            (BookShelfActivity.this, currentCover, getString(R.string.cover_transition));
+                }
                 ActivityCompat.startActivity(this, intent, options.toBundle());
                 break;
             default:
