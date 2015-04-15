@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -17,7 +16,7 @@ import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.utils.L;
 
-public class BookActivity extends ActionBarActivity {
+public class BookActivity extends BaseActivity {
 
     public static final String TARGET_FRAGMENT = "targetFragment";
     private static final String TAG = BookActivity.class.getSimpleName();
