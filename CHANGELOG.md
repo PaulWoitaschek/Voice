@@ -1,3 +1,17 @@
+# v2.0.6 Finetuning
+
+## Additions
+* Added wma
+* Use correct colors and update widget correctly
+* More intensive colors
+* Removed Transitions for now since they caused many bugs
+* FAB as play button
+* Calculates the amount of columns according to device orientation on BookShelf
+
+## Fixes
+* Fixed a rare crash on defect music files
+* Minor fixes
+
 # v2.0.5 More Transitions
 
 ## Additions
