@@ -5,8 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -55,7 +53,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
-    private final Handler handler = new Handler(Looper.getMainLooper());
     private BookAdapter adapter;
     private ImageView currentCover;
     private TextView currentText;
@@ -198,7 +195,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         // Scanning for new files here in case there are changes on the drive.
         baseApplication.bookLock.lock();
         try {
-            handler.post(new Runnable() {
+            getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     adapter.notifyDataSetChanged();
@@ -266,7 +263,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onPlayStateChanged(final BaseApplication.PlayState state) {
-        handler.post(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (state == BaseApplication.PlayState.PLAYING) {
@@ -280,7 +277,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onPositionChanged(boolean positionChanged) {
-        handler.post(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 initPlayerWidget();
@@ -349,7 +346,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onBookAdded(final int position) {
-        handler.post(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 toggleRecyclerVisibilities(baseApplication.isScannerActive());
@@ -371,7 +368,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onBookDeleted(final int position) {
-        handler.post(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 toggleRecyclerVisibilities(baseApplication.isScannerActive());
@@ -382,7 +379,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onScannerStateChanged(final boolean active) {
-        handler.post(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 toggleRecyclerVisibilities(active);

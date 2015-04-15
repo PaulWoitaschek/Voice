@@ -3,8 +3,6 @@ package de.ph1b.audiobook.fragment;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -53,7 +51,6 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
 
 
     public static final String TAG = BookPlayFragment.class.getSimpleName();
-    private final Handler handler = new Handler(Looper.getMainLooper());
     private volatile int duration = 0;
     private FloatingActionButton playButton;
     private TextView playedTimeView;
@@ -200,7 +197,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onPositionChanged(boolean positionChanged) {
-        handler.post(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 /**
@@ -229,7 +226,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onPlayStateChanged(final BaseApplication.PlayState state) {
-        handler.post(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (state == BaseApplication.PlayState.PLAYING) {
@@ -341,7 +338,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onSleepStateChanged(final boolean active) {
-        handler.post(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 getActivity().invalidateOptionsMenu();
