@@ -36,28 +36,15 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
     private final PrefsManager prefs;
     private final DataBaseHelper db;
     private final BaseApplication baseApplication;
-    private Book book;
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
     @GuardedBy("lock")
     private final MediaPlayerInterface player;
-    @GuardedBy("lock")
+    private Book book;
     private volatile State state;
     private ScheduledFuture<?> sleepSand;
     private volatile boolean stopAfterCurrentTrack = false;
     private ScheduledFuture updater = null;
     private volatile int prepareTries = 0;
-
-    public void init(@NonNull Book book) {
-        lock.lock();
-        try {
-            L.e(TAG, "constructor called with book=" + book);
-            new Validate().notNull(book);
-            this.book = book;
-            prepare();
-        } finally {
-            lock.unlock();
-        }
-    }
 
     public MediaPlayerController(@NonNull final BaseApplication baseApplication) {
         lock.lock();
@@ -72,6 +59,18 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
             } else {
                 player = new AndroidMediaPlayer();
             }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void init(@NonNull Book book) {
+        lock.lock();
+        try {
+            L.e(TAG, "constructor called with book=" + book);
+            new Validate().notNull(book);
+            this.book = book;
+            prepare();
         } finally {
             lock.unlock();
         }

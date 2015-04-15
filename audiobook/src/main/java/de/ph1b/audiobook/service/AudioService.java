@@ -296,21 +296,21 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 L.d(TAG, "onPlayStateChanged executed:" + state);
                 switch (state) {
                     case PLAYING:
-                            audioManager.requestAudioFocus(AudioService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-                            startForeground(NOTIFICATION_ID, getNotification());
-                            if (Build.VERSION.SDK_INT >= 14) {
-                                //noinspection deprecation
-                                remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
-                                updateRemoteControlClient();
-                            }
+                        audioManager.requestAudioFocus(AudioService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+                        startForeground(NOTIFICATION_ID, getNotification());
+                        if (Build.VERSION.SDK_INT >= 14) {
+                            //noinspection deprecation
+                            remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
+                            updateRemoteControlClient();
+                        }
                         break;
                     case PAUSED:
-                            stopForeground(false);
-                            notificationManager.notify(NOTIFICATION_ID, getNotification());
-                            if (Build.VERSION.SDK_INT >= 14) {
-                                //noinspection deprecation
-                                remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
-                            }
+                        stopForeground(false);
+                        notificationManager.notify(NOTIFICATION_ID, getNotification());
+                        if (Build.VERSION.SDK_INT >= 14) {
+                            //noinspection deprecation
+                            remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
+                        }
                         break;
                     case STOPPED:
                         audioManager.abandonAudioFocus(AudioService.this);
