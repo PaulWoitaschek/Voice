@@ -136,16 +136,6 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     }
 
     @Override
-    public void release() {
-        L.v(TAG, "stop called in state:" + state);
-        reset(); //reset will stop wakelock
-        onCompletionListener = null;
-        executor.shutdown();
-        state = State.END;
-        L.d(TAG, "State changed to: " + state);
-    }
-
-    @Override
     public void prepare() throws IOException {
         L.v(TAG, "prepare called in state: " + state);
         switch (state) {
