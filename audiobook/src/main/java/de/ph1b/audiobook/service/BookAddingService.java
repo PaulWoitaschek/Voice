@@ -329,7 +329,7 @@ public class BookAddingService extends Service {
                 File f = musicFiles.get(i);
                 int duration = 0;
                 try {
-                    mp.setDataSource(f.getPath());
+                    mp.setDataSource(f.getAbsolutePath());
                     mp.prepare();
                     duration = mp.getDuration();
                 } catch (IOException e) {
