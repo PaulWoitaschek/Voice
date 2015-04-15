@@ -45,7 +45,7 @@ import de.ph1b.audiobook.utils.L;
  */
 public class BookmarkDialog extends DialogFragment {
 
-    private static final String TAG = BookmarkDialog.class.getSimpleName();
+    public static final String TAG = BookmarkDialog.class.getSimpleName();
 
     private BookmarkAdapter adapter;
     private MaterialDialog dialog;

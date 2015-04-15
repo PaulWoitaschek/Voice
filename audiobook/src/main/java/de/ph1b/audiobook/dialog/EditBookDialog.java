@@ -41,8 +41,8 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
 
     public static final String BOOK_COVER = "BOOK_COVER";
     public static final int REPLACEMENT_DIMEN = 500;
+    public static final String TAG = EditBookDialog.class.getSimpleName();
     private static final String COVER_POSITION = "COVER_POSITION";
-    private static final String TAG = EditBookDialog.class.getSimpleName();
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     /**
      * Variable representing if the first cover is a letter - cover. This is recognized by checking
@@ -201,7 +201,7 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
                     db.updateBook(book);
                     Picasso.with(getActivity()).invalidate(book.getCoverFile());
 
-                    ((OnEditBookFinished) getActivity()).onEditBookFinished(book);
+                    ((OnEditBookFinishedListener) getActivity()).onEditBookFinished(book);
                 } finally {
                     baseApplication.bookLock.unlock();
                 }
@@ -267,8 +267,8 @@ public class EditBookDialog extends DialogFragment implements View.OnClickListen
         return editBook;
     }
 
-    public interface OnEditBookFinished {
-        public void onEditBookFinished(@NonNull Book book);
+    public interface OnEditBookFinishedListener {
+        void onEditBookFinished(@NonNull Book book);
     }
 
     private class AddCoverAsync extends AsyncTask<Void, Void, Bitmap> {

@@ -51,7 +51,7 @@ import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 
-public class BookShelfFragment extends Fragment implements View.OnClickListener, EditBookDialog.OnEditBookFinished, BaseApplication.OnBookAddedListener, BaseApplication.OnBookDeletedListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener, BaseApplication.OnScannerStateChangedListener {
+public class BookShelfFragment extends Fragment implements View.OnClickListener, EditBookDialog.OnEditBookFinishedListener, BaseApplication.OnBookAddedListener, BaseApplication.OnBookDeletedListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener, BaseApplication.OnScannerStateChangedListener {
 
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
@@ -128,7 +128,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                 bundle.putLong(Book.TAG, book.getId());
 
                 editBookDialog.setArguments(bundle);
-                editBookDialog.show(getFragmentManager(), TAG);
+                editBookDialog.show(getFragmentManager(), EditBookDialog.TAG);
             }
         };
 

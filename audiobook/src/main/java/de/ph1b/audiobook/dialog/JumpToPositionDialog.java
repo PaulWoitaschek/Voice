@@ -21,7 +21,7 @@ import de.ph1b.audiobook.utils.BaseApplication;
 
 public class JumpToPositionDialog extends DialogFragment {
 
-    private static final String TAG = JumpToPositionDialog.class.getSimpleName();
+    public static final String TAG = JumpToPositionDialog.class.getSimpleName();
     private int durationInMinutes;
     private int biggestHour;
     private NumberPicker mPicker;

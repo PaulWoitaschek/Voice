@@ -271,7 +271,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         JumpToPositionDialog dialog = new JumpToPositionDialog();
         Bundle bundle = new Bundle();
         dialog.setArguments(bundle);
-        dialog.show(getFragmentManager(), "timePicker");
+        dialog.show(getFragmentManager(), JumpToPositionDialog.TAG);
     }
 
     @Override
@@ -306,11 +306,11 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
                 return true;
             case R.id.action_time_lapse:
                 SetPlaybackSpeedDialog dialog = new SetPlaybackSpeedDialog();
-                dialog.show(getFragmentManager(), TAG);
+                dialog.show(getFragmentManager(), SetPlaybackSpeedDialog.TAG);
                 return true;
             case R.id.action_bookmark:
                 BookmarkDialog bookmarkDialog = new BookmarkDialog();
-                bookmarkDialog.show(getFragmentManager(), TAG);
+                bookmarkDialog.show(getFragmentManager(), BookmarkDialog.TAG);
                 return true;
             case android.R.id.home:
             case R.id.home:
