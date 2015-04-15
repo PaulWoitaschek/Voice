@@ -1,10 +1,8 @@
 package de.ph1b.audiobook.activity;
 
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarActivity;
 import android.util.TypedValue;
 
@@ -18,14 +16,6 @@ import de.ph1b.audiobook.uitools.ThemeUtil;
  */
 public abstract class BaseActivity extends ActionBarActivity {
 
-    @NonNull
-    @Override
-    /**
-     * Never call this. This throws an AssertionError. Instead use {@link #getSupportFragmentManager()}
-     */
-    public FragmentManager getFragmentManager() {
-        throw new AssertionError("This should never be called because we use the support library");
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
