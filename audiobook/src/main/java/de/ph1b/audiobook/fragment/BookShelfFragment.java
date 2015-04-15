@@ -132,7 +132,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             }
         };
 
-
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getAmountOfColumns()));
         adapter = new BookAdapter(baseApplication.getAllBooks(), getActivity(), onClickListener);
@@ -175,15 +174,17 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                 .build();
     }
 
+
     /**
-     * Returns the amount of columns the main-grid will need
+     * Returns the amount of columns the main-grid will need.
      *
      * @return The amount of columns, but at least 2.
      */
     private int getAmountOfColumns() {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-        int columns = Math.round(dpWidth / getResources().getDimension(R.dimen.desired_medium_cover));
+        float widthPx = displayMetrics.widthPixels;
+        float desiredPx = getResources().getDimensionPixelSize(R.dimen.desired_medium_cover);
+        int columns = Math.round(widthPx / desiredPx);
         return columns > 2 ? columns : 2;
     }
 
