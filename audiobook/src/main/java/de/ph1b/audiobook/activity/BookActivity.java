@@ -8,7 +8,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
+import android.widget.FrameLayout;
 
+import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.fragment.BookPlayFragment;
 import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
@@ -39,9 +42,13 @@ public class BookActivity extends ActionBarActivity {
             }
         }
 
+        View view = new FrameLayout(this);
+        view.setId(R.id.content);
+        setContentView(view);
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (addPlayFragment) {
-            ft.replace(android.R.id.content, new BookPlayFragment(), BookPlayFragment.TAG);
+            ft.replace(R.id.content, new BookPlayFragment(), BookPlayFragment.TAG);
         } else {
             Fragment bookShelfFragment = new BookShelfFragment();
 
@@ -52,7 +59,7 @@ public class BookActivity extends ActionBarActivity {
                 bookShelfFragment.setArguments(args);
             }
 
-            ft.replace(android.R.id.content, bookShelfFragment, BookShelfFragment.TAG);
+            ft.replace(R.id.content, bookShelfFragment, BookShelfFragment.TAG);
         }
         ft.commit();
     }
@@ -63,7 +70,7 @@ public class BookActivity extends ActionBarActivity {
         L.d(TAG, "onBackPressed with backStackEntryCount=" + fm.getBackStackEntryCount());
         Fragment bookPlayFragment = fm.findFragmentByTag(BookPlayFragment.TAG);
         if (bookPlayFragment != null && bookPlayFragment.isVisible()) {
-            fm.beginTransaction().replace(android.R.id.content, new BookShelfFragment(), BookShelfFragment.TAG).commit();
+            fm.beginTransaction().replace(R.id.content, new BookShelfFragment(), BookShelfFragment.TAG).commit();
         } else {
             super.onBackPressed();
         }

@@ -100,8 +100,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                 prefs.setCurrentBookId(book.getId());
 
                 getFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, new BookPlayFragment(), BookPlayFragment.TAG)
-                        .addToBackStack(null)
+                        .replace(R.id.content, new BookPlayFragment(), BookPlayFragment.TAG)
                         .commit();
             }
 
@@ -322,8 +321,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                 break;
             case R.id.current:
                 getFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, new BookPlayFragment(), BookPlayFragment.TAG)
-                        .addToBackStack(null)
+                        .replace(R.id.content, new BookPlayFragment(), BookPlayFragment.TAG)
                         .commit();
                 break;
             default:

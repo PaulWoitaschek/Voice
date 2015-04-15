@@ -73,7 +73,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         book = baseApplication.getCurrentBook();
         if (book == null) {
             getFragmentManager().beginTransaction()
-                    .replace(android.R.id.content, new BookPlayFragment(), BookPlayFragment.TAG)
+                    .replace(R.id.content, new BookPlayFragment(), BookPlayFragment.TAG)
                     .commit();
             return null;
         }
