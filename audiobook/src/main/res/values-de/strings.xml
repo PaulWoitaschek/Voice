@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- BookAdding -->
+    <string name="adding_failed_subfolder">Die Ordner dürfen kein Unterordner von einander sein:</string>
+    <string name="audiobook_folders_title">Hörbuch Ordner</string>
+    <string name="no_audiobook_folders_title">Ordner wählen</string>
+    <string name="no_audiobook_folders_summary">Bitte wählen Sie jetzt Ihren Hörbuchordner.\n\nJeder Unterordner wird als eigenes Buch erkannt!</string>
+    <string name="chosen_folder_description">Gewählter Ordner: </string>
+    <string name="delete_folder">Ordner entfernen</string>
+    <string name="delete_folder_content">Möchten Sie den folgenden Ordner aus Ihrer Bücherei entfernen?</string>
+    <string name="content_file_folder">Zeigt an, ob es sich um einen Ordner oder um eine Datei handelt</string>
+
     <!-- Settings -->
     <string name="action_settings">Einstellungen</string>
     <string name="pref_resume_on_replug">Wiedergabe fortsetzen</string>
@@ -20,7 +30,6 @@
     <string name="pref_send_bugs_summary">Sendet automatische anonymisierte Fehlerberichte um die Entwicklung zu vereinfachen.</string>
 
     <!-- Unsorted -->
-    <string name="adding_failed_subfolder">Die Ordner dürfen kein Unterordner von einander sein:</string>
     <string name="cover">Cover</string>
     <string name="play_pause">Play / Pause</string>
     <string name="book_add_empty_title">Geben Sie einen Titel ein</string>
@@ -46,22 +55,15 @@
     <string name="sleep_timer_started">Einschlaftimer: </string>
     <string name="next_track">Nächster Song</string>
     <string name="previous_track">Voriger Song</string>
-    <string name="up">Ordner hoch</string>
-    <string name="chosen_folder_description">Gewählter Ordner: </string>
     <string name="bookmark">Lesezeichen</string>
     <string name="bookmark_delete_title">Möchten Sie dieses Lesezeichen löschen?</string>
     <string name="bookmark_edit_title">Lesezeichen bearbeiten</string>
     <string name="acc_button_add_bookmark">Fügt an der aktuellen Stelle ein Lesezeichen hinzu.</string>
     <string name="bookmark_edit_hint">Lesezeichenname</string>
     <string name="bookmark_added">Lesezeichen hinzugefügt</string>
-    <string name="audiobook_folders_title">Hörbuch Ordner</string>
-    <string name="no_audiobook_folders_summary">Bitte wählen Sie jetzt Ihren Hörbuchordner.\n\nJeder Unterordner wird als eigenes Buch erkannt!</string>
-    <string name="no_audiobook_folders_title">Ordner wählen</string>
     <string name="pause">Pause</string>
     <string name="play">Abspielen</string>
     <string name="stop">Stop</string>
-    <string name="delete_folder">Ordner entfernen</string>
-    <string name="delete_folder_content">Möchten Sie den folgenden Ordner aus Ihrer Bücherei entfernen?</string>
     <string name="sleep_timer_stopped">Einschlaftimer gestoppt</string>
     <string name="mal_file_message">Die folgende Datei könnte defekt sein:</string>
     <string name="mal_file_title">Beschädigte Datei</string>

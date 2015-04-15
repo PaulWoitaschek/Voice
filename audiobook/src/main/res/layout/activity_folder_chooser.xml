@@ -7,51 +7,14 @@
 
     <include layout="@layout/toolbar" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/up"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:contentDescription="@string/up"
-            android:src="?attr/folder_choose_up" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/chosen_folder_description"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-            <TextView
-                android:id="@+id/chosenFolder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-        </LinearLayout>
-
-    </LinearLayout>
+    <include layout="@layout/list_twoline_text_with_icon" />
 
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:minHeight="400dp" />
+        android:layout_marginTop="16dp"
+        android:layout_weight="1" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         style="?android:buttonBarStyle"

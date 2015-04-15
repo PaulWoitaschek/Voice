@@ -38,6 +38,5 @@
     <string name="pref_summary_track_to_end">Sigue jugando hasta el final de la pista, después de temporizador ha desencadenado.</string>
     <string name="previous_track">Pista anterior</string>
     <string name="next_track">Proxima pista </string>
-    <string name="up">Carpeta superior</string>
     <string name="chosen_folder_description">Carpeta elegida:</string>
 </resources>

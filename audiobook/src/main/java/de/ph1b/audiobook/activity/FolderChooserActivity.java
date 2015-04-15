@@ -135,8 +135,9 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
 
         //get views
         ListView listView = (ListView) findViewById(R.id.listView);
-        upButton = (ImageButton) findViewById(R.id.up);
-        currentFolderName = (TextView) findViewById(R.id.chosenFolder);
+        upButton = (ImageButton) findViewById(R.id.twoline_image1);
+        currentFolderName = (TextView) findViewById(R.id.twoline_text2);
+        ((TextView) findViewById(R.id.twoline_text1)).setText(R.string.chosen_folder_description);
         chooseButton = (Button) findViewById(R.id.choose);
         Button abortButton = (Button) findViewById(R.id.abort);
 
@@ -270,7 +271,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.up:
+            case R.id.twoline_image1:
                 up();
                 break;
             case R.id.choose:
