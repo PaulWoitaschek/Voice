@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.PowerManager;
+import android.support.annotation.NonNull;
 
 import net.jcip.annotations.GuardedBy;
-import net.jcip.annotations.ThreadSafe;
 
 import java.io.IOException;
 import java.util.concurrent.Executors;
@@ -25,7 +25,6 @@ import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 import de.ph1b.audiobook.utils.Validate;
 
-@ThreadSafe
 public class MediaPlayerController implements MediaPlayer.OnErrorListener, MediaPlayerInterface.OnCompletionListener {
 
 
@@ -37,7 +36,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
     private final PrefsManager prefs;
     private final DataBaseHelper db;
     private final BaseApplication baseApplication;
-    private final Book book;
+    private Book book;
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
     @GuardedBy("lock")
     private final MediaPlayerInterface player;
@@ -48,22 +47,34 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
     private ScheduledFuture updater = null;
     private volatile int prepareTries = 0;
 
-    public MediaPlayerController(BaseApplication baseApplication, Book book) {
-        L.e(TAG, "constructor called with book=" + book);
-        new Validate().notNull(baseApplication, book);
-        this.c = baseApplication.getApplicationContext();
-        this.book = book;
-        prefs = new PrefsManager(c);
-        db = DataBaseHelper.getInstance(c);
-        this.baseApplication = baseApplication;
-
-        if (playerCanSetSpeed) {
-            player = new CustomMediaPlayer();
-        } else {
-            player = new AndroidMediaPlayer();
+    public void init(@NonNull Book book) {
+        lock.lock();
+        try {
+            L.e(TAG, "constructor called with book=" + book);
+            new Validate().notNull(book);
+            this.book = book;
+            prepare();
+        } finally {
+            lock.unlock();
         }
+    }
 
-        prepare();
+    public MediaPlayerController(@NonNull final BaseApplication baseApplication) {
+        lock.lock();
+        try {
+            this.c = baseApplication.getApplicationContext();
+            prefs = new PrefsManager(c);
+            db = DataBaseHelper.getInstance(c);
+            this.baseApplication = baseApplication;
+
+            if (playerCanSetSpeed) {
+                player = new CustomMediaPlayer();
+            } else {
+                player = new AndroidMediaPlayer();
+            }
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -135,6 +146,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
      * updates to the GUI.
      */
     private void startUpdating() {
+        L.v(TAG, "startupdating");
         if (!updaterActive()) {
             updater = executor.scheduleAtFixedRate(new Runnable() {
                 @Override
@@ -228,17 +240,16 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
     /**
      * Releases the controller. After this, this object should no longer be used.
      */
-    public void release() {
+    public void stop() {
         lock.lock();
         try {
             stopUpdating();
-            player.release();
+            player.reset();
             baseApplication.setPlayState(BaseApplication.PlayState.STOPPED);
             if (sleepSandActive()) {
                 toggleSleepSand();
             }
-            executor.shutdown();
-            state = State.DEAD;
+            state = State.IDLE;
         } finally {
             lock.unlock();
         }
@@ -345,7 +356,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
     }
 
     /**
-     * After the current song has ended, prepare the next one if there is one. Else release the
+     * After the current song has ended, prepare the next one if there is one. Else stop the
      * resources.
      */
     @Override

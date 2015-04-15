@@ -137,8 +137,8 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
 
     @Override
     public void release() {
-        L.v(TAG, "release called in state:" + state);
-        reset(); //reset will release wakelock
+        L.v(TAG, "stop called in state:" + state);
+        reset(); //reset will stop wakelock
         onCompletionListener = null;
         executor.shutdown();
         state = State.END;

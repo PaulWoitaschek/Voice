@@ -12,8 +12,6 @@ interface MediaPlayerInterface {
 
     public void reset();
 
-    public void release();
-
     public void prepare() throws IOException;
 
     public void seekTo(int ms);

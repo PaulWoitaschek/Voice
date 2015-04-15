@@ -17,6 +17,7 @@ import android.media.MediaMetadataRetriever;
 import android.media.RemoteControlClient;
 import android.os.Build;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
@@ -45,6 +46,7 @@ import de.ph1b.audiobook.utils.BaseApplication.PlayState;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
+
 public class AudioService extends Service implements AudioManager.OnAudioFocusChangeListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnCurrentBookChangedListener, BaseApplication.OnPositionChangedListener {
 
     private static final String TAG = AudioService.class.getSimpleName();
@@ -58,7 +60,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     );
     private NotificationManager notificationManager;
     private PrefsManager prefs;
-    private MediaPlayerController controller = null;
+    private MediaPlayerController controller;
     private AudioManager audioManager;
     private BaseApplication baseApplication;
     @SuppressWarnings("deprecation")
@@ -132,52 +134,17 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
         baseApplication.setPlayState(PlayState.STOPPED);
 
+        controller = new MediaPlayerController(baseApplication);
+
         Book book = baseApplication.getCurrentBook();
         if (book != null) {
             L.d(TAG, "onCreated initialized book=" + book);
-            controller = new MediaPlayerController(baseApplication, book);
+            reInitController(book);
         }
     }
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
-
-        if (controller == null && baseApplication.getCurrentBook() != null) {
-            controller = new MediaPlayerController(baseApplication, baseApplication.getCurrentBook());
-        }
-
-        if (controller != null) {
-            handleIntent(intent);
-        }
-        return Service.START_STICKY;
-    }
-
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    @Override
-    public void onDestroy() {
-        L.v(TAG, "onDestroy called");
-        releaseController();
-
-        baseApplication.removeOnPlayStateChangedListener(this);
-        baseApplication.removeOnCurrentBookChangedListener(this);
-        baseApplication.removeOnPositionChangedListener(this);
-        baseApplication.setPlayState(PlayState.STOPPED);
-
-        try {
-            unregisterReceiver(audioBecomingNoisyReceiver);
-            unregisterReceiver(headsetPlugReceiver);
-        } catch (IllegalArgumentException ignored) {
-        }
-
-        super.onDestroy();
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    private void handleIntent(final Intent intent) {
         if (intent != null && intent.getAction() != null) {
             playerExecutor.execute(new Runnable() {
                 @Override
@@ -199,7 +166,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                                     }
                                     break;
                                 case KeyEvent.KEYCODE_MEDIA_STOP:
-                                    releaseController();
+                                    controller.stop();
                                     break;
                                 case KeyEvent.KEYCODE_MEDIA_NEXT:
                                 case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
@@ -233,13 +200,40 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 }
             });
         }
+
+        return Service.START_STICKY;
     }
 
-    private void releaseController() {
-        if (controller != null) {
-            controller.release();
-            controller = null;
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    @Override
+    public void onDestroy() {
+        L.v(TAG, "onDestroy called");
+        controller.stop();
+
+        baseApplication.removeOnPlayStateChangedListener(this);
+        baseApplication.removeOnCurrentBookChangedListener(this);
+        baseApplication.removeOnPositionChangedListener(this);
+        baseApplication.setPlayState(PlayState.STOPPED);
+
+        try {
+            unregisterReceiver(audioBecomingNoisyReceiver);
+            unregisterReceiver(headsetPlugReceiver);
+        } catch (IllegalArgumentException ignored) {
         }
+
+        super.onDestroy();
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+
+    private void reInitController(@NonNull Book book) {
+        controller.stop();
+        controller.init(book);
+
         pauseBecauseHeadset = false;
         pauseBecauseLossTransient = false;
         baseApplication.setPlayState(PlayState.STOPPED);
@@ -267,7 +261,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 break;
             case AudioManager.AUDIOFOCUS_LOSS:
                 L.d(TAG, "paused by audioFocus loss");
-                releaseController();
+                controller.stop();
                 break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                 if (!prefs.pauseOnTempFocusLoss()) {
@@ -302,7 +296,6 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 L.d(TAG, "onPlayStateChanged executed:" + state);
                 switch (state) {
                     case PLAYING:
-                        if (controller != null) {
                             audioManager.requestAudioFocus(AudioService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
                             startForeground(NOTIFICATION_ID, getNotification());
                             if (Build.VERSION.SDK_INT >= 14) {
@@ -310,17 +303,14 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                                 remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
                                 updateRemoteControlClient();
                             }
-                        }
                         break;
                     case PAUSED:
-                        if (controller != null) {
                             stopForeground(false);
                             notificationManager.notify(NOTIFICATION_ID, getNotification());
                             if (Build.VERSION.SDK_INT >= 14) {
                                 //noinspection deprecation
                                 remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
                             }
-                        }
                         break;
                     case STOPPED:
                         audioManager.abandonAudioFocus(AudioService.this);
@@ -472,16 +462,12 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
     @Override
     public void onCurrentBookChanged(Book book) {
-        releaseController();
-        if (book != null) {
-            L.d(TAG, "init new book=" + book);
-            controller = new MediaPlayerController(baseApplication, book);
-        }
+        reInitController(book);
     }
 
     @Override
     public void onPositionChanged(boolean positionChanged) {
-        if (Build.VERSION.SDK_INT >= 14 && positionChanged && controller != null) {
+        if (Build.VERSION.SDK_INT >= 14 && positionChanged) {
             updateRemoteControlClient();
         }
     }
