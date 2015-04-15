@@ -35,10 +35,10 @@
         <activity
             android:name=".activity.SettingsActivity"
             android:label="@string/action_settings"
-            android:parentActivityName=".activity.BookShelfActivity">
+            android:parentActivityName=".activity.BookActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.BookShelfActivity" />
+                android:value=".activity.BookActivity" />
         </activity>
 
         <activity
@@ -56,10 +56,10 @@
 
         <activity
             android:name=".activity.FolderChooserActivity"
-            android:parentActivityName=".activity.FolderOverviewActivity">
+            android:parentActivityName=".activity.BookActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.FolderOverviewActivity" />
+                android:value=".activity.BookActivity" />
         </activity>
 
         <service android:name=".service.AudioService" />
