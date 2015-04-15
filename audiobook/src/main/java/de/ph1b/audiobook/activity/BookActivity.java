@@ -31,6 +31,10 @@ public class BookActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        View view = new FrameLayout(this);
+        view.setId(R.id.content);
+        setContentView(view);
+
         boolean addPlayFragment = false;
         if (getIntent().hasExtra(TARGET_FRAGMENT)) {
             String fragmentTag = getIntent().getStringExtra(TARGET_FRAGMENT);
@@ -41,26 +45,24 @@ public class BookActivity extends BaseActivity {
             }
         }
 
-        View view = new FrameLayout(this);
-        view.setId(R.id.content);
-        setContentView(view);
+        if (savedInstanceState == null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            if (addPlayFragment) {
+                ft.replace(R.id.content, new BookPlayFragment(), BookPlayFragment.TAG);
+            } else {
+                Fragment bookShelfFragment = new BookShelfFragment();
 
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        if (addPlayFragment) {
-            ft.replace(R.id.content, new BookPlayFragment(), BookPlayFragment.TAG);
-        } else {
-            Fragment bookShelfFragment = new BookShelfFragment();
+                if (getIntent().hasExtra(MediaPlayerController.MALFORMED_FILE)) {
+                    Bundle args = new Bundle();
+                    String malformedFile = getIntent().getStringExtra(MediaPlayerController.MALFORMED_FILE);
+                    args.putString(MediaPlayerController.MALFORMED_FILE, malformedFile);
+                    bookShelfFragment.setArguments(args);
+                }
 
-            if (getIntent().hasExtra(MediaPlayerController.MALFORMED_FILE)) {
-                Bundle args = new Bundle();
-                String malformedFile = getIntent().getStringExtra(MediaPlayerController.MALFORMED_FILE);
-                args.putString(MediaPlayerController.MALFORMED_FILE, malformedFile);
-                bookShelfFragment.setArguments(args);
+                ft.replace(R.id.content, bookShelfFragment, BookShelfFragment.TAG);
             }
-
-            ft.replace(R.id.content, bookShelfFragment, BookShelfFragment.TAG);
+            ft.commit();
         }
-        ft.commit();
     }
 
     @Override
