@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
+@SuppressWarnings("UnusedReturnValue")
 public class Validate {
 
     public Validate notEmpty(@NonNull String... args) {

@@ -33,19 +33,19 @@
 
             <TextView
                 android:id="@+id/title"
-                android:textSize="@dimen/list_text_primary_size"
-                android:textColor="@color/dark_text_primary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textColor="@color/dark_text_primary"
+                android:textSize="@dimen/list_text_primary_size" />
 
             <TextView
                 android:id="@+id/summary"
-                android:textSize="@dimen/list_text_secondary_size"
-                android:textColor="@color/dark_text_secondary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textColor="@color/dark_text_secondary"
+                android:textSize="@dimen/list_text_secondary_size" />
         </LinearLayout>
 
         <LinearLayout

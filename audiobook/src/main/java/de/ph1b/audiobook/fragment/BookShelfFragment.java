@@ -9,9 +9,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -96,25 +94,10 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         currentPlaying.setOnClickListener(this);
         BookAdapter.OnItemClickListener onClickListener = new BookAdapter.OnItemClickListener() {
             @Override
-            public void onCoverClicked(int position, final ViewGroup itemView) {
+            public void onCoverClicked(int position) {
                 Book book = adapter.getItem(position);
                 baseApplication.setCurrentBook(book);
                 prefs.setCurrentBookId(book.getId());
-
-                /**
-                 * Workaround. If we use a fake cover image transition will fail. So we don't du image transition in that case.
-                 */
-                boolean fakeCover = book.isUseCoverReplacement() || !book.getCoverFile().exists();
-                ActivityOptionsCompat options;
-                if (fakeCover) {
-                    //noinspection unchecked
-                    options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity());
-                } else {
-                    options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-                            itemView, getString(R.string.cover_transition));
-                }
-
-                ViewCompat.setTransitionName(itemView, getString(R.string.cover_transition));
 
                 getFragmentManager().beginTransaction()
                         .replace(android.R.id.content, new BookPlayFragment(), BookPlayFragment.TAG)
@@ -338,22 +321,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                 controller.playPause();
                 break;
             case R.id.current:
-
-                /**
-                 * Workaround. If we use a fake cover image transition will fail. So we don't du image transition in that case.
-                 */
-                boolean fakeCover = baseApplication.getCurrentBook() != null && (baseApplication.getCurrentBook().isUseCoverReplacement() || !baseApplication.getCurrentBook().getCoverFile().exists());
-                ActivityOptionsCompat options;
-                if (fakeCover) {
-                    //noinspection unchecked
-                    options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity());
-                } else {
-                    options = ActivityOptionsCompat.makeSceneTransitionAnimation
-                            (getActivity(), currentCover, getString(R.string.cover_transition));
-                }
-
-                ViewCompat.setTransitionName(currentCover, getString(R.string.cover_transition));
-
                 getFragmentManager().beginTransaction()
                         .replace(android.R.id.content, new BookPlayFragment(), BookPlayFragment.TAG)
                         .addToBackStack(null)

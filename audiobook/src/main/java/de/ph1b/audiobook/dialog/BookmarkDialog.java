@@ -3,6 +3,7 @@ package de.ph1b.audiobook.dialog;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -49,6 +50,7 @@ public class BookmarkDialog extends DialogFragment {
     private BookmarkAdapter adapter;
     private MaterialDialog dialog;
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 

@@ -73,11 +73,11 @@
             android:id="@+id/play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fab:fab_icon="@drawable/ic_play_arrow_white_24dp"
-            android:contentDescription="@string/play_pause"
             android:layout_margin="8dp"
+            android:contentDescription="@string/play_pause"
             fab:fab_colorNormal="?attr/colorAccent"
-            fab:fab_colorPressed="?attr/colorAccentDark" />
+            fab:fab_colorPressed="?attr/colorAccentDark"
+            fab:fab_icon="@drawable/ic_play_arrow_white_24dp" />
 
         <ImageButton
             android:id="@+id/fastForward"

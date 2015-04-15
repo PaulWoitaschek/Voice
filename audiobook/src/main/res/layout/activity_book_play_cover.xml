@@ -8,5 +8,4 @@
     android:adjustViewBounds="true"
     android:contentDescription="@string/cover"
     android:scaleType="centerCrop"
-    android:transitionName="@string/cover_transition"
     tools:ignore="UnusedAttribute" />

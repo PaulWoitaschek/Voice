@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ public class SetPlaybackSpeedDialog extends DialogFragment {
     private static final float SPEED_MAX = 2f;
     private float speed;
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 

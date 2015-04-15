@@ -17,6 +17,7 @@ import de.ph1b.audiobook.utils.L;
 public class BookActivity extends ActionBarActivity {
 
     public static final String TARGET_FRAGMENT = "targetFragment";
+    private static final String TAG = BookActivity.class.getSimpleName();
 
     public static Intent bookScreenIntent(Context c) {
         Intent intent = new Intent(c, BookActivity.class);
@@ -55,8 +56,6 @@ public class BookActivity extends ActionBarActivity {
         }
         ft.commit();
     }
-
-    public static final String TAG = BookActivity.class.getSimpleName();
 
     @Override
     public void onBackPressed() {

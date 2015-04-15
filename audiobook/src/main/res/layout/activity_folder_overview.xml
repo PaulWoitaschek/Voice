@@ -27,9 +27,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:layout_margin="16dp"
-            fab:fab_icon="@drawable/ic_add_white_24dp"
             fab:fab_colorNormal="?attr/colorAccent"
-            fab:fab_colorPressed="?attr/colorAccentDark" />
+            fab:fab_colorPressed="?attr/colorAccentDark"
+            fab:fab_icon="@drawable/ic_add_white_24dp" />
     </FrameLayout>
 
 </LinearLayout>
