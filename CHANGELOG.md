@@ -1,3 +1,9 @@
+# v2.0.7 Hotfix
+
+## Fixes
+* Fixed threading issue on MediaPlayer
+* Fixed rare race condition error at BookShelf and BookPlay fragment 
+
 # v2.0.6 Finetuning
 
 ## Additions
