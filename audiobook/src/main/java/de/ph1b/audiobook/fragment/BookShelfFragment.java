@@ -163,7 +163,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        String malformedFile = getArguments() != null ? getArguments().getString(MediaPlayerController.MALFORMED_FILE, null) : null;
+        String malformedFile = getArguments() != null ? getArguments().getString(MediaPlayerController.MALFORMED_FILE) : null;
         if (malformedFile != null) {
             new MaterialDialog.Builder(getActivity())
                     .title(R.string.mal_file_title)
