@@ -16,7 +16,7 @@
         android:orientation="horizontal">
 
         <include
-            layout="@layout/activity_book_play_cover"
+            layout="@layout/fragment_book_play_cover"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
@@ -27,7 +27,7 @@
             android:background="?attr/colorAccent" />
 
         <include
-            layout="@layout/activity_book_play_player"
+            layout="@layout/fragment_book_play_player"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"

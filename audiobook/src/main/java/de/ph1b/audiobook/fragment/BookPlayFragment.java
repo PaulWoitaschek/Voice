@@ -65,7 +65,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_book_play, container, false);
+        View view = inflater.inflate(R.layout.fragment_book_play, container, false);
 
         book = baseApplication.getCurrentBook();
         if (book == null) {
@@ -128,8 +128,8 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         for (Chapter c : baseApplication.getCurrentBook().getChapters()) {
             chaptersAsStrings.add(c.getName());
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.activity_book_play_spinner, chaptersAsStrings);
-        adapter.setDropDownViewResource(R.layout.activity_book_play_spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.fragment_book_play_spinner, chaptersAsStrings);
+        adapter.setDropDownViewResource(R.layout.fragment_book_play_spinner);
         bookSpinner.setAdapter(adapter);
 
         bookSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

@@ -6,8 +6,8 @@
 
     <include layout="@layout/toolbar" />
 
-    <include layout="@layout/activity_book_play_cover" />
+    <include layout="@layout/fragment_book_play_cover" />
 
-    <include layout="@layout/activity_book_play_player" />
+    <include layout="@layout/fragment_book_play_player" />
 
 </LinearLayout>
