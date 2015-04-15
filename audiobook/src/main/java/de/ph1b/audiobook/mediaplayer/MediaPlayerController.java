@@ -16,7 +16,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
-import de.ph1b.audiobook.activity.BookShelfActivity;
+import de.ph1b.audiobook.activity.BookActivity;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.model.DataBaseHelper;
@@ -332,7 +332,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
         try {
             L.e(TAG, "onError");
             baseApplication.deleteBook(book);
-            Intent bookShelfIntent = BookShelfActivity.getClearStarterIntent(c);
+            Intent bookShelfIntent = BookActivity.bookScreenIntent(c);
             bookShelfIntent.putExtra(MALFORMED_FILE, book.getRoot() + "/" + book.getCurrentChapter().getPath());
             c.startActivity(bookShelfIntent);
 

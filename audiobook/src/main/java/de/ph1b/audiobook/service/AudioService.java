@@ -32,7 +32,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.BookPlayActivity;
+import de.ph1b.audiobook.activity.BookActivity;
+import de.ph1b.audiobook.fragment.BookPlayFragment;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
@@ -342,10 +343,9 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         Chapter chapter = book.getCurrentChapter();
 
         // content click
-        Intent bookPlayIntent = new Intent(AudioService.this, BookPlayActivity.class);
-        PendingIntent contentIntent = android.support.v4.app.TaskStackBuilder.create(AudioService.this)
-                .addNextIntentWithParentStack(bookPlayIntent)
-                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent bookPlayIntent = new Intent(AudioService.this, BookActivity.class);
+        bookPlayIntent.putExtra(BookActivity.TARGET_FRAGMENT, BookPlayFragment.TAG);
+        PendingIntent contentIntent = PendingIntent.getActivity(AudioService.this, 0, bookPlayIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // cover
         // note: On Android 21 + the MediaStyle will use the cover as the background. So it has to be a large image.

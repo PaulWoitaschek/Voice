@@ -1,25 +1,26 @@
-package de.ph1b.audiobook.activity;
+package de.ph1b.audiobook.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.transition.Fade;
-import android.transition.Transition;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.activity.FolderChooserActivity;
+import de.ph1b.audiobook.activity.SettingsActivity;
 import de.ph1b.audiobook.adapter.BookAdapter;
 import de.ph1b.audiobook.dialog.EditBookDialog;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
@@ -49,9 +52,11 @@ import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.PrefsManager;
 
-public class BookShelfActivity extends BaseActivity implements View.OnClickListener, EditBookDialog.OnEditBookFinished, BaseApplication.OnBookAddedListener, BaseApplication.OnBookDeletedListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener, BaseApplication.OnScannerStateChangedListener {
 
-    private static final String TAG = BookShelfActivity.class.getSimpleName();
+public class BookShelfFragment extends Fragment implements View.OnClickListener, EditBookDialog.OnEditBookFinished, BaseApplication.OnBookAddedListener, BaseApplication.OnBookDeletedListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener, BaseApplication.OnScannerStateChangedListener {
+
+
+    public static final String TAG = BookShelfFragment.class.getSimpleName();
     private final Handler handler = new Handler(Looper.getMainLooper());
     private BookAdapter adapter;
     private ImageView currentCover;
@@ -66,64 +71,26 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     private RecyclerView recyclerView;
     private ProgressBar recyclerReplacementView;
 
-    public static Intent getClearStarterIntent(Context c) {
-        Intent intent = new Intent(c, BookShelfActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        return intent;
-    }
-
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_book_shelf);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_book_shelf, container, false);
 
-        if (Build.VERSION.SDK_INT >= 21) {
-            Transition exitTransition = new Fade();
-            exitTransition.excludeTarget(android.R.id.statusBarBackground, true);
-            exitTransition.excludeTarget(android.R.id.navigationBarBackground, true);
-            exitTransition.excludeTarget(R.id.toolbar, true);
-            exitTransition.setDuration(500);
-            getWindow().setExitTransition(exitTransition);
-            getWindow().setTransitionBackgroundFadeDuration(500);
-        }
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        ((ActionBarActivity) getActivity()).setSupportActionBar(toolbar);
+        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setTitle(this.getString(R.string.app_name));
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        getSupportActionBar().setTitle(this.getString(R.string.app_name));
+        setHasOptionsMenu(true);
 
-        if (getIntent().hasExtra(MediaPlayerController.MALFORMED_FILE)) {
-            String malformedFile = getIntent().getStringExtra(MediaPlayerController.MALFORMED_FILE);
-            new MaterialDialog.Builder(this)
-                    .title(R.string.mal_file_title)
-                    .content(getString(R.string.mal_file_message) + "\n\n" + malformedFile)
-                    .show();
-        }
-
-        baseApplication = (BaseApplication) getApplication();
-        prefs = new PrefsManager(this);
-        controller = new ServiceController(this);
-        noFolderWarning = new MaterialDialog.Builder(this)
-                .title(R.string.no_audiobook_folders_title)
-                .content(R.string.no_audiobook_folders_summary)
-                .positiveText(R.string.dialog_confirm)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        startActivity(new Intent(BookShelfActivity.this, FolderChooserActivity.class));
-                    }
-                })
-                .cancelable(false)
-                .build();
-
-        playerWidget = (ViewGroup) findViewById(R.id.current);
-        currentCover = (ImageView) findViewById(R.id.current_cover);
-        currentText = (TextView) findViewById(R.id.current_text);
-        currentPlaying = (ImageButton) findViewById(R.id.current_playing);
-        progressBar = (ProgressBar) findViewById(R.id.progress);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerReplacementView = (ProgressBar) findViewById(R.id.recyclerReplacement);
+        playerWidget = (ViewGroup) view.findViewById(R.id.current);
+        currentCover = (ImageView) view.findViewById(R.id.current_cover);
+        currentText = (TextView) view.findViewById(R.id.current_text);
+        currentPlaying = (ImageButton) view.findViewById(R.id.current_playing);
+        progressBar = (ProgressBar) view.findViewById(R.id.progress);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        recyclerReplacementView = (ProgressBar) view.findViewById(R.id.recyclerReplacement);
 
         playerWidget.setOnClickListener(this);
         currentPlaying.setOnClickListener(this);
@@ -141,16 +108,18 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 ActivityOptionsCompat options;
                 if (fakeCover) {
                     //noinspection unchecked
-                    options = ActivityOptionsCompat.makeSceneTransitionAnimation(BookShelfActivity.this);
+                    options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity());
                 } else {
-                    options = ActivityOptionsCompat.makeSceneTransitionAnimation(BookShelfActivity.this,
+                    options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
                             itemView, getString(R.string.cover_transition));
                 }
 
                 ViewCompat.setTransitionName(itemView, getString(R.string.cover_transition));
 
-                ActivityCompat.startActivity(BookShelfActivity.this, new Intent
-                        (BookShelfActivity.this, BookPlayActivity.class), options.toBundle());
+                getFragmentManager().beginTransaction()
+                        .replace(android.R.id.content, new BookPlayFragment(), BookPlayFragment.TAG)
+                        .addToBackStack(null)
+                        .commit();
             }
 
             @Override
@@ -161,7 +130,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 Bundle bundle = new Bundle();
 
                 ArrayList<Bitmap> covers = new ArrayList<>();
-                CoverReplacement replacement = new CoverReplacement(book.getName(), BookShelfActivity.this);
+                CoverReplacement replacement = new CoverReplacement(book.getName(), getActivity());
                 covers.add(ImageHelper.drawableToBitmap(replacement,
                         EditBookDialog.REPLACEMENT_DIMEN, EditBookDialog.REPLACEMENT_DIMEN));
 
@@ -181,10 +150,47 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             }
         };
 
-        adapter = new BookAdapter(baseApplication.getAllBooks(), this, onClickListener);
+
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, getAmountOfColumns()));
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getAmountOfColumns()));
+        adapter = new BookAdapter(baseApplication.getAllBooks(), getActivity(), onClickListener);
         recyclerView.setAdapter(adapter);
+
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        String malformedFile = getArguments() != null ? getArguments().getString(MediaPlayerController.MALFORMED_FILE, null) : null;
+        if (malformedFile != null) {
+            new MaterialDialog.Builder(getActivity())
+                    .title(R.string.mal_file_title)
+                    .content(getString(R.string.mal_file_message) + "\n\n" + malformedFile)
+                    .show();
+        }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        baseApplication = (BaseApplication) getActivity().getApplication();
+        prefs = new PrefsManager(getActivity());
+        controller = new ServiceController(getActivity());
+        noFolderWarning = new MaterialDialog.Builder(getActivity())
+                .title(R.string.no_audiobook_folders_title)
+                .content(R.string.no_audiobook_folders_summary)
+                .positiveText(R.string.dialog_confirm)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        startActivity(new Intent(getActivity(), FolderChooserActivity.class));
+                    }
+                })
+                .cancelable(false)
+                .build();
     }
 
     /**
@@ -223,7 +229,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
         baseApplication.addOnScannerStateChangedListener(this);
 
-        startService(BookAddingService.getRescanIntent(this, false));
+        getActivity().startService(BookAddingService.getRescanIntent(getActivity(), false));
 
         if (baseApplication.getCurrentBook() == null) {
             playerWidget.setVisibility(View.GONE);
@@ -249,9 +255,9 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             // cover
             File coverFile = book.getCoverFile();
             String bookName = book.getName();
-            Drawable coverReplacement = new CoverReplacement(bookName, this);
+            Drawable coverReplacement = new CoverReplacement(bookName, getActivity());
             if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-                Picasso.with(this).load(coverFile).fit().placeholder(coverReplacement).into(currentCover);
+                Picasso.with(getActivity()).load(coverFile).fit().placeholder(coverReplacement).into(currentCover);
             } else {
                 currentCover.setImageDrawable(coverReplacement);
             }
@@ -281,9 +287,9 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void run() {
                 if (state == BaseApplication.PlayState.PLAYING) {
-                    currentPlaying.setImageResource(ThemeUtil.getResourceId(BookShelfActivity.this, R.attr.book_shelf_pause));
+                    currentPlaying.setImageResource(ThemeUtil.getResourceId(getActivity(), R.attr.book_shelf_pause));
                 } else {
-                    currentPlaying.setImageResource(ThemeUtil.getResourceId(BookShelfActivity.this, R.attr.book_shelf_play));
+                    currentPlaying.setImageResource(ThemeUtil.getResourceId(getActivity(), R.attr.book_shelf_play));
                 }
             }
         });
@@ -310,16 +316,15 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.book_shelf, menu);
-        return true;
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.book_shelf, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
+                startActivity(new Intent(getActivity(), SettingsActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -333,7 +338,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 controller.playPause();
                 break;
             case R.id.current:
-                Intent intent = new Intent(this, BookPlayActivity.class);
 
                 /**
                  * Workaround. If we use a fake cover image transition will fail. So we don't du image transition in that case.
@@ -342,20 +346,24 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 ActivityOptionsCompat options;
                 if (fakeCover) {
                     //noinspection unchecked
-                    options = ActivityOptionsCompat.makeSceneTransitionAnimation(BookShelfActivity.this);
+                    options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity());
                 } else {
                     options = ActivityOptionsCompat.makeSceneTransitionAnimation
-                            (BookShelfActivity.this, currentCover, getString(R.string.cover_transition));
+                            (getActivity(), currentCover, getString(R.string.cover_transition));
                 }
 
                 ViewCompat.setTransitionName(currentCover, getString(R.string.cover_transition));
 
-                ActivityCompat.startActivity(this, intent, options.toBundle());
+                getFragmentManager().beginTransaction()
+                        .replace(android.R.id.content, new BookPlayFragment(), BookPlayFragment.TAG)
+                        .addToBackStack(null)
+                        .commit();
                 break;
             default:
                 break;
         }
     }
+
 
     @Override
     public void onEditBookFinished(@NonNull Book book) {
@@ -415,4 +423,5 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             }
         });
     }
+
 }

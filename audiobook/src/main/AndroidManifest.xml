@@ -24,20 +24,12 @@
             android:value="AEdPqrEAAAAIjeSB6A5JNJpRSV5yPq22PvZtl95fWDzDIuk63w" />
 
         <activity
-            android:name=".activity.BookShelfActivity"
+            android:name=".activity.BookActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".activity.BookPlayActivity"
-            android:parentActivityName=".activity.BookShelfActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.BookShelfActivity" />
         </activity>
 
         <activity

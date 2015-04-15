@@ -12,7 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -28,8 +27,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.BookPlayActivity;
-import de.ph1b.audiobook.activity.BookShelfActivity;
+import de.ph1b.audiobook.activity.BookActivity;
+import de.ph1b.audiobook.fragment.BookPlayFragment;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.receiver.BaseWidgetProvider;
 import de.ph1b.audiobook.uitools.CoverReplacement;
@@ -98,7 +97,7 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
                         }
                     } else {
                         // directly going back to bookChoose
-                        Intent wholeWidgetClickI = BookShelfActivity.getClearStarterIntent(WidgetUpdateService.this);
+                        Intent wholeWidgetClickI = BookActivity.bookScreenIntent(WidgetUpdateService.this);
                         PendingIntent wholeWidgetClickPI = PendingIntent.getActivity
                                 (WidgetUpdateService.this, (int) System.currentTimeMillis(), wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
                         //noinspection deprecation
@@ -160,19 +159,16 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
 
         // if we have any book, init the views and have a click on the whole widget start BookPlay.
         // if we have no book, simply have a click on the whole widget start BookChoose.
-        PendingIntent wholeWidgetClickPI;
-        Intent wholeWidgetClickI = new Intent(this, BookPlayActivity.class);
+
         remoteViews.setTextViewText(R.id.title, book.getName());
         String name = book.getCurrentChapter().getName();
 
         remoteViews.setTextViewText(R.id.summary, name);
 
-        // building back-stack.
-        wholeWidgetClickI.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(BookPlayActivity.class);
-        stackBuilder.addNextIntent(wholeWidgetClickI);
-        wholeWidgetClickPI = stackBuilder.getPendingIntent((int) System.currentTimeMillis(), PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent wholeWidgetClickI = new Intent(this, BookActivity.class);
+        wholeWidgetClickI.putExtra(BookActivity.TARGET_FRAGMENT, BookPlayFragment.TAG);
+        PendingIntent wholeWidgetClickPI = PendingIntent.getActivity
+                (WidgetUpdateService.this, (int) System.currentTimeMillis(), wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Bitmap cover = null;
         try {
