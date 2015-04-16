@@ -185,10 +185,10 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                         case ServiceController.CONTROL_TOGGLE_SLEEP_SAND:
                             controller.toggleSleepSand();
                             break;
-                        case ServiceController.CONTROL_CHANGE_TIME:
-                            int time1 = intent.getIntExtra(ServiceController.CONTROL_CHANGE_TIME_EXTRA_TIME, 0);
-                            String relativePath = intent.getStringExtra(ServiceController.CONTROL_CHANGE_TIME_EXTRA_PATH_RELATIVE);
-                            controller.changePosition(time1, relativePath);
+                        case ServiceController.CONTROL_CHANGE_POSITION:
+                            int newTime = intent.getIntExtra(ServiceController.CONTROL_CHANGE_POSITION_EXTRA_TIME, 0);
+                            String relativePath = intent.getStringExtra(ServiceController.CONTROL_CHANGE_POSITION_EXTRA_PATH_RELATIVE);
+                            controller.changePosition(newTime, relativePath);
                             break;
                         case ServiceController.CONTROL_NEXT:
                             controller.next();

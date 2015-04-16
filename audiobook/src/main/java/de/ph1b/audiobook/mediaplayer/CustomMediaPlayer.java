@@ -253,7 +253,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
 
     @Override
     public int getDuration() {
-        return (int) duration;
+        return (int) (duration / 1000);
     }
 
     private void initStream() throws IOException, IllegalArgumentException {

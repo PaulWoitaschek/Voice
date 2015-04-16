@@ -169,6 +169,8 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
      * @param direction The direction to skip
      */
     public void skip(Direction direction) {
+        final String TAG = MediaPlayerController.TAG + ":skip()";
+        L.v(TAG, "direction=" + direction);
         lock.lock();
         try {
             int currentPos = player.getCurrentPosition();
@@ -176,6 +178,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
             int delta = prefs.getSeekTime() * 1000;
 
             int seekTo = (direction == Direction.FORWARD) ? currentPos + delta : currentPos - delta;
+            L.v(TAG, "currentPosition=" + currentPos + ",seekTo=" + seekTo + ",duration=" + duration);
 
             if (seekTo < 0) {
                 previous(false);
@@ -400,9 +403,12 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
      * @param relPath The relative path of the media to play (relative to the books root path)
      */
     public void changePosition(int time, String relPath) {
+        final String TAG = MediaPlayerController.TAG + ":changePosition()";
         lock.lock();
         try {
+            L.v(TAG, "time=" + time + ", relPath=" + relPath);
             boolean changeFile = (!book.getCurrentChapter().getPath().equals(relPath));
+            L.v(TAG, "changeFile=" + changeFile);
             if (changeFile) {
                 boolean wasPlaying = (state == State.STARTED);
                 book.setPosition(time, relPath);

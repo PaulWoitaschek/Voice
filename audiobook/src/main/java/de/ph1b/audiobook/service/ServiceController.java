@@ -15,9 +15,9 @@ public class ServiceController {
     public static final String CONTROL_SET_PLAYBACK_SPEED_EXTRA_SPEED = "CONTROL_SET_PLAYBACK_SPEED_EXTRA_SPEED";
 
     public static final String CONTROL_TOGGLE_SLEEP_SAND = "CONTROL_TOGGLE_SLEEP_SAND";
-    public static final String CONTROL_CHANGE_TIME = "CONTROL_CHANGE_TIME";
-    public static final String CONTROL_CHANGE_TIME_EXTRA_TIME = "CONTROL_CHANGE_TIME_EXTRA_TIME";
-    public static final String CONTROL_CHANGE_TIME_EXTRA_PATH_RELATIVE = "CONTROL_CHANGE_TIME_EXTRA_PATH_RELATIVE";
+    public static final String CONTROL_CHANGE_POSITION = "CONTROL_CHANGE_POSITION";
+    public static final String CONTROL_CHANGE_POSITION_EXTRA_TIME = "CONTROL_CHANGE_POSITION_EXTRA_TIME";
+    public static final String CONTROL_CHANGE_POSITION_EXTRA_PATH_RELATIVE = "CONTROL_CHANGE_POSITION_EXTRA_PATH_RELATIVE";
     public static final String CONTROL_NEXT = "CONTROL_NEXT";
     public static final String CONTROL_PREVIOUS = "CONTROL_PREVIOUS";
     private final Context c;
@@ -63,9 +63,9 @@ public class ServiceController {
 
     public void changeTime(int time, String relativePath) {
         Intent intent = new Intent(c, AudioService.class);
-        intent.setAction(CONTROL_CHANGE_TIME);
-        intent.putExtra(CONTROL_CHANGE_TIME_EXTRA_TIME, time);
-        intent.putExtra(CONTROL_CHANGE_TIME_EXTRA_PATH_RELATIVE, relativePath);
+        intent.setAction(CONTROL_CHANGE_POSITION);
+        intent.putExtra(CONTROL_CHANGE_POSITION_EXTRA_TIME, time);
+        intent.putExtra(CONTROL_CHANGE_POSITION_EXTRA_PATH_RELATIVE, relativePath);
         c.startService(intent);
     }
 
