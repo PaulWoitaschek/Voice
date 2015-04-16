@@ -4,9 +4,6 @@
     <dimen name="desired_medium_cover">180dp</dimen>
     <dimen name="widget_margin">8dp</dimen>
 
-    <dimen name="horizontal_margin">16dp</dimen>
-    <dimen name="vertical_margin">16dp</dimen>
-
     <dimen name="dialog_content_text_size">18sp</dimen>
 
     <!-- material specs -->

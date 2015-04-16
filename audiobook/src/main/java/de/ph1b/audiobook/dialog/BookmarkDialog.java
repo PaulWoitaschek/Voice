@@ -7,9 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -22,7 +20,6 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.Collections;
@@ -80,45 +77,19 @@ public class BookmarkDialog extends DialogFragment {
                             case R.id.edit:
                                 final Bookmark editBookmark = adapter.getItem(position);
 
-                                // custom view
-                                final EditText editText = new EditText(getActivity());
-                                editText.setInputType(InputType.TYPE_CLASS_TEXT);
-                                int padding = getResources().getDimensionPixelSize(R.dimen.horizontal_margin);
-                                editText.setPadding(padding, padding, padding, padding);
-                                editText.setText(editBookmark.getTitle());
-
-                                builder.title(R.string.bookmark_edit_title)
-                                        .positiveText(R.string.dialog_confirm)
-                                        .negativeText(R.string.dialog_cancel)
-                                        .callback(new MaterialDialog.ButtonCallback() {
+                                new MaterialDialog.Builder(getActivity())
+                                        .title(R.string.bookmark_edit_title)
+                                        .inputType(InputType.TYPE_CLASS_TEXT)
+                                        .input(getString(R.string.bookmark_edit_hint), editBookmark.getTitle(), new MaterialDialog.InputCallback() {
                                             @Override
-                                            public void onPositive(MaterialDialog dialog) {
-                                                editBookmark.setTitle(editText.getText().toString());
+                                            public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+                                                editBookmark.setTitle(charSequence.toString());
                                                 db.updateBook(book);
                                                 adapter.notifyItemChanged(position);
                                             }
                                         })
-                                        .customView(editText, true);
-
-                                MaterialDialog dialog = builder.show();
-                                final View positive = dialog.getActionButton(DialogAction.NEGATIVE);
-                                positive.setEnabled(editText.getText().toString().length() > 0);
-                                editText.addTextChangedListener(new TextWatcher() {
-                                    @Override
-                                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                                    }
-
-                                    @Override
-                                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                        positive.setEnabled(s.length() > 0);
-                                    }
-
-                                    @Override
-                                    public void afterTextChanged(Editable s) {
-
-                                    }
-                                });
+                                        .positiveText(R.string.dialog_confirm)
+                                        .show();
                                 return true;
                             case R.id.delete:
                                 final Bookmark deleteBookmark = adapter.getItem(position);

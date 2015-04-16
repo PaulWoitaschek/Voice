@@ -79,7 +79,6 @@ jboolean Java_org_vinuxproject_sonic_Sonic_putBytesNative(
     int samples = lenBytes/(sizeof(short)*sonicGetNumChannels(stream));
     int remainingBytes = lenBytes - samples*sizeof(short)*sonicGetNumChannels(stream);
 
-// TODO: deal with case where remainingBytes is not 0.
 if(remainingBytes != 0) {
     LOGV("Remaining bytes == %d!!!", remainingBytes);
 }
