@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/wholeWidget"
+    android:background="@drawable/widget_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/widget_background"
     android:padding="@dimen/widget_margin"
     tools:ignore="Overdraw">
 
@@ -54,33 +54,34 @@
             android:layout_gravity="center"
             android:divider="@drawable/notification_divider"
             android:dividerPadding="8dp"
+            android:gravity="center_horizontal"
             android:orientation="horizontal"
             android:showDividers="middle">
 
             <ImageButton
                 android:id="@+id/rewind"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="?android:selectableItemBackground"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:background="@drawable/dark_image_button_background"
                 android:contentDescription="@string/rewind"
                 android:src="@drawable/ic_fast_rewind_white_36dp" />
 
             <ImageButton
                 android:id="@+id/playPause"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="?android:selectableItemBackground"
+                android:padding="8dp"
+                android:background="@drawable/dark_image_button_background"
                 android:contentDescription="@string/play_pause"
                 android:src="@drawable/ic_play_arrow_white_36dp" />
 
             <ImageButton
                 android:id="@+id/fastForward"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="?android:selectableItemBackground"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:background="@drawable/dark_image_button_background"
                 android:contentDescription="@string/fast_forward"
                 android:src="@drawable/ic_fast_forward_white_36dp" />
 

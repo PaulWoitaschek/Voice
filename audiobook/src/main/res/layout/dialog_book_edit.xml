@@ -46,10 +46,9 @@
         <ImageButton
             android:id="@+id/previous_cover"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/content_previous_cover"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
+            android:padding="8dp"
             android:src="?attr/edit_prev" />
 
         <FrameLayout
@@ -78,10 +77,9 @@
         <ImageButton
             android:id="@+id/next_cover"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/content_next_cover"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
+            android:padding="8dp"
             android:src="?attr/edit_next" />
     </LinearLayout>
 </LinearLayout>

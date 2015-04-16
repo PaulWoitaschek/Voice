@@ -15,7 +15,7 @@
         <item name="colorPrimaryDark">@color/light_primary_dark</item>
         <item name="colorAccent">@color/light_accent</item>
         <item name="colorAccentDark">@color/light_accent_dark</item>
-        <item name="android:imageButtonStyle">@style/CustomButtonStyle</item>
+        <item name="android:imageButtonStyle">@style/LightButtonStyle</item>
         <item name="theme_name">@string/pref_theme_light</item>
 
         <!-- BookShelf -->
@@ -63,7 +63,7 @@
         <item name="colorPrimaryDark">@color/dark_primary_dark</item>
         <item name="colorAccent">@color/dark_accent</item>
         <item name="colorAccentDark">@color/dark_accent_dark</item>
-        <item name="android:imageButtonStyle">@style/CustomButtonStyle</item>
+        <item name="android:imageButtonStyle">@style/DarkButtonStyle</item>
         <item name="theme_name">@string/pref_theme_dark</item>
 
         <!-- BookShelf -->
@@ -96,7 +96,11 @@
         <item name="folder_overview_trash">@drawable/ic_delete_white_24dp</item>
     </style>
 
-    <style name="CustomButtonStyle" parent="@android:style/Widget.ImageButton">
-        <item name="android:background">?android:attr/selectableItemBackground</item>
+    <style name="DarkButtonStyle" parent="@android:style/Widget.ImageButton">
+        <item name="android:background">@drawable/dark_image_button_background</item>
+    </style>
+
+    <style name="LightButtonStyle" parent="@android:style/Widget.ImageButton">
+        <item name="android:background">@drawable/light_image_button_background</item>
     </style>
 </resources>
