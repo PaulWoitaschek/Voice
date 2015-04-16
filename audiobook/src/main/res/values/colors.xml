@@ -24,7 +24,7 @@
     <color name="light_accent_dark">#ffc2185b</color>
     <!-- ## text colors -->
     <color name="light_text_primary">@color/abc_primary_text_material_light</color>
-    <color name="light_text_secondary">@color/abc_primary_text_material_light</color>
+    <color name="light_text_secondary">@color/abc_secondary_text_material_light</color>
 
     <!-- # widget -->
     <color name="widget_background">@color/background_material_dark</color>
