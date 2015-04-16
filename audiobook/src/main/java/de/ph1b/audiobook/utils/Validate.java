@@ -9,7 +9,7 @@ public class Validate {
 
     public Validate notEmpty(@NonNull String... args) {
         for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("")) {
+            if (args[i].length() == 0) {
                 throw new IllegalArgumentException("Argument #" + i + " must not be empty");
             }
         }
