@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="General settings">
+    <PreferenceCategory android:title="@string/pref_category_playback">
         <Preference
             android:key="@string/pref_key_audiobook_folders"
             android:summary="Your audiobook folders"
@@ -18,7 +18,7 @@
             android:summary="@string/pref_send_bugs_summary"
             android:title="@string/pref_send_bugs_title" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Playback behavior">
+    <PreferenceCategory android:title="@string/pref_category_playback">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="@string/pref_key_resume_on_replug"

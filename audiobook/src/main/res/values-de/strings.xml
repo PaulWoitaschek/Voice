@@ -11,6 +11,8 @@
     <string name="content_file_folder">Zeigt an, ob es sich um einen Ordner oder um eine Datei handelt</string>
 
     <!-- Settings -->
+    <string name="pref_category_general">Allgemeine Einstellungen</string>
+    <string name="pref_category_playback">Abspielverhalten</string>
     <string name="action_settings">Einstellungen</string>
     <string name="pref_resume_on_replug">Wiedergabe fortsetzen</string>
     <string name="pref_resume_on_replug_hint">Nimmt die Wiedergabe beim Einstecken der Kopfhörer wieder auf.</string>
