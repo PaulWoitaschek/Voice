@@ -14,8 +14,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="16dp"
-        android:maxWidth="56dp"
         android:clickable="true"
+        android:maxWidth="56dp"
         tools:ignore="ContentDescription"
         tools:src="@drawable/ic_arrow_up_grey600_48dp" />
 

@@ -68,7 +68,7 @@ public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAd
 
         public ViewHolder(View itemView, final OnFolderMoreClickedListener listener) {
             super(itemView);
-            imageView = (ImageView) itemView.findViewById(R.id.more);
+            imageView = (ImageView) itemView.findViewById(R.id.remove);
             textView = (TextView) itemView.findViewById(R.id.containing);
 
             imageView.setOnClickListener(new View.OnClickListener() {
