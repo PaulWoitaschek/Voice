@@ -36,7 +36,9 @@ import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.BaseApplication.PlayState;
 
-public class WidgetUpdateService extends Service implements BaseApplication.OnPositionChangedListener, BaseApplication.OnCurrentBookChangedListener, BaseApplication.OnPlayStateChangedListener {
+public class WidgetUpdateService extends Service implements
+        BaseApplication.OnPositionChangedListener, BaseApplication.OnCurrentBookChangedListener,
+        BaseApplication.OnPlayStateChangedListener {
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private BaseApplication baseApplication;
     private AppWidgetManager appWidgetManager;
@@ -67,7 +69,8 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
             public void run() {
                 Book book = baseApplication.getCurrentBook();
                 boolean isPortrait = isPortrait();
-                int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(WidgetUpdateService.this, BaseWidgetProvider.class));
+                int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(
+                        WidgetUpdateService.this, BaseWidgetProvider.class));
 
                 for (int widgetId : ids) {
                     RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.widget);
@@ -76,10 +79,14 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
                         initElements(remoteViews, book);
                         if (Build.VERSION.SDK_INT >= 16) {
                             Bundle opts = appWidgetManager.getAppWidgetOptions(widgetId);
-                            int minHeight = dpToPx(opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT));
-                            int maxHeight = dpToPx(opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT));
-                            int minWidth = dpToPx(opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH));
-                            int maxWidth = dpToPx(opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH));
+                            int minHeight = dpToPx(opts.getInt(
+                                    AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT));
+                            int maxHeight = dpToPx(opts.getInt(
+                                    AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT));
+                            int minWidth = dpToPx(opts.getInt(
+                                    AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH));
+                            int maxWidth = dpToPx(opts.getInt(
+                                    AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH));
 
                             int useWidth;
                             int useHeight;
@@ -92,19 +99,24 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
                                 useHeight = minHeight;
                             }
                             if (useWidth > 0 && useHeight > 0) {
-                                setVisibilities(remoteViews, useWidth, useHeight, book.getChapters().size() == 1);
+                                setVisibilities(remoteViews, useWidth, useHeight,
+                                        book.getChapters().size() == 1);
                             }
                         }
                     } else {
                         // directly going back to bookChoose
-                        Intent wholeWidgetClickI = BookActivity.bookScreenIntent(WidgetUpdateService.this);
+                        Intent wholeWidgetClickI = BookActivity.bookScreenIntent
+                                (WidgetUpdateService.this);
                         PendingIntent wholeWidgetClickPI = PendingIntent.getActivity
-                                (WidgetUpdateService.this, (int) System.currentTimeMillis(), wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
+                                (WidgetUpdateService.this, (int) System.currentTimeMillis(),
+                                        wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
                         //noinspection deprecation
                         remoteViews.setImageViewBitmap(R.id.imageView,
-                                ImageHelper.drawableToBitmap(getResources().getDrawable(R.drawable.icon_108dp),
+                                ImageHelper.drawableToBitmap(
+                                        getResources().getDrawable(R.drawable.icon_108dp),
                                         ImageHelper.getSmallerScreenSize(WidgetUpdateService.this),
-                                        ImageHelper.getSmallerScreenSize(WidgetUpdateService.this)));
+                                        ImageHelper.getSmallerScreenSize(
+                                                WidgetUpdateService.this)));
                         remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI);
                     }
 
@@ -128,7 +140,9 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
         @SuppressWarnings("deprecation") int displayWidth = display.getWidth();
         @SuppressWarnings("deprecation") int displayHeight = display.getHeight();
 
-        return orientation != Configuration.ORIENTATION_LANDSCAPE && (orientation == Configuration.ORIENTATION_PORTRAIT || displayWidth == displayHeight || displayWidth < displayHeight);
+        return orientation != Configuration.ORIENTATION_LANDSCAPE &&
+                (orientation == Configuration.ORIENTATION_PORTRAIT || displayWidth == displayHeight
+                        || displayWidth < displayHeight);
     }
 
 
@@ -140,15 +154,19 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
      */
     private void initElements(@NonNull final RemoteViews remoteViews, @NonNull final Book book) {
         Intent playPauseI = ServiceController.getPlayPauseIntent(this);
-        PendingIntent playPausePI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseI, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent playPausePI = PendingIntent.getService(this,
+                KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseI, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI);
 
         Intent fastForwardI = ServiceController.getFastForwardIntent(this);
-        PendingIntent fastForwardPI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, fastForwardI, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent fastForwardPI = PendingIntent.getService(this,
+                KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, fastForwardI,
+                PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.fastForward, fastForwardPI);
 
         Intent rewindI = ServiceController.getRewindIntent(this);
-        PendingIntent rewindPI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_REWIND, rewindI, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent rewindPI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_REWIND,
+                rewindI, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI);
 
         if (baseApplication.getPlayState() == PlayState.PLAYING) {
@@ -168,7 +186,8 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
         Intent wholeWidgetClickI = new Intent(this, BookActivity.class);
         wholeWidgetClickI.putExtra(BookActivity.TARGET_FRAGMENT, BookPlayFragment.TAG);
         PendingIntent wholeWidgetClickPI = PendingIntent.getActivity
-                (WidgetUpdateService.this, (int) System.currentTimeMillis(), wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
+                (WidgetUpdateService.this, (int) System.currentTimeMillis(), wholeWidgetClickI,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
 
         Bitmap cover = null;
         try {
@@ -181,8 +200,9 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
         }
         if (cover == null) {
             cover = ImageHelper.drawableToBitmap(new CoverReplacement(
-                    book.getName(),
-                    WidgetUpdateService.this), ImageHelper.getSmallerScreenSize(this), ImageHelper.getSmallerScreenSize(this));
+                            book.getName(),
+                            WidgetUpdateService.this), ImageHelper.getSmallerScreenSize(this),
+                    ImageHelper.getSmallerScreenSize(this));
         }
         remoteViews.setImageViewBitmap(R.id.imageView, cover);
         remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI);
@@ -195,7 +215,8 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
      * @return the px the dp represent
      */
     private int dpToPx(final int dp) {
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics()));
+        return Math.round(TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics()));
     }
 
 
@@ -207,7 +228,8 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
      * @param height        the height of the widget
      * @param singleChapter if true if the book has only one chapter
      */
-    private void setVisibilities(@NonNull final RemoteViews remoteViews, final int width, final int height, final boolean singleChapter) {
+    private void setVisibilities(@NonNull final RemoteViews remoteViews, final int width,
+                                 final int height, final boolean singleChapter) {
         setXVisibility(remoteViews, width, height);
         setYVisibility(remoteViews, height, singleChapter);
     }
@@ -220,9 +242,11 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
      * @param widgetWidth The widget width
      * @param coverSize   The cover size
      */
-    private void setXVisibility(@NonNull final RemoteViews remoteViews, final int widgetWidth, final int coverSize) {
-        int singleButtonSize = dpToPx(4 + 36 + 4);
-        int summarizedItemWidth = 3 * singleButtonSize + coverSize; // widget height because cover is square
+    private void setXVisibility(@NonNull final RemoteViews remoteViews, final int widgetWidth,
+                                final int coverSize) {
+        int singleButtonSize = dpToPx(8 + 36 + 8);
+        // widget height because cover is square
+        int summarizedItemWidth = 3 * singleButtonSize + coverSize;
 
         // set all views visible
         remoteViews.setViewVisibility(R.id.imageView, View.VISIBLE);
@@ -255,8 +279,9 @@ public class WidgetUpdateService extends Service implements BaseApplication.OnPo
      * @param widgetHeight  The widget height
      * @param singleChapter true if the book has only one chapter
      */
-    private void setYVisibility(@NonNull final RemoteViews remoteViews, final int widgetHeight, final boolean singleChapter) {
-        int buttonSize = dpToPx(4 + 36 + 4);
+    private void setYVisibility(@NonNull final RemoteViews remoteViews, final int widgetHeight,
+                                final boolean singleChapter) {
+        int buttonSize = dpToPx(8 + 36 + 8);
         int titleSize = getResources().getDimensionPixelSize(R.dimen.list_text_primary_size);
         int summarySize = getResources().getDimensionPixelSize(R.dimen.list_text_secondary_size);
 
