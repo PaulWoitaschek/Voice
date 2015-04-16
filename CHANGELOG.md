@@ -1,3 +1,17 @@
+# v2.0.8 Autorewind & Finetuning
+
+## Additions
+* Autorewind setting
+* Settings grouped
+* List layouts improved to match material specs
+* Bookmark layout reworked
+* Round button backgrounds (see when clicked)
+
+## Fixes
+* Load cover from storage only if there is enough free memory (RAM)
+* Fixed a bug that caused skip not to work on large files
+* Correctly initialized widget with new padding
+
 # v2.0.7 Hotfix
 
 ## Fixes
