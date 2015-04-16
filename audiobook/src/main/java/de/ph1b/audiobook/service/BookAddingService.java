@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.service;
 
+import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -303,11 +304,16 @@ public class BookAddingService extends Service {
         Bitmap cover = null;
 
         // if there are images, get the first one.
+        ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
+        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        activityManager.getMemoryInfo(mi);
         int dimen = ImageHelper.getSmallerScreenSize(this);
         for (File f : coverFiles) {
-            if (cover == null) {
+            // only read cover if its size is less than a third of the available memory
+            if (f.length() < (mi.availMem / 3L)) {
                 try {
                     cover = Picasso.with(this).load(f).resize(dimen, dimen).get();
+                    break;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
