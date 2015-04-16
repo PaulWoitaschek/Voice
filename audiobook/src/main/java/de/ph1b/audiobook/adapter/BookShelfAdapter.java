@@ -20,14 +20,14 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 
-public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
+public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.ViewHolder> {
 
     @NonNull
     private final ArrayList<Book> books;
     private final Context c;
     private final OnItemClickListener onItemClickListener;
 
-    public BookAdapter(@NonNull ArrayList<Book> books, Context c, OnItemClickListener onItemClickListener) {
+    public BookShelfAdapter(@NonNull ArrayList<Book> books, Context c, OnItemClickListener onItemClickListener) {
         this.books = books;
         this.c = c;
         this.onItemClickListener = onItemClickListener;

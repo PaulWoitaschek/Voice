@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -63,15 +63,15 @@ public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAd
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        final ImageView imageView;
+        final ImageButton imageButton;
         final TextView textView;
 
         public ViewHolder(View itemView, final OnFolderMoreClickedListener listener) {
             super(itemView);
-            imageView = (ImageView) itemView.findViewById(R.id.remove);
+            imageButton = (ImageButton) itemView.findViewById(R.id.remove);
             textView = (TextView) itemView.findViewById(R.id.containing);
 
-            imageView.setOnClickListener(new View.OnClickListener() {
+            imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     listener.onFolderMoreClicked(getAdapterPosition());

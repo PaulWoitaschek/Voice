@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.adapter.FolderAdapter;
+import de.ph1b.audiobook.adapter.FolderChooserAdapter;
 import de.ph1b.audiobook.model.NaturalFileComparator;
 import de.ph1b.audiobook.service.BookAddingService;
 import de.ph1b.audiobook.uitools.ThemeUtil;
@@ -45,7 +45,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
     private File chosenFolder = null;
     private TextView currentFolderName;
     private Button chooseButton;
-    private FolderAdapter adapter;
+    private FolderChooserAdapter adapter;
     private ImageButton upButton;
 
     private ArrayList<File> getStorageDirectories() {
@@ -147,7 +147,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         abortButton.setOnClickListener(this);
 
         //setup
-        adapter = new FolderAdapter(this, currentFolderContent);
+        adapter = new FolderChooserAdapter(this, currentFolderContent);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

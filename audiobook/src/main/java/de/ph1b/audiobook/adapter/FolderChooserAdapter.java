@@ -16,12 +16,12 @@ import java.util.ArrayList;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 
-public class FolderAdapter extends BaseAdapter {
+public class FolderChooserAdapter extends BaseAdapter {
 
     private final Context c;
     private final ArrayList<File> data;
 
-    public FolderAdapter(@NonNull Context c, @NonNull ArrayList<File> data) {
+    public FolderChooserAdapter(@NonNull Context c, @NonNull ArrayList<File> data) {
         this.c = c;
         this.data = data;
     }
@@ -47,7 +47,7 @@ public class FolderAdapter extends BaseAdapter {
         final ViewHolder viewHolder;
         if (convertView == null) {
             LayoutInflater vi = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = vi.inflate(R.layout.list_single_text_with_icon, parent, false);
+            convertView = vi.inflate(R.layout.activity_folder_chooser_adapter_row_layout, parent, false);
 
             viewHolder = new ViewHolder();
             viewHolder.textView = (TextView) convertView.findViewById(R.id.singleline_text1);

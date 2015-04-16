@@ -35,7 +35,7 @@ import java.util.Collections;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.FolderChooserActivity;
 import de.ph1b.audiobook.activity.SettingsActivity;
-import de.ph1b.audiobook.adapter.BookAdapter;
+import de.ph1b.audiobook.adapter.BookShelfAdapter;
 import de.ph1b.audiobook.dialog.EditBookDialog;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
@@ -53,7 +53,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
-    private BookAdapter adapter;
+    private BookShelfAdapter adapter;
     private ImageView currentCover;
     private TextView currentText;
     private ViewGroup playerWidget;
@@ -89,7 +89,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
         playerWidget.setOnClickListener(this);
         currentPlaying.setOnClickListener(this);
-        BookAdapter.OnItemClickListener onClickListener = new BookAdapter.OnItemClickListener() {
+        BookShelfAdapter.OnItemClickListener onClickListener = new BookShelfAdapter.OnItemClickListener() {
             @Override
             public void onCoverClicked(int position) {
                 Book book = adapter.getItem(position);
@@ -131,7 +131,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getAmountOfColumns()));
-        adapter = new BookAdapter(baseApplication.getAllBooks(), getActivity(), onClickListener);
+        adapter = new BookShelfAdapter(baseApplication.getAllBooks(), getActivity(), onClickListener);
         recyclerView.setAdapter(adapter);
 
         return view;

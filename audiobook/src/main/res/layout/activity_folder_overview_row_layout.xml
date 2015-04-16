@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="56dp">
 
-    <ImageButton
+    <ImageView
         android:layout_width="56dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -29,14 +29,15 @@
         android:textSize="@dimen/list_text_primary_size"
         tools:text="/storage/scard1/Audiobooks/subfolder/subsdfer/subfodsdfsdffder/subsbder/subfolder/subfolder" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/remove"
-        android:layout_width="56dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:contentDescription="@string/remove"
-        android:scaleType="fitCenter"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:src="?attr/folder_overview_trash" />
 
 </RelativeLayout>
