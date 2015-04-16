@@ -9,7 +9,7 @@ MaterialAudiobookPlayer
 # Contribution
 
 ## Translations
-The project page is on [transifex](https://www.transifex.com/projects/p/material-audiobook-player/). There all the localizations are maintained. If you want to contribute, check there if there are untranslated or wrong translated words. 
+The project page is on [transifex](https://www.transifex.com/projects/p/material-audiobook-player/). There all the localizations are maintained. If you want to contribute, check if there are untranslated or wrong translated words. 
 
 Or you can start translating a new language if you speak it ;-)
 
