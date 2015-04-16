@@ -16,13 +16,23 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.PrefsManager;
 
-public class SeekPreferenceDialog extends DialogPreference {
 
+public class AutoRewindDialogPreference extends DialogPreference {
 
-    public SeekPreferenceDialog(Context context, AttributeSet attrs) {
+    private static final int SEEK_BAR_MIN = 0;
+    private static final int SEEK_BAR_MAX = 20;
+    private TextView textView;
+
+    public AutoRewindDialogPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
+    public void setText(int progress) {
+        String autoRewindSummary = getContext().getString(R.string.pref_auto_rewind_summary)
+                + " " + String.valueOf(progress + SEEK_BAR_MIN) + " "
+                + getContext().getString(R.string.seconds);
+        textView.setText(autoRewindSummary);
+    }
 
     @Override
     protected void showDialog(Bundle state) {
@@ -31,18 +41,17 @@ public class SeekPreferenceDialog extends DialogPreference {
         // init custom view
         @SuppressLint("InflateParams") View customView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_amount_chooser, null);
         final SeekBar seekBar = (SeekBar) customView.findViewById(R.id.seekBar);
-        final TextView textView = (TextView) customView.findViewById(R.id.textView);
+        textView = (TextView) customView.findViewById(R.id.textView);
 
         //seekBar
-        final int SEEK_BAR_MIN = 10;
-        int position = prefs.getSeekTime();
+        int position = prefs.getAutoRewindAmount();
         ThemeUtil.theme(seekBar);
-        seekBar.setMax(60 - SEEK_BAR_MIN);
+        seekBar.setMax(SEEK_BAR_MAX - SEEK_BAR_MIN);
         seekBar.setProgress(position - SEEK_BAR_MIN);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                textView.setText(String.valueOf(progress + SEEK_BAR_MIN) + " " + getContext().getString(R.string.seconds));
+                setText(progress);
             }
 
             @Override
@@ -55,18 +64,18 @@ public class SeekPreferenceDialog extends DialogPreference {
         });
 
         // text
-        textView.setText(String.valueOf(seekBar.getProgress() + SEEK_BAR_MIN) + " " + getContext().getString(R.string.seconds));
+        setText(seekBar.getProgress());
 
         new MaterialDialog.Builder(getContext())
-                .title(R.string.pref_seek_time)
+                .title(R.string.pref_auto_rewind_title)
                 .customView(customView, true)
                 .positiveText(R.string.dialog_confirm)
                 .negativeText(R.string.dialog_cancel)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        int seekAmount = seekBar.getProgress();
-                        prefs.setSeekTime(seekAmount + SEEK_BAR_MIN);
+                        int autoRewindAmount = seekBar.getProgress();
+                        prefs.setAutoRewindAmount(autoRewindAmount + SEEK_BAR_MIN);
                     }
                 })
                 .show();

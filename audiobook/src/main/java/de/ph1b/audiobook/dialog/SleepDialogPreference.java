@@ -16,10 +16,10 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.PrefsManager;
 
-public class SleepPreferenceDialog extends DialogPreference {
+public class SleepDialogPreference extends DialogPreference {
 
 
-    public SleepPreferenceDialog(Context context, AttributeSet attrs) {
+    public SleepDialogPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 

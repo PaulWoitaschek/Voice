@@ -37,11 +37,11 @@ import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
 
-public class EditBookDialog extends DialogFragment implements View.OnClickListener {
+public class EditBookDialogFragment extends DialogFragment implements View.OnClickListener {
 
     public static final String BOOK_COVER = "BOOK_COVER";
     public static final int REPLACEMENT_DIMEN = 500;
-    public static final String TAG = EditBookDialog.class.getSimpleName();
+    public static final String TAG = EditBookDialogFragment.class.getSimpleName();
     private static final String COVER_POSITION = "COVER_POSITION";
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     /**

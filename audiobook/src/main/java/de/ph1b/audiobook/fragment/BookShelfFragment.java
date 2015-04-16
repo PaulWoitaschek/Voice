@@ -36,7 +36,7 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.FolderChooserActivity;
 import de.ph1b.audiobook.activity.SettingsActivity;
 import de.ph1b.audiobook.adapter.BookShelfAdapter;
-import de.ph1b.audiobook.dialog.EditBookDialog;
+import de.ph1b.audiobook.dialog.EditBookDialogFragment;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
@@ -49,7 +49,7 @@ import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 
-public class BookShelfFragment extends Fragment implements View.OnClickListener, EditBookDialog.OnEditBookFinishedListener, BaseApplication.OnBookAddedListener, BaseApplication.OnBookDeletedListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener, BaseApplication.OnScannerStateChangedListener {
+public class BookShelfFragment extends Fragment implements View.OnClickListener, EditBookDialogFragment.OnEditBookFinishedListener, BaseApplication.OnBookAddedListener, BaseApplication.OnBookDeletedListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener, BaseApplication.OnScannerStateChangedListener {
 
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
@@ -105,13 +105,13 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             public void onMenuClicked(final int position) {
                 Book book = adapter.getItem(position);
 
-                EditBookDialog editBookDialog = new EditBookDialog();
+                EditBookDialogFragment editBookDialogFragment = new EditBookDialogFragment();
                 Bundle bundle = new Bundle();
 
                 ArrayList<Bitmap> covers = new ArrayList<>();
                 CoverReplacement replacement = new CoverReplacement(book.getName(), getActivity());
                 covers.add(ImageHelper.drawableToBitmap(replacement,
-                        EditBookDialog.REPLACEMENT_DIMEN, EditBookDialog.REPLACEMENT_DIMEN));
+                        EditBookDialogFragment.REPLACEMENT_DIMEN, EditBookDialogFragment.REPLACEMENT_DIMEN));
 
                 File coverFile = book.getCoverFile();
                 if (coverFile.exists() && coverFile.canRead()) {
@@ -121,11 +121,11 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                     }
                 }
 
-                bundle.putParcelableArrayList(EditBookDialog.BOOK_COVER, covers);
+                bundle.putParcelableArrayList(EditBookDialogFragment.BOOK_COVER, covers);
                 bundle.putLong(Book.TAG, book.getId());
 
-                editBookDialog.setArguments(bundle);
-                editBookDialog.show(getFragmentManager(), EditBookDialog.TAG);
+                editBookDialogFragment.setArguments(bundle);
+                editBookDialogFragment.show(getFragmentManager(), EditBookDialogFragment.TAG);
             }
         };
 

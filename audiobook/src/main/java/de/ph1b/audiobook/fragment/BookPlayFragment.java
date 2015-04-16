@@ -33,9 +33,9 @@ import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.SettingsActivity;
-import de.ph1b.audiobook.dialog.BookmarkDialog;
-import de.ph1b.audiobook.dialog.JumpToPositionDialog;
-import de.ph1b.audiobook.dialog.SetPlaybackSpeedDialog;
+import de.ph1b.audiobook.dialog.BookmarkDialogFragment;
+import de.ph1b.audiobook.dialog.JumpToPositionDialogFragment;
+import de.ph1b.audiobook.dialog.PlaybackSpeedDialogFragment;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
@@ -265,10 +265,10 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
     }
 
     private void launchJumpToPositionDialog() {
-        JumpToPositionDialog dialog = new JumpToPositionDialog();
+        JumpToPositionDialogFragment dialog = new JumpToPositionDialogFragment();
         Bundle bundle = new Bundle();
         dialog.setArguments(bundle);
-        dialog.show(getFragmentManager(), JumpToPositionDialog.TAG);
+        dialog.show(getFragmentManager(), JumpToPositionDialogFragment.TAG);
     }
 
     @Override
@@ -302,12 +302,12 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
                 controller.toggleSleepSand();
                 return true;
             case R.id.action_time_lapse:
-                SetPlaybackSpeedDialog dialog = new SetPlaybackSpeedDialog();
-                dialog.show(getFragmentManager(), SetPlaybackSpeedDialog.TAG);
+                PlaybackSpeedDialogFragment dialog = new PlaybackSpeedDialogFragment();
+                dialog.show(getFragmentManager(), PlaybackSpeedDialogFragment.TAG);
                 return true;
             case R.id.action_bookmark:
-                BookmarkDialog bookmarkDialog = new BookmarkDialog();
-                bookmarkDialog.show(getFragmentManager(), BookmarkDialog.TAG);
+                BookmarkDialogFragment bookmarkDialogFragment = new BookmarkDialogFragment();
+                bookmarkDialogFragment.show(getFragmentManager(), BookmarkDialogFragment.TAG);
                 return true;
             case android.R.id.home:
             case R.id.home:

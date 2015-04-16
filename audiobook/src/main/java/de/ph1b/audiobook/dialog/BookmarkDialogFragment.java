@@ -40,9 +40,9 @@ import de.ph1b.audiobook.utils.L;
  * @link {http://www.paul-woitaschek.de}
  * @see <a href="http://www.paul-woitaschek.de">http://www.paul-woitaschek.de</a>
  */
-public class BookmarkDialog extends DialogFragment {
+public class BookmarkDialogFragment extends DialogFragment {
 
-    public static final String TAG = BookmarkDialog.class.getSimpleName();
+    public static final String TAG = BookmarkDialogFragment.class.getSimpleName();
 
     private BookmarkAdapter adapter;
     private MaterialDialog dialog;

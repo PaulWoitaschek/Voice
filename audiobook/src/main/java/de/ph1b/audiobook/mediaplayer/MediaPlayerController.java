@@ -327,6 +327,16 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener, Media
                 case STARTED:
                     player.pause();
                     stopUpdating();
+
+                    int originalPosition = player.getCurrentPosition();
+                    int autoRewind = prefs.getAutoRewindAmount() * 1000;
+                    int seekTo = originalPosition - autoRewind;
+                    if (seekTo < 0) seekTo = 0;
+                    book.setPosition(seekTo, book.getRelativeMediaPath());
+                    player.seekTo(seekTo);
+                    db.updateBook(book);
+                    baseApplication.notifyPositionChanged(false);
+
                     baseApplication.setPlayState(BaseApplication.PlayState.PAUSED);
                     state = State.PAUSED;
                     break;

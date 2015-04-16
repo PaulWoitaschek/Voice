@@ -12,14 +12,14 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.dialog.EditBookDialog;
+import de.ph1b.audiobook.dialog.EditBookDialogFragment;
 import de.ph1b.audiobook.fragment.BookPlayFragment;
 import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.utils.L;
 
-public class BookActivity extends BaseActivity implements EditBookDialog.OnEditBookFinishedListener {
+public class BookActivity extends BaseActivity implements EditBookDialogFragment.OnEditBookFinishedListener {
 
     public static final String TARGET_FRAGMENT = "targetFragment";
     private static final String TAG = BookActivity.class.getSimpleName();

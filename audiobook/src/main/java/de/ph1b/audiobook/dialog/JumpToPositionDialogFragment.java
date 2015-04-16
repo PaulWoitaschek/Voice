@@ -19,9 +19,9 @@ import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.BaseApplication;
 
-public class JumpToPositionDialog extends DialogFragment {
+public class JumpToPositionDialogFragment extends DialogFragment {
 
-    public static final String TAG = JumpToPositionDialog.class.getSimpleName();
+    public static final String TAG = JumpToPositionDialogFragment.class.getSimpleName();
     private int durationInMinutes;
     private int biggestHour;
     private NumberPicker mPicker;

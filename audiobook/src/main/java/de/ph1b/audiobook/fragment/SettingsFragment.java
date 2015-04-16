@@ -14,8 +14,9 @@ import com.afollestad.materialdialogs.prefs.MaterialListPreference;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BaseActivity;
 import de.ph1b.audiobook.activity.FolderOverviewActivity;
-import de.ph1b.audiobook.dialog.SeekPreferenceDialog;
-import de.ph1b.audiobook.dialog.SleepPreferenceDialog;
+import de.ph1b.audiobook.dialog.AutoRewindDialogPreference;
+import de.ph1b.audiobook.dialog.SeekDialogPreference;
+import de.ph1b.audiobook.dialog.SleepDialogPreference;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -49,15 +50,21 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     private void initValues() {
         // seek pref
         int seekAmount = prefs.getSeekTime();
-        String seekSummary = String.valueOf(seekAmount) + " " + getString(R.string.seconds);
-        SeekPreferenceDialog seekPreferenceDialog = (SeekPreferenceDialog) findPreference(getString(R.string.pref_key_seek_time));
-        seekPreferenceDialog.setSummary(seekSummary);
+        String seekSummary = seekAmount + " " + getString(R.string.seconds);
+        SeekDialogPreference seekDialogPreference = (SeekDialogPreference) findPreference(getString(R.string.pref_key_seek_time));
+        seekDialogPreference.setSummary(seekSummary);
+
+        // auto rewind pref
+        int autoRewindAmount = prefs.getAutoRewindAmount();
+        String autoRewindSummary = autoRewindAmount + " " + getString(R.string.seconds);
+        AutoRewindDialogPreference autoRewindDialogPreference = (AutoRewindDialogPreference) findPreference(getString(R.string.pref_key_auto_rewind));
+        autoRewindDialogPreference.setSummary(autoRewindSummary);
 
         // sleep pref
         int sleepAmount = prefs.getSleepTime();
         String sleepSummary = String.valueOf(sleepAmount) + " " + getString(R.string.minutes);
-        SleepPreferenceDialog sleepPreferenceDialog = (SleepPreferenceDialog) findPreference(getString(R.string.pref_key_sleep_time));
-        sleepPreferenceDialog.setSummary(sleepSummary);
+        SleepDialogPreference sleepDialogPreference = (SleepDialogPreference) findPreference(getString(R.string.pref_key_sleep_time));
+        sleepDialogPreference.setSummary(sleepSummary);
 
         // folder pref
         Preference folderPreference = findPreference(getString(R.string.pref_key_audiobook_folders));

@@ -28,9 +28,8 @@ public class PrefsManager {
     }
 
     public void setCurrentBookId(long bookId) {
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putLong(PREF_KEY_CURRENT_BOOK, bookId);
-        editor.apply();
+        sp.edit().putLong(PREF_KEY_CURRENT_BOOK, bookId)
+                .apply();
     }
 
     @NonNull
@@ -56,9 +55,8 @@ public class PrefsManager {
     }
 
     public void setSleepTime(int time) {
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putInt(c.getString(R.string.pref_key_sleep_time), time);
-        editor.apply();
+        sp.edit().putInt(c.getString(R.string.pref_key_sleep_time), time)
+                .apply();
     }
 
     public int getSeekTime() {
@@ -66,9 +64,8 @@ public class PrefsManager {
     }
 
     public void setSeekTime(int time) {
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putInt(c.getString(R.string.pref_key_seek_time), time);
-        editor.apply();
+        sp.edit().putInt(c.getString(R.string.pref_key_seek_time), time)
+                .apply();
     }
 
     public boolean resumeOnReplug() {
@@ -77,5 +74,14 @@ public class PrefsManager {
 
     public boolean pauseOnTempFocusLoss() {
         return sp.getBoolean(c.getString(R.string.pref_key_pause_on_can_duck), false);
+    }
+
+    public int getAutoRewindAmount() {
+        return sp.getInt(c.getString(R.string.pref_key_auto_rewind), 0);
+    }
+
+    public void setAutoRewindAmount(int autoRewindAmount) {
+        sp.edit().putInt(c.getString(R.string.pref_key_auto_rewind), autoRewindAmount)
+                .apply();
     }
 }
