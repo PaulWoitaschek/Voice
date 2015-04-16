@@ -40,6 +40,7 @@
 
         <!-- Bookmark -->
         <item name="bookmark_add_button">@drawable/ic_add_circle_outline_grey600_36dp</item>
+        <item name="more">@drawable/ic_more_vert_grey600_24dp</item>
 
         <item name="text_primary">@color/light_text_primary</item>
         <item name="text_secondary">@color/light_text_secondary</item>
@@ -87,6 +88,7 @@
 
         <!-- Bookmark -->
         <item name="bookmark_add_button">@drawable/ic_add_circle_outline_white_36dp</item>
+        <item name="more">@drawable/ic_more_vert_white_24dp</item>
 
         <item name="text_primary">@color/dark_text_primary</item>
         <item name="text_secondary">@color/dark_text_secondary</item>

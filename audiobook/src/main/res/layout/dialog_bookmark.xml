@@ -4,18 +4,16 @@
     android:layout_height="wrap_content"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/vertical_margin"
-    android:paddingLeft="@dimen/horizontal_margin"
-    android:paddingRight="@dimen/horizontal_margin"
-    android:paddingTop="@dimen/vertical_margin">
+    android:paddingBottom="@dimen/md_content_padding_bottom"
+    android:paddingLeft="@dimen/md_dialog_frame_margin"
+    android:paddingRight="@dimen/md_dialog_frame_margin"
+    android:paddingTop="@dimen/md_content_padding_top">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="40dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginStart="40dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -23,8 +21,6 @@
             android:id="@+id/edit1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:layout_weight="1"
             android:hint="@string/bookmark_edit_hint"
             android:imeOptions="actionDone"
@@ -34,6 +30,7 @@
             android:id="@+id/add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
             android:contentDescription="@string/acc_button_add_bookmark"
             android:src="?attr/bookmark_add_button" />
 
