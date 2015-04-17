@@ -52,7 +52,8 @@ public class FolderOverviewActivity extends BaseActivity {
             public void onFolderMoreClicked(final int position) {
                 new MaterialDialog.Builder(FolderOverviewActivity.this)
                         .title(R.string.delete_folder)
-                        .content(getString(R.string.delete_folder_content) + "\n" + adapter.getItem(position))
+                        .content(getString(R.string.delete_folder_content) + "\n"
+                                + adapter.getItem(position))
                         .positiveText(R.string.remove)
                         .negativeText(R.string.dialog_cancel)
                         .callback(new MaterialDialog.ButtonCallback() {
@@ -60,7 +61,8 @@ public class FolderOverviewActivity extends BaseActivity {
                             public void onPositive(MaterialDialog dialog) {
                                 adapter.removeItem(position);
                                 prefs.setAudiobookFolders(folders);
-                                startService(BookAddingService.getRescanIntent(FolderOverviewActivity.this, true));
+                                startService(BookAddingService.getRescanIntent(
+                                        FolderOverviewActivity.this, true));
                             }
                         })
                         .show();

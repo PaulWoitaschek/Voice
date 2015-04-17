@@ -19,26 +19,27 @@ public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAd
     @NonNull
     private final OnFolderMoreClickedListener listener;
 
-    public FolderOverviewAdapter(@NonNull ArrayList<String> folders, @NonNull OnFolderMoreClickedListener listener) {
+    public FolderOverviewAdapter(@NonNull final ArrayList<String> folders,
+                                 @NonNull final OnFolderMoreClickedListener listener) {
         this.folders = folders;
         this.listener = listener;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate
                 (R.layout.activity_folder_overview_row_layout, parent, false);
         return new ViewHolder(v, listener);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         String folder = folders.get(position);
         holder.textView.setText(folder);
     }
 
     @Override
-    public long getItemId(int position) {
+    public long getItemId(final int position) {
         return position;
     }
 
@@ -47,18 +48,18 @@ public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAd
         return folders.size();
     }
 
-    public void removeItem(int position) {
+    public void removeItem(final int position) {
         folders.remove(position);
         notifyItemRemoved(position);
     }
 
     @NonNull
-    public String getItem(int position) {
+    public String getItem(final int position) {
         return folders.get(position);
     }
 
     public interface OnFolderMoreClickedListener {
-        public void onFolderMoreClicked(int position);
+        void onFolderMoreClicked(int position);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -66,7 +67,7 @@ public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAd
         final ImageButton imageButton;
         final TextView textView;
 
-        public ViewHolder(View itemView, final OnFolderMoreClickedListener listener) {
+        public ViewHolder(final View itemView, final OnFolderMoreClickedListener listener) {
             super(itemView);
             imageButton = (ImageButton) itemView.findViewById(R.id.remove);
             textView = (TextView) itemView.findViewById(R.id.containing);

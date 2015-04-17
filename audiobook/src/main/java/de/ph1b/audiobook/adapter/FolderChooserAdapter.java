@@ -21,7 +21,7 @@ public class FolderChooserAdapter extends BaseAdapter {
     private final Context c;
     private final ArrayList<File> data;
 
-    public FolderChooserAdapter(@NonNull Context c, @NonNull ArrayList<File> data) {
+    public FolderChooserAdapter(final @NonNull Context c, final @NonNull ArrayList<File> data) {
         this.c = c;
         this.data = data;
     }
@@ -33,21 +33,23 @@ public class FolderChooserAdapter extends BaseAdapter {
 
     @Override
     @NonNull
-    public File getItem(int position) {
+    public File getItem(final int position) {
         return data.get(position);
     }
 
     @Override
-    public long getItemId(int position) {
+    public long getItemId(final int position) {
         return position;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         final ViewHolder viewHolder;
         if (convertView == null) {
-            LayoutInflater vi = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = vi.inflate(R.layout.activity_folder_chooser_adapter_row_layout, parent, false);
+            LayoutInflater vi = (LayoutInflater) c.getSystemService(
+                    Context.LAYOUT_INFLATER_SERVICE);
+            convertView = vi.inflate(R.layout.activity_folder_chooser_adapter_row_layout, parent,
+                    false);
 
             viewHolder = new ViewHolder();
             viewHolder.textView = (TextView) convertView.findViewById(R.id.singleline_text1);
@@ -62,19 +64,17 @@ public class FolderChooserAdapter extends BaseAdapter {
         boolean isDirectory = selectedFile.isDirectory();
 
         viewHolder.textView.setText(selectedFile.getName());
+        viewHolder.textView.setEnabled(isDirectory);
 
-        if (isDirectory) {
-            viewHolder.textView.setTextColor(c.getResources().getColor(ThemeUtil.getResourceId(c, R.attr.text_primary)));
-        } else {
-            viewHolder.textView.setTextColor(c.getResources().getColor(ThemeUtil.getResourceId(c, R.attr.text_secondary)));
-        }
         Drawable icon;
         if (isDirectory) {
             //noinspection deprecation
-            icon = c.getResources().getDrawable(ThemeUtil.getResourceId(c, R.attr.folder_choose_folder));
+            icon = c.getResources().getDrawable(
+                    ThemeUtil.getResourceId(c, R.attr.folder_choose_folder));
         } else {
             //noinspection deprecation
-            icon = c.getResources().getDrawable(ThemeUtil.getResourceId(c, R.attr.folder_choose_track));
+            icon = c.getResources().getDrawable(
+                    ThemeUtil.getResourceId(c, R.attr.folder_choose_track));
         }
         viewHolder.imageView.setImageDrawable(icon);
 
