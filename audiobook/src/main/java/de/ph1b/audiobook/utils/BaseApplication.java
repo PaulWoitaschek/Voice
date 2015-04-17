@@ -197,9 +197,9 @@ public class BaseApplication extends Application {
     public void deleteBook(Book book) {
         bookLock.lock();
         try {
+            db.deleteBook(book);
             int position = allBooks.indexOf(book);
             allBooks.remove(book);
-            db.deleteBook(book);
             for (OnBookDeletedListener l : onBookDeletedListeners) {
                 l.onBookDeleted(position);
             }

@@ -31,6 +31,7 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.CountDownLatch;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.FolderChooserActivity;
@@ -346,13 +347,20 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onBookAdded(final int position) {
+        final CountDownLatch latch = new CountDownLatch(1);
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 toggleRecyclerVisibilities(baseApplication.isScannerActive());
                 adapter.notifyItemInserted(position);
+                latch.countDown();
             }
         });
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -368,13 +376,20 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onBookDeleted(final int position) {
+        final CountDownLatch latch  = new CountDownLatch(1);
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 toggleRecyclerVisibilities(baseApplication.isScannerActive());
                 adapter.notifyItemRemoved(position);
+                latch.countDown();
             }
         });
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
