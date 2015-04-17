@@ -187,11 +187,12 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
             case ERROR:
                 error("getCurrentPosition", state);
                 onErrorListener.onError(null, 0, 0);
-                break;
+                return 0;
+            case IDLE:
+                return 0;
             default:
                 return (int) (extractor.getSampleTime() / 1000);
         }
-        return 0;
     }
 
     @Override
