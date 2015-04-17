@@ -10,7 +10,7 @@ import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
+import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
 
 import java.util.ArrayList;
 
@@ -25,6 +25,7 @@ public class FolderOverviewActivity extends BaseActivity {
     private final ArrayList<String> folders = new ArrayList<>();
     private PrefsManager prefs;
     private FolderOverviewAdapter adapter;
+    private FloatingActionsMenu fam;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,7 +41,7 @@ public class FolderOverviewActivity extends BaseActivity {
 
         //init views
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fam = (FloatingActionsMenu) findViewById(R.id.fam);
 
         // preparing list
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -70,7 +71,13 @@ public class FolderOverviewActivity extends BaseActivity {
         });
         recyclerView.setAdapter(adapter);
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.add_single).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(FolderOverviewActivity.this, FolderChooserActivity.class));
+            }
+        });
+        findViewById(R.id.add_library).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(FolderOverviewActivity.this, FolderChooserActivity.class));
@@ -81,6 +88,8 @@ public class FolderOverviewActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        fam.collapse();
 
         folders.clear();
         folders.addAll(prefs.getAudiobookFolders());

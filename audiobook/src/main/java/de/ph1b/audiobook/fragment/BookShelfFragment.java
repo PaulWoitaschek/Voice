@@ -401,7 +401,8 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             public void run() {
                 toggleRecyclerVisibilities(baseApplication.isScannerActive());
             }
-        });    }
+        });
+    }
 
     @Override
     public void onScannerStateChanged(final boolean active) {
