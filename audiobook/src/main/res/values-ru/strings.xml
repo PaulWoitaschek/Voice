@@ -1,28 +1,80 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="cover">Обложка</string>
-    <string name="play_pause">Воспроизвести / Пауза</string>
-
-    <string name="action_settings">Настройки</string>
-    <string name="book_add_empty_title">Добавить название</string>
-    <string name="dialog_confirm">Установить</string>
-    <string name="dialog_cancel">Отмена</string>
-    <string name="action_time_change">Перейти к</string>
-    <string name="pref_resume_on_replug">Прокрутка назад</string>
-    <string name="pref_resume_on_replug_hint">Автоматическая прокрутка назад после паузы.</string>
-    <string name="action_sleep">Таймер сна</string>
-    <string name="no_external_storage">Карта памяти недоступна. Пожалуйста убедитесь, что она установлена и вы не соединены кабелем с компьютером.</string>
-    <string name="no_external_storage_action_bar_title">Карта памяти</string>
-
-    <string name="action_sleep_title_hint_left">Отключить через</string>
-    <string name="action_sleep_title_hint_right">минут</string>
-    <string name="minutes">минут</string>
-    <string name="seconds">секунд</string>
-
+    <!--BookShelf-->
     <string name="current_cover">Показать обложку текущей аудиокниги.</string>
     <string name="current_playing">Показывать состояние проигрывания.</string>
+    <string name="mal_file_message">Возможно данный файл поврежден:</string>
+    <string name="mal_file_title">Поврежденный файл</string>
+    <!--BookPlayActivity-->
+    <string name="cover">Обложка</string>
+    <string name="play_pause">Воспроизвести / Пауза</string>
+    <string name="action_sleep">Таймер сна</string>
+    <string name="action_sleep_title_hint_left">Отключить через</string>
+    <string name="action_sleep_title_hint_right">минут</string>
+    <string name="rewind">Перемотать назад</string>
+    <string name="fast_forward">Перемотать вперед</string>
+    <string name="previous_track">Предыдущий файл</string>
+    <string name="next_track">Следующий файл</string>
+    <string name="play">Воспроизвести</string>
+    <string name="pause">Пауза</string>
+    <string name="stop">Остановить</string>
+    <string name="sleep_timer_started">Таймер сна:</string>
+    <string name="sleep_timer_stopped">Таймер сна выключен</string>
+    <!--NoExternalStorage-->
+    <string name="no_external_storage">Карта памяти недоступна. Пожалуйста убедитесь, что она установлена и вы не соединены кабелем с компьютером.</string>
+    <string name="no_external_storage_action_bar_title">Карта памяти</string>
+    <!--Dialogs-->
+    <string name="dialog_confirm">Установить</string>
+    <string name="dialog_cancel">Отмена</string>
+    <!--EditBookDialog-->
+    <string name="book_add_empty_title">Добавить название</string>
     <string name="content_previous_cover">Выбрать предыдущую обложку</string>
     <string name="content_next_cover">Выбрать следующую обложку</string>
     <string name="content_cover">Показать выбранную обложку</string>
+    <string name="edit_book_title">Редактировать книгу</string>
+    <!--JumpToPosition-->
+    <string name="action_time_change">Перейти к</string>
+    <!--BookAdding-->
+    <string name="adding_failed_subfolder">Папка не может находиться внутри уже добавленной папки:</string>
+    <string name="audiobook_folders_title">Папки с аудиокнигами</string>
+    <string name="no_audiobook_folders_title">Выбор папки</string>
+    <string name="no_audiobook_folders_summary">Выберите папку для аудиокниг.\n\Каждая папка внутри нее будет определяться как отдельная книга!</string>
+    <string name="chosen_folder_description">Выбранная папка:</string>
+    <string name="delete_folder">Удалить из библиотеки?</string>
+    <string name="delete_folder_content">Вы хотите удалить эту папку из библиотеки?</string>
+    <string name="content_file_folder">Индикатор показывает если это файл или папка</string>
+    <!--PlaybackSpeed-->
+    <string name="playback_speed">Скорость воспроизведения</string>
+    <!--Bookmarks-->
+    <string name="bookmark">Закладки</string>
+    <string name="bookmark_edit_title">Редактировать</string>
+    <string name="acc_button_add_bookmark">Добавляет закладку текущей позиции</string>
+    <string name="bookmark_edit_hint">Название закладки</string>
+    <string name="bookmark_added">Закладка добавлена</string>
+    <string name="bookmark_delete_title">Удалить эту закладку?</string>
+    <!--Settings-->
+    <string name="pref_category_general">Основные настройки</string>
+    <string name="pref_category_playback">Настройки воспроизведения</string>
+    <string name="action_settings">Настройки</string>
+    <string name="pref_resume_on_replug">Прокрутка назад</string>
+    <string name="pref_resume_on_replug_hint">Автоматическая прокрутка назад после паузы.</string>
+    <string name="minutes">минут</string>
+    <string name="seconds">секунд</string>
     <string name="pref_seek_time">Ускоренная перемотка</string>
+    <string name="pref_title_track_to_end">Воспроизводить до конца</string>
+    <string name="pref_summary_track_to_end">Файл воспроизводится до конца, даже если сработал таймер сна.</string>
+    <string name="pref_sleep_time">Время сна</string>
+    <string name="pref_root_folder_title">Папка для аудиокниг</string>
+    <string name="pref_theme_title">Внешний вид</string>
+    <string name="pref_theme_light">Светлый</string>
+    <string name="pref_theme_dark">Темный</string>
+    <string name="pref_pause_on_can_duck_title">Останавливать во время прерывания</string>
+    <string name="pref_pause_on_can_duck_summary">Останавливать и не \"делать тише\" на время прерывания</string>
+    <string name="pref_send_bugs_title">Отправлять отчеты об ошибках</string>
+    <string name="pref_send_bugs_summary">Автоматически отправляет анонимные отчеты при возникновении сбоев</string>
+    <string name="pref_auto_rewind_title">Авто-перемотка назад</string>
+    <string name="pref_auto_rewind_summary">Отмотать назад после паузы на:</string>
+    <!--Misc-->
+    <string name="popup_edit">Редактировать</string>
+    <string name="remove">Удалить</string>
 </resources>
