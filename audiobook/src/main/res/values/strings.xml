@@ -48,7 +48,7 @@
     <string name="no_audiobook_folders_summary" tools:ignore="MissingTranslation">Please choose your audiobook folder now.\n\nEvery subfolder is being recognized as a single book!</string>
     <string name="chosen_folder_description" tools:ignore="MissingTranslation">Chosen folder:</string>
     <string name="delete_folder" tools:ignore="MissingTranslation">Remove from Library?</string>
-    <string name="delete_folder_content" tools:ignore="MissingTranslation">Dou you want to remove the following folder from the library?</string>
+    <string name="delete_folder_content" tools:ignore="MissingTranslation">Do you want to remove the following folder from the library?</string>
     <string name="content_file_folder" tools:ignore="MissingTranslation">Indicating if its a file or a folder</string>
 
     <!-- PlaybackSpeed -->
