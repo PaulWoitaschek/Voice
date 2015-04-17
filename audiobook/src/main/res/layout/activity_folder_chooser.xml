@@ -15,23 +15,25 @@
 
         <ImageButton
             android:id="@+id/twoline_image1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:clickable="true"
-            android:maxWidth="56dp"
+            android:scaleType="fitStart"
             tools:ignore="ContentDescription"
             tools:src="@drawable/ic_arrow_up_grey600_48dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginEnd="16dp"
             android:layout_marginLeft="72dp"
             android:layout_marginRight="16dp"
+            android:layout_marginStart="72dp"
             android:gravity="center_vertical"
             android:orientation="vertical">
 
