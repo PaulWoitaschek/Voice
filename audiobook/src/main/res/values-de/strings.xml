@@ -1,6 +1,40 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <!-- BookAdding -->
+    <!--BookShelf-->
+    <string name="current_cover">Zeigt das Cover des momentan spielenden Buchs.</string>
+    <string name="current_playing">Zeigt an, ob momentan ein Buch abgespielt wird.</string>
+    <string name="mal_file_message">Die folgende Datei könnte defekt sein:</string>
+    <string name="mal_file_title">Beschädigte Datei</string>
+    <!--BookPlayActivity-->
+    <string name="cover">Cover</string>
+    <string name="play_pause">Play / Pause</string>
+    <string name="action_sleep">Einschlaf-Timer</string>
+    <string name="action_sleep_title_hint_left">Pausiert nach</string>
+    <string name="action_sleep_title_hint_right">Minuten</string>
+    <string name="rewind">Zurückspulen</string>
+    <string name="fast_forward">Vorspulen</string>
+    <string name="previous_track">Voriger Song</string>
+    <string name="next_track">Nächster Song</string>
+    <string name="play">Abspielen</string>
+    <string name="pause">Pause</string>
+    <string name="stop">Stop</string>
+    <string name="sleep_timer_started">Einschlaftimer: </string>
+    <string name="sleep_timer_stopped">Einschlaftimer gestoppt</string>
+    <!--NoExternalStorage-->
+    <string name="no_external_storage">Der externe Speicher ist nicht verfügbar. Prüfen Sie, ob Ihre Speicherkarte eingesteckt und nicht mit dem Computer verbunden ist.</string>
+    <string name="no_external_storage_action_bar_title">Externer Speicher</string>
+    <!--Dialogs-->
+    <string name="dialog_confirm">Okay</string>
+    <string name="dialog_cancel">Abbrechen</string>
+    <!--EditBookDialog-->
+    <string name="book_add_empty_title">Geben Sie einen Titel ein</string>
+    <string name="content_previous_cover">Wählt voriges Cover</string>
+    <string name="content_next_cover">Wählt nächstes Cover</string>
+    <string name="content_cover">Zeigt aktuelles Cover an</string>
+    <string name="edit_book_title">Buch bearbeiten</string>
+    <!--JumpToPosition-->
+    <string name="action_time_change">Zu Stelle springen</string>
+    <!--BookAdding-->
     <string name="adding_failed_subfolder">Die Ordner dürfen kein Unterordner von einander sein:</string>
     <string name="audiobook_folders_title">Hörbuch Ordner</string>
     <string name="no_audiobook_folders_title">Ordner wählen</string>
@@ -9,8 +43,16 @@
     <string name="delete_folder">Ordner entfernen</string>
     <string name="delete_folder_content">Möchten Sie den folgenden Ordner aus Ihrer Bücherei entfernen?</string>
     <string name="content_file_folder">Zeigt an, ob es sich um einen Ordner oder um eine Datei handelt</string>
-
-    <!-- Settings -->
+    <!--PlaybackSpeed-->
+    <string name="playback_speed">Geschwindigkeit</string>
+    <!--Bookmarks-->
+    <string name="bookmark">Lesezeichen</string>
+    <string name="bookmark_edit_title">Lesezeichen bearbeiten</string>
+    <string name="acc_button_add_bookmark">Fügt an der aktuellen Stelle ein Lesezeichen hinzu.</string>
+    <string name="bookmark_edit_hint">Lesezeichenname</string>
+    <string name="bookmark_added">Lesezeichen hinzugefügt</string>
+    <string name="bookmark_delete_title">Möchten Sie dieses Lesezeichen löschen?</string>
+    <!--Settings-->
     <string name="pref_category_general">Allgemeine Einstellungen</string>
     <string name="pref_category_playback">Abspielverhalten</string>
     <string name="action_settings">Einstellungen</string>
@@ -32,43 +74,7 @@
     <string name="pref_send_bugs_summary">Sendet automatische anonymisierte Fehlerberichte um die Entwicklung zu vereinfachen.</string>
     <string name="pref_auto_rewind_title">Automatisch zurückspulen</string>
     <string name="pref_auto_rewind_summary">Spult nach manuellem pausieren automatisch zurück:</string>
-
-    <!-- Unsorted -->
-    <string name="cover">Cover</string>
-    <string name="play_pause">Play / Pause</string>
-    <string name="book_add_empty_title">Geben Sie einen Titel ein</string>
-    <string name="dialog_confirm">Okay</string>
-    <string name="dialog_cancel">Abbrechen</string>
-    <string name="action_time_change">Zu Stelle springen</string>
-    <string name="action_sleep">Einschlaf-Timer</string>
-    <string name="no_external_storage">Der externe Speicher ist nicht verfügbar. Prüfen Sie, ob Ihre Speicherkarte eingesteckt und nicht mit dem Computer verbunden ist.</string>
-    <string name="no_external_storage_action_bar_title">Externer Speicher</string>
-    <string name="action_sleep_title_hint_left">Pausiert nach</string>
-    <string name="action_sleep_title_hint_right">Minuten</string>
-    <string name="current_cover">Zeigt das Cover des momentan spielenden Buchs.</string>
-    <string name="current_playing">Zeigt an, ob momentan ein Buch abgespielt wird.</string>
-    <string name="content_previous_cover">Wählt voriges Cover</string>
-    <string name="content_next_cover">Wählt nächstes Cover</string>
-    <string name="content_cover">Zeigt aktuelles Cover an</string>
-    <string name="edit_book_title">Buch bearbeiten</string>
-    <string name="remove">Löschen</string>
+    <!--Misc-->
     <string name="popup_edit">Bearbeiten</string>
-    <string name="rewind">Zurückspulen</string>
-    <string name="fast_forward">Vorspulen</string>
-    <string name="playback_speed">Geschwindigkeit</string>
-    <string name="sleep_timer_started">Einschlaftimer: </string>
-    <string name="next_track">Nächster Song</string>
-    <string name="previous_track">Voriger Song</string>
-    <string name="bookmark">Lesezeichen</string>
-    <string name="bookmark_delete_title">Möchten Sie dieses Lesezeichen löschen?</string>
-    <string name="bookmark_edit_title">Lesezeichen bearbeiten</string>
-    <string name="acc_button_add_bookmark">Fügt an der aktuellen Stelle ein Lesezeichen hinzu.</string>
-    <string name="bookmark_edit_hint">Lesezeichenname</string>
-    <string name="bookmark_added">Lesezeichen hinzugefügt</string>
-    <string name="pause">Pause</string>
-    <string name="play">Abspielen</string>
-    <string name="stop">Stop</string>
-    <string name="sleep_timer_stopped">Einschlaftimer gestoppt</string>
-    <string name="mal_file_message">Die folgende Datei könnte defekt sein:</string>
-    <string name="mal_file_title">Beschädigte Datei</string>
+    <string name="remove">Löschen</string>
 </resources>

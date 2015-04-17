@@ -1,92 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-
+<resources>
     <!-- BookShelf -->
     <string name="current_cover">Shows cover of currently playing book.</string>
     <string name="current_playing">Shows playing state.</string>
-    <string name="mal_file_message" tools:ignore="MissingTranslation">The following file may be corrupt:</string>
-    <string name="mal_file_title" tools:ignore="MissingTranslation">Defect file</string>
-
+    <string name="mal_file_message">The following file may be corrupt:</string>
+    <string name="mal_file_title">Defect file</string>
     <!-- BookPlayActivity -->
     <string name="cover">Cover</string>
     <string name="play_pause">Play / Pause</string>
     <string name="action_sleep">Sleep-Timer</string>
     <string name="action_sleep_title_hint_left">Pauses after</string>
     <string name="action_sleep_title_hint_right">minutes</string>
-    <string name="rewind" tools:ignore="MissingTranslation">Rewind</string>
-    <string name="fast_forward" tools:ignore="MissingTranslation">Fast forward</string>
-    <string name="previous_track" tools:ignore="MissingTranslation">Previous track</string>
-    <string name="next_track" tools:ignore="MissingTranslation">Next track</string>
-    <string name="play" tools:ignore="MissingTranslation">Play</string>
-    <string name="pause" tools:ignore="MissingTranslation">Pause</string>
-    <string name="stop" tools:ignore="MissingTranslation">Stop</string>
-    <string name="sleep_timer_started" tools:ignore="MissingTranslation">Sleep timer: </string>
-    <string name="sleep_timer_stopped" tools:ignore="MissingTranslation">Sleep timer stopped</string>
-
+    <string name="rewind">Rewind</string>
+    <string name="fast_forward">Fast forward</string>
+    <string name="previous_track">Previous track</string>
+    <string name="next_track">Next track</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="stop">Stop</string>
+    <string name="sleep_timer_started">Sleep timer: </string>
+    <string name="sleep_timer_stopped">Sleep timer stopped</string>
     <!-- NoExternalStorage -->
     <string name="no_external_storage">External Storage is not available. Please make sure it is connected and not mounted in your computer.</string>
     <string name="no_external_storage_action_bar_title">External Storage</string>
-
     <!-- Dialogs -->
     <string name="dialog_confirm">Set</string>
     <string name="dialog_cancel">Cancel</string>
-
     <!-- EditBookDialog -->
     <string name="book_add_empty_title">Add a title</string>
     <string name="content_previous_cover">Chooses previous cover</string>
     <string name="content_next_cover">Chooses next cover</string>
     <string name="content_cover">Shows cover to choose</string>
-    <string name="edit_book_title" tools:ignore="MissingTranslation">Edit book</string>
-
+    <string name="edit_book_title">Edit book</string>
     <!-- JumpToPosition -->
     <string name="action_time_change">Jump to</string>
-
     <!-- BookAdding -->
-    <string name="adding_failed_subfolder" tools:ignore="MissingTranslation">The folders must not be a subfolder of each other:</string>
-    <string name="audiobook_folders_title" tools:ignore="MissingTranslation">Audiobook folders</string>
-    <string name="no_audiobook_folders_title" tools:ignore="MissingTranslation">Choose folder now</string>
-    <string name="no_audiobook_folders_summary" tools:ignore="MissingTranslation">Please choose your audiobook folder now.\n\nEvery subfolder is being recognized as a single book!</string>
-    <string name="chosen_folder_description" tools:ignore="MissingTranslation">Chosen folder:</string>
-    <string name="delete_folder" tools:ignore="MissingTranslation">Remove from Library?</string>
-    <string name="delete_folder_content" tools:ignore="MissingTranslation">Do you want to remove the following folder from the library?</string>
-    <string name="content_file_folder" tools:ignore="MissingTranslation">Indicating if its a file or a folder</string>
-
+    <string name="adding_failed_subfolder">The folders must not be a subfolder of each other:</string>
+    <string name="audiobook_folders_title">Audiobook folders</string>
+    <string name="no_audiobook_folders_title">Choose folder now</string>
+    <string name="no_audiobook_folders_summary">Please choose your audiobook folder now.\n\nEvery subfolder is being recognized as a single book!</string>
+    <string name="chosen_folder_description">Chosen folder:</string>
+    <string name="delete_folder">Remove from Library?</string>
+    <string name="delete_folder_content">Do you want to remove the following folder from the library?</string>
+    <string name="content_file_folder">Indicating if its a file or a folder</string>
     <!-- PlaybackSpeed -->
-    <string name="playback_speed" tools:ignore="MissingTranslation">Playback speed</string>
-
+    <string name="playback_speed">Playback speed</string>
     <!-- Bookmarks -->
-    <string name="bookmark" tools:ignore="MissingTranslation">Bookmark</string>
-    <string name="bookmark_edit_title" tools:ignore="MissingTranslation">Edit bookmark</string>
-    <string name="acc_button_add_bookmark" tools:ignore="MissingTranslation">Adds a bookmark at the current position</string>
-    <string name="bookmark_edit_hint" tools:ignore="MissingTranslation">Bookmark name</string>
-    <string name="bookmark_added" tools:ignore="MissingTranslation">Bookmark added</string>
-    <string name="bookmark_delete_title" tools:ignore="MissingTranslation">Delete this bookmark?</string>
-
+    <string name="bookmark">Bookmark</string>
+    <string name="bookmark_edit_title">Edit bookmark</string>
+    <string name="acc_button_add_bookmark">Adds a bookmark at the current position</string>
+    <string name="bookmark_edit_hint">Bookmark name</string>
+    <string name="bookmark_added">Bookmark added</string>
+    <string name="bookmark_delete_title">Delete this bookmark?</string>
     <!-- Settings -->
-    <string name="pref_category_general" tools:ignore="MissingTranslation">General settings</string>
-    <string name="pref_category_playback" tools:ignore="MissingTranslation">Playback behaviour</string>
+    <string name="pref_category_general">General settings</string>
+    <string name="pref_category_playback">Playback behaviour</string>
     <string name="action_settings">Preferences</string>
     <string name="pref_resume_on_replug">Resume playback</string>
     <string name="pref_resume_on_replug_hint">If you paused by plugging headset out, it will resume on replug.</string>
     <string name="minutes">minutes</string>
     <string name="seconds">seconds</string>
     <string name="pref_seek_time">Skip amount</string>
-    <string name="pref_title_track_to_end" tools:ignore="MissingTranslation">Continue till end</string>
-    <string name="pref_summary_track_to_end" tools:ignore="MissingTranslation">Continues playing till the end of the track, after sleep timer has triggered.</string>
-    <string name="pref_sleep_time" tools:ignore="MissingTranslation">Sleep time</string>
-    <string name="pref_root_folder_title" tools:ignore="MissingTranslation">Audiobook folder</string>
-    <string name="pref_theme_title" tools:ignore="MissingTranslation">Theme</string>
-    <string name="pref_theme_light" tools:ignore="MissingTranslation">Light</string>
-    <string name="pref_theme_dark" tools:ignore="MissingTranslation">Dark</string>
-    <string name="pref_pause_on_can_duck_title" tools:ignore="MissingTranslation">Pause on Interruption</string>
-    <string name="pref_pause_on_can_duck_summary" tools:ignore="MissingTranslation">Pause when interrupted instead of lowering the volume for the duration of the interruption.</string>
-    <string name="pref_send_bugs_title" tools:ignore="MissingTranslation">Report bugs</string>
-    <string name="pref_send_bugs_summary" tools:ignore="MissingTranslation">Automatically sends anonymous reports about crashes to help development.</string>
-    <string name="pref_auto_rewind_title" tools:ignore="MissingTranslation">Auto rewind</string>
-    <string name="pref_auto_rewind_summary" tools:ignore="MissingTranslation">Automatically rewinds after manual pausing:</string>
-
+    <string name="pref_title_track_to_end">Continue till end</string>
+    <string name="pref_summary_track_to_end">Continues playing till the end of the track, after sleep timer has triggered.</string>
+    <string name="pref_sleep_time">Sleep time</string>
+    <string name="pref_root_folder_title">Audiobook folder</string>
+    <string name="pref_theme_title">Theme</string>
+    <string name="pref_theme_light">Light</string>
+    <string name="pref_theme_dark">Dark</string>
+    <string name="pref_pause_on_can_duck_title">Pause on Interruption</string>
+    <string name="pref_pause_on_can_duck_summary">Pause when interrupted instead of lowering the volume for the duration of the interruption.</string>
+    <string name="pref_send_bugs_title">Report bugs</string>
+    <string name="pref_send_bugs_summary">Automatically sends anonymous reports about crashes to help development.</string>
+    <string name="pref_auto_rewind_title">Auto rewind</string>
+    <string name="pref_auto_rewind_summary">Automatically rewinds after manual pausing:</string>
     <!-- Misc -->
-    <string name="popup_edit" tools:ignore="MissingTranslation">Edit</string>
-    <string name="remove" tools:ignore="MissingTranslation">Remove</string>
-
+    <string name="popup_edit">Edit</string>
+    <string name="remove">Remove</string>
 </resources>
