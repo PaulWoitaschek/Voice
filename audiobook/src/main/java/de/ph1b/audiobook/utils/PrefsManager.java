@@ -77,7 +77,7 @@ public class PrefsManager {
     }
 
     public int getAutoRewindAmount() {
-        return sp.getInt(c.getString(R.string.pref_key_auto_rewind), 0);
+        return sp.getInt(c.getString(R.string.pref_key_auto_rewind), 2);
     }
 
     public void setAutoRewindAmount(int autoRewindAmount) {
