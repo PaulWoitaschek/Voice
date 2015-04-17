@@ -11,7 +11,7 @@ android {
         versionName '2.0.9'
 
         ndk {
-            moduleName "sonic"it pul
+            moduleName "sonic"
         }
 
     }
