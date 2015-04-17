@@ -351,7 +351,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                toggleRecyclerVisibilities(baseApplication.isScannerActive());
                 adapter.notifyItemInserted(position);
                 latch.countDown();
             }
@@ -380,7 +379,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                toggleRecyclerVisibilities(baseApplication.isScannerActive());
                 adapter.notifyItemRemoved(position);
                 latch.countDown();
             }
