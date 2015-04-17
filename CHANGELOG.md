@@ -1,4 +1,4 @@
-# v2.0.9 Updated translation
+# v2.0.9 Translation & Hotfix
 
 ## Addition
 * KO fully translated
