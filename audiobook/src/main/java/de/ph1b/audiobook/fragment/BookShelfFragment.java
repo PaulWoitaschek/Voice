@@ -360,6 +360,8 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        toggleRecyclerVisibilities(baseApplication.isScannerActive());
     }
 
     @Override
@@ -375,7 +377,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onBookDeleted(final int position) {
-        final CountDownLatch latch  = new CountDownLatch(1);
+        final CountDownLatch latch = new CountDownLatch(1);
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -388,6 +390,8 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        toggleRecyclerVisibilities(baseApplication.isScannerActive());
     }
 
     @Override
