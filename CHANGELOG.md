@@ -1,3 +1,12 @@
+# v2.0.9 Updated translation
+
+## Addition
+* KO fully translated
+
+## Fixes
+* Typos fixed
+* Threading issue fixed, so recycler should hopefully never crash again due to invalid state
+
 # v2.0.8 Autorewind & Finetuning
 
 ## Additions
