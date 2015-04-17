@@ -1,3 +1,7 @@
+# v2.0.9.1 Hotfix
+## Fixes
+* Correctly hide progressbar after first book has been added.
+
 # v2.0.9 Translation & Hotfix
 
 ## Addition
