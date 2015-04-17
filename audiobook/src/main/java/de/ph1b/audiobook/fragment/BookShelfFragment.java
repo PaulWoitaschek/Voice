@@ -361,7 +361,12 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             e.printStackTrace();
         }
 
-        toggleRecyclerVisibilities(baseApplication.isScannerActive());
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                toggleRecyclerVisibilities(baseApplication.isScannerActive());
+            }
+        });
     }
 
     @Override
@@ -391,8 +396,12 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             e.printStackTrace();
         }
 
-        toggleRecyclerVisibilities(baseApplication.isScannerActive());
-    }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                toggleRecyclerVisibilities(baseApplication.isScannerActive());
+            }
+        });    }
 
     @Override
     public void onScannerStateChanged(final boolean active) {
