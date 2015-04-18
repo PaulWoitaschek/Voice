@@ -15,4 +15,5 @@
         <item>dark</item>
     </string-array>
     <string name="pref_key_auto_rewind">AUTO_REWIND</string>
+    <string name="transition_cover">coverTransition</string>
 </resources>

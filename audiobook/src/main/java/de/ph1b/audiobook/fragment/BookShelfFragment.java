@@ -4,16 +4,23 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,6 +36,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.CountDownLatch;
@@ -46,15 +54,22 @@ import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.BaseApplication;
+import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 
-public class BookShelfFragment extends Fragment implements View.OnClickListener, EditBookDialogFragment.OnEditBookFinishedListener, BaseApplication.OnBookAddedListener, BaseApplication.OnBookDeletedListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener, BaseApplication.OnScannerStateChangedListener {
+public class BookShelfFragment extends Fragment implements View.OnClickListener,
+        EditBookDialogFragment.OnEditBookFinishedListener,
+        BaseApplication.OnBookAddedListener,
+        BaseApplication.OnBookDeletedListener,
+        BaseApplication.OnPlayStateChangedListener,
+        BaseApplication.OnPositionChangedListener,
+        BaseApplication.OnScannerStateChangedListener {
 
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
     private BookShelfAdapter adapter;
-    private ImageView currentCover;
+    private ImageView widgetCover;
     private TextView currentText;
     private ViewGroup playerWidget;
     private PrefsManager prefs;
@@ -68,8 +83,19 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_book_shelf, container, false);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Transition fade = new Fade();
+            fade.setDuration(300);
+            fade.excludeTarget(android.R.id.navigationBarBackground, true);
+            fade.excludeTarget(android.R.id.statusBarBackground, true);
+            fade.excludeTarget(R.id.toolbar, true);
+            setEnterTransition(fade);
+            setReenterTransition(fade);
+        }
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         ((ActionBarActivity) getActivity()).setSupportActionBar(toolbar);
@@ -80,7 +106,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         setHasOptionsMenu(true);
 
         playerWidget = (ViewGroup) view.findViewById(R.id.current);
-        currentCover = (ImageView) view.findViewById(R.id.current_cover);
+        widgetCover = (ImageView) view.findViewById(R.id.current_cover);
         currentText = (TextView) view.findViewById(R.id.current_text);
         currentPlaying = (ImageButton) view.findViewById(R.id.current_playing);
         progressBar = (ProgressBar) view.findViewById(R.id.progress);
@@ -89,50 +115,58 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
         playerWidget.setOnClickListener(this);
         currentPlaying.setOnClickListener(this);
-        BookShelfAdapter.OnItemClickListener onClickListener = new BookShelfAdapter.OnItemClickListener() {
-            @Override
-            public void onCoverClicked(int position) {
-                Book book = adapter.getItem(position);
-                baseApplication.setCurrentBook(book);
-                prefs.setCurrentBookId(book.getId());
+        BookShelfAdapter.OnItemClickListener onClickListener =
+                new BookShelfAdapter.OnItemClickListener() {
+                    @Override
+                    public void onCoverClicked(int position, ImageView cover) {
+                        Book book = adapter.getItem(position);
+                        baseApplication.setCurrentBook(book);
+                        prefs.setCurrentBookId(book.getId());
 
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.content, new BookPlayFragment(), BookPlayFragment.TAG)
-                        .commit();
-            }
-
-            @Override
-            public void onMenuClicked(final int position) {
-                Book book = adapter.getItem(position);
-
-                EditBookDialogFragment editBookDialogFragment = new EditBookDialogFragment();
-                Bundle bundle = new Bundle();
-
-                ArrayList<Bitmap> covers = new ArrayList<>();
-                CoverReplacement replacement = new CoverReplacement(book.getName(), getActivity());
-                covers.add(ImageHelper.drawableToBitmap(replacement,
-                        EditBookDialogFragment.REPLACEMENT_DIMEN, EditBookDialogFragment.REPLACEMENT_DIMEN));
-
-                File coverFile = book.getCoverFile();
-                if (coverFile.exists() && coverFile.canRead()) {
-                    Bitmap defaultCover = BitmapFactory.decodeFile(coverFile.getAbsolutePath());
-                    if (defaultCover != null) {
-                        covers.add(defaultCover);
+                        startBookPlay(cover);
                     }
-                }
 
-                bundle.putParcelableArrayList(EditBookDialogFragment.BOOK_COVER, covers);
-                bundle.putLong(Book.TAG, book.getId());
+                    @Override
+                    public void onMenuClicked(final int position) {
+                        Book book = adapter.getItem(position);
 
-                editBookDialogFragment.setArguments(bundle);
-                editBookDialogFragment.show(getFragmentManager(), EditBookDialogFragment.TAG);
-            }
-        };
+                        EditBookDialogFragment editBookDialogFragment = new EditBookDialogFragment();
+                        Bundle bundle = new Bundle();
+
+                        ArrayList<Bitmap> covers = new ArrayList<>();
+                        CoverReplacement replacement = new CoverReplacement(book.getName(), getActivity());
+                        covers.add(ImageHelper.drawableToBitmap(replacement,
+                                EditBookDialogFragment.REPLACEMENT_DIMEN,
+                                EditBookDialogFragment.REPLACEMENT_DIMEN));
+
+                        File coverFile = book.getCoverFile();
+                        if (coverFile.exists() && coverFile.canRead()) {
+                            Bitmap defaultCover = BitmapFactory.decodeFile(coverFile.getAbsolutePath());
+                            if (defaultCover != null) {
+                                covers.add(defaultCover);
+                            }
+                        }
+
+                        bundle.putParcelableArrayList(EditBookDialogFragment.BOOK_COVER, covers);
+                        bundle.putLong(Book.TAG, book.getId());
+
+                        editBookDialogFragment.setArguments(bundle);
+                        editBookDialogFragment.show(getFragmentManager(), EditBookDialogFragment.TAG);
+                    }
+                };
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getAmountOfColumns()));
-        adapter = new BookShelfAdapter(baseApplication.getAllBooks(), getActivity(), onClickListener);
+        adapter = new BookShelfAdapter(baseApplication.getAllBooks(), getActivity(),
+                onClickListener);
         recyclerView.setAdapter(adapter);
+
+        if (savedInstanceState != null) {
+            recyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState
+                    .getParcelable(RECYCLER_VIEW_STATE));
+        }
+
+        initPlayerWidget();
 
         return view;
     }
@@ -141,7 +175,8 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        String malformedFile = getArguments() != null ? getArguments().getString(MediaPlayerController.MALFORMED_FILE) : null;
+        String malformedFile = getArguments() != null ? getArguments().getString(
+                MediaPlayerController.MALFORMED_FILE) : null;
         if (malformedFile != null) {
             new MaterialDialog.Builder(getActivity())
                     .title(R.string.mal_file_title)
@@ -154,12 +189,15 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        L.d(TAG, "onCreate called");
+
         baseApplication = (BaseApplication) getActivity().getApplication();
         prefs = new PrefsManager(getActivity());
         controller = new ServiceController(getActivity());
         noFolderWarning = new MaterialDialog.Builder(getActivity())
                 .title(R.string.no_audiobook_folders_title)
-                .content(getString(R.string.no_audiobook_folders_summary_start) + "\n\n" + getString(R.string.no_audiobook_folders_end))
+                .content(getString(R.string.no_audiobook_folders_summary_start) + "\n\n" +
+                        getString(R.string.no_audiobook_folders_end))
                 .positiveText(R.string.dialog_confirm)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
@@ -225,6 +263,46 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         toggleRecyclerVisibilities(baseApplication.isScannerActive());
     }
 
+    private static final String RECYCLER_VIEW_STATE = "recyclerViewState";
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (recyclerView != null) {
+            outState.putParcelable(RECYCLER_VIEW_STATE, recyclerView.getLayoutManager()
+                    .onSaveInstanceState());
+        }
+
+        super.onSaveInstanceState(outState);
+    }
+
+    private Bitmap picassoGetBlocking(final File file) {
+        final Bitmap[] bitmap = {null};
+        Runnable getter = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    bitmap[0] = Picasso.with(getActivity()).load(file).get();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                synchronized (this) {
+                    this.notify();
+                }
+
+            }
+        };
+        //noinspection SynchronizationOnLocalVariableOrMethodParameter
+        synchronized (getter) {
+            new Thread(getter).start();
+            try {
+                getter.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return bitmap[0];
+    }
+
     private void initPlayerWidget() {
         Book book = baseApplication.getCurrentBook();
         if (book != null) {
@@ -232,10 +310,15 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             File coverFile = book.getCoverFile();
             String bookName = book.getName();
             Drawable coverReplacement = new CoverReplacement(bookName, getActivity());
+
+            Bitmap bitmap = null;
             if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-                Picasso.with(getActivity()).load(coverFile).fit().placeholder(coverReplacement).into(currentCover);
+                bitmap = picassoGetBlocking(coverFile);
+            }
+            if (bitmap == null) {
+                widgetCover.setImageDrawable(coverReplacement);
             } else {
-                currentCover.setImageDrawable(coverReplacement);
+                widgetCover.setImageBitmap(bitmap);
             }
 
             // text
@@ -252,9 +335,11 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                     timeTillBeginOfCurrentChapter += c.getDuration();
                 }
             }
-            int progress = Math.round((timeTillBeginOfCurrentChapter + book.getTime()) * 1000 / duration);
+            int progress = Math.round((timeTillBeginOfCurrentChapter + book.getTime()) * 1000
+                    / duration);
             progressBar.setProgress(progress);
         }
+
     }
 
     @Override
@@ -263,9 +348,11 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             @Override
             public void run() {
                 if (state == BaseApplication.PlayState.PLAYING) {
-                    currentPlaying.setImageResource(ThemeUtil.getResourceId(getActivity(), R.attr.book_shelf_pause));
+                    currentPlaying.setImageResource(ThemeUtil.getResourceId(getActivity(),
+                            R.attr.book_shelf_pause));
                 } else {
-                    currentPlaying.setImageResource(ThemeUtil.getResourceId(getActivity(), R.attr.book_shelf_play));
+                    currentPlaying.setImageResource(ThemeUtil.getResourceId(getActivity(),
+                            R.attr.book_shelf_play));
                 }
             }
         });
@@ -307,6 +394,40 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         }
     }
 
+    private void startBookPlay(View view) {
+
+        ViewCompat.setTransitionName(view, getString(R.string.transition_cover));
+        Fragment bookPlayFragment = new BookPlayFragment();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            Transition sharedElementEnterTransition = TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.move);
+            sharedElementEnterTransition.setDuration(300);
+            bookPlayFragment.setSharedElementEnterTransition(sharedElementEnterTransition);
+
+            Transition enterTransition = new Slide(Gravity.TOP);
+            enterTransition.setDuration(300);
+            enterTransition.excludeTarget(R.id.toolbar, true);
+            enterTransition.excludeTarget(R.id.book_cover, true);
+            bookPlayFragment.setEnterTransition(enterTransition);
+
+            Transition returnTransition = new Slide(Gravity.BOTTOM);
+            returnTransition.setDuration(300);
+            returnTransition.excludeTarget(R.id.toolbar, true);
+            returnTransition.excludeTarget(R.id.book_cover, true);
+            bookPlayFragment.setReturnTransition(returnTransition);
+
+            Transition sharedElementReturnTransition = new Fade();
+            sharedElementReturnTransition.setDuration(300);
+            bookPlayFragment.setSharedElementReturnTransition(sharedElementReturnTransition);
+        }
+
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content, bookPlayFragment, BookPlayFragment.TAG)
+                .addToBackStack(null)
+                .addSharedElement(view, getString(R.string.transition_cover))
+                .commit();
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -314,9 +435,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                 controller.playPause();
                 break;
             case R.id.current:
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.content, new BookPlayFragment(), BookPlayFragment.TAG)
-                        .commit();
+                startBookPlay(widgetCover);
                 break;
             default:
                 break;

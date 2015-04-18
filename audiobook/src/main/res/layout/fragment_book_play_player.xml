@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
     android:layout_marginBottom="8dp"
+    android:background="?android:attr/windowBackground"
     android:gravity="center_vertical"
     android:orientation="vertical">
 

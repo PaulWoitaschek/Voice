@@ -17,6 +17,8 @@
         <item name="colorAccentDark">@color/light_accent_dark</item>
         <item name="android:imageButtonStyle">@style/LightButtonStyle</item>
         <item name="theme_name">@string/pref_theme_light</item>
+        <item name="android:navigationBarColor" tools:ignore="NewApi">@color/light_primary_dark
+        </item>
 
         <!-- BookShelf -->
         <item name="book_shelf_play">@drawable/ic_play_arrow_grey600_48dp</item>
@@ -68,6 +70,8 @@
         <item name="colorAccentDark">@color/dark_accent_dark</item>
         <item name="android:imageButtonStyle">@style/DarkButtonStyle</item>
         <item name="theme_name">@string/pref_theme_dark</item>
+        <item name="android:navigationBarColor" tools:ignore="NewApi">@color/dark_primary_dark
+        </item>
 
         <!-- BookShelf -->
         <item name="book_shelf_play">@drawable/ic_play_arrow_white_48dp</item>

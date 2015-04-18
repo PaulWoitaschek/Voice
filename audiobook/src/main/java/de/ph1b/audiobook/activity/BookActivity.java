@@ -64,20 +64,34 @@ public class BookActivity extends BaseActivity implements EditBookDialogFragment
 
                 ft.replace(R.id.content, bookShelfFragment, BookShelfFragment.TAG);
             }
-            ft.commit();
+            ft.addToBackStack(null).commit();
         }
     }
 
     @Override
     public void onBackPressed() {
+        L.d(TAG, "onBackPressed called");
         FragmentManager fm = getSupportFragmentManager();
-        L.d(TAG, "onBackPressed with backStackEntryCount=" + fm.getBackStackEntryCount());
+
         Fragment bookPlayFragment = fm.findFragmentByTag(BookPlayFragment.TAG);
-        if (bookPlayFragment != null && bookPlayFragment.isVisible()) {
-            fm.beginTransaction().replace(R.id.content, new BookShelfFragment(), BookShelfFragment.TAG).commit();
+        Fragment bookShelfFragment = fm.findFragmentByTag(BookShelfFragment.TAG);
+
+        if (bookPlayFragment != null && bookPlayFragment.isVisible() && bookShelfFragment == null) {
+            fm.beginTransaction().replace(R.id.content, new BookShelfFragment(),
+                    BookShelfFragment.TAG).addToBackStack(null).commit();
+        } else if (bookShelfFragment != null && bookShelfFragment.isVisible()) {
+            finish();
         } else {
+            L.v(TAG, "calling super.onBackPressed()");
             super.onBackPressed();
         }
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        L.d(TAG, "onSaveInstanceState called");
     }
 
     @Override
