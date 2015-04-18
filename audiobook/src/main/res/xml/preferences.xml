@@ -3,7 +3,7 @@
     <PreferenceCategory android:title="@string/pref_category_general">
         <Preference
             android:key="@string/pref_key_audiobook_folders"
-            android:summary="Your audiobook folders"
+            android:summary="@string/pref_root_folder_summary"
             android:title="@string/pref_root_folder_title" />
         <com.afollestad.materialdialogs.prefs.MaterialListPreference
             android:defaultValue="light"
