@@ -193,9 +193,11 @@ public class BaseApplication extends Application {
     public void setCurrentBook(Book book) {
         bookLock.lock();
         try {
-            this.currentBook = book;
-            for (OnCurrentBookChangedListener l : onCurrentBookChangedListeners) {
-                l.onCurrentBookChanged(currentBook);
+            if (this.currentBook != book) {
+                this.currentBook = book;
+                for (OnCurrentBookChangedListener l : onCurrentBookChangedListeners) {
+                    l.onCurrentBookChanged(currentBook);
+                }
             }
         } finally {
             bookLock.unlock();
