@@ -34,7 +34,7 @@ import java.util.Collections;
 import java.util.concurrent.CountDownLatch;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.FolderChooserActivity;
+import de.ph1b.audiobook.activity.FolderOverviewActivity;
 import de.ph1b.audiobook.activity.SettingsActivity;
 import de.ph1b.audiobook.adapter.BookShelfAdapter;
 import de.ph1b.audiobook.dialog.EditBookDialogFragment;
@@ -164,7 +164,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        startActivity(new Intent(getActivity(), FolderChooserActivity.class));
+                        startActivity(new Intent(getActivity(), FolderOverviewActivity.class));
                     }
                 })
                 .cancelable(false)
