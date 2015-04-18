@@ -1,39 +1,84 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="cover">Obal</string>
-    <string name="play_pause">Přehrát / Pozastavit</string>
-
-    <string name="action_settings">Nastavení</string>
-    <string name="book_add_empty_title">Přidat titul</string>
-    <string name="dialog_confirm">Nastavit</string>
-    <string name="dialog_cancel">Ukončit</string>
-    <string name="action_time_change">Přeskočit na</string>
-    <string name="pref_resume_on_replug">Pokračovat v přehrávání</string>
-    <string name="pref_resume_on_replug_hint">Pokud pozastavíte přehrávání vytažením sluchátek, při jejich
-        připojení bude znovu spuštěno.</string>
-    <string name="action_sleep">Časovač vypnutí</string>
-    <string name="no_external_storage">Externí úložiště není dostupné. Ověřte prosím, že je
-        připojeno a není používáno vaším počítačem.</string>
-    <string name="no_external_storage_action_bar_title">Externí úložiště</string>
-
-    <string name="action_sleep_title_hint_left">Pozastavit po</string>
-    <string name="action_sleep_title_hint_right">minutách</string>
-    <string name="minutes">minut</string>
-    <string name="seconds">sekund</string>
-
+    <!--BookShelf-->
     <string name="current_cover">Zobrazit obal právě přehrávané knihy.</string>
     <string name="current_playing">Zobrazit stav přehrávání.</string>
+    <string name="mal_file_message">Následující soubor může být poškozen:</string>
+    <string name="mal_file_title">Najít soubor</string>
+    <!--BookPlayActivity-->
+    <string name="cover">Obal</string>
+    <string name="play_pause">Přehrát / Pozastavit</string>
+    <string name="action_sleep">Časovač vypnutí</string>
+    <string name="action_sleep_title_hint_left">Pozastavit po</string>
+    <string name="action_sleep_title_hint_right">minutách</string>
+    <string name="rewind">Přetočit</string>
+    <string name="fast_forward">Posun vpřed</string>
+    <string name="previous_track">Předchozí skladba</string>
+    <string name="next_track">Následující skladba</string>
+    <string name="play">Spustit</string>
+    <string name="pause">Pozastavit</string>
+    <string name="stop">Zastavit</string>
+    <string name="sleep_timer_started">Časovač vypnutí: </string>
+    <string name="sleep_timer_stopped">Časovač vypnutí zastaven</string>
+    <!--NoExternalStorage-->
+  <string name="no_external_storage">Externí úložiště není dostupné. Ověřte prosím, že je
+        připojeno a není používáno vaším počítačem.</string>
+    <string name="no_external_storage_action_bar_title">Externí úložiště</string>
+    <!--Dialogs-->
+    <string name="dialog_confirm">Nastavit</string>
+    <string name="dialog_cancel">Ukončit</string>
+    <!--EditBookDialog-->
+    <string name="book_add_empty_title">Přidat titul</string>
     <string name="content_previous_cover">Vybere předchozí obal</string>
     <string name="content_next_cover">Vybere další obal</string>
     <string name="content_cover">Zobrazí obaly pro vybrání</string>
-    <string name="pref_seek_time">Přeskočit o</string>
-
     <string name="edit_book_title">Upravit knihu</string>
+    <!--JumpToPosition-->
+    <string name="action_time_change">Přeskočit na</string>
+    <!--BookAdding-->
+    <string name="adding_failed_subfolder">Adresáře nesmí být podadresáři sebe samých:</string>
+    <string name="audiobook_folders_title">Adresáře s audioknihami</string>
+    <string name="no_audiobook_folders_title">Vybrat adresář</string>
+    <string name="no_audiobook_folders_summary">Vyberte prosím adresář s audioknihami.\n\nKaždý jeho podadresář bude rozpoznán jako samostatná kniha!</string>
+    <string name="chosen_folder_description">Vybraný adresář:</string>
+    <string name="delete_folder">Odstranit z knihovny?</string>
+    <string name="delete_folder_content">Opravdu chcete odstranit následující adresář z knihovny?</string>
+    <string name="content_file_folder">Určení zda jde o soubor nebo adresář</string>
+    <string name="folder_add_book">Samotná kniha</string>
+    <string name="folder_add_collection">Adresář s vícero knihami</string>
+    <!--PlaybackSpeed-->
+    <string name="playback_speed">Rychlost přehrávání</string>
+    <!--Bookmarks-->
+    <string name="bookmark">Záložka</string>
+    <string name="bookmark_edit_title">Upravit záložku</string>
+    <string name="acc_button_add_bookmark">Přidá záložku na aktuální pozici</string>
+    <string name="bookmark_edit_hint">Jméno záložky</string>
+    <string name="bookmark_added">Záložka přidána</string>
+    <string name="bookmark_delete_title">Smazat tuto záložku?</string>
+    <!--Settings-->
+    <string name="pref_category_general">Hlavní nastavení</string>
+    <string name="pref_category_playback">Nastavení přehrávání</string>
+    <string name="action_settings">Nastavení</string>
+    <string name="pref_resume_on_replug">Pokračovat v přehrávání</string>
+  <string name="pref_resume_on_replug_hint">Pokud pozastavíte přehrávání vytažením sluchátek, při jejich
+        připojení bude znovu spuštěno.</string>
+    <string name="minutes">minut</string>
+    <string name="seconds">sekund</string>
+    <string name="pref_seek_time">Přeskočit o</string>
+    <string name="pref_title_track_to_end">Pokračovat do konce</string>
+    <string name="pref_summary_track_to_end">Pokračovat v přehrávání až do konce aktuální skladby poté co byl aktivován časovač vypnutí.</string>
+    <string name="pref_sleep_time">Časovač vypnutí</string>
+    <string name="pref_root_folder_title">Adresář audioknihy</string>
+    <string name="pref_theme_title">Vzhled</string>
+    <string name="pref_theme_light">Světlý</string>
+    <string name="pref_theme_dark">Tmavý</string>
+    <string name="pref_pause_on_can_duck_title">Pozastavit při vyrušení</string>
+    <string name="pref_pause_on_can_duck_summary">Pozastavit při vyrušení namísto snížení hlasitosti po trvání vyrušení.</string>
+    <string name="pref_send_bugs_title">Nahlásit chybu</string>
+    <string name="pref_send_bugs_summary">Automaticky odesílat anonymní hlášení o pádech aplikace pro zlepšení vývoje.</string>
+    <string name="pref_auto_rewind_title">Automaticky přetočit</string>
+    <string name="pref_auto_rewind_summary">Automaticky přetočí po ručním pozastavení:</string>
+    <!--Misc-->
     <string name="popup_edit">Upravit</string>
     <string name="remove">Smazat</string>
-    <string name="rewind">Přetočit</string>
-    <string name="fast_forward">Posun vpřed</string>
-    <string name="playback_speed">Rychlost přehrávání</string>
-    <string name="pref_sleep_time">Časovač vypnutí</string>
-    <string name="sleep_timer_started">Časovač vypnutí: </string>
 </resources>
