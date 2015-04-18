@@ -47,7 +47,7 @@ public class BaseApplication extends Application {
     private Book currentBook = null;
     private volatile PlayState currentState = PlayState.STOPPED;
     private PrefsManager prefs;
-    private boolean sleepTimerActive = false;
+    private volatile boolean sleepTimerActive = false;
     private volatile boolean scannerActive = false;
     private BookAdder bookAdder;
 
