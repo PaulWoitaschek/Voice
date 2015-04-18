@@ -80,7 +80,7 @@ public class BookmarkDialogFragment extends DialogFragment {
                                 new MaterialDialog.Builder(getActivity())
                                         .title(R.string.bookmark_edit_title)
                                         .inputType(InputType.TYPE_CLASS_TEXT)
-                                        .input(getString(R.string.bookmark_edit_hint), editBookmark.getTitle(), new MaterialDialog.InputCallback() {
+                                        .input(getString(R.string.bookmark_edit_hint), editBookmark.getTitle(), false, new MaterialDialog.InputCallback() {
                                             @Override
                                             public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
                                                 editBookmark.setTitle(charSequence.toString());
