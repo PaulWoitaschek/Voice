@@ -70,6 +70,7 @@ public class FolderOverviewActivity extends BaseActivity {
                                     public void onPositive(MaterialDialog dialog) {
                                         adapter.removeItem(position);
                                         prefs.setCollectionFolders(bookCollections);
+                                        prefs.setSingleBookFolders(singleBooks);
                                         baseApplication.scanForFiles(true);
                                     }
                                 })
