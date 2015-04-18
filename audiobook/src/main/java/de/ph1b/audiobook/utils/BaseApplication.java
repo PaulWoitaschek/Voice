@@ -32,7 +32,7 @@ import de.ph1b.audiobook.service.WidgetUpdateService;
 @ThreadSafe
 public class BaseApplication extends Application {
     private static final String TAG = BaseApplication.class.getSimpleName();
-    public final ReentrantLock bookLock = new ReentrantLock();
+    private final ReentrantLock bookLock = new ReentrantLock();
     @GuardedBy("bookLock")
     private final ArrayList<Book> allBooks = new ArrayList<>();
     private final CopyOnWriteArrayList<OnBookAddedListener> onBookAddedListeners = new CopyOnWriteArrayList<>();

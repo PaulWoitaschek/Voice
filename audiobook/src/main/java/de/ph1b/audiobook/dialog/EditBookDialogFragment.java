@@ -55,7 +55,6 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
     private ArrayList<Bitmap> covers;
     private int googleCount = 0;
     private Book book;
-    private BaseApplication baseApplication;
     private DataBaseHelper db;
 
     @Override
@@ -111,7 +110,7 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
         super.onCreate(savedInstanceState);
 
         coverDownloader = new CoverDownloader(getActivity());
-        baseApplication = (BaseApplication) getActivity().getApplication();
+        BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
         db = DataBaseHelper.getInstance(getActivity());
 
         Bundle b = getArguments();
@@ -182,28 +181,23 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
                     addCoverAsync.cancel(true);
                 }
 
-                baseApplication.bookLock.lock();
-                try {
-                    String bookName = nameEditText.getText().toString();
-                    Rect r = coverImageView.getCropPosition();
-                    if (coverPosition > 0 && r.width() > 0 && r.height() > 0) {
-                        Bitmap cover = covers.get(coverPosition);
-                        cover = Bitmap.createBitmap(cover, r.left, r.top, r.width(), r.height());
-                        ImageHelper.saveCover(cover, getActivity(), book.getRoot(),
-                                book.getChapters());
-                        book.setUseCoverReplacement(false);
-                    } else {
-                        book.setUseCoverReplacement(true);
-                    }
-
-                    book.setName(bookName);
-                    db.updateBook(book);
-                    Picasso.with(getActivity()).invalidate(book.getCoverFile());
-
-                    ((OnEditBookFinishedListener) getActivity()).onEditBookFinished(book);
-                } finally {
-                    baseApplication.bookLock.unlock();
+                String bookName = nameEditText.getText().toString();
+                Rect r = coverImageView.getCropPosition();
+                if (coverPosition > 0 && r.width() > 0 && r.height() > 0) {
+                    Bitmap cover = covers.get(coverPosition);
+                    cover = Bitmap.createBitmap(cover, r.left, r.top, r.width(), r.height());
+                    ImageHelper.saveCover(cover, getActivity(), book.getRoot(),
+                            book.getChapters());
+                    book.setUseCoverReplacement(false);
+                } else {
+                    book.setUseCoverReplacement(true);
                 }
+
+                book.setName(bookName);
+                db.updateBook(book);
+                Picasso.with(getActivity()).invalidate(book.getCoverFile());
+
+                ((OnEditBookFinishedListener) getActivity()).onEditBookFinished(book);
             }
 
             @Override

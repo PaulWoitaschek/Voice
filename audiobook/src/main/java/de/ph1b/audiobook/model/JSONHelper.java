@@ -32,14 +32,18 @@ class JSONHelper {
     @NonNull
     private JSONObject playingInformation = new JSONObject();
 
-    public JSONHelper(@NonNull String root, @NonNull ArrayList<Chapter> chapters) {
-        this.configFile = Book.getConfigFile(root, chapters);
-        this.backupFile = Book.getBackupFile(root, chapters);
+    public JSONHelper(@NonNull String root,
+                      @NonNull ArrayList<Chapter> chapters,
+                      @NonNull Book.Type type) {
+        this.configFile = Book.getConfigFile(root, chapters, type);
+        this.backupFile = Book.getBackupFile(root, chapters, type);
 
         synchronized (JSONHelper.class) {
 
-            boolean configFileValid = configFile.exists() && configFile.canRead() && configFile.length() > 0;
-            boolean backupFileValid = backupFile.exists() && backupFile.canRead() && backupFile.length() > 0;
+            boolean configFileValid = configFile.exists() && configFile.canRead()
+                    && configFile.length() > 0;
+            boolean backupFileValid = backupFile.exists() && backupFile.canRead()
+                    && backupFile.length() > 0;
 
             JSONObject tempInformation = null;
             if (configFileValid) {
@@ -57,32 +61,39 @@ class JSONHelper {
 
         try {
             // bookmarks
-            if (!(playingInformation.has(JSON_BOOKMARKS)) || (playingInformation.has(JSON_BOOKMARKS) && !(playingInformation.get(JSON_BOOKMARKS) instanceof JSONArray))) {
+            if (!(playingInformation.has(JSON_BOOKMARKS)) || (playingInformation.has(JSON_BOOKMARKS)
+                    && !(playingInformation.get(JSON_BOOKMARKS) instanceof JSONArray))) {
                 playingInformation.put(JSON_BOOKMARKS, new JSONArray());
             }
 
             // time
-            if (!(playingInformation.has(JSON_TIME)) || (playingInformation.has(JSON_TIME) && !(playingInformation.get(JSON_TIME) instanceof Number))) {
+            if (!(playingInformation.has(JSON_TIME)) || (playingInformation.has(JSON_TIME)
+                    && !(playingInformation.get(JSON_TIME) instanceof Number))) {
                 playingInformation.put(JSON_TIME, 0);
             }
 
             // rel path
-            if (!(playingInformation.has(JSON_REL_PATH)) || (playingInformation.has(JSON_REL_PATH) && !(playingInformation.get(JSON_REL_PATH) instanceof String))) {
+            if (!(playingInformation.has(JSON_REL_PATH)) || (playingInformation.has(JSON_REL_PATH)
+                    && !(playingInformation.get(JSON_REL_PATH) instanceof String))) {
                 playingInformation.put(JSON_REL_PATH, "1.0");
             }
 
             // speed
-            if (!(playingInformation.has(JSON_SPEED)) || (playingInformation.has(JSON_SPEED) && !(playingInformation.get(JSON_SPEED) instanceof String))) {
+            if (!(playingInformation.has(JSON_SPEED)) || (playingInformation.has(JSON_SPEED)
+                    && !(playingInformation.get(JSON_SPEED) instanceof String))) {
                 playingInformation.put(JSON_SPEED, "1.0");
             }
 
             // book name
-            if (!(playingInformation.has(JSON_NAME)) || (playingInformation.has(JSON_NAME) && !(playingInformation.get(JSON_NAME) instanceof String))) {
+            if (!(playingInformation.has(JSON_NAME)) || (playingInformation.has(JSON_NAME)
+                    && !(playingInformation.get(JSON_NAME) instanceof String))) {
                 playingInformation.put(JSON_NAME, "");
             }
 
             // cover replacement
-            if (!(playingInformation.has(JSON_USE_COVER_REPLACEMENT)) || (playingInformation.has(JSON_USE_COVER_REPLACEMENT) && !(playingInformation.get(JSON_USE_COVER_REPLACEMENT) instanceof Boolean))) {
+            if (!(playingInformation.has(JSON_USE_COVER_REPLACEMENT))
+                    || (playingInformation.has(JSON_USE_COVER_REPLACEMENT)
+                    && !(playingInformation.get(JSON_USE_COVER_REPLACEMENT) instanceof Boolean))) {
                 playingInformation.put(JSON_USE_COVER_REPLACEMENT, false);
             }
         } catch (JSONException e) {

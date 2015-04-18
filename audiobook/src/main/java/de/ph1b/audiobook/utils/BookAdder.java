@@ -89,9 +89,24 @@ public class BookAdder {
     }
 
     private void addNewBooks() {
-        ArrayList<File> containingFiles = getContainingFiles();
-        for (final File f : containingFiles) {
-            addNewBook(f);
+        ArrayList<File> singleBooks = getSingleBookFiles();
+        for (File f : singleBooks) {
+            L.d(TAG, "addNewBooks with singleBookFile=" + f);
+            if (f.isFile() && f.canRead()) {
+                addNewBook(f, Book.Type.SINGLE_FILE);
+            } else if (f.isDirectory() && f.canRead()) {
+                addNewBook(f, Book.Type.SINGLE_FOLDER);
+            }
+        }
+
+        ArrayList<File> collectionBooks = getCollectionBookFiles();
+        for (File f : collectionBooks) {
+            L.d(TAG, "checking collectionBook=" + f);
+            if (f.isFile() && f.canRead()) {
+                addNewBook(f, Book.Type.COLLECTION_FILE);
+            } else if (f.isDirectory() && f.canRead()) {
+                addNewBook(f, Book.Type.COLLECTION_FOLDER);
+            }
         }
     }
 
@@ -103,15 +118,16 @@ public class BookAdder {
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
+                    L.v(TAG, "started");
                     baseApplication.setScannerActive(true);
                     stopScanner = false;
-
 
                     deleteOldBooks();
                     addNewBooks();
 
                     stopScanner = false;
                     baseApplication.setScannerActive(false);
+                    L.v(TAG, "stopped");
                 }
             });
         }
@@ -126,12 +142,18 @@ public class BookAdder {
         return false;
     }
 
+    private ArrayList<File> getSingleBookFiles() {
+        ArrayList<File> singleBooks = new ArrayList<>();
+        for (String s : prefs.getSingleBookFolders()) {
+            singleBooks.add(new File(s));
+        }
+        return singleBooks;
+    }
 
-    private ArrayList<File> getContainingFiles() {
-        // getting all files who are in the root of the chosen folders
-        ArrayList<String> folders = prefs.getCollectionFolders();
+
+    private ArrayList<File> getCollectionBookFiles() {
         ArrayList<File> containingFiles = new ArrayList<>();
-        for (String s : folders) {
+        for (String s : prefs.getCollectionFolders()) {
             File f = new File(s);
             if (f.exists() && f.isDirectory()) {
                 File[] containing = f.listFiles(folderAndMusicFilter);
@@ -143,45 +165,83 @@ public class BookAdder {
         return containingFiles;
     }
 
+
+    /**
+     * Deletes all the books that exist on the database but not on the hard drive or on the saved
+     * audio book paths.
+     */
     private void deleteOldBooks() {
-        ArrayList<File> containingFiles = getContainingFiles();
+        final String TAG = BookAdder.TAG + "#deleteOldBooks()";
+        L.d(TAG, "started");
+        ArrayList<File> singleBookFiles = getSingleBookFiles();
+        ArrayList<File> collectionBookFolders = getCollectionBookFiles();
 
         //getting books to remove
-        baseApplication.bookLock.lock();
-        try {
-            ArrayList<Book> booksToRemove = new ArrayList<>();
-            for (Book book : baseApplication.getAllBooks()) {
-                boolean bookExists = false;
-                for (File f : containingFiles) {
-                    if (f.isDirectory()) { // multi file book
-                        if (book.getRoot().equals(f.getAbsolutePath())) {
-                            bookExists = true;
-                        }
-                    } else if (f.isFile()) { // single file book
-                        ArrayList<Chapter> chapters = book.getChapters();
-                        String singleBookChapterPath = book.getRoot() + "/" + chapters.get(0).getPath();
-                        if (singleBookChapterPath.equals(f.getAbsolutePath())) {
-                            bookExists = true;
+        ArrayList<Book> booksToRemove = new ArrayList<>();
+        for (Book book : baseApplication.getAllBooks()) {
+            boolean bookExists = false;
+            switch (book.getType()) {
+                case COLLECTION_FILE:
+                    for (File f : collectionBookFolders) {
+                        if (f.isFile()) {
+                            ArrayList<Chapter> chapters = book.getChapters();
+                            String singleBookChapterPath = book.getRoot() + "/" + chapters.get(0).getPath();
+                            if (singleBookChapterPath.equals(f.getAbsolutePath())) {
+                                bookExists = true;
+                            }
                         }
                     }
-                }
-                if (!bookExists) {
-                    booksToRemove.add(book);
-                }
+                    break;
+                case COLLECTION_FOLDER:
+                    for (File f : collectionBookFolders) {
+                        if (f.isDirectory()) { // multi file book
+                            if (book.getRoot().equals(f.getAbsolutePath())) {
+                                bookExists = true;
+                            }
+                        }
+                    }
+                    break;
+                case SINGLE_FILE:
+                    for (File f : singleBookFiles) {
+                        if (f.isFile()) {
+                            ArrayList<Chapter> chapters = book.getChapters();
+                            String singleBookChapterPath = book.getRoot() + "/" + chapters.get(0).getPath();
+                            if (singleBookChapterPath.equals(f.getAbsolutePath())) {
+                                bookExists = true;
+                            }
+                        }
+                    }
+                    break;
+                case SINGLE_FOLDER:
+                    for (File f : singleBookFiles) {
+                        if (f.isDirectory()) { // multi file book
+                            if (book.getRoot().equals(f.getAbsolutePath())) {
+                                bookExists = true;
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    throw new AssertionError("We added somewhere a non valid type=" + book.getType());
             }
 
-            for (Book b : booksToRemove) {
-                L.d(TAG, "deleting book=" + b);
-                baseApplication.deleteBook(b);
+            if (!bookExists) {
+                booksToRemove.add(book);
             }
-        } finally {
-            baseApplication.bookLock.unlock();
         }
+
+        for (Book b : booksToRemove) {
+            L.d(TAG, "deleting book=" + b);
+            baseApplication.deleteBook(b);
+        }
+        L.d(TAG, "finished");
     }
 
-    private void addNewBook(File f) {
-        Book bookExisting = getBookByRoot(f);
-        Book newBook = rootFileToBook(f);
+    private void addNewBook(File f, Book.Type type) {
+        final String TAG = BookAdder.TAG + "#addNewBook(" + f + ", " + type + ")";
+        L.v(TAG, "started");
+        Book bookExisting = getBookFromDBByFile(f, type);
+        Book newBook = rootFileToBook(f, type);
 
         // this check is important
         if (stopScanner) {
@@ -206,6 +266,7 @@ public class BookAdder {
         }
 
         baseApplication.addBook(newBook);
+        L.v(TAG, "finished normally");
     }
 
     /**
@@ -244,31 +305,7 @@ public class BookAdder {
     }
 
     @Nullable
-    private Book rootFileToBook(File rootFile) {
-        if (stopScanner) {
-            return null;
-        }
-
-        ArrayList<File> rootFiles = new ArrayList<>();
-        rootFiles.add(rootFile);
-        rootFiles = addFilesRecursive(rootFiles);
-        ArrayList<Chapter> containingMedia = new ArrayList<>();
-        ArrayList<File> coverFiles = new ArrayList<>();
-        ArrayList<File> musicFiles = new ArrayList<>();
-        for (File f : rootFiles) {
-            if (isAudio(f)) {
-                musicFiles.add(f);
-            } else if (isImage(f)) {
-                coverFiles.add(f);
-            }
-        }
-
-        if (musicFiles.size() == 0) {
-            L.d(TAG, "assAsBook with file=" + rootFiles + " aborted because it contains no audio files");
-        }
-
-        Bitmap cover = null;
-
+    private Bitmap getCoverFromDisk(ArrayList<File> coverFiles) {
         // if there are images, get the first one.
         ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
         ActivityManager activityManager = (ActivityManager) baseApplication.getSystemService(Context.ACTIVITY_SERVICE);
@@ -278,13 +315,40 @@ public class BookAdder {
             // only read cover if its size is less than a third of the available memory
             if (f.length() < (mi.availMem / 3L)) {
                 try {
-                    cover = Picasso.with(baseApplication).load(f).resize(dimen, dimen).get();
-                    break;
+                    return Picasso.with(baseApplication).load(f).resize(dimen, dimen).get();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
+        return null;
+    }
+
+    @Nullable
+    private Book rootFileToBook(File rootFile, Book.Type type) {
+        if (stopScanner) {
+            return null;
+        }
+
+        ArrayList<File> containingFiles = new ArrayList<>();
+        containingFiles.add(rootFile);
+        containingFiles = addFilesRecursive(containingFiles);
+
+        ArrayList<File> coverFiles = new ArrayList<>();
+        ArrayList<File> musicFiles = new ArrayList<>();
+        for (File f : containingFiles) {
+            if (isAudio(f)) {
+                musicFiles.add(f);
+            } else if (isImage(f)) {
+                coverFiles.add(f);
+            }
+        }
+
+        if (musicFiles.size() == 0) {
+            L.d(TAG, "assAsBook with file=" + containingFiles + " aborted because it contains no audio files");
+            return null;
+        }
+
 
         String bookRoot = rootFile.isDirectory() ?
                 rootFile.getAbsolutePath() :
@@ -293,7 +357,10 @@ public class BookAdder {
                 rootFile.getName() :
                 rootFile.getName().substring(0, rootFile.getName().lastIndexOf("."));
 
+        Bitmap cover = getCoverFromDisk(coverFiles);
+
         // get duration and if there is no cover yet, try to get an embedded dover (up to 5 times)
+        ArrayList<Chapter> containingMedia = new ArrayList<>();
         final int MAX_TRIES_FOR_EMBEDDED_COVER = 5;
         MediaPlayer mp = new MediaPlayer();
         try {
@@ -319,6 +386,7 @@ public class BookAdder {
                     chapterName = fileName;
                 }
 
+
                 if (duration > 0) {
                     containingMedia.add(new Chapter(f.getAbsolutePath().substring(bookRoot.length() + 1), chapterName, duration));
                 }
@@ -336,28 +404,27 @@ public class BookAdder {
         }
 
         if (containingMedia.size() == 0) {
-            L.e(TAG, "Book with root=" + rootFiles + " contains no media");
+            L.e(TAG, "Book with root=" + containingFiles + " contains no media");
             return null;
-        }
-
-        if (cover != null && !Book.getCoverFile(bookRoot, containingMedia).exists()) {
+        } else if (cover != null && !Book.getCoverFile(bookRoot, containingMedia).exists()) {
             ImageHelper.saveCover(cover, baseApplication, bookRoot, containingMedia);
         }
 
-        return new Book(bookRoot, bookName, containingMedia, new ArrayList<Bookmark>(), 1.0f, Book.ID_UNKNOWN, 0, containingMedia.get(0).getPath(), false);
+        return new Book(bookRoot, bookName, containingMedia, new ArrayList<Bookmark>(), 1.0f,
+                Book.ID_UNKNOWN, 0, containingMedia.get(0).getPath(), false, type);
     }
 
     @Nullable
-    private Book getBookByRoot(File rootFile) {
+    private Book getBookFromDBByFile(File rootFile, Book.Type type) {
         if (rootFile.isDirectory()) {
             for (Book b : baseApplication.getAllBooks()) {
-                if (rootFile.getAbsolutePath().equals(b.getRoot())) {
+                if (rootFile.getAbsolutePath().equals(b.getRoot()) && type == b.getType()) {
                     return b;
                 }
             }
         } else if (rootFile.isFile()) {
             for (Book b : baseApplication.getAllBooks()) {
-                if (rootFile.getParentFile().getAbsolutePath().equals(b.getRoot())) {
+                if (rootFile.getParentFile().getAbsolutePath().equals(b.getRoot()) && type == b.getType()) {
                     Chapter singleChapter = b.getChapters().get(0);
                     if ((b.getRoot() + "/" + singleChapter.getPath()).equals(rootFile.getAbsolutePath())) {
                         return b;

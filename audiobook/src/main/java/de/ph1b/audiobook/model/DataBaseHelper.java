@@ -17,14 +17,16 @@ import de.ph1b.audiobook.utils.L;
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class DataBaseHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 23;
+    private static final int DATABASE_VERSION = 24;
     private static final String DATABASE_NAME = "autoBookDB";
 
     private static final String TABLE_BOOK = "TABLE_BOOK";
     private static final String BOOK_ID = "BOOK_ID";
     private static final String BOOK_ROOT = "BOOK_ROOT";
+    private static final String BOOK_TYPE = "BOOK_TYPE";
     private static final String CREATE_TABLE_BOOK = "CREATE TABLE " + TABLE_BOOK + " ( " +
             BOOK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            BOOK_TYPE + " TEXT NOT NULL, " +
             BOOK_ROOT + " TEXT NOT NULL)";
 
     private static final String TABLE_CHAPTERS = "TABLE_CHAPTERS";
@@ -63,6 +65,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         try {
             ContentValues cv = new ContentValues();
             cv.put(BOOK_ROOT, book.getRoot());
+            cv.put(BOOK_TYPE, book.getType().name());
             bookId = db.insert(TABLE_BOOK, null, cv);
 
             for (Chapter c : book.getChapters()) {
@@ -80,7 +83,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         book.setId(bookId);
 
         // retrieving existing values
-        JSONHelper helper = new JSONHelper(book.getRoot(), book.getChapters());
+        JSONHelper helper = new JSONHelper(book.getRoot(), book.getChapters(), book.getType());
 
         // name
         String name = helper.getName();
@@ -89,7 +92,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         } else {
             helper.setName(book.getName());
         }
-
 
         // relPath
         String relPath = helper.getRelPath();
@@ -162,15 +164,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @Nullable
     private Book getBook(long id, @NonNull SQLiteDatabase db) {
         Cursor cursor = db.query(TABLE_BOOK,
-                new String[]{BOOK_ROOT},
+                new String[]{BOOK_ROOT, BOOK_TYPE},
                 BOOK_ID + "=?", new String[]{String.valueOf(id)},
                 null, null, null);
         try {
             if (cursor.moveToFirst()) {
                 String root = cursor.getString(0);
+                Book.Type type = Book.Type.valueOf(cursor.getString(1));
                 ArrayList<Chapter> chapters = getChapters(id, db);
 
-                JSONHelper helper = new JSONHelper(root, chapters);
+                JSONHelper helper = new JSONHelper(root, chapters, type);
 
                 int currentTime = helper.getTime();
 
@@ -187,7 +190,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     if (bookmarkExists) {
                         safeBookmarks.add(b);
                     } else {
-                        L.e(TAG, "deleted bookmark=" + b + " because it was not in chapters=" + chapters);
+                        L.e(TAG, "deleted bookmark=" + b + " because it was not in chapters="
+                                + chapters);
                     }
                 }
 
@@ -216,7 +220,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
                 boolean useCoverReplacement = helper.useCoverReplacement();
 
-                return new Book(root, name, chapters, safeBookmarks, speed, id, currentTime, relPath, useCoverReplacement);
+                return new Book(root, name, chapters, safeBookmarks, speed, id, currentTime,
+                        relPath, useCoverReplacement, type);
             }
         } finally {
             cursor.close();
@@ -227,7 +232,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @NonNull
     private ArrayList<Chapter> getChapters(long bookId, @NonNull SQLiteDatabase db) {
         ArrayList<Chapter> chapters = new ArrayList<>();
-        Cursor cursor = db.query(TABLE_CHAPTERS, new String[]{CHAPTER_PATH, CHAPTER_DURATION, CHAPTER_NAME},
+        Cursor cursor = db.query(TABLE_CHAPTERS, new String[]{CHAPTER_PATH, CHAPTER_DURATION,
+                        CHAPTER_NAME},
                 BOOK_ID + "=?", new String[]{String.valueOf(bookId)},
                 null, null, null);
         try {
@@ -244,7 +250,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     public void updateBook(@NonNull Book book) {
-        JSONHelper helper = new JSONHelper(book.getRoot(), book.getChapters());
+        JSONHelper helper = new JSONHelper(book.getRoot(), book.getChapters(), book.getType());
 
         helper.setTime(book.getTime());
         helper.setSpeed(book.getPlaybackSpeed());

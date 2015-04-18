@@ -192,21 +192,17 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         baseApplication.addOnPlayStateChangedListener(this);
         baseApplication.addOnPositionChangedListener(this);
 
-        // Scanning for new files here in case there are changes on the drive.
-        baseApplication.bookLock.lock();
-        try {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    adapter.notifyDataSetChanged();
-                }
-            });
-            baseApplication.addOnBookAddedListener(this);
-            baseApplication.addOnBookDeletedListener(this);
-        } finally {
-            baseApplication.bookLock.unlock();
-        }
 
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        });
+        baseApplication.addOnBookAddedListener(this);
+        baseApplication.addOnBookDeletedListener(this);
+
+        // Scanning for new files here in case there are changes on the drive.
         baseApplication.addOnScannerStateChangedListener(this);
         baseApplication.scanForFiles(false);
 
@@ -220,7 +216,8 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         onPlayStateChanged(baseApplication.getPlayState());
         onPositionChanged(true);
 
-        boolean audioFoldersEmpty = prefs.getCollectionFolders().size() == 0;
+        boolean audioFoldersEmpty = (prefs.getCollectionFolders().size() +
+                prefs.getSingleBookFolders().size()) == 0;
         boolean noFolderWarningIsShowing = noFolderWarning.isShowing();
         if (audioFoldersEmpty && !noFolderWarningIsShowing) {
             noFolderWarning.show();
@@ -329,18 +326,13 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onEditBookFinished(@NonNull Book book) {
-        baseApplication.bookLock.lock();
-        try {
-            int oldIndex = baseApplication.getAllBooks().indexOf(book);
-            Collections.sort(baseApplication.getAllBooks());
-            int newIndex = baseApplication.getAllBooks().indexOf(book);
-            adapter.notifyItemMoved(oldIndex, newIndex);
-            adapter.notifyItemChanged(newIndex);
+        int oldIndex = baseApplication.getAllBooks().indexOf(book);
+        Collections.sort(baseApplication.getAllBooks());
+        int newIndex = baseApplication.getAllBooks().indexOf(book);
+        adapter.notifyItemMoved(oldIndex, newIndex);
+        adapter.notifyItemChanged(newIndex);
 
-            initPlayerWidget();
-        } finally {
-            baseApplication.bookLock.unlock();
-        }
+        initPlayerWidget();
     }
 
     @Override
