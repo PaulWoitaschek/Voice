@@ -2,6 +2,7 @@ package de.ph1b.audiobook.fragment;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -47,7 +48,9 @@ import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 
-public class BookPlayFragment extends Fragment implements View.OnClickListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener, BaseApplication.OnSleepStateChangedListener {
+public class BookPlayFragment extends Fragment implements View.OnClickListener,
+        BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener,
+        BaseApplication.OnSleepStateChangedListener {
 
 
     public static final String TAG = BookPlayFragment.class.getSimpleName();
@@ -61,10 +64,12 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
     private ServiceController controller;
     private BaseApplication baseApplication;
     private Book book;
+    private TransitionDrawable playTransition;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_book_play, container, false);
 
         book = baseApplication.getCurrentBook();
@@ -88,8 +93,6 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         //init buttons
         seekBar = (SeekBar) view.findViewById(R.id.seekBar);
         playButton = (FloatingActionButton) view.findViewById(R.id.play);
-        ImageButton rewind_button = (ImageButton) view.findViewById(R.id.rewind);
-        ImageButton fast_forward_button = (ImageButton) view.findViewById(R.id.fastForward);
         ImageButton previous_button = (ImageButton) view.findViewById(R.id.previous);
         ImageButton next_button = (ImageButton) view.findViewById(R.id.next);
         playedTimeView = (TextView) view.findViewById(R.id.played);
@@ -98,8 +101,8 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         bookSpinner = (Spinner) view.findViewById(R.id.book_spinner);
 
         //setup buttons
-        rewind_button.setOnClickListener(this);
-        fast_forward_button.setOnClickListener(this);
+        view.findViewById(R.id.fastForward).setOnClickListener(this);
+        view.findViewById(R.id.rewind).setOnClickListener(this);
         previous_button.setOnClickListener(this);
         next_button.setOnClickListener(this);
         playButton.setOnClickListener(this);
@@ -108,7 +111,8 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                playedTimeView.setText(formatTime(progress)); //sets text to adjust while using seekBar
+                //sets text to adjust while using seekBar
+                playedTimeView.setText(formatTime(progress));
             }
 
             @Override
@@ -118,7 +122,8 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 int progress = seekBar.getProgress();
-                controller.changeTime(progress, baseApplication.getCurrentBook().getCurrentChapter().getPath());
+                controller.changeTime(progress, baseApplication.getCurrentBook().getCurrentChapter()
+                        .getPath());
                 playedTimeView.setText(formatTime(progress));
             }
         });
@@ -128,7 +133,8 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         for (Chapter c : baseApplication.getCurrentBook().getChapters()) {
             chaptersAsStrings.add(c.getName());
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.fragment_book_play_spinner, chaptersAsStrings);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+                R.layout.fragment_book_play_spinner, chaptersAsStrings);
         adapter.setDropDownViewResource(R.layout.fragment_book_play_spinner);
         bookSpinner.setAdapter(adapter);
 
@@ -137,7 +143,8 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
             public void onItemSelected(AdapterView<?> parent, View view, int newPosition, long id) {
                 if (parent.getTag() != null && ((int) parent.getTag()) != newPosition) {
                     L.i(TAG, "spinner, onItemSelected, firing:" + newPosition);
-                    controller.changeTime(0, baseApplication.getCurrentBook().getChapters().get(newPosition).getPath());
+                    controller.changeTime(0, baseApplication.getCurrentBook().getChapters().get(
+                            newPosition).getPath());
                     parent.setTag(newPosition);
                 }
             }
@@ -149,9 +156,11 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
 
         // (Cover)
         File coverFile = book.getCoverFile();
-        Drawable coverReplacement = new CoverReplacement(baseApplication.getCurrentBook().getName(), getActivity());
+        Drawable coverReplacement = new CoverReplacement(baseApplication.getCurrentBook().getName(),
+                getActivity());
         if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-            Picasso.with(getActivity()).load(coverFile).placeholder(coverReplacement).into(coverView);
+            Picasso.with(getActivity()).load(coverFile).placeholder(coverReplacement).into(
+                    coverView);
         } else {
             coverView.setImageDrawable(coverReplacement);
         }
@@ -192,7 +201,6 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         super.onResume();
 
         onPositionChanged(true);
-        onPlayStateChanged(baseApplication.getPlayState());
     }
 
     @Override
@@ -224,15 +232,34 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         });
     }
 
+
+    /**
+     * Sets the play initial play transition.
+     */
+    public void setPlayTransition() {
+        @SuppressWarnings("deprecation") Drawable pause = getResources().getDrawable(
+                R.drawable.ic_pause_white_24dp);
+        @SuppressWarnings("deprecation") Drawable play = getResources().getDrawable(
+                R.drawable.ic_play_arrow_white_24dp);
+        if (baseApplication.getPlayState() == BaseApplication.PlayState.PLAYING) {
+            playTransition = new TransitionDrawable(new Drawable[]{pause, play});
+        } else {
+            playTransition = new TransitionDrawable(new Drawable[]{play, pause});
+        }
+        playTransition.setCrossFadeEnabled(true);
+        playButton.setIconDrawable(playTransition);
+    }
+
     @Override
     public void onPlayStateChanged(final BaseApplication.PlayState state) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                final int DURATION = 300;
                 if (state == BaseApplication.PlayState.PLAYING) {
-                    playButton.setIcon(R.drawable.ic_pause_white_24dp);
+                    playTransition.startTransition(DURATION);
                 } else {
-                    playButton.setIcon(R.drawable.ic_play_arrow_white_24dp);
+                    playTransition.reverseTransition(DURATION);
                 }
             }
         });
@@ -322,6 +349,8 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
     public void onStart() {
         super.onStart();
 
+        setPlayTransition();
+
         baseApplication.addOnPlayStateChangedListener(this);
         baseApplication.addOnPositionChangedListener(this);
         baseApplication.addOnSleepStateChangedListener(this);
@@ -344,10 +373,12 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
                 getActivity().invalidateOptionsMenu();
                 if (active) {
                     int minutes = prefs.getSleepTime();
-                    String message = getString(R.string.sleep_timer_started) + minutes + " " + getString(R.string.minutes);
+                    String message = getString(R.string.sleep_timer_started) + minutes + " " +
+                            getString(R.string.minutes);
                     Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getActivity(), R.string.sleep_timer_stopped, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), R.string.sleep_timer_stopped, Toast.LENGTH_LONG)
+                            .show();
                 }
             }
         });
