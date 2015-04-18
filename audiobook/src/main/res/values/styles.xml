@@ -37,6 +37,7 @@
         <!-- Folder Overview -->
         <item name="folder_overview_trash">@drawable/ic_delete_grey600_24dp</item>
         <item name="folder_overview_multi_folder">@drawable/ic_folder_multiple_grey600_48dp</item>
+        <item name="background_overlay">@color/primary_text_disabled_material_light</item>
 
         <!-- BookEditDialog -->
         <item name="edit_next">@drawable/ic_navigate_next_grey600_36dp</item>
@@ -87,6 +88,7 @@
         <!-- Folder Overview -->
         <item name="folder_overview_trash">@drawable/ic_delete_white_24dp</item>
         <item name="folder_overview_multi_folder">@drawable/ic_folder_multiple_white_48dp</item>
+        <item name="background_overlay">@color/primary_text_disabled_material_dark</item>
 
         <!-- BookEditDialog -->
         <item name="edit_next">@drawable/ic_navigate_next_white_36dp</item>

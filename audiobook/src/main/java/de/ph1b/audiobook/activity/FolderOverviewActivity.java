@@ -1,17 +1,23 @@
 package de.ph1b.audiobook.activity;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
+import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
 import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
 
 import java.util.ArrayList;
@@ -26,12 +32,25 @@ import de.ph1b.audiobook.utils.PrefsManager;
 public class FolderOverviewActivity extends BaseActivity {
 
     private static final String TAG = FolderOverviewActivity.class.getSimpleName();
+    private static final String BACKGROUND_OVERLAY_VISIBLE = "backgroundOverlayVisibility";
     private final ArrayList<String> bookCollections = new ArrayList<>();
     private final ArrayList<String> singleBooks = new ArrayList<>();
     private PrefsManager prefs;
     private FolderOverviewAdapter adapter;
     private FloatingActionsMenu fam;
     private BaseApplication baseApplication;
+    private FloatingActionButton buttonRepresentingTheFam;
+    private View backgroundOverlay;
+
+    /**
+     * @return the point representing the center of the floating action menus button. Note, that the
+     * fam is only a container, so we have to calculate the point relatively.
+     */
+    private Point getFamCenter() {
+        int x = fam.getLeft() + ((buttonRepresentingTheFam.getLeft() + buttonRepresentingTheFam.getRight()) / 2);
+        int y = fam.getTop() + ((buttonRepresentingTheFam.getTop() + buttonRepresentingTheFam.getBottom()) / 2);
+        return new Point(x, y);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,6 +68,70 @@ public class FolderOverviewActivity extends BaseActivity {
         //init views
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
         fam = (FloatingActionsMenu) findViewById(R.id.fam);
+        buttonRepresentingTheFam = (FloatingActionButton) findViewById(R.id.fab_expand_menu_button);
+        backgroundOverlay = findViewById(R.id.overlay);
+        if (savedInstanceState != null) { // restoring overlay
+            if (savedInstanceState.getBoolean(BACKGROUND_OVERLAY_VISIBLE)) {
+                backgroundOverlay.setVisibility(View.VISIBLE);
+            } else {
+                backgroundOverlay.setVisibility(View.GONE);
+            }
+        }
+
+        fam.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+            @Override
+            public void onMenuExpanded() {
+                if (Build.VERSION.SDK_INT >= 21) {
+                    Point famCenter = getFamCenter();
+                    int cx = famCenter.x;
+                    int cy = famCenter.y;
+
+                    // get the final radius for the clipping circle
+                    int finalRadius = Math.max(backgroundOverlay.getWidth(), backgroundOverlay.getHeight());
+
+                    // create the animator for this view (the start radius is zero)
+                    Animator anim = ViewAnimationUtils.createCircularReveal(backgroundOverlay, cx, cy, 0,
+                            finalRadius);
+
+                    // make the view visible and start the animation
+                    backgroundOverlay.setVisibility(View.VISIBLE);
+                    anim.start();
+                } else {
+                    backgroundOverlay.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onMenuCollapsed() {
+                if (Build.VERSION.SDK_INT >= 21) {
+                    // get the center for the clipping circle
+                    Point famCenter = getFamCenter();
+                    int cx = famCenter.x;
+                    int cy = famCenter.y;
+
+                    // get the initial radius for the clipping circle
+                    int initialRadius = Math.max(backgroundOverlay.getHeight(), backgroundOverlay.getWidth());
+
+                    // create the animation (the final radius is zero)
+                    Animator anim = ViewAnimationUtils.createCircularReveal(backgroundOverlay, cx, cy,
+                            initialRadius, 0);
+
+                    // make the view invisible when the animation is done
+                    anim.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            backgroundOverlay.setVisibility(View.INVISIBLE);
+                        }
+                    });
+
+                    // start the animation
+                    anim.start();
+                } else {
+                    backgroundOverlay.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
 
         // preparing list
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -175,5 +258,12 @@ public class FolderOverviewActivity extends BaseActivity {
         singleBooks.clear();
         singleBooks.addAll(prefs.getSingleBookFolders());
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(BACKGROUND_OVERLAY_VISIBLE, backgroundOverlay.getVisibility() == View.VISIBLE);
+
+        super.onSaveInstanceState(outState);
     }
 }

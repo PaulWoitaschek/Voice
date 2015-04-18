@@ -19,6 +19,13 @@
             android:clipToPadding="false"
             android:paddingBottom="88dp" />
 
+        <View
+            android:id="@+id/overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/background_overlay"
+            android:visibility="invisible" />
+
         <net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu
             android:id="@+id/fam"
             android:layout_width="wrap_content"
@@ -51,6 +58,7 @@
                 fab:fab_title="@string/folder_add_collection" />
 
         </net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu>
+
     </FrameLayout>
 
 </LinearLayout>
