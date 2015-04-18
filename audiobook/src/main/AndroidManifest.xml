@@ -66,8 +66,6 @@
 
         <service android:name=".service.WidgetUpdateService" />
 
-        <service android:name=".service.BookAddingService" />
-
         <receiver android:name=".receiver.RemoteControlReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />

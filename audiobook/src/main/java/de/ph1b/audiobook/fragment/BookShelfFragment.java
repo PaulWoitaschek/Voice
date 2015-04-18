@@ -41,7 +41,6 @@ import de.ph1b.audiobook.dialog.EditBookDialogFragment;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
-import de.ph1b.audiobook.service.BookAddingService;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
@@ -209,8 +208,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         }
 
         baseApplication.addOnScannerStateChangedListener(this);
-
-        getActivity().startService(BookAddingService.getRescanIntent(getActivity(), false));
+        baseApplication.scanForFiles(false);
 
         if (baseApplication.getCurrentBook() == null) {
             playerWidget.setVisibility(View.GONE);

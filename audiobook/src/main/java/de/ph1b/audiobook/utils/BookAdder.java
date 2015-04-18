@@ -1,13 +1,11 @@
-package de.ph1b.audiobook.service;
+package de.ph1b.audiobook.utils;
 
 import android.app.ActivityManager;
-import android.app.Service;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.os.Build;
-import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.squareup.picasso.Picasso;
@@ -26,11 +24,9 @@ import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.model.NaturalFileComparator;
 import de.ph1b.audiobook.uitools.ImageHelper;
-import de.ph1b.audiobook.utils.BaseApplication;
-import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.PrefsManager;
 
-public class BookAddingService extends Service {
+
+public class BookAdder {
 
     public static final FileFilter folderAndMusicFilter = new FileFilter() {
         @Override
@@ -38,10 +34,8 @@ public class BookAddingService extends Service {
             return isAudio(pathname) || pathname.isDirectory();
         }
     };
-    private static final String ACTION_UPDATE_BOOKS = "actionUpdateBooks";
-    private static final String ACTION_UPDATE_BOOKS_INTERRUPTING = "actionUpdateBooksInterrupting";
 
-    private static final String TAG = BookAddingService.class.getSimpleName();
+    private static final String TAG = BookAdder.class.getSimpleName();
     private static final ArrayList<String> audioTypes = new ArrayList<>();
     private static final ArrayList<String> imageTypes = new ArrayList<>();
 
@@ -76,16 +70,9 @@ public class BookAddingService extends Service {
     }
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    private BaseApplication baseApplication;
-    private PrefsManager prefs;
+    private final BaseApplication baseApplication;
+    private final PrefsManager prefs;
     private volatile boolean stopScanner = false;
-
-    public static Intent getRescanIntent(Context c, boolean interrupting) {
-        Intent i = new Intent(c, BookAddingService.class);
-        i.setAction(ACTION_UPDATE_BOOKS);
-        i.putExtra(ACTION_UPDATE_BOOKS_INTERRUPTING, interrupting);
-        return i;
-    }
 
     private static boolean isAudio(File f) {
         for (String s : audioTypes) {
@@ -96,34 +83,11 @@ public class BookAddingService extends Service {
         return false;
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        baseApplication = (BaseApplication) getApplication();
-        prefs = new PrefsManager(this);
+    public BookAdder(@NonNull BaseApplication baseApplication) {
+        this.baseApplication = baseApplication;
+        prefs = new PrefsManager(baseApplication);
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null && intent.getAction() != null && intent.getAction().equals(ACTION_UPDATE_BOOKS)) {
-            boolean interrupting = intent.getBooleanExtra(ACTION_UPDATE_BOOKS_INTERRUPTING, true);
-            scanForFiles(interrupting);
-        }
-
-        return START_NOT_STICKY;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        baseApplication.setScannerActive(false);
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
 
     private void addNewBooks() {
         ArrayList<File> containingFiles = getContainingFiles();
@@ -132,7 +96,8 @@ public class BookAddingService extends Service {
         }
     }
 
-    private void scanForFiles(boolean interrupting) {
+
+    public void scanForFiles(boolean interrupting) {
         L.d(TAG, "scanForFiles called. scannerActive=" + baseApplication.isScannerActive() + ", interrupting=" + interrupting);
         if (!baseApplication.isScannerActive() || interrupting) {
             stopScanner = true;
@@ -141,6 +106,7 @@ public class BookAddingService extends Service {
                 public void run() {
                     baseApplication.setScannerActive(true);
                     stopScanner = false;
+
 
                     deleteOldBooks();
                     addNewBooks();
@@ -160,6 +126,7 @@ public class BookAddingService extends Service {
         }
         return false;
     }
+
 
     private ArrayList<File> getContainingFiles() {
         // getting all files who are in the root of the chosen folders
@@ -305,14 +272,14 @@ public class BookAddingService extends Service {
 
         // if there are images, get the first one.
         ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
-        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        ActivityManager activityManager = (ActivityManager) baseApplication.getSystemService(Context.ACTIVITY_SERVICE);
         activityManager.getMemoryInfo(mi);
-        int dimen = ImageHelper.getSmallerScreenSize(this);
+        int dimen = ImageHelper.getSmallerScreenSize(baseApplication);
         for (File f : coverFiles) {
             // only read cover if its size is less than a third of the available memory
             if (f.length() < (mi.availMem / 3L)) {
                 try {
-                    cover = Picasso.with(this).load(f).resize(dimen, dimen).get();
+                    cover = Picasso.with(baseApplication).load(f).resize(dimen, dimen).get();
                     break;
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -358,7 +325,7 @@ public class BookAddingService extends Service {
                 }
 
                 if (i < MAX_TRIES_FOR_EMBEDDED_COVER && cover == null) {
-                    cover = ImageHelper.getEmbeddedCover(f, this);
+                    cover = ImageHelper.getEmbeddedCover(f, baseApplication);
                 }
                 if (stopScanner) {
                     L.d(TAG, "rootFileToBook, stopScanner called");
@@ -375,7 +342,7 @@ public class BookAddingService extends Service {
         }
 
         if (cover != null && !Book.getCoverFile(bookRoot, containingMedia).exists()) {
-            ImageHelper.saveCover(cover, this, bookRoot, containingMedia);
+            ImageHelper.saveCover(cover, baseApplication, bookRoot, containingMedia);
         }
 
         return new Book(bookRoot, bookName, containingMedia, new ArrayList<Bookmark>(), 1.0f, Book.ID_UNKNOWN, 0, containingMedia.get(0).getPath(), false);

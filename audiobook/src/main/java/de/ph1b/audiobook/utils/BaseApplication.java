@@ -49,6 +49,7 @@ public class BaseApplication extends Application {
     private PrefsManager prefs;
     private boolean sleepTimerActive = false;
     private volatile boolean scannerActive = false;
+    private BookAdder bookAdder;
 
     public Book getBook(long id) {
         bookLock.lock();
@@ -106,6 +107,10 @@ public class BaseApplication extends Application {
         onBookAddedListeners.remove(listener);
     }
 
+    public void scanForFiles(final boolean interrupting) {
+        bookAdder.scanForFiles(interrupting);
+    }
+
     public PlayState getPlayState() {
         return currentState;
     }
@@ -138,6 +143,7 @@ public class BaseApplication extends Application {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         prefs = new PrefsManager(this);
         db = DataBaseHelper.getInstance(this);
+        bookAdder = new BookAdder(this);
 
         bookLock.lock();
         try {
@@ -151,6 +157,8 @@ public class BaseApplication extends Application {
         } finally {
             bookLock.unlock();
         }
+
+        bookAdder.scanForFiles(true);
     }
 
     public ArrayList<Book> getAllBooks() {

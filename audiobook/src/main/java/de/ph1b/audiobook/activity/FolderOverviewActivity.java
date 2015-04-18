@@ -18,8 +18,8 @@ import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.FolderOverviewAdapter;
-import de.ph1b.audiobook.service.BookAddingService;
 import de.ph1b.audiobook.uitools.DividerItemDecoration;
+import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
@@ -31,6 +31,7 @@ public class FolderOverviewActivity extends BaseActivity {
     private PrefsManager prefs;
     private FolderOverviewAdapter adapter;
     private FloatingActionsMenu fam;
+    private BaseApplication baseApplication;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class FolderOverviewActivity extends BaseActivity {
         getSupportActionBar().setTitle(getString(R.string.audiobook_folders_title));
 
         prefs = new PrefsManager(this);
+        baseApplication = (BaseApplication) getApplication();
 
         //init views
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
@@ -68,8 +70,7 @@ public class FolderOverviewActivity extends BaseActivity {
                                     public void onPositive(MaterialDialog dialog) {
                                         adapter.removeItem(position);
                                         prefs.setCollectionFolders(bookCollections);
-                                        startService(BookAddingService.getRescanIntent(
-                                                FolderOverviewActivity.this, true));
+                                        baseApplication.scanForFiles(true);
                                     }
                                 })
                                 .show();
@@ -158,7 +159,7 @@ public class FolderOverviewActivity extends BaseActivity {
                     L.v(TAG, "chosenSingleBook=" + chosenSingleBook);
                     break;
             }
-            startService(BookAddingService.getRescanIntent(this, true));
+            baseApplication.scanForFiles(true);
         }
     }
 
