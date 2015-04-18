@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 fab:fab_colorNormal="?attr/colorAccent"
                 fab:fab_colorPressed="?attr/colorAccentDark"
-                fab:fab_icon="@drawable/ic_folder_multiple_white_24dp"
+                fab:fab_icon="@drawable/ic_folder_multiple_white_48dp"
                 fab:fab_size="mini"
                 fab:fab_title="@string/folder_add_collection" />
 

@@ -163,7 +163,7 @@ public class BookAddingService extends Service {
 
     private ArrayList<File> getContainingFiles() {
         // getting all files who are in the root of the chosen folders
-        ArrayList<String> folders = prefs.getAudiobookFolders();
+        ArrayList<String> folders = prefs.getCollectionFolders();
         ArrayList<File> containingFiles = new ArrayList<>();
         for (String s : folders) {
             File f = new File(s);

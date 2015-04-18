@@ -34,6 +34,10 @@
         <item name="folder_choose_track">@drawable/ic_audiotrack_grey600_48dp</item>
         <item name="folder_choose_up">@drawable/ic_arrow_up_grey600_48dp</item>
 
+        <!-- Folder Overview -->
+        <item name="folder_overview_trash">@drawable/ic_delete_grey600_24dp</item>
+        <item name="folder_overview_multi_folder">@drawable/ic_folder_multiple_grey600_48dp</item>
+
         <!-- BookEditDialog -->
         <item name="edit_next">@drawable/ic_navigate_next_grey600_36dp</item>
         <item name="edit_prev">@drawable/ic_navigate_before_grey600_36dp</item>
@@ -44,8 +48,6 @@
 
         <item name="text_primary">@color/light_text_primary</item>
         <item name="text_secondary">@color/light_text_secondary</item>
-
-        <item name="folder_overview_trash">@drawable/ic_delete_grey600_24dp</item>
     </style>
 
     <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
@@ -82,6 +84,10 @@
         <item name="folder_choose_track">@drawable/ic_audiotrack_white_48dp</item>
         <item name="folder_choose_up">@drawable/ic_arrow_up_white_48dp</item>
 
+        <!-- Folder Overview -->
+        <item name="folder_overview_trash">@drawable/ic_delete_white_24dp</item>
+        <item name="folder_overview_multi_folder">@drawable/ic_folder_multiple_white_48dp</item>
+
         <!-- BookEditDialog -->
         <item name="edit_next">@drawable/ic_navigate_next_white_36dp</item>
         <item name="edit_prev">@drawable/ic_navigate_before_white_36dp</item>
@@ -92,8 +98,6 @@
 
         <item name="text_primary">@color/dark_text_primary</item>
         <item name="text_secondary">@color/dark_text_secondary</item>
-
-        <item name="folder_overview_trash">@drawable/ic_delete_white_24dp</item>
     </style>
 
     <style name="DarkButtonStyle" parent="@android:style/Widget.ImageButton">

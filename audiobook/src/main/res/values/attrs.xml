@@ -29,6 +29,7 @@
 
     <!-- Folder Overview Dialog -->
     <attr name="folder_overview_trash" format="reference" />
+    <attr name="folder_overview_multi_folder" format="reference" />
 
     <!-- BookEditDialog -->
     <attr name="edit_next" format="reference" />

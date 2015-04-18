@@ -46,8 +46,8 @@
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="3dp"
-            android:layout_toRightOf="@id/current_cover"
             android:layout_toEndOf="@id/current_cover"
+            android:layout_toRightOf="@id/current_cover"
             android:max="1000"
             android:progressDrawable="?attr/progress_drawable"
             tools:progress="500" />

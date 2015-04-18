@@ -14,7 +14,8 @@ import de.ph1b.audiobook.R;
 public class PrefsManager {
 
     private static final String PREF_KEY_CURRENT_BOOK = "currentBook";
-    private static final String PREF_KEY_AUDIOBOOK_FOLDERS = "folders";
+    private static final String PREF_KEY_COLLECTION_FOLDERS = "folders";
+    private static final String PREF_KEY_SINGLE_BOOK_FOLDERS = "singleBookFolders";
     private final Context c;
     private final SharedPreferences sp;
 
@@ -33,16 +34,30 @@ public class PrefsManager {
     }
 
     @NonNull
-    public ArrayList<String> getAudiobookFolders() {
-        Set<String> set = sp.getStringSet(PREF_KEY_AUDIOBOOK_FOLDERS, new HashSet<String>());
+    public ArrayList<String> getCollectionFolders() {
+        Set<String> set = sp.getStringSet(PREF_KEY_COLLECTION_FOLDERS, new HashSet<String>());
         return new ArrayList<>(set);
     }
 
-    public void setAudiobookFolders(@NonNull ArrayList<String> folders) {
+    public void setCollectionFolders(@NonNull ArrayList<String> folders) {
         Set<String> set = new HashSet<>();
         set.addAll(folders);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putStringSet(PREF_KEY_AUDIOBOOK_FOLDERS, set);
+        editor.putStringSet(PREF_KEY_COLLECTION_FOLDERS, set);
+        editor.apply();
+    }
+
+    @NonNull
+    public ArrayList<String> getSingleBookFolders() {
+        Set<String> set = sp.getStringSet(PREF_KEY_SINGLE_BOOK_FOLDERS, new HashSet<String>());
+        return new ArrayList<>(set);
+    }
+
+    public void setSingleBookFolders(@NonNull ArrayList<String> folders) {
+        Set<String> set = new HashSet<>();
+        set.addAll(folders);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putStringSet(PREF_KEY_SINGLE_BOOK_FOLDERS, set);
         editor.apply();
     }
 

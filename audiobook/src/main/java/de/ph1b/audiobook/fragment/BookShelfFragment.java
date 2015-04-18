@@ -222,7 +222,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         onPlayStateChanged(baseApplication.getPlayState());
         onPositionChanged(true);
 
-        boolean audioFoldersEmpty = prefs.getAudiobookFolders().size() == 0;
+        boolean audioFoldersEmpty = prefs.getCollectionFolders().size() == 0;
         boolean noFolderWarningIsShowing = noFolderWarning.isShowing();
         if (audioFoldersEmpty && !noFolderWarningIsShowing) {
             noFolderWarning.show();

@@ -1,27 +1,38 @@
 package de.ph1b.audiobook.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.uitools.ThemeUtil;
 
 public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAdapter.ViewHolder> {
 
     @NonNull
-    private final ArrayList<String> folders;
+    private final Context c;
+    @NonNull
+    private final ArrayList<String> bookCollections;
+    @NonNull
+    private final ArrayList<String> singleBooks;
     @NonNull
     private final OnFolderMoreClickedListener listener;
 
-    public FolderOverviewAdapter(@NonNull final ArrayList<String> folders,
+    public FolderOverviewAdapter(@NonNull final Context c,
+                                 @NonNull final ArrayList<String> bookCollections,
+                                 @NonNull final ArrayList<String> singleBooks,
                                  @NonNull final OnFolderMoreClickedListener listener) {
-        this.folders = folders;
+        this.c = c;
+        this.bookCollections = bookCollections;
+        this.singleBooks = singleBooks;
         this.listener = listener;
     }
 
@@ -34,8 +45,18 @@ public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAd
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        String folder = folders.get(position);
-        holder.textView.setText(folder);
+        String file = getItem(position);
+        holder.textView.setText(file);
+
+        if (bookCollections.contains(file)) {
+            //noinspection deprecation
+            holder.icon.setImageDrawable(c.getResources().getDrawable(ThemeUtil.getResourceId(c,
+                    R.attr.folder_overview_multi_folder)));
+        } else {
+            //noinspection deprecation
+            holder.icon.setImageDrawable(c.getResources().getDrawable(ThemeUtil.getResourceId(c,
+                    R.attr.folder_choose_folder)));
+        }
     }
 
     @Override
@@ -45,17 +66,25 @@ public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAd
 
     @Override
     public int getItemCount() {
-        return folders.size();
+        return bookCollections.size() + singleBooks.size();
     }
 
     public void removeItem(final int position) {
-        folders.remove(position);
+        if (bookCollections.size() > position) {
+            bookCollections.remove(position);
+        } else {
+            singleBooks.remove(position - bookCollections.size());
+        }
         notifyItemRemoved(position);
     }
 
     @NonNull
     public String getItem(final int position) {
-        return folders.get(position);
+        if (bookCollections.size() > position) {
+            return bookCollections.get(position);
+        } else {
+            return singleBooks.get(position - bookCollections.size());
+        }
     }
 
     public interface OnFolderMoreClickedListener {
@@ -64,13 +93,15 @@ public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAd
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        final ImageButton imageButton;
+        final ImageView icon;
         final TextView textView;
+        final ImageButton imageButton;
 
         public ViewHolder(final View itemView, final OnFolderMoreClickedListener listener) {
             super(itemView);
-            imageButton = (ImageButton) itemView.findViewById(R.id.remove);
+            icon = (ImageView) itemView.findViewById(R.id.icon);
             textView = (TextView) itemView.findViewById(R.id.containing);
+            imageButton = (ImageButton) itemView.findViewById(R.id.remove);
 
             imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
