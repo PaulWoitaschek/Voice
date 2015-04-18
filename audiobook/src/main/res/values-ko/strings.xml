@@ -38,6 +38,8 @@
     <string name="adding_failed_subfolder">선택한 폴더의 하위폴더를 재선택하시면 안됩니다:</string>
     <string name="audiobook_folders_title">오디오북 폴더</string>
     <string name="no_audiobook_folders_title">폴더 선택</string>
+    <string name="no_audiobook_folders_summary_start">오디오북 폴더를 선택해주세요.</string>
+    <string name="no_audiobook_folders_end">책 여러 권, 혹은 책 한 권이 들어있는 폴더를 선택해주세요</string>
     <string name="chosen_folder_description">선택된 폴더:</string>
     <string name="delete_folder">서재에서 제거합니까?</string>
     <string name="delete_folder_content">선택한 책을 서재에서 제거합니까?</string>
@@ -66,6 +68,7 @@
     <string name="pref_summary_track_to_end">취침예약 타이머가 끝났을 때 재생 중이었던 트랙을 끝까지 재생합니다.</string>
     <string name="pref_sleep_time">취침예약 시간</string>
     <string name="pref_root_folder_title">오디오북 폴더</string>
+    <string name="pref_root_folder_summary">선택하신 폴더</string>
     <string name="pref_theme_title">테마</string>
     <string name="pref_theme_light">하양</string>
     <string name="pref_theme_dark">검정</string>
