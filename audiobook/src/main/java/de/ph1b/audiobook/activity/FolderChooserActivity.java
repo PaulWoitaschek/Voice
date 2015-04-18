@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.activity;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,7 +13,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,7 +28,6 @@ import de.ph1b.audiobook.model.NaturalFileComparator;
 import de.ph1b.audiobook.service.BookAddingService;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.PrefsManager;
 
 /**
  * Activity for choosing an audiobook folder. If there are multiple SD-Cards, the Activity unifies
@@ -37,16 +36,23 @@ import de.ph1b.audiobook.utils.PrefsManager;
  */
 public class FolderChooserActivity extends BaseActivity implements View.OnClickListener {
 
+    public static final String ACTIVITY_FOR_RESULT_REQUEST_CODE = "requestCode";
+    public static final String CHOSEN_FILE = "chosenFile";
+    public static final int ACTIVITY_FOR_RESULT_CODE_COLLECTION = 1;
+    public static final int ACTIVITY_FOR_RESULT_CODE_SINGLE_BOOK = 2;
+
     private static final String CURRENT_FOLDER_NAME = "currentFolderName";
     private static final String TAG = FolderChooserActivity.class.getSimpleName();
     private final ArrayList<File> currentFolderContent = new ArrayList<>();
     private boolean multiSd = true;
     private ArrayList<File> rootDirs;
-    private File chosenFolder = null;
+    private File currentFolder = null;
+    private File chosenFile = null;
     private TextView currentFolderName;
     private Button chooseButton;
     private FolderChooserAdapter adapter;
     private ImageButton upButton;
+    private int mode;
 
     private ArrayList<File> getStorageDirectories() {
         Pattern DIR_SEPARATOR = Pattern.compile("/");
@@ -114,10 +120,9 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
     }
 
     private void changeFolder(File newFolder) {
-        chosenFolder = newFolder;
+        currentFolder = newFolder;
         currentFolderContent.clear();
-        currentFolderContent.addAll(getFilesFromFolder(chosenFolder));
-        currentFolderName.setText(chosenFolder.getName());
+        currentFolderContent.addAll(getFilesFromFolder(currentFolder));
         adapter.notifyDataSetChanged();
         setButtonEnabledDisabled();
     }
@@ -125,6 +130,13 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        int requestCode = getIntent().getIntExtra(ACTIVITY_FOR_RESULT_REQUEST_CODE, -1);
+        if (requestCode != ACTIVITY_FOR_RESULT_CODE_COLLECTION && requestCode != ACTIVITY_FOR_RESULT_CODE_SINGLE_BOOK) {
+            throw new IllegalArgumentException("Illegal requestCode=" + requestCode);
+        } else {
+            mode = requestCode;
+        }
 
         // init fields
         setContentView(R.layout.activity_folder_chooser);
@@ -147,21 +159,28 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         abortButton.setOnClickListener(this);
 
         //setup
-        adapter = new FolderChooserAdapter(this, currentFolderContent);
+        adapter = new FolderChooserAdapter(this, currentFolderContent, mode);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 File selectedFile = adapter.getItem(position);
                 if (selectedFile.isDirectory() && selectedFile.canRead()) {
+                    chosenFile = selectedFile;
+                    currentFolderName.setText(chosenFile.getName());
                     changeFolder(adapter.getItem(position));
+                } else if (mode == ACTIVITY_FOR_RESULT_CODE_SINGLE_BOOK && selectedFile.isFile()) {
+                    chosenFile = selectedFile;
+                    currentFolderName.setText(chosenFile.getName());
                 }
             }
         });
 
         rootDirs = getStorageDirectories();
         if (rootDirs.size() == 1) {
-            changeFolder(rootDirs.get(0));
+            chosenFile = rootDirs.get(0);
+            currentFolderName.setText(chosenFile.getName());
+            changeFolder(chosenFile);
             multiSd = false;
         } else {
             currentFolderContent.addAll(rootDirs);
@@ -173,6 +192,8 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
             if (savedFolderPath != null) {
                 File f = new File(savedFolderPath);
                 if (f.exists() && f.canRead()) {
+                    chosenFile = f;
+                    currentFolderName.setText(chosenFile.getName());
                     changeFolder(f);
                 }
             }
@@ -184,8 +205,8 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (chosenFolder != null) {
-            outState.putString(CURRENT_FOLDER_NAME, chosenFolder.getAbsolutePath());
+        if (currentFolder != null) {
+            outState.putString(CURRENT_FOLDER_NAME, currentFolder.getAbsolutePath());
         }
     }
 
@@ -200,10 +221,10 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
 
     private boolean canGoBack() {
         if (multiSd) {
-            return chosenFolder != null;
+            return currentFolder != null;
         } else {
             for (File f : rootDirs) {
-                if (f.equals(chosenFolder)) {
+                if (f.equals(currentFolder)) {
                     return false; //to go up we must not already be in top level
                 }
             }
@@ -212,25 +233,26 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
     }
 
     private void up() {
-        L.d(TAG, "up called. chosenFolder=" + chosenFolder);
+        L.d(TAG, "up called. currentFolder=" + currentFolder);
 
         boolean chosenFolderIsInRoot = false;
         for (File f : rootDirs) {
-            if (f.equals(chosenFolder)) {
+            if (f.equals(currentFolder)) {
                 L.d(TAG, "chosen folder is in root");
                 chosenFolderIsInRoot = true;
             }
         }
         if (multiSd && chosenFolderIsInRoot) {
-            chosenFolder = null;
+            currentFolder = null;
             currentFolderName.setText("");
             currentFolderContent.clear();
             currentFolderContent.addAll(rootDirs);
             adapter.notifyDataSetChanged();
         } else {
-            chosenFolder = chosenFolder.getParentFile();
-            currentFolderName.setText(chosenFolder.getName());
-            ArrayList<File> parentContaining = getFilesFromFolder(chosenFolder);
+            currentFolder = currentFolder.getParentFile();
+            chosenFile = currentFolder;
+            currentFolderName.setText(currentFolder.getName());
+            ArrayList<File> parentContaining = getFilesFromFolder(currentFolder);
             currentFolderContent.clear();
             currentFolderContent.addAll(parentContaining);
             adapter.notifyDataSetChanged();
@@ -275,37 +297,9 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
                 up();
                 break;
             case R.id.choose:
-                String newFolder = chosenFolder.getAbsolutePath();
-                PrefsManager prefs = new PrefsManager(this);
-                ArrayList<String> folders = prefs.getAudiobookFolders();
-                boolean filesAreSubsets = true;
-                boolean firstAddedFolder = folders.size() == 0;
-                boolean sameFolder = false;
-                for (String s : folders) {
-                    if (s.equals(newFolder)) {
-                        sameFolder = true;
-                    }
-                    String[] oldParts = s.split("/");
-                    String[] newParts = newFolder.split("/");
-                    for (int i = 0; i < Math.min(oldParts.length, newParts.length); i++) {
-                        if (!oldParts[i].equals(newParts[i])) {
-                            filesAreSubsets = false;
-                        }
-                    }
-                    if (!sameFolder && filesAreSubsets) {
-                        Toast.makeText(this, getString(R.string.adding_failed_subfolder) + "\n" + s + "\n" + newFolder, Toast.LENGTH_LONG).show();
-                    }
-                    if (filesAreSubsets) {
-                        break;
-                    }
-                }
-
-                if (firstAddedFolder || (!sameFolder && !filesAreSubsets)) {
-                    folders.add(newFolder);
-                    prefs.setAudiobookFolders(folders);
-                    startService(BookAddingService.getRescanIntent(this, true));
-                }
-
+                Intent data = new Intent();
+                data.putExtra(CHOSEN_FILE, chosenFile.getAbsolutePath());
+                setResult(RESULT_OK, data);
                 finish();
                 break;
             case R.id.abort:

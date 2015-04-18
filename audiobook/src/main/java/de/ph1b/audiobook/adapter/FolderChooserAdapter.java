@@ -14,16 +14,25 @@ import java.io.File;
 import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.activity.FolderChooserActivity;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 
 public class FolderChooserAdapter extends BaseAdapter {
 
     private final Context c;
     private final ArrayList<File> data;
+    private final int mode;
 
-    public FolderChooserAdapter(final @NonNull Context c, final @NonNull ArrayList<File> data) {
+    public FolderChooserAdapter(final @NonNull Context c, final @NonNull ArrayList<File> data,
+                                final int mode) {
         this.c = c;
         this.data = data;
+
+        if (mode != FolderChooserActivity.ACTIVITY_FOR_RESULT_CODE_SINGLE_BOOK &&
+                mode != FolderChooserActivity.ACTIVITY_FOR_RESULT_CODE_COLLECTION) {
+            throw new IllegalArgumentException("Invalid mode=" + mode);
+        }
+        this.mode = mode;
     }
 
     @Override
@@ -64,7 +73,11 @@ public class FolderChooserAdapter extends BaseAdapter {
         boolean isDirectory = selectedFile.isDirectory();
 
         viewHolder.textView.setText(selectedFile.getName());
-        viewHolder.textView.setEnabled(isDirectory);
+
+        // if its not a collection its also fine to pick a file
+        if (mode == FolderChooserActivity.ACTIVITY_FOR_RESULT_CODE_COLLECTION) {
+            viewHolder.textView.setEnabled(isDirectory);
+        }
 
         Drawable icon;
         if (isDirectory) {
