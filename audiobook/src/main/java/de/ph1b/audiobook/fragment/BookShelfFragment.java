@@ -87,16 +87,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_book_shelf, container, false);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Transition fade = new Fade();
-            fade.setDuration(300);
-            fade.excludeTarget(android.R.id.navigationBarBackground, true);
-            fade.excludeTarget(android.R.id.statusBarBackground, true);
-            fade.excludeTarget(R.id.toolbar, true);
-            setEnterTransition(fade);
-            setReenterTransition(fade);
-        }
-
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         ((ActionBarActivity) getActivity()).setSupportActionBar(toolbar);
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
@@ -410,15 +400,16 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             enterTransition.excludeTarget(R.id.book_cover, true);
             bookPlayFragment.setEnterTransition(enterTransition);
 
-            Transition returnTransition = new Slide(Gravity.BOTTOM);
-            returnTransition.setDuration(300);
-            returnTransition.excludeTarget(R.id.toolbar, true);
-            returnTransition.excludeTarget(R.id.book_cover, true);
-            bookPlayFragment.setReturnTransition(returnTransition);
-
             Transition sharedElementReturnTransition = new Fade();
             sharedElementReturnTransition.setDuration(300);
             bookPlayFragment.setSharedElementReturnTransition(sharedElementReturnTransition);
+
+            Transition returnTransition = new Fade();
+            returnTransition.setDuration(300);
+            returnTransition.excludeTarget(R.id.toolbar, true);
+            bookPlayFragment.setReturnTransition(returnTransition);
+            bookPlayFragment.setExitTransition(returnTransition);
+            setReturnTransition(returnTransition);
         }
 
         getFragmentManager().beginTransaction()
