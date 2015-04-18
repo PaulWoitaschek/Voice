@@ -44,10 +44,6 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
     public static final String TAG = EditBookDialogFragment.class.getSimpleName();
     private static final String COVER_POSITION = "COVER_POSITION";
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    /**
-     * Variable representing if the first cover is a letter - cover. This is recognized by checking
-     * if the pixels on the borders are the same as the color accent
-     */
     private CoverDownloader coverDownloader;
     private DraggableBoxImageView coverImageView;
     private ProgressBar coverReplacement;
@@ -85,7 +81,8 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
                     coverPosition++;
                     coverImageView.setImageBitmap(covers.get(coverPosition));
                     previousCover.setVisibility(View.VISIBLE);
-                    if (!ImageHelper.isOnline(getActivity()) && coverPosition == covers.size() - 1) {
+                    if (!ImageHelper.isOnline(getActivity()) &&
+                            coverPosition == covers.size() - 1) {
                         nextCover.setVisibility(View.INVISIBLE);
                     }
                 } else {
@@ -149,7 +146,8 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
         //init view
         //passing null is fine because of fragment
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        @SuppressLint("InflateParams") View customView = inflater.inflate(R.layout.dialog_book_edit, null);
+        @SuppressLint("InflateParams") View customView = inflater.inflate(R.layout.dialog_book_edit,
+                null);
 
         //init items
         nameEditText = (EditText) customView.findViewById(R.id.book_name);
@@ -191,7 +189,8 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
                     if (coverPosition > 0 && r.width() > 0 && r.height() > 0) {
                         Bitmap cover = covers.get(coverPosition);
                         cover = Bitmap.createBitmap(cover, r.left, r.top, r.width(), r.height());
-                        ImageHelper.saveCover(cover, getActivity(), book.getRoot(), book.getChapters());
+                        ImageHelper.saveCover(cover, getActivity(), book.getRoot(),
+                                book.getChapters());
                         book.setUseCoverReplacement(false);
                     } else {
                         book.setUseCoverReplacement(true);
@@ -240,13 +239,11 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
                     emptyTitleText.setVisibility(View.INVISIBLE);
                     editBook.getActionButton(DialogAction.POSITIVE).setEnabled(true);
                     Bitmap newLetterCover = ImageHelper.drawableToBitmap(new CoverReplacement(
-                                    newName,
-                                    getActivity()),
-                            REPLACEMENT_DIMEN, REPLACEMENT_DIMEN);
+                            newName, getActivity()), REPLACEMENT_DIMEN, REPLACEMENT_DIMEN);
 
                     covers.set(0, newLetterCover);
                     L.d(TAG, "onTextChanged, setting new cover with newName=" + newName);
-                    if (textLength > 0 && coverPosition == 0) {
+                    if (coverPosition == 0) {
                         L.d(TAG, "textLength > 0 and position==0, so setting new image");
                         coverImageView.setImageBitmap(newLetterCover);
                     }
