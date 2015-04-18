@@ -74,6 +74,11 @@ public class BookAdder {
     private final PrefsManager prefs;
     private volatile boolean stopScanner = false;
 
+    public BookAdder(@NonNull BaseApplication baseApplication) {
+        this.baseApplication = baseApplication;
+        prefs = new PrefsManager(baseApplication);
+    }
+
     private static boolean isAudio(File f) {
         for (String s : audioTypes) {
             if (f.getName().toLowerCase().endsWith(s)) {
@@ -82,12 +87,6 @@ public class BookAdder {
         }
         return false;
     }
-
-    public BookAdder(@NonNull BaseApplication baseApplication) {
-        this.baseApplication = baseApplication;
-        prefs = new PrefsManager(baseApplication);
-    }
-
 
     private void addNewBooks() {
         ArrayList<File> containingFiles = getContainingFiles();

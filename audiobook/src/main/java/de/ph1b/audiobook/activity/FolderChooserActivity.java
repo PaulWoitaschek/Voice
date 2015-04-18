@@ -25,8 +25,8 @@ import java.util.regex.Pattern;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.FolderChooserAdapter;
 import de.ph1b.audiobook.model.NaturalFileComparator;
-import de.ph1b.audiobook.utils.BookAdder;
 import de.ph1b.audiobook.uitools.ThemeUtil;
+import de.ph1b.audiobook.utils.BookAdder;
 import de.ph1b.audiobook.utils.L;
 
 /**

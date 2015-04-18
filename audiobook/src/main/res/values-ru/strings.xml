@@ -38,7 +38,6 @@
     <string name="adding_failed_subfolder">Папка не может находиться внутри уже добавленной папки:</string>
     <string name="audiobook_folders_title">Папки с аудиокнигами</string>
     <string name="no_audiobook_folders_title">Выбор папки</string>
-    <string name="no_audiobook_folders_summary">Выберите папку для аудиокниг.\n\Каждая папка внутри нее будет определяться как отдельная книга!</string>
     <string name="chosen_folder_description">Выбранная папка:</string>
     <string name="delete_folder">Удалить из библиотеки?</string>
     <string name="delete_folder_content">Вы хотите удалить эту папку из библиотеки?</string>

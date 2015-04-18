@@ -39,7 +39,6 @@
     <string name="adding_failed_subfolder">Adresáře nesmí být podadresáři sebe samých:</string>
     <string name="audiobook_folders_title">Adresáře s audioknihami</string>
     <string name="no_audiobook_folders_title">Vybrat adresář</string>
-    <string name="no_audiobook_folders_summary">Vyberte prosím adresář s audioknihami.\n\nKaždý jeho podadresář bude rozpoznán jako samostatná kniha!</string>
     <string name="chosen_folder_description">Vybraný adresář:</string>
     <string name="delete_folder">Odstranit z knihovny?</string>
     <string name="delete_folder_content">Opravdu chcete odstranit následující adresář z knihovny?</string>

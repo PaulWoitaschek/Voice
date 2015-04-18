@@ -38,7 +38,6 @@
     <string name="adding_failed_subfolder">선택한 폴더의 하위폴더를 재선택하시면 안됩니다:</string>
     <string name="audiobook_folders_title">오디오북 폴더</string>
     <string name="no_audiobook_folders_title">폴더 선택</string>
-    <string name="no_audiobook_folders_summary">폴더를 선택해 주세요 \n\n선택한 폴더의 하위폴더는 하나의 오디오북으로 인식됩니다!</string>
     <string name="chosen_folder_description">선택된 폴더:</string>
     <string name="delete_folder">서재에서 제거합니까?</string>
     <string name="delete_folder_content">선택한 책을 서재에서 제거합니까?</string>

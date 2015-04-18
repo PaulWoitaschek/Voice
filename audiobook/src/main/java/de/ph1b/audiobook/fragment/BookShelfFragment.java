@@ -159,7 +159,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         controller = new ServiceController(getActivity());
         noFolderWarning = new MaterialDialog.Builder(getActivity())
                 .title(R.string.no_audiobook_folders_title)
-                .content(R.string.no_audiobook_folders_summary)
+                .content(getString(R.string.no_audiobook_folders_summary_start) + "\n\n" + getString(R.string.no_audiobook_folders_end))
                 .positiveText(R.string.dialog_confirm)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override

@@ -38,7 +38,8 @@
     <string name="adding_failed_subfolder">Die Ordner dürfen kein Unterordner von einander sein:</string>
     <string name="audiobook_folders_title">Hörbuch Ordner</string>
     <string name="no_audiobook_folders_title">Ordner wählen</string>
-    <string name="no_audiobook_folders_summary">Bitte wählen Sie jetzt Ihren Hörbuchordner.\n\nJeder Unterordner wird als eigenes Buch erkannt!</string>
+    <string name="no_audiobook_folders_summary_start">Bitte wählen Sie jetzt Ihre(n) Hörbuchordner.</string>
+    <string name="no_audiobook_folders_end">Sie können Ihren Hauptordner, der unterschiedliche Bücher beinhaltet hinzufügen. Oder Sie können einfach ein einzelnes Buch hinzufügen.</string>
     <string name="chosen_folder_description">Gewählter Ordner: </string>
     <string name="delete_folder">Ordner entfernen</string>
     <string name="delete_folder_content">Möchten Sie den folgenden Ordner aus Ihrer Bücherei entfernen?</string>
