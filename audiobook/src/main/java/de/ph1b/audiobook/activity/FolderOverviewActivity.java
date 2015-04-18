@@ -82,6 +82,7 @@ public class FolderOverviewActivity extends BaseActivity {
         findViewById(R.id.add_single).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                fam.collapse();
                 Intent intent = new Intent(FolderOverviewActivity.this,
                         FolderChooserActivity.class);
                 int requestCode = FolderChooserActivity.ACTIVITY_FOR_RESULT_CODE_SINGLE_BOOK;
@@ -93,6 +94,7 @@ public class FolderOverviewActivity extends BaseActivity {
         findViewById(R.id.add_library).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                fam.collapse();
                 Intent intent = new Intent(FolderOverviewActivity.this,
                         FolderChooserActivity.class);
                 int requestCode = FolderChooserActivity.ACTIVITY_FOR_RESULT_CODE_COLLECTION;
@@ -167,8 +169,6 @@ public class FolderOverviewActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        fam.collapse();
 
         bookCollections.clear();
         bookCollections.addAll(prefs.getCollectionFolders());
