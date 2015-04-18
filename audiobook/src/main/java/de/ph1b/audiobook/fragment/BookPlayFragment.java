@@ -65,6 +65,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener,
     private BaseApplication baseApplication;
     private Book book;
     private TransitionDrawable playTransition;
+    private BaseApplication.PlayState initialState;
 
     @Nullable
     @Override
@@ -232,16 +233,17 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener,
         });
     }
 
-
     /**
      * Sets the play initial play transition.
      */
-    public void setPlayTransition() {
+    private void setPlayTransition() {
+        L.v(TAG, "setPlayTransitoin with state=" + baseApplication.getPlayState());
         @SuppressWarnings("deprecation") Drawable pause = getResources().getDrawable(
                 R.drawable.ic_pause_white_24dp);
         @SuppressWarnings("deprecation") Drawable play = getResources().getDrawable(
                 R.drawable.ic_play_arrow_white_24dp);
-        if (baseApplication.getPlayState() == BaseApplication.PlayState.PLAYING) {
+        initialState = baseApplication.getPlayState();
+        if (initialState == BaseApplication.PlayState.PLAYING) {
             playTransition = new TransitionDrawable(new Drawable[]{pause, play});
         } else {
             playTransition = new TransitionDrawable(new Drawable[]{play, pause});
@@ -256,10 +258,19 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener,
             @Override
             public void run() {
                 final int DURATION = 300;
-                if (state == BaseApplication.PlayState.PLAYING) {
-                    playTransition.startTransition(DURATION);
-                } else {
-                    playTransition.reverseTransition(DURATION);
+                L.v(TAG, "initialState=" + initialState + ", currentState=" + state);
+                if (state == BaseApplication.PlayState.PLAYING) { // we need ||
+                    if (initialState == BaseApplication.PlayState.PLAYING) { // start will cause >, reverse causes ||
+                        playTransition.reverseTransition(DURATION);
+                    } else { // start will cause ||, reverse causes >
+                        playTransition.startTransition(DURATION);
+                    }
+                } else { // we need >
+                    if (initialState == BaseApplication.PlayState.PLAYING) { // start will cause >, reverse causes ||
+                        playTransition.startTransition(DURATION);
+                    } else { // start will cause ||, reverse causes >
+                        playTransition.reverseTransition(DURATION);
+                    }
                 }
             }
         });
