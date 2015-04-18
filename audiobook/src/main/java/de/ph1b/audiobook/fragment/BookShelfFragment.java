@@ -390,26 +390,31 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         Fragment bookPlayFragment = new BookPlayFragment();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
+            int enterTransitionDuration = 300;
+
             Transition sharedElementEnterTransition = TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.move);
-            sharedElementEnterTransition.setDuration(300);
+            sharedElementEnterTransition.setDuration(enterTransitionDuration);
             bookPlayFragment.setSharedElementEnterTransition(sharedElementEnterTransition);
 
             Transition enterTransition = new Slide(Gravity.TOP);
-            enterTransition.setDuration(300);
+            enterTransition.setDuration(enterTransitionDuration);
             enterTransition.excludeTarget(R.id.toolbar, true);
             enterTransition.excludeTarget(R.id.book_cover, true);
             bookPlayFragment.setEnterTransition(enterTransition);
 
+            int returnTransitionDuration = 400;
+
             Transition sharedElementReturnTransition = new Fade();
-            sharedElementReturnTransition.setDuration(300);
+            sharedElementReturnTransition.setDuration(returnTransitionDuration);
             bookPlayFragment.setSharedElementReturnTransition(sharedElementReturnTransition);
 
             Transition returnTransition = new Fade();
-            returnTransition.setDuration(300);
+            returnTransition.setDuration(returnTransitionDuration);
             returnTransition.excludeTarget(R.id.toolbar, true);
             bookPlayFragment.setReturnTransition(returnTransition);
             bookPlayFragment.setExitTransition(returnTransition);
             setReturnTransition(returnTransition);
+            setReenterTransition(returnTransition);
         }
 
         getFragmentManager().beginTransaction()
