@@ -11,13 +11,13 @@
     <string name="action_sleep">취침예약</string>
     <string name="action_sleep_title_hint_left">취침시간 설정</string>
     <string name="action_sleep_title_hint_right">분</string>
-    <string name="rewind">다시감기</string>
+    <string name="rewind">뒤로</string>
     <string name="fast_forward">빨리감기</string>
     <string name="previous_track">이전 트랙</string>
     <string name="next_track">다음 트랙</string>
     <string name="play">재생</string>
-    <string name="pause">일시정지</string>
-    <string name="stop">멈추기</string>
+    <string name="pause">정지</string>
+    <string name="stop">닫기</string>
     <string name="sleep_timer_started">취침예약</string>
     <string name="sleep_timer_stopped">취침예약이 취소됨</string>
     <!--NoExternalStorage-->
@@ -43,6 +43,8 @@
     <string name="delete_folder">서재에서 제거합니까?</string>
     <string name="delete_folder_content">선택한 책을 서재에서 제거합니까?</string>
     <string name="content_file_folder">선택한 것이 파일, 혹은 폴더인지를 표시</string>
+    <string name="folder_add_book">폴더에 책 한권</string>
+    <string name="folder_add_collection">폴더에 책 여러 권</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">재생 속도</string>
     <!--Bookmarks-->
@@ -73,7 +75,7 @@
     <string name="pref_send_bugs_title">오류 보내기</string>
     <string name="pref_send_bugs_summary">앱의 품질향상을 위해 익명으로 오류를 보냅니다.</string>
     <string name="pref_auto_rewind_title">자동 다시감기</string>
-    <string name="pref_auto_rewind_summary">일시정지 후 자동으로 다시감기:</string>
+    <string name="pref_auto_rewind_summary">재생 시 자동으로 다시감기:</string>
     <!--Misc-->
     <string name="popup_edit">수정</string>
     <string name="remove">삭제</string>
