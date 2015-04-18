@@ -269,14 +269,31 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                 throw new IOException();
             }
             final MediaFormat oFormat = extractor.getTrackFormat(TRACK_NUM);
-            if (oFormat == null) {
+
+            if (!oFormat.containsKey(MediaFormat.KEY_SAMPLE_RATE)) {
                 error("initStream", state);
-                throw new IOException();
+                throw new IOException("No KEY_SAMPLE_RATE");
             }
             int sampleRate = oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
+
+            if (!oFormat.containsKey(MediaFormat.KEY_CHANNEL_COUNT)) {
+                error("initStream", state);
+                throw new IOException("No KEY_CHANNEL_COUNT");
+            }
             int channelCount = oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
+
+            if (!oFormat.containsKey(MediaFormat.KEY_MIME)) {
+                error("initStream", state);
+                throw new IOException("No KEY_MIME");
+            }
             final String mime = oFormat.getString(MediaFormat.KEY_MIME);
+
+            if (!oFormat.containsKey(MediaFormat.KEY_DURATION)) {
+                error("initStream", state);
+                throw new IOException("No KEY_DURATION");
+            }
             duration = oFormat.getLong(MediaFormat.KEY_DURATION);
+
             L.v(TAG, "Sample rate: " + sampleRate);
             L.v(TAG, "Mime type: " + mime);
             initDevice(sampleRate, channelCount);
