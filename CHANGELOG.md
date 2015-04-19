@@ -1,4 +1,21 @@
+# v2.1.0 Single books back
+
+## Additions
+* New way to add single books. Containing material animations, enjoy them.
+* Material Transitions!
+* Ripples on button press for Lollipop +. Much better feedback on button pressing
+* Czech translations updated
+* Animate Play button
+* Korean updated
+* German updated
+
+## Fixes
+* Fixes rare crashes where media player died due to defect audio files
+* Smaller fixes
+* Performance improvements
+
 # v2.0.9.1 Hotfix
+
 ## Fixes
 * Correctly hide progressbar after first book has been added.
 
