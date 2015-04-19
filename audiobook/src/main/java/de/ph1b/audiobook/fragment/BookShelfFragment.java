@@ -196,7 +196,9 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        startActivity(new Intent(getActivity(), FolderOverviewActivity.class));
+                        Intent intent = new Intent(getActivity(), FolderOverviewActivity.class);
+                        intent.setAction(FolderOverviewActivity.ONESHOT_FROM_BOOKSHELF);
+                        startActivity(intent);
                     }
                 })
                 .cancelable(false)

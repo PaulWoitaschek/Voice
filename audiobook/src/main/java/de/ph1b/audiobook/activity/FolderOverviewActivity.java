@@ -31,6 +31,12 @@ import de.ph1b.audiobook.utils.PrefsManager;
 
 public class FolderOverviewActivity extends BaseActivity {
 
+    /**
+     * This is an extra for the launching intent to indicate, that this activity was called from the
+     * {@link de.ph1b.audiobook.fragment.BookShelfFragment}. If so, after choosing a file we will
+     * finish the activity immediately.
+     */
+    public static final String ONESHOT_FROM_BOOKSHELF = "oneShotFromBookShelf";
     private static final String TAG = FolderOverviewActivity.class.getSimpleName();
     private static final String BACKGROUND_OVERLAY_VISIBLE = "backgroundOverlayVisibility";
     private final ArrayList<String> bookCollections = new ArrayList<>();
@@ -232,6 +238,10 @@ public class FolderOverviewActivity extends BaseActivity {
                     if (canAddNewFolder(chosenCollection)) {
                         bookCollections.add(chosenCollection);
                         prefs.setCollectionFolders(bookCollections);
+                        String action = getIntent().getAction();
+                        if (action != null && action.equals(ONESHOT_FROM_BOOKSHELF)) {
+                            finish();
+                        }
                     }
                     L.v(TAG, "chosenCollection=" + chosenCollection);
                     break;
@@ -241,6 +251,10 @@ public class FolderOverviewActivity extends BaseActivity {
                     if (canAddNewFolder(chosenSingleBook)) {
                         singleBooks.add(chosenSingleBook);
                         prefs.setSingleBookFolders(singleBooks);
+                        String action = getIntent().getAction();
+                        if (action != null && action.equals(ONESHOT_FROM_BOOKSHELF)) {
+                            finish();
+                        }
                     }
                     L.v(TAG, "chosenSingleBook=" + chosenSingleBook);
                     break;
