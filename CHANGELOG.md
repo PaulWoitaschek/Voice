@@ -1,3 +1,12 @@
+# v2.1.1 Fancy Pants
+
+## 
+* Play buttons will transform with animation
+* Press back while fam is shown will collapse it
+
+## Fixes
+* Little threading issue fixed
+
 # v2.1.0 Single books back
 
 ## Additions
