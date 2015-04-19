@@ -351,12 +351,14 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                     player.pause();
                     stopUpdating();
 
-                    int originalPosition = player.getCurrentPosition();
                     int autoRewind = prefs.getAutoRewindAmount() * 1000;
-                    int seekTo = originalPosition - autoRewind;
-                    if (seekTo < 0) seekTo = 0;
-                    book.setPosition(seekTo, book.getRelativeMediaPath());
-                    player.seekTo(seekTo);
+                    if (autoRewind != 0) {
+                        int originalPosition = player.getCurrentPosition();
+                        int seekTo = originalPosition - autoRewind;
+                        if (seekTo < 0) seekTo = 0;
+                        player.seekTo(seekTo);
+                        book.setPosition(seekTo, book.getRelativeMediaPath());
+                    }
                     db.updateBook(book);
                     baseApplication.notifyPositionChanged(false);
 
