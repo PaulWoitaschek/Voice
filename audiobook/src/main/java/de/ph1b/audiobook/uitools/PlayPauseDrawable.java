@@ -1,5 +1,7 @@
-package de.ph1b.audiobook.uitools;/*
+package de.ph1b.audiobook.uitools;
+/*
  * Copyright (C) 2014 AChep@xda <artemchep@gmail.com>
+ * Modified by Paul Woitaschek <woitaschek@posteo.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

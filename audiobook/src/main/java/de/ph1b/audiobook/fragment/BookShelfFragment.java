@@ -69,6 +69,8 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
+    private static final String RECYCLER_VIEW_STATE = "recyclerViewState";
+    private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
     private BookShelfAdapter adapter;
     private ImageView widgetCover;
     private TextView currentText;
@@ -80,8 +82,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     private MaterialDialog noFolderWarning;
     private RecyclerView recyclerView;
     private ProgressBar recyclerReplacementView;
-
-    private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
 
     @Nullable
     @Override
@@ -203,7 +203,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                 .build();
     }
 
-
     /**
      * Returns the amount of columns the main-grid will need.
      *
@@ -256,46 +255,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         }
         toggleRecyclerVisibilities(baseApplication.isScannerActive());
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        baseApplication.addOnPlayStateChangedListener(this);
-        baseApplication.addOnPositionChangedListener(this);
-
-
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyDataSetChanged();
-            }
-        });
-        baseApplication.addOnBookAddedListener(this);
-        baseApplication.addOnBookDeletedListener(this);
-
-        // Scanning for new files here in case there are changes on the drive.
-        baseApplication.addOnScannerStateChangedListener(this);
-        baseApplication.scanForFiles(false);
-
-        if (baseApplication.getCurrentBook() == null) {
-            playerWidget.setVisibility(View.GONE);
-        } else {
-            playerWidget.setVisibility(View.VISIBLE);
-        }
-
-        initPlayerWidget();
-        setPlayState(baseApplication.getPlayState(), false);
-        onPositionChanged(true);
-
-        boolean audioFoldersEmpty = (prefs.getCollectionFolders().size() +
-                prefs.getSingleBookFolders().size()) == 0;
-        boolean noFolderWarningIsShowing = noFolderWarning.isShowing();
-        if (audioFoldersEmpty && !noFolderWarningIsShowing) {
-            noFolderWarning.show();
-        }
-        toggleRecyclerVisibilities(baseApplication.isScannerActive());
-    }    private static final String RECYCLER_VIEW_STATE = "recyclerViewState";
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
