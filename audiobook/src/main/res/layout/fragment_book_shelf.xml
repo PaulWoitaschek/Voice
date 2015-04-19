@@ -54,13 +54,13 @@
 
         <ImageButton
             android:id="@+id/current_playing"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:contentDescription="@string/current_playing"
-            android:src="?attr/book_shelf_play" />
+            android:padding="4dp" />
 
         <TextView
             android:id="@+id/current_text"

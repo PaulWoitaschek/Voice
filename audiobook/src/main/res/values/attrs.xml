@@ -8,8 +8,6 @@
     <attr name="toolbar_popup_theme" format="reference" />
 
     <!--Bookshelf-->
-    <attr name="book_shelf_play" format="reference" />
-    <attr name="book_shelf_pause" format="reference" />
     <!-- necessary because we cant use attr in custom drawable on pre lollipop!-->
     <attr name="progress_drawable" format="reference" />
 
@@ -39,4 +37,6 @@
     <!-- Bookmark -->
     <attr name="bookmark_add_button" format="reference" />
     <attr name="more" format="reference" />
+
+    <attr name="button_color" format="reference" />
 </resources>

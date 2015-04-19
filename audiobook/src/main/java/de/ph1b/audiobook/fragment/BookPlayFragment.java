@@ -2,7 +2,6 @@ package de.ph1b.audiobook.fragment;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -42,6 +41,7 @@ import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.CoverReplacement;
+import de.ph1b.audiobook.uitools.PlayPauseDrawable;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
@@ -54,8 +54,8 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener,
 
 
     public static final String TAG = BookPlayFragment.class.getSimpleName();
+    private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
     private volatile int duration = 0;
-    private FloatingActionButton playButton;
     private TextView playedTimeView;
     private SeekBar seekBar;
     private volatile Spinner bookSpinner;
@@ -64,8 +64,6 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener,
     private ServiceController controller;
     private BaseApplication baseApplication;
     private Book book;
-    private TransitionDrawable playTransition;
-    private BaseApplication.PlayState initialState;
 
     @Nullable
     @Override
@@ -93,7 +91,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener,
 
         //init buttons
         seekBar = (SeekBar) view.findViewById(R.id.seekBar);
-        playButton = (FloatingActionButton) view.findViewById(R.id.play);
+        FloatingActionButton playButton = (FloatingActionButton) view.findViewById(R.id.play);
         ImageButton previous_button = (ImageButton) view.findViewById(R.id.previous);
         ImageButton next_button = (ImageButton) view.findViewById(R.id.next);
         playedTimeView = (TextView) view.findViewById(R.id.played);
@@ -107,6 +105,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener,
         previous_button.setOnClickListener(this);
         next_button.setOnClickListener(this);
         playButton.setOnClickListener(this);
+        playButton.setIconDrawable(playPauseDrawable);
         playedTimeView.setOnClickListener(this);
         ThemeUtil.theme(seekBar);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -177,7 +176,6 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener,
             bookSpinner.setVisibility(View.VISIBLE);
         }
 
-
         return view;
     }
 
@@ -233,45 +231,12 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener,
         });
     }
 
-    /**
-     * Sets the play initial play transition.
-     */
-    private void setPlayTransition() {
-        L.v(TAG, "setPlayTransitoin with state=" + baseApplication.getPlayState());
-        @SuppressWarnings("deprecation") Drawable pause = getResources().getDrawable(
-                R.drawable.ic_pause_white_24dp);
-        @SuppressWarnings("deprecation") Drawable play = getResources().getDrawable(
-                R.drawable.ic_play_arrow_white_24dp);
-        initialState = baseApplication.getPlayState();
-        if (initialState == BaseApplication.PlayState.PLAYING) {
-            playTransition = new TransitionDrawable(new Drawable[]{pause, play});
-        } else {
-            playTransition = new TransitionDrawable(new Drawable[]{play, pause});
-        }
-        playTransition.setCrossFadeEnabled(true);
-        playButton.setIconDrawable(playTransition);
-    }
-
     @Override
     public void onPlayStateChanged(final BaseApplication.PlayState state) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                final int DURATION = 300;
-                L.v(TAG, "initialState=" + initialState + ", currentState=" + state);
-                if (state == BaseApplication.PlayState.PLAYING) { // we need ||
-                    if (initialState == BaseApplication.PlayState.PLAYING) { // start will cause >, reverse causes ||
-                        playTransition.reverseTransition(DURATION);
-                    } else { // start will cause ||, reverse causes >
-                        playTransition.startTransition(DURATION);
-                    }
-                } else { // we need >
-                    if (initialState == BaseApplication.PlayState.PLAYING) { // start will cause >, reverse causes ||
-                        playTransition.startTransition(DURATION);
-                    } else { // start will cause ||, reverse causes >
-                        playTransition.reverseTransition(DURATION);
-                    }
-                }
+                setPlayState(state, true);
             }
         });
     }
@@ -356,11 +321,19 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener,
         }
     }
 
+    private void setPlayState(BaseApplication.PlayState state, boolean animated) {
+        if (state == BaseApplication.PlayState.PLAYING) {
+            playPauseDrawable.transformToPause(animated);
+        } else {
+            playPauseDrawable.transformToPlay(animated);
+        }
+    }
+
     @Override
     public void onStart() {
         super.onStart();
 
-        setPlayTransition();
+        setPlayState(baseApplication.getPlayState(), false);
 
         baseApplication.addOnPlayStateChangedListener(this);
         baseApplication.addOnPositionChangedListener(this);

@@ -13,6 +13,8 @@
     <color name="dark_text_primary">@color/abc_primary_text_material_dark</color>
     <color name="dark_text_secondary">@color/abc_secondary_text_material_dark</color>
 
+    <color name="dark_button_color">#ffffffff</color>
+
     <!-- # light theme -->
     <!-- indigo 500 -->
     <color name="light_primary">#ff3f51b5</color>
@@ -25,4 +27,6 @@
     <!-- ## text colors -->
     <color name="light_text_primary">@color/abc_primary_text_material_light</color>
     <color name="light_text_secondary">@color/abc_secondary_text_material_light</color>
+
+    <color name="light_button_color">#ff757575</color>
 </resources>

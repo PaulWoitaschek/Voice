@@ -52,6 +52,7 @@ import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
+import de.ph1b.audiobook.uitools.PlayPauseDrawable;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
@@ -75,11 +76,12 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     private PrefsManager prefs;
     private BaseApplication baseApplication;
     private ServiceController controller;
-    private ImageButton currentPlaying;
     private ProgressBar progressBar;
     private MaterialDialog noFolderWarning;
     private RecyclerView recyclerView;
     private ProgressBar recyclerReplacementView;
+
+    private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
 
     @Nullable
     @Override
@@ -98,12 +100,14 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         playerWidget = (ViewGroup) view.findViewById(R.id.current);
         widgetCover = (ImageView) view.findViewById(R.id.current_cover);
         currentText = (TextView) view.findViewById(R.id.current_text);
-        currentPlaying = (ImageButton) view.findViewById(R.id.current_playing);
+        ImageButton currentPlaying = (ImageButton) view.findViewById(R.id.current_playing);
         progressBar = (ProgressBar) view.findViewById(R.id.progress);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerReplacementView = (ProgressBar) view.findViewById(R.id.recyclerReplacement);
 
         playerWidget.setOnClickListener(this);
+        playPauseDrawable.setColor(getResources().getColor(ThemeUtil.getResourceId(getActivity(), R.attr.button_color)));
+        currentPlaying.setImageDrawable(playPauseDrawable);
         currentPlaying.setOnClickListener(this);
         BookShelfAdapter.OnItemClickListener onClickListener =
                 new BookShelfAdapter.OnItemClickListener() {
@@ -241,7 +245,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         }
 
         initPlayerWidget();
-        onPlayStateChanged(baseApplication.getPlayState());
+        setPlayState(baseApplication.getPlayState(), false);
         onPositionChanged(true);
 
         boolean audioFoldersEmpty = (prefs.getCollectionFolders().size() +
@@ -253,7 +257,45 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         toggleRecyclerVisibilities(baseApplication.isScannerActive());
     }
 
-    private static final String RECYCLER_VIEW_STATE = "recyclerViewState";
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        baseApplication.addOnPlayStateChangedListener(this);
+        baseApplication.addOnPositionChangedListener(this);
+
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        });
+        baseApplication.addOnBookAddedListener(this);
+        baseApplication.addOnBookDeletedListener(this);
+
+        // Scanning for new files here in case there are changes on the drive.
+        baseApplication.addOnScannerStateChangedListener(this);
+        baseApplication.scanForFiles(false);
+
+        if (baseApplication.getCurrentBook() == null) {
+            playerWidget.setVisibility(View.GONE);
+        } else {
+            playerWidget.setVisibility(View.VISIBLE);
+        }
+
+        initPlayerWidget();
+        setPlayState(baseApplication.getPlayState(), false);
+        onPositionChanged(true);
+
+        boolean audioFoldersEmpty = (prefs.getCollectionFolders().size() +
+                prefs.getSingleBookFolders().size()) == 0;
+        boolean noFolderWarningIsShowing = noFolderWarning.isShowing();
+        if (audioFoldersEmpty && !noFolderWarningIsShowing) {
+            noFolderWarning.show();
+        }
+        toggleRecyclerVisibilities(baseApplication.isScannerActive());
+    }    private static final String RECYCLER_VIEW_STATE = "recyclerViewState";
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -332,18 +374,20 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
     }
 
+    private void setPlayState(BaseApplication.PlayState state, boolean animated) {
+        if (state == BaseApplication.PlayState.PLAYING) {
+            playPauseDrawable.transformToPause(animated);
+        } else {
+            playPauseDrawable.transformToPlay(animated);
+        }
+    }
+
     @Override
     public void onPlayStateChanged(final BaseApplication.PlayState state) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (state == BaseApplication.PlayState.PLAYING) {
-                    currentPlaying.setImageResource(ThemeUtil.getResourceId(getActivity(),
-                            R.attr.book_shelf_pause));
-                } else {
-                    currentPlaying.setImageResource(ThemeUtil.getResourceId(getActivity(),
-                            R.attr.book_shelf_play));
-                }
+                setPlayState(state, true);
             }
         });
     }
