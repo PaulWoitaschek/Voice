@@ -250,6 +250,15 @@ public class FolderOverviewActivity extends BaseActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        if (fam.isExpanded()) {
+            fam.collapse();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
