@@ -223,13 +223,8 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         baseApplication.addOnPlayStateChangedListener(this);
         baseApplication.addOnPositionChangedListener(this);
 
+        adapter.notifyDataSetChanged();
 
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyDataSetChanged();
-            }
-        });
         baseApplication.addOnBookAddedListener(this);
         baseApplication.addOnBookDeletedListener(this);
 
