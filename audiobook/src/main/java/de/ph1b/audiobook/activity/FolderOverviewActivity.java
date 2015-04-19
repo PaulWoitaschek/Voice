@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.Toast;
@@ -31,12 +32,7 @@ import de.ph1b.audiobook.utils.PrefsManager;
 
 public class FolderOverviewActivity extends BaseActivity {
 
-    /**
-     * This is an extra for the launching intent to indicate, that this activity was called from the
-     * {@link de.ph1b.audiobook.fragment.BookShelfFragment}. If so, after choosing a file we will
-     * finish the activity immediately.
-     */
-    public static final String ONESHOT_FROM_BOOKSHELF = "oneShotFromBookShelf";
+
     private static final String TAG = FolderOverviewActivity.class.getSimpleName();
     private static final String BACKGROUND_OVERLAY_VISIBLE = "backgroundOverlayVisibility";
     private final ArrayList<String> bookCollections = new ArrayList<>();
@@ -56,6 +52,18 @@ public class FolderOverviewActivity extends BaseActivity {
         int x = fam.getLeft() + ((buttonRepresentingTheFam.getLeft() + buttonRepresentingTheFam.getRight()) / 2);
         int y = fam.getTop() + ((buttonRepresentingTheFam.getTop() + buttonRepresentingTheFam.getBottom()) / 2);
         return new Point(x, y);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.home:
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -238,10 +246,6 @@ public class FolderOverviewActivity extends BaseActivity {
                     if (canAddNewFolder(chosenCollection)) {
                         bookCollections.add(chosenCollection);
                         prefs.setCollectionFolders(bookCollections);
-                        String action = getIntent().getAction();
-                        if (action != null && action.equals(ONESHOT_FROM_BOOKSHELF)) {
-                            finish();
-                        }
                     }
                     L.v(TAG, "chosenCollection=" + chosenCollection);
                     break;
@@ -251,10 +255,6 @@ public class FolderOverviewActivity extends BaseActivity {
                     if (canAddNewFolder(chosenSingleBook)) {
                         singleBooks.add(chosenSingleBook);
                         prefs.setSingleBookFolders(singleBooks);
-                        String action = getIntent().getAction();
-                        if (action != null && action.equals(ONESHOT_FROM_BOOKSHELF)) {
-                            finish();
-                        }
                     }
                     L.v(TAG, "chosenSingleBook=" + chosenSingleBook);
                     break;
