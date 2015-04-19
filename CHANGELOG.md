@@ -1,6 +1,6 @@
 # v2.1.1 Fancy Pants
 
-## 
+## Additions
 * Play buttons will transform with animation
 * Press back while fam is shown will collapse it
 
