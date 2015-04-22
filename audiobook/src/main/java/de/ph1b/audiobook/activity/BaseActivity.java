@@ -3,7 +3,7 @@ package de.ph1b.audiobook.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 
 import de.ph1b.audiobook.R;
@@ -11,10 +11,10 @@ import de.ph1b.audiobook.service.AudioService;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 
 /**
- * Base class for all Activities which extends ActionBarActivity and checks in onResume, if the storage
+ * Base class for all Activities which checks in onResume, if the storage
  * is mounted. Shuts down service if not.
  */
-public abstract class BaseActivity extends ActionBarActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
 
     @Override

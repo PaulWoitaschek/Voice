@@ -13,9 +13,9 @@ import de.ph1b.audiobook.utils.Validate;
 
 public class Book implements Comparable<Book> {
 
+    public static final String TAG = Book.class.getSimpleName();
     private static final long ID_UNKNOWN = -1;
     private long id = ID_UNKNOWN;
-    public static final String TAG = Book.class.getSimpleName();
     @NonNull
     private final String root;
     @NonNull
@@ -25,14 +25,14 @@ public class Book implements Comparable<Book> {
     @NonNull
     private final String packageName;
     @NonNull
+    private final ArrayList<Bookmark> bookmarks;
+    @NonNull
     private String name;
     private int time = 0;
     private float playbackSpeed = 1.0f;
     @NonNull
     private String currentMediaPath;
     private boolean useCoverReplacement = false;
-    @NonNull
-    private final ArrayList<Bookmark> bookmarks;
 
     public Book(@NonNull String root,
                 @NonNull String name,

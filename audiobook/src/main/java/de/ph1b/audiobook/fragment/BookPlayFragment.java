@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -81,11 +81,13 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener,
 
         //setup actionbar
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        ActionBarActivity actionBarActivity = (ActionBarActivity) getActivity();
-        actionBarActivity.setSupportActionBar(toolbar);
-        ActionBar actionBar = actionBarActivity.getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(book.getName());
+        AppCompatActivity appCompatActivity = (AppCompatActivity) getActivity();
+        appCompatActivity.setSupportActionBar(toolbar);
+        ActionBar actionBar = appCompatActivity.getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(book.getName());
+        }
 
         setHasOptionsMenu(true);
 
