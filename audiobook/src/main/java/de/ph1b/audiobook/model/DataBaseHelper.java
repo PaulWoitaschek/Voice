@@ -17,8 +17,8 @@ import java.util.Collections;
 public class DataBaseHelper extends SQLiteOpenHelper {
 
 
-    private static final int DATABASE_VERSION = 25;
-    private static final String DATABASE_NAME = "autoBookDB";
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "autoBookDB2";
 
     // tables
     private static final String TABLE_BOOK = "TABLE_BOOK";
@@ -98,21 +98,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_BOOK);
     }
 
-    private void upgrade24(SQLiteDatabase db) {
-
-    }
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        while (oldVersion < newVersion) {
-            switch (oldVersion) {
-                case 24:
-                    upgrade24(db);
-                    break;
-                default:
-                    break;
-            }
-            oldVersion++;
-        }
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BOOK);
+        onCreate(db);
     }
 }
