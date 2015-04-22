@@ -462,7 +462,9 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
     @Override
     public void onCurrentBookChanged(Book book) {
+        L.v(TAG, "onCurrentBookChanged called");
         reInitController(book);
+        L.v(TAG, "onCurrentBookChanged done");
     }
 
     @Override

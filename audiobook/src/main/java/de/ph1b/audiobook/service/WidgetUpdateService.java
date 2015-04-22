@@ -35,10 +35,12 @@ import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.BaseApplication.PlayState;
+import de.ph1b.audiobook.utils.L;
 
 public class WidgetUpdateService extends Service implements
         BaseApplication.OnPositionChangedListener, BaseApplication.OnCurrentBookChangedListener,
         BaseApplication.OnPlayStateChangedListener {
+    private static final String TAG = WidgetUpdateService.class.getSimpleName();
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private BaseApplication baseApplication;
     private AppWidgetManager appWidgetManager;
@@ -145,7 +147,6 @@ public class WidgetUpdateService extends Service implements
                         || displayWidth < displayHeight);
     }
 
-
     /**
      * Initializes the elements of the widgets with a book
      *
@@ -219,7 +220,6 @@ public class WidgetUpdateService extends Service implements
                 TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics()));
     }
 
-
     /**
      * Sets visibilities on widgets element, depending on the size of the widget
      *
@@ -233,7 +233,6 @@ public class WidgetUpdateService extends Service implements
         setXVisibility(remoteViews, width, height);
         setYVisibility(remoteViews, height, singleChapter);
     }
-
 
     /**
      * Set visibilities dependent on widget width.
@@ -270,7 +269,6 @@ public class WidgetUpdateService extends Service implements
             remoteViews.setViewVisibility(R.id.rewind, View.GONE);
         }
     }
-
 
     /**
      * Sets visibilities dependent on widget height.
@@ -335,7 +333,9 @@ public class WidgetUpdateService extends Service implements
 
     @Override
     public void onCurrentBookChanged(final Book book) {
+        L.v(TAG, "onCurrentBookChanged called");
         updateWidget();
+        L.v(TAG, "onCurrentBookChanged done");
     }
 
     @Override

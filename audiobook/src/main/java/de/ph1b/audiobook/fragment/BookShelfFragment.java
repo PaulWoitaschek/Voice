@@ -220,23 +220,15 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public void onResume() {
         super.onResume();
 
-        baseApplication.addOnPlayStateChangedListener(this);
-        baseApplication.addOnPositionChangedListener(this);
-
-        adapter.notifyDataSetChanged();
-
-        baseApplication.addOnBookAddedListener(this);
-        baseApplication.addOnBookDeletedListener(this);
-
-        // Scanning for new files here in case there are changes on the drive.
-        baseApplication.addOnScannerStateChangedListener(this);
-        baseApplication.scanForFiles(false);
-
         if (baseApplication.getCurrentBook() == null) {
             playerWidget.setVisibility(View.GONE);
         } else {
             playerWidget.setVisibility(View.VISIBLE);
         }
+
+        adapter.notifyDataSetChanged();
+
+        baseApplication.scanForFiles(false);
 
         initPlayerWidget();
         setPlayState(baseApplication.getPlayState(), false);
@@ -249,6 +241,12 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             noFolderWarning.show();
         }
         toggleRecyclerVisibilities(baseApplication.isScannerActive());
+
+        baseApplication.addOnPlayStateChangedListener(this);
+        baseApplication.addOnPositionChangedListener(this);
+        baseApplication.addOnBookAddedListener(this);
+        baseApplication.addOnBookDeletedListener(this);
+        baseApplication.addOnScannerStateChangedListener(this);
     }
 
     @Override
@@ -357,13 +355,20 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     }
 
     private void toggleRecyclerVisibilities(boolean scannerActive) {
-        if (baseApplication.getAllBooks().size() == 0 && scannerActive) {
-            recyclerReplacementView.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
-        } else {
-            recyclerReplacementView.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-        }
+        L.v(TAG, "toggleRecyclerVisibilities");
+        final boolean hideRecycler = adapter.getItemCount() == 0 && scannerActive;
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (hideRecycler) {
+                    recyclerReplacementView.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                } else {
+                    recyclerReplacementView.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     @Override
@@ -464,12 +469,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             e.printStackTrace();
         }
 
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                toggleRecyclerVisibilities(baseApplication.isScannerActive());
-            }
-        });
+        toggleRecyclerVisibilities(baseApplication.isScannerActive());
     }
 
     @Override
@@ -485,36 +485,32 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onBookDeleted(final int position) {
+        L.v(TAG, "onBookDeleted started");
         final CountDownLatch latch = new CountDownLatch(1);
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                L.v(TAG, "onBookDeleted, notifying adapter about position=" + position);
                 adapter.notifyItemRemoved(position);
                 latch.countDown();
+                L.v(TAG, "onBookDeleted, counted down latch");
             }
         });
         try {
+            L.v(TAG, "onBookDeleted, wait for latch");
             latch.await();
+            L.v(TAG, "onBookDeleted, latch released");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                toggleRecyclerVisibilities(baseApplication.isScannerActive());
-            }
-        });
+        toggleRecyclerVisibilities(baseApplication.isScannerActive());
+        L.v(TAG, "onBookDeleted finished");
     }
 
     @Override
     public void onScannerStateChanged(final boolean active) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                toggleRecyclerVisibilities(active);
-            }
-        });
+        toggleRecyclerVisibilities(active);
     }
 
 }

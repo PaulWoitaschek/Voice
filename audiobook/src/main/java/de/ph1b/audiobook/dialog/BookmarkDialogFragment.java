@@ -118,7 +118,7 @@ public class BookmarkDialogFragment extends DialogFragment {
             @Override
             public void onBookmarkClicked(int position) {
                 Bookmark bookmark = adapter.getItem(position);
-                controller.changeTime(bookmark.getTime(), bookmark.getPath());
+                controller.changeTime(bookmark.getTime(), bookmark.getMediaPath());
                 dialog.cancel();
             }
         };

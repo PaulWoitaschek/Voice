@@ -76,6 +76,7 @@ public class PlayPauseDrawable extends Drawable {
     private float mProgress;
     private int mFromShape;
     private int mToShape;
+
     public PlayPauseDrawable() {
         this(VERTEX_PAUSE, VERTEX_PLAY);
     }

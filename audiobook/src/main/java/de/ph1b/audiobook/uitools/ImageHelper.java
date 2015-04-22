@@ -16,10 +16,7 @@ import android.view.WindowManager;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 
-import de.ph1b.audiobook.model.Book;
-import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.utils.L;
 
 public class ImageHelper {
@@ -41,7 +38,7 @@ public class ImageHelper {
      * @param bitmap The bitmap to be saved
      * @param c      Application context
      */
-    public static synchronized void saveCover(@NonNull Bitmap bitmap, Context c, @NonNull String root, @NonNull ArrayList<Chapter> chapters) {
+    public static synchronized void saveCover(@NonNull Bitmap bitmap, Context c, @NonNull File destination) {
         // make bitmap square
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
@@ -58,13 +55,12 @@ public class ImageHelper {
 
         // save bitmap to storage
         try {
-            File coverFile = Book.getCoverFile(root, chapters);
-            FileOutputStream coverOut = new FileOutputStream(coverFile);
+            FileOutputStream coverOut = new FileOutputStream(destination);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, coverOut);
             coverOut.flush();
             coverOut.close();
         } catch (IOException e) {
-            L.e(TAG, "Error at saving image with book root=" + root, e);
+            L.e(TAG, "Error at saving image with destination=" + destination, e);
         }
     }
 

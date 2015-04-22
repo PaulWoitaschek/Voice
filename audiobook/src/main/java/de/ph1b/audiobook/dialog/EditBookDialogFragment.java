@@ -57,6 +57,7 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
     private Book book;
     private DataBaseHelper db;
 
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -186,8 +187,7 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
                 if (coverPosition > 0 && r.width() > 0 && r.height() > 0) {
                     Bitmap cover = covers.get(coverPosition);
                     cover = Bitmap.createBitmap(cover, r.left, r.top, r.width(), r.height());
-                    ImageHelper.saveCover(cover, getActivity(), book.getRoot(),
-                            book.getChapters());
+                    ImageHelper.saveCover(cover, getActivity(), book.getCoverFile());
                     book.setUseCoverReplacement(false);
                 } else {
                     book.setUseCoverReplacement(true);

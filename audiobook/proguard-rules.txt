@@ -1,7 +1,7 @@
 # Add project specific ProGuard rules here.
 # By default, the flags in this file are appended to flags specified
 # in /opt/android-sdk/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the ProGuard
+# You can edit the include mediaId and order by changing the ProGuard
 # include property in project.properties.
 #
 # For more details, see

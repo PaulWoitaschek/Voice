@@ -19,10 +19,10 @@ public class NaturalBookmarkComparator implements Comparator<Bookmark> {
 
         for (int i = 0; i < chapters.size(); i++) {
             String chapterPath = chapters.get(i).getPath();
-            if (lhs.getPath().equals(chapterPath)) {
+            if (lhs.getMediaPath().equals(chapterPath)) {
                 indexLhs = i;
             }
-            if (rhs.getPath().equals(chapterPath)) {
+            if (rhs.getMediaPath().equals(chapterPath)) {
                 indexRhs = i;
             }
         }
@@ -50,6 +50,6 @@ public class NaturalBookmarkComparator implements Comparator<Bookmark> {
         }
 
         // if there is nothing else to compare, compare the titles.
-        return NaturalComparator.compare(lhs.getTitle(), rhs.getTitle());
+        return NaturalOrderComparator.naturalCompare(lhs.getTitle(), rhs.getTitle());
     }
 }

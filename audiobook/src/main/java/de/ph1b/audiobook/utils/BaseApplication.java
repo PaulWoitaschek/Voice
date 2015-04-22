@@ -52,7 +52,9 @@ public class BaseApplication extends Application {
     private BookAdder bookAdder;
 
     public Book getBook(long id) {
+        L.v(TAG, "getBook acquiring lock");
         bookLock.lock();
+        L.v(TAG, "getBook acquired lock");
         try {
             for (Book b : allBooks) {
                 if (b.getId() == id) {
@@ -60,6 +62,7 @@ public class BaseApplication extends Application {
                 }
             }
         } finally {
+            L.v(TAG, "getBook released lock");
             bookLock.unlock();
         }
         throw new AssertionError("Get book with id=" + id + " did not find a book");
@@ -89,7 +92,9 @@ public class BaseApplication extends Application {
     }
 
     public void addBook(Book book) {
+        L.v(TAG, "addBook acquiring lock...");
         bookLock.lock();
+        L.v(TAG, "addBook acquired lock...");
         try {
             db.addBook(book);
             allBooks.add(book);
@@ -99,6 +104,7 @@ public class BaseApplication extends Application {
                 l.onBookAdded(position);
             }
         } finally {
+            L.v(TAG, "addBook released lock...");
             bookLock.unlock();
         }
     }
@@ -136,6 +142,7 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        //noinspection ConstantConditions,PointlessBooleanExpression
         if (!BuildConfig.DEBUG) {
             ACRA.init(this);
         }
@@ -145,34 +152,35 @@ public class BaseApplication extends Application {
         db = DataBaseHelper.getInstance(this);
         bookAdder = new BookAdder(this);
 
-        bookLock.lock();
-        try {
-            allBooks.addAll(db.getAllBooks());
-            for (Book b : allBooks) {
-                if (b.getId() == prefs.getCurrentBookId()) {
-                    currentBook = b;
-                    break;
-                }
+        allBooks.addAll(db.getAllBooks());
+        for (Book b : allBooks) {
+            if (b.getId() == prefs.getCurrentBookId()) {
+                currentBook = b;
+                break;
             }
-        } finally {
-            bookLock.unlock();
         }
 
         bookAdder.scanForFiles(true);
     }
 
+
     public ArrayList<Book> getAllBooks() {
+        L.v(TAG, "getAllBooks acquiring lock...");
         bookLock.lock();
+        L.v(TAG, "getAllBooks acquired lock...");
         try {
             return allBooks;
         } finally {
+            L.v(TAG, "getAllBooks releasing lock...");
             bookLock.unlock();
         }
     }
 
     @Nullable
     public Book getCurrentBook() {
+        L.v(TAG, "getCurrentBook acquiring lock");
         bookLock.lock();
+        L.v(TAG, "getCurrentBook acquired lock");
         try {
             if (currentBook == null) {
                 for (Book b : allBooks) {
@@ -186,12 +194,15 @@ public class BaseApplication extends Application {
             }
             return currentBook;
         } finally {
+            L.v(TAG, "getCurrentBook releasing lock");
             bookLock.unlock();
         }
     }
 
     public void setCurrentBook(Book book) {
+        L.v(TAG, "setCurrentBook acquiring lock");
         bookLock.lock();
+        L.v(TAG, "setCurrentBook acquired lock");
         try {
             if (this.currentBook != book) {
                 this.currentBook = book;
@@ -200,12 +211,15 @@ public class BaseApplication extends Application {
                 }
             }
         } finally {
+            L.v(TAG, "setCurrentBook releasing lock");
             bookLock.unlock();
         }
     }
 
     public void deleteBook(Book book) {
+        L.v(TAG, "deleteBook acquiring lock");
         bookLock.lock();
+        L.v(TAG, "deleteBook acquired lock");
         try {
             db.deleteBook(book);
             int position = allBooks.indexOf(book);
@@ -214,6 +228,7 @@ public class BaseApplication extends Application {
                 l.onBookDeleted(position);
             }
         } finally {
+            L.v(TAG, "deleteBook releasing lock");
             bookLock.unlock();
         }
     }

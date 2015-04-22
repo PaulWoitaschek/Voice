@@ -9,15 +9,15 @@ public class Bookmark {
     private static final String TAG = Bookmark.class.getSimpleName();
     private final int time;
     @NonNull
-    private final String path;
+    private final String mediaPath;
     @NonNull
     private String title;
 
-    public Bookmark(@NonNull String path, @NonNull String title, int time) {
-        new Validate().notNull(path, title)
-                .notEmpty(path, title);
+    public Bookmark(@NonNull String mediaPath, @NonNull String title, int time) {
+        new Validate().notNull(mediaPath, title)
+                .notEmpty(mediaPath, title);
 
-        this.path = path;
+        this.mediaPath = mediaPath;
         this.title = title;
         this.time = time;
     }
@@ -30,10 +30,7 @@ public class Bookmark {
 
         if (o instanceof Bookmark) {
             Bookmark that = (Bookmark) o;
-            boolean timeE = that.time == this.time;
-            boolean pathE = that.path.equals(this.path);
-            boolean titleE = that.title.equals(this.title);
-            return timeE && pathE && titleE;
+            return this.time == that.time && this.mediaPath.equals(that.mediaPath) && that.title.equals(this.title);
         }
 
         return false;
@@ -43,7 +40,7 @@ public class Bookmark {
     public int hashCode() {
         final int PRIME = 31;
         int result = PRIME + time;
-        result = PRIME * result + path.hashCode();
+        result = PRIME * result + mediaPath.hashCode();
         result = PRIME * result + title.hashCode();
         return result;
     }
@@ -53,13 +50,13 @@ public class Bookmark {
         return TAG + "[" +
                 ",title=" + title +
                 ",time=" + time +
-                ",path=" + path +
+                ",mediaPath=" + mediaPath +
                 "]";
     }
 
     @NonNull
-    public String getPath() {
-        return path;
+    public String getMediaPath() {
+        return mediaPath;
     }
 
     @NonNull
