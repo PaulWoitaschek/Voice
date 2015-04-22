@@ -47,7 +47,8 @@ import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 
-public class AudioService extends Service implements AudioManager.OnAudioFocusChangeListener, BaseApplication.OnPlayStateChangedListener, BaseApplication.OnCurrentBookChangedListener, BaseApplication.OnPositionChangedListener {
+public class AudioService extends Service implements AudioManager.OnAudioFocusChangeListener,
+        BaseApplication.OnBooksChangedListener {
 
     private static final String TAG = AudioService.class.getSimpleName();
     private static final int NOTIFICATION_ID = 42;
@@ -128,9 +129,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         registerReceiver(audioBecomingNoisyReceiver, new IntentFilter(
                 AudioManager.ACTION_AUDIO_BECOMING_NOISY));
         registerReceiver(headsetPlugReceiver, new IntentFilter(Intent.ACTION_HEADSET_PLUG));
-        baseApplication.addOnPlayStateChangedListener(this);
-        baseApplication.addOnCurrentBookChangedListener(this);
-        baseApplication.addOnPositionChangedListener(this);
+        baseApplication.addOnBooksChangedListener(this);
 
         baseApplication.setPlayState(PlayState.STOPPED);
 
@@ -210,9 +209,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         L.v(TAG, "onDestroy called");
         controller.stop();
 
-        baseApplication.removeOnPlayStateChangedListener(this);
-        baseApplication.removeOnCurrentBookChangedListener(this);
-        baseApplication.removeOnPositionChangedListener(this);
+        baseApplication.removeOnBooksChangedListener(this);
         baseApplication.setPlayState(PlayState.STOPPED);
 
         try {
@@ -285,6 +282,11 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onBookDeleted(int position) {
+
     }
 
     @Override
@@ -468,9 +470,24 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     }
 
     @Override
+    public void onBookAdded(int position) {
+
+    }
+
+    @Override
+    public void onScannerStateChanged(boolean active) {
+
+    }
+
+    @Override
     public void onPositionChanged(boolean positionChanged) {
         if (Build.VERSION.SDK_INT >= 14 && positionChanged) {
             updateRemoteControlClient();
         }
+    }
+
+    @Override
+    public void onSleepStateChanged(boolean active) {
+
     }
 }

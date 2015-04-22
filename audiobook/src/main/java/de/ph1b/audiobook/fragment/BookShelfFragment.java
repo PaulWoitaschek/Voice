@@ -61,11 +61,7 @@ import de.ph1b.audiobook.utils.PrefsManager;
 
 public class BookShelfFragment extends Fragment implements View.OnClickListener,
         EditBookDialogFragment.OnEditBookFinishedListener,
-        BaseApplication.OnBookAddedListener,
-        BaseApplication.OnBookDeletedListener,
-        BaseApplication.OnPlayStateChangedListener,
-        BaseApplication.OnPositionChangedListener,
-        BaseApplication.OnScannerStateChangedListener {
+        BaseApplication.OnBooksChangedListener {
 
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
@@ -244,11 +240,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         }
         toggleRecyclerVisibilities(baseApplication.isScannerActive());
 
-        baseApplication.addOnPlayStateChangedListener(this);
-        baseApplication.addOnPositionChangedListener(this);
-        baseApplication.addOnBookAddedListener(this);
-        baseApplication.addOnBookDeletedListener(this);
-        baseApplication.addOnScannerStateChangedListener(this);
+        baseApplication.addOnBooksChangedListener(this);
     }
 
     @Override
@@ -354,6 +346,16 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                 initPlayerWidget();
             }
         });
+    }
+
+    @Override
+    public void onSleepStateChanged(boolean active) {
+
+    }
+
+    @Override
+    public void onCurrentBookChanged(Book book) {
+
     }
 
     private void toggleRecyclerVisibilities(boolean scannerActive) {
@@ -478,11 +480,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public void onPause() {
         super.onPause();
 
-        baseApplication.removeOnBookAddedListener(this);
-        baseApplication.removeOnBookDeletedListener(this);
-        baseApplication.removeOnPlayStateChangedListener(this);
-        baseApplication.removeOnPositionChangedListener(this);
-        baseApplication.removeOnScannerStateChangedListener(this);
+        baseApplication.removeOnBooksChangedListener(this);
     }
 
     @Override

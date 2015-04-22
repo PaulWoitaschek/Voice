@@ -38,8 +38,7 @@ import de.ph1b.audiobook.utils.BaseApplication.PlayState;
 import de.ph1b.audiobook.utils.L;
 
 public class WidgetUpdateService extends Service implements
-        BaseApplication.OnPositionChangedListener, BaseApplication.OnCurrentBookChangedListener,
-        BaseApplication.OnPlayStateChangedListener {
+        BaseApplication.OnBooksChangedListener {
     private static final String TAG = WidgetUpdateService.class.getSimpleName();
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private BaseApplication baseApplication;
@@ -50,9 +49,7 @@ public class WidgetUpdateService extends Service implements
         super.onCreate();
 
         baseApplication = (BaseApplication) getApplication();
-        baseApplication.addOnPlayStateChangedListener(this);
-        baseApplication.addOnCurrentBookChangedListener(this);
-        baseApplication.addOnPositionChangedListener(this);
+        baseApplication.addOnBooksChangedListener(this);
         appWidgetManager = AppWidgetManager.getInstance(this);
     }
 
@@ -305,9 +302,7 @@ public class WidgetUpdateService extends Service implements
     public void onDestroy() {
         super.onDestroy();
 
-        baseApplication.removeOnPlayStateChangedListener(this);
-        baseApplication.removeOnCurrentBookChangedListener(this);
-        baseApplication.removeOnPositionChangedListener(this);
+        baseApplication.removeOnBooksChangedListener(this);
         executor.shutdown();
     }
 
@@ -332,10 +327,30 @@ public class WidgetUpdateService extends Service implements
     }
 
     @Override
+    public void onSleepStateChanged(boolean active) {
+
+    }
+
+    @Override
     public void onCurrentBookChanged(final Book book) {
         L.v(TAG, "onCurrentBookChanged called");
         updateWidget();
         L.v(TAG, "onCurrentBookChanged done");
+    }
+
+    @Override
+    public void onBookAdded(int position) {
+
+    }
+
+    @Override
+    public void onScannerStateChanged(boolean active) {
+
+    }
+
+    @Override
+    public void onBookDeleted(int position) {
+
     }
 
     @Override
