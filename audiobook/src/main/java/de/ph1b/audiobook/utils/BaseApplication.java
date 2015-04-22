@@ -227,6 +227,11 @@ public class BaseApplication extends Application {
         onBooksChangedListeners.add(listener);
     }
 
+    public void onCoverChanged(Book book) {
+        for (OnBooksChangedListener l : onBooksChangedListeners)
+            l.onCoverChanged(allBooks.indexOf(book));
+    }
+
     public enum PlayState {
         PLAYING,
         PAUSED,
@@ -235,19 +240,20 @@ public class BaseApplication extends Application {
 
 
     public interface OnBooksChangedListener {
-        public void onBookDeleted(int position);
+        void onBookDeleted(int position);
 
-        public void onPlayStateChanged(PlayState state);
+        void onPlayStateChanged(PlayState state);
 
-        public void onPositionChanged(boolean fileChanged);
+        void onPositionChanged(boolean fileChanged);
 
-        public void onSleepStateChanged(boolean active);
+        void onSleepStateChanged(boolean active);
 
-        public void onCurrentBookChanged(Book book);
+        void onCurrentBookChanged(Book book);
 
-        public void onBookAdded(int position);
+        void onBookAdded(int position);
 
-        public void onScannerStateChanged(boolean active);
+        void onScannerStateChanged(boolean active);
 
+        void onCoverChanged(int position);
     }
 }

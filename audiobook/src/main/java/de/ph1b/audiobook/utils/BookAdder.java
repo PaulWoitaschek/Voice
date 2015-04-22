@@ -173,6 +173,7 @@ public class BookAdder {
                         if (images != null) {
                             Bitmap cover = getCoverFromDisk(images);
                             if (cover != null) {
+                                baseApplication.onCoverChanged(b);
                                 ImageHelper.saveCover(cover, baseApplication, coverFile);
                                 continue;
                             }
@@ -182,6 +183,7 @@ public class BookAdder {
                 Bitmap cover = getEmbeddedCover(b.getChapters());
                 if (cover != null) {
                     ImageHelper.saveCover(cover, baseApplication, coverFile);
+                    baseApplication.onCoverChanged(b);
                 }
             }
         }

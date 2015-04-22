@@ -513,4 +513,15 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         toggleRecyclerVisibilities(active);
     }
 
+    @Override
+    public void onCoverChanged(final int position) {
+        Picasso.with(getActivity()).invalidate(adapter.getItem(position).getCoverFile());
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyItemChanged(position);
+            }
+        });
+    }
+
 }

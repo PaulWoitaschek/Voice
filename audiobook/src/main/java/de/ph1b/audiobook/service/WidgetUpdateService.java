@@ -349,6 +349,11 @@ public class WidgetUpdateService extends Service implements
     }
 
     @Override
+    public void onCoverChanged(int position) {
+
+    }
+
+    @Override
     public void onBookDeleted(int position) {
 
     }

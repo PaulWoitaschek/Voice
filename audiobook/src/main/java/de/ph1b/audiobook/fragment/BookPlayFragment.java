@@ -384,4 +384,9 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener,
     public void onScannerStateChanged(boolean active) {
 
     }
+
+    @Override
+    public void onCoverChanged(int position) {
+
+    }
 }
