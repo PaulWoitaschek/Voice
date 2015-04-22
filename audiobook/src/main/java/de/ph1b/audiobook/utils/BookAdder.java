@@ -223,6 +223,7 @@ public class BookAdder {
         for (String s : prefs.getSingleBookFolders()) {
             singleBooks.add(new File(s));
         }
+        Collections.sort(singleBooks, new NaturalOrderComparator());
         return singleBooks;
     }
 
@@ -238,6 +239,7 @@ public class BookAdder {
                 }
             }
         }
+        Collections.sort(containingFiles, new NaturalOrderComparator());
         return containingFiles;
     }
 
