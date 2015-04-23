@@ -123,8 +123,6 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                             RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
                             RemoteControlClient.FLAG_KEY_MEDIA_REWIND |
                             RemoteControlClient.FLAG_KEY_MEDIA_FAST_FORWARD);
-            //noinspection deprecation
-            audioManager.registerRemoteControlClient(remoteControlClient);
         }
         registerReceiver(audioBecomingNoisyReceiver, new IntentFilter(
                 AudioManager.ACTION_AUDIO_BECOMING_NOISY));
@@ -299,6 +297,10 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 switch (state) {
                     case PLAYING:
                         audioManager.requestAudioFocus(AudioService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+
+                        //noinspection deprecation
+                        audioManager.registerRemoteControlClient(remoteControlClient);
+
                         startForeground(NOTIFICATION_ID, getNotification());
                         if (Build.VERSION.SDK_INT >= 14) {
                             //noinspection deprecation
@@ -315,6 +317,9 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                         }
                         break;
                     case STOPPED:
+                        //noinspection deprecation
+                        audioManager.unregisterRemoteControlClient(remoteControlClient);
+
                         audioManager.abandonAudioFocus(AudioService.this);
                         notificationManager.cancel(NOTIFICATION_ID);
                         stopForeground(true);
