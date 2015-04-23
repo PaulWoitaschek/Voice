@@ -122,9 +122,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             }
         } catch (InvalidPropertiesFormatException e) {
             L.e(TAG, "Error at upgrade", e);
-            db.execSQL("DROP TABLE IF NOT EXISTS " + TABLE_BOOK);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_BOOK);
+            db.execSQL(CREATE_TABLE_BOOK);
         }
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_BOOK);
     }
 
     private void upgrade24(SQLiteDatabase db) throws InvalidPropertiesFormatException {
@@ -145,192 +145,195 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 new String[]{"BOOK_ID", "BOOK_ROOT", "BOOK_TYPE"},
                 null, null, null, null, null);
         try {
-            long bookId = bookCursor.getLong(0);
-            String root = bookCursor.getString(1);
-            String type = bookCursor.getString(2);
+            while(bookCursor.moveToNext()) {
+                long bookId = bookCursor.getLong(0);
+                String root = bookCursor.getString(1);
+                String type = bookCursor.getString(2);
 
-            ArrayList<String> chapterNames = new ArrayList<>();
-            ArrayList<Integer> chapterDurations = new ArrayList<>();
-            ArrayList<String> chapterPaths = new ArrayList<>();
+                ArrayList<String> chapterNames = new ArrayList<>();
+                ArrayList<Integer> chapterDurations = new ArrayList<>();
+                ArrayList<String> chapterPaths = new ArrayList<>();
 
-            Cursor mediaCursor = db.query(copyChapterTableName, new String[]{"CHAPTER_PATH", "CHAPTER_DURATION",
-                            "CHAPTER_NAME"},
-                    BOOK_ID + "=?", new String[]{String.valueOf(bookId)},
-                    null, null, null);
-            try {
-                while (mediaCursor.moveToNext()) {
-                    chapterPaths.add(mediaCursor.getString(0));
-                    chapterDurations.add(mediaCursor.getInt(1));
-                    chapterNames.add(mediaCursor.getString(2));
+                Cursor mediaCursor = db.query(copyChapterTableName, new String[]{"CHAPTER_PATH", "CHAPTER_DURATION",
+                                "CHAPTER_NAME"},
+                        BOOK_ID + "=?", new String[]{String.valueOf(bookId)},
+                        null, null, null);
+                try {
+                    while (mediaCursor.moveToNext()) {
+                        chapterPaths.add(mediaCursor.getString(0));
+                        chapterDurations.add(mediaCursor.getInt(1));
+                        chapterNames.add(mediaCursor.getString(2));
+                    }
+                } finally {
+                    mediaCursor.close();
                 }
-            } finally {
-                mediaCursor.close();
-            }
 
-            File configFile;
-            switch (type) {
-                case "COLLECTION_FILE":
-                case "SINGLE_FILE":
-                    configFile = new File(root, "." + chapterNames.get(0) + "-map.json");
-                    break;
-                case "COLLECTION_FOLDER":
-                case "SINGLE_FOLDER":
-                    configFile = new File(root, "." + (new File(root).getName()) + "-map.json");
-                    break;
-                default:
-                    throw new InvalidPropertiesFormatException("Upgrade failed due to unknown type=" + type);
-            }
-            File backupFile = new File(configFile.getAbsolutePath() + ".backup");
-
-            boolean configFileValid = configFile.exists() && configFile.canRead()
-                    && configFile.length() > 0;
-            boolean backupFileValid = backupFile.exists() && backupFile.canRead()
-                    && backupFile.length() > 0;
-
-
-            JSONObject playingInformation = null;
-            try {
-                if (configFileValid) {
-                    String retString = FileUtils.readFileToString(configFile);
-                    if (retString.length() > 0)
-                        playingInformation = new JSONObject(retString);
-                }
-            } catch (JSONException | IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                if (playingInformation == null && backupFileValid) {
-                    String retString = FileUtils.readFileToString(backupFile);
-                    playingInformation = new JSONObject(retString);
-                }
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-            }
-
-            if (playingInformation == null) {
-                throw new InvalidPropertiesFormatException("Could not fetch information");
-            }
-
-            final String JSON_TIME = "time";
-            final String JSON_BOOKMARK_TIME = "time";
-            final String JSON_BOOKMARK_TITLE = "title";
-            final String JSON_SPEED = "speed";
-            final String JSON_NAME = "name";
-            final String JSON_BOOKMARKS = "bookmarks";
-            final String JSON_REL_PATH = "relPath";
-            final String JSON_BOOKMARK_REL_PATH = "relPath";
-            final String JSON_USE_COVER_REPLACEMENT = "useCoverReplacement";
-
-            int currentTime = 0;
-            try {
-                currentTime = playingInformation.getInt(JSON_TIME);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            ArrayList<String> bookmarkRelPathsUnsafe = new ArrayList<>();
-            ArrayList<String> bookmarkTitlesUnsafe = new ArrayList<>();
-            ArrayList<Integer> bookmarkTimesUnsafe = new ArrayList<>();
-            try {
-                JSONArray bookmarksJ = playingInformation.getJSONArray(JSON_BOOKMARKS);
-                for (int i = 0; i < bookmarksJ.length(); i++) {
-                    JSONObject bookmarkJ = (JSONObject) bookmarksJ.get(i);
-                    bookmarkTimesUnsafe.add(bookmarkJ.getInt(JSON_BOOKMARK_TIME));
-                    bookmarkTitlesUnsafe.add(bookmarkJ.getString(JSON_BOOKMARK_TITLE));
-                    bookmarkRelPathsUnsafe.add(bookmarkJ.getString(JSON_BOOKMARK_REL_PATH));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                bookmarkRelPathsUnsafe.clear();
-                bookmarkTitlesUnsafe.clear();
-                bookmarkTimesUnsafe.clear();
-            }
-
-            ArrayList<String> bookmarkRelPathsSafe = new ArrayList<>();
-            ArrayList<String> bookmarkTitlesSafe = new ArrayList<>();
-            ArrayList<Integer> bookmarkTimesSafe = new ArrayList<>();
-
-            for (int i = 0; i < bookmarkRelPathsUnsafe.size(); i++) {
-                boolean bookmarkExists = false;
-                for (String chapterPath : chapterPaths) {
-                    if (chapterPath.equals(bookmarkRelPathsUnsafe.get(i))) {
-                        bookmarkExists = true;
+                File configFile;
+                switch (type) {
+                    case "COLLECTION_FILE":
+                    case "SINGLE_FILE":
+                        configFile = new File(root, "." + chapterNames.get(0) + "-map.json");
                         break;
+                    case "COLLECTION_FOLDER":
+                    case "SINGLE_FOLDER":
+                        configFile = new File(root, "." + (new File(root).getName()) + "-map.json");
+                        break;
+                    default:
+                        throw new InvalidPropertiesFormatException("Upgrade failed due to unknown type=" + type);
+                }
+                File backupFile = new File(configFile.getAbsolutePath() + ".backup");
+
+                boolean configFileValid = configFile.exists() && configFile.canRead()
+                        && configFile.length() > 0;
+                boolean backupFileValid = backupFile.exists() && backupFile.canRead()
+                        && backupFile.length() > 0;
+
+
+                JSONObject playingInformation = null;
+                try {
+                    if (configFileValid) {
+                        String retString = FileUtils.readFileToString(configFile);
+                        if (retString.length() > 0)
+                            playingInformation = new JSONObject(retString);
+                    }
+                } catch (JSONException | IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    if (playingInformation == null && backupFileValid) {
+                        String retString = FileUtils.readFileToString(backupFile);
+                        playingInformation = new JSONObject(retString);
+                    }
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (playingInformation == null) {
+                    throw new InvalidPropertiesFormatException("Could not fetch information");
+                }
+
+                final String JSON_TIME = "time";
+                final String JSON_BOOKMARK_TIME = "time";
+                final String JSON_BOOKMARK_TITLE = "title";
+                final String JSON_SPEED = "speed";
+                final String JSON_NAME = "name";
+                final String JSON_BOOKMARKS = "bookmarks";
+                final String JSON_REL_PATH = "relPath";
+                final String JSON_BOOKMARK_REL_PATH = "relPath";
+                final String JSON_USE_COVER_REPLACEMENT = "useCoverReplacement";
+
+                int currentTime = 0;
+                try {
+                    currentTime = playingInformation.getInt(JSON_TIME);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                ArrayList<String> bookmarkRelPathsUnsafe = new ArrayList<>();
+                ArrayList<String> bookmarkTitlesUnsafe = new ArrayList<>();
+                ArrayList<Integer> bookmarkTimesUnsafe = new ArrayList<>();
+                try {
+                    JSONArray bookmarksJ = playingInformation.getJSONArray(JSON_BOOKMARKS);
+                    for (int i = 0; i < bookmarksJ.length(); i++) {
+                        JSONObject bookmarkJ = (JSONObject) bookmarksJ.get(i);
+                        bookmarkTimesUnsafe.add(bookmarkJ.getInt(JSON_BOOKMARK_TIME));
+                        bookmarkTitlesUnsafe.add(bookmarkJ.getString(JSON_BOOKMARK_TITLE));
+                        bookmarkRelPathsUnsafe.add(bookmarkJ.getString(JSON_BOOKMARK_REL_PATH));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    bookmarkRelPathsUnsafe.clear();
+                    bookmarkTitlesUnsafe.clear();
+                    bookmarkTimesUnsafe.clear();
+                }
+
+                ArrayList<String> bookmarkRelPathsSafe = new ArrayList<>();
+                ArrayList<String> bookmarkTitlesSafe = new ArrayList<>();
+                ArrayList<Integer> bookmarkTimesSafe = new ArrayList<>();
+
+                for (int i = 0; i < bookmarkRelPathsUnsafe.size(); i++) {
+                    boolean bookmarkExists = false;
+                    for (String chapterPath : chapterPaths) {
+                        if (chapterPath.equals(bookmarkRelPathsUnsafe.get(i))) {
+                            bookmarkExists = true;
+                            break;
+                        }
+                    }
+                    if (bookmarkExists) {
+                        bookmarkRelPathsSafe.add(bookmarkRelPathsUnsafe.get(i));
+                        bookmarkTitlesSafe.add(bookmarkTitlesUnsafe.get(i));
+                        bookmarkTimesSafe.add(bookmarkTimesUnsafe.get(i));
                     }
                 }
-                if (bookmarkExists) {
-                    bookmarkRelPathsSafe.add(bookmarkRelPathsUnsafe.get(i));
-                    bookmarkTitlesSafe.add(bookmarkTitlesUnsafe.get(i));
-                    bookmarkTimesSafe.add(bookmarkTimesUnsafe.get(i));
+
+                String currentPath = "";
+                try {
+                    currentPath = playingInformation.getString(JSON_REL_PATH);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            }
-
-            String currentPath = "";
-            try {
-                currentPath = playingInformation.getString(JSON_REL_PATH);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            boolean relPathExists = false;
-            for (String chapterPath : chapterPaths) {
-                if (chapterPath.equals(currentPath)) {
-                    relPathExists = true;
+                boolean relPathExists = false;
+                for (String chapterPath : chapterPaths) {
+                    if (chapterPath.equals(currentPath)) {
+                        relPathExists = true;
+                    }
                 }
-            }
-            if (!relPathExists) {
-                currentPath = chapterPaths.get(0);
-                currentTime = 0;
-            }
-
-            float speed = 1.0f;
-            try {
-                speed = Float.valueOf(playingInformation.getString(JSON_SPEED));
-            } catch (JSONException | NumberFormatException e) {
-                e.printStackTrace();
-            }
-
-            String name = "";
-            try {
-                name = playingInformation.getString(JSON_NAME);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            if (name.equals("")) {
-                if (chapterPaths.size() == 1) {
-                    String chapterPath = chapterPaths.get(0);
-                    name = chapterPath.substring(0, chapterPath.lastIndexOf("."));
-                } else {
-                    name = new File(root).getName();
+                if (!relPathExists) {
+                    currentPath = chapterPaths.get(0);
+                    currentTime = 0;
                 }
-            }
 
-            boolean useCoverReplacement = false;
-            try {
-                useCoverReplacement = playingInformation.getBoolean(JSON_USE_COVER_REPLACEMENT);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+                float speed = 1.0f;
+                try {
+                    speed = Float.valueOf(playingInformation.getString(JSON_SPEED));
+                } catch (JSONException | NumberFormatException e) {
+                    e.printStackTrace();
+                }
 
-            ArrayList<Chapter> chapters = new ArrayList<>();
-            for (int i = 0; i < chapterPaths.size(); i++) {
-                chapters.add(new Chapter(root + File.separator + chapterPaths.get(i),
-                        chapterNames.get(i), chapterDurations.get(i)));
-            }
+                String name = "";
+                try {
+                    name = playingInformation.getString(JSON_NAME);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (name.equals("")) {
+                    if (chapterPaths.size() == 1) {
+                        String chapterPath = chapterPaths.get(0);
+                        name = chapterPath.substring(0, chapterPath.lastIndexOf("."));
+                    } else {
+                        name = new File(root).getName();
+                    }
+                }
 
-            ArrayList<Bookmark> bookmarks = new ArrayList<>();
-            for (int i = 0; i < bookmarkRelPathsSafe.size(); i++) {
-                bookmarks.add(new Bookmark(root + File.separator + bookmarkRelPathsSafe.get(i),
-                        bookmarkTitlesSafe.get(i), bookmarkTimesSafe.get(i)));
-            }
+                boolean useCoverReplacement = false;
+                try {
+                    useCoverReplacement = playingInformation.getBoolean(JSON_USE_COVER_REPLACEMENT);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-            Book book = new Book(root, name, chapters, root + File.separator + currentPath,
-                    Book.Type.valueOf(type), bookmarks, c);
-            book.setUseCoverReplacement(useCoverReplacement);
-            book.setPosition(currentTime, root + File.separator + currentPath);
-            book.setPlaybackSpeed(speed);
-            ContentValues cv = new ContentValues();
-            cv.put(BOOK_JSON, new Gson().toJson(book, Book.class));
-            db.insert(newBookTable, null, cv);
+                ArrayList<Chapter> chapters = new ArrayList<>();
+                for (int i = 0; i < chapterPaths.size(); i++) {
+                    chapters.add(new Chapter(root + File.separator + chapterPaths.get(i),
+                            chapterNames.get(i), chapterDurations.get(i)));
+                }
+
+                ArrayList<Bookmark> bookmarks = new ArrayList<>();
+                for (int i = 0; i < bookmarkRelPathsSafe.size(); i++) {
+                    bookmarks.add(new Bookmark(root + File.separator + bookmarkRelPathsSafe.get(i),
+                            bookmarkTitlesSafe.get(i), bookmarkTimesSafe.get(i)));
+                }
+
+                Book book = new Book(root, name, chapters, root + File.separator + currentPath,
+                        Book.Type.valueOf(type), bookmarks, c);
+                book.setUseCoverReplacement(useCoverReplacement);
+                book.setPosition(currentTime, root + File.separator + currentPath);
+                book.setPlaybackSpeed(speed);
+                L.d(TAG, "upgrade24 restored book=" + book);
+                ContentValues cv = new ContentValues();
+                cv.put(BOOK_JSON, new Gson().toJson(book, Book.class));
+                db.insert(newBookTable, null, cv);
+            }
         } finally {
             bookCursor.close();
         }
