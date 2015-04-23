@@ -70,7 +70,7 @@ public class BookAdder {
         audioTypes.add(".flac");
         audioTypes.add(".mkv");
         audioTypes.add(".wma");
-        if (Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             audioTypes.add(".opus");
         }
 

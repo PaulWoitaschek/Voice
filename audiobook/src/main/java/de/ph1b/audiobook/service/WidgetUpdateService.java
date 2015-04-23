@@ -76,7 +76,7 @@ public class WidgetUpdateService extends Service implements
 
                     if (book != null) {
                         initElements(remoteViews, book);
-                        if (Build.VERSION.SDK_INT >= 16) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                             Bundle opts = appWidgetManager.getAppWidgetOptions(widgetId);
                             int minHeight = dpToPx(opts.getInt(
                                     AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT));

@@ -97,7 +97,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         }
     };
 
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -106,24 +106,23 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         baseApplication = (BaseApplication) getApplication();
 
-        if (Build.VERSION.SDK_INT >= 14) {
-            ComponentName eventReceiver = new ComponentName(AudioService.this.getPackageName(), RemoteControlReceiver.class.getName());
-            //noinspection deprecation
-            audioManager.registerMediaButtonEventReceiver(eventReceiver);
-            Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-            mediaButtonIntent.setComponent(eventReceiver);
-            PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, mediaButtonIntent, 0);
-            //noinspection deprecation
-            remoteControlClient = new RemoteControlClient(mediaPendingIntent);
-            //noinspection deprecation
-            remoteControlClient.setTransportControlFlags(
-                    RemoteControlClient.FLAG_KEY_MEDIA_PAUSE |
-                            RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE |
-                            RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS |
-                            RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
-                            RemoteControlClient.FLAG_KEY_MEDIA_REWIND |
-                            RemoteControlClient.FLAG_KEY_MEDIA_FAST_FORWARD);
-        }
+        ComponentName eventReceiver = new ComponentName(AudioService.this.getPackageName(), RemoteControlReceiver.class.getName());
+        //noinspection deprecation
+        audioManager.registerMediaButtonEventReceiver(eventReceiver);
+        Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        mediaButtonIntent.setComponent(eventReceiver);
+        PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, mediaButtonIntent, 0);
+        //noinspection deprecation
+        remoteControlClient = new RemoteControlClient(mediaPendingIntent);
+        //noinspection deprecation
+        remoteControlClient.setTransportControlFlags(
+                RemoteControlClient.FLAG_KEY_MEDIA_PAUSE |
+                        RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE |
+                        RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS |
+                        RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
+                        RemoteControlClient.FLAG_KEY_MEDIA_REWIND |
+                        RemoteControlClient.FLAG_KEY_MEDIA_FAST_FORWARD);
+
         registerReceiver(audioBecomingNoisyReceiver, new IntentFilter(
                 AudioManager.ACTION_AUDIO_BECOMING_NOISY));
         registerReceiver(headsetPlugReceiver, new IntentFilter(Intent.ACTION_HEADSET_PLUG));
@@ -201,7 +200,6 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         return Service.START_STICKY;
     }
 
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public void onDestroy() {
         L.v(TAG, "onDestroy called");
@@ -302,19 +300,19 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                         audioManager.registerRemoteControlClient(remoteControlClient);
 
                         startForeground(NOTIFICATION_ID, getNotification());
-                        if (Build.VERSION.SDK_INT >= 14) {
-                            //noinspection deprecation
-                            remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
-                            updateRemoteControlClient();
-                        }
+
+                        //noinspection deprecation
+                        remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
+                        updateRemoteControlClient();
+
                         break;
                     case PAUSED:
                         stopForeground(false);
                         notificationManager.notify(NOTIFICATION_ID, getNotification());
-                        if (Build.VERSION.SDK_INT >= 14) {
-                            //noinspection deprecation
-                            remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
-                        }
+
+                        //noinspection deprecation
+                        remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
+
                         break;
                     case STOPPED:
                         //noinspection deprecation
@@ -323,10 +321,10 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                         audioManager.abandonAudioFocus(AudioService.this);
                         notificationManager.cancel(NOTIFICATION_ID);
                         stopForeground(true);
-                        if (Build.VERSION.SDK_INT >= 14) {
-                            //noinspection deprecation
-                            remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_STOPPED);
-                        }
+
+                        //noinspection deprecation
+                        remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_STOPPED);
+
                         break;
                 }
             }
@@ -351,8 +349,8 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
          * has to be a large image. On Android < 21 there will be a wrong cropping, so there we must
          * set the size to the correct notification sizes, otherwise notification will look ugly.
          */
-        int width = Build.VERSION.SDK_INT >= 21 ? ImageHelper.getSmallerScreenSize(this) : getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_width);
-        int height = Build.VERSION.SDK_INT >= 21 ? ImageHelper.getSmallerScreenSize(this) : getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_height);
+        int width = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? ImageHelper.getSmallerScreenSize(this) : getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_width);
+        int height = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? ImageHelper.getSmallerScreenSize(this) : getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_height);
 
         Bitmap cover = null;
         try {
@@ -387,7 +385,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
             notificationBuilder.setContentText(chapter.getName());
         }
 
-        if (Build.VERSION.SDK_INT >= 16) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             notificationBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
 
             // rewind
@@ -405,16 +403,16 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
             }
 
             // have stop action only on api < 21 because from then on, media style is dismissible
-            if (Build.VERSION.SDK_INT < 21) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 notificationBuilder.addAction(R.drawable.ic_close_white_36dp, getString(R.string.stop), stopPI);
             }
         }
 
-        if (Build.VERSION.SDK_INT >= 17) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             notificationBuilder.setShowWhen(false);
         }
 
-        if (Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             notificationBuilder
                     .setStyle(new Notification.MediaStyle()
                             .setShowActionsInCompactView(0, 1))
@@ -430,7 +428,6 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         return notificationBuilder.getNotification();
     }
 
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void updateRemoteControlClient() {
         executor.execute(new Runnable() {
             @Override
@@ -491,7 +488,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
     @Override
     public void onPositionChanged(boolean positionChanged) {
-        if (Build.VERSION.SDK_INT >= 14 && positionChanged) {
+        if (positionChanged) {
             updateRemoteControlClient();
         }
     }

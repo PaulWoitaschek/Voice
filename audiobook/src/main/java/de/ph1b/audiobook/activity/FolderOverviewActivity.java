@@ -99,7 +99,7 @@ public class FolderOverviewActivity extends BaseActivity {
         fam.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
             @Override
             public void onMenuExpanded() {
-                if (Build.VERSION.SDK_INT >= 21) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     Point famCenter = getFamCenter();
                     int cx = famCenter.x;
                     int cy = famCenter.y;
@@ -121,7 +121,7 @@ public class FolderOverviewActivity extends BaseActivity {
 
             @Override
             public void onMenuCollapsed() {
-                if (Build.VERSION.SDK_INT >= 21) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     // get the center for the clipping circle
                     Point famCenter = getFamCenter();
                     int cx = famCenter.x;

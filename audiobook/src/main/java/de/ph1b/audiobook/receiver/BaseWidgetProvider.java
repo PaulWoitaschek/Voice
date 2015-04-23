@@ -18,7 +18,7 @@ public class BaseWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
-        if (Build.VERSION.SDK_INT >= 16) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             context.startService(new Intent(context, WidgetUpdateService.class));
             super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
         }
