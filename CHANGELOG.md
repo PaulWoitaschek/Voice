@@ -1,3 +1,15 @@
+# v2.1.2 Stability
+
+Once again, positions and bookmarks reset. We cant store positions to internal storage since on Android 4.4 there is no permission to write to sd card.
+So we write back to db.
+Sorry again, this is the last reset.
+
+## Additions
+* Minimized sound on rewind
+* On Lollipop: Dark navigation color on dark theme
+* Adds books by alphabet
+* Adds covers after books
+
 # v2.1.1 Fancy Pants
 
 ## Additions
