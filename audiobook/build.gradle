@@ -7,7 +7,7 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 52
+        versionCode 53
         versionName '2.1.2'
 
         ndk {
