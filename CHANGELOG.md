@@ -5,6 +5,8 @@ So we write back to db.
 Sorry again, this is the last reset.
 
 ## Additions
+* Added greek. Thanks to beonex (Wasilis Mandratzis-Walz)!
+* Added italian. Thanks to  Lurtz (Davide Andreotti)!
 * Minimized sound on rewind
 * On Lollipop: Dark navigation color on dark theme
 * Adds books by alphabet
