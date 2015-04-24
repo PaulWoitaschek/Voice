@@ -150,7 +150,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getAmountOfColumns()));
-        adapter = new BookShelfAdapter(baseApplication.getAllBooks(), getActivity(),
+        adapter = new BookShelfAdapter(baseApplication.getAllBooks(), baseApplication,
                 onClickListener);
         recyclerView.setAdapter(adapter);
 
@@ -242,6 +242,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         toggleRecyclerVisibilities(baseApplication.isScannerActive());
 
         baseApplication.addOnBooksChangedListener(this);
+        adapter.registerListener();
     }
 
     @Override
@@ -492,6 +493,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         super.onPause();
 
         baseApplication.removeOnBooksChangedListener(this);
+        adapter.unregisterListener();
     }
 
     @Override

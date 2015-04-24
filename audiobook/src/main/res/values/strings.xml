@@ -5,6 +5,7 @@
     <string name="current_playing">Shows playing state.</string>
     <string name="mal_file_message">The following file may be corrupt:</string>
     <string name="mal_file_title">Defect file</string>
+    <string name="content_current_book">This is the current book</string>
     <!-- BookPlayActivity -->
     <string name="cover">Cover</string>
     <string name="play_pause">Play / Pause</string>

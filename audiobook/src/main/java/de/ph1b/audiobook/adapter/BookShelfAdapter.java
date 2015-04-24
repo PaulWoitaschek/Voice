@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.adapter;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -19,20 +18,32 @@ import java.util.ArrayList;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.uitools.CoverReplacement;
+import de.ph1b.audiobook.utils.BaseApplication;
 
-public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.ViewHolder> {
+public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.ViewHolder> implements BaseApplication.OnBooksChangedListener {
 
     @NonNull
     private final ArrayList<Book> books;
-    private final Context c;
+    private final BaseApplication baseApplication;
     private final OnItemClickListener onItemClickListener;
+    private int currentPlayingIndex;
 
-    public BookShelfAdapter(@NonNull ArrayList<Book> books, Context c, OnItemClickListener onItemClickListener) {
+    public BookShelfAdapter(@NonNull ArrayList<Book> books, BaseApplication baseApplication,
+                            OnItemClickListener onItemClickListener) {
         this.books = books;
-        this.c = c;
+        this.baseApplication = baseApplication;
+        this.currentPlayingIndex = books.indexOf(baseApplication.getCurrentBook());
         this.onItemClickListener = onItemClickListener;
 
         setHasStableIds(true);
+    }
+
+    public void registerListener() {
+        baseApplication.addOnBooksChangedListener(this);
+    }
+
+    public void unregisterListener() {
+        baseApplication.removeOnBooksChangedListener(this);
     }
 
     @Override
@@ -47,7 +58,8 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-        ViewGroup v = (ViewGroup) LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_book_shelf_row_layout, parent, false);
+        ViewGroup v = (ViewGroup) LayoutInflater.from(parent.getContext()).inflate(
+                R.layout.fragment_book_shelf_row_layout, parent, false);
         return new ViewHolder(v, onItemClickListener);
     }
 
@@ -62,18 +74,67 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
 
         // (Cover)
         File coverFile = b.getCoverFile();
-        Drawable coverReplacement = new CoverReplacement(b.getName().substring(0, 1), c);
+        Drawable coverReplacement = new CoverReplacement(b.getName().substring(0, 1), baseApplication);
         if (!b.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-            Picasso.with(c).load(coverFile).placeholder(coverReplacement).into(viewHolder.coverView);
+            Picasso.with(baseApplication).load(coverFile).placeholder(coverReplacement).into(viewHolder.coverView);
         } else {
-            Picasso.with(c).cancelRequest(viewHolder.coverView);
+            Picasso.with(baseApplication).cancelRequest(viewHolder.coverView);
             viewHolder.coverView.setImageDrawable(coverReplacement);
+        }
+
+        if (currentPlayingIndex == position) {
+            viewHolder.currentPlayingIndicator.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.currentPlayingIndicator.setVisibility(View.GONE);
         }
     }
 
     @Override
     public int getItemCount() {
         return books.size();
+    }
+
+    @Override
+    public void onBookDeleted(int position) {
+
+    }
+
+    @Override
+    public void onPlayStateChanged(BaseApplication.PlayState state) {
+
+    }
+
+    @Override
+    public void onPositionChanged(boolean fileChanged) {
+
+    }
+
+    @Override
+    public void onSleepStateChanged(boolean active) {
+
+    }
+
+    @Override
+    public void onCurrentBookChanged(Book book) {
+        int oldIndex = currentPlayingIndex;
+        currentPlayingIndex = books.indexOf(book);
+        notifyItemChanged(oldIndex);
+        notifyItemChanged(currentPlayingIndex);
+    }
+
+    @Override
+    public void onBookAdded(int position) {
+
+    }
+
+    @Override
+    public void onScannerStateChanged(boolean active) {
+
+    }
+
+    @Override
+    public void onCoverChanged(int position) {
+
     }
 
     public interface OnItemClickListener {
@@ -87,12 +148,14 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
         final ImageView coverView;
         final TextView titleView;
         final ImageButton editBook;
+        final ImageView currentPlayingIndicator;
 
         public ViewHolder(final ViewGroup itemView, final OnItemClickListener onItemClickListener) {
             super(itemView);
             coverView = (ImageView) itemView.findViewById(R.id.cover);
             titleView = (TextView) itemView.findViewById(R.id.title);
             editBook = (ImageButton) itemView.findViewById(R.id.editBook);
+            currentPlayingIndicator = (ImageView) itemView.findViewById(R.id.currentPlayingIndicator);
 
             coverView.setOnClickListener(new View.OnClickListener() {
                 @Override
