@@ -282,25 +282,12 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     }
 
     private void initPlayerWidget() {
-        Book book = baseApplication.getCurrentBook();
+        final Book book = baseApplication.getCurrentBook();
         if (book != null) {
             // cover
-            File coverFile = book.getCoverFile();
-            String bookName = book.getName();
-            Drawable coverReplacement = new CoverReplacement(bookName, getActivity());
-
-            Bitmap bitmap = null;
-            if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-                bitmap = picassoGetBlocking(coverFile);
-            }
-            if (bitmap == null) {
-                widgetCover.setImageDrawable(coverReplacement);
-            } else {
-                widgetCover.setImageBitmap(bitmap);
-            }
-
-            // text
-            currentText.setText(bookName);
+            final File coverFile = book.getCoverFile();
+            final String bookName = book.getName();
+            final Drawable coverReplacement = new CoverReplacement(bookName, getActivity());
 
             // progress
             ArrayList<Chapter> allChapters = book.getChapters();
@@ -313,11 +300,29 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                     timeTillBeginOfCurrentChapter += c.getDuration();
                 }
             }
-            int progress = Math.round((timeTillBeginOfCurrentChapter + book.getTime()) * 1000
+            final int progress = Math.round((timeTillBeginOfCurrentChapter + book.getTime()) * 1000
                     / duration);
-            progressBar.setProgress(progress);
-        }
 
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Bitmap bitmap = null;
+                    if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
+                        bitmap = picassoGetBlocking(coverFile);
+                    }
+
+                    if (bitmap == null) {
+                        widgetCover.setImageDrawable(coverReplacement);
+                    } else {
+                        widgetCover.setImageBitmap(bitmap);
+                    }
+
+                    // text
+                    currentText.setText(bookName);
+                    progressBar.setProgress(progress);
+                }
+            });
+        }
     }
 
     private void setPlayState(BaseApplication.PlayState state, boolean animated) {
@@ -340,12 +345,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onPositionChanged(boolean positionChanged) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                initPlayerWidget();
-            }
-        });
+        initPlayerWidget();
     }
 
     @Override
@@ -390,6 +390,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     private void startBookPlay(View view) {
 
