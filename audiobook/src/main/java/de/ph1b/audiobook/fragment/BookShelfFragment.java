@@ -16,11 +16,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
-import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -321,25 +319,16 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             sharedElementEnterTransition.setDuration(enterTransitionDuration);
             bookPlayFragment.setSharedElementEnterTransition(sharedElementEnterTransition);
 
-            Transition enterTransition = new Slide(Gravity.TOP);
-            enterTransition.setDuration(enterTransitionDuration);
-            enterTransition.excludeTarget(R.id.toolbar, true);
-            enterTransition.excludeTarget(R.id.book_cover, true);
-            bookPlayFragment.setEnterTransition(enterTransition);
+            Transition fade = new Fade();
+            fade.setDuration(enterTransitionDuration);
+            fade.excludeTarget(R.id.toolbar, true);
+            fade.excludeTarget(R.id.book_cover, true);
 
-            int returnTransitionDuration = 400;
-
-            Transition sharedElementReturnTransition = new Fade();
-            sharedElementReturnTransition.setDuration(returnTransitionDuration);
-            bookPlayFragment.setSharedElementReturnTransition(sharedElementReturnTransition);
-
-            Transition returnTransition = new Fade();
-            returnTransition.setDuration(returnTransitionDuration);
-            returnTransition.excludeTarget(R.id.toolbar, true);
-            bookPlayFragment.setReturnTransition(returnTransition);
-            bookPlayFragment.setExitTransition(returnTransition);
-            setReturnTransition(returnTransition);
-            setReenterTransition(returnTransition);
+            bookPlayFragment.setEnterTransition(fade);
+            bookPlayFragment.setReturnTransition(null);
+            bookPlayFragment.setExitTransition(null);
+            setReturnTransition(null);
+            setReenterTransition(null);
         }
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
