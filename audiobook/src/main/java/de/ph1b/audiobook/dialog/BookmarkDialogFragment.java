@@ -2,6 +2,7 @@ package de.ph1b.audiobook.dialog;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -151,14 +152,9 @@ public class BookmarkDialogFragment extends DialogFragment {
                     title = book.getCurrentChapter().getName();
                 }
 
-                Bookmark bookmark = new Bookmark(book.getCurrentChapter().getPath(), title, book.getTime());
-                L.v(TAG, "Added bookmark=" + bookmark);
-
-                book.getBookmarks().add(bookmark);
-                Collections.sort(book.getBookmarks(), new NaturalBookmarkComparator(book.getChapters()));
-                db.updateBook(book);
-                bookmarkTitle.setText("");
+                addBookmark(book, title, getActivity());
                 Toast.makeText(getActivity(), R.string.bookmark_added, Toast.LENGTH_SHORT).show();
+                bookmarkTitle.setText("");
                 dismiss();
             }
         });
@@ -170,5 +166,14 @@ public class BookmarkDialogFragment extends DialogFragment {
                 .build();
 
         return dialog;
+    }
+
+    public static void addBookmark(@NonNull Book book, @NonNull String title, @NonNull Context c) {
+        Bookmark bookmark = new Bookmark(book.getCurrentChapter().getPath(), title, book.getTime());
+
+        book.getBookmarks().add(bookmark);
+        Collections.sort(book.getBookmarks(), new NaturalBookmarkComparator(book.getChapters()));
+        DataBaseHelper.getInstance(c).updateBook(book);
+        L.v("addBookmark", "Added bookmark=" + bookmark);
     }
 }

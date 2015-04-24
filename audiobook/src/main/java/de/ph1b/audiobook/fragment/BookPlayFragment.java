@@ -309,6 +309,9 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener,
                 return true;
             case R.id.action_sleep:
                 controller.toggleSleepSand();
+                if (prefs.setBookmarkOnSleepTimer() && !baseApplication.isSleepTimerActive()) {
+                    BookmarkDialogFragment.addBookmark(book, book.getCurrentChapter().getName(), getActivity());
+                }
                 return true;
             case R.id.action_time_lapse:
                 PlaybackSpeedDialogFragment dialog = new PlaybackSpeedDialogFragment();

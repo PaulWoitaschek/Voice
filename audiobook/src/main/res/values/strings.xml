@@ -78,6 +78,8 @@
     <string name="pref_send_bugs_summary">Automatically sends anonymous reports about crashes to help development.</string>
     <string name="pref_auto_rewind_title">Auto rewind</string>
     <string name="pref_auto_rewind_summary">Automatically rewinds after manual pausing:</string>
+    <string name="pref_bookmark_on_sleep_title">Bookmark on sleep</string>
+    <string name="pref_bookmark_on_sleep_summary">Automatically sets a bookmark each time the sleep timer is set.</string>
     <!-- Misc -->
     <string name="popup_edit">Edit</string>
     <string name="remove">Remove</string>

@@ -99,4 +99,8 @@ public class PrefsManager {
         sp.edit().putInt(c.getString(R.string.pref_key_auto_rewind), autoRewindAmount)
                 .apply();
     }
+
+    public boolean setBookmarkOnSleepTimer() {
+        return sp.getBoolean(c.getString(R.string.pref_key_bookmark_on_sleep), false);
+    }
 }
