@@ -344,6 +344,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.content, bookPlayFragment, BookPlayFragment.TAG)
+                .addSharedElement(fab, getString(R.string.transition_fab))
                 .addToBackStack(null);
 
         /**

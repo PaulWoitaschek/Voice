@@ -35,7 +35,9 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
+        android:transitionName="@string/transition_fab"
         fab:fab_colorNormal="?attr/colorAccent"
-        fab:fab_colorPressed="?attr/colorAccentDark" />
+        fab:fab_colorPressed="?attr/colorAccentDark"
+        tools:ignore="UnusedAttribute" />
 
 </RelativeLayout>
