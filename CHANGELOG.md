@@ -1,6 +1,16 @@
-# v2.1.2.2 Hotfix
+# v2.1.3 Details
 
-Fixed a bug that caused a crash on previous database upgrade
+## Additions
+* Added setting to set a bookmark on sleep timer
+* Bookmark icon on higher priority
+* Replaced miniplayer widget with fab
+* Improved transitions
+* 
+## Fixes
+* Shows correct error message on corrupt files
+* Threading issues fixed
+* Crash on database upgrade fixed
+* Transition on Coverreplacement omitted
 
 # v2.1.2.1 Stability
 
