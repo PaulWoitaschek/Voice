@@ -42,7 +42,6 @@ public class WidgetUpdateService extends Service implements
     private static final String TAG = WidgetUpdateService.class.getSimpleName();
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private BaseApplication baseApplication;
-    private AppWidgetManager appWidgetManager;
 
     @Override
     public void onCreate() {
@@ -50,7 +49,6 @@ public class WidgetUpdateService extends Service implements
 
         baseApplication = (BaseApplication) getApplication();
         baseApplication.addOnBooksChangedListener(this);
-        appWidgetManager = AppWidgetManager.getInstance(this);
     }
 
     @Override
@@ -66,6 +64,7 @@ public class WidgetUpdateService extends Service implements
         executor.execute(new Runnable() {
             @Override
             public void run() {
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(WidgetUpdateService.this);
                 Book book = baseApplication.getCurrentBook();
                 boolean isPortrait = isPortrait();
                 int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(
