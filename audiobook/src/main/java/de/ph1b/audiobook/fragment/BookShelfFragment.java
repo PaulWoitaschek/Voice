@@ -219,7 +219,8 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public void onResume() {
         super.onResume();
 
-        if (baseApplication.getCurrentBook() == null) {
+        Book currentBook = baseApplication.getCurrentBook();
+        if (currentBook == null) {
             playerWidget.setVisibility(View.GONE);
         } else {
             playerWidget.setVisibility(View.VISIBLE);

@@ -26,13 +26,16 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
     private final ArrayList<Book> books;
     private final BaseApplication baseApplication;
     private final OnItemClickListener onItemClickListener;
-    private int currentPlayingIndex;
+    private int currentPlayingIndex = -1;
 
     public BookShelfAdapter(@NonNull ArrayList<Book> books, BaseApplication baseApplication,
                             OnItemClickListener onItemClickListener) {
         this.books = books;
         this.baseApplication = baseApplication;
-        this.currentPlayingIndex = books.indexOf(baseApplication.getCurrentBook());
+        Book currentBook = baseApplication.getCurrentBook();
+        if (currentBook != null) {
+            this.currentPlayingIndex = books.indexOf(baseApplication.getCurrentBook());
+        }
         this.onItemClickListener = onItemClickListener;
 
         setHasStableIds(true);
