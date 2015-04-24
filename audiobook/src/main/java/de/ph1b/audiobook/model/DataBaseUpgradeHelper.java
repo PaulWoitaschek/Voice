@@ -21,7 +21,7 @@ import de.ph1b.audiobook.utils.L;
 
 
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
-public class DataBaseUpgradeHelper {
+class DataBaseUpgradeHelper {
 
     private static final String TAG = DataBaseUpgradeHelper.class.getSimpleName();
 
