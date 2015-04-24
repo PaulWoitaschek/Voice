@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -393,7 +394,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
 
     private void startBookPlay(View view) {
-
         ViewCompat.setTransitionName(view, getString(R.string.transition_cover));
         Fragment bookPlayFragment = new BookPlayFragment();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -425,11 +425,21 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             setReenterTransition(returnTransition);
         }
 
-        getFragmentManager().beginTransaction()
-                .replace(R.id.content, bookPlayFragment, BookPlayFragment.TAG)
-                .addToBackStack(null)
-                .addSharedElement(view, getString(R.string.transition_cover))
-                .commit();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.content, bookPlayFragment, BookPlayFragment.TAG)
+                .addToBackStack(null);
+
+        /**
+         * Only use transition if we don't use a cover replacement. Else there is a bug so the
+         * replacement won't scale correctly.
+         */
+        Book currentBook = baseApplication.getCurrentBook();
+        boolean isRealCover = currentBook != null &&
+                (!currentBook.isUseCoverReplacement() && currentBook.getCoverFile().exists());
+        if (isRealCover)
+            ft.addSharedElement(view, getString(R.string.transition_cover));
+
+        ft.commit();
     }
 
     @Override
