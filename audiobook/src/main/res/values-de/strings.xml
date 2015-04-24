@@ -78,6 +78,8 @@
     <string name="pref_send_bugs_summary">Sendet automatische anonymisierte Fehlerberichte um die Entwicklung zu vereinfachen.</string>
     <string name="pref_auto_rewind_title">Automatisch zurückspulen</string>
     <string name="pref_auto_rewind_summary">Spult nach manuellem pausieren automatisch zurück:</string>
+    <string name="pref_bookmark_on_sleep_title">Lesezeichen beim Einschlafen</string>
+    <string name="pref_bookmark_on_sleep_summary">Legt jedes Mal ein Lesezeichen an, wenn der Einschlaftimer gesetzt wird.</string>
     <!--Misc-->
     <string name="popup_edit">Bearbeiten</string>
     <string name="remove">Löschen</string>
