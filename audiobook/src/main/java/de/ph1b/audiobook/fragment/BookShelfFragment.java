@@ -224,6 +224,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             playerWidget.setVisibility(View.GONE);
         } else {
             playerWidget.setVisibility(View.VISIBLE);
+            recyclerView.scrollToPosition(baseApplication.getAllBooks().indexOf(currentBook));
         }
 
         adapter.notifyDataSetChanged();
