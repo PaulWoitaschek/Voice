@@ -3,6 +3,7 @@
     <!--BookShelf-->
     <string name="mal_file_message">Die folgende Datei könnte defekt sein:</string>
     <string name="mal_file_title">Beschädigte Datei</string>
+    <string name="content_current_book">Dies ist das aktuelle Buch</string>
     <!--BookPlayActivity-->
     <string name="cover">Cover</string>
     <string name="play_pause">Play / Pause</string>
