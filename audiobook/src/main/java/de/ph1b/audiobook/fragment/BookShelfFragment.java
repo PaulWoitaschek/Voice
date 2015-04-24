@@ -3,7 +3,6 @@ package de.ph1b.audiobook.fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -28,16 +27,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.squareup.picasso.Picasso;
 
+import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
+
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.CountDownLatch;
@@ -49,12 +47,10 @@ import de.ph1b.audiobook.adapter.BookShelfAdapter;
 import de.ph1b.audiobook.dialog.EditBookDialogFragment;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
-import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.uitools.PlayPauseDrawable;
-import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
@@ -69,16 +65,13 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     private static final String RECYCLER_VIEW_STATE = "recyclerViewState";
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
     private BookShelfAdapter adapter;
-    private ImageView widgetCover;
-    private TextView currentText;
-    private ViewGroup playerWidget;
     private PrefsManager prefs;
     private BaseApplication baseApplication;
     private ServiceController controller;
-    private ProgressBar progressBar;
     private MaterialDialog noFolderWarning;
     private RecyclerView recyclerView;
     private ProgressBar recyclerReplacementView;
+    private FloatingActionButton fab;
 
     @Nullable
     @Override
@@ -96,18 +89,11 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
         setHasOptionsMenu(true);
 
-        playerWidget = (ViewGroup) view.findViewById(R.id.current);
-        widgetCover = (ImageView) view.findViewById(R.id.current_cover);
-        currentText = (TextView) view.findViewById(R.id.current_text);
-        ImageButton currentPlaying = (ImageButton) view.findViewById(R.id.current_playing);
-        progressBar = (ProgressBar) view.findViewById(R.id.progress);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerReplacementView = (ProgressBar) view.findViewById(R.id.recyclerReplacement);
-
-        playerWidget.setOnClickListener(this);
-        playPauseDrawable.setColor(getResources().getColor(ThemeUtil.getResourceId(getActivity(), R.attr.button_color)));
-        currentPlaying.setImageDrawable(playPauseDrawable);
-        currentPlaying.setOnClickListener(this);
+        fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.setIconDrawable(playPauseDrawable);
+        fab.setOnClickListener(this);
         BookShelfAdapter.OnItemClickListener onClickListener =
                 new BookShelfAdapter.OnItemClickListener() {
                     @Override
@@ -158,8 +144,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             recyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState
                     .getParcelable(RECYCLER_VIEW_STATE));
         }
-
-        initPlayerWidget();
 
         return view;
     }
@@ -219,19 +203,21 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public void onResume() {
         super.onResume();
 
-        Book currentBook = baseApplication.getCurrentBook();
-        if (currentBook == null) {
-            playerWidget.setVisibility(View.GONE);
+        if (baseApplication.getCurrentBook() == null) {
+            fab.setVisibility(View.GONE);
         } else {
-            playerWidget.setVisibility(View.VISIBLE);
-            recyclerView.scrollToPosition(baseApplication.getAllBooks().indexOf(currentBook));
+            fab.setVisibility(View.VISIBLE);
+        }
+        if (baseApplication.getPlayState() == BaseApplication.PlayState.PLAYING) {
+            playPauseDrawable.transformToPause(false);
+        } else {
+            playPauseDrawable.transformToPlay(false);
         }
 
         adapter.notifyDataSetChanged();
 
         baseApplication.scanForFiles(false);
 
-        initPlayerWidget();
         setPlayState(baseApplication.getPlayState(), false);
         onPositionChanged(true);
 
@@ -257,77 +243,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         super.onSaveInstanceState(outState);
     }
 
-    private Bitmap picassoGetBlocking(final File file) {
-        final Bitmap[] bitmap = {null};
-        Runnable getter = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    bitmap[0] = Picasso.with(getActivity()).load(file).get();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                synchronized (this) {
-                    this.notify();
-                }
-
-            }
-        };
-        //noinspection SynchronizationOnLocalVariableOrMethodParameter
-        synchronized (getter) {
-            new Thread(getter).start();
-            try {
-                getter.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        return bitmap[0];
-    }
-
-    private void initPlayerWidget() {
-        final Book book = baseApplication.getCurrentBook();
-        if (book != null) {
-            // cover
-            final File coverFile = book.getCoverFile();
-            final String bookName = book.getName();
-            final Drawable coverReplacement = new CoverReplacement(bookName, getActivity());
-
-            // progress
-            ArrayList<Chapter> allChapters = book.getChapters();
-            Chapter currentChapter = book.getCurrentChapter();
-            float duration = 0;
-            float timeTillBeginOfCurrentChapter = 0;
-            for (Chapter c : allChapters) {
-                duration += c.getDuration();
-                if (allChapters.indexOf(c) < allChapters.indexOf(currentChapter)) {
-                    timeTillBeginOfCurrentChapter += c.getDuration();
-                }
-            }
-            final int progress = Math.round((timeTillBeginOfCurrentChapter + book.getTime()) * 1000
-                    / duration);
-
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Bitmap bitmap = null;
-                    if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-                        bitmap = picassoGetBlocking(coverFile);
-                    }
-
-                    if (bitmap == null) {
-                        widgetCover.setImageDrawable(coverReplacement);
-                    } else {
-                        widgetCover.setImageBitmap(bitmap);
-                    }
-
-                    // text
-                    currentText.setText(bookName);
-                    progressBar.setProgress(progress);
-                }
-            });
-        }
-    }
 
     private void setPlayState(BaseApplication.PlayState state, boolean animated) {
         if (state == BaseApplication.PlayState.PLAYING) {
@@ -349,7 +264,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onPositionChanged(boolean positionChanged) {
-        initPlayerWidget();
     }
 
     @Override
@@ -359,7 +273,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onCurrentBookChanged(Book book) {
-
+        fab.setVisibility(View.VISIBLE);
     }
 
     private void toggleRecyclerVisibilities(boolean scannerActive) {
@@ -448,11 +362,8 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.current_playing:
+            case R.id.fab:
                 controller.playPause();
-                break;
-            case R.id.current:
-                startBookPlay(widgetCover);
                 break;
             default:
                 break;
@@ -467,8 +378,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         int newIndex = baseApplication.getAllBooks().indexOf(book);
         adapter.notifyItemMoved(oldIndex, newIndex);
         adapter.notifyItemChanged(newIndex);
-
-        initPlayerWidget();
     }
 
     @Override

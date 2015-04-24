@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="current_cover">Zeigt das Cover des momentan spielenden Buchs.</string>
-    <string name="current_playing">Zeigt an, ob momentan ein Buch abgespielt wird.</string>
     <string name="mal_file_message">Die folgende Datei könnte defekt sein:</string>
     <string name="mal_file_title">Beschädigte Datei</string>
     <!--BookPlayActivity-->

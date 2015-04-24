@@ -48,6 +48,15 @@ public class BookmarkDialogFragment extends DialogFragment {
     private BookmarkAdapter adapter;
     private MaterialDialog dialog;
 
+    public static void addBookmark(@NonNull Book book, @NonNull String title, @NonNull Context c) {
+        Bookmark bookmark = new Bookmark(book.getCurrentChapter().getPath(), title, book.getTime());
+
+        book.getBookmarks().add(bookmark);
+        Collections.sort(book.getBookmarks(), new NaturalBookmarkComparator(book.getChapters()));
+        DataBaseHelper.getInstance(c).updateBook(book);
+        L.v("addBookmark", "Added bookmark=" + bookmark);
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -166,14 +175,5 @@ public class BookmarkDialogFragment extends DialogFragment {
                 .build();
 
         return dialog;
-    }
-
-    public static void addBookmark(@NonNull Book book, @NonNull String title, @NonNull Context c) {
-        Bookmark bookmark = new Bookmark(book.getCurrentChapter().getPath(), title, book.getTime());
-
-        book.getBookmarks().add(bookmark);
-        Collections.sort(book.getBookmarks(), new NaturalBookmarkComparator(book.getChapters()));
-        DataBaseHelper.getInstance(c).updateBook(book);
-        L.v("addBookmark", "Added bookmark=" + bookmark);
     }
 }

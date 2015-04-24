@@ -101,10 +101,12 @@ public class PlayPauseDrawable extends Drawable {
         transformToShape(1, animated);
     }
 
-    public void setColor(int color) {
-        mPaint.setColor(color);
-        invalidateSelf();
-    }
+    /**
+     * public void setColor(int color) {
+     * mPaint.setColor(color);
+     * invalidateSelf();
+     * }*
+     */
 
     private void transformToShape(int i, boolean animated) {
         if (mToShape == i) {

@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="current_cover">Εμφανίζει το εξώφυλλο του τρέχοντος βιβλίου.</string>
-    <string name="current_playing">Εμφανίζει την αναπαραγωγή κατάστασης.</string>
     <string name="mal_file_message">Το ακόλουθο αρχείο μπορεί να είναι κατεστραμμένο:</string>
     <string name="mal_file_title">Αρχείο με ελαττώματα</string>
     <!--BookPlayActivity-->

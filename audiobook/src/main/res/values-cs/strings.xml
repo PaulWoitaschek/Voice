@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="current_cover">Zobrazit obal právě přehrávané knihy.</string>
-    <string name="current_playing">Zobrazit stav přehrávání.</string>
     <string name="mal_file_message">Následující soubor může být poškozen:</string>
     <string name="mal_file_title">Najít soubor</string>
     <!--BookPlayActivity-->

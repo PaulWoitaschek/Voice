@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="current_cover">재생중인 책표지 보기</string>
-    <string name="current_playing">재생상태 보기</string>
     <string name="mal_file_message">선택한 파일을 인식할 수 없습니다:</string>
     <string name="mal_file_title"> 고장난 파일</string>
     <!--BookPlayActivity-->

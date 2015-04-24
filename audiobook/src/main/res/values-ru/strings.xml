@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="current_cover">Показать обложку текущей аудиокниги.</string>
-    <string name="current_playing">Показывать состояние проигрывания.</string>
     <string name="mal_file_message">Возможно данный файл поврежден:</string>
     <string name="mal_file_title">Поврежденный файл</string>
     <!--BookPlayActivity-->

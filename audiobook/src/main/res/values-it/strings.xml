@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="current_cover">Mostra la copertina del libro in riproduzione.</string>
-    <string name="current_playing">Mostra lo stato della riproduzione.</string>
     <string name="mal_file_message">Questo file potrebbe essere corrotto:</string>
     <string name="mal_file_title">File difettoso</string>
     <!--BookPlayActivity-->

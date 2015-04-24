@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
     <!-- BookShelf -->
-    <string name="current_cover">Shows cover of currently playing book.</string>
-    <string name="current_playing">Shows playing state.</string>
     <string name="mal_file_message">The following file may be corrupt:</string>
     <string name="mal_file_title">Defect file</string>
     <string name="content_current_book">This is the current book</string>

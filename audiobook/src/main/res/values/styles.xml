@@ -49,8 +49,6 @@
 
         <item name="text_primary">@color/light_text_primary</item>
         <item name="text_secondary">@color/light_text_secondary</item>
-
-        <item name="button_color">@color/light_button_color</item>
     </style>
 
     <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
@@ -101,8 +99,6 @@
 
         <item name="text_primary">@color/dark_text_primary</item>
         <item name="text_secondary">@color/dark_text_secondary</item>
-
-        <item name="button_color">@color/dark_button_color</item>
     </style>
 
     <style name="DarkButtonStyle" parent="@android:style/Widget.ImageButton">

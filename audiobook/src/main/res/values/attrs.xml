@@ -37,6 +37,4 @@
     <!-- Bookmark -->
     <attr name="bookmark_add_button" format="reference" />
     <attr name="more" format="reference" />
-
-    <attr name="button_color" format="reference" />
 </resources>
