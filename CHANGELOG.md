@@ -1,3 +1,7 @@
+# v2.1.2.2 Hotfix
+
+Fixed a bug that caused a crash on previous database upgrade
+
 # v2.1.2.1 Stability
 
 We cant store positions to internal storage since on Android 4.4 there is no permission to write to sd card.
