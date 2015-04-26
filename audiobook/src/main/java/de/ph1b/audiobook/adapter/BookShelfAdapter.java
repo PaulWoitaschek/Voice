@@ -3,6 +3,7 @@ package de.ph1b.audiobook.adapter;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,14 +25,47 @@ import de.ph1b.audiobook.utils.PrefsManager;
 public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.ViewHolder> {
 
     @NonNull
-    private final ArrayList<Book> books;
     private final Context c;
     private final PrefsManager prefs;
     private final OnItemClickListener onItemClickListener;
+    private final SortedList<Book> sortedList = new SortedList<>(Book.class, new SortedList.Callback<Book>() {
 
-    public BookShelfAdapter(@NonNull ArrayList<Book> books, Context c,
-                            OnItemClickListener onItemClickListener) {
-        this.books = books;
+        @Override
+        public int compare(Book o1, Book o2) {
+            return o1.compareTo(o2);
+        }
+
+        @Override
+        public void onInserted(int position, int count) {
+            notifyItemRangeInserted(position, count);
+        }
+
+        @Override
+        public void onRemoved(int position, int count) {
+            notifyItemRangeRemoved(position, count);
+        }
+
+        @Override
+        public void onMoved(int fromPosition, int toPosition) {
+            notifyItemMoved(fromPosition, toPosition);
+        }
+
+        @Override
+        public void onChanged(int position, int count) {
+            notifyItemRangeChanged(position, count);
+        }
+
+        @Override
+        public boolean areContentsTheSame(Book oldItem, Book newItem) {
+            return oldItem.getName().equals(newItem.getName());
+        }
+
+        @Override
+        public boolean areItemsTheSame(Book item1, Book item2) {
+            return item1.getId() == item2.getId();
+        }
+    });
+    public BookShelfAdapter(@NonNull Context c, OnItemClickListener onItemClickListener) {
         this.c = c;
         this.onItemClickListener = onItemClickListener;
         this.prefs = new PrefsManager(c);
@@ -39,14 +73,43 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
         setHasStableIds(true);
     }
 
+    public SortedList<Book> getSortedList() {
+        return sortedList;
+    }
+
+    public void add(ArrayList<Book> books) {
+        this.sortedList.beginBatchedUpdates();
+        for (Book b : books) {
+            this.sortedList.add(b);
+        }
+        this.sortedList.endBatchedUpdates();
+    }
+
+    public void add(Book book) {
+        sortedList.add(book);
+    }
+
+    public void delete(ArrayList<Book> books) {
+        sortedList.beginBatchedUpdates();
+        for (Book b : books) {
+            for (int i = 0; i < this.sortedList.size(); i++) {
+                if (this.sortedList.get(i).getId() == b.getId()) {
+                    this.sortedList.removeItemAt(i);
+                    break;
+                }
+            }
+        }
+        sortedList.endBatchedUpdates();
+    }
+
     @Override
     public long getItemId(int position) {
-        return books.get(position).getId();
+        return sortedList.get(position).getId();
     }
 
     @NonNull
     public Book getItem(int position) {
-        return books.get(position);
+        return sortedList.get(position);
     }
 
     @Override
@@ -58,7 +121,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        Book b = books.get(position);
+        Book b = sortedList.get(position);
 
         //setting text
         String name = b.getName();
@@ -84,7 +147,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
 
     @Override
     public int getItemCount() {
-        return books.size();
+        return sortedList.size();
     }
 
 

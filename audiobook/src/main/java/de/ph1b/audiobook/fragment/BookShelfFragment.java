@@ -16,6 +16,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.util.SortedList;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -38,7 +39,6 @@ import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.ListIterator;
 
 import de.ph1b.audiobook.R;
@@ -65,15 +65,15 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public static final String TAG = BookShelfFragment.class.getSimpleName();
     private static final String RECYCLER_VIEW_STATE = "recyclerViewState";
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
-    private final ArrayList<Book> allBooks = new ArrayList<>();
     private final BroadcastReceiver onBookSetChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
 
             // old books
             ArrayList<Book> oldBooks = new ArrayList<>();
-            for (Book b : allBooks) {
-                oldBooks.add(new Book(b));
+            SortedList<Book> sortedList = adapter.getSortedList();
+            for (int i = 0; i < sortedList.size(); i++) {
+                oldBooks.add(new Book(sortedList.get(i)));
             }
 
             // new books
@@ -100,11 +100,8 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                 }
                 booksToDelete.add(oldB);
             }
-            for (Book bookToDelete : booksToDelete) {
-                int index = allBooks.indexOf(bookToDelete);
-                allBooks.remove(index);
-                adapter.notifyItemRemoved(index);
-            }
+
+            adapter.delete(booksToDelete);
 
             // find books to add
             ArrayList<Book> booksToAdd = new ArrayList<>();
@@ -116,11 +113,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                 }
                 booksToAdd.add(newB);
             }
-            for (Book bookToAdd : booksToAdd) {
-                allBooks.add(bookToAdd);
-                Collections.sort(allBooks);
-                adapter.notifyItemInserted(allBooks.indexOf(bookToAdd));
-            }
+            adapter.add(booksToAdd);
 
             checkVisibilities();
         }
@@ -129,15 +122,12 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         @Override
         public void onReceive(Context context, Intent intent) {
             long bookChangedId = intent.getLongExtra(Communication.COVER_CHANGED_BOOK_ID, -1);
-            for (int i = 0; i < allBooks.size(); i++) {
-                if (allBooks.get(i).getId() == bookChangedId) {
+            SortedList<Book> sortedList = adapter.getSortedList();
+            for (int i = 0; i < sortedList.size(); i++) {
+                Book book = sortedList.get(i);
+                if (book.getId() == bookChangedId) {
                     adapter.notifyItemChanged(i);
                 }
-            }
-
-            for (Book b : allBooks) {
-                if (b.getId() == intent.getLongExtra(Communication.COVER_CHANGED_BOOK_ID, -1))
-                    adapter.notifyItemChanged(allBooks.indexOf(b));
             }
         }
     };
@@ -239,9 +229,8 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getAmountOfColumns()));
-        allBooks.clear();
-        allBooks.addAll(db.getAllBooks());
-        adapter = new BookShelfAdapter(allBooks, getActivity(), onClickListener);
+        adapter = new BookShelfAdapter(getActivity(), onClickListener);
+        adapter.add(db.getAllBooks());
         recyclerView.setAdapter(adapter);
 
         if (savedInstanceState != null) {
@@ -367,9 +356,12 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         }
 
         boolean currentBookExists = false;
-        for (Book b : allBooks) {
+        SortedList<Book> sortedList = adapter.getSortedList();
+        for (int i = 0; i < sortedList.size(); i++) {
+            Book b = sortedList.get(i);
             if (b.getId() == prefs.getCurrentBookId()) {
                 currentBookExists = true;
+                break;
             }
         }
         if (currentBookExists) {
@@ -449,11 +441,14 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onEditBookFinished(@NonNull Book book) {
-        int oldIndex = allBooks.indexOf(book);
-        Collections.sort(allBooks);
-        int newIndex = allBooks.indexOf(book);
-        adapter.notifyItemMoved(oldIndex, newIndex);
-        adapter.notifyItemChanged(newIndex);
+        L.v(TAG, "onEditBookFinished(" + book + ")");
+        SortedList<Book> sortedList = adapter.getSortedList();
+        for (int i = 0; i < sortedList.size(); i++) {
+            if (sortedList.get(i).getId() == book.getId()) {
+                sortedList.updateItemAt(i, book);
+                break;
+            }
+        }
         db.updateBook(book);
     }
 

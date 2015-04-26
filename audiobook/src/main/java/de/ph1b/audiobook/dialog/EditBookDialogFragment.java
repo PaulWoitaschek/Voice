@@ -54,7 +54,6 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
     private ArrayList<Bitmap> covers;
     private int googleCount = 0;
     private Book book;
-    private DataBaseHelper db;
 
 
     @Override
@@ -110,7 +109,7 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
         super.onCreate(savedInstanceState);
 
         coverDownloader = new CoverDownloader(getActivity());
-        db = DataBaseHelper.getInstance(getActivity());
+        DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
 
         Bundle b = getArguments();
         long bookId = b.getLong(Book.TAG);
@@ -193,7 +192,6 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
                 }
 
                 book.setName(bookName);
-                db.updateBook(book);
                 Picasso.with(getActivity()).invalidate(book.getCoverFile());
 
                 ((OnEditBookFinishedListener) getActivity()).onEditBookFinished(book);
