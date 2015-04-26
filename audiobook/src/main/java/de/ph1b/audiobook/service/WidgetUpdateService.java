@@ -3,15 +3,18 @@ package de.ph1b.audiobook.service;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -29,26 +32,49 @@ import java.util.concurrent.Executors;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookActivity;
 import de.ph1b.audiobook.fragment.BookPlayFragment;
+import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
+import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.receiver.BaseWidgetProvider;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
-import de.ph1b.audiobook.utils.BaseApplication;
-import de.ph1b.audiobook.utils.BaseApplication.PlayState;
-import de.ph1b.audiobook.utils.L;
+import de.ph1b.audiobook.utils.Communication;
+import de.ph1b.audiobook.utils.PrefsManager;
 
-public class WidgetUpdateService extends Service implements
-        BaseApplication.OnBooksChangedListener {
-    private static final String TAG = WidgetUpdateService.class.getSimpleName();
+public class WidgetUpdateService extends Service {
     private final ExecutorService executor = Executors.newCachedThreadPool();
-    private BaseApplication baseApplication;
+    private final BroadcastReceiver onCurrentBookChanged = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateWidget();
+        }
+    };
+    private final BroadcastReceiver onBookSetChanged = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateWidget();
+        }
+    };
+    private final BroadcastReceiver onPlayStateChanged = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateWidget();
+        }
+    };
+    private DataBaseHelper db;
+    private PrefsManager prefs;
+    private LocalBroadcastManager bcm;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        baseApplication = (BaseApplication) getApplication();
-        baseApplication.addOnBooksChangedListener(this);
+        db = DataBaseHelper.getInstance(this);
+        prefs = new PrefsManager(this);
+        bcm = LocalBroadcastManager.getInstance(this);
+        bcm.registerReceiver(onBookSetChanged, new IntentFilter(Communication.BOOK_SET_CHANGED));
+        bcm.registerReceiver(onCurrentBookChanged, new IntentFilter(Communication.CURRENT_BOOK_CHANGED));
+        bcm.registerReceiver(onPlayStateChanged, new IntentFilter(Communication.PLAY_STATE_CHANGED));
     }
 
     @Override
@@ -65,7 +91,7 @@ public class WidgetUpdateService extends Service implements
             @Override
             public void run() {
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(WidgetUpdateService.this);
-                Book book = baseApplication.getCurrentBook();
+                Book book = db.getBook(prefs.getCurrentBookId());
                 boolean isPortrait = isPortrait();
                 int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(
                         WidgetUpdateService.this, BaseWidgetProvider.class));
@@ -166,7 +192,7 @@ public class WidgetUpdateService extends Service implements
                 rewindI, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI);
 
-        if (baseApplication.getPlayState() == PlayState.PLAYING) {
+        if (MediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
             remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_36dp);
         } else {
             remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow_white_36dp);
@@ -300,9 +326,10 @@ public class WidgetUpdateService extends Service implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        baseApplication.removeOnBooksChangedListener(this);
         executor.shutdown();
+        bcm.unregisterReceiver(onCurrentBookChanged);
+        bcm.unregisterReceiver(onBookSetChanged);
+        bcm.unregisterReceiver(onPlayStateChanged);
     }
 
     @Override
@@ -318,47 +345,5 @@ public class WidgetUpdateService extends Service implements
     @Override
     public IBinder onBind(final Intent intent) {
         return null;
-    }
-
-    @Override
-    public void onPositionChanged(final boolean positionChanged) {
-        updateWidget();
-    }
-
-    @Override
-    public void onSleepStateChanged(boolean active) {
-
-    }
-
-    @Override
-    public void onCurrentBookChanged(final Book book) {
-        L.v(TAG, "onCurrentBookChanged called");
-        updateWidget();
-        L.v(TAG, "onCurrentBookChanged done");
-    }
-
-    @Override
-    public void onBookAdded(int position) {
-
-    }
-
-    @Override
-    public void onScannerStateChanged(boolean active) {
-
-    }
-
-    @Override
-    public void onCoverChanged(int position) {
-
-    }
-
-    @Override
-    public void onBookDeleted(int position) {
-
-    }
-
-    @Override
-    public void onPlayStateChanged(final PlayState state) {
-        updateWidget();
     }
 }

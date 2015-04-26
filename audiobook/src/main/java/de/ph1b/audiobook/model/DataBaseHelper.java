@@ -2,10 +2,13 @@ package de.ph1b.audiobook.model;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.gson.Gson;
 
@@ -14,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.InvalidPropertiesFormatException;
 
+import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
 
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
@@ -36,10 +40,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String TAG = DataBaseHelper.class.getSimpleName();
     private static DataBaseHelper instance;
     private final Context c;
+    private final LocalBroadcastManager bcm;
 
     private DataBaseHelper(Context c) {
         super(c, DATABASE_NAME, null, DATABASE_VERSION);
         this.c = c;
+        this.bcm = LocalBroadcastManager.getInstance(c);
     }
 
     public static synchronized DataBaseHelper getInstance(Context c) {
@@ -54,6 +60,33 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         cv.put(BOOK_JSON, new Gson().toJson(book));
         long bookId = getWritableDatabase().insert(TABLE_BOOK, null, cv);
         book.setId(bookId);
+
+        sendBookSetChanged();
+    }
+
+    private void sendBookSetChanged() {
+        bcm.sendBroadcast(new Intent(Communication.BOOK_SET_CHANGED));
+    }
+
+    @Nullable
+    public Book getBook(long id) {
+        return getBook(getReadableDatabase(), id);
+    }
+
+
+    private Book getBook(SQLiteDatabase db, long id) {
+        Cursor cursor = db.query(TABLE_BOOK, new String[]{BOOK_JSON}, BOOK_ID + "=?",
+                new String[]{String.valueOf(id)}, null, null, null);
+        try {
+            if (cursor.moveToNext()) {
+                Book book = new Gson().fromJson(cursor.getString(0), Book.class);
+                book.setId(id);
+                return book;
+            }
+        } finally {
+            cursor.close();
+        }
+        return null;
     }
 
     @NonNull
@@ -62,12 +95,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = getReadableDatabase();
         db.beginTransaction();
-        Cursor cursor = db.query(TABLE_BOOK, new String[]{BOOK_ID, BOOK_JSON}, null, null, null, null, null);
+        Cursor cursor = db.query(TABLE_BOOK, new String[]{BOOK_ID}, null, null, null, null, null);
         try {
             while (cursor.moveToNext()) {
-                Book book = new Gson().fromJson(cursor.getString(1), Book.class);
-                book.setId(cursor.getLong(0));
-                allBooks.add(book);
+                allBooks.add(getBook(cursor.getLong(0)));
             }
             db.setTransactionSuccessful();
         } finally {
@@ -84,6 +115,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         cv.put(BOOK_JSON, new Gson().toJson(book));
         getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
+        sendBookSetChanged();
     }
 
     public void deleteBook(@NonNull Book book) {
@@ -94,6 +126,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             //noinspection ResultOfMethodCallIgnored
             coverFile.delete();
         }
+        sendBookSetChanged();
     }
 
     @Override

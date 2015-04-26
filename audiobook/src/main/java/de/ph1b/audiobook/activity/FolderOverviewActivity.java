@@ -26,8 +26,8 @@ import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.FolderOverviewAdapter;
+import de.ph1b.audiobook.model.BookAdder;
 import de.ph1b.audiobook.uitools.DividerItemDecoration;
-import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
@@ -41,7 +41,6 @@ public class FolderOverviewActivity extends BaseActivity {
     private PrefsManager prefs;
     private FolderOverviewAdapter adapter;
     private FloatingActionsMenu fam;
-    private BaseApplication baseApplication;
     private FloatingActionButton buttonRepresentingTheFam;
     private View backgroundOverlay;
 
@@ -81,7 +80,6 @@ public class FolderOverviewActivity extends BaseActivity {
         }
 
         prefs = new PrefsManager(this);
-        baseApplication = (BaseApplication) getApplication();
 
         //init views
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
@@ -172,7 +170,7 @@ public class FolderOverviewActivity extends BaseActivity {
                                         adapter.removeItem(position);
                                         prefs.setCollectionFolders(bookCollections);
                                         prefs.setSingleBookFolders(singleBooks);
-                                        baseApplication.scanForFiles(true);
+                                        BookAdder.getInstance(FolderOverviewActivity.this).scanForFiles(true);
                                     }
                                 })
                                 .show();
@@ -263,7 +261,7 @@ public class FolderOverviewActivity extends BaseActivity {
                     L.v(TAG, "chosenSingleBook=" + chosenSingleBook);
                     break;
             }
-            baseApplication.scanForFiles(true);
+            BookAdder.getInstance(this).scanForFiles(true);
         }
     }
 

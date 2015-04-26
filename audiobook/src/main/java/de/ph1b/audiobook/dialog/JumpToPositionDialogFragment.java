@@ -15,9 +15,10 @@ import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
+import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.ThemeUtil;
-import de.ph1b.audiobook.utils.BaseApplication;
+import de.ph1b.audiobook.utils.PrefsManager;
 
 public class JumpToPositionDialogFragment extends DialogFragment {
 
@@ -38,9 +39,9 @@ public class JumpToPositionDialogFragment extends DialogFragment {
 
         hPicker = (NumberPicker) v.findViewById(R.id.number_hour);
         mPicker = (NumberPicker) v.findViewById(R.id.number_minute);
-        BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
 
-        final Book book = baseApplication.getCurrentBook();
+        final Book book = DataBaseHelper.getInstance(getActivity()).getBook(new PrefsManager(
+                getActivity()).getCurrentBookId());
         if (book == null) {
             throw new AssertionError("Cannot instantiate " + TAG + " without a current book");
         }

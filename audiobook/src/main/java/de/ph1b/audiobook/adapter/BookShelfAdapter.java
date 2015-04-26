@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.adapter;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -18,35 +19,24 @@ import java.util.ArrayList;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.uitools.CoverReplacement;
-import de.ph1b.audiobook.utils.BaseApplication;
+import de.ph1b.audiobook.utils.PrefsManager;
 
-public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.ViewHolder> implements BaseApplication.OnBooksChangedListener {
+public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.ViewHolder> {
 
     @NonNull
     private final ArrayList<Book> books;
-    private final BaseApplication baseApplication;
+    private final Context c;
+    private final PrefsManager prefs;
     private final OnItemClickListener onItemClickListener;
-    private int currentPlayingIndex = -1;
 
-    public BookShelfAdapter(@NonNull ArrayList<Book> books, BaseApplication baseApplication,
+    public BookShelfAdapter(@NonNull ArrayList<Book> books, Context c,
                             OnItemClickListener onItemClickListener) {
         this.books = books;
-        this.baseApplication = baseApplication;
-        Book currentBook = baseApplication.getCurrentBook();
-        if (currentBook != null) {
-            this.currentPlayingIndex = books.indexOf(baseApplication.getCurrentBook());
-        }
+        this.c = c;
         this.onItemClickListener = onItemClickListener;
+        this.prefs = new PrefsManager(c);
 
         setHasStableIds(true);
-    }
-
-    public void registerListener() {
-        baseApplication.addOnBooksChangedListener(this);
-    }
-
-    public void unregisterListener() {
-        baseApplication.removeOnBooksChangedListener(this);
     }
 
     @Override
@@ -77,15 +67,15 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
 
         // (Cover)
         File coverFile = b.getCoverFile();
-        Drawable coverReplacement = new CoverReplacement(b.getName().substring(0, 1), baseApplication);
+        Drawable coverReplacement = new CoverReplacement(b.getName().substring(0, 1), c);
         if (!b.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-            Picasso.with(baseApplication).load(coverFile).placeholder(coverReplacement).into(viewHolder.coverView);
+            Picasso.with(c).load(coverFile).placeholder(coverReplacement).into(viewHolder.coverView);
         } else {
-            Picasso.with(baseApplication).cancelRequest(viewHolder.coverView);
+            Picasso.with(c).cancelRequest(viewHolder.coverView);
             viewHolder.coverView.setImageDrawable(coverReplacement);
         }
 
-        if (currentPlayingIndex == position) {
+        if (b.getId() == prefs.getCurrentBookId()) {
             viewHolder.currentPlayingIndicator.setVisibility(View.VISIBLE);
         } else {
             viewHolder.currentPlayingIndicator.setVisibility(View.GONE);
@@ -97,54 +87,11 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
         return books.size();
     }
 
-    @Override
-    public void onBookDeleted(int position) {
-
-    }
-
-    @Override
-    public void onPlayStateChanged(BaseApplication.PlayState state) {
-
-    }
-
-    @Override
-    public void onPositionChanged(boolean fileChanged) {
-
-    }
-
-    @Override
-    public void onSleepStateChanged(boolean active) {
-
-    }
-
-    @Override
-    public void onCurrentBookChanged(Book book) {
-        int oldIndex = currentPlayingIndex;
-        currentPlayingIndex = books.indexOf(book);
-        notifyItemChanged(oldIndex);
-        notifyItemChanged(currentPlayingIndex);
-    }
-
-    @Override
-    public void onBookAdded(int position) {
-
-    }
-
-    @Override
-    public void onScannerStateChanged(boolean active) {
-
-    }
-
-    @Override
-    public void onCoverChanged(int position) {
-
-    }
 
     public interface OnItemClickListener {
         void onCoverClicked(final int position, ImageView cover);
 
         void onMenuClicked(final int position);
-
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.utils;
+package de.ph1b.audiobook.model;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -20,12 +20,10 @@ import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import de.ph1b.audiobook.model.Book;
-import de.ph1b.audiobook.model.Bookmark;
-import de.ph1b.audiobook.model.Chapter;
-import de.ph1b.audiobook.model.DataBaseHelper;
-import de.ph1b.audiobook.model.NaturalOrderComparator;
 import de.ph1b.audiobook.uitools.ImageHelper;
+import de.ph1b.audiobook.utils.Communication;
+import de.ph1b.audiobook.utils.L;
+import de.ph1b.audiobook.utils.PrefsManager;
 
 
 public class BookAdder {
@@ -80,16 +78,25 @@ public class BookAdder {
         imageTypes.add(".png");
     }
 
+    public static volatile boolean scannerActive = false;
+    private static BookAdder instance;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    private final BaseApplication baseApplication;
+    private final Context c;
     private final PrefsManager prefs;
     private final DataBaseHelper db;
     private volatile boolean stopScanner = false;
 
-    public BookAdder(@NonNull BaseApplication baseApplication) {
-        this.baseApplication = baseApplication;
-        prefs = new PrefsManager(baseApplication);
-        db = DataBaseHelper.getInstance(baseApplication);
+    private BookAdder(@NonNull Context c) {
+        this.c = c;
+        prefs = new PrefsManager(this.c);
+        db = DataBaseHelper.getInstance(this.c);
+    }
+
+    public static synchronized BookAdder getInstance(Context c) {
+        if (instance == null) {
+            instance = new BookAdder(c.getApplicationContext());
+        }
+        return instance;
     }
 
     private static boolean isAudio(File f) {
@@ -127,15 +134,15 @@ public class BookAdder {
     private Bitmap getCoverFromDisk(@NonNull File[] coverFiles) throws InterruptedException {
         // if there are images, get the first one.
         ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
-        ActivityManager activityManager = (ActivityManager) baseApplication.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager activityManager = (ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
         activityManager.getMemoryInfo(mi);
-        int dimen = ImageHelper.getSmallerScreenSize(baseApplication);
+        int dimen = ImageHelper.getSmallerScreenSize(c);
         for (File f : coverFiles) {
             if (stopScanner) throw new InterruptedException("Interrupted at getCoverFromDisk");
             // only read cover if its size is less than a third of the available memory
             if (f.length() < (mi.availMem / 3L)) {
                 try {
-                    return Picasso.with(baseApplication).load(f).resize(dimen, dimen).get();
+                    return Picasso.with(c).load(f).resize(dimen, dimen).get();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -151,7 +158,7 @@ public class BookAdder {
         for (Chapter c : chapters) {
             if (++tries < maxTries) {
                 if (stopScanner) throw new InterruptedException("Interrupted at getEmbeddedCover");
-                Bitmap cover = ImageHelper.getEmbeddedCover(new File(c.getPath()), baseApplication);
+                Bitmap cover = ImageHelper.getEmbeddedCover(new File(c.getPath()), this.c);
                 if (cover != null)
                     return cover;
             } else {
@@ -162,7 +169,7 @@ public class BookAdder {
     }
 
     private void findCovers() throws InterruptedException {
-        for (Book b : baseApplication.getAllBooks()) {
+        for (Book b : db.getAllBooks()) {
             if (stopScanner) throw new InterruptedException("interrupted at findCover");
             File coverFile = b.getCoverFile();
             if (!coverFile.exists()) {
@@ -173,8 +180,9 @@ public class BookAdder {
                         if (images != null) {
                             Bitmap cover = getCoverFromDisk(images);
                             if (cover != null) {
-                                baseApplication.onCoverChanged(b);
-                                ImageHelper.saveCover(cover, baseApplication, coverFile);
+                                ImageHelper.saveCover(cover, c, coverFile);
+                                Picasso.with(c).invalidate(coverFile);
+                                Communication.sendCoverChanged(c, b.getId());
                                 continue;
                             }
                         }
@@ -182,23 +190,24 @@ public class BookAdder {
                 }
                 Bitmap cover = getEmbeddedCover(b.getChapters());
                 if (cover != null) {
-                    ImageHelper.saveCover(cover, baseApplication, coverFile);
-                    baseApplication.onCoverChanged(b);
+                    ImageHelper.saveCover(cover, c, coverFile);
+                    Picasso.with(c).invalidate(coverFile);
+                    Communication.sendCoverChanged(c, b.getId());
                 }
             }
         }
     }
 
-
     public void scanForFiles(boolean interrupting) {
-        L.d(TAG, "scanForFiles called. scannerActive=" + baseApplication.isScannerActive() + ", interrupting=" + interrupting);
-        if (!baseApplication.isScannerActive() || interrupting) {
+        L.d(TAG, "scanForFiles called. scannerActive=" + scannerActive + ", interrupting=" + interrupting);
+        if (!scannerActive || interrupting) {
             stopScanner = true;
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
                     L.v(TAG, "started");
-                    baseApplication.setScannerActive(true);
+                    scannerActive = true;
+                    Communication.sendScannerStateChanged(c);
                     stopScanner = false;
 
                     try {
@@ -210,7 +219,8 @@ public class BookAdder {
                     }
 
                     stopScanner = false;
-                    baseApplication.setScannerActive(false);
+                    scannerActive = false;
+                    Communication.sendScannerStateChanged(c);
                     L.v(TAG, "stopped");
                 }
             });
@@ -256,7 +266,7 @@ public class BookAdder {
 
         //getting books to remove
         ArrayList<Book> booksToRemove = new ArrayList<>();
-        for (Book book : baseApplication.getAllBooks()) {
+        for (Book book : db.getAllBooks()) {
             boolean bookExists = false;
             switch (book.getType()) {
                 case COLLECTION_FILE:
@@ -310,7 +320,7 @@ public class BookAdder {
 
         for (Book b : booksToRemove) {
             L.d(TAG, "deleting book=" + b);
-            baseApplication.deleteBook(b);
+            db.deleteBook(b);
         }
         L.d(TAG, "finished");
     }
@@ -320,8 +330,9 @@ public class BookAdder {
         Book bookExisting = getBookFromDb(rootFile, type);
 
         if (newChapters.size() == 0) { // there are no chapters
-            if (bookExisting != null) //so delete book if available
-                baseApplication.deleteBook(bookExisting);
+            if (bookExisting != null) {//so delete book if available
+                db.deleteBook(bookExisting);
+            }
         } else { // there are chapters
             if (bookExisting == null) { //there is no book, so add a new one
                 String bookRoot = rootFile.isDirectory() ?
@@ -333,9 +344,10 @@ public class BookAdder {
 
                 Book newBook = new Book(bookRoot, bookName, newChapters,
                         newChapters.get(0).getPath(), type, new ArrayList<Bookmark>(),
-                        baseApplication);
+                        c);
                 L.d(TAG, "adding newBook=" + newBook);
-                baseApplication.addBook(newBook);
+
+                db.addBook(newBook);
             } else { //there is a book, so update it if necessary
 
                 ArrayList<Chapter> existingChapters = bookExisting.getChapters();
@@ -458,15 +470,16 @@ public class BookAdder {
     @Nullable
     private Book getBookFromDb(File rootFile, Book.Type type) {
         L.d(TAG, "getBookFromDb, rootFile=" + rootFile + ", type=" + type);
+        ArrayList<Book> allBooks = db.getAllBooks();
         if (rootFile.isDirectory()) {
-            for (Book b : baseApplication.getAllBooks()) {
+            for (Book b : allBooks) {
                 if (rootFile.getAbsolutePath().equals(b.getRoot()) && type == b.getType()) {
                     return b;
                 }
             }
         } else if (rootFile.isFile()) {
             L.d(TAG, "getBookFromDb, its a file");
-            for (Book b : baseApplication.getAllBooks()) {
+            for (Book b : allBooks) {
                 L.v(TAG, "comparing bookRoot=" + b.getRoot() + " with " + rootFile.getParentFile().getAbsolutePath());
                 if (rootFile.getParentFile().getAbsolutePath().equals(b.getRoot()) && type == b.getType()) {
                     Chapter singleChapter = b.getChapters().get(0);

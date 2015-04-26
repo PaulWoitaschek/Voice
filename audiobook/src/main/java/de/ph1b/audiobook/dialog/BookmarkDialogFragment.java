@@ -33,8 +33,8 @@ import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.model.NaturalBookmarkComparator;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.DividerItemDecoration;
-import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
+import de.ph1b.audiobook.utils.PrefsManager;
 
 /**
  * @author <a href="mailto:woitaschek@posteo.de">Paul Woitaschek</a>
@@ -68,7 +68,7 @@ public class BookmarkDialogFragment extends DialogFragment {
 
         final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
         final ServiceController controller = new ServiceController(getActivity());
-        final Book book = ((BaseApplication) getActivity().getApplication()).getCurrentBook();
+        final Book book = db.getBook(new PrefsManager(getActivity()).getCurrentBookId());
         if (book == null) {
             throw new AssertionError("Cannot instantiate " + TAG + " without a current book");
         }

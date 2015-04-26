@@ -34,7 +34,6 @@ import de.ph1b.audiobook.uitools.CoverDownloader;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.DraggableBoxImageView;
 import de.ph1b.audiobook.uitools.ImageHelper;
-import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
 
 public class EditBookDialogFragment extends DialogFragment implements View.OnClickListener {
@@ -111,12 +110,11 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
         super.onCreate(savedInstanceState);
 
         coverDownloader = new CoverDownloader(getActivity());
-        BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
         db = DataBaseHelper.getInstance(getActivity());
 
         Bundle b = getArguments();
         long bookId = b.getLong(Book.TAG);
-        book = baseApplication.getBook(bookId);
+        book = db.getBook(bookId);
         if (savedInstanceState == null) {
             covers = b.getParcelableArrayList(BOOK_COVER);
 
@@ -188,6 +186,7 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
                     Bitmap cover = covers.get(coverPosition);
                     cover = Bitmap.createBitmap(cover, r.left, r.top, r.width(), r.height());
                     ImageHelper.saveCover(cover, getActivity(), book.getCoverFile());
+                    Picasso.with(getActivity()).invalidate(book.getCoverFile());
                     book.setUseCoverReplacement(false);
                 } else {
                     book.setUseCoverReplacement(true);

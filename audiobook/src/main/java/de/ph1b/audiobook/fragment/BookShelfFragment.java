@@ -1,6 +1,9 @@
 package de.ph1b.audiobook.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -9,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -29,14 +33,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.squareup.picasso.Picasso;
 
 import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.concurrent.CountDownLatch;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.FolderOverviewActivity;
@@ -45,31 +47,123 @@ import de.ph1b.audiobook.adapter.BookShelfAdapter;
 import de.ph1b.audiobook.dialog.EditBookDialogFragment;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
+import de.ph1b.audiobook.model.BookAdder;
+import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.uitools.PlayPauseDrawable;
-import de.ph1b.audiobook.utils.BaseApplication;
+import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 
 public class BookShelfFragment extends Fragment implements View.OnClickListener,
-        EditBookDialogFragment.OnEditBookFinishedListener,
-        BaseApplication.OnBooksChangedListener {
-
+        EditBookDialogFragment.OnEditBookFinishedListener {
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
     private static final String RECYCLER_VIEW_STATE = "recyclerViewState";
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
+    private final ArrayList<Book> allBooks = new ArrayList<>();
+    private final BroadcastReceiver onBookSetChangedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            // old books
+            ArrayList<Book> oldBooks = new ArrayList<>();
+            for (Book b : allBooks) {
+                oldBooks.add(new Book(b));
+            }
+
+            // new books
+            ArrayList<Book> newBooks = db.getAllBooks();
+
+            // find books to delete
+            ArrayList<Book> booksToDelete = new ArrayList<>();
+            deleteLoop:
+            for (Book oldB : oldBooks) {
+                for (Book newB : newBooks) {
+                    if (oldB.getId() == newB.getId())
+                        continue deleteLoop;
+                }
+                booksToDelete.add(oldB);
+            }
+            for (Book bookToDelete : booksToDelete) {
+                int index = allBooks.indexOf(bookToDelete);
+                allBooks.remove(index);
+                adapter.notifyItemRemoved(index);
+            }
+
+            // find books to add
+            ArrayList<Book> booksToAdd = new ArrayList<>();
+            addLoop:
+            for (Book newB : newBooks) {
+                for (Book oldB : oldBooks) {
+                    if (newB.getId() == oldB.getId())
+                        continue addLoop;
+                }
+                booksToAdd.add(newB);
+            }
+            for (Book bookToAdd : booksToAdd) {
+                allBooks.add(bookToAdd);
+                Collections.sort(allBooks);
+                adapter.notifyItemInserted(allBooks.indexOf(bookToAdd));
+            }
+
+            toggleRecyclerVisibilities();
+        }
+    };
+    private final BroadcastReceiver onCoverChanged = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            long bookChangedId = intent.getLongExtra(Communication.COVER_CHANGED_BOOK_ID, -1);
+            for (int i = 0; i < allBooks.size(); i++) {
+                if (allBooks.get(i).getId() == bookChangedId) {
+                    adapter.notifyItemChanged(i);
+                }
+            }
+
+            for (Book b : allBooks) {
+                if (b.getId() == intent.getLongExtra(Communication.COVER_CHANGED_BOOK_ID, -1))
+                    adapter.notifyItemChanged(allBooks.indexOf(b));
+            }
+        }
+    };
+    private final BroadcastReceiver onCurrentBookChanged = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            fab.setVisibility(View.VISIBLE);
+            long oldId = intent.getLongExtra(Communication.CURRENT_BOOK_CHANGED_OLD_ID, -1);
+            if (oldId == -1)
+                throw new IllegalArgumentException("Intent sent without CURRENT_BOOK_CHANGED_OLD_ID");
+            for (int i = 0; i < adapter.getItemCount(); i++) {
+                long itemId = adapter.getItemId(i);
+                if (itemId == oldId || itemId == prefs.getCurrentBookId())
+                    adapter.notifyItemChanged(i);
+            }
+        }
+    };
+    private final BroadcastReceiver onPlayStateChanged = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            setPlayState(true);
+        }
+    };
+    private final BroadcastReceiver onScannerStateChanged = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            toggleRecyclerVisibilities();
+        }
+    };
     private BookShelfAdapter adapter;
     private PrefsManager prefs;
-    private BaseApplication baseApplication;
     private ServiceController controller;
     private MaterialDialog noFolderWarning;
     private RecyclerView recyclerView;
     private ProgressBar recyclerReplacementView;
     private FloatingActionButton fab;
+    private DataBaseHelper db;
+    private LocalBroadcastManager bcm;
 
     @Nullable
     @Override
@@ -97,8 +191,9 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                     @Override
                     public void onCoverClicked(int position, ImageView cover) {
                         Book book = adapter.getItem(position);
-                        baseApplication.setCurrentBook(book);
+                        long oldId = prefs.getCurrentBookId();
                         prefs.setCurrentBookId(book.getId());
+                        Communication.sendCurrentBookChanged(getActivity(), oldId);
 
                         startBookPlay(cover);
                     }
@@ -134,8 +229,9 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getAmountOfColumns()));
-        adapter = new BookShelfAdapter(baseApplication.getAllBooks(), baseApplication,
-                onClickListener);
+        allBooks.clear();
+        allBooks.addAll(db.getAllBooks());
+        adapter = new BookShelfAdapter(allBooks, getActivity(), onClickListener);
         recyclerView.setAdapter(adapter);
 
         if (savedInstanceState != null) {
@@ -166,8 +262,9 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
         L.d(TAG, "onCreate called");
 
-        baseApplication = (BaseApplication) getActivity().getApplication();
         prefs = new PrefsManager(getActivity());
+        db = DataBaseHelper.getInstance(getActivity());
+        bcm = LocalBroadcastManager.getInstance(getActivity());
         controller = new ServiceController(getActivity());
         noFolderWarning = new MaterialDialog.Builder(getActivity())
                 .title(R.string.no_audiobook_folders_title)
@@ -201,12 +298,12 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public void onResume() {
         super.onResume();
 
-        if (baseApplication.getCurrentBook() == null) {
+        if (db.getBook(prefs.getCurrentBookId()) == null) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);
         }
-        if (baseApplication.getPlayState() == BaseApplication.PlayState.PLAYING) {
+        if (MediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
             playPauseDrawable.transformToPause(false);
         } else {
             playPauseDrawable.transformToPlay(false);
@@ -214,10 +311,10 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
         adapter.notifyDataSetChanged();
 
-        baseApplication.scanForFiles(false);
+        BookAdder.getInstance(getActivity()).scanForFiles(false);
 
-        setPlayState(baseApplication.getPlayState(), false);
-        onPositionChanged(true);
+        setPlayState(false);
+        onBookSetChangedReceiver.onReceive(getActivity(), new Intent());
 
         boolean audioFoldersEmpty = (prefs.getCollectionFolders().size() +
                 prefs.getSingleBookFolders().size()) == 0;
@@ -225,10 +322,13 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         if (audioFoldersEmpty && !noFolderWarningIsShowing) {
             noFolderWarning.show();
         }
-        toggleRecyclerVisibilities(baseApplication.isScannerActive());
+        toggleRecyclerVisibilities();
 
-        baseApplication.addOnBooksChangedListener(this);
-        adapter.registerListener();
+        bcm.registerReceiver(onBookSetChangedReceiver, new IntentFilter(Communication.BOOK_SET_CHANGED));
+        bcm.registerReceiver(onCoverChanged, new IntentFilter(Communication.COVER_CHANGED));
+        bcm.registerReceiver(onCurrentBookChanged, new IntentFilter(Communication.CURRENT_BOOK_CHANGED));
+        bcm.registerReceiver(onPlayStateChanged, new IntentFilter(Communication.PLAY_STATE_CHANGED));
+        bcm.registerReceiver(onScannerStateChanged, new IntentFilter(Communication.SCANNER_STATE_CHANGED));
     }
 
     @Override
@@ -241,42 +341,17 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         super.onSaveInstanceState(outState);
     }
 
-
-    private void setPlayState(BaseApplication.PlayState state, boolean animated) {
-        if (state == BaseApplication.PlayState.PLAYING) {
+    private void setPlayState(boolean animated) {
+        if (MediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
             playPauseDrawable.transformToPause(animated);
         } else {
             playPauseDrawable.transformToPlay(animated);
         }
     }
 
-    @Override
-    public void onPlayStateChanged(final BaseApplication.PlayState state) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                setPlayState(state, true);
-            }
-        });
-    }
-
-    @Override
-    public void onPositionChanged(boolean positionChanged) {
-    }
-
-    @Override
-    public void onSleepStateChanged(boolean active) {
-
-    }
-
-    @Override
-    public void onCurrentBookChanged(Book book) {
-        fab.setVisibility(View.VISIBLE);
-    }
-
-    private void toggleRecyclerVisibilities(boolean scannerActive) {
+    private void toggleRecyclerVisibilities() {
         L.v(TAG, "toggleRecyclerVisibilities");
-        final boolean hideRecycler = adapter.getItemCount() == 0 && scannerActive;
+        final boolean hideRecycler = adapter.getItemCount() == 0 && BookAdder.scannerActive;
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -306,7 +381,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
     private void startBookPlay(View view) {
         ViewCompat.setTransitionName(view, getString(R.string.transition_cover));
@@ -340,7 +414,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
          * Only use transition if we don't use a cover replacement. Else there is a bug so the
          * replacement won't scale correctly.
          */
-        Book currentBook = baseApplication.getCurrentBook();
+        Book currentBook = db.getBook(prefs.getCurrentBookId());
         boolean isRealCover = currentBook != null &&
                 (!currentBook.isUseCoverReplacement() && currentBook.getCoverFile().exists());
         if (isRealCover)
@@ -360,82 +434,24 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-
     @Override
     public void onEditBookFinished(@NonNull Book book) {
-        int oldIndex = baseApplication.getAllBooks().indexOf(book);
-        Collections.sort(baseApplication.getAllBooks());
-        int newIndex = baseApplication.getAllBooks().indexOf(book);
+        int oldIndex = allBooks.indexOf(book);
+        Collections.sort(allBooks);
+        int newIndex = allBooks.indexOf(book);
         adapter.notifyItemMoved(oldIndex, newIndex);
         adapter.notifyItemChanged(newIndex);
-    }
-
-    @Override
-    public void onBookAdded(final int position) {
-        final CountDownLatch latch = new CountDownLatch(1);
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyItemInserted(position);
-                latch.countDown();
-            }
-        });
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        toggleRecyclerVisibilities(baseApplication.isScannerActive());
+        db.updateBook(book);
     }
 
     @Override
     public void onPause() {
         super.onPause();
 
-        baseApplication.removeOnBooksChangedListener(this);
-        adapter.unregisterListener();
+        bcm.unregisterReceiver(onBookSetChangedReceiver);
+        bcm.unregisterReceiver(onCoverChanged);
+        bcm.unregisterReceiver(onCurrentBookChanged);
+        bcm.unregisterReceiver(onPlayStateChanged);
+        bcm.unregisterReceiver(onScannerStateChanged);
     }
-
-    @Override
-    public void onBookDeleted(final int position) {
-        L.v(TAG, "onBookDeleted started");
-        final CountDownLatch latch = new CountDownLatch(1);
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                L.v(TAG, "onBookDeleted, notifying adapter about position=" + position);
-                adapter.notifyItemRemoved(position);
-                latch.countDown();
-                L.v(TAG, "onBookDeleted, counted down latch");
-            }
-        });
-        try {
-            L.v(TAG, "onBookDeleted, wait for latch");
-            latch.await();
-            L.v(TAG, "onBookDeleted, latch released");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        toggleRecyclerVisibilities(baseApplication.isScannerActive());
-        L.v(TAG, "onBookDeleted finished");
-    }
-
-    @Override
-    public void onScannerStateChanged(final boolean active) {
-        toggleRecyclerVisibilities(active);
-    }
-
-    @Override
-    public void onCoverChanged(final int position) {
-        Picasso.with(getActivity()).invalidate(adapter.getItem(position).getCoverFile());
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyItemChanged(position);
-            }
-        });
-    }
-
 }

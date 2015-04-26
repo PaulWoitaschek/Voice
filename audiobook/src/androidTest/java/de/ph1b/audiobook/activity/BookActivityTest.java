@@ -11,7 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
-import de.ph1b.audiobook.utils.BaseApplication;
+import de.ph1b.audiobook.model.DataBaseHelper;
 
 
 public class BookActivityTest extends ActivityInstrumentationTestCase2<BookActivity> {
@@ -24,11 +24,13 @@ public class BookActivityTest extends ActivityInstrumentationTestCase2<BookActiv
 
     @MediumTest
     public void testAddingRemovingBooksAsynchronous() throws InterruptedException {
-        final BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
 
         final ReentrantLock lock = new ReentrantLock();
-        final int THREADS = 1000;
+        final int THREADS = 100;
         final CountDownLatch latch = new CountDownLatch(THREADS);
+        final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
+        final ArrayList<Book> allBooks = db.getAllBooks();
+        final int BOOKS_AT_ONCE = 3;
 
         for (int i = 0; i < THREADS; i++) {
             boolean remove = rnd.nextInt(3) > 0; // remove with 1 third prop
@@ -38,11 +40,10 @@ public class BookActivityTest extends ActivityInstrumentationTestCase2<BookActiv
                     public void run() {
                         lock.lock();
 
-                        for (int i = 0; i < 10; i++) {
-                            ArrayList<Book> allBooks = baseApplication.getAllBooks();
+                        for (int i = 0; i < BOOKS_AT_ONCE; i++) {
                             if (allBooks.size() > 0) {
                                 Book book = allBooks.get(rnd.nextInt(allBooks.size()));
-                                baseApplication.deleteBook(book);
+                                db.deleteBook(book);
                             }
                         }
 
@@ -56,8 +57,8 @@ public class BookActivityTest extends ActivityInstrumentationTestCase2<BookActiv
                     public void run() {
                         lock.lock();
 
-                        for (int i = 0; i < 10; i++) {
-                            baseApplication.addBook(randomBook());
+                        for (int i = 0; i < BOOKS_AT_ONCE; i++) {
+                            db.addBook(randomBook());
                         }
 
                         lock.unlock();

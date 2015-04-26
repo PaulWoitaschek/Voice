@@ -18,9 +18,10 @@ import java.text.DecimalFormat;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
+import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.ThemeUtil;
-import de.ph1b.audiobook.utils.BaseApplication;
+import de.ph1b.audiobook.utils.PrefsManager;
 
 public class PlaybackSpeedDialogFragment extends DialogFragment {
 
@@ -43,8 +44,8 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
         final TextView textView = (TextView) v.findViewById(R.id.textView);
 
         // setting current speed
-        BaseApplication baseApplication = (BaseApplication) getActivity().getApplication();
-        Book book = baseApplication.getCurrentBook();
+        final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
+        final Book book = db.getBook(new PrefsManager(getActivity()).getCurrentBookId());
         if (book == null) {
             throw new AssertionError("Cannot instantiate " + TAG + " without a current book");
         }
@@ -89,6 +90,8 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         new ServiceController(getActivity()).setPlaybackSpeed(speed);
+                        book.setPlaybackSpeed(speed);
+                        db.updateBook(book);
                     }
                 })
                 .build();
