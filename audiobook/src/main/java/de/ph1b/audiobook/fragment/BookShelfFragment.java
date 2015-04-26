@@ -350,18 +350,13 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     private void toggleRecyclerVisibilities() {
         L.v(TAG, "toggleRecyclerVisibilities");
         final boolean hideRecycler = adapter.getItemCount() == 0 && BookAdder.scannerActive;
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (hideRecycler) {
-                    recyclerReplacementView.setVisibility(View.VISIBLE);
-                    recyclerView.setVisibility(View.GONE);
-                } else {
-                    recyclerReplacementView.setVisibility(View.GONE);
-                    recyclerView.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+        if (hideRecycler) {
+            recyclerReplacementView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            recyclerReplacementView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
