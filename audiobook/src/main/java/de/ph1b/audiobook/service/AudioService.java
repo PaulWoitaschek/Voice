@@ -161,6 +161,10 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     };
     private DataBaseHelper db;
     private LocalBroadcastManager bcm;
+    /**
+     * The last path the {@link #updateRemoteControlClient()} has used to update the metadata.
+     */
+    private volatile String lastPathForUpdatingRemoteControlClient = "";
 
     @Override
     public void onCreate() {
@@ -456,32 +460,35 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
             public void run() {
                 L.d(TAG, "updateRemoteControlClient called");
                 Book book = controller.getBook();
-                Bitmap bitmap = null;
-                File coverFile = book.getCoverFile();
-                if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-                    try {
-                        bitmap = Picasso.with(AudioService.this).load(coverFile).get();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                if (!lastPathForUpdatingRemoteControlClient.equals(book.getCurrentMediaPath())) {
+                    Bitmap bitmap = null;
+                    File coverFile = book.getCoverFile();
+                    if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
+                        try {
+                            bitmap = Picasso.with(AudioService.this).load(coverFile).get();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-                if (bitmap == null) {
-                    Drawable replacement = new CoverReplacement(
-                            book.getName(),
-                            AudioService.this);
-                    L.d(TAG, "replacement dimen: " + replacement.getIntrinsicWidth() + ":" + replacement.getIntrinsicHeight());
-                    bitmap = ImageHelper.drawableToBitmap(
-                            replacement,
-                            ImageHelper.getSmallerScreenSize(AudioService.this),
-                            ImageHelper.getSmallerScreenSize(AudioService.this));
-                }
+                    if (bitmap == null) {
+                        Drawable replacement = new CoverReplacement(
+                                book.getName(),
+                                AudioService.this);
+                        L.d(TAG, "replacement dimen: " + replacement.getIntrinsicWidth() + ":" + replacement.getIntrinsicHeight());
+                        bitmap = ImageHelper.drawableToBitmap(
+                                replacement,
+                                ImageHelper.getSmallerScreenSize(AudioService.this),
+                                ImageHelper.getSmallerScreenSize(AudioService.this));
+                    }
 
-                Chapter c = book.getCurrentChapter();
-                //noinspection deprecation
-                remoteControlClient.editMetadata(true).putString(MediaMetadataRetriever.METADATA_KEY_TITLE, c.getName())
-                        .putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName())
-                        .putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bitmap.copy(bitmap.getConfig(), true))
-                        .apply();
+                    Chapter c = book.getCurrentChapter();
+                    //noinspection deprecation
+                    remoteControlClient.editMetadata(true).putString(MediaMetadataRetriever.METADATA_KEY_TITLE, c.getName())
+                            .putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName())
+                            .putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bitmap.copy(bitmap.getConfig(), true))
+                            .apply();
+                    lastPathForUpdatingRemoteControlClient = book.getCurrentMediaPath();
+                }
             }
         });
     }
