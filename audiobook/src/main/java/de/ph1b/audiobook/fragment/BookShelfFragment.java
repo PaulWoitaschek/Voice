@@ -134,8 +134,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         public void onReceive(Context context, Intent intent) {
             fab.setVisibility(View.VISIBLE);
             long oldId = intent.getLongExtra(Communication.CURRENT_BOOK_CHANGED_OLD_ID, -1);
-            if (oldId == -1)
-                throw new IllegalArgumentException("Intent sent without CURRENT_BOOK_CHANGED_OLD_ID");
             for (int i = 0; i < adapter.getItemCount(); i++) {
                 long itemId = adapter.getItemId(i);
                 if (itemId == oldId || itemId == prefs.getCurrentBookId())
