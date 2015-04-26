@@ -39,6 +39,7 @@ import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.ListIterator;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.FolderOverviewActivity;
@@ -77,6 +78,17 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
             // new books
             ArrayList<Book> newBooks = db.getAllBooks();
+
+            // find books to update
+            ListIterator<Book> bookListIterator = oldBooks.listIterator();
+            while (bookListIterator.hasNext()) {
+                Book oldB = bookListIterator.next();
+                for (Book newB : newBooks) {
+                    if (oldB.getId() == newB.getId()) {
+                        bookListIterator.set(newB);
+                    }
+                }
+            }
 
             // find books to delete
             ArrayList<Book> booksToDelete = new ArrayList<>();
