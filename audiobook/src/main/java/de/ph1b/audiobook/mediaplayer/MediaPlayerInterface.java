@@ -8,6 +8,8 @@ import java.io.IOException;
 
 interface MediaPlayerInterface {
 
+    public void release();
+
     public void start();
 
     public void reset();

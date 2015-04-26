@@ -277,6 +277,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     public void onDestroy() {
         L.v(TAG, "onDestroy called");
         controller.stop();
+        controller.onDestroy();
 
         bcm.unregisterReceiver(onBookSetChanged);
         bcm.unregisterReceiver(onCurrentBookChanged);

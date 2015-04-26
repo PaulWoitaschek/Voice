@@ -349,6 +349,12 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
         }
     }
 
+    @Override
+    public void release() {
+        reset();
+        state = State.END;
+    }
+
     private void decode() {
         L.d(TAG, "decode called ins state=" + state);
         decoderRunnable = new Runnable() {

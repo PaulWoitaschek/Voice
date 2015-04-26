@@ -1,11 +1,14 @@
 package de.ph1b.audiobook.mediaplayer;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.PowerManager;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 
 import net.jcip.annotations.GuardedBy;
 
@@ -42,7 +45,14 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
     @GuardedBy("lock")
     private final MediaPlayerInterface player;
+    private final LocalBroadcastManager bcm;
     private Book book;
+    private final BroadcastReceiver onBookSetChanged = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            book = db.getBook(prefs.getCurrentBookId());
+        }
+    };
     private volatile State state;
     private ScheduledFuture<?> sleepSand;
     private volatile boolean stopAfterCurrentTrack = false;
@@ -55,6 +65,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
             this.c = c;
             prefs = new PrefsManager(c);
             db = DataBaseHelper.getInstance(c);
+            bcm = LocalBroadcastManager.getInstance(c);
 
             if (playerCanSetSpeed) {
                 player = new CustomMediaPlayer();
@@ -63,6 +74,8 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
             }
             state = State.IDLE;
             setPlayState(c, PlayState.STOPPED);
+
+            bcm.registerReceiver(onBookSetChanged, new IntentFilter(Communication.BOOK_SET_CHANGED));
         } finally {
             lock.unlock();
         }
@@ -260,7 +273,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     }
 
     /**
-     * Releases the controller. After this, this object should no longer be used.
+     * Stops the playback and releases some resources.
      */
     public void stop() {
         lock.lock();
@@ -285,7 +298,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
             updater.cancel(true);
         }
     }
-
 
     /**
      * @return true if a sleep timer has been set.
@@ -489,12 +501,19 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         }
     }
 
+    /**
+     * After this this object should no longer be used.
+     */
+    public void onDestroy() {
+        bcm.unregisterReceiver(onBookSetChanged);
+        player.release();
+    }
+
     public enum PlayState {
         PLAYING,
         PAUSED,
         STOPPED,
     }
-
 
     /**
      * The direction to skip.
