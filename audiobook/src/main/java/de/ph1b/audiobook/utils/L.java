@@ -2,6 +2,8 @@ package de.ph1b.audiobook.utils;
 
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import de.ph1b.audiobook.BuildConfig;
 
 @SuppressWarnings("SameParameterValue")
@@ -9,41 +11,64 @@ public class L {
 
     public static void d(String tag, Object msg) {
         if (BuildConfig.DEBUG) {
-            Log.d(tag, getMessage(msg));
+            for (String s : getMessage(msg)) {
+                Log.d(tag, s);
+            }
         }
     }
 
-    private static String getMessage(Object msg) {
-        if (msg == null) {
-            return "null";
-        } else if (msg.equals("")) {
-            return "empty";
-        } else {
-            return String.valueOf(msg);
+    public static void d(String tag, Object msg, Throwable t) {
+        if (BuildConfig.DEBUG) {
+            for (String s : getMessage(msg))
+                Log.d(tag, s, t);
         }
+    }
+
+    private static ArrayList<String> getMessage(Object msg) {
+        ArrayList<String> split = new ArrayList<>();
+        if (msg == null) {
+            split.add("null");
+        } else if (msg.equals("")) {
+            split.add("empty");
+            return split;
+        } else {
+            String fullMsg = String.valueOf(msg);
+            for (int i = 0; i < fullMsg.length(); i += 4000) {
+                split.add(fullMsg.substring(i, Math.min(fullMsg.length(), i + 4000)));
+            }
+            return split;
+        }
+        return split;
     }
 
     public static void e(String tag, Object msg) {
         if (BuildConfig.DEBUG) {
-            Log.e(tag, getMessage(msg));
+            for (String s : getMessage(msg)) {
+                Log.e(tag, s);
+            }
         }
     }
 
     public static void e(String tag, Object msg, Throwable tr) {
         if (BuildConfig.DEBUG) {
-            Log.e(tag, getMessage(msg), tr);
+            for (String s : getMessage(msg)) {
+                Log.e(tag, s, tr);
+            }
         }
     }
 
     public static void i(String tag, Object msg) {
         if (BuildConfig.DEBUG) {
-            Log.i(tag, getMessage(msg));
+            for (String s : getMessage(msg))
+                Log.i(tag, s);
         }
     }
 
     public static void v(String tag, Object msg) {
         if (BuildConfig.DEBUG) {
-            Log.v(tag, getMessage(msg));
+            for (String s : getMessage(msg)) {
+                Log.v(tag, s);
+            }
         }
     }
 }

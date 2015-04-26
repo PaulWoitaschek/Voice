@@ -1,9 +1,12 @@
 package de.ph1b.audiobook.model;
 
+import java.io.File;
+import java.util.Comparator;
 
-class NaturalComparator {
 
-    static int compare(String lhs, String rhs) {
+public class NaturalOrderComparator implements Comparator<Object> {
+
+    static int naturalCompare(String lhs, String rhs) {
         int ia = 0, ib = 0;
         int nza, nzb;
         char ca, cb;
@@ -92,6 +95,40 @@ class NaturalComparator {
             } else if (ca == 0 && cb == 0) {
                 return bias;
             }
+        }
+    }
+
+    @Override
+    public int compare(Object lhs, Object rhs) {
+        if (lhs instanceof Chapter && rhs instanceof Chapter) {
+            Chapter a = (Chapter) lhs;
+            Chapter b = (Chapter) rhs;
+            return compare(new File(a.getPath()), b.getPath());
+        } else if (lhs instanceof File && rhs instanceof File) {
+            File a = (File) lhs;
+            File b = (File) rhs;
+            return naturalCompare(a, b);
+        } else if (lhs instanceof String && rhs instanceof String) {
+            String a = (String) lhs;
+            String b = (String) rhs;
+            return naturalCompare(a, b);
+        } else {
+            return naturalCompare(String.valueOf(lhs), String.valueOf(rhs));
+        }
+    }
+
+    private int naturalCompare(File lhs, File rhs) {
+        if (lhs.isDirectory() && !rhs.isDirectory()) {
+            // Directory before non-directory
+            return -1;
+        } else if (!lhs.isDirectory() && rhs.isDirectory()) {
+            // Non-directory after directory
+            return 1;
+        } else {
+            // Alphabetic order otherwise, ignoring Capital
+            String a = lhs.getName();
+            String b = rhs.getName();
+            return naturalCompare(a, b);
         }
     }
 }

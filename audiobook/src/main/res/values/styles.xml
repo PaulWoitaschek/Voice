@@ -49,8 +49,6 @@
 
         <item name="text_primary">@color/light_text_primary</item>
         <item name="text_secondary">@color/light_text_secondary</item>
-
-        <item name="button_color">@color/light_button_color</item>
     </style>
 
     <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
@@ -70,8 +68,7 @@
         <item name="colorAccentDark">@color/dark_accent_dark</item>
         <item name="android:imageButtonStyle">@style/DarkButtonStyle</item>
         <item name="theme_name">@string/pref_theme_dark</item>
-        <item name="android:navigationBarColor" tools:ignore="NewApi">@color/dark_primary_dark
-        </item>
+        <item name="android:navigationBarColor" tools:ignore="NewApi">@android:color/black</item>
 
         <!-- BookShelf -->
         <item name="progress_drawable">@drawable/dark_progress</item>
@@ -102,8 +99,6 @@
 
         <item name="text_primary">@color/dark_text_primary</item>
         <item name="text_secondary">@color/dark_text_secondary</item>
-
-        <item name="button_color">@color/dark_button_color</item>
     </style>
 
     <style name="DarkButtonStyle" parent="@android:style/Widget.ImageButton">

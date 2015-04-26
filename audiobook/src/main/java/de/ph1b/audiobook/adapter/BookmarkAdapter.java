@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
@@ -24,26 +23,23 @@ import de.ph1b.audiobook.model.Chapter;
 public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHolder> {
 
     @NonNull
-    private final ArrayList<Bookmark> bookmarks;
+    private final Book book;
     @NonNull
     private final OnOptionsMenuClickedListener listener;
-    @NonNull
-    private final Book book;
 
     public BookmarkAdapter(@NonNull Book book, @NonNull OnOptionsMenuClickedListener listener) {
         this.book = book;
         this.listener = listener;
-        this.bookmarks = book.getBookmarks();
     }
 
     public void removeItem(int position) {
-        bookmarks.remove(position);
+        book.getBookmarks().remove(position);
         notifyItemRemoved(position);
     }
 
     @NonNull
     public Bookmark getItem(int position) {
-        return bookmarks.get(position);
+        return book.getBookmarks().get(position);
     }
 
     @Override
@@ -55,13 +51,13 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Bookmark bookmark = bookmarks.get(position);
+        Bookmark bookmark = getItem(position);
         holder.title.setText(bookmark.getTitle());
 
         int size = book.getChapters().size();
         Chapter currentChapter = null;
         for (Chapter c : book.getChapters()) {
-            if (c.getPath().equals(bookmark.getPath())) {
+            if (c.getPath().equals(bookmark.getMediaPath())) {
                 currentChapter = c;
             }
         }
@@ -81,7 +77,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return bookmarks.size();
+        return book.getBookmarks().size();
     }
 
     @NonNull

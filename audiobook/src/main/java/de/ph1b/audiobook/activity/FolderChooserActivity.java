@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.FolderChooserAdapter;
-import de.ph1b.audiobook.model.NaturalFileComparator;
+import de.ph1b.audiobook.model.NaturalOrderComparator;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.BookAdder;
 import de.ph1b.audiobook.utils.L;
@@ -115,7 +115,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
                 paths.add(f);
             }
         }
-        Collections.sort(paths, new NaturalFileComparator());
+        Collections.sort(paths, new NaturalOrderComparator());
         return paths;
     }
 
@@ -272,7 +272,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         File[] containing = file.listFiles(BookAdder.folderAndMusicFilter);
         if (containing != null) {
             asList = new ArrayList<>(Arrays.asList(containing));
-            Collections.sort(asList, new NaturalFileComparator());
+            Collections.sort(asList, new NaturalOrderComparator());
         }
         return asList;
     }

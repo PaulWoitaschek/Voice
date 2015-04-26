@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -49,8 +49,7 @@ import de.ph1b.audiobook.utils.PrefsManager;
 
 
 public class BookPlayFragment extends Fragment implements View.OnClickListener,
-        BaseApplication.OnPlayStateChangedListener, BaseApplication.OnPositionChangedListener,
-        BaseApplication.OnSleepStateChangedListener {
+        BaseApplication.OnBooksChangedListener {
 
 
     public static final String TAG = BookPlayFragment.class.getSimpleName();
@@ -81,11 +80,13 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener,
 
         //setup actionbar
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        ActionBarActivity actionBarActivity = (ActionBarActivity) getActivity();
-        actionBarActivity.setSupportActionBar(toolbar);
-        ActionBar actionBar = actionBarActivity.getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(book.getName());
+        AppCompatActivity appCompatActivity = (AppCompatActivity) getActivity();
+        appCompatActivity.setSupportActionBar(toolbar);
+        ActionBar actionBar = appCompatActivity.getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(book.getName());
+        }
 
         setHasOptionsMenu(true);
 
@@ -232,6 +233,11 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
+    public void onBookDeleted(int position) {
+
+    }
+
+    @Override
     public void onPlayStateChanged(final BaseApplication.PlayState state) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -303,6 +309,9 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener,
                 return true;
             case R.id.action_sleep:
                 controller.toggleSleepSand();
+                if (prefs.setBookmarkOnSleepTimer() && !baseApplication.isSleepTimerActive()) {
+                    BookmarkDialogFragment.addBookmark(book, book.getCurrentChapter().getName(), getActivity());
+                }
                 return true;
             case R.id.action_time_lapse:
                 PlaybackSpeedDialogFragment dialog = new PlaybackSpeedDialogFragment();
@@ -335,18 +344,14 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener,
 
         setPlayState(baseApplication.getPlayState(), false);
 
-        baseApplication.addOnPlayStateChangedListener(this);
-        baseApplication.addOnPositionChangedListener(this);
-        baseApplication.addOnSleepStateChangedListener(this);
+        baseApplication.addOnBooksChangedListener(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
 
-        baseApplication.removeOnPlayStateChangedListener(this);
-        baseApplication.removeOnPositionChangedListener(this);
-        baseApplication.removeOnSleepStateChangedListener(this);
+        baseApplication.removeOnBooksChangedListener(this);
     }
 
     @Override
@@ -366,5 +371,25 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener,
                 }
             }
         });
+    }
+
+    @Override
+    public void onCurrentBookChanged(Book book) {
+
+    }
+
+    @Override
+    public void onBookAdded(int position) {
+
+    }
+
+    @Override
+    public void onScannerStateChanged(boolean active) {
+
+    }
+
+    @Override
+    public void onCoverChanged(int position) {
+
     }
 }

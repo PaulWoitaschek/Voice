@@ -18,12 +18,13 @@ public class CustomBackupAgent extends BackupAgentHelper {
         String trackToEnd = getString(R.string.pref_key_track_to_end);
         String theme = getString(R.string.pref_key_theme);
         String pauseOnCanDuck = getString(R.string.pref_key_pause_on_can_duck);
-        String acraEnable = "acra.enable";
+        String autoBugReportEnable = "acra.enable";
         String autoRewind = getString(R.string.pref_key_auto_rewind);
+        String bookmarkOnSleep = getString(R.string.pref_key_bookmark_on_sleep);
 
         SharedPreferencesBackupHelper helper = new SharedPreferencesBackupHelper(this,
-                resumeOnReplug, seekTime, sleepTime, trackToEnd, theme, pauseOnCanDuck, acraEnable,
-                autoRewind);
+                resumeOnReplug, seekTime, sleepTime, trackToEnd, theme, pauseOnCanDuck,
+                autoBugReportEnable, autoRewind, bookmarkOnSleep);
         addHelper(BACKUP_KEY, helper);
     }
 }

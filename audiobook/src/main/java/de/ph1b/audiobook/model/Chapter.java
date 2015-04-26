@@ -10,14 +10,16 @@ import de.ph1b.audiobook.utils.Validate;
 public class Chapter {
 
     private static final String TAG = Chapter.class.getSimpleName();
-
     @NonNull
     private final String path;
     private final int duration;
     @NonNull
     private final String name;
 
-    public Chapter(@NonNull String path, @NonNull String name, int duration) {
+    public Chapter(@NonNull String path,
+                   @NonNull String name,
+                   int duration) {
+
         new Validate().notNull(path, name)
                 .notEmpty(path, name);
         this.path = path;
@@ -33,9 +35,7 @@ public class Chapter {
 
         if (o instanceof Chapter) {
             Chapter that = (Chapter) o;
-            if (that.path.equals(this.path) && that.name.equals(this.name) && that.duration == this.duration) {
-                return true;
-            }
+            return this.path.equals(that.path) && this.name.equals(that.name) && this.duration == that.duration;
         }
         return false;
     }

@@ -3,40 +3,37 @@ package de.ph1b.audiobook.fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
-import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.squareup.picasso.Picasso;
 
+import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
+
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.CountDownLatch;
@@ -48,12 +45,10 @@ import de.ph1b.audiobook.adapter.BookShelfAdapter;
 import de.ph1b.audiobook.dialog.EditBookDialogFragment;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
-import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.uitools.PlayPauseDrawable;
-import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
@@ -61,27 +56,20 @@ import de.ph1b.audiobook.utils.PrefsManager;
 
 public class BookShelfFragment extends Fragment implements View.OnClickListener,
         EditBookDialogFragment.OnEditBookFinishedListener,
-        BaseApplication.OnBookAddedListener,
-        BaseApplication.OnBookDeletedListener,
-        BaseApplication.OnPlayStateChangedListener,
-        BaseApplication.OnPositionChangedListener,
-        BaseApplication.OnScannerStateChangedListener {
+        BaseApplication.OnBooksChangedListener {
 
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
     private static final String RECYCLER_VIEW_STATE = "recyclerViewState";
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
     private BookShelfAdapter adapter;
-    private ImageView widgetCover;
-    private TextView currentText;
-    private ViewGroup playerWidget;
     private PrefsManager prefs;
     private BaseApplication baseApplication;
     private ServiceController controller;
-    private ProgressBar progressBar;
     private MaterialDialog noFolderWarning;
     private RecyclerView recyclerView;
     private ProgressBar recyclerReplacementView;
+    private FloatingActionButton fab;
 
     @Nullable
     @Override
@@ -90,25 +78,20 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         View view = inflater.inflate(R.layout.fragment_book_shelf, container, false);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        ((ActionBarActivity) getActivity()).setSupportActionBar(toolbar);
-        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setTitle(this.getString(R.string.app_name));
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setTitle(this.getString(R.string.app_name));
+        }
 
         setHasOptionsMenu(true);
 
-        playerWidget = (ViewGroup) view.findViewById(R.id.current);
-        widgetCover = (ImageView) view.findViewById(R.id.current_cover);
-        currentText = (TextView) view.findViewById(R.id.current_text);
-        ImageButton currentPlaying = (ImageButton) view.findViewById(R.id.current_playing);
-        progressBar = (ProgressBar) view.findViewById(R.id.progress);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerReplacementView = (ProgressBar) view.findViewById(R.id.recyclerReplacement);
-
-        playerWidget.setOnClickListener(this);
-        playPauseDrawable.setColor(getResources().getColor(ThemeUtil.getResourceId(getActivity(), R.attr.button_color)));
-        currentPlaying.setImageDrawable(playPauseDrawable);
-        currentPlaying.setOnClickListener(this);
+        fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.setIconDrawable(playPauseDrawable);
+        fab.setOnClickListener(this);
         BookShelfAdapter.OnItemClickListener onClickListener =
                 new BookShelfAdapter.OnItemClickListener() {
                     @Override
@@ -151,7 +134,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getAmountOfColumns()));
-        adapter = new BookShelfAdapter(baseApplication.getAllBooks(), getActivity(),
+        adapter = new BookShelfAdapter(baseApplication.getAllBooks(), baseApplication,
                 onClickListener);
         recyclerView.setAdapter(adapter);
 
@@ -159,8 +142,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             recyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState
                     .getParcelable(RECYCLER_VIEW_STATE));
         }
-
-        initPlayerWidget();
 
         return view;
     }
@@ -220,25 +201,21 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public void onResume() {
         super.onResume();
 
-        baseApplication.addOnPlayStateChangedListener(this);
-        baseApplication.addOnPositionChangedListener(this);
+        if (baseApplication.getCurrentBook() == null) {
+            fab.setVisibility(View.GONE);
+        } else {
+            fab.setVisibility(View.VISIBLE);
+        }
+        if (baseApplication.getPlayState() == BaseApplication.PlayState.PLAYING) {
+            playPauseDrawable.transformToPause(false);
+        } else {
+            playPauseDrawable.transformToPlay(false);
+        }
 
         adapter.notifyDataSetChanged();
 
-        baseApplication.addOnBookAddedListener(this);
-        baseApplication.addOnBookDeletedListener(this);
-
-        // Scanning for new files here in case there are changes on the drive.
-        baseApplication.addOnScannerStateChangedListener(this);
         baseApplication.scanForFiles(false);
 
-        if (baseApplication.getCurrentBook() == null) {
-            playerWidget.setVisibility(View.GONE);
-        } else {
-            playerWidget.setVisibility(View.VISIBLE);
-        }
-
-        initPlayerWidget();
         setPlayState(baseApplication.getPlayState(), false);
         onPositionChanged(true);
 
@@ -249,6 +226,9 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             noFolderWarning.show();
         }
         toggleRecyclerVisibilities(baseApplication.isScannerActive());
+
+        baseApplication.addOnBooksChangedListener(this);
+        adapter.registerListener();
     }
 
     @Override
@@ -261,72 +241,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         super.onSaveInstanceState(outState);
     }
 
-    private Bitmap picassoGetBlocking(final File file) {
-        final Bitmap[] bitmap = {null};
-        Runnable getter = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    bitmap[0] = Picasso.with(getActivity()).load(file).get();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                synchronized (this) {
-                    this.notify();
-                }
-
-            }
-        };
-        //noinspection SynchronizationOnLocalVariableOrMethodParameter
-        synchronized (getter) {
-            new Thread(getter).start();
-            try {
-                getter.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        return bitmap[0];
-    }
-
-    private void initPlayerWidget() {
-        Book book = baseApplication.getCurrentBook();
-        if (book != null) {
-            // cover
-            File coverFile = book.getCoverFile();
-            String bookName = book.getName();
-            Drawable coverReplacement = new CoverReplacement(bookName, getActivity());
-
-            Bitmap bitmap = null;
-            if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-                bitmap = picassoGetBlocking(coverFile);
-            }
-            if (bitmap == null) {
-                widgetCover.setImageDrawable(coverReplacement);
-            } else {
-                widgetCover.setImageBitmap(bitmap);
-            }
-
-            // text
-            currentText.setText(bookName);
-
-            // progress
-            ArrayList<Chapter> allChapters = book.getChapters();
-            Chapter currentChapter = book.getCurrentChapter();
-            float duration = 0;
-            float timeTillBeginOfCurrentChapter = 0;
-            for (Chapter c : allChapters) {
-                duration += c.getDuration();
-                if (allChapters.indexOf(c) < allChapters.indexOf(currentChapter)) {
-                    timeTillBeginOfCurrentChapter += c.getDuration();
-                }
-            }
-            int progress = Math.round((timeTillBeginOfCurrentChapter + book.getTime()) * 1000
-                    / duration);
-            progressBar.setProgress(progress);
-        }
-
-    }
 
     private void setPlayState(BaseApplication.PlayState state, boolean animated) {
         if (state == BaseApplication.PlayState.PLAYING) {
@@ -348,22 +262,33 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onPositionChanged(boolean positionChanged) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                initPlayerWidget();
-            }
-        });
+    }
+
+    @Override
+    public void onSleepStateChanged(boolean active) {
+
+    }
+
+    @Override
+    public void onCurrentBookChanged(Book book) {
+        fab.setVisibility(View.VISIBLE);
     }
 
     private void toggleRecyclerVisibilities(boolean scannerActive) {
-        if (baseApplication.getAllBooks().size() == 0 && scannerActive) {
-            recyclerReplacementView.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
-        } else {
-            recyclerReplacementView.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-        }
+        L.v(TAG, "toggleRecyclerVisibilities");
+        final boolean hideRecycler = adapter.getItemCount() == 0 && scannerActive;
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (hideRecycler) {
+                    recyclerReplacementView.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                } else {
+                    recyclerReplacementView.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     @Override
@@ -382,8 +307,8 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-    private void startBookPlay(View view) {
 
+    private void startBookPlay(View view) {
         ViewCompat.setTransitionName(view, getString(R.string.transition_cover));
         Fragment bookPlayFragment = new BookPlayFragment();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -394,42 +319,41 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             sharedElementEnterTransition.setDuration(enterTransitionDuration);
             bookPlayFragment.setSharedElementEnterTransition(sharedElementEnterTransition);
 
-            Transition enterTransition = new Slide(Gravity.TOP);
-            enterTransition.setDuration(enterTransitionDuration);
-            enterTransition.excludeTarget(R.id.toolbar, true);
-            enterTransition.excludeTarget(R.id.book_cover, true);
-            bookPlayFragment.setEnterTransition(enterTransition);
+            Transition fade = new Fade();
+            fade.setDuration(enterTransitionDuration);
+            fade.excludeTarget(R.id.toolbar, true);
+            fade.excludeTarget(R.id.book_cover, true);
 
-            int returnTransitionDuration = 400;
-
-            Transition sharedElementReturnTransition = new Fade();
-            sharedElementReturnTransition.setDuration(returnTransitionDuration);
-            bookPlayFragment.setSharedElementReturnTransition(sharedElementReturnTransition);
-
-            Transition returnTransition = new Fade();
-            returnTransition.setDuration(returnTransitionDuration);
-            returnTransition.excludeTarget(R.id.toolbar, true);
-            bookPlayFragment.setReturnTransition(returnTransition);
-            bookPlayFragment.setExitTransition(returnTransition);
-            setReturnTransition(returnTransition);
-            setReenterTransition(returnTransition);
+            bookPlayFragment.setEnterTransition(fade);
+            bookPlayFragment.setReturnTransition(null);
+            bookPlayFragment.setExitTransition(null);
+            setReturnTransition(null);
+            setReenterTransition(null);
         }
 
-        getFragmentManager().beginTransaction()
-                .replace(R.id.content, bookPlayFragment, BookPlayFragment.TAG)
-                .addToBackStack(null)
-                .addSharedElement(view, getString(R.string.transition_cover))
-                .commit();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.content, bookPlayFragment, BookPlayFragment.TAG)
+                .addSharedElement(fab, getString(R.string.transition_fab))
+                .addToBackStack(null);
+
+        /**
+         * Only use transition if we don't use a cover replacement. Else there is a bug so the
+         * replacement won't scale correctly.
+         */
+        Book currentBook = baseApplication.getCurrentBook();
+        boolean isRealCover = currentBook != null &&
+                (!currentBook.isUseCoverReplacement() && currentBook.getCoverFile().exists());
+        if (isRealCover)
+            ft.addSharedElement(view, getString(R.string.transition_cover));
+
+        ft.commit();
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.current_playing:
+            case R.id.fab:
                 controller.playPause();
-                break;
-            case R.id.current:
-                startBookPlay(widgetCover);
                 break;
             default:
                 break;
@@ -444,8 +368,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         int newIndex = baseApplication.getAllBooks().indexOf(book);
         adapter.notifyItemMoved(oldIndex, newIndex);
         adapter.notifyItemChanged(newIndex);
-
-        initPlayerWidget();
     }
 
     @Override
@@ -464,55 +386,54 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             e.printStackTrace();
         }
 
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                toggleRecyclerVisibilities(baseApplication.isScannerActive());
-            }
-        });
+        toggleRecyclerVisibilities(baseApplication.isScannerActive());
     }
 
     @Override
     public void onPause() {
         super.onPause();
 
-        baseApplication.removeOnBookAddedListener(this);
-        baseApplication.removeOnBookDeletedListener(this);
-        baseApplication.removeOnPlayStateChangedListener(this);
-        baseApplication.removeOnPositionChangedListener(this);
-        baseApplication.removeOnScannerStateChangedListener(this);
+        baseApplication.removeOnBooksChangedListener(this);
+        adapter.unregisterListener();
     }
 
     @Override
     public void onBookDeleted(final int position) {
+        L.v(TAG, "onBookDeleted started");
         final CountDownLatch latch = new CountDownLatch(1);
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                L.v(TAG, "onBookDeleted, notifying adapter about position=" + position);
                 adapter.notifyItemRemoved(position);
                 latch.countDown();
+                L.v(TAG, "onBookDeleted, counted down latch");
             }
         });
         try {
+            L.v(TAG, "onBookDeleted, wait for latch");
             latch.await();
+            L.v(TAG, "onBookDeleted, latch released");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                toggleRecyclerVisibilities(baseApplication.isScannerActive());
-            }
-        });
+        toggleRecyclerVisibilities(baseApplication.isScannerActive());
+        L.v(TAG, "onBookDeleted finished");
     }
 
     @Override
     public void onScannerStateChanged(final boolean active) {
+        toggleRecyclerVisibilities(active);
+    }
+
+    @Override
+    public void onCoverChanged(final int position) {
+        Picasso.with(getActivity()).invalidate(adapter.getItem(position).getCoverFile());
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                toggleRecyclerVisibilities(active);
+                adapter.notifyItemChanged(position);
             }
         });
     }

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
     <!-- BookShelf -->
-    <string name="current_cover">Shows cover of currently playing book.</string>
-    <string name="current_playing">Shows playing state.</string>
     <string name="mal_file_message">The following file may be corrupt:</string>
     <string name="mal_file_title">Defect file</string>
+    <string name="content_current_book">This is the current book</string>
     <!-- BookPlayActivity -->
     <string name="cover">Cover</string>
     <string name="play_pause">Play / Pause</string>
@@ -78,6 +77,8 @@
     <string name="pref_send_bugs_summary">Automatically sends anonymous reports about crashes to help development.</string>
     <string name="pref_auto_rewind_title">Auto rewind</string>
     <string name="pref_auto_rewind_summary">Automatically rewinds after manual pausing:</string>
+    <string name="pref_bookmark_on_sleep_title">Bookmark on sleep</string>
+    <string name="pref_bookmark_on_sleep_summary">Automatically sets a bookmark each time the sleep timer is set.</string>
     <!-- Misc -->
     <string name="popup_edit">Edit</string>
     <string name="remove">Remove</string>

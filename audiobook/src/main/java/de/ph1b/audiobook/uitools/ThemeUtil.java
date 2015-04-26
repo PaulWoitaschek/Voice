@@ -21,10 +21,10 @@ import de.ph1b.audiobook.R;
 public class ThemeUtil {
 
     public static void theme(SeekBar seekBar) {
-        if (Build.VERSION.SDK_INT < 21) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             int colorAccent = seekBar.getResources().getColor(ThemeUtil.getResourceId(seekBar.getContext(), R.attr.colorAccent));
             seekBar.getProgressDrawable().setColorFilter(colorAccent, PorterDuff.Mode.SRC_ATOP);
-            if (Build.VERSION.SDK_INT >= 16) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 seekBar.getThumb().setColorFilter(colorAccent, PorterDuff.Mode.SRC_ATOP);
             }
         }
@@ -59,7 +59,7 @@ public class ThemeUtil {
     }
 
     public static void theme(NumberPicker numberPicker) {
-        if (Build.VERSION.SDK_INT < 21) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             if (numberPicker != null) {
                 final int count = numberPicker.getChildCount();
                 for (int i = 0; i < count; i++) {

@@ -23,7 +23,7 @@
             android:defaultValue="true"
             android:key="@string/pref_key_resume_on_replug"
             android:summary="@string/pref_resume_on_replug_hint"
-            android:title="@string/pref_resume_on_replug" />´
+            android:title="@string/pref_resume_on_replug" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/pref_key_pause_on_can_duck"
@@ -35,6 +35,11 @@
         <de.ph1b.audiobook.dialog.SleepDialogPreference
             android:key="@string/pref_key_sleep_time"
             android:title="@string/pref_sleep_time" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/pref_key_bookmark_on_sleep"
+            android:summary="@string/pref_bookmark_on_sleep_summary"
+            android:title="@string/pref_bookmark_on_sleep_title" />
         <de.ph1b.audiobook.dialog.AutoRewindDialogPreference
             android:key="@string/pref_key_auto_rewind"
             android:title="@string/pref_auto_rewind_title" />

@@ -35,13 +35,7 @@ public class BaseApplication extends Application {
     private final ReentrantLock bookLock = new ReentrantLock();
     @GuardedBy("bookLock")
     private final ArrayList<Book> allBooks = new ArrayList<>();
-    private final CopyOnWriteArrayList<OnBookAddedListener> onBookAddedListeners = new CopyOnWriteArrayList<>();
-    private final CopyOnWriteArrayList<OnBookDeletedListener> onBookDeletedListeners = new CopyOnWriteArrayList<>();
-    private final CopyOnWriteArrayList<OnPositionChangedListener> onPositionChangedListeners = new CopyOnWriteArrayList<>();
-    private final CopyOnWriteArrayList<OnSleepStateChangedListener> onSleepStateChangedListeners = new CopyOnWriteArrayList<>();
-    private final CopyOnWriteArrayList<OnPlayStateChangedListener> onPlayStateChangedListeners = new CopyOnWriteArrayList<>();
-    private final CopyOnWriteArrayList<OnCurrentBookChangedListener> onCurrentBookChangedListeners = new CopyOnWriteArrayList<>();
-    private final CopyOnWriteArrayList<OnScannerStateChangedListener> onScannerStateChangedListeners = new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<OnBooksChangedListener> onBooksChangedListeners = new CopyOnWriteArrayList<>();
     private DataBaseHelper db;
     @GuardedBy("bookLock")
     private Book currentBook = null;
@@ -52,7 +46,9 @@ public class BaseApplication extends Application {
     private BookAdder bookAdder;
 
     public Book getBook(long id) {
+        L.v(TAG, "getBook acquiring lock");
         bookLock.lock();
+        L.v(TAG, "getBook acquired lock");
         try {
             for (Book b : allBooks) {
                 if (b.getId() == id) {
@@ -60,13 +56,10 @@ public class BaseApplication extends Application {
                 }
             }
         } finally {
+            L.v(TAG, "getBook released lock");
             bookLock.unlock();
         }
         throw new AssertionError("Get book with id=" + id + " did not find a book");
-    }
-
-    public void addOnScannerStateChangedListener(OnScannerStateChangedListener listener) {
-        onScannerStateChangedListeners.add(listener);
     }
 
     public boolean isScannerActive() {
@@ -75,36 +68,27 @@ public class BaseApplication extends Application {
 
     public void setScannerActive(boolean scannerActive) {
         this.scannerActive = scannerActive;
-        for (OnScannerStateChangedListener l : onScannerStateChangedListeners) {
+        for (OnBooksChangedListener l : onBooksChangedListeners) {
             l.onScannerStateChanged(scannerActive);
         }
     }
 
-    public void removeOnScannerStateChangedListener(OnScannerStateChangedListener listener) {
-        onScannerStateChangedListeners.remove(listener);
-    }
-
-    public void addOnBookAddedListener(OnBookAddedListener listener) {
-        onBookAddedListeners.add(listener);
-    }
-
     public void addBook(Book book) {
+        L.v(TAG, "addBook acquiring lock...");
         bookLock.lock();
+        L.v(TAG, "addBook acquired lock...");
         try {
             db.addBook(book);
             allBooks.add(book);
             Collections.sort(allBooks);
             int position = allBooks.indexOf(book);
-            for (OnBookAddedListener l : onBookAddedListeners) {
+            for (OnBooksChangedListener l : onBooksChangedListeners) {
                 l.onBookAdded(position);
             }
         } finally {
+            L.v(TAG, "addBook released lock...");
             bookLock.unlock();
         }
-    }
-
-    public void removeOnBookAddedListener(OnBookAddedListener listener) {
-        onBookAddedListeners.remove(listener);
     }
 
     public void scanForFiles(final boolean interrupting) {
@@ -118,24 +102,17 @@ public class BaseApplication extends Application {
     public void setPlayState(BaseApplication.PlayState playState) {
         L.v(TAG, "setPlayState to: " + playState);
         currentState = playState;
-        for (OnPlayStateChangedListener l : onPlayStateChangedListeners) {
+        for (OnBooksChangedListener l : onBooksChangedListeners) {
             l.onPlayStateChanged(currentState);
         }
         startService(new Intent(this, WidgetUpdateService.class));
-    }
-
-    public void addOnPlayStateChangedListener(OnPlayStateChangedListener onPlayStateChangedListener) {
-        onPlayStateChangedListeners.add(onPlayStateChangedListener);
-    }
-
-    public void removeOnPlayStateChangedListener(OnPlayStateChangedListener onPlayStateChangedListener) {
-        onPlayStateChangedListeners.remove(onPlayStateChangedListener);
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
 
+        //noinspection ConstantConditions,PointlessBooleanExpression
         if (!BuildConfig.DEBUG) {
             ACRA.init(this);
         }
@@ -145,34 +122,34 @@ public class BaseApplication extends Application {
         db = DataBaseHelper.getInstance(this);
         bookAdder = new BookAdder(this);
 
-        bookLock.lock();
-        try {
-            allBooks.addAll(db.getAllBooks());
-            for (Book b : allBooks) {
-                if (b.getId() == prefs.getCurrentBookId()) {
-                    currentBook = b;
-                    break;
-                }
+        allBooks.addAll(db.getAllBooks());
+        for (Book b : allBooks) {
+            if (b.getId() == prefs.getCurrentBookId()) {
+                currentBook = b;
+                break;
             }
-        } finally {
-            bookLock.unlock();
         }
 
         bookAdder.scanForFiles(true);
     }
 
     public ArrayList<Book> getAllBooks() {
+        L.v(TAG, "getAllBooks acquiring lock...");
         bookLock.lock();
+        L.v(TAG, "getAllBooks acquired lock...");
         try {
             return allBooks;
         } finally {
+            L.v(TAG, "getAllBooks releasing lock...");
             bookLock.unlock();
         }
     }
 
     @Nullable
     public Book getCurrentBook() {
+        L.v(TAG, "getCurrentBook acquiring lock");
         bookLock.lock();
+        L.v(TAG, "getCurrentBook acquired lock");
         try {
             if (currentBook == null) {
                 for (Book b : allBooks) {
@@ -186,64 +163,47 @@ public class BaseApplication extends Application {
             }
             return currentBook;
         } finally {
+            L.v(TAG, "getCurrentBook releasing lock");
             bookLock.unlock();
         }
     }
 
     public void setCurrentBook(Book book) {
+        L.v(TAG, "setCurrentBook acquiring lock");
         bookLock.lock();
+        L.v(TAG, "setCurrentBook acquired lock");
         try {
             if (this.currentBook != book) {
                 this.currentBook = book;
-                for (OnCurrentBookChangedListener l : onCurrentBookChangedListeners) {
+                for (OnBooksChangedListener l : onBooksChangedListeners) {
                     l.onCurrentBookChanged(currentBook);
                 }
             }
         } finally {
+            L.v(TAG, "setCurrentBook releasing lock");
             bookLock.unlock();
         }
     }
 
     public void deleteBook(Book book) {
+        L.v(TAG, "deleteBook acquiring lock");
         bookLock.lock();
+        L.v(TAG, "deleteBook acquired lock");
         try {
             db.deleteBook(book);
             int position = allBooks.indexOf(book);
             allBooks.remove(book);
-            for (OnBookDeletedListener l : onBookDeletedListeners) {
+            for (OnBooksChangedListener l : onBooksChangedListeners) {
                 l.onBookDeleted(position);
             }
         } finally {
+            L.v(TAG, "deleteBook releasing lock");
             bookLock.unlock();
         }
     }
 
-    public void addOnCurrentBookChangedListener(OnCurrentBookChangedListener listener) {
-        onCurrentBookChangedListeners.add(listener);
-    }
-
-    public void removeOnCurrentBookChangedListener(OnCurrentBookChangedListener listener) {
-        onCurrentBookChangedListeners.remove(listener);
-    }
-
-    public void addOnSleepStateChangedListener(OnSleepStateChangedListener listener) {
-        onSleepStateChangedListeners.add(listener);
-    }
-
-    public void removeOnSleepStateChangedListener(OnSleepStateChangedListener listener) {
-        onSleepStateChangedListeners.remove(listener);
-    }
-
-    public void addOnPositionChangedListener(OnPositionChangedListener listener) {
-        onPositionChangedListeners.add(listener);
-    }
-
-    public void removeOnPositionChangedListener(OnPositionChangedListener listener) {
-        onPositionChangedListeners.remove(listener);
-    }
-
     public void notifyPositionChanged(boolean fileChanged) {
-        for (OnPositionChangedListener l : onPositionChangedListeners) {
+        for (OnBooksChangedListener l : onBooksChangedListeners) {
             l.onPositionChanged(fileChanged);
         }
     }
@@ -254,17 +214,22 @@ public class BaseApplication extends Application {
 
     public void setSleepTimerActive(boolean active) {
         this.sleepTimerActive = active;
-        for (OnSleepStateChangedListener l : onSleepStateChangedListeners) {
+        for (OnBooksChangedListener l : onBooksChangedListeners) {
             l.onSleepStateChanged(active);
         }
     }
 
-    public void addOnBookDeletedListener(OnBookDeletedListener listener) {
-        onBookDeletedListeners.add(listener);
+    public void removeOnBooksChangedListener(OnBooksChangedListener listener) {
+        onBooksChangedListeners.remove(listener);
     }
 
-    public void removeOnBookDeletedListener(OnBookDeletedListener listener) {
-        onBookDeletedListeners.remove(listener);
+    public void addOnBooksChangedListener(OnBooksChangedListener listener) {
+        onBooksChangedListeners.add(listener);
+    }
+
+    public void onCoverChanged(Book book) {
+        for (OnBooksChangedListener l : onBooksChangedListeners)
+            l.onCoverChanged(allBooks.indexOf(book));
     }
 
     public enum PlayState {
@@ -273,31 +238,22 @@ public class BaseApplication extends Application {
         STOPPED,
     }
 
-    public interface OnScannerStateChangedListener {
-        public void onScannerStateChanged(boolean active);
-    }
 
-    public interface OnBookAddedListener {
-        public void onBookAdded(int position);
-    }
+    public interface OnBooksChangedListener {
+        void onBookDeleted(int position);
 
-    public interface OnCurrentBookChangedListener {
-        public void onCurrentBookChanged(Book book);
-    }
+        void onPlayStateChanged(PlayState state);
 
-    public interface OnSleepStateChangedListener {
-        public void onSleepStateChanged(boolean active);
-    }
+        void onPositionChanged(boolean fileChanged);
 
-    public interface OnPositionChangedListener {
-        public void onPositionChanged(boolean fileChanged);
-    }
+        void onSleepStateChanged(boolean active);
 
-    public interface OnPlayStateChangedListener {
-        public void onPlayStateChanged(PlayState state);
-    }
+        void onCurrentBookChanged(Book book);
 
-    public interface OnBookDeletedListener {
-        public void onBookDeleted(int position);
+        void onBookAdded(int position);
+
+        void onScannerStateChanged(boolean active);
+
+        void onCoverChanged(int position);
     }
 }

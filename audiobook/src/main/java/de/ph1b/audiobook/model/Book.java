@@ -1,5 +1,7 @@
 package de.ph1b.audiobook.model;
 
+import android.content.Context;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -11,120 +13,87 @@ import de.ph1b.audiobook.utils.Validate;
 
 public class Book implements Comparable<Book> {
 
-    public static final int ID_UNKNOWN = -1;
-    private long id = ID_UNKNOWN;
     public static final String TAG = Book.class.getSimpleName();
-    private static final String IMAGE_EXTENSION = ".jpg";
-    private static final String FILE_EXTENSION = "-map.json";
-    private static final String BACKUP_SUFFIX = ".backup";
+    private static final long ID_UNKNOWN = -1;
+    private long id = ID_UNKNOWN;
     @NonNull
     private final String root;
     @NonNull
     private final ArrayList<Chapter> chapters;
     @NonNull
-    private final ArrayList<Bookmark> bookmarks;
     private final Type type;
+    @NonNull
+    private final String packageName;
+    @NonNull
+    private final ArrayList<Bookmark> bookmarks;
     @NonNull
     private String name;
     private int time = 0;
-    private float playbackSpeed = 1;
+    private float playbackSpeed = 1.0f;
     @NonNull
-    private String relativeMediaPath;
-    private boolean useCoverReplacement;
+    private String currentMediaPath;
+    private boolean useCoverReplacement = false;
 
     public Book(@NonNull String root,
                 @NonNull String name,
                 @NonNull ArrayList<Chapter> chapters,
+                @NonNull
+                String currentMediaPath,
+                @NonNull Type type,
                 @NonNull ArrayList<Bookmark> bookmarks,
-                float playbackSpeed,
-                long id,
-                int time,
-                @NonNull String relativeMediaPath,
-                boolean useCoverReplacement,
-                @NonNull Type type) {
-        new Validate().notNull(root, name, chapters, bookmarks, relativeMediaPath, type)
-                .notEmpty(root, name, relativeMediaPath)
+                @NonNull Context c) {
+        new Validate().notNull(root, name, chapters, currentMediaPath, type)
+                .notEmpty(root, name)
                 .notEmpty(chapters);
 
-        //check if bookmark exists
-        for (Bookmark b : bookmarks) {
-            boolean bookmarkExists = false;
-            for (Chapter c : chapters) {
-                if (b.getPath().equals(c.getPath())) {
-                    bookmarkExists = true;
-                    break;
-                }
-            }
-            if (!bookmarkExists) {
-                throw new IllegalArgumentException("Cannot add bookmark=" + b + " because it is not " +
-                        "in chapters=" + chapters);
-            }
-        }
-
-        this.bookmarks = bookmarks;
-        this.playbackSpeed = playbackSpeed;
         this.root = root;
         this.name = name;
         this.chapters = chapters;
-        this.id = id;
-        this.useCoverReplacement = useCoverReplacement;
         this.type = type;
-        setPosition(time, relativeMediaPath);
+        this.bookmarks = bookmarks;
+        this.packageName = c.getPackageName();
+        setPosition(0, currentMediaPath);
     }
 
     @NonNull
-    public static File getCoverFile(@NonNull String root, @NonNull ArrayList<Chapter> chapters) {
-        if (chapters.size() == 1) {
-            String fileName = "." + chapters.get(0).getName() + IMAGE_EXTENSION;
-            return new File(root, fileName);
-        } else {
-            String fileName = "." + (new File(root).getName()) + IMAGE_EXTENSION;
-            return new File(root, fileName);
+    public ArrayList<Bookmark> getBookmarks() {
+        return bookmarks;
+    }
+
+
+    @NonNull
+    public File getCoverFile() {
+        File coverFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
+                File.separator + "Android" + File.separator + "data" + File.separator + packageName,
+                id + ".jpg");
+        if (!coverFile.getParentFile().exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            coverFile.getParentFile().mkdirs();
         }
+        return coverFile;
     }
 
     @NonNull
-    public static File getConfigFile(@NonNull String root, @NonNull ArrayList<Chapter> chapters,
-                                     @NonNull Type type) {
-        switch (type) {
-            case COLLECTION_FILE:
-            case SINGLE_FILE:
-                return new File(root, "." + chapters.get(0).getName() + FILE_EXTENSION);
-            case COLLECTION_FOLDER:
-            case SINGLE_FOLDER:
-                return new File(root, "." + (new File(root).getName()) + FILE_EXTENSION);
-        }
-        throw new IllegalArgumentException("Wrong type=" + type);
-    }
-
-    @NonNull
-    public static File getBackupFile(@NonNull String root, @NonNull ArrayList<Chapter> chapters,
-                                     @NonNull Type type) {
-        return new File(getConfigFile(root, chapters, type).getAbsolutePath() + BACKUP_SUFFIX);
-    }
-
     public Type getType() {
         return type;
     }
 
-    public void setPosition(int time, @NonNull String relativeMediaPath) {
-        new Validate().notNull(relativeMediaPath)
-                .notEmpty(relativeMediaPath);
+    public void setPosition(int time, @NonNull String currentMediaPath) {
 
         boolean relativeMediaPathExists = false;
         for (Chapter c : chapters) {
-            if (c.getPath().equals(relativeMediaPath)) {
+            if (c.getPath().equals(currentMediaPath)) {
                 relativeMediaPathExists = true;
             }
         }
         if (!relativeMediaPathExists) {
             throw new IllegalArgumentException("Creating book with name=" + name +
-                    " failed because relativeMediaPath=" + relativeMediaPath +
+                    " failed because currentMediaPath=" + currentMediaPath +
                     " does not exist in chapters");
         }
 
         this.time = time;
-        this.relativeMediaPath = relativeMediaPath;
+        this.currentMediaPath = currentMediaPath;
     }
 
     public boolean isUseCoverReplacement() {
@@ -146,19 +115,17 @@ public class Book implements Comparable<Book> {
 
             if (!(this.root.equals(that.root))) return false;
 
-            boolean chaptersE = true;
             if (this.chapters.size() != that.chapters.size()) {
-                chaptersE = false;
+                return false;
             } else {
                 for (int i = 0; i < this.chapters.size(); i++) {
                     if (!this.chapters.get(i).equals(that.chapters.get(i))) {
-                        chaptersE = false;
-                        break;
+                        return false;
                     }
                 }
             }
 
-            return this.type == that.type && chaptersE;
+            return this.type == that.type;
 
         }
         return false;
@@ -178,20 +145,20 @@ public class Book implements Comparable<Book> {
     public String toString() {
         return TAG + "[" +
                 "root=" + root +
-                ",chapters=" + chapters +
-                ",bookmarks=" + bookmarks +
-                ",id=" + id + ", " +
-                ",name=" + name +
-                ",time=" + time +
-                ",playbackSpeed=" + playbackSpeed +
-                ",relativeMediaPath=" + relativeMediaPath +
-                ",useCoverReplacement=" + useCoverReplacement +
+                ", type=" + type +
+                ", id=" + id + ", " +
+                ", name=" + name +
+                ", time=" + time +
+                ", playbackSpeed=" + playbackSpeed +
+                ", currentMediaPath=" + currentMediaPath +
+                ", useCoverReplacement=" + useCoverReplacement +
+                ", chapters=" + chapters +
                 "]";
     }
 
     @NonNull
-    public String getRelativeMediaPath() {
-        return relativeMediaPath;
+    public String getCurrentMediaPath() {
+        return currentMediaPath;
     }
 
     @Nullable
@@ -206,12 +173,12 @@ public class Book implements Comparable<Book> {
     @NonNull
     public Chapter getCurrentChapter() {
         for (Chapter c : chapters) {
-            if (c.getPath().equals(relativeMediaPath)) {
+            if (c.getPath().equals(currentMediaPath)) {
                 return c;
             }
         }
-        throw new IllegalArgumentException("getCurrentChapter has no valid path with" +
-                " relativeMediaPath=" + relativeMediaPath);
+        throw new IllegalArgumentException("getCurrentChapter has no valid id with" +
+                " currentMediaPath=" + currentMediaPath);
     }
 
     @Nullable
@@ -238,11 +205,6 @@ public class Book implements Comparable<Book> {
         this.name = name;
     }
 
-    @NonNull
-    public File getCoverFile() {
-        return getCoverFile(root, chapters);
-    }
-
     public long getId() {
         return id;
     }
@@ -254,11 +216,6 @@ public class Book implements Comparable<Book> {
     @NonNull
     public ArrayList<Chapter> getChapters() {
         return chapters;
-    }
-
-    @NonNull
-    public ArrayList<Bookmark> getBookmarks() {
-        return bookmarks;
     }
 
     public float getPlaybackSpeed() {
@@ -276,7 +233,7 @@ public class Book implements Comparable<Book> {
 
     @Override
     public int compareTo(@NonNull Book that) {
-        return new NaturalStringComparator().compare(this.name, that.name);
+        return new NaturalOrderComparator().compare(this.name, that.name);
     }
 
     public enum Type {

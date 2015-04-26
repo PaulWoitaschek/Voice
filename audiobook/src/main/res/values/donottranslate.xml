@@ -15,5 +15,7 @@
         <item>dark</item>
     </string-array>
     <string name="pref_key_auto_rewind">AUTO_REWIND</string>
+    <string name="pref_key_bookmark_on_sleep">BOOKMARK_ON_SLEEP</string>
     <string name="transition_cover">coverTransition</string>
+    <string name="transition_fab">fabTransition</string>
 </resources>

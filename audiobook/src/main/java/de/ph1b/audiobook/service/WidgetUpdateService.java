@@ -35,23 +35,20 @@ import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.BaseApplication.PlayState;
+import de.ph1b.audiobook.utils.L;
 
 public class WidgetUpdateService extends Service implements
-        BaseApplication.OnPositionChangedListener, BaseApplication.OnCurrentBookChangedListener,
-        BaseApplication.OnPlayStateChangedListener {
+        BaseApplication.OnBooksChangedListener {
+    private static final String TAG = WidgetUpdateService.class.getSimpleName();
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private BaseApplication baseApplication;
-    private AppWidgetManager appWidgetManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         baseApplication = (BaseApplication) getApplication();
-        baseApplication.addOnPlayStateChangedListener(this);
-        baseApplication.addOnCurrentBookChangedListener(this);
-        baseApplication.addOnPositionChangedListener(this);
-        appWidgetManager = AppWidgetManager.getInstance(this);
+        baseApplication.addOnBooksChangedListener(this);
     }
 
     @Override
@@ -67,6 +64,7 @@ public class WidgetUpdateService extends Service implements
         executor.execute(new Runnable() {
             @Override
             public void run() {
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(WidgetUpdateService.this);
                 Book book = baseApplication.getCurrentBook();
                 boolean isPortrait = isPortrait();
                 int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(
@@ -77,7 +75,7 @@ public class WidgetUpdateService extends Service implements
 
                     if (book != null) {
                         initElements(remoteViews, book);
-                        if (Build.VERSION.SDK_INT >= 16) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                             Bundle opts = appWidgetManager.getAppWidgetOptions(widgetId);
                             int minHeight = dpToPx(opts.getInt(
                                     AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT));
@@ -144,7 +142,6 @@ public class WidgetUpdateService extends Service implements
                 (orientation == Configuration.ORIENTATION_PORTRAIT || displayWidth == displayHeight
                         || displayWidth < displayHeight);
     }
-
 
     /**
      * Initializes the elements of the widgets with a book
@@ -219,7 +216,6 @@ public class WidgetUpdateService extends Service implements
                 TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics()));
     }
 
-
     /**
      * Sets visibilities on widgets element, depending on the size of the widget
      *
@@ -233,7 +229,6 @@ public class WidgetUpdateService extends Service implements
         setXVisibility(remoteViews, width, height);
         setYVisibility(remoteViews, height, singleChapter);
     }
-
 
     /**
      * Set visibilities dependent on widget width.
@@ -271,7 +266,6 @@ public class WidgetUpdateService extends Service implements
         }
     }
 
-
     /**
      * Sets visibilities dependent on widget height.
      *
@@ -307,9 +301,7 @@ public class WidgetUpdateService extends Service implements
     public void onDestroy() {
         super.onDestroy();
 
-        baseApplication.removeOnPlayStateChangedListener(this);
-        baseApplication.removeOnCurrentBookChangedListener(this);
-        baseApplication.removeOnPositionChangedListener(this);
+        baseApplication.removeOnBooksChangedListener(this);
         executor.shutdown();
     }
 
@@ -334,8 +326,35 @@ public class WidgetUpdateService extends Service implements
     }
 
     @Override
+    public void onSleepStateChanged(boolean active) {
+
+    }
+
+    @Override
     public void onCurrentBookChanged(final Book book) {
+        L.v(TAG, "onCurrentBookChanged called");
         updateWidget();
+        L.v(TAG, "onCurrentBookChanged done");
+    }
+
+    @Override
+    public void onBookAdded(int position) {
+
+    }
+
+    @Override
+    public void onScannerStateChanged(boolean active) {
+
+    }
+
+    @Override
+    public void onCoverChanged(int position) {
+
+    }
+
+    @Override
+    public void onBookDeleted(int position) {
+
     }
 
     @Override

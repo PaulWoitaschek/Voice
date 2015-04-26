@@ -1,3 +1,34 @@
+# v2.1.3 Details
+
+## Additions
+* Added setting to set a bookmark on sleep timer
+* Bookmark icon on higher priority
+* Replaced miniplayer widget with fab
+* Improved transitions
+* 
+## Fixes
+* Shows correct error message on corrupt files
+* Threading issues fixed
+* Crash on database upgrade fixed
+* Transition on Coverreplacement omitted
+
+# v2.1.2.1 Stability
+
+We cant store positions to internal storage since on Android 4.4 there is no permission to write to sd card.
+So we write back to db.
+
+## Additions
+* Added greek. Thanks to beonex (Wasilis Mandratzis-Walz)!
+* Added italian. Thanks to  Lurtz (Davide Andreotti)!
+* Minimized sound on rewind
+* On Lollipop: Dark navigation color on dark theme
+* Adds books by alphabet
+* Adds covers after books
+
+## Fixes
+* Dont hold listener to headset controls after we stopped
+* Threading issues fixed
+
 # v2.1.1 Fancy Pants
 
 ## Additions

@@ -58,7 +58,7 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
 
         int color = getResources().getColor(ThemeUtil.getResourceId(getActivity(), R.attr.colorAccent));
         seekBar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-        if (Build.VERSION.SDK_INT >= 16) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             seekBar.getThumb().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
         }
 

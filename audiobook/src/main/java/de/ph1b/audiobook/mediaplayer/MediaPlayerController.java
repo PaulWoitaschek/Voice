@@ -97,7 +97,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
             player.setWakeMode(c, PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE);
 
             try {
-                player.setDataSource(book.getRoot() + "/" + book.getCurrentChapter().getPath());
+                player.setDataSource(book.getCurrentChapter().getPath());
                 player.prepare();
                 player.seekTo(book.getTime());
                 player.setPlaybackSpeed(book.getPlaybackSpeed());
@@ -160,7 +160,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                 public void run() {
                     lock.lock();
                     try {
-                        book.setPosition(player.getCurrentPosition(), book.getRelativeMediaPath());
+                        book.setPosition(player.getCurrentPosition(), book.getCurrentMediaPath());
                         db.updateBook(book);
                         baseApplication.notifyPositionChanged(false);
                     } finally {
@@ -193,7 +193,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
             } else if (seekTo > duration) {
                 next();
             } else {
-                changePosition(seekTo, book.getRelativeMediaPath());
+                changePosition(seekTo, book.getCurrentMediaPath());
             }
         } finally {
             lock.unlock();
@@ -228,7 +228,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         try {
             if (player.getCurrentPosition() > 2000 || book.getPreviousChapter() == null) {
                 player.seekTo(0);
-                book.setPosition(0, book.getRelativeMediaPath());
+                book.setPosition(0, book.getCurrentMediaPath());
                 db.updateBook(book);
                 baseApplication.notifyPositionChanged(false);
             } else {
@@ -351,12 +351,14 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                     player.pause();
                     stopUpdating();
 
-                    int originalPosition = player.getCurrentPosition();
                     int autoRewind = prefs.getAutoRewindAmount() * 1000;
-                    int seekTo = originalPosition - autoRewind;
-                    if (seekTo < 0) seekTo = 0;
-                    book.setPosition(seekTo, book.getRelativeMediaPath());
-                    player.seekTo(seekTo);
+                    if (autoRewind != 0) {
+                        int originalPosition = player.getCurrentPosition();
+                        int seekTo = originalPosition - autoRewind;
+                        if (seekTo < 0) seekTo = 0;
+                        player.seekTo(seekTo);
+                        book.setPosition(seekTo, book.getCurrentMediaPath());
+                    }
                     db.updateBook(book);
                     baseApplication.notifyPositionChanged(false);
 
@@ -379,8 +381,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
             L.e(TAG, "onError");
             baseApplication.deleteBook(book);
             Intent bookShelfIntent = BookActivity.bookScreenIntent(c);
-            bookShelfIntent.putExtra(MALFORMED_FILE, book.getRoot() + "/" +
-                    book.getCurrentChapter().getPath());
+            bookShelfIntent.putExtra(MALFORMED_FILE, book.getCurrentChapter().getPath());
             c.startActivity(bookShelfIntent);
 
             state = State.DEAD;
@@ -433,19 +434,19 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
      * Changes the current position in book. If the path is the same, continues playing the song.
      * Else calls {@link #prepare()} to prepare the next file
      *
-     * @param time    The time in chapter at which to start
-     * @param relPath The relative path of the media to play (relative to the books root path)
+     * @param time The time in chapter at which to start
+     * @param path The path of the media to play (relative to the books root path)
      */
-    public void changePosition(int time, String relPath) {
+    public void changePosition(int time, String path) {
         final String TAG = MediaPlayerController.TAG + ":changePosition()";
         lock.lock();
         try {
-            L.v(TAG, "time=" + time + ", relPath=" + relPath);
-            boolean changeFile = (!book.getCurrentChapter().getPath().equals(relPath));
+            L.v(TAG, "time=" + time + ", relPath=" + path);
+            boolean changeFile = (!book.getCurrentChapter().getPath().equals(path));
             L.v(TAG, "changeFile=" + changeFile);
             if (changeFile) {
                 boolean wasPlaying = (state == State.STARTED);
-                book.setPosition(time, relPath);
+                book.setPosition(time, path);
                 db.updateBook(book);
                 prepare();
                 if (wasPlaying) {

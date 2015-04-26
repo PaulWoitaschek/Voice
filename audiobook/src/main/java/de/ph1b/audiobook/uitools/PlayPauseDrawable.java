@@ -76,6 +76,7 @@ public class PlayPauseDrawable extends Drawable {
     private float mProgress;
     private int mFromShape;
     private int mToShape;
+
     public PlayPauseDrawable() {
         this(VERTEX_PAUSE, VERTEX_PLAY);
     }
@@ -100,10 +101,12 @@ public class PlayPauseDrawable extends Drawable {
         transformToShape(1, animated);
     }
 
-    public void setColor(int color) {
-        mPaint.setColor(color);
-        invalidateSelf();
-    }
+    /**
+     * public void setColor(int color) {
+     * mPaint.setColor(color);
+     * invalidateSelf();
+     * }*
+     */
 
     private void transformToShape(int i, boolean animated) {
         if (mToShape == i) {

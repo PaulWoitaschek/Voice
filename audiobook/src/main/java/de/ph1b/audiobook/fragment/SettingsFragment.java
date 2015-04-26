@@ -7,7 +7,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
 import com.afollestad.materialdialogs.prefs.MaterialListPreference;
 
@@ -36,8 +36,10 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         super.onActivityCreated(savedInstanceState);
 
         addPreferencesFromResource(R.xml.preferences);
-        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
