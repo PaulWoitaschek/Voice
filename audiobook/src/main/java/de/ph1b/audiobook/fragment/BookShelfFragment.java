@@ -110,7 +110,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                 adapter.notifyItemInserted(allBooks.indexOf(bookToAdd));
             }
 
-            toggleRecyclerVisibilities();
+            checkVisibilities();
         }
     };
     private final BroadcastReceiver onCoverChanged = new BroadcastReceiver() {
@@ -132,13 +132,13 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     private final BroadcastReceiver onCurrentBookChanged = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            fab.setVisibility(View.VISIBLE);
             long oldId = intent.getLongExtra(Communication.CURRENT_BOOK_CHANGED_OLD_ID, -1);
             for (int i = 0; i < adapter.getItemCount(); i++) {
                 long itemId = adapter.getItemId(i);
                 if (itemId == oldId || itemId == prefs.getCurrentBookId())
                     adapter.notifyItemChanged(i);
             }
+            checkVisibilities();
         }
     };
     private final BroadcastReceiver onPlayStateChanged = new BroadcastReceiver() {
@@ -150,7 +150,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     private final BroadcastReceiver onScannerStateChanged = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            toggleRecyclerVisibilities();
+            checkVisibilities();
         }
     };
     private BookShelfAdapter adapter;
@@ -296,11 +296,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public void onResume() {
         super.onResume();
 
-        if (db.getBook(prefs.getCurrentBookId()) == null) {
-            fab.setVisibility(View.GONE);
-        } else {
-            fab.setVisibility(View.VISIBLE);
-        }
         if (MediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
             playPauseDrawable.transformToPause(false);
         } else {
@@ -320,7 +315,8 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         if (audioFoldersEmpty && !noFolderWarningIsShowing) {
             noFolderWarning.show();
         }
-        toggleRecyclerVisibilities();
+
+        checkVisibilities();
 
         bcm.registerReceiver(onBookSetChangedReceiver, new IntentFilter(Communication.BOOK_SET_CHANGED));
         bcm.registerReceiver(onCoverChanged, new IntentFilter(Communication.COVER_CHANGED));
@@ -347,8 +343,8 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-    private void toggleRecyclerVisibilities() {
-        L.v(TAG, "toggleRecyclerVisibilities");
+    private void checkVisibilities() {
+        L.v(TAG, "checkVisibilities");
         final boolean hideRecycler = adapter.getItemCount() == 0 && BookAdder.scannerActive;
         if (hideRecycler) {
             recyclerReplacementView.setVisibility(View.VISIBLE);
@@ -356,6 +352,18 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         } else {
             recyclerReplacementView.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
+        }
+
+        boolean currentBookExists = false;
+        for (Book b : allBooks) {
+            if (b.getId() == prefs.getCurrentBookId()) {
+                currentBookExists = true;
+            }
+        }
+        if (currentBookExists) {
+            fab.setVisibility(View.VISIBLE);
+        } else {
+            fab.setVisibility(View.GONE);
         }
     }
 
