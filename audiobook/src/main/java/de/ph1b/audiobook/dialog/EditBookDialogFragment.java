@@ -63,13 +63,7 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
     private final BroadcastReceiver onBookSetChanged = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ArrayList<Book> allBooks = db.getAllBooks();
-            for (Book b : allBooks) {
-                if (b.getId() == book.getId()) {
-                    book = b;
-                    break;
-                }
-            }
+            book = db.getBook(book.getId());
         }
     };
     private DataBaseHelper db;
