@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- BookShelf -->
-    <string name="current_cover">Відображати  обкладинку книги, яка зараз програється.</string>
-    <string name="current_playing">Відображати стан програвання.</string>
     <string name="mal_file_message">Цей файл може бути зіпсований:</string>
     <string name="mal_file_title">Зіпсований файл</string>
     <!-- BookPlayActivity -->
