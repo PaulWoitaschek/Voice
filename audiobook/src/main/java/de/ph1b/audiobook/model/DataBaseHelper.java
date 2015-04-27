@@ -55,6 +55,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     public synchronized void addBook(@NonNull Book book) {
+        L.v(TAG, "addBook=" + book.getName());
         ContentValues cv = new ContentValues();
         cv.put(BOOK_JSON, new Gson().toJson(book));
         long bookId = getWritableDatabase().insert(TABLE_BOOK, null, cv);
@@ -100,6 +101,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     public synchronized void updateBook(@NonNull Book bookToUpdate) {
+        L.v(TAG, "updateBook=" + bookToUpdate.getName());
         ContentValues cv = new ContentValues();
         cv.put(BOOK_JSON, new Gson().toJson(bookToUpdate));
         getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(bookToUpdate.getId())});
@@ -120,6 +122,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     public synchronized void deleteBook(@NonNull Book book) {
+        L.v(TAG, "deleteBook=" + book.getName());
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_BOOK, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
         File coverFile = book.getCoverFile();

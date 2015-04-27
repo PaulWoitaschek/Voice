@@ -350,6 +350,7 @@ public class BookAdder {
                 db.addBook(newBook);
             } else { //there is a book, so update it if necessary
 
+                boolean bookHasChanged = false;
                 ArrayList<Chapter> existingChapters = bookExisting.getChapters();
 
                 // 1. Delete chapters that have the same path, but a different duration
@@ -363,16 +364,21 @@ public class BookAdder {
                             deleteChapter = false;
                         }
                     }
-                    if (deleteChapter)
+                    if (deleteChapter) {
                         chapterIterator.remove();
+                        bookHasChanged = true;
+                    }
                 }
                 for (Chapter n : existingChapters) {
                     if (!existingChapters.contains(n)) {
                         existingChapters.add(n);
+                        bookHasChanged = true;
                     }
                 }
                 Collections.sort(existingChapters, new NaturalOrderComparator());
-                db.updateBook(bookExisting);
+                if (bookHasChanged) {
+                    db.updateBook(bookExisting);
+                }
             }
         }
     }
@@ -457,8 +463,7 @@ public class BookAdder {
                 }
 
                 if (duration > 0) {
-                    containingMedia.add(new Chapter(f.getAbsolutePath(), chapterName, duration
-                    ));
+                    containingMedia.add(new Chapter(f.getAbsolutePath(), chapterName, duration));
                 }
 
                 if (stopScanner) {

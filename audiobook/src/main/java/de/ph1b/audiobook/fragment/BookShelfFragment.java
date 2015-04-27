@@ -60,11 +60,10 @@ import de.ph1b.audiobook.utils.PrefsManager;
 public class BookShelfFragment extends Fragment implements View.OnClickListener {
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
-    private static final String RECYCLER_VIEW_STATE = "recyclerViewState";
-    private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
     private final BroadcastReceiver onBookSetChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            L.v(TAG, "onBookSetChanged called");
             adapter.newDataSet(db.getAllBooks());
             checkVisibilities();
         }
@@ -72,6 +71,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
     private final BroadcastReceiver onCoverChanged = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            L.v(TAG, "onCoverChanged called");
             long bookChangedId = intent.getLongExtra(Communication.COVER_CHANGED_BOOK_ID, -1);
             SortedList<Book> sortedList = adapter.getSortedList();
             for (int i = 0; i < sortedList.size(); i++) {
@@ -84,6 +84,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
     private final BroadcastReceiver onCurrentBookChanged = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            L.v(TAG, "onCurrentBookChanged called");
             long oldId = intent.getLongExtra(Communication.CURRENT_BOOK_CHANGED_OLD_ID, -1);
             for (int i = 0; i < adapter.getItemCount(); i++) {
                 long itemId = adapter.getItemId(i);
@@ -93,6 +94,8 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
             checkVisibilities();
         }
     };
+    private static final String RECYCLER_VIEW_STATE = "recyclerViewState";
+    private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
     private final BroadcastReceiver onPlayStateChanged = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -287,8 +290,8 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
     }
 
     private void checkVisibilities() {
-        L.v(TAG, "checkVisibilities");
         final boolean hideRecycler = adapter.getItemCount() == 0 && BookAdder.scannerActive;
+        L.v(TAG, "checkVisibilities hidesRecycler=" + hideRecycler);
         if (hideRecycler) {
             recyclerReplacementView.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
