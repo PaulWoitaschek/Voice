@@ -451,19 +451,8 @@ public class BookAdder {
                 } catch (RuntimeException ignored) {
                 }
 
-
-                // checking for dot index because otherwise a file called ".mp3" would have no name.
-                String fileName = f.getName();
-                int dotIndex = fileName.indexOf(".");
-                String chapterName;
-                if (dotIndex > 0) {
-                    chapterName = fileName.substring(0, dotIndex);
-                } else {
-                    chapterName = fileName;
-                }
-
                 if (duration > 0) {
-                    containingMedia.add(new Chapter(f.getAbsolutePath(), chapterName, duration));
+                    containingMedia.add(new Chapter(f.getAbsolutePath(), duration));
                 }
 
                 if (stopScanner) {

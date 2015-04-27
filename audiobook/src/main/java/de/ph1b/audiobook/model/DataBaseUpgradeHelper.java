@@ -212,8 +212,7 @@ class DataBaseUpgradeHelper {
 
                 ArrayList<Chapter> chapters = new ArrayList<>();
                 for (int i = 0; i < chapterPaths.size(); i++) {
-                    chapters.add(new Chapter(root + File.separator + chapterPaths.get(i),
-                            chapterNames.get(i), chapterDurations.get(i)));
+                    chapters.add(new Chapter(root + File.separator + chapterPaths.get(i), chapterDurations.get(i)));
                 }
 
                 ArrayList<Bookmark> bookmarks = new ArrayList<>();

@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import net.jcip.annotations.Immutable;
 
+import java.io.File;
+
 import de.ph1b.audiobook.utils.Validate;
 
 @Immutable
@@ -13,23 +15,18 @@ public class Chapter {
     @NonNull
     private final String path;
     private final int duration;
-    @NonNull
-    private final String name;
 
     public Chapter(Chapter that) {
         this.path = that.path;
         this.duration = that.duration;
-        this.name = that.name;
     }
 
     public Chapter(@NonNull String path,
-                   @NonNull String name,
                    int duration) {
 
-        new Validate().notNull(path, name)
-                .notEmpty(path, name);
+        new Validate().notNull(path)
+                .notEmpty(path);
         this.path = path;
-        this.name = name;
         this.duration = duration;
     }
 
@@ -41,7 +38,7 @@ public class Chapter {
 
         if (o instanceof Chapter) {
             Chapter that = (Chapter) o;
-            return this.path.equals(that.path) && this.name.equals(that.name) && this.duration == that.duration;
+            return this.path.equals(that.path) && this.duration == that.duration;
         }
         return false;
     }
@@ -51,7 +48,6 @@ public class Chapter {
         final int PRIME = 31;
         int result = PRIME + path.hashCode();
         result = PRIME * result + duration;
-        result = PRIME * result + name.hashCode();
         return result;
     }
 
@@ -60,13 +56,21 @@ public class Chapter {
         return TAG + "[" +
                 "path=" + path +
                 ",duration=" + duration +
-                ",name=" + name +
                 "]";
     }
 
     @NonNull
     public String getName() {
-        return name;
+        // checking for dot index because otherwise a file called ".mp3" would have no name.
+        String fileName = new File(path).getName();
+        int dotIndex = fileName.indexOf(".");
+        String chapterName;
+        if (dotIndex > 0) {
+            chapterName = fileName.substring(0, dotIndex);
+        } else {
+            chapterName = fileName;
+        }
+        return chapterName;
     }
 
     public int getDuration() {
