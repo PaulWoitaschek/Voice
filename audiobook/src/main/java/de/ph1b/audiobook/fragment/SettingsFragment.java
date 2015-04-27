@@ -24,6 +24,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     private PrefsManager prefs;
     private SharedPreferences sp;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,9 +94,12 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 throw new AssertionError("This should not have happened. There is no theme for key=" + theme);
         }
         themePreference.setSummary(themeSummary);
+
         BaseActivity baseActivity = (BaseActivity) getActivity();
         baseActivity.recreateIfThemeChanged();
     }
+
+    public static final String TAG = SettingsFragment.class.getSimpleName();
 
     @Override
     public void onPause() {
