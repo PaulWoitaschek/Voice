@@ -99,8 +99,7 @@ public class ImageHelper {
                 options.inJustDecodeBounds = false;
                 return BitmapFactory.decodeByteArray(data, 0, data.length, options);
             }
-        } catch (RuntimeException e) {
-            e.printStackTrace();
+        } catch (RuntimeException ignored) {
         }
         return null;
     }

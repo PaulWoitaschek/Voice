@@ -3,7 +3,7 @@ package de.ph1b.audiobook.model;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.media.MediaPlayer;
+import android.media.MediaMetadataRetriever;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -427,19 +427,24 @@ public class BookAdder {
 
         // get duration and if there is no cover yet, try to get an embedded dover (up to 5 times)
         ArrayList<Chapter> containingMedia = new ArrayList<>();
-        MediaPlayer mp = new MediaPlayer();
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         try {
             for (int i = 0; i < musicFiles.size(); i++) {
                 File f = musicFiles.get(i);
                 int duration = 0;
+
                 try {
-                    mp.setDataSource(f.getAbsolutePath());
-                    mp.prepare();
-                    duration = mp.getDuration();
-                } catch (IOException e) {
-                    L.e(TAG, "io error at file f=" + f);
+                    mmr.setDataSource(f.getAbsolutePath());
+
+                    String durationString = mmr.extractMetadata(
+                            MediaMetadataRetriever.METADATA_KEY_DURATION);
+                    if (durationString == null) {
+                        continue;
+                    }
+                    duration = Integer.parseInt(durationString);
+                } catch (RuntimeException ignored) {
                 }
-                mp.reset();
+
 
                 // checking for dot index because otherwise a file called ".mp3" would have no name.
                 String fileName = f.getName();
@@ -461,7 +466,7 @@ public class BookAdder {
                 }
             }
         } finally {
-            mp.release();
+            mmr.release();
         }
         return containingMedia;
     }
