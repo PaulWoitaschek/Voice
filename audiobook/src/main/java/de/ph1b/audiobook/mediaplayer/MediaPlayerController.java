@@ -46,11 +46,17 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     @GuardedBy("lock")
     private final MediaPlayerInterface player;
     private final LocalBroadcastManager bcm;
+    @GuardedBy("lock")
     private Book book;
     private final BroadcastReceiver onBookSetChanged = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            book = db.getBook(prefs.getCurrentBookId());
+            lock.lock();
+            try {
+                book = db.getBook(prefs.getCurrentBookId());
+            } finally {
+                lock.unlock();
+            }
         }
     };
     private volatile State state;
