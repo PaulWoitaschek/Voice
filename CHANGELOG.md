@@ -1,3 +1,10 @@
+# v 2.1.5 Support
+
+## Additions
+* Added a support menu
+* Added option to donate
+* Added hint how book adding works
+
 # v2.1.4 Details
 
 ## Additions
