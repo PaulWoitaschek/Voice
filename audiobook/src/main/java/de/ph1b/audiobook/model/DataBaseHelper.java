@@ -61,7 +61,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         long bookId = getWritableDatabase().insert(TABLE_BOOK, null, cv);
         book.setId(bookId);
 
-        getAllBooks().add(book);
+        getInternalBooks().add(book);
 
         sendBookSetChanged();
     }
@@ -72,15 +72,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Nullable
     public synchronized Book getBook(long id) {
-        for (Book b : getAllBooks()) {
+        for (Book b : getInternalBooks()) {
             if (b.getId() == id)
-                return b;
+                return new Book(b);
         }
         return null;
     }
 
-    @NonNull
-    public synchronized ArrayList<Book> getAllBooks() {
+    private synchronized ArrayList<Book> getInternalBooks() {
         if (allBooks == null) {
             allBooks = new ArrayList<>();
             Cursor cursor = getReadableDatabase().query(TABLE_BOOK,
@@ -100,6 +99,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return allBooks;
     }
 
+    @NonNull
+    public synchronized ArrayList<Book> getAllBooks() {
+        ArrayList<Book> internalBooks = getInternalBooks();
+        ArrayList<Book> copyBooks = new ArrayList<>();
+        for (Book b : internalBooks) {
+            copyBooks.add(new Book(b));
+        }
+
+        return copyBooks;
+    }
+
     public synchronized void updateBook(@NonNull Book bookToUpdate) {
         L.v(TAG, "updateBook=" + bookToUpdate.getName());
         ContentValues cv = new ContentValues();
@@ -107,7 +117,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(bookToUpdate.getId())});
 
         int indexToUpdate = -1;
-        ArrayList<Book> allBooks = getAllBooks();
+        ArrayList<Book> allBooks = getInternalBooks();
         for (int i = 0; i < allBooks.size(); i++)
             if (allBooks.get(i).getId() == bookToUpdate.getId())
                 indexToUpdate = i;
@@ -132,7 +142,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
 
         int indexToDelete = -1;
-        ArrayList<Book> allBooks = getAllBooks();
+        ArrayList<Book> allBooks = getInternalBooks();
         for (int i = 0; i < allBooks.size(); i++)
             if (allBooks.get(i).getId() == book.getId())
                 indexToDelete = i;

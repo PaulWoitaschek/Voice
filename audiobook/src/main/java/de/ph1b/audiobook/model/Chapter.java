@@ -16,6 +16,12 @@ public class Chapter {
     @NonNull
     private final String name;
 
+    public Chapter(Chapter that) {
+        this.path = that.path;
+        this.duration = that.duration;
+        this.name = that.name;
+    }
+
     public Chapter(@NonNull String path,
                    @NonNull String name,
                    int duration) {
