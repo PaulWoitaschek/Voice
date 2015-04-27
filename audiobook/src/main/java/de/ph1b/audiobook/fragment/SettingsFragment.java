@@ -28,6 +28,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setRetainInstance(true);
         prefs = new PrefsManager(getActivity());
         sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
     }

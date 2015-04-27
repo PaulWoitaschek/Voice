@@ -40,9 +40,11 @@ public class SettingsActivity extends BaseActivity {
             }
         });
 
-        getFragmentManager().beginTransaction()
-                .replace(R.id.container, new SettingsFragment(), SettingsFragment.TAG)
-                .commit();
+        if (savedInstanceState == null) {
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.container, new SettingsFragment(), SettingsFragment.TAG)
+                    .commit();
+        }
     }
 
     @Override
