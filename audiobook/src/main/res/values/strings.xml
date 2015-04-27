@@ -45,6 +45,7 @@
     <string name="content_file_folder">Indicating if its a file or a folder</string>
     <string name="folder_add_book">Single book</string>
     <string name="folder_add_collection">Folder with multiple books</string>
+    <string name="for_example">e.g.</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Playback speed</string>
     <!--Bookmarks-->

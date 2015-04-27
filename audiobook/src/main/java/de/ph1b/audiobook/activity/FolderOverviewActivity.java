@@ -178,7 +178,10 @@ public class FolderOverviewActivity extends BaseActivity {
                 });
         recyclerView.setAdapter(adapter);
 
-        findViewById(R.id.add_single).setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton single = (FloatingActionButton) findViewById(R.id.add_single);
+        single.setTitle(getString(R.string.folder_add_book) + "\n" + getString(R.string.for_example)
+        +" Harry Potter 4");
+        single.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fam.collapse();
@@ -190,7 +193,10 @@ public class FolderOverviewActivity extends BaseActivity {
                 startActivityForResult(intent, requestCode);
             }
         });
-        findViewById(R.id.add_library).setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton library = (FloatingActionButton) findViewById(R.id.add_library);
+        library.setTitle(getString(R.string.folder_add_collection) + "\n" + getString(R.string.for_example)
+                +" AudioBooks");
+        library.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fam.collapse();
