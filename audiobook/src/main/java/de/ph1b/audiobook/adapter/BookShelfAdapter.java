@@ -20,11 +20,9 @@ import java.util.ArrayList;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.uitools.CoverReplacement;
-import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.ViewHolder> {
-
     @NonNull
     private final Context c;
     private final PrefsManager prefs;
@@ -58,7 +56,6 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
 
         @Override
         public boolean areContentsTheSame(Book oldItem, Book newItem) {
-            L.v("ada", "contentsthesmae=" + oldItem.getName() + " with " + newItem.getName());
             return oldItem.getName().equals(newItem.getName());
         }
 
@@ -97,8 +94,8 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
             for (int i = 0; i < sortedList.size(); i++) {
                 if (sortedList.get(i).getId() == b.getId()) {
                     sortedList.updateItemAt(i, b);
-                    L.v("ada", "update book=" + b.getName() + " at index=" + i);
                     bookExists = true;
+                    break;
                 }
             }
             if (!bookExists) {
@@ -113,6 +110,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
             for (Book b : books) {
                 if (existing.getId() == b.getId()) {
                     deleteBook = false;
+                    break;
                 }
             }
             if (deleteBook) {
