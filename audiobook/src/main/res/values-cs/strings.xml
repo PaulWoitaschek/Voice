@@ -3,6 +3,7 @@
     <!--BookShelf-->
     <string name="mal_file_message">Následující soubor může být poškozen:</string>
     <string name="mal_file_title">Najít soubor</string>
+    <string name="content_current_book">Toto je aktuální kniha</string>
     <!--BookPlayActivity-->
     <string name="cover">Obal</string>
     <string name="play_pause">Přehrát / Pozastavit</string>
@@ -37,6 +38,8 @@
     <string name="adding_failed_subfolder">Adresáře nesmí být podadresáři sebe samých:</string>
     <string name="audiobook_folders_title">Adresáře s audioknihami</string>
     <string name="no_audiobook_folders_title">Vybrat adresář</string>
+    <string name="no_audiobook_folders_summary_start">Zvolte adresář(e) s audioknihami.</string>
+    <string name="no_audiobook_folders_end">Můžete zvolit hlavní adresář s několika knihami. Nebo vybrat pouze samostatnou knihu.</string>
     <string name="chosen_folder_description">Vybraný adresář:</string>
     <string name="delete_folder">Odstranit z knihovny?</string>
     <string name="delete_folder_content">Opravdu chcete odstranit následující adresář z knihovny?</string>
@@ -66,6 +69,7 @@
     <string name="pref_summary_track_to_end">Pokračovat v přehrávání až do konce aktuální skladby poté co byl aktivován časovač vypnutí.</string>
     <string name="pref_sleep_time">Časovač vypnutí</string>
     <string name="pref_root_folder_title">Adresář audioknihy</string>
+    <string name="pref_root_folder_summary">Vybrané adresáře s audioknihami.</string>
     <string name="pref_theme_title">Vzhled</string>
     <string name="pref_theme_light">Světlý</string>
     <string name="pref_theme_dark">Tmavý</string>
@@ -75,6 +79,8 @@
     <string name="pref_send_bugs_summary">Automaticky odesílat anonymní hlášení o pádech aplikace pro zlepšení vývoje.</string>
     <string name="pref_auto_rewind_title">Automaticky přetočit</string>
     <string name="pref_auto_rewind_summary">Automaticky přetočí po ručním pozastavení:</string>
+    <string name="pref_bookmark_on_sleep_title">Vytvořit záložku při časovaném vypnutí</string>
+    <string name="pref_bookmark_on_sleep_summary">Automaticky vytvoří záložku při každé aktivaci časovače vypnutí.</string>
     <!--Misc-->
     <string name="popup_edit">Upravit</string>
     <string name="remove">Smazat</string>
