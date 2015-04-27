@@ -27,7 +27,7 @@
         android:layout_marginTop="?attr/actionBarSize"
         android:visibility="gone" />
 
-    <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
+    <com.getbase.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

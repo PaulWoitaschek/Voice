@@ -18,9 +18,8 @@ import android.view.ViewAnimationUtils;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-
-import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
-import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import java.util.ArrayList;
 
@@ -180,7 +179,7 @@ public class FolderOverviewActivity extends BaseActivity {
 
         FloatingActionButton single = (FloatingActionButton) findViewById(R.id.add_single);
         single.setTitle(getString(R.string.folder_add_book) + "\n" + getString(R.string.for_example)
-        +" Harry Potter 4");
+                + " Harry Potter 4");
         single.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -195,7 +194,7 @@ public class FolderOverviewActivity extends BaseActivity {
         });
         FloatingActionButton library = (FloatingActionButton) findViewById(R.id.add_library);
         library.setTitle(getString(R.string.folder_add_collection) + "\n" + getString(R.string.for_example)
-                +" AudioBooks");
+                + " AudioBooks");
         library.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

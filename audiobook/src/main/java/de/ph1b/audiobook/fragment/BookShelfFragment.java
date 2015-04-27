@@ -33,8 +33,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-
-import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -27,9 +27,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
-
-import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.util.ArrayList;
