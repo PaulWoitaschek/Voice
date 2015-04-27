@@ -1,8 +1,8 @@
-# v2.1.4
+# v2.1.4 Details
 
 ## Additions
 * xxxhdpi icons complete
-* Ukrainan language added
+* Ukrainan language added. Thanks to [gladk](https://github.com/gladk)
 * Performance greatly improved
 * Translations updated
 
