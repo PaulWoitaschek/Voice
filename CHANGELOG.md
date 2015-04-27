@@ -1,3 +1,17 @@
+# v2.1.4
+
+## Additions
+* xxxhdpi icons complete
+* Ukrainan language added
+* Performance greatly improved
+* Translations updated
+
+## Fixes
+* Wrong theming on older Android versions fixed
+* Threading issues fixed
+* Correctly hide and show fab
+* Memory used minimized
+
 # v2.1.3 Details
 
 ## Additions
