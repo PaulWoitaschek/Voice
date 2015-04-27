@@ -2,13 +2,20 @@ package de.ph1b.audiobook.fragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.prefs.MaterialListPreference;
 
 import de.ph1b.audiobook.R;
@@ -18,20 +25,39 @@ import de.ph1b.audiobook.dialog.AutoRewindDialogPreference;
 import de.ph1b.audiobook.dialog.SeekDialogPreference;
 import de.ph1b.audiobook.dialog.SleepDialogPreference;
 import de.ph1b.audiobook.utils.PrefsManager;
+import de.ph1b.audiobook.vendinghelper.IabHelper;
+import de.ph1b.audiobook.vendinghelper.IabResult;
+import de.ph1b.audiobook.vendinghelper.Purchase;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+    public static final String TAG = SettingsFragment.class.getSimpleName();
     private PrefsManager prefs;
     private SharedPreferences sp;
-
+    private boolean donationAvailable = false;
+    private IabHelper iabHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setRetainInstance(true);
+        setHasOptionsMenu(true);
+
         prefs = new PrefsManager(getActivity());
         sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        iabHelper = new IabHelper(getActivity(), "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApfo7lNYf9Mh" +
+                "GiHAZO8iG/LX3SDGg7Gv7s41FEf08rxCuIuE+6QdQ0u+yZEoirislWV7jMqHY3XlyJMrH+/nKqrtYgw" +
+                "qnFtwuwckS/5R+0dtSKL4F/aVm6a3p00BtCjqe7tXrEg90gpVk59p5qr1cOnOAAc/xmerFG9VCv8QHw" +
+                "I9arlShCcXz7eTKemxjkHMO3dTkTKDjYZMIozr0t9qTvTxPz1aV6TWAGs5E6Dt7UF78pntgG9bMwmIgL" +
+                "N6fOYuBaKd8IxA3iQ5IhWGVB8WG65Ax+u0RXsx0r8BC53JQq91lItka7b1OeBe6uPHeqk8IQWY0l57AW" +
+                "fjZOFlNyWQB4QIDAQAB");
+        iabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            @Override
+            public void onIabSetupFinished(IabResult result) {
+                donationAvailable = result.isSuccess();
+            }
+        });
     }
 
     @Override
@@ -101,8 +127,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         baseActivity.recreateIfThemeChanged();
     }
 
-    public static final String TAG = SettingsFragment.class.getSimpleName();
-
     @Override
     public void onPause() {
         super.onPause();
@@ -113,4 +137,113 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         initValues();
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_settings, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_contribute:
+                launchSupport();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private void launchSupport() {
+        final MaterialDialog.ListCallback donationListCallback = new MaterialDialog.ListCallback() {
+            @Override
+            public void onSelection(MaterialDialog materialDialog, View view, int i,
+                                    CharSequence charSequence) {
+                String item;
+
+                switch (i) {
+                    case 0:
+                        item = "1donation";
+                        break;
+                    case 1:
+                        item = "2donation";
+                        break;
+                    case 2:
+                        item = "3donation";
+                        break;
+                    case 3:
+                        item = "5donation";
+                        break;
+                    case 4:
+                        item = "10donation";
+                        break;
+                    case 5:
+                        item = "20donation";
+                        break;
+                    default:
+                        throw new AssertionError("There are only 4 items");
+                }
+                if (donationAvailable) {
+                    iabHelper.launchPurchaseFlow(getActivity(), item, 10001,
+                            new IabHelper.OnIabPurchaseFinishedListener() {
+                                @Override
+                                public void onIabPurchaseFinished(IabResult result, Purchase info) {
+                                    String message;
+                                    if (result.isSuccess()) {
+                                        message = getString(R.string.donation_worked_thanks);
+                                    } else {
+                                        message = getString(R.string.donation_not_worked) + ":\n"
+                                                + result.getMessage();
+                                    }
+                                    Toast.makeText(getActivity(), message,
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            });
+                }
+            }
+        };
+        final MaterialDialog.ListCallback onSupportListItemClicked =
+                new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog materialDialog, View view, int i,
+                                            CharSequence charSequence) {
+                        switch (i) {
+                            case 0: //dev and support
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse
+                                        ("https://github.com/Ph1b/MaterialAudiobookPlayer/" +
+                                                "issues")));
+                                break;
+                            case 1: //translations
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse
+                                        ("https://www.transifex.com/projects/p/" +
+                                                "material-audiobook-player/")));
+                                break;
+                            case 2:
+                                new MaterialDialog.Builder(getActivity())
+                                        .title(R.string.pref_support_donation)
+                                        .items(R.array.pref_support_money)
+                                        .itemsCallback(donationListCallback)
+                                        .show();
+                                break;
+                            default:
+                                throw new AssertionError("There are just 3 items");
+                        }
+                    }
+                };
+
+
+        new MaterialDialog.Builder(getActivity())
+                .title(R.string.pref_support_title)
+                .items(R.array.pref_support_values)
+                .itemsCallback(onSupportListItemClicked)
+                .show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        iabHelper.handleActivityResult(requestCode, resultCode, data);
+    }
+
 }
