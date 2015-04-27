@@ -75,8 +75,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
             long bookChangedId = intent.getLongExtra(Communication.COVER_CHANGED_BOOK_ID, -1);
             SortedList<Book> sortedList = adapter.getSortedList();
             for (int i = 0; i < sortedList.size(); i++) {
-                Book book = sortedList.get(i);
-                if (book.getId() == bookChangedId) {
+                if (adapter.getItemId(i) == bookChangedId) {
                     adapter.notifyItemChanged(i);
                 }
             }
@@ -210,8 +209,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        L.d(TAG, "onCreate called");
-
         prefs = new PrefsManager(getActivity());
         db = DataBaseHelper.getInstance(getActivity());
         bcm = LocalBroadcastManager.getInstance(getActivity());
@@ -248,19 +245,10 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
     public void onResume() {
         super.onResume();
 
-        if (MediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
-            playPauseDrawable.transformToPause(false);
-        } else {
-            playPauseDrawable.transformToPlay(false);
-        }
-
-        adapter.notifyDataSetChanged();
-
+        // scan for files
         BookAdder.getInstance(getActivity()).scanForFiles(false);
 
-        setPlayState(false);
-        onBookSetChangedReceiver.onReceive(getActivity(), new Intent());
-
+        // show dialog if no folders are set
         boolean audioFoldersEmpty = (prefs.getCollectionFolders().size() +
                 prefs.getSingleBookFolders().size()) == 0;
         boolean noFolderWarningIsShowing = noFolderWarning.isShowing();
@@ -268,8 +256,11 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
             noFolderWarning.show();
         }
 
-        checkVisibilities();
+        // update items and set ui
+        setPlayState(false);
+        onBookSetChangedReceiver.onReceive(getActivity(), new Intent());
 
+        // register receivers
         bcm.registerReceiver(onBookSetChangedReceiver, new IntentFilter(Communication.BOOK_SET_CHANGED));
         bcm.registerReceiver(onCoverChanged, new IntentFilter(Communication.COVER_CHANGED));
         bcm.registerReceiver(onCurrentBookChanged, new IntentFilter(Communication.CURRENT_BOOK_CHANGED));

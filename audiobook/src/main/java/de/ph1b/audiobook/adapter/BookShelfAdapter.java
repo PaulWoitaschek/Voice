@@ -91,19 +91,12 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
         sortedList.beginBatchedUpdates();
 
         for (Book b : books) {
-            for (int i = 0; i < sortedList.size(); i++) {
-                if (sortedList.get(i).getId() == b.getId()) {
-                    sortedList.updateItemAt(i, b);
-                    break;
-                }
-            }
-        }
-
-        for (Book b : books) {
             boolean bookExists = false;
             for (int i = 0; i < sortedList.size(); i++) {
                 if (sortedList.get(i).getId() == b.getId()) {
+                    sortedList.updateItemAt(i, b);
                     bookExists = true;
+                    break;
                 }
             }
             if (!bookExists) {

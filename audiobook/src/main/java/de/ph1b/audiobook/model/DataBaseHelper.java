@@ -14,7 +14,6 @@ import com.google.gson.Gson;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.InvalidPropertiesFormatException;
 
 import de.ph1b.audiobook.utils.Communication;
@@ -22,7 +21,6 @@ import de.ph1b.audiobook.utils.L;
 
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class DataBaseHelper extends SQLiteOpenHelper {
-
 
     private static final int DATABASE_VERSION = 25;
     private static final String DATABASE_NAME = "autoBookDB";
@@ -41,6 +39,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static DataBaseHelper instance;
     private final Context c;
     private final LocalBroadcastManager bcm;
+    private ArrayList<Book> allBooks = null;
 
     private DataBaseHelper(Context c) {
         super(c, DATABASE_NAME, null, DATABASE_VERSION);
@@ -55,11 +54,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return instance;
     }
 
-    public void addBook(@NonNull Book book) {
+    public synchronized void addBook(@NonNull Book book) {
         ContentValues cv = new ContentValues();
         cv.put(BOOK_JSON, new Gson().toJson(book));
         long bookId = getWritableDatabase().insert(TABLE_BOOK, null, cv);
         book.setId(bookId);
+
+        getAllBooks().add(book);
 
         sendBookSetChanged();
     }
@@ -69,56 +70,56 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     @Nullable
-    public Book getBook(long id) {
-        return getBook(getReadableDatabase(), id);
-    }
-
-
-    private Book getBook(SQLiteDatabase db, long id) {
-        Cursor cursor = db.query(TABLE_BOOK, new String[]{BOOK_JSON}, BOOK_ID + "=?",
-                new String[]{String.valueOf(id)}, null, null, null);
-        try {
-            if (cursor.moveToNext()) {
-                Book book = new Gson().fromJson(cursor.getString(0), Book.class);
-                book.setId(id);
-                return book;
-            }
-        } finally {
-            cursor.close();
+    public synchronized Book getBook(long id) {
+        for (Book b : getAllBooks()) {
+            if (b.getId() == id)
+                return b;
         }
         return null;
     }
 
     @NonNull
-    public ArrayList<Book> getAllBooks() {
-        ArrayList<Book> allBooks = new ArrayList<>();
-
-        SQLiteDatabase db = getReadableDatabase();
-        db.beginTransaction();
-        Cursor cursor = db.query(TABLE_BOOK, new String[]{BOOK_ID}, null, null, null, null, null);
-        try {
-            while (cursor.moveToNext()) {
-                allBooks.add(getBook(cursor.getLong(0)));
+    public synchronized ArrayList<Book> getAllBooks() {
+        if (allBooks == null) {
+            allBooks = new ArrayList<>();
+            Cursor cursor = getReadableDatabase().query(TABLE_BOOK,
+                    new String[]{BOOK_ID, BOOK_JSON},
+                    null, null, null, null, null);
+            try {
+                while (cursor.moveToNext()) {
+                    Book book = new Gson().fromJson(cursor.getString(1), Book.class);
+                    book.setId(cursor.getLong(0));
+                    allBooks.add(book);
+                }
+            } finally {
+                cursor.close();
             }
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-            cursor.close();
         }
-
-        Collections.sort(allBooks);
 
         return allBooks;
     }
 
-    public void updateBook(@NonNull Book book) {
+    public synchronized void updateBook(@NonNull Book bookToUpdate) {
         ContentValues cv = new ContentValues();
-        cv.put(BOOK_JSON, new Gson().toJson(book));
-        getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
+        cv.put(BOOK_JSON, new Gson().toJson(bookToUpdate));
+        getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(bookToUpdate.getId())});
+
+        int indexToUpdate = -1;
+        ArrayList<Book> allBooks = getAllBooks();
+        for (int i = 0; i < allBooks.size(); i++)
+            if (allBooks.get(i).getId() == bookToUpdate.getId())
+                indexToUpdate = i;
+
+        if (indexToUpdate != -1) {
+            allBooks.set(indexToUpdate, bookToUpdate);
+        } else {
+            L.e(TAG, "Could not update book=" + bookToUpdate);
+        }
+
         sendBookSetChanged();
     }
 
-    public void deleteBook(@NonNull Book book) {
+    public synchronized void deleteBook(@NonNull Book book) {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_BOOK, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
         File coverFile = book.getCoverFile();
@@ -126,6 +127,19 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             //noinspection ResultOfMethodCallIgnored
             coverFile.delete();
         }
+
+        int indexToDelete = -1;
+        ArrayList<Book> allBooks = getAllBooks();
+        for (int i = 0; i < allBooks.size(); i++)
+            if (allBooks.get(i).getId() == book.getId())
+                indexToDelete = i;
+
+        if (indexToDelete == -1) {
+            L.e(TAG, "Could not delete book=" + book);
+        } else {
+            allBooks.remove(indexToDelete);
+        }
+
         sendBookSetChanged();
     }
 
@@ -191,5 +205,4 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             db.execSQL(CREATE_TABLE_BOOK);
         }
     }
-
 }
