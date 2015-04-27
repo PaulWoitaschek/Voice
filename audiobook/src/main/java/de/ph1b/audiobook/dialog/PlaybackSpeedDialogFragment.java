@@ -90,8 +90,11 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         new ServiceController(getActivity()).setPlaybackSpeed(speed);
-                        book.setPlaybackSpeed(speed);
-                        db.updateBook(book);
+                        Book currentBook = db.getBook(book.getId());
+                        if (currentBook != null) {
+                            currentBook.setPlaybackSpeed(speed);
+                            db.updateBook(currentBook);
+                        }
                     }
                 })
                 .build();
