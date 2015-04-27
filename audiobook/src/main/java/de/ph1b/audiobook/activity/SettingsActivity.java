@@ -5,9 +5,10 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.dialog.DonationDialogFragment;
 import de.ph1b.audiobook.fragment.SettingsFragment;
 
-public class SettingsActivity extends BaseActivity {
+public class SettingsActivity extends BaseActivity implements DonationDialogFragment.OnDonationClickedListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,14 @@ public class SettingsActivity extends BaseActivity {
         SettingsFragment settingsFragment = (SettingsFragment) getFragmentManager().findFragmentByTag(SettingsFragment.TAG);
         if (settingsFragment != null && settingsFragment.isVisible()) {
             settingsFragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public void onDonationClicked(String item) {
+        SettingsFragment settingsFragment = (SettingsFragment) getFragmentManager().findFragmentByTag(SettingsFragment.TAG);
+        if (settingsFragment != null && settingsFragment.isVisible()) {
+            settingsFragment.onDonationClicked(item);
         }
     }
 }

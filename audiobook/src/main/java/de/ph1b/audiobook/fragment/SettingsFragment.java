@@ -2,7 +2,6 @@ package de.ph1b.audiobook.fragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -12,24 +11,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.prefs.MaterialListPreference;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BaseActivity;
 import de.ph1b.audiobook.activity.FolderOverviewActivity;
 import de.ph1b.audiobook.dialog.AutoRewindDialogPreference;
+import de.ph1b.audiobook.dialog.DonationDialogFragment;
 import de.ph1b.audiobook.dialog.SeekDialogPreference;
 import de.ph1b.audiobook.dialog.SleepDialogPreference;
+import de.ph1b.audiobook.dialog.SupportDialogFragment;
 import de.ph1b.audiobook.utils.PrefsManager;
 import de.ph1b.audiobook.vendinghelper.IabHelper;
 import de.ph1b.audiobook.vendinghelper.IabResult;
 import de.ph1b.audiobook.vendinghelper.Purchase;
 
-public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragment implements SharedPreferences.
+        OnSharedPreferenceChangeListener, DonationDialogFragment.OnDonationClickedListener {
 
     public static final String TAG = SettingsFragment.class.getSimpleName();
     private PrefsManager prefs;
@@ -42,7 +42,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         super.onCreate(savedInstanceState);
 
         setRetainInstance(true);
-        setHasOptionsMenu(true);
 
         prefs = new PrefsManager(getActivity());
         sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -74,6 +73,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     @Override
     public void onResume() {
         super.onResume();
+        setHasOptionsMenu(true);
         initValues();
         sp.registerOnSharedPreferenceChangeListener(this);
     }
@@ -147,96 +147,31 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_contribute:
-                launchSupport();
+                new SupportDialogFragment().show(getFragmentManager(), SupportDialogFragment.TAG);
                 return true;
             default:
                 return false;
         }
     }
 
-    private void launchSupport() {
-        final MaterialDialog.ListCallback donationListCallback = new MaterialDialog.ListCallback() {
-            @Override
-            public void onSelection(MaterialDialog materialDialog, View view, int i,
-                                    CharSequence charSequence) {
-                String item;
-
-                switch (i) {
-                    case 0:
-                        item = "1donation";
-                        break;
-                    case 1:
-                        item = "2donation";
-                        break;
-                    case 2:
-                        item = "3donation";
-                        break;
-                    case 3:
-                        item = "5donation";
-                        break;
-                    case 4:
-                        item = "10donation";
-                        break;
-                    case 5:
-                        item = "20donation";
-                        break;
-                    default:
-                        throw new AssertionError("There are only 4 items");
-                }
-                if (donationAvailable) {
-                    iabHelper.launchPurchaseFlow(getActivity(), item, 10001,
-                            new IabHelper.OnIabPurchaseFinishedListener() {
-                                @Override
-                                public void onIabPurchaseFinished(IabResult result, Purchase info) {
-                                    String message;
-                                    if (result.isSuccess()) {
-                                        message = getString(R.string.donation_worked_thanks);
-                                    } else {
-                                        message = getString(R.string.donation_not_worked) + ":\n"
-                                                + result.getMessage();
-                                    }
-                                    Toast.makeText(getActivity(), message,
-                                            Toast.LENGTH_LONG).show();
-                                }
-                            });
-                }
-            }
-        };
-        final MaterialDialog.ListCallback onSupportListItemClicked =
-                new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog materialDialog, View view, int i,
-                                            CharSequence charSequence) {
-                        switch (i) {
-                            case 0: //dev and support
-                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse
-                                        ("https://github.com/Ph1b/MaterialAudiobookPlayer/" +
-                                                "issues")));
-                                break;
-                            case 1: //translations
-                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse
-                                        ("https://www.transifex.com/projects/p/" +
-                                                "material-audiobook-player/")));
-                                break;
-                            case 2:
-                                new MaterialDialog.Builder(getActivity())
-                                        .title(R.string.pref_support_donation)
-                                        .items(R.array.pref_support_money)
-                                        .itemsCallback(donationListCallback)
-                                        .show();
-                                break;
-                            default:
-                                throw new AssertionError("There are just 3 items");
+    public void onDonationClicked(String item) {
+        if (donationAvailable) {
+            iabHelper.launchPurchaseFlow(getActivity(), item, 10001,
+                    new IabHelper.OnIabPurchaseFinishedListener() {
+                        @Override
+                        public void onIabPurchaseFinished(IabResult result, Purchase info) {
+                            String message;
+                            if (result.isSuccess()) {
+                                message = getString(R.string.donation_worked_thanks);
+                            } else {
+                                message = getString(R.string.donation_not_worked) + ":\n"
+                                        + result.getMessage();
+                            }
+                            Toast.makeText(getActivity(), message,
+                                    Toast.LENGTH_LONG).show();
                         }
-                    }
-                };
-
-
-        new MaterialDialog.Builder(getActivity())
-                .title(R.string.pref_support_title)
-                .items(R.array.pref_support_values)
-                .itemsCallback(onSupportListItemClicked)
-                .show();
+                    });
+        }
     }
 
     @Override
@@ -245,5 +180,4 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
         iabHelper.handleActivityResult(requestCode, resultCode, data);
     }
-
 }
