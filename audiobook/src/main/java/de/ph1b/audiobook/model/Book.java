@@ -34,28 +34,6 @@ public class Book implements Comparable<Book> {
     private String currentMediaPath;
     private boolean useCoverReplacement = false;
 
-    public Book(Book that) {
-        this.id = that.id;
-        this.root = that.root;
-        ArrayList<Chapter> copyChapters = new ArrayList<>();
-        for (Chapter c : that.chapters) {
-            copyChapters.add(new Chapter(c));
-        }
-        this.chapters = copyChapters;
-        this.type = Type.valueOf(that.type.name());
-        this.packageName = that.packageName;
-        ArrayList<Bookmark> copyBookmarks = new ArrayList<>();
-        for (Bookmark b : that.bookmarks) {
-            copyBookmarks.add(new Bookmark(b));
-        }
-        this.bookmarks = copyBookmarks;
-        this.name = that.name;
-        this.time = that.time;
-        this.playbackSpeed = that.playbackSpeed;
-        this.currentMediaPath = that.currentMediaPath;
-        this.useCoverReplacement = that.useCoverReplacement;
-    }
-
     public Book(@NonNull String root,
                 @NonNull String name,
                 @NonNull ArrayList<Chapter> chapters,

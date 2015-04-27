@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -39,7 +38,6 @@ import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.ListIterator;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.FolderOverviewActivity;
@@ -59,8 +57,7 @@ import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 
-public class BookShelfFragment extends Fragment implements View.OnClickListener,
-        EditBookDialogFragment.OnEditBookFinishedListener {
+public class BookShelfFragment extends Fragment implements View.OnClickListener {
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
     private static final String RECYCLER_VIEW_STATE = "recyclerViewState";
@@ -68,53 +65,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     private final BroadcastReceiver onBookSetChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
-            // old books
-            ArrayList<Book> oldBooks = new ArrayList<>();
-            SortedList<Book> sortedList = adapter.getSortedList();
-            for (int i = 0; i < sortedList.size(); i++) {
-                oldBooks.add(new Book(sortedList.get(i)));
-            }
-
-            // new books
-            ArrayList<Book> newBooks = db.getAllBooks();
-
-            // find books to update
-            ListIterator<Book> bookListIterator = oldBooks.listIterator();
-            while (bookListIterator.hasNext()) {
-                Book oldB = bookListIterator.next();
-                for (Book newB : newBooks) {
-                    if (oldB.getId() == newB.getId()) {
-                        bookListIterator.set(newB);
-                    }
-                }
-            }
-
-            // find books to delete
-            ArrayList<Book> booksToDelete = new ArrayList<>();
-            deleteLoop:
-            for (Book oldB : oldBooks) {
-                for (Book newB : newBooks) {
-                    if (oldB.getId() == newB.getId())
-                        continue deleteLoop;
-                }
-                booksToDelete.add(oldB);
-            }
-
-            adapter.delete(booksToDelete);
-
-            // find books to add
-            ArrayList<Book> booksToAdd = new ArrayList<>();
-            addLoop:
-            for (Book newB : newBooks) {
-                for (Book oldB : oldBooks) {
-                    if (newB.getId() == oldB.getId())
-                        continue addLoop;
-                }
-                booksToAdd.add(newB);
-            }
-            adapter.add(booksToAdd);
-
+            adapter.newDataSet(db.getAllBooks());
             checkVisibilities();
         }
     };
@@ -230,7 +181,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getAmountOfColumns()));
         adapter = new BookShelfAdapter(getActivity(), onClickListener);
-        adapter.add(db.getAllBooks());
+        adapter.addAll(db.getAllBooks());
         recyclerView.setAdapter(adapter);
 
         if (savedInstanceState != null) {
@@ -437,19 +388,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             default:
                 break;
         }
-    }
-
-    @Override
-    public void onEditBookFinished(@NonNull Book book) {
-        L.v(TAG, "onEditBookFinished(" + book + ")");
-        SortedList<Book> sortedList = adapter.getSortedList();
-        for (int i = 0; i < sortedList.size(); i++) {
-            if (sortedList.get(i).getId() == book.getId()) {
-                sortedList.updateItemAt(i, book);
-                break;
-            }
-        }
-        db.updateBook(book);
     }
 
     @Override

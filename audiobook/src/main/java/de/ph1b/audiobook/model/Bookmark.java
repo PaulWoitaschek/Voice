@@ -13,11 +13,6 @@ public class Bookmark {
     @NonNull
     private String title;
 
-    public Bookmark(Bookmark that) {
-        this.time = that.time;
-        this.mediaPath = that.mediaPath;
-        this.title = that.title;
-    }
 
     public Bookmark(@NonNull String mediaPath, @NonNull String title, int time) {
         new Validate().notNull(mediaPath, title)

@@ -4,8 +4,6 @@ import android.support.annotation.NonNull;
 
 import net.jcip.annotations.Immutable;
 
-import de.ph1b.audiobook.utils.Validate;
-
 @Immutable
 public class Chapter {
 
@@ -20,17 +18,6 @@ public class Chapter {
         this.path = that.path;
         this.duration = that.duration;
         this.name = that.name;
-    }
-
-    public Chapter(@NonNull String path,
-                   @NonNull String name,
-                   int duration) {
-
-        new Validate().notNull(path, name)
-                .notEmpty(path, name);
-        this.path = path;
-        this.name = name;
-        this.duration = duration;
     }
 
     @Override

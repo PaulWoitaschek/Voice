@@ -65,6 +65,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
             return item1.getId() == item2.getId();
         }
     });
+
     public BookShelfAdapter(@NonNull Context c, OnItemClickListener onItemClickListener) {
         this.c = c;
         this.onItemClickListener = onItemClickListener;
@@ -77,7 +78,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
         return sortedList;
     }
 
-    public void add(ArrayList<Book> books) {
+    public void addAll(ArrayList<Book> books) {
         this.sortedList.beginBatchedUpdates();
         for (Book b : books) {
             this.sortedList.add(b);
@@ -85,20 +86,48 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
         this.sortedList.endBatchedUpdates();
     }
 
-    public void add(Book book) {
-        sortedList.add(book);
-    }
 
-    public void delete(ArrayList<Book> books) {
+    public void newDataSet(ArrayList<Book> books) {
         sortedList.beginBatchedUpdates();
+
         for (Book b : books) {
-            for (int i = 0; i < this.sortedList.size(); i++) {
-                if (this.sortedList.get(i).getId() == b.getId()) {
-                    this.sortedList.removeItemAt(i);
+            for (int i = 0; i < sortedList.size(); i++) {
+                if (sortedList.get(i).getId() == b.getId()) {
+                    sortedList.updateItemAt(i, b);
                     break;
                 }
             }
         }
+
+        for (Book b : books) {
+            boolean bookExists = false;
+            for (int i = 0; i < sortedList.size(); i++) {
+                if (sortedList.get(i).getId() == b.getId()) {
+                    bookExists = true;
+                }
+            }
+            if (!bookExists) {
+                sortedList.add(b);
+            }
+        }
+
+        ArrayList<Book> booksToDelete = new ArrayList<>();
+        for (int i = 0; i < sortedList.size(); i++) {
+            Book existing = sortedList.get(i);
+            boolean deleteBook = true;
+            for (Book b : books) {
+                if (existing.getId() == b.getId()) {
+                    deleteBook = false;
+                }
+            }
+            if (deleteBook) {
+                booksToDelete.add(existing);
+            }
+        }
+        for (Book b : booksToDelete) {
+            sortedList.remove(b);
+        }
+
         sortedList.endBatchedUpdates();
     }
 

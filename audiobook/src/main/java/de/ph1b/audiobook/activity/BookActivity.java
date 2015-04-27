@@ -4,7 +4,6 @@ package de.ph1b.audiobook.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -12,14 +11,12 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.dialog.EditBookDialogFragment;
 import de.ph1b.audiobook.fragment.BookPlayFragment;
 import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
-import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.utils.L;
 
-public class BookActivity extends BaseActivity implements EditBookDialogFragment.OnEditBookFinishedListener {
+public class BookActivity extends BaseActivity {
 
     public static final String TARGET_FRAGMENT = "targetFragment";
     private static final String TAG = BookActivity.class.getSimpleName();
@@ -92,13 +89,5 @@ public class BookActivity extends BaseActivity implements EditBookDialogFragment
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         L.d(TAG, "onSaveInstanceState called");
-    }
-
-    @Override
-    public void onEditBookFinished(@NonNull Book book) {
-        BookShelfFragment bookShelfFragment = (BookShelfFragment) getSupportFragmentManager().findFragmentByTag(BookShelfFragment.TAG);
-        if (bookShelfFragment != null && bookShelfFragment.isVisible()) {
-            bookShelfFragment.onEditBookFinished(book);
-        }
     }
 }

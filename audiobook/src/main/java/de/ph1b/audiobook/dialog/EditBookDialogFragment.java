@@ -2,12 +2,17 @@ package de.ph1b.audiobook.dialog;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -34,15 +39,16 @@ import de.ph1b.audiobook.uitools.CoverDownloader;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.DraggableBoxImageView;
 import de.ph1b.audiobook.uitools.ImageHelper;
+import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
 
 public class EditBookDialogFragment extends DialogFragment implements View.OnClickListener {
-
     public static final String BOOK_COVER = "BOOK_COVER";
     public static final int REPLACEMENT_DIMEN = 500;
     public static final String TAG = EditBookDialogFragment.class.getSimpleName();
     private static final String COVER_POSITION = "COVER_POSITION";
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private LocalBroadcastManager bcm;
     private CoverDownloader coverDownloader;
     private DraggableBoxImageView coverImageView;
     private ProgressBar coverReplacement;
@@ -54,7 +60,33 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
     private ArrayList<Bitmap> covers;
     private int googleCount = 0;
     private Book book;
+    private final BroadcastReceiver onBookSetChanged = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ArrayList<Book> allBooks = db.getAllBooks();
+            for (Book b : allBooks) {
+                if (b.getId() == book.getId()) {
+                    book = b;
+                    break;
+                }
+            }
+        }
+    };
+    private DataBaseHelper db;
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        bcm.registerReceiver(onBookSetChanged, new IntentFilter(Communication.BOOK_SET_CHANGED));
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        bcm.unregisterReceiver(onBookSetChanged);
+    }
 
     @Override
     public void onClick(View view) {
@@ -109,7 +141,8 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
         super.onCreate(savedInstanceState);
 
         coverDownloader = new CoverDownloader(getActivity());
-        DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
+        db = DataBaseHelper.getInstance(getActivity());
+        bcm = LocalBroadcastManager.getInstance(getActivity());
 
         Bundle b = getArguments();
         long bookId = b.getLong(Book.TAG);
@@ -193,8 +226,8 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
 
                 book.setName(bookName);
                 Picasso.with(getActivity()).invalidate(book.getCoverFile());
-
-                ((OnEditBookFinishedListener) getActivity()).onEditBookFinished(book);
+                db.updateBook(book);
+                Communication.sendCoverChanged(getActivity(), book.getId());
             }
 
             @Override
@@ -253,10 +286,6 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
         }
 
         return editBook;
-    }
-
-    public interface OnEditBookFinishedListener {
-        void onEditBookFinished(@NonNull Book book);
     }
 
     private class AddCoverAsync extends AsyncTask<Void, Void, Bitmap> {
