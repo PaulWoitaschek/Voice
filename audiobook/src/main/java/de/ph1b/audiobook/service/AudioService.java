@@ -63,7 +63,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         @Override
         public void onReceive(Context context, Intent intent) {
             Book book = db.getBook(prefs.getCurrentBookId());
-            if (book != null)
+            if (book != null && (controller.getBook().getId() != book.getId()))
                 reInitController(book);
         }
     };
@@ -303,7 +303,6 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
         pauseBecauseHeadset = false;
         pauseBecauseLossTransient = false;
-        MediaPlayerController.setPlayState(this, MediaPlayerController.PlayState.STOPPED);
     }
 
     @Override
