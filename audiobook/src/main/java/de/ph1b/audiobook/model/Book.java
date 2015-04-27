@@ -168,7 +168,7 @@ public class Book implements Comparable<Book> {
         return TAG + "[" +
                 "root=" + root +
                 ", type=" + type +
-                ", id=" + id + ", " +
+                ", id=" + id +
                 ", name=" + name +
                 ", time=" + time +
                 ", playbackSpeed=" + playbackSpeed +
