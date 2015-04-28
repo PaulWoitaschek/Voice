@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
@@ -29,7 +30,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -42,6 +45,7 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.FolderOverviewActivity;
 import de.ph1b.audiobook.activity.SettingsActivity;
 import de.ph1b.audiobook.adapter.BookShelfAdapter;
+import de.ph1b.audiobook.dialog.BookmarkDialogFragment;
 import de.ph1b.audiobook.dialog.EditBookDialogFragment;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
@@ -143,39 +147,59 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
                     @Override
                     public void onCoverClicked(int position, ImageView cover) {
                         Book book = adapter.getItem(position);
-                        long oldId = prefs.getCurrentBookId();
-                        prefs.setCurrentBookId(book.getId());
-                        Communication.sendCurrentBookChanged(getActivity(), oldId);
+
+                        prefs.setCurrentBookIdAndInform(book.getId());
 
                         startBookPlay(cover);
                     }
 
                     @Override
-                    public void onMenuClicked(final int position) {
-                        Book book = adapter.getItem(position);
+                    public void onMenuClicked(final int position, ImageButton editBook) {
+                        PopupMenu popupMenu = new PopupMenu(getActivity(), editBook);
+                        popupMenu.inflate(R.menu.bookshelf_popup);
+                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                switch (item.getItemId()) {
+                                    case R.id.edit_book:
+                                        Book book = adapter.getItem(position);
 
-                        EditBookDialogFragment editBookDialogFragment = new EditBookDialogFragment();
-                        Bundle bundle = new Bundle();
+                                        EditBookDialogFragment editBookDialogFragment = new EditBookDialogFragment();
+                                        Bundle bundle = new Bundle();
 
-                        ArrayList<Bitmap> covers = new ArrayList<>();
-                        CoverReplacement replacement = new CoverReplacement(book.getName(), getActivity());
-                        covers.add(ImageHelper.drawableToBitmap(replacement,
-                                EditBookDialogFragment.REPLACEMENT_DIMEN,
-                                EditBookDialogFragment.REPLACEMENT_DIMEN));
+                                        ArrayList<Bitmap> covers = new ArrayList<>();
+                                        CoverReplacement replacement = new CoverReplacement(book.getName(), getActivity());
+                                        covers.add(ImageHelper.drawableToBitmap(replacement,
+                                                EditBookDialogFragment.REPLACEMENT_DIMEN,
+                                                EditBookDialogFragment.REPLACEMENT_DIMEN));
 
-                        File coverFile = book.getCoverFile();
-                        if (coverFile.exists() && coverFile.canRead()) {
-                            Bitmap defaultCover = BitmapFactory.decodeFile(coverFile.getAbsolutePath());
-                            if (defaultCover != null) {
-                                covers.add(defaultCover);
+                                        File coverFile = book.getCoverFile();
+                                        if (coverFile.exists() && coverFile.canRead()) {
+                                            Bitmap defaultCover = BitmapFactory.decodeFile(coverFile.getAbsolutePath());
+                                            if (defaultCover != null) {
+                                                covers.add(defaultCover);
+                                            }
+                                        }
+
+                                        bundle.putParcelableArrayList(EditBookDialogFragment.BOOK_COVER, covers);
+                                        bundle.putLong(Book.TAG, book.getId());
+
+                                        editBookDialogFragment.setArguments(bundle);
+                                        editBookDialogFragment.show(getFragmentManager(), EditBookDialogFragment.TAG);
+                                        return true;
+                                    case R.id.bookmark:
+                                        DialogFragment bookmarkDialogFragment = new BookmarkDialogFragment();
+                                        Bundle args = new Bundle();
+                                        args.putLong(BookmarkDialogFragment.BOOK_ID, adapter.getItemId(position));
+                                        bookmarkDialogFragment.setArguments(args);
+                                        bookmarkDialogFragment.show(getFragmentManager(), BookmarkDialogFragment.TAG);
+                                        return true;
+                                    default:
+                                        return false;
+                                }
                             }
-                        }
-
-                        bundle.putParcelableArrayList(EditBookDialogFragment.BOOK_COVER, covers);
-                        bundle.putLong(Book.TAG, book.getId());
-
-                        editBookDialogFragment.setArguments(bundle);
-                        editBookDialogFragment.show(getFragmentManager(), EditBookDialogFragment.TAG);
+                        });
+                        popupMenu.show();
                     }
                 };
 

@@ -175,7 +175,7 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
 
         //init items
         nameEditText = (EditText) customView.findViewById(R.id.book_name);
-        coverImageView = (DraggableBoxImageView) customView.findViewById(R.id.cover);
+        coverImageView = (DraggableBoxImageView) customView.findViewById(R.id.edit_book);
         coverReplacement = (ProgressBar) customView.findViewById(R.id.cover_replacement);
         previousCover = (ImageButton) customView.findViewById(R.id.previous_cover);
         nextCover = (ImageButton) customView.findViewById(R.id.next_cover);

@@ -325,7 +325,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
             case R.id.action_sleep:
                 controller.toggleSleepSand();
                 if (prefs.setBookmarkOnSleepTimer() && !MediaPlayerController.sleepTimerActive) {
-                    BookmarkDialogFragment.addBookmark(book, book.getCurrentChapter().getName(), getActivity());
+                    BookmarkDialogFragment.addBookmark(book.getId(), book.getCurrentChapter().getName(), getActivity());
                 }
                 return true;
             case R.id.action_time_lapse:
@@ -334,6 +334,9 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
                 return true;
             case R.id.action_bookmark:
                 BookmarkDialogFragment bookmarkDialogFragment = new BookmarkDialogFragment();
+                Bundle args = new Bundle();
+                args.putLong(BookmarkDialogFragment.BOOK_ID, book.getId());
+                bookmarkDialogFragment.setArguments(args);
                 bookmarkDialogFragment.show(getFragmentManager(), BookmarkDialogFragment.TAG);
                 return true;
             case android.R.id.home:

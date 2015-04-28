@@ -14,7 +14,7 @@
         android:layout_height="match_parent">
 
         <de.ph1b.audiobook.uitools.SquareImageView
-            android:id="@+id/cover"
+            android:id="@+id/edit_book"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

@@ -27,6 +27,7 @@ import java.util.Collections;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.BookmarkAdapter;
+import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.DataBaseHelper;
@@ -48,14 +49,23 @@ public class BookmarkDialogFragment extends DialogFragment {
     private BookmarkAdapter adapter;
     private MaterialDialog dialog;
 
-    public static void addBookmark(@NonNull Book book, @NonNull String title, @NonNull Context c) {
-        Bookmark bookmark = new Bookmark(book.getCurrentChapter().getPath(), title, book.getTime());
+    public static void addBookmark(long bookId, @NonNull String title, @NonNull Context c) {
+        DataBaseHelper db = DataBaseHelper.getInstance(c);
 
-        book.getBookmarks().add(bookmark);
-        Collections.sort(book.getBookmarks(), new NaturalBookmarkComparator(book.getChapters()));
-        DataBaseHelper.getInstance(c).updateBook(book);
-        L.v("addBookmark", "Added bookmark=" + bookmark);
+        Book book = db.getBook(bookId);
+        if (book != null) {
+            Bookmark bookmark = new Bookmark(book.getCurrentChapter().getPath(), title, book.getTime());
+
+            book.getBookmarks().add(bookmark);
+            Collections.sort(book.getBookmarks(), new NaturalBookmarkComparator(book.getChapters()));
+            db.updateBook(book);
+            L.v(TAG, "Added bookmark=" + bookmark);
+        } else {
+            L.e(TAG, "Book does not exist");
+        }
     }
+
+    public static final String BOOK_ID = "bookId";
 
     @NonNull
     @Override
@@ -68,7 +78,8 @@ public class BookmarkDialogFragment extends DialogFragment {
 
         final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
         final ServiceController controller = new ServiceController(getActivity());
-        final Book book = db.getBook(new PrefsManager(getActivity()).getCurrentBookId());
+        final long bookId = getArguments().getLong(BOOK_ID);
+        final Book book = db.getBook(bookId);
         if (book == null) {
             throw new AssertionError("Cannot instantiate " + TAG + " without a current book");
         }
@@ -127,8 +138,18 @@ public class BookmarkDialogFragment extends DialogFragment {
 
             @Override
             public void onBookmarkClicked(int position) {
+                boolean wasPlaying = MediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING;
+
                 Bookmark bookmark = adapter.getItem(position);
+                new PrefsManager(getActivity()).setCurrentBookIdAndInform(bookId);
                 controller.changeTime(bookmark.getTime(), bookmark.getMediaPath());
+
+                boolean isPlaying = MediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING;
+
+                if (wasPlaying && !isPlaying) {
+                    controller.playPause();
+                }
+
                 dialog.cancel();
             }
         };
@@ -161,7 +182,7 @@ public class BookmarkDialogFragment extends DialogFragment {
                     title = book.getCurrentChapter().getName();
                 }
 
-                addBookmark(book, title, getActivity());
+                addBookmark(book.getId(), title, getActivity());
                 Toast.makeText(getActivity(), R.string.bookmark_added, Toast.LENGTH_SHORT).show();
                 bookmarkTitle.setText("");
                 dismiss();

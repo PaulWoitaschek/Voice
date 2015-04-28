@@ -28,9 +28,11 @@ public class PrefsManager {
         return sp.getLong(PREF_KEY_CURRENT_BOOK, -1);
     }
 
-    public void setCurrentBookId(long bookId) {
+    public void setCurrentBookIdAndInform(long bookId) {
+        long oldId = getCurrentBookId();
         sp.edit().putLong(PREF_KEY_CURRENT_BOOK, bookId)
                 .apply();
+        Communication.sendCurrentBookChanged(c, oldId);
     }
 
     @NonNull
