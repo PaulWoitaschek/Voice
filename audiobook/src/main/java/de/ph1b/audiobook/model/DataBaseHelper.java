@@ -112,12 +112,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     public synchronized void updateBook(@NonNull Book bookToUpdate) {
-        new Validate().notEmpty(bookToUpdate.getChapters());
-
         L.v(TAG, "updateBook=" + bookToUpdate.getName());
-        ContentValues cv = new ContentValues();
-        cv.put(BOOK_JSON, new Gson().toJson(bookToUpdate));
-        getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(bookToUpdate.getId())});
+        new Validate().notEmpty(bookToUpdate.getChapters());
 
         int indexToUpdate = -1;
         ArrayList<Book> allBooks = getInternalBooks();
@@ -127,22 +123,19 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         if (indexToUpdate != -1) {
             allBooks.set(indexToUpdate, bookToUpdate);
+
+            ContentValues cv = new ContentValues();
+            cv.put(BOOK_JSON, new Gson().toJson(bookToUpdate));
+            getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(bookToUpdate.getId())});
+
+            sendBookSetChanged();
         } else {
             L.e(TAG, "Could not update book=" + bookToUpdate);
         }
-
-        sendBookSetChanged();
     }
 
     public synchronized void deleteBook(@NonNull Book book) {
         L.v(TAG, "deleteBook=" + book.getName());
-        SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_BOOK, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
-        File coverFile = book.getCoverFile();
-        if (coverFile.exists() && coverFile.canWrite()) {
-            //noinspection ResultOfMethodCallIgnored
-            coverFile.delete();
-        }
 
         int indexToDelete = -1;
         ArrayList<Book> allBooks = getInternalBooks();
@@ -154,9 +147,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             L.e(TAG, "Could not delete book=" + book);
         } else {
             allBooks.remove(indexToDelete);
-        }
 
-        sendBookSetChanged();
+            SQLiteDatabase db = getWritableDatabase();
+            db.delete(TABLE_BOOK, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
+            File coverFile = book.getCoverFile();
+            if (coverFile.exists() && coverFile.canWrite()) {
+                //noinspection ResultOfMethodCallIgnored
+                coverFile.delete();
+            }
+
+            sendBookSetChanged();
+        }
     }
 
     @Override
@@ -211,7 +212,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         DataBaseUpgradeHelper.upgrade24(db, c);
                         break;
                     case 25:
-                        DataBaseUpgradeHelper.upgrade25(db, c);
+                        DataBaseUpgradeHelper.upgrade25(db);
                         break;
                     default:
                         break;
