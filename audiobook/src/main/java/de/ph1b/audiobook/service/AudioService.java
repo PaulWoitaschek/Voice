@@ -63,7 +63,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         @Override
         public void onReceive(Context context, Intent intent) {
             Book book = db.getBook(prefs.getCurrentBookId());
-            if (book != null && (controller.getBook().getId() != book.getId()))
+            if (book != null && (controller.getBook() == null || controller.getBook().getId() != book.getId()))
                 reInitController(book);
         }
     };
@@ -71,6 +71,15 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         @Override
         public void onReceive(Context context, Intent intent) {
             updateRemoteControlClient();
+            Book controllerBook = controller.getBook();
+            if (controllerBook != null) {
+                for (Book b : db.getAllBooks()) {
+                    if (b.getId() == controllerBook.getId()) {
+                        controller.updateBook(b);
+                        break;
+                    }
+                }
+            }
         }
     };
     private NotificationManager notificationManager;
@@ -81,48 +90,50 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     private RemoteControlClient remoteControlClient = null;
     private final BroadcastReceiver onPlayStateChanged = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(final Context context, Intent intent) {
             final MediaPlayerController.PlayState state = MediaPlayerController.getPlayState();
             L.d(TAG, "onPlayStateChanged:" + state);
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
                     L.d(TAG, "onPlayStateChanged executed:" + state);
-                    switch (state) {
-                        case PLAYING:
-                            audioManager.requestAudioFocus(AudioService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+                    Book controllerBook = controller.getBook();
+                    if (controllerBook != null)
+                        switch (state) {
+                            case PLAYING:
+                                audioManager.requestAudioFocus(AudioService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
-                            //noinspection deprecation
-                            audioManager.registerRemoteControlClient(remoteControlClient);
+                                //noinspection deprecation
+                                audioManager.registerRemoteControlClient(remoteControlClient);
 
-                            startForeground(NOTIFICATION_ID, getNotification());
+                                startForeground(NOTIFICATION_ID, getNotification(controllerBook));
 
-                            //noinspection deprecation
-                            remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
-                            updateRemoteControlClient();
+                                //noinspection deprecation
+                                remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
+                                updateRemoteControlClient();
 
-                            break;
-                        case PAUSED:
-                            stopForeground(false);
-                            notificationManager.notify(NOTIFICATION_ID, getNotification());
+                                break;
+                            case PAUSED:
+                                stopForeground(false);
+                                notificationManager.notify(NOTIFICATION_ID, getNotification(controllerBook));
 
-                            //noinspection deprecation
-                            remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
+                                //noinspection deprecation
+                                remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
 
-                            break;
-                        case STOPPED:
-                            //noinspection deprecation
-                            audioManager.unregisterRemoteControlClient(remoteControlClient);
+                                break;
+                            case STOPPED:
+                                //noinspection deprecation
+                                audioManager.unregisterRemoteControlClient(remoteControlClient);
 
-                            audioManager.abandonAudioFocus(AudioService.this);
-                            notificationManager.cancel(NOTIFICATION_ID);
-                            stopForeground(true);
+                                audioManager.abandonAudioFocus(AudioService.this);
+                                notificationManager.cancel(NOTIFICATION_ID);
+                                stopForeground(true);
 
-                            //noinspection deprecation
-                            remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_STOPPED);
+                                //noinspection deprecation
+                                remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_STOPPED);
 
-                            break;
-                    }
+                                break;
+                        }
                 }
             });
         }
@@ -297,6 +308,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         return null;
     }
 
+
     private void reInitController(@NonNull Book book) {
         controller.stop();
         controller.init(book);
@@ -356,9 +368,8 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private Notification getNotification() {
+    private Notification getNotification(@NonNull Book book) {
         Notification.Builder notificationBuilder = new Notification.Builder(this);
-        Book book = controller.getBook();
         Chapter chapter = book.getCurrentChapter();
 
         // content click
@@ -458,7 +469,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
             public void run() {
                 L.d(TAG, "updateRemoteControlClient called");
                 Book book = controller.getBook();
-                if (!lastPathForUpdatingRemoteControlClient.equals(book.getCurrentMediaPath())) {
+                if (book != null && !lastPathForUpdatingRemoteControlClient.equals(book.getCurrentMediaPath())) {
                     Bitmap bitmap = null;
                     File coverFile = book.getCoverFile();
                     if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
