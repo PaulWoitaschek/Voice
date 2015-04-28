@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 59
-        versionName '2.1.5'
+        versionCode 60
+        versionName '2.1.6'
 
         ndk {
             moduleName "sonic"
