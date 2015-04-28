@@ -377,7 +377,20 @@ public class BookAdder {
                 }
                 Collections.sort(existingChapters, new NaturalOrderComparator());
                 if (bookHasChanged) {
-                    db.updateBook(bookExisting);
+                    db.deleteBook(bookExisting);
+                    if (existingChapters.size() > 0) {
+                        boolean currentPathIsGone = true;
+                        String currentPath = bookExisting.getCurrentMediaPath();
+                        for (Chapter c : existingChapters) {
+                            if (c.getPath().equals(currentPath)) {
+                                currentPathIsGone = false;
+                            }
+                        }
+                        if (currentPathIsGone) {
+                            bookExisting.setPosition(0, existingChapters.get(0).getPath());
+                        }
+                        db.addBook(bookExisting);
+                    }
                 }
             }
         }
