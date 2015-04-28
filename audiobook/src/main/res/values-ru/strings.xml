@@ -3,6 +3,7 @@
     <!--BookShelf-->
     <string name="mal_file_message">Возможно данный файл поврежден:</string>
     <string name="mal_file_title">Поврежденный файл</string>
+    <string name="content_current_book">Книга, которую вы сейчас слушаете</string>
     <!--BookPlayActivity-->
     <string name="cover">Обложка</string>
     <string name="play_pause">Воспроизвести / Пауза</string>
@@ -36,10 +37,15 @@
     <string name="adding_failed_subfolder">Папка не может находиться внутри уже добавленной папки:</string>
     <string name="audiobook_folders_title">Папки с аудиокнигами</string>
     <string name="no_audiobook_folders_title">Выбор папки</string>
+    <string name="no_audiobook_folders_summary_start">Выберите папку(и) с аудиокнигами.</string>
+    <string name="no_audiobook_folders_end">Вы можете указать папку, в которой содержится одна или несколько книг.</string>
     <string name="chosen_folder_description">Выбранная папка:</string>
     <string name="delete_folder">Удалить из библиотеки?</string>
     <string name="delete_folder_content">Вы хотите удалить эту папку из библиотеки?</string>
     <string name="content_file_folder">Индикатор показывает если это файл или папка</string>
+    <string name="folder_add_book">Одна книга</string>
+    <string name="folder_add_collection">Несколько книг в одной папке</string>
+    <string name="for_example">например</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Скорость воспроизведения</string>
     <!--Bookmarks-->
@@ -61,7 +67,8 @@
     <string name="pref_title_track_to_end">Воспроизводить до конца</string>
     <string name="pref_summary_track_to_end">Файл воспроизводится до конца, даже если сработал таймер сна.</string>
     <string name="pref_sleep_time">Время сна</string>
-    <string name="pref_root_folder_title">Папка для аудиокниг</string>
+    <string name="pref_root_folder_title">Папки с аудиокнигами</string>
+    <string name="pref_root_folder_summary">Выбранные папки с книгами.</string>
     <string name="pref_theme_title">Внешний вид</string>
     <string name="pref_theme_light">Светлый</string>
     <string name="pref_theme_dark">Темный</string>
@@ -71,6 +78,14 @@
     <string name="pref_send_bugs_summary">Автоматически отправляет анонимные отчеты при возникновении сбоев</string>
     <string name="pref_auto_rewind_title">Авто-перемотка назад</string>
     <string name="pref_auto_rewind_summary">Отмотать назад после паузы на:</string>
+    <string name="pref_bookmark_on_sleep_title">Ставить закладку в момент сна</string>
+    <string name="pref_bookmark_on_sleep_summary">Автоматически ставить закладку при включении таймера сна.</string>
+    <string name="pref_support_title">Поддержка</string>
+    <string name="pref_support_translations">Переводы</string>
+    <string name="pref_support_contribute">Поддержка и предложения</string>
+    <string name="pref_support_donation">Сделать пожертвование</string>
+    <string name="donation_worked_thanks">Большое спасибо. Это реальная помощь :)</string>
+    <string name="donation_not_worked">Что-то пошло не так...</string>
     <!--Misc-->
     <string name="popup_edit">Редактировать</string>
     <string name="remove">Удалить</string>
