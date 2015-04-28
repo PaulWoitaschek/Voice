@@ -408,8 +408,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         lock.lock();
         try {
             L.e(TAG, "onError");
-            db.deleteBook(book);
-
             Intent bookShelfIntent = BookActivity.bookScreenIntent(c);
             bookShelfIntent.putExtra(MALFORMED_FILE, book.getCurrentChapter().getPath());
             c.startActivity(bookShelfIntent);
