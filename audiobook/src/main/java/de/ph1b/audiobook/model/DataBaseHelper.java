@@ -18,6 +18,7 @@ import java.util.InvalidPropertiesFormatException;
 
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
+import de.ph1b.audiobook.utils.Validate;
 
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class DataBaseHelper extends SQLiteOpenHelper {
@@ -111,6 +112,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     public synchronized void updateBook(@NonNull Book bookToUpdate) {
+        new Validate().notEmpty(bookToUpdate.getChapters());
+
         L.v(TAG, "updateBook=" + bookToUpdate.getName());
         ContentValues cv = new ContentValues();
         cv.put(BOOK_JSON, new Gson().toJson(bookToUpdate));
