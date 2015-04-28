@@ -25,6 +25,45 @@ class DataBaseUpgradeHelper {
 
     private static final String TAG = DataBaseUpgradeHelper.class.getSimpleName();
 
+
+    /**
+     * A previous version caused empty books to be added. So we delete them now.
+     *
+     * @param db The The Database to be upgraded
+     */
+    public static void upgrade25(SQLiteDatabase db) {
+
+        // get all books
+        ArrayList<Book> allBooks = new ArrayList<>();
+        Cursor cursor = db.query("TABLE_BOOK",
+                new String[]{"BOOK_ID", "BOOK_JSON"},
+                null, null, null, null, null);
+        try {
+            while (cursor.moveToNext()) {
+                Book book = new Gson().fromJson(cursor.getString(1), Book.class);
+                book.setId(cursor.getLong(0));
+                allBooks.add(book);
+            }
+        } finally {
+            cursor.close();
+        }
+
+        // delete empty books
+        for (Book b : allBooks) {
+            if (b.getChapters().size() == 0) {
+                db.delete("TABLE_BOOK", "BOOK_ID" + "=?", new String[]{String.valueOf(b.getId())});
+            }
+        }
+    }
+
+
+    /**
+     * Migrate the database so they will be stored as json objects
+     *
+     * @param db The Database to be upgraded
+     * @param c  Context
+     * @throws InvalidPropertiesFormatException if there is an internal data mismatch
+     */
     public static void upgrade24(SQLiteDatabase db, Context c) throws InvalidPropertiesFormatException {
         String copyBookTableName = "TABLE_BOOK_COPY";
         String copyChapterTableName = "TABLE_CHAPTERS_COPY";

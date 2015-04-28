@@ -22,7 +22,7 @@ import de.ph1b.audiobook.utils.L;
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class DataBaseHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 25;
+    private static final int DATABASE_VERSION = 26;
     private static final String DATABASE_NAME = "autoBookDB";
 
     // tables
@@ -206,6 +206,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         break;
                     case 24:
                         DataBaseUpgradeHelper.upgrade24(db, c);
+                        break;
+                    case 25:
+                        DataBaseUpgradeHelper.upgrade25(db, c);
                         break;
                     default:
                         break;
