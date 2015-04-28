@@ -1,4 +1,13 @@
-# v 2.1.5 Support
+# v2.1.6
+
+## Additions
+* Use cover also as play button
+* Bookmarks editable from BookShelf
+
+## Fixes
+* Fixes refreshing books which would lead to crash if book was empty after searching for update
+
+# v2.1.5 Support
 
 ## Additions
 * Added a support menu
