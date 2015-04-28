@@ -222,6 +222,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         } else {
             coverView.setImageDrawable(coverReplacement);
         }
+        coverView.setOnClickListener(this);
 
         // Next/Prev/spinner hiding
         if (book.getChapters().size() == 1) {
@@ -265,6 +266,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.play:
+            case R.id.book_cover:
                 controller.playPause();
                 break;
             case R.id.rewind:
