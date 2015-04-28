@@ -126,8 +126,7 @@ public class CoverDownloader {
             for (int i = 0; i < results.length(); i++) {
                 newStrings.add(results.getJSONObject(i).getString("url"));
             }
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
+        } catch (IOException | JSONException ignored) {
         }
 
         return newStrings;
@@ -145,8 +144,7 @@ public class CoverDownloader {
                     }
                 }
             }
-        } catch (Exception e) {
-            L.d(TAG, e.getMessage());
+        } catch (Exception ignored) {
         }
         return "";
     }
