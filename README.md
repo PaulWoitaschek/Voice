@@ -20,7 +20,7 @@ If you like to contribute to the project just let me know which ideas you have!
 # License
 Copyright (C) 2015 Paul Woitaschek
 
-The license is [GnuGPLv3](https://github.com/Ph1b/MaterialAudiobookPlayer/blob/master/LICENSE.md). With contributing you aggree to license your code under the same conditions.
+The license is [GnuGPLv3](https://github.com/Ph1b/MaterialAudiobookPlayer/blob/master/LICENSE.md). With contributing you agree to license your code under the same conditions.
 
 # Donations
 Paypal: 
