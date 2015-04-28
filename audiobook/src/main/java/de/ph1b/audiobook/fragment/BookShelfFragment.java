@@ -161,31 +161,44 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
                             @Override
                             public boolean onMenuItemClick(MenuItem item) {
                                 switch (item.getItemId()) {
-                                    case R.id.edit_book:
-                                        Book book = adapter.getItem(position);
+                                    case R.id.cover:
+                                        CharSequence[] items = new CharSequence[]{getString(R.string.edit_book_title)};
+                                        new MaterialDialog.Builder(getActivity())
+                                                .items(items)
+                                                .title(R.string.cover)
+                                                .itemsCallback(new MaterialDialog.ListCallback() {
+                                                    @Override
+                                                    public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
+                                                        switch (i) {
+                                                            case 0:
+                                                                Book book = adapter.getItem(position);
 
-                                        EditBookDialogFragment editBookDialogFragment = new EditBookDialogFragment();
-                                        Bundle bundle = new Bundle();
+                                                                EditBookDialogFragment editBookDialogFragment = new EditBookDialogFragment();
+                                                                Bundle bundle = new Bundle();
 
-                                        ArrayList<Bitmap> covers = new ArrayList<>();
-                                        CoverReplacement replacement = new CoverReplacement(book.getName(), getActivity());
-                                        covers.add(ImageHelper.drawableToBitmap(replacement,
-                                                EditBookDialogFragment.REPLACEMENT_DIMEN,
-                                                EditBookDialogFragment.REPLACEMENT_DIMEN));
+                                                                ArrayList<Bitmap> covers = new ArrayList<>();
+                                                                CoverReplacement replacement = new CoverReplacement(book.getName(), getActivity());
+                                                                covers.add(ImageHelper.drawableToBitmap(replacement,
+                                                                        EditBookDialogFragment.REPLACEMENT_DIMEN,
+                                                                        EditBookDialogFragment.REPLACEMENT_DIMEN));
 
-                                        File coverFile = book.getCoverFile();
-                                        if (coverFile.exists() && coverFile.canRead()) {
-                                            Bitmap defaultCover = BitmapFactory.decodeFile(coverFile.getAbsolutePath());
-                                            if (defaultCover != null) {
-                                                covers.add(defaultCover);
-                                            }
-                                        }
+                                                                File coverFile = book.getCoverFile();
+                                                                if (coverFile.exists() && coverFile.canRead()) {
+                                                                    Bitmap defaultCover = BitmapFactory.decodeFile(coverFile.getAbsolutePath());
+                                                                    if (defaultCover != null) {
+                                                                        covers.add(defaultCover);
+                                                                    }
+                                                                }
 
-                                        bundle.putParcelableArrayList(EditBookDialogFragment.BOOK_COVER, covers);
-                                        bundle.putLong(Book.TAG, book.getId());
+                                                                bundle.putParcelableArrayList(EditBookDialogFragment.BOOK_COVER, covers);
+                                                                bundle.putLong(Book.TAG, book.getId());
 
-                                        editBookDialogFragment.setArguments(bundle);
-                                        editBookDialogFragment.show(getFragmentManager(), EditBookDialogFragment.TAG);
+                                                                editBookDialogFragment.setArguments(bundle);
+                                                                editBookDialogFragment.show(getFragmentManager(), EditBookDialogFragment.TAG);
+                                                        }
+                                                    }
+                                                })
+                                                .show();
                                         return true;
                                     case R.id.bookmark:
                                         DialogFragment bookmarkDialogFragment = new BookmarkDialogFragment();
