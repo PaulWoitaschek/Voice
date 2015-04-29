@@ -126,6 +126,7 @@ public class IabHelper {
     // The listener registered on launchPurchaseFlow, which we have to call back when
     // the purchase finishes
     OnIabPurchaseFinishedListener mPurchaseListener;
+    private boolean mBound = false;
 
 
     /**
@@ -250,7 +251,7 @@ public class IabHelper {
         List<ResolveInfo> intentServices = mContext.getPackageManager().queryIntentServices(serviceIntent, 0);
         if (intentServices != null && intentServices.isEmpty()) {
             // service available to handle that Intent
-            mContext.bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
+            mBound = mContext.bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
         } else {
             // no service available to handle that Intent
             if (listener != null) {
@@ -270,9 +271,12 @@ public class IabHelper {
     public void dispose() {
         logDebug("Disposing.");
         mSetupDone = false;
-        if (mServiceConn != null) {
+        if (mServiceConn != null && mBound) {
             logDebug("Unbinding from service.");
-            if (mContext != null) mContext.unbindService(mServiceConn);
+            if (mContext != null) {
+                mContext.unbindService(mServiceConn);
+                mBound = false;
+            }
         }
         mDisposed = true;
         mContext = null;
