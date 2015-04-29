@@ -92,7 +92,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
              * Setting position as a tag, so we can make sure onItemSelected is only fired when
              * the user changes the position himself.
              */
-            book = db.getBook(prefs.getCurrentBookId());
+            book = db.getBook(book.getId());
             if (book == null) {
                 getFragmentManager().beginTransaction()
                         .replace(R.id.content, new BookPlayFragment(), BookPlayFragment.TAG)
