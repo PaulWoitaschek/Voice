@@ -85,7 +85,7 @@
     <string name="pref_support_contribute">피드백 </string>
     <string name="pref_support_donation">앱 계발자를 지원해주세요</string>
     <string name="donation_worked_thanks">지원해주셔서 감사합니다. :)</string>
-    <string name="donation_not_worked">어랏... 뭔가 이상하네요</string>
+    <string name="donation_not_worked">어랏… 뭔가 이상하네요</string>
     <!--Misc-->
     <string name="popup_edit">수정</string>
     <string name="remove">삭제</string>

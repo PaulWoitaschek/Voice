@@ -85,7 +85,7 @@
     <string name="pref_support_contribute">Support und Vorschläge</string>
     <string name="pref_support_donation">Spenden</string>
     <string name="donation_worked_thanks">Danke sehr. Das ist echt hilfreich :)</string>
-    <string name="donation_not_worked">Upps... Da ist was schief gelaufen</string>
+    <string name="donation_not_worked">Upps… Da ist was schief gelaufen</string>
     <!--Misc-->
     <string name="popup_edit">Bearbeiten</string>
     <string name="remove">Löschen</string>
