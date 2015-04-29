@@ -38,6 +38,13 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     private IabHelper iabHelper;
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        iabHelper.dispose();
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

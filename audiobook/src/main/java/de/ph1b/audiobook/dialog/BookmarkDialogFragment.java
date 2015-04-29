@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,7 +28,6 @@ import java.util.Collections;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.BookmarkAdapter;
-import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.DataBaseHelper;
@@ -45,9 +45,10 @@ import de.ph1b.audiobook.utils.PrefsManager;
 public class BookmarkDialogFragment extends DialogFragment {
 
     public static final String TAG = BookmarkDialogFragment.class.getSimpleName();
-
+    public static final String BOOK_ID = "bookId";
     private BookmarkAdapter adapter;
-    private MaterialDialog dialog;
+    private DataBaseHelper db;
+    private ServiceController controller;
 
     public static void addBookmark(long bookId, @NonNull String title, @NonNull Context c) {
         DataBaseHelper db = DataBaseHelper.getInstance(c);
@@ -65,7 +66,13 @@ public class BookmarkDialogFragment extends DialogFragment {
         }
     }
 
-    public static final String BOOK_ID = "bookId";
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        db = DataBaseHelper.getInstance(getActivity());
+        controller = new ServiceController(getActivity());
+    }
 
     @NonNull
     @Override
@@ -76,12 +83,11 @@ public class BookmarkDialogFragment extends DialogFragment {
         //passing null is fine because of fragment
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_bookmark, null);
 
-        final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
-        final ServiceController controller = new ServiceController(getActivity());
+
         final long bookId = getArguments().getLong(BOOK_ID);
         final Book book = db.getBook(bookId);
         if (book == null) {
-            throw new AssertionError("Cannot instantiate " + TAG + " without a current book");
+            throw new AssertionError("Cannot instantiate " + TAG + " without a book");
         }
 
         BookmarkAdapter.OnOptionsMenuClickedListener listener = new BookmarkAdapter.OnOptionsMenuClickedListener() {
@@ -138,19 +144,11 @@ public class BookmarkDialogFragment extends DialogFragment {
 
             @Override
             public void onBookmarkClicked(int position) {
-                boolean wasPlaying = MediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING;
-
                 Bookmark bookmark = adapter.getItem(position);
                 new PrefsManager(getActivity()).setCurrentBookIdAndInform(bookId);
                 controller.changeTime(bookmark.getTime(), bookmark.getMediaPath());
 
-                boolean isPlaying = MediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING;
-
-                if (wasPlaying && !isPlaying) {
-                    controller.playPause();
-                }
-
-                dialog.cancel();
+                getDialog().cancel();
             }
         };
 
@@ -189,12 +187,10 @@ public class BookmarkDialogFragment extends DialogFragment {
             }
         });
 
-        dialog = new MaterialDialog.Builder(getActivity())
+        return new MaterialDialog.Builder(getActivity())
                 .customView(v, false)
                 .title(R.string.bookmark)
                 .negativeText(R.string.dialog_cancel)
                 .build();
-
-        return dialog;
     }
 }
