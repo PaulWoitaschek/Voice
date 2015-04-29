@@ -106,7 +106,7 @@ public class BookmarkDialogFragment extends DialogFragment {
 
                                 new MaterialDialog.Builder(getActivity())
                                         .title(R.string.bookmark_edit_title)
-                                        .inputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
+                                        .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
                                         .input(getString(R.string.bookmark_edit_hint), editBookmark.getTitle(), false, new MaterialDialog.InputCallback() {
                                             @Override
                                             public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
