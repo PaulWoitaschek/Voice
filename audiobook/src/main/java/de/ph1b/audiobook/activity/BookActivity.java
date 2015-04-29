@@ -65,22 +65,26 @@ public class BookActivity extends BaseActivity {
         }
     }
 
+    /**
+     * If we are in {@link de.ph1b.audiobook.fragment.BookShelfFragment}, call {@link #finish()}.
+     * Else reuse {@link de.ph1b.audiobook.fragment.BookShelfFragment} if available or create a new
+     * one and start it.
+     * {@inheritDoc}
+     */
     @Override
     public void onBackPressed() {
         L.d(TAG, "onBackPressed called");
         FragmentManager fm = getSupportFragmentManager();
 
-        Fragment bookPlayFragment = fm.findFragmentByTag(BookPlayFragment.TAG);
         Fragment bookShelfFragment = fm.findFragmentByTag(BookShelfFragment.TAG);
 
-        if (bookPlayFragment != null && bookPlayFragment.isVisible() && bookShelfFragment == null) {
-            fm.beginTransaction().replace(R.id.content, new BookShelfFragment(),
-                    BookShelfFragment.TAG).addToBackStack(null).commit();
-        } else if (bookShelfFragment != null && bookShelfFragment.isVisible()) {
+        if (bookShelfFragment != null && bookShelfFragment.isVisible()) {
             finish();
         } else {
-            L.v(TAG, "calling super.onBackPressed()");
-            super.onBackPressed();
+            if (bookShelfFragment == null)
+                bookShelfFragment = new BookShelfFragment();
+            fm.beginTransaction().replace(R.id.content, bookShelfFragment, BookShelfFragment.TAG)
+                    .addToBackStack(null).commit();
         }
     }
 
