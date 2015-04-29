@@ -1,14 +1,12 @@
 package de.ph1b.audiobook.utils;
 
 import android.app.Application;
-import android.preference.PreferenceManager;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 import org.acra.sender.HttpSender;
 
 import de.ph1b.audiobook.BuildConfig;
-import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.BookAdder;
 
 @ReportsCrashes(
@@ -29,7 +27,6 @@ public class BaseApplication extends Application {
             ACRA.init(this);
         }
 
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         BookAdder.getInstance(this).scanForFiles(true);
     }
 }

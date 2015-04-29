@@ -20,8 +20,10 @@ public class PrefsManager {
     private final SharedPreferences sp;
 
     public PrefsManager(Context c) {
+        PreferenceManager.setDefaultValues(c, R.xml.preferences, false);
         this.c = c;
         sp = PreferenceManager.getDefaultSharedPreferences(c);
+
     }
 
     public long getCurrentBookId() {
