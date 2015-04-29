@@ -70,10 +70,10 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.3.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.3.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.afollestad:material-dialogs:0.7.2.8'
+    compile 'com.afollestad:material-dialogs:0.7.3.1'
     compile 'com.getbase:floatingactionbutton:1.9.0'
     compile 'net.jcip:jcip-annotations:1.0'
-    compile 'ch.acra:acra:4.6.1'
+    compile 'ch.acra:acra:4.6.2'
     compile 'commons-io:commons-io:2.4'
     compile 'com.google.code.gson:gson:2.3.1'
 }
