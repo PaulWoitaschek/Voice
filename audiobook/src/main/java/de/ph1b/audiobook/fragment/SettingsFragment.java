@@ -50,10 +50,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
         prefs = new PrefsManager(getActivity());
         addPreferencesFromResource(R.xml.preferences);
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+
+        setHasOptionsMenu(true);
 
         sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         iabHelper = new IabHelper(getActivity(), "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApfo7lNYf9Mh" +
@@ -70,12 +68,23 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         });
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        // we need this here since SettingsActivity sets toolbar in onCreate, but the fragment is
+        // reused.
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
 
     @Override
     public void onResume() {
         super.onResume();
-        setHasOptionsMenu(true);
         initValues();
+
         sp.registerOnSharedPreferenceChangeListener(this);
     }
 
