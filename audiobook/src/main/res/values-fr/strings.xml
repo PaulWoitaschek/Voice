@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <!--BookShelf-->
+    <string name="mal_file_message">Le fichier suivant est peut-être corrompu:</string>
+    <string name="mal_file_title">Fichier défectueux</string>
+    <string name="content_current_book">Ceci est le livre en cours</string>
+    <!--BookPlayActivity-->
+    <string name="cover">Couverture</string>
+    <string name="play_pause">Lire / Pause</string>
+    <string name="action_sleep">Minuteur</string>
+    <string name="action_sleep_title_hint_left">Pause après</string>
+    <string name="action_sleep_title_hint_right">minutes</string>
+    <string name="rewind">Rembobiner</string>
+    <string name="fast_forward">Avance rapide</string>
+    <string name="previous_track">Piste précédente</string>
+    <string name="next_track">Piste suivante</string>
+    <string name="play">Lire</string>
+    <string name="pause">Pause</string>
+    <string name="stop">Arrêt</string>
+    <string name="sleep_timer_started">Minuteur:</string>
+    <string name="sleep_timer_stopped">Minuteur en arrêt</string>
+    <!--NoExternalStorage-->
+    <string name="no_external_storage">Le stockage externe n\'est pas disponible. Veuillez vous assurez qu\'il est connecté et n\'est pas monté sur votre ordinateur.</string>
+    <string name="no_external_storage_action_bar_title">Stockage externe</string>
+    <!--Dialogs-->
+    <string name="dialog_confirm">Définir</string>
+    <string name="dialog_cancel">Annuler</string>
+    <!--EditBookDialog-->
+    <string name="book_add_empty_title">Ajouter un titre</string>
+    <string name="content_previous_cover">Choisis la couverture précédente</string>
+    <string name="content_next_cover">Choisis la couverture suivante</string>
+    <string name="content_cover">Montre la couverture à choisir</string>
+    <string name="edit_book_title">Modifier le livre</string>
+    <!--JumpToPosition-->
+    <string name="action_time_change">Aller à</string>
+    <!--BookAdding-->
+    <string name="adding_failed_subfolder">Les dossiers ne doivent pas être des sous-dossiers l\'un de l\'autre:</string>
+    <string name="audiobook_folders_title">Dossiers de livres audio</string>
+    <string name="no_audiobook_folders_title">Choisissez un dossier maintenant</string>
+    <string name="no_audiobook_folders_summary_start">Veuillez choisir le(s) dossier(s) des livres audio maintenant.</string>
+    <string name="no_audiobook_folders_end">Vous pouvez choisir un dossier principal contenant des livres différents. Ou vous pouvez ne choisir qu\'un seul livre.</string>
+    <string name="chosen_folder_description">Dossier choisi:</string>
+    <string name="delete_folder">Enlever de la bibliothèque?</string>
+    <string name="delete_folder_content">Voulez vous enlever le dossier suivant de la bibliothèque?</string>
+    <string name="content_file_folder">Indiquer si c\'est un fichier ou un dossier</string>
+    <string name="folder_add_book">Livre unique</string>
+    <string name="folder_add_collection">Dossier de plusieurs livres</string>
+    <string name="for_example">Par ex.</string>
+    <!--PlaybackSpeed-->
+    <string name="playback_speed">Vitesse de lecture</string>
+    <!--Bookmarks-->
+    <string name="bookmark">Marque-page</string>
+    <string name="bookmark_edit_title">Modifier le marque-page</string>
+    <string name="acc_button_add_bookmark">Ajouter un marque-page</string>
+    <string name="bookmark_edit_hint">Nom du marque-page</string>
+    <string name="bookmark_added">Marque-page ajouté</string>
+    <string name="bookmark_delete_title">Effacer ce marque-page?</string>
+    <!--Settings-->
+    <string name="pref_category_general">Réglages généraux</string>
+    <string name="pref_category_playback">Comportement de lecture</string>
+    <string name="action_settings">Préférences</string>
+    <string name="pref_resume_on_replug">Reprendre la lecture</string>
+    <string name="pref_resume_on_replug_hint">Si vous avez mis en pause en débranchant le casque, la lecture reprendra en rebranchant.</string>
+    <string name="minutes">minutes</string>
+    <string name="seconds">secondes</string>
+    <string name="pref_seek_time">Sauter par</string>
+    <string name="pref_title_track_to_end">Continuer jusqu\'à la fin</string>
+    <string name="pref_summary_track_to_end">Continue à jouer jusqu\'à la fin de la piste, après que le minuteur soit déclenché.</string>
+    <string name="pref_sleep_time">Temps avant la pause</string>
+    <string name="pref_root_folder_title">Dossier de livre audio</string>
+    <string name="pref_root_folder_summary">Les dossiers de livres audio sélectionnés.</string>
+    <string name="pref_theme_title">Thème</string>
+    <string name="pref_theme_light">Clair</string>
+    <string name="pref_theme_dark">Sombre</string>
+    <string name="pref_pause_on_can_duck_title">Pause lors d\'une interruption</string>
+    <string name="pref_pause_on_can_duck_summary">Pause lors d\'une interruption au lieu de baisser le volume pour la durée de l\'interruption.</string>
+    <string name="pref_send_bugs_title">Signaler des bugs</string>
+    <string name="pref_send_bugs_summary">Envoie automatiquement des rapports anonymes sur les plantage pour aider au développement.</string>
+    <string name="pref_auto_rewind_title">Rembobinage automatique</string>
+    <string name="pref_auto_rewind_summary">Rembobine automatiquement après une mise en pause manuelle:</string>
+    <string name="pref_bookmark_on_sleep_title">Marque-page à la mise en veille</string>
+    <string name="pref_bookmark_on_sleep_summary">Place un marque-page automatiquement à chaque fois que le minuteur est réglé.</string>
+    <string name="pref_support_title">Assistance</string>
+    <string name="pref_support_translations">Traductions</string>
+    <string name="pref_support_contribute">Assistance et suggestions</string>
+    <string name="pref_support_donation">Faire un don</string>
+    <string name="donation_worked_thanks">Merci beaucoup. C\'est d\'une grande aide :)</string>
+    <string name="donation_not_worked">Oups… Il y a eu un problème</string>
+    <!--Misc-->
+    <string name="popup_edit">Modifer</string>
+    <string name="remove">Enlever</string>
+</resources>
