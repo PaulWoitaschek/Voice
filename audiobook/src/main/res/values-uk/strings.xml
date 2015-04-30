@@ -3,6 +3,7 @@
     <!-- BookShelf -->
     <string name="mal_file_message">Цей файл може бути зіпсований:</string>
     <string name="mal_file_title">Зіпсований файл</string>
+    <string name="content_current_book">Поточна книга</string>
     <!-- BookPlayActivity -->
     <string name="cover">Обкладинка</string>
     <string name="play_pause">Програвати / Пауза</string>
@@ -44,6 +45,7 @@
     <string name="content_file_folder">Індикатор відображає, че є це файл або папка</string>
     <string name="folder_add_book">Книга</string>
     <string name="folder_add_collection">Папка з декількома книгами</string>
+    <string name="for_example">наприклад</string>
     <!-- PlaybackSpeed -->
     <string name="playback_speed">Швидкість програвання</string>
     <!-- Bookmarks -->
@@ -76,6 +78,14 @@
     <string name="pref_send_bugs_summary">Автоматично відсилати звіти про помилки під час збою для допомоги розробки проекту.</string>
     <string name="pref_auto_rewind_title">Автоматична перекрутка назад</string>
     <string name="pref_auto_rewind_summary">Автоматично прокручувати назад після паузи:</string>
+    <string name="pref_bookmark_on_sleep_title">Автоматично додавати закладку, коли спрацьовує таймер сну</string>
+    <string name="pref_bookmark_on_sleep_summary">Автоматично додавати закладку, коли таймер сну включається.</string>
+    <string name="pref_support_title">Підтримка</string>
+    <string name="pref_support_translations">Переклади</string>
+    <string name="pref_support_contribute">Підтримка та запропонування</string>
+    <string name="pref_support_donation">Зробити внесок</string>
+    <string name="donation_worked_thanks">Щиро дякуємо. Це велика підтримка :)</string>
+    <string name="donation_not_worked">На жаль… щось не спрацювало</string>
     <!-- Misc -->
     <string name="popup_edit">Редагувати</string>
     <string name="remove">Видалити</string>
