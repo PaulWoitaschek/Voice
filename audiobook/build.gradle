@@ -76,4 +76,5 @@ dependencies {
     compile 'ch.acra:acra:4.6.2'
     compile 'commons-io:commons-io:2.4'
     compile 'com.google.code.gson:gson:2.3.1'
+    compile 'com.github.AnderWeb:discreteSeekBar:a3b5deadf3'
 }

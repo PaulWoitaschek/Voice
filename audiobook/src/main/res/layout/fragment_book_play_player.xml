@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:text="@string/zeroTime" />
 
-        <SeekBar
+        <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
             android:id="@+id/seekBar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
