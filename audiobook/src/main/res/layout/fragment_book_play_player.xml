@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_layout"
@@ -37,9 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
-            android:layout_weight="1"
-            app:dsb_indicatorColor="?attr/colorAccent"
-            app:dsb_progressColor="?attr/colorAccent" />
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/maxTime"
