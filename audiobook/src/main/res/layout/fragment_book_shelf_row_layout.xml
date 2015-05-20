@@ -5,6 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="2dp"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
+    android:background="?attr/selectableItemBackgroundBorderless"
     android:orientation="vertical"
     card_view:cardCornerRadius="4dp"
     card_view:cardPreventCornerOverlap="false">
@@ -34,6 +37,7 @@
 
         <ImageButton
             android:id="@+id/editBook"
+            style="@style/DarkButtonStyle"
             android:layout_width="35dp"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
