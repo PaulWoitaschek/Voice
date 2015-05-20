@@ -22,14 +22,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
-
-import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -47,6 +46,7 @@ import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.PlayPauseDrawable;
+import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
@@ -79,7 +79,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         }
     };
     private TextView playedTimeView;
-    private DiscreteSeekBar seekBar;
+    private SeekBar seekBar;
     private volatile Spinner bookSpinner;
     private TextView maxTimeView;
     private PrefsManager prefs;
@@ -148,7 +148,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         setHasOptionsMenu(true);
 
         //init buttons
-        seekBar = (DiscreteSeekBar) view.findViewById(R.id.seekBar);
+        seekBar = (SeekBar) view.findViewById(R.id.seekBar);
         FloatingActionButton playButton = (FloatingActionButton) view.findViewById(R.id.play);
         ImageButton previous_button = (ImageButton) view.findViewById(R.id.previous);
         ImageButton next_button = (ImageButton) view.findViewById(R.id.next);
@@ -165,36 +165,20 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         playButton.setOnClickListener(this);
         playButton.setIconDrawable(playPauseDrawable);
         playedTimeView.setOnClickListener(this);
-        seekBar.setNumericTransformer(new DiscreteSeekBar.NumericTransformer() {
+        ThemeUtil.theme(seekBar);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public int transform(int i) {
-                return i;
-            }
-
-            @Override
-            public String transformToString(int value) {
-                return formatTime(value);
-            }
-
-            @Override
-            public boolean useStringTransform() {
-                return true;
-            }
-        });
-        seekBar.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
-            @Override
-            public void onProgressChanged(DiscreteSeekBar discreteSeekBar, int progress, boolean b) {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 //sets text to adjust while using seekBar
                 playedTimeView.setText(formatTime(progress));
             }
 
             @Override
-            public void onStartTrackingTouch(DiscreteSeekBar discreteSeekBar) {
-
+            public void onStartTrackingTouch(SeekBar seekBar) {
             }
 
             @Override
-            public void onStopTrackingTouch(DiscreteSeekBar discreteSeekBar) {
+            public void onStopTrackingTouch(SeekBar seekBar) {
                 int progress = seekBar.getProgress();
                 controller.changeTime(progress, book.getCurrentChapter()
                         .getPath());
