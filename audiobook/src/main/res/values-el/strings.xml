@@ -3,6 +3,7 @@
     <!--BookShelf-->
     <string name="mal_file_message">Το ακόλουθο αρχείο μπορεί να είναι κατεστραμμένο:</string>
     <string name="mal_file_title">Αρχείο με ελαττώματα</string>
+    <string name="content_current_book">Αυτό είναι το τρέχον βιβλίο</string>
     <!--BookPlayActivity-->
     <string name="cover">Εξώφυλλο</string>
     <string name="play_pause">Αναπαραγωγή / Παύση</string>
@@ -44,6 +45,7 @@
     <string name="content_file_folder">Αναγραφή αν ειναι αρχείο ή φάκελος</string>
     <string name="folder_add_book">Ενιαίο βιβλίο</string>
     <string name="folder_add_collection">Φάκελος με πολλαπλά βιβλία</string>
+    <string name="for_example">π.χ.</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Ταχύτητα αναπαραγωγής</string>
     <!--Bookmarks-->
@@ -76,6 +78,14 @@
     <string name="pref_send_bugs_summary">Αποστέλλει αυτόματα ανώνυμες καταγγελίες σχετικά με τις διακοπές για να βοηθήσει την ανάπτυξη.</string>
     <string name="pref_auto_rewind_title">Αυτόματη αναζήτηση προς τα πίσω </string>
     <string name="pref_auto_rewind_summary">Αναζήτηση προς τα πίσω αυτόματα μετά τη χειροκίνητη παύση:</string>
+    <string name="pref_bookmark_on_sleep_title">Ρυθμιση του σελιδοδείκτη για εναρξη του χρονοδιακόπτη ύπνου</string>
+    <string name="pref_bookmark_on_sleep_summary">Ορίζει αυτόματα ένα σελιδοδείκτη κάθε φορά που ο χρονοδιακόπτης ύπνου έχει ρυθμιστεί.</string>
+    <string name="pref_support_title">Υποστήριξη</string>
+    <string name="pref_support_translations">Μεταφράσεις</string>
+    <string name="pref_support_contribute">Υποστήριξη και προτάσεις</string>
+    <string name="pref_support_donation">Δωρεά</string>
+    <string name="donation_worked_thanks">Ευχαριστούμε πολύ. Αυτό πραγματικά βοηθά :)</string>
+    <string name="donation_not_worked">Ουπς… κάτι πήγε στραβά</string>
     <!--Misc-->
     <string name="popup_edit">Επεξεργασία </string>
     <string name="remove">Αφαίρεση</string>
