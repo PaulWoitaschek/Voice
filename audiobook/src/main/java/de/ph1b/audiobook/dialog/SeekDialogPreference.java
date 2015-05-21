@@ -38,7 +38,6 @@ public class SeekDialogPreference extends DialogPreference {
 
         //seekBar
         int position = prefs.getSeekTime();
-        ThemeUtil.theme(seekBar);
         seekBar.setMax(SEEK_BAR_MAX - SEEK_BAR_MIN);
         seekBar.setProgress(position - SEEK_BAR_MIN);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

@@ -5,9 +5,10 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
@@ -22,11 +23,11 @@ public class ThemeUtil {
 
     public static void theme(SeekBar seekBar) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            int colorAccent = seekBar.getResources().getColor(ThemeUtil.getResourceId(seekBar.getContext(), R.attr.colorAccent));
-            seekBar.getProgressDrawable().setColorFilter(colorAccent, PorterDuff.Mode.SRC_ATOP);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                seekBar.getThumb().setColorFilter(colorAccent, PorterDuff.Mode.SRC_ATOP);
-            }
+            int colorAccent = seekBar.getResources().getColor(ThemeUtil.getResourceId(
+                    seekBar.getContext(), R.attr.colorAccent));
+            Drawable progressDrawable = DrawableCompat.wrap(seekBar.getProgressDrawable());
+            DrawableCompat.setTint(progressDrawable, colorAccent);
+            seekBar.setProgressDrawable(progressDrawable);
         }
     }
 

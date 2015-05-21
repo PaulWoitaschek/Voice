@@ -8,4 +8,6 @@
     <style name="LightButtonStyle" parent="@android:style/Widget.ImageButton">
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
     </style>
+
+    <style name="seek_style" parent="@android:style/Widget.DeviceDefault.SeekBar" />
 </resources>

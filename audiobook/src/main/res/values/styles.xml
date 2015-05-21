@@ -47,6 +47,8 @@
         <item name="bookmark_add_button">@drawable/ic_add_circle_outline_grey600_36dp</item>
         <item name="more">@drawable/ic_more_vert_grey600_24dp</item>
 
+        <item name="android:seekBarStyle">@style/seek_style</item>
+
         <item name="text_primary">@color/light_text_primary</item>
         <item name="text_secondary">@color/light_text_secondary</item>
     </style>
@@ -97,6 +99,8 @@
         <item name="bookmark_add_button">@drawable/ic_add_circle_outline_white_36dp</item>
         <item name="more">@drawable/ic_more_vert_white_24dp</item>
 
+        <item name="android:seekBarStyle">@style/seek_style</item>
+
         <item name="text_primary">@color/dark_text_primary</item>
         <item name="text_secondary">@color/dark_text_secondary</item>
     </style>
@@ -112,5 +116,17 @@
     <style name="fab_label_style">
         <item name="android:background">@drawable/fab_label_background</item>
         <item name="android:textColor">@color/abc_primary_text_material_dark</item>
+    </style>
+
+    <style name="seek_style">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_material</item>
+        <item name="android:indeterminateDrawable">@drawable/scrubber_progress_horizontal_material
+        </item>
+        <item name="android:thumb">@drawable/seek_thumb</item>
+        <item name="android:focusable">true</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:mirrorForRtl" tools:ignore="NewApi">true</item>
     </style>
 </resources>

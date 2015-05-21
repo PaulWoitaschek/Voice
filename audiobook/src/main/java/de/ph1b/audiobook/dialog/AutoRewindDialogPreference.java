@@ -45,7 +45,6 @@ public class AutoRewindDialogPreference extends DialogPreference {
 
         //seekBar
         int position = prefs.getAutoRewindAmount();
-        ThemeUtil.theme(seekBar);
         seekBar.setMax(SEEK_BAR_MAX - SEEK_BAR_MIN);
         seekBar.setProgress(position - SEEK_BAR_MIN);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
