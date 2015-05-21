@@ -12,6 +12,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -338,7 +339,11 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
             case R.id.action_sleep:
                 controller.toggleSleepSand();
                 if (prefs.setBookmarkOnSleepTimer() && !MediaPlayerController.sleepTimerActive) {
-                    BookmarkDialogFragment.addBookmark(book.getId(), book.getCurrentChapter().getName(), getActivity());
+                    String date = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE |
+                            DateUtils.FORMAT_SHOW_TIME |
+                            DateUtils.FORMAT_NUMERIC_DATE);
+                    BookmarkDialogFragment.addBookmark(book.getId(), date + ": " +
+                            getString(R.string.action_sleep), getActivity());
                 }
                 return true;
             case R.id.action_time_lapse:
