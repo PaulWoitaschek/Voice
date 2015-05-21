@@ -60,13 +60,13 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
     private ArrayList<Bitmap> covers;
     private int googleCount = 0;
     private Book book;
+    private DataBaseHelper db;
     private final BroadcastReceiver onBookSetChanged = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             book = db.getBook(book.getId());
         }
     };
-    private DataBaseHelper db;
 
     @Override
     public void onStart() {

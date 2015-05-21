@@ -15,7 +15,6 @@ public class Book implements Comparable<Book> {
 
     public static final String TAG = Book.class.getSimpleName();
     private static final long ID_UNKNOWN = -1;
-    private long id = ID_UNKNOWN;
     @NonNull
     private final String root;
     @NonNull
@@ -26,6 +25,7 @@ public class Book implements Comparable<Book> {
     private final String packageName;
     @NonNull
     private final ArrayList<Bookmark> bookmarks;
+    private long id = ID_UNKNOWN;
     @NonNull
     private String name;
     private int time = 0;

@@ -28,14 +28,14 @@ import de.ph1b.audiobook.utils.PrefsManager;
 
 public class BookAdder {
 
+    private static final String TAG = BookAdder.class.getSimpleName();
+    private static final ArrayList<String> audioTypes = new ArrayList<>();
     public static final FileFilter folderAndMusicFilter = new FileFilter() {
         @Override
         public boolean accept(File pathname) {
             return isAudio(pathname) || pathname.isDirectory();
         }
     };
-    private static final String TAG = BookAdder.class.getSimpleName();
-    private static final ArrayList<String> audioTypes = new ArrayList<>();
     private static final ArrayList<String> imageTypes = new ArrayList<>();
     private static final FileFilter imageFilter = new FileFilter() {
         @Override
@@ -47,6 +47,8 @@ public class BookAdder {
             return false;
         }
     };
+    public static volatile boolean scannerActive = false;
+    private static BookAdder instance;
 
     static {
         audioTypes.add(".3gp");
@@ -78,8 +80,6 @@ public class BookAdder {
         imageTypes.add(".png");
     }
 
-    public static volatile boolean scannerActive = false;
-    private static BookAdder instance;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Context c;
     private final PrefsManager prefs;

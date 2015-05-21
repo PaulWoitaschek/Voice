@@ -7,6 +7,10 @@ package org.vinuxproject.sonic;
 
 @SuppressWarnings("ALL")
 public class Sonic {
+    static {
+        System.loadLibrary("sonic");
+    }
+
     // Sonic is thread-safe, but to have multiple instances of it, we have to
     // store a pointer to it's data. We store that here as a long, just in case
     // someone wants to port this JNI wapper to a 64-bit JVM.
@@ -170,8 +174,4 @@ public class Sonic {
     private native void setVolumeNative(long sonicID, float newVolume);
 
     private native float getVolumeNative(long sonicID);
-
-    static {
-        System.loadLibrary("sonic");
-    }
 }

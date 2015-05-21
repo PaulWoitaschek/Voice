@@ -59,6 +59,43 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
             new LinkedBlockingQueue<Runnable>(2), // queue capacity
             new ThreadPoolExecutor.DiscardOldestPolicy()
     );
+    private NotificationManager notificationManager;
+    private PrefsManager prefs;
+    private MediaPlayerController controller;
+    private AudioManager audioManager;
+    @SuppressWarnings("deprecation")
+    private RemoteControlClient remoteControlClient = null;
+    private volatile boolean pauseBecauseLossTransient = false;
+    private volatile boolean pauseBecauseHeadset = false;
+    private final BroadcastReceiver audioBecomingNoisyReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (MediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
+                pauseBecauseHeadset = true;
+                controller.pause();
+            }
+        }
+    };
+    private final BroadcastReceiver headsetPlugReceiver = new BroadcastReceiver() {
+        private static final int PLUGGED = 1;
+        private static final int UNPLUGGED = 0;
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action != null && action.equals(Intent.ACTION_HEADSET_PLUG)) {
+                if (intent.getIntExtra("state", UNPLUGGED) == PLUGGED) {
+                    if (pauseBecauseHeadset) {
+                        if (prefs.resumeOnReplug()) {
+                            controller.play();
+                        }
+                        pauseBecauseHeadset = false;
+                    }
+                }
+            }
+        }
+    };
+    private DataBaseHelper db;
     private final BroadcastReceiver onCurrentBookChanged = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -67,6 +104,11 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 reInitController(book);
         }
     };
+    private LocalBroadcastManager bcm;
+    /**
+     * The last path the {@link #updateRemoteControlClient()} has used to update the metadata.
+     */
+    private volatile String lastPathForUpdatingRemoteControlClient = "";
     private final BroadcastReceiver onBookSetChanged = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -82,12 +124,6 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
             }
         }
     };
-    private NotificationManager notificationManager;
-    private PrefsManager prefs;
-    private MediaPlayerController controller;
-    private AudioManager audioManager;
-    @SuppressWarnings("deprecation")
-    private RemoteControlClient remoteControlClient = null;
     private final BroadcastReceiver onPlayStateChanged = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, Intent intent) {
@@ -138,42 +174,6 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
             });
         }
     };
-    private volatile boolean pauseBecauseLossTransient = false;
-    private volatile boolean pauseBecauseHeadset = false;
-    private final BroadcastReceiver audioBecomingNoisyReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (MediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
-                pauseBecauseHeadset = true;
-                controller.pause();
-            }
-        }
-    };
-    private final BroadcastReceiver headsetPlugReceiver = new BroadcastReceiver() {
-        private static final int PLUGGED = 1;
-        private static final int UNPLUGGED = 0;
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action != null && action.equals(Intent.ACTION_HEADSET_PLUG)) {
-                if (intent.getIntExtra("state", UNPLUGGED) == PLUGGED) {
-                    if (pauseBecauseHeadset) {
-                        if (prefs.resumeOnReplug()) {
-                            controller.play();
-                        }
-                        pauseBecauseHeadset = false;
-                    }
-                }
-            }
-        }
-    };
-    private DataBaseHelper db;
-    private LocalBroadcastManager bcm;
-    /**
-     * The last path the {@link #updateRemoteControlClient()} has used to update the metadata.
-     */
-    private volatile String lastPathForUpdatingRemoteControlClient = "";
 
     @Override
     public void onCreate() {

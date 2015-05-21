@@ -63,14 +63,15 @@ import de.ph1b.audiobook.utils.PrefsManager;
 public class BookShelfFragment extends Fragment implements View.OnClickListener {
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
-    private final BroadcastReceiver onBookSetChangedReceiver = new BroadcastReceiver() {
+    private static final String RECYCLER_VIEW_STATE = "recyclerViewState";
+    private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
+    private final BroadcastReceiver onPlayStateChanged = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            L.v(TAG, "onBookSetChanged called");
-            adapter.newDataSet(db.getAllBooks());
-            checkVisibilities();
+            setPlayState(true);
         }
     };
+    private BookShelfAdapter adapter;
     private final BroadcastReceiver onCoverChanged = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -84,6 +85,12 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
             }
         }
     };
+    private PrefsManager prefs;
+    private ServiceController controller;
+    private MaterialDialog noFolderWarning;
+    private RecyclerView recyclerView;
+    private ProgressBar recyclerReplacementView;
+    private FloatingActionButton fab;
     private final BroadcastReceiver onCurrentBookChanged = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -97,28 +104,21 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
             checkVisibilities();
         }
     };
-    private static final String RECYCLER_VIEW_STATE = "recyclerViewState";
-    private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
-    private final BroadcastReceiver onPlayStateChanged = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            setPlayState(true);
-        }
-    };
     private final BroadcastReceiver onScannerStateChanged = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             checkVisibilities();
         }
     };
-    private BookShelfAdapter adapter;
-    private PrefsManager prefs;
-    private ServiceController controller;
-    private MaterialDialog noFolderWarning;
-    private RecyclerView recyclerView;
-    private ProgressBar recyclerReplacementView;
-    private FloatingActionButton fab;
     private DataBaseHelper db;
+    private final BroadcastReceiver onBookSetChangedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            L.v(TAG, "onBookSetChanged called");
+            adapter.newDataSet(db.getAllBooks());
+            checkVisibilities();
+        }
+    };
     private LocalBroadcastManager bcm;
 
     @Nullable

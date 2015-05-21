@@ -319,7 +319,7 @@ class DataBaseUpgradeHelper {
 
 
     /**
-     * Adds a new row called
+     * Adds a new column indicating if the book should be actively shown or hidden.
      */
     public void upgrade26() {
         String copyBookTableName = "TABLE_BOOK_COPY";

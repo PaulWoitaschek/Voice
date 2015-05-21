@@ -64,6 +64,11 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
             setPlayState(true);
         }
     };
+    private TextView playedTimeView;
+    private SeekBar seekBar;
+    private volatile Spinner bookSpinner;
+    private TextView maxTimeView;
+    private PrefsManager prefs;
     private final BroadcastReceiver onSleepStateChanged = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -79,13 +84,9 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
             }
         }
     };
-    private TextView playedTimeView;
-    private SeekBar seekBar;
-    private volatile Spinner bookSpinner;
-    private TextView maxTimeView;
-    private PrefsManager prefs;
     private ServiceController controller;
     private Book book;
+    private DataBaseHelper db;
     private final BroadcastReceiver onBookSetChanged = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -120,7 +121,6 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
             }
         }
     };
-    private DataBaseHelper db;
     private LocalBroadcastManager bcm;
 
     @Nullable

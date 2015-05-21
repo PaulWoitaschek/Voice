@@ -57,6 +57,13 @@ public class PlayPauseDrawable extends Drawable {
             {19f, 19f, 8f, 8f, 19f, 19f, 8f, 8f, 19f},
             {12f, 12f, 5f, 9f, 12f, 12f, 5f, 19f, 12f}
     };
+    private final Animator mAnimator = ObjectAnimator.ofFloat(this, TRANSFORM, 0f, 1f);
+    private final Path mPath;
+    private final Paint mPaint;
+    private final float[][][] mVertex;
+    private float mProgress;
+    private int mFromShape;
+    private int mToShape;
     private final static Property<PlayPauseDrawable, Float> TRANSFORM =
             new FloatProperty<PlayPauseDrawable>() {
                 @Override
@@ -69,13 +76,6 @@ public class PlayPauseDrawable extends Drawable {
                     return object.getTransformation();
                 }
             };
-    private final Animator mAnimator = ObjectAnimator.ofFloat(this, TRANSFORM, 0f, 1f);
-    private final Path mPath;
-    private final Paint mPaint;
-    private final float[][][] mVertex;
-    private float mProgress;
-    private int mFromShape;
-    private int mToShape;
 
     public PlayPauseDrawable() {
         this(VERTEX_PAUSE, VERTEX_PLAY);

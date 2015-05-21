@@ -43,6 +43,8 @@ import de.ph1b.audiobook.utils.PrefsManager;
 
 public class WidgetUpdateService extends Service {
     private final ExecutorService executor = Executors.newCachedThreadPool();
+    private DataBaseHelper db;
+    private PrefsManager prefs;
     private final BroadcastReceiver onCurrentBookChanged = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -61,8 +63,6 @@ public class WidgetUpdateService extends Service {
             updateWidget();
         }
     };
-    private DataBaseHelper db;
-    private PrefsManager prefs;
     private LocalBroadcastManager bcm;
 
     @Override
