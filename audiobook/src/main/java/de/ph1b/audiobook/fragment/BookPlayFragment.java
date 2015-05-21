@@ -108,13 +108,13 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
             bookSpinner.setSelection(position, true);
             int duration = chapter.getDuration();
             seekBar.setMax(duration);
-            maxTimeView.setText(formatTime(duration));
+            maxTimeView.setText(formatTime(duration, duration));
 
             // Setting seekBar and played time view
             if (!seekBar.isPressed()) {
                 int progress = book.getTime();
                 seekBar.setProgress(progress);
-                playedTimeView.setText(formatTime(progress));
+                playedTimeView.setText(formatTime(progress, duration));
             }
         }
     };
@@ -170,7 +170,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 //sets text to adjust while using seekBar
-                playedTimeView.setText(formatTime(progress));
+                playedTimeView.setText(formatTime(progress, seekBar.getMax()));
             }
 
             @Override
@@ -182,7 +182,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
                 int progress = seekBar.getProgress();
                 controller.changeTime(progress, book.getCurrentChapter()
                         .getPath());
-                playedTimeView.setText(formatTime(progress));
+                playedTimeView.setText(formatTime(progress, seekBar.getMax()));
             }
         });
 
@@ -248,11 +248,16 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         bcm = LocalBroadcastManager.getInstance(getActivity());
     }
 
-    private String formatTime(int ms) {
+    private String formatTime(int ms, int duration) {
         String h = String.valueOf(TimeUnit.MILLISECONDS.toHours(ms));
         String m = String.format("%02d", (TimeUnit.MILLISECONDS.toMinutes(ms) % 60));
         String s = String.format("%02d", (TimeUnit.MILLISECONDS.toSeconds(ms) % 60));
-        return h + ":" + m + ":" + s;
+
+        if (TimeUnit.MILLISECONDS.toHours(duration) == 0) {
+            return m + ":" + s;
+        } else {
+            return h + ":" + m + ":" + s;
+        }
     }
 
     @Override
