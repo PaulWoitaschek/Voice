@@ -13,15 +13,15 @@
 
         <item name="colorPrimary">@color/light_primary</item>
         <item name="colorPrimaryDark">@color/light_primary_dark</item>
-        <item name="colorAccent">@color/light_accent</item>
-        <item name="colorAccentDark">@color/light_accent_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="colorAccentDark">@color/accentDark</item>
         <item name="android:imageButtonStyle">@style/LightButtonStyle</item>
         <item name="theme_name">@string/pref_theme_light</item>
         <item name="android:navigationBarColor" tools:ignore="NewApi">@color/light_primary_dark
         </item>
 
         <!-- BookShelf -->
-        <item name="progress_drawable">@drawable/light_progress</item>
+        <item name="progress_drawable">@drawable/progress</item>
 
         <!-- BookPlay -->
         <item name="book_play_rewind">@drawable/ic_fast_rewind_grey600_36dp</item>
@@ -64,14 +64,14 @@
 
         <item name="colorPrimary">@color/dark_primary</item>
         <item name="colorPrimaryDark">@color/dark_primary_dark</item>
-        <item name="colorAccent">@color/dark_accent</item>
-        <item name="colorAccentDark">@color/dark_accent_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="colorAccentDark">@color/accentDark</item>
         <item name="android:imageButtonStyle">@style/DarkButtonStyle</item>
         <item name="theme_name">@string/pref_theme_dark</item>
         <item name="android:navigationBarColor" tools:ignore="NewApi">@android:color/black</item>
 
         <!-- BookShelf -->
-        <item name="progress_drawable">@drawable/dark_progress</item>
+        <item name="progress_drawable">@drawable/progress</item>
 
         <!-- BookPlay -->
         <item name="book_play_rewind">@drawable/ic_fast_rewind_white_36dp</item>

@@ -3,7 +3,7 @@
     <item android:id="@android:id/progress">
         <clip>
             <shape>
-                <solid android:color="@color/dark_accent" />
+                <solid android:color="@color/accent" />
             </shape>
         </clip>
     </item>
