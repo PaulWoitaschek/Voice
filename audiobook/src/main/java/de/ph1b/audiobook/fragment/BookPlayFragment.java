@@ -99,6 +99,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
                         .commit();
                 return;
             }
+            L.d(TAG, "onBookSetChanged called with bookName=" + book.getName());
 
             ArrayList<Chapter> chapters = book.getChapters();
             Chapter chapter = book.getCurrentChapter();
@@ -273,12 +274,6 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        onBookSetChanged.onReceive(getActivity(), new Intent());
-    }
 
     @Override
     public void onClick(View view) {
@@ -383,6 +378,8 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         bcm.registerReceiver(onBookSetChanged, new IntentFilter(Communication.BOOK_SET_CHANGED));
         bcm.registerReceiver(onPlayStateChanged, new IntentFilter(Communication.PLAY_STATE_CHANGED));
         bcm.registerReceiver(onSleepStateChanged, new IntentFilter(Communication.SLEEP_STATE_CHANGED));
+
+        onBookSetChanged.onReceive(getActivity(), new Intent());
     }
 
     @Override
