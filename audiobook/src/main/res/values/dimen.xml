@@ -2,7 +2,6 @@
 <resources>
     <dimen name="cover_edit_stroke_width">3dp</dimen>
     <dimen name="desired_medium_cover">180dp</dimen>
-    <dimen name="widget_margin">8dp</dimen>
 
     <dimen name="dialog_content_text_size">18sp</dimen>
 
