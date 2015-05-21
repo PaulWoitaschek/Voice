@@ -23,7 +23,7 @@ import de.ph1b.audiobook.utils.Validate;
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class DataBaseHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 26;
+    private static final int DATABASE_VERSION = 27;
     private static final String DATABASE_NAME = "autoBookDB";
 
     // tables
@@ -32,10 +32,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     // book keys
     private static final String BOOK_ID = "BOOK_ID";
     private static final String BOOK_JSON = "BOOK_JSON";
+    private static final String BOOK_ACTIVE = "BOOK_ACTIVE";
 
     private static final String CREATE_TABLE_BOOK = "CREATE TABLE " + TABLE_BOOK + " ( " +
             BOOK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            BOOK_JSON + " TEXT NOT NULL)";
+            BOOK_JSON + " TEXT NOT NULL, " +
+            BOOK_ACTIVE + " INTEGER NOT NULL)";
     private static final String TAG = DataBaseHelper.class.getSimpleName();
     private static DataBaseHelper instance;
     private final Context c;
@@ -201,6 +203,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         break;
                     case 25:
                         upgradeHelper.upgrade25();
+                        break;
+                    case 26:
+                        upgradeHelper.upgrade26();
                         break;
                     default:
                         break;

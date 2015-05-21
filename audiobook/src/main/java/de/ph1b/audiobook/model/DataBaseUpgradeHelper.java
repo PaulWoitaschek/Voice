@@ -33,6 +33,7 @@ class DataBaseUpgradeHelper {
         this.c = c;
     }
 
+
     /**
      * Drops all tables and creates new ones.
      */
@@ -52,36 +53,6 @@ class DataBaseUpgradeHelper {
                 "BOOK_ID" + " INTEGER NOT NULL, " +
                 "FOREIGN KEY(" + "BOOK_ID" + ") REFERENCES TABLE_BOOK(BOOK_ID))");
     }
-
-
-    /**
-     * A previous version caused empty books to be added. So we delete them now.
-     */
-    public void upgrade25() {
-
-        // get all books
-        ArrayList<Book> allBooks = new ArrayList<>();
-        Cursor cursor = db.query("TABLE_BOOK",
-                new String[]{"BOOK_ID", "BOOK_JSON"},
-                null, null, null, null, null);
-        try {
-            while (cursor.moveToNext()) {
-                Book book = new Gson().fromJson(cursor.getString(1), Book.class);
-                book.setId(cursor.getLong(0));
-                allBooks.add(book);
-            }
-        } finally {
-            cursor.close();
-        }
-
-        // delete empty books
-        for (Book b : allBooks) {
-            if (b.getChapters().size() == 0) {
-                db.delete("TABLE_BOOK", "BOOK_ID" + "=?", new String[]{String.valueOf(b.getId())});
-            }
-        }
-    }
-
 
     /**
      * Migrate the database so they will be stored as json objects
@@ -314,6 +285,63 @@ class DataBaseUpgradeHelper {
             }
         } finally {
             bookCursor.close();
+        }
+    }
+
+
+    /**
+     * A previous version caused empty books to be added. So we delete them now.
+     */
+    public void upgrade25() {
+
+        // get all books
+        ArrayList<Book> allBooks = new ArrayList<>();
+        Cursor cursor = db.query("TABLE_BOOK",
+                new String[]{"BOOK_ID", "BOOK_JSON"},
+                null, null, null, null, null);
+        try {
+            while (cursor.moveToNext()) {
+                Book book = new Gson().fromJson(cursor.getString(1), Book.class);
+                book.setId(cursor.getLong(0));
+                allBooks.add(book);
+            }
+        } finally {
+            cursor.close();
+        }
+
+        // delete empty books
+        for (Book b : allBooks) {
+            if (b.getChapters().size() == 0) {
+                db.delete("TABLE_BOOK", "BOOK_ID" + "=?", new String[]{String.valueOf(b.getId())});
+            }
+        }
+    }
+
+
+    /**
+     * Adds a new row called
+     */
+    public void upgrade26() {
+        String copyBookTableName = "TABLE_BOOK_COPY";
+        db.execSQL("ALTER TABLE TABLE_BOOK RENAME TO " + copyBookTableName);
+        db.execSQL("CREATE TABLE " + "TABLE_BOOK" + " ( " +
+                "BOOK_ID" + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "BOOK_JSON" + " TEXT NOT NULL, " +
+                "BOOK_ACTIVE" + " INTEGER NOT NULL)");
+
+        Cursor cursor = db.query(copyBookTableName, new String[]{"BOOK_JSON"}, null, null, null, null, null);
+        db.beginTransaction();
+        try {
+            while (cursor.moveToNext()) {
+                ContentValues cv = new ContentValues();
+                cv.put("BOOK_JSON", cursor.getString(0));
+                cv.put("BOOK_ACTIVE", 1);
+                db.insert("TABLE_BOOK", null, cv);
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+            cursor.close();
         }
     }
 
