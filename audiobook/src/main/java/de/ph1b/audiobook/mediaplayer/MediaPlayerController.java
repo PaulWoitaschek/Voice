@@ -47,7 +47,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     private Book book;
     private volatile State state;
     private ScheduledFuture<?> sleepSand;
-    private volatile boolean stopAfterCurrentTrack = false;
     private ScheduledFuture updater = null;
     private volatile int prepareTries = 0;
 
@@ -317,30 +316,23 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
             if (sleepSandActive()) {
                 L.i(TAG, "sleepSand is active. cancelling now");
                 sleepSand.cancel(false);
-                stopAfterCurrentTrack = true;
                 sleepTimerActive = false;
                 Communication.sendSleepStateChanged(c);
             } else {
                 L.i(TAG, "preparing new sleep sand");
                 int minutes = prefs.getSleepTime();
-                stopAfterCurrentTrack = prefs.stopAfterCurrentTrack();
                 sleepTimerActive = true;
                 Communication.sendSleepStateChanged(c);
                 sleepSand = executor.schedule(new Runnable() {
                     @Override
                     public void run() {
-                        if (!stopAfterCurrentTrack) {
-                            lock.lock();
-                            try {
-                                pause();
-                                sleepTimerActive = false;
-                                Communication.sendSleepStateChanged(c);
-                            } finally {
-                                lock.unlock();
-                            }
-                        } else {
-                            L.d(TAG, "Sandman: We are not stopping right now. " +
-                                    "We stop after this track.");
+                        lock.lock();
+                        try {
+                            pause();
+                            sleepTimerActive = false;
+                            Communication.sendSleepStateChanged(c);
+                        } finally {
+                            lock.unlock();
                         }
                     }
                 }, minutes, TimeUnit.MINUTES);

@@ -66,8 +66,6 @@
     <string name="minutes">minut</string>
     <string name="seconds">sekund</string>
     <string name="pref_seek_time">Přeskočit o</string>
-    <string name="pref_title_track_to_end">Pokračovat do konce</string>
-    <string name="pref_summary_track_to_end">Pokračovat v přehrávání až do konce aktuální skladby poté co byl aktivován časovač vypnutí.</string>
     <string name="pref_sleep_time">Časovač vypnutí</string>
     <string name="pref_root_folder_title">Adresář audioknihy</string>
     <string name="pref_root_folder_summary">Vybrané adresáře s audioknihami.</string>

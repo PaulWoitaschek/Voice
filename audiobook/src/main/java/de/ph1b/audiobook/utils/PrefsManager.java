@@ -65,10 +65,6 @@ public class PrefsManager {
         editor.apply();
     }
 
-    public boolean stopAfterCurrentTrack() {
-        return sp.getBoolean(c.getString(R.string.pref_key_track_to_end), false);
-    }
-
     public int getSleepTime() {
         return sp.getInt(c.getString(R.string.pref_key_sleep_time), 20);
     }

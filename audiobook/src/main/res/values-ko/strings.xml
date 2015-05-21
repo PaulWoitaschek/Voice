@@ -64,8 +64,6 @@
     <string name="minutes">분</string>
     <string name="seconds">초</string>
     <string name="pref_seek_time">건너뛸 시간</string>
-    <string name="pref_title_track_to_end">취침예약 시 재생설정</string>
-    <string name="pref_summary_track_to_end">취침예약 타이머가 끝났을 때 재생 중이었던 트랙을 끝까지 재생합니다.</string>
     <string name="pref_sleep_time">취침예약 시간</string>
     <string name="pref_root_folder_title">오디오북 폴더</string>
     <string name="pref_root_folder_summary">선택한 폴더</string>

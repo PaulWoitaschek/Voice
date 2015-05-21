@@ -64,8 +64,6 @@
     <string name="minutes">минут</string>
     <string name="seconds">секунд</string>
     <string name="pref_seek_time">Ускоренная перемотка</string>
-    <string name="pref_title_track_to_end">Воспроизводить до конца</string>
-    <string name="pref_summary_track_to_end">Файл воспроизводится до конца, даже если сработал таймер сна.</string>
     <string name="pref_sleep_time">Время сна</string>
     <string name="pref_root_folder_title">Папки с аудиокнигами</string>
     <string name="pref_root_folder_summary">Выбранные папки с книгами.</string>

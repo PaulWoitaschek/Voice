@@ -43,10 +43,5 @@
         <de.ph1b.audiobook.dialog.AutoRewindDialogPreference
             android:key="@string/pref_key_auto_rewind"
             android:title="@string/pref_auto_rewind_title" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="@string/pref_key_track_to_end"
-            android:summary="@string/pref_summary_track_to_end"
-            android:title="@string/pref_title_track_to_end" />
     </PreferenceCategory>
 </PreferenceScreen>

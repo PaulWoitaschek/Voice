@@ -64,8 +64,6 @@
     <string name="minutes">хвилин</string>
     <string name="seconds">секунд</string>
     <string name="pref_seek_time">Пропустити</string>
-    <string name="pref_title_track_to_end">Продовжувати до кінця</string>
-    <string name="pref_summary_track_to_end">Продовжувати програвання до кінця доріжки після того, як було активовано таймер сну.</string>
     <string name="pref_sleep_time">Час засинання</string>
     <string name="pref_root_folder_title">Папка аудіокниги</string>
     <string name="pref_root_folder_summary">Обрані папки за аудіокнигами.</string>

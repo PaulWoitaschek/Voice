@@ -64,8 +64,6 @@
     <string name="minutes">minutes</string>
     <string name="seconds">secondes</string>
     <string name="pref_seek_time">Sauter par</string>
-    <string name="pref_title_track_to_end">Continuer jusqu\'à la fin</string>
-    <string name="pref_summary_track_to_end">Continue à jouer jusqu\'à la fin de la piste, après que le minuteur soit déclenché.</string>
     <string name="pref_sleep_time">Temps avant la pause</string>
     <string name="pref_root_folder_title">Dossier de livre audio</string>
     <string name="pref_root_folder_summary">Les dossiers de livres audio sélectionnés.</string>

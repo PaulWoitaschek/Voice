@@ -6,7 +6,6 @@
     <string name="pref_key_seek_time">SEEK_TIME</string>
     <string name="pref_key_sleep_time">SLEEP_TIME</string>
     <string name="pref_key_resume_on_replug">RESUME_ON_REPLUG</string>
-    <string name="pref_key_track_to_end">PLAY_TRACK_TO_END</string>
     <string name="pref_key_audiobook_folders">ROOT_FOLDER</string>
     <string name="pref_key_theme">CUSTOM_THEME</string>
     <string name="pref_key_pause_on_can_duck">PAUSE_ON_CAN_DUCK</string>

@@ -62,8 +62,6 @@
     <string name="minutes">minuti</string>
     <string name="seconds">secondi</string>
     <string name="pref_seek_time">Salta</string>
-    <string name="pref_title_track_to_end">Continua fino alla fine</string>
-    <string name="pref_summary_track_to_end">Dopo la fine del timer standby, continua a riprodurre fino alla conclusione della traccia.</string>
     <string name="pref_sleep_time">Tempo di standby</string>
     <string name="pref_root_folder_title">Cartella audiolibro</string>
     <string name="pref_root_folder_summary">Le cartelle audiolibro selezionate.</string>
