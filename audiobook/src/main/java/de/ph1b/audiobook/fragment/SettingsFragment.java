@@ -119,9 +119,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
         // theme pref
         MaterialListPreference themePreference = (MaterialListPreference) findPreference(getString(R.string.pref_key_theme));
-        String theme = sp.getString(getString(R.string.pref_key_theme), "light");
+        String theme = sp.getString(getString(R.string.pref_key_theme), null);
         String themeSummary;
-        switch (theme) {
+        switch (theme == null ? "light" : theme) {
             case "light":
                 themeSummary = getString(R.string.pref_theme_light);
                 break;

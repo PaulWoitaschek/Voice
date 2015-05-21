@@ -176,7 +176,7 @@ public class BookmarkDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 String title = bookmarkTitle.getText().toString();
-                if (title == null || title.equals("")) {
+                if (title.equals("")) {
                     title = book.getCurrentChapter().getName();
                 }
 

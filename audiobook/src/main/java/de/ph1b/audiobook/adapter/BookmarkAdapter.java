@@ -94,9 +94,9 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
     }
 
     public interface OnOptionsMenuClickedListener {
-        public void onOptionsMenuClicked(int position, View v);
+        void onOptionsMenuClicked(int position, View v);
 
-        public void onBookmarkClicked(int position);
+        void onBookmarkClicked(int position);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

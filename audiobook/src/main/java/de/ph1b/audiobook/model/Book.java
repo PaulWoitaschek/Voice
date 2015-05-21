@@ -75,6 +75,7 @@ public class Book implements Comparable<Book> {
         this.bookmarks = bookmarks;
         this.packageName = c.getPackageName();
         setPosition(0, currentMediaPath);
+        this.currentMediaPath = currentMediaPath;
     }
 
     @NonNull
@@ -101,7 +102,6 @@ public class Book implements Comparable<Book> {
     }
 
     public void setPosition(int time, @NonNull String currentMediaPath) {
-
         boolean relativeMediaPathExists = false;
         for (Chapter c : chapters) {
             if (c.getPath().equals(currentMediaPath)) {

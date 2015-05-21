@@ -35,8 +35,8 @@ public class ThemeUtil {
         Resources r = c.getResources();
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
-        String theme = sp.getString(r.getString(R.string.pref_key_theme), "light");
-        switch (theme) {
+        String theme = sp.getString(r.getString(R.string.pref_key_theme), null);
+        switch (theme == null ? "light" : theme) {
             case "light":
                 return R.style.LightTheme;
             case "dark":
