@@ -81,10 +81,12 @@ public class BookActivity extends BaseActivity {
         if (bookShelfFragment != null && bookShelfFragment.isVisible()) {
             finish();
         } else {
-            if (bookShelfFragment == null)
-                bookShelfFragment = new BookShelfFragment();
-            fm.beginTransaction().replace(R.id.content, bookShelfFragment, BookShelfFragment.TAG)
-                    .addToBackStack(null).commit();
+            if (bookShelfFragment == null) {
+                fm.beginTransaction().replace(R.id.content, new BookShelfFragment(), BookShelfFragment.TAG)
+                        .addToBackStack(null).commit();
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 
