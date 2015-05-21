@@ -168,6 +168,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         try {
+            DataBaseUpgradeHelper upgradeHelper = new DataBaseUpgradeHelper(db, c);
             while (oldVersion < newVersion) {
                 switch (oldVersion) {
                     case 1:
@@ -193,26 +194,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     case 21:
                     case 22:
                     case 23:
-                        db.execSQL("DROP TABLE IF EXISTS TABLE_BOOK");
-                        db.execSQL("DROP TABLE IF EXISTS TABLE_CHAPTERS");
-
-                        db.execSQL("CREATE TABLE TABLE_BOOK ( " +
-                                "BOOK_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                                "BOOK_TYPE TEXT NOT NULL, " +
-                                "BOOK_ROOT TEXT NOT NULL)");
-                        db.execSQL("CREATE TABLE " + "TABLE_CHAPTERS" + " ( " +
-                                "CHAPTER_ID" + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                                "CHAPTER_PATH" + " TEXT NOT NULL, " +
-                                "CHAPTER_DURATION" + " INTEGER NOT NULL, " +
-                                "CHAPTER_NAME" + " TEXT NOT NULL, " +
-                                "BOOK_ID" + " INTEGER NOT NULL, " +
-                                "FOREIGN KEY(" + "BOOK_ID" + ") REFERENCES TABLE_BOOK(BOOK_ID))");
+                        upgradeHelper.upgrade23();
                         break;
                     case 24:
-                        DataBaseUpgradeHelper.upgrade24(db, c);
+                        upgradeHelper.upgrade24();
                         break;
                     case 25:
-                        DataBaseUpgradeHelper.upgrade25(db);
+                        upgradeHelper.upgrade25();
                         break;
                     default:
                         break;

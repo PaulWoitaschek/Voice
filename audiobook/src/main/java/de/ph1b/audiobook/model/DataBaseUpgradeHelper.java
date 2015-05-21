@@ -25,13 +25,39 @@ class DataBaseUpgradeHelper {
 
     private static final String TAG = DataBaseUpgradeHelper.class.getSimpleName();
 
+    private final SQLiteDatabase db;
+    private final Context c;
+
+    public DataBaseUpgradeHelper(SQLiteDatabase db, Context c) {
+        this.db = db;
+        this.c = c;
+    }
+
+    /**
+     * Drops all tables and creates new ones.
+     */
+    public void upgrade23() {
+        db.execSQL("DROP TABLE IF EXISTS TABLE_BOOK");
+        db.execSQL("DROP TABLE IF EXISTS TABLE_CHAPTERS");
+
+        db.execSQL("CREATE TABLE TABLE_BOOK ( " +
+                "BOOK_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "BOOK_TYPE TEXT NOT NULL, " +
+                "BOOK_ROOT TEXT NOT NULL)");
+        db.execSQL("CREATE TABLE " + "TABLE_CHAPTERS" + " ( " +
+                "CHAPTER_ID" + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "CHAPTER_PATH" + " TEXT NOT NULL, " +
+                "CHAPTER_DURATION" + " INTEGER NOT NULL, " +
+                "CHAPTER_NAME" + " TEXT NOT NULL, " +
+                "BOOK_ID" + " INTEGER NOT NULL, " +
+                "FOREIGN KEY(" + "BOOK_ID" + ") REFERENCES TABLE_BOOK(BOOK_ID))");
+    }
+
 
     /**
      * A previous version caused empty books to be added. So we delete them now.
-     *
-     * @param db The The Database to be upgraded
      */
-    public static void upgrade25(SQLiteDatabase db) {
+    public void upgrade25() {
 
         // get all books
         ArrayList<Book> allBooks = new ArrayList<>();
@@ -60,11 +86,9 @@ class DataBaseUpgradeHelper {
     /**
      * Migrate the database so they will be stored as json objects
      *
-     * @param db The Database to be upgraded
-     * @param c  Context
      * @throws InvalidPropertiesFormatException if there is an internal data mismatch
      */
-    public static void upgrade24(SQLiteDatabase db, Context c) throws InvalidPropertiesFormatException {
+    public void upgrade24() throws InvalidPropertiesFormatException {
         String copyBookTableName = "TABLE_BOOK_COPY";
         String copyChapterTableName = "TABLE_CHAPTERS_COPY";
 
