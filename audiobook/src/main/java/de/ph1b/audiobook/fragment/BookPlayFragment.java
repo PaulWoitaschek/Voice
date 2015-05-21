@@ -123,7 +123,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_book_play, container, false);
 
@@ -187,13 +187,26 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         });
 
         // adapter
-        ArrayList<String> chaptersAsStrings = new ArrayList<>();
+        final ArrayList<String> chaptersAsStrings = new ArrayList<>();
         for (Chapter c : book.getChapters()) {
             chaptersAsStrings.add(c.getName());
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
-                R.layout.fragment_book_play_spinner, chaptersAsStrings);
-        adapter.setDropDownViewResource(R.layout.fragment_book_play_spinner);
+        // this is necessary due to a bug in android causing the layout to be ignored.
+        // see: http://stackoverflow.com/questions/14139106/spinner-does-not-wrap-text-is-this-an-android-bug
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                R.layout.fragment_book_play_spinner, chaptersAsStrings) {
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                final TextView textView = (TextView) super.getDropDownView(position, convertView, parent);
+                textView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        textView.setSingleLine(false);
+                    }
+                });
+                return textView;
+            }
+        };
         bookSpinner.setAdapter(adapter);
 
         bookSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
