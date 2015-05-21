@@ -31,7 +31,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="52dp"
+        android:layout_height="68dp"
         android:layout_gravity="bottom"
         android:background="#64000000">
 
@@ -45,10 +45,6 @@
             android:layout_alignParentRight="true"
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/popup_edit"
-            android:paddingEnd="0dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="0dp"
-            android:paddingStart="8dp"
             android:src="@drawable/ic_more_vert_white_24dp"
             tools:ignore="NewApi" />
 
@@ -67,7 +63,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:textColor="@android:color/white"
-            android:textSize="16sp"
+            android:textSize="14sp"
             tools:text="Title of a example book" />
 
     </RelativeLayout>
