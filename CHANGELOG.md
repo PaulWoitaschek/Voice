@@ -1,3 +1,18 @@
+# v2.1.7
+
+## Changes
+* Added polish translation
+* Settings in book grid has ripples now
+* Tint seekbar on pre lollipop
+* Shorter times will be formated to 01:05 instead of 0:01:05
+* Removed stop after track for sleep timer
+* Multi line spinner in BokoPlay for better overview over books
+* Book Grid layout improved
+* Bookmarks have ripples now
+* Reenter transitions of playbutton now handled correctly
+* Hide books instead of deleting them so readding a book known previously will restore its state
+* Respect external storage state on adding / deleting books
+
 # v2.1.6.1
 
 ## Changes
