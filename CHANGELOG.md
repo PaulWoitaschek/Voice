@@ -1,3 +1,11 @@
+# v2.1.6.1
+
+## Changes
+* Bookmark title uses cap at start
+* Autocorrect on bookmark title
+* Ukraninan updated
+* Improved back navigation
+
 # v2.1.6
 
 ## Additions
