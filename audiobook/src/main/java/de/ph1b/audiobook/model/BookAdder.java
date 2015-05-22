@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import de.ph1b.audiobook.activity.BaseActivity;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
@@ -258,7 +259,7 @@ public class BookAdder {
      * Deletes all the books that exist on the database but not on the hard drive or on the saved
      * audio book paths.
      */
-    private void deleteOldBooks() {
+    private void deleteOldBooks() throws InterruptedException {
         final String TAG = BookAdder.TAG + "#deleteOldBooks()";
         L.d(TAG, "started");
         ArrayList<File> singleBookFiles = getSingleBookFiles();
@@ -318,6 +319,8 @@ public class BookAdder {
             }
         }
 
+        if (!BaseActivity.storageMounted())
+            throw new InterruptedException("Storage is not mounted");
         for (Book b : booksToRemove) {
             L.d(TAG, "deleting book=" + b);
             db.hideBook(b);
@@ -328,6 +331,9 @@ public class BookAdder {
     private void addNewBook(File rootFile, Book.Type type) throws InterruptedException {
         ArrayList<Chapter> newChapters = getChaptersByRootFile(rootFile);
         Book bookExisting = getBookFromDb(rootFile, type, false);
+
+        if (!BaseActivity.storageMounted())
+            throw new InterruptedException("Storage not mounted");
 
         if (newChapters.size() == 0) { // there are no chapters
             if (bookExisting != null) {//so delete book if available

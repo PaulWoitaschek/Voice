@@ -2,7 +2,6 @@ package de.ph1b.audiobook.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,7 +26,7 @@ public class NoExternalStorageActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+        if (BaseActivity.storageMounted()) {
             super.onBackPressed();
         } else {
             Intent i = new Intent(Intent.ACTION_MAIN);
@@ -40,7 +39,7 @@ public class NoExternalStorageActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+        if (BaseActivity.storageMounted()) {
             onBackPressed();
         }
     }

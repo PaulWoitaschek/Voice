@@ -26,14 +26,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        String state = Environment.getExternalStorageState();
-        if (!Environment.MEDIA_MOUNTED.equals(state)) {
+        if (!storageMounted()) {
             Intent serviceIntent = new Intent(this, AudioService.class);
             stopService(serviceIntent);
 
             Intent i = new Intent(this, NoExternalStorageActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(new Intent(i));
+            return;
         }
         recreateIfThemeChanged();
     }
@@ -49,5 +49,9 @@ public abstract class BaseActivity extends AppCompatActivity {
             // themes have changed. recreate
             recreate();
         }
+    }
+
+    public static boolean storageMounted() {
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 }
