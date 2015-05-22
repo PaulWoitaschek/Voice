@@ -169,7 +169,7 @@ public class BookAdder {
     }
 
     private void findCovers() throws InterruptedException {
-        for (Book b : db.getAllBooks()) {
+        for (Book b : db.getActiveBooks()) {
             if (stopScanner) throw new InterruptedException("interrupted at findCover");
             File coverFile = b.getCoverFile();
             if (!coverFile.exists()) {
@@ -266,7 +266,7 @@ public class BookAdder {
 
         //getting books to remove
         ArrayList<Book> booksToRemove = new ArrayList<>();
-        for (Book book : db.getAllBooks()) {
+        for (Book book : db.getActiveBooks()) {
             boolean bookExists = false;
             switch (book.getType()) {
                 case COLLECTION_FILE:
@@ -320,21 +320,21 @@ public class BookAdder {
 
         for (Book b : booksToRemove) {
             L.d(TAG, "deleting book=" + b);
-            db.deleteBook(b);
+            db.hideBook(b);
         }
         L.d(TAG, "finished");
     }
 
     private void addNewBook(File rootFile, Book.Type type) throws InterruptedException {
         ArrayList<Chapter> newChapters = getChaptersByRootFile(rootFile);
-        Book bookExisting = getBookFromDb(rootFile, type);
+        Book bookExisting = getBookFromDb(rootFile, type, false);
 
         if (newChapters.size() == 0) { // there are no chapters
             if (bookExisting != null) {//so delete book if available
-                db.deleteBook(bookExisting);
+                db.hideBook(bookExisting);
             }
         } else { // there are chapters
-            if (bookExisting == null) { //there is no book, so add a new one
+            if (bookExisting == null) { //there is no active book.
                 String bookRoot = rootFile.isDirectory() ?
                         rootFile.getAbsolutePath() :
                         rootFile.getParent();
@@ -342,12 +342,47 @@ public class BookAdder {
                         rootFile.getName() :
                         rootFile.getName().substring(0, rootFile.getName().lastIndexOf("."));
 
-                Book newBook = new Book(bookRoot, bookName, newChapters,
-                        newChapters.get(0).getPath(), type, new ArrayList<Bookmark>(),
-                        c);
-                L.d(TAG, "adding newBook=" + newBook);
+                Book orphanedBook = getBookFromDb(rootFile, type, true);
+                if (orphanedBook == null) {
+                    Book newBook = new Book(bookRoot, bookName, newChapters,
+                            newChapters.get(0).getPath(), type, new ArrayList<Bookmark>(),
+                            c);
+                    L.d(TAG, "adding newBook=" + newBook);
+                    db.addBook(newBook);
+                } else { // restore old books
 
-                db.addBook(newBook);
+                    // first adds all chapters
+                    orphanedBook.getChapters().clear();
+                    orphanedBook.getChapters().addAll(newChapters);
+
+                    // now removes invalid bookmarks
+                    ArrayList<Bookmark> invalidBookmarks = new ArrayList<>();
+                    for (Bookmark bookmark : orphanedBook.getBookmarks()) {
+                        boolean bookmarkValid = false;
+                        for (Chapter c : orphanedBook.getChapters()) {
+                            if (c.getPath().equals(bookmark.getMediaPath()))
+                                bookmarkValid = true;
+                        }
+                        if (!bookmarkValid)
+                            invalidBookmarks.add(bookmark);
+                    }
+                    for (Bookmark invalid : invalidBookmarks) {
+                        orphanedBook.getBookmarks().remove(invalid);
+                    }
+
+                    // checks if current path is still valid. if not, reset position.
+                    boolean pathValid = false;
+                    for (Chapter c : orphanedBook.getChapters()) {
+                        if (c.getPath().equals(orphanedBook.getCurrentMediaPath()))
+                            pathValid = true;
+                    }
+                    if (!pathValid) {
+                        orphanedBook.setPosition(0, orphanedBook.getChapters().get(0).getPath());
+                    }
+
+                    // now finally un-hide this book
+                    db.reveilBook(orphanedBook);
+                }
             } else { //there is a book, so update it if necessary
 
                 boolean bookHasChanged = false;
@@ -377,7 +412,6 @@ public class BookAdder {
                 }
                 Collections.sort(existingChapters, new NaturalOrderComparator());
                 if (bookHasChanged) {
-                    db.deleteBook(bookExisting);
                     if (existingChapters.size() > 0) {
                         boolean currentPathIsGone = true;
                         String currentPath = bookExisting.getCurrentMediaPath();
@@ -389,7 +423,9 @@ public class BookAdder {
                         if (currentPathIsGone) {
                             bookExisting.setPosition(0, existingChapters.get(0).getPath());
                         }
-                        db.addBook(bookExisting);
+                        db.updateBook(bookExisting);
+                    } else {
+                        db.hideBook(bookExisting);
                     }
                 }
             }
@@ -480,18 +516,23 @@ public class BookAdder {
 
 
     @Nullable
-    private Book getBookFromDb(File rootFile, Book.Type type) {
-        L.d(TAG, "getBookFromDb, rootFile=" + rootFile + ", type=" + type);
-        ArrayList<Book> allBooks = db.getAllBooks();
+    private Book getBookFromDb(File rootFile, Book.Type type, boolean orphaned) {
+        L.d(TAG, "getBookFromDb, rootFile=" + rootFile + ", type=" + type + ", orphaned=" + orphaned);
+        ArrayList<Book> books;
+        if (orphaned) {
+            books = db.getOrphanedBooks();
+        } else {
+            books = db.getActiveBooks();
+        }
         if (rootFile.isDirectory()) {
-            for (Book b : allBooks) {
+            for (Book b : books) {
                 if (rootFile.getAbsolutePath().equals(b.getRoot()) && type == b.getType()) {
                     return b;
                 }
             }
         } else if (rootFile.isFile()) {
             L.d(TAG, "getBookFromDb, its a file");
-            for (Book b : allBooks) {
+            for (Book b : books) {
                 L.v(TAG, "comparing bookRoot=" + b.getRoot() + " with " + rootFile.getParentFile().getAbsolutePath());
                 if (rootFile.getParentFile().getAbsolutePath().equals(b.getRoot()) && type == b.getType()) {
                     Chapter singleChapter = b.getChapters().get(0);

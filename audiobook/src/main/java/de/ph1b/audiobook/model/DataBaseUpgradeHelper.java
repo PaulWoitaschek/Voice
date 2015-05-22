@@ -327,6 +327,7 @@ class DataBaseUpgradeHelper {
         db.execSQL("CREATE TABLE " + "TABLE_BOOK" + " ( " +
                 "BOOK_ID" + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "BOOK_JSON" + " TEXT NOT NULL, " +
+                "LAST_TIME_BOOK_WAS_ACTIVE" + " INTEGER NOT NULL, " +
                 "BOOK_ACTIVE" + " INTEGER NOT NULL)");
 
         Cursor cursor = db.query(copyBookTableName, new String[]{"BOOK_JSON"}, null, null, null, null, null);
@@ -336,6 +337,7 @@ class DataBaseUpgradeHelper {
                 ContentValues cv = new ContentValues();
                 cv.put("BOOK_JSON", cursor.getString(0));
                 cv.put("BOOK_ACTIVE", 1);
+                cv.put("LAST_TIME_BOOK_WAS_ACTIVE", System.currentTimeMillis());
                 db.insert("TABLE_BOOK", null, cv);
             }
             db.setTransactionSuccessful();

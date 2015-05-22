@@ -115,7 +115,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
             updateRemoteControlClient();
             Book controllerBook = controller.getBook();
             if (controllerBook != null) {
-                for (Book b : db.getAllBooks()) {
+                for (Book b : db.getActiveBooks()) {
                     if (b.getId() == controllerBook.getId()) {
                         controller.updateBook(b);
                         break;

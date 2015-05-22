@@ -29,7 +29,7 @@ public class BookActivityTest extends ActivityInstrumentationTestCase2<BookActiv
         final int THREADS = 100;
         final CountDownLatch latch = new CountDownLatch(THREADS);
         final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
-        final ArrayList<Book> allBooks = db.getAllBooks();
+        final ArrayList<Book> allBooks = db.getActiveBooks();
         final int BOOKS_AT_ONCE = 3;
 
         for (int i = 0; i < THREADS; i++) {
@@ -43,7 +43,7 @@ public class BookActivityTest extends ActivityInstrumentationTestCase2<BookActiv
                         for (int i = 0; i < BOOKS_AT_ONCE; i++) {
                             if (allBooks.size() > 0) {
                                 Book book = allBooks.get(rnd.nextInt(allBooks.size()));
-                                db.deleteBook(book);
+                                db.hideBook(book);
                             }
                         }
 

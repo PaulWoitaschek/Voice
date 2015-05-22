@@ -115,7 +115,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
         @Override
         public void onReceive(Context context, Intent intent) {
             L.v(TAG, "onBookSetChanged called");
-            adapter.newDataSet(db.getAllBooks());
+            adapter.newDataSet(db.getActiveBooks());
             checkVisibilities();
         }
     };
@@ -206,7 +206,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), getAmountOfColumns()));
         adapter = new BookShelfAdapter(getActivity(), onClickListener);
-        adapter.addAll(db.getAllBooks());
+        adapter.addAll(db.getActiveBooks());
         recyclerView.setAdapter(adapter);
 
         if (savedInstanceState != null) {
