@@ -17,6 +17,10 @@ import de.ph1b.audiobook.uitools.ThemeUtil;
 public abstract class BaseActivity extends AppCompatActivity {
 
 
+    public static boolean storageMounted() {
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(ThemeUtil.getTheme(this));
@@ -49,9 +53,5 @@ public abstract class BaseActivity extends AppCompatActivity {
             // themes have changed. recreate
             recreate();
         }
-    }
-
-    public static boolean storageMounted() {
-        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 }

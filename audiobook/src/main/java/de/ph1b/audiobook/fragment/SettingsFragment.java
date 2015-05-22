@@ -27,7 +27,6 @@ import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 import de.ph1b.audiobook.vendinghelper.IabHelper;
 import de.ph1b.audiobook.vendinghelper.IabResult;
-import de.ph1b.audiobook.vendinghelper.Purchase;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.
         OnSharedPreferenceChangeListener, DonationDialogFragment.OnDonationClickedListener {
@@ -168,10 +167,10 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void onDonationClicked(String item) {
         L.d(TAG, "onDonationClicked with item=" + item + " and donationAvailable=" + donationAvailable);
         if (donationAvailable) {
-            iabHelper.launchPurchaseFlow(getActivity(), item, 10001,
+            iabHelper.launchPurchaseFlow(getActivity(), item,
                     new IabHelper.OnIabPurchaseFinishedListener() {
                         @Override
-                        public void onIabPurchaseFinished(IabResult result, Purchase info) {
+                        public void onIabPurchaseFinished(IabResult result) {
                             String message;
                             if (result.isSuccess()) {
                                 message = getString(R.string.donation_worked_thanks);

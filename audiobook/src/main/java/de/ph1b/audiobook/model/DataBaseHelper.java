@@ -73,6 +73,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         cleanOrphans();
     }
 
+    public static synchronized DataBaseHelper getInstance(Context c) {
+        if (instance == null) {
+            instance = new DataBaseHelper(c.getApplicationContext());
+        }
+        return instance;
+    }
+
     /**
      * Deletes orphaned books if there are more than 20. Begin with the oldest one.
      */
@@ -113,13 +120,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 }
             }
         }
-    }
-
-    public static synchronized DataBaseHelper getInstance(Context c) {
-        if (instance == null) {
-            instance = new DataBaseHelper(c.getApplicationContext());
-        }
-        return instance;
     }
 
     public synchronized void addBook(@NonNull Book book) {

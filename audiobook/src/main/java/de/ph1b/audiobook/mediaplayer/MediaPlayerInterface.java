@@ -8,35 +8,35 @@ import java.io.IOException;
 
 interface MediaPlayerInterface {
 
-    public void release();
+    void release();
 
-    public void start();
+    void start();
 
-    public void reset();
+    void reset();
 
-    public void prepare() throws IOException;
+    void prepare() throws IOException;
 
-    public void seekTo(int ms);
+    void seekTo(int ms);
 
-    public int getCurrentPosition();
+    int getCurrentPosition();
 
-    public void pause();
+    void pause();
 
-    public void setPlaybackSpeed(float speed);
+    void setPlaybackSpeed(float speed);
 
     @SuppressWarnings("RedundantThrows")
-    public void setDataSource(String source) throws IOException;
+    void setDataSource(String source) throws IOException;
 
-    public void setOnErrorListener(MediaPlayer.OnErrorListener onErrorListener);
+    void setOnErrorListener(MediaPlayer.OnErrorListener onErrorListener);
 
-    public void setOnCompletionListener(OnCompletionListener onCompletionListener);
+    void setOnCompletionListener(OnCompletionListener onCompletionListener);
 
     @SuppressWarnings("UnusedParameters")
-    public void setWakeMode(Context context, int mode);
+    void setWakeMode(Context context, int mode);
 
-    public int getDuration();
+    int getDuration();
 
-    public interface OnCompletionListener {
-        public void onCompletion();
+    interface OnCompletionListener {
+        void onCompletion();
     }
 }

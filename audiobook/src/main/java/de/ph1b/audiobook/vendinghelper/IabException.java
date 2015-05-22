@@ -21,10 +21,10 @@ package de.ph1b.audiobook.vendinghelper;
  * To get the IAB result that caused this exception to be thrown,
  * call {@link #getResult()}.
  */
-public class IabException extends Exception {
-    IabResult mResult;
+class IabException extends Exception {
+    private final IabResult mResult;
 
-    public IabException(IabResult r) {
+    private IabException(IabResult r) {
         this(r, null);
     }
 
@@ -32,7 +32,7 @@ public class IabException extends Exception {
         this(new IabResult(response, message));
     }
 
-    public IabException(IabResult r, Exception cause) {
+    private IabException(IabResult r, Exception cause) {
         super(r.getMessage(), cause);
         mResult = r;
     }
