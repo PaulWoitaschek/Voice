@@ -23,6 +23,7 @@ import de.ph1b.audiobook.dialog.DonationDialogFragment;
 import de.ph1b.audiobook.dialog.SeekDialogPreference;
 import de.ph1b.audiobook.dialog.SleepDialogPreference;
 import de.ph1b.audiobook.dialog.SupportDialogFragment;
+import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 import de.ph1b.audiobook.vendinghelper.IabHelper;
 import de.ph1b.audiobook.vendinghelper.IabResult;
@@ -165,6 +166,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     }
 
     public void onDonationClicked(String item) {
+        L.d(TAG, "onDonationClicked with item=" + item + " and donationAvailable=" + donationAvailable);
         if (donationAvailable) {
             iabHelper.launchPurchaseFlow(getActivity(), item, 10001,
                     new IabHelper.OnIabPurchaseFinishedListener() {

@@ -22,7 +22,6 @@ public class DonationDialogFragment extends DialogFragment {
             public void onSelection(MaterialDialog materialDialog, View view, int i,
                                     CharSequence charSequence) {
                 String item;
-
                 switch (i) {
                     case 0:
                         item = "1donation";
