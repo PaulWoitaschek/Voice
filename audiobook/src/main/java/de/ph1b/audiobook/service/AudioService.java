@@ -492,8 +492,11 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
                     Chapter c = book.getCurrentChapter();
                     //noinspection deprecation
-                    remoteControlClient.editMetadata(true).putString(MediaMetadataRetriever.METADATA_KEY_TITLE, c.getName())
+                    remoteControlClient.editMetadata(true)
+                            .putString(MediaMetadataRetriever.METADATA_KEY_TITLE, c.getName())
                             .putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName())
+                            .putString(MediaMetadataRetriever.METADATA_KEY_GENRE, "Audiobook")
+                            .putLong(MediaMetadataRetriever.METADATA_KEY_DURATION, c.getDuration())
                             .putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK,
                                     bitmap.copy(bitmap.getConfig(), true))
                             .apply();
