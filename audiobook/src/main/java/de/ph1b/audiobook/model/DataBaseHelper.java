@@ -24,7 +24,7 @@ import de.ph1b.audiobook.utils.Validate;
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class DataBaseHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 27;
+    private static final int DATABASE_VERSION = 28;
     private static final String DATABASE_NAME = "autoBookDB";
 
     // tables
@@ -240,47 +240,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         try {
             DataBaseUpgradeHelper upgradeHelper = new DataBaseUpgradeHelper(db, c);
-            while (oldVersion < newVersion) {
-                switch (oldVersion) {
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                    case 5:
-                    case 6:
-                    case 7:
-                    case 8:
-                    case 9:
-                    case 10:
-                    case 11:
-                    case 12:
-                    case 13:
-                    case 14:
-                    case 15:
-                    case 16:
-                    case 17:
-                    case 18:
-                    case 19:
-                    case 20:
-                    case 21:
-                    case 22:
-                    case 23:
-                        upgradeHelper.upgrade23();
-                        break;
-                    case 24:
-                        upgradeHelper.upgrade24();
-                        break;
-                    case 25:
-                        upgradeHelper.upgrade25();
-                        break;
-                    case 26:
-                        upgradeHelper.upgrade26();
-                        break;
-                    default:
-                        break;
-                }
-                oldVersion++;
-            }
+            upgradeHelper.upgrade(oldVersion);
         } catch (InvalidPropertiesFormatException e) {
             L.e(TAG, "Error at upgrade", e);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_BOOK);

@@ -37,7 +37,7 @@ class DataBaseUpgradeHelper {
     /**
      * Drops all tables and creates new ones.
      */
-    public void upgrade23() {
+    private void upgrade23() {
         db.execSQL("DROP TABLE IF EXISTS TABLE_BOOK");
         db.execSQL("DROP TABLE IF EXISTS TABLE_CHAPTERS");
 
@@ -59,7 +59,7 @@ class DataBaseUpgradeHelper {
      *
      * @throws InvalidPropertiesFormatException if there is an internal data mismatch
      */
-    public void upgrade24() throws InvalidPropertiesFormatException {
+    private void upgrade24() throws InvalidPropertiesFormatException {
         String copyBookTableName = "TABLE_BOOK_COPY";
         String copyChapterTableName = "TABLE_CHAPTERS_COPY";
 
@@ -292,7 +292,7 @@ class DataBaseUpgradeHelper {
     /**
      * A previous version caused empty books to be added. So we delete them now.
      */
-    public void upgrade25() {
+    private void upgrade25() {
 
         // get all books
         ArrayList<Book> allBooks = new ArrayList<>();
@@ -321,8 +321,9 @@ class DataBaseUpgradeHelper {
     /**
      * Adds a new column indicating if the book should be actively shown or hidden.
      */
-    public void upgrade26() {
+    private void upgrade26() {
         String copyBookTableName = "TABLE_BOOK_COPY";
+        db.execSQL("DROP TABLE IF EXISTS " + copyBookTableName);
         db.execSQL("ALTER TABLE TABLE_BOOK RENAME TO " + copyBookTableName);
         db.execSQL("CREATE TABLE " + "TABLE_BOOK" + " ( " +
                 "BOOK_ID" + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -331,7 +332,6 @@ class DataBaseUpgradeHelper {
                 "BOOK_ACTIVE" + " INTEGER NOT NULL)");
 
         Cursor cursor = db.query(copyBookTableName, new String[]{"BOOK_JSON"}, null, null, null, null, null);
-        db.beginTransaction();
         try {
             while (cursor.moveToNext()) {
                 ContentValues cv = new ContentValues();
@@ -340,10 +340,55 @@ class DataBaseUpgradeHelper {
                 cv.put("LAST_TIME_BOOK_WAS_ACTIVE", System.currentTimeMillis());
                 db.insert("TABLE_BOOK", null, cv);
             }
-            db.setTransactionSuccessful();
         } finally {
-            db.endTransaction();
             cursor.close();
+        }
+    }
+
+
+    /**
+     * Deletes the table if that failed previously due to a bug in {@link #upgrade26()}
+     */
+    private void upgrade27() {
+        db.execSQL("DROP TABLE IF EXISTS TABLE_BOOK_COPY");
+    }
+
+    public void upgrade(int fromVersion) throws InvalidPropertiesFormatException {
+        switch (fromVersion) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+            case 15:
+            case 16:
+            case 17:
+            case 18:
+            case 19:
+            case 20:
+            case 21:
+            case 22:
+            case 23:
+                upgrade23();
+            case 24:
+                upgrade24();
+            case 25:
+                upgrade25();
+            case 26:
+                upgrade26();
+            case 27:
+                upgrade27();
+            default:
+                break;
         }
     }
 
