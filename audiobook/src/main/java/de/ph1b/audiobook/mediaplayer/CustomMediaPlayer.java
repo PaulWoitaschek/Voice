@@ -23,6 +23,7 @@ import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.media.MediaPlayer;
 import android.os.PowerManager;
+import android.support.annotation.Nullable;
 
 import org.vinuxproject.sonic.Sonic;
 
@@ -36,11 +37,9 @@ import de.ph1b.audiobook.utils.L;
 
 @TargetApi(16)
 public class CustomMediaPlayer implements MediaPlayerInterface {
-    private final static int TRACK_NUM = 0;
     private static final String TAG = CustomMediaPlayer.class.getSimpleName();
     private final ReentrantLock lock = new ReentrantLock();
-    private final Object mDecoderLock = new Object();
-    private final float pitch = 1;
+    private final Object decoderLock = new Object();
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private PowerManager.WakeLock wakeLock = null;
     private AudioTrack track;
@@ -48,18 +47,18 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     private MediaExtractor extractor;
     private MediaCodec codec;
     private Runnable decoderRunnable = null;
+    @Nullable
     private String path = null;
-    private volatile boolean mContinue = false;
-    private volatile boolean mIsDecoding = false;
-    private float speed = 1;
+    private volatile boolean continuing = false;
+    private volatile boolean isDecoding = false;
+    private float speed = 1.0F;
+    @Nullable
     private MediaPlayerInterface.OnCompletionListener onCompletionListener;
     private volatile State state = State.IDLE;
+    @Nullable
     private MediaPlayer.OnErrorListener onErrorListener;
     private long duration;
 
-
-    public CustomMediaPlayer() {
-    }
 
     @Override
     public void start() {
@@ -74,7 +73,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
             case PREPARED:
                 state = State.STARTED;
                 L.d(TAG, "State changed to: " + state);
-                mContinue = true;
+                continuing = true;
                 track.play();
                 decode();
                 stayAwake(true);
@@ -84,8 +83,8 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
             case PAUSED:
                 state = State.STARTED;
                 L.d(TAG, "State changed to: " + state);
-                synchronized (mDecoderLock) {
-                    mDecoderLock.notify();
+                synchronized (decoderLock) {
+                    decoderLock.notify();
                 }
                 track.play();
                 stayAwake(true);
@@ -102,13 +101,13 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
         stayAwake(false);
         lock.lock();
         try {
-            mContinue = false;
+            continuing = false;
             try {
                 if (decoderRunnable != null && state != State.PLAYBACK_COMPLETED) {
-                    while (mIsDecoding) {
-                        synchronized (mDecoderLock) {
-                            mDecoderLock.notify();
-                            mDecoderLock.wait();
+                    while (isDecoding) {
+                        synchronized (decoderLock) {
+                            decoderLock.notify();
+                            decoderLock.wait();
                         }
                     }
                 }
@@ -186,7 +185,8 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
         switch (state) {
             case ERROR:
                 error("getCurrentPosition", state);
-                onErrorListener.onError(null, 0, 0);
+                if (onErrorListener != null)
+                    onErrorListener.onError(null, 0, 0);
                 return 0;
             case IDLE:
                 return 0;
@@ -236,12 +236,12 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     }
 
     @Override
-    public void setOnErrorListener(MediaPlayer.OnErrorListener onErrorListener) {
+    public void setOnErrorListener(@Nullable MediaPlayer.OnErrorListener onErrorListener) {
         this.onErrorListener = onErrorListener;
     }
 
     @Override
-    public void setOnCompletionListener(MediaPlayerInterface.OnCompletionListener listener) {
+    public void setOnCompletionListener(@Nullable MediaPlayerInterface.OnCompletionListener listener) {
         this.onCompletionListener = listener;
     }
 
@@ -268,7 +268,8 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                 error("initStream", state);
                 throw new IOException();
             }
-            final MediaFormat oFormat = extractor.getTrackFormat(TRACK_NUM);
+            int trackNum = 0;
+            final MediaFormat oFormat = extractor.getTrackFormat(trackNum);
 
             if (!oFormat.containsKey(MediaFormat.KEY_SAMPLE_RATE)) {
                 error("initStream", state);
@@ -297,7 +298,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
             L.v(TAG, "Sample rate: " + sampleRate);
             L.v(TAG, "Mime type: " + mime);
             initDevice(sampleRate, channelCount);
-            extractor.selectTrack(TRACK_NUM);
+            extractor.selectTrack(trackNum);
             codec = MediaCodec.createDecoderByType(mime);
             codec.configure(oFormat, null, null, 0);
         } finally {
@@ -360,17 +361,17 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
         decoderRunnable = new Runnable() {
             @Override
             public void run() {
-                mIsDecoding = true;
+                isDecoding = true;
                 codec.start();
                 ByteBuffer[] inputBuffers = codec.getInputBuffers();
                 ByteBuffer[] outputBuffers = codec.getOutputBuffers();
                 boolean sawInputEOS = false;
                 boolean sawOutputEOS = false;
-                while (!sawInputEOS && !sawOutputEOS && mContinue) {
+                while (!sawInputEOS && !sawOutputEOS && continuing) {
                     if (state == State.PAUSED) {
                         try {
-                            synchronized (mDecoderLock) {
-                                mDecoderLock.wait();
+                            synchronized (decoderLock) {
+                                decoderLock.wait();
                             }
                         } catch (InterruptedException e) {
                             // Purposely not doing anything here
@@ -379,7 +380,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                     }
                     if (null != sonic) {
                         sonic.setSpeed(speed);
-                        sonic.setPitch(pitch);
+                        sonic.setPitch(1);
                     }
                     int inputBufIndex = codec.dequeueInputBuffer(200);
                     if (inputBufIndex >= 0) {
@@ -453,22 +454,23 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
 
                 codec.stop();
                 track.stop();
-                mIsDecoding = false;
-                if (mContinue && (sawInputEOS || sawOutputEOS)) {
+                isDecoding = false;
+                if (continuing && (sawInputEOS || sawOutputEOS)) {
                     state = State.PLAYBACK_COMPLETED;
                     L.d(TAG, "State changed to: " + state);
                     Thread t = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            onCompletionListener.onCompletion();
+                            if (onCompletionListener != null)
+                                onCompletionListener.onCompletion();
                             stayAwake(false);
                         }
                     });
                     t.setDaemon(true);
                     t.start();
                 }
-                synchronized (mDecoderLock) {
-                    mDecoderLock.notifyAll();
+                synchronized (decoderLock) {
+                    decoderLock.notifyAll();
                 }
             }
         };

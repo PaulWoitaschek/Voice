@@ -97,8 +97,11 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
 
     public void updateBook(@NonNull Book book) {
         lock.lock();
-        this.book = book;
-        lock.unlock();
+        try {
+            this.book = book;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -197,11 +200,11 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         L.v(TAG, "direction=" + direction);
         lock.lock();
         try {
-            int currentPos = player.getCurrentPosition();
-            int duration = player.getDuration();
-            int delta = prefs.getSeekTime() * 1000;
+            final int currentPos = player.getCurrentPosition();
+            final int duration = player.getDuration();
+            final int delta = prefs.getSeekTime() * 1000;
 
-            int seekTo = (direction == Direction.FORWARD) ? currentPos + delta : currentPos - delta;
+            final int seekTo = (direction == Direction.FORWARD) ? currentPos + delta : currentPos - delta;
             L.v(TAG, "currentPos=" + currentPos + ",seekTo=" + seekTo + ",duration=" + duration);
 
             if (seekTo < 0) {
@@ -320,7 +323,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                 Communication.sendSleepStateChanged(c);
             } else {
                 L.i(TAG, "preparing new sleep sand");
-                int minutes = prefs.getSleepTime();
+                final int minutes = prefs.getSleepTime();
                 sleepTimerActive = true;
                 Communication.sendSleepStateChanged(c);
                 sleepSand = executor.schedule(new Runnable() {
@@ -362,7 +365,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                     player.pause();
                     stopUpdating();
 
-                    int autoRewind = prefs.getAutoRewindAmount() * 1000;
+                    final int autoRewind = prefs.getAutoRewindAmount() * 1000;
                     if (autoRewind != 0) {
                         int originalPosition = player.getCurrentPosition();
                         int seekTo = originalPosition - autoRewind;
