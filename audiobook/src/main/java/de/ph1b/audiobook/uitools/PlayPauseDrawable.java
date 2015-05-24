@@ -57,13 +57,13 @@ public class PlayPauseDrawable extends Drawable {
             {19f, 19f, 8f, 8f, 19f, 19f, 8f, 8f, 19f},
             {12f, 12f, 5f, 9f, 12f, 12f, 5f, 19f, 12f}
     };
-    private final Animator mAnimator = ObjectAnimator.ofFloat(this, TRANSFORM, 0f, 1f);
-    private final Path mPath;
-    private final Paint mPaint;
-    private final float[][][] mVertex;
-    private float mProgress;
-    private int mFromShape;
-    private int mToShape;
+    private final Animator animator = ObjectAnimator.ofFloat(this, TRANSFORM, 0f, 1f);
+    private final Path path;
+    private final Paint paint;
+    private final float[][][] vertex;
+    private float progress;
+    private int fromShape;
+    private int toShape;
     private final static Property<PlayPauseDrawable, Float> TRANSFORM =
             new FloatProperty<PlayPauseDrawable>() {
                 @Override
@@ -82,15 +82,15 @@ public class PlayPauseDrawable extends Drawable {
     }
 
     private PlayPauseDrawable(@NonNull float[][]... vertex) {
-        mVertex = vertex;
+        this.vertex = vertex;
 
-        mPath = new Path();
-        mPath.setFillType(Path.FillType.WINDING);
+        path = new Path();
+        path.setFillType(Path.FillType.WINDING);
 
-        mPaint = new Paint();
-        mPaint.setAntiAlias(true);
-        mPaint.setColor(Color.WHITE);
-        mPaint.setStyle(Paint.Style.FILL);
+        paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setColor(Color.WHITE);
+        paint.setStyle(Paint.Style.FILL);
     }
 
     public void transformToPause(boolean animated) {
@@ -103,61 +103,60 @@ public class PlayPauseDrawable extends Drawable {
 
     /**
      * public void setColor(int color) {
-     * mPaint.setColor(color);
+     * paint.setColor(color);
      * invalidateSelf();
      * }*
      */
 
     private void transformToShape(int i, boolean animated) {
-        if (mToShape == i) {
-            // Otherwise this will not be animated.
-            return;
-        }
-        if (animated) {
-            mAnimator.setDuration(300);
-        } else {
-            mAnimator.setDuration(0);
-        }
+        // Otherwise this will not be animated.
+        if (toShape != i) {
+            if (animated) {
+                animator.setDuration(300);
+            } else {
+                animator.setDuration(0);
+            }
 
-        setTransformationTarget(i);
-        mAnimator.cancel();
-        mAnimator.start();
+            setTransformationTarget(i);
+            animator.cancel();
+            animator.start();
+        }
     }
 
     private void setTransformationTarget(int i) {
-        mFromShape = mToShape;
-        mToShape = i;
+        fromShape = toShape;
+        toShape = i;
     }
 
     private float getTransformation() {
-        return mProgress;
+        return progress;
     }
 
     private void setTransformation(float progress) {
-        mProgress = progress;
+        this.progress = progress;
         Rect rect = getBounds();
 
         final float size = Math.min(rect.right - rect.left, rect.bottom - rect.top);
         final float left = rect.left + (rect.right - rect.left - size) / 2;
         final float top = rect.top + (rect.bottom - rect.top - size) / 2;
 
-        mPath.reset();
-        mPath.moveTo(
+        path.reset();
+        path.moveTo(
                 left + calcTransformation(0, 0, progress, size),
                 top + calcTransformation(1, 0, progress, size));
-        for (int i = 1; i < mVertex[0][0].length; i++) {
-            mPath.lineTo(
+        for (int i = 1; i < vertex[0][0].length; i++) {
+            path.lineTo(
                     left + calcTransformation(0, i, progress, size),
                     top + calcTransformation(1, i, progress, size));
         }
 
-        mPath.close();
+        path.close();
         invalidateSelf();
     }
 
     private float calcTransformation(int type, int i, float progress, float size) {
-        float v0 = mVertex[mFromShape][type][i] * (1f - progress);
-        float v1 = mVertex[mToShape][type][i] * progress;
+        float v0 = vertex[fromShape][type][i] * (1f - progress);
+        float v1 = vertex[toShape][type][i] * progress;
         return (v0 + v1) * size / 24f;
     }
 
@@ -167,7 +166,7 @@ public class PlayPauseDrawable extends Drawable {
     @Override
     protected void onBoundsChange(Rect bounds) {
         super.onBoundsChange(bounds);
-        setTransformation(mProgress);
+        setTransformation(progress);
     }
 
     /**
@@ -175,7 +174,7 @@ public class PlayPauseDrawable extends Drawable {
      */
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawPath(mPath, mPaint);
+        canvas.drawPath(path, paint);
     }
 
     /**
@@ -183,7 +182,7 @@ public class PlayPauseDrawable extends Drawable {
      */
     @Override
     public void setAlpha(int alpha) {
-        mPaint.setAlpha(alpha);
+        paint.setAlpha(alpha);
         invalidateSelf();
     }
 
@@ -192,7 +191,7 @@ public class PlayPauseDrawable extends Drawable {
      */
     @Override
     public void setColorFilter(ColorFilter cf) {
-        mPaint.setColorFilter(cf);
+        paint.setColorFilter(cf);
         invalidateSelf();
     }
 

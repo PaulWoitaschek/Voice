@@ -161,12 +161,11 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                     public void run() {
                         lock.lock();
                         try {
-                            if (track == null) {
-                                return;
+                            if (track != null) {
+                                track.flush();
+                                long to = ((long) ms * 1000);
+                                extractor.seekTo(to, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
                             }
-                            track.flush();
-                            long to = ((long) ms * 1000);
-                            extractor.seekTo(to, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
                         } finally {
                             lock.unlock();
                         }
