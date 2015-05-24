@@ -44,6 +44,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     @GuardedBy("lock")
     private final MediaPlayerInterface player;
     @GuardedBy("lock")
+    @Nullable
     private Book book;
     private volatile State state;
     private ScheduledFuture<?> sleepSand;
@@ -110,21 +111,23 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     private void prepare() {
         lock.lock();
         try {
-            player.reset();
+            if (book != null) {
+                player.reset();
 
-            player.setOnCompletionListener(this);
-            player.setOnErrorListener(this);
-            player.setWakeMode(c, PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE);
+                player.setOnCompletionListener(this);
+                player.setOnErrorListener(this);
+                player.setWakeMode(c, PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE);
 
-            try {
-                player.setDataSource(book.getCurrentChapter().getPath());
-                player.prepare();
-                player.seekTo(book.getTime());
-                player.setPlaybackSpeed(book.getPlaybackSpeed());
-                state = State.PREPARED;
-            } catch (IOException e) {
-                e.printStackTrace();
-                state = State.DEAD;
+                try {
+                    player.setDataSource(book.getCurrentChapter().getPath());
+                    player.prepare();
+                    player.seekTo(book.getTime());
+                    player.setPlaybackSpeed(book.getPlaybackSpeed());
+                    state = State.PREPARED;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    state = State.DEAD;
+                }
             }
         } finally {
             lock.unlock();
@@ -180,8 +183,10 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                 public void run() {
                     lock.lock();
                     try {
-                        book.setPosition(player.getCurrentPosition(), book.getCurrentMediaPath());
-                        db.updateBook(book);
+                        if (book != null) {
+                            book.setPosition(player.getCurrentPosition(), book.getCurrentMediaPath());
+                            db.updateBook(book);
+                        }
                     } finally {
                         lock.unlock();
                     }
@@ -200,19 +205,21 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         L.v(TAG, "direction=" + direction);
         lock.lock();
         try {
-            final int currentPos = player.getCurrentPosition();
-            final int duration = player.getDuration();
-            final int delta = prefs.getSeekTime() * 1000;
+            if (book != null) {
+                final int currentPos = player.getCurrentPosition();
+                final int duration = player.getDuration();
+                final int delta = prefs.getSeekTime() * 1000;
 
-            final int seekTo = (direction == Direction.FORWARD) ? currentPos + delta : currentPos - delta;
-            L.v(TAG, "currentPos=" + currentPos + ",seekTo=" + seekTo + ",duration=" + duration);
+                final int seekTo = (direction == Direction.FORWARD) ? currentPos + delta : currentPos - delta;
+                L.v(TAG, "currentPos=" + currentPos + ",seekTo=" + seekTo + ",duration=" + duration);
 
-            if (seekTo < 0) {
-                previous(false);
-            } else if (seekTo > duration) {
-                next();
-            } else {
-                changePosition(seekTo, book.getCurrentMediaPath());
+                if (seekTo < 0) {
+                    previous(false);
+                } else if (seekTo > duration) {
+                    next();
+                } else {
+                    changePosition(seekTo, book.getCurrentMediaPath());
+                }
             }
         } finally {
             lock.unlock();
@@ -227,12 +234,14 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     public void setPlaybackSpeed(float speed) {
         lock.lock();
         try {
-            book.setPlaybackSpeed(speed);
-            db.updateBook(book);
-            if (state != State.DEAD) {
-                player.setPlaybackSpeed(speed);
-            } else {
-                L.e(TAG, "setPlaybackSpeed called in illegal state: " + state);
+            if (book != null) {
+                book.setPlaybackSpeed(speed);
+                db.updateBook(book);
+                if (state != State.DEAD) {
+                    player.setPlaybackSpeed(speed);
+                } else {
+                    L.e(TAG, "setPlaybackSpeed called in illegal state: " + state);
+                }
             }
         } finally {
             lock.unlock();
@@ -245,16 +254,18 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     public void previous(boolean toNullOfNewTrack) {
         lock.lock();
         try {
-            if (player.getCurrentPosition() > 2000 || book.getPreviousChapter() == null) {
-                player.seekTo(0);
-                book.setPosition(0, book.getCurrentMediaPath());
-                db.updateBook(book);
-            } else {
-                if (toNullOfNewTrack) {
-                    changePosition(0, book.getPreviousChapter().getPath());
+            if (book != null) {
+                if (player.getCurrentPosition() > 2000 || book.getPreviousChapter() == null) {
+                    player.seekTo(0);
+                    book.setPosition(0, book.getCurrentMediaPath());
+                    db.updateBook(book);
                 } else {
-                    changePosition(book.getPreviousChapter().getDuration() -
-                            (prefs.getSeekTime() * 1000), book.getPreviousChapter().getPath());
+                    if (toNullOfNewTrack) {
+                        changePosition(0, book.getPreviousChapter().getPath());
+                    } else {
+                        changePosition(book.getPreviousChapter().getDuration() -
+                                (prefs.getSeekTime() * 1000), book.getPreviousChapter().getPath());
+                    }
                 }
             }
         } finally {
@@ -360,28 +371,30 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         lock.lock();
         try {
             L.v(TAG, "pause acquired lock. state is=" + state);
-            switch (state) {
-                case STARTED:
-                    player.pause();
-                    stopUpdating();
+            if (book != null) {
+                switch (state) {
+                    case STARTED:
+                        player.pause();
+                        stopUpdating();
 
-                    final int autoRewind = prefs.getAutoRewindAmount() * 1000;
-                    if (autoRewind != 0) {
-                        int originalPosition = player.getCurrentPosition();
-                        int seekTo = originalPosition - autoRewind;
-                        if (seekTo < 0) seekTo = 0;
-                        player.seekTo(seekTo);
-                        book.setPosition(seekTo, book.getCurrentMediaPath());
-                    }
-                    db.updateBook(book);
+                        final int autoRewind = prefs.getAutoRewindAmount() * 1000;
+                        if (autoRewind != 0) {
+                            int originalPosition = player.getCurrentPosition();
+                            int seekTo = originalPosition - autoRewind;
+                            if (seekTo < 0) seekTo = 0;
+                            player.seekTo(seekTo);
+                            book.setPosition(seekTo, book.getCurrentMediaPath());
+                        }
+                        db.updateBook(book);
 
-                    setPlayState(c, PlayState.PAUSED);
+                        setPlayState(c, PlayState.PAUSED);
 
-                    state = State.PAUSED;
-                    break;
-                default:
-                    L.e(TAG, "pause called in illegal state=" + state);
-                    break;
+                        state = State.PAUSED;
+                        break;
+                    default:
+                        L.e(TAG, "pause called in illegal state=" + state);
+                        break;
+                }
             }
         } finally {
             lock.unlock();
@@ -394,7 +407,8 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         try {
             L.e(TAG, "onError");
             Intent bookShelfIntent = BookActivity.bookScreenIntent(c);
-            bookShelfIntent.putExtra(MALFORMED_FILE, book.getCurrentChapter().getPath());
+            if (book != null)
+                bookShelfIntent.putExtra(MALFORMED_FILE, book.getCurrentChapter().getPath());
             c.startActivity(bookShelfIntent);
 
             state = State.DEAD;
@@ -413,15 +427,17 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     public void onCompletion() {
         lock.lock();
         try {
-            L.v(TAG, "onCompletion called, nextChapter=" + book.getNextChapter());
-            if (book.getNextChapter() != null) {
-                next();
-            } else {
-                L.v(TAG, "Reached last track. Stopping player");
-                stopUpdating();
-                setPlayState(c, PlayState.STOPPED);
+            if (book != null) {
+                L.v(TAG, "onCompletion called, nextChapter=" + book.getNextChapter());
+                if (book.getNextChapter() != null) {
+                    next();
+                } else {
+                    L.v(TAG, "Reached last track. Stopping player");
+                    stopUpdating();
+                    setPlayState(c, PlayState.STOPPED);
 
-                state = State.PLAYBACK_COMPLETED;
+                    state = State.PLAYBACK_COMPLETED;
+                }
             }
         } finally {
             lock.unlock();
@@ -434,9 +450,11 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     public void next() {
         lock.lock();
         try {
-            Chapter nextChapter = book.getNextChapter();
-            if (nextChapter != null) {
-                changePosition(0, nextChapter.getPath());
+            if (book != null) {
+                Chapter nextChapter = book.getNextChapter();
+                if (nextChapter != null) {
+                    changePosition(0, nextChapter.getPath());
+                }
             }
         } finally {
             lock.unlock();
@@ -455,34 +473,36 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         lock.lock();
         try {
             L.v(TAG, "time=" + time + ", relPath=" + path);
-            boolean changeFile = (!book.getCurrentChapter().getPath().equals(path));
-            L.v(TAG, "changeFile=" + changeFile);
-            if (changeFile) {
-                boolean wasPlaying = (state == State.STARTED);
-                book.setPosition(time, path);
-                db.updateBook(book);
-                prepare();
-                if (wasPlaying) {
-                    player.start();
-                    state = State.STARTED;
-                    setPlayState(c, PlayState.PLAYING);
+            if (book != null) {
+                boolean changeFile = (!book.getCurrentChapter().getPath().equals(path));
+                L.v(TAG, "changeFile=" + changeFile);
+                if (changeFile) {
+                    boolean wasPlaying = (state == State.STARTED);
+                    book.setPosition(time, path);
+                    db.updateBook(book);
+                    prepare();
+                    if (wasPlaying) {
+                        player.start();
+                        state = State.STARTED;
+                        setPlayState(c, PlayState.PLAYING);
+                    } else {
+                        state = State.PREPARED;
+                        setPlayState(c, PlayState.PAUSED);
+                    }
                 } else {
-                    state = State.PREPARED;
-                    setPlayState(c, PlayState.PAUSED);
-                }
-            } else {
-                switch (state) {
-                    case PREPARED:
-                    case STARTED:
-                    case PAUSED:
-                    case PLAYBACK_COMPLETED:
-                        player.seekTo(time);
-                        book.setPosition(time, book.getCurrentChapter().getPath());
-                        db.updateBook(book);
-                        break;
-                    default:
-                        L.e(TAG, "changePosition called in illegal state:" + state);
-                        break;
+                    switch (state) {
+                        case PREPARED:
+                        case STARTED:
+                        case PAUSED:
+                        case PLAYBACK_COMPLETED:
+                            player.seekTo(time);
+                            book.setPosition(time, book.getCurrentChapter().getPath());
+                            db.updateBook(book);
+                            break;
+                        default:
+                            L.e(TAG, "changePosition called in illegal state:" + state);
+                            break;
+                    }
                 }
             }
         } finally {
