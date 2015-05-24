@@ -494,7 +494,8 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                     //noinspection deprecation
                     remoteControlClient.editMetadata(true).putString(MediaMetadataRetriever.METADATA_KEY_TITLE, c.getName())
                             .putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName())
-                            .putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bitmap)
+                            .putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK,
+                                    bitmap.copy(bitmap.getConfig(), true))
                             .apply();
                     lastPathForUpdatingRemoteControlClient = book.getCurrentMediaPath();
                 }
