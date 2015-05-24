@@ -435,12 +435,15 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                             track.stop();
                             lock.lock();
                             try {
+                                int channelCount = track.getChannelCount();
                                 track.release();
                                 final MediaFormat oFormat = codec
                                         .getOutputFormat();
                                 initDevice(
                                         oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE),
-                                        oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT));
+                                        channelCount);
+                                // wrong value on some devices:
+                                // oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT));
                                 outputBuffers = codec.getOutputBuffers();
                                 track.play();
                             } finally {
