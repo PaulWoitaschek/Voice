@@ -385,6 +385,40 @@ class DataBaseUpgradeHelper {
         db.execSQL("DROP TABLE IF EXISTS TABLE_BOOK_COPY");
     }
 
+
+    /**
+     * Adds
+     * @throws InvalidPropertiesFormatException
+     */
+    private void upgrade28() throws InvalidPropertiesFormatException {
+        Cursor cursor = db.query("TABLE_BOOK", new String[]{"BOOK_JSON"}, null, null, null, null, null);
+        try {
+            while (cursor.moveToNext()) {
+                JSONObject book = new JSONObject(cursor.getString(0));
+                JSONArray chapters = book.getJSONArray("chapters");
+                for (int i = 0; i< chapters.length(); i++){
+                    JSONObject chapter = chapters.getJSONObject(i);
+                    String fileName = chapter.getString("path");
+                    int dotIndex = fileName.indexOf(".");
+                    String chapterName;
+                    if (dotIndex > 0) {
+                        chapterName = fileName.substring(0, dotIndex);
+                    } else {
+                        chapterName = fileName;
+                    }
+                    chapter.put("name", chapterName);
+                }
+                ContentValues cv = new ContentValues();
+                cv.put("BOOK_JSON", book.toString());
+                db.insert("TABLE_BOOK", null, cv);
+            }
+        } catch (JSONException e) {
+            throw new InvalidPropertiesFormatException(e);
+        } finally {
+            cursor.close();
+        }
+    }
+
     public void upgrade(int fromVersion) throws InvalidPropertiesFormatException {
         switch (fromVersion) {
             case 1:
@@ -419,6 +453,8 @@ class DataBaseUpgradeHelper {
                 upgrade26();
             case 27:
                 upgrade27();
+            case 28:
+                upgrade28();
             default:
                 break;
         }

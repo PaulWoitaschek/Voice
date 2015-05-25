@@ -24,7 +24,7 @@ import de.ph1b.audiobook.utils.Validate;
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class DataBaseHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 28;
+    private static final int DATABASE_VERSION = 29;
     private static final String DATABASE_NAME = "autoBookDB";
 
     // tables

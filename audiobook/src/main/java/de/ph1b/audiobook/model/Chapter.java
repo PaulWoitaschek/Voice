@@ -4,8 +4,6 @@ import android.support.annotation.NonNull;
 
 import net.jcip.annotations.Immutable;
 
-import java.io.File;
-
 import de.ph1b.audiobook.utils.Validate;
 
 @Immutable
@@ -14,19 +12,24 @@ public class Chapter {
     private static final String TAG = Chapter.class.getSimpleName();
     @NonNull
     private final String path;
+    @NonNull
+    private final String name;
     private final int duration;
 
     public Chapter(Chapter that) {
         this.path = that.path;
+        this.name = that.name;
         this.duration = that.duration;
     }
 
     public Chapter(@NonNull String path,
+                   @NonNull String name,
                    int duration) {
 
-        new Validate().notNull(path)
-                .notEmpty(path);
+        new Validate().notNull(path, name)
+                .notEmpty(path, name);
         this.path = path;
+        this.name = name;
         this.duration = duration;
     }
 
@@ -55,22 +58,14 @@ public class Chapter {
     public String toString() {
         return TAG + "[" +
                 "path=" + path +
+                ",name=" + name +
                 ",duration=" + duration +
                 "]";
     }
 
     @NonNull
     public String getName() {
-        // checking for dot index because otherwise a file called ".mp3" would have no name.
-        String fileName = new File(path).getName();
-        int dotIndex = fileName.indexOf(".");
-        String chapterName;
-        if (dotIndex > 0) {
-            chapterName = fileName.substring(0, dotIndex);
-        } else {
-            chapterName = fileName;
-        }
-        return chapterName;
+        return name;
     }
 
     public int getDuration() {
