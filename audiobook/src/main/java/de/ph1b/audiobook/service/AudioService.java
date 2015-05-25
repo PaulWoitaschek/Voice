@@ -541,6 +541,10 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                                     ImageHelper.getSmallerScreenSize(AudioService.this),
                                     ImageHelper.getSmallerScreenSize(AudioService.this));
                         }
+                        // we make a copy because we do not want to use picassos bitmap, since
+                        // MediaSessionCompat recycles our bitmap eventually which would make
+                        // picassos cached bitmap useless.
+                        bitmap = bitmap.copy(bitmap.getConfig(), true);
                         mediaMetaDataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap)
                                 .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
                                 .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, c.getDuration())
