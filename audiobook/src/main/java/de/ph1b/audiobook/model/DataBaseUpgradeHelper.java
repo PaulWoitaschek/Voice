@@ -388,6 +388,7 @@ class DataBaseUpgradeHelper {
 
     /**
      * Adds
+     *
      * @throws InvalidPropertiesFormatException
      */
     private void upgrade28() throws InvalidPropertiesFormatException {
@@ -396,7 +397,7 @@ class DataBaseUpgradeHelper {
             while (cursor.moveToNext()) {
                 JSONObject book = new JSONObject(cursor.getString(0));
                 JSONArray chapters = book.getJSONArray("chapters");
-                for (int i = 0; i< chapters.length(); i++){
+                for (int i = 0; i < chapters.length(); i++) {
                     JSONObject chapter = chapters.getJSONObject(i);
                     String fileName = chapter.getString("path");
                     int dotIndex = fileName.indexOf(".");
@@ -410,7 +411,7 @@ class DataBaseUpgradeHelper {
                 }
                 ContentValues cv = new ContentValues();
                 cv.put("BOOK_JSON", book.toString());
-                db.insert("TABLE_BOOK", null, cv);
+                db.update("TABLE_BOOK", cv, "BOOK_ID" + "=?", new String[]{String.valueOf(book.get("id"))});
             }
         } catch (JSONException e) {
             throw new InvalidPropertiesFormatException(e);
