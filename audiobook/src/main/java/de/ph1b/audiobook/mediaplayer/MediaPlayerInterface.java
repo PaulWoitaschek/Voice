@@ -22,6 +22,8 @@ interface MediaPlayerInterface {
 
     void pause();
 
+    float getPlaybackSpeed();
+
     void setPlaybackSpeed(float speed);
 
     @SuppressWarnings("RedundantThrows")

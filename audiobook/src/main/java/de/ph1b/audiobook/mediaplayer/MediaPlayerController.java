@@ -227,28 +227,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     }
 
     /**
-     * Sets the current playback speed
-     *
-     * @param speed The playback-speed. 1.0 for normal playback, 2.0 for twice the speed, etc.
-     */
-    public void setPlaybackSpeed(float speed) {
-        lock.lock();
-        try {
-            if (book != null) {
-                book.setPlaybackSpeed(speed);
-                db.updateBook(book);
-                if (state != State.DEAD) {
-                    player.setPlaybackSpeed(speed);
-                } else {
-                    L.e(TAG, "setPlaybackSpeed called in illegal state: " + state);
-                }
-            }
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    /**
      * If current time is > 2000ms, seek to 0. Else play previous chapter if there is one.
      */
     public void previous(boolean toNullOfNewTrack) {
@@ -503,6 +481,37 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                             L.e(TAG, "changePosition called in illegal state:" + state);
                             break;
                     }
+                }
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public float getPlaybackSpeed() {
+        lock.lock();
+        try {
+            return player.getPlaybackSpeed();
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    /**
+     * Sets the current playback speed
+     *
+     * @param speed The playback-speed. 1.0 for normal playback, 2.0 for twice the speed, etc.
+     */
+    public void setPlaybackSpeed(float speed) {
+        lock.lock();
+        try {
+            if (book != null) {
+                book.setPlaybackSpeed(speed);
+                db.updateBook(book);
+                if (state != State.DEAD) {
+                    player.setPlaybackSpeed(speed);
+                } else {
+                    L.e(TAG, "setPlaybackSpeed called in illegal state: " + state);
                 }
             }
         } finally {

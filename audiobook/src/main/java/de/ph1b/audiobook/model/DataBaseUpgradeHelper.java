@@ -59,6 +59,7 @@ class DataBaseUpgradeHelper {
      *
      * @throws InvalidPropertiesFormatException if there is an internal data mismatch
      */
+    @SuppressWarnings("ConstantConditions")
     private void upgrade24() throws InvalidPropertiesFormatException {
         String copyBookTableName = "TABLE_BOOK_COPY";
         String copyChapterTableName = "TABLE_CHAPTERS_COPY";

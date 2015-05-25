@@ -216,6 +216,11 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     }
 
     @Override
+    public float getPlaybackSpeed() {
+        return speed;
+    }
+
+    @Override
     public void setPlaybackSpeed(float speed) {
         this.speed = speed;
     }

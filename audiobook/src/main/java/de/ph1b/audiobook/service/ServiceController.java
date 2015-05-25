@@ -29,28 +29,32 @@ public class ServiceController {
     public static Intent getStopIntent(Context c) {
         Intent intent = new Intent(c, AudioService.class);
         intent.setAction(Intent.ACTION_MEDIA_BUTTON);
-        intent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_STOP);
+        KeyEvent keyEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_STOP);
+        intent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent);
         return intent;
     }
 
     public static Intent getPlayPauseIntent(Context c) {
         Intent intent = new Intent(c, AudioService.class);
         intent.setAction(Intent.ACTION_MEDIA_BUTTON);
-        intent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+        KeyEvent keyEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+        intent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent);
         return intent;
     }
 
     public static Intent getFastForwardIntent(Context c) {
         Intent intent = new Intent(c, AudioService.class);
         intent.setAction(Intent.ACTION_MEDIA_BUTTON);
-        intent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD);
+        KeyEvent keyEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD);
+        intent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent);
         return intent;
     }
 
     public static Intent getRewindIntent(Context c) {
         Intent intent = new Intent(c, AudioService.class);
         intent.setAction(Intent.ACTION_MEDIA_BUTTON);
-        intent.putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent.KEYCODE_MEDIA_REWIND);
+        KeyEvent keyEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_REWIND);
+        intent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent);
         return intent;
     }
 

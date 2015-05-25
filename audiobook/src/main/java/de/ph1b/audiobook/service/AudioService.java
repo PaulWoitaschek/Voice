@@ -13,13 +13,15 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
-import android.media.MediaMetadataRetriever;
-import android.media.RemoteControlClient;
+import android.media.session.MediaSession;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.media.MediaMetadataCompat;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 
@@ -52,6 +54,8 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
     private static final String TAG = AudioService.class.getSimpleName();
     private static final int NOTIFICATION_ID = 42;
+    private static final String PLAYSTATE_CHANGED = "com.android.music.playstatechanged";
+    private static final String META_CHANGED = "com.android.music.metachanged";
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private final ExecutorService playerExecutor = new ThreadPoolExecutor(
             1, 1, // single thread
@@ -59,12 +63,20 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
             new LinkedBlockingQueue<Runnable>(2), // queue capacity
             new ThreadPoolExecutor.DiscardOldestPolicy()
     );
+    private final PlaybackStateCompat.Builder playbackStateBuilder = new PlaybackStateCompat.Builder()
+            .setActions(PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+                    | PlaybackStateCompat.ACTION_REWIND
+                    | PlaybackStateCompat.ACTION_PLAY
+                    | PlaybackStateCompat.ACTION_PAUSE
+                    | PlaybackStateCompat.ACTION_STOP
+                    | PlaybackStateCompat.ACTION_FAST_FORWARD
+                    | PlaybackStateCompat.ACTION_SKIP_TO_NEXT
+                    | PlaybackStateCompat.ACTION_SEEK_TO);
+    private final MediaMetadataCompat.Builder mediaMetaDataBuilder = new MediaMetadataCompat.Builder();
     private NotificationManager notificationManager;
     private PrefsManager prefs;
     private MediaPlayerController controller;
     private AudioManager audioManager;
-    @SuppressWarnings("deprecation")
-    private RemoteControlClient remoteControlClient = null;
     private volatile boolean pauseBecauseLossTransient = false;
     private volatile boolean pauseBecauseHeadset = false;
     private final BroadcastReceiver audioBecomingNoisyReceiver = new BroadcastReceiver() {
@@ -95,6 +107,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
             }
         }
     };
+    private MediaSessionCompat mediaSession;
     private DataBaseHelper db;
     private final BroadcastReceiver onCurrentBookChanged = new BroadcastReceiver() {
         @Override
@@ -106,13 +119,12 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     };
     private LocalBroadcastManager bcm;
     /**
-     * The last path the {@link #updateRemoteControlClient()} has used to update the metadata.
+     * The last path the {@link #notifyChange(String)} has used to update the metadata.
      */
-    private volatile String lastPathForUpdatingRemoteControlClient = "";
+    private volatile String lastPathForMetaData = "";
     private final BroadcastReceiver onBookSetChanged = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            updateRemoteControlClient();
             Book controllerBook = controller.getBook();
             if (controllerBook != null) {
                 for (Book b : db.getActiveBooks()) {
@@ -121,6 +133,8 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                         break;
                     }
                 }
+
+                notifyChange(META_CHANGED);
             }
         }
     };
@@ -139,37 +153,27 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                             case PLAYING:
                                 audioManager.requestAudioFocus(AudioService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
-                                //noinspection deprecation
-                                audioManager.registerRemoteControlClient(remoteControlClient);
+                                mediaSession.setActive(true);
 
                                 startForeground(NOTIFICATION_ID, getNotification(controllerBook));
-
-                                //noinspection deprecation
-                                remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
-                                updateRemoteControlClient();
 
                                 break;
                             case PAUSED:
                                 stopForeground(false);
                                 notificationManager.notify(NOTIFICATION_ID, getNotification(controllerBook));
 
-                                //noinspection deprecation
-                                remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_PAUSED);
-
                                 break;
                             case STOPPED:
-                                //noinspection deprecation
-                                audioManager.unregisterRemoteControlClient(remoteControlClient);
+                                mediaSession.setActive(false);
 
                                 audioManager.abandonAudioFocus(AudioService.this);
                                 notificationManager.cancel(NOTIFICATION_ID);
                                 stopForeground(true);
 
-                                //noinspection deprecation
-                                remoteControlClient.setPlaybackState(RemoteControlClient.PLAYSTATE_STOPPED);
-
                                 break;
                         }
+
+                    notifyChange(PLAYSTATE_CHANGED);
                 }
             });
         }
@@ -185,21 +189,26 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         ComponentName eventReceiver = new ComponentName(AudioService.this.getPackageName(), RemoteControlReceiver.class.getName());
-        //noinspection deprecation
-        audioManager.registerMediaButtonEventReceiver(eventReceiver);
         Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
         mediaButtonIntent.setComponent(eventReceiver);
         PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, mediaButtonIntent, 0);
-        //noinspection deprecation
-        remoteControlClient = new RemoteControlClient(mediaPendingIntent);
-        //noinspection deprecation
-        remoteControlClient.setTransportControlFlags(
-                RemoteControlClient.FLAG_KEY_MEDIA_PAUSE |
-                        RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE |
-                        RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS |
-                        RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
-                        RemoteControlClient.FLAG_KEY_MEDIA_REWIND |
-                        RemoteControlClient.FLAG_KEY_MEDIA_FAST_FORWARD);
+        mediaSession = new MediaSessionCompat(this, TAG, eventReceiver, mediaPendingIntent);
+        mediaSession.setCallback(new MediaSessionCompat.Callback() {
+            @Override
+            public boolean onMediaButtonEvent(Intent mediaButtonEvent) {
+                KeyEvent keyEvent = mediaButtonEvent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
+                if (keyEvent != null && keyEvent.getAction() == KeyEvent.ACTION_DOWN
+                        && keyEvent.getRepeatCount() == 0) {
+                    int keyCode = keyEvent.getKeyCode();
+                    L.d(TAG, "onMediaButtonEvent Received command=" + keyEvent);
+                    return handleKeyCode(keyCode);
+                } else {
+                    return super.onMediaButtonEvent(mediaButtonEvent);
+                }
+            }
+        });
+        mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
+                MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
 
         registerReceiver(audioBecomingNoisyReceiver, new IntentFilter(
                 AudioManager.ACTION_AUDIO_BECOMING_NOISY));
@@ -220,6 +229,36 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         }
     }
 
+    private boolean handleKeyCode(int keyCode) {
+        L.v(TAG, "handling keyCode: " + keyCode);
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_MEDIA_PLAY:
+            case KeyEvent.KEYCODE_MEDIA_PAUSE:
+            case KeyEvent.KEYCODE_HEADSETHOOK:
+            case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+                if (MediaPlayerController.getPlayState() ==
+                        MediaPlayerController.PlayState.PLAYING) {
+                    controller.pause();
+                } else {
+                    controller.play();
+                }
+                return true;
+            case KeyEvent.KEYCODE_MEDIA_STOP:
+                controller.stop();
+                return true;
+            case KeyEvent.KEYCODE_MEDIA_NEXT:
+            case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
+                controller.skip(MediaPlayerController.Direction.FORWARD);
+                return true;
+            case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+            case KeyEvent.KEYCODE_MEDIA_REWIND:
+                controller.skip(MediaPlayerController.Direction.BACKWARD);
+                return true;
+            default:
+                return false;
+        }
+    }
+
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
         if (intent != null && intent.getAction() != null) {
@@ -229,31 +268,11 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                     L.v(TAG, "handling intent action:" + intent.getAction());
                     switch (intent.getAction()) {
                         case Intent.ACTION_MEDIA_BUTTON:
-                            int keyCode = intent.getIntExtra(Intent.EXTRA_KEY_EVENT, -1);
-                            L.v(TAG, "handling keyCode: " + keyCode);
-                            switch (keyCode) {
-                                case KeyEvent.KEYCODE_MEDIA_PLAY:
-                                case KeyEvent.KEYCODE_MEDIA_PAUSE:
-                                case KeyEvent.KEYCODE_HEADSETHOOK:
-                                case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-                                    if (MediaPlayerController.getPlayState() ==
-                                            MediaPlayerController.PlayState.PLAYING) {
-                                        controller.pause();
-                                    } else {
-                                        controller.play();
-                                    }
-                                    break;
-                                case KeyEvent.KEYCODE_MEDIA_STOP:
-                                    controller.stop();
-                                    break;
-                                case KeyEvent.KEYCODE_MEDIA_NEXT:
-                                case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
-                                    controller.skip(MediaPlayerController.Direction.FORWARD);
-                                    break;
-                                case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
-                                case KeyEvent.KEYCODE_MEDIA_REWIND:
-                                    controller.skip(MediaPlayerController.Direction.BACKWARD);
-                                    break;
+                            KeyEvent keyEvent = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
+                            if (keyEvent != null && keyEvent.getAction() == KeyEvent.ACTION_DOWN
+                                    && keyEvent.getRepeatCount() == 0) {
+                                int keyCode = keyEvent.getKeyCode();
+                                handleKeyCode(keyCode);
                             }
                             break;
                         case ServiceController.CONTROL_SET_PLAYBACK_SPEED:
@@ -300,6 +319,8 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         } catch (IllegalArgumentException ignored) {
         }
 
+        mediaSession.release();
+
         super.onDestroy();
     }
 
@@ -307,7 +328,6 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     public IBinder onBind(Intent intent) {
         return null;
     }
-
 
     private void reInitController(@NonNull Book book) {
         controller.stop();
@@ -377,8 +397,6 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         bookPlayIntent.putExtra(BookActivity.TARGET_FRAGMENT, BookPlayFragment.TAG);
         PendingIntent contentIntent = PendingIntent.getActivity(AudioService.this, 0, bookPlayIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        // cover
-        // note: On Android 21 + the MediaStyle will use the cover as the background. So it has to be a large image.
         /**
          * Cover. NOTE: On Android 21 + the MediaStyle will use the cover as the background. So it
          * has to be a large image. On Android < 21 there will be a wrong cropping, so there we must
@@ -448,9 +466,9 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            notificationBuilder
-                    .setStyle(new Notification.MediaStyle()
-                            .setShowActionsInCompactView(0, 1))
+            notificationBuilder.setStyle(new Notification.MediaStyle()
+                    .setShowActionsInCompactView(0, 1)
+                    .setMediaSession((MediaSession.Token) mediaSession.getSessionToken().getToken()))
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
             // fast forward. Since we don't need a stop button, we have space for a fast forward button on api >= 21
@@ -463,44 +481,76 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         return notificationBuilder.getNotification();
     }
 
-    private void updateRemoteControlClient() {
+    private void notifyChange(final String what) {
         executor.execute(new Runnable() {
             @Override
             public void run() {
                 L.d(TAG, "updateRemoteControlClient called");
-                Book book = controller.getBook();
-                if (book != null && !lastPathForUpdatingRemoteControlClient.equals(book.getCurrentMediaPath())) {
-                    Bitmap bitmap = null;
-                    File coverFile = book.getCoverFile();
-                    if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-                        try {
-                            bitmap = Picasso.with(AudioService.this).load(coverFile).get();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    if (bitmap == null) {
-                        Drawable replacement = new CoverReplacement(
-                                book.getName(),
-                                AudioService.this);
-                        L.d(TAG, "replacement dimen: " + replacement.getIntrinsicWidth() + ":" + replacement.getIntrinsicHeight());
-                        bitmap = ImageHelper.drawableToBitmap(
-                                replacement,
-                                ImageHelper.getSmallerScreenSize(AudioService.this),
-                                ImageHelper.getSmallerScreenSize(AudioService.this));
-                    }
 
+                Book book = controller.getBook();
+                if (book != null) {
                     Chapter c = book.getCurrentChapter();
-                    //noinspection deprecation
-                    remoteControlClient.editMetadata(true)
-                            .putString(MediaMetadataRetriever.METADATA_KEY_TITLE, c.getName())
-                            .putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, book.getName())
-                            .putString(MediaMetadataRetriever.METADATA_KEY_GENRE, "Audiobook")
-                            .putLong(MediaMetadataRetriever.METADATA_KEY_DURATION, c.getDuration())
-                            .putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK,
-                                    bitmap.copy(bitmap.getConfig(), true))
-                            .apply();
-                    lastPathForUpdatingRemoteControlClient = book.getCurrentMediaPath();
+                    MediaPlayerController.PlayState playState = MediaPlayerController.getPlayState();
+
+                    String bookName = book.getName();
+                    String chapterName = c.getName();
+                    int position = book.getTime();
+
+                    Intent i = new Intent(what);
+                    i.putExtra("id", 1);
+                    i.putExtra("artist", "");
+                    i.putExtra("album", bookName);
+                    i.putExtra("track", chapterName);
+                    i.putExtra("playing", playState == MediaPlayerController.PlayState.PLAYING);
+                    i.putExtra("position", book.getTime());
+                    sendBroadcast(i);
+
+                    if (what.equals(PLAYSTATE_CHANGED)) {
+                        int state;
+                        if (playState == MediaPlayerController.PlayState.PLAYING) {
+                            //noinspection deprecation
+                            state = PlaybackStateCompat.STATE_PLAYING;
+                        } else if (playState == MediaPlayerController.PlayState.PAUSED) {
+                            //noinspection deprecation
+                            state = PlaybackStateCompat.STATE_PAUSED;
+                        } else {
+                            //noinspection deprecation
+                            state = PlaybackStateCompat.STATE_STOPPED;
+                        }
+                        playbackStateBuilder.setState(state, position, controller.getPlaybackSpeed());
+                        mediaSession.setPlaybackState(playbackStateBuilder.build());
+                    } else if (what.equals(META_CHANGED) && !lastPathForMetaData.equals(book.getCurrentMediaPath())) {
+                        // this check is necessary. Else the lockscreen controls will flicker due to
+                        // an updated picture
+                        Bitmap bitmap = null;
+                        File coverFile = book.getCoverFile();
+                        if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
+                            try {
+                                bitmap = Picasso.with(AudioService.this).load(coverFile).get();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if (bitmap == null) {
+                            Drawable replacement = new CoverReplacement(
+                                    book.getName(),
+                                    AudioService.this);
+                            L.d(TAG, "replacement dimen: " + replacement.getIntrinsicWidth() + ":" + replacement.getIntrinsicHeight());
+                            bitmap = ImageHelper.drawableToBitmap(
+                                    replacement,
+                                    ImageHelper.getSmallerScreenSize(AudioService.this),
+                                    ImageHelper.getSmallerScreenSize(AudioService.this));
+                        }
+                        mediaMetaDataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap)
+                                .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
+                                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, c.getDuration())
+                                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, chapterName)
+                                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, bookName)
+                                .putString(MediaMetadataCompat.METADATA_KEY_GENRE, "Audiobook");
+                        mediaSession.setMetadata(mediaMetaDataBuilder.build());
+
+                        lastPathForMetaData = book.getCurrentMediaPath();
+                    }
                 }
             }
         });
