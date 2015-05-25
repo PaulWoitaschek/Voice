@@ -63,7 +63,7 @@ public class Chapter {
     public String getName() {
         // checking for dot index because otherwise a file called ".mp3" would have no name.
         String fileName = new File(path).getName();
-        int dotIndex = fileName.indexOf(".");
+        int dotIndex = fileName.lastIndexOf('.');
         String chapterName;
         if (dotIndex > 0) {
             chapterName = fileName.substring(0, dotIndex);
