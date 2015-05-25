@@ -231,7 +231,8 @@ class DataBaseUpgradeHelper {
                 if (name.equals("")) {
                     if (chapterPaths.size() == 1) {
                         String chapterPath = chapterPaths.get(0);
-                        name = chapterPath.substring(0, chapterPath.lastIndexOf("."));
+                        String fileName = new File(chapterPath).getName();
+                        name = fileName.substring(0, chapterPath.lastIndexOf("."));
                     } else {
                         name = new File(root).getName();
                     }
