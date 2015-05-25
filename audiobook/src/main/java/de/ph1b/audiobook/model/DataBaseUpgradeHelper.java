@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 
 import com.google.gson.Gson;
 
@@ -245,43 +246,67 @@ class DataBaseUpgradeHelper {
                     e.printStackTrace();
                 }
 
-                ArrayList<Chapter> chapters = new ArrayList<>();
-                for (int i = 0; i < chapterPaths.size(); i++) {
-                    chapters.add(new Chapter(root + File.separator + chapterPaths.get(i), chapterDurations.get(i)));
-                }
-
-                ArrayList<Bookmark> bookmarks = new ArrayList<>();
-                for (int i = 0; i < bookmarkRelPathsSafe.size(); i++) {
-                    bookmarks.add(new Bookmark(root + File.separator + bookmarkRelPathsSafe.get(i),
-                            bookmarkTitlesSafe.get(i), bookmarkTimesSafe.get(i)));
-                }
-
-                Book book = new Book(root, name, chapters, root + File.separator + currentPath,
-                        Book.Type.valueOf(type), bookmarks, c);
-                book.setUseCoverReplacement(useCoverReplacement);
-                book.setPosition(currentTime, root + File.separator + currentPath);
-                book.setPlaybackSpeed(speed);
-                L.d(TAG, "upgrade24 restored book=" + book);
-                ContentValues cv = new ContentValues();
-                cv.put("BOOK_JSON", new Gson().toJson(book, Book.class));
-                long newBookId = db.insert(newBookTable, null, cv);
-                book.setId(newBookId);
-
-                // move cover file if possible
-                File coverFile;
-                if (chapterPaths.size() == 1) {
-                    String fileName = "." + chapterNames.get(0) + ".jpg";
-                    coverFile = new File(root, fileName);
-                } else {
-                    String fileName = "." + (new File(root).getName()) + ".jpg";
-                    coverFile = new File(root, fileName);
-                }
-                if (coverFile.exists() && coverFile.canWrite()) {
-                    try {
-                        FileUtils.moveFile(coverFile, book.getCoverFile());
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                try {
+                    JSONArray chapters = new JSONArray();
+                    for (int i = 0; i < chapterPaths.size(); i++) {
+                        JSONObject chapter = new JSONObject();
+                        chapter.put("path", root + File.separator + chapterPaths.get(i));
+                        chapter.put("duration", chapterDurations.get(i));
+                        chapters.put(chapter);
                     }
+
+                    JSONArray bookmarks = new JSONArray();
+                    for (int i = 0; i < bookmarkRelPathsSafe.size(); i++) {
+                        JSONObject bookmark = new JSONObject();
+                        bookmark.put("mediaPath", root + File.separator + bookmarkRelPathsSafe.get(i));
+                        bookmark.put("title", bookmarkTitlesSafe.get(i));
+                        bookmark.put("time", bookmarkTimesSafe.get(i));
+                        bookmarks.put(bookmark);
+                    }
+
+                    JSONObject book = new JSONObject();
+                    book.put("root", root);
+                    book.put("name", name);
+                    book.put("chapters", chapters);
+                    book.put("currentMediaPath", root + File.separator + currentPath);
+                    book.put("type", type);
+                    book.put("bookmarks", bookmarks);
+                    book.put("useCoverReplacement", useCoverReplacement);
+                    book.put("time", currentTime);
+                    book.put("playbackSpeed", speed);
+
+                    L.d(TAG, "upgrade24 restored book=" + book);
+                    ContentValues cv = new ContentValues();
+                    cv.put("BOOK_JSON", new Gson().toJson(book, Book.class));
+                    long newBookId = db.insert(newBookTable, null, cv);
+                    book.put("id", newBookId);
+
+
+                    // move cover file if possible
+                    File coverFile;
+                    if (chapterPaths.size() == 1) {
+                        String fileName = "." + chapterNames.get(0) + ".jpg";
+                        coverFile = new File(root, fileName);
+                    } else {
+                        String fileName = "." + (new File(root).getName()) + ".jpg";
+                        coverFile = new File(root, fileName);
+                    }
+                    if (coverFile.exists() && coverFile.canWrite()) {
+                        try {
+                            File newCoverFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
+                                    File.separator + "Android" + File.separator + "data" + File.separator + c.getPackageName(),
+                                    newBookId + ".jpg");
+                            if (!coverFile.getParentFile().exists()) {
+                                //noinspection ResultOfMethodCallIgnored
+                                coverFile.getParentFile().mkdirs();
+                            }
+                            FileUtils.moveFile(coverFile, newCoverFile);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } catch (JSONException e) {
+                    throw new InvalidPropertiesFormatException(e);
                 }
             }
         } finally {
@@ -293,28 +318,36 @@ class DataBaseUpgradeHelper {
     /**
      * A previous version caused empty books to be added. So we delete them now.
      */
-    private void upgrade25() {
+    private void upgrade25() throws InvalidPropertiesFormatException {
 
         // get all books
-        ArrayList<Book> allBooks = new ArrayList<>();
+        ArrayList<JSONObject> allBooks = new ArrayList<>();
         Cursor cursor = db.query("TABLE_BOOK",
                 new String[]{"BOOK_ID", "BOOK_JSON"},
                 null, null, null, null, null);
         try {
             while (cursor.moveToNext()) {
-                Book book = new Gson().fromJson(cursor.getString(1), Book.class);
-                book.setId(cursor.getLong(0));
+                String content = cursor.getString(1);
+                JSONObject book = new JSONObject(content);
+                book.put("id", cursor.getLong(0));
                 allBooks.add(book);
             }
+        } catch (JSONException e) {
+            throw new InvalidPropertiesFormatException(e);
         } finally {
             cursor.close();
         }
 
         // delete empty books
-        for (Book b : allBooks) {
-            if (b.getChapters().size() == 0) {
-                db.delete("TABLE_BOOK", "BOOK_ID" + "=?", new String[]{String.valueOf(b.getId())});
+        try {
+            for (JSONObject b : allBooks) {
+                JSONArray chapters = b.getJSONArray("chapters");
+                if (chapters.length() == 0) {
+                    db.delete("TABLE_BOOK", "BOOK_ID" + "=?", new String[]{String.valueOf(b.get("id"))});
+                }
             }
+        } catch (JSONException e) {
+            throw new InvalidPropertiesFormatException(e);
         }
     }
 
