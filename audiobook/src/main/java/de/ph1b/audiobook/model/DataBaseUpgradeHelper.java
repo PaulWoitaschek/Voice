@@ -399,8 +399,8 @@ class DataBaseUpgradeHelper {
                 JSONArray chapters = book.getJSONArray("chapters");
                 for (int i = 0; i < chapters.length(); i++) {
                     JSONObject chapter = chapters.getJSONObject(i);
-                    String fileName = chapter.getString("path");
-                    int dotIndex = fileName.indexOf(".");
+                    String fileName = new File(chapter.getString("path")).getName();
+                    int dotIndex = fileName.lastIndexOf(".");
                     String chapterName;
                     if (dotIndex > 0) {
                         chapterName = fileName.substring(0, dotIndex);

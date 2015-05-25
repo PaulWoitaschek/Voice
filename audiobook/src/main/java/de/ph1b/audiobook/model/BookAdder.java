@@ -510,7 +510,7 @@ public class BookAdder {
 
                     // checking for dot index because otherwise a file called ".mp3" would have no name.
                     String fileName = f.getName();
-                    int dotIndex = fileName.indexOf(".");
+                    int dotIndex = fileName.lastIndexOf(".");
                     String chapterName;
                     if (dotIndex > 0) {
                         chapterName = fileName.substring(0, dotIndex);
