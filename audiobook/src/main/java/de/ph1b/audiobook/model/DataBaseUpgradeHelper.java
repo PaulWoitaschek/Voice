@@ -6,8 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 
-import com.google.gson.Gson;
-
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -277,7 +275,7 @@ class DataBaseUpgradeHelper {
 
                     L.d(TAG, "upgrade24 restored book=" + book);
                     ContentValues cv = new ContentValues();
-                    cv.put("BOOK_JSON", new Gson().toJson(book, Book.class));
+                    cv.put("BOOK_JSON", book.toString());
                     long newBookId = db.insert(newBookTable, null, cv);
                     book.put("id", newBookId);
 
