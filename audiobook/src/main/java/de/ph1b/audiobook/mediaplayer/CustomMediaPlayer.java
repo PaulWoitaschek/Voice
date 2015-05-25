@@ -51,6 +51,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     private String path = null;
     private volatile boolean continuing = false;
     private volatile boolean isDecoding = false;
+    private volatile boolean flushCodec = false;
     private float speed = 1.0F;
     @Nullable
     private MediaPlayerInterface.OnCompletionListener onCompletionListener;
@@ -163,6 +164,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                         try {
                             if (track != null) {
                                 track.flush();
+                                flushCodec = true;
                                 long to = ((long) ms * 1000);
                                 extractor.seekTo(to, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
                             }
@@ -385,6 +387,10 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                     if (null != sonic) {
                         sonic.setSpeed(speed);
                         sonic.setPitch(1);
+                    }
+                    if (flushCodec) {
+                        codec.flush();
+                        flushCodec = false;
                     }
                     int inputBufIndex = codec.dequeueInputBuffer(200);
                     if (inputBufIndex >= 0) {
