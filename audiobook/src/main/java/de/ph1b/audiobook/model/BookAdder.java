@@ -328,6 +328,33 @@ public class BookAdder {
         L.d(TAG, "finished");
     }
 
+
+    /**
+     * Returns the name of the book we want to add. If there is a tag embedded, use that one. Else
+     * derive the title from the filename.
+     *
+     * @param firstChapterPath A path to a file
+     * @param rootFile         The root of the book to add
+     * @return The name of the book we add
+     */
+    private String getBookName(String firstChapterPath, File rootFile) {
+        String bookName = null;
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        try {
+            mmr.setDataSource(firstChapterPath);
+            bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+        } catch (RuntimeException ignored) {
+        } finally {
+            mmr.release();
+        }
+        if (bookName == null || bookName.length() == 0) {
+            bookName = rootFile.isDirectory() ?
+                    rootFile.getName() :
+                    rootFile.getName().substring(0, rootFile.getName().lastIndexOf("."));
+        }
+        return bookName;
+    }
+
     private void addNewBook(File rootFile, Book.Type type) throws InterruptedException {
         ArrayList<Chapter> newChapters = getChaptersByRootFile(rootFile);
         Book bookExisting = getBookFromDb(rootFile, type, false);
@@ -344,15 +371,13 @@ public class BookAdder {
                 String bookRoot = rootFile.isDirectory() ?
                         rootFile.getAbsolutePath() :
                         rootFile.getParent();
-                String bookName = rootFile.isDirectory() ?
-                        rootFile.getName() :
-                        rootFile.getName().substring(0, rootFile.getName().lastIndexOf("."));
 
+                String firstChapterPath = newChapters.get(0).getPath();
+                String bookName = getBookName(firstChapterPath, rootFile);
                 Book orphanedBook = getBookFromDb(rootFile, type, true);
                 if (orphanedBook == null) {
-                    Book newBook = new Book(bookRoot, bookName, newChapters,
-                            newChapters.get(0).getPath(), type, new ArrayList<Bookmark>(),
-                            c);
+                    Book newBook = new Book(bookRoot, bookName, newChapters, firstChapterPath, type,
+                            new ArrayList<Bookmark>(), c);
                     L.d(TAG, "adding newBook=" + newBook);
                     db.addBook(newBook);
                 } else { // restore old books
@@ -390,7 +415,6 @@ public class BookAdder {
                     db.reveilBook(orphanedBook);
                 }
             } else { //there is a book, so update it if necessary
-
                 boolean bookHasChanged = false;
                 ArrayList<Chapter> existingChapters = bookExisting.getChapters();
 
