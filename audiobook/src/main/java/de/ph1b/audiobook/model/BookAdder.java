@@ -531,7 +531,6 @@ public class BookAdder {
                             chapterName = fileName;
                         }
                     }
-                    chapterName = (i + 1) + " - " + chapterName;
 
                     String durationString = mmr.extractMetadata(
                             MediaMetadataRetriever.METADATA_KEY_DURATION);

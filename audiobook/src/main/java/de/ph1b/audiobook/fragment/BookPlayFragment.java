@@ -190,9 +190,28 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
 
         // adapter
         final ArrayList<String> chaptersAsStrings = new ArrayList<>();
-        for (Chapter c : book.getChapters()) {
-            chaptersAsStrings.add(c.getName());
+        for (int i = 0; i < book.getChapters().size(); i++) {
+            String chapterName = book.getChapters().get(i).getName();
+
+            // cutting leading zeros
+            chapterName = chapterName.replaceFirst("^0", "");
+            String number = String.valueOf(i + 1);
+
+            // desired format is "1 - Title"
+            if (!chapterName.startsWith(number + " - ")) { // if title does not match desired format
+                if (chapterName.startsWith(number)) {
+                    // if it starts with a number, a " - " should follow
+                    chapterName = number + " - " + chapterName.substring(chapterName.indexOf(number)
+                            + number.length());
+                } else {
+                    // if the name does not match at all, set the correct format
+                    chapterName = number + " - " + chapterName;
+                }
+            }
+
+            chaptersAsStrings.add(chapterName);
         }
+
         // this is necessary due to a bug in android causing the layout to be ignored.
         // see: http://stackoverflow.com/questions/14139106/spinner-does-not-wrap-text-is-this-an-android-bug
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
