@@ -492,36 +492,37 @@ public class BookAdder {
         try {
             for (int i = 0; i < musicFiles.size(); i++) {
                 File f = musicFiles.get(i);
-                int duration = 0;
-
                 try {
                     mmr.setDataSource(f.getAbsolutePath());
+
+                    // getting chapter-name
+                    String chapterName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+                    // checking for dot index because otherwise a file called ".mp3" would have no name.
+                    if (chapterName == null || chapterName.length() == 0) {
+                        String fileName = f.getName();
+                        int dotIndex = fileName.lastIndexOf(".");
+                        if (dotIndex > 0) {
+                            chapterName = fileName.substring(0, dotIndex);
+                        } else {
+                            chapterName = fileName;
+                        }
+                    }
+                    chapterName = (i + 1) + " - " + chapterName;
 
                     String durationString = mmr.extractMetadata(
                             MediaMetadataRetriever.METADATA_KEY_DURATION);
                     if (durationString == null) {
                         continue;
-                    }
-                    duration = Integer.parseInt(durationString);
-                } catch (RuntimeException ignored) {
-                }
-
-                if (duration > 0) {
-
-                    // checking for dot index because otherwise a file called ".mp3" would have no name.
-                    String fileName = f.getName();
-                    int dotIndex = fileName.lastIndexOf(".");
-                    String chapterName;
-                    if (dotIndex > 0) {
-                        chapterName = fileName.substring(0, dotIndex);
                     } else {
-                        chapterName = fileName;
+                        int duration = Integer.parseInt(durationString);
+                        if (duration > 0) {
+                            containingMedia.add(new Chapter(f.getAbsolutePath(), chapterName, duration));
+                        }
                     }
-                    containingMedia.add(new Chapter(f.getAbsolutePath(), chapterName, duration));
-                }
-
-                if (stopScanner) {
-                    throw new InterruptedException("getChaptersByRootFile interrupted");
+                    if (stopScanner) {
+                        throw new InterruptedException("getChaptersByRootFile interrupted");
+                    }
+                } catch (RuntimeException ignored) {
                 }
             }
         } finally {
