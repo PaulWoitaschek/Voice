@@ -1,3 +1,10 @@
+# v2.1.8
+
+## Changes
+* Bug about database upgrading from previous version has been fixed
+* Checks for non existing book
+* Added duration and genre as metainfo
+
 # v2.1.7
 
 ## Changes
