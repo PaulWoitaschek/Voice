@@ -1,3 +1,9 @@
+# v2.1.9
+
+## Changes
+* Audio quality improved. No more weird sound on seeking
+* Read metatags for chapter and book title
+
 # v2.1.8
 
 ## Changes
