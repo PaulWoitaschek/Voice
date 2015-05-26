@@ -101,7 +101,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
                         .commit();
                 return;
             }
-            L.d(TAG, "onBookSetChanged called with bookName=" + book.getName());
+            L.d(TAG, "onBookSetChanged called with book=" + book);
 
             ArrayList<Chapter> chapters = book.getChapters();
             Chapter chapter = book.getCurrentChapter();
