@@ -475,6 +475,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
             notificationBuilder.setStyle(new Notification.MediaStyle()
                     .setShowActionsInCompactView(0, 1)
                     .setMediaSession((MediaSession.Token) mediaSession.getSessionToken().getToken()))
+                    .setCategory(Notification.CATEGORY_TRANSPORT)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
             // fast forward. Since we don't need a stop button, we have space for a fast forward button on api >= 21
@@ -556,6 +557,8 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                         mediaMetaDataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap)
                                 .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
                                 .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, c.getDuration())
+                                .putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, (book.getChapters().indexOf(book.getCurrentChapter()) + 1))
+                                .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, book.getChapters().size())
                                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, chapterName)
                                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, bookName)
                                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, author)
