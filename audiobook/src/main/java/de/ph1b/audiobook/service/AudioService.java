@@ -494,11 +494,13 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
                     String bookName = book.getName();
                     String chapterName = c.getName();
+                    String author = book.getAuthor();
                     int position = book.getTime();
 
                     Intent i = new Intent(what);
                     i.putExtra("id", 1);
-                    i.putExtra("artist", "");
+                    if (author != null)
+                        i.putExtra("artist", author);
                     i.putExtra("album", bookName);
                     i.putExtra("track", chapterName);
                     i.putExtra("playing", playState == MediaPlayerController.PlayState.PLAYING);
@@ -550,6 +552,10 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                                 .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, c.getDuration())
                                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, chapterName)
                                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, bookName)
+                                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, author)
+                                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, author)
+                                .putString(MediaMetadataCompat.METADATA_KEY_AUTHOR, author)
+                                .putString(MediaMetadataCompat.METADATA_KEY_COMPOSER, author)
                                 .putString(MediaMetadataCompat.METADATA_KEY_GENRE, "Audiobook");
                         mediaSession.setMetadata(mediaMetaDataBuilder.build());
 

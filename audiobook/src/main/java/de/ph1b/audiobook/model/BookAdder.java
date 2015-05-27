@@ -337,15 +337,13 @@ public class BookAdder {
      * @param rootFile         The root of the book to add
      * @return The name of the book we add
      */
-    private String getBookName(String firstChapterPath, File rootFile) {
+    @NonNull
+    private String getBookName(String firstChapterPath, File rootFile, MediaMetadataRetriever mmr) {
         String bookName = null;
-        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         try {
             mmr.setDataSource(firstChapterPath);
             bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
         } catch (RuntimeException ignored) {
-        } finally {
-            mmr.release();
         }
         if (bookName == null || bookName.length() == 0) {
             bookName = rootFile.isDirectory() ?
@@ -353,6 +351,30 @@ public class BookAdder {
                     rootFile.getName().substring(0, rootFile.getName().lastIndexOf("."));
         }
         return bookName;
+    }
+
+    /**
+     * Returns the author of the book we want to add. If there is a tag embedded, use that one. Else
+     * return null
+     *
+     * @param firstChapterPath A path to a file
+     * @return The name of the book we add
+     */
+    @Nullable
+    private String getAuthor(@NonNull String firstChapterPath, @NonNull MediaMetadataRetriever mmr) {
+        try {
+            mmr.setDataSource(firstChapterPath);
+            String bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_COMPOSER);
+            if (bookName == null || bookName.length() == 0) {
+                bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_AUTHOR);
+            }
+            if (bookName == null || bookName.length() == 0) {
+                bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+            }
+            return bookName;
+        } catch (RuntimeException ignored) {
+            return null;
+        }
     }
 
     private void addNewBook(File rootFile, Book.Type type) throws InterruptedException {
@@ -373,15 +395,18 @@ public class BookAdder {
                         rootFile.getParent();
 
                 String firstChapterPath = newChapters.get(0).getPath();
-                String bookName = getBookName(firstChapterPath, rootFile);
+                MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+                String bookName = getBookName(firstChapterPath, rootFile, mmr);
+                String author = getAuthor(firstChapterPath, mmr);
+                mmr.release();
+
                 Book orphanedBook = getBookFromDb(rootFile, type, true);
                 if (orphanedBook == null) {
-                    Book newBook = new Book(bookRoot, bookName, newChapters, firstChapterPath, type,
-                            new ArrayList<Bookmark>(), c);
+                    Book newBook = new Book(bookRoot, bookName, author, newChapters,
+                            firstChapterPath, type, new ArrayList<Bookmark>(), c);
                     L.d(TAG, "adding newBook=" + newBook);
                     db.addBook(newBook);
                 } else { // restore old books
-
                     // first adds all chapters
                     orphanedBook.getChapters().clear();
                     orphanedBook.getChapters().addAll(newChapters);

@@ -28,6 +28,8 @@ public class Book implements Comparable<Book> {
     private long id = ID_UNKNOWN;
     @NonNull
     private String name;
+    @Nullable
+    private final String author;
     private int time = 0;
     private float playbackSpeed = 1.0f;
     @NonNull
@@ -50,6 +52,7 @@ public class Book implements Comparable<Book> {
         }
         this.bookmarks = copyBookmarks;
         this.name = that.name;
+        this.author = that.author;
         this.time = that.time;
         this.playbackSpeed = that.playbackSpeed;
         this.currentMediaPath = that.currentMediaPath;
@@ -58,6 +61,7 @@ public class Book implements Comparable<Book> {
 
     public Book(@NonNull String root,
                 @NonNull String name,
+                @Nullable String author,
                 @NonNull ArrayList<Chapter> chapters,
                 @NonNull
                 String currentMediaPath,
@@ -70,6 +74,7 @@ public class Book implements Comparable<Book> {
 
         this.root = root;
         this.name = name;
+        this.author = author;
         this.chapters = chapters;
         this.type = type;
         this.bookmarks = bookmarks;
@@ -124,6 +129,15 @@ public class Book implements Comparable<Book> {
 
     public void setUseCoverReplacement(boolean useCoverReplacement) {
         this.useCoverReplacement = useCoverReplacement;
+    }
+
+
+    /**
+     * @return the author of the book or null if not set.
+     */
+    @Nullable
+    public String getAuthor() {
+        return author;
     }
 
     @Override
