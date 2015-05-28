@@ -19,9 +19,6 @@
         <!-- toolbar -->
         <item name="toolbar_popup_theme">@style/toolbar_popup_light</item>
 
-        <!-- BookShelf -->
-        <item name="progress_drawable">@drawable/progress</item>
-
         <!-- BookPlay -->
         <item name="book_play_rewind">@drawable/ic_fast_rewind_grey600_36dp</item>
         <item name="book_play_fast_forward">@drawable/ic_fast_forward_grey600_36dp</item>
@@ -69,9 +66,6 @@
 
         <!-- toolbar -->
         <item name="toolbar_popup_theme">@style/toolbar_popup_dark</item>
-
-        <!-- BookShelf -->
-        <item name="progress_drawable">@drawable/progress</item>
 
         <!-- BookPlay -->
         <item name="book_play_rewind">@drawable/ic_fast_rewind_white_36dp</item>

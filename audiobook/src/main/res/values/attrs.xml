@@ -6,10 +6,6 @@
     <!-- Toolbar-->
     <attr name="toolbar_popup_theme" format="reference" />
 
-    <!--Bookshelf-->
-    <!-- necessary because we cant use attr in custom drawable on pre lollipop!-->
-    <attr name="progress_drawable" format="reference" />
-
     <!-- BookPlay -->
     <attr name="book_play_rewind" format="reference" />
     <attr name="book_play_fast_forward" format="reference" />
