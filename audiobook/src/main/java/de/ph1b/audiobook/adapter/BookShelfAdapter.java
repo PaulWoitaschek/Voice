@@ -174,13 +174,13 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
 
 
     public interface OnItemClickListener {
-        void onCoverClicked(final int position, ImageView cover);
+        void onCoverClicked(final int position);
 
         void onMenuClicked(final int position, ImageButton editBook);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        final ImageView coverView;
+        public final ImageView coverView;
         final TextView titleView;
         final ImageButton editBook;
         final ImageView currentPlayingIndicator;
@@ -195,7 +195,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
             coverView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onCoverClicked(getAdapterPosition(), coverView);
+                    onItemClickListener.onCoverClicked(getAdapterPosition());
                 }
             });
             editBook.setOnClickListener(new View.OnClickListener() {

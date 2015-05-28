@@ -31,7 +31,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
@@ -145,12 +144,10 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
         BookShelfAdapter.OnItemClickListener onClickListener =
                 new BookShelfAdapter.OnItemClickListener() {
                     @Override
-                    public void onCoverClicked(int position, ImageView cover) {
+                    public void onCoverClicked(int position) {
                         Book book = adapter.getItem(position);
-
                         prefs.setCurrentBookIdAndInform(book.getId());
-
-                        startBookPlay(cover);
+                        startBookPlay();
                     }
 
                     @Override
@@ -342,6 +339,10 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.book_shelf, menu);
+
+        // sets menu item visible if there is a current book
+        MenuItem currentPlaying = menu.findItem(R.id.action_current);
+        currentPlaying.setVisible(db.getBook(prefs.getCurrentBookId()) != null);
     }
 
     @Override
@@ -350,13 +351,15 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
             case R.id.action_settings:
                 startActivity(new Intent(getActivity(), SettingsActivity.class));
                 return true;
+            case R.id.action_current:
+                startBookPlay();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void startBookPlay(View view) {
-        ViewCompat.setTransitionName(view, getString(R.string.transition_cover));
+    private void startBookPlay() {
         Fragment bookPlayFragment = new BookPlayFragment();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
@@ -388,10 +391,21 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
          * replacement won't scale correctly.
          */
         Book currentBook = db.getBook(prefs.getCurrentBookId());
-        boolean isRealCover = currentBook != null &&
-                (!currentBook.isUseCoverReplacement() && currentBook.getCoverFile().exists());
-        if (isRealCover)
-            ft.addSharedElement(view, getString(R.string.transition_cover));
+        if (currentBook != null) {
+            boolean isRealCover = (!currentBook.isUseCoverReplacement() && currentBook.getCoverFile().exists());
+            if (isRealCover) {
+                BookShelfAdapter.ViewHolder viewHolder = (BookShelfAdapter.ViewHolder) recyclerView
+                        .findViewHolderForItemId(currentBook.getId());
+                if (viewHolder != null) {
+                    L.d(TAG, "Starting transition for book=" + currentBook.getName());
+                    ViewCompat.setTransitionName(viewHolder.coverView, getString(R.string.transition_cover));
+                    ft.addSharedElement(viewHolder.coverView, getString(R.string.transition_cover));
+                } else {
+                    L.d(TAG, "ViewHolder for book=" + currentBook.getName() + " is not on screen, " +
+                            "so setting no transition");
+                }
+            }
+        }
 
         ft.commit();
     }
