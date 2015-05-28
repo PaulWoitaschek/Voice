@@ -37,6 +37,10 @@ public class Book implements Comparable<Book> {
     private boolean useCoverReplacement = false;
 
     public Book(Book that) {
+        new Validate().notNull(that.root, that.name, that.chapters, that.currentMediaPath, that.type)
+                .notEmpty(that.root, that.name)
+                .notEmpty(that.chapters);
+
         this.id = that.id;
         this.root = that.root;
         ArrayList<Chapter> copyChapters = new ArrayList<>();

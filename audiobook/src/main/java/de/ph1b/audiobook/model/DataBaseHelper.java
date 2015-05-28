@@ -192,6 +192,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public synchronized void hideBook(@NonNull Book book) {
         L.v(TAG, "hideBook=" + book.getName());
+        new Validate().notEmpty(book.getChapters());
 
         int indexToHide = -1;
         for (int i = 0; i < activeBooks.size(); i++)
@@ -213,7 +214,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public synchronized void reveilBook(@NonNull Book book) {
+    public synchronized void revealBook(@NonNull Book book) {
+        new Validate().notEmpty(book.getChapters());
+
         Iterator<Book> orphanedBookIterator = orphanedBooks.iterator();
         while (orphanedBookIterator.hasNext()) {
             if (orphanedBookIterator.next().getId() == book.getId()) {

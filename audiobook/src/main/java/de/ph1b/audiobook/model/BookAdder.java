@@ -437,7 +437,7 @@ public class BookAdder {
                     }
 
                     // now finally un-hide this book
-                    db.reveilBook(orphanedBook);
+                    db.revealBook(orphanedBook);
                 }
             } else { //there is a book, so update it if necessary
                 boolean bookHasChanged = false;
