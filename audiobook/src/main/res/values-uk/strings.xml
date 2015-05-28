@@ -3,7 +3,8 @@
     <!-- BookShelf -->
     <string name="mal_file_message">Цей файл може бути зіпсований:</string>
     <string name="mal_file_title">Зіпсований файл</string>
-    <string name="content_current_book">Поточна книга</string>
+    <string name="content_current_book">Книга, яку ви прослуховуюєте</string>
+    <string name="current_book">Поточна книга</string>
     <!-- BookPlayActivity -->
     <string name="cover">Обкладинка</string>
     <string name="play_pause">Програвати / Пауза</string>
