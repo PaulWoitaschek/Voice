@@ -1,25 +1,36 @@
-package de.ph1b.audiobook.uitools;
-/*
- * Copyright (C) 2014 AChep@xda <artemchep@gmail.com>
- * Modified by Paul Woitaschek <woitaschek@posteo.de>
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- * MA  02110-1301, USA.
+/**
+ * This code was modified by me, Paul Woitaschek. All these changes are licensed under GPLv3. The
+ * original source can be found here: {@link https://github.com/alexjlockwood/material-pause-play-
+ * animation/blob/master/app/src/main/java/com/alexjlockwood/example/playpauseanimation/
+ * PlayPauseView.java}
+ * <p/>
+ * The original licensing is as follows:
+ * <p/>
+ * <p/>
+ * The MIT License (MIT)
+ * <p/>
+ * Copyright (c) 2015 Alex Lockwood
+ * <p/>
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+ * associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge, publish, distribute,
+ * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * <p/>
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ * <p/>
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+package de.ph1b.audiobook.uitools;
+
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -27,180 +38,175 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PixelFormat;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Property;
+import android.view.animation.DecelerateInterpolator;
 
-
-/**
- * A class for creating simple transformation buttons. It is very simple to
- * use and perfectly fits simple Material icons' transformation.
- *
- * @author Artem Chepurnoy
- */
 public class PlayPauseDrawable extends Drawable {
 
 
-    /**
-     * Pause icon
-     */
-    private static final float[][] VERTEX_PAUSE = {
-            {10f, 6f, 6f, 10f, 10f, 14f, 14f, 18f, 18f},
-            {5f, 5f, 19f, 19f, 5f, 5f, 19f, 19f, 5f}
-    };
-
-    /**
-     * Play icon
-     */
-    private static final float[][] VERTEX_PLAY = {
-            {19f, 19f, 8f, 8f, 19f, 19f, 8f, 8f, 19f},
-            {12f, 12f, 5f, 9f, 12f, 12f, 5f, 19f, 12f}
-    };
-    private final Animator animator = ObjectAnimator.ofFloat(this, TRANSFORM, 0f, 1f);
-    private final Path path;
-    private final Paint paint;
-    private final float[][][] vertex;
+    private final Path leftPauseBar = new Path();
+    private final Path rightPauseBar = new Path();
+    private final Paint paint = new Paint();
     private float progress;
-    private int fromShape;
-    private int toShape;
-    private final static Property<PlayPauseDrawable, Float> TRANSFORM =
-            new FloatProperty<PlayPauseDrawable>() {
+    private static final Property<PlayPauseDrawable, Float> PROGRESS =
+            new Property<PlayPauseDrawable, Float>(Float.class, "progress") {
                 @Override
-                public void setValue(PlayPauseDrawable object, float value) {
-                    object.setTransformation(value);
+                public Float get(PlayPauseDrawable d) {
+                    return d.getProgress();
                 }
 
                 @Override
-                public Float get(PlayPauseDrawable object) {
-                    return object.getTransformation();
+                public void set(PlayPauseDrawable d, Float value) {
+                    d.setProgress(value);
                 }
             };
+    private boolean isPlay;
+    @Nullable
+    private Animator animator;
 
     public PlayPauseDrawable() {
-        this(VERTEX_PAUSE, VERTEX_PLAY);
+        paint.setAntiAlias(true);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.WHITE);
     }
 
-    private PlayPauseDrawable(@NonNull float[][]... vertex) {
-        this.vertex = vertex;
+    /**
+     * Linear interpolate between a and b with parameter t.
+     */
+    private static float interpolate(float a, float b, float t) {
+        return a + (b - a) * t;
+    }
 
-        path = new Path();
-        path.setFillType(Path.FillType.WINDING);
 
-        paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setColor(Color.WHITE);
-        paint.setStyle(Paint.Style.FILL);
+    @Override
+    public void draw(Canvas canvas) {
+        leftPauseBar.rewind();
+        rightPauseBar.rewind();
+
+        // move to center of canvas
+        canvas.translate(getBounds().left, getBounds().top);
+
+        float pauseBarHeight = 7.0F / 12.0F * ((float) getBounds().height());
+        float pauseBarWidth = pauseBarHeight / 3.0F;
+        float pauseBarDistance = pauseBarHeight / 3.6F;
+
+        // The current distance between the two pause bars.
+        final float barDist = interpolate(pauseBarDistance, 0.0F, progress);
+        // The current width of each pause bar.
+        final float barWidth = interpolate(pauseBarWidth, pauseBarHeight / 1.75F, progress);
+        // The current position of the left pause bar's top left coordinate.
+        final float firstBarTopLeft = interpolate(0.0F, barWidth, progress);
+        // The current position of the right pause bar's top right coordinate.
+        final float secondBarTopRight = interpolate(2.0F * barWidth + barDist, barWidth + barDist, progress);
+
+        // Draw the left pause bar. The left pause bar transforms into the
+        // top half of the play button triangle by animating the position of the
+        // rectangle's top left coordinate and expanding its bottom width.
+        leftPauseBar.moveTo(0.0F, 0.0F);
+        leftPauseBar.lineTo(firstBarTopLeft, -pauseBarHeight);
+        leftPauseBar.lineTo(barWidth, -pauseBarHeight);
+        leftPauseBar.lineTo(barWidth, 0.0F);
+        leftPauseBar.close();
+
+        // Draw the right pause bar. The right pause bar transforms into the
+        // bottom half of the play button triangle by animating the position of the
+        // rectangle's top right coordinate and expanding its bottom width.
+        rightPauseBar.moveTo(barWidth + barDist, 0.0F);
+        rightPauseBar.lineTo(barWidth + barDist, -pauseBarHeight);
+        rightPauseBar.lineTo(secondBarTopRight, -pauseBarHeight);
+        rightPauseBar.lineTo(2.0F * barWidth + barDist, 0.0F);
+        rightPauseBar.close();
+
+        canvas.save();
+
+        // Translate the play button a tiny bit to the right so it looks more centered.
+        canvas.translate(interpolate(0.0F, pauseBarHeight / 8.0F, progress), 0.0F);
+
+        // (1) Pause --> Play: rotate 0 to 90 degrees clockwise.
+        // (2) Play --> Pause: rotate 90 to 180 degrees clockwise.
+        final float rotationProgress = isPlay ? 1.0F - progress : progress;
+        final float startingRotation = isPlay ? 90.0F : 0.0F;
+        canvas.rotate(interpolate(startingRotation, startingRotation + 90.0F, rotationProgress), getBounds().width() / 2.0F, getBounds().height() / 2.0F);
+
+        // Position the pause/play button in the center of the drawable's bounds.
+        canvas.translate(getBounds().width() / 2.0F - ((2.0F * barWidth + barDist) / 2.0F), getBounds().height() / 2.0F + (pauseBarHeight / 2.0F));
+
+        // Draw the two bars that form the animated pause/play button.
+        canvas.drawPath(leftPauseBar, paint);
+        canvas.drawPath(rightPauseBar, paint);
+
+        canvas.restore();
     }
 
     public void transformToPause(boolean animated) {
-        transformToShape(0, animated);
+        if (isPlay) {
+            if (animated) {
+                toggle();
+            } else {
+                isPlay = false;
+                setProgress(0.0F);
+            }
+        }
     }
 
     public void transformToPlay(boolean animated) {
-        transformToShape(1, animated);
-    }
-
-    /**
-     * public void setColor(int color) {
-     * paint.setColor(color);
-     * invalidateSelf();
-     * }*
-     */
-
-    private void transformToShape(int i, boolean animated) {
-        // Otherwise this will not be animated.
-        if (toShape != i) {
+        if (!isPlay) {
             if (animated) {
-                animator.setDuration(300);
+                toggle();
             } else {
-                animator.setDuration(0);
+                isPlay = true;
+                setProgress(1.0F);
             }
-
-            setTransformationTarget(i);
-            animator.cancel();
-            animator.start();
         }
     }
 
-    private void setTransformationTarget(int i) {
-        fromShape = toShape;
-        toShape = i;
+    public void toggle() {
+        if (animator != null) {
+            animator.cancel();
+        }
+
+        animator = ObjectAnimator.ofFloat(this, PROGRESS, isPlay ? 1.0F : 0.0F, isPlay ? 0.0F : 1.0F);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                isPlay = !isPlay;
+            }
+        });
+
+        animator.setInterpolator(new DecelerateInterpolator());
+        animator.setDuration(275);
+        animator.start();
     }
 
-    private float getTransformation() {
+    public boolean isPlay() {
+        return isPlay;
+    }
+
+    private float getProgress() {
         return progress;
     }
 
-    private void setTransformation(float progress) {
+    private void setProgress(float progress) {
         this.progress = progress;
-        Rect rect = getBounds();
-
-        final float size = Math.min(rect.right - rect.left, rect.bottom - rect.top);
-        final float left = rect.left + (rect.right - rect.left - size) / 2;
-        final float top = rect.top + (rect.bottom - rect.top - size) / 2;
-
-        path.reset();
-        path.moveTo(
-                left + calcTransformation(0, 0, progress, size),
-                top + calcTransformation(1, 0, progress, size));
-        for (int i = 1; i < vertex[0][0].length; i++) {
-            path.lineTo(
-                    left + calcTransformation(0, i, progress, size),
-                    top + calcTransformation(1, i, progress, size));
-        }
-
-        path.close();
         invalidateSelf();
     }
 
-    private float calcTransformation(int type, int i, float progress, float size) {
-        float v0 = vertex[fromShape][type][i] * (1f - progress);
-        float v1 = vertex[toShape][type][i] * progress;
-        return (v0 + v1) * size / 24f;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void onBoundsChange(Rect bounds) {
-        super.onBoundsChange(bounds);
-        setTransformation(progress);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void draw(Canvas canvas) {
-        canvas.drawPath(path, paint);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setAlpha(int alpha) {
         paint.setAlpha(alpha);
         invalidateSelf();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setColorFilter(ColorFilter cf) {
         paint.setColorFilter(cf);
         invalidateSelf();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int getOpacity() {
         return PixelFormat.TRANSLUCENT;
     }
-
 }
