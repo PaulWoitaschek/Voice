@@ -4,7 +4,6 @@
     <attr name="colorAccentDark" format="reference" />
 
     <!-- Toolbar-->
-    <attr name="toolbar_theme" format="reference" />
     <attr name="toolbar_popup_theme" format="reference" />
 
     <!--Bookshelf-->
