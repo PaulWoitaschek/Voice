@@ -212,19 +212,36 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
             chaptersAsStrings.add(chapterName);
         }
 
-        // this is necessary due to a bug in android causing the layout to be ignored.
-        // see: http://stackoverflow.com/questions/14139106/spinner-does-not-wrap-text-is-this-an-android-bug
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 R.layout.fragment_book_play_spinner, chaptersAsStrings) {
             @Override
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                final TextView textView = (TextView) super.getDropDownView(position, convertView, parent);
+                final TextView textView = (TextView) super.getDropDownView(position, convertView,
+                        parent);
+
+                // this is necessary due to a bug in android causing the layout to be ignored.
+                // see: http://stackoverflow.com/questions/14139106/spinner-does-not-wrap-text-is-th
+                // is-an-android-bug
                 textView.post(new Runnable() {
                     @Override
                     public void run() {
                         textView.setSingleLine(false);
                     }
                 });
+
+                // highlights the selected item and un-highlights an item if it is not selected.
+                // default implementation uses a ViewHolder, so this is necessary.
+                if (position == bookSpinner.getSelectedItemPosition()) {
+                    textView.setBackgroundColor(getResources().getColor(ThemeUtil.getResourceId(
+                            getActivity(), R.attr.colorAccent)));
+                    textView.setTextColor(getResources().getColor(R.color.dark_text_primary));
+                } else {
+                    textView.setBackgroundColor(getResources().getColor(ThemeUtil.getResourceId(
+                            getActivity(), android.R.attr.windowBackground)));
+                    textView.setTextColor(getResources().getColor(ThemeUtil.getResourceId(
+                            getActivity(), R.attr.text_primary)));
+                }
+
                 return textView;
             }
         };
