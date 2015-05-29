@@ -76,7 +76,7 @@ public class BookActivityTest extends ActivityInstrumentationTestCase2<BookActiv
         ArrayList<Chapter> chapters = new ArrayList<>();
         chapters.add(new Chapter(randomString(), randomString(), rnd.nextInt()));
 
-        return new Book(randomString(), randomString(), chapters, chapters.get(0).getPath(),
+        return new Book(randomString(), randomString(), randomString(), chapters, chapters.get(0).getPath(),
                 Book.Type.COLLECTION_FILE, new ArrayList<Bookmark>(), getActivity());
 
     }
