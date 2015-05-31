@@ -31,8 +31,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
 
 
     public static final String MALFORMED_FILE = "malformedFile";
-    public static final boolean playerCanSetSpeed = Build.VERSION.SDK_INT >=
-            Build.VERSION_CODES.JELLY_BEAN;
     private static final String TAG = MediaPlayerController.class.getSimpleName();
     public static volatile boolean sleepTimerActive = false;
     private static volatile PlayState playState = PlayState.STOPPED;
@@ -58,7 +56,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
             prefs = new PrefsManager(c);
             db = DataBaseHelper.getInstance(c);
 
-            if (playerCanSetSpeed) {
+            if (canSetSpeed()) {
                 player = new CustomMediaPlayer();
             } else {
                 player = new AndroidMediaPlayer();
@@ -68,6 +66,23 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         } finally {
             lock.unlock();
         }
+    }
+
+    /**
+     * Checks if the device can set playback-seed by {@link MediaPlayerInterface#setPlaybackSpeed(float)}
+     * Therefore it has to be >= {@link android.os.Build.VERSION_CODES#JELLY_BEAN} and not blacklisted
+     * due to a bug.
+     *
+     * @return true if the device can set variable playback speed.
+     */
+    public static boolean canSetSpeed() {
+        boolean greaterJellyBean = Build.VERSION.SDK_INT >=
+                Build.VERSION_CODES.JELLY_BEAN;
+        boolean black1 = Build.DEVICE.equals("ME173X") && Build.MODEL.equals("ME173X") &&
+                Build.PRODUCT.equals("RUS_memo") && Build.HARDWARE.equals("mt8125");
+        boolean black2 = Build.DEVICE.equals("Lenovo") && Build.MODEL.equals("N903") &&
+                Build.PRODUCT.equals("Lenovo") && Build.HARDWARE.equals("mt6582");
+        return greaterJellyBean && !black1 && !black2;
     }
 
     public static void setPlayState(Context c, PlayState playState) {

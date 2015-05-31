@@ -351,7 +351,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         MenuItem timeLapseItem = menu.findItem(R.id.action_time_lapse);
-        timeLapseItem.setVisible(MediaPlayerController.playerCanSetSpeed);
+        timeLapseItem.setVisible(MediaPlayerController.canSetSpeed());
         MenuItem sleepTimerItem = menu.findItem(R.id.action_sleep);
         if (MediaPlayerController.sleepTimerActive) {
             sleepTimerItem.setIcon(R.drawable.ic_alarm_on_white_24dp);
