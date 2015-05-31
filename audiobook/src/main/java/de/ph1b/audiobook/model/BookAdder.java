@@ -53,27 +53,34 @@ public class BookAdder {
 
     static {
         audioTypes.add(".3gp");
-        audioTypes.add(".mp4");
+
+        audioTypes.add(".aac");
+        audioTypes.add(".awb");
+
+        audioTypes.add(".flac");
+
+        audioTypes.add(".imy");
+
         audioTypes.add(".m4a");
         audioTypes.add(".m4b");
-        audioTypes.add(".mp3");
+        audioTypes.add(".mp4");
         audioTypes.add(".mid");
-        audioTypes.add(".xmf");
+        audioTypes.add(".mkv");
+        audioTypes.add(".mp3");
         audioTypes.add(".mxmf");
-        audioTypes.add(".rtttl");
-        audioTypes.add(".rtx");
-        audioTypes.add(".ota");
-        audioTypes.add(".imy");
+
         audioTypes.add(".ogg");
         audioTypes.add(".oga");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) audioTypes.add(".opus");
+        audioTypes.add(".ota");
+
+        audioTypes.add(".rtttl");
+        audioTypes.add(".rtx");
+
         audioTypes.add(".wav");
-        audioTypes.add(".aac");
-        audioTypes.add(".flac");
-        audioTypes.add(".mkv");
         audioTypes.add(".wma");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            audioTypes.add(".opus");
-        }
+
+        audioTypes.add(".xmf");
 
         imageTypes.add(".jpg");
         imageTypes.add(".jpeg");
