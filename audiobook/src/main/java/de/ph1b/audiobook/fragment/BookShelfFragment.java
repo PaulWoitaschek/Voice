@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -37,9 +35,6 @@ import android.widget.ProgressBar;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
-import java.io.File;
-import java.util.ArrayList;
-
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.FolderOverviewActivity;
 import de.ph1b.audiobook.activity.SettingsActivity;
@@ -51,8 +46,6 @@ import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.BookAdder;
 import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.service.ServiceController;
-import de.ph1b.audiobook.uitools.CoverReplacement;
-import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.uitools.PlayPauseDrawable;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
@@ -160,29 +153,8 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
                                 switch (item.getItemId()) {
                                     case R.id.edit_book:
                                         Book book = adapter.getItem(position);
-
-                                        EditBookDialogFragment editBookDialogFragment = new EditBookDialogFragment();
-                                        Bundle bundle = new Bundle();
-
-                                        ArrayList<Bitmap> covers = new ArrayList<>();
-                                        CoverReplacement replacement = new CoverReplacement(book.getName(), getActivity());
-                                        covers.add(ImageHelper.drawableToBitmap(replacement,
-                                                EditBookDialogFragment.REPLACEMENT_DIMEN,
-                                                EditBookDialogFragment.REPLACEMENT_DIMEN));
-
-                                        File coverFile = book.getCoverFile();
-                                        if (coverFile.exists() && coverFile.canRead()) {
-                                            Bitmap defaultCover = BitmapFactory.decodeFile(coverFile.getAbsolutePath());
-                                            if (defaultCover != null) {
-                                                covers.add(defaultCover);
-                                            }
-                                        }
-
-                                        bundle.putParcelableArrayList(EditBookDialogFragment.BOOK_COVER, covers);
-                                        bundle.putLong(Book.TAG, book.getId());
-
-                                        editBookDialogFragment.setArguments(bundle);
-                                        editBookDialogFragment.show(getFragmentManager(), EditBookDialogFragment.TAG);
+                                        EditBookDialogFragment.newInstance(book, getActivity()).show(
+                                                getFragmentManager(), EditBookDialogFragment.TAG);
                                         return true;
                                     case R.id.bookmark:
                                         DialogFragment bookmarkDialogFragment = new BookmarkDialogFragment();

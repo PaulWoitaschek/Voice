@@ -162,7 +162,7 @@ public class PlayPauseDrawable extends Drawable {
         }
     }
 
-    public void toggle() {
+    private void toggle() {
         if (animator != null) {
             animator.cancel();
         }
@@ -178,10 +178,6 @@ public class PlayPauseDrawable extends Drawable {
         animator.setInterpolator(new DecelerateInterpolator());
         animator.setDuration(275);
         animator.start();
-    }
-
-    public boolean isPlay() {
-        return isPlay;
     }
 
     private float getProgress() {

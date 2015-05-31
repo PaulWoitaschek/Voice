@@ -340,10 +340,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
     }
 
     private void launchJumpToPositionDialog() {
-        JumpToPositionDialogFragment dialog = new JumpToPositionDialogFragment();
-        Bundle bundle = new Bundle();
-        dialog.setArguments(bundle);
-        dialog.show(getFragmentManager(), JumpToPositionDialogFragment.TAG);
+        new JumpToPositionDialogFragment().show(getFragmentManager(), JumpToPositionDialogFragment.TAG);
     }
 
     @Override
@@ -383,15 +380,12 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
                 }
                 return true;
             case R.id.action_time_lapse:
-                PlaybackSpeedDialogFragment dialog = new PlaybackSpeedDialogFragment();
-                dialog.show(getFragmentManager(), PlaybackSpeedDialogFragment.TAG);
+                new PlaybackSpeedDialogFragment().show(getFragmentManager(),
+                        PlaybackSpeedDialogFragment.TAG);
                 return true;
             case R.id.action_bookmark:
-                BookmarkDialogFragment bookmarkDialogFragment = new BookmarkDialogFragment();
-                Bundle args = new Bundle();
-                args.putLong(BookmarkDialogFragment.BOOK_ID, book.getId());
-                bookmarkDialogFragment.setArguments(args);
-                bookmarkDialogFragment.show(getFragmentManager(), BookmarkDialogFragment.TAG);
+                BookmarkDialogFragment.newInstance(book.getId()).show(getFragmentManager(),
+                        BookmarkDialogFragment.TAG);
                 return true;
             case android.R.id.home:
             case R.id.home:

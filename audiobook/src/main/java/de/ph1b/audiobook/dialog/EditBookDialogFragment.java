@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
@@ -43,8 +45,8 @@ import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
 
 public class EditBookDialogFragment extends DialogFragment implements View.OnClickListener {
-    public static final String BOOK_COVER = "BOOK_COVER";
-    public static final int REPLACEMENT_DIMEN = 500;
+    private static final String BOOK_COVER = "BOOK_COVER";
+    private static final int REPLACEMENT_DIMEN = 500;
     public static final String TAG = EditBookDialogFragment.class.getSimpleName();
     private static final String COVER_POSITION = "COVER_POSITION";
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -67,6 +69,31 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
             book = db.getBook(book.getId());
         }
     };
+
+    public static EditBookDialogFragment newInstance(@NonNull Book book, @NonNull Context c){
+        EditBookDialogFragment editBookDialogFragment = new EditBookDialogFragment();
+        Bundle bundle = new Bundle();
+
+        ArrayList<Bitmap> covers = new ArrayList<>();
+        CoverReplacement replacement = new CoverReplacement(book.getName(), c);
+        covers.add(ImageHelper.drawableToBitmap(replacement,
+                EditBookDialogFragment.REPLACEMENT_DIMEN,
+                EditBookDialogFragment.REPLACEMENT_DIMEN));
+
+        File coverFile = book.getCoverFile();
+        if (coverFile.exists() && coverFile.canRead()) {
+            Bitmap defaultCover = BitmapFactory.decodeFile(coverFile.getAbsolutePath());
+            if (defaultCover != null) {
+                covers.add(defaultCover);
+            }
+        }
+
+        bundle.putParcelableArrayList(EditBookDialogFragment.BOOK_COVER, covers);
+        bundle.putLong(Book.TAG, book.getId());
+
+        editBookDialogFragment.setArguments(bundle);
+        return editBookDialogFragment;
+    }
 
     @Override
     public void onStart() {

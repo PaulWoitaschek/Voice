@@ -50,6 +50,14 @@ public class BookmarkDialogFragment extends DialogFragment {
     private DataBaseHelper db;
     private ServiceController controller;
 
+    public static BookmarkDialogFragment newInstance(long bookId) {
+        BookmarkDialogFragment bookmarkDialogFragment = new BookmarkDialogFragment();
+        Bundle args = new Bundle();
+        args.putLong(BookmarkDialogFragment.BOOK_ID, bookId);
+        bookmarkDialogFragment.setArguments(args);
+        return bookmarkDialogFragment;
+    }
+
     public static void addBookmark(long bookId, @NonNull String title, @NonNull Context c) {
         DataBaseHelper db = DataBaseHelper.getInstance(c);
 
