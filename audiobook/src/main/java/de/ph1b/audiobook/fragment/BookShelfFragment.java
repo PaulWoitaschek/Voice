@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
@@ -157,11 +156,8 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
                                                 getFragmentManager(), EditBookDialogFragment.TAG);
                                         return true;
                                     case R.id.bookmark:
-                                        DialogFragment bookmarkDialogFragment = new BookmarkDialogFragment();
-                                        Bundle args = new Bundle();
-                                        args.putLong(BookmarkDialogFragment.BOOK_ID, adapter.getItemId(position));
-                                        bookmarkDialogFragment.setArguments(args);
-                                        bookmarkDialogFragment.show(getFragmentManager(), BookmarkDialogFragment.TAG);
+                                        BookmarkDialogFragment.newInstance(adapter.getItemId(position))
+                                                .show(getFragmentManager(), TAG);
                                         return true;
                                     default:
                                         return false;

@@ -45,7 +45,7 @@ import de.ph1b.audiobook.utils.PrefsManager;
 public class BookmarkDialogFragment extends DialogFragment {
 
     public static final String TAG = BookmarkDialogFragment.class.getSimpleName();
-    public static final String BOOK_ID = "bookId";
+    private static final String BOOK_ID = "bookId";
     private BookmarkAdapter adapter;
     private DataBaseHelper db;
     private ServiceController controller;
