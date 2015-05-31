@@ -59,7 +59,6 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     @Nullable
     private MediaPlayer.OnErrorListener onErrorListener;
     private long duration;
-    private int channelCount;
 
 
     @Override
@@ -288,7 +287,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                 error("initStream", state);
                 throw new IOException("No KEY_CHANNEL_COUNT");
             }
-            channelCount = oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
+            int channelCount = oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
 
             if (!oFormat.containsKey(MediaFormat.KEY_MIME)) {
                 error("initStream", state);
@@ -454,7 +453,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                                 // workaround - get channel count from media extractor, not from codec, because of speed bug with some devices
                                 initDevice(
                                         oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE),
-                                        channelCount);
+                                        oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT));
                                 outputBuffers = codec.getOutputBuffers();
                                 track.play();
                             } finally {
