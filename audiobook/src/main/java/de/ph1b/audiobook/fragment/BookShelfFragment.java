@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
@@ -33,6 +32,7 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.FolderOverviewActivity;
@@ -131,7 +131,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerReplacementView = (ProgressBar) view.findViewById(R.id.recyclerReplacement);
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.setImageDrawable(playPauseDrawable);
+        fab.setIconDrawable(playPauseDrawable);
         fab.setOnClickListener(this);
         BookShelfAdapter.OnItemClickListener onClickListener =
                 new BookShelfAdapter.OnItemClickListener() {
