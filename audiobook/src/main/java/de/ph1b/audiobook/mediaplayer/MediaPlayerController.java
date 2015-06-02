@@ -78,11 +78,12 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     public static boolean canSetSpeed() {
         boolean greaterJellyBean = Build.VERSION.SDK_INT >=
                 Build.VERSION_CODES.JELLY_BEAN;
-        boolean black1 = Build.DEVICE.equals("ME173X") && Build.MODEL.equals("ME173X") &&
-                Build.PRODUCT.equals("RUS_memo") && Build.HARDWARE.equals("mt8125");
-        boolean black2 = Build.DEVICE.equals("Lenovo") && Build.MODEL.equals("N903") &&
-                Build.PRODUCT.equals("Lenovo") && Build.HARDWARE.equals("mt6582");
-        return greaterJellyBean && !black1 && !black2;
+
+        boolean me173x = Build.MODEL.equals("ME173X") && Build.HARDWARE.equals("mt8125");
+        boolean n903 = Build.MODEL.equals("N903") && Build.HARDWARE.equals("mt6582");
+        boolean micromaxA116 = Build.MODEL.equals("Micromax A116") && Build.HARDWARE.equals("mt6589");
+
+        return greaterJellyBean && !me173x && !n903 && !micromaxA116;
     }
 
     public static void setPlayState(Context c, PlayState playState) {
