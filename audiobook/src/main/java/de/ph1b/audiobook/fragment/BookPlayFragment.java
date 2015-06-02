@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
@@ -28,7 +29,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -165,7 +165,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         previous_button.setOnClickListener(this);
         next_button.setOnClickListener(this);
         playButton.setOnClickListener(this);
-        playButton.setIconDrawable(playPauseDrawable);
+        playButton.setImageDrawable(playPauseDrawable);
         playedTimeView.setOnClickListener(this);
         ThemeUtil.theme(seekBar);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
