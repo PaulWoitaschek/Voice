@@ -4,14 +4,12 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +20,7 @@ import java.util.concurrent.Executors;
 import de.ph1b.audiobook.activity.BaseActivity;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.Communication;
+import de.ph1b.audiobook.utils.FileRecognition;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
@@ -32,63 +31,11 @@ import de.ph1b.audiobook.utils.PrefsManager;
 public class BookAdder {
 
     private static final String TAG = BookAdder.class.getSimpleName();
-    private static final ArrayList<String> audioTypes = new ArrayList<>();
-    public static final FileFilter folderAndMusicFilter = new FileFilter() {
-        @Override
-        public boolean accept(File pathname) {
-            return isAudio(pathname) || pathname.isDirectory();
-        }
-    };
-    private static final ArrayList<String> imageTypes = new ArrayList<>();
-    private static final FileFilter imageFilter = new FileFilter() {
-        @Override
-        public boolean accept(File pathname) {
-            for (String s : imageTypes) {
-                if (pathname.getAbsolutePath().toLowerCase().endsWith(s))
-                    return true;
-            }
-            return false;
-        }
-    };
+
+
     public static volatile boolean scannerActive = false;
     private static BookAdder instance;
 
-    static {
-        audioTypes.add(".3gp");
-
-        audioTypes.add(".aac");
-        audioTypes.add(".awb");
-
-        audioTypes.add(".flac");
-
-        audioTypes.add(".imy");
-
-        audioTypes.add(".m4a");
-        audioTypes.add(".m4b");
-        audioTypes.add(".mp4");
-        audioTypes.add(".mid");
-        audioTypes.add(".mkv");
-        audioTypes.add(".mp3");
-        audioTypes.add(".mxmf");
-
-        audioTypes.add(".ogg");
-        audioTypes.add(".oga");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) audioTypes.add(".opus");
-        audioTypes.add(".ota");
-
-        audioTypes.add(".rtttl");
-        audioTypes.add(".rtx");
-
-        audioTypes.add(".wav");
-        audioTypes.add(".wma");
-
-        audioTypes.add(".xmf");
-
-        imageTypes.add(".jpg");
-        imageTypes.add(".jpeg");
-        imageTypes.add(".bmp");
-        imageTypes.add(".png");
-    }
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Context c;
@@ -109,21 +56,6 @@ public class BookAdder {
         return instance;
     }
 
-
-    /**
-     * Checks if the file is an audio file.
-     *
-     * @param f the file to check
-     * @return true if the specified file is an audio file
-     */
-    private static boolean isAudio(File f) {
-        for (String s : audioTypes) {
-            if (f.getName().toLowerCase().endsWith(s)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     /**
      * Checks for new books
@@ -219,7 +151,7 @@ public class BookAdder {
                 if (b.getType() == Book.Type.COLLECTION_FOLDER || b.getType() == Book.Type.SINGLE_FOLDER) {
                     File root = new File(b.getRoot());
                     if (root.exists()) {
-                        File[] images = root.listFiles(imageFilter);
+                        File[] images = root.listFiles(FileRecognition.imageFilter);
                         if (images != null) {
                             Bitmap cover = getCoverFromDisk(images);
                             if (cover != null) {
@@ -305,7 +237,7 @@ public class BookAdder {
         for (String s : prefs.getCollectionFolders()) {
             File f = new File(s);
             if (f.exists() && f.isDirectory()) {
-                File[] containing = f.listFiles(folderAndMusicFilter);
+                File[] containing = f.listFiles(FileRecognition.folderAndMusicFilter);
                 if (containing != null) {
                     containingFiles.addAll(Arrays.asList(containing));
                 }
@@ -633,7 +565,7 @@ public class BookAdder {
 
         ArrayList<File> musicFiles = new ArrayList<>();
         for (File f : containingFiles) {
-            if (isAudio(f)) {
+            if (FileRecognition.audioFilter.accept(f)) {
                 musicFiles.add(f);
             }
         }
