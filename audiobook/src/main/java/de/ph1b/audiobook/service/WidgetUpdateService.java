@@ -70,7 +70,7 @@ public class WidgetUpdateService extends Service {
         super.onCreate();
 
         db = DataBaseHelper.getInstance(this);
-        prefs = new PrefsManager(this);
+        prefs = PrefsManager.getInstance(this);
         bcm = LocalBroadcastManager.getInstance(this);
         bcm.registerReceiver(onBookSetChanged, new IntentFilter(Communication.BOOK_SET_CHANGED));
         bcm.registerReceiver(onCurrentBookChanged, new IntentFilter(Communication.CURRENT_BOOK_CHANGED));

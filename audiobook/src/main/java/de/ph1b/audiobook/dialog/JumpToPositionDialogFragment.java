@@ -40,8 +40,8 @@ public class JumpToPositionDialogFragment extends DialogFragment {
         hPicker = (NumberPicker) v.findViewById(R.id.number_hour);
         mPicker = (NumberPicker) v.findViewById(R.id.number_minute);
 
-        final Book book = DataBaseHelper.getInstance(getActivity()).getBook(new PrefsManager(
-                getActivity()).getCurrentBookId());
+        final Book book = DataBaseHelper.getInstance(getActivity()).getBook(
+                PrefsManager.getInstance(getActivity()).getCurrentBookId());
         if (book == null) {
             throw new AssertionError("Cannot instantiate " + TAG + " without a current book");
         }

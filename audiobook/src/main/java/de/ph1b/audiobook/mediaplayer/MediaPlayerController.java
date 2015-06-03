@@ -53,7 +53,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         lock.lock();
         try {
             this.c = c;
-            prefs = new PrefsManager(c);
+            prefs = PrefsManager.getInstance(c);
             db = DataBaseHelper.getInstance(c);
 
             if (canSetSpeed()) {

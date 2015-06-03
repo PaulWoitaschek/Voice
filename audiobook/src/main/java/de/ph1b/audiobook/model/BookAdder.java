@@ -45,7 +45,7 @@ public class BookAdder {
 
     private BookAdder(@NonNull Context c) {
         this.c = c;
-        prefs = new PrefsManager(this.c);
+        prefs = PrefsManager.getInstance(c);
         db = DataBaseHelper.getInstance(this.c);
     }
 

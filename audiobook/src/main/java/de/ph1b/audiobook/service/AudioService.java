@@ -183,7 +183,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     @Override
     public void onCreate() {
         super.onCreate();
-        prefs = new PrefsManager(this);
+        prefs = PrefsManager.getInstance(this);
         bcm = LocalBroadcastManager.getInstance(this);
         db = DataBaseHelper.getInstance(this);
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

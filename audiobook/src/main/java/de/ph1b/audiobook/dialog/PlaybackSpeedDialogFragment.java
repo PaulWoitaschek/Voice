@@ -45,7 +45,7 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
 
         // setting current speed
         final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
-        final Book book = db.getBook(new PrefsManager(getActivity()).getCurrentBookId());
+        final Book book = db.getBook(PrefsManager.getInstance(getActivity()).getCurrentBookId());
         if (book == null) {
             throw new AssertionError("Cannot instantiate " + TAG + " without a current book");
         }

@@ -14,7 +14,7 @@ import de.ph1b.audiobook.utils.Validate;
 public class Book implements Comparable<Book> {
 
     public static final String TAG = Book.class.getSimpleName();
-    private static final long ID_UNKNOWN = -1;
+    public static final long ID_UNKNOWN = -1;
     @NonNull
     private final String root;
     @NonNull
@@ -25,11 +25,11 @@ public class Book implements Comparable<Book> {
     private final String packageName;
     @NonNull
     private final ArrayList<Bookmark> bookmarks;
+    @Nullable
+    private final String author;
     private long id = ID_UNKNOWN;
     @NonNull
     private String name;
-    @Nullable
-    private final String author;
     private int time = 0;
     private float playbackSpeed = 1.0f;
     @NonNull

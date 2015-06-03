@@ -153,7 +153,7 @@ public class BookmarkDialogFragment extends DialogFragment {
             @Override
             public void onBookmarkClicked(int position) {
                 Bookmark bookmark = adapter.getItem(position);
-                new PrefsManager(getActivity()).setCurrentBookIdAndInform(bookId);
+                PrefsManager.getInstance(getActivity()).setCurrentBookIdAndInform(bookId);
                 controller.changeTime(bookmark.getTime(), bookmark.getMediaPath());
 
                 getDialog().cancel();

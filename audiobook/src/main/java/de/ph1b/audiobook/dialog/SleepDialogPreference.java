@@ -27,7 +27,7 @@ public class SleepDialogPreference extends DialogPreference {
     @Override
     protected void showDialog(Bundle state) {
         @SuppressLint("InflateParams") View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_sleep_timer, null);
-        final PrefsManager prefs = new PrefsManager(getContext());
+        final PrefsManager prefs = PrefsManager.getInstance(getContext());
 
         //init views
         final TextView timeView = (TextView) view.findViewById(R.id.minute_text);

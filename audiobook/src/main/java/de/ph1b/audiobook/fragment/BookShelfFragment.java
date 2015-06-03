@@ -200,7 +200,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        prefs = new PrefsManager(getActivity());
+        prefs = PrefsManager.getInstance(getActivity());
         db = DataBaseHelper.getInstance(getActivity());
         bcm = LocalBroadcastManager.getInstance(getActivity());
         controller = new ServiceController(getActivity());

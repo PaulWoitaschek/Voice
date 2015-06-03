@@ -450,7 +450,6 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                                 final MediaFormat oFormat = codec
                                         .getOutputFormat();
 
-                                // workaround - get channel count from media extractor, not from codec, because of speed bug with some devices
                                 initDevice(
                                         oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE),
                                         oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT));

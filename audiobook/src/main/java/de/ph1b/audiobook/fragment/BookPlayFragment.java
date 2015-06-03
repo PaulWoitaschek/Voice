@@ -293,7 +293,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        prefs = new PrefsManager(getActivity());
+        prefs = PrefsManager.getInstance(getActivity());
         db = DataBaseHelper.getInstance(getActivity());
         controller = new ServiceController(getActivity());
         bcm = LocalBroadcastManager.getInstance(getActivity());

@@ -78,7 +78,7 @@ public class FolderOverviewActivity extends BaseActivity {
             actionBar.setTitle(getString(R.string.audiobook_folders_title));
         }
 
-        prefs = new PrefsManager(this);
+        prefs = PrefsManager.getInstance(this);
 
         //init views
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
@@ -210,7 +210,6 @@ public class FolderOverviewActivity extends BaseActivity {
     }
 
     private boolean canAddNewFolder(@NonNull final String newFile) {
-        PrefsManager prefs = new PrefsManager(this);
         ArrayList<String> folders = new ArrayList<>();
         folders.addAll(prefs.getCollectionFolders());
         folders.addAll(prefs.getSingleBookFolders());

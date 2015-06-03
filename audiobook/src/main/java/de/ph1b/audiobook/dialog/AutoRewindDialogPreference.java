@@ -36,7 +36,7 @@ public class AutoRewindDialogPreference extends DialogPreference {
 
     @Override
     protected void showDialog(Bundle state) {
-        final PrefsManager prefs = new PrefsManager(getContext());
+        final PrefsManager prefs = PrefsManager.getInstance(getContext());
 
         // init custom view
         @SuppressLint("InflateParams") View customView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_amount_chooser, null);

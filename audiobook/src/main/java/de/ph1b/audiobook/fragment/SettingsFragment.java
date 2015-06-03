@@ -48,7 +48,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        prefs = new PrefsManager(getActivity());
+        prefs = PrefsManager.getInstance(getActivity());
         addPreferencesFromResource(R.xml.preferences);
 
         setHasOptionsMenu(true);

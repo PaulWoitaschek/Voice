@@ -68,7 +68,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
     public BookShelfAdapter(@NonNull Context c, OnItemClickListener onItemClickListener) {
         this.c = c;
         this.onItemClickListener = onItemClickListener;
-        this.prefs = new PrefsManager(c);
+        this.prefs = PrefsManager.getInstance(c);
 
         setHasStableIds(true);
     }

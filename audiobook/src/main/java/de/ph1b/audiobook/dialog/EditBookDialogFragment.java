@@ -45,9 +45,9 @@ import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
 
 public class EditBookDialogFragment extends DialogFragment implements View.OnClickListener {
+    public static final String TAG = EditBookDialogFragment.class.getSimpleName();
     private static final String BOOK_COVER = "BOOK_COVER";
     private static final int REPLACEMENT_DIMEN = 500;
-    public static final String TAG = EditBookDialogFragment.class.getSimpleName();
     private static final String COVER_POSITION = "COVER_POSITION";
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private LocalBroadcastManager bcm;
@@ -70,7 +70,7 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
         }
     };
 
-    public static EditBookDialogFragment newInstance(@NonNull Book book, @NonNull Context c){
+    public static EditBookDialogFragment newInstance(@NonNull Book book, @NonNull Context c) {
         EditBookDialogFragment editBookDialogFragment = new EditBookDialogFragment();
         Bundle bundle = new Bundle();
 
