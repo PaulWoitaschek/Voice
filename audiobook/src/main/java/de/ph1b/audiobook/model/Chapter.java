@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.model;
 
+import android.content.ContentValues;
 import android.support.annotation.NonNull;
 
 import net.jcip.annotations.Immutable;
@@ -21,6 +22,7 @@ public class Chapter {
         this.name = that.name;
         this.duration = that.duration;
     }
+
 
     public Chapter(@NonNull String path,
                    @NonNull String name,
@@ -75,5 +77,14 @@ public class Chapter {
     @NonNull
     public String getPath() {
         return path;
+    }
+
+    public ContentValues getContentValues(long bookId) {
+        ContentValues chapterCv = new ContentValues();
+        chapterCv.put(DataBaseHelper.CHAPTER_DURATION, duration);
+        chapterCv.put(DataBaseHelper.CHAPTER_NAME, name);
+        chapterCv.put(DataBaseHelper.CHAPTER_PATH, path);
+        chapterCv.put(DataBaseHelper.BOOK_ID, bookId);
+        return chapterCv;
     }
 }

@@ -10,9 +10,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.google.gson.Gson;
+import net.jcip.annotations.ThreadSafe;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Iterator;
@@ -21,26 +20,58 @@ import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.Validate;
 
+@ThreadSafe
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class DataBaseHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 29;
-    private static final String DATABASE_NAME = "autoBookDB";
-
-    // tables
-    private static final String TABLE_BOOK = "TABLE_BOOK";
-
     // book keys
-    private static final String BOOK_ID = "BOOK_ID";
-    private static final String BOOK_JSON = "BOOK_JSON";
-    private static final String BOOK_ACTIVE = "BOOK_ACTIVE";
-    private static final String LAST_TIME_BOOK_WAS_ACTIVE = "LAST_TIME_BOOK_WAS_ACTIVE";
-
+    public static final String BOOK_ID = "bookId";
+    public static final String BOOK_NAME = "bookName";
+    public static final String BOOK_AUTHOR = "bookAuthor";
+    public static final String BOOK_CURRENT_MEDIA_PATH = "bookCurrentMediaPath";
+    public static final String BOOK_PLAYBACK_SPEED = "bookSpeed";
+    public static final String BOOK_ROOT = "bookRoot";
+    public static final String BOOK_TIME = "bookTime";
+    public static final String BOOK_TYPE = "bookType";
+    public static final String BOOK_USE_COVER_REPLACEMENT = "bookUseCoverReplacement";
+    public static final String BOOK_ACTIVE = "BOOK_ACTIVE";
+    public static final String CHAPTER_DURATION = "chapterDuration";
+    public static final String CHAPTER_NAME = "chapterName";
+    public static final String CHAPTER_PATH = "chapterPath";
+    public static final String BOOKMARK_TIME = "bookmarkTime";
+    public static final String BOOKMARK_PATH = "bookmarkPath";
+    public static final String BOOKMARK_TITLE = "bookmarkTitle";
+    private static final int DATABASE_VERSION = 30;
+    private static final String DATABASE_NAME = "autoBookDB";
+    private static final String TABLE_BOOK = "tableBooks";
+    private static final String TABLE_CHAPTERS = "tableChapters";
+    private static final String TABLE_BOOKMARKS = "tableBookmarks";
     private static final String CREATE_TABLE_BOOK = "CREATE TABLE " + TABLE_BOOK + " ( " +
             BOOK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            BOOK_JSON + " TEXT NOT NULL, " +
-            LAST_TIME_BOOK_WAS_ACTIVE + " INTEGER NOT NULL, " +
-            BOOK_ACTIVE + " INTEGER NOT NULL)";
+            BOOK_NAME + " TEXT NOT NULL, " +
+            BOOK_AUTHOR + " TEXT, " +
+            BOOK_CURRENT_MEDIA_PATH + " TEXT NOT NULL, " +
+            BOOK_PLAYBACK_SPEED + " REAL NOT NULL, " +
+            BOOK_ROOT + " TEXT NOT NULL, " +
+            BOOK_TIME + " INTEGER NOT NULL, " +
+            BOOK_TYPE + " TEXT NOT NULL, " +
+            BOOK_USE_COVER_REPLACEMENT + " INTEGER NOT NULL, " +
+            BOOK_ACTIVE + " INTEGER NOT NULL DEFAULT 1)";
+
+    private static final String CREATE_TABLE_CHAPTERS = "CREATE TABLE " + TABLE_CHAPTERS + " ( " +
+            CHAPTER_DURATION + " INTEGER NOT NULL, " +
+            CHAPTER_NAME + " TEXT NOT NULL, " +
+            CHAPTER_PATH + " TEXT NOT NULL, " +
+            BOOK_ID + " INTEGER NOT NULL, " +
+            "FOREIGN KEY (" + BOOK_ID + ") REFERENCES " + TABLE_BOOK + "(" + BOOK_ID + "))";
+
+    private static final String CREATE_TABLE_BOOKMARKS = "CREATE TABLE " + TABLE_BOOKMARKS + " ( " +
+            BOOKMARK_PATH + " TEXT NOT NULL, " +
+            BOOKMARK_TITLE + " TEXT NOT NULL, " +
+            BOOKMARK_TIME + " INTEGER NOT NULL, " +
+            BOOK_ID + " INTEGER NOT NULL, " +
+            "FOREIGN KEY (" + BOOK_ID + ") REFERENCES " + TABLE_BOOK + "(" + BOOK_ID + "))";
+
     private static final String TAG = DataBaseHelper.class.getSimpleName();
     private static DataBaseHelper instance;
     private final Context c;
@@ -53,24 +84,74 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         this.c = c;
         this.bcm = LocalBroadcastManager.getInstance(c);
 
-        Cursor cursor = getReadableDatabase().query(TABLE_BOOK,
-                new String[]{BOOK_ID, BOOK_JSON, BOOK_ACTIVE},
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor bookCursor = db.query(TABLE_BOOK,
+                new String[]{BOOK_ID, BOOK_NAME, BOOK_AUTHOR, BOOK_CURRENT_MEDIA_PATH,
+                        BOOK_PLAYBACK_SPEED, BOOK_ROOT, BOOK_TIME, BOOK_TYPE, BOOK_USE_COVER_REPLACEMENT,
+                        BOOK_ACTIVE},
                 null, null, null, null, null);
         try {
-            while (cursor.moveToNext()) {
-                Book book = new Gson().fromJson(cursor.getString(1), Book.class);
-                book.setId(cursor.getLong(0));
-                if (cursor.getInt(2) == 1) {
+            while (bookCursor.moveToNext()) {
+                long bookId = bookCursor.getLong(0);
+                String bookName = bookCursor.getString(1);
+                String bookAuthor = bookCursor.getString(2);
+                String bookmarkCurrentMediaPath = bookCursor.getString(3);
+                float bookSpeed = bookCursor.getFloat(4);
+                String bookRoot = bookCursor.getString(5);
+                int bookTime = bookCursor.getInt(6);
+                Book.Type bookType = Book.Type.valueOf(bookCursor.getString(7));
+                boolean bookUseCoverReplacement = bookCursor.getInt(8) == 1;
+                boolean bookActive = bookCursor.getInt(9) == 1;
+
+                ArrayList<Chapter> chapters = new ArrayList<>();
+                Cursor chapterCursor = db.query(TABLE_CHAPTERS,
+                        new String[]{CHAPTER_DURATION, CHAPTER_NAME, CHAPTER_PATH},
+                        BOOK_ID + "=?",
+                        new String[]{String.valueOf(bookId)},
+                        null, null, null);
+                try {
+                    while (chapterCursor.moveToNext()) {
+                        int chapterDuration = chapterCursor.getInt(0);
+                        String chapterName = chapterCursor.getString(1);
+                        String chapterPath = chapterCursor.getString(2);
+                        chapters.add(new Chapter(chapterPath, chapterName, chapterDuration));
+                    }
+                } finally {
+                    chapterCursor.close();
+                }
+
+                ArrayList<Bookmark> bookmarks = new ArrayList<>();
+                Cursor bookmarkCursor = db.query(TABLE_BOOKMARKS,
+                        new String[]{BOOKMARK_PATH, BOOKMARK_TIME, BOOKMARK_TITLE},
+                        BOOK_ID + "=?", new String[]{String.valueOf(bookId)}
+                        , null, null, null);
+                try {
+                    while (bookmarkCursor.moveToNext()) {
+                        String bookmarkPath = bookmarkCursor.getString(0);
+                        int bookmarkTime = bookmarkCursor.getInt(1);
+                        String bookmarkTitle = bookmarkCursor.getString(2);
+                        bookmarks.add(new Bookmark(bookmarkPath, bookmarkTitle, bookmarkTime));
+                    }
+                } finally {
+                    bookmarkCursor.close();
+                }
+
+                Book book = new Book(bookRoot, bookName, bookAuthor, chapters,
+                        bookmarkCurrentMediaPath, bookType, bookmarks, c);
+                book.setPlaybackSpeed(bookSpeed);
+                book.setPosition(bookTime, bookmarkCurrentMediaPath);
+                book.setUseCoverReplacement(bookUseCoverReplacement);
+                book.setId(bookId);
+
+                if (bookActive) {
                     activeBooks.add(book);
                 } else {
                     orphanedBooks.add(book);
                 }
             }
         } finally {
-            cursor.close();
+            bookCursor.close();
         }
-
-        cleanOrphans();
     }
 
     public static synchronized DataBaseHelper getInstance(Context c) {
@@ -80,56 +161,32 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return instance;
     }
 
-    /**
-     * Deletes orphaned books if there are more than 20. Begin with the oldest one.
-     */
-    private void cleanOrphans() {
-        final int MAX_ORPHANS = 20;
-        if (orphanedBooks.size() + activeBooks.size() > 40 && orphanedBooks.size() > MAX_ORPHANS) {
-            ArrayList<Book> orphansToRemove = new ArrayList<>();
-            int amountToRemove = orphanedBooks.size() - MAX_ORPHANS;
-            Cursor orphans = getWritableDatabase().query(
-                    TABLE_BOOK,
-                    new String[]{BOOK_ID}, //columns
-                    BOOK_ACTIVE + "=?", //selection
-                    new String[]{String.valueOf(0)}, // args
-                    null, null,
-                    LAST_TIME_BOOK_WAS_ACTIVE); // order by
-            try {
-                while (orphans.moveToNext()) {
-                    for (int i = 0; i < amountToRemove; i++) {
-                        long idToRemove = orphans.getLong(0);
-                        for (Book b : orphanedBooks) {
-                            if (b.getId() == idToRemove) {
-                                orphansToRemove.add(b);
-                            }
-                        }
-                    }
-                }
-            } finally {
-                orphans.close();
-            }
-            for (Book bookToRemove : orphansToRemove) {
-                getWritableDatabase().delete(TABLE_BOOK, BOOK_ID + "=?", new String[]{String.valueOf(bookToRemove.getId())});
-                orphanedBooks.remove(bookToRemove);
-
-                File coverFile = bookToRemove.getCoverFile();
-                if (coverFile.exists() && coverFile.canWrite()) {
-                    //noinspection ResultOfMethodCallIgnored
-                    coverFile.delete();
-                }
-            }
-        }
-    }
 
     public synchronized void addBook(@NonNull Book book) {
         L.v(TAG, "addBook=" + book.getName());
-        ContentValues cv = new ContentValues();
-        cv.put(BOOK_JSON, new Gson().toJson(book));
-        cv.put(BOOK_ACTIVE, 1);
-        cv.put(LAST_TIME_BOOK_WAS_ACTIVE, System.currentTimeMillis());
-        long bookId = getWritableDatabase().insert(TABLE_BOOK, null, cv);
-        book.setId(bookId);
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        try {
+            ContentValues bookCv = book.getContentValues();
+
+            long bookId = db.insert(TABLE_BOOK, null, bookCv);
+            book.setId(bookId);
+
+            for (Chapter c : book.getChapters()) {
+                ContentValues chapterCv = c.getContentValues(book.getId());
+                db.insert(TABLE_CHAPTERS, null, chapterCv);
+            }
+
+            for (Bookmark b : book.getBookmarks()) {
+                ContentValues bookmarkCv = b.getContentValues(book.getId());
+                db.insert(TABLE_BOOKMARKS, null, bookmarkCv);
+            }
+
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
 
         activeBooks.add(book);
 
@@ -167,26 +224,41 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return copyBooks;
     }
 
-    public synchronized void updateBook(@NonNull Book bookToUpdate) {
-        L.v(TAG, "updateBook=" + bookToUpdate.getName());
-        new Validate().notEmpty(bookToUpdate.getChapters());
+    public synchronized void updateBook(@NonNull Book book) {
+        L.v(TAG, "updateBook=" + book.getName());
+        new Validate().notEmpty(book.getChapters());
 
         int indexToUpdate = -1;
         for (int i = 0; i < activeBooks.size(); i++)
-            if (activeBooks.get(i).getId() == bookToUpdate.getId())
+            if (activeBooks.get(i).getId() == book.getId())
                 indexToUpdate = i;
 
         if (indexToUpdate != -1) {
-            activeBooks.set(indexToUpdate, bookToUpdate);
+            activeBooks.set(indexToUpdate, book);
 
-            ContentValues cv = new ContentValues();
-            cv.put(BOOK_JSON, new Gson().toJson(bookToUpdate));
-            cv.put(LAST_TIME_BOOK_WAS_ACTIVE, System.currentTimeMillis());
-            getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(bookToUpdate.getId())});
+            SQLiteDatabase db = getWritableDatabase();
+
+            // update book itself
+            ContentValues bookCv = book.getContentValues();
+            db.update(TABLE_BOOK, bookCv, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
+
+            // delete old chapters and replace them with new ones
+            db.delete(TABLE_CHAPTERS, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
+            for (Chapter c : book.getChapters()) {
+                ContentValues chapterCv = c.getContentValues(book.getId());
+                db.insert(TABLE_CHAPTERS, null, chapterCv);
+            }
+
+            // replace old bookmarks and replace them with new ones
+            db.delete(TABLE_BOOKMARKS, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
+            for (Bookmark b : book.getBookmarks()) {
+                ContentValues bookmarkCV = b.getContentValues(book.getId());
+                db.insert(TABLE_BOOKMARKS, null, bookmarkCV);
+            }
 
             sendBookSetChanged();
         } else {
-            L.e(TAG, "Could not update book=" + bookToUpdate);
+            L.e(TAG, "Could not update book=" + book);
         }
     }
 
@@ -205,9 +277,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             orphanedBooks.add(book);
 
             ContentValues cv = new ContentValues();
-            cv.put(BOOK_JSON, new Gson().toJson(book));
             cv.put(BOOK_ACTIVE, 0);
-            cv.put(LAST_TIME_BOOK_WAS_ACTIVE, System.currentTimeMillis());
             getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
 
             sendBookSetChanged();
@@ -226,9 +296,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
         activeBooks.add(book);
         ContentValues cv = new ContentValues();
-        cv.put(BOOK_JSON, new Gson().toJson(book));
         cv.put(BOOK_ACTIVE, 1);
-        cv.put(LAST_TIME_BOOK_WAS_ACTIVE, System.currentTimeMillis());
         getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
 
         sendBookSetChanged();
@@ -237,6 +305,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_BOOK);
+        db.execSQL(CREATE_TABLE_CHAPTERS);
+        db.execSQL(CREATE_TABLE_BOOKMARKS);
     }
 
     @Override
@@ -247,7 +317,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         } catch (InvalidPropertiesFormatException e) {
             L.e(TAG, "Error at upgrade", e);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_BOOK);
-            db.execSQL(CREATE_TABLE_BOOK);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHAPTERS);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_BOOKMARKS);
+            onCreate(db);
         }
     }
 }

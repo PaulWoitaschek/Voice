@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.model;
 
+import android.content.ContentValues;
 import android.support.annotation.NonNull;
 
 import de.ph1b.audiobook.utils.Validate;
@@ -12,6 +13,7 @@ public class Bookmark {
     private final String mediaPath;
     @NonNull
     private String title;
+
 
     public Bookmark(Bookmark that) {
         this.time = that.time;
@@ -78,5 +80,14 @@ public class Bookmark {
 
     public int getTime() {
         return time;
+    }
+
+    public ContentValues getContentValues(long bookId) {
+        ContentValues cv = new ContentValues();
+        cv.put(DataBaseHelper.BOOKMARK_TIME, time);
+        cv.put(DataBaseHelper.BOOKMARK_PATH, mediaPath);
+        cv.put(DataBaseHelper.BOOKMARK_TITLE, title);
+        cv.put(DataBaseHelper.BOOK_ID, bookId);
+        return cv;
     }
 }

@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.model;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -63,6 +64,7 @@ public class Book implements Comparable<Book> {
         this.useCoverReplacement = that.useCoverReplacement;
     }
 
+
     public Book(@NonNull String root,
                 @NonNull String name,
                 @Nullable String author,
@@ -85,6 +87,20 @@ public class Book implements Comparable<Book> {
         this.packageName = c.getPackageName();
         setPosition(0, currentMediaPath);
         this.currentMediaPath = currentMediaPath;
+    }
+
+    public ContentValues getContentValues() {
+        ContentValues bookCv = new ContentValues();
+        bookCv.put(DataBaseHelper.BOOK_NAME, name);
+        bookCv.put(DataBaseHelper.BOOK_AUTHOR, author);
+        bookCv.put(DataBaseHelper.BOOK_ACTIVE, 1);
+        bookCv.put(DataBaseHelper.BOOK_CURRENT_MEDIA_PATH, currentMediaPath);
+        bookCv.put(DataBaseHelper.BOOK_PLAYBACK_SPEED, playbackSpeed);
+        bookCv.put(DataBaseHelper.BOOK_ROOT, root);
+        bookCv.put(DataBaseHelper.BOOK_TIME, time);
+        bookCv.put(DataBaseHelper.BOOK_TYPE, type.name());
+        bookCv.put(DataBaseHelper.BOOK_USE_COVER_REPLACEMENT, useCoverReplacement);
+        return bookCv;
     }
 
     @NonNull

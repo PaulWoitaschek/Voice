@@ -422,6 +422,157 @@ class DataBaseUpgradeHelper {
         }
     }
 
+    private void upgrade29() throws InvalidPropertiesFormatException {
+        L.d(TAG, "upgrade29");
+
+        // fetching old contents
+        ArrayList<String> bookContents = new ArrayList<>();
+        ArrayList<Boolean> activeMapping = new ArrayList<>();
+        Cursor cursor = db.query("TABLE_BOOK", new String[]{"BOOK_JSON", "BOOK_ACTIVE"},
+                null, null, null, null, null);
+        try {
+            while (cursor.moveToNext()) {
+                bookContents.add(cursor.getString(0));
+                activeMapping.add(cursor.getInt(1) == 1);
+            }
+        } finally {
+            cursor.close();
+        }
+        db.execSQL("DROP TABLE TABLE_BOOK");
+
+        // tables
+        final String TABLE_BOOK = "tableBooks";
+        final String TABLE_CHAPTERS = "tableChapters";
+        final String TABLE_BOOKMARKS = "tableBookmarks";
+
+        // book keys
+        final String BOOK_ID = "bookId";
+        final String BOOK_NAME = "bookName";
+        final String BOOK_AUTHOR = "bookAuthor";
+        final String BOOK_CURRENT_MEDIA_PATH = "bookCurrentMediaPath";
+        final String BOOK_PLAYBACK_SPEED = "bookSpeed";
+        final String BOOK_ROOT = "bookRoot";
+        final String BOOK_TIME = "bookTime";
+        final String BOOK_TYPE = "bookType";
+        final String BOOK_USE_COVER_REPLACEMENT = "bookUseCoverReplacement";
+        final String BOOK_ACTIVE = "BOOK_ACTIVE";
+
+        // chapter keys
+        final String CHAPTER_DURATION = "chapterDuration";
+        final String CHAPTER_NAME = "chapterName";
+        final String CHAPTER_PATH = "chapterPath";
+
+        // bookmark keys
+        final String BOOKMARK_TIME = "bookmarkTime";
+        final String BOOKMARK_PATH = "bookmarkPath";
+        final String BOOKMARK_TITLE = "bookmarkTitle";
+
+        // create strings
+        final String CREATE_TABLE_BOOK = "CREATE TABLE " + TABLE_BOOK + " ( " +
+                BOOK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                BOOK_NAME + " TEXT NOT NULL, " +
+                BOOK_AUTHOR + " TEXT, " +
+                BOOK_CURRENT_MEDIA_PATH + " TEXT NOT NULL, " +
+                BOOK_PLAYBACK_SPEED + " REAL NOT NULL, " +
+                BOOK_ROOT + " TEXT NOT NULL, " +
+                BOOK_TIME + " INTEGER NOT NULL, " +
+                BOOK_TYPE + " TEXT NOT NULL, " +
+                BOOK_USE_COVER_REPLACEMENT + " INTEGER NOT NULL, " +
+                BOOK_ACTIVE + " INTEGER NOT NULL DEFAULT 1)";
+
+        final String CREATE_TABLE_CHAPTERS = "CREATE TABLE " + TABLE_CHAPTERS + " ( " +
+                CHAPTER_DURATION + " INTEGER NOT NULL, " +
+                CHAPTER_NAME + " TEXT NOT NULL, " +
+                CHAPTER_PATH + " TEXT NOT NULL, " +
+                BOOK_ID + " INTEGER NOT NULL, " +
+                "FOREIGN KEY (" + BOOK_ID + ") REFERENCES " + TABLE_BOOK + "(" + BOOK_ID + "))";
+
+        final String CREATE_TABLE_BOOKMARKS = "CREATE TABLE " + TABLE_BOOKMARKS + " ( " +
+                BOOKMARK_PATH + " TEXT NOT NULL, " +
+                BOOKMARK_TITLE + " TEXT NOT NULL, " +
+                BOOKMARK_TIME + " INTEGER NOT NULL, " +
+                BOOK_ID + " INTEGER NOT NULL, " +
+                "FOREIGN KEY (" + BOOK_ID + ") REFERENCES " + TABLE_BOOK + "(" + BOOK_ID + "))";
+
+        // drop tables in case they exist
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BOOK);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHAPTERS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BOOKMARKS);
+
+        // create new tables
+        db.execSQL(CREATE_TABLE_BOOK);
+        db.execSQL(CREATE_TABLE_CHAPTERS);
+        db.execSQL(CREATE_TABLE_BOOKMARKS);
+
+        for (int i = 0; i < bookContents.size(); i++) {
+            String bookJson = bookContents.get(i);
+            boolean bookActive = activeMapping.get(i);
+
+            try {
+
+                JSONObject bookObj = new JSONObject(bookJson);
+                String author = bookObj.getString("author");
+                JSONArray bookmarks = bookObj.getJSONArray("bookmarks");
+                JSONArray chapters = bookObj.getJSONArray("chapters");
+                String currentMediaPath = bookObj.getString("currentMediaPath");
+                String bookName = bookObj.getString("name");
+                float speed = (float) bookObj.getDouble("playbackSpeed");
+                String root = bookObj.getString("root");
+                int time = bookObj.getInt("time");
+                String type = bookObj.getString("type");
+                boolean useCoverReplacement = bookObj.getBoolean("useCoverReplacement");
+
+                ContentValues bookCV = new ContentValues();
+                bookCV.put(BOOK_AUTHOR, author);
+                bookCV.put(BOOK_CURRENT_MEDIA_PATH, currentMediaPath);
+                bookCV.put(BOOK_NAME, bookName);
+                bookCV.put(BOOK_PLAYBACK_SPEED, speed);
+                bookCV.put(BOOK_ROOT, root);
+                bookCV.put(BOOK_TIME, time);
+                bookCV.put(BOOK_TYPE, type);
+                bookCV.put(BOOK_USE_COVER_REPLACEMENT, useCoverReplacement ? 1 : 0);
+                bookCV.put(BOOK_ACTIVE, bookActive ? 1 : 0);
+
+                long bookId = db.insert(TABLE_BOOK, null, bookCV);
+
+
+                for (int j = 0; j < chapters.length(); j++) {
+                    JSONObject chapter = chapters.getJSONObject(j);
+                    int chapterDuration = chapter.getInt("duration");
+                    String chapterName = chapter.getString("name");
+                    String chapterPath = chapter.getString("path");
+
+                    ContentValues chapterCV = new ContentValues();
+                    chapterCV.put(CHAPTER_DURATION, chapterDuration);
+                    chapterCV.put(CHAPTER_NAME, chapterName);
+                    chapterCV.put(CHAPTER_PATH, chapterPath);
+                    chapterCV.put(BOOK_ID, bookId);
+
+                    db.insert(TABLE_CHAPTERS, null, chapterCV);
+
+                }
+
+
+                for (int j = 0; j < bookmarks.length(); j++) {
+                    JSONObject bookmark = bookmarks.getJSONObject(j);
+                    int bookmarkTime = bookmark.getInt("time");
+                    String bookmarkPath = bookmark.getString("mediaPath");
+                    String bookmarkTitle = bookmark.getString("title");
+
+                    ContentValues bookmarkCV = new ContentValues();
+                    bookmarkCV.put(BOOKMARK_PATH, bookmarkPath);
+                    bookmarkCV.put(BOOKMARK_TITLE, bookmarkTitle);
+                    bookmarkCV.put(BOOKMARK_TIME, bookmarkTime);
+                    bookmarkCV.put(BOOK_ID, bookId);
+
+                    db.insert(TABLE_BOOKMARKS, null, bookmarkCV);
+                }
+            } catch (JSONException e) {
+                throw new InvalidPropertiesFormatException(e);
+            }
+        }
+    }
+
     public void upgrade(int fromVersion) throws InvalidPropertiesFormatException {
         switch (fromVersion) {
             case 1:
@@ -458,6 +609,8 @@ class DataBaseUpgradeHelper {
                 upgrade27();
             case 28:
                 upgrade28();
+            case 29:
+                upgrade29();
             default:
                 break;
         }
