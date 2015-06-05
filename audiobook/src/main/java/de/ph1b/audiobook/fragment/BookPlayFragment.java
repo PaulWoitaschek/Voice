@@ -53,7 +53,7 @@ import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 
-public class BookPlayFragment extends Fragment implements View.OnClickListener {
+public class BookPlayFragment extends Fragment implements View.OnClickListener, Communication.OnSleepStateChangedListener {
 
 
     public static final String TAG = BookPlayFragment.class.getSimpleName();
@@ -69,21 +69,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
     private volatile Spinner bookSpinner;
     private TextView maxTimeView;
     private PrefsManager prefs;
-    private final BroadcastReceiver onSleepStateChanged = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            getActivity().invalidateOptionsMenu();
-            if (MediaPlayerController.sleepTimerActive) {
-                int minutes = prefs.getSleepTime();
-                String message = getString(R.string.sleep_timer_started) + minutes + " " +
-                        getString(R.string.minutes);
-                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getActivity(), R.string.sleep_timer_stopped, Toast.LENGTH_LONG)
-                        .show();
-            }
-        }
-    };
+
     private ServiceController controller;
     private Book book;
     private DataBaseHelper db;
@@ -126,6 +112,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         }
     };
     private LocalBroadcastManager bcm;
+    private Communication communication;
 
     @Nullable
     @Override
@@ -301,6 +288,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         db = DataBaseHelper.getInstance(getActivity());
         controller = new ServiceController(getActivity());
         bcm = LocalBroadcastManager.getInstance(getActivity());
+        communication = Communication.getInstance(getActivity());
     }
 
     private String formatTime(int ms, int duration) {
@@ -416,7 +404,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
 
         bcm.registerReceiver(onBookContentChangedReciever, new IntentFilter(Communication.BOOK_CONTENT_CHANGED));
         bcm.registerReceiver(onPlayStateChanged, new IntentFilter(Communication.PLAY_STATE_CHANGED));
-        bcm.registerReceiver(onSleepStateChanged, new IntentFilter(Communication.SLEEP_STATE_CHANGED));
+        communication.addOnSleepStateChangedListener(this);
 
         onBookContentChangedReciever.onReceive(getActivity(), new Intent());
     }
@@ -427,6 +415,25 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
 
         bcm.unregisterReceiver(onBookContentChangedReciever);
         bcm.unregisterReceiver(onPlayStateChanged);
-        bcm.unregisterReceiver(onSleepStateChanged);
+        communication.removeOnSleepStateChangedListener(this);
+    }
+
+    @Override
+    public void onSleepStateChanged() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                getActivity().invalidateOptionsMenu();
+                if (MediaPlayerController.sleepTimerActive) {
+                    int minutes = prefs.getSleepTime();
+                    String message = getString(R.string.sleep_timer_started) + minutes + " " +
+                            getString(R.string.minutes);
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), R.string.sleep_timer_stopped, Toast.LENGTH_LONG)
+                            .show();
+                }
+            }
+        });
     }
 }

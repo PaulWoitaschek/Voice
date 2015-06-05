@@ -20,7 +20,6 @@ public class Communication {
 
     public static final String CURRENT_BOOK_CHANGED = "currentBookChanged";
     public static final String CURRENT_BOOK_CHANGED_OLD_ID = "currentBookChangedOldId";
-    public static final String SLEEP_STATE_CHANGED = "sleepStateChanged";
     public static final String SCANNER_STATE_CHANGED = "scannerStateChanged";
     public static final String PLAY_STATE_CHANGED = "playStateChanged";
     public static final String COVER_CHANGED = "coverChanged";
@@ -29,6 +28,7 @@ public class Communication {
     public static final String BOOK_CONTENT_CHANGED_ID = "bookContentChanged";
     private static Communication instance;
     private final ArrayList<OnBookSetChangedListener> onBookSetChangedListeners = new ArrayList<>();
+    private final ArrayList<OnSleepStateChangedListener> onSleepStateChangedListeners = new ArrayList<>();
     private LocalBroadcastManager bcm;
 
     private Communication(@NonNull Context c) {
@@ -54,12 +54,22 @@ public class Communication {
     }
 
     /**
-     * Sends a broadcast signaling that the sleep-timer has either started or cancelled.
+     * Notifies the listeners that the sleep-timer has either been started or cancelled.
      *
      * @see MediaPlayerController#sleepSandActive()
      */
-    public synchronized void sendSleepStateChanged() {
-        bcm.sendBroadcast(new Intent(SLEEP_STATE_CHANGED));
+    public synchronized void sleepStateChanged() {
+        for (OnSleepStateChangedListener listener : onSleepStateChangedListeners) {
+            listener.onSleepStateChanged();
+        }
+    }
+
+    public synchronized void addOnSleepStateChangedListener(OnSleepStateChangedListener onSleepStateChangedListener) {
+        onSleepStateChangedListeners.add(onSleepStateChangedListener);
+    }
+
+    public synchronized void removeOnSleepStateChangedListener(OnSleepStateChangedListener onSleepStateChangedListener) {
+        onSleepStateChangedListeners.remove(onSleepStateChangedListener);
     }
 
     /**
@@ -92,7 +102,7 @@ public class Communication {
     }
 
     /**
-     * Sends a broadcast signaling that the whole set of Books has been changed.
+     * Notifies listeners, that the whole set of Books has changed.
      */
     public synchronized void bookSetChanged() {
         for (OnBookSetChangedListener onBookSetChangedListener : onBookSetChangedListeners) {
@@ -117,6 +127,10 @@ public class Communication {
         Intent intent = new Intent(BOOK_CONTENT_CHANGED);
         intent.putExtra(BOOK_CONTENT_CHANGED_ID, bookId);
         bcm.sendBroadcast(intent);
+    }
+
+    public interface OnSleepStateChangedListener {
+        void onSleepStateChanged();
     }
 
     public interface OnBookSetChangedListener {

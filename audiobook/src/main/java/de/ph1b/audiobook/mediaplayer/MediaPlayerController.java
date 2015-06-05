@@ -339,14 +339,14 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                         try {
                             pause();
                             sleepTimerActive = false;
-                            communication.sendSleepStateChanged();
+                            communication.sleepStateChanged();
                         } finally {
                             lock.unlock();
                         }
                     }
                 }, minutes, TimeUnit.MINUTES);
             }
-            communication.sendSleepStateChanged();
+            communication.sleepStateChanged();
         } finally {
             lock.unlock();
         }
