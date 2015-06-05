@@ -112,7 +112,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         }
     }
 
-    public void updateBook(@NonNull Book book) {
+    public void updateBook(@Nullable Book book) {
         lock.lock();
         try {
             this.book = book;

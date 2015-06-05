@@ -126,17 +126,8 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     private final BroadcastReceiver onBookSetChanged = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Book controllerBook = controller.getBook();
-            if (controllerBook != null) {
-                for (Book b : db.getActiveBooks()) {
-                    if (b.getId() == controllerBook.getId()) {
-                        controller.updateBook(b);
-                        break;
-                    }
-                }
-
-                notifyChange(META_CHANGED);
-            }
+            controller.updateBook(db.getBook(prefs.getCurrentBookId()));
+            notifyChange(META_CHANGED);
         }
     };
     private final BroadcastReceiver onPlayStateChanged = new BroadcastReceiver() {
