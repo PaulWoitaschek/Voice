@@ -51,7 +51,7 @@ import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 
-public class BookShelfFragment extends Fragment implements View.OnClickListener, Communication.OnBookSetChangedListener {
+public class BookShelfFragment extends Fragment implements View.OnClickListener, Communication.OnBookSetChangedListener, Communication.OnCoverChangedListener {
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
     private static final String RECYCLER_VIEW_STATE = "recyclerViewState";
@@ -63,19 +63,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         }
     };
     private BookShelfAdapter adapter;
-    private final BroadcastReceiver onCoverChanged = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            L.v(TAG, "onCoverChanged called");
-            long bookChangedId = intent.getLongExtra(Communication.COVER_CHANGED_BOOK_ID, -1);
-            SortedList<Book> sortedList = adapter.getSortedList();
-            for (int i = 0; i < sortedList.size(); i++) {
-                if (adapter.getItemId(i) == bookChangedId) {
-                    adapter.notifyItemChanged(i);
-                }
-            }
-        }
-    };
     private PrefsManager prefs;
     private ServiceController controller;
     private MaterialDialog noFolderWarning;
@@ -247,7 +234,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
         // register receivers
         communication.addOnBookSetChangedListener(this);
-        bcm.registerReceiver(onCoverChanged, new IntentFilter(Communication.COVER_CHANGED));
+        communication.addOnCoverChangedListener(this);
         bcm.registerReceiver(onCurrentBookChanged, new IntentFilter(Communication.CURRENT_BOOK_CHANGED));
         bcm.registerReceiver(onPlayStateChanged, new IntentFilter(Communication.PLAY_STATE_CHANGED));
         bcm.registerReceiver(onScannerStateChanged, new IntentFilter(Communication.SCANNER_STATE_CHANGED));
@@ -388,7 +375,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         super.onPause();
 
         communication.removeOnBookSetChangedListener(this);
-        bcm.unregisterReceiver(onCoverChanged);
+        communication.removeOnCoverChangedListener(this);
         bcm.unregisterReceiver(onCurrentBookChanged);
         bcm.unregisterReceiver(onPlayStateChanged);
         bcm.unregisterReceiver(onScannerStateChanged);
@@ -402,6 +389,22 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             public void run() {
                 adapter.newDataSet(db.getActiveBooks());
                 checkVisibilities();
+            }
+        });
+    }
+
+    @Override
+    public void onCoverChanged(final long bookId) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                L.v(TAG, "onCoverChanged called");
+                SortedList<Book> sortedList = adapter.getSortedList();
+                for (int i = 0; i < sortedList.size(); i++) {
+                    if (adapter.getItemId(i) == bookId) {
+                        adapter.notifyItemChanged(i);
+                    }
+                }
             }
         });
     }

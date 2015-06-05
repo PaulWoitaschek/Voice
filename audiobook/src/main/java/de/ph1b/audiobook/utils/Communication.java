@@ -22,13 +22,12 @@ public class Communication {
     public static final String CURRENT_BOOK_CHANGED_OLD_ID = "currentBookChangedOldId";
     public static final String SCANNER_STATE_CHANGED = "scannerStateChanged";
     public static final String PLAY_STATE_CHANGED = "playStateChanged";
-    public static final String COVER_CHANGED = "coverChanged";
-    public static final String COVER_CHANGED_BOOK_ID = "coverChanged";
     public static final String BOOK_CONTENT_CHANGED = "bookContentChanged";
     public static final String BOOK_CONTENT_CHANGED_ID = "bookContentChanged";
     private static Communication instance;
     private final ArrayList<OnBookSetChangedListener> onBookSetChangedListeners = new ArrayList<>();
     private final ArrayList<OnSleepStateChangedListener> onSleepStateChangedListeners = new ArrayList<>();
+    private final ArrayList<OnCoverChangedListener> onCoverChangedListeners = new ArrayList<>();
     private LocalBroadcastManager bcm;
 
     private Communication(@NonNull Context c) {
@@ -48,9 +47,17 @@ public class Communication {
      * @param bookId The book ID for which the cover has changed
      */
     public synchronized void sendCoverChanged(long bookId) {
-        Intent intent = new Intent(COVER_CHANGED);
-        intent.putExtra(COVER_CHANGED_BOOK_ID, bookId);
-        bcm.sendBroadcast(intent);
+        for (OnCoverChangedListener onCoverChangedListener : onCoverChangedListeners) {
+            onCoverChangedListener.onCoverChanged(bookId);
+        }
+    }
+
+    public void addOnCoverChangedListener(OnCoverChangedListener onCoverChangedListener) {
+        onCoverChangedListeners.add(onCoverChangedListener);
+    }
+
+    public void removeOnCoverChangedListener(OnCoverChangedListener onCoverChangedListener) {
+        onCoverChangedListeners.remove(onCoverChangedListener);
     }
 
     /**
@@ -127,6 +134,10 @@ public class Communication {
         Intent intent = new Intent(BOOK_CONTENT_CHANGED);
         intent.putExtra(BOOK_CONTENT_CHANGED_ID, bookId);
         bcm.sendBroadcast(intent);
+    }
+
+    public interface OnCoverChangedListener {
+        void onCoverChanged(long bookId);
     }
 
     public interface OnSleepStateChangedListener {
