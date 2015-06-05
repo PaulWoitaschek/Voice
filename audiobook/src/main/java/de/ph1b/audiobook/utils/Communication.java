@@ -22,12 +22,11 @@ public class Communication {
     public static final String CURRENT_BOOK_CHANGED_OLD_ID = "currentBookChangedOldId";
     public static final String SCANNER_STATE_CHANGED = "scannerStateChanged";
     public static final String PLAY_STATE_CHANGED = "playStateChanged";
-    public static final String BOOK_CONTENT_CHANGED = "bookContentChanged";
-    public static final String BOOK_CONTENT_CHANGED_ID = "bookContentChanged";
     private static Communication instance;
     private final ArrayList<OnBookSetChangedListener> onBookSetChangedListeners = new ArrayList<>();
     private final ArrayList<OnSleepStateChangedListener> onSleepStateChangedListeners = new ArrayList<>();
     private final ArrayList<OnCoverChangedListener> onCoverChangedListeners = new ArrayList<>();
+    private final ArrayList<OnBookContentChangedListener> onBookContentChangedListeners = new ArrayList<>();
     private LocalBroadcastManager bcm;
 
     private Communication(@NonNull Context c) {
@@ -125,16 +124,29 @@ public class Communication {
         onBookSetChangedListeners.remove(onBookSetChangedListener);
     }
 
+    public synchronized void addOnBookContentChangedListener(OnBookContentChangedListener onBookContentChangedListener) {
+        onBookContentChangedListeners.add(onBookContentChangedListener);
+    }
+
+    public synchronized void removeOnBookContentChangedListener(OnBookContentChangedListener onBookContentChangedListener) {
+        onBookContentChangedListeners.remove(onBookContentChangedListener);
+    }
+
     /**
      * Sends a broadcast signaling that a certain book has changed.
      *
      * @param bookId THe book id for the book that has changed.
      */
     public synchronized void sendBookContentChanged(long bookId) {
-        Intent intent = new Intent(BOOK_CONTENT_CHANGED);
-        intent.putExtra(BOOK_CONTENT_CHANGED_ID, bookId);
-        bcm.sendBroadcast(intent);
+        for (OnBookContentChangedListener onBookContentChangedListener : onBookContentChangedListeners) {
+            onBookContentChangedListener.onBookContentChanged(bookId);
+        }
     }
+
+    public interface OnBookContentChangedListener {
+        void onBookContentChanged(long bookId);
+    }
+
 
     public interface OnCoverChangedListener {
         void onCoverChanged(long bookId);

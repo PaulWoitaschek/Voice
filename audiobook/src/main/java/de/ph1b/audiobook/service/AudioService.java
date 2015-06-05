@@ -51,7 +51,7 @@ import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 
-public class AudioService extends Service implements AudioManager.OnAudioFocusChangeListener {
+public class AudioService extends Service implements AudioManager.OnAudioFocusChangeListener, Communication.OnBookContentChangedListener {
 
     private static final String TAG = AudioService.class.getSimpleName();
     private static final int NOTIFICATION_ID = 42;
@@ -123,13 +123,6 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
      * The last path the {@link #notifyChange(String)} has used to update the metadata.
      */
     private volatile String lastPathForMetaData = "";
-    private final BroadcastReceiver onBookContentChangedReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            controller.updateBook(db.getBook(prefs.getCurrentBookId()));
-            notifyChange(META_CHANGED);
-        }
-    };
     private final BroadcastReceiver onPlayStateChanged = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, Intent intent) {
@@ -170,6 +163,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
             });
         }
     };
+    private Communication communication;
 
     @Override
     public void onCreate() {
@@ -179,6 +173,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         db = DataBaseHelper.getInstance(this);
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        communication = Communication.getInstance(this);
 
         ComponentName eventReceiver = new ComponentName(AudioService.this.getPackageName(), RemoteControlReceiver.class.getName());
         Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
@@ -210,7 +205,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
         controller = new MediaPlayerController(this);
 
-        bcm.registerReceiver(onBookContentChangedReceiver, new IntentFilter(Communication.BOOK_CONTENT_CHANGED));
+        communication.addOnBookContentChangedListener(this);
         bcm.registerReceiver(onCurrentBookChanged, new IntentFilter(Communication.CURRENT_BOOK_CHANGED));
         bcm.registerReceiver(onPlayStateChanged, new IntentFilter(Communication.PLAY_STATE_CHANGED));
 
@@ -299,7 +294,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         controller.stop();
         controller.onDestroy();
 
-        bcm.unregisterReceiver(onBookContentChangedReceiver);
+        communication.removeOnBookContentChangedListener(this);
         bcm.unregisterReceiver(onCurrentBookChanged);
         bcm.unregisterReceiver(onPlayStateChanged);
 
@@ -564,5 +559,11 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 }
             }
         });
+    }
+
+    @Override
+    public void onBookContentChanged(long bookId) {
+        controller.updateBook(db.getBook(prefs.getCurrentBookId()));
+        notifyChange(META_CHANGED);
     }
 }

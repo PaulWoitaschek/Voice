@@ -41,7 +41,7 @@ import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.PrefsManager;
 
-public class WidgetUpdateService extends Service {
+public class WidgetUpdateService extends Service implements Communication.OnBookContentChangedListener {
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private DataBaseHelper db;
     private PrefsManager prefs;
@@ -51,13 +51,6 @@ public class WidgetUpdateService extends Service {
             updateWidget();
         }
     };
-    private final BroadcastReceiver onBookContentChangedReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getLongExtra(Communication.BOOK_CONTENT_CHANGED_ID, -1) == prefs.getCurrentBookId())
-                updateWidget();
-        }
-    };
     private final BroadcastReceiver onPlayStateChanged = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -65,6 +58,7 @@ public class WidgetUpdateService extends Service {
         }
     };
     private LocalBroadcastManager bcm;
+    private Communication communication;
 
     @Override
     public void onCreate() {
@@ -73,7 +67,9 @@ public class WidgetUpdateService extends Service {
         db = DataBaseHelper.getInstance(this);
         prefs = PrefsManager.getInstance(this);
         bcm = LocalBroadcastManager.getInstance(this);
-        bcm.registerReceiver(onBookContentChangedReceiver, new IntentFilter(Communication.BOOK_CONTENT_CHANGED));
+        communication = Communication.getInstance(this);
+
+        communication.addOnBookContentChangedListener(this);
         bcm.registerReceiver(onCurrentBookChanged, new IntentFilter(Communication.CURRENT_BOOK_CHANGED));
         bcm.registerReceiver(onPlayStateChanged, new IntentFilter(Communication.PLAY_STATE_CHANGED));
     }
@@ -328,8 +324,9 @@ public class WidgetUpdateService extends Service {
     public void onDestroy() {
         super.onDestroy();
         executor.shutdown();
+
+        communication.removeOnBookContentChangedListener(this);
         bcm.unregisterReceiver(onCurrentBookChanged);
-        bcm.unregisterReceiver(onBookContentChangedReceiver);
         bcm.unregisterReceiver(onPlayStateChanged);
     }
 
@@ -346,5 +343,11 @@ public class WidgetUpdateService extends Service {
     @Override
     public IBinder onBind(final Intent intent) {
         return null;
+    }
+
+    @Override
+    public void onBookContentChanged(long bookId) {
+        if (bookId == prefs.getCurrentBookId())
+            updateWidget();
     }
 }

@@ -53,7 +53,7 @@ import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 
-public class BookPlayFragment extends Fragment implements View.OnClickListener, Communication.OnSleepStateChangedListener {
+public class BookPlayFragment extends Fragment implements View.OnClickListener, Communication.OnSleepStateChangedListener, Communication.OnBookContentChangedListener {
 
 
     public static final String TAG = BookPlayFragment.class.getSimpleName();
@@ -73,44 +73,6 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
     private ServiceController controller;
     private Book book;
     private DataBaseHelper db;
-    private final BroadcastReceiver onBookContentChangedReciever = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            long changedId = intent.getLongExtra(Communication.BOOK_CONTENT_CHANGED_ID, -1);
-            L.d(TAG, "onBookContentChangedReciever called with bookId=" + changedId);
-            if (changedId == book.getId()) {
-                book = db.getBook(book.getId());
-
-                if (book == null) {
-                    getFragmentManager().beginTransaction()
-                            .replace(R.id.content, new BookPlayFragment(), BookPlayFragment.TAG)
-                            .commit();
-                    return;
-                }
-
-                ArrayList<Chapter> chapters = book.getChapters();
-                Chapter chapter = book.getCurrentChapter();
-
-                int position = chapters.indexOf(chapter);
-                /**
-                 * Setting position as a tag, so we can make sure onItemSelected is only fired when
-                 * the user changes the position himself.
-                 */
-                bookSpinner.setTag(position);
-                bookSpinner.setSelection(position, true);
-                int duration = chapter.getDuration();
-                seekBar.setMax(duration);
-                maxTimeView.setText(formatTime(duration, duration));
-
-                // Setting seekBar and played time view
-                if (!seekBar.isPressed()) {
-                    int progress = book.getTime();
-                    seekBar.setProgress(progress);
-                    playedTimeView.setText(formatTime(progress, duration));
-                }
-            }
-        }
-    };
     private LocalBroadcastManager bcm;
     private Communication communication;
 
@@ -402,18 +364,16 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
 
         setPlayState(false);
 
-        bcm.registerReceiver(onBookContentChangedReciever, new IntentFilter(Communication.BOOK_CONTENT_CHANGED));
+        communication.addOnBookContentChangedListener(this);
         bcm.registerReceiver(onPlayStateChanged, new IntentFilter(Communication.PLAY_STATE_CHANGED));
         communication.addOnSleepStateChangedListener(this);
-
-        onBookContentChangedReciever.onReceive(getActivity(), new Intent());
     }
 
     @Override
     public void onStop() {
         super.onStop();
 
-        bcm.unregisterReceiver(onBookContentChangedReciever);
+        communication.removeOnBookContentChangedListener(this);
         bcm.unregisterReceiver(onPlayStateChanged);
         communication.removeOnSleepStateChangedListener(this);
     }
@@ -432,6 +392,47 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
                 } else {
                     Toast.makeText(getActivity(), R.string.sleep_timer_stopped, Toast.LENGTH_LONG)
                             .show();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onBookContentChanged(final long bookId) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                L.d(TAG, "onBookContentChangedReciever called with bookId=" + bookId);
+                if (bookId == book.getId()) {
+                    book = db.getBook(book.getId());
+
+                    if (book == null) {
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.content, new BookPlayFragment(), BookPlayFragment.TAG)
+                                .commit();
+                        return;
+                    }
+
+                    ArrayList<Chapter> chapters = book.getChapters();
+                    Chapter chapter = book.getCurrentChapter();
+
+                    int position = chapters.indexOf(chapter);
+                    /**
+                     * Setting position as a tag, so we can make sure onItemSelected is only fired when
+                     * the user changes the position himself.
+                     */
+                    bookSpinner.setTag(position);
+                    bookSpinner.setSelection(position, true);
+                    int duration = chapter.getDuration();
+                    seekBar.setMax(duration);
+                    maxTimeView.setText(formatTime(duration, duration));
+
+                    // Setting seekBar and played time view
+                    if (!seekBar.isPressed()) {
+                        int progress = book.getTime();
+                        seekBar.setProgress(progress);
+                        playedTimeView.setText(formatTime(progress, duration));
+                    }
                 }
             }
         });
