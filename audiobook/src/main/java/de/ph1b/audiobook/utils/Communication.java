@@ -21,6 +21,8 @@ public class Communication {
     public static final String PLAY_STATE_CHANGED = "playStateChanged";
     public static final String COVER_CHANGED = "coverChanged";
     public static final String COVER_CHANGED_BOOK_ID = "coverChanged";
+    public static final String BOOK_CONTENT_CHANGED = "bookContentChanged";
+    public static final String BOOK_CONTENT_CHANGED_ID = "bookContentChanged";
 
     private LocalBroadcastManager bcm;
 
@@ -82,5 +84,16 @@ public class Communication {
      */
     public void sendBookSetChanged() {
         bcm.sendBroadcast(new Intent(BOOK_SET_CHANGED));
+    }
+
+    /**
+     * Sends a broadcast signaling that a certain book has changed.
+     *
+     * @param bookId THe book id for the book that has changed.
+     */
+    public void sendBookContentChanged(long bookId) {
+        Intent intent = new Intent(BOOK_CONTENT_CHANGED);
+        intent.putExtra(BOOK_CONTENT_CHANGED_ID, bookId);
+        bcm.sendBroadcast(intent);
     }
 }

@@ -250,7 +250,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 db.insert(TABLE_BOOKMARKS, null, bookmarkCV);
             }
 
-            communication.sendBookSetChanged();
+            communication.sendBookContentChanged(book.getId());
         } else {
             L.e(TAG, "Could not update book=" + book);
         }

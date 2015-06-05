@@ -63,10 +63,13 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
     private int googleCount = 0;
     private Book book;
     private DataBaseHelper db;
-    private final BroadcastReceiver onBookSetChanged = new BroadcastReceiver() {
+    private final BroadcastReceiver onBookContentChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            book = db.getBook(book.getId());
+            long changedId = intent.getLongExtra(Communication.BOOK_CONTENT_CHANGED_ID, -1);
+            if (changedId == book.getId()) {
+                book = db.getBook(book.getId());
+            }
         }
     };
     private Communication communication;
@@ -100,14 +103,14 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
     public void onStart() {
         super.onStart();
 
-        bcm.registerReceiver(onBookSetChanged, new IntentFilter(Communication.BOOK_SET_CHANGED));
+        bcm.registerReceiver(onBookContentChangedReceiver, new IntentFilter(Communication.BOOK_CONTENT_CHANGED));
     }
 
     @Override
     public void onStop() {
         super.onStop();
 
-        bcm.unregisterReceiver(onBookSetChanged);
+        bcm.unregisterReceiver(onBookContentChangedReceiver);
     }
 
     @Override

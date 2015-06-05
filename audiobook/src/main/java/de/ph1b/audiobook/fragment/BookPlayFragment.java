@@ -87,37 +87,41 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
     private ServiceController controller;
     private Book book;
     private DataBaseHelper db;
-    private final BroadcastReceiver onBookSetChanged = new BroadcastReceiver() {
+    private final BroadcastReceiver onBookContentChangedReciever = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            /**
-             * Setting position as a tag, so we can make sure onItemSelected is only fired when
-             * the user changes the position himself.
-             */
-            book = db.getBook(book.getId());
-            if (book == null) {
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.content, new BookPlayFragment(), BookPlayFragment.TAG)
-                        .commit();
-                return;
-            }
-            L.d(TAG, "onBookSetChanged called with book=" + book);
+            long changedId = intent.getLongExtra(Communication.BOOK_CONTENT_CHANGED_ID, -1);
+            L.d(TAG, "onBookContentChangedReciever called with bookId=" + changedId);
+            if (changedId == book.getId()) {
+                book = db.getBook(book.getId());
 
-            ArrayList<Chapter> chapters = book.getChapters();
-            Chapter chapter = book.getCurrentChapter();
+                if (book == null) {
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.content, new BookPlayFragment(), BookPlayFragment.TAG)
+                            .commit();
+                    return;
+                }
 
-            int position = chapters.indexOf(chapter);
-            bookSpinner.setTag(position);
-            bookSpinner.setSelection(position, true);
-            int duration = chapter.getDuration();
-            seekBar.setMax(duration);
-            maxTimeView.setText(formatTime(duration, duration));
+                ArrayList<Chapter> chapters = book.getChapters();
+                Chapter chapter = book.getCurrentChapter();
 
-            // Setting seekBar and played time view
-            if (!seekBar.isPressed()) {
-                int progress = book.getTime();
-                seekBar.setProgress(progress);
-                playedTimeView.setText(formatTime(progress, duration));
+                int position = chapters.indexOf(chapter);
+                /**
+                 * Setting position as a tag, so we can make sure onItemSelected is only fired when
+                 * the user changes the position himself.
+                 */
+                bookSpinner.setTag(position);
+                bookSpinner.setSelection(position, true);
+                int duration = chapter.getDuration();
+                seekBar.setMax(duration);
+                maxTimeView.setText(formatTime(duration, duration));
+
+                // Setting seekBar and played time view
+                if (!seekBar.isPressed()) {
+                    int progress = book.getTime();
+                    seekBar.setProgress(progress);
+                    playedTimeView.setText(formatTime(progress, duration));
+                }
             }
         }
     };
@@ -410,18 +414,18 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
 
         setPlayState(false);
 
-        bcm.registerReceiver(onBookSetChanged, new IntentFilter(Communication.BOOK_SET_CHANGED));
+        bcm.registerReceiver(onBookContentChangedReciever, new IntentFilter(Communication.BOOK_CONTENT_CHANGED));
         bcm.registerReceiver(onPlayStateChanged, new IntentFilter(Communication.PLAY_STATE_CHANGED));
         bcm.registerReceiver(onSleepStateChanged, new IntentFilter(Communication.SLEEP_STATE_CHANGED));
 
-        onBookSetChanged.onReceive(getActivity(), new Intent());
+        onBookContentChangedReciever.onReceive(getActivity(), new Intent());
     }
 
     @Override
     public void onStop() {
         super.onStop();
 
-        bcm.unregisterReceiver(onBookSetChanged);
+        bcm.unregisterReceiver(onBookContentChangedReciever);
         bcm.unregisterReceiver(onPlayStateChanged);
         bcm.unregisterReceiver(onSleepStateChanged);
     }

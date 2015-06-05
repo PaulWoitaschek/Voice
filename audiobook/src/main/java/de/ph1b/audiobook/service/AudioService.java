@@ -123,7 +123,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
      * The last path the {@link #notifyChange(String)} has used to update the metadata.
      */
     private volatile String lastPathForMetaData = "";
-    private final BroadcastReceiver onBookSetChanged = new BroadcastReceiver() {
+    private final BroadcastReceiver onBookContentChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             controller.updateBook(db.getBook(prefs.getCurrentBookId()));
@@ -210,7 +210,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
         controller = new MediaPlayerController(this);
 
-        bcm.registerReceiver(onBookSetChanged, new IntentFilter(Communication.BOOK_SET_CHANGED));
+        bcm.registerReceiver(onBookContentChangedReceiver, new IntentFilter(Communication.BOOK_CONTENT_CHANGED));
         bcm.registerReceiver(onCurrentBookChanged, new IntentFilter(Communication.CURRENT_BOOK_CHANGED));
         bcm.registerReceiver(onPlayStateChanged, new IntentFilter(Communication.PLAY_STATE_CHANGED));
 
@@ -299,7 +299,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         controller.stop();
         controller.onDestroy();
 
-        bcm.unregisterReceiver(onBookSetChanged);
+        bcm.unregisterReceiver(onBookContentChangedReceiver);
         bcm.unregisterReceiver(onCurrentBookChanged);
         bcm.unregisterReceiver(onPlayStateChanged);
 

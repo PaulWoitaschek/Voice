@@ -51,10 +51,11 @@ public class WidgetUpdateService extends Service {
             updateWidget();
         }
     };
-    private final BroadcastReceiver onBookSetChanged = new BroadcastReceiver() {
+    private final BroadcastReceiver onBookContentChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            updateWidget();
+            if (intent.getLongExtra(Communication.BOOK_CONTENT_CHANGED_ID, -1) == prefs.getCurrentBookId())
+                updateWidget();
         }
     };
     private final BroadcastReceiver onPlayStateChanged = new BroadcastReceiver() {
@@ -72,7 +73,7 @@ public class WidgetUpdateService extends Service {
         db = DataBaseHelper.getInstance(this);
         prefs = PrefsManager.getInstance(this);
         bcm = LocalBroadcastManager.getInstance(this);
-        bcm.registerReceiver(onBookSetChanged, new IntentFilter(Communication.BOOK_SET_CHANGED));
+        bcm.registerReceiver(onBookContentChangedReceiver, new IntentFilter(Communication.BOOK_CONTENT_CHANGED));
         bcm.registerReceiver(onCurrentBookChanged, new IntentFilter(Communication.CURRENT_BOOK_CHANGED));
         bcm.registerReceiver(onPlayStateChanged, new IntentFilter(Communication.PLAY_STATE_CHANGED));
     }
@@ -328,7 +329,7 @@ public class WidgetUpdateService extends Service {
         super.onDestroy();
         executor.shutdown();
         bcm.unregisterReceiver(onCurrentBookChanged);
-        bcm.unregisterReceiver(onBookSetChanged);
+        bcm.unregisterReceiver(onBookContentChangedReceiver);
         bcm.unregisterReceiver(onPlayStateChanged);
     }
 
