@@ -1,7 +1,5 @@
 package de.ph1b.audiobook.utils;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 
 import net.jcip.annotations.ThreadSafe;
@@ -24,15 +22,14 @@ public class Communication {
     private final ArrayList<OnBookContentChangedListener> onBookContentChangedListeners = new ArrayList<>();
     private final ArrayList<OnPlayStateChangedListener> onPlayStateChangedListeners = new ArrayList<>();
     private final ArrayList<OnScannerStateChangedListener> onScannerStateChangedListeners = new ArrayList<>();
-    private LocalBroadcastManager bcm;
+    private final ArrayList<OnCurrentBookIdChangedListener> onCurrentBookIdChangedListeners = new ArrayList<>();
 
-    private Communication(@NonNull Context c) {
-        bcm = LocalBroadcastManager.getInstance(c);
+    private Communication() {
     }
 
-    public static synchronized Communication getInstance(Context c) {
+    public static synchronized Communication getInstance() {
         if (instance == null) {
-            instance = new Communication(c);
+            instance = new Communication();
         }
         return instance;
     }
@@ -106,12 +103,6 @@ public class Communication {
         }
     }
 
-    public interface OnCurrentBookIdChangedListener {
-        void onCurrentBookIdChanged(long oldId);
-    }
-
-    private final ArrayList<OnCurrentBookIdChangedListener> onCurrentBookIdChangedListeners = new ArrayList<>();
-
     public synchronized void addOnCurrentBookIdChangedListener(OnCurrentBookIdChangedListener onCurrentBookIdChangedListener) {
         onCurrentBookIdChangedListeners.add(onCurrentBookIdChangedListener);
     }
@@ -172,6 +163,10 @@ public class Communication {
         for (OnBookContentChangedListener onBookContentChangedListener : onBookContentChangedListeners) {
             onBookContentChangedListener.onBookContentChanged(bookId);
         }
+    }
+
+    public interface OnCurrentBookIdChangedListener {
+        void onCurrentBookIdChanged(long oldId);
     }
 
     public interface OnScannerStateChangedListener {

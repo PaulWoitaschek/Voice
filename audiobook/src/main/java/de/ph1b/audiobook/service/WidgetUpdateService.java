@@ -3,18 +3,15 @@ package de.ph1b.audiobook.service;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -43,10 +40,9 @@ import de.ph1b.audiobook.utils.PrefsManager;
 
 public class WidgetUpdateService extends Service implements Communication.OnBookContentChangedListener, Communication.OnPlayStateChangedListener, Communication.OnCurrentBookIdChangedListener {
     private final ExecutorService executor = Executors.newCachedThreadPool();
+    private final Communication communication = Communication.getInstance();
     private DataBaseHelper db;
     private PrefsManager prefs;
-    private LocalBroadcastManager bcm;
-    private Communication communication;
 
     @Override
     public void onCreate() {
@@ -54,8 +50,6 @@ public class WidgetUpdateService extends Service implements Communication.OnBook
 
         db = DataBaseHelper.getInstance(this);
         prefs = PrefsManager.getInstance(this);
-        bcm = LocalBroadcastManager.getInstance(this);
-        communication = Communication.getInstance(this);
 
         communication.addOnBookContentChangedListener(this);
         communication.addOnCurrentBookIdChangedListener(this);

@@ -1,13 +1,11 @@
 package de.ph1b.audiobook.fragment;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -54,6 +52,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public static final String TAG = BookShelfFragment.class.getSimpleName();
     private static final String RECYCLER_VIEW_STATE = "recyclerViewState";
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
+    private final Communication communication = Communication.getInstance();
     private BookShelfAdapter adapter;
     private PrefsManager prefs;
     private ServiceController controller;
@@ -62,8 +61,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     private ProgressBar recyclerReplacementView;
     private FloatingActionButton fab;
     private DataBaseHelper db;
-    private LocalBroadcastManager bcm;
-    private Communication communication;
 
     @Nullable
     @Override
@@ -155,9 +152,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
         prefs = PrefsManager.getInstance(getActivity());
         db = DataBaseHelper.getInstance(getActivity());
-        bcm = LocalBroadcastManager.getInstance(getActivity());
         controller = new ServiceController(getActivity());
-        communication = Communication.getInstance(getActivity());
         noFolderWarning = new MaterialDialog.Builder(getActivity())
                 .title(R.string.no_audiobook_folders_title)
                 .content(getString(R.string.no_audiobook_folders_summary_start) + "\n\n" +

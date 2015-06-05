@@ -75,12 +75,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private final Context c;
     private final ArrayList<Book> activeBooks = new ArrayList<>();
     private final ArrayList<Book> orphanedBooks = new ArrayList<>();
-    private Communication communication;
+    private final Communication communication = Communication.getInstance();
 
     private DataBaseHelper(Context c) {
         super(c, DATABASE_NAME, null, DATABASE_VERSION);
         this.c = c;
-        communication = Communication.getInstance(c);
 
         SQLiteDatabase db = getReadableDatabase();
         Cursor bookCursor = db.query(TABLE_BOOK,

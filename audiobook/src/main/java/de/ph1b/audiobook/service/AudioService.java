@@ -18,7 +18,6 @@ import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -74,6 +73,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                     | PlaybackStateCompat.ACTION_SKIP_TO_NEXT
                     | PlaybackStateCompat.ACTION_SEEK_TO);
     private final MediaMetadataCompat.Builder mediaMetaDataBuilder = new MediaMetadataCompat.Builder();
+    private final Communication communication = Communication.getInstance();
     private NotificationManager notificationManager;
     private PrefsManager prefs;
     private MediaPlayerController controller;
@@ -110,22 +110,18 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     };
     private MediaSessionCompat mediaSession;
     private DataBaseHelper db;
-    private LocalBroadcastManager bcm;
     /**
      * The last path the {@link #notifyChange(String)} has used to update the metadata.
      */
     private volatile String lastPathForMetaData = "";
-    private Communication communication;
 
     @Override
     public void onCreate() {
         super.onCreate();
         prefs = PrefsManager.getInstance(this);
-        bcm = LocalBroadcastManager.getInstance(this);
         db = DataBaseHelper.getInstance(this);
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        communication = Communication.getInstance(this);
 
         ComponentName eventReceiver = new ComponentName(AudioService.this.getPackageName(), RemoteControlReceiver.class.getName());
         Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
@@ -153,7 +149,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 AudioManager.ACTION_AUDIO_BECOMING_NOISY));
         registerReceiver(headsetPlugReceiver, new IntentFilter(Intent.ACTION_HEADSET_PLUG));
 
-        MediaPlayerController.setPlayState(this, MediaPlayerController.PlayState.STOPPED);
+        MediaPlayerController.setPlayState(MediaPlayerController.PlayState.STOPPED);
 
         controller = new MediaPlayerController(this);
 
@@ -250,7 +246,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         communication.removeOnCurrentBookIdChangedListener(this);
         communication.removeOnPlayStateChangedListener(this);
 
-        MediaPlayerController.setPlayState(this, MediaPlayerController.PlayState.STOPPED);
+        MediaPlayerController.setPlayState(MediaPlayerController.PlayState.STOPPED);
 
         try {
             unregisterReceiver(audioBecomingNoisyReceiver);

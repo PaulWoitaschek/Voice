@@ -41,14 +41,13 @@ public class BookAdder {
     private final Context c;
     private final PrefsManager prefs;
     private final DataBaseHelper db;
+    private final Communication communication = Communication.getInstance();
     private volatile boolean stopScanner = false;
-    private Communication communication;
 
     private BookAdder(@NonNull Context c) {
         this.c = c;
         prefs = PrefsManager.getInstance(c);
-        db = DataBaseHelper.getInstance(this.c);
-        communication = Communication.getInstance(c);
+        db = DataBaseHelper.getInstance(c);
     }
 
     public static synchronized BookAdder getInstance(Context c) {

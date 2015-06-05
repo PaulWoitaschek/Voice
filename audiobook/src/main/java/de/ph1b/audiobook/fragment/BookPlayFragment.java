@@ -54,16 +54,15 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
 
     public static final String TAG = BookPlayFragment.class.getSimpleName();
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
+    private final Communication communication = Communication.getInstance();
     private TextView playedTimeView;
     private SeekBar seekBar;
     private volatile Spinner bookSpinner;
     private TextView maxTimeView;
     private PrefsManager prefs;
-
     private ServiceController controller;
     private Book book;
     private DataBaseHelper db;
-    private Communication communication;
 
     @Nullable
     @Override
@@ -238,7 +237,6 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         prefs = PrefsManager.getInstance(getActivity());
         db = DataBaseHelper.getInstance(getActivity());
         controller = new ServiceController(getActivity());
-        communication = Communication.getInstance(getActivity());
     }
 
     private String formatTime(int ms, int duration) {

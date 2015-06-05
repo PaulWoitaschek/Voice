@@ -46,6 +46,7 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
     private static final int REPLACEMENT_DIMEN = 500;
     private static final String COVER_POSITION = "COVER_POSITION";
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final Communication communication = Communication.getInstance();
     private CoverDownloader coverDownloader;
     private DraggableBoxImageView coverImageView;
     private ProgressBar coverReplacement;
@@ -58,7 +59,6 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
     private int googleCount = 0;
     private Book book;
     private DataBaseHelper db;
-    private Communication communication;
 
     public static EditBookDialogFragment newInstance(@NonNull Book book, @NonNull Context c) {
         EditBookDialogFragment editBookDialogFragment = new EditBookDialogFragment();
@@ -153,7 +153,6 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
 
         coverDownloader = new CoverDownloader(getActivity());
         db = DataBaseHelper.getInstance(getActivity());
-        communication = Communication.getInstance(getActivity());
 
         Bundle b = getArguments();
         long bookId = b.getLong(Book.TAG);

@@ -41,7 +41,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
     @GuardedBy("lock")
     private final MediaPlayerInterface player;
-    private Communication communication;
+    private final Communication communication = Communication.getInstance();
     @GuardedBy("lock")
     @Nullable
     private Book book;
@@ -56,7 +56,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
             this.c = c;
             prefs = PrefsManager.getInstance(c);
             db = DataBaseHelper.getInstance(c);
-            communication = Communication.getInstance(c);
 
             if (canSetSpeed()) {
                 player = new CustomMediaPlayer();
@@ -64,7 +63,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                 player = new AndroidMediaPlayer();
             }
             state = State.IDLE;
-            setPlayState(c, PlayState.STOPPED);
+            setPlayState(PlayState.STOPPED);
         } finally {
             lock.unlock();
         }
@@ -88,14 +87,13 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         return greaterJellyBean && !me173x && !n903 && !micromaxA116;
     }
 
-    public static void setPlayState(Context c, PlayState playState) {
-        // TODO: Lock correctly
-        MediaPlayerController.playState = playState;
-        Communication.getInstance(c).playStateChanged();
-    }
-
     public static PlayState getPlayState() {
         return playState;
+    }
+
+    public static void setPlayState(PlayState playState) {
+        MediaPlayerController.playState = playState;
+        Communication.getInstance().playStateChanged();
     }
 
     /**
@@ -166,7 +164,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                 case PAUSED:
                     player.start();
                     startUpdating();
-                    setPlayState(c, PlayState.PLAYING);
+                    setPlayState(PlayState.PLAYING);
                     state = State.STARTED;
                     prepareTries = 0;
                     break;
@@ -286,7 +284,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         try {
             stopUpdating();
             player.reset();
-            setPlayState(c, PlayState.STOPPED);
+            setPlayState(PlayState.STOPPED);
             if (sleepSandActive()) {
                 toggleSleepSand();
             }
@@ -383,7 +381,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                         }
                         db.updateBook(book);
 
-                        setPlayState(c, PlayState.PAUSED);
+                        setPlayState(PlayState.PAUSED);
 
                         state = State.PAUSED;
                         break;
@@ -430,7 +428,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                 } else {
                     L.v(TAG, "Reached last track. Stopping player");
                     stopUpdating();
-                    setPlayState(c, PlayState.STOPPED);
+                    setPlayState(PlayState.STOPPED);
 
                     state = State.PLAYBACK_COMPLETED;
                 }
@@ -480,10 +478,10 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                     if (wasPlaying) {
                         player.start();
                         state = State.STARTED;
-                        setPlayState(c, PlayState.PLAYING);
+                        setPlayState(PlayState.PLAYING);
                     } else {
                         state = State.PREPARED;
-                        setPlayState(c, PlayState.PAUSED);
+                        setPlayState(PlayState.PAUSED);
                     }
                 } else {
                     switch (state) {

@@ -27,13 +27,12 @@ public class PrefsManager {
     @NonNull
     private final Context c;
     private final SharedPreferences sp;
-    private Communication communication;
+    private final Communication communication = Communication.getInstance();
 
     private PrefsManager(@NonNull Context c) {
         PreferenceManager.setDefaultValues(c, R.xml.preferences, false);
         this.c = c;
         sp = PreferenceManager.getDefaultSharedPreferences(c);
-        communication = Communication.getInstance(c);
     }
 
     public static synchronized PrefsManager getInstance(@NonNull Context c) {
