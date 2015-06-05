@@ -51,7 +51,7 @@ import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 
-public class BookShelfFragment extends Fragment implements View.OnClickListener, Communication.OnBookSetChangedListener, Communication.OnCoverChangedListener, Communication.OnPlayStateChangedListener {
+public class BookShelfFragment extends Fragment implements View.OnClickListener, Communication.OnBookSetChangedListener, Communication.OnCoverChangedListener, Communication.OnPlayStateChangedListener, Communication.OnScannerStateChangedListener {
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
     private static final String RECYCLER_VIEW_STATE = "recyclerViewState";
@@ -73,12 +73,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                 if (itemId == oldId || itemId == prefs.getCurrentBookId())
                     adapter.notifyItemChanged(i);
             }
-            checkVisibilities();
-        }
-    };
-    private final BroadcastReceiver onScannerStateChanged = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
             checkVisibilities();
         }
     };
@@ -231,7 +225,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         communication.addOnCoverChangedListener(this);
         bcm.registerReceiver(onCurrentBookChanged, new IntentFilter(Communication.CURRENT_BOOK_CHANGED));
         communication.addOnPlayStateChangedListener(this);
-        bcm.registerReceiver(onScannerStateChanged, new IntentFilter(Communication.SCANNER_STATE_CHANGED));
+        communication.addOnScannerStateChangedListener(this);
     }
 
     @Override
@@ -372,7 +366,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         communication.removeOnCoverChangedListener(this);
         bcm.unregisterReceiver(onCurrentBookChanged);
         communication.removeOnPlayStateChangedListener(this);
-        bcm.unregisterReceiver(onScannerStateChanged);
+        communication.removeOnScannerStateChangedListener(this);
     }
 
     @Override
@@ -409,6 +403,16 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             @Override
             public void run() {
                 setPlayState(true);
+            }
+        });
+    }
+
+    @Override
+    public void onScannerStateChanged() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                checkVisibilities();
             }
         });
     }

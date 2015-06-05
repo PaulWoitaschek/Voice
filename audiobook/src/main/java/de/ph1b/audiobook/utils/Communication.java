@@ -20,13 +20,13 @@ public class Communication {
 
     public static final String CURRENT_BOOK_CHANGED = "currentBookChanged";
     public static final String CURRENT_BOOK_CHANGED_OLD_ID = "currentBookChangedOldId";
-    public static final String SCANNER_STATE_CHANGED = "scannerStateChanged";
     private static Communication instance;
     private final ArrayList<OnBookSetChangedListener> onBookSetChangedListeners = new ArrayList<>();
     private final ArrayList<OnSleepStateChangedListener> onSleepStateChangedListeners = new ArrayList<>();
     private final ArrayList<OnCoverChangedListener> onCoverChangedListeners = new ArrayList<>();
     private final ArrayList<OnBookContentChangedListener> onBookContentChangedListeners = new ArrayList<>();
     private final ArrayList<OnPlayStateChangedListener> onPlayStateChangedListeners = new ArrayList<>();
+    private final ArrayList<OnScannerStateChangedListener> onScannerStateChangedListeners = new ArrayList<>();
     private LocalBroadcastManager bcm;
 
     private Communication(@NonNull Context c) {
@@ -85,7 +85,17 @@ public class Communication {
      * @see de.ph1b.audiobook.model.BookAdder#scannerActive
      */
     public synchronized void sendScannerStateChanged() {
-        bcm.sendBroadcast(new Intent(SCANNER_STATE_CHANGED));
+        for (OnScannerStateChangedListener onScannerStateChangedListener : onScannerStateChangedListeners) {
+            onScannerStateChangedListener.onScannerStateChanged();
+        }
+    }
+
+    public synchronized void addOnScannerStateChangedListener(OnScannerStateChangedListener onScannerStateChangedListener) {
+        onScannerStateChangedListeners.add(onScannerStateChangedListener);
+    }
+
+    public synchronized void removeOnScannerStateChangedListener(OnScannerStateChangedListener onScannerStateChangedListener) {
+        onScannerStateChangedListeners.remove(onScannerStateChangedListener);
     }
 
     /**
@@ -151,6 +161,10 @@ public class Communication {
         for (OnBookContentChangedListener onBookContentChangedListener : onBookContentChangedListeners) {
             onBookContentChangedListener.onBookContentChanged(bookId);
         }
+    }
+
+    public interface OnScannerStateChangedListener {
+        void onScannerStateChanged();
     }
 
     public interface OnPlayStateChangedListener {
