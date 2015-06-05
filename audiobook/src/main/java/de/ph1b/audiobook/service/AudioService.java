@@ -51,7 +51,7 @@ import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 
-public class AudioService extends Service implements AudioManager.OnAudioFocusChangeListener, Communication.OnBookContentChangedListener, Communication.OnPlayStateChangedListener {
+public class AudioService extends Service implements AudioManager.OnAudioFocusChangeListener, Communication.OnBookContentChangedListener, Communication.OnPlayStateChangedListener, Communication.OnCurrentBookIdChangedListener {
 
     private static final String TAG = AudioService.class.getSimpleName();
     private static final int NOTIFICATION_ID = 42;
@@ -110,14 +110,6 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     };
     private MediaSessionCompat mediaSession;
     private DataBaseHelper db;
-    private final BroadcastReceiver onCurrentBookChanged = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Book book = db.getBook(prefs.getCurrentBookId());
-            if (book != null && (controller.getBook() == null || controller.getBook().getId() != book.getId()))
-                reInitController(book);
-        }
-    };
     private LocalBroadcastManager bcm;
     /**
      * The last path the {@link #notifyChange(String)} has used to update the metadata.
@@ -166,7 +158,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         controller = new MediaPlayerController(this);
 
         communication.addOnBookContentChangedListener(this);
-        bcm.registerReceiver(onCurrentBookChanged, new IntentFilter(Communication.CURRENT_BOOK_CHANGED));
+        communication.addOnCurrentBookIdChangedListener(this);
         communication.addOnPlayStateChangedListener(this);
 
         Book book = db.getBook(prefs.getCurrentBookId());
@@ -255,7 +247,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         controller.onDestroy();
 
         communication.removeOnBookContentChangedListener(this);
-        bcm.unregisterReceiver(onCurrentBookChanged);
+        communication.removeOnCurrentBookIdChangedListener(this);
         communication.removeOnPlayStateChangedListener(this);
 
         MediaPlayerController.setPlayState(this, MediaPlayerController.PlayState.STOPPED);
@@ -564,5 +556,12 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 notifyChange(PLAYSTATE_CHANGED);
             }
         });
+    }
+
+    @Override
+    public void onCurrentBookIdChanged(long oldId) {
+        Book book = db.getBook(prefs.getCurrentBookId());
+        if (book != null && (controller.getBook() == null || controller.getBook().getId() != book.getId()))
+            reInitController(book);
     }
 }

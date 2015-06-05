@@ -1,7 +1,5 @@
 package de.ph1b.audiobook.fragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
@@ -51,7 +49,7 @@ import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 
-public class BookShelfFragment extends Fragment implements View.OnClickListener, Communication.OnBookSetChangedListener, Communication.OnCoverChangedListener, Communication.OnPlayStateChangedListener, Communication.OnScannerStateChangedListener {
+public class BookShelfFragment extends Fragment implements View.OnClickListener, Communication.OnBookSetChangedListener, Communication.OnCurrentBookIdChangedListener, Communication.OnCoverChangedListener, Communication.OnPlayStateChangedListener, Communication.OnScannerStateChangedListener {
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
     private static final String RECYCLER_VIEW_STATE = "recyclerViewState";
@@ -63,19 +61,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     private RecyclerView recyclerView;
     private ProgressBar recyclerReplacementView;
     private FloatingActionButton fab;
-    private final BroadcastReceiver onCurrentBookChanged = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            L.v(TAG, "onCurrentBookChanged called");
-            long oldId = intent.getLongExtra(Communication.CURRENT_BOOK_CHANGED_OLD_ID, -1);
-            for (int i = 0; i < adapter.getItemCount(); i++) {
-                long itemId = adapter.getItemId(i);
-                if (itemId == oldId || itemId == prefs.getCurrentBookId())
-                    adapter.notifyItemChanged(i);
-            }
-            checkVisibilities();
-        }
-    };
     private DataBaseHelper db;
     private LocalBroadcastManager bcm;
     private Communication communication;
@@ -223,7 +208,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         // register receivers
         communication.addOnBookSetChangedListener(this);
         communication.addOnCoverChangedListener(this);
-        bcm.registerReceiver(onCurrentBookChanged, new IntentFilter(Communication.CURRENT_BOOK_CHANGED));
+        communication.addOnCurrentBookIdChangedListener(this);
         communication.addOnPlayStateChangedListener(this);
         communication.addOnScannerStateChangedListener(this);
     }
@@ -364,7 +349,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
         communication.removeOnBookSetChangedListener(this);
         communication.removeOnCoverChangedListener(this);
-        bcm.unregisterReceiver(onCurrentBookChanged);
+        communication.removeOnCurrentBookIdChangedListener(this);
         communication.removeOnPlayStateChangedListener(this);
         communication.removeOnScannerStateChangedListener(this);
     }
@@ -412,6 +397,21 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                checkVisibilities();
+            }
+        });
+    }
+
+    @Override
+    public void onCurrentBookIdChanged(final long oldId) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < adapter.getItemCount(); i++) {
+                    long itemId = adapter.getItemId(i);
+                    if (itemId == oldId || itemId == prefs.getCurrentBookId())
+                        adapter.notifyItemChanged(i);
+                }
                 checkVisibilities();
             }
         });

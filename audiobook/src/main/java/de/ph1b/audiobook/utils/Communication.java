@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.utils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 
@@ -18,8 +17,6 @@ import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 @ThreadSafe
 public class Communication {
 
-    public static final String CURRENT_BOOK_CHANGED = "currentBookChanged";
-    public static final String CURRENT_BOOK_CHANGED_OLD_ID = "currentBookChangedOldId";
     private static Communication instance;
     private final ArrayList<OnBookSetChangedListener> onBookSetChangedListeners = new ArrayList<>();
     private final ArrayList<OnSleepStateChangedListener> onSleepStateChangedListeners = new ArrayList<>();
@@ -104,9 +101,23 @@ public class Communication {
      * @param oldId The old {@link de.ph1b.audiobook.model.Book#id}
      */
     public synchronized void sendCurrentBookChanged(long oldId) {
-        Intent intent = new Intent(CURRENT_BOOK_CHANGED);
-        intent.putExtra(CURRENT_BOOK_CHANGED_OLD_ID, oldId);
-        bcm.sendBroadcast(intent);
+        for (OnCurrentBookIdChangedListener onCurrentBookIdChangedListener : onCurrentBookIdChangedListeners) {
+            onCurrentBookIdChangedListener.onCurrentBookIdChanged(oldId);
+        }
+    }
+
+    public interface OnCurrentBookIdChangedListener {
+        void onCurrentBookIdChanged(long oldId);
+    }
+
+    private final ArrayList<OnCurrentBookIdChangedListener> onCurrentBookIdChangedListeners = new ArrayList<>();
+
+    public synchronized void addOnCurrentBookIdChangedListener(OnCurrentBookIdChangedListener onCurrentBookIdChangedListener) {
+        onCurrentBookIdChangedListeners.add(onCurrentBookIdChangedListener);
+    }
+
+    public synchronized void removeOnCurrentBookIdChangedListener(OnCurrentBookIdChangedListener onCurrentBookIdChangedListener) {
+        onCurrentBookIdChangedListeners.remove(onCurrentBookIdChangedListener);
     }
 
     /**

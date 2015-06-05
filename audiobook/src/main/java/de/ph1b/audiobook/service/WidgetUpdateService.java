@@ -41,16 +41,10 @@ import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.PrefsManager;
 
-public class WidgetUpdateService extends Service implements Communication.OnBookContentChangedListener, Communication.OnPlayStateChangedListener {
+public class WidgetUpdateService extends Service implements Communication.OnBookContentChangedListener, Communication.OnPlayStateChangedListener, Communication.OnCurrentBookIdChangedListener {
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private DataBaseHelper db;
     private PrefsManager prefs;
-    private final BroadcastReceiver onCurrentBookChanged = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateWidget();
-        }
-    };
     private LocalBroadcastManager bcm;
     private Communication communication;
 
@@ -64,8 +58,7 @@ public class WidgetUpdateService extends Service implements Communication.OnBook
         communication = Communication.getInstance(this);
 
         communication.addOnBookContentChangedListener(this);
-        bcm.registerReceiver(onCurrentBookChanged, new IntentFilter(Communication.CURRENT_BOOK_CHANGED));
-        communication.addOnPlayStateChangedListener(this);
+        communication.addOnCurrentBookIdChangedListener(this);
         communication.addOnPlayStateChangedListener(this);
     }
 
@@ -321,7 +314,7 @@ public class WidgetUpdateService extends Service implements Communication.OnBook
         executor.shutdown();
 
         communication.removeOnBookContentChangedListener(this);
-        bcm.unregisterReceiver(onCurrentBookChanged);
+        communication.removeOnCurrentBookIdChangedListener(this);
         communication.removeOnPlayStateChangedListener(this);
     }
 
@@ -348,6 +341,11 @@ public class WidgetUpdateService extends Service implements Communication.OnBook
 
     @Override
     public void onPlayStateChanged() {
+        updateWidget();
+    }
+
+    @Override
+    public void onCurrentBookIdChanged(long oldId) {
         updateWidget();
     }
 }
