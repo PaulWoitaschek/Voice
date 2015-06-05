@@ -51,7 +51,7 @@ import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 
-public class AudioService extends Service implements AudioManager.OnAudioFocusChangeListener, Communication.OnBookContentChangedListener {
+public class AudioService extends Service implements AudioManager.OnAudioFocusChangeListener, Communication.OnBookContentChangedListener, Communication.OnPlayStateChangedListener {
 
     private static final String TAG = AudioService.class.getSimpleName();
     private static final int NOTIFICATION_ID = 42;
@@ -123,46 +123,6 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
      * The last path the {@link #notifyChange(String)} has used to update the metadata.
      */
     private volatile String lastPathForMetaData = "";
-    private final BroadcastReceiver onPlayStateChanged = new BroadcastReceiver() {
-        @Override
-        public void onReceive(final Context context, Intent intent) {
-            final MediaPlayerController.PlayState state = MediaPlayerController.getPlayState();
-            L.d(TAG, "onPlayStateChanged:" + state);
-            executor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    L.d(TAG, "onPlayStateChanged executed:" + state);
-                    Book controllerBook = controller.getBook();
-                    if (controllerBook != null)
-                        switch (state) {
-                            case PLAYING:
-                                audioManager.requestAudioFocus(AudioService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-
-                                mediaSession.setActive(true);
-
-                                startForeground(NOTIFICATION_ID, getNotification(controllerBook));
-
-                                break;
-                            case PAUSED:
-                                stopForeground(false);
-                                notificationManager.notify(NOTIFICATION_ID, getNotification(controllerBook));
-
-                                break;
-                            case STOPPED:
-                                mediaSession.setActive(false);
-
-                                audioManager.abandonAudioFocus(AudioService.this);
-                                notificationManager.cancel(NOTIFICATION_ID);
-                                stopForeground(true);
-
-                                break;
-                        }
-
-                    notifyChange(PLAYSTATE_CHANGED);
-                }
-            });
-        }
-    };
     private Communication communication;
 
     @Override
@@ -207,7 +167,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
         communication.addOnBookContentChangedListener(this);
         bcm.registerReceiver(onCurrentBookChanged, new IntentFilter(Communication.CURRENT_BOOK_CHANGED));
-        bcm.registerReceiver(onPlayStateChanged, new IntentFilter(Communication.PLAY_STATE_CHANGED));
+        communication.addOnPlayStateChangedListener(this);
 
         Book book = db.getBook(prefs.getCurrentBookId());
         if (book != null) {
@@ -296,7 +256,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
         communication.removeOnBookContentChangedListener(this);
         bcm.unregisterReceiver(onCurrentBookChanged);
-        bcm.unregisterReceiver(onPlayStateChanged);
+        communication.removeOnPlayStateChangedListener(this);
 
         MediaPlayerController.setPlayState(this, MediaPlayerController.PlayState.STOPPED);
 
@@ -565,5 +525,44 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     public void onBookContentChanged(long bookId) {
         controller.updateBook(db.getBook(prefs.getCurrentBookId()));
         notifyChange(META_CHANGED);
+    }
+
+    @Override
+    public void onPlayStateChanged() {
+        final MediaPlayerController.PlayState state = MediaPlayerController.getPlayState();
+        L.d(TAG, "onPlayStateChanged:" + state);
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                L.d(TAG, "onPlayStateChanged executed:" + state);
+                Book controllerBook = controller.getBook();
+                if (controllerBook != null)
+                    switch (state) {
+                        case PLAYING:
+                            audioManager.requestAudioFocus(AudioService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+
+                            mediaSession.setActive(true);
+
+                            startForeground(NOTIFICATION_ID, getNotification(controllerBook));
+
+                            break;
+                        case PAUSED:
+                            stopForeground(false);
+                            notificationManager.notify(NOTIFICATION_ID, getNotification(controllerBook));
+
+                            break;
+                        case STOPPED:
+                            mediaSession.setActive(false);
+
+                            audioManager.abandonAudioFocus(AudioService.this);
+                            notificationManager.cancel(NOTIFICATION_ID);
+                            stopForeground(true);
+
+                            break;
+                    }
+
+                notifyChange(PLAYSTATE_CHANGED);
+            }
+        });
     }
 }

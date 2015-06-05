@@ -1,14 +1,10 @@
 package de.ph1b.audiobook.fragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -53,17 +49,11 @@ import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 
-public class BookPlayFragment extends Fragment implements View.OnClickListener, Communication.OnSleepStateChangedListener, Communication.OnBookContentChangedListener {
+public class BookPlayFragment extends Fragment implements View.OnClickListener, Communication.OnSleepStateChangedListener, Communication.OnBookContentChangedListener, Communication.OnPlayStateChangedListener {
 
 
     public static final String TAG = BookPlayFragment.class.getSimpleName();
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
-    private final BroadcastReceiver onPlayStateChanged = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            setPlayState(true);
-        }
-    };
     private TextView playedTimeView;
     private SeekBar seekBar;
     private volatile Spinner bookSpinner;
@@ -73,7 +63,6 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
     private ServiceController controller;
     private Book book;
     private DataBaseHelper db;
-    private LocalBroadcastManager bcm;
     private Communication communication;
 
     @Nullable
@@ -249,7 +238,6 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         prefs = PrefsManager.getInstance(getActivity());
         db = DataBaseHelper.getInstance(getActivity());
         controller = new ServiceController(getActivity());
-        bcm = LocalBroadcastManager.getInstance(getActivity());
         communication = Communication.getInstance(getActivity());
     }
 
@@ -365,7 +353,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         setPlayState(false);
 
         communication.addOnBookContentChangedListener(this);
-        bcm.registerReceiver(onPlayStateChanged, new IntentFilter(Communication.PLAY_STATE_CHANGED));
+        communication.addOnPlayStateChangedListener(this);
         communication.addOnSleepStateChangedListener(this);
     }
 
@@ -374,7 +362,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         super.onStop();
 
         communication.removeOnBookContentChangedListener(this);
-        bcm.unregisterReceiver(onPlayStateChanged);
+        communication.removeOnPlayStateChangedListener(this);
         communication.removeOnSleepStateChangedListener(this);
     }
 
@@ -434,6 +422,16 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
                         playedTimeView.setText(formatTime(progress, duration));
                     }
                 }
+            }
+        });
+    }
+
+    @Override
+    public void onPlayStateChanged() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                setPlayState(true);
             }
         });
     }

@@ -21,12 +21,12 @@ public class Communication {
     public static final String CURRENT_BOOK_CHANGED = "currentBookChanged";
     public static final String CURRENT_BOOK_CHANGED_OLD_ID = "currentBookChangedOldId";
     public static final String SCANNER_STATE_CHANGED = "scannerStateChanged";
-    public static final String PLAY_STATE_CHANGED = "playStateChanged";
     private static Communication instance;
     private final ArrayList<OnBookSetChangedListener> onBookSetChangedListeners = new ArrayList<>();
     private final ArrayList<OnSleepStateChangedListener> onSleepStateChangedListeners = new ArrayList<>();
     private final ArrayList<OnCoverChangedListener> onCoverChangedListeners = new ArrayList<>();
     private final ArrayList<OnBookContentChangedListener> onBookContentChangedListeners = new ArrayList<>();
+    private final ArrayList<OnPlayStateChangedListener> onPlayStateChangedListeners = new ArrayList<>();
     private LocalBroadcastManager bcm;
 
     private Communication(@NonNull Context c) {
@@ -103,8 +103,18 @@ public class Communication {
      * Sends a broadcast signaling that the
      * {@link de.ph1b.audiobook.mediaplayer.MediaPlayerController.PlayState} has changed.
      */
-    public synchronized void sendPlayStateChanged() {
-        bcm.sendBroadcast(new Intent(PLAY_STATE_CHANGED));
+    public synchronized void playStateChanged() {
+        for (OnPlayStateChangedListener onPlayStateChangedListener : onPlayStateChangedListeners) {
+            onPlayStateChangedListener.onPlayStateChanged();
+        }
+    }
+
+    public synchronized void addOnPlayStateChangedListener(OnPlayStateChangedListener onPlayStateChangedListener) {
+        onPlayStateChangedListeners.add(onPlayStateChangedListener);
+    }
+
+    public synchronized void removeOnPlayStateChangedListener(OnPlayStateChangedListener onPlayStateChangedListener) {
+        onPlayStateChangedListeners.remove(onPlayStateChangedListener);
     }
 
     /**
@@ -141,6 +151,10 @@ public class Communication {
         for (OnBookContentChangedListener onBookContentChangedListener : onBookContentChangedListeners) {
             onBookContentChangedListener.onBookContentChanged(bookId);
         }
+    }
+
+    public interface OnPlayStateChangedListener {
+        void onPlayStateChanged();
     }
 
     public interface OnBookContentChangedListener {

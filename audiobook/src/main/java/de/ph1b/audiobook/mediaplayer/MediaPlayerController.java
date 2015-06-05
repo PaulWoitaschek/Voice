@@ -91,7 +91,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     public static void setPlayState(Context c, PlayState playState) {
         // TODO: Lock correctly
         MediaPlayerController.playState = playState;
-        Communication.getInstance(c).sendPlayStateChanged();
+        Communication.getInstance(c).playStateChanged();
     }
 
     public static PlayState getPlayState() {
