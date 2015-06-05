@@ -39,4 +39,8 @@ public class Communication {
     public static void sendPlayStateChanged(Context c) {
         LocalBroadcastManager.getInstance(c).sendBroadcast(new Intent(PLAY_STATE_CHANGED));
     }
+
+    public static void sendBookSetChanged(Context c) {
+        LocalBroadcastManager.getInstance(c).sendBroadcast(new Intent(BOOK_SET_CHANGED));
+    }
 }

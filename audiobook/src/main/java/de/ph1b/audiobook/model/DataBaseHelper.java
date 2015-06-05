@@ -2,13 +2,11 @@ package de.ph1b.audiobook.model;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
 
 import net.jcip.annotations.ThreadSafe;
 
@@ -75,14 +73,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String TAG = DataBaseHelper.class.getSimpleName();
     private static DataBaseHelper instance;
     private final Context c;
-    private final LocalBroadcastManager bcm;
     private final ArrayList<Book> activeBooks = new ArrayList<>();
     private final ArrayList<Book> orphanedBooks = new ArrayList<>();
 
     private DataBaseHelper(Context c) {
         super(c, DATABASE_NAME, null, DATABASE_VERSION);
         this.c = c;
-        this.bcm = LocalBroadcastManager.getInstance(c);
 
         SQLiteDatabase db = getReadableDatabase();
         Cursor bookCursor = db.query(TABLE_BOOK,
@@ -190,11 +186,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         activeBooks.add(book);
 
-        sendBookSetChanged();
-    }
-
-    private void sendBookSetChanged() {
-        bcm.sendBroadcast(new Intent(Communication.BOOK_SET_CHANGED));
+        Communication.sendBookSetChanged(c);
     }
 
     @Nullable
@@ -256,7 +248,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 db.insert(TABLE_BOOKMARKS, null, bookmarkCV);
             }
 
-            sendBookSetChanged();
+            Communication.sendBookSetChanged(c);
         } else {
             L.e(TAG, "Could not update book=" + book);
         }
@@ -280,7 +272,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             cv.put(BOOK_ACTIVE, 0);
             getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
 
-            sendBookSetChanged();
+            Communication.sendBookSetChanged(c);
         }
     }
 
@@ -299,7 +291,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         cv.put(BOOK_ACTIVE, 1);
         getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
 
-        sendBookSetChanged();
+        Communication.sendBookSetChanged(c);
     }
 
     @Override
