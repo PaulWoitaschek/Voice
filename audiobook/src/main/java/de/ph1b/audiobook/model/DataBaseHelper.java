@@ -188,7 +188,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         activeBooks.add(book);
 
-        communication.sendBookSetChanged();
+        communication.bookSetChanged();
     }
 
     @Nullable
@@ -274,7 +274,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             cv.put(BOOK_ACTIVE, 0);
             getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
 
-            communication.sendBookSetChanged();
+            communication.bookSetChanged();
         }
     }
 
@@ -293,7 +293,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         cv.put(BOOK_ACTIVE, 1);
         getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
 
-        communication.sendBookSetChanged();
+        communication.bookSetChanged();
     }
 
     @Override

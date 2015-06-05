@@ -51,7 +51,7 @@ import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 
-public class BookShelfFragment extends Fragment implements View.OnClickListener {
+public class BookShelfFragment extends Fragment implements View.OnClickListener, Communication.OnBookSetChangedListener {
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
     private static final String RECYCLER_VIEW_STATE = "recyclerViewState";
@@ -102,15 +102,8 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
         }
     };
     private DataBaseHelper db;
-    private final BroadcastReceiver onBookSetChangedReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            L.v(TAG, "onBookSetChanged called");
-            adapter.newDataSet(db.getActiveBooks());
-            checkVisibilities();
-        }
-    };
     private LocalBroadcastManager bcm;
+    private Communication communication;
 
     @Nullable
     @Override
@@ -204,6 +197,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
         db = DataBaseHelper.getInstance(getActivity());
         bcm = LocalBroadcastManager.getInstance(getActivity());
         controller = new ServiceController(getActivity());
+        communication = Communication.getInstance(getActivity());
         noFolderWarning = new MaterialDialog.Builder(getActivity())
                 .title(R.string.no_audiobook_folders_title)
                 .content(getString(R.string.no_audiobook_folders_summary_start) + "\n\n" +
@@ -249,10 +243,10 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
 
         // update items and set ui
         setPlayState(false);
-        onBookSetChangedReceiver.onReceive(getActivity(), new Intent());
+        onBookSetChanged();
 
         // register receivers
-        bcm.registerReceiver(onBookSetChangedReceiver, new IntentFilter(Communication.BOOK_SET_CHANGED));
+        communication.addOnBookSetChangedListener(this);
         bcm.registerReceiver(onCoverChanged, new IntentFilter(Communication.COVER_CHANGED));
         bcm.registerReceiver(onCurrentBookChanged, new IntentFilter(Communication.CURRENT_BOOK_CHANGED));
         bcm.registerReceiver(onPlayStateChanged, new IntentFilter(Communication.PLAY_STATE_CHANGED));
@@ -393,10 +387,22 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener 
     public void onPause() {
         super.onPause();
 
-        bcm.unregisterReceiver(onBookSetChangedReceiver);
+        communication.removeOnBookSetChangedListener(this);
         bcm.unregisterReceiver(onCoverChanged);
         bcm.unregisterReceiver(onCurrentBookChanged);
         bcm.unregisterReceiver(onPlayStateChanged);
         bcm.unregisterReceiver(onScannerStateChanged);
+    }
+
+    @Override
+    public void onBookSetChanged() {
+        L.v(TAG, "onBookSetChanged called");
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.newDataSet(db.getActiveBooks());
+                checkVisibilities();
+            }
+        });
     }
 }

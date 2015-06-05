@@ -7,6 +7,8 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import net.jcip.annotations.ThreadSafe;
 
+import java.util.ArrayList;
+
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 
 
@@ -18,7 +20,6 @@ public class Communication {
 
     public static final String CURRENT_BOOK_CHANGED = "currentBookChanged";
     public static final String CURRENT_BOOK_CHANGED_OLD_ID = "currentBookChangedOldId";
-    public static final String BOOK_SET_CHANGED = "bookChanged";
     public static final String SLEEP_STATE_CHANGED = "sleepStateChanged";
     public static final String SCANNER_STATE_CHANGED = "scannerStateChanged";
     public static final String PLAY_STATE_CHANGED = "playStateChanged";
@@ -26,14 +27,13 @@ public class Communication {
     public static final String COVER_CHANGED_BOOK_ID = "coverChanged";
     public static final String BOOK_CONTENT_CHANGED = "bookContentChanged";
     public static final String BOOK_CONTENT_CHANGED_ID = "bookContentChanged";
-
+    private static Communication instance;
+    private final ArrayList<OnBookSetChangedListener> onBookSetChangedListeners = new ArrayList<>();
     private LocalBroadcastManager bcm;
 
     private Communication(@NonNull Context c) {
         bcm = LocalBroadcastManager.getInstance(c);
     }
-
-    private static Communication instance;
 
     public static synchronized Communication getInstance(Context c) {
         if (instance == null) {
@@ -94,8 +94,18 @@ public class Communication {
     /**
      * Sends a broadcast signaling that the whole set of Books has been changed.
      */
-    public synchronized void sendBookSetChanged() {
-        bcm.sendBroadcast(new Intent(BOOK_SET_CHANGED));
+    public synchronized void bookSetChanged() {
+        for (OnBookSetChangedListener onBookSetChangedListener : onBookSetChangedListeners) {
+            onBookSetChangedListener.onBookSetChanged();
+        }
+    }
+
+    public synchronized void addOnBookSetChangedListener(OnBookSetChangedListener onBookSetChangedListener) {
+        onBookSetChangedListeners.add(onBookSetChangedListener);
+    }
+
+    public synchronized void removeOnBookSetChangedListener(OnBookSetChangedListener onBookSetChangedListener) {
+        onBookSetChangedListeners.remove(onBookSetChangedListener);
     }
 
     /**
@@ -107,5 +117,9 @@ public class Communication {
         Intent intent = new Intent(BOOK_CONTENT_CHANGED);
         intent.putExtra(BOOK_CONTENT_CHANGED_ID, bookId);
         bcm.sendBroadcast(intent);
+    }
+
+    public interface OnBookSetChangedListener {
+        void onBookSetChanged();
     }
 }
