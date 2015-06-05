@@ -80,7 +80,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private DataBaseHelper(Context c) {
         super(c, DATABASE_NAME, null, DATABASE_VERSION);
         this.c = c;
-        communication = new Communication(c);
+        communication = Communication.getInstance(c);
 
         SQLiteDatabase db = getReadableDatabase();
         Cursor bookCursor = db.query(TABLE_BOOK,

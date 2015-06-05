@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 
+import net.jcip.annotations.ThreadSafe;
+
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 
 
 /**
  * Class for communicating on different events through {@link LocalBroadcastManager}.
  */
+@ThreadSafe
 public class Communication {
 
     public static final String CURRENT_BOOK_CHANGED = "currentBookChanged";
@@ -26,8 +29,17 @@ public class Communication {
 
     private LocalBroadcastManager bcm;
 
-    public Communication(@NonNull Context c) {
+    private Communication(@NonNull Context c) {
         bcm = LocalBroadcastManager.getInstance(c);
+    }
+
+    private static Communication instance;
+
+    public static synchronized Communication getInstance(Context c) {
+        if (instance == null) {
+            instance = Communication.getInstance(c);
+        }
+        return instance;
     }
 
     /**
@@ -35,7 +47,7 @@ public class Communication {
      *
      * @param bookId The book ID for which the cover has changed
      */
-    public void sendCoverChanged(long bookId) {
+    public synchronized void sendCoverChanged(long bookId) {
         Intent intent = new Intent(COVER_CHANGED);
         intent.putExtra(COVER_CHANGED_BOOK_ID, bookId);
         bcm.sendBroadcast(intent);
@@ -46,7 +58,7 @@ public class Communication {
      *
      * @see MediaPlayerController#sleepSandActive()
      */
-    public void sendSleepStateChanged() {
+    public synchronized void sendSleepStateChanged() {
         bcm.sendBroadcast(new Intent(SLEEP_STATE_CHANGED));
     }
 
@@ -56,7 +68,7 @@ public class Communication {
      *
      * @see de.ph1b.audiobook.model.BookAdder#scannerActive
      */
-    public void sendScannerStateChanged() {
+    public synchronized void sendScannerStateChanged() {
         bcm.sendBroadcast(new Intent(SCANNER_STATE_CHANGED));
     }
 
@@ -65,7 +77,7 @@ public class Communication {
      *
      * @param oldId The old {@link de.ph1b.audiobook.model.Book#id}
      */
-    public void sendCurrentBookChanged(long oldId) {
+    public synchronized void sendCurrentBookChanged(long oldId) {
         Intent intent = new Intent(CURRENT_BOOK_CHANGED);
         intent.putExtra(CURRENT_BOOK_CHANGED_OLD_ID, oldId);
         bcm.sendBroadcast(intent);
@@ -75,14 +87,14 @@ public class Communication {
      * Sends a broadcast signaling that the
      * {@link de.ph1b.audiobook.mediaplayer.MediaPlayerController.PlayState} has changed.
      */
-    public void sendPlayStateChanged() {
+    public synchronized void sendPlayStateChanged() {
         bcm.sendBroadcast(new Intent(PLAY_STATE_CHANGED));
     }
 
     /**
      * Sends a broadcast signaling that the whole set of Books has been changed.
      */
-    public void sendBookSetChanged() {
+    public synchronized void sendBookSetChanged() {
         bcm.sendBroadcast(new Intent(BOOK_SET_CHANGED));
     }
 
@@ -91,7 +103,7 @@ public class Communication {
      *
      * @param bookId THe book id for the book that has changed.
      */
-    public void sendBookContentChanged(long bookId) {
+    public synchronized void sendBookContentChanged(long bookId) {
         Intent intent = new Intent(BOOK_CONTENT_CHANGED);
         intent.putExtra(BOOK_CONTENT_CHANGED_ID, bookId);
         bcm.sendBroadcast(intent);

@@ -48,7 +48,7 @@ public class BookAdder {
         this.c = c;
         prefs = PrefsManager.getInstance(c);
         db = DataBaseHelper.getInstance(this.c);
-        communication = new Communication(c);
+        communication = Communication.getInstance(c);
     }
 
     public static synchronized BookAdder getInstance(Context c) {

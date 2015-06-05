@@ -33,7 +33,7 @@ public class PrefsManager {
         PreferenceManager.setDefaultValues(c, R.xml.preferences, false);
         this.c = c;
         sp = PreferenceManager.getDefaultSharedPreferences(c);
-        communication = new Communication(c);
+        communication = Communication.getInstance(c);
     }
 
     public static synchronized PrefsManager getInstance(@NonNull Context c) {

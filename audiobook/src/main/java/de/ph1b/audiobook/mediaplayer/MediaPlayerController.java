@@ -56,7 +56,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
             this.c = c;
             prefs = PrefsManager.getInstance(c);
             db = DataBaseHelper.getInstance(c);
-            communication = new Communication(c);
+            communication = Communication.getInstance(c);
 
             if (canSetSpeed()) {
                 player = new CustomMediaPlayer();
@@ -91,7 +91,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     public static void setPlayState(Context c, PlayState playState) {
         // TODO: Lock correctly
         MediaPlayerController.playState = playState;
-        new Communication(c).sendPlayStateChanged();
+        Communication.getInstance(c).sendPlayStateChanged();
     }
 
     public static PlayState getPlayState() {

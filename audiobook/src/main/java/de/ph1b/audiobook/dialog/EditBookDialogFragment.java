@@ -168,7 +168,7 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
         coverDownloader = new CoverDownloader(getActivity());
         db = DataBaseHelper.getInstance(getActivity());
         bcm = LocalBroadcastManager.getInstance(getActivity());
-        communication = new Communication(getActivity());
+        communication = Communication.getInstance(getActivity());
 
         Bundle b = getArguments();
         long bookId = b.getLong(Book.TAG);
