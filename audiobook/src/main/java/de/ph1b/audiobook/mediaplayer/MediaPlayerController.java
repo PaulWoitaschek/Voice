@@ -41,6 +41,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
     @GuardedBy("lock")
     private final MediaPlayerInterface player;
+    private Communication communication;
     @GuardedBy("lock")
     @Nullable
     private Book book;
@@ -55,6 +56,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
             this.c = c;
             prefs = PrefsManager.getInstance(c);
             db = DataBaseHelper.getInstance(c);
+            communication = new Communication(c);
 
             if (canSetSpeed()) {
                 player = new CustomMediaPlayer();
@@ -87,8 +89,9 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     }
 
     public static void setPlayState(Context c, PlayState playState) {
+        // TODO: Lock correctly
         MediaPlayerController.playState = playState;
-        Communication.sendPlayStateChanged(c);
+        new Communication(c).sendPlayStateChanged();
     }
 
     public static PlayState getPlayState() {
@@ -325,12 +328,10 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                 L.i(TAG, "sleepSand is active. cancelling now");
                 sleepSand.cancel(false);
                 sleepTimerActive = false;
-                Communication.sendSleepStateChanged(c);
             } else {
                 L.i(TAG, "preparing new sleep sand");
                 final int minutes = prefs.getSleepTime();
                 sleepTimerActive = true;
-                Communication.sendSleepStateChanged(c);
                 sleepSand = executor.schedule(new Runnable() {
                     @Override
                     public void run() {
@@ -338,13 +339,14 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                         try {
                             pause();
                             sleepTimerActive = false;
-                            Communication.sendSleepStateChanged(c);
+                            communication.sendSleepStateChanged();
                         } finally {
                             lock.unlock();
                         }
                     }
                 }, minutes, TimeUnit.MINUTES);
             }
+            communication.sendSleepStateChanged();
         } finally {
             lock.unlock();
         }

@@ -75,10 +75,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private final Context c;
     private final ArrayList<Book> activeBooks = new ArrayList<>();
     private final ArrayList<Book> orphanedBooks = new ArrayList<>();
+    private Communication communication;
 
     private DataBaseHelper(Context c) {
         super(c, DATABASE_NAME, null, DATABASE_VERSION);
         this.c = c;
+        communication = new Communication(c);
 
         SQLiteDatabase db = getReadableDatabase();
         Cursor bookCursor = db.query(TABLE_BOOK,
@@ -186,7 +188,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         activeBooks.add(book);
 
-        Communication.sendBookSetChanged(c);
+        communication.sendBookSetChanged();
     }
 
     @Nullable
@@ -248,7 +250,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 db.insert(TABLE_BOOKMARKS, null, bookmarkCV);
             }
 
-            Communication.sendBookSetChanged(c);
+            communication.sendBookSetChanged();
         } else {
             L.e(TAG, "Could not update book=" + book);
         }
@@ -272,7 +274,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             cv.put(BOOK_ACTIVE, 0);
             getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
 
-            Communication.sendBookSetChanged(c);
+            communication.sendBookSetChanged();
         }
     }
 
@@ -291,7 +293,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         cv.put(BOOK_ACTIVE, 1);
         getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
 
-        Communication.sendBookSetChanged(c);
+        communication.sendBookSetChanged();
     }
 
     @Override

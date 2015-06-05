@@ -69,6 +69,7 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
             book = db.getBook(book.getId());
         }
     };
+    private Communication communication;
 
     public static EditBookDialogFragment newInstance(@NonNull Book book, @NonNull Context c) {
         EditBookDialogFragment editBookDialogFragment = new EditBookDialogFragment();
@@ -164,6 +165,7 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
         coverDownloader = new CoverDownloader(getActivity());
         db = DataBaseHelper.getInstance(getActivity());
         bcm = LocalBroadcastManager.getInstance(getActivity());
+        communication = new Communication(getActivity());
 
         Bundle b = getArguments();
         long bookId = b.getLong(Book.TAG);
@@ -248,7 +250,7 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
                 book.setName(bookName);
                 Picasso.with(getActivity()).invalidate(book.getCoverFile());
                 db.updateBook(book);
-                Communication.sendCoverChanged(getActivity(), book.getId());
+                communication.sendCoverChanged(book.getId());
             }
 
             @Override

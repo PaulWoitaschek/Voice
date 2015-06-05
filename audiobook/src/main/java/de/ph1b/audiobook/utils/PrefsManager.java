@@ -27,11 +27,13 @@ public class PrefsManager {
     @NonNull
     private final Context c;
     private final SharedPreferences sp;
+    private Communication communication;
 
     private PrefsManager(@NonNull Context c) {
         PreferenceManager.setDefaultValues(c, R.xml.preferences, false);
         this.c = c;
         sp = PreferenceManager.getDefaultSharedPreferences(c);
+        communication = new Communication(c);
     }
 
     public static synchronized PrefsManager getInstance(@NonNull Context c) {
@@ -50,7 +52,7 @@ public class PrefsManager {
     }
 
     /**
-     * Sets the current bookId and calls {@link Communication#sendCurrentBookChanged(Context, long)}
+     * Sets the current bookId and calls {@link Communication#sendCurrentBookChanged(long)}
      *
      * @param bookId the book Id to set
      */
@@ -58,7 +60,7 @@ public class PrefsManager {
         long oldId = getCurrentBookId();
         sp.edit().putLong(PREF_KEY_CURRENT_BOOK, bookId)
                 .apply();
-        Communication.sendCurrentBookChanged(c, oldId);
+        communication.sendCurrentBookChanged(oldId);
     }
 
     /**

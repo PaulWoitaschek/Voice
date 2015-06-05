@@ -42,11 +42,13 @@ public class BookAdder {
     private final PrefsManager prefs;
     private final DataBaseHelper db;
     private volatile boolean stopScanner = false;
+    private Communication communication;
 
     private BookAdder(@NonNull Context c) {
         this.c = c;
         prefs = PrefsManager.getInstance(c);
         db = DataBaseHelper.getInstance(this.c);
+        communication = new Communication(c);
     }
 
     public static synchronized BookAdder getInstance(Context c) {
@@ -157,7 +159,7 @@ public class BookAdder {
                             if (cover != null) {
                                 ImageHelper.saveCover(cover, c, coverFile);
                                 Picasso.with(c).invalidate(coverFile);
-                                Communication.sendCoverChanged(c, b.getId());
+                                communication.sendCoverChanged(b.getId());
                                 continue;
                             }
                         }
@@ -167,7 +169,7 @@ public class BookAdder {
                 if (cover != null) {
                     ImageHelper.saveCover(cover, c, coverFile);
                     Picasso.with(c).invalidate(coverFile);
-                    Communication.sendCoverChanged(c, b.getId());
+                    communication.sendCoverChanged(b.getId());
                 }
             }
         }
@@ -187,7 +189,7 @@ public class BookAdder {
                 public void run() {
                     L.v(TAG, "started");
                     scannerActive = true;
-                    Communication.sendScannerStateChanged(c);
+                    communication.sendScannerStateChanged();
                     stopScanner = false;
 
                     try {
@@ -200,7 +202,7 @@ public class BookAdder {
 
                     stopScanner = false;
                     scannerActive = false;
-                    Communication.sendScannerStateChanged(c);
+                    communication.sendScannerStateChanged();
                     L.v(TAG, "stopped");
                 }
             });
