@@ -37,7 +37,7 @@ public class Communication {
 
     public static synchronized Communication getInstance(Context c) {
         if (instance == null) {
-            instance = Communication.getInstance(c);
+            instance = new Communication(c);
         }
         return instance;
     }
