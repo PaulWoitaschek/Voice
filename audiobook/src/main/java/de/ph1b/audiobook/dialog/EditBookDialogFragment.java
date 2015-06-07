@@ -40,13 +40,12 @@ import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
 
-public class EditBookDialogFragment extends DialogFragment implements View.OnClickListener, Communication.OnBookContentChangedListener {
+public class EditBookDialogFragment extends DialogFragment implements View.OnClickListener {
     public static final String TAG = EditBookDialogFragment.class.getSimpleName();
     private static final String BOOK_COVER = "BOOK_COVER";
     private static final int REPLACEMENT_DIMEN = 500;
     private static final String COVER_POSITION = "COVER_POSITION";
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    private final Communication communication = Communication.getInstance();
     private CoverDownloader coverDownloader;
     private DraggableBoxImageView coverImageView;
     private ProgressBar coverReplacement;
@@ -57,8 +56,6 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
     private int coverPosition = 0;
     private ArrayList<Bitmap> covers;
     private int googleCount = 0;
-    private Book book;
-    private DataBaseHelper db;
 
     public static EditBookDialogFragment newInstance(@NonNull Book book, @NonNull Context c) {
         EditBookDialogFragment editBookDialogFragment = new EditBookDialogFragment();
@@ -85,19 +82,6 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
         return editBookDialogFragment;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        communication.addOnBookContentChangedListener(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        communication.removeOnBookContentChangedListener(this);
-    }
 
     @Override
     public void onClick(View view) {
@@ -152,13 +136,8 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
         super.onCreate(savedInstanceState);
 
         coverDownloader = new CoverDownloader(getActivity());
-        db = DataBaseHelper.getInstance(getActivity());
-
-        Bundle b = getArguments();
-        long bookId = b.getLong(Book.TAG);
-        book = db.getBook(bookId);
         if (savedInstanceState == null) {
-            covers = b.getParcelableArrayList(BOOK_COVER);
+            covers = getArguments().getParcelableArrayList(BOOK_COVER);
 
             // defaulting only to capital cover when its the only one.
             if (covers.size() == 1) {
@@ -183,6 +162,12 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+        final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
+        final long bookId = getArguments().getLong(Book.TAG);
+        final Book book = db.getBook(bookId);
+        assert book != null;
+
         //init view
         //passing null is fine because of fragment
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -224,20 +209,28 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
 
                 String bookName = nameEditText.getText().toString();
                 Rect r = coverImageView.getCropPosition();
+                boolean useCoverReplacement;
                 if (coverPosition > 0 && r.width() > 0 && r.height() > 0) {
                     Bitmap cover = covers.get(coverPosition);
                     cover = Bitmap.createBitmap(cover, r.left, r.top, r.width(), r.height());
                     ImageHelper.saveCover(cover, getActivity(), book.getCoverFile());
                     Picasso.with(getActivity()).invalidate(book.getCoverFile());
-                    book.setUseCoverReplacement(false);
+                    useCoverReplacement = false;
                 } else {
-                    book.setUseCoverReplacement(true);
+                    useCoverReplacement = true;
                 }
 
-                book.setName(bookName);
                 Picasso.with(getActivity()).invalidate(book.getCoverFile());
-                db.updateBook(book);
-                communication.sendCoverChanged(book.getId());
+
+                synchronized (db) {
+                    Book dbBook = db.getBook(book.getId());
+                    if (dbBook != null) {
+                        dbBook.setUseCoverReplacement(useCoverReplacement);
+                        dbBook.setName(bookName);
+                        db.updateBook(book);
+                    }
+                }
+                Communication.getInstance().sendCoverChanged(book.getId());
             }
 
             @Override
@@ -298,12 +291,6 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
         return editBook;
     }
 
-    @Override
-    public void onBookContentChanged(long bookId) {
-        if (bookId == book.getId()) {
-            book = db.getBook(book.getId());
-        }
-    }
 
     private class AddCoverAsync extends AsyncTask<Void, Void, Bitmap> {
         private final String searchString;
