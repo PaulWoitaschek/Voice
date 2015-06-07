@@ -230,23 +230,29 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             activeBooks.set(indexToUpdate, book);
 
             SQLiteDatabase db = getWritableDatabase();
+            db.beginTransaction();
+            try {
+                // update book itself
+                ContentValues bookCv = book.getContentValues();
+                db.update(TABLE_BOOK, bookCv, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
 
-            // update book itself
-            ContentValues bookCv = book.getContentValues();
-            db.update(TABLE_BOOK, bookCv, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
+                // delete old chapters and replace them with new ones
+                db.delete(TABLE_CHAPTERS, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
+                for (Chapter c : book.getChapters()) {
+                    ContentValues chapterCv = c.getContentValues(book.getId());
+                    db.insert(TABLE_CHAPTERS, null, chapterCv);
+                }
 
-            // delete old chapters and replace them with new ones
-            db.delete(TABLE_CHAPTERS, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
-            for (Chapter c : book.getChapters()) {
-                ContentValues chapterCv = c.getContentValues(book.getId());
-                db.insert(TABLE_CHAPTERS, null, chapterCv);
-            }
+                // replace old bookmarks and replace them with new ones
+                db.delete(TABLE_BOOKMARKS, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
+                for (Bookmark b : book.getBookmarks()) {
+                    ContentValues bookmarkCV = b.getContentValues(book.getId());
+                    db.insert(TABLE_BOOKMARKS, null, bookmarkCV);
+                }
 
-            // replace old bookmarks and replace them with new ones
-            db.delete(TABLE_BOOKMARKS, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
-            for (Bookmark b : book.getBookmarks()) {
-                ContentValues bookmarkCV = b.getContentValues(book.getId());
-                db.insert(TABLE_BOOKMARKS, null, bookmarkCV);
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
             }
 
             communication.sendBookContentChanged(book.getId());
