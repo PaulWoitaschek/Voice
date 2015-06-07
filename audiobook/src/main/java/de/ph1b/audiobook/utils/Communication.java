@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.utils;
 
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 
 import net.jcip.annotations.ThreadSafe;
@@ -7,6 +8,7 @@ import net.jcip.annotations.ThreadSafe;
 import java.util.ArrayList;
 
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
+import de.ph1b.audiobook.model.Book;
 
 
 /**
@@ -157,11 +159,12 @@ public class Communication {
     /**
      * Sends a broadcast signaling that a certain book has changed.
      *
-     * @param bookId THe book id for the book that has changed.
+     * @param book The book that has changed
      */
-    public synchronized void sendBookContentChanged(long bookId) {
+    public synchronized void sendBookContentChanged(@NonNull Book book) {
         for (OnBookContentChangedListener onBookContentChangedListener : onBookContentChangedListeners) {
-            onBookContentChangedListener.onBookContentChanged(bookId);
+            // copy constructor for immutabliity
+            onBookContentChangedListener.onBookContentChanged(new Book(book));
         }
     }
 
@@ -178,7 +181,7 @@ public class Communication {
     }
 
     public interface OnBookContentChangedListener {
-        void onBookContentChanged(long bookId);
+        void onBookContentChanged(@NonNull Book book);
     }
 
 

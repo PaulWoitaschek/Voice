@@ -255,7 +255,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 db.endTransaction();
             }
 
-            communication.sendBookContentChanged(book.getId());
+            communication.sendBookContentChanged(book);
         } else {
             L.e(TAG, "Could not update book=" + book);
         }

@@ -510,9 +510,11 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     }
 
     @Override
-    public void onBookContentChanged(long bookId) {
-        controller.updateBook(db.getBook(prefs.getCurrentBookId()));
-        notifyChange(META_CHANGED);
+    public void onBookContentChanged(@NonNull Book book) {
+        if (book.getId() == prefs.getCurrentBookId()) {
+            controller.updateBook(db.getBook(prefs.getCurrentBookId()));
+            notifyChange(META_CHANGED);
+        }
     }
 
     @Override

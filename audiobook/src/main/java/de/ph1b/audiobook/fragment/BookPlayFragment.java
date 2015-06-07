@@ -3,6 +3,7 @@ package de.ph1b.audiobook.fragment;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -384,20 +385,13 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onBookContentChanged(final long bookId) {
+    public void onBookContentChanged(@NonNull final Book updatedBook) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                L.d(TAG, "onBookContentChangedReciever called with bookId=" + bookId);
-                if (bookId == book.getId()) {
-                    book = db.getBook(book.getId());
-
-                    if (book == null) {
-                        getFragmentManager().beginTransaction()
-                                .replace(R.id.content, new BookPlayFragment(), BookPlayFragment.TAG)
-                                .commit();
-                        return;
-                    }
+                L.d(TAG, "onBookContentChangedReciever called with bookId=" + updatedBook.getId());
+                if (updatedBook.getId() == book.getId()) {
+                    book = updatedBook;
 
                     ArrayList<Chapter> chapters = book.getChapters();
                     Chapter chapter = book.getCurrentChapter();

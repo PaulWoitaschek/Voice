@@ -328,8 +328,8 @@ public class WidgetUpdateService extends Service implements Communication.OnBook
     }
 
     @Override
-    public void onBookContentChanged(long bookId) {
-        if (bookId == prefs.getCurrentBookId())
+    public void onBookContentChanged(@NonNull Book book) {
+        if (book.getId() == prefs.getCurrentBookId())
             updateWidget();
     }
 
