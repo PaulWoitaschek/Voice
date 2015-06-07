@@ -3,6 +3,7 @@ package de.ph1b.audiobook.fragment;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -29,6 +30,8 @@ import android.widget.ProgressBar;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.FolderOverviewActivity;
@@ -198,7 +201,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
         // update items and set ui
         setPlayState(false);
-        onBookSetChanged();
+        onBookSetChanged(db.getActiveBooks());
 
         // register receivers
         communication.addOnBookSetChangedListener(this);
@@ -350,12 +353,12 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onBookSetChanged() {
+    public void onBookSetChanged(@NonNull final ArrayList<Book> activeBooks) {
         L.v(TAG, "onBookSetChanged called");
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                adapter.newDataSet(db.getActiveBooks());
+                adapter.newDataSet(activeBooks);
                 checkVisibilities();
             }
         });

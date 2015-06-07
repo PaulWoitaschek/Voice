@@ -133,10 +133,16 @@ public class Communication {
 
     /**
      * Notifies listeners, that the whole set of Books has changed.
+     *
+     * @param allBooks The whole book set
      */
-    public synchronized void bookSetChanged() {
+    public synchronized void bookSetChanged(ArrayList<Book> allBooks) {
         for (OnBookSetChangedListener onBookSetChangedListener : onBookSetChangedListeners) {
-            onBookSetChangedListener.onBookSetChanged();
+            ArrayList<Book> copyBooks = new ArrayList<>();
+            for (Book b : allBooks) {
+                copyBooks.add(new Book(b));
+            }
+            onBookSetChangedListener.onBookSetChanged(copyBooks);
         }
     }
 
@@ -194,6 +200,6 @@ public class Communication {
     }
 
     public interface OnBookSetChangedListener {
-        void onBookSetChanged();
+        void onBookSetChanged(@NonNull ArrayList<Book> activeBooks);
     }
 }
