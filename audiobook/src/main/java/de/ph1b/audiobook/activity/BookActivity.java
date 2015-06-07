@@ -15,6 +15,7 @@ import de.ph1b.audiobook.fragment.BookPlayFragment;
 import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.utils.L;
+import de.ph1b.audiobook.utils.PrefsManager;
 
 public class BookActivity extends BaseActivity {
 
@@ -48,7 +49,7 @@ public class BookActivity extends BaseActivity {
         if (savedInstanceState == null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             if (addPlayFragment) {
-                ft.replace(R.id.content, new BookPlayFragment(), BookPlayFragment.TAG);
+                ft.replace(R.id.content, BookPlayFragment.newInstance(PrefsManager.getInstance(this).getCurrentBookId()), BookPlayFragment.TAG);
             } else {
                 Fragment bookShelfFragment = new BookShelfFragment();
 

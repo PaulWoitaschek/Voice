@@ -280,7 +280,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     }
 
     private void startBookPlay() {
-        Fragment bookPlayFragment = new BookPlayFragment();
+        Fragment bookPlayFragment = BookPlayFragment.newInstance(prefs.getCurrentBookId());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
             int enterTransitionDuration = 300;

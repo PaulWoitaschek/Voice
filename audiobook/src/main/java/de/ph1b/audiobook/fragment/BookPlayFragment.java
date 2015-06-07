@@ -52,7 +52,7 @@ import de.ph1b.audiobook.utils.PrefsManager;
 
 public class BookPlayFragment extends Fragment implements View.OnClickListener, Communication.OnSleepStateChangedListener, Communication.OnBookContentChangedListener, Communication.OnPlayStateChangedListener {
 
-
+    public static final String BOOK_ID = "bookId";
     public static final String TAG = BookPlayFragment.class.getSimpleName();
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
     private final Communication communication = Communication.getInstance();
@@ -62,8 +62,17 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
     private TextView maxTimeView;
     private PrefsManager prefs;
     private ServiceController controller;
-    private Book book;
+    private long bookId;
     private DataBaseHelper db;
+
+    public static BookPlayFragment newInstance(long bookId) {
+        Bundle args = new Bundle();
+        args.putLong(BOOK_ID, bookId);
+
+        BookPlayFragment bookPlayFragment = new BookPlayFragment();
+        bookPlayFragment.setArguments(args);
+        return bookPlayFragment;
+    }
 
     @Nullable
     @Override
@@ -71,10 +80,11 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_book_play, container, false);
 
-        book = db.getBook(prefs.getCurrentBookId());
+        bookId = getArguments().getLong(BOOK_ID);
+        final Book book = db.getBook(bookId);
         if (book == null) {
             getFragmentManager().beginTransaction()
-                    .replace(R.id.content, new BookPlayFragment(), BookPlayFragment.TAG)
+                    .replace(R.id.content, new BookShelfFragment(), BookShelfFragment.TAG)
                     .commit();
             return null;
         }
@@ -316,7 +326,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
                     String date = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE |
                             DateUtils.FORMAT_SHOW_TIME |
                             DateUtils.FORMAT_NUMERIC_DATE);
-                    BookmarkDialogFragment.addBookmark(book.getId(), date + ": " +
+                    BookmarkDialogFragment.addBookmark(bookId, date + ": " +
                             getString(R.string.action_sleep), getActivity());
                 }
                 return true;
@@ -325,7 +335,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
                         PlaybackSpeedDialogFragment.TAG);
                 return true;
             case R.id.action_bookmark:
-                BookmarkDialogFragment.newInstance(book.getId()).show(getFragmentManager(),
+                BookmarkDialogFragment.newInstance(bookId).show(getFragmentManager(),
                         BookmarkDialogFragment.TAG);
                 return true;
             case android.R.id.home:
@@ -350,6 +360,10 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         super.onStart();
 
         setPlayState(false);
+
+        Book book = db.getBook(bookId);
+        if (book != null)
+            onBookContentChanged(book);
 
         communication.addOnBookContentChangedListener(this);
         communication.addOnPlayStateChangedListener(this);
@@ -385,13 +399,12 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onBookContentChanged(@NonNull final Book updatedBook) {
+    public void onBookContentChanged(@NonNull final Book book) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                L.d(TAG, "onBookContentChangedReciever called with bookId=" + updatedBook.getId());
-                if (updatedBook.getId() == book.getId()) {
-                    book = updatedBook;
+                L.d(TAG, "onBookContentChangedReciever called with bookId=" + book.getId());
+                if (book.getId() == bookId) {
 
                     ArrayList<Chapter> chapters = book.getChapters();
                     Chapter chapter = book.getCurrentChapter();
