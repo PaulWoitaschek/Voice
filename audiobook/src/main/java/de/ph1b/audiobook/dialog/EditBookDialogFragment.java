@@ -227,7 +227,7 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
                     if (dbBook != null) {
                         dbBook.setUseCoverReplacement(useCoverReplacement);
                         dbBook.setName(bookName);
-                        db.updateBook(book);
+                        db.updateBook(dbBook);
                     }
                 }
                 Communication.getInstance().sendCoverChanged(book.getId());
