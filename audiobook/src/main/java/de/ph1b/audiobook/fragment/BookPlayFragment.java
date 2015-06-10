@@ -365,6 +365,8 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         if (book != null)
             onBookContentChanged(book);
 
+        getActivity().invalidateOptionsMenu();
+
         communication.addOnBookContentChangedListener(this);
         communication.addOnPlayStateChangedListener(this);
         communication.addOnSleepStateChangedListener(this);
