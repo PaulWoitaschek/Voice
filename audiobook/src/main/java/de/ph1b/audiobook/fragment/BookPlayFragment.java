@@ -134,9 +134,12 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 int progress = seekBar.getProgress();
-                controller.changeTime(progress, book.getCurrentChapter()
-                        .getPath());
-                playedTimeView.setText(formatTime(progress, seekBar.getMax()));
+                Book currentBook = db.getBook(bookId);
+                if (currentBook != null) {
+                    controller.changeTime(progress, currentBook.getCurrentChapter()
+                            .getPath());
+                    playedTimeView.setText(formatTime(progress, seekBar.getMax()));
+                }
             }
         });
 
