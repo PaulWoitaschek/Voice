@@ -1,3 +1,18 @@
+# v2.2
+
+## Changes
+* More metadata (like author)
+* Quick return to current book
+* Correct toolbar menu colors set
+* PlayPauseDrawable improved
+* Highlights selectet item in spinner
+* Revert speed fix causing problems
+* Blacklist some devices that have a bug in MediaExtractor
+* Add awb to audio types
+* Correctly update books
+* Many performance improvements
+* Synchronization improved
+
 # v2.1.9.1
 
 ## Changes
