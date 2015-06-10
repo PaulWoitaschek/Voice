@@ -17,7 +17,7 @@ import de.ph1b.audiobook.model.Book;
 @ThreadSafe
 public class Communication {
 
-    private static Communication instance;
+    private static final Communication INSTANCE = new Communication();
     private final ArrayList<OnBookSetChangedListener> onBookSetChangedListeners = new ArrayList<>();
     private final ArrayList<OnSleepStateChangedListener> onSleepStateChangedListeners = new ArrayList<>();
     private final ArrayList<OnCoverChangedListener> onCoverChangedListeners = new ArrayList<>();
@@ -29,11 +29,8 @@ public class Communication {
     private Communication() {
     }
 
-    public static synchronized Communication getInstance() {
-        if (instance == null) {
-            instance = new Communication();
-        }
-        return instance;
+    public static Communication getInstance() {
+        return INSTANCE;
     }
 
     /**
