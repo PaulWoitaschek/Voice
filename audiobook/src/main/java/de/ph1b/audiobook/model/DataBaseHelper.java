@@ -13,7 +13,6 @@ import net.jcip.annotations.ThreadSafe;
 import java.util.ArrayList;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Iterator;
-import java.util.List;
 
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
@@ -202,7 +201,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 
     @NonNull
-    public synchronized List<Book> getActiveBooks() {
+    public synchronized ArrayList<Book> getActiveBooks() {
         ArrayList<Book> copyBooks = new ArrayList<>();
         for (Book b : activeBooks) {
             copyBooks.add(new Book(b));
@@ -210,7 +209,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return copyBooks;
     }
 
-    public synchronized List<Book> getOrphanedBooks() {
+    public synchronized ArrayList<Book> getOrphanedBooks() {
         ArrayList<Book> copyBooks = new ArrayList<>();
         for (Book b : orphanedBooks) {
             copyBooks.add(new Book(b));

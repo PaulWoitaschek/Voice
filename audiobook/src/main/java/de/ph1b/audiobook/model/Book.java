@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import de.ph1b.audiobook.utils.Validate;
 
@@ -105,7 +104,7 @@ public class Book implements Comparable<Book> {
     }
 
     @NonNull
-    public List<Bookmark> getBookmarks() {
+    public ArrayList<Bookmark> getBookmarks() {
         return bookmarks;
     }
 
@@ -271,7 +270,7 @@ public class Book implements Comparable<Book> {
     }
 
     @NonNull
-    public List<Chapter> getChapters() {
+    public ArrayList<Chapter> getChapters() {
         return chapters;
     }
 

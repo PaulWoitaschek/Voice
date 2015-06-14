@@ -9,7 +9,6 @@ import net.jcip.annotations.ThreadSafe;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import de.ph1b.audiobook.R;
@@ -68,7 +67,7 @@ public class PrefsManager {
      * or {@link de.ph1b.audiobook.model.Book.Type#COLLECTION_FILE}
      */
     @NonNull
-    public synchronized List<String> getCollectionFolders() {
+    public synchronized ArrayList<String> getCollectionFolders() {
         Set<String> set = sp.getStringSet(PREF_KEY_COLLECTION_FOLDERS, new HashSet<String>());
         return new ArrayList<>(set);
     }
@@ -96,7 +95,7 @@ public class PrefsManager {
      * @return the single book folders
      */
     @NonNull
-    public synchronized List<String> getSingleBookFolders() {
+    public synchronized ArrayList<String> getSingleBookFolders() {
         Set<String> set = sp.getStringSet(PREF_KEY_SINGLE_BOOK_FOLDERS, new HashSet<String>());
         return new ArrayList<>(set);
     }
