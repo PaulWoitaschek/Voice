@@ -3,6 +3,7 @@ package de.ph1b.audiobook.utils;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.ph1b.audiobook.BuildConfig;
 
@@ -24,8 +25,8 @@ public class L {
         }
     }
 
-    private static ArrayList<String> getMessage(Object msg) {
-        ArrayList<String> split = new ArrayList<>();
+    private static List<String> getMessage(Object msg) {
+        List<String> split = new ArrayList<>();
         if (msg == null) {
             split.add("null");
         } else if (msg.equals("")) {

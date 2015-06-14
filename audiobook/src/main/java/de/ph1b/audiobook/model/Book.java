@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import de.ph1b.audiobook.utils.Validate;
 
@@ -19,13 +20,13 @@ public class Book implements Comparable<Book> {
     @NonNull
     private final String root;
     @NonNull
-    private final ArrayList<Chapter> chapters;
+    private final List<Chapter> chapters;
     @NonNull
     private final Type type;
     @NonNull
     private final String packageName;
     @NonNull
-    private final ArrayList<Bookmark> bookmarks;
+    private final List<Bookmark> bookmarks;
     @Nullable
     private final String author;
     private long id = ID_UNKNOWN;
@@ -44,14 +45,14 @@ public class Book implements Comparable<Book> {
 
         this.id = that.id;
         this.root = that.root;
-        ArrayList<Chapter> copyChapters = new ArrayList<>();
+        List<Chapter> copyChapters = new ArrayList<>();
         for (Chapter c : that.chapters) {
             copyChapters.add(new Chapter(c));
         }
         this.chapters = copyChapters;
         this.type = Type.valueOf(that.type.name());
         this.packageName = that.packageName;
-        ArrayList<Bookmark> copyBookmarks = new ArrayList<>();
+        List<Bookmark> copyBookmarks = new ArrayList<>();
         for (Bookmark b : that.bookmarks) {
             copyBookmarks.add(new Bookmark(b));
         }
@@ -68,11 +69,11 @@ public class Book implements Comparable<Book> {
     public Book(@NonNull String root,
                 @NonNull String name,
                 @Nullable String author,
-                @NonNull ArrayList<Chapter> chapters,
+                @NonNull List<Chapter> chapters,
                 @NonNull
                 String currentMediaPath,
                 @NonNull Type type,
-                @NonNull ArrayList<Bookmark> bookmarks,
+                @NonNull List<Bookmark> bookmarks,
                 @NonNull Context c) {
         new Validate().notNull(root, name, chapters, currentMediaPath, type)
                 .notEmpty(root, name)
@@ -104,7 +105,7 @@ public class Book implements Comparable<Book> {
     }
 
     @NonNull
-    public ArrayList<Bookmark> getBookmarks() {
+    public List<Bookmark> getBookmarks() {
         return bookmarks;
     }
 
@@ -270,7 +271,7 @@ public class Book implements Comparable<Book> {
     }
 
     @NonNull
-    public ArrayList<Chapter> getChapters() {
+    public List<Chapter> getChapters() {
         return chapters;
     }
 

@@ -30,6 +30,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
@@ -144,7 +145,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         });
 
         // adapter
-        final ArrayList<String> chaptersAsStrings = new ArrayList<>();
+        final List<String> chaptersAsStrings = new ArrayList<>();
         for (int i = 0; i < book.getChapters().size(); i++) {
             String chapterName = book.getChapters().get(i).getName();
 
@@ -411,7 +412,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
                 L.d(TAG, "onBookContentChangedReciever called with bookId=" + book.getId());
                 if (book.getId() == bookId) {
 
-                    ArrayList<Chapter> chapters = book.getChapters();
+                    List<Chapter> chapters = book.getChapters();
                     Chapter chapter = book.getCurrentChapter();
 
                     int position = chapters.indexOf(chapter);

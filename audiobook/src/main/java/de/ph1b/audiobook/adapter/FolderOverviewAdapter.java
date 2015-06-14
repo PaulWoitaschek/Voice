@@ -10,7 +10,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.uitools.ThemeUtil;
@@ -20,15 +20,15 @@ public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAd
     @NonNull
     private final Context c;
     @NonNull
-    private final ArrayList<String> bookCollections;
+    private final List<String> bookCollections;
     @NonNull
-    private final ArrayList<String> singleBooks;
+    private final List<String> singleBooks;
     @NonNull
     private final OnFolderMoreClickedListener listener;
 
     public FolderOverviewAdapter(@NonNull final Context c,
-                                 @NonNull final ArrayList<String> bookCollections,
-                                 @NonNull final ArrayList<String> singleBooks,
+                                 @NonNull final List<String> bookCollections,
+                                 @NonNull final List<String> singleBooks,
                                  @NonNull final OnFolderMoreClickedListener listener) {
         this.c = c;
         this.bookCollections = bookCollections;

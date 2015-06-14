@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.InvalidPropertiesFormatException;
+import java.util.List;
 
 import de.ph1b.audiobook.utils.L;
 
@@ -82,9 +83,9 @@ class DataBaseUpgradeHelper {
                 String root = bookCursor.getString(1);
                 String type = bookCursor.getString(2);
 
-                ArrayList<String> chapterNames = new ArrayList<>();
-                ArrayList<Integer> chapterDurations = new ArrayList<>();
-                ArrayList<String> chapterPaths = new ArrayList<>();
+                List<String> chapterNames = new ArrayList<>();
+                List<Integer> chapterDurations = new ArrayList<>();
+                List<String> chapterPaths = new ArrayList<>();
 
                 Cursor mediaCursor = db.query(copyChapterTableName, new String[]{"CHAPTER_PATH", "CHAPTER_DURATION",
                                 "CHAPTER_NAME"},
@@ -161,9 +162,9 @@ class DataBaseUpgradeHelper {
                     e.printStackTrace();
                 }
 
-                ArrayList<String> bookmarkRelPathsUnsafe = new ArrayList<>();
-                ArrayList<String> bookmarkTitlesUnsafe = new ArrayList<>();
-                ArrayList<Integer> bookmarkTimesUnsafe = new ArrayList<>();
+                List<String> bookmarkRelPathsUnsafe = new ArrayList<>();
+                List<String> bookmarkTitlesUnsafe = new ArrayList<>();
+                List<Integer> bookmarkTimesUnsafe = new ArrayList<>();
                 try {
                     JSONArray bookmarksJ = playingInformation.getJSONArray(JSON_BOOKMARKS);
                     for (int i = 0; i < bookmarksJ.length(); i++) {
@@ -179,9 +180,9 @@ class DataBaseUpgradeHelper {
                     bookmarkTimesUnsafe.clear();
                 }
 
-                ArrayList<String> bookmarkRelPathsSafe = new ArrayList<>();
-                ArrayList<String> bookmarkTitlesSafe = new ArrayList<>();
-                ArrayList<Integer> bookmarkTimesSafe = new ArrayList<>();
+                List<String> bookmarkRelPathsSafe = new ArrayList<>();
+                List<String> bookmarkTitlesSafe = new ArrayList<>();
+                List<Integer> bookmarkTimesSafe = new ArrayList<>();
 
                 for (int i = 0; i < bookmarkRelPathsUnsafe.size(); i++) {
                     boolean bookmarkExists = false;
@@ -319,7 +320,7 @@ class DataBaseUpgradeHelper {
     private void upgrade25() throws InvalidPropertiesFormatException {
 
         // get all books
-        ArrayList<JSONObject> allBooks = new ArrayList<>();
+        List<JSONObject> allBooks = new ArrayList<>();
         Cursor cursor = db.query("TABLE_BOOK",
                 new String[]{"BOOK_ID", "BOOK_JSON"},
                 null, null, null, null, null);
@@ -426,8 +427,8 @@ class DataBaseUpgradeHelper {
         L.d(TAG, "upgrade29");
 
         // fetching old contents
-        ArrayList<String> bookContents = new ArrayList<>();
-        ArrayList<Boolean> activeMapping = new ArrayList<>();
+        List<String> bookContents = new ArrayList<>();
+        List<Boolean> activeMapping = new ArrayList<>();
         Cursor cursor = db.query("TABLE_BOOK", new String[]{"BOOK_JSON", "BOOK_ACTIVE"},
                 null, null, null, null, null);
         try {

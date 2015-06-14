@@ -28,7 +28,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -367,7 +367,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 .setDeleteIntent(stopPI)
                 .setAutoCancel(true);
 
-        ArrayList<Chapter> chapters = book.getChapters();
+        List<Chapter> chapters = book.getChapters();
         if (chapters.size() > 1) {
             notificationBuilder.setContentInfo((book.getChapters().indexOf(chapter) + 1) + "/" +
                     book.getChapters().size());

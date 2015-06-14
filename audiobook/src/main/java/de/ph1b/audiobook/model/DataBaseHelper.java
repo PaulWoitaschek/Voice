@@ -13,6 +13,7 @@ import net.jcip.annotations.ThreadSafe;
 import java.util.ArrayList;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Iterator;
+import java.util.List;
 
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
@@ -73,8 +74,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String TAG = DataBaseHelper.class.getSimpleName();
     private static DataBaseHelper instance;
     private final Context c;
-    private final ArrayList<Book> activeBooks = new ArrayList<>();
-    private final ArrayList<Book> orphanedBooks = new ArrayList<>();
+    private final List<Book> activeBooks = new ArrayList<>();
+    private final List<Book> orphanedBooks = new ArrayList<>();
     private final Communication communication = Communication.getInstance();
 
     private DataBaseHelper(Context c) {
@@ -100,7 +101,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 boolean bookUseCoverReplacement = bookCursor.getInt(8) == 1;
                 boolean bookActive = bookCursor.getInt(9) == 1;
 
-                ArrayList<Chapter> chapters = new ArrayList<>();
+                List<Chapter> chapters = new ArrayList<>();
                 Cursor chapterCursor = db.query(TABLE_CHAPTERS,
                         new String[]{CHAPTER_DURATION, CHAPTER_NAME, CHAPTER_PATH},
                         BOOK_ID + "=?",
@@ -117,7 +118,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     chapterCursor.close();
                 }
 
-                ArrayList<Bookmark> bookmarks = new ArrayList<>();
+                List<Bookmark> bookmarks = new ArrayList<>();
                 Cursor bookmarkCursor = db.query(TABLE_BOOKMARKS,
                         new String[]{BOOKMARK_PATH, BOOKMARK_TIME, BOOKMARK_TITLE},
                         BOOK_ID + "=?", new String[]{String.valueOf(bookId)}
@@ -201,16 +202,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 
     @NonNull
-    public synchronized ArrayList<Book> getActiveBooks() {
-        ArrayList<Book> copyBooks = new ArrayList<>();
+    public synchronized List<Book> getActiveBooks() {
+        List<Book> copyBooks = new ArrayList<>();
         for (Book b : activeBooks) {
             copyBooks.add(new Book(b));
         }
         return copyBooks;
     }
 
-    public synchronized ArrayList<Book> getOrphanedBooks() {
-        ArrayList<Book> copyBooks = new ArrayList<>();
+    public synchronized List<Book> getOrphanedBooks() {
+        List<Book> copyBooks = new ArrayList<>();
         for (Book b : orphanedBooks) {
             copyBooks.add(new Book(b));
         }

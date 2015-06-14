@@ -31,7 +31,7 @@ import android.widget.ProgressBar;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.FolderOverviewActivity;
@@ -353,7 +353,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onBookSetChanged(@NonNull final ArrayList<Book> activeBooks) {
+    public void onBookSetChanged(@NonNull final List<Book> activeBooks) {
         L.v(TAG, "onBookSetChanged called");
         getActivity().runOnUiThread(new Runnable() {
             @Override

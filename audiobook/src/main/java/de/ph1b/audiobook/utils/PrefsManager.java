@@ -9,6 +9,7 @@ import net.jcip.annotations.ThreadSafe;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import de.ph1b.audiobook.R;
@@ -67,7 +68,7 @@ public class PrefsManager {
      * or {@link de.ph1b.audiobook.model.Book.Type#COLLECTION_FILE}
      */
     @NonNull
-    public synchronized ArrayList<String> getCollectionFolders() {
+    public synchronized List<String> getCollectionFolders() {
         Set<String> set = sp.getStringSet(PREF_KEY_COLLECTION_FOLDERS, new HashSet<String>());
         return new ArrayList<>(set);
     }
@@ -79,7 +80,7 @@ public class PrefsManager {
      * @param folders the collection folders
      * @see PrefsManager#getCollectionFolders()
      */
-    public synchronized void setCollectionFolders(@NonNull ArrayList<String> folders) {
+    public synchronized void setCollectionFolders(@NonNull List<String> folders) {
         Set<String> set = new HashSet<>();
         set.addAll(folders);
         SharedPreferences.Editor editor = sp.edit();
@@ -95,20 +96,20 @@ public class PrefsManager {
      * @return the single book folders
      */
     @NonNull
-    public synchronized ArrayList<String> getSingleBookFolders() {
+    public synchronized List<String> getSingleBookFolders() {
         Set<String> set = sp.getStringSet(PREF_KEY_SINGLE_BOOK_FOLDERS, new HashSet<String>());
         return new ArrayList<>(set);
     }
 
 
     /**
-     * Like {@link PrefsManager#setCollectionFolders(ArrayList)} ()} but with
+     * Like {@link PrefsManager#setCollectionFolders(List)} ()} but with
      * {@link de.ph1b.audiobook.model.Book.Type#SINGLE_FILE} or
      * {@link de.ph1b.audiobook.model.Book.Type#SINGLE_FOLDER}.
      *
      * @param folders the single book folders
      */
-    public synchronized void setSingleBookFolders(@NonNull ArrayList<String> folders) {
+    public synchronized void setSingleBookFolders(@NonNull List<String> folders) {
         Set<String> set = new HashSet<>();
         set.addAll(folders);
         SharedPreferences.Editor editor = sp.edit();

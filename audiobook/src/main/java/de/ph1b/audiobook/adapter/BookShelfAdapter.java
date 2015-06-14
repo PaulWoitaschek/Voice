@@ -16,6 +16,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
@@ -77,7 +78,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
         return sortedList;
     }
 
-    public void addAll(ArrayList<Book> books) {
+    public void addAll(List<Book> books) {
         this.sortedList.beginBatchedUpdates();
         for (Book b : books) {
             this.sortedList.add(b);
@@ -86,7 +87,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
     }
 
 
-    public void newDataSet(ArrayList<Book> books) {
+    public void newDataSet(List<Book> books) {
         sortedList.beginBatchedUpdates();
 
         for (Book b : books) {
@@ -103,7 +104,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
             }
         }
 
-        ArrayList<Book> booksToDelete = new ArrayList<>();
+        List<Book> booksToDelete = new ArrayList<>();
         for (int i = 0; i < sortedList.size(); i++) {
             Book existing = sortedList.get(i);
             boolean deleteBook = true;

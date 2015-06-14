@@ -1,13 +1,13 @@
 package de.ph1b.audiobook.model;
 
-import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public class NaturalBookmarkComparator implements Comparator<Bookmark> {
 
-    private final ArrayList<Chapter> chapters;
+    private final List<Chapter> chapters;
 
-    public NaturalBookmarkComparator(ArrayList<Chapter> chapters) {
+    public NaturalBookmarkComparator(List<Chapter> chapters) {
         this.chapters = chapters;
     }
 

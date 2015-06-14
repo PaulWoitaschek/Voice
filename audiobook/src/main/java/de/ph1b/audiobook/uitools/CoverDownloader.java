@@ -30,7 +30,7 @@ import de.ph1b.audiobook.utils.L;
 public class CoverDownloader {
 
     private static final String TAG = CoverDownloader.class.getSimpleName();
-    private static final HashMap<String, ArrayList<String>> searchMapping = new HashMap<>();
+    private static final HashMap<String, List<String>> searchMapping = new HashMap<>();
     private final Picasso picasso;
     private Call call = null;
 
@@ -66,13 +66,13 @@ public class CoverDownloader {
     @Nullable
     private String getBitmapUrl(@NonNull String searchText, int number) {
         if (searchMapping.containsKey(searchText)) {
-            ArrayList<String> containing = searchMapping.get(searchText);
+            List<String> containing = searchMapping.get(searchText);
             if (number < containing.size()) {
                 return containing.get(number);
             } else {
                 int startPoint = containing.size();
                 L.v(TAG, "looking for new set at startPoint=" + startPoint);
-                ArrayList<String> newSet = getNewLinks(searchText, startPoint);
+                List<String> newSet = getNewLinks(searchText, startPoint);
                 if (newSet.size() > 0) {
                     containing.addAll(newSet);
                     return newSet.get(0);
@@ -81,7 +81,7 @@ public class CoverDownloader {
                 }
             }
         } else {
-            ArrayList<String> newSet = getNewLinks(searchText, 0);
+            List<String> newSet = getNewLinks(searchText, 0);
             if (newSet.size() > 0) {
                 searchMapping.put(searchText, newSet);
                 return newSet.get(0);
@@ -91,8 +91,8 @@ public class CoverDownloader {
         }
     }
 
-    private ArrayList<String> getNewLinks(@NonNull String searchText, int startPage) {
-        ArrayList<String> newStrings = new ArrayList<>();
+    private List<String> getNewLinks(@NonNull String searchText, int startPage) {
+        List<String> newStrings = new ArrayList<>();
 
         try {
             Uri uri = new Uri.Builder()

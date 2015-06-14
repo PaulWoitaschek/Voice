@@ -4,6 +4,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.MediumTest;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.ReentrantLock;
@@ -29,7 +30,7 @@ public class BookActivityTest extends ActivityInstrumentationTestCase2<BookActiv
         final int THREADS = 100;
         final CountDownLatch latch = new CountDownLatch(THREADS);
         final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
-        final ArrayList<Book> allBooks = db.getActiveBooks();
+        final List<Book> allBooks = db.getActiveBooks();
         final int BOOKS_AT_ONCE = 3;
 
         for (int i = 0; i < THREADS; i++) {
@@ -73,7 +74,7 @@ public class BookActivityTest extends ActivityInstrumentationTestCase2<BookActiv
     }
 
     private Book randomBook() {
-        ArrayList<Chapter> chapters = new ArrayList<>();
+        List<Chapter> chapters = new ArrayList<>();
         chapters.add(new Chapter(randomString(), randomString(), rnd.nextInt()));
 
         return new Book(randomString(), randomString(), randomString(), chapters, chapters.get(0).getPath(),

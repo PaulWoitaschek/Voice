@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -64,7 +65,7 @@ public class BookAdder {
      * @throws InterruptedException if a reset on the scanner has been requested
      */
     private void checkForBooks() throws InterruptedException {
-        ArrayList<File> singleBooks = getSingleBookFiles();
+        List<File> singleBooks = getSingleBookFiles();
         for (File f : singleBooks) {
             L.d(TAG, "checkForBooks with singleBookFile=" + f);
             if (f.isFile() && f.canRead()) {
@@ -74,7 +75,7 @@ public class BookAdder {
             }
         }
 
-        ArrayList<File> collectionBooks = getCollectionBookFiles();
+        List<File> collectionBooks = getCollectionBookFiles();
         for (File f : collectionBooks) {
             L.d(TAG, "checking collectionBook=" + f);
             if (f.isFile() && f.canRead()) {
@@ -123,7 +124,7 @@ public class BookAdder {
      * @throws InterruptedException If the scanner has been requested to reset.
      */
     @Nullable
-    private Bitmap getEmbeddedCover(@NonNull ArrayList<Chapter> chapters) throws InterruptedException {
+    private Bitmap getEmbeddedCover(@NonNull List<Chapter> chapters) throws InterruptedException {
         int tries = 0;
         int maxTries = 5;
         for (Chapter c : chapters) {
@@ -216,8 +217,8 @@ public class BookAdder {
      * @see de.ph1b.audiobook.model.Book.Type#SINGLE_FILE
      * @see de.ph1b.audiobook.model.Book.Type#SINGLE_FOLDER
      */
-    private ArrayList<File> getSingleBookFiles() {
-        ArrayList<File> singleBooks = new ArrayList<>();
+    private List<File> getSingleBookFiles() {
+        List<File> singleBooks = new ArrayList<>();
         for (String s : prefs.getSingleBookFolders()) {
             singleBooks.add(new File(s));
         }
@@ -233,8 +234,8 @@ public class BookAdder {
      * @see de.ph1b.audiobook.model.Book.Type#COLLECTION_FILE
      * @see de.ph1b.audiobook.model.Book.Type#COLLECTION_FOLDER
      */
-    private ArrayList<File> getCollectionBookFiles() {
-        ArrayList<File> containingFiles = new ArrayList<>();
+    private List<File> getCollectionBookFiles() {
+        List<File> containingFiles = new ArrayList<>();
         for (String s : prefs.getCollectionFolders()) {
             File f = new File(s);
             if (f.exists() && f.isDirectory()) {
@@ -256,18 +257,18 @@ public class BookAdder {
     private void deleteOldBooks() throws InterruptedException {
         final String TAG = BookAdder.TAG + "#deleteOldBooks()";
         L.d(TAG, "started");
-        ArrayList<File> singleBookFiles = getSingleBookFiles();
-        ArrayList<File> collectionBookFolders = getCollectionBookFiles();
+        List<File> singleBookFiles = getSingleBookFiles();
+        List<File> collectionBookFolders = getCollectionBookFiles();
 
         //getting books to remove
-        ArrayList<Book> booksToRemove = new ArrayList<>();
+        List<Book> booksToRemove = new ArrayList<>();
         for (Book book : db.getActiveBooks()) {
             boolean bookExists = false;
             switch (book.getType()) {
                 case COLLECTION_FILE:
                     for (File f : collectionBookFolders) {
                         if (f.isFile()) {
-                            ArrayList<Chapter> chapters = book.getChapters();
+                            List<Chapter> chapters = book.getChapters();
                             String singleBookChapterPath = chapters.get(0).getPath();
                             if (singleBookChapterPath.equals(f.getAbsolutePath())) {
                                 bookExists = true;
@@ -287,7 +288,7 @@ public class BookAdder {
                 case SINGLE_FILE:
                     for (File f : singleBookFiles) {
                         if (f.isFile()) {
-                            ArrayList<Chapter> chapters = book.getChapters();
+                            List<Chapter> chapters = book.getChapters();
                             String singleBookChapterPath = chapters.get(0).getPath();
                             if (singleBookChapterPath.equals(f.getAbsolutePath())) {
                                 bookExists = true;
@@ -378,7 +379,7 @@ public class BookAdder {
      * @param newChapters The new chapters that have been found matching to the location of the book
      * @param type        The type of the book
      */
-    private void addNewBook(File rootFile, ArrayList<Chapter> newChapters, Book.Type type) {
+    private void addNewBook(File rootFile, List<Chapter> newChapters, Book.Type type) {
         String bookRoot = rootFile.isDirectory() ?
                 rootFile.getAbsolutePath() :
                 rootFile.getParent();
@@ -401,7 +402,7 @@ public class BookAdder {
             orphanedBook.getChapters().addAll(newChapters);
 
             // now removes invalid bookmarks
-            ArrayList<Bookmark> invalidBookmarks = new ArrayList<>();
+            List<Bookmark> invalidBookmarks = new ArrayList<>();
             for (Bookmark bookmark : orphanedBook.getBookmarks()) {
                 boolean bookmarkValid = false;
                 for (Chapter c : orphanedBook.getChapters()) {
@@ -436,7 +437,7 @@ public class BookAdder {
      * @param right Second chapter to compare
      * @return True if the Chapters in the array differ by {@link Chapter#name} or {@link Chapter#path}
      */
-    private boolean chaptersDiffer(ArrayList<Chapter> left, ArrayList<Chapter> right) {
+    private boolean chaptersDiffer(List<Chapter> left, List<Chapter> right) {
         if (left.size() != right.size()) {
             // different chapter size, so book must have changed
             return true;
@@ -463,7 +464,7 @@ public class BookAdder {
      * @param bookExisting The existing book
      * @param newChapters  The new chapters matching to the book
      */
-    private void updateBook(@NonNull Book bookExisting, @NonNull ArrayList<Chapter> newChapters) {
+    private void updateBook(@NonNull Book bookExisting, @NonNull List<Chapter> newChapters) {
         boolean bookHasChanged = chaptersDiffer(bookExisting.getChapters(), newChapters);
         // sort chapters
         if (bookHasChanged) {
@@ -497,7 +498,7 @@ public class BookAdder {
      * @throws InterruptedException If the scanner has been requested to reset
      */
     private void checkBook(@NonNull File rootFile, @NonNull Book.Type type) throws InterruptedException {
-        ArrayList<Chapter> newChapters = getChaptersByRootFile(rootFile);
+        List<Chapter> newChapters = getChaptersByRootFile(rootFile);
         Book bookExisting = getBookFromDb(rootFile, type, false);
 
         if (!BaseActivity.storageMounted())
@@ -523,10 +524,10 @@ public class BookAdder {
      * @param dir The dirs and files to be added
      * @return All the files containing in a natural sorted order.
      */
-    private ArrayList<File> addFilesRecursive(ArrayList<File> dir) {
-        ArrayList<File> returnList = new ArrayList<>();
-        ArrayList<File> fileList = new ArrayList<>();
-        ArrayList<File> dirList = new ArrayList<>();
+    private List<File> addFilesRecursive(List<File> dir) {
+        List<File> returnList = new ArrayList<>();
+        List<File> fileList = new ArrayList<>();
+        List<File> dirList = new ArrayList<>();
         for (File f : dir) {
             if (f.exists() && f.isFile()) {
                 fileList.add(f);
@@ -538,13 +539,13 @@ public class BookAdder {
         returnList.addAll(fileList);
         Collections.sort(dirList, new NaturalOrderComparator());
         for (File f : dirList) {
-            ArrayList<File> content = new ArrayList<>();
+            List<File> content = new ArrayList<>();
             File[] containing = f.listFiles();
             if (containing != null) {
                 content = new ArrayList<>(Arrays.asList(containing));
             }
             if (content.size() > 0) {
-                ArrayList<File> tempReturn = addFilesRecursive(content);
+                List<File> tempReturn = addFilesRecursive(content);
                 returnList.addAll(tempReturn);
             }
         }
@@ -559,12 +560,12 @@ public class BookAdder {
      * @throws InterruptedException If the scanner has been requested to terminate
      */
     @NonNull
-    private ArrayList<Chapter> getChaptersByRootFile(File rootFile) throws InterruptedException {
-        ArrayList<File> containingFiles = new ArrayList<>();
+    private List<Chapter> getChaptersByRootFile(File rootFile) throws InterruptedException {
+        List<File> containingFiles = new ArrayList<>();
         containingFiles.add(rootFile);
         containingFiles = addFilesRecursive(containingFiles);
 
-        ArrayList<File> musicFiles = new ArrayList<>();
+        List<File> musicFiles = new ArrayList<>();
         for (File f : containingFiles) {
             if (FileRecognition.audioFilter.accept(f)) {
                 musicFiles.add(f);
@@ -572,7 +573,7 @@ public class BookAdder {
         }
 
         // get duration and if there is no cover yet, try to get an embedded dover (up to 5 times)
-        ArrayList<Chapter> containingMedia = new ArrayList<>();
+        List<Chapter> containingMedia = new ArrayList<>();
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         try {
             for (int i = 0; i < musicFiles.size(); i++) {
@@ -628,7 +629,7 @@ public class BookAdder {
     @Nullable
     private Book getBookFromDb(File rootFile, Book.Type type, boolean orphaned) {
         L.d(TAG, "getBookFromDb, rootFile=" + rootFile + ", type=" + type + ", orphaned=" + orphaned);
-        ArrayList<Book> books;
+        List<Book> books;
         if (orphaned) {
             books = db.getOrphanedBooks();
         } else {

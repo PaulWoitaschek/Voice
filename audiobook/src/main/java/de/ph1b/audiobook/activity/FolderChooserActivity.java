@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -43,9 +44,9 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
 
     private static final String CURRENT_FOLDER_NAME = "currentFolderName";
     private static final String TAG = FolderChooserActivity.class.getSimpleName();
-    private final ArrayList<File> currentFolderContent = new ArrayList<>();
+    private final List<File> currentFolderContent = new ArrayList<>();
     private boolean multiSd = true;
-    private ArrayList<File> rootDirs;
+    private List<File> rootDirs;
     private File currentFolder = null;
     private File chosenFile = null;
     private TextView currentFolderName;
@@ -54,7 +55,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
     private ImageButton upButton;
     private int mode;
 
-    private ArrayList<File> getStorageDirectories() {
+    private List<File> getStorageDirectories() {
         Pattern DIR_SEPARATOR = Pattern.compile("/");
         // Final set of paths
         final Set<String> rv = new HashSet<>();
@@ -108,7 +109,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         rv.add(Environment.getExternalStorageDirectory().getAbsolutePath());
         rv.add("/storage/emulated/0");
         rv.add("/storage/sdcard1");
-        ArrayList<File> paths = new ArrayList<>();
+        List<File> paths = new ArrayList<>();
         for (String s : rv) {
             File f = new File(s);
             if (f.exists() && f.isDirectory() && !paths.contains(f) && f.canRead() && f.listFiles() != null && f.listFiles().length > 0) {
@@ -252,7 +253,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
             currentFolder = currentFolder.getParentFile();
             chosenFile = currentFolder;
             currentFolderName.setText(currentFolder.getName());
-            ArrayList<File> parentContaining = getFilesFromFolder(currentFolder);
+            List<File> parentContaining = getFilesFromFolder(currentFolder);
             currentFolderContent.clear();
             currentFolderContent.addAll(parentContaining);
             adapter.notifyDataSetChanged();
@@ -267,8 +268,8 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
      * @param file The file to look for containing files
      * @return The containing files
      */
-    private ArrayList<File> getFilesFromFolder(File file) {
-        ArrayList<File> asList = new ArrayList<>();
+    private List<File> getFilesFromFolder(File file) {
+        List<File> asList = new ArrayList<>();
         File[] containing = file.listFiles(FileRecognition.folderAndMusicFilter);
         if (containing != null) {
             asList = new ArrayList<>(Arrays.asList(containing));

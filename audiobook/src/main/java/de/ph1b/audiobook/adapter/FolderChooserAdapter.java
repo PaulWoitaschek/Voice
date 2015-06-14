@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.List;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.FolderChooserActivity;
@@ -20,10 +20,10 @@ import de.ph1b.audiobook.uitools.ThemeUtil;
 public class FolderChooserAdapter extends BaseAdapter {
 
     private final Context c;
-    private final ArrayList<File> data;
+    private final List<File> data;
     private final int mode;
 
-    public FolderChooserAdapter(final @NonNull Context c, final @NonNull ArrayList<File> data,
+    public FolderChooserAdapter(final @NonNull Context c, final @NonNull List<File> data,
                                 final int mode) {
         this.c = c;
         this.data = data;

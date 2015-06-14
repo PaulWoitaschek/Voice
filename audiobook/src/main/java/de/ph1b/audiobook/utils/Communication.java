@@ -6,6 +6,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import net.jcip.annotations.ThreadSafe;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
@@ -18,13 +19,13 @@ import de.ph1b.audiobook.model.Book;
 public class Communication {
 
     private static final Communication INSTANCE = new Communication();
-    private final ArrayList<OnBookSetChangedListener> onBookSetChangedListeners = new ArrayList<>();
-    private final ArrayList<OnSleepStateChangedListener> onSleepStateChangedListeners = new ArrayList<>();
-    private final ArrayList<OnCoverChangedListener> onCoverChangedListeners = new ArrayList<>();
-    private final ArrayList<OnBookContentChangedListener> onBookContentChangedListeners = new ArrayList<>();
-    private final ArrayList<OnPlayStateChangedListener> onPlayStateChangedListeners = new ArrayList<>();
-    private final ArrayList<OnScannerStateChangedListener> onScannerStateChangedListeners = new ArrayList<>();
-    private final ArrayList<OnCurrentBookIdChangedListener> onCurrentBookIdChangedListeners = new ArrayList<>();
+    private final List<OnBookSetChangedListener> onBookSetChangedListeners = new ArrayList<>();
+    private final List<OnSleepStateChangedListener> onSleepStateChangedListeners = new ArrayList<>();
+    private final List<OnCoverChangedListener> onCoverChangedListeners = new ArrayList<>();
+    private final List<OnBookContentChangedListener> onBookContentChangedListeners = new ArrayList<>();
+    private final List<OnPlayStateChangedListener> onPlayStateChangedListeners = new ArrayList<>();
+    private final List<OnScannerStateChangedListener> onScannerStateChangedListeners = new ArrayList<>();
+    private final List<OnCurrentBookIdChangedListener> onCurrentBookIdChangedListeners = new ArrayList<>();
 
     private Communication() {
     }
@@ -133,9 +134,9 @@ public class Communication {
      *
      * @param allBooks The whole book set
      */
-    public synchronized void bookSetChanged(ArrayList<Book> allBooks) {
+    public synchronized void bookSetChanged(List<Book> allBooks) {
         for (OnBookSetChangedListener onBookSetChangedListener : onBookSetChangedListeners) {
-            ArrayList<Book> copyBooks = new ArrayList<>();
+            List<Book> copyBooks = new ArrayList<>();
             for (Book b : allBooks) {
                 copyBooks.add(new Book(b));
             }
@@ -197,6 +198,6 @@ public class Communication {
     }
 
     public interface OnBookSetChangedListener {
-        void onBookSetChanged(@NonNull ArrayList<Book> activeBooks);
+        void onBookSetChanged(@NonNull List<Book> activeBooks);
     }
 }

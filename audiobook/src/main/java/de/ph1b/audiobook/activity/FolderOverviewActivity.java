@@ -22,6 +22,7 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.FolderOverviewAdapter;
@@ -35,8 +36,8 @@ public class FolderOverviewActivity extends BaseActivity {
 
     private static final String TAG = FolderOverviewActivity.class.getSimpleName();
     private static final String BACKGROUND_OVERLAY_VISIBLE = "backgroundOverlayVisibility";
-    private final ArrayList<String> bookCollections = new ArrayList<>();
-    private final ArrayList<String> singleBooks = new ArrayList<>();
+    private final List<String> bookCollections = new ArrayList<>();
+    private final List<String> singleBooks = new ArrayList<>();
     private PrefsManager prefs;
     private FolderOverviewAdapter adapter;
     private FloatingActionsMenu fam;
@@ -210,7 +211,7 @@ public class FolderOverviewActivity extends BaseActivity {
     }
 
     private boolean canAddNewFolder(@NonNull final String newFile) {
-        ArrayList<String> folders = new ArrayList<>();
+        List<String> folders = new ArrayList<>();
         folders.addAll(prefs.getCollectionFolders());
         folders.addAll(prefs.getSingleBookFolders());
 
