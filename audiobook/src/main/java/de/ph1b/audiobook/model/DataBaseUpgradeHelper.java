@@ -423,7 +423,7 @@ class DataBaseUpgradeHelper {
         }
     }
 
-    private void upgrade29() throws InvalidPropertiesFormatException {
+    private void upgrade29() {
         L.d(TAG, "upgrade29");
 
         // fetching old contents
@@ -512,7 +512,6 @@ class DataBaseUpgradeHelper {
             try {
 
                 JSONObject bookObj = new JSONObject(bookJson);
-                String author = bookObj.getString("author");
                 JSONArray bookmarks = bookObj.getJSONArray("bookmarks");
                 JSONArray chapters = bookObj.getJSONArray("chapters");
                 String currentMediaPath = bookObj.getString("currentMediaPath");
@@ -524,7 +523,6 @@ class DataBaseUpgradeHelper {
                 boolean useCoverReplacement = bookObj.getBoolean("useCoverReplacement");
 
                 ContentValues bookCV = new ContentValues();
-                bookCV.put(BOOK_AUTHOR, author);
                 bookCV.put(BOOK_CURRENT_MEDIA_PATH, currentMediaPath);
                 bookCV.put(BOOK_NAME, bookName);
                 bookCV.put(BOOK_PLAYBACK_SPEED, speed);
@@ -550,9 +548,7 @@ class DataBaseUpgradeHelper {
                     chapterCV.put(BOOK_ID, bookId);
 
                     db.insert(TABLE_CHAPTERS, null, chapterCV);
-
                 }
-
 
                 for (int j = 0; j < bookmarks.length(); j++) {
                     JSONObject bookmark = bookmarks.getJSONObject(j);
@@ -569,7 +565,7 @@ class DataBaseUpgradeHelper {
                     db.insert(TABLE_BOOKMARKS, null, bookmarkCV);
                 }
             } catch (JSONException e) {
-                throw new InvalidPropertiesFormatException(e);
+                throw new IllegalStateException(e);
             }
         }
     }
