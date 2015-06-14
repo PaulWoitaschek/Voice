@@ -509,7 +509,6 @@ class DataBaseUpgradeHelper {
             boolean bookActive = activeMapping.get(i);
 
             try {
-
                 JSONObject bookObj = new JSONObject(bookJson);
                 String author = bookObj.getString("author");
                 JSONArray bookmarks = bookObj.getJSONArray("bookmarks");
