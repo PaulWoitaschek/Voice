@@ -166,8 +166,7 @@ public class IabHelper {
             else return String.valueOf(code) + ":Unknown IAB Helper Error";
         } else if (code < 0 || code >= iab_msgs.length) {
             return String.valueOf(code) + ":Unknown";
-        }
-        else
+        } else
             return iab_msgs[code];
     }
 
