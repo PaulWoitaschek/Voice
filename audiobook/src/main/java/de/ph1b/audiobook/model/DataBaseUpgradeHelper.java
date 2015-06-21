@@ -6,7 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 
-import org.apache.commons.io.FileUtils;
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -125,7 +127,7 @@ class DataBaseUpgradeHelper {
                 JSONObject playingInformation = null;
                 try {
                     if (configFileValid) {
-                        String retString = FileUtils.readFileToString(configFile);
+                        String retString = Files.toString(configFile, Charsets.UTF_8);
                         if (retString.length() > 0)
                             playingInformation = new JSONObject(retString);
                     }
@@ -134,7 +136,7 @@ class DataBaseUpgradeHelper {
                 }
                 try {
                     if (playingInformation == null && backupFileValid) {
-                        String retString = FileUtils.readFileToString(backupFile);
+                        String retString = Files.toString(backupFile, Charsets.UTF_8);
                         playingInformation = new JSONObject(retString);
                     }
                 } catch (IOException | JSONException e) {
@@ -299,7 +301,7 @@ class DataBaseUpgradeHelper {
                                 //noinspection ResultOfMethodCallIgnored
                                 coverFile.getParentFile().mkdirs();
                             }
-                            FileUtils.moveFile(coverFile, newCoverFile);
+                            Files.move(coverFile, newCoverFile);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
