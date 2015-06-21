@@ -330,6 +330,9 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
                 return true;
             case R.id.action_sleep:
                 controller.toggleSleepSand();
+                if (MediaPlayerController.sleepTimerActive && snackbar != null) {
+                    snackbar.dismiss();
+                }
                 if (prefs.setBookmarkOnSleepTimer() && !MediaPlayerController.sleepTimerActive) {
                     String date = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE |
                             DateUtils.FORMAT_SHOW_TIME |
@@ -408,10 +411,6 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
                                 }
                             });
                     snackbar.show();
-                } else {
-                    if (snackbar != null) {
-                        snackbar.dismiss();
-                    }
                 }
             }
         });
