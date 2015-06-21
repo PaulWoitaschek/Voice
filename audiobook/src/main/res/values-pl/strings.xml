@@ -14,11 +14,27 @@
   ~  see <http://www.gnu.org/licenses/>.
   -->
 
+<!--
+  ~ This file is part of Material Audiobook Player.
+  ~
+  ~ Material Audiobook Player is free software: you can redistribute it and/or modify it under the
+  ~ terms of the GNU General Public License as published by the Free Software Foundation, either
+  ~ version 3 of the License, or any later version.
+  ~
+  ~ Material Audiobook Player is distributed in the hope that it will be useful, but WITHOUT ANY
+  ~ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+  ~ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License along with Foobar.  If not,
+  ~  see <http://www.gnu.org/licenses/>.
+  -->
+
 <resources>
     <!--BookShelf-->
     <string name="mal_file_message">Poniższy plik może być uszkodzony</string>
     <string name="mal_file_title">Uszkodzony plik</string>
     <string name="content_current_book">To jest aktualna książka</string>
+    <string name="current_book">Aktualna książka</string>
     <!--BookPlayActivity-->
     <string name="cover">Okładka</string>
     <string name="play_pause">Odtwarzaj/Pauza</string>
@@ -77,7 +93,7 @@
     <string name="pref_resume_on_replug_hint">Jeśli zatrzymałeś poprzez wyjęcie słuchawek, wznowi się po ponownym podłączeniu.</string>
     <string name="minutes">minuty</string>
     <string name="seconds">sekundy</string>
-    <string name="pref_seek_time">Pomiń ilość</string>
+    <string name="pref_seek_time">Przewiń o</string>
     <string name="pref_sleep_time">Czas drzemki</string>
     <string name="pref_root_folder_title">Folder audiobooków</string>
     <string name="pref_root_folder_summary">Wybrane foldery z audiobookami</string>
