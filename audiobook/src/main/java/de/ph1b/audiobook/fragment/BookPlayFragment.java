@@ -366,8 +366,9 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         setPlayState(false);
 
         Book book = db.getBook(bookId);
-        if (book != null)
+        if (book != null) {
             onBookContentChanged(book);
+        }
 
         getActivity().invalidateOptionsMenu();
 

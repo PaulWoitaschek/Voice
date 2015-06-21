@@ -135,8 +135,9 @@ public class BookAdder {
             if (++tries < maxTries) {
                 if (stopScanner) throw new InterruptedException("Interrupted at getEmbeddedCover");
                 Bitmap cover = ImageHelper.getEmbeddedCover(new File(c.getPath()), this.c);
-                if (cover != null)
+                if (cover != null) {
                     return cover;
+                }
             } else {
                 return null;
             }
@@ -320,8 +321,9 @@ public class BookAdder {
             }
         }
 
-        if (!BaseActivity.storageMounted())
+        if (!BaseActivity.storageMounted()) {
             throw new InterruptedException("Storage is not mounted");
+        }
         for (Book b : booksToRemove) {
             L.d(TAG, "deleting book=" + b);
             db.hideBook(b);
@@ -395,7 +397,7 @@ public class BookAdder {
         String author = getAuthor(firstChapterPath, mmr);
         mmr.release();
 
-        Book orphanedBook = getBookFromDb(rootFile, type, true);
+        final Book orphanedBook = getBookFromDb(rootFile, type, true);
         if (orphanedBook == null) {
             Book newBook = new Book(bookRoot, bookName, author, newChapters,
                     firstChapterPath, type, new ArrayList<Bookmark>(), c);
@@ -407,25 +409,27 @@ public class BookAdder {
             orphanedBook.getChapters().addAll(newChapters);
 
             // now removes invalid bookmarks
-            List<Bookmark> invalidBookmarks = new ArrayList<>();
-            for (Bookmark bookmark : orphanedBook.getBookmarks()) {
-                boolean bookmarkValid = false;
-                for (Chapter c : orphanedBook.getChapters()) {
-                    if (c.getPath().equals(bookmark.getMediaPath()))
-                        bookmarkValid = true;
-                }
-                if (!bookmarkValid)
-                    invalidBookmarks.add(bookmark);
-            }
-            for (Bookmark invalid : invalidBookmarks) {
-                orphanedBook.getBookmarks().remove(invalid);
-            }
+            List<Bookmark> filteredBookmarks = Lists.newArrayList(Collections2.filter(
+                    orphanedBook.getBookmarks(), new Predicate<Bookmark>() {
+                        @Override
+                        public boolean apply(Bookmark input) {
+                            for (Chapter c : orphanedBook.getChapters()) {
+                                if (c.getPath().equals(input.getMediaPath())) {
+                                    return true;
+                                }
+                            }
+                            return false;
+                        }
+                    }));
+            orphanedBook.getBookmarks().clear();
+            orphanedBook.getBookmarks().addAll(filteredBookmarks);
 
             // checks if current path is still valid. if not, reset position.
             boolean pathValid = false;
             for (Chapter c : orphanedBook.getChapters()) {
-                if (c.getPath().equals(orphanedBook.getCurrentMediaPath()))
+                if (c.getPath().equals(orphanedBook.getCurrentMediaPath())) {
                     pathValid = true;
+                }
             }
             if (!pathValid) {
                 orphanedBook.setPosition(0, orphanedBook.getChapters().get(0).getPath());
@@ -524,10 +528,11 @@ public class BookAdder {
         List<Chapter> newChapters = getChaptersByRootFile(rootFile);
         Book bookExisting = getBookFromDb(rootFile, type, false);
 
-        if (!BaseActivity.storageMounted())
+        if (!BaseActivity.storageMounted()) {
             throw new InterruptedException("Storage not mounted");
+        }
 
-        if (newChapters.size() == 0) { // there are no chapters
+        if (newChapters.isEmpty()) { // there are no chapters
             if (bookExisting != null) {//so delete book if available
                 db.hideBook(bookExisting);
             }

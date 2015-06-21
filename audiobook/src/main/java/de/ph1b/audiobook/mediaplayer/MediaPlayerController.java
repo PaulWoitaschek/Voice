@@ -401,8 +401,9 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         try {
             L.e(TAG, "onError");
             Intent bookShelfIntent = BookActivity.bookScreenIntent(c);
-            if (book != null)
+            if (book != null) {
                 bookShelfIntent.putExtra(MALFORMED_FILE, book.getCurrentChapter().getPath());
+            }
             c.startActivity(bookShelfIntent);
 
             state = State.DEAD;

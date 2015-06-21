@@ -164,8 +164,9 @@ public class IabHelper {
             int index = IABHELPER_ERROR_BASE - code;
             if (index >= 0 && index < iabhelper_msgs.length) return iabhelper_msgs[index];
             else return String.valueOf(code) + ":Unknown IAB Helper Error";
-        } else if (code < 0 || code >= iab_msgs.length)
+        } else if (code < 0 || code >= iab_msgs.length) {
             return String.valueOf(code) + ":Unknown";
+        }
         else
             return iab_msgs[code];
     }
@@ -277,8 +278,9 @@ public class IabHelper {
     }
 
     private void checkNotDisposed() {
-        if (mDisposed)
+        if (mDisposed) {
             throw new IllegalStateException("IabHelper was disposed of, so it cannot be used.");
+        }
     }
 
 

@@ -440,8 +440,9 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
                     Intent i = new Intent(what);
                     i.putExtra("id", 1);
-                    if (author != null)
+                    if (author != null) {
                         i.putExtra("artist", author);
+                    }
                     i.putExtra("album", bookName);
                     i.putExtra("track", chapterName);
                     i.putExtra("playing", playState == MediaPlayerController.PlayState.PLAYING);
@@ -526,7 +527,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
             public void run() {
                 L.d(TAG, "onPlayStateChanged executed:" + state);
                 Book controllerBook = controller.getBook();
-                if (controllerBook != null)
+                if (controllerBook != null) {
                     switch (state) {
                         case PLAYING:
                             audioManager.requestAudioFocus(AudioService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
@@ -551,7 +552,8 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                             break;
                     }
 
-                notifyChange(PLAYSTATE_CHANGED);
+                    notifyChange(PLAYSTATE_CHANGED);
+                }
             }
         });
     }
@@ -559,7 +561,8 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     @Override
     public void onCurrentBookIdChanged(long oldId) {
         Book book = db.getBook(prefs.getCurrentBookId());
-        if (book != null && (controller.getBook() == null || controller.getBook().getId() != book.getId()))
+        if (book != null && (controller.getBook() == null || controller.getBook().getId() != book.getId())) {
             reInitController(book);
+        }
     }
 }

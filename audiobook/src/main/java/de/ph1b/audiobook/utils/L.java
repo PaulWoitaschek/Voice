@@ -20,8 +20,9 @@ public class L {
 
     public static void d(String tag, Object msg, Throwable t) {
         if (BuildConfig.DEBUG) {
-            for (String s : getMessage(msg))
+            for (String s : getMessage(msg)) {
                 Log.d(tag, s, t);
+            }
         }
     }
 
@@ -60,8 +61,9 @@ public class L {
 
     public static void i(String tag, Object msg) {
         if (BuildConfig.DEBUG) {
-            for (String s : getMessage(msg))
+            for (String s : getMessage(msg)) {
                 Log.i(tag, s);
+            }
         }
     }
 

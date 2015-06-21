@@ -186,8 +186,9 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
         switch (state) {
             case ERROR:
                 error("getCurrentPosition", state);
-                if (onErrorListener != null)
+                if (onErrorListener != null) {
                     onErrorListener.onError(null, 0, 0);
+                }
                 return 0;
             case IDLE:
                 return 0;
@@ -473,8 +474,9 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                     Thread t = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            if (onCompletionListener != null)
+                            if (onCompletionListener != null) {
                                 onCompletionListener.onCompletion();
+                            }
                             stayAwake(false);
                         }
                     });

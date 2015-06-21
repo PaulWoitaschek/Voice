@@ -194,8 +194,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @Nullable
     public synchronized Book getBook(long id) {
         for (Book b : activeBooks) {
-            if (b.getId() == id)
+            if (b.getId() == id) {
                 return new Book(b);
+            }
         }
         return null;
     }
@@ -223,10 +224,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         new Validate().notEmpty(book.getChapters());
 
         int indexToUpdate = -1;
-        for (int i = 0; i < activeBooks.size(); i++)
-            if (activeBooks.get(i).getId() == book.getId())
+        for (int i = 0; i < activeBooks.size(); i++) {
+            if (activeBooks.get(i).getId() == book.getId()) {
                 indexToUpdate = i;
-
+            }
+        }
         if (indexToUpdate != -1) {
             activeBooks.set(indexToUpdate, book);
 
@@ -267,9 +269,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         new Validate().notEmpty(book.getChapters());
 
         int indexToHide = -1;
-        for (int i = 0; i < activeBooks.size(); i++)
-            if (activeBooks.get(i).getId() == book.getId())
+        for (int i = 0; i < activeBooks.size(); i++) {
+            if (activeBooks.get(i).getId() == book.getId()) {
                 indexToHide = i;
+            }
+        }
         if (indexToHide == -1) {
             throw new AssertionError("This should not have happened. Tried to remove a not existing book");
         } else {

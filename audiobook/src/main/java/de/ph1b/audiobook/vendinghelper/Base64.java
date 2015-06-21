@@ -389,8 +389,7 @@ public class Base64 {
         // Example: Dk==
         if (source[srcOffset + 2] == EQUALS_SIGN) {
             int outBuff =
-                    ((decodabet[source[srcOffset]] << 24) >>> 6)
-                            | ((decodabet[source[srcOffset + 1]] << 24) >>> 12);
+                    ((decodabet[source[srcOffset]] << 24) >>> 6) | ((decodabet[source[srcOffset + 1]] << 24) >>> 12);
 
             destination[destOffset] = (byte) (outBuff >>> 16);
             return 1;
@@ -536,8 +535,7 @@ public class Base64 {
                         if (b4Posn == 0 || b4Posn == 1) {
                             throw new Base64DecoderException(
                                     "invalid padding byte '=' at byte offset " + i);
-                        } else if ((b4Posn == 3 && bytesLeft > 2)
-                                || (b4Posn == 4 && bytesLeft > 1)) {
+                        } else if ((b4Posn == 3 && bytesLeft > 2) || (b4Posn == 4 && bytesLeft > 1)) {
                             throw new Base64DecoderException(
                                     "padding byte '=' falsely signals end of encoded value "
                                             + "at offset " + i);

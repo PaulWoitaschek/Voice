@@ -44,8 +44,9 @@ public class FileRecognition {
         @Override
         public boolean accept(File pathname) {
             for (String s : imageTypes) {
-                if (pathname.getAbsolutePath().toLowerCase().endsWith(s))
+                if (pathname.getAbsolutePath().toLowerCase().endsWith(s)) {
                     return true;
+                }
             }
             return false;
         }

@@ -407,8 +407,9 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             public void run() {
                 for (int i = 0; i < adapter.getItemCount(); i++) {
                     long itemId = adapter.getItemId(i);
-                    if (itemId == oldId || itemId == prefs.getCurrentBookId())
+                    if (itemId == oldId || itemId == prefs.getCurrentBookId()) {
                         adapter.notifyItemChanged(i);
+                    }
                 }
                 checkVisibilities();
             }
