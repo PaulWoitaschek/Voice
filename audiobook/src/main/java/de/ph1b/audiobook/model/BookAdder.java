@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+import com.google.common.io.Files;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -220,6 +221,7 @@ public class BookAdder {
      * @see de.ph1b.audiobook.model.Book.Type#SINGLE_FILE
      * @see de.ph1b.audiobook.model.Book.Type#SINGLE_FOLDER
      */
+    @NonNull
     private List<File> getSingleBookFiles() {
         List<File> singleBooks = new ArrayList<>();
         for (String s : prefs.getSingleBookFolders()) {
@@ -237,6 +239,7 @@ public class BookAdder {
      * @see de.ph1b.audiobook.model.Book.Type#COLLECTION_FILE
      * @see de.ph1b.audiobook.model.Book.Type#COLLECTION_FOLDER
      */
+    @NonNull
     private List<File> getCollectionBookFiles() {
         List<File> containingFiles = new ArrayList<>();
         for (String s : prefs.getCollectionFolders()) {
@@ -336,7 +339,7 @@ public class BookAdder {
      * @return The name of the book we add
      */
     @NonNull
-    private String getBookName(String firstChapterPath, File rootFile, MediaMetadataRetriever mmr) {
+    private String getBookName(@NonNull String firstChapterPath, @NonNull File rootFile, @NonNull MediaMetadataRetriever mmr) {
         String bookName = null;
         try {
             mmr.setDataSource(firstChapterPath);
@@ -344,9 +347,8 @@ public class BookAdder {
         } catch (RuntimeException ignored) {
         }
         if (bookName == null || bookName.length() == 0) {
-            bookName = rootFile.isDirectory() ?
-                    rootFile.getName() :
-                    rootFile.getName().substring(0, rootFile.getName().lastIndexOf("."));
+            String withoutExtension = Files.getNameWithoutExtension(rootFile.getAbsolutePath());
+            bookName = withoutExtension.isEmpty() ? rootFile.getName() : withoutExtension;
         }
         return bookName;
     }
@@ -382,7 +384,7 @@ public class BookAdder {
      * @param newChapters The new chapters that have been found matching to the location of the book
      * @param type        The type of the book
      */
-    private void addNewBook(File rootFile, List<Chapter> newChapters, Book.Type type) {
+    private void addNewBook(@NonNull File rootFile, @NonNull List<Chapter> newChapters, @NonNull Book.Type type) {
         String bookRoot = rootFile.isDirectory() ?
                 rootFile.getAbsolutePath() :
                 rootFile.getParent();
@@ -440,7 +442,7 @@ public class BookAdder {
      * @param right Second chapter to compare
      * @return True if the Chapters in the array differ by {@link Chapter#name} or {@link Chapter#path}
      */
-    private boolean chaptersDiffer(List<Chapter> left, List<Chapter> right) {
+    private boolean chaptersDiffer(@NonNull List<Chapter> left, @NonNull List<Chapter> right) {
         if (left.size() != right.size()) {
             // different chapter size, so book must have changed
             return true;
@@ -545,7 +547,7 @@ public class BookAdder {
      * @param dir The dirs and files to be added
      * @return All the files containing in a natural sorted order.
      */
-    private List<File> addFilesRecursive(List<File> dir) {
+    private List<File> addFilesRecursive(@NonNull List<File> dir) {
         List<File> returnList = new ArrayList<>();
         List<File> fileList = new ArrayList<>();
         List<File> dirList = new ArrayList<>();
@@ -581,7 +583,7 @@ public class BookAdder {
      * @throws InterruptedException If the scanner has been requested to terminate
      */
     @NonNull
-    private List<Chapter> getChaptersByRootFile(File rootFile) throws InterruptedException {
+    private List<Chapter> getChaptersByRootFile(@NonNull File rootFile) throws InterruptedException {
         List<File> containingFiles = new ArrayList<>();
         containingFiles.add(rootFile);
         containingFiles = addFilesRecursive(containingFiles);
@@ -606,13 +608,8 @@ public class BookAdder {
                     String chapterName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
                     // checking for dot index because otherwise a file called ".mp3" would have no name.
                     if (chapterName == null || chapterName.length() == 0) {
-                        String fileName = f.getName();
-                        int dotIndex = fileName.lastIndexOf(".");
-                        if (dotIndex > 0) {
-                            chapterName = fileName.substring(0, dotIndex);
-                        } else {
-                            chapterName = fileName;
-                        }
+                        String fileName = Files.getNameWithoutExtension(f.getAbsolutePath());
+                        chapterName = fileName.isEmpty() ? f.getName() : fileName;
                     }
 
                     String durationString = mmr.extractMetadata(
@@ -648,7 +645,7 @@ public class BookAdder {
      * @return The Book if available, or <code>null</code>
      */
     @Nullable
-    private Book getBookFromDb(File rootFile, Book.Type type, boolean orphaned) {
+    private Book getBookFromDb(@NonNull File rootFile, @NonNull Book.Type type, boolean orphaned) {
         L.d(TAG, "getBookFromDb, rootFile=" + rootFile + ", type=" + type + ", orphaned=" + orphaned);
         List<Book> books;
         if (orphaned) {
