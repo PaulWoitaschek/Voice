@@ -5,6 +5,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -23,7 +25,6 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
@@ -57,6 +58,8 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
     public static final String TAG = BookPlayFragment.class.getSimpleName();
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
     private final Communication communication = Communication.getInstance();
+    @Nullable
+    Snackbar snackbar;
     private TextView playedTimeView;
     private SeekBar seekBar;
     private volatile Spinner bookSpinner;
@@ -65,6 +68,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
     private ServiceController controller;
     private long bookId;
     private DataBaseHelper db;
+    private CoordinatorLayout coordinatorLayout;
 
     public static BookPlayFragment newInstance(long bookId) {
         Bundle args = new Bundle();
@@ -111,6 +115,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         ImageView coverView = (ImageView) view.findViewById(R.id.book_cover);
         maxTimeView = (TextView) view.findViewById(R.id.maxTime);
         bookSpinner = (Spinner) view.findViewById(R.id.book_spinner);
+        coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.bottom_layout);
 
         //setup buttons
         view.findViewById(R.id.fastForward).setOnClickListener(this);
@@ -266,7 +271,6 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         }
     }
 
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -394,12 +398,20 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
                 getActivity().invalidateOptionsMenu();
                 if (MediaPlayerController.sleepTimerActive) {
                     int minutes = prefs.getSleepTime();
-                    String message = getString(R.string.sleep_timer_started) + minutes + " " +
+                    String message = getString(R.string.sleep_timer_started) + " " + minutes + " " +
                             getString(R.string.minutes);
-                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                    snackbar = Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).setAction(
+                            R.string.stop, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    controller.toggleSleepSand();
+                                }
+                            });
+                    snackbar.show();
                 } else {
-                    Toast.makeText(getActivity(), R.string.sleep_timer_stopped, Toast.LENGTH_LONG)
-                            .show();
+                    if (snackbar != null) {
+                        snackbar.dismiss();
+                    }
                 }
             }
         });

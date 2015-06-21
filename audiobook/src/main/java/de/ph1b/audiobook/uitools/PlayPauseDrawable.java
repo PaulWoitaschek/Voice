@@ -43,9 +43,12 @@ import android.support.annotation.Nullable;
 import android.util.Property;
 import android.view.animation.DecelerateInterpolator;
 
+import de.ph1b.audiobook.utils.L;
+
 public class PlayPauseDrawable extends Drawable {
 
 
+    private static final String TAG = PlayPauseDrawable.class.getSimpleName();
     private final Path leftPauseBar = new Path();
     private final Path rightPauseBar = new Path();
     private final Paint paint = new Paint();
@@ -79,9 +82,9 @@ public class PlayPauseDrawable extends Drawable {
         return a + (b - a) * t;
     }
 
-
     @Override
     public void draw(Canvas canvas) {
+        L.v(TAG, "draw called with progress=" + progress);
         leftPauseBar.rewind();
         rightPauseBar.rewind();
 
@@ -151,6 +154,17 @@ public class PlayPauseDrawable extends Drawable {
         }
     }
 
+    @Override
+    public void jumpToCurrentState() {
+        L.d(TAG, "jumpToCurrentState()");
+        if (animator != null && animator.isStarted()) {
+            animator.cancel();
+            isPlay = !isPlay;
+
+            setProgress(isPlay ? 1.0F : 0.0F);
+        }
+    }
+
     public void transformToPlay(boolean animated) {
         if (!isPlay) {
             if (animated) {
@@ -187,6 +201,8 @@ public class PlayPauseDrawable extends Drawable {
     private void setProgress(float progress) {
         this.progress = progress;
         invalidateSelf();
+
+        L.v(TAG, "setProgress(" + progress + ")");
     }
 
     @Override
