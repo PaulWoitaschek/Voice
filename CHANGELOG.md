@@ -1,3 +1,12 @@
+# v2.2.1
+
+## Changes
+* Correctly check for existing bookmarks if book has changed
+* Fixed issue with name recognition of chapter and books
+* Use snackbar instead of toast for the sleep timer
+* Added Brasilian Portugeese translation
+* Updated translations
+
 # v2.2
 
 ## Changes
