@@ -56,7 +56,7 @@ public class Bookmark {
     @Override
     public String toString() {
         return TAG + "[" +
-                ",title=" + title +
+                "title=" + title +
                 ",time=" + time +
                 ",mediaPath=" + mediaPath +
                 "]";

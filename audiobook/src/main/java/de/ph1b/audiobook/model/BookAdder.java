@@ -7,6 +7,9 @@ import android.media.MediaMetadataRetriever;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -458,19 +461,20 @@ public class BookAdder {
 
 
     /**
-     * Updates a book. Addes the new chapters to the book and corrects the
+     * Updates a book. Adds the new chapters to the book and corrects the
      * {@link Book#currentMediaPath} and {@link Book#time}.
      *
      * @param bookExisting The existing book
      * @param newChapters  The new chapters matching to the book
      */
-    private void updateBook(@NonNull Book bookExisting, @NonNull List<Chapter> newChapters) {
+    private void updateBook(@NonNull final Book bookExisting, @NonNull List<Chapter> newChapters) {
         boolean bookHasChanged = chaptersDiffer(bookExisting.getChapters(), newChapters);
         // sort chapters
         if (bookHasChanged) {
             bookExisting.getChapters().clear();
             bookExisting.getChapters().addAll(newChapters);
 
+            // check if the chapter set as the current still exists
             boolean currentPathIsGone = true;
             String currentPath = bookExisting.getCurrentMediaPath();
             int currentTime = bookExisting.getTime();
@@ -485,6 +489,23 @@ public class BookAdder {
             if (currentPathIsGone) {
                 bookExisting.setPosition(0, bookExisting.getChapters().get(0).getPath());
             }
+
+            // removes the bookmarks that no longer represent an existing file
+            List<Bookmark> existingBookmarks = bookExisting.getBookmarks();
+            List<Bookmark> filtered = Lists.newArrayList(Collections2.filter(existingBookmarks, new Predicate<Bookmark>() {
+                @Override
+                public boolean apply(Bookmark input) {
+                    for (Chapter c : bookExisting.getChapters()) {
+                        if (c.getPath().equals(input.getMediaPath())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }));
+            existingBookmarks.clear();
+            existingBookmarks.addAll(filtered);
+
             db.updateBook(bookExisting);
         }
     }
