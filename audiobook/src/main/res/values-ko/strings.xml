@@ -1,4 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ This file is part of Material Audiobook Player.
+  ~
+  ~ Material Audiobook Player is free software: you can redistribute it and/or modify it under the
+  ~ terms of the GNU General Public License as published by the Free Software Foundation, either
+  ~ version 3 of the License, or any later version.
+  ~
+  ~ Material Audiobook Player is distributed in the hope that it will be useful, but WITHOUT ANY
+  ~ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+  ~ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License along with Foobar.  If not,
+  ~  see <http://www.gnu.org/licenses/>.
+  -->
+
 <resources>
     <!--BookShelf-->
     <string name="mal_file_message">선택한 파일을 인식할 수 없습니다:</string>
@@ -18,7 +33,6 @@
     <string name="pause">정지</string>
     <string name="stop">닫기</string>
     <string name="sleep_timer_started">취침예약</string>
-    <string name="sleep_timer_stopped">취침예약이 취소됨</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">외부저장공간을 찾지 못했습니다. 연결/인식상태를 확인해주세요.</string>
     <string name="no_external_storage_action_bar_title">외부저장공간</string>

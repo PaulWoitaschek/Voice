@@ -1,4 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ This file is part of Material Audiobook Player.
+  ~
+  ~ Material Audiobook Player is free software: you can redistribute it and/or modify it under the
+  ~ terms of the GNU General Public License as published by the Free Software Foundation, either
+  ~ version 3 of the License, or any later version.
+  ~
+  ~ Material Audiobook Player is distributed in the hope that it will be useful, but WITHOUT ANY
+  ~ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+  ~ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License along with Foobar.  If not,
+  ~  see <http://www.gnu.org/licenses/>.
+  -->
+
 <resources>
     <!--BookShelf-->
     <string name="mal_file_message">Возможно данный файл поврежден:</string>
@@ -19,7 +34,6 @@
     <string name="pause">Пауза</string>
     <string name="stop">Остановить</string>
     <string name="sleep_timer_started">Таймер сна:</string>
-    <string name="sleep_timer_stopped">Таймер сна выключен</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Карта памяти недоступна. Пожалуйста убедитесь, что она установлена и вы не соединены кабелем с компьютером.</string>
     <string name="no_external_storage_action_bar_title">Карта памяти</string>

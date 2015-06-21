@@ -54,11 +54,12 @@ import de.ph1b.audiobook.utils.PrefsManager;
 
 public class BookPlayFragment extends Fragment implements View.OnClickListener, Communication.OnSleepStateChangedListener, Communication.OnBookContentChangedListener, Communication.OnPlayStateChangedListener {
 
-    public static final String BOOK_ID = "bookId";
     public static final String TAG = BookPlayFragment.class.getSimpleName();
+    private static final String BOOK_ID = "bookId";
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
     private final Communication communication = Communication.getInstance();
     @Nullable
+    private
     Snackbar snackbar;
     private TextView playedTimeView;
     private SeekBar seekBar;

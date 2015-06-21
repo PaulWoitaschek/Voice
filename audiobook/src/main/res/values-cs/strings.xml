@@ -1,4 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ This file is part of Material Audiobook Player.
+  ~
+  ~ Material Audiobook Player is free software: you can redistribute it and/or modify it under the
+  ~ terms of the GNU General Public License as published by the Free Software Foundation, either
+  ~ version 3 of the License, or any later version.
+  ~
+  ~ Material Audiobook Player is distributed in the hope that it will be useful, but WITHOUT ANY
+  ~ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+  ~ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License along with Foobar.  If not,
+  ~  see <http://www.gnu.org/licenses/>.
+  -->
+
 <resources>
     <!--BookShelf-->
     <string name="mal_file_message">Následující soubor může být poškozen:</string>
@@ -18,7 +33,6 @@
     <string name="pause">Pozastavit</string>
     <string name="stop">Zastavit</string>
     <string name="sleep_timer_started">Časovač vypnutí: </string>
-    <string name="sleep_timer_stopped">Časovač vypnutí zastaven</string>
     <!--NoExternalStorage-->
   <string name="no_external_storage">Externí úložiště není dostupné. Ověřte prosím, že je
         připojeno a není používáno vaším počítačem.</string>
