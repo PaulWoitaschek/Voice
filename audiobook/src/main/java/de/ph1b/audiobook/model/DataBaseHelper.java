@@ -17,7 +17,8 @@ import java.util.List;
 
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.Validate;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 @ThreadSafe
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
@@ -40,7 +41,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String BOOKMARK_TIME = "bookmarkTime";
     public static final String BOOKMARK_PATH = "bookmarkPath";
     public static final String BOOKMARK_TITLE = "bookmarkTitle";
-    private static final int DATABASE_VERSION = 30;
+    private static final int DATABASE_VERSION = 31;
     private static final String DATABASE_NAME = "autoBookDB";
     private static final String TABLE_BOOK = "tableBooks";
     private static final String TABLE_CHAPTERS = "tableChapters";
@@ -162,6 +163,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public synchronized void addBook(@NonNull Book book) {
         L.v(TAG, "addBook=" + book.getName());
+        checkArgument(!book.getChapters().isEmpty());
 
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
@@ -211,6 +213,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return copyBooks;
     }
 
+    @NonNull
     public synchronized List<Book> getOrphanedBooks() {
         List<Book> copyBooks = new ArrayList<>();
         for (Book b : orphanedBooks) {
@@ -221,7 +224,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public synchronized void updateBook(@NonNull Book book) {
         L.v(TAG, "updateBook=" + book.getName());
-        new Validate().notEmpty(book.getChapters());
+        checkArgument(!book.getChapters().isEmpty());
 
         int indexToUpdate = -1;
         for (int i = 0; i < activeBooks.size(); i++) {
@@ -266,7 +269,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public synchronized void hideBook(@NonNull Book book) {
         L.v(TAG, "hideBook=" + book.getName());
-        new Validate().notEmpty(book.getChapters());
+        checkArgument(!book.getChapters().isEmpty());
 
         int indexToHide = -1;
         for (int i = 0; i < activeBooks.size(); i++) {
@@ -289,7 +292,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     public synchronized void revealBook(@NonNull Book book) {
-        new Validate().notEmpty(book.getChapters());
+        checkArgument(!book.getChapters().isEmpty());
 
         Iterator<Book> orphanedBookIterator = orphanedBooks.iterator();
         while (orphanedBookIterator.hasNext()) {

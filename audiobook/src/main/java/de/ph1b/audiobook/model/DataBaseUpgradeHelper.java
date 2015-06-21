@@ -573,6 +573,45 @@ class DataBaseUpgradeHelper {
         }
     }
 
+
+    /**
+     * Queries through all books and removes the ones that were added empty by a bug.
+     */
+    private void upgrade30() {
+        // book keys
+        final String BOOK_ID = "bookId";
+        final String TABLE_BOOK = "tableBooks";
+        final String TABLE_CHAPTERS = "tableChapters";
+
+        Cursor bookCursor = db.query(TABLE_BOOK,
+                new String[]{BOOK_ID},
+                null, null, null, null, null);
+        try {
+            while (bookCursor.moveToNext()) {
+                long bookId = bookCursor.getLong(0);
+
+                int chapterCount = 0;
+                Cursor chapterCursor = db.query(TABLE_CHAPTERS,
+                        null,
+                        BOOK_ID + "=?",
+                        new String[]{String.valueOf(bookId)},
+                        null, null, null);
+                try {
+                    while (chapterCursor.moveToNext()) {
+                        chapterCount++;
+                    }
+                } finally {
+                    chapterCursor.close();
+                }
+                if (chapterCount == 0) {
+                    db.delete(TABLE_BOOK, BOOK_ID + "=?", new String[]{String.valueOf(bookId)});
+                }
+            }
+        } finally {
+            bookCursor.close();
+        }
+    }
+
     public void upgrade(int fromVersion) throws InvalidPropertiesFormatException {
         switch (fromVersion) {
             case 1:
@@ -611,6 +650,8 @@ class DataBaseUpgradeHelper {
                 upgrade28();
             case 29:
                 upgrade29();
+            case 30:
+                upgrade30();
             default:
                 break;
         }
