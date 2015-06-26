@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.TypedValue;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.SeekBar;
 
 import java.lang.reflect.Field;
 
+import android.widget.TextView;
 import de.ph1b.audiobook.R;
 
 public class ThemeUtil {
@@ -28,6 +30,26 @@ public class ThemeUtil {
             Drawable progressDrawable = DrawableCompat.wrap(seekBar.getProgressDrawable());
             DrawableCompat.setTint(progressDrawable, colorAccent);
             seekBar.setProgressDrawable(progressDrawable);
+        }
+    }
+
+    public static void theme(Snackbar bar, Context c) {
+        Resources r = c.getResources();
+        TextView textView = (TextView) bar.getView().findViewById(android.support.design.R.id.snackbar_text);
+        if (textView != null) {
+            int theme = ThemeUtil.getTheme(c);
+            switch (theme) {
+                case R.style.LightTheme:
+                    bar.getView().setBackgroundColor(r.getColor(R.color.background_material_light));
+                    textView.setTextColor(r.getColor(R.color.abc_primary_text_material_light));
+                    break;
+                case R.style.DarkTheme:
+                    bar.getView().setBackgroundColor(r.getColor(R.color.background_material_dark));
+                    textView.setTextColor(r.getColor(R.color.abc_primary_text_material_dark));
+                    break;
+                default:
+                    throw new AssertionError("Unknown theme found=" + theme);
+            }
         }
     }
 
