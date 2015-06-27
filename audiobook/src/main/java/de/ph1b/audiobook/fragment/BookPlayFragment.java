@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -411,8 +410,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
                                     controller.toggleSleepSand();
                                 }
                             });
-                    Context context = getActivity().getApplicationContext();
-                    ThemeUtil.theme(snackbar, context);
+                    ThemeUtil.theme(snackbar);
                     snackbar.show();
                 }
             }

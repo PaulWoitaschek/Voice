@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.TypedValue;
@@ -33,7 +34,8 @@ public class ThemeUtil {
         }
     }
 
-    public static void theme(Snackbar bar, Context c) {
+    public static void theme(@NonNull Snackbar bar) {
+        Context c = bar.getView().getContext();
         Resources r = c.getResources();
         TextView textView = (TextView) bar.getView().findViewById(android.support.design.R.id.snackbar_text);
         if (textView != null) {
