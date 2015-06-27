@@ -43,12 +43,6 @@ public class ThemeUtil {
                     bar.getView().setBackgroundColor(r.getColor(R.color.background_material_light));
                     textView.setTextColor(r.getColor(R.color.abc_primary_text_material_light));
                     break;
-                case R.style.LightTheme:
-                    bar.getView().setBackgroundColor(r.getColor(R.color.background_material_dark));
-                    textView.setTextColor(r.getColor(R.color.abc_primary_text_material_dark));
-                    break;
-                default:
-                    throw new AssertionError("Unknown theme found=" + theme);
             }
         }
     }
