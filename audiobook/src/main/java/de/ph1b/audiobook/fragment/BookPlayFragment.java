@@ -59,8 +59,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
     private final Communication communication = Communication.getInstance();
     @Nullable
-    private
-    Snackbar snackbar;
+    private Snackbar snackbar;
     private TextView playedTimeView;
     private SeekBar seekBar;
     private volatile Spinner bookSpinner;
@@ -411,6 +410,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
                                     controller.toggleSleepSand();
                                 }
                             });
+                    ThemeUtil.theme(snackbar);
                     snackbar.show();
                 }
             }
