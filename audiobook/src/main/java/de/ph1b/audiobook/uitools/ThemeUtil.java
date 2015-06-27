@@ -15,10 +15,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import java.lang.reflect.Field;
 
-import android.widget.TextView;
 import de.ph1b.audiobook.R;
 
 public class ThemeUtil {
@@ -39,11 +39,11 @@ public class ThemeUtil {
         if (textView != null) {
             int theme = ThemeUtil.getTheme(c);
             switch (theme) {
-                case R.style.LightTheme:
+                case R.style.DarkTheme:
                     bar.getView().setBackgroundColor(r.getColor(R.color.background_material_light));
                     textView.setTextColor(r.getColor(R.color.abc_primary_text_material_light));
                     break;
-                case R.style.DarkTheme:
+                case R.style.LightTheme:
                     bar.getView().setBackgroundColor(r.getColor(R.color.background_material_dark));
                     textView.setTextColor(r.getColor(R.color.abc_primary_text_material_dark));
                     break;
