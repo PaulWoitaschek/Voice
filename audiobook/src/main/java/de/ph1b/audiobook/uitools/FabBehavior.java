@@ -31,6 +31,21 @@ public class FabBehavior extends CoordinatorLayout.Behavior<FloatingActionButton
         super(context, attrs);
     }
 
+    private static float getFabTranslationYForSnackbar(CoordinatorLayout parent, FloatingActionButton fab) {
+        float minOffset = 0.0F;
+        List dependencies = parent.getDependencies(fab);
+        int i = 0;
+
+        for (int z = dependencies.size(); i < z; ++i) {
+            View view = (View) dependencies.get(i);
+            if (view instanceof Snackbar.SnackbarLayout && parent.doViewsOverlap(fab, view)) {
+                minOffset = Math.min(minOffset, ViewCompat.getTranslationY(view) - (float) view.getHeight());
+            }
+        }
+
+        return minOffset;
+    }
+
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, FloatingActionButton child, View dependency) {
         return dependency instanceof Snackbar.SnackbarLayout;
@@ -46,7 +61,7 @@ public class FabBehavior extends CoordinatorLayout.Behavior<FloatingActionButton
     }
 
     private void updateFabTranslationForSnackbar(CoordinatorLayout parent, FloatingActionButton fab, View snackbar) {
-        float translationY = this.getFabTranslationYForSnackbar(parent, fab);
+        float translationY = FabBehavior.getFabTranslationYForSnackbar(parent, fab);
         if (translationY != this.mTranslationY) {
             ViewCompat.animate(fab).cancel();
             if (Math.abs(translationY - this.mTranslationY) == (float) snackbar.getHeight()) {
@@ -58,20 +73,5 @@ public class FabBehavior extends CoordinatorLayout.Behavior<FloatingActionButton
             this.mTranslationY = translationY;
         }
 
-    }
-
-    private float getFabTranslationYForSnackbar(CoordinatorLayout parent, FloatingActionButton fab) {
-        float minOffset = 0.0F;
-        List dependencies = parent.getDependencies(fab);
-        int i = 0;
-
-        for (int z = dependencies.size(); i < z; ++i) {
-            View view = (View) dependencies.get(i);
-            if (view instanceof Snackbar.SnackbarLayout && parent.doViewsOverlap(fab, view)) {
-                minOffset = Math.min(minOffset, ViewCompat.getTranslationY(view) - (float) view.getHeight());
-            }
-        }
-
-        return minOffset;
     }
 }

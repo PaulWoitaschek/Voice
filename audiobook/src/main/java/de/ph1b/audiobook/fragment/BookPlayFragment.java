@@ -68,7 +68,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
     private ServiceController controller;
     private long bookId;
     private DataBaseHelper db;
-    private CoordinatorLayout coordinatorLayout;
+    private CoordinatorLayout view;
 
     public static BookPlayFragment newInstance(long bookId) {
         Bundle args = new Bundle();
@@ -79,11 +79,23 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         return bookPlayFragment;
     }
 
+    private static String formatTime(int ms, int duration) {
+        String h = String.valueOf(TimeUnit.MILLISECONDS.toHours(ms));
+        String m = String.format("%02d", (TimeUnit.MILLISECONDS.toMinutes(ms) % 60));
+        String s = String.format("%02d", (TimeUnit.MILLISECONDS.toSeconds(ms) % 60));
+
+        if (TimeUnit.MILLISECONDS.toHours(duration) == 0) {
+            return m + ":" + s;
+        } else {
+            return h + ":" + m + ":" + s;
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_book_play, container, false);
+        view = (CoordinatorLayout) inflater.inflate(R.layout.fragment_book_play, container, false);
 
         bookId = getArguments().getLong(BOOK_ID);
         final Book book = db.getBook(bookId);
@@ -115,7 +127,6 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         ImageView coverView = (ImageView) view.findViewById(R.id.book_cover);
         maxTimeView = (TextView) view.findViewById(R.id.maxTime);
         bookSpinner = (Spinner) view.findViewById(R.id.book_spinner);
-        coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.bottom_layout);
 
         //setup buttons
         view.findViewById(R.id.fastForward).setOnClickListener(this);
@@ -259,18 +270,6 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         controller = new ServiceController(getActivity());
     }
 
-    private String formatTime(int ms, int duration) {
-        String h = String.valueOf(TimeUnit.MILLISECONDS.toHours(ms));
-        String m = String.format("%02d", (TimeUnit.MILLISECONDS.toMinutes(ms) % 60));
-        String s = String.format("%02d", (TimeUnit.MILLISECONDS.toSeconds(ms) % 60));
-
-        if (TimeUnit.MILLISECONDS.toHours(duration) == 0) {
-            return m + ":" + s;
-        } else {
-            return h + ":" + m + ":" + s;
-        }
-    }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -403,7 +402,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
                     int minutes = prefs.getSleepTime();
                     String message = getString(R.string.sleep_timer_started) + " " + minutes + " " +
                             getString(R.string.minutes);
-                    snackbar = Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).setAction(
+                    snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG).setAction(
                             R.string.stop, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {

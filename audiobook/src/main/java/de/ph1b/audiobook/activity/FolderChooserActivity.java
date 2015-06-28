@@ -55,7 +55,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
     private ImageButton upButton;
     private int mode;
 
-    private List<File> getStorageDirectories() {
+    private static List<File> getStorageDirectories() {
         Pattern DIR_SEPARATOR = Pattern.compile("/");
         // Final set of paths
         final Set<String> rv = new HashSet<>();
@@ -118,6 +118,23 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         }
         Collections.sort(paths, new NaturalOrderComparator());
         return paths;
+    }
+
+    /**
+     * Gets the containing files of a folder (restricted to music and folders) in a naturally sorted
+     * order.
+     *
+     * @param file The file to look for containing files
+     * @return The containing files
+     */
+    private static List<File> getFilesFromFolder(File file) {
+        List<File> asList = new ArrayList<>();
+        File[] containing = file.listFiles(FileRecognition.folderAndMusicFilter);
+        if (containing != null) {
+            asList = new ArrayList<>(Arrays.asList(containing));
+            Collections.sort(asList, new NaturalOrderComparator());
+        }
+        return asList;
     }
 
     private void changeFolder(File newFolder) {
@@ -259,23 +276,6 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
             adapter.notifyDataSetChanged();
         }
         setButtonEnabledDisabled();
-    }
-
-    /**
-     * Gets the containing files of a folder (restricted to music and folders) in a naturally sorted
-     * order.
-     *
-     * @param file The file to look for containing files
-     * @return The containing files
-     */
-    private List<File> getFilesFromFolder(File file) {
-        List<File> asList = new ArrayList<>();
-        File[] containing = file.listFiles(FileRecognition.folderAndMusicFilter);
-        if (containing != null) {
-            asList = new ArrayList<>(Arrays.asList(containing));
-            Collections.sort(asList, new NaturalOrderComparator());
-        }
-        return asList;
     }
 
     /**

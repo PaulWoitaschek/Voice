@@ -60,6 +60,16 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     private MediaPlayer.OnErrorListener onErrorListener;
     private long duration;
 
+    private static int findFormatFromChannels(int numChannels) {
+        switch (numChannels) {
+            case 1:
+                return AudioFormat.CHANNEL_OUT_MONO;
+            case 2:
+                return AudioFormat.CHANNEL_OUT_STEREO;
+            default:
+                return -1; // Error
+        }
+    }
 
     @Override
     public void start() {
@@ -333,17 +343,6 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
             sonic = new Sonic(sampleRate, numChannels);
         } finally {
             lock.unlock();
-        }
-    }
-
-    private int findFormatFromChannels(int numChannels) {
-        switch (numChannels) {
-            case 1:
-                return AudioFormat.CHANNEL_OUT_MONO;
-            case 2:
-                return AudioFormat.CHANNEL_OUT_STEREO;
-            default:
-                return -1; // Error
         }
     }
 

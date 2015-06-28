@@ -11,8 +11,9 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.text.TextPaint;
 
+import com.google.common.base.Preconditions;
+
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.utils.Validate;
 
 
 public class CoverReplacement extends Drawable {
@@ -22,8 +23,7 @@ public class CoverReplacement extends Drawable {
     private final int backgroundColor;
 
     public CoverReplacement(@NonNull String text, @NonNull Context c) {
-        new Validate().notNull(text)
-                .notEmpty(text);
+        Preconditions.checkArgument(!text.isEmpty());
         this.text = text;
 
         // text

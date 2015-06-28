@@ -3,7 +3,7 @@ package de.ph1b.audiobook.model;
 import android.content.ContentValues;
 import android.support.annotation.NonNull;
 
-import de.ph1b.audiobook.utils.Validate;
+import static com.google.common.base.Preconditions.checkArgument;
 
 public class Bookmark {
 
@@ -22,8 +22,8 @@ public class Bookmark {
     }
 
     public Bookmark(@NonNull String mediaPath, @NonNull String title, int time) {
-        new Validate().notNull(mediaPath, title)
-                .notEmpty(mediaPath, title);
+        checkArgument(!mediaPath.isEmpty());
+        checkArgument(!title.isEmpty());
 
         this.mediaPath = mediaPath;
         this.title = title;
@@ -73,8 +73,7 @@ public class Bookmark {
     }
 
     public void setTitle(@NonNull String title) {
-        new Validate().notNull(title)
-                .notEmpty(title);
+        checkArgument(!title.isEmpty());
         this.title = title;
     }
 

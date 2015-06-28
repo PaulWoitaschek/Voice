@@ -38,6 +38,23 @@ public class CoverDownloader {
         picasso = Picasso.with(c);
     }
 
+    @NonNull
+    private static String getIPAddress() {
+        try {
+            List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface i : interfaces) {
+                List<InetAddress> internetAddresses = Collections.list(i.getInetAddresses());
+                for (InetAddress a : internetAddresses) {
+                    if (!a.isLoopbackAddress()) {
+                        return a.getHostAddress().toUpperCase();
+                    }
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return "";
+    }
+
     public void cancel() {
         if (call != null) {
             call.cancel();
@@ -130,22 +147,5 @@ public class CoverDownloader {
         }
 
         return newStrings;
-    }
-
-    @NonNull
-    private String getIPAddress() {
-        try {
-            List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
-            for (NetworkInterface i : interfaces) {
-                List<InetAddress> internetAddresses = Collections.list(i.getInetAddresses());
-                for (InetAddress a : internetAddresses) {
-                    if (!a.isLoopbackAddress()) {
-                        return a.getHostAddress().toUpperCase();
-                    }
-                }
-            }
-        } catch (Exception ignored) {
-        }
-        return "";
     }
 }

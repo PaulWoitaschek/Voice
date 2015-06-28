@@ -1,16 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?android:attr/windowBackground"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <include layout="@layout/toolbar" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <include layout="@layout/fragment_book_play_cover" />
+        <include layout="@layout/toolbar" />
 
-    <include layout="@layout/fragment_book_play_player" />
+        <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/book_cover"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/cover"
+            android:scaleType="centerCrop"
+            android:transitionName="@string/transition_cover"
+            tools:ignore="UnusedAttribute" />
 
-</LinearLayout>
+
+        <Spinner
+            android:id="@+id/book_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical|center_horizontal">
+
+            <TextView
+                android:id="@+id/played"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/zeroTime" />
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/maxTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/zeroTime" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/play_group"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/previous"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/previous_track"
+                android:padding="8dp"
+                android:src="?attr/book_play_previous" />
+
+            <ImageButton
+                android:id="@+id/rewind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="44dp"
+                android:layout_marginRight="44dp"
+                android:contentDescription="@string/rewind"
+                android:padding="8dp"
+                android:src="?attr/book_play_rewind" />
+
+            <ImageButton
+                android:id="@+id/fastForward"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="44dp"
+                android:layout_marginStart="44dp"
+                android:contentDescription="@string/fast_forward"
+                android:padding="8dp"
+                android:src="?attr/book_play_fast_forward" />
+
+            <ImageButton
+                android:id="@+id/next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/next_track"
+                android:padding="8dp"
+                android:src="?attr/book_play_next" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/play_pause"
+        android:transitionName="@string/transition_fab"
+        app:layout_anchor="@id/play_group"
+        app:layout_anchorGravity="center"
+        app:layout_behavior="de.ph1b.audiobook.uitools.FabBehavior"
+        fab:fab_colorNormal="?attr/colorAccent"
+        fab:fab_colorPressed="?attr/colorAccentDark"
+        tools:ignore="UnusedAttribute" />
+
+</android.support.design.widget.CoordinatorLayout>
