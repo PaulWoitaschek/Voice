@@ -41,7 +41,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String BOOKMARK_TIME = "bookmarkTime";
     public static final String BOOKMARK_PATH = "bookmarkPath";
     public static final String BOOKMARK_TITLE = "bookmarkTitle";
-    private static final int DATABASE_VERSION = 31;
+    private static final int DATABASE_VERSION = 32;
     private static final String DATABASE_NAME = "autoBookDB";
     private static final String TABLE_BOOK = "tableBooks";
     private static final String TABLE_CHAPTERS = "tableChapters";

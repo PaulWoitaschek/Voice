@@ -612,6 +612,60 @@ class DataBaseUpgradeHelper {
         }
     }
 
+    /**
+     * Corrects media paths that have been falsely set.
+     */
+    private void upgrade31() {
+        final String BOOK_ID = "bookId";
+        final String TABLE_BOOK = "tableBooks";
+        final String TABLE_CHAPTERS = "tableChapters";
+        final String BOOK_CURRENT_MEDIA_PATH = "bookCurrentMediaPath";
+        final String CHAPTER_PATH = "chapterPath";
+
+        Cursor bookCursor = db.query(TABLE_BOOK,
+                new String[]{BOOK_ID, BOOK_CURRENT_MEDIA_PATH},
+                null, null, null, null, null);
+        try {
+            while (bookCursor.moveToNext()) {
+                long bookId = bookCursor.getLong(0);
+                String bookmarkCurrentMediaPath = bookCursor.getString(1);
+
+                List<String> chapterPaths = new ArrayList<>();
+                Cursor chapterCursor = db.query(TABLE_CHAPTERS,
+                        new String[]{CHAPTER_PATH},
+                        BOOK_ID + "=?",
+                        new String[]{String.valueOf(bookId)},
+                        null, null, null);
+                try {
+                    while (chapterCursor.moveToNext()) {
+                        String chapterPath = chapterCursor.getString(0);
+                        chapterPaths.add(chapterPath);
+                    }
+                } finally {
+                    chapterCursor.close();
+                }
+
+                if (chapterPaths.isEmpty()) {
+                    db.delete(TABLE_BOOK, BOOK_ID + "=?", new String[]{String.valueOf(bookId)});
+                } else {
+                    boolean mediaPathValid = false;
+                    for (String s : chapterPaths) {
+                        if (s.equals(bookmarkCurrentMediaPath)) {
+                            mediaPathValid = true;
+                        }
+                    }
+                    if (!mediaPathValid) {
+                        ContentValues cv = new ContentValues();
+                        cv.put(BOOK_CURRENT_MEDIA_PATH, chapterPaths.get(0));
+                        db.update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(bookId)});
+                    }
+                }
+            }
+        } finally {
+            bookCursor.close();
+        }
+    }
+
     public void upgrade(int fromVersion) throws InvalidPropertiesFormatException {
         switch (fromVersion) {
             case 1:
@@ -652,6 +706,8 @@ class DataBaseUpgradeHelper {
                 upgrade29();
             case 30:
                 upgrade30();
+            case 31:
+                upgrade31();
             default:
                 break;
         }
