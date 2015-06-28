@@ -10,7 +10,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ph1b.audiobook.utils.Validate;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 
 public class Book implements Comparable<Book> {
@@ -39,10 +40,6 @@ public class Book implements Comparable<Book> {
     private boolean useCoverReplacement = false;
 
     public Book(Book that) {
-        new Validate().notNull(that.root, that.name, that.chapters, that.currentMediaPath, that.type)
-                .notEmpty(that.root, that.name)
-                .notEmpty(that.chapters);
-
         this.id = that.id;
         this.root = that.root;
         List<Chapter> copyChapters = new ArrayList<>();
@@ -70,14 +67,17 @@ public class Book implements Comparable<Book> {
                 @NonNull String name,
                 @Nullable String author,
                 @NonNull List<Chapter> chapters,
-                @NonNull
-                String currentMediaPath,
+                @NonNull String currentMediaPath,
                 @NonNull Type type,
                 @NonNull List<Bookmark> bookmarks,
                 @NonNull Context c) {
-        new Validate().notNull(root, name, chapters, currentMediaPath, type)
-                .notEmpty(root, name)
-                .notEmpty(chapters);
+        checkNotNull(chapters);
+        checkNotNull(currentMediaPath);
+        checkNotNull(type);
+        checkNotNull(bookmarks);
+        checkArgument(!root.isEmpty());
+        checkArgument(!name.isEmpty());
+        checkArgument(!chapters.isEmpty());
 
         this.root = root;
         this.name = name;
@@ -260,8 +260,7 @@ public class Book implements Comparable<Book> {
     }
 
     public void setName(@NonNull String name) {
-        new Validate().notNull(name)
-                .notEmpty(name);
+        checkArgument(!name.isEmpty());
         this.name = name;
     }
 

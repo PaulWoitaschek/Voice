@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 
 import net.jcip.annotations.Immutable;
 
-import de.ph1b.audiobook.utils.Validate;
+import static com.google.common.base.Preconditions.checkArgument;
 
 @Immutable
 public class Chapter {
@@ -27,9 +27,9 @@ public class Chapter {
     public Chapter(@NonNull String path,
                    @NonNull String name,
                    int duration) {
+        checkArgument(!path.isEmpty());
+        checkArgument(!name.isEmpty());
 
-        new Validate().notNull(path, name)
-                .notEmpty(path, name);
         this.path = path;
         this.name = name;
         this.duration = duration;

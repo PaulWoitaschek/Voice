@@ -8,6 +8,8 @@ import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.google.common.base.Preconditions;
+
 import net.jcip.annotations.GuardedBy;
 
 import java.io.IOException;
@@ -24,7 +26,6 @@ import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
-import de.ph1b.audiobook.utils.Validate;
 
 public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         MediaPlayerInterface.OnCompletionListener {
@@ -106,7 +107,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         lock.lock();
         try {
             L.e(TAG, "constructor called with book=" + book);
-            new Validate().notNull(book);
+            Preconditions.checkNotNull(book);
             this.book = book;
             prepare();
         } finally {
