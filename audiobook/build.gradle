@@ -8,7 +8,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 68
-        versionName '68-preview1'
+        versionName '2.2.2'
 
         ndk {
             moduleName "sonic"
