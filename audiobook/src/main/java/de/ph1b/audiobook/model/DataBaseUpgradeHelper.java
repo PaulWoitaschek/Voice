@@ -232,7 +232,7 @@ class DataBaseUpgradeHelper {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                if (name.equals("")) {
+                if (name.isEmpty()) {
                     if (chapterPaths.size() == 1) {
                         String chapterPath = chapterPaths.get(0);
                         name = chapterPath.substring(0, chapterPath.lastIndexOf("."));

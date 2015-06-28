@@ -62,6 +62,111 @@ public class BookAdder {
         return instance;
     }
 
+    /**
+     * Returns the name of the book we want to add. If there is a tag embedded, use that one. Else
+     * derive the title from the filename.
+     *
+     * @param firstChapterPath A path to a file
+     * @param rootFile         The root of the book to add
+     * @return The name of the book we add
+     */
+    @NonNull
+    private static String getBookName(@NonNull String firstChapterPath, @NonNull File rootFile, @NonNull MediaMetadataRetriever mmr) {
+        String bookName = null;
+        try {
+            mmr.setDataSource(firstChapterPath);
+            bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+        } catch (RuntimeException ignored) {
+        }
+        if (bookName == null || bookName.length() == 0) {
+            String withoutExtension = Files.getNameWithoutExtension(rootFile.getAbsolutePath());
+            bookName = withoutExtension.isEmpty() ? rootFile.getName() : withoutExtension;
+        }
+        return bookName;
+    }
+
+    /**
+     * Returns the author of the book we want to add. If there is a tag embedded, use that one. Else
+     * return null
+     *
+     * @param firstChapterPath A path to a file
+     * @return The name of the book we add
+     */
+    @Nullable
+    private static String getAuthor(@NonNull String firstChapterPath, @NonNull MediaMetadataRetriever mmr) {
+        try {
+            mmr.setDataSource(firstChapterPath);
+            String bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_COMPOSER);
+            if (bookName == null || bookName.length() == 0) {
+                bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_AUTHOR);
+            }
+            if (bookName == null || bookName.length() == 0) {
+                bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+            }
+            return bookName;
+        } catch (RuntimeException ignored) {
+            return null;
+        }
+    }
+
+    /**
+     * @param left  First chapter to compare
+     * @param right Second chapter to compare
+     * @return True if the Chapters in the array differ by {@link Chapter#name} or {@link Chapter#path}
+     */
+    private static boolean chaptersDiffer(@NonNull List<Chapter> left, @NonNull List<Chapter> right) {
+        if (left.size() != right.size()) {
+            // different chapter size, so book must have changed
+            return true;
+        } else {
+            for (int i = 0; i < left.size(); i++) {
+                Chapter ex = left.get(i);
+                Chapter ne = right.get(i);
+                boolean pathSame = ex.getPath().equals(ne.getPath());
+                boolean durationSame = ex.getDuration() == ne.getDuration();
+                if (!pathSame || !durationSame) {
+                    // duration of path have changed, so book has changed
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Adds files recursively. First takes all files and adds them sorted to the return list. Then
+     * sorts the folders, and then adds their content sorted to the return list.
+     *
+     * @param dir The dirs and files to be added
+     * @return All the files containing in a natural sorted order.
+     */
+    private static List<File> addFilesRecursive(@NonNull List<File> dir) {
+        List<File> returnList = new ArrayList<>();
+        List<File> fileList = new ArrayList<>();
+        List<File> dirList = new ArrayList<>();
+        for (File f : dir) {
+            if (f.exists() && f.isFile()) {
+                fileList.add(f);
+            } else if (f.exists() && f.isDirectory()) {
+                dirList.add(f);
+            }
+        }
+        Collections.sort(fileList, new NaturalOrderComparator());
+        returnList.addAll(fileList);
+        Collections.sort(dirList, new NaturalOrderComparator());
+        for (File f : dirList) {
+            List<File> content = new ArrayList<>();
+            File[] containing = f.listFiles();
+            if (containing != null) {
+                content = new ArrayList<>(Arrays.asList(containing));
+            }
+            if (content.size() > 0) {
+                List<File> tempReturn = addFilesRecursive(content);
+                returnList.addAll(tempReturn);
+            }
+        }
+        return returnList;
+    }
 
     /**
      * Checks for new books
@@ -90,7 +195,6 @@ public class BookAdder {
         }
     }
 
-
     /**
      * Returns a Bitmap from an array of {@link File} that should be images
      *
@@ -118,7 +222,6 @@ public class BookAdder {
         }
         return null;
     }
-
 
     /**
      * Finds an embedded cover within a {@link Chapter}
@@ -232,7 +335,6 @@ public class BookAdder {
         return singleBooks;
     }
 
-
     /**
      * Gets the saved collection book files the User chose in {@link de.ph1b.audiobook.activity.FolderChooserActivity}
      *
@@ -255,7 +357,6 @@ public class BookAdder {
         Collections.sort(containingFiles, new NaturalOrderComparator());
         return containingFiles;
     }
-
 
     /**
      * Deletes all the books that exist on the database but not on the hard drive or on the saved
@@ -331,54 +432,6 @@ public class BookAdder {
         L.d(TAG, "finished");
     }
 
-
-    /**
-     * Returns the name of the book we want to add. If there is a tag embedded, use that one. Else
-     * derive the title from the filename.
-     *
-     * @param firstChapterPath A path to a file
-     * @param rootFile         The root of the book to add
-     * @return The name of the book we add
-     */
-    @NonNull
-    private String getBookName(@NonNull String firstChapterPath, @NonNull File rootFile, @NonNull MediaMetadataRetriever mmr) {
-        String bookName = null;
-        try {
-            mmr.setDataSource(firstChapterPath);
-            bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
-        } catch (RuntimeException ignored) {
-        }
-        if (bookName == null || bookName.length() == 0) {
-            String withoutExtension = Files.getNameWithoutExtension(rootFile.getAbsolutePath());
-            bookName = withoutExtension.isEmpty() ? rootFile.getName() : withoutExtension;
-        }
-        return bookName;
-    }
-
-    /**
-     * Returns the author of the book we want to add. If there is a tag embedded, use that one. Else
-     * return null
-     *
-     * @param firstChapterPath A path to a file
-     * @return The name of the book we add
-     */
-    @Nullable
-    private String getAuthor(@NonNull String firstChapterPath, @NonNull MediaMetadataRetriever mmr) {
-        try {
-            mmr.setDataSource(firstChapterPath);
-            String bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_COMPOSER);
-            if (bookName == null || bookName.length() == 0) {
-                bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_AUTHOR);
-            }
-            if (bookName == null || bookName.length() == 0) {
-                bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
-            }
-            return bookName;
-        } catch (RuntimeException ignored) {
-            return null;
-        }
-    }
-
     /**
      * Adds a new book
      *
@@ -439,32 +492,6 @@ public class BookAdder {
             db.revealBook(orphanedBook);
         }
     }
-
-
-    /**
-     * @param left  First chapter to compare
-     * @param right Second chapter to compare
-     * @return True if the Chapters in the array differ by {@link Chapter#name} or {@link Chapter#path}
-     */
-    private boolean chaptersDiffer(@NonNull List<Chapter> left, @NonNull List<Chapter> right) {
-        if (left.size() != right.size()) {
-            // different chapter size, so book must have changed
-            return true;
-        } else {
-            for (int i = 0; i < left.size(); i++) {
-                Chapter ex = left.get(i);
-                Chapter ne = right.get(i);
-                boolean pathSame = ex.getPath().equals(ne.getPath());
-                boolean durationSame = ex.getDuration() == ne.getDuration();
-                if (!pathSame || !durationSame) {
-                    // duration of path have changed, so book has changed
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
 
     /**
      * Updates a book. Adds the new chapters to the book and corrects the
@@ -543,41 +570,6 @@ public class BookAdder {
                 updateBook(bookExisting, newChapters);
             }
         }
-    }
-
-    /**
-     * Adds files recursively. First takes all files and adds them sorted to the return list. Then
-     * sorts the folders, and then adds their content sorted to the return list.
-     *
-     * @param dir The dirs and files to be added
-     * @return All the files containing in a natural sorted order.
-     */
-    private List<File> addFilesRecursive(@NonNull List<File> dir) {
-        List<File> returnList = new ArrayList<>();
-        List<File> fileList = new ArrayList<>();
-        List<File> dirList = new ArrayList<>();
-        for (File f : dir) {
-            if (f.exists() && f.isFile()) {
-                fileList.add(f);
-            } else if (f.exists() && f.isDirectory()) {
-                dirList.add(f);
-            }
-        }
-        Collections.sort(fileList, new NaturalOrderComparator());
-        returnList.addAll(fileList);
-        Collections.sort(dirList, new NaturalOrderComparator());
-        for (File f : dirList) {
-            List<File> content = new ArrayList<>();
-            File[] containing = f.listFiles();
-            if (containing != null) {
-                content = new ArrayList<>(Arrays.asList(containing));
-            }
-            if (content.size() > 0) {
-                List<File> tempReturn = addFilesRecursive(content);
-                returnList.addAll(tempReturn);
-            }
-        }
-        return returnList;
     }
 
     /**

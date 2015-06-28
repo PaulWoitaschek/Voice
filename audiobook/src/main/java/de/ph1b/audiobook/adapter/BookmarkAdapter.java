@@ -32,6 +32,19 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         this.listener = listener;
     }
 
+    @NonNull
+    private static String formatTime(int ms) {
+        String h = String.valueOf(TimeUnit.MILLISECONDS.toHours(ms));
+        String m = String.format("%02d", (TimeUnit.MILLISECONDS.toMinutes(ms) % 60));
+        String s = String.format("%02d", (TimeUnit.MILLISECONDS.toSeconds(ms) % 60));
+        String returnString = "";
+        if (!h.equals("0")) {
+            returnString += h + ":";
+        }
+        returnString += m + ":" + s;
+        return returnString;
+    }
+
     public void removeItem(int position) {
         book.getBookmarks().remove(position);
         notifyItemRemoved(position);
@@ -78,19 +91,6 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
     @Override
     public int getItemCount() {
         return book.getBookmarks().size();
-    }
-
-    @NonNull
-    private String formatTime(int ms) {
-        String h = String.valueOf(TimeUnit.MILLISECONDS.toHours(ms));
-        String m = String.format("%02d", (TimeUnit.MILLISECONDS.toMinutes(ms) % 60));
-        String s = String.format("%02d", (TimeUnit.MILLISECONDS.toSeconds(ms) % 60));
-        String returnString = "";
-        if (!h.equals("0")) {
-            returnString += h + ":";
-        }
-        returnString += m + ":" + s;
-        return returnString;
     }
 
     public interface OnOptionsMenuClickedListener {

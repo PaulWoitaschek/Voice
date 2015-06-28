@@ -205,11 +205,14 @@ public class Book implements Comparable<Book> {
                 ", type=" + type +
                 ", id=" + id +
                 ", name=" + name +
+                ", author=" + author +
                 ", time=" + time +
                 ", playbackSpeed=" + playbackSpeed +
                 ", currentMediaPath=" + currentMediaPath +
                 ", useCoverReplacement=" + useCoverReplacement +
+                ", packageName=" + packageName +
                 ", chapters=" + chapters +
+                ", bookmarks=" + bookmarks +
                 "]";
     }
 

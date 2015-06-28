@@ -164,6 +164,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         }
     }
 
+    @Override
     public void onDonationClicked(String item) {
         L.d(TAG, "onDonationClicked with item=" + item + " and donationAvailable=" + donationAvailable);
         if (donationAvailable) {

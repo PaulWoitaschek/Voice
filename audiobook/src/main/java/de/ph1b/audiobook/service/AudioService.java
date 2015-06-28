@@ -379,7 +379,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            notificationBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
+            notificationBuilder.setPriority(Notification.PRIORITY_HIGH);
 
             // rewind
             Intent rewindIntent = ServiceController.getRewindIntent(this);

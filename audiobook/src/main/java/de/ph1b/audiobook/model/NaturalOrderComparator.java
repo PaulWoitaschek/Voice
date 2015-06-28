@@ -98,6 +98,21 @@ public class NaturalOrderComparator implements Comparator<Object> {
         }
     }
 
+    private static int naturalCompare(File lhs, File rhs) {
+        if (lhs.isDirectory() && !rhs.isDirectory()) {
+            // Directory before non-directory
+            return -1;
+        } else if (!lhs.isDirectory() && rhs.isDirectory()) {
+            // Non-directory after directory
+            return 1;
+        } else {
+            // Alphabetic order otherwise, ignoring Capital
+            String a = lhs.getName();
+            String b = rhs.getName();
+            return naturalCompare(a, b);
+        }
+    }
+
     @Override
     public int compare(Object lhs, Object rhs) {
         if (lhs instanceof Chapter && rhs instanceof Chapter) {
@@ -114,21 +129,6 @@ public class NaturalOrderComparator implements Comparator<Object> {
             return naturalCompare(a, b);
         } else {
             return naturalCompare(String.valueOf(lhs), String.valueOf(rhs));
-        }
-    }
-
-    private int naturalCompare(File lhs, File rhs) {
-        if (lhs.isDirectory() && !rhs.isDirectory()) {
-            // Directory before non-directory
-            return -1;
-        } else if (!lhs.isDirectory() && rhs.isDirectory()) {
-            // Non-directory after directory
-            return 1;
-        } else {
-            // Alphabetic order otherwise, ignoring Capital
-            String a = lhs.getName();
-            String b = rhs.getName();
-            return naturalCompare(a, b);
         }
     }
 }
