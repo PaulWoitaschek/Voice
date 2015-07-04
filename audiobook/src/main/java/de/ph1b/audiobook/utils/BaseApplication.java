@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.utils;
 
 import android.app.Application;
+import android.os.StrictMode;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
@@ -22,8 +23,17 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        //noinspection ConstantConditions,PointlessBooleanExpression
-        if (!BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .penaltyDialog()
+                    .build());
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build());
+        } else {
             ACRA.init(this);
         }
 
