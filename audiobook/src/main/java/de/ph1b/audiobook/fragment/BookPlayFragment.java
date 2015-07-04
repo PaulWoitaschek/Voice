@@ -24,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -184,7 +185,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
             chaptersAsStrings.add(chapterName);
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+        SpinnerAdapter adapter = new ArrayAdapter<String>(getActivity(),
                 R.layout.fragment_book_play_spinner, chaptersAsStrings) {
             @Override
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
