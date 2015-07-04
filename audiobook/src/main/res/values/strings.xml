@@ -87,4 +87,8 @@
     <!--Misc-->
     <string name="popup_edit">Edit</string>
     <string name="remove">Remove</string>
+    <!-- hide folder dialog -->
+    <string name="hide_folder_title">Hide folder</string>
+    <string name="hide_folder_content">Do you want to hide the folder from music players, so they don\'t recognize your book as music?</string>
+    <string name="hide_confirm">Hide</string>
 </resources>

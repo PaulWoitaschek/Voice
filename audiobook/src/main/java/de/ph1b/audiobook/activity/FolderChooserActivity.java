@@ -1,10 +1,12 @@
 package de.ph1b.audiobook.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
@@ -25,6 +27,7 @@ import java.util.regex.Pattern;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.FolderChooserAdapter;
+import de.ph1b.audiobook.dialog.HideFolderDialog;
 import de.ph1b.audiobook.model.NaturalOrderComparator;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.FileRecognition;
@@ -298,14 +301,30 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
                 up();
                 break;
             case R.id.choose:
-                Intent data = new Intent();
-                data.putExtra(CHOSEN_FILE, chosenFile.getAbsolutePath());
-                setResult(RESULT_OK, data);
-                finish();
+                if (chosenFile.isDirectory() && !new File(chosenFile, ".nomedia").exists()) {
+                    HideFolderDialog hideFolderDialog = HideFolderDialog.newInstance(chosenFile);
+                    hideFolderDialog.show(getSupportFragmentManager(), HideFolderDialog.TAG);
+                    hideFolderDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            finishActivityWithSuccess(chosenFile);
+                        }
+                    });
+                } else {
+                    finishActivityWithSuccess(chosenFile);
+                }
+
                 break;
             case R.id.abort:
                 finish();
                 break;
         }
+    }
+
+    private void finishActivityWithSuccess(@NonNull File chosenFile) {
+        Intent data = new Intent();
+        data.putExtra(CHOSEN_FILE, chosenFile.getAbsolutePath());
+        setResult(RESULT_OK, data);
+        finish();
     }
 }
