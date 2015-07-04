@@ -84,7 +84,8 @@ public class PlayPauseDrawable extends Drawable {
 
     @Override
     public void draw(Canvas canvas) {
-        L.v(TAG, "draw called with progress=" + progress);
+        long startDraw = System.currentTimeMillis();
+
         leftPauseBar.rewind();
         rightPauseBar.rewind();
 
@@ -141,6 +142,11 @@ public class PlayPauseDrawable extends Drawable {
         canvas.drawPath(rightPauseBar, paint);
 
         canvas.restore();
+
+        long timeElapsed = System.currentTimeMillis() - startDraw;
+        if (timeElapsed > 16) {
+            L.e(TAG, "Drawing took too long=" + timeElapsed);
+        }
     }
 
     public void transformToPause(boolean animated) {
