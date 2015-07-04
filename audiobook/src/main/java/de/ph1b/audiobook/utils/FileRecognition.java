@@ -69,6 +69,7 @@ public class FileRecognition {
         audioTypes.add(".mid");
         audioTypes.add(".mkv");
         audioTypes.add(".mp3");
+        audioTypes.add(".mp3package");
         audioTypes.add(".mxmf");
 
         audioTypes.add(".ogg");
