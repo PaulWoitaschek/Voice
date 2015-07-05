@@ -4,9 +4,33 @@ import java.io.File;
 import java.util.Comparator;
 
 
-public class NaturalOrderComparator implements Comparator<Object> {
+public class NaturalOrderComparator {
 
-    static int naturalCompare(String lhs, String rhs) {
+    public static final Comparator<Object> INSTANCE = new Comparator<Object>() {
+        @Override
+        public int compare(Object lhs, Object rhs) {
+            if (lhs instanceof Chapter && rhs instanceof Chapter) {
+                Chapter a = (Chapter) lhs;
+                Chapter b = (Chapter) rhs;
+                return compare(new File(a.getPath()), b.getPath());
+            } else if (lhs instanceof File && rhs instanceof File) {
+                File a = (File) lhs;
+                File b = (File) rhs;
+                return naturalCompare(a, b);
+            } else if (lhs instanceof String && rhs instanceof String) {
+                String a = (String) lhs;
+                String b = (String) rhs;
+                return naturalCompare(a, b);
+            } else {
+                return naturalCompare(String.valueOf(lhs), String.valueOf(rhs));
+            }
+        }
+    };
+
+    private NaturalOrderComparator() {
+    }
+
+    private static int naturalCompare(String lhs, String rhs) {
         int ia = 0, ib = 0;
         int nza, nzb;
         char ca, cb;
@@ -110,25 +134,6 @@ public class NaturalOrderComparator implements Comparator<Object> {
             String a = lhs.getName();
             String b = rhs.getName();
             return naturalCompare(a, b);
-        }
-    }
-
-    @Override
-    public int compare(Object lhs, Object rhs) {
-        if (lhs instanceof Chapter && rhs instanceof Chapter) {
-            Chapter a = (Chapter) lhs;
-            Chapter b = (Chapter) rhs;
-            return compare(new File(a.getPath()), b.getPath());
-        } else if (lhs instanceof File && rhs instanceof File) {
-            File a = (File) lhs;
-            File b = (File) rhs;
-            return naturalCompare(a, b);
-        } else if (lhs instanceof String && rhs instanceof String) {
-            String a = (String) lhs;
-            String b = (String) rhs;
-            return naturalCompare(a, b);
-        } else {
-            return naturalCompare(String.valueOf(lhs), String.valueOf(rhs));
         }
     }
 }

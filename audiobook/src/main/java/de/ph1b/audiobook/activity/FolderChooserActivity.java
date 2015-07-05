@@ -119,7 +119,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
                 paths.add(f);
             }
         }
-        Collections.sort(paths, new NaturalOrderComparator());
+        Collections.sort(paths, NaturalOrderComparator.INSTANCE);
         return paths;
     }
 
@@ -135,7 +135,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         File[] containing = file.listFiles(FileRecognition.folderAndMusicFilter);
         if (containing != null) {
             asList = new ArrayList<>(Arrays.asList(containing));
-            Collections.sort(asList, new NaturalOrderComparator());
+            Collections.sort(asList, NaturalOrderComparator.INSTANCE);
         }
         return asList;
     }

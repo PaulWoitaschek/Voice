@@ -292,7 +292,7 @@ public class Book implements Comparable<Book> {
 
     @Override
     public int compareTo(@NonNull Book that) {
-        return new NaturalOrderComparator().compare(this.name, that.name);
+        return NaturalOrderComparator.INSTANCE.compare(this.name, that.name);
     }
 
     public enum Type {
