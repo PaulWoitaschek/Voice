@@ -23,6 +23,17 @@ public class HideFolderDialog extends DialogFragment {
     @Nullable
     private DialogInterface.OnDismissListener listener;
 
+    /**
+     * Returns a file that called .nomedia that prevents music players from recognizing the book as
+     * music.
+     *
+     * @param folder The folder
+     * @return The file that provides the hiding
+     */
+    public static File getNoMediaFileByFolder(@NonNull File folder) {
+        return new File(folder, ".nomedia");
+    }
+
     public static HideFolderDialog newInstance(@NonNull File pathToHide) {
         Bundle args = new Bundle();
         args.putString(PATH_TO_HIDE, pathToHide.getAbsolutePath());
@@ -49,7 +60,7 @@ public class HideFolderDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         String pathToHide = getArguments().getString(PATH_TO_HIDE);
-        final File hideFile = new File(pathToHide, ".nomedia");
+        final File hideFile = getNoMediaFileByFolder(new File(pathToHide));
         return new MaterialDialog.Builder(getActivity())
                 .title(R.string.hide_folder_title)
                 .content(R.string.hide_folder_content)

@@ -301,7 +301,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
                 up();
                 break;
             case R.id.choose:
-                if (chosenFile.isDirectory() && !new File(chosenFile, ".nomedia").exists()) {
+                if (chosenFile.isDirectory() && !HideFolderDialog.getNoMediaFileByFolder(chosenFile).exists()) {
                     HideFolderDialog hideFolderDialog = HideFolderDialog.newInstance(chosenFile);
                     hideFolderDialog.show(getSupportFragmentManager(), HideFolderDialog.TAG);
                     hideFolderDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
