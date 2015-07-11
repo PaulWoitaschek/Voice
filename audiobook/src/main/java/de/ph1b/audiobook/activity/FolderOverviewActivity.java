@@ -265,6 +265,8 @@ public class FolderOverviewActivity extends BaseActivity {
                     }
                     L.v(TAG, "chosenSingleBook=" + chosenSingleBook);
                     break;
+                default:
+                    break;
             }
             BookAdder.getInstance(this).scanForFiles(true);
         }

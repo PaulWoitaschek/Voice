@@ -47,6 +47,8 @@ public class ThemeUtil {
                     bar.getView().setBackgroundColor(r.getColor(R.color.background_material_light));
                     textView.setTextColor(r.getColor(R.color.abc_primary_text_material_light));
                     break;
+                default:
+                    break;
             }
         }
     }

@@ -313,10 +313,11 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
                 } else {
                     finishActivityWithSuccess(chosenFile);
                 }
-
                 break;
             case R.id.abort:
                 finish();
+                break;
+            default:
                 break;
         }
     }

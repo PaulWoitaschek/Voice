@@ -228,6 +228,8 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                         case ServiceController.CONTROL_PREVIOUS:
                             controller.previous(true);
                             break;
+                        default:
+                            break;
                     }
                 }
             });
@@ -318,6 +320,8 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                     controller.pause();
                     pauseBecauseLossTransient = true;
                 }
+                break;
+            default:
                 break;
         }
     }
