@@ -19,6 +19,7 @@ import java.io.IOException;
 
 import de.ph1b.audiobook.utils.L;
 
+@SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class ImageHelper {
 
     private static final String TAG = ImageHelper.class.getSimpleName();
@@ -56,9 +57,12 @@ public class ImageHelper {
         // save bitmap to storage
         try {
             FileOutputStream coverOut = new FileOutputStream(destination);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, coverOut);
-            coverOut.flush();
-            coverOut.close();
+            try {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, coverOut);
+                coverOut.flush();
+            } finally {
+                coverOut.close();
+            }
         } catch (IOException e) {
             L.e(TAG, "Error at saving image with destination=" + destination, e);
         }
