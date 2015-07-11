@@ -23,10 +23,13 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.pro'
             signingConfig signingConfigs.release
         }
         debug {
+            minifyEnabled false
+            shrinkResources false
             applicationIdSuffix ".debug"
         }
     }
