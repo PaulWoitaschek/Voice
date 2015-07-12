@@ -19,7 +19,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
-import de.ph1b.audiobook.activity.BookActivity;
+import de.ph1b.audiobook.activity.BookShelfActivity;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.model.DataBaseHelper;
@@ -31,7 +31,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         MediaPlayerInterface.OnCompletionListener {
 
 
-    public static final String MALFORMED_FILE = "malformedFile";
     private static final String TAG = MediaPlayerController.class.getSimpleName();
     public static volatile boolean sleepTimerActive = false;
     private static volatile PlayState playState = PlayState.STOPPED;
@@ -403,11 +402,11 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         lock.lock();
         try {
             L.e(TAG, "onError");
-            Intent bookShelfIntent = BookActivity.bookScreenIntent(c);
             if (book != null) {
-                bookShelfIntent.putExtra(MALFORMED_FILE, book.getCurrentChapter().getPath());
+                c.startActivity(BookShelfActivity.malformedFileIntent(c, book.getCurrentMediaPath()));
+            } else {
+                c.startActivity(new Intent(c, BookShelfActivity.class));
             }
-            c.startActivity(bookShelfIntent);
 
             state = State.DEAD;
         } finally {

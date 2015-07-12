@@ -36,8 +36,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.BookActivity;
-import de.ph1b.audiobook.fragment.BookPlayFragment;
+import de.ph1b.audiobook.activity.BookPlayActivity;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
@@ -332,17 +331,19 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         Chapter chapter = book.getCurrentChapter();
 
         // content click
-        Intent bookPlayIntent = new Intent(AudioService.this, BookActivity.class);
-        bookPlayIntent.putExtra(BookActivity.TARGET_FRAGMENT, BookPlayFragment.TAG);
-        PendingIntent contentIntent = PendingIntent.getActivity(AudioService.this, 0, bookPlayIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntent = BookPlayActivity.getTaskStackPI(this, book.getId());
 
         /**
          * Cover. NOTE: On Android 21 + the MediaStyle will use the cover as the background. So it
          * has to be a large image. On Android < 21 there will be a wrong cropping, so there we must
          * set the size to the correct notification sizes, otherwise notification will look ugly.
          */
-        int width = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? ImageHelper.getSmallerScreenSize(this) : getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_width);
-        int height = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? ImageHelper.getSmallerScreenSize(this) : getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_height);
+        int width = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
+                ImageHelper.getSmallerScreenSize(this) :
+                getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_width);
+        int height = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
+                ImageHelper.getSmallerScreenSize(this) :
+                getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_height);
 
         Bitmap cover = null;
         try {

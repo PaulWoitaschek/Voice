@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
     android:layout_gravity="center_vertical"
@@ -31,7 +32,6 @@
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/cover"
                 android:scaleType="centerCrop"
-                android:transitionName="@string/transition_cover"
                 tools:ignore="UnusedAttribute" />
 
 
@@ -137,7 +137,6 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/play_pause"
         android:gravity="bottom"
-        android:transitionName="@string/transition_fab"
         app:layout_anchor="@id/play_group"
         app:layout_anchorGravity="center"
         app:layout_behavior="de.ph1b.audiobook.uitools.FabBehavior"

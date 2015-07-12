@@ -27,8 +27,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.BookActivity;
-import de.ph1b.audiobook.fragment.BookPlayFragment;
+import de.ph1b.audiobook.activity.BookShelfActivity;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.DataBaseHelper;
@@ -108,8 +107,7 @@ public class WidgetUpdateService extends Service implements Communication.OnBook
                         }
                     } else {
                         // directly going back to bookChoose
-                        Intent wholeWidgetClickI = BookActivity.bookScreenIntent
-                                (WidgetUpdateService.this);
+                        Intent wholeWidgetClickI = new Intent(WidgetUpdateService.this, BookShelfActivity.class);
                         PendingIntent wholeWidgetClickPI = PendingIntent.getActivity
                                 (WidgetUpdateService.this, (int) System.currentTimeMillis(),
                                         wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -185,8 +183,7 @@ public class WidgetUpdateService extends Service implements Communication.OnBook
 
         remoteViews.setTextViewText(R.id.summary, name);
 
-        Intent wholeWidgetClickI = new Intent(this, BookActivity.class);
-        wholeWidgetClickI.putExtra(BookActivity.TARGET_FRAGMENT, BookPlayFragment.TAG);
+        Intent wholeWidgetClickI = new Intent(this, BookShelfActivity.class);
         PendingIntent wholeWidgetClickPI = PendingIntent.getActivity
                 (WidgetUpdateService.this, (int) System.currentTimeMillis(), wholeWidgetClickI,
                         PendingIntent.FLAG_UPDATE_CURRENT);

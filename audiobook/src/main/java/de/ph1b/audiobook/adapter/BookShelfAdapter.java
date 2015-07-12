@@ -138,7 +138,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
         ViewGroup v = (ViewGroup) LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.fragment_book_shelf_row_layout, parent, false);
+                R.layout.activity_book_shelf_row_layout, parent, false);
         return new ViewHolder(v, onItemClickListener);
     }
 

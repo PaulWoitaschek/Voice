@@ -1,20 +1,24 @@
-package de.ph1b.audiobook.fragment;
+package de.ph1b.audiobook.activity;
 
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
-import android.view.LayoutInflater;
+import android.transition.Fade;
+import android.transition.Transition;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +40,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.SettingsActivity;
 import de.ph1b.audiobook.dialog.BookmarkDialogFragment;
 import de.ph1b.audiobook.dialog.JumpToPositionDialogFragment;
 import de.ph1b.audiobook.dialog.PlaybackSpeedDialogFragment;
@@ -52,10 +55,15 @@ import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
+/**
+ * Created by Paul Woitaschek (woitaschek@posteo.de, paul-woitaschek.de) on 12.07.15.
+ * TODO: Edit class description
+ */
+public class BookPlayActivity extends BaseActivity implements View.OnClickListener, Communication.OnSleepStateChangedListener, Communication.OnBookContentChangedListener, Communication.OnPlayStateChangedListener {
 
-public class BookPlayFragment extends Fragment implements View.OnClickListener, Communication.OnSleepStateChangedListener, Communication.OnBookContentChangedListener, Communication.OnPlayStateChangedListener {
-
-    public static final String TAG = BookPlayFragment.class.getSimpleName();
+    public static final String TAG = BookPlayActivity.class.getSimpleName();
+    public static final String TRANSITION_COVER = "transitionCover";
+    public static final String TRANSITION_FAB = "transitionFab";
     private static final String BOOK_ID = "bookId";
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
     private final Communication communication = Communication.getInstance();
@@ -69,15 +77,21 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
     private ServiceController controller;
     private long bookId;
     private DataBaseHelper db;
-    private CoordinatorLayout view;
+    private CoordinatorLayout coordinatorLayout;
 
-    public static BookPlayFragment newInstance(long bookId) {
-        Bundle args = new Bundle();
-        args.putLong(BOOK_ID, bookId);
+    public static Intent newIntent(Context c, long bookId) {
+        Intent intent = new Intent(c, BookPlayActivity.class);
+        intent.putExtra(BOOK_ID, bookId);
+        return intent;
+    }
 
-        BookPlayFragment bookPlayFragment = new BookPlayFragment();
-        bookPlayFragment.setArguments(args);
-        return bookPlayFragment;
+    public static PendingIntent getTaskStackPI(Context c, long bookId) {
+        // Use TaskStackBuilder to build the back stack and get the PendingIntent
+        Intent bookPlayIntent = newIntent(c, bookId);
+        return TaskStackBuilder.create(c)
+                .addParentStack(BookShelfActivity.class)
+                .addNextIntentWithParentStack(bookPlayIntent)
+                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     private static String formatTime(int ms, int duration) {
@@ -92,46 +106,46 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         }
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
-                             Bundle savedInstanceState) {
-        view = (CoordinatorLayout) inflater.inflate(R.layout.fragment_book_play, container, false);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        bookId = getArguments().getLong(BOOK_ID);
+        prefs = PrefsManager.getInstance(this);
+        db = DataBaseHelper.getInstance(this);
+        controller = new ServiceController(this);
+
+        setContentView(R.layout.activity_book_play);
+
+        bookId = getIntent().getLongExtra(BOOK_ID, -1);
         final Book book = db.getBook(bookId);
         if (book == null) {
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.content, new BookShelfFragment(), BookShelfFragment.TAG)
-                    .commit();
-            return null;
+            startActivity(new Intent(this, BookShelfActivity.class));
+            return;
         }
 
         //setup actionbar
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        AppCompatActivity appCompatActivity = (AppCompatActivity) getActivity();
-        appCompatActivity.setSupportActionBar(toolbar);
-        ActionBar actionBar = appCompatActivity.getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(book.getName());
-        }
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(book.getName());
 
-        setHasOptionsMenu(true);
 
         //init buttons
-        seekBar = (SeekBar) view.findViewById(R.id.seekBar);
-        FloatingActionButton playButton = (FloatingActionButton) view.findViewById(R.id.play);
-        ImageButton previous_button = (ImageButton) view.findViewById(R.id.previous);
-        ImageButton next_button = (ImageButton) view.findViewById(R.id.next);
-        playedTimeView = (TextView) view.findViewById(R.id.played);
-        ImageView coverView = (ImageView) view.findViewById(R.id.book_cover);
-        maxTimeView = (TextView) view.findViewById(R.id.maxTime);
-        bookSpinner = (Spinner) view.findViewById(R.id.book_spinner);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator);
+        seekBar = (SeekBar) findViewById(R.id.seekBar);
+        FloatingActionButton playButton = (FloatingActionButton) findViewById(R.id.play);
+        ImageButton previous_button = (ImageButton) findViewById(R.id.previous);
+        ImageButton next_button = (ImageButton) findViewById(R.id.next);
+        playedTimeView = (TextView) findViewById(R.id.played);
+        ImageView coverView = (ImageView) findViewById(R.id.book_cover);
+        maxTimeView = (TextView) findViewById(R.id.maxTime);
+        bookSpinner = (Spinner) findViewById(R.id.book_spinner);
 
         //setup buttons
-        view.findViewById(R.id.fastForward).setOnClickListener(this);
-        view.findViewById(R.id.rewind).setOnClickListener(this);
+        findViewById(R.id.fastForward).setOnClickListener(this);
+        findViewById(R.id.rewind).setOnClickListener(this);
         previous_button.setOnClickListener(this);
         next_button.setOnClickListener(this);
         playButton.setOnClickListener(this);
@@ -185,8 +199,8 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
             chaptersAsStrings.add(chapterName);
         }
 
-        SpinnerAdapter adapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.fragment_book_play_spinner, chaptersAsStrings) {
+        SpinnerAdapter adapter = new ArrayAdapter<String>(this,
+                R.layout.activity_book_play_spinner, chaptersAsStrings) {
             @Override
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
                 final TextView textView = (TextView) super.getDropDownView(position, convertView,
@@ -206,13 +220,13 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
                 // default implementation uses a ViewHolder, so this is necessary.
                 if (position == bookSpinner.getSelectedItemPosition()) {
                     textView.setBackgroundColor(getResources().getColor(ThemeUtil.getResourceId(
-                            getActivity(), R.attr.colorAccent)));
+                            BookPlayActivity.this, R.attr.colorAccent)));
                     textView.setTextColor(getResources().getColor(R.color.dark_text_primary));
                 } else {
                     textView.setBackgroundColor(getResources().getColor(ThemeUtil.getResourceId(
-                            getActivity(), android.R.attr.windowBackground)));
+                            BookPlayActivity.this, android.R.attr.windowBackground)));
                     textView.setTextColor(getResources().getColor(ThemeUtil.getResourceId(
-                            getActivity(), R.attr.text_primary)));
+                            BookPlayActivity.this, R.attr.text_primary)));
                 }
 
                 return textView;
@@ -239,9 +253,9 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         // (Cover)
         File coverFile = book.getCoverFile();
         Drawable coverReplacement = new CoverReplacement(book.getName(),
-                getActivity());
+                this);
         if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-            Picasso.with(getActivity()).load(coverFile).placeholder(coverReplacement).into(
+            Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(
                     coverView);
         } else {
             coverView.setImageDrawable(coverReplacement);
@@ -259,16 +273,16 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
             bookSpinner.setVisibility(View.VISIBLE);
         }
 
-        return view;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        prefs = PrefsManager.getInstance(getActivity());
-        db = DataBaseHelper.getInstance(getActivity());
-        controller = new ServiceController(getActivity());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Transition fade = new Fade();
+            fade.excludeTarget(R.id.toolbar, true);
+            fade.excludeTarget(R.id.book_cover, true);
+            fade.excludeTarget(android.R.id.statusBarBackground, true);
+            fade.excludeTarget(android.R.id.navigationBarBackground, true);
+            getWindow().setEnterTransition(fade);
+        }
+        ViewCompat.setTransitionName(coverView, TRANSITION_COVER);
+        ViewCompat.setTransitionName(playButton, TRANSITION_FAB);
     }
 
     @Override
@@ -299,16 +313,12 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
     }
 
     private void launchJumpToPositionDialog() {
-        new JumpToPositionDialogFragment().show(getFragmentManager(), JumpToPositionDialogFragment.TAG);
+        new JumpToPositionDialogFragment().show(getSupportFragmentManager(), JumpToPositionDialogFragment.TAG);
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.book_play, menu);
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.book_play, menu);
         MenuItem timeLapseItem = menu.findItem(R.id.action_time_lapse);
         timeLapseItem.setVisible(MediaPlayerController.canSetSpeed());
         MenuItem sleepTimerItem = menu.findItem(R.id.action_sleep);
@@ -317,13 +327,14 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
         } else {
             sleepTimerItem.setIcon(R.drawable.ic_snooze_white_24dp);
         }
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.action_time_change:
                 launchJumpToPositionDialog();
@@ -334,24 +345,23 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
                     snackbar.dismiss();
                 }
                 if (prefs.setBookmarkOnSleepTimer() && !MediaPlayerController.sleepTimerActive) {
-                    String date = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE |
+                    String date = DateUtils.formatDateTime(this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE |
                             DateUtils.FORMAT_SHOW_TIME |
                             DateUtils.FORMAT_NUMERIC_DATE);
                     BookmarkDialogFragment.addBookmark(bookId, date + ": " +
-                            getString(R.string.action_sleep), getActivity());
+                            getString(R.string.action_sleep), this);
                 }
                 return true;
             case R.id.action_time_lapse:
-                new PlaybackSpeedDialogFragment().show(getFragmentManager(),
+                new PlaybackSpeedDialogFragment().show(getSupportFragmentManager(),
                         PlaybackSpeedDialogFragment.TAG);
                 return true;
             case R.id.action_bookmark:
-                BookmarkDialogFragment.newInstance(bookId).show(getFragmentManager(),
+                BookmarkDialogFragment.newInstance(bookId).show(getSupportFragmentManager(),
                         BookmarkDialogFragment.TAG);
                 return true;
             case android.R.id.home:
-            case R.id.home:
-                getActivity().onBackPressed();
+                ActivityCompat.finishAfterTransition(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -377,7 +387,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
             onBookContentChanged(book);
         }
 
-        getActivity().invalidateOptionsMenu();
+        this.invalidateOptionsMenu();
 
         communication.addOnBookContentChangedListener(this);
         communication.addOnPlayStateChangedListener(this);
@@ -395,15 +405,15 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onSleepStateChanged() {
-        getActivity().runOnUiThread(new Runnable() {
+        this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                getActivity().invalidateOptionsMenu();
+                invalidateOptionsMenu();
                 if (MediaPlayerController.sleepTimerActive) {
                     int minutes = prefs.getSleepTime();
                     String message = getString(R.string.sleep_timer_started) + " " + minutes + " " +
                             getString(R.string.minutes);
-                    snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG).setAction(
+                    snackbar = Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).setAction(
                             R.string.stop, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -419,7 +429,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onBookContentChanged(@NonNull final Book book) {
-        getActivity().runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 L.d(TAG, "onBookContentChangedReciever called with bookId=" + book.getId());
@@ -452,7 +462,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onPlayStateChanged() {
-        getActivity().runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 setPlayState(true);

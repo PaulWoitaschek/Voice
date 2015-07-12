@@ -28,6 +28,4 @@
         <item>@string/pref_support_translations</item>
         <item>@string/pref_support_donation</item>
     </string-array>
-    <string name="transition_cover">coverTransition</string>
-    <string name="transition_fab">fabTransition</string>
 </resources>
