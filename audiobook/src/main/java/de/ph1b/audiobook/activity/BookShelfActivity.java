@@ -2,6 +2,7 @@ package de.ph1b.audiobook.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -222,10 +223,18 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     private void startBookPlay() {
         Book currentBook = db.getBook(prefs.getCurrentBookId());
         if (currentBook != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setReturnTransition(null);
+                getWindow().setReenterTransition(null);
+                getWindow().setSharedElementReturnTransition(null);
+                getWindow().setSharedElementReenterTransition(null);
+                getWindow().setSharedElementsUseOverlay(false);
+            }
+
             List<Pair<View, String>> shared = new ArrayList<>();
             BookShelfAdapter.ViewHolder viewHolder = (BookShelfAdapter.ViewHolder) recyclerView
                     .findViewHolderForItemId(currentBook.getId());
-            if (viewHolder != null && !currentBook.isUseCoverReplacement()) {
+            if (viewHolder != null && !currentBook.isUseCoverReplacement() && currentBook.getCoverFile().exists()) {
                 shared.add(Pair.create((View) viewHolder.coverView, BookPlayActivity.TRANSITION_COVER));
             }
             // buggy

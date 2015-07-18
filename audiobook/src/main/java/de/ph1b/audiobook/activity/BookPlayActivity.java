@@ -32,6 +32,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -249,8 +250,19 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         Drawable coverReplacement = new CoverReplacement(book.getName(),
                 this);
         if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
+            ActivityCompat.postponeEnterTransition(this);
             Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(
-                    coverView);
+                    coverView, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            ActivityCompat.startPostponedEnterTransition(BookPlayActivity.this);
+                        }
+
+                        @Override
+                        public void onError() {
+                            ActivityCompat.startPostponedEnterTransition(BookPlayActivity.this);
+                        }
+                    });
         } else {
             coverView.setImageDrawable(coverReplacement);
         }
@@ -273,6 +285,11 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             fade.excludeTarget(android.R.id.statusBarBackground, true);
             fade.excludeTarget(android.R.id.navigationBarBackground, true);
             getWindow().setEnterTransition(fade);
+            getWindow().setSharedElementExitTransition(null);
+            getWindow().setExitTransition(null);
+            getWindow().setSharedElementReturnTransition(null);
+            getWindow().setSharedElementReenterTransition(null);
+            getWindow().setSharedElementsUseOverlay(false);
         }
         ViewCompat.setTransitionName(coverView, TRANSITION_COVER);
         ViewCompat.setTransitionName(playButton, TRANSITION_FAB);
