@@ -144,13 +144,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         bookSpinner = (Spinner) findViewById(R.id.book_spinner);
 
         //setup buttons
-        findViewById(R.id.fastForward).setOnClickListener(this);
-        findViewById(R.id.rewind).setOnClickListener(this);
-        previous_button.setOnClickListener(this);
-        next_button.setOnClickListener(this);
-        playButton.setOnClickListener(this);
         playButton.setIconDrawable(playPauseDrawable);
-        playedTimeView.setOnClickListener(this);
         ThemeUtil.theme(seekBar);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -260,7 +254,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         } else {
             coverView.setImageDrawable(coverReplacement);
         }
-        coverView.setOnClickListener(this);
 
         // Next/Prev/spinner hiding
         if (book.getChapters().size() == 1) {
