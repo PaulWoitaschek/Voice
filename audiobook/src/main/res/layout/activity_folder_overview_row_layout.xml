@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="56dp">
 
-    <ImageView
+    <ImageButton
         android:id="@+id/icon"
         android:layout_width="56dp"
         android:layout_height="wrap_content"
@@ -14,7 +14,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:scaleType="fitStart"
-        android:src="?attr/folder_choose_folder"
+        android:src="@drawable/ic_folder_white_48dp"
         tools:ignore="ContentDescription" />
 
     <TextView
@@ -32,7 +32,6 @@
         android:layout_marginStart="72dp"
         android:ellipsize="marquee"
         android:maxLines="2"
-        android:textColor="?attr/text_primary"
         android:textSize="@dimen/list_text_primary_size"
         tools:text="/storage/scard1/Audiobooks/subfolder/subsdfer/subfodsdfsdffder/subsbder/subfolder/subfolder" />
 
@@ -46,6 +45,6 @@
         android:contentDescription="@string/remove"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:src="?attr/folder_overview_trash" />
+        android:src="@drawable/ic_delete_white_24dp" />
 
 </RelativeLayout>

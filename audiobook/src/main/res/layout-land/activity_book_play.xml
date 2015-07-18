@@ -93,7 +93,7 @@
                         android:layout_height="wrap_content"
                         android:contentDescription="@string/previous_track"
                         android:padding="8dp"
-                        android:src="?attr/book_play_previous" />
+                        android:src="@drawable/ic_skip_previous_white_36dp" />
 
                     <ImageButton
                         android:id="@+id/rewind"
@@ -103,7 +103,7 @@
                         android:layout_marginRight="44dp"
                         android:contentDescription="@string/rewind"
                         android:padding="8dp"
-                        android:src="?attr/book_play_rewind" />
+                        android:src="@drawable/ic_fast_rewind_white_36dp" />
 
                     <ImageButton
                         android:id="@+id/fastForward"
@@ -113,7 +113,7 @@
                         android:layout_marginStart="44dp"
                         android:contentDescription="@string/fast_forward"
                         android:padding="8dp"
-                        android:src="?attr/book_play_fast_forward" />
+                        android:src="@drawable/ic_fast_forward_white_36dp" />
 
                     <ImageButton
                         android:id="@+id/next"
@@ -121,7 +121,7 @@
                         android:layout_height="wrap_content"
                         android:contentDescription="@string/next_track"
                         android:padding="8dp"
-                        android:src="?attr/book_play_next" />
+                        android:src="@drawable/ic_skip_next_white_36dp" />
 
                 </LinearLayout>
 

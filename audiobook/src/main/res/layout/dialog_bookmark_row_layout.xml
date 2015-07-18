@@ -17,7 +17,7 @@
         android:contentDescription="@string/popup_edit"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:src="?attr/more" />
+        android:src="@drawable/ic_more_vert_white_24dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +36,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:textColor="?attr/text_primary"
             android:textSize="@dimen/list_text_primary_size"
             tools:text="Fictive bookmark title that is possibly too long long long" />
 
@@ -53,7 +52,7 @@
                 android:layout_weight="1"
                 android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="?attr/text_secondary"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="@dimen/list_text_secondary_size"
                 tools:text="(4/102)" />
 
@@ -63,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="?attr/text_secondary"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="@dimen/list_text_secondary_size"
                 tools:text="10:10:10 / 12:12:12" />
 

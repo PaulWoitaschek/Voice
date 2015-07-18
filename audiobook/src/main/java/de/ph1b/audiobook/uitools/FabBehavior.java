@@ -17,6 +17,7 @@ import java.util.List;
  * Defines the behavior for the floating action button. If the dependency is a Snackbar, move the
  * fab up.
  */
+@SuppressWarnings("ALL")
 public class FabBehavior extends CoordinatorLayout.Behavior<FloatingActionButton> {
 
     private float mTranslationY;

@@ -57,13 +57,13 @@ import de.ph1b.audiobook.utils.PrefsManager;
 
 /**
  * Created by Paul Woitaschek (woitaschek@posteo.de, paul-woitaschek.de) on 12.07.15.
- * TODO: Edit class description
+ * Base class for book playing interaction.
  */
 public class BookPlayActivity extends BaseActivity implements View.OnClickListener, Communication.OnSleepStateChangedListener, Communication.OnBookContentChangedListener, Communication.OnPlayStateChangedListener {
 
-    public static final String TAG = BookPlayActivity.class.getSimpleName();
     public static final String TRANSITION_COVER = "transitionCover";
     public static final String TRANSITION_FAB = "transitionFab";
+    private static final String TAG = BookPlayActivity.class.getSimpleName();
     private static final String BOOK_ID = "bookId";
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
     private final Communication communication = Communication.getInstance();
@@ -226,7 +226,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                     textView.setBackgroundColor(getResources().getColor(ThemeUtil.getResourceId(
                             BookPlayActivity.this, android.R.attr.windowBackground)));
                     textView.setTextColor(getResources().getColor(ThemeUtil.getResourceId(
-                            BookPlayActivity.this, R.attr.text_primary)));
+                            BookPlayActivity.this, android.R.attr.textColor)));
                 }
 
                 return textView;

@@ -29,7 +29,6 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.FolderChooserAdapter;
 import de.ph1b.audiobook.dialog.HideFolderDialog;
 import de.ph1b.audiobook.model.NaturalOrderComparator;
-import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.FileRecognition;
 import de.ph1b.audiobook.utils.L;
 
@@ -290,7 +289,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
 
         chooseButton.setEnabled(chooseEnabled);
         upButton.setEnabled(upEnabled);
-        @SuppressWarnings("deprecation") Drawable upIcon = upEnabled ? getResources().getDrawable(ThemeUtil.getResourceId(this, R.attr.folder_choose_up)) : null;
+        @SuppressWarnings("deprecation") Drawable upIcon = upEnabled ? getResources().getDrawable(R.drawable.ic_arrow_up_white_48dp) : null;
         upButton.setImageDrawable(upIcon);
     }
 

@@ -13,7 +13,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.uitools.ThemeUtil;
 
 public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAdapter.ViewHolder> {
 
@@ -50,12 +49,10 @@ public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAd
 
         if (bookCollections.contains(file)) {
             //noinspection deprecation
-            holder.icon.setImageDrawable(c.getResources().getDrawable(ThemeUtil.getResourceId(c,
-                    R.attr.folder_overview_multi_folder)));
+            holder.icon.setImageDrawable(c.getResources().getDrawable(R.drawable.ic_folder_multiple_white_48dp));
         } else {
             //noinspection deprecation
-            holder.icon.setImageDrawable(c.getResources().getDrawable(ThemeUtil.getResourceId(c,
-                    R.attr.folder_choose_folder)));
+            holder.icon.setImageDrawable(c.getResources().getDrawable(R.drawable.ic_folder_white_48dp));
         }
     }
 

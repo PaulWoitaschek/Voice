@@ -6,6 +6,7 @@
 
     <ImageView
         android:id="@+id/singleline_image1"
+        style="@style/TintedImageViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -15,7 +16,7 @@
         android:contentDescription="@string/content_file_folder"
         android:maxWidth="56dp"
         android:scaleType="fitStart"
-        android:src="?attr/folder_choose_folder" />
+        android:src="@drawable/ic_folder_white_48dp" />
 
     <TextView
         android:id="@+id/singleline_text1"
@@ -31,7 +32,6 @@
         android:layout_marginStart="72dp"
         android:gravity="center_vertical"
         android:singleLine="true"
-        android:textColor="?attr/text_primary"
         android:textSize="@dimen/list_text_primary_size"
         tools:text="ExampleFolder" />
 

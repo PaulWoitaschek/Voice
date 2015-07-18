@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/content_previous_cover"
             android:padding="8dp"
-            android:src="?attr/edit_prev" />
+            android:src="@drawable/ic_navigate_before_white_36dp" />
 
         <FrameLayout
             android:layout_width="0dp"
@@ -80,6 +80,6 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/content_next_cover"
             android:padding="8dp"
-            android:src="?attr/edit_next" />
+            android:src="@drawable/ic_navigate_next_white_36dp" />
     </LinearLayout>
 </LinearLayout>

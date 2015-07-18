@@ -37,7 +37,7 @@
 
         <ImageButton
             android:id="@+id/editBook"
-            style="@style/DarkButtonStyle"
+            style="@style/ImageButtonStyle"
             android:layout_width="35dp"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"

@@ -24,8 +24,6 @@
     <color name="accentDark">#ffc2185b</color>
     <!-- ## text colors -->
 
-    <color name="dark_icon_color">#ffffff</color>
-
-    <color name="light_icon_color">#8b000000</color>
-    <color name="dar_icon_color">#ffffffff</color>
+    <color name="light_icon_enabled">#ff757575</color>
+    <color name="dark_icon_enabled">#ffffffff</color>
 </resources>

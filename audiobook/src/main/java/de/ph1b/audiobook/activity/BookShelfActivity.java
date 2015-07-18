@@ -46,7 +46,7 @@ import de.ph1b.audiobook.utils.PrefsManager;
  */
 public class BookShelfActivity extends BaseActivity implements View.OnClickListener, Communication.OnBookSetChangedListener, Communication.OnCurrentBookIdChangedListener, Communication.OnScannerStateChangedListener, Communication.OnPlayStateChangedListener, Communication.OnCoverChangedListener, BookShelfAdapter.OnItemClickListener {
 
-    public static final String TAG = BookShelfActivity.class.getSimpleName();
+    private static final String TAG = BookShelfActivity.class.getSimpleName();
     private static final String MALFORMED_FILE = "malformedFile";
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
     private final Communication communication = Communication.getInstance();
@@ -256,7 +256,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 shared.add(Pair.create((View) viewHolder.coverView, BookPlayActivity.TRANSITION_COVER));
             }
             shared.add(Pair.create((View) fab, BookPlayActivity.TRANSITION_FAB));
-            ActivityOptionsCompat opts = ActivityOptionsCompat.makeSceneTransitionAnimation(this, shared.toArray(new Pair[shared.size()]));
+            @SuppressWarnings("unchecked") ActivityOptionsCompat opts = ActivityOptionsCompat.makeSceneTransitionAnimation(this, shared.toArray(new Pair[shared.size()]));
             ActivityCompat.startActivity(this, BookPlayActivity.newIntent(this, prefs.getCurrentBookId()), opts.toBundle());
         }
 

@@ -15,7 +15,6 @@ import java.util.List;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.FolderChooserActivity;
-import de.ph1b.audiobook.uitools.ThemeUtil;
 
 public class FolderChooserAdapter extends BaseAdapter {
 
@@ -82,12 +81,10 @@ public class FolderChooserAdapter extends BaseAdapter {
         Drawable icon;
         if (isDirectory) {
             //noinspection deprecation
-            icon = c.getResources().getDrawable(
-                    ThemeUtil.getResourceId(c, R.attr.folder_choose_folder));
+            icon = c.getResources().getDrawable(R.drawable.ic_folder_white_48dp);
         } else {
             //noinspection deprecation
-            icon = c.getResources().getDrawable(
-                    ThemeUtil.getResourceId(c, R.attr.folder_choose_track));
+            icon = c.getResources().getDrawable(R.drawable.ic_audiotrack_white_48dp);
         }
         viewHolder.imageView.setImageDrawable(icon);
 

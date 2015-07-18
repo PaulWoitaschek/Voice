@@ -26,15 +26,14 @@
             android:imeOptions="actionDone"
             android:inputType="textCapSentences|textAutoCorrect" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:contentDescription="@string/acc_button_add_bookmark"
-            android:src="@drawable/ic_add_circle_outline_white_36dp"
-            android:tint="?attr/themed_icon_color" />
+            android:src="@drawable/ic_add_circle_outline_white_36dp" />
 
     </LinearLayout>
 
