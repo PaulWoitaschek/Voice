@@ -2,8 +2,6 @@ package de.ph1b.audiobook.dialog;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.graphics.PorterDuff;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -46,6 +44,7 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
 
         SeekBar seekBar = (SeekBar) v.findViewById(R.id.seekBar);
         final TextView textView = (TextView) v.findViewById(R.id.textView);
+        ThemeUtil.theme(seekBar);
 
         // setting current speed
         final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
@@ -60,12 +59,6 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
         seekBar.setMax(seekMaxSteps);
         int seekProgress = (int) ((speed - SPEED_MIN) * (seekMaxSteps + 1) / (SPEED_MAX - SPEED_MIN));
         seekBar.setProgress(seekProgress);
-
-        int color = getResources().getColor(ThemeUtil.getResourceId(getActivity(), R.attr.colorAccent));
-        seekBar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            seekBar.getThumb().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-        }
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
