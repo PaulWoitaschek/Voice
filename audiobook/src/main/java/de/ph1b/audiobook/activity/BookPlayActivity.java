@@ -317,8 +317,13 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.book_play, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem timeLapseItem = menu.findItem(R.id.action_time_lapse);
         timeLapseItem.setVisible(MediaPlayerController.canSetSpeed());
         MenuItem sleepTimerItem = menu.findItem(R.id.action_sleep);
@@ -329,6 +334,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         }
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -387,7 +393,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             onBookContentChanged(book);
         }
 
-        this.invalidateOptionsMenu();
+        ActivityCompat.invalidateOptionsMenu(this);
 
         communication.addOnBookContentChangedListener(this);
         communication.addOnPlayStateChangedListener(this);
@@ -408,7 +414,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                invalidateOptionsMenu();
+                ActivityCompat.invalidateOptionsMenu(BookPlayActivity.this);
                 if (MediaPlayerController.sleepTimerActive) {
                     int minutes = prefs.getSleepTime();
                     String message = getString(R.string.sleep_timer_started) + " " + minutes + " " +
