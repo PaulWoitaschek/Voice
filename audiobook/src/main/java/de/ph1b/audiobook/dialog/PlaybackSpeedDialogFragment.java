@@ -27,6 +27,7 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
     private static final float SPEED_DELTA = 0.1f;
     private static final float SPEED_MIN = 0.5f;
     private static final float SPEED_MAX = 2f;
+    private static final DecimalFormat df = new DecimalFormat("0.00");
 
     private static float speedStepValueToSpeed(int step) {
         return (SPEED_MIN + (step * SPEED_DELTA));
@@ -85,7 +86,6 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
     }
 
     private String formatTime(float time) {
-        DecimalFormat df = new DecimalFormat("0.00");
         return getString(R.string.playback_speed) + ": " + df.format(time) + "x";
     }
 }
