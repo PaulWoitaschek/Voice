@@ -10,6 +10,7 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.AnyRes;
 import android.support.annotation.AttrRes;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -30,10 +31,13 @@ public class ThemeUtil {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             int colorAccent = seekBar.getResources().getColor(ThemeUtil.getResourceId(
                     seekBar.getContext(), R.attr.colorAccent));
-            Drawable progressDrawable = DrawableCompat.wrap(seekBar.getProgressDrawable());
-            DrawableCompat.setTint(progressDrawable, colorAccent);
-            seekBar.setProgressDrawable(progressDrawable);
+            tint(seekBar.getProgressDrawable(), colorAccent);
         }
+    }
+
+    private static void tint(Drawable drawable, @ColorInt int color) {
+        Drawable wrapped = DrawableCompat.wrap(drawable.mutate());
+        DrawableCompat.setTint(wrapped, color);
     }
 
     public static void theme(@NonNull Snackbar bar) {
