@@ -24,7 +24,9 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookShelfActivity;
@@ -38,7 +40,12 @@ import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 public class WidgetUpdateService extends Service implements Communication.OnBookContentChangedListener, Communication.OnPlayStateChangedListener, Communication.OnCurrentBookIdChangedListener {
-    private final ExecutorService executor = Executors.newCachedThreadPool();
+    private final ExecutorService executor = new ThreadPoolExecutor(
+            1, 1, // single thread
+            5, TimeUnit.SECONDS,
+            new LinkedBlockingQueue<Runnable>(2), // queue capacity
+            new ThreadPoolExecutor.DiscardOldestPolicy()
+    );
     private final Communication communication = Communication.getInstance();
     private DataBaseHelper db;
     private PrefsManager prefs;
