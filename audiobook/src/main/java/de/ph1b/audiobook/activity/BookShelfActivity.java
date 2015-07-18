@@ -16,7 +16,6 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
@@ -357,7 +356,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    public void onMenuClicked(final int position, ImageButton editBook) {
+    public void onMenuClicked(final int position, View editBook) {
         PopupMenu popupMenu = new PopupMenu(BookShelfActivity.this, editBook);
         popupMenu.inflate(R.menu.bookshelf_popup);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

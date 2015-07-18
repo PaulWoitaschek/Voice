@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -177,20 +176,20 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
     public interface OnItemClickListener {
         void onCoverClicked(final int position);
 
-        void onMenuClicked(final int position, ImageButton editBook);
+        void onMenuClicked(final int position, View view);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final ImageView coverView;
         final TextView titleView;
-        final ImageButton editBook;
+        final View editBook;
         final ImageView currentPlayingIndicator;
 
         public ViewHolder(final ViewGroup itemView, final OnItemClickListener onItemClickListener) {
             super(itemView);
             coverView = (ImageView) itemView.findViewById(R.id.edit_book);
             titleView = (TextView) itemView.findViewById(R.id.title);
-            editBook = (ImageButton) itemView.findViewById(R.id.editBook);
+            editBook = itemView.findViewById(R.id.editBook);
             currentPlayingIndicator = (ImageView) itemView.findViewById(R.id.currentPlayingIndicator);
 
             coverView.setOnClickListener(new View.OnClickListener() {
