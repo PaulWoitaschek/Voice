@@ -184,13 +184,7 @@ public class FolderOverviewActivity extends BaseActivity {
         single.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fam.collapse();
-                Intent intent = new Intent(FolderOverviewActivity.this,
-                        FolderChooserActivity.class);
-                int requestCode = FolderChooserActivity.ACTIVITY_FOR_RESULT_CODE_SINGLE_BOOK;
-                intent.putExtra(FolderChooserActivity.ACTIVITY_FOR_RESULT_REQUEST_CODE,
-                        requestCode);
-                startActivityForResult(intent, requestCode);
+                startFolderChooserActivity(FolderChooserActivity.ACTIVITY_FOR_RESULT_CODE_SINGLE_BOOK);
             }
         });
         FloatingActionButton library = (FloatingActionButton) findViewById(R.id.add_library);
@@ -199,15 +193,17 @@ public class FolderOverviewActivity extends BaseActivity {
         library.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fam.collapse();
-                Intent intent = new Intent(FolderOverviewActivity.this,
-                        FolderChooserActivity.class);
-                int requestCode = FolderChooserActivity.ACTIVITY_FOR_RESULT_CODE_COLLECTION;
-                intent.putExtra(FolderChooserActivity.ACTIVITY_FOR_RESULT_REQUEST_CODE,
-                        requestCode);
-                startActivityForResult(intent, requestCode);
+                startFolderChooserActivity(FolderChooserActivity.ACTIVITY_FOR_RESULT_CODE_COLLECTION);
             }
         });
+    }
+
+    private void startFolderChooserActivity(int requestCode) {
+        Intent intent = new Intent(FolderOverviewActivity.this,
+                FolderChooserActivity.class);
+        intent.putExtra(FolderChooserActivity.ACTIVITY_FOR_RESULT_REQUEST_CODE,
+                requestCode);
+        startActivityForResult(intent, requestCode);
     }
 
     private boolean canAddNewFolder(@NonNull final String newFile) {
@@ -281,9 +277,12 @@ public class FolderOverviewActivity extends BaseActivity {
         }
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
+
+        fam.collapseImmediately();
 
         bookCollections.clear();
         bookCollections.addAll(prefs.getCollectionFolders());
