@@ -21,10 +21,13 @@ import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.PrefsManager;
 
+/**
+ * Dialog for setting the playback speed of the current book.
+ */
 public class PlaybackSpeedDialogFragment extends DialogFragment {
 
     public static final String TAG = PlaybackSpeedDialogFragment.class.getSimpleName();
-    private static final float SPEED_DELTA = 0.1f;
+    private static final float SPEED_DELTA = 0.01f;
     private static final float SPEED_MIN = 0.5f;
     private static final float SPEED_MAX = 2f;
     private static final DecimalFormat df = new DecimalFormat("0.00");
@@ -36,14 +39,9 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-
-        //passing null is fine because of fragment
+        // init views
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_amount_chooser, null);
-
-        final ServiceController serviceController = new ServiceController(getActivity());
-
         SeekBar seekBar = (SeekBar) v.findViewById(R.id.seekBar);
         final TextView textView = (TextView) v.findViewById(R.id.textView);
         ThemeUtil.theme(seekBar);
@@ -56,13 +54,14 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
         }
         float speed = book.getPlaybackSpeed();
         textView.setText(formatTime(speed));
-
         int seekMaxSteps = (int) ((SPEED_MAX - SPEED_MIN) / SPEED_DELTA);
         seekBar.setMax(seekMaxSteps);
         int seekProgress = (int) ((speed - SPEED_MIN) * (seekMaxSteps + 1) / (SPEED_MAX - SPEED_MIN));
         seekBar.setProgress(seekProgress);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            private final ServiceController serviceController = new ServiceController(getActivity());
+
             @Override
             public void onProgressChanged(SeekBar seekBar, int step, boolean fromUser) {
                 float newSpeed = speedStepValueToSpeed(step);
