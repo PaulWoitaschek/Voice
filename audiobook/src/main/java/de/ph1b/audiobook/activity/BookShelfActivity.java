@@ -225,10 +225,11 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             List<Pair<View, String>> shared = new ArrayList<>();
             BookShelfAdapter.ViewHolder viewHolder = (BookShelfAdapter.ViewHolder) recyclerView
                     .findViewHolderForItemId(currentBook.getId());
-            if (viewHolder != null) {
+            if (viewHolder != null && !currentBook.isUseCoverReplacement()) {
                 shared.add(Pair.create((View) viewHolder.coverView, BookPlayActivity.TRANSITION_COVER));
             }
-            shared.add(Pair.create((View) fab, BookPlayActivity.TRANSITION_FAB));
+            // buggy
+            //shared.add(Pair.create((View) fab, BookPlayActivity.TRANSITION_FAB));
             @SuppressWarnings("unchecked") ActivityOptionsCompat opts = ActivityOptionsCompat.makeSceneTransitionAnimation(this, shared.toArray(new Pair[shared.size()]));
             ActivityCompat.startActivity(this, BookPlayActivity.newIntent(this, prefs.getCurrentBookId()), opts.toBundle());
         }
