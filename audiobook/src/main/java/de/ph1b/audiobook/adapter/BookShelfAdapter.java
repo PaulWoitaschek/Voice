@@ -138,11 +138,11 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
     public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
         ViewGroup v = (ViewGroup) LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.activity_book_shelf_row_layout, parent, false);
-        return new ViewHolder(v, onItemClickListener);
+        return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(final ViewHolder viewHolder, int position) {
         Book b = sortedList.get(position);
 
         //setting text
@@ -165,6 +165,19 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
         } else {
             viewHolder.currentPlayingIndicator.setVisibility(View.GONE);
         }
+
+        viewHolder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClickListener.onCoverClicked(viewHolder.getAdapterPosition());
+            }
+        });
+        viewHolder.editBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClickListener.onMenuClicked(viewHolder.getAdapterPosition(), v);
+            }
+        });
     }
 
     @Override
@@ -184,26 +197,15 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
         final TextView titleView;
         final View editBook;
         final ImageView currentPlayingIndicator;
+        View view;
 
-        public ViewHolder(final ViewGroup itemView, final OnItemClickListener onItemClickListener) {
+        public ViewHolder(final ViewGroup itemView) {
             super(itemView);
+            this.view = itemView;
             coverView = (ImageView) itemView.findViewById(R.id.edit_book);
             titleView = (TextView) itemView.findViewById(R.id.title);
             editBook = itemView.findViewById(R.id.editBook);
             currentPlayingIndicator = (ImageView) itemView.findViewById(R.id.currentPlayingIndicator);
-
-            coverView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onItemClickListener.onCoverClicked(getAdapterPosition());
-                }
-            });
-            editBook.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onItemClickListener.onMenuClicked(getAdapterPosition(), editBook);
-                }
-            });
         }
     }
 }
