@@ -26,7 +26,6 @@
             android:scaleType="centerCrop"
             tools:ignore="UnusedAttribute" />
 
-
         <Spinner
             android:id="@+id/book_spinner"
             android:layout_width="match_parent"
