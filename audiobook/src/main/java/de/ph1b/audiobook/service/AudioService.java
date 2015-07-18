@@ -59,7 +59,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     private final ExecutorService playerExecutor = new ThreadPoolExecutor(
             1, 1, // single thread
             5, TimeUnit.SECONDS,
-            new LinkedBlockingQueue<Runnable>(2), // queue capacity
+            new LinkedBlockingQueue<Runnable>(3), // queue capacity
             new ThreadPoolExecutor.DiscardOldestPolicy()
     );
     private final PlaybackStateCompat.Builder playbackStateBuilder = new PlaybackStateCompat.Builder()

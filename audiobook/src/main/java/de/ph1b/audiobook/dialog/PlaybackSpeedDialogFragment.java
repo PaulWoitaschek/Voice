@@ -27,7 +27,6 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
     private static final float SPEED_DELTA = 0.1f;
     private static final float SPEED_MIN = 0.5f;
     private static final float SPEED_MAX = 2f;
-    private float speed;
 
     private static float speedStepValueToSpeed(int step) {
         return (SPEED_MIN + (step * SPEED_DELTA));
@@ -42,6 +41,8 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
         //passing null is fine because of fragment
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_amount_chooser, null);
 
+        final ServiceController serviceController = new ServiceController(getActivity());
+
         SeekBar seekBar = (SeekBar) v.findViewById(R.id.seekBar);
         final TextView textView = (TextView) v.findViewById(R.id.textView);
         ThemeUtil.theme(seekBar);
@@ -52,7 +53,7 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
         if (book == null) {
             throw new AssertionError("Cannot instantiate " + TAG + " without a current book");
         }
-        speed = book.getPlaybackSpeed();
+        float speed = book.getPlaybackSpeed();
         textView.setText(formatTime(speed));
 
         int seekMaxSteps = (int) ((SPEED_MAX - SPEED_MIN) / SPEED_DELTA);
@@ -63,37 +64,23 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int step, boolean fromUser) {
-                speed = speedStepValueToSpeed(step);
-                textView.setText(formatTime(speed));
+                float newSpeed = speedStepValueToSpeed(step);
+                textView.setText(formatTime(newSpeed));
+                serviceController.setPlaybackSpeed(newSpeed);
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
             }
         });
 
         return new MaterialDialog.Builder(getActivity())
                 .title(R.string.playback_speed)
-                .negativeText(R.string.dialog_cancel)
-                .positiveText(R.string.dialog_confirm)
                 .customView(v, true)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        new ServiceController(getActivity()).setPlaybackSpeed(speed);
-                        Book currentBook = db.getBook(book.getId());
-                        if (currentBook != null) {
-                            currentBook.setPlaybackSpeed(speed);
-                            db.updateBook(currentBook);
-                        }
-                    }
-                })
                 .build();
     }
 
