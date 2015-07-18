@@ -41,7 +41,7 @@ import de.ph1b.audiobook.utils.PrefsManager;
 
 /**
  * Created by Paul Woitaschek (woitaschek@posteo.de, paul-woitaschek.de) on 12.07.15.
- * TODO: Edit class description
+ * Showing the shelf of all the available books and provide a navigation to each book
  */
 public class BookShelfActivity extends BaseActivity implements View.OnClickListener, Communication.OnBookSetChangedListener, Communication.OnCurrentBookIdChangedListener, Communication.OnScannerStateChangedListener, Communication.OnPlayStateChangedListener, Communication.OnCoverChangedListener, BookShelfAdapter.OnItemClickListener {
 
@@ -220,34 +220,8 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void startBookPlay() {
-        /**   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-         int enterTransitionDuration = 300;
-
-         Transition sharedElementEnterTransition = TransitionInflater.from(this).inflateTransition(android.R.transition.move);
-         sharedElementEnterTransition.setDuration(enterTransitionDuration);
-
-         Transition fade = new Fade();
-         fade.setDuration(enterTransitionDuration);
-         fade.excludeTarget(R.id.toolbar, true);
-         fade.excludeTarget(R.id.book_cover, true);
-
-         bookPlayFragment.setEnterTransition(fade);
-         bookPlayFragment.setReturnTransition(null);
-         bookPlayFragment.setExitTransition(null);
-         setReturnTransition(null);
-         setReenterTransition(null);
-         }**/
-
-        //     .addSharedElement(fab, getString(R.string.transition_fab))
-
-        /**
-         * Only use transition if we don't use a cover replacement. Else there is a bug so the
-         * replacement won't scale correctly.
-         */
         Book currentBook = db.getBook(prefs.getCurrentBookId());
         if (currentBook != null) {
-
             List<Pair<View, String>> shared = new ArrayList<>();
             BookShelfAdapter.ViewHolder viewHolder = (BookShelfAdapter.ViewHolder) recyclerView
                     .findViewHolderForItemId(currentBook.getId());
@@ -258,8 +232,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             @SuppressWarnings("unchecked") ActivityOptionsCompat opts = ActivityOptionsCompat.makeSceneTransitionAnimation(this, shared.toArray(new Pair[shared.size()]));
             ActivityCompat.startActivity(this, BookPlayActivity.newIntent(this, prefs.getCurrentBookId()), opts.toBundle());
         }
-
-
     }
 
     @Override
