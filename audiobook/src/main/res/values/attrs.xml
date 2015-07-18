@@ -2,6 +2,7 @@
 <resources>
     <attr name="theme_name" format="reference" />
     <attr name="colorAccentDark" format="reference" />
+    <attr name="themed_icon_color" format="reference" />
 
     <!-- Toolbar-->
     <attr name="toolbar_popup_theme" format="reference" />
@@ -30,6 +31,5 @@
     <attr name="edit_prev" format="reference" />
 
     <!-- Bookmark -->
-    <attr name="bookmark_add_button" format="reference" />
     <attr name="more" format="reference" />
 </resources>

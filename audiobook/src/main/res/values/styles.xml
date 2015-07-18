@@ -15,6 +15,7 @@
         <item name="theme_name">@string/pref_theme_light</item>
         <item name="android:navigationBarColor" tools:ignore="NewApi">@color/light_primary_dark
         </item>
+        <item name="themed_icon_color">@color/light_icon_color</item>
 
         <!-- toolbar -->
         <item name="toolbar_popup_theme">@style/toolbar_popup_light</item>
@@ -40,7 +41,6 @@
         <item name="edit_prev">@drawable/ic_navigate_before_grey600_36dp</item>
 
         <!-- Bookmark -->
-        <item name="bookmark_add_button">@drawable/ic_add_circle_outline_grey600_36dp</item>
         <item name="more">@drawable/ic_more_vert_grey600_24dp</item>
 
         <item name="android:seekBarStyle">@style/seek_style</item>
@@ -63,6 +63,7 @@
         <item name="android:imageButtonStyle">@style/DarkButtonStyle</item>
         <item name="theme_name">@string/pref_theme_dark</item>
         <item name="android:navigationBarColor" tools:ignore="NewApi">@android:color/black</item>
+        <item name="themed_icon_color">@color/dark_icon_color</item>
 
         <!-- toolbar -->
         <item name="toolbar_popup_theme">@style/toolbar_popup_dark</item>
@@ -88,7 +89,6 @@
         <item name="edit_prev">@drawable/ic_navigate_before_white_36dp</item>
 
         <!-- Bookmark -->
-        <item name="bookmark_add_button">@drawable/ic_add_circle_outline_white_36dp</item>
         <item name="more">@drawable/ic_more_vert_white_24dp</item>
 
         <item name="android:seekBarStyle">@style/seek_style</item>
