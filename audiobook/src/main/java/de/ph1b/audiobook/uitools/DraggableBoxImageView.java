@@ -14,6 +14,9 @@ import android.widget.ImageView;
 
 import de.ph1b.audiobook.R;
 
+/**
+ * ImageView that has a draggable square box and can return the position of the box
+ */
 public class DraggableBoxImageView extends ImageView {
 
     private final Paint borderLinePaint;
@@ -45,7 +48,7 @@ public class DraggableBoxImageView extends ImageView {
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         int action = event.getAction();
         float x = event.getX();
-        float y = (int) event.getY();
+        float y = event.getY();
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
@@ -64,7 +67,7 @@ public class DraggableBoxImageView extends ImageView {
                     dragRect.offset(deltaX, 0);
                 }
 
-                if ((dragRect.bottom + deltaY) > imageViewBounds.right) {
+                if ((dragRect.bottom + deltaY) > imageViewBounds.bottom) {
                     dragRect.offsetTo(dragRect.left, imageViewBounds.bottom - dragRect.height());
                 } else if ((dragRect.top + deltaY) < 0) {
                     dragRect.offsetTo(dragRect.left, 0);
@@ -86,37 +89,28 @@ public class DraggableBoxImageView extends ImageView {
     protected void onSizeChanged(int w, int h, int oldW, int oldH) {
         super.onSizeChanged(w, h, oldW, oldH);
 
-        dragRect.set(0, 0, 0, 0);
-
-
-        //where the finger last went down
+        // resets values
         lastTouchPoint.set(0, 0);
-
         imageViewBounds.set(0, 0, w, h);
-
-        if (getDrawable() != null && w > 0 && h > 0) {
-
-            //setting frame accordingly
-            if (w < h) {
-                dragRect.right = w;
-                dragRect.bottom = w;
-            } else {
-                dragRect.right = h;
-                dragRect.bottom = h;
-            }
-        }
+        int min = Math.min(w, h);
+        dragRect.set(0, 0, min, min);
     }
 
-    public Rect getCropPosition() {
+    /**
+     * Calculates the position of the chosen cropped rect.
+     *
+     * @return the rect selection
+     */
+    public Rect getSelectedRect() {
         Drawable d = getDrawable();
-        int origW = d.getIntrinsicWidth();
-        int origH = d.getIntrinsicHeight();
+        float widthScaleFactor = d.getIntrinsicWidth() / imageViewBounds.width();
+        float heightScaleFactor = d.getIntrinsicHeight() / imageViewBounds.height();
 
         //returning the actual sizes
-        int realLeft = Math.round(dragRect.left / imageViewBounds.width() * origW);
-        int realTop = Math.round(dragRect.top / imageViewBounds.height() * origH);
-        int realRight = Math.round(dragRect.right / imageViewBounds.width() * origW);
-        int realBottom = Math.round(dragRect.bottom / imageViewBounds.height() * origH);
+        int realLeft = Math.round(dragRect.left * widthScaleFactor);
+        int realTop = Math.round(dragRect.top * heightScaleFactor);
+        int realRight = Math.round(dragRect.right * widthScaleFactor);
+        int realBottom = Math.round(dragRect.bottom * heightScaleFactor);
 
         return new Rect(realLeft, realTop, realRight, realBottom);
     }

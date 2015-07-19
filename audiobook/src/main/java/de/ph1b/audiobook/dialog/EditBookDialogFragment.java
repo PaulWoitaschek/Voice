@@ -208,7 +208,7 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
                 }
 
                 String bookName = nameEditText.getText().toString();
-                Rect r = coverImageView.getCropPosition();
+                Rect r = coverImageView.getSelectedRect();
                 boolean useCoverReplacement;
                 if (coverPosition > 0 && r.width() > 0 && r.height() > 0) {
                     Bitmap cover = covers.get(coverPosition);
