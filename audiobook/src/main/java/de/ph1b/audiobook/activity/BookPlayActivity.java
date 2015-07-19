@@ -214,7 +214,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                     textView.setBackgroundColor(getResources().getColor(ThemeUtil.getResourceId(
                             BookPlayActivity.this, android.R.attr.windowBackground)));
                     textView.setTextColor(getResources().getColor(ThemeUtil.getResourceId(
-                            BookPlayActivity.this, android.R.attr.textColor)));
+                            BookPlayActivity.this, android.R.attr.textColorPrimary)));
                 }
 
                 return textView;
