@@ -48,22 +48,6 @@ public class DraggableBoxImageView extends ImageView {
         this(context, null);
     }
 
-    private void resetValues() {
-        left = 0;
-        right = 0;
-        top = 0;
-        bottom = 0;
-
-        imageViewWidth = 0;
-        imageViewHeight = 0;
-
-        maxWidth = 0;
-        maxHeight = 0;
-
-        //where the finger last went down
-        lastTouchPoint.set(0, 0);
-    }
-
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         int action = event.getAction();
@@ -114,7 +98,20 @@ public class DraggableBoxImageView extends ImageView {
     @Override
     protected void onSizeChanged(int w, int h, int oldW, int oldH) {
 
-        resetValues();
+
+        left = 0;
+        right = 0;
+        top = 0;
+        bottom = 0;
+
+        imageViewWidth = 0;
+        imageViewHeight = 0;
+
+        maxWidth = 0;
+        maxHeight = 0;
+
+        //where the finger last went down
+        lastTouchPoint.set(0, 0);
 
         imageViewWidth = w;
         imageViewHeight = h;
