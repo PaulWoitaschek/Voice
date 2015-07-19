@@ -9,7 +9,7 @@ package org.vinuxproject.sonic;/* Sonic library
 
 import de.ph1b.audiobook.utils.L;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "UnusedReturnValue"})
 public class Sonic {
 
     private static final int SONIC_MIN_PITCH = 65;

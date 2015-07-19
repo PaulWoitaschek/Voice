@@ -197,7 +197,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
         final TextView titleView;
         final View editBook;
         final ImageView currentPlayingIndicator;
-        View view;
+        final View view;
 
         public ViewHolder(final ViewGroup itemView) {
             super(itemView);
