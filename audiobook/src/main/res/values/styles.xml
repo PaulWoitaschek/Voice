@@ -35,6 +35,7 @@
 
     <style name="BaseImageButtonStyle" parent="@android:style/Widget.ImageButton">
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:tint">@null</item>
     </style>
 
     <style name="TintedImageButtonStyle" parent="@style/BaseImageButtonStyle">
