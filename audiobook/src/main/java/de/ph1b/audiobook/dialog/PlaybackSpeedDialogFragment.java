@@ -30,10 +30,16 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
     private static final float SPEED_DELTA = 0.01f;
     private static final float SPEED_MIN = 0.5f;
     private static final float SPEED_MAX = 2f;
+    private static final int MAX_STEPS = Math.round((SPEED_MAX - SPEED_MIN) / SPEED_DELTA);
+
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
     private static float speedStepValueToSpeed(int step) {
         return (SPEED_MIN + (step * SPEED_DELTA));
+    }
+
+    private static int speedValueToSteps(float speed) {
+        return Math.round((speed - SPEED_MIN) * (MAX_STEPS + 1) / (SPEED_MAX - SPEED_MIN));
     }
 
     @NonNull
@@ -54,10 +60,8 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
         }
         float speed = book.getPlaybackSpeed();
         textView.setText(formatTime(speed));
-        int seekMaxSteps = (int) ((SPEED_MAX - SPEED_MIN) / SPEED_DELTA);
-        seekBar.setMax(seekMaxSteps);
-        int seekProgress = (int) ((speed - SPEED_MIN) * (seekMaxSteps + 1) / (SPEED_MAX - SPEED_MIN));
-        seekBar.setProgress(seekProgress);
+        seekBar.setMax(MAX_STEPS);
+        seekBar.setProgress(speedValueToSteps(speed));
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             private final ServiceController serviceController = new ServiceController(getActivity());
