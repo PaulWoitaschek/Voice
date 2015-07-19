@@ -34,16 +34,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:textColor="@color/dark_text_primary"
-                android:textSize="@dimen/list_text_primary_size" />
+                android:textColor="@color/abc_primary_text_material_dark"
+                android:textSize="@dimen/list_text_primary_size"
+                tools:text="Title text" />
 
             <TextView
                 android:id="@+id/summary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:textColor="@color/dark_text_secondary"
-                android:textSize="@dimen/list_text_secondary_size" />
+                android:textColor="@color/abc_secondary_text_material_dark"
+                android:textSize="@dimen/list_text_secondary_size"
+                tools:text="Subtitle" />
         </LinearLayout>
 
         <LinearLayout

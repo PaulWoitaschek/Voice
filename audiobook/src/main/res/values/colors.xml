@@ -5,17 +5,12 @@
     <color name="dark_primary">#ff455a64</color>
     <!-- blue grey 900 -->
     <color name="dark_primary_dark">#ff263238</color>
-    <!-- ## text colors -->
-    <color name="dark_text_primary">@color/abc_primary_text_material_dark</color>
-    <color name="dark_text_secondary">@color/abc_secondary_text_material_dark</color>
 
     <!-- # light theme -->
     <!-- indigo 500 -->
     <color name="light_primary">#ff3f51b5</color>
     <!-- indigo 700 -->
     <color name="light_primary_dark">#ff303f9f</color>
-    <color name="light_text_primary">@color/abc_primary_text_material_light</color>
-    <color name="light_text_secondary">@color/abc_secondary_text_material_light</color>
 
     <!-- accents -->
     <!-- pink 500 -->
@@ -23,7 +18,4 @@
     <!-- pink 700 -->
     <color name="accentDark">#ffc2185b</color>
     <!-- ## text colors -->
-
-    <color name="light_icon_enabled">#ff757575</color>
-    <color name="dark_icon_enabled">#ffffffff</color>
 </resources>

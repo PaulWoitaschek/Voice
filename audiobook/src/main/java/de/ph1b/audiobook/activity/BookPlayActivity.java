@@ -216,7 +216,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                 if (position == bookSpinner.getSelectedItemPosition()) {
                     textView.setBackgroundColor(getResources().getColor(ThemeUtil.getResourceId(
                             BookPlayActivity.this, R.attr.colorAccent)));
-                    textView.setTextColor(getResources().getColor(R.color.dark_text_primary));
+                    textView.setTextColor(getResources().getColor(R.color.abc_primary_text_material_dark));
                 } else {
                     textView.setBackgroundColor(getResources().getColor(ThemeUtil.getResourceId(
                             BookPlayActivity.this, android.R.attr.windowBackground)));
