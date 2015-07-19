@@ -27,7 +27,7 @@ import de.ph1b.audiobook.utils.PrefsManager;
 public class PlaybackSpeedDialogFragment extends DialogFragment {
 
     public static final String TAG = PlaybackSpeedDialogFragment.class.getSimpleName();
-    private static final float SPEED_DELTA = 0.01f;
+    private static final float SPEED_DELTA = 0.02f;
     private static final float SPEED_MIN = 0.5f;
     private static final float SPEED_MAX = 2f;
     private static final int MAX_STEPS = Math.round((SPEED_MAX - SPEED_MIN) / SPEED_DELTA);
