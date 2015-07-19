@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -17,21 +18,16 @@ import de.ph1b.audiobook.R;
 public class DraggableBoxImageView extends ImageView {
 
     private final Paint borderLinePaint;
-
+    //where the finger last went down
+    private final PointF lastTouchPoint = new PointF();
     private float left;
     private float right;
     private float top;
     private float bottom;
-
     private float imageViewWidth;
     private float imageViewHeight;
-
     private float maxWidth;
     private float maxHeight;
-
-    //where the finger last went down
-    private float fingerX;
-    private float fingerY;
 
     public DraggableBoxImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -65,8 +61,7 @@ public class DraggableBoxImageView extends ImageView {
         maxHeight = 0;
 
         //where the finger last went down
-        fingerX = 0;
-        fingerY = 0;
+        lastTouchPoint.set(0, 0);
     }
 
     @Override
@@ -77,13 +72,12 @@ public class DraggableBoxImageView extends ImageView {
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                fingerX = x;
-                fingerY = y;
+                lastTouchPoint.set(x, y);
+                return true;
             case MotionEvent.ACTION_MOVE:
-                float deltaX = x - fingerX;
-                float deltaY = y - fingerY;
-                fingerX = x;
-                fingerY = y;
+                float deltaX = x - lastTouchPoint.x;
+                float deltaY = y - lastTouchPoint.y;
+                lastTouchPoint.set(x, y);
 
                 if ((right + deltaX) > imageViewWidth) {
                     right = imageViewWidth;
@@ -108,15 +102,13 @@ public class DraggableBoxImageView extends ImageView {
                 }
 
                 invalidate();
-                break;
+                return true;
             case MotionEvent.ACTION_UP:
-                fingerX = 0;
-                fingerY = 0;
-                break;
+                lastTouchPoint.set(0, 0);
+                return true;
             default:
-                break;
+                return false;
         }
-        return true;
     }
 
     @Override
