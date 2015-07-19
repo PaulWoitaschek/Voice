@@ -20,8 +20,7 @@ public class DraggableBoxImageView extends ImageView {
     //where the finger last went down
     private final PointF lastTouchPoint = new PointF();
     private final RectF dragRect = new RectF();
-    private float imageViewWidth;
-    private float imageViewHeight;
+    private final RectF imageViewBounds = new RectF();
 
     public DraggableBoxImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -57,16 +56,16 @@ public class DraggableBoxImageView extends ImageView {
                 float deltaY = y - lastTouchPoint.y;
                 lastTouchPoint.set(x, y);
 
-                if ((dragRect.right + deltaX) > imageViewWidth) {
-                    dragRect.offsetTo(imageViewWidth - dragRect.width(), dragRect.top);
+                if ((dragRect.right + deltaX) > imageViewBounds.right) {
+                    dragRect.offsetTo(imageViewBounds.right - dragRect.width(), dragRect.top);
                 } else if ((dragRect.left + deltaX) < 0) {
                     dragRect.offsetTo(0, dragRect.top);
                 } else {
                     dragRect.offset(deltaX, 0);
                 }
 
-                if ((dragRect.bottom + deltaY) > imageViewHeight) {
-                    dragRect.offsetTo(dragRect.left, imageViewHeight - dragRect.height());
+                if ((dragRect.bottom + deltaY) > imageViewBounds.right) {
+                    dragRect.offsetTo(dragRect.left, imageViewBounds.bottom - dragRect.height());
                 } else if ((dragRect.top + deltaY) < 0) {
                     dragRect.offsetTo(dragRect.left, 0);
                 } else {
@@ -93,8 +92,7 @@ public class DraggableBoxImageView extends ImageView {
         //where the finger last went down
         lastTouchPoint.set(0, 0);
 
-        imageViewWidth = w;
-        imageViewHeight = h;
+        imageViewBounds.set(0, 0, w, h);
 
         if (getDrawable() != null && w > 0 && h > 0) {
 
@@ -115,10 +113,10 @@ public class DraggableBoxImageView extends ImageView {
         int origH = d.getIntrinsicHeight();
 
         //returning the actual sizes
-        int realLeft = Math.round(dragRect.left / imageViewWidth * origW);
-        int realTop = Math.round(dragRect.top / imageViewHeight * origH);
-        int realRight = Math.round(dragRect.right / imageViewWidth * origW);
-        int realBottom = Math.round(dragRect.bottom / imageViewHeight * origH);
+        int realLeft = Math.round(dragRect.left / imageViewBounds.width() * origW);
+        int realTop = Math.round(dragRect.top / imageViewBounds.height() * origH);
+        int realRight = Math.round(dragRect.right / imageViewBounds.width() * origW);
+        int realBottom = Math.round(dragRect.bottom / imageViewBounds.height() * origH);
 
         return new Rect(realLeft, realTop, realRight, realBottom);
     }
@@ -127,8 +125,8 @@ public class DraggableBoxImageView extends ImageView {
     protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
 
-        if (imageViewHeight > 0 && imageViewWidth > 0) {
-            float proportion = imageViewHeight / imageViewWidth;
+        if (imageViewBounds.height() > 0 && imageViewBounds.width() > 0) {
+            float proportion = imageViewBounds.height() / imageViewBounds.width();
             // only draw frame if relation doesn't already fit approx
             if (proportion < 0.95 || proportion > 1.05) {
                 canvas.drawARGB(70, 0, 0, 0);
