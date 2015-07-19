@@ -16,7 +16,7 @@ import de.ph1b.audiobook.R;
 
 public class DraggableBoxImageView extends ImageView {
 
-    private Paint borderLinePaint;
+    private final Paint borderLinePaint;
 
     private float left;
     private float right;
@@ -33,35 +33,26 @@ public class DraggableBoxImageView extends ImageView {
     private float fingerX;
     private float fingerY;
 
-    //constructor!
-    @SuppressWarnings("UnusedDeclaration")
     public DraggableBoxImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
-    }
 
-    //constructor!
-    @SuppressWarnings("UnusedDeclaration")
-    public DraggableBoxImageView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
-
-    //constructor!
-    @SuppressWarnings("UnusedDeclaration")
-    public DraggableBoxImageView(Context context) {
-        super(context);
-        init();
-    }
-
-    private void init() {
         int strokeWidth = getContext().getResources().getDimensionPixelSize(R.dimen.cover_edit_stroke_width);
 
         borderLinePaint = new Paint();
         borderLinePaint.setColor(getResources().getColor(ThemeUtil.getResourceId(getContext(), R.attr.colorAccent)));
         borderLinePaint.setStyle(Paint.Style.STROKE);
         borderLinePaint.setStrokeWidth(strokeWidth);
+    }
 
+    public DraggableBoxImageView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public DraggableBoxImageView(Context context) {
+        this(context, null);
+    }
+
+    private void resetValues() {
         left = 0;
         right = 0;
         top = 0;
@@ -131,7 +122,7 @@ public class DraggableBoxImageView extends ImageView {
     @Override
     protected void onSizeChanged(int w, int h, int oldW, int oldH) {
 
-        init();
+        resetValues();
 
         imageViewWidth = w;
         imageViewHeight = h;
