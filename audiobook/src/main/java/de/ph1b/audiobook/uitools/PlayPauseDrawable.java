@@ -162,13 +162,11 @@ public class PlayPauseDrawable extends Drawable {
 
     @Override
     public void jumpToCurrentState() {
-        L.d(TAG, "jumpToCurrentState()");
-        if (animator != null && animator.isStarted()) {
+        L.v(TAG, "jumpToCurrentState()");
+        if (animator != null) {
             animator.cancel();
-            isPlay = !isPlay;
-
-            setProgress(isPlay ? 1.0F : 0.0F);
         }
+        setProgress(isPlay ? 1.0F : 0.0F);
     }
 
     public void transformToPlay(boolean animated) {
