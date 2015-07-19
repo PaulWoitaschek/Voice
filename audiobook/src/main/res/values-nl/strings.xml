@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <!--BookShelf-->
+    <string name="mal_file_message">Dit bestand is mogelijks beschadigd:</string>
+    <string name="mal_file_title">Beschadigd bestand</string>
+    <string name="content_current_book">Dit is het huidige boek</string>
+    <string name="current_book">Huidig boek</string>
+    <!--BookPlayActivity-->
+    <string name="cover">Cover</string>
+    <string name="play_pause">Speel / Pauze</string>
+    <string name="action_sleep">Slaap-timer</string>
+    <string name="action_sleep_title_hint_left">Pauzeer na</string>
+    <string name="action_sleep_title_hint_right">minuten</string>
+    <string name="rewind">Ga terug</string>
+    <string name="fast_forward">Spoel door</string>
+    <string name="previous_track">Vorige track</string>
+    <string name="next_track">Volgende trak</string>
+    <string name="play">Speel</string>
+    <string name="pause">Pauzeer</string>
+    <string name="stop">Stop</string>
+    <string name="sleep_timer_started">Slaap timer:</string>
+    <!--NoExternalStorage-->
+    <string name="no_external_storage">Externe opslag is niet beschikbaar. Controleer of deze is aangesloten en niet in gebruik is door uw PC.</string>
+    <string name="no_external_storage_action_bar_title">Externe opslag</string>
+    <!--Dialogs-->
+    <string name="dialog_confirm">Zet</string>
+    <string name="dialog_cancel">Annuleer</string>
+    <!--EditBookDialog-->
+    <string name="book_add_empty_title">Voeg titel toe</string>
+    <string name="content_previous_cover">Kies vorige cover</string>
+    <string name="content_next_cover">Kies volgende cover</string>
+    <string name="content_cover">Toont cover om te kiezen</string>
+    <string name="edit_book_title">Bewerk boek</string>
+    <!--JumpToPosition-->
+    <string name="action_time_change">Ga naar</string>
+    <!--BookAdding-->
+    <string name="adding_failed_subfolder">De mappen mogen geen submap van elkaar zijn:</string>
+    <string name="audiobook_folders_title">Luisterboek mappen</string>
+    <string name="no_audiobook_folders_title">Kies nu een map</string>
+    <string name="no_audiobook_folders_summary_start">Kies aub nu uw map(pen) met luisterboeken</string>
+    <string name="no_audiobook_folders_end">U kunt uw hoofdmap met meerdere boeken kiezen. Of een map met gewoon één boek.</string>
+    <string name="chosen_folder_description">Kies map:</string>
+    <string name="delete_folder">Uit bibliotheek verwijderen?</string>
+    <string name="delete_folder_content">Wilt u deze map uit uw bibliotheek verwijderen?</string>
+    <string name="content_file_folder">Geeft aan of dit een map of bestand is</string>
+    <string name="folder_add_book">Één boek</string>
+    <string name="folder_add_collection">Map met meerdere boeken</string>
+    <string name="for_example">bvb.</string>
+    <!--PlaybackSpeed-->
+    <string name="playback_speed">Afspeelsnelheid</string>
+    <!--Bookmarks-->
+    <string name="bookmark">Bladwijzer</string>
+    <string name="bookmark_edit_title">Bewerk bladwijzer</string>
+    <string name="acc_button_add_bookmark">Voeg bladwijzer toe op huidige positie</string>
+    <string name="bookmark_edit_hint">Bladwijzer naam</string>
+    <string name="bookmark_added">Bladwijzer toegevoegd</string>
+    <string name="bookmark_delete_title">Verwijder deze bladwijzer?</string>
+    <!--Settings-->
+    <string name="pref_category_general">Algemene instellingen</string>
+    <string name="pref_category_playback">Afspeelgedrag</string>
+    <string name="action_settings">Voorkeuren</string>
+    <string name="pref_resume_on_replug">Afspelen hervatten</string>
+    <string name="pref_resume_on_replug_hint">Als u pauzeert door de headset te ontkoppelen, zal het afspelen hervatten als u deze weer aansluit.</string>
+    <string name="minutes">minuten</string>
+    <string name="seconds">seconden</string>
+    <string name="pref_seek_time">Skiptijd</string>
+    <string name="pref_sleep_time">Slaap timer</string>
+    <string name="pref_root_folder_title">Luisterboekmap</string>
+    <string name="pref_root_folder_summary">Geselecteerde luisterboekmappen.</string>
+    <string name="pref_theme_title">Thema</string>
+    <string name="pref_theme_light">Licht</string>
+    <string name="pref_theme_dark">Donker</string>
+    <string name="pref_pause_on_can_duck_title">Pauzeer bij melding</string>
+    <string name="pref_pause_on_can_duck_summary">Pauzeren wanneer een andere app een melding laat horen, ipv het afspeelvolume tijdelijk te verlagen.</string>
+    <string name="pref_send_bugs_title">Rapporteer lieveheersbeestjes</string>
+    <string name="pref_send_bugs_summary">Automatisch anoniem bugs rapporteren wanneer de app crasht, om de verdere ontwikkeling te helpen.</string>
+    <string name="pref_auto_rewind_title">Automatisch terugspoelen</string>
+    <string name="pref_auto_rewind_summary">Spoelt automatisch terug na handmatig pauzeren:</string>
+    <string name="pref_bookmark_on_sleep_title">Bladwijzer toevoegen bij inslapen</string>
+    <string name="pref_bookmark_on_sleep_summary">Voegt automatisch een bladwijzer toe elke keer de slaap-timer afgaat.</string>
+    <string name="pref_support_title">Steun</string>
+    <string name="pref_support_translations">Tolk spelen</string>
+    <string name="pref_support_contribute">Steunen en suggesties</string>
+    <string name="pref_support_donation">Donneer</string>
+    <string name="donation_worked_thanks">Bedankt, dat helpt écht! :)</string>
+    <string name="donation_not_worked">Oeps… er ging iets mis</string>
+    <!--Misc-->
+    <string name="popup_edit">Bewerk</string>
+    <string name="remove">Verwijder</string>
+    <!--hide folder dialog-->
+</resources>
