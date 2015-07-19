@@ -31,15 +31,15 @@
         android:layout_gravity="bottom"
         android:background="#64000000">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/editBook"
+            style="@style/BaseImageButtonStyle"
             android:layout_width="35dp"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_gravity="center_vertical"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/popup_edit"
             android:src="@drawable/ic_more_vert_white_24dp"
             tools:ignore="NewApi" />

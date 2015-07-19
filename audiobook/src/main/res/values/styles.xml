@@ -2,7 +2,7 @@
 
     <style name="LightTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
-        <item name="android:imageButtonStyle">@style/ImageButtonStyle</item>
+        <item name="android:imageButtonStyle">@style/TintedImageButtonStyle</item>
         <item name="android:seekBarStyle">@style/seek_style</item>
 
         <item name="colorPrimary">@color/light_primary</item>
@@ -19,7 +19,7 @@
 
     <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowNoTitle">true</item>
-        <item name="android:imageButtonStyle">@style/ImageButtonStyle</item>
+        <item name="android:imageButtonStyle">@style/TintedImageButtonStyle</item>
         <item name="android:seekBarStyle">@style/seek_style</item>
 
         <item name="colorPrimary">@color/dark_primary</item>
@@ -33,8 +33,11 @@
         <item name="background_overlay">@color/primary_text_disabled_material_dark</item>
     </style>
 
-    <style name="ImageButtonStyle" parent="@android:style/Widget.ImageButton">
+    <style name="BaseImageButtonStyle" parent="@android:style/Widget.ImageButton">
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="TintedImageButtonStyle" parent="@style/BaseImageButtonStyle">
         <item name="android:tint">?attr/icon_color</item>
     </style>
 
