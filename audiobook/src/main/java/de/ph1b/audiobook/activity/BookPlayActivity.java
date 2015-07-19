@@ -4,7 +4,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,12 +11,9 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
-import android.transition.Fade;
-import android.transition.Transition;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +28,6 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -62,8 +57,6 @@ import de.ph1b.audiobook.utils.PrefsManager;
  */
 public class BookPlayActivity extends BaseActivity implements View.OnClickListener, Communication.OnSleepStateChangedListener, Communication.OnBookContentChangedListener, Communication.OnPlayStateChangedListener {
 
-    public static final String TRANSITION_COVER = "transitionCover";
-    public static final String TRANSITION_FAB = "transitionFab";
     private static final String TAG = BookPlayActivity.class.getSimpleName();
     private static final String BOOK_ID = "bookId";
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
@@ -250,19 +243,8 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         Drawable coverReplacement = new CoverReplacement(book.getName(),
                 this);
         if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-            ActivityCompat.postponeEnterTransition(this);
             Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(
-                    coverView, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            ActivityCompat.startPostponedEnterTransition(BookPlayActivity.this);
-                        }
-
-                        @Override
-                        public void onError() {
-                            ActivityCompat.startPostponedEnterTransition(BookPlayActivity.this);
-                        }
-                    });
+                    coverView);
         } else {
             coverView.setImageDrawable(coverReplacement);
         }
@@ -277,22 +259,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             previous_button.setVisibility(View.VISIBLE);
             bookSpinner.setVisibility(View.VISIBLE);
         }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Transition fade = new Fade();
-            fade.excludeTarget(R.id.toolbar, true);
-            fade.excludeTarget(R.id.book_cover, true);
-            fade.excludeTarget(android.R.id.statusBarBackground, true);
-            fade.excludeTarget(android.R.id.navigationBarBackground, true);
-            getWindow().setEnterTransition(fade);
-            getWindow().setSharedElementExitTransition(null);
-            getWindow().setExitTransition(null);
-            getWindow().setSharedElementReturnTransition(null);
-            getWindow().setSharedElementReenterTransition(null);
-            getWindow().setSharedElementsUseOverlay(false);
-        }
-        ViewCompat.setTransitionName(coverView, TRANSITION_COVER);
-        ViewCompat.setTransitionName(playButton, TRANSITION_FAB);
     }
 
     @Override

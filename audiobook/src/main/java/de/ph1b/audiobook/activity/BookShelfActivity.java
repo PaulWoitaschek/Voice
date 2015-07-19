@@ -2,12 +2,8 @@ package de.ph1b.audiobook.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
 import android.support.v7.app.ActionBar;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.GridLayoutManager;
@@ -23,7 +19,6 @@ import android.widget.ProgressBar;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.ph1b.audiobook.R;
@@ -223,24 +218,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     private void startBookPlay() {
         Book currentBook = db.getBook(prefs.getCurrentBookId());
         if (currentBook != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setReturnTransition(null);
-                getWindow().setReenterTransition(null);
-                getWindow().setSharedElementReturnTransition(null);
-                getWindow().setSharedElementReenterTransition(null);
-                getWindow().setSharedElementsUseOverlay(false);
-            }
-
-            List<Pair<View, String>> shared = new ArrayList<>();
-            BookShelfAdapter.ViewHolder viewHolder = (BookShelfAdapter.ViewHolder) recyclerView
-                    .findViewHolderForItemId(currentBook.getId());
-            if (viewHolder != null && !currentBook.isUseCoverReplacement() && currentBook.getCoverFile().exists()) {
-                shared.add(Pair.create((View) viewHolder.coverView, BookPlayActivity.TRANSITION_COVER));
-            }
-            // buggy
-            //shared.add(Pair.create((View) fab, BookPlayActivity.TRANSITION_FAB));
-            @SuppressWarnings("unchecked") ActivityOptionsCompat opts = ActivityOptionsCompat.makeSceneTransitionAnimation(this, shared.toArray(new Pair[shared.size()]));
-            ActivityCompat.startActivity(this, BookPlayActivity.newIntent(this, prefs.getCurrentBookId()), opts.toBundle());
+            startActivity(BookPlayActivity.newIntent(this, prefs.getCurrentBookId()));
         }
     }
 
