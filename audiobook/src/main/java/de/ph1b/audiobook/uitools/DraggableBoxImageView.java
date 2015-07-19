@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
@@ -18,14 +19,9 @@ public class DraggableBoxImageView extends ImageView {
     private final Paint borderLinePaint;
     //where the finger last went down
     private final PointF lastTouchPoint = new PointF();
-    private float left;
-    private float right;
-    private float top;
-    private float bottom;
+    private final RectF dragRect = new RectF();
     private float imageViewWidth;
     private float imageViewHeight;
-    private float maxWidth;
-    private float maxHeight;
 
     public DraggableBoxImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -61,26 +57,26 @@ public class DraggableBoxImageView extends ImageView {
                 float deltaY = y - lastTouchPoint.y;
                 lastTouchPoint.set(x, y);
 
-                if ((right + deltaX) > imageViewWidth) {
-                    right = imageViewWidth;
-                    left = imageViewWidth - maxWidth;
-                } else if ((left + deltaX) < 0) {
-                    left = 0;
-                    right = maxWidth;
+                if ((dragRect.right + deltaX) > imageViewWidth) {
+                    dragRect.right = imageViewWidth;
+                    dragRect.left = imageViewWidth - dragRect.width();
+                } else if ((dragRect.left + deltaX) < 0) {
+                    dragRect.left = 0;
+                    dragRect.right = dragRect.width();
                 } else {
-                    right += deltaX;
-                    left += deltaX;
+                    dragRect.right += deltaX;
+                    dragRect.left += deltaX;
                 }
 
-                if ((bottom + deltaY) > imageViewHeight) {
-                    bottom = imageViewHeight;
-                    top = imageViewHeight - maxHeight;
-                } else if ((top + deltaY) < 0) {
-                    top = 0;
-                    bottom = maxHeight;
+                if ((dragRect.bottom + deltaY) > imageViewHeight) {
+                    dragRect.bottom = imageViewHeight;
+                    dragRect.top = imageViewHeight - dragRect.height();
+                } else if ((dragRect.top + deltaY) < 0) {
+                    dragRect.top = 0;
+                    dragRect.bottom = dragRect.height();
                 } else {
-                    bottom += deltaY;
-                    top += deltaY;
+                    dragRect.bottom += deltaY;
+                    dragRect.top += deltaY;
                 }
 
                 invalidate();
@@ -97,13 +93,8 @@ public class DraggableBoxImageView extends ImageView {
     protected void onSizeChanged(int w, int h, int oldW, int oldH) {
         super.onSizeChanged(w, h, oldW, oldH);
 
-        left = 0;
-        right = 0;
-        top = 0;
-        bottom = 0;
+        dragRect.set(0, 0, 0, 0);
 
-        maxWidth = 0;
-        maxHeight = 0;
 
         //where the finger last went down
         lastTouchPoint.set(0, 0);
@@ -115,15 +106,12 @@ public class DraggableBoxImageView extends ImageView {
 
             //setting frame accordingly
             if (w < h) {
-                right = w;
-                bottom = w;
+                dragRect.right = w;
+                dragRect.bottom = w;
             } else {
-                right = h;
-                bottom = h;
+                dragRect.right = h;
+                dragRect.bottom = h;
             }
-
-            maxWidth = right;
-            maxHeight = bottom;
         }
     }
 
@@ -133,10 +121,10 @@ public class DraggableBoxImageView extends ImageView {
         int origH = d.getIntrinsicHeight();
 
         //returning the actual sizes
-        int realLeft = Math.round(left / imageViewWidth * origW);
-        int realTop = Math.round(top / imageViewHeight * origH);
-        int realRight = Math.round(right / imageViewWidth * origW);
-        int realBottom = Math.round(bottom / imageViewHeight * origH);
+        int realLeft = Math.round(dragRect.left / imageViewWidth * origW);
+        int realTop = Math.round(dragRect.top / imageViewHeight * origH);
+        int realRight = Math.round(dragRect.right / imageViewWidth * origW);
+        int realBottom = Math.round(dragRect.bottom / imageViewHeight * origH);
 
         return new Rect(realLeft, realTop, realRight, realBottom);
     }
@@ -151,8 +139,8 @@ public class DraggableBoxImageView extends ImageView {
             if (proportion < 0.95 || proportion > 1.05) {
                 canvas.drawARGB(70, 0, 0, 0);
                 float halfStrokeSize = borderLinePaint.getStrokeWidth() / 2;
-                canvas.drawRect(left + halfStrokeSize, top + halfStrokeSize,
-                        right - halfStrokeSize, bottom - halfStrokeSize, borderLinePaint);
+                canvas.drawRect(dragRect.left + halfStrokeSize, dragRect.top + halfStrokeSize,
+                        dragRect.right - halfStrokeSize, dragRect.bottom - halfStrokeSize, borderLinePaint);
             }
         }
     }
