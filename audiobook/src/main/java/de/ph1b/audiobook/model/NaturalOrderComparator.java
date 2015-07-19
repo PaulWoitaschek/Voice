@@ -83,11 +83,11 @@ public class NaturalOrderComparator {
     }
 
     private static char charAt(String s, int i) {
-        if (i >= s.length()) {
+        String lowerString = s.toLowerCase();
+        if (i >= lowerString.length()) {
             return 0;
         } else {
-            return s.toLowerCase().charAt(i); // modified to lower case to
-            // ignore case // ignore case
+            return lowerString.charAt(i); // modified to lower case to ignore case
         }
     }
 
