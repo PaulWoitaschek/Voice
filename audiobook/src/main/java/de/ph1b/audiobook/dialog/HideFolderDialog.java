@@ -10,6 +10,7 @@ import android.support.v4.app.DialogFragment;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.io.File;
+import java.io.IOException;
 
 import de.ph1b.audiobook.R;
 
@@ -69,8 +70,12 @@ public class HideFolderDialog extends DialogFragment {
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        //noinspection ResultOfMethodCallIgnored
-                        hideFile.mkdirs();
+                        try {
+                            //noinspection ResultOfMethodCallIgnored
+                            hideFile.createNewFile();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 })
                 .build();
