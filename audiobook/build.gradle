@@ -9,11 +9,6 @@ android {
         targetSdkVersion 22
         versionCode 68
         versionName '2.2.2'
-
-        ndk {
-            moduleName "sonic"
-        }
-
     }
 
     signingConfigs {

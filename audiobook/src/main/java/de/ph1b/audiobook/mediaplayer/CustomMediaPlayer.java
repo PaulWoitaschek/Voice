@@ -425,16 +425,16 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                             outputBuffers[res].get(chunk);
                             outputBuffers[res].clear();
                             if (chunk.length > 0) {
-                                sonic.putBytes(chunk, chunk.length);
+                                sonic.writeBytesToStream(chunk, chunk.length);
                             } else {
-                                sonic.flush();
+                                sonic.flushStream();
                             }
                             int available = sonic.availableBytes();
                             if (available > 0) {
                                 if (modifiedSamples.length < available) {
                                     modifiedSamples = new byte[available];
                                 }
-                                sonic.receiveBytes(modifiedSamples, available);
+                                sonic.readBytesFromStream(modifiedSamples, available);
                                 track.write(modifiedSamples, 0, available);
                             }
                             codec.releaseOutputBuffer(res, false);
