@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.uitools;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
@@ -9,7 +8,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
@@ -152,9 +150,7 @@ public class DraggableBoxImageView extends ImageView {
             // only draw frame if relation doesn't already fit approx
             if (proportion < 0.95 || proportion > 1.05) {
                 canvas.drawARGB(70, 0, 0, 0);
-                float strokeSizeInDp = getResources().getDimension(R.dimen.cover_edit_stroke_width);
-                float strokeSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, strokeSizeInDp, Resources.getSystem().getDisplayMetrics());
-                float halfStrokeSize = strokeSize / 2;
+                float halfStrokeSize = borderLinePaint.getStrokeWidth() / 2;
                 canvas.drawRect(left + halfStrokeSize, top + halfStrokeSize,
                         right - halfStrokeSize, bottom - halfStrokeSize, borderLinePaint);
             }
