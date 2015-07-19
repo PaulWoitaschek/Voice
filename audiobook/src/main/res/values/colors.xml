@@ -18,4 +18,7 @@
     <!-- pink 700 -->
     <color name="accentDark">#ffc2185b</color>
     <!-- ## text colors -->
+
+    <color name="dark_icon_color">#ffffff</color>
+    <color name="light_icon_color">#757575</color>
 </resources>
