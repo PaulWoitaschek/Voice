@@ -58,25 +58,19 @@ public class DraggableBoxImageView extends ImageView {
                 lastTouchPoint.set(x, y);
 
                 if ((dragRect.right + deltaX) > imageViewWidth) {
-                    dragRect.right = imageViewWidth;
-                    dragRect.left = imageViewWidth - dragRect.width();
+                    dragRect.offsetTo(imageViewWidth - dragRect.width(), dragRect.top);
                 } else if ((dragRect.left + deltaX) < 0) {
-                    dragRect.left = 0;
-                    dragRect.right = dragRect.width();
+                    dragRect.offsetTo(0, dragRect.top);
                 } else {
-                    dragRect.right += deltaX;
-                    dragRect.left += deltaX;
+                    dragRect.offset(deltaX, 0);
                 }
 
                 if ((dragRect.bottom + deltaY) > imageViewHeight) {
-                    dragRect.bottom = imageViewHeight;
-                    dragRect.top = imageViewHeight - dragRect.height();
+                    dragRect.offsetTo(dragRect.left, imageViewHeight - dragRect.height());
                 } else if ((dragRect.top + deltaY) < 0) {
-                    dragRect.top = 0;
-                    dragRect.bottom = dragRect.height();
+                    dragRect.offsetTo(dragRect.left, 0);
                 } else {
-                    dragRect.bottom += deltaY;
-                    dragRect.top += deltaY;
+                    dragRect.offset(0, deltaY);
                 }
 
                 invalidate();
