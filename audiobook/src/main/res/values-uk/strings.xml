@@ -89,4 +89,8 @@
     <!-- Misc -->
     <string name="popup_edit">Редагувати</string>
     <string name="remove">Видалити</string>
+    <!-- hide folder dialog -->
+    <string name="hide_folder_title">Приховати папку</string>
+    <string name="hide_folder_content">Чи хочете ви приховати папку від музичних програчів так, щоб вони не ідентифіковували вашу книгу як музіку?</string>
+    <string name="hide_confirm">Приховати</string>
 </resources>
