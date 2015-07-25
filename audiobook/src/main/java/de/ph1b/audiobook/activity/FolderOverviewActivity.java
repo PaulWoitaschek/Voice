@@ -43,21 +43,73 @@ public class FolderOverviewActivity extends BaseActivity {
     private FloatingActionsMenu fam;
     private FloatingActionButton buttonRepresentingTheFam;
     private View backgroundOverlay;
+    private final FloatingActionsMenu.OnFloatingActionsMenuUpdateListener famMenuListener = new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+
+        private final Point famCenter = new Point();
+
+        @Override
+        public void onMenuExpanded() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getFamCenter(famCenter);
+
+                // get the final radius for the clipping circle
+                int finalRadius = Math.max(backgroundOverlay.getWidth(), backgroundOverlay.getHeight());
+
+                // create the animator for this view (the start radius is zero)
+                Animator anim = ViewAnimationUtils.createCircularReveal(backgroundOverlay,
+                        famCenter.x, famCenter.y, 0, finalRadius);
+
+                // make the view visible and start the animation
+                backgroundOverlay.setVisibility(View.VISIBLE);
+                anim.start();
+            } else {
+                backgroundOverlay.setVisibility(View.VISIBLE);
+            }
+        }
+
+        @Override
+        public void onMenuCollapsed() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                // get the center for the clipping circle
+                getFamCenter(famCenter);
+
+                // get the initial radius for the clipping circle
+                int initialRadius = Math.max(backgroundOverlay.getHeight(), backgroundOverlay.getWidth());
+
+                // create the animation (the final radius is zero)
+                Animator anim = ViewAnimationUtils.createCircularReveal(backgroundOverlay,
+                        famCenter.x, famCenter.y, initialRadius, 0);
+
+                // make the view invisible when the animation is done
+                anim.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        backgroundOverlay.setVisibility(View.INVISIBLE);
+                    }
+                });
+
+                // start the animation
+                anim.start();
+            } else {
+                backgroundOverlay.setVisibility(View.INVISIBLE);
+            }
+        }
+    };
 
     /**
-     * @return the point representing the center of the floating action menus button. Note, that the
-     * fam is only a container, so we have to calculate the point relatively.
+     * Calculates the point representing the center of the floating action menus button. Note, that
+     * the fam is only a container, so we have to calculate the point relatively.
      */
-    private Point getFamCenter() {
+    private void getFamCenter(Point point) {
         int x = fam.getLeft() + ((buttonRepresentingTheFam.getLeft() + buttonRepresentingTheFam.getRight()) / 2);
         int y = fam.getTop() + ((buttonRepresentingTheFam.getTop() + buttonRepresentingTheFam.getBottom()) / 2);
-        return new Point(x, y);
+        point.set(x, y);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.home:
             case android.R.id.home:
                 finish();
                 return true;
@@ -74,10 +126,9 @@ public class FolderOverviewActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(getString(R.string.audiobook_folders_title));
-        }
+        assert actionBar != null;
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(getString(R.string.audiobook_folders_title));
 
         prefs = PrefsManager.getInstance(this);
 
@@ -93,61 +144,6 @@ public class FolderOverviewActivity extends BaseActivity {
                 backgroundOverlay.setVisibility(View.GONE);
             }
         }
-
-        fam.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
-            @Override
-            public void onMenuExpanded() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    Point famCenter = getFamCenter();
-                    int cx = famCenter.x;
-                    int cy = famCenter.y;
-
-                    // get the final radius for the clipping circle
-                    int finalRadius = Math.max(backgroundOverlay.getWidth(), backgroundOverlay.getHeight());
-
-                    // create the animator for this view (the start radius is zero)
-                    Animator anim = ViewAnimationUtils.createCircularReveal(backgroundOverlay, cx, cy, 0,
-                            finalRadius);
-
-                    // make the view visible and start the animation
-                    backgroundOverlay.setVisibility(View.VISIBLE);
-                    anim.start();
-                } else {
-                    backgroundOverlay.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onMenuCollapsed() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    // get the center for the clipping circle
-                    Point famCenter = getFamCenter();
-                    int cx = famCenter.x;
-                    int cy = famCenter.y;
-
-                    // get the initial radius for the clipping circle
-                    int initialRadius = Math.max(backgroundOverlay.getHeight(), backgroundOverlay.getWidth());
-
-                    // create the animation (the final radius is zero)
-                    Animator anim = ViewAnimationUtils.createCircularReveal(backgroundOverlay, cx, cy,
-                            initialRadius, 0);
-
-                    // make the view invisible when the animation is done
-                    anim.addListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            backgroundOverlay.setVisibility(View.INVISIBLE);
-                        }
-                    });
-
-                    // start the animation
-                    anim.start();
-                } else {
-                    backgroundOverlay.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
 
         // preparing list
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -178,6 +174,8 @@ public class FolderOverviewActivity extends BaseActivity {
                 });
         recyclerView.setAdapter(adapter);
 
+        fam.setOnFloatingActionsMenuUpdateListener(famMenuListener);
+
         FloatingActionButton single = (FloatingActionButton) findViewById(R.id.add_single);
         single.setTitle(getString(R.string.folder_add_book) + "\n" + getString(R.string.for_example)
                 + " Harry Potter 4");
@@ -204,15 +202,22 @@ public class FolderOverviewActivity extends BaseActivity {
         intent.putExtra(FolderChooserActivity.ACTIVITY_FOR_RESULT_REQUEST_CODE,
                 requestCode);
         startActivityForResult(intent, requestCode);
+
+        fam.setOnFloatingActionsMenuUpdateListener(null);
     }
 
+    /**
+     * @param newFile the new folder file
+     * @return true if the new folder is not added yet and is no sub- or parent folder of an existing
+     * book folder
+     */
     private boolean canAddNewFolder(@NonNull final String newFile) {
         List<String> folders = new ArrayList<>();
-        folders.addAll(prefs.getCollectionFolders());
-        folders.addAll(prefs.getSingleBookFolders());
+        folders.addAll(bookCollections);
+        folders.addAll(singleBooks);
 
         boolean filesAreSubsets = true;
-        boolean firstAddedFolder = folders.size() == 0;
+        boolean firstAddedFolder = folders.isEmpty();
         boolean sameFolder = false;
         for (String s : folders) {
             if (s.equals(newFile)) {
@@ -240,6 +245,10 @@ public class FolderOverviewActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        fam.collapseImmediately();
+        backgroundOverlay.setVisibility(View.GONE);
+        fam.setOnFloatingActionsMenuUpdateListener(famMenuListener);
 
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
@@ -281,8 +290,6 @@ public class FolderOverviewActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        fam.collapseImmediately();
 
         bookCollections.clear();
         bookCollections.addAll(prefs.getCollectionFolders());
