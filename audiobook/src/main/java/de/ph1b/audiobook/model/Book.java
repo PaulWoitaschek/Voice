@@ -170,19 +170,9 @@ public class Book implements Comparable<Book> {
         if (o instanceof Book) {
             Book that = (Book) o;
 
-            if (!(this.root.equals(that.root))) return false;
-
-            if (this.chapters.size() != that.chapters.size()) {
-                return false;
-            } else {
-                for (int i = 0; i < this.chapters.size(); i++) {
-                    if (!this.chapters.get(i).equals(that.chapters.get(i))) {
-                        return false;
-                    }
-                }
-            }
-
-            return this.type == that.type;
+            return this.root.equals(that.root) &&
+                    this.chapters.equals(that.chapters) &&
+                    this.type == that.type;
 
         }
         return false;
@@ -191,10 +181,9 @@ public class Book implements Comparable<Book> {
     @Override
     public int hashCode() {
         final int PRIME = 31;
-        int result = PRIME + root.hashCode();
-        for (Chapter c : chapters) {
-            result = PRIME * result + c.hashCode();
-        }
+        int result = PRIME;
+        result = PRIME * result + root.hashCode();
+        result = PRIME * result + chapters.hashCode();
         return result;
     }
 
