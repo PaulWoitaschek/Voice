@@ -18,12 +18,13 @@ public class SupportDialogFragment extends DialogFragment {
 
     public static final String TAG = SupportDialogFragment.class.getSimpleName();
 
+    private static final String GITHUB_URL = "https://github.com/Ph1b/MaterialAudiobookPlayer";
+    private static final String TRANSLATION_URL = "https://www.transifex.com/projects/p/material-audiobook-player";
+
 
     @Override
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-
         final MaterialDialog.ListCallback onSupportListItemClicked =
                 new MaterialDialog.ListCallback() {
                     @Override
@@ -31,14 +32,10 @@ public class SupportDialogFragment extends DialogFragment {
                                             CharSequence charSequence) {
                         switch (i) {
                             case 0: //dev and support
-                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse
-                                        ("https://github.com/Ph1b/MaterialAudiobookPlayer/" +
-                                                "issues")));
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GITHUB_URL)));
                                 break;
                             case 1: //translations
-                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse
-                                        ("https://www.transifex.com/projects/p/" +
-                                                "material-audiobook-player/")));
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(TRANSLATION_URL)));
                                 break;
                             case 2:
                                 new DonationDialogFragment().show(getFragmentManager(),
