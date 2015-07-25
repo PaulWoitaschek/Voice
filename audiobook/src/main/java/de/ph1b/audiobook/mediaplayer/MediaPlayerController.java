@@ -162,6 +162,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
             switch (state) {
                 case PLAYBACK_COMPLETED:
                     player.seekTo(0);
+                    //noinspection fallthrough: we pass directly to start()
                 case PREPARED:
                 case PAUSED:
                     player.start();
@@ -337,7 +338,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                     public void run() {
                         lock.lock();
                         try {
-                            pause();
+                            pause(true);
                             sleepTimerActive = false;
                             communication.sleepStateChanged();
                         } finally {
@@ -362,8 +363,10 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     /**
      * Pauses the player. Also stops the updating mechanism which constantly updates the book to the
      * database.
+     *
+     * @param rewind true if the player should automatically rewind a little bit.
      */
-    public void pause() {
+    public void pause(boolean rewind) {
         lock.lock();
         try {
             L.v(TAG, "pause acquired lock. state is=" + state);
@@ -373,13 +376,15 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                         player.pause();
                         stopUpdating();
 
-                        final int autoRewind = prefs.getAutoRewindAmount() * 1000;
-                        if (autoRewind != 0) {
-                            int originalPosition = player.getCurrentPosition();
-                            int seekTo = originalPosition - autoRewind;
-                            if (seekTo < 0) seekTo = 0;
-                            player.seekTo(seekTo);
-                            book.setPosition(seekTo, book.getCurrentMediaPath());
+                        if (rewind) {
+                            final int autoRewind = prefs.getAutoRewindAmount() * 1000;
+                            if (autoRewind != 0) {
+                                int originalPosition = player.getCurrentPosition();
+                                int seekTo = originalPosition - autoRewind;
+                                seekTo = Math.max(seekTo, 0);
+                                player.seekTo(seekTo);
+                                book.setPosition(seekTo, book.getCurrentMediaPath());
+                            }
                         }
                         db.updateBook(book);
 

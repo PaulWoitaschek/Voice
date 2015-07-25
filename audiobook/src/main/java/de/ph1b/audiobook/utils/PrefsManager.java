@@ -24,11 +24,11 @@ public class PrefsManager {
     private static final String PREF_KEY_CURRENT_BOOK = "currentBook";
     private static final String PREF_KEY_COLLECTION_FOLDERS = "folders";
     private static final String PREF_KEY_SINGLE_BOOK_FOLDERS = "singleBookFolders";
+    private static final Communication communication = Communication.getInstance();
     private static PrefsManager instance;
     @NonNull
     private final Context c;
     private final SharedPreferences sp;
-    private final Communication communication = Communication.getInstance();
 
     private PrefsManager(@NonNull Context c) {
         PreferenceManager.setDefaultValues(c, R.xml.preferences, false);

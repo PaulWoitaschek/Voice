@@ -84,7 +84,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         public void onReceive(Context context, Intent intent) {
             if (MediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
                 pauseBecauseHeadset = true;
-                controller.pause();
+                controller.pause(true);
             }
         }
     };
@@ -172,7 +172,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
             case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
                 if (MediaPlayerController.getPlayState() ==
                         MediaPlayerController.PlayState.PLAYING) {
-                    controller.pause();
+                    controller.pause(true);
                 } else {
                     controller.play();
                 }
@@ -312,11 +312,14 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                      */
                     break;
                 }
+                //noinspection fallthrough: See text above!
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                 if (MediaPlayerController.getPlayState() ==
                         MediaPlayerController.PlayState.PLAYING) {
                     L.d(TAG, "Paused by audio-focus loss transient.");
-                    controller.pause();
+                    // Only rewind if loss is transient. When we only pause temporary, don't rewind
+                    // automatically.
+                    controller.pause(focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT);
                     pauseBecauseLossTransient = true;
                 }
                 break;
