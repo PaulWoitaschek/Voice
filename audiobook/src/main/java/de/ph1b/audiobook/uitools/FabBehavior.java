@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -17,17 +16,14 @@ import java.util.List;
  * Defines the behavior for the floating action button. If the dependency is a Snackbar, move the
  * fab up.
  */
-@SuppressWarnings("ALL")
 public class FabBehavior extends CoordinatorLayout.Behavior<FloatingActionButton> {
 
     private float mTranslationY;
 
-    @SuppressWarnings("unused")
     public FabBehavior() {
         super();
     }
 
-    @SuppressWarnings("unused")
     public FabBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -53,26 +49,16 @@ public class FabBehavior extends CoordinatorLayout.Behavior<FloatingActionButton
     }
 
     @Override
-    public boolean onDependentViewChanged(CoordinatorLayout parent, FloatingActionButton child, View dependency) {
-        if (dependency instanceof Snackbar.SnackbarLayout) {
-            this.updateFabTranslationForSnackbar(parent, child, dependency);
+    public boolean onDependentViewChanged(CoordinatorLayout parent, FloatingActionButton fab, View dependency) {
+        if (dependency instanceof Snackbar.SnackbarLayout && fab.getVisibility() == View.VISIBLE) {
+            float translationY = getFabTranslationYForSnackbar(parent, fab);
+            if (translationY != this.mTranslationY) {
+                ViewCompat.animate(fab).cancel();
+                ViewCompat.setTranslationY(fab, translationY);
+                this.mTranslationY = translationY;
+            }
         }
 
         return false;
-    }
-
-    private void updateFabTranslationForSnackbar(CoordinatorLayout parent, FloatingActionButton fab, View snackbar) {
-        float translationY = FabBehavior.getFabTranslationYForSnackbar(parent, fab);
-        if (translationY != this.mTranslationY) {
-            ViewCompat.animate(fab).cancel();
-            if (Math.abs(translationY - this.mTranslationY) == (float) snackbar.getHeight()) {
-                ViewCompat.animate(fab).translationY(translationY).setInterpolator(new FastOutSlowInInterpolator()).setListener(null);
-            } else {
-                ViewCompat.setTranslationY(fab, translationY);
-            }
-
-            this.mTranslationY = translationY;
-        }
-
     }
 }
