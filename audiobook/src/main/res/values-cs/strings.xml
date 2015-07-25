@@ -1,11 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-
-
 <resources>
     <!--BookShelf-->
     <string name="mal_file_message">Následující soubor může být poškozen:</string>
     <string name="mal_file_title">Najít soubor</string>
     <string name="content_current_book">Toto je aktuální kniha</string>
+    <string name="current_book">Aktuální kniha</string>
     <!--BookPlayActivity-->
     <string name="cover">Obal</string>
     <string name="play_pause">Přehrát / Pozastavit</string>
@@ -90,4 +89,8 @@
     <!--Misc-->
     <string name="popup_edit">Upravit</string>
     <string name="remove">Smazat</string>
+    <!--hide folder dialog-->
+    <string name="hide_folder_title">Skrýt adresář</string>
+    <string name="hide_folder_content">Chcete skrýt tento adresář před hudebními přehrávači aby nerozpoznávaly tuto audioknihu jako hudební sbírku?</string>
+    <string name="hide_confirm">Skrýt</string>
 </resources>

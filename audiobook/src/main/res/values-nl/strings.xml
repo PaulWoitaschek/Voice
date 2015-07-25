@@ -6,15 +6,15 @@
     <string name="content_current_book">Dit is het huidige boek</string>
     <string name="current_book">Huidig boek</string>
     <!--BookPlayActivity-->
-    <string name="cover">Cover</string>
+    <string name="cover">Omslag</string>
     <string name="play_pause">Speel / Pauze</string>
     <string name="action_sleep">Slaap-timer</string>
     <string name="action_sleep_title_hint_left">Pauzeer na</string>
     <string name="action_sleep_title_hint_right">minuten</string>
-    <string name="rewind">Ga terug</string>
+    <string name="rewind">Spoel terug</string>
     <string name="fast_forward">Spoel door</string>
     <string name="previous_track">Vorige track</string>
-    <string name="next_track">Volgende trak</string>
+    <string name="next_track">Volgende track</string>
     <string name="play">Speel</string>
     <string name="pause">Pauzeer</string>
     <string name="stop">Stop</string>
@@ -23,7 +23,7 @@
     <string name="no_external_storage">Externe opslag is niet beschikbaar. Controleer of deze is aangesloten en niet in gebruik is door uw PC.</string>
     <string name="no_external_storage_action_bar_title">Externe opslag</string>
     <!--Dialogs-->
-    <string name="dialog_confirm">Zet</string>
+    <string name="dialog_confirm">Opslaan</string>
     <string name="dialog_cancel">Annuleer</string>
     <!--EditBookDialog-->
     <string name="book_add_empty_title">Voeg titel toe</string>
@@ -75,11 +75,11 @@
     <string name="pref_send_bugs_title">Rapporteer lieveheersbeestjes</string>
     <string name="pref_send_bugs_summary">Automatisch anoniem bugs rapporteren wanneer de app crasht, om de verdere ontwikkeling te helpen.</string>
     <string name="pref_auto_rewind_title">Automatisch terugspoelen</string>
-    <string name="pref_auto_rewind_summary">Spoelt automatisch terug na handmatig pauzeren:</string>
+    <string name="pref_auto_rewind_summary">Spoel automatisch terug na handmatig pauzeren:</string>
     <string name="pref_bookmark_on_sleep_title">Bladwijzer toevoegen bij inslapen</string>
-    <string name="pref_bookmark_on_sleep_summary">Voegt automatisch een bladwijzer toe elke keer de slaap-timer afgaat.</string>
+    <string name="pref_bookmark_on_sleep_summary">Maak automatisch een bladwijzer aan elke keer de slaap-timer afgaat.</string>
     <string name="pref_support_title">Steun</string>
-    <string name="pref_support_translations">Tolk spelen</string>
+    <string name="pref_support_translations">App vertalen</string>
     <string name="pref_support_contribute">Steunen en suggesties</string>
     <string name="pref_support_donation">Donneer</string>
     <string name="donation_worked_thanks">Bedankt, dat helpt écht! :)</string>
@@ -88,4 +88,7 @@
     <string name="popup_edit">Bewerk</string>
     <string name="remove">Verwijder</string>
     <!--hide folder dialog-->
+    <string name="hide_folder_title">Verberg map</string>
+    <string name="hide_folder_content">Wilt u deze map verbergen voor andere mediaspelers, zodat uw luisterboeken niet als muziek worden gezien?</string>
+    <string name="hide_confirm">Verberg</string>
 </resources>
