@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -130,8 +129,8 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator);
         seekBar = (SeekBar) findViewById(R.id.seekBar);
         FloatingActionButton playButton = (FloatingActionButton) findViewById(R.id.play);
-        ImageButton previous_button = (ImageButton) findViewById(R.id.previous);
-        ImageButton next_button = (ImageButton) findViewById(R.id.next);
+        View previous_button = findViewById(R.id.previous);
+        View next_button = findViewById(R.id.next);
         playedTimeView = (TextView) findViewById(R.id.played);
         ImageView coverView = (ImageView) findViewById(R.id.book_cover);
         maxTimeView = (TextView) findViewById(R.id.maxTime);
