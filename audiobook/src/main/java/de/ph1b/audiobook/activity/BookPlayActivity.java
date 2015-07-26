@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -44,6 +45,7 @@ import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.model.DataBaseHelper;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.CoverReplacement;
+import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.uitools.PlayPauseDrawable;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.Communication;
@@ -202,7 +204,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         View previous_button = findViewById(R.id.previous);
         View next_button = findViewById(R.id.next);
         playedTimeView = (TextView) findViewById(R.id.played);
-        ImageView coverView = (ImageView) findViewById(R.id.book_cover);
+        final ImageView coverView = (ImageView) findViewById(R.id.book_cover);
         maxTimeView = (TextView) findViewById(R.id.maxTime);
         bookSpinner = (Spinner) findViewById(R.id.book_spinner);
 
@@ -309,13 +311,19 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
 
         // (Cover)
         File coverFile = book.getCoverFile();
-        Drawable coverReplacement = new CoverReplacement(book.getName(),
-                this);
+        final Drawable coverReplacement = new CoverReplacement(book.getName(), this);
         if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-            Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(
-                    coverView);
+            Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(coverView);
         } else {
-            coverView.setImageDrawable(coverReplacement);
+            // this hack is necessary because otherwise the transition will fail
+            coverView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    coverView.setImageBitmap(ImageHelper.drawableToBitmap(coverReplacement, coverView.getWidth(), coverView.getHeight()));
+                    coverView.getViewTreeObserver().removeOnPreDrawListener(this);
+                    return true;
+                }
+            });
         }
 
         // Next/Prev/spinner hiding
