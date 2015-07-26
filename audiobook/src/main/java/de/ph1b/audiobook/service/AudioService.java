@@ -49,7 +49,7 @@ import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 
-public class AudioService extends Service implements AudioManager.OnAudioFocusChangeListener, Communication.OnBookContentChangedListener, Communication.OnPlayStateChangedListener, Communication.OnCurrentBookIdChangedListener {
+public class AudioService extends Service implements AudioManager.OnAudioFocusChangeListener {
 
     private static final String TAG = AudioService.class.getSimpleName();
     private static final int NOTIFICATION_ID = 42;
@@ -113,6 +113,65 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
      * The last path the {@link #notifyChange(String)} has used to update the metadata.
      */
     private volatile String lastPathForMetaData = "";
+    private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
+
+
+        @Override
+        public void onBookContentChanged(@NonNull Book book) {
+            if (book.getId() == prefs.getCurrentBookId()) {
+                controller.updateBook(db.getBook(prefs.getCurrentBookId()));
+                notifyChange(META_CHANGED);
+            }
+        }
+
+        @Override
+        public void onPlayStateChanged() {
+            final MediaPlayerController.PlayState state = MediaPlayerController.getPlayState();
+            L.d(TAG, "onPlayStateChanged:" + state);
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    L.d(TAG, "onPlayStateChanged executed:" + state);
+                    Book controllerBook = controller.getBook();
+                    if (controllerBook != null) {
+                        switch (state) {
+                            case PLAYING:
+                                audioManager.requestAudioFocus(AudioService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+
+                                mediaSession.setActive(true);
+
+                                startForeground(NOTIFICATION_ID, getNotification(controllerBook));
+
+                                break;
+                            case PAUSED:
+                                stopForeground(false);
+                                notificationManager.notify(NOTIFICATION_ID, getNotification(controllerBook));
+
+                                break;
+                            case STOPPED:
+                                mediaSession.setActive(false);
+
+                                audioManager.abandonAudioFocus(AudioService.this);
+                                notificationManager.cancel(NOTIFICATION_ID);
+                                stopForeground(true);
+
+                                break;
+                        }
+
+                        notifyChange(PLAYSTATE_CHANGED);
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onCurrentBookIdChanged(long oldId) {
+            Book book = db.getBook(prefs.getCurrentBookId());
+            if (book != null && (controller.getBook() == null || controller.getBook().getId() != book.getId())) {
+                reInitController(book);
+            }
+        }
+    };
 
     @Override
     public void onCreate() {
@@ -152,9 +211,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
         controller = new MediaPlayerController(this);
 
-        communication.addOnBookContentChangedListener(this);
-        communication.addOnCurrentBookIdChangedListener(this);
-        communication.addOnPlayStateChangedListener(this);
+        communication.addBookCommunicationListener(listener);
 
         Book book = db.getBook(prefs.getCurrentBookId());
         if (book != null) {
@@ -243,9 +300,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         controller.stop();
         controller.onDestroy();
 
-        communication.removeOnBookContentChangedListener(this);
-        communication.removeOnCurrentBookIdChangedListener(this);
-        communication.removeOnPlayStateChangedListener(this);
+        communication.removeBookCommunicationListener(listener);
 
         MediaPlayerController.setPlayState(MediaPlayerController.PlayState.STOPPED);
 
@@ -516,61 +571,5 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 }
             }
         });
-    }
-
-    @Override
-    public void onBookContentChanged(@NonNull Book book) {
-        if (book.getId() == prefs.getCurrentBookId()) {
-            controller.updateBook(db.getBook(prefs.getCurrentBookId()));
-            notifyChange(META_CHANGED);
-        }
-    }
-
-    @Override
-    public void onPlayStateChanged() {
-        final MediaPlayerController.PlayState state = MediaPlayerController.getPlayState();
-        L.d(TAG, "onPlayStateChanged:" + state);
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                L.d(TAG, "onPlayStateChanged executed:" + state);
-                Book controllerBook = controller.getBook();
-                if (controllerBook != null) {
-                    switch (state) {
-                        case PLAYING:
-                            audioManager.requestAudioFocus(AudioService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-
-                            mediaSession.setActive(true);
-
-                            startForeground(NOTIFICATION_ID, getNotification(controllerBook));
-
-                            break;
-                        case PAUSED:
-                            stopForeground(false);
-                            notificationManager.notify(NOTIFICATION_ID, getNotification(controllerBook));
-
-                            break;
-                        case STOPPED:
-                            mediaSession.setActive(false);
-
-                            audioManager.abandonAudioFocus(AudioService.this);
-                            notificationManager.cancel(NOTIFICATION_ID);
-                            stopForeground(true);
-
-                            break;
-                    }
-
-                    notifyChange(PLAYSTATE_CHANGED);
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onCurrentBookIdChanged(long oldId) {
-        Book book = db.getBook(prefs.getCurrentBookId());
-        if (book != null && (controller.getBook() == null || controller.getBook().getId() != book.getId())) {
-            reInitController(book);
-        }
     }
 }

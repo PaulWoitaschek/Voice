@@ -39,7 +39,7 @@ import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.PrefsManager;
 
-public class WidgetUpdateService extends Service implements Communication.OnBookContentChangedListener, Communication.OnPlayStateChangedListener, Communication.OnCurrentBookIdChangedListener {
+public class WidgetUpdateService extends Service {
     private final ExecutorService executor = new ThreadPoolExecutor(
             1, 1, // single thread
             5, TimeUnit.SECONDS,
@@ -49,6 +49,26 @@ public class WidgetUpdateService extends Service implements Communication.OnBook
     private final Communication communication = Communication.getInstance();
     private DataBaseHelper db;
     private PrefsManager prefs;
+    private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
+
+        @Override
+        public void onBookContentChanged(@NonNull Book book) {
+            if (book.getId() == prefs.getCurrentBookId()) {
+                updateWidget();
+            }
+        }
+
+        @Override
+        public void onPlayStateChanged() {
+            updateWidget();
+        }
+
+        @Override
+        public void onCurrentBookIdChanged(long oldId) {
+            updateWidget();
+        }
+
+    };
 
     @Override
     public void onCreate() {
@@ -57,9 +77,7 @@ public class WidgetUpdateService extends Service implements Communication.OnBook
         db = DataBaseHelper.getInstance(this);
         prefs = PrefsManager.getInstance(this);
 
-        communication.addOnBookContentChangedListener(this);
-        communication.addOnCurrentBookIdChangedListener(this);
-        communication.addOnPlayStateChangedListener(this);
+        communication.addBookCommunicationListener(listener);
     }
 
     @Override
@@ -311,9 +329,7 @@ public class WidgetUpdateService extends Service implements Communication.OnBook
         super.onDestroy();
         executor.shutdown();
 
-        communication.removeOnBookContentChangedListener(this);
-        communication.removeOnCurrentBookIdChangedListener(this);
-        communication.removeOnPlayStateChangedListener(this);
+        communication.removeBookCommunicationListener(listener);
     }
 
     @Override
@@ -329,22 +345,5 @@ public class WidgetUpdateService extends Service implements Communication.OnBook
     @Override
     public IBinder onBind(final Intent intent) {
         return null;
-    }
-
-    @Override
-    public void onBookContentChanged(@NonNull Book book) {
-        if (book.getId() == prefs.getCurrentBookId()) {
-            updateWidget();
-        }
-    }
-
-    @Override
-    public void onPlayStateChanged() {
-        updateWidget();
-    }
-
-    @Override
-    public void onCurrentBookIdChanged(long oldId) {
-        updateWidget();
     }
 }

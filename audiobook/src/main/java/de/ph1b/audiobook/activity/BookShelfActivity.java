@@ -39,7 +39,8 @@ import de.ph1b.audiobook.utils.PrefsManager;
  * Created by Paul Woitaschek (woitaschek@posteo.de, paul-woitaschek.de) on 12.07.15.
  * Showing the shelf of all the available books and provide a navigation to each book
  */
-public class BookShelfActivity extends BaseActivity implements View.OnClickListener, Communication.OnBookSetChangedListener, Communication.OnCurrentBookIdChangedListener, Communication.OnScannerStateChangedListener, Communication.OnPlayStateChangedListener, BookShelfAdapter.OnItemClickListener, Communication.OnBookContentChangedListener {
+public class BookShelfActivity extends BaseActivity implements View.OnClickListener,
+        BookShelfAdapter.OnItemClickListener {
 
     private static final String TAG = BookShelfActivity.class.getSimpleName();
     private static final String MALFORMED_FILE = "malformedFile";
@@ -52,6 +53,68 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     private RecyclerView recyclerView;
     private ProgressBar recyclerReplacementView;
     private FloatingActionButton fab;
+    private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
+        @Override
+        public void onBookContentChanged(@NonNull final Book book) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    List<Book> container = new ArrayList<>();
+                    container.add(book);
+                    adapter.addAll(container);
+                }
+            });
+        }
+
+        @Override
+        public void onPlayStateChanged() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    setPlayState(true);
+                }
+            });
+        }
+
+        @Override
+        public void onScannerStateChanged() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    checkVisibilities();
+                }
+            });
+        }
+
+        @Override
+        public void onBookSetChanged(@NonNull final List<Book> activeBooks) {
+            L.v(TAG, "onBookSetChanged called");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.newDataSet(activeBooks);
+                    checkVisibilities();
+                }
+            });
+        }
+
+
+        @Override
+        public void onCurrentBookIdChanged(final long oldId) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int i = 0; i < adapter.getItemCount(); i++) {
+                        long itemId = adapter.getItemId(i);
+                        if (itemId == oldId || itemId == prefs.getCurrentBookId()) {
+                            adapter.notifyItemChanged(i);
+                        }
+                    }
+                    checkVisibilities();
+                }
+            });
+        }
+    };
     private DataBaseHelper db;
 
     public static Intent malformedFileIntent(Context c, String malformedFile) {
@@ -59,7 +122,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         intent.putExtra(MALFORMED_FILE, malformedFile);
         return intent;
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -145,14 +207,10 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
         // update items and set ui
         setPlayState(false);
-        onBookSetChanged(db.getActiveBooks());
+        listener.onBookSetChanged(db.getActiveBooks());
 
         // register receivers
-        communication.addOnBookSetChangedListener(this);
-        communication.addOnBookContentChangedListener(this);
-        communication.addOnCurrentBookIdChangedListener(this);
-        communication.addOnPlayStateChangedListener(this);
-        communication.addOnScannerStateChangedListener(this);
+        communication.addBookCommunicationListener(listener);
     }
 
     private void setPlayState(boolean animated) {
@@ -189,7 +247,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             fab.setVisibility(View.GONE);
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -237,60 +294,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     public void onPause() {
         super.onPause();
 
-        communication.removeOnBookSetChangedListener(this);
-        communication.removeOnBookContentChangedListener(this);
-        communication.removeOnCurrentBookIdChangedListener(this);
-        communication.removeOnPlayStateChangedListener(this);
-        communication.removeOnScannerStateChangedListener(this);
-    }
-
-    @Override
-    public void onBookSetChanged(@NonNull final List<Book> activeBooks) {
-        L.v(TAG, "onBookSetChanged called");
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.newDataSet(activeBooks);
-                checkVisibilities();
-            }
-        });
-    }
-
-
-    @Override
-    public void onPlayStateChanged() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                setPlayState(true);
-            }
-        });
-    }
-
-    @Override
-    public void onScannerStateChanged() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                checkVisibilities();
-            }
-        });
-    }
-
-    @Override
-    public void onCurrentBookIdChanged(final long oldId) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < adapter.getItemCount(); i++) {
-                    long itemId = adapter.getItemId(i);
-                    if (itemId == oldId || itemId == prefs.getCurrentBookId()) {
-                        adapter.notifyItemChanged(i);
-                    }
-                }
-                checkVisibilities();
-            }
-        });
+        communication.removeBookCommunicationListener(listener);
     }
 
     @Override
@@ -333,17 +337,5 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             }
         });
         popupMenu.show();
-    }
-
-    @Override
-    public void onBookContentChanged(@NonNull final Book book) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ArrayList<Book> container = new ArrayList<>();
-                container.add(book);
-                adapter.addAll(container);
-            }
-        });
     }
 }

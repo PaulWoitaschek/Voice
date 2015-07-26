@@ -54,12 +54,12 @@ import de.ph1b.audiobook.utils.PrefsManager;
  * Created by Paul Woitaschek (woitaschek@posteo.de, paul-woitaschek.de) on 12.07.15.
  * Base class for book playing interaction.
  */
-public class BookPlayActivity extends BaseActivity implements View.OnClickListener, Communication.OnSleepStateChangedListener, Communication.OnBookContentChangedListener, Communication.OnPlayStateChangedListener {
+public class BookPlayActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = BookPlayActivity.class.getSimpleName();
     private static final String BOOK_ID = "bookId";
+    private static final Communication communication = Communication.getInstance();
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
-    private final Communication communication = Communication.getInstance();
     @Nullable
     private Snackbar snackbar;
     private TextView playedTimeView;
@@ -71,6 +71,76 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     private long bookId;
     private DataBaseHelper db;
     private CoordinatorLayout coordinatorLayout;
+    private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
+
+        @Override
+        public void onSleepStateChanged() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ActivityCompat.invalidateOptionsMenu(BookPlayActivity.this);
+                    if (MediaPlayerController.sleepTimerActive) {
+                        int minutes = prefs.getSleepTime();
+                        String message = getString(R.string.sleep_timer_started) + " " + minutes + " " +
+                                getString(R.string.minutes);
+                        snackbar = Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).setAction(
+                                R.string.stop, new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        controller.toggleSleepSand();
+                                    }
+                                });
+                        ThemeUtil.theme(snackbar);
+                        snackbar.show();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onBookContentChanged(@NonNull final Book book) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    L.d(TAG, "onBookContentChangedReciever called with bookId=" + book.getId());
+                    if (book.getId() == bookId) {
+
+                        List<Chapter> chapters = book.getChapters();
+                        Chapter chapter = book.getCurrentChapter();
+
+                        int position = chapters.indexOf(chapter);
+                        /**
+                         * Setting position as a tag, so we can make sure onItemSelected is only fired when
+                         * the user changes the position himself.
+                         */
+                        bookSpinner.setTag(position);
+                        bookSpinner.setSelection(position, true);
+                        int duration = chapter.getDuration();
+                        seekBar.setMax(duration);
+                        maxTimeView.setText(formatTime(duration, duration));
+
+                        // Setting seekBar and played time view
+                        if (!seekBar.isPressed()) {
+                            int progress = book.getTime();
+                            seekBar.setProgress(progress);
+                            playedTimeView.setText(formatTime(progress, duration));
+                        }
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onPlayStateChanged() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    setPlayState(true);
+                }
+            });
+        }
+
+    };
 
     public static Intent newIntent(Context c, long bookId) {
         Intent intent = new Intent(c, BookPlayActivity.class);
@@ -310,7 +380,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         return true;
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -365,89 +434,18 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
 
         Book book = db.getBook(bookId);
         if (book != null) {
-            onBookContentChanged(book);
+            listener.onBookContentChanged(book);
         }
 
         ActivityCompat.invalidateOptionsMenu(this);
 
-        communication.addOnBookContentChangedListener(this);
-        communication.addOnPlayStateChangedListener(this);
-        communication.addOnSleepStateChangedListener(this);
+        communication.addBookCommunicationListener(listener);
     }
 
     @Override
     public void onStop() {
         super.onStop();
 
-        communication.removeOnBookContentChangedListener(this);
-        communication.removeOnPlayStateChangedListener(this);
-        communication.removeOnSleepStateChangedListener(this);
-    }
-
-    @Override
-    public void onSleepStateChanged() {
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ActivityCompat.invalidateOptionsMenu(BookPlayActivity.this);
-                if (MediaPlayerController.sleepTimerActive) {
-                    int minutes = prefs.getSleepTime();
-                    String message = getString(R.string.sleep_timer_started) + " " + minutes + " " +
-                            getString(R.string.minutes);
-                    snackbar = Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).setAction(
-                            R.string.stop, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    controller.toggleSleepSand();
-                                }
-                            });
-                    ThemeUtil.theme(snackbar);
-                    snackbar.show();
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onBookContentChanged(@NonNull final Book book) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                L.d(TAG, "onBookContentChangedReciever called with bookId=" + book.getId());
-                if (book.getId() == bookId) {
-
-                    List<Chapter> chapters = book.getChapters();
-                    Chapter chapter = book.getCurrentChapter();
-
-                    int position = chapters.indexOf(chapter);
-                    /**
-                     * Setting position as a tag, so we can make sure onItemSelected is only fired when
-                     * the user changes the position himself.
-                     */
-                    bookSpinner.setTag(position);
-                    bookSpinner.setSelection(position, true);
-                    int duration = chapter.getDuration();
-                    seekBar.setMax(duration);
-                    maxTimeView.setText(formatTime(duration, duration));
-
-                    // Setting seekBar and played time view
-                    if (!seekBar.isPressed()) {
-                        int progress = book.getTime();
-                        seekBar.setProgress(progress);
-                        playedTimeView.setText(formatTime(progress, duration));
-                    }
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onPlayStateChanged() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                setPlayState(true);
-            }
-        });
+        communication.removeBookCommunicationListener(listener);
     }
 }
