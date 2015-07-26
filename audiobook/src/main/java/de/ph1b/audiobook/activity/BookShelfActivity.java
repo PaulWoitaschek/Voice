@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -275,7 +277,14 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     private void startBookPlay() {
         Book currentBook = db.getBook(prefs.getCurrentBookId());
         if (currentBook != null) {
-            startActivity(BookPlayActivity.newIntent(this, prefs.getCurrentBookId()));
+            @SuppressWarnings("unchecked")
+            ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this);
+
+            BookShelfAdapter.ViewHolder viewHolder = (BookShelfAdapter.ViewHolder) recyclerView.findViewHolderForItemId(currentBook.getId());
+            if (viewHolder != null) {
+                optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, viewHolder.coverView, getString(R.string.transition_cover));
+            }
+            ActivityCompat.startActivity(this, BookPlayActivity.newIntent(this, prefs.getCurrentBookId()), optionsCompat.toBundle());
         }
     }
 
