@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
@@ -22,6 +25,10 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 @ThreadSafe
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
+/**
+ * This is the helper for the apps database. All Database writing is done by an executor and the
+ * helper holds a internal array of the books.
+ */
 public class DataBaseHelper extends SQLiteOpenHelper {
 
     // book keys
@@ -57,24 +64,22 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             BOOK_TYPE + " TEXT NOT NULL, " +
             BOOK_USE_COVER_REPLACEMENT + " INTEGER NOT NULL, " +
             BOOK_ACTIVE + " INTEGER NOT NULL DEFAULT 1)";
-
     private static final String CREATE_TABLE_CHAPTERS = "CREATE TABLE " + TABLE_CHAPTERS + " ( " +
             CHAPTER_DURATION + " INTEGER NOT NULL, " +
             CHAPTER_NAME + " TEXT NOT NULL, " +
             CHAPTER_PATH + " TEXT NOT NULL, " +
             BOOK_ID + " INTEGER NOT NULL, " +
             "FOREIGN KEY (" + BOOK_ID + ") REFERENCES " + TABLE_BOOK + "(" + BOOK_ID + "))";
-
     private static final String CREATE_TABLE_BOOKMARKS = "CREATE TABLE " + TABLE_BOOKMARKS + " ( " +
             BOOKMARK_PATH + " TEXT NOT NULL, " +
             BOOKMARK_TITLE + " TEXT NOT NULL, " +
             BOOKMARK_TIME + " INTEGER NOT NULL, " +
             BOOK_ID + " INTEGER NOT NULL, " +
             "FOREIGN KEY (" + BOOK_ID + ") REFERENCES " + TABLE_BOOK + "(" + BOOK_ID + "))";
-
     private static final String TAG = DataBaseHelper.class.getSimpleName();
-    private static final Communication communication = Communication.getInstance();
+    private static final Communication COMMUNICATION = Communication.getInstance();
     private static DataBaseHelper instance;
+    private final Executor executor = Executors.newSingleThreadExecutor();
     private final Context c;
     private final List<Book> activeBooks = new ArrayList<>();
     private final List<Book> orphanedBooks = new ArrayList<>();
@@ -167,36 +172,41 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public synchronized void addBook(@NonNull Book book) {
-        L.v(TAG, "addBook=" + book.getName());
-        checkArgument(!book.getChapters().isEmpty());
+    public synchronized void addBook(@NonNull final Book mutableBook) {
+        L.v(TAG, "addBook=" + mutableBook.getName());
+        checkArgument(!mutableBook.getChapters().isEmpty());
+        final Book copyBook = new Book(mutableBook);
 
-        SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
-        try {
-            ContentValues bookCv = book.getContentValues();
+        activeBooks.add(copyBook);
+        COMMUNICATION.bookSetChanged(activeBooks);
 
-            long bookId = db.insert(TABLE_BOOK, null, bookCv);
-            book.setId(bookId);
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                SQLiteDatabase db = getWritableDatabase();
+                db.beginTransaction();
+                try {
+                    ContentValues bookCv = copyBook.getContentValues();
 
-            for (Chapter c : book.getChapters()) {
-                ContentValues chapterCv = c.getContentValues(book.getId());
-                db.insert(TABLE_CHAPTERS, null, chapterCv);
+                    long bookId = db.insert(TABLE_BOOK, null, bookCv);
+                    copyBook.setId(bookId);
+
+                    for (Chapter c : copyBook.getChapters()) {
+                        ContentValues chapterCv = c.getContentValues(copyBook.getId());
+                        db.insert(TABLE_CHAPTERS, null, chapterCv);
+                    }
+
+                    for (Bookmark b : copyBook.getBookmarks()) {
+                        ContentValues bookmarkCv = b.getContentValues(copyBook.getId());
+                        db.insert(TABLE_BOOKMARKS, null, bookmarkCv);
+                    }
+
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
             }
-
-            for (Bookmark b : book.getBookmarks()) {
-                ContentValues bookmarkCv = b.getContentValues(book.getId());
-                db.insert(TABLE_BOOKMARKS, null, bookmarkCv);
-            }
-
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
-
-        activeBooks.add(book);
-
-        communication.bookSetChanged(activeBooks);
+        });
     }
 
     @Nullable
@@ -228,91 +238,101 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return copyBooks;
     }
 
-    public synchronized void updateBook(@NonNull Book book) {
-        L.v(TAG, "updateBook=" + book.getName());
-        checkArgument(!book.getChapters().isEmpty());
+    public synchronized void updateBook(@NonNull Book mutableBook) {
+        L.v(TAG, "updateBook=" + mutableBook.getName());
+        checkArgument(!mutableBook.getChapters().isEmpty());
 
-        int indexToUpdate = -1;
-        for (int i = 0; i < activeBooks.size(); i++) {
-            if (activeBooks.get(i).getId() == book.getId()) {
-                indexToUpdate = i;
-            }
-        }
-        if (indexToUpdate != -1) {
-            activeBooks.set(indexToUpdate, book);
+        ListIterator<Book> bookIterator = activeBooks.listIterator();
+        while (bookIterator.hasNext()) {
+            Book next = bookIterator.next();
+            if (mutableBook.getId() == next.getId()) {
+                final Book copyBook = new Book(mutableBook);
+                bookIterator.set(copyBook);
+                COMMUNICATION.sendBookContentChanged(copyBook);
 
-            SQLiteDatabase db = getWritableDatabase();
-            db.beginTransaction();
-            try {
-                // update book itself
-                ContentValues bookCv = book.getContentValues();
-                db.update(TABLE_BOOK, bookCv, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        SQLiteDatabase db = getWritableDatabase();
+                        db.beginTransaction();
+                        try {
+                            // update book itself
+                            ContentValues bookCv = copyBook.getContentValues();
+                            db.update(TABLE_BOOK, bookCv, BOOK_ID + "=?", new String[]{String.valueOf(copyBook.getId())});
 
-                // delete old chapters and replace them with new ones
-                db.delete(TABLE_CHAPTERS, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
-                for (Chapter c : book.getChapters()) {
-                    ContentValues chapterCv = c.getContentValues(book.getId());
-                    db.insert(TABLE_CHAPTERS, null, chapterCv);
-                }
+                            // delete old chapters and replace them with new ones
+                            db.delete(TABLE_CHAPTERS, BOOK_ID + "=?", new String[]{String.valueOf(copyBook.getId())});
+                            for (Chapter c : copyBook.getChapters()) {
+                                ContentValues chapterCv = c.getContentValues(copyBook.getId());
+                                db.insert(TABLE_CHAPTERS, null, chapterCv);
+                            }
 
-                // replace old bookmarks and replace them with new ones
-                db.delete(TABLE_BOOKMARKS, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
-                for (Bookmark b : book.getBookmarks()) {
-                    ContentValues bookmarkCV = b.getContentValues(book.getId());
-                    db.insert(TABLE_BOOKMARKS, null, bookmarkCV);
-                }
+                            // replace old bookmarks and replace them with new ones
+                            db.delete(TABLE_BOOKMARKS, BOOK_ID + "=?", new String[]{String.valueOf(copyBook.getId())});
+                            for (Bookmark b : copyBook.getBookmarks()) {
+                                ContentValues bookmarkCV = b.getContentValues(copyBook.getId());
+                                db.insert(TABLE_BOOKMARKS, null, bookmarkCV);
+                            }
 
-                db.setTransactionSuccessful();
-            } finally {
-                db.endTransaction();
-            }
+                            db.setTransactionSuccessful();
+                        } finally {
+                            db.endTransaction();
+                        }
+                    }
+                });
 
-            communication.sendBookContentChanged(book);
-        } else {
-            L.e(TAG, "Could not update book=" + book);
-        }
-    }
-
-    public synchronized void hideBook(@NonNull Book book) {
-        L.v(TAG, "hideBook=" + book.getName());
-        checkArgument(!book.getChapters().isEmpty());
-
-        int indexToHide = -1;
-        for (int i = 0; i < activeBooks.size(); i++) {
-            if (activeBooks.get(i).getId() == book.getId()) {
-                indexToHide = i;
-            }
-        }
-        if (indexToHide == -1) {
-            throw new AssertionError("This should not have happened. Tried to remove a not existing book");
-        } else {
-            activeBooks.remove(indexToHide);
-            orphanedBooks.add(book);
-
-            ContentValues cv = new ContentValues();
-            cv.put(BOOK_ACTIVE, 0);
-            getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
-
-            communication.bookSetChanged(activeBooks);
-        }
-    }
-
-    public synchronized void revealBook(@NonNull Book book) {
-        checkArgument(!book.getChapters().isEmpty());
-
-        Iterator<Book> orphanedBookIterator = orphanedBooks.iterator();
-        while (orphanedBookIterator.hasNext()) {
-            if (orphanedBookIterator.next().getId() == book.getId()) {
-                orphanedBookIterator.remove();
                 break;
             }
         }
-        activeBooks.add(book);
-        ContentValues cv = new ContentValues();
-        cv.put(BOOK_ACTIVE, 1);
-        getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(book.getId())});
+    }
 
-        communication.bookSetChanged(activeBooks);
+    public synchronized void hideBook(@NonNull Book mutableBook) {
+        L.v(TAG, "hideBook=" + mutableBook.getName());
+        checkArgument(!mutableBook.getChapters().isEmpty());
+
+        ListIterator<Book> iterator = activeBooks.listIterator();
+        while (iterator.hasNext()) {
+            Book next = iterator.next();
+            if (next.getId() == mutableBook.getId()) {
+                iterator.remove();
+                final Book copyBook = new Book(mutableBook);
+                orphanedBooks.add(copyBook);
+                COMMUNICATION.bookSetChanged(activeBooks);
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        ContentValues cv = new ContentValues();
+                        cv.put(BOOK_ACTIVE, 0);
+                        getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(copyBook.getId())});
+                    }
+                });
+
+            }
+        }
+    }
+
+    public synchronized void revealBook(@NonNull Book mutableBook) {
+        checkArgument(!mutableBook.getChapters().isEmpty());
+
+        Iterator<Book> orphanedBookIterator = orphanedBooks.iterator();
+        while (orphanedBookIterator.hasNext()) {
+            if (orphanedBookIterator.next().getId() == mutableBook.getId()) {
+                orphanedBookIterator.remove();
+                final Book copyBook = new Book(mutableBook);
+                activeBooks.add(copyBook);
+                COMMUNICATION.bookSetChanged(activeBooks);
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        ContentValues cv = new ContentValues();
+                        cv.put(BOOK_ACTIVE, 1);
+                        getWritableDatabase().update(TABLE_BOOK, cv, BOOK_ID + "=?", new String[]{String.valueOf(copyBook.getId())});
+                    }
+                });
+                break;
+            }
+        }
+
     }
 
     @Override

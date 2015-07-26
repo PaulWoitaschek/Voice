@@ -7,6 +7,9 @@ import net.jcip.annotations.ThreadSafe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
@@ -19,12 +22,13 @@ import de.ph1b.audiobook.model.Book;
 public class Communication {
 
     private static final Communication INSTANCE = new Communication();
-    private final List<BookCommunication> listeners = new ArrayList<>();
+    private final List<BookCommunication> listeners = new CopyOnWriteArrayList<>();
+    private final Executor executor = Executors.newSingleThreadScheduledExecutor();
 
     private Communication() {
     }
 
-    public static Communication getInstance() {
+    public static synchronized Communication getInstance() {
         return INSTANCE;
     }
 
@@ -35,9 +39,14 @@ public class Communication {
      * @see MediaPlayerController#sleepSandActive()
      */
     public synchronized void sleepStateChanged() {
-        for (BookCommunication listener : listeners) {
-            listener.onSleepStateChanged();
-        }
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (BookCommunication listener : listeners) {
+                    listener.onSleepStateChanged();
+                }
+            }
+        });
     }
 
 
@@ -48,9 +57,14 @@ public class Communication {
      * @see de.ph1b.audiobook.model.BookAdder#scannerActive
      */
     public synchronized void sendScannerStateChanged() {
-        for (BookCommunication listener : listeners) {
-            listener.onScannerStateChanged();
-        }
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (BookCommunication listener : listeners) {
+                    listener.onScannerStateChanged();
+                }
+            }
+        });
     }
 
 
@@ -59,10 +73,15 @@ public class Communication {
      *
      * @param oldId The old {@link de.ph1b.audiobook.model.Book#id}
      */
-    public synchronized void sendCurrentBookChanged(long oldId) {
-        for (BookCommunication listener : listeners) {
-            listener.onCurrentBookIdChanged(oldId);
-        }
+    public synchronized void sendCurrentBookChanged(final long oldId) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (BookCommunication listener : listeners) {
+                    listener.onCurrentBookIdChanged(oldId);
+                }
+            }
+        });
     }
 
 
@@ -71,9 +90,14 @@ public class Communication {
      * {@link de.ph1b.audiobook.mediaplayer.MediaPlayerController.PlayState} has changed.
      */
     public synchronized void playStateChanged() {
-        for (BookCommunication listener : listeners) {
-            listener.onPlayStateChanged();
-        }
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (BookCommunication listener : listeners) {
+                    listener.onPlayStateChanged();
+                }
+            }
+        });
     }
 
 
@@ -82,14 +106,19 @@ public class Communication {
      *
      * @param allBooks The whole book set
      */
-    public synchronized void bookSetChanged(List<Book> allBooks) {
-        for (BookCommunication listener : listeners) {
-            List<Book> copyBooks = new ArrayList<>();
-            for (Book b : allBooks) {
-                copyBooks.add(new Book(b));
+    public synchronized void bookSetChanged(final List<Book> allBooks) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (BookCommunication listener : listeners) {
+                    List<Book> copyBooks = new ArrayList<>();
+                    for (Book b : allBooks) {
+                        copyBooks.add(new Book(b));
+                    }
+                    listener.onBookSetChanged(copyBooks);
+                }
             }
-            listener.onBookSetChanged(copyBooks);
-        }
+        });
     }
 
 
@@ -106,29 +135,29 @@ public class Communication {
      *
      * @param book The book that has changed
      */
-    public synchronized void sendBookContentChanged(@NonNull Book book) {
-        for (BookCommunication listener : listeners) {
-            // copy constructor for immutabliity
-            listener.onBookContentChanged(new Book(book));
-        }
+    public synchronized void sendBookContentChanged(@NonNull final Book book) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (BookCommunication listener : listeners) {
+                    // copy constructor for immutabliity
+                    listener.onBookContentChanged(new Book(book));
+                }
+            }
+        });
     }
 
     public interface BookCommunication {
-
 
         void onCurrentBookIdChanged(long oldId);
 
         void onScannerStateChanged();
 
-
         void onPlayStateChanged();
-
 
         void onBookContentChanged(@NonNull Book book);
 
-
         void onSleepStateChanged();
-
 
         void onBookSetChanged(@NonNull List<Book> activeBooks);
     }
