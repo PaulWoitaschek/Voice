@@ -73,16 +73,30 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             "FOREIGN KEY (" + BOOK_ID + ") REFERENCES " + TABLE_BOOK + "(" + BOOK_ID + "))";
 
     private static final String TAG = DataBaseHelper.class.getSimpleName();
+    private static final Communication communication = Communication.getInstance();
     private static DataBaseHelper instance;
     private final Context c;
     private final List<Book> activeBooks = new ArrayList<>();
     private final List<Book> orphanedBooks = new ArrayList<>();
-    private final Communication communication = Communication.getInstance();
 
     private DataBaseHelper(Context c) {
         super(c, DATABASE_NAME, null, DATABASE_VERSION);
         this.c = c;
 
+        initialLoadFilesFromDB();
+    }
+
+    public static synchronized DataBaseHelper getInstance(Context c) {
+        if (instance == null) {
+            instance = new DataBaseHelper(c.getApplicationContext());
+        }
+        return instance;
+    }
+
+    /**
+     * This should be called in the constructor and makes sure the data is loaded from the database.
+     */
+    private void initialLoadFilesFromDB() {
         SQLiteDatabase db = getReadableDatabase();
         Cursor bookCursor = db.query(TABLE_BOOK,
                 new String[]{BOOK_ID, BOOK_NAME, BOOK_AUTHOR, BOOK_CURRENT_MEDIA_PATH,
@@ -152,14 +166,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             bookCursor.close();
         }
     }
-
-    public static synchronized DataBaseHelper getInstance(Context c) {
-        if (instance == null) {
-            instance = new DataBaseHelper(c.getApplicationContext());
-        }
-        return instance;
-    }
-
 
     public synchronized void addBook(@NonNull Book book) {
         L.v(TAG, "addBook=" + book.getName());
