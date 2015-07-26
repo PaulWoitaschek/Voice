@@ -42,10 +42,6 @@
         <item name="android:tint">?attr/icon_color</item>
     </style>
 
-    <style name="NoBackground" parent="android:Theme">
-        <item name="android:background">@null</item>
-    </style>
-
     <style name="TintedImageViewStyle">
         <item name="android:tint">?attr/icon_color</item>
     </style>
