@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
-import android.support.v7.util.SortedList;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +18,7 @@ import android.widget.ProgressBar;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.ph1b.audiobook.R;
@@ -39,7 +39,7 @@ import de.ph1b.audiobook.utils.PrefsManager;
  * Created by Paul Woitaschek (woitaschek@posteo.de, paul-woitaschek.de) on 12.07.15.
  * Showing the shelf of all the available books and provide a navigation to each book
  */
-public class BookShelfActivity extends BaseActivity implements View.OnClickListener, Communication.OnBookSetChangedListener, Communication.OnCurrentBookIdChangedListener, Communication.OnScannerStateChangedListener, Communication.OnPlayStateChangedListener, Communication.OnCoverChangedListener, BookShelfAdapter.OnItemClickListener {
+public class BookShelfActivity extends BaseActivity implements View.OnClickListener, Communication.OnBookSetChangedListener, Communication.OnCurrentBookIdChangedListener, Communication.OnScannerStateChangedListener, Communication.OnPlayStateChangedListener, BookShelfAdapter.OnItemClickListener, Communication.OnBookContentChangedListener {
 
     private static final String TAG = BookShelfActivity.class.getSimpleName();
     private static final String MALFORMED_FILE = "malformedFile";
@@ -149,7 +149,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
         // register receivers
         communication.addOnBookSetChangedListener(this);
-        communication.addOnCoverChangedListener(this);
+        communication.addOnBookContentChangedListener(this);
         communication.addOnCurrentBookIdChangedListener(this);
         communication.addOnPlayStateChangedListener(this);
         communication.addOnScannerStateChangedListener(this);
@@ -175,14 +175,14 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         }
 
         boolean currentBookExists = false;
-        SortedList<Book> sortedList = adapter.getSortedList();
-        for (int i = 0; i < sortedList.size(); i++) {
-            Book b = sortedList.get(i);
-            if (b.getId() == prefs.getCurrentBookId()) {
+        long currentBookId = prefs.getCurrentBookId();
+        for (int i = 0; i < adapter.getItemCount(); i++) {
+            if (currentBookId == adapter.getItemId(i)) {
                 currentBookExists = true;
                 break;
             }
         }
+
         if (currentBookExists) {
             fab.setVisibility(View.VISIBLE);
         } else {
@@ -238,7 +238,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         super.onPause();
 
         communication.removeOnBookSetChangedListener(this);
-        communication.removeOnCoverChangedListener(this);
+        communication.removeOnBookContentChangedListener(this);
         communication.removeOnCurrentBookIdChangedListener(this);
         communication.removeOnPlayStateChangedListener(this);
         communication.removeOnScannerStateChangedListener(this);
@@ -256,21 +256,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         });
     }
 
-    @Override
-    public void onCoverChanged(final long bookId) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                L.v(TAG, "onCoverChanged called");
-                SortedList<Book> sortedList = adapter.getSortedList();
-                for (int i = 0; i < sortedList.size(); i++) {
-                    if (adapter.getItemId(i) == bookId) {
-                        adapter.notifyItemChanged(i);
-                    }
-                }
-            }
-        });
-    }
 
     @Override
     public void onPlayStateChanged() {
@@ -325,8 +310,18 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 switch (item.getItemId()) {
                     case R.id.edit_book:
                         Book book = adapter.getItem(position);
-                        EditBookDialogFragment.newInstance(book, BookShelfActivity.this).show(
-                                getSupportFragmentManager(), EditBookDialogFragment.TAG);
+                        EditBookDialogFragment fragment = EditBookDialogFragment.newInstance(book, BookShelfActivity.this);
+                        fragment.setOnEditBookFinished(new EditBookDialogFragment.OnEditBookFinished() {
+                            @Override
+                            public void onEditBookFinished(@NonNull Book book) {
+                                for (int i = 0; i < adapter.getItemCount(); i++) {
+                                    if (adapter.getItemId(i) == book.getId()) {
+                                        adapter.notifyItemChanged(i);
+                                    }
+                                }
+                            }
+                        });
+                        fragment.show(getSupportFragmentManager(), EditBookDialogFragment.TAG);
                         return true;
                     case R.id.bookmark:
                         BookmarkDialogFragment.newInstance(adapter.getItemId(position))
@@ -338,5 +333,17 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             }
         });
         popupMenu.show();
+    }
+
+    @Override
+    public void onBookContentChanged(@NonNull final Book book) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<Book> container = new ArrayList<>();
+                container.add(book);
+                adapter.addAll(container);
+            }
+        });
     }
 }

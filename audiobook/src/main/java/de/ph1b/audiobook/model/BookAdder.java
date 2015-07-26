@@ -36,17 +36,13 @@ import de.ph1b.audiobook.utils.PrefsManager;
 public class BookAdder {
 
     private static final String TAG = BookAdder.class.getSimpleName();
-
-
+    private static final Communication communication = Communication.getInstance();
     public static volatile boolean scannerActive = false;
     private static BookAdder instance;
-
-
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Context c;
     private final PrefsManager prefs;
     private final DataBaseHelper db;
-    private final Communication communication = Communication.getInstance();
     private volatile boolean stopScanner = false;
 
     private BookAdder(@NonNull Context c) {
@@ -267,7 +263,7 @@ public class BookAdder {
                             if (cover != null) {
                                 ImageHelper.saveCover(cover, c, coverFile);
                                 Picasso.with(c).invalidate(coverFile);
-                                communication.sendCoverChanged(b.getId());
+                                communication.sendBookContentChanged(b);
                                 continue;
                             }
                         }
@@ -277,7 +273,7 @@ public class BookAdder {
                 if (cover != null) {
                     ImageHelper.saveCover(cover, c, coverFile);
                     Picasso.with(c).invalidate(coverFile);
-                    communication.sendCoverChanged(b.getId());
+                    communication.sendBookContentChanged(b);
                 }
             }
         }

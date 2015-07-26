@@ -9,6 +9,7 @@ import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -37,7 +38,6 @@ import de.ph1b.audiobook.uitools.CoverDownloader;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.DraggableBoxImageView;
 import de.ph1b.audiobook.uitools.ImageHelper;
-import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
 
 public class EditBookDialogFragment extends DialogFragment implements View.OnClickListener {
@@ -56,6 +56,8 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
     private int coverPosition = 0;
     private ArrayList<Bitmap> covers;
     private int googleCount = 0;
+    @Nullable
+    private OnEditBookFinished listener;
 
     public static EditBookDialogFragment newInstance(@NonNull Book book, @NonNull Context c) {
         EditBookDialogFragment editBookDialogFragment = new EditBookDialogFragment();
@@ -82,6 +84,9 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
         return editBookDialogFragment;
     }
 
+    public void setOnEditBookFinished(@Nullable OnEditBookFinished listener) {
+        this.listener = listener;
+    }
 
     @Override
     public void onClick(View view) {
@@ -230,7 +235,10 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
                         db.updateBook(dbBook);
                     }
                 }
-                Communication.getInstance().sendCoverChanged(book.getId());
+
+                if (listener != null) {
+                    listener.onEditBookFinished(book);
+                }
             }
 
             @Override
@@ -291,6 +299,9 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
         return editBook;
     }
 
+    public interface OnEditBookFinished {
+        void onEditBookFinished(@NonNull Book book);
+    }
 
     private class AddCoverAsync extends AsyncTask<Void, Void, Bitmap> {
         private final String searchString;

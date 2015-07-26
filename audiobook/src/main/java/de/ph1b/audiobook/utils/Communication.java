@@ -21,7 +21,6 @@ public class Communication {
     private static final Communication INSTANCE = new Communication();
     private final List<OnBookSetChangedListener> onBookSetChangedListeners = new ArrayList<>();
     private final List<OnSleepStateChangedListener> onSleepStateChangedListeners = new ArrayList<>();
-    private final List<OnCoverChangedListener> onCoverChangedListeners = new ArrayList<>();
     private final List<OnBookContentChangedListener> onBookContentChangedListeners = new ArrayList<>();
     private final List<OnPlayStateChangedListener> onPlayStateChangedListeners = new ArrayList<>();
     private final List<OnScannerStateChangedListener> onScannerStateChangedListeners = new ArrayList<>();
@@ -34,24 +33,6 @@ public class Communication {
         return INSTANCE;
     }
 
-    /**
-     * Sends a broadcast indicating that a cover for a certain Book has changed
-     *
-     * @param bookId The book ID for which the cover has changed
-     */
-    public synchronized void sendCoverChanged(long bookId) {
-        for (OnCoverChangedListener onCoverChangedListener : onCoverChangedListeners) {
-            onCoverChangedListener.onCoverChanged(bookId);
-        }
-    }
-
-    public void addOnCoverChangedListener(OnCoverChangedListener onCoverChangedListener) {
-        onCoverChangedListeners.add(onCoverChangedListener);
-    }
-
-    public void removeOnCoverChangedListener(OnCoverChangedListener onCoverChangedListener) {
-        onCoverChangedListeners.remove(onCoverChangedListener);
-    }
 
     /**
      * Notifies the listeners that the sleep-timer has either been started or cancelled.
@@ -186,11 +167,6 @@ public class Communication {
 
     public interface OnBookContentChangedListener {
         void onBookContentChanged(@NonNull Book book);
-    }
-
-
-    public interface OnCoverChangedListener {
-        void onCoverChanged(long bookId);
     }
 
     public interface OnSleepStateChangedListener {

@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.util.SortedListAdapterCallback;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,44 +20,30 @@ import java.util.List;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
+import de.ph1b.audiobook.model.NaturalOrderComparator;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.utils.PrefsManager;
 
 public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.ViewHolder> {
+
     @NonNull
     private final Context c;
     private final PrefsManager prefs;
     private final OnItemClickListener onItemClickListener;
-    private final SortedList<Book> sortedList = new SortedList<>(Book.class, new SortedList.Callback<Book>() {
+    private final SortedList<Book> sortedList = new SortedList<>(Book.class, new SortedListAdapterCallback<Book>(this) {
 
         @Override
         public int compare(Book o1, Book o2) {
-            return o1.compareTo(o2);
-        }
-
-        @Override
-        public void onInserted(int position, int count) {
-            notifyItemRangeInserted(position, count);
-        }
-
-        @Override
-        public void onRemoved(int position, int count) {
-            notifyItemRangeRemoved(position, count);
-        }
-
-        @Override
-        public void onMoved(int fromPosition, int toPosition) {
-            notifyItemMoved(fromPosition, toPosition);
-        }
-
-        @Override
-        public void onChanged(int position, int count) {
-            notifyItemRangeChanged(position, count);
+            if (areItemsTheSame(o1, o2)) {
+                return 0;
+            }
+            return NaturalOrderComparator.INSTANCE.compare(o1.getName(), o2.getName());
         }
 
         @Override
         public boolean areContentsTheSame(Book oldItem, Book newItem) {
-            return oldItem.getName().equals(newItem.getName());
+            return oldItem.getName().equals(newItem.getName()) &&
+                    oldItem.isUseCoverReplacement() == newItem.isUseCoverReplacement();
         }
 
         @Override
@@ -73,55 +60,36 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
         setHasStableIds(true);
     }
 
-    public SortedList<Book> getSortedList() {
-        return sortedList;
-    }
-
     public void addAll(List<Book> books) {
-        this.sortedList.beginBatchedUpdates();
-        for (Book b : books) {
-            this.sortedList.add(b);
-        }
-        this.sortedList.endBatchedUpdates();
+        sortedList.addAll(books);
     }
-
 
     public void newDataSet(List<Book> books) {
         sortedList.beginBatchedUpdates();
-
-        for (Book b : books) {
-            boolean bookExists = false;
+        try {
+            // remove old books
+            List<Book> booksToDelete = new ArrayList<>();
             for (int i = 0; i < sortedList.size(); i++) {
-                if (sortedList.get(i).getId() == b.getId()) {
-                    sortedList.updateItemAt(i, b);
-                    bookExists = true;
-                    break;
+                Book existing = sortedList.get(i);
+                boolean deleteBook = true;
+                for (Book b : books) {
+                    if (existing.getId() == b.getId()) {
+                        deleteBook = false;
+                        break;
+                    }
+                }
+                if (deleteBook) {
+                    booksToDelete.add(existing);
                 }
             }
-            if (!bookExists) {
-                sortedList.add(b);
+            for (Book b : booksToDelete) {
+                sortedList.remove(b);
             }
-        }
 
-        List<Book> booksToDelete = new ArrayList<>();
-        for (int i = 0; i < sortedList.size(); i++) {
-            Book existing = sortedList.get(i);
-            boolean deleteBook = true;
-            for (Book b : books) {
-                if (existing.getId() == b.getId()) {
-                    deleteBook = false;
-                    break;
-                }
-            }
-            if (deleteBook) {
-                booksToDelete.add(existing);
-            }
+            sortedList.addAll(books);
+        } finally {
+            sortedList.endBatchedUpdates();
         }
-        for (Book b : booksToDelete) {
-            sortedList.remove(b);
-        }
-
-        sortedList.endBatchedUpdates();
     }
 
     @Override
@@ -148,7 +116,6 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
         //setting text
         String name = b.getName();
         viewHolder.titleView.setText(name);
-        viewHolder.titleView.setActivated(true);
 
         // (Cover)
         File coverFile = b.getCoverFile();

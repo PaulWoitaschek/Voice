@@ -172,7 +172,8 @@ public class Book implements Comparable<Book> {
 
             return this.root.equals(that.root) &&
                     this.chapters.equals(that.chapters) &&
-                    this.type == that.type;
+                    this.type == that.type &&
+                    this.name.equals(that.name);
 
         }
         return false;
@@ -184,6 +185,7 @@ public class Book implements Comparable<Book> {
         int result = PRIME;
         result = PRIME * result + root.hashCode();
         result = PRIME * result + chapters.hashCode();
+        result = PRIME * result + name.hashCode();
         return result;
     }
 
@@ -281,7 +283,11 @@ public class Book implements Comparable<Book> {
 
     @Override
     public int compareTo(@NonNull Book that) {
-        return NaturalOrderComparator.INSTANCE.compare(this.name, that.name);
+        if (this.equals(that)) {
+            return 0;
+        } else {
+            return NaturalOrderComparator.INSTANCE.compare(this.name, that.name);
+        }
     }
 
     public enum Type {
