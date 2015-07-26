@@ -327,6 +327,7 @@ public class IabHelper {
             mRequestCode = 10001;
             mPurchaseListener = listener;
             mPurchasingItemType = IabHelper.ITEM_TYPE_INAPP;
+            assert pendingIntent != null;
             act.startIntentSenderForResult(pendingIntent.getIntentSender(),
                     10001, new Intent(),
                     0, 0,

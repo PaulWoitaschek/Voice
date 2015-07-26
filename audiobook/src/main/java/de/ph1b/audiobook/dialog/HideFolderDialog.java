@@ -61,6 +61,7 @@ public class HideFolderDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         String pathToHide = getArguments().getString(PATH_TO_HIDE);
+        assert pathToHide != null;
         final File hideFile = getNoMediaFileByFolder(new File(pathToHide));
         return new MaterialDialog.Builder(getActivity())
                 .title(R.string.hide_folder_title)
