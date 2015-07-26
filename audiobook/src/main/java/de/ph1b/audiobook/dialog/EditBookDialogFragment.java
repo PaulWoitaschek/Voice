@@ -145,6 +145,7 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
             covers = getArguments().getParcelableArrayList(BOOK_COVER);
 
             // defaulting only to capital cover when its the only one.
+            assert covers != null;
             if (covers.size() == 1) {
                 coverPosition = 0;
             } else {
@@ -237,7 +238,7 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
                 }
 
                 if (listener != null) {
-                    listener.onEditBookFinished(book);
+                    listener.onEditBookFinished();
                 }
             }
 
@@ -300,7 +301,7 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
     }
 
     public interface OnEditBookFinished {
-        void onEditBookFinished(@NonNull Book book);
+        void onEditBookFinished();
     }
 
     private class AddCoverAsync extends AsyncTask<Void, Void, Bitmap> {

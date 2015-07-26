@@ -313,11 +313,11 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.edit_book:
-                        Book book = adapter.getItem(position);
+                        final Book book = adapter.getItem(position);
                         EditBookDialogFragment fragment = EditBookDialogFragment.newInstance(book, BookShelfActivity.this);
                         fragment.setOnEditBookFinished(new EditBookDialogFragment.OnEditBookFinished() {
                             @Override
-                            public void onEditBookFinished(@NonNull Book book) {
+                            public void onEditBookFinished() {
                                 for (int i = 0; i < adapter.getItemCount(); i++) {
                                     if (adapter.getItemId(i) == book.getId()) {
                                         adapter.notifyItemChanged(i);
