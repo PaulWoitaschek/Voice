@@ -432,12 +432,10 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
         List<Chapter> chapters = book.getChapters();
         if (chapters.size() > 1) {
-            notificationBuilder.setContentInfo((book.getChapters().indexOf(chapter) + 1) + "/" +
-                    book.getChapters().size());
-        }
+            // we need the current chapter title and number only if there is more than one chapter.
 
-        // we need the current chapter title only if there is more than one chapter.
-        if (book.getChapters().size() > 1) {
+            notificationBuilder.setContentInfo((chapters.indexOf(chapter) + 1) + "/" +
+                    chapters.size());
             notificationBuilder.setContentText(chapter.getName());
         }
 
