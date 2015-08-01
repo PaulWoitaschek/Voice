@@ -109,6 +109,15 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
         return new ViewHolder(v);
     }
 
+    public void notifyItemAtIdChanged(long id) {
+        for (int i = 0; i < sortedList.size(); i++) {
+            if (sortedList.get(i).getId() == id) {
+                notifyItemChanged(i);
+                break;
+            }
+        }
+    }
+
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, int position) {
         Book b = sortedList.get(position);

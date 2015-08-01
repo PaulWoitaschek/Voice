@@ -2,84 +2,46 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:focusableInTouchMode="true"
-    android:orientation="vertical">
+    android:gravity="center_vertical"
+    android:minHeight="250dp"
+    android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/book_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:focusableInTouchMode="true"
-            android:inputType="textCapSentences"
-            android:singleLine="true"
-            android:textSize="20sp" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/empty_title"
+    <ImageButton
+        android:id="@+id/previous_cover"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="2dp"
-        android:gravity="center_vertical"
-        android:text="@string/book_add_empty_title"
-        android:textColor="?attr/colorAccent"
-        android:textSize="15sp"
-        android:visibility="invisible" />
+        android:contentDescription="@string/content_previous_cover"
+        android:padding="8dp"
+        android:src="@drawable/ic_navigate_before_white_36dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
 
-        <ImageButton
-            android:id="@+id/previous_cover"
+        <ProgressBar
+            android:id="@+id/cover_replacement"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/content_previous_cover"
-            android:padding="8dp"
-            android:src="@drawable/ic_navigate_before_white_36dp" />
+            android:layout_gravity="center"
+            android:visibility="gone" />
 
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <ProgressBar
-                android:id="@+id/cover_replacement"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone" />
-
-            <de.ph1b.audiobook.uitools.DraggableBoxImageView
-                android:id="@+id/edit_book"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/content_cover"
-                android:scaleType="fitCenter" />
-        </FrameLayout>
-
-
-        <ImageButton
-            android:id="@+id/next_cover"
+        <de.ph1b.audiobook.uitools.DraggableBoxImageView
+            android:id="@+id/edit_book"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/content_next_cover"
-            android:padding="8dp"
-            android:src="@drawable/ic_navigate_next_white_36dp" />
-    </LinearLayout>
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/content_cover"
+            android:scaleType="fitCenter" />
+    </FrameLayout>
+
+
+    <ImageButton
+        android:id="@+id/next_cover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/content_next_cover"
+        android:padding="8dp"
+        android:src="@drawable/ic_navigate_next_white_36dp" />
 </LinearLayout>

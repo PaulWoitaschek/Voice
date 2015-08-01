@@ -11,17 +11,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.squareup.picasso.Picasso;
 
@@ -40,8 +35,8 @@ import de.ph1b.audiobook.uitools.DraggableBoxImageView;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.L;
 
-public class EditBookDialogFragment extends DialogFragment implements View.OnClickListener {
-    public static final String TAG = EditBookDialogFragment.class.getSimpleName();
+public class EditCoverDialogFragment extends DialogFragment implements View.OnClickListener {
+    public static final String TAG = EditCoverDialogFragment.class.getSimpleName();
     private static final String BOOK_COVER = "BOOK_COVER";
     private static final int REPLACEMENT_DIMEN = 500;
     private static final String COVER_POSITION = "COVER_POSITION";
@@ -51,23 +46,23 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
     private ProgressBar coverReplacement;
     private ImageButton previousCover;
     private ImageButton nextCover;
-    private EditText nameEditText;
     private AddCoverAsync addCoverAsync;
     private int coverPosition = 0;
     private ArrayList<Bitmap> covers;
     private int googleCount = 0;
     @Nullable
     private OnEditBookFinished listener;
+    private Book book;
 
-    public static EditBookDialogFragment newInstance(@NonNull Book book, @NonNull Context c) {
-        EditBookDialogFragment editBookDialogFragment = new EditBookDialogFragment();
+    public static EditCoverDialogFragment newInstance(@NonNull Book book, @NonNull Context c) {
+        EditCoverDialogFragment editCoverDialogFragment = new EditCoverDialogFragment();
         Bundle bundle = new Bundle();
 
-        ArrayList<Bitmap> covers = new ArrayList<>();
+        ArrayList<Bitmap> covers = new ArrayList<>(20);
         CoverReplacement replacement = new CoverReplacement(book.getName(), c);
         covers.add(ImageHelper.drawableToBitmap(replacement,
-                EditBookDialogFragment.REPLACEMENT_DIMEN,
-                EditBookDialogFragment.REPLACEMENT_DIMEN));
+                EditCoverDialogFragment.REPLACEMENT_DIMEN,
+                EditCoverDialogFragment.REPLACEMENT_DIMEN));
 
         File coverFile = book.getCoverFile();
         if (coverFile.exists() && coverFile.canRead()) {
@@ -77,11 +72,11 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
             }
         }
 
-        bundle.putParcelableArrayList(EditBookDialogFragment.BOOK_COVER, covers);
+        bundle.putParcelableArrayList(EditCoverDialogFragment.BOOK_COVER, covers);
         bundle.putLong(Book.TAG, book.getId());
 
-        editBookDialogFragment.setArguments(bundle);
-        return editBookDialogFragment;
+        editCoverDialogFragment.setArguments(bundle);
+        return editCoverDialogFragment;
     }
 
     public void setOnEditBookFinished(@Nullable OnEditBookFinished listener) {
@@ -116,7 +111,7 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
                         nextCover.setVisibility(View.INVISIBLE);
                     }
                 } else {
-                    genCoverFromInternet(nameEditText.getText().toString());
+                    genCoverFromInternet(book.getName());
                 }
                 break;
             default:
@@ -171,7 +166,7 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
 
         final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
         final long bookId = getArguments().getLong(Book.TAG);
-        final Book book = db.getBook(bookId);
+        book = db.getBook(bookId);
         assert book != null;
 
         //init view
@@ -181,20 +176,16 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
                 null);
 
         //init items
-        nameEditText = (EditText) customView.findViewById(R.id.book_name);
         coverImageView = (DraggableBoxImageView) customView.findViewById(R.id.edit_book);
         coverReplacement = (ProgressBar) customView.findViewById(R.id.cover_replacement);
         previousCover = (ImageButton) customView.findViewById(R.id.previous_cover);
         nextCover = (ImageButton) customView.findViewById(R.id.next_cover);
-        final TextView emptyTitleText = (TextView) customView.findViewById(R.id.empty_title);
 
         //init listeners
         nextCover.setOnClickListener(this);
         previousCover.setOnClickListener(this);
 
         //init values
-        nameEditText.setText(book.getName());
-
         boolean online = ImageHelper.isOnline(getActivity());
 
         coverImageView.setImageBitmap(covers.get(coverPosition));
@@ -213,7 +204,6 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
                     addCoverAsync.cancel(true);
                 }
 
-                String bookName = nameEditText.getText().toString();
                 Rect r = coverImageView.getSelectedRect();
                 boolean useCoverReplacement;
                 if (coverPosition > 0 && r.width() > 0 && r.height() > 0) {
@@ -232,7 +222,6 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
                     Book dbBook = db.getBook(book.getId());
                     if (dbBook != null) {
                         dbBook.setUseCoverReplacement(useCoverReplacement);
-                        dbBook.setName(bookName);
                         db.updateBook(dbBook);
                     }
                 }
@@ -252,45 +241,11 @@ public class EditBookDialogFragment extends DialogFragment implements View.OnCli
 
         final MaterialDialog editBook = new MaterialDialog.Builder(getActivity())
                 .customView(customView, true)
-                .title(R.string.edit_book_title)
+                .title(R.string.edit_book_cover)
                 .positiveText(R.string.dialog_confirm)
                 .negativeText(R.string.dialog_cancel)
                 .callback(buttonCallback)
                 .build();
-
-        nameEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                String newName = charSequence.toString();
-                int textLength = newName.length();
-                if (textLength == 0) {
-                    emptyTitleText.setVisibility(View.VISIBLE);
-                    editBook.getActionButton(DialogAction.POSITIVE).setEnabled(false);
-                } else {
-                    emptyTitleText.setVisibility(View.INVISIBLE);
-                    editBook.getActionButton(DialogAction.POSITIVE).setEnabled(true);
-                    Bitmap newLetterCover = ImageHelper.drawableToBitmap(new CoverReplacement(
-                            newName, getActivity()), REPLACEMENT_DIMEN, REPLACEMENT_DIMEN);
-
-                    covers.set(0, newLetterCover);
-                    L.d(TAG, "onTextChanged, setting new cover with newName=" + newName);
-                    if (coverPosition == 0) {
-                        L.d(TAG, "textLength > 0 and position==0, so setting new image");
-                        coverImageView.setImageBitmap(newLetterCover);
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                googleCount = 0;
-            }
-        });
 
         // if we are online and at the first (always replacement) cover, immediately load a cover
         if (coverPosition == 0 && ImageHelper.isOnline(getActivity())) {

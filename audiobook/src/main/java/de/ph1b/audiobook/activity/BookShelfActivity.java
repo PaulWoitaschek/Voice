@@ -28,7 +28,8 @@ import java.util.List;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.BookShelfAdapter;
 import de.ph1b.audiobook.dialog.BookmarkDialogFragment;
-import de.ph1b.audiobook.dialog.EditBookDialogFragment;
+import de.ph1b.audiobook.dialog.EditBookTitleDialogFragment;
+import de.ph1b.audiobook.dialog.EditCoverDialogFragment;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.BookAdder;
@@ -321,27 +322,41 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    public void onMenuClicked(final int position, View editBook) {
+    public void onMenuClicked(final int position, final View editBook) {
         PopupMenu popupMenu = new PopupMenu(BookShelfActivity.this, editBook);
         popupMenu.inflate(R.menu.bookshelf_popup);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                final Book book = adapter.getItem(position);
                 switch (item.getItemId()) {
-                    case R.id.edit_book:
-                        final Book book = adapter.getItem(position);
-                        EditBookDialogFragment fragment = EditBookDialogFragment.newInstance(book, BookShelfActivity.this);
-                        fragment.setOnEditBookFinished(new EditBookDialogFragment.OnEditBookFinished() {
+                    case R.id.edit_cover:
+                        EditCoverDialogFragment fragment = EditCoverDialogFragment.newInstance(book, BookShelfActivity.this);
+                        fragment.setOnEditBookFinished(new EditCoverDialogFragment.OnEditBookFinished() {
                             @Override
                             public void onEditBookFinished() {
-                                for (int i = 0; i < adapter.getItemCount(); i++) {
-                                    if (adapter.getItemId(i) == book.getId()) {
-                                        adapter.notifyItemChanged(i);
+                                adapter.notifyItemAtIdChanged(book.getId());
+                            }
+                        });
+                        fragment.show(getSupportFragmentManager(), EditCoverDialogFragment.TAG);
+                        return true;
+                    case R.id.edit_title:
+                        EditBookTitleDialogFragment editBookTitle = EditBookTitleDialogFragment.newInstance(book.getName());
+                        editBookTitle.setOnTextChangedListener(new EditBookTitleDialogFragment.OnTextChanged() {
+                            @Override
+                            public void onTitleChanged(@NonNull String newTitle) {
+                                book.setName(newTitle);
+                                adapter.notifyItemAtIdChanged(book.getId());
+                                synchronized (db) {
+                                    Book dbBook = db.getBook(book.getId());
+                                    if (dbBook != null) {
+                                        dbBook.setName(newTitle);
+                                        db.updateBook(dbBook);
                                     }
                                 }
                             }
                         });
-                        fragment.show(getSupportFragmentManager(), EditBookDialogFragment.TAG);
+                        editBookTitle.show(getSupportFragmentManager(), EditBookTitleDialogFragment.TAG);
                         return true;
                     case R.id.bookmark:
                         BookmarkDialogFragment.newInstance(adapter.getItemId(position))

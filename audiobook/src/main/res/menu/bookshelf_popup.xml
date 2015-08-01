@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/edit_book"
-        android:title="@string/edit_book_title" />
+        android:id="@+id/edit_title"
+        android:title="@string/edit_book_name" />
+
+    <item
+        android:id="@+id/edit_cover"
+        android:title="@string/edit_book_cover" />
 
     <item
         android:id="@+id/bookmark"

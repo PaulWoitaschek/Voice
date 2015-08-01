@@ -128,7 +128,6 @@ public class BookmarkDialogFragment extends DialogFragment {
                                 return true;
                             case R.id.delete:
                                 final Bookmark deleteBookmark = adapter.getItem(position);
-
                                 builder.title(R.string.bookmark_delete_title)
                                         .content(deleteBookmark.getTitle())
                                         .positiveText(R.string.remove)
