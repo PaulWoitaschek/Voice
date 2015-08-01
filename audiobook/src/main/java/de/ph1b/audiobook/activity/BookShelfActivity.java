@@ -64,7 +64,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    List<Book> container = new ArrayList<>();
+                    List<Book> container = new ArrayList<>(1);
                     container.add(book);
                     adapter.addAll(container);
                 }
