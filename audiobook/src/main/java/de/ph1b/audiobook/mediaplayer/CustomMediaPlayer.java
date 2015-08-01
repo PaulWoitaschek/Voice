@@ -389,10 +389,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                         sonic.setSpeed(speed);
                         sonic.setPitch(1);
                     }
-                    if (flushCodec) {
-                        codec.flush();
-                        flushCodec = false;
-                    }
+
                     int inputBufIndex = codec.dequeueInputBuffer(200);
                     if (inputBufIndex >= 0) {
                         ByteBuffer dstBuf = inputBuffers[inputBufIndex];
@@ -411,6 +408,10 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                                 presentationTimeUs,
                                 sawInputEOS ? MediaCodec.BUFFER_FLAG_END_OF_STREAM
                                         : 0);
+                        if (flushCodec) {
+                            codec.flush();
+                            flushCodec = false;
+                        }
                         if (!sawInputEOS) {
                             extractor.advance();
                         }
