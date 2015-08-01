@@ -1,6 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="LightTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowContentTransitions" tools:ignore="NewApi">true</item>
+        <item name="android:windowActivityTransitions" tools:ignore="NewApi">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:imageButtonStyle">@style/TintedImageButtonStyle</item>
         <item name="android:seekBarStyle">@style/seek_style</item>
@@ -18,6 +20,8 @@
     </style>
 
     <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowContentTransitions" tools:ignore="NewApi">true</item>
+        <item name="android:windowActivityTransitions" tools:ignore="NewApi">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:imageButtonStyle">@style/TintedImageButtonStyle</item>
         <item name="android:seekBarStyle">@style/seek_style</item>
