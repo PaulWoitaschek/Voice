@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
+import android.transition.Transition;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -335,6 +337,14 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             next_button.setVisibility(View.VISIBLE);
             previous_button.setVisibility(View.VISIBLE);
             bookSpinner.setVisibility(View.VISIBLE);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Transition enterTransition = getWindow().getEnterTransition();
+            enterTransition.excludeTarget(R.id.toolbar, true);
+            enterTransition.excludeTarget(android.R.id.statusBarBackground, true);
+            enterTransition.excludeTarget(android.R.id.navigationBarBackground, true);
+            getWindow().setReturnTransition(null);
         }
     }
 

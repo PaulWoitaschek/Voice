@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -46,8 +48,8 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
     private static final String TAG = BookShelfActivity.class.getSimpleName();
     private static final String MALFORMED_FILE = "malformedFile";
+    private static final Communication COMMUNICATION = Communication.getInstance();
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
-    private final Communication communication = Communication.getInstance();
     private BookShelfAdapter adapter;
     private PrefsManager prefs;
     private ServiceController controller;
@@ -118,6 +120,8 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         }
     };
     private DataBaseHelper db;
+    @Nullable
+    private View lastTransitionedView;
 
     public static Intent malformedFileIntent(Context c, String malformedFile) {
         Intent intent = new Intent(c, BookShelfActivity.class);
@@ -212,7 +216,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         listener.onBookSetChanged(db.getActiveBooks());
 
         // register receivers
-        communication.addBookCommunicationListener(listener);
+        COMMUNICATION.addBookCommunicationListener(listener);
     }
 
     private void setPlayState(boolean animated) {
@@ -282,11 +286,14 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
             BookShelfAdapter.ViewHolder viewHolder = (BookShelfAdapter.ViewHolder) recyclerView.findViewHolderForItemId(currentBook.getId());
             if (viewHolder != null) {
+                ViewCompat.setTransitionName(viewHolder.coverView, getString(R.string.transition_cover));
+                lastTransitionedView = viewHolder.coverView;
                 optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, viewHolder.coverView, getString(R.string.transition_cover));
             }
             ActivityCompat.startActivity(this, BookPlayActivity.newIntent(this, prefs.getCurrentBookId()), optionsCompat.toBundle());
         }
     }
+
 
     @Override
     public void onClick(View view) {
@@ -303,7 +310,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     public void onPause() {
         super.onPause();
 
-        communication.removeBookCommunicationListener(listener);
+        COMMUNICATION.removeBookCommunicationListener(listener);
     }
 
     @Override
