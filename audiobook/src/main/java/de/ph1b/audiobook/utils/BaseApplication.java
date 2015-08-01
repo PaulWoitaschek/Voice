@@ -3,6 +3,8 @@ package de.ph1b.audiobook.utils;
 import android.app.Application;
 import android.os.StrictMode;
 
+import com.squareup.leakcanary.LeakCanary;
+
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 import org.acra.sender.HttpSender;
@@ -32,6 +34,7 @@ public class BaseApplication extends Application {
                     .detectAll()
                     .penaltyLog()
                     .build());
+            LeakCanary.install(this);
         } else {
             ACRA.init(this);
         }
