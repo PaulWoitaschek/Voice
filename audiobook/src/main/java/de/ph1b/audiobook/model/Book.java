@@ -42,14 +42,14 @@ public class Book implements Comparable<Book> {
     public Book(Book that) {
         this.id = that.id;
         this.root = that.root;
-        List<Chapter> copyChapters = new ArrayList<>();
+        List<Chapter> copyChapters = new ArrayList<>(that.chapters.size());
         for (Chapter c : that.chapters) {
             copyChapters.add(new Chapter(c));
         }
         this.chapters = copyChapters;
         this.type = Type.valueOf(that.type.name());
         this.packageName = that.packageName;
-        List<Bookmark> copyBookmarks = new ArrayList<>();
+        List<Bookmark> copyBookmarks = new ArrayList<>(that.bookmarks.size());
         for (Bookmark b : that.bookmarks) {
             copyBookmarks.add(new Bookmark(b));
         }

@@ -81,27 +81,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static DataBaseHelper instance;
     private final Executor executor = Executors.newSingleThreadExecutor();
     private final Context c;
-    private final List<Book> activeBooks = new ArrayList<>();
-    private final List<Book> orphanedBooks = new ArrayList<>();
+    private final List<Book> activeBooks;
+    private final List<Book> orphanedBooks;
 
     private DataBaseHelper(Context c) {
         super(c, DATABASE_NAME, null, DATABASE_VERSION);
         this.c = c;
 
-        initialLoadFilesFromDB();
-    }
-
-    public static synchronized DataBaseHelper getInstance(Context c) {
-        if (instance == null) {
-            instance = new DataBaseHelper(c.getApplicationContext());
-        }
-        return instance;
-    }
-
-    /**
-     * This should be called in the constructor and makes sure the data is loaded from the database.
-     */
-    private void initialLoadFilesFromDB() {
         SQLiteDatabase db = getReadableDatabase();
         Cursor bookCursor = db.query(TABLE_BOOK,
                 new String[]{BOOK_ID, BOOK_NAME, BOOK_AUTHOR, BOOK_CURRENT_MEDIA_PATH,
@@ -109,6 +95,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         BOOK_ACTIVE},
                 null, null, null, null, null);
         try {
+            activeBooks = new ArrayList<>(bookCursor.getCount());
+            orphanedBooks = new ArrayList<>(bookCursor.getCount());
             while (bookCursor.moveToNext()) {
                 long bookId = bookCursor.getLong(0);
                 String bookName = bookCursor.getString(1);
@@ -121,12 +109,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 boolean bookUseCoverReplacement = bookCursor.getInt(8) == 1;
                 boolean bookActive = bookCursor.getInt(9) == 1;
 
-                List<Chapter> chapters = new ArrayList<>();
                 Cursor chapterCursor = db.query(TABLE_CHAPTERS,
                         new String[]{CHAPTER_DURATION, CHAPTER_NAME, CHAPTER_PATH},
                         BOOK_ID + "=?",
                         new String[]{String.valueOf(bookId)},
                         null, null, null);
+                List<Chapter> chapters = new ArrayList<>(chapterCursor.getCount());
                 try {
                     while (chapterCursor.moveToNext()) {
                         int chapterDuration = chapterCursor.getInt(0);
@@ -138,11 +126,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     chapterCursor.close();
                 }
 
-                List<Bookmark> bookmarks = new ArrayList<>();
                 Cursor bookmarkCursor = db.query(TABLE_BOOKMARKS,
                         new String[]{BOOKMARK_PATH, BOOKMARK_TIME, BOOKMARK_TITLE},
                         BOOK_ID + "=?", new String[]{String.valueOf(bookId)}
                         , null, null, null);
+                List<Bookmark> bookmarks = new ArrayList<>(bookmarkCursor.getCount());
                 try {
                     while (bookmarkCursor.moveToNext()) {
                         String bookmarkPath = bookmarkCursor.getString(0);
@@ -170,6 +158,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         } finally {
             bookCursor.close();
         }
+    }
+
+    public static synchronized DataBaseHelper getInstance(Context c) {
+        if (instance == null) {
+            instance = new DataBaseHelper(c.getApplicationContext());
+        }
+        return instance;
     }
 
     public synchronized void addBook(@NonNull final Book mutableBook) {
@@ -222,7 +217,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @NonNull
     public synchronized List<Book> getActiveBooks() {
-        List<Book> copyBooks = new ArrayList<>();
+        List<Book> copyBooks = new ArrayList<>(activeBooks.size());
         for (Book b : activeBooks) {
             copyBooks.add(new Book(b));
         }
@@ -231,7 +226,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @NonNull
     public synchronized List<Book> getOrphanedBooks() {
-        List<Book> copyBooks = new ArrayList<>();
+        List<Book> copyBooks = new ArrayList<>(orphanedBooks.size());
         for (Book b : orphanedBooks) {
             copyBooks.add(new Book(b));
         }
