@@ -2,7 +2,6 @@ package de.ph1b.audiobook.dialog;
 
 
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,7 +13,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import de.ph1b.audiobook.R;
 
 
-public class SupportDialogFragment extends DialogFragment {
+public class SupportDialogFragment extends BaseDialogFragment {
 
     public static final String TAG = SupportDialogFragment.class.getSimpleName();
 

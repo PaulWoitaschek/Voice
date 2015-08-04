@@ -1,9 +1,14 @@
 package de.ph1b.audiobook.utils;
 
+import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.os.StrictMode;
+import android.preference.PreferenceFragment;
+import android.support.v4.app.DialogFragment;
 
 import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
@@ -20,10 +25,31 @@ import de.ph1b.audiobook.model.BookAdder;
         formUriBasicAuthPassword = "KA0Kc8h4dV4lCZBz")
 public class BaseApplication extends Application {
 
+    private RefWatcher refWatcher;
+
+    private static RefWatcher getRefWatcher(Context context) {
+        BaseApplication application = (BaseApplication) context.getApplicationContext();
+        return application.refWatcher;
+    }
+
+    public static void leakWatch(DialogFragment dialogFragment) {
+        getRefWatcher(dialogFragment.getActivity()).watch(dialogFragment);
+    }
+
+    public static void leakWatch(PreferenceFragment preferenceFragment) {
+        getRefWatcher(preferenceFragment.getActivity()).watch(preferenceFragment);
+    }
+
+    public static void leakWatch(Activity activity) {
+        getRefWatcher(activity).watch(activity);
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        refWatcher = LeakCanary.install(this);
+
 
         if (BuildConfig.DEBUG) {
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
@@ -34,7 +60,6 @@ public class BaseApplication extends Application {
                     .detectAll()
                     .penaltyLog()
                     .build());
-            LeakCanary.install(this);
         } else {
             ACRA.init(this);
         }

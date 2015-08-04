@@ -23,6 +23,7 @@ import de.ph1b.audiobook.dialog.DonationDialogFragment;
 import de.ph1b.audiobook.dialog.SeekDialogPreference;
 import de.ph1b.audiobook.dialog.SleepDialogPreference;
 import de.ph1b.audiobook.dialog.SupportDialogFragment;
+import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
 import de.ph1b.audiobook.vendinghelper.IabHelper;
@@ -42,6 +43,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         super.onDestroy();
 
         iabHelper.dispose();
+        BaseApplication.leakWatch(this);
     }
 
     @Override
@@ -157,7 +159,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_contribute:
-                new SupportDialogFragment().show(getFragmentManager(), SupportDialogFragment.TAG);
+                new SupportDialogFragment().show(((BaseActivity) getActivity()).getSupportFragmentManager(),
+                        SupportDialogFragment.TAG);
                 return true;
             default:
                 return false;

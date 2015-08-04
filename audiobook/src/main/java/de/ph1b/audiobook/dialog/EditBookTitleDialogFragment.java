@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.text.InputType;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -16,7 +15,7 @@ import de.ph1b.audiobook.R;
  *
  * @author Paul Woitaschek
  */
-public class EditBookTitleDialogFragment extends DialogFragment {
+public class EditBookTitleDialogFragment extends BaseDialogFragment {
 
     public static final String TAG = EditBookTitleDialogFragment.class.getSimpleName();
     private static final String NI_PRESET_NAME = "niPresetName";
