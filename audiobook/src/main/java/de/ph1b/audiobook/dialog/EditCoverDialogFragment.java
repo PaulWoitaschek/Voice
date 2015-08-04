@@ -2,9 +2,7 @@ package de.ph1b.audiobook.dialog;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,15 +12,14 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -35,52 +32,71 @@ import de.ph1b.audiobook.uitools.DraggableBoxImageView;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.L;
 
+/**
+ * Simple dialog to edit the cover of a book.
+ */
 public class EditCoverDialogFragment extends DialogFragment implements View.OnClickListener {
     public static final String TAG = EditCoverDialogFragment.class.getSimpleName();
-    private static final String BOOK_COVER = "BOOK_COVER";
-    private static final int REPLACEMENT_DIMEN = 500;
-    private static final String COVER_POSITION = "COVER_POSITION";
+    private static final String SI_COVER_POSITION = "siCoverPosition";
+    private static final String SI_COVER_URLS = "siCoverUrls";
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final List<String> imageURLS = new ArrayList<>(20);
     private CoverDownloader coverDownloader;
     private DraggableBoxImageView coverImageView;
-    private ProgressBar coverReplacement;
+    private ProgressBar loadingProgressBar;
     private ImageButton previousCover;
     private ImageButton nextCover;
     private AddCoverAsync addCoverAsync;
-    private int coverPosition = 0;
-    private ArrayList<Bitmap> covers;
+    /**
+     * The position in the {@link #imageURLS} or -1 if it is the {@link #coverReplacement}.
+     */
+    private int coverPosition = -1;
     private int googleCount = 0;
     @Nullable
     private OnEditBookFinished listener;
     private Book book;
+    private CoverReplacement coverReplacement;
+    private Picasso picasso;
+    private boolean isOnline;
 
-    public static EditCoverDialogFragment newInstance(@NonNull Book book, @NonNull Context c) {
+    public static EditCoverDialogFragment newInstance(@NonNull Book book) {
         EditCoverDialogFragment editCoverDialogFragment = new EditCoverDialogFragment();
+
         Bundle bundle = new Bundle();
-
-        ArrayList<Bitmap> covers = new ArrayList<>(20);
-        CoverReplacement replacement = new CoverReplacement(book.getName(), c);
-        covers.add(ImageHelper.drawableToBitmap(replacement,
-                EditCoverDialogFragment.REPLACEMENT_DIMEN,
-                EditCoverDialogFragment.REPLACEMENT_DIMEN));
-
-        File coverFile = book.getCoverFile();
-        if (coverFile.exists() && coverFile.canRead()) {
-            Bitmap defaultCover = BitmapFactory.decodeFile(coverFile.getAbsolutePath());
-            if (defaultCover != null) {
-                covers.add(defaultCover);
-            }
-        }
-
-        bundle.putParcelableArrayList(EditCoverDialogFragment.BOOK_COVER, covers);
         bundle.putLong(Book.TAG, book.getId());
-
         editCoverDialogFragment.setArguments(bundle);
+
         return editCoverDialogFragment;
     }
 
     public void setOnEditBookFinished(@Nullable OnEditBookFinished listener) {
         this.listener = listener;
+    }
+
+    /**
+     * Loads the current cover and sets progress replacement visibility accordingly.
+     */
+    private void loadCoverPosition() {
+        if (coverPosition == -1) {
+            loadingProgressBar.setVisibility(View.GONE);
+            coverImageView.setVisibility(View.VISIBLE);
+            coverImageView.setImageDrawable(coverReplacement);
+        } else {
+            loadingProgressBar.setVisibility(View.VISIBLE);
+            coverImageView.setVisibility(View.GONE);
+            picasso.load(imageURLS.get(coverPosition)).into(coverImageView, new Callback() {
+                @Override
+                public void onSuccess() {
+                    loadingProgressBar.setVisibility(View.GONE);
+                    coverImageView.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onError() {
+
+                }
+            });
+        }
     }
 
     @Override
@@ -90,35 +106,29 @@ public class EditCoverDialogFragment extends DialogFragment implements View.OnCl
                 if (addCoverAsync != null && !addCoverAsync.isCancelled()) {
                     addCoverAsync.cancel(true);
                 }
-                if (coverPosition > 0) {
-                    coverPosition--;
-                }
-                coverImageView.setImageBitmap(covers.get(coverPosition));
-                coverImageView.setVisibility(View.VISIBLE);
-                coverReplacement.setVisibility(View.GONE);
-                nextCover.setVisibility(View.VISIBLE);
-                if (coverPosition == 0) {
-                    previousCover.setVisibility(View.INVISIBLE);
-                }
+                coverPosition--;
+                loadCoverPosition();
+                setNextPreviousEnabledDisabled();
                 break;
             case R.id.next_cover:
-                if (coverPosition < covers.size() - 1) {
+                if (coverPosition < imageURLS.size() - 1) {
                     coverPosition++;
-                    coverImageView.setImageBitmap(covers.get(coverPosition));
-                    previousCover.setVisibility(View.VISIBLE);
-                    if (!ImageHelper.isOnline(getActivity()) &&
-                            coverPosition == covers.size() - 1) {
-                        nextCover.setVisibility(View.INVISIBLE);
-                    }
+                    loadCoverPosition();
                 } else {
                     genCoverFromInternet(book.getName());
                 }
+                setNextPreviousEnabledDisabled();
                 break;
             default:
                 break;
         }
     }
 
+    /**
+     * Initiates a search on a cover from the internet and shows it if successful
+     *
+     * @param searchString the name to search the cover by
+     */
     private void genCoverFromInternet(String searchString) {
         //cancels task if running
         if (addCoverAsync != null) {
@@ -136,65 +146,66 @@ public class EditCoverDialogFragment extends DialogFragment implements View.OnCl
         super.onCreate(savedInstanceState);
 
         coverDownloader = new CoverDownloader(getActivity());
-        if (savedInstanceState == null) {
-            covers = getArguments().getParcelableArrayList(BOOK_COVER);
-
-            // defaulting only to capital cover when its the only one.
-            assert covers != null;
-            if (covers.size() == 1) {
-                coverPosition = 0;
-            } else {
-                coverPosition = 1;
-            }
-        } else {
-            covers = savedInstanceState.getParcelableArrayList(BOOK_COVER);
-            coverPosition = savedInstanceState.getInt(COVER_POSITION);
-        }
+        picasso = Picasso.with(getActivity());
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putParcelableArrayList(BOOK_COVER, covers);
-        outState.putInt(COVER_POSITION, coverPosition);
+        outState.putInt(SI_COVER_POSITION, coverPosition);
+        outState.putStringArrayList(SI_COVER_URLS, new ArrayList<>(imageURLS));
+    }
+
+    /**
+     * Sets the next and previous buttons (that navigate within covers) visible / invisible,
+     * accordingly to the current position.
+     */
+    private void setNextPreviousEnabledDisabled() {
+        if (coverPosition > -1) {
+            previousCover.setVisibility(View.VISIBLE);
+        } else {
+            previousCover.setVisibility(View.INVISIBLE);
+        }
+
+        if (isOnline || (coverPosition + 1 < imageURLS.size())) {
+            nextCover.setVisibility(View.VISIBLE);
+        } else {
+            nextCover.setVisibility(View.INVISIBLE);
+        }
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+        // init ui
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        @SuppressLint("InflateParams") View customView = inflater.inflate(R.layout.dialog_cover_edit, null);
+        coverImageView = (DraggableBoxImageView) customView.findViewById(R.id.edit_book);
+        loadingProgressBar = (ProgressBar) customView.findViewById(R.id.cover_replacement);
+        previousCover = (ImageButton) customView.findViewById(R.id.previous_cover);
+        nextCover = (ImageButton) customView.findViewById(R.id.next_cover);
+        nextCover.setOnClickListener(this);
+        previousCover.setOnClickListener(this);
+
+        // init values
         final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
         final long bookId = getArguments().getLong(Book.TAG);
         book = db.getBook(bookId);
         assert book != null;
-
-        //init view
-        //passing null is fine because of fragment
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        @SuppressLint("InflateParams") View customView = inflater.inflate(R.layout.dialog_book_edit,
-                null);
-
-        //init items
-        coverImageView = (DraggableBoxImageView) customView.findViewById(R.id.edit_book);
-        coverReplacement = (ProgressBar) customView.findViewById(R.id.cover_replacement);
-        previousCover = (ImageButton) customView.findViewById(R.id.previous_cover);
-        nextCover = (ImageButton) customView.findViewById(R.id.next_cover);
-
-        //init listeners
-        nextCover.setOnClickListener(this);
-        previousCover.setOnClickListener(this);
-
-        //init values
-        boolean online = ImageHelper.isOnline(getActivity());
-
-        coverImageView.setImageBitmap(covers.get(coverPosition));
-        if (!online && (coverPosition == (covers.size() - 1))) {
-            nextCover.setVisibility(View.INVISIBLE);
+        coverReplacement = new CoverReplacement(book.getName(), getActivity());
+        isOnline = ImageHelper.isOnline(getActivity());
+        if (savedInstanceState == null) {
+            coverPosition = -1;
+        } else {
+            imageURLS.clear();
+            //noinspection ConstantConditions
+            imageURLS.addAll(savedInstanceState.getStringArrayList(SI_COVER_URLS));
+            coverPosition = savedInstanceState.getInt(SI_COVER_POSITION);
         }
-        if (coverPosition == 0) {
-            previousCover.setVisibility(View.INVISIBLE);
-        }
+        loadCoverPosition();
+        setNextPreviousEnabledDisabled();
 
         MaterialDialog.ButtonCallback buttonCallback = new MaterialDialog.ButtonCallback() {
             @Override
@@ -204,19 +215,22 @@ public class EditCoverDialogFragment extends DialogFragment implements View.OnCl
                     addCoverAsync.cancel(true);
                 }
 
-                Rect r = coverImageView.getSelectedRect();
+                final Rect r = coverImageView.getSelectedRect();
                 boolean useCoverReplacement;
-                if (coverPosition > 0 && r.width() > 0 && r.height() > 0) {
-                    Bitmap cover = covers.get(coverPosition);
-                    cover = Bitmap.createBitmap(cover, r.left, r.top, r.width(), r.height());
-                    ImageHelper.saveCover(cover, getActivity(), book.getCoverFile());
-                    Picasso.with(getActivity()).invalidate(book.getCoverFile());
-                    useCoverReplacement = false;
+                if (coverPosition > -1 && !r.isEmpty()) {
+                    Bitmap cover = ImageHelper.picassoGetBlocking(getActivity(), imageURLS.get(coverPosition));
+                    if (cover != null) {
+                        cover = Bitmap.createBitmap(cover, r.left, r.top, r.width(), r.height());
+                        ImageHelper.saveCover(cover, getActivity(), book.getCoverFile());
+
+                        picasso.invalidate(book.getCoverFile());
+                        useCoverReplacement = false;
+                    } else {
+                        useCoverReplacement = true;
+                    }
                 } else {
                     useCoverReplacement = true;
                 }
-
-                Picasso.with(getActivity()).invalidate(book.getCoverFile());
 
                 synchronized (db) {
                     Book dbBook = db.getBook(book.getId());
@@ -239,81 +253,50 @@ public class EditCoverDialogFragment extends DialogFragment implements View.OnCl
             }
         };
 
-        final MaterialDialog editBook = new MaterialDialog.Builder(getActivity())
+        return new MaterialDialog.Builder(getActivity())
                 .customView(customView, true)
                 .title(R.string.edit_book_cover)
                 .positiveText(R.string.dialog_confirm)
                 .negativeText(R.string.dialog_cancel)
                 .callback(buttonCallback)
                 .build();
-
-        // if we are online and at the first (always replacement) cover, immediately load a cover
-        if (coverPosition == 0 && ImageHelper.isOnline(getActivity())) {
-            nextCover.performClick();
-        }
-
-        return editBook;
     }
 
     public interface OnEditBookFinished {
         void onEditBookFinished();
     }
 
-    private class AddCoverAsync extends AsyncTask<Void, Void, Bitmap> {
+    private class AddCoverAsync extends AsyncTask<Void, Void, String> {
         private final String searchString;
-        private final WeakReference<ProgressBar> progressBarWeakReference;
-        private final WeakReference<ImageView> imageViewWeakReference;
-        private final WeakReference<ImageButton> previousCoverWeakReference;
-        private final WeakReference<ImageButton> nextCoverWeakReference;
 
         public AddCoverAsync(String searchString) {
             this.searchString = searchString;
-            progressBarWeakReference = new WeakReference<>(coverReplacement);
-            imageViewWeakReference = new WeakReference<ImageView>(coverImageView);
-            previousCoverWeakReference = new WeakReference<>(previousCover);
-            nextCoverWeakReference = new WeakReference<>(nextCover);
         }
 
         @Override
-        protected Bitmap doInBackground(Void... voids) {
-            return coverDownloader.getCover(searchString, googleCount);
+        protected String doInBackground(Void... voids) {
+            return coverDownloader.fetchCover(searchString, googleCount);
         }
 
         @Override
         protected void onPreExecute() {
             nextCover.setVisibility(View.INVISIBLE);
-            if (covers.size() > 0) {
+            if (imageURLS.size() > 0) {
                 previousCover.setVisibility(View.VISIBLE);
             }
-            coverReplacement.setVisibility(View.VISIBLE);
+            loadingProgressBar.setVisibility(View.VISIBLE);
             coverImageView.setVisibility(View.GONE);
         }
 
         @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            ProgressBar coverReplacement = progressBarWeakReference.get();
-            ImageView cover = imageViewWeakReference.get();
-            ImageButton previousCover = previousCoverWeakReference.get();
-            ImageButton nextCover = nextCoverWeakReference.get();
-
-            if (coverReplacement != null && cover != null && previousCover != null && nextCover != null) {
-                coverReplacement.setVisibility(View.GONE);
-                cover.setVisibility(View.VISIBLE);
-                nextCover.setVisibility(View.VISIBLE);
-                if (bitmap != null) {
-                    covers.add(bitmap);
-                    coverPosition = covers.indexOf(bitmap);
-                    cover.setImageBitmap(bitmap);
-                    if (covers.size() > 1) {
-                        previousCover.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    //if we found no bitmap, set old one
-                    cover.setImageBitmap(covers.get(coverPosition));
-                    if (coverPosition == 0) {
-                        previousCover.setVisibility(View.INVISIBLE);
-                    }
+        protected void onPostExecute(String bitmapUrl) {
+            if (isAdded()) {
+                if (bitmapUrl != null) {
+                    imageURLS.add(bitmapUrl);
+                    coverPosition = imageURLS.size() - 1;
                 }
+                loadCoverPosition();
+                setNextPreviousEnabledDisabled();
             }
         }
 

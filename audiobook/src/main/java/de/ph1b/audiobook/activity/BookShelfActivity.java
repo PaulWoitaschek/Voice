@@ -331,7 +331,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 final Book book = adapter.getItem(position);
                 switch (item.getItemId()) {
                     case R.id.edit_cover:
-                        EditCoverDialogFragment fragment = EditCoverDialogFragment.newInstance(book, BookShelfActivity.this);
+                        EditCoverDialogFragment fragment = EditCoverDialogFragment.newInstance(book);
                         fragment.setOnEditBookFinished(new EditCoverDialogFragment.OnEditBookFinished() {
                             @Override
                             public void onEditBookFinished() {

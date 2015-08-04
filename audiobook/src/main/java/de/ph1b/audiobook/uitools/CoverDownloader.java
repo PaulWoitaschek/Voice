@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.Size;
 
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.OkHttpClient;
@@ -27,10 +28,13 @@ import java.util.List;
 
 import de.ph1b.audiobook.utils.L;
 
+/**
+ * Helper class for downloading covers from the internet.
+ */
 public class CoverDownloader {
 
     private static final String TAG = CoverDownloader.class.getSimpleName();
-    private static final HashMap<String, List<String>> searchMapping = new HashMap<>();
+    private static final HashMap<String, List<String>> SEARCH_MAPPING = new HashMap<>(10);
     private final Picasso picasso;
     private Call call = null;
 
@@ -38,6 +42,9 @@ public class CoverDownloader {
         picasso = Picasso.with(c);
     }
 
+    /**
+     * @return the ip address or an empty String if none was found
+     */
     @NonNull
     private static String getIPAddress() {
         try {
@@ -50,11 +57,15 @@ public class CoverDownloader {
                     }
                 }
             }
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return "";
     }
 
+    /**
+     * Cancels the cover downloading if one is in progress
+     */
     public void cancel() {
         if (call != null) {
             call.cancel();
@@ -62,28 +73,36 @@ public class CoverDownloader {
     }
 
     /**
-     * Returns a bitmap from google, defined by the searchText
+     * Fetches a cover into Picassos internal cache and returns the url if that worked.
      *
      * @param searchText The Audiobook to look for
      * @param number     The nth result
      * @return the generated bitmap. If no bitmap was found, returns null
      */
     @Nullable
-    public Bitmap getCover(@NonNull String searchText, int number) {
+    public String fetchCover(@NonNull String searchText, int number) {
         String bitmapUrl = getBitmapUrl(searchText, number);
         try {
             L.v(TAG, "number=" + number + ", url=" + bitmapUrl);
-            return picasso.load(bitmapUrl).get();
+            Bitmap bitmap = picasso.load(bitmapUrl).get();
+            if (bitmap != null) {
+                return bitmapUrl;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
+    /**
+     * @param searchText The text to search the cover by
+     * @param number     The nth cover with the given searchText. Starts at 0
+     * @return The URL of the cover found or <code>null</code> if none was found
+     */
     @Nullable
     private String getBitmapUrl(@NonNull String searchText, int number) {
-        if (searchMapping.containsKey(searchText)) {
-            List<String> containing = searchMapping.get(searchText);
+        if (SEARCH_MAPPING.containsKey(searchText)) {
+            List<String> containing = SEARCH_MAPPING.get(searchText);
             if (number < containing.size()) {
                 return containing.get(number);
             } else {
@@ -100,7 +119,7 @@ public class CoverDownloader {
         } else {
             List<String> newSet = getNewLinks(searchText, 0);
             if (newSet.size() > 0) {
-                searchMapping.put(searchText, newSet);
+                SEARCH_MAPPING.put(searchText, newSet);
                 return newSet.get(0);
             } else {
                 return null;
@@ -108,9 +127,18 @@ public class CoverDownloader {
         }
     }
 
+    /**
+     * Queries google for new urls of images
+     *
+     * @param searchText The Text to search the cover by
+     * @param startPage  The start number for the covers. If the last time this returned an array
+     *                   with the size of 8 the next time this number should be increased by excactly
+     *                   that amount + 1.
+     * @return A list of urls with the new covers. Might be empty
+     */
+    @NonNull
+    @Size(min = 0)
     private List<String> getNewLinks(@NonNull String searchText, int startPage) {
-        List<String> newStrings = new ArrayList<>();
-
         try {
             Uri uri = new Uri.Builder()
                     .scheme("https")
@@ -140,12 +168,15 @@ public class CoverDownloader {
             JSONObject responseData = jsonObject.getJSONObject("responseData");
             JSONArray results = responseData.getJSONArray("results");
 
+            List<String> newStrings = new ArrayList<>(results.length());
             for (int i = 0; i < results.length(); i++) {
                 newStrings.add(results.getJSONObject(i).getString("url"));
             }
-        } catch (IOException | JSONException ignored) {
+            return newStrings;
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
         }
 
-        return newStrings;
+        return new ArrayList<>(0);
     }
 }

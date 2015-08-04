@@ -13,9 +13,12 @@ import android.support.annotation.Nullable;
 import android.view.Display;
 import android.view.WindowManager;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
 
 import de.ph1b.audiobook.utils.L;
 
@@ -30,6 +33,31 @@ public class ImageHelper {
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bitmap;
+    }
+
+    @Nullable
+    public static Bitmap picassoGetBlocking(final Context context, final String path) {
+        final CountDownLatch latch = new CountDownLatch(1);
+        final Bitmap[] bitmap = new Bitmap[1];
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    bitmap[0] = Picasso.with(context).load(path).get();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    latch.countDown();
+                }
+            }
+        }).start();
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return bitmap[0];
     }
 
 
