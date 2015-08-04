@@ -128,7 +128,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
 
         // (Cover)
         File coverFile = b.getCoverFile();
-        Drawable coverReplacement = new CoverReplacement(b.getName().substring(0, 1), c);
+        Drawable coverReplacement = new CoverReplacement(b.getName(), c);
         if (!b.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
             Picasso.with(c).load(coverFile).placeholder(coverReplacement).into(viewHolder.coverView);
         } else {
