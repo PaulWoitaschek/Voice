@@ -30,6 +30,8 @@
     <string name="content_previous_cover">Wählt voriges Cover</string>
     <string name="content_next_cover">Wählt nächstes Cover</string>
     <string name="content_cover">Zeigt aktuelles Cover an</string>
+    <string name="edit_book_name">Name bearbeiten</string>
+    <string name="edit_book_cover">Cover bearbeiten</string>
     <string name="edit_book_title">Buch bearbeiten</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Zu Stelle springen</string>
