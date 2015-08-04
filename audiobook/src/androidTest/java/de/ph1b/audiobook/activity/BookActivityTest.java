@@ -15,12 +15,12 @@ import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.model.DataBaseHelper;
 
 
-public class BookActivityTest extends ActivityInstrumentationTestCase2<BookActivity> {
+public class BookActivityTest extends ActivityInstrumentationTestCase2<BookShelfActivity> {
 
     private final Random rnd = new Random();
 
     public BookActivityTest() {
-        super(BookActivity.class);
+        super(BookShelfActivity.class);
     }
 
     @MediumTest
