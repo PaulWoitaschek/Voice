@@ -119,7 +119,7 @@ public class DraggableBoxImageView extends ImageView {
     protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
 
-        if (imageViewBounds.height() > 0 && imageViewBounds.width() > 0) {
+        if (!imageViewBounds.isEmpty()) {
             float proportion = imageViewBounds.height() / imageViewBounds.width();
             // only draw frame if relation doesn't already fit approx
             if (proportion < 0.95 || proportion > 1.05) {
