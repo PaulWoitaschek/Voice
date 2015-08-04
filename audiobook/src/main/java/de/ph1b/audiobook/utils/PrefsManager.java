@@ -69,7 +69,7 @@ public class PrefsManager {
      */
     @NonNull
     public synchronized List<String> getCollectionFolders() {
-        Set<String> set = sp.getStringSet(PREF_KEY_COLLECTION_FOLDERS, new HashSet<String>());
+        Set<String> set = sp.getStringSet(PREF_KEY_COLLECTION_FOLDERS, new HashSet<String>(10));
         return new ArrayList<>(set);
     }
 
@@ -81,11 +81,10 @@ public class PrefsManager {
      * @see PrefsManager#getCollectionFolders()
      */
     public synchronized void setCollectionFolders(@NonNull List<String> folders) {
-        Set<String> set = new HashSet<>();
+        Set<String> set = new HashSet<>(folders.size());
         set.addAll(folders);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putStringSet(PREF_KEY_COLLECTION_FOLDERS, set);
-        editor.apply();
+        sp.edit().putStringSet(PREF_KEY_COLLECTION_FOLDERS, set)
+                .apply();
     }
 
     /**
@@ -97,7 +96,7 @@ public class PrefsManager {
      */
     @NonNull
     public synchronized List<String> getSingleBookFolders() {
-        Set<String> set = sp.getStringSet(PREF_KEY_SINGLE_BOOK_FOLDERS, new HashSet<String>());
+        Set<String> set = sp.getStringSet(PREF_KEY_SINGLE_BOOK_FOLDERS, new HashSet<String>(10));
         return new ArrayList<>(set);
     }
 
@@ -110,11 +109,10 @@ public class PrefsManager {
      * @param folders the single book folders
      */
     public synchronized void setSingleBookFolders(@NonNull List<String> folders) {
-        Set<String> set = new HashSet<>();
+        Set<String> set = new HashSet<>(folders.size());
         set.addAll(folders);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putStringSet(PREF_KEY_SINGLE_BOOK_FOLDERS, set);
-        editor.apply();
+        sp.edit().putStringSet(PREF_KEY_SINGLE_BOOK_FOLDERS, set)
+                .apply();
     }
 
 

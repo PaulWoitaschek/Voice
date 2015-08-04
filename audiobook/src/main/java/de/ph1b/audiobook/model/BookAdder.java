@@ -137,9 +137,8 @@ public class BookAdder {
      * @return All the files containing in a natural sorted order.
      */
     private static List<File> addFilesRecursive(@NonNull List<File> dir) {
-        List<File> returnList = new ArrayList<>();
-        List<File> fileList = new ArrayList<>();
-        List<File> dirList = new ArrayList<>();
+        List<File> fileList = new ArrayList<>(dir.size());
+        List<File> dirList = new ArrayList<>(dir.size());
         for (File f : dir) {
             if (f.exists() && f.isFile()) {
                 fileList.add(f);
@@ -148,10 +147,11 @@ public class BookAdder {
             }
         }
         Collections.sort(fileList, NaturalOrderComparator.INSTANCE);
+        List<File> returnList = new ArrayList<>(fileList.size());
         returnList.addAll(fileList);
         Collections.sort(dirList, NaturalOrderComparator.INSTANCE);
         for (File f : dirList) {
-            List<File> content = new ArrayList<>();
+            List<File> content = new ArrayList<>(0);
             File[] containing = f.listFiles();
             if (containing != null) {
                 content = new ArrayList<>(Arrays.asList(containing));
@@ -323,8 +323,9 @@ public class BookAdder {
      */
     @NonNull
     private List<File> getSingleBookFiles() {
-        List<File> singleBooks = new ArrayList<>();
-        for (String s : prefs.getSingleBookFolders()) {
+        List<String> singleBooksAsStrings = prefs.getSingleBookFolders();
+        List<File> singleBooks = new ArrayList<>(singleBooksAsStrings.size());
+        for (String s : singleBooksAsStrings) {
             singleBooks.add(new File(s));
         }
         Collections.sort(singleBooks, NaturalOrderComparator.INSTANCE);
@@ -340,8 +341,9 @@ public class BookAdder {
      */
     @NonNull
     private List<File> getCollectionBookFiles() {
-        List<File> containingFiles = new ArrayList<>();
-        for (String s : prefs.getCollectionFolders()) {
+        List<String> collectionFoldersStringList = prefs.getCollectionFolders();
+        List<File> containingFiles = new ArrayList<>(collectionFoldersStringList.size());
+        for (String s : collectionFoldersStringList) {
             File f = new File(s);
             if (f.exists() && f.isDirectory()) {
                 File[] containing = f.listFiles(FileRecognition.folderAndMusicFilter);
@@ -365,7 +367,7 @@ public class BookAdder {
         List<File> collectionBookFolders = getCollectionBookFiles();
 
         //getting books to remove
-        List<Book> booksToRemove = new ArrayList<>();
+        List<Book> booksToRemove = new ArrayList<>(20);
         for (Book book : db.getActiveBooks()) {
             boolean bookExists = false;
             switch (book.getType()) {
@@ -449,7 +451,7 @@ public class BookAdder {
         final Book orphanedBook = getBookFromDb(rootFile, type, true);
         if (orphanedBook == null) {
             Book newBook = new Book(bookRoot, bookName, author, newChapters,
-                    firstChapterPath, type, new ArrayList<Bookmark>(), c);
+                    firstChapterPath, type, new ArrayList<Bookmark>(10), c);
             L.d(TAG, "adding newBook=" + newBook);
             db.addBook(newBook);
         } else { // restore old books
@@ -577,11 +579,11 @@ public class BookAdder {
      */
     @NonNull
     private List<Chapter> getChaptersByRootFile(@NonNull File rootFile) throws InterruptedException {
-        List<File> containingFiles = new ArrayList<>();
+        List<File> containingFiles = new ArrayList<>(100);
         containingFiles.add(rootFile);
         containingFiles = addFilesRecursive(containingFiles);
 
-        List<File> musicFiles = new ArrayList<>();
+        List<File> musicFiles = new ArrayList<>(containingFiles.size());
         for (File f : containingFiles) {
             if (FileRecognition.audioFilter.accept(f)) {
                 musicFiles.add(f);
@@ -589,7 +591,7 @@ public class BookAdder {
         }
 
         // get duration and if there is no cover yet, try to get an embedded dover (up to 5 times)
-        List<Chapter> containingMedia = new ArrayList<>();
+        List<Chapter> containingMedia = new ArrayList<>(musicFiles.size());
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         try {
             for (int i = 0; i < musicFiles.size(); i++) {

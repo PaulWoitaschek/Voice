@@ -237,9 +237,10 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         });
 
         // adapter
-        final List<String> chaptersAsStrings = new ArrayList<>();
-        for (int i = 0; i < book.getChapters().size(); i++) {
-            String chapterName = book.getChapters().get(i).getName();
+        List<Chapter> chapters = book.getChapters();
+        final List<String> chaptersAsStrings = new ArrayList<>(chapters.size());
+        for (int i = 0; i < chapters.size(); i++) {
+            String chapterName = chapters.get(i).getName();
 
             // cutting leading zeros
             chapterName = chapterName.replaceFirst("^0", "");

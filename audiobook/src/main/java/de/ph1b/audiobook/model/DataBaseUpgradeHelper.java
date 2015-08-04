@@ -61,7 +61,7 @@ class DataBaseUpgradeHelper {
      *
      * @throws InvalidPropertiesFormatException if there is an internal data mismatch
      */
-    @SuppressWarnings("ConstantConditions")
+    @SuppressWarnings({"ConstantConditions", "CollectionWithoutInitialCapacity"})
     private void upgrade24() throws InvalidPropertiesFormatException {
         String copyBookTableName = "TABLE_BOOK_COPY";
         String copyChapterTableName = "TABLE_CHAPTERS_COPY";
@@ -85,14 +85,13 @@ class DataBaseUpgradeHelper {
                 String root = bookCursor.getString(1);
                 String type = bookCursor.getString(2);
 
-                List<String> chapterNames = new ArrayList<>();
-                List<Integer> chapterDurations = new ArrayList<>();
-                List<String> chapterPaths = new ArrayList<>();
-
                 Cursor mediaCursor = db.query(copyChapterTableName, new String[]{"CHAPTER_PATH", "CHAPTER_DURATION",
                                 "CHAPTER_NAME"},
                         "BOOK_ID" + "=?", new String[]{String.valueOf(bookId)},
                         null, null, null);
+                List<String> chapterNames = new ArrayList<>(mediaCursor.getCount());
+                List<Integer> chapterDurations = new ArrayList<>(mediaCursor.getCount());
+                List<String> chapterPaths = new ArrayList<>(mediaCursor.getCount());
                 try {
                     while (mediaCursor.moveToNext()) {
                         chapterPaths.add(mediaCursor.getString(0));
@@ -323,10 +322,10 @@ class DataBaseUpgradeHelper {
     private void upgrade25() throws InvalidPropertiesFormatException {
 
         // get all books
-        List<JSONObject> allBooks = new ArrayList<>();
         Cursor cursor = db.query("TABLE_BOOK",
                 new String[]{"BOOK_ID", "BOOK_JSON"},
                 null, null, null, null, null);
+        List<JSONObject> allBooks = new ArrayList<>(cursor.getCount());
         try {
             while (cursor.moveToNext()) {
                 String content = cursor.getString(1);
@@ -430,10 +429,10 @@ class DataBaseUpgradeHelper {
         L.d(TAG, "upgrade29");
 
         // fetching old contents
-        List<String> bookContents = new ArrayList<>();
-        List<Boolean> activeMapping = new ArrayList<>();
         Cursor cursor = db.query("TABLE_BOOK", new String[]{"BOOK_JSON", "BOOK_ACTIVE"},
                 null, null, null, null, null);
+        List<String> bookContents = new ArrayList<>(cursor.getCount());
+        List<Boolean> activeMapping = new ArrayList<>(cursor.getCount());
         try {
             while (cursor.moveToNext()) {
                 bookContents.add(cursor.getString(0));
@@ -630,12 +629,12 @@ class DataBaseUpgradeHelper {
                 long bookId = bookCursor.getLong(0);
                 String bookmarkCurrentMediaPath = bookCursor.getString(1);
 
-                List<String> chapterPaths = new ArrayList<>();
                 Cursor chapterCursor = db.query(TABLE_CHAPTERS,
                         new String[]{CHAPTER_PATH},
                         BOOK_ID + "=?",
                         new String[]{String.valueOf(bookId)},
                         null, null, null);
+                List<String> chapterPaths = new ArrayList<>(chapterCursor.getCount());
                 try {
                     while (chapterCursor.moveToNext()) {
                         String chapterPath = chapterCursor.getString(0);

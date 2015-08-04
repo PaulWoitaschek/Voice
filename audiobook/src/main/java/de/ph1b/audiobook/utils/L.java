@@ -3,6 +3,7 @@ package de.ph1b.audiobook.utils;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.ph1b.audiobook.BuildConfig;
@@ -27,20 +28,19 @@ public class L {
     }
 
     private static List<String> getMessage(Object msg) {
-        List<String> split = new ArrayList<>();
         if (msg == null) {
-            split.add("null");
+            return Collections.singletonList("null");
         } else if (msg.equals("")) {
-            split.add("empty");
-            return split;
+            return Collections.singletonList("empty");
         } else {
             String fullMsg = String.valueOf(msg);
-            for (int i = 0; i < fullMsg.length(); i += 4000) {
-                split.add(fullMsg.substring(i, Math.min(fullMsg.length(), i + 4000)));
+            int cutAt = 4000;
+            List<String> split = new ArrayList<>(fullMsg.length() / cutAt);
+            for (int i = 0; i < fullMsg.length(); i += cutAt) {
+                split.add(fullMsg.substring(i, Math.min(fullMsg.length(), i + cutAt)));
             }
             return split;
         }
-        return split;
     }
 
     public static void e(String tag, Object msg) {

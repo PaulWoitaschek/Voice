@@ -111,7 +111,7 @@ public class Communication {
             @Override
             public void run() {
                 for (BookCommunication listener : listeners) {
-                    List<Book> copyBooks = new ArrayList<>();
+                    List<Book> copyBooks = new ArrayList<>(allBooks.size());
                     for (Book b : allBooks) {
                         copyBooks.add(new Book(b));
                     }

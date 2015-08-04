@@ -68,7 +68,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
         sortedList.beginBatchedUpdates();
         try {
             // remove old books
-            List<Book> booksToDelete = new ArrayList<>();
+            List<Book> booksToDelete = new ArrayList<>(5);
             for (int i = 0; i < sortedList.size(); i++) {
                 Book existing = sortedList.get(i);
                 boolean deleteBook = true;

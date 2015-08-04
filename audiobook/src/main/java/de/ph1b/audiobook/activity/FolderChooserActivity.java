@@ -46,7 +46,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
 
     private static final String CURRENT_FOLDER_NAME = "currentFolderName";
     private static final String TAG = FolderChooserActivity.class.getSimpleName();
-    private final List<File> currentFolderContent = new ArrayList<>();
+    private final List<File> currentFolderContent = new ArrayList<>(30);
     private boolean multiSd = true;
     private List<File> rootDirs;
     private File currentFolder = null;
@@ -60,7 +60,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
     private static List<File> getStorageDirectories() {
         Pattern DIR_SEPARATOR = Pattern.compile("/");
         // Final set of paths
-        final Set<String> rv = new HashSet<>();
+        final Set<String> rv = new HashSet<>(5);
         // Primary physical SD-CARD (not emulated)
         final String rawExternalStorage = System.getenv("EXTERNAL_STORAGE");
         // All Secondary SD-CARDs (all exclude primary) separated by ":"
@@ -111,7 +111,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         rv.add(Environment.getExternalStorageDirectory().getAbsolutePath());
         rv.add("/storage/emulated/0");
         rv.add("/storage/sdcard1");
-        List<File> paths = new ArrayList<>();
+        List<File> paths = new ArrayList<>(rv.size());
         for (String s : rv) {
             File f = new File(s);
             if (f.exists() && f.isDirectory() && !paths.contains(f) && f.canRead() && f.listFiles() != null && f.listFiles().length > 0) {
@@ -130,13 +130,12 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
      * @return The containing files
      */
     private static List<File> getFilesFromFolder(File file) {
-        List<File> asList = new ArrayList<>();
         File[] containing = file.listFiles(FileRecognition.folderAndMusicFilter);
         if (containing != null) {
-            asList = new ArrayList<>(Arrays.asList(containing));
+            List<File> asList = new ArrayList<>(Arrays.asList(containing));
             Collections.sort(asList, NaturalOrderComparator.INSTANCE);
         }
-        return asList;
+        return new ArrayList<>(0);
     }
 
     private void changeFolder(File newFolder) {

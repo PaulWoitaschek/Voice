@@ -36,8 +36,8 @@ public class FolderOverviewActivity extends BaseActivity {
 
     private static final String TAG = FolderOverviewActivity.class.getSimpleName();
     private static final String BACKGROUND_OVERLAY_VISIBLE = "backgroundOverlayVisibility";
-    private final List<String> bookCollections = new ArrayList<>();
-    private final List<String> singleBooks = new ArrayList<>();
+    private final List<String> bookCollections = new ArrayList<>(10);
+    private final List<String> singleBooks = new ArrayList<>(10);
     private PrefsManager prefs;
     private FolderOverviewAdapter adapter;
     private FloatingActionsMenu fam;
@@ -212,7 +212,7 @@ public class FolderOverviewActivity extends BaseActivity {
      * book folder
      */
     private boolean canAddNewFolder(@NonNull final String newFile) {
-        List<String> folders = new ArrayList<>();
+        List<String> folders = new ArrayList<>(bookCollections.size() + singleBooks.size());
         folders.addAll(bookCollections);
         folders.addAll(singleBooks);
 

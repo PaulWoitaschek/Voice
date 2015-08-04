@@ -5,6 +5,7 @@ import android.os.Build;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -13,7 +14,7 @@ import java.util.List;
  */
 public class FileRecognition {
 
-    private static final List<String> audioTypes = new ArrayList<>();
+    private static final List<String> audioTypes = new ArrayList<>(30);
     /**
      * Recognizing supported audio files
      * {@inheritDoc}
@@ -35,7 +36,7 @@ public class FileRecognition {
             return audioFilter.accept(pathname) || pathname.isDirectory();
         }
     };
-    private static final List<String> imageTypes = new ArrayList<>();
+    private static final List<String> imageTypes = Arrays.asList(".jpg", ".jpeg", ".png", ".bmp");
     /**
      * Recognizing supported image types.
      * {@inheritDoc}
@@ -84,10 +85,5 @@ public class FileRecognition {
         audioTypes.add(".wma");
 
         audioTypes.add(".xmf");
-
-        imageTypes.add(".jpg");
-        imageTypes.add(".jpeg");
-        imageTypes.add(".bmp");
-        imageTypes.add(".png");
     }
 }
