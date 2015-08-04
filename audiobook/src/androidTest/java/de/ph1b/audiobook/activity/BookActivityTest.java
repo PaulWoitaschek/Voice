@@ -4,6 +4,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.MediumTest;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
@@ -74,8 +75,7 @@ public class BookActivityTest extends ActivityInstrumentationTestCase2<BookShelf
     }
 
     private Book randomBook() {
-        List<Chapter> chapters = new ArrayList<>(1);
-        chapters.add(new Chapter(randomString(), randomString(), rnd.nextInt()));
+        List<Chapter> chapters = Collections.singletonList(new Chapter(randomString(), randomString(), rnd.nextInt()));
 
         return new Book(randomString(), randomString(), randomString(), chapters, chapters.get(0).getPath(),
                 Book.Type.COLLECTION_FILE, new ArrayList<Bookmark>(0), getActivity());

@@ -22,7 +22,7 @@ import android.widget.ProgressBar;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.ph1b.audiobook.R;
@@ -64,9 +64,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    List<Book> container = new ArrayList<>(1);
-                    container.add(book);
-                    adapter.addAll(container);
+                    adapter.addAll(Collections.singletonList(book));
                 }
             });
         }
