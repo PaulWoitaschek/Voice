@@ -410,7 +410,9 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
             if (book != null) {
                 c.startActivity(BookShelfActivity.malformedFileIntent(c, book.getCurrentMediaPath()));
             } else {
-                c.startActivity(new Intent(c, BookShelfActivity.class));
+                Intent intent = new Intent(c, BookShelfActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                c.startActivity(intent);
             }
 
             state = State.DEAD;

@@ -125,6 +125,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     public static Intent malformedFileIntent(Context c, String malformedFile) {
         Intent intent = new Intent(c, BookShelfActivity.class);
         intent.putExtra(MALFORMED_FILE, malformedFile);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         return intent;
     }
 
