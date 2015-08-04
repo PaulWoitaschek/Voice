@@ -84,6 +84,88 @@ public class Sonic {
         return numSamples;
     }
 
+    // Overlap two sound segments, ramp the volume of one down, while ramping the
+    // other one from zero up, and add them, storing the result at the output.
+    private static void overlapAdd(
+            int numSamples,
+            int numChannels,
+            short out[],
+            int outPos,
+            short rampDown[],
+            int rampDownPos,
+            short rampUp[],
+            int rampUpPos) {
+        for (int i = 0; i < numChannels; i++) {
+            int o = outPos * numChannels + i;
+            int u = rampUpPos * numChannels + i;
+            int d = rampDownPos * numChannels + i;
+            for (int t = 0; t < numSamples; t++) {
+                out[o] = (short) ((rampDown[d] * (numSamples - t) + rampUp[u] * t) / numSamples);
+                o += numChannels;
+                d += numChannels;
+                u += numChannels;
+            }
+        }
+    }
+
+    // Overlap two sound segments, ramp the volume of one down, while ramping the
+    // other one from zero up, and add them, storing the result at the output.
+    private static void overlapAddWithSeparation(
+            int numSamples,
+            int numChannels,
+            int separation,
+            short out[],
+            int outPos,
+            short rampDown[],
+            int rampDownPos,
+            short rampUp[],
+            int rampUpPos) {
+        for (int i = 0; i < numChannels; i++) {
+            int o = outPos * numChannels + i;
+            int u = rampUpPos * numChannels + i;
+            int d = rampDownPos * numChannels + i;
+            for (int t = 0; t < numSamples + separation; t++) {
+                if (t < separation) {
+                    out[o] = (short) (rampDown[d] * (numSamples - t) / numSamples);
+                    d += numChannels;
+                } else if (t < numSamples) {
+                    out[o] = (short) ((rampDown[d] * (numSamples - t) + rampUp[u] * (t - separation)) / numSamples);
+                    d += numChannels;
+                    u += numChannels;
+                } else {
+                    out[o] = (short) (rampUp[u] * (t - separation) / numSamples);
+                    u += numChannels;
+                }
+                o += numChannels;
+            }
+        }
+    }
+
+    /* This is a non-stream oriented interface to just change the speed of a sound sample */
+    public static int sonicChangeShortSpeed(
+            short samples[],
+            int numSamples,
+            float speed,
+            float pitch,
+            float rate,
+            float volume,
+            boolean useChordPitch,
+            int sampleRate,
+            int numChannels) {
+        Sonic stream = new Sonic(sampleRate, numChannels);
+
+        stream.setSpeed(speed);
+        stream.setPitch(pitch);
+        stream.setRate(rate);
+        stream.setVolume(volume);
+        stream.setChordPitch(useChordPitch);
+        stream.writeShortToStream(samples, numSamples);
+        stream.flushStream();
+        numSamples = stream.samplesAvailable();
+        stream.readShortFromStream(samples, numSamples);
+        return numSamples;
+    }
+
     // Resize the array.
     private short[] resize(
             short[] oldArray,
@@ -608,63 +690,6 @@ public class Sonic {
         return retPeriod;
     }
 
-    // Overlap two sound segments, ramp the volume of one down, while ramping the
-    // other one from zero up, and add them, storing the result at the output.
-    private void overlapAdd(
-            int numSamples,
-            int numChannels,
-            short out[],
-            int outPos,
-            short rampDown[],
-            int rampDownPos,
-            short rampUp[],
-            int rampUpPos) {
-        for (int i = 0; i < numChannels; i++) {
-            int o = outPos * numChannels + i;
-            int u = rampUpPos * numChannels + i;
-            int d = rampDownPos * numChannels + i;
-            for (int t = 0; t < numSamples; t++) {
-                out[o] = (short) ((rampDown[d] * (numSamples - t) + rampUp[u] * t) / numSamples);
-                o += numChannels;
-                d += numChannels;
-                u += numChannels;
-            }
-        }
-    }
-
-    // Overlap two sound segments, ramp the volume of one down, while ramping the
-    // other one from zero up, and add them, storing the result at the output.
-    private void overlapAddWithSeparation(
-            int numSamples,
-            int numChannels,
-            int separation,
-            short out[],
-            int outPos,
-            short rampDown[],
-            int rampDownPos,
-            short rampUp[],
-            int rampUpPos) {
-        for (int i = 0; i < numChannels; i++) {
-            int o = outPos * numChannels + i;
-            int u = rampUpPos * numChannels + i;
-            int d = rampDownPos * numChannels + i;
-            for (int t = 0; t < numSamples + separation; t++) {
-                if (t < separation) {
-                    out[o] = (short) (rampDown[d] * (numSamples - t) / numSamples);
-                    d += numChannels;
-                } else if (t < numSamples) {
-                    out[o] = (short) ((rampDown[d] * (numSamples - t) + rampUp[u] * (t - separation)) / numSamples);
-                    d += numChannels;
-                    u += numChannels;
-                } else {
-                    out[o] = (short) (rampUp[u] * (t - separation) / numSamples);
-                    u += numChannels;
-                }
-                o += numChannels;
-            }
-        }
-    }
-
     // Just move the new samples in the output buffer to the pitch buffer
     private void moveNewSamplesToPitchBuffer(
             int originalNumOutputSamples) {
@@ -906,30 +931,5 @@ public class Sonic {
             int numBytes) {
         addBytesToInputBuffer(inBuffer, numBytes);
         processStreamInput();
-    }
-
-    /* This is a non-stream oriented interface to just change the speed of a sound sample */
-    public int sonicChangeShortSpeed(
-            short samples[],
-            int numSamples,
-            float speed,
-            float pitch,
-            float rate,
-            float volume,
-            boolean useChordPitch,
-            int sampleRate,
-            int numChannels) {
-        Sonic stream = new Sonic(sampleRate, numChannels);
-
-        stream.setSpeed(speed);
-        stream.setPitch(pitch);
-        stream.setRate(rate);
-        stream.setVolume(volume);
-        stream.setChordPitch(useChordPitch);
-        stream.writeShortToStream(samples, numSamples);
-        stream.flushStream();
-        numSamples = stream.samplesAvailable();
-        stream.readShortFromStream(samples, numSamples);
-        return numSamples;
     }
 }

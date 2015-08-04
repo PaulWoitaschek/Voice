@@ -170,6 +170,43 @@ public class IabHelper {
             return iab_msgs[code];
     }
 
+    // Workaround to bug where sometimes response codes come as Long instead of Integer
+    private static int getResponseCodeFromBundle(Bundle b) {
+        Object o = b.get(RESPONSE_CODE);
+        if (o == null) {
+            L.d(TAG, "Bundle with null response code, assuming OK (known issue)");
+            return BILLING_RESPONSE_RESULT_OK;
+        } else if (o instanceof Integer) {
+            return (Integer) o;
+        } else if (o instanceof Long) return (int) ((Long) o).longValue();
+        else {
+            logError("Unexpected type for bundle response code.");
+            logError(o.getClass().getName());
+            throw new RuntimeException("Unexpected type for bundle response code: " + o.getClass().getName());
+        }
+    }
+
+    // Workaround to bug where sometimes response codes come as Long instead of Integer
+    private static int getResponseCodeFromIntent(Intent i) {
+        Object o = i.getExtras().get(RESPONSE_CODE);
+        if (o == null) {
+            logError("Intent with no response code, assuming OK (known issue)");
+            return BILLING_RESPONSE_RESULT_OK;
+        } else if (o instanceof Integer) {
+            return (Integer) o;
+        } else if (o instanceof Long) return (int) ((Long) o).longValue();
+        else {
+            logError("Unexpected type for intent response code.");
+            logError(o.getClass().getName());
+            throw new RuntimeException("Unexpected type for intent response code: " + o.getClass().getName());
+        }
+    }
+
+    private static void logError(String msg) {
+        String mDebugTag = "IabHelper";
+        Log.e(mDebugTag, "In-app billing error: " + msg);
+    }
+
     /**
      * Starts the setup process. This will start up the setup process asynchronously.
      * You will be notified through the listener when the setup process is complete.
@@ -281,7 +318,6 @@ public class IabHelper {
             throw new IllegalStateException("IabHelper was disposed of, so it cannot be used.");
         }
     }
-
 
     /**
      * Initiate the UI flow for an in-app purchase. Call this method to initiate an in-app purchase,
@@ -443,44 +479,11 @@ public class IabHelper {
         }
     }
 
-
     // Checks that setup was done; if not, throws an exception.
     private void checkSetupDone(String operation) {
         if (!mSetupDone) {
             logError("Illegal state for operation (" + operation + "): IAB helper is not set up.");
             throw new IllegalStateException("IAB helper is not set up. Can't perform operation: " + operation);
-        }
-    }
-
-    // Workaround to bug where sometimes response codes come as Long instead of Integer
-    private int getResponseCodeFromBundle(Bundle b) {
-        Object o = b.get(RESPONSE_CODE);
-        if (o == null) {
-            L.d(TAG, "Bundle with null response code, assuming OK (known issue)");
-            return BILLING_RESPONSE_RESULT_OK;
-        } else if (o instanceof Integer) {
-            return (Integer) o;
-        } else if (o instanceof Long) return (int) ((Long) o).longValue();
-        else {
-            logError("Unexpected type for bundle response code.");
-            logError(o.getClass().getName());
-            throw new RuntimeException("Unexpected type for bundle response code: " + o.getClass().getName());
-        }
-    }
-
-    // Workaround to bug where sometimes response codes come as Long instead of Integer
-    private int getResponseCodeFromIntent(Intent i) {
-        Object o = i.getExtras().get(RESPONSE_CODE);
-        if (o == null) {
-            logError("Intent with no response code, assuming OK (known issue)");
-            return BILLING_RESPONSE_RESULT_OK;
-        } else if (o instanceof Integer) {
-            return (Integer) o;
-        } else if (o instanceof Long) return (int) ((Long) o).longValue();
-        else {
-            logError("Unexpected type for intent response code.");
-            logError(o.getClass().getName());
-            throw new RuntimeException("Unexpected type for intent response code: " + o.getClass().getName());
         }
     }
 
@@ -496,11 +499,6 @@ public class IabHelper {
         L.d(TAG, "Ending async operation: " + mAsyncOperation);
         mAsyncOperation = "";
         mAsyncInProgress = false;
-    }
-
-    private void logError(String msg) {
-        String mDebugTag = "IabHelper";
-        Log.e(mDebugTag, "In-app billing error: " + msg);
     }
 
     /**
