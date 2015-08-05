@@ -151,7 +151,7 @@ public class BookAdder {
         returnList.addAll(fileList);
         Collections.sort(dirList, NaturalOrderComparator.INSTANCE);
         for (File f : dirList) {
-            List<File> content = new ArrayList<>(0);
+            List<File> content = new ArrayList<>(10);
             File[] containing = f.listFiles();
             if (containing != null) {
                 content = new ArrayList<>(Arrays.asList(containing));

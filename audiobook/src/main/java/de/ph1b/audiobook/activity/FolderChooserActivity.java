@@ -134,8 +134,10 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         if (containing != null) {
             List<File> asList = new ArrayList<>(Arrays.asList(containing));
             Collections.sort(asList, NaturalOrderComparator.INSTANCE);
+            return asList;
+        } else {
+            return Collections.emptyList();
         }
-        return new ArrayList<>(0);
     }
 
     private void changeFolder(File newFolder) {

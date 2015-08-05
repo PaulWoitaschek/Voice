@@ -175,8 +175,7 @@ public class CoverDownloader {
             return newStrings;
         } catch (IOException | JSONException e) {
             e.printStackTrace();
+            return Collections.emptyList();
         }
-
-        return new ArrayList<>(0);
     }
 }

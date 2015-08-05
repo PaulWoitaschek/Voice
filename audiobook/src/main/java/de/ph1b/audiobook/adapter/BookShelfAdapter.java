@@ -34,9 +34,6 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
 
         @Override
         public int compare(Book o1, Book o2) {
-            if (areItemsTheSame(o1, o2)) {
-                return 0;
-            }
             return NaturalOrderComparator.INSTANCE.compare(o1.getName(), o2.getName());
         }
 
