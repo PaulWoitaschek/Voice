@@ -1,3 +1,26 @@
+# v2.2.3.1 Hotfix
+* Fixed base color tinting
+* Fixed a crash where a wrong attr was referenced
+* Make a .nomedia file insted of a folder
+
+# v2.2.3
+* Added mp3package as file extension
+* Add an option to hide the book from music players
+* Object creation decreased
+* Performance increased
+* Correctly collapse FAM
+* Tint all the icons insted of having multiple icons in different colors
+* Replaces CardView with normal grid
+* Add ripples to grid (book shelf)
+* Disable buggy transitions
+* Replaced Sonic NDK with Java version
+* Minor fixes
+
+# v2.2.2 Fixes and Snackbar Theming
+* Repairs database corruption by a previous update
+* Theme snackbar. Thanks to dark-seizo!
+* Minor improvements
+
 # v2.2.1
 
 ## Changes
