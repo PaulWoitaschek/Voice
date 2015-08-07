@@ -22,7 +22,6 @@ import android.widget.ProgressBar;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
-import java.util.Collections;
 import java.util.List;
 
 import de.ph1b.audiobook.R;
@@ -64,7 +63,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    adapter.addAll(Collections.singletonList(book));
+                    adapter.updateOrAddBook(book);
                 }
             });
         }
@@ -169,7 +168,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, getAmountOfColumns()));
         adapter = new BookShelfAdapter(this, this);
-        adapter.addAll(db.getActiveBooks());
         recyclerView.setAdapter(adapter);
 
         if (savedInstanceState == null) {
@@ -334,6 +332,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                         fragment.setOnEditBookFinished(new EditCoverDialogFragment.OnEditBookFinished() {
                             @Override
                             public void onEditBookFinished() {
+                                // this is necessary for the cover update
                                 adapter.notifyItemAtIdChanged(book.getId());
                             }
                         });
@@ -344,8 +343,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                         editBookTitle.setOnTextChangedListener(new EditBookTitleDialogFragment.OnTextChanged() {
                             @Override
                             public void onTitleChanged(@NonNull String newTitle) {
-                                book.setName(newTitle);
-                                adapter.notifyItemAtIdChanged(book.getId());
                                 synchronized (db) {
                                     Book dbBook = db.getBook(book.getId());
                                     if (dbBook != null) {

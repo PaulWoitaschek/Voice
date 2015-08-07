@@ -57,15 +57,32 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
         setHasStableIds(true);
     }
 
-    public void addAll(List<Book> books) {
-        sortedList.addAll(books);
+    /**
+     * Adds a book or updates it if it already exists.
+     *
+     * @param book The new book
+     */
+    public void updateOrAddBook(@NonNull Book book) {
+        int index = -1;
+        for (int i = 0; i < sortedList.size(); i++) {
+            if (sortedList.get(i).getId() == book.getId()) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index == -1) {
+            sortedList.add(book); // add it if it doesnt exist
+        } else {
+            sortedList.updateItemAt(index, book); // update it if it exists
+        }
     }
 
-    public void newDataSet(List<Book> books) {
+    public void newDataSet(@NonNull List<Book> books) {
         sortedList.beginBatchedUpdates();
         try {
             // remove old books
-            List<Book> booksToDelete = new ArrayList<>(5);
+            List<Book> booksToDelete = new ArrayList<>(sortedList.size());
             for (int i = 0; i < sortedList.size(); i++) {
                 Book existing = sortedList.get(i);
                 boolean deleteBook = true;
@@ -83,7 +100,11 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
                 sortedList.remove(b);
             }
 
-            sortedList.addAll(books);
+            // add new books
+            for (Book b : books) {
+                updateOrAddBook(b);
+            }
+
         } finally {
             sortedList.endBatchedUpdates();
         }
