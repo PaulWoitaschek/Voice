@@ -1,3 +1,8 @@
+# v2.2.2 Fixes and Snackbar Theming
+* Repairs database corruption by a previous update
+* Theme snackbar. Thanks to dark-seizo!
+* Minor improvements
+
 # v2.2.1
 
 ## Changes
