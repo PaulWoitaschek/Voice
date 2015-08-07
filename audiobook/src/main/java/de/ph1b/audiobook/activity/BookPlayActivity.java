@@ -63,7 +63,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
 
     private static final String TAG = BookPlayActivity.class.getSimpleName();
     private static final String BOOK_ID = "bookId";
-    private static final Communication communication = Communication.getInstance();
+    private static final Communication COMMUNICATION = Communication.getInstance();
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
     @Nullable
     private Snackbar snackbar;
@@ -492,7 +492,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
 
         ActivityCompat.invalidateOptionsMenu(this);
 
-        communication.addBookCommunicationListener(listener);
+        COMMUNICATION.addBookCommunicationListener(listener);
 
         // Sleep timer countdown view
         initializeTimerCountdown();
@@ -504,6 +504,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
-        communication.removeBookCommunicationListener(listener);
+        COMMUNICATION.removeBookCommunicationListener(listener);
     }
 }
