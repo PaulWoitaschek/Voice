@@ -495,6 +495,13 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         ActivityCompat.invalidateOptionsMenu(this);
 
         communication.addBookCommunicationListener(listener);
+
+        // Sleep timer countdown view
+        if (MediaPlayerController.sleepTimerActive) {
+            long delay = System.currentTimeMillis() - MediaPlayerController.sleepTimerDelay;
+            int minutes = prefs.getSleepTime();
+            showTimerCountdown(minutes * 60000 - delay);
+        }
     }
 
     @Override
