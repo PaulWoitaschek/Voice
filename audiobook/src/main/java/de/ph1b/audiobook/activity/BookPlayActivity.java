@@ -501,9 +501,11 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onStop() {
         super.onStop();
+
+        COMMUNICATION.removeBookCommunicationListener(listener);
+
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
-        COMMUNICATION.removeBookCommunicationListener(listener);
     }
 }
