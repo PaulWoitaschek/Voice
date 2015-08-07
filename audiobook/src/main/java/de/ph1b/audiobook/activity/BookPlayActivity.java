@@ -100,11 +100,9 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                                 });
                         ThemeUtil.theme(snackbar);
                         snackbar.show();
-                        long delay = System.currentTimeMillis() - MediaPlayerController.sleepTimerDelay;
-                        showTimerCountdown(minutes * 60000 - delay);
-                    } else {
-                        showTimerCountdown(0);
                     }
+
+                    initializeTimerCountdown();
                 }
             });
         }
@@ -388,8 +386,15 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         new JumpToPositionDialogFragment().show(getSupportFragmentManager(), JumpToPositionDialogFragment.TAG);
     }
 
-    private void showTimerCountdown(long time) {
-        if (time != 0) {
+    private void initializeTimerCountdown() {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+
+        if (MediaPlayerController.sleepTimerActive) {
+            long delay = System.currentTimeMillis() - MediaPlayerController.sleepTimerDelay;
+            int minutes = prefs.getSleepTime();
+            long time = minutes * 60 * 1000 - delay;
             timerCountdownView.setVisibility(View.VISIBLE);
             countDownTimer = new CountDownTimer(time, 1000) {
                 @Override
@@ -404,10 +409,8 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                     L.i(TAG, "Countdown timer finished");
                 }
             }.start();
-        } else if (countDownTimer != null) {
+        } else {
             timerCountdownView.setVisibility(View.GONE);
-            countDownTimer.cancel();
-            L.i(TAG, "Countdown timer canceled");
         }
     }
 
@@ -492,11 +495,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         communication.addBookCommunicationListener(listener);
 
         // Sleep timer countdown view
-        if (MediaPlayerController.sleepTimerActive) {
-            long delay = System.currentTimeMillis() - MediaPlayerController.sleepTimerDelay;
-            int minutes = prefs.getSleepTime();
-            showTimerCountdown(minutes * 60000 - delay);
-        }
+        initializeTimerCountdown();
     }
 
     @Override
