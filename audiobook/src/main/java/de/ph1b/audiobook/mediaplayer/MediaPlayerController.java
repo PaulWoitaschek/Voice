@@ -49,6 +49,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     private ScheduledFuture<?> sleepSand;
     private ScheduledFuture updater = null;
     private volatile int prepareTries = 0;
+    public static volatile long sleepTimerDelay = 0;
 
     public MediaPlayerController(@NonNull final Context c) {
         lock.lock();
@@ -329,6 +330,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                 L.i(TAG, "sleepSand is active. cancelling now");
                 sleepSand.cancel(false);
                 sleepTimerActive = false;
+                sleepTimerDelay = 0;
             } else {
                 L.i(TAG, "preparing new sleep sand");
                 final int minutes = prefs.getSleepTime();
@@ -341,11 +343,13 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                             pause(true);
                             sleepTimerActive = false;
                             communication.sleepStateChanged();
+                            sleepTimerDelay = 0;
                         } finally {
                             lock.unlock();
                         }
                     }
                 }, minutes, TimeUnit.MINUTES);
+                sleepTimerDelay = System.currentTimeMillis();
             }
             communication.sleepStateChanged();
         } finally {

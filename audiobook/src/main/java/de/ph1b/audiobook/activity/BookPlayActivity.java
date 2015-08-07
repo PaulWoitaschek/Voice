@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -75,6 +77,9 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     private long bookId;
     private DataBaseHelper db;
     private CoordinatorLayout coordinatorLayout;
+    private TextView timerCountdownView;
+    private CountDownTimer countDownTimer;
+
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
 
         @Override
@@ -96,7 +101,9 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                                 });
                         ThemeUtil.theme(snackbar);
                         snackbar.show();
-                    }
+                        long delay = System.currentTimeMillis() - MediaPlayerController.sleepTimerDelay;
+                        showTimerCountdown(minutes * 60000 - delay);
+                    } else showTimerCountdown(0);
                 }
             });
         }
@@ -209,6 +216,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         final ImageView coverView = (ImageView) findViewById(R.id.book_cover);
         maxTimeView = (TextView) findViewById(R.id.maxTime);
         bookSpinner = (Spinner) findViewById(R.id.book_spinner);
+        timerCountdownView = (TextView) findViewById(R.id.timerView);
 
         //setup buttons
         playButton.setIconDrawable(playPauseDrawable);
@@ -347,6 +355,13 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             enterTransition.excludeTarget(android.R.id.navigationBarBackground, true);
             getWindow().setReturnTransition(null);
         }
+
+        // Sleep timer countdown view
+        if (MediaPlayerController.sleepTimerActive) {
+            long delay = System.currentTimeMillis() - MediaPlayerController.sleepTimerDelay;
+            int minutes = prefs.getSleepTime();
+            showTimerCountdown(minutes * 60000 - delay);
+        }
     }
 
     @Override
@@ -378,6 +393,27 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
 
     private void launchJumpToPositionDialog() {
         new JumpToPositionDialogFragment().show(getSupportFragmentManager(), JumpToPositionDialogFragment.TAG);
+    }
+
+    private void showTimerCountdown(long time) {
+        if (time != 0) {
+            timerCountdownView.setVisibility(View.VISIBLE);
+            countDownTimer = new CountDownTimer(time, 1000) {
+                public void onTick(long m) {
+                    int timer = (int) m - 1000;
+                    timerCountdownView.setText(formatTime(timer, timer));
+                }
+
+                public void onFinish() {
+                    timerCountdownView.setVisibility(View.GONE);
+                    L.i(TAG, "Countdown timer finished");
+                }
+            }.start();
+        } else if (countDownTimer != null) {
+            timerCountdownView.setVisibility(View.GONE);
+            countDownTimer.cancel();
+            L.i(TAG, "Countdown timer canceled");
+        }
     }
 
     @Override
@@ -464,7 +500,9 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onStop() {
         super.onStop();
-
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
         communication.removeBookCommunicationListener(listener);
     }
 }
