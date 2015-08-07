@@ -32,18 +32,8 @@
 
             <TextView
                 android:id="@+id/timerView"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_margin="8dp"
-                android:background="@drawable/current_playing_circle_background"
-                android:gravity="center_vertical|center_horizontal"
-                android:lines="1"
-                android:text="0:00:00"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
-                android:visibility="gone"/>
+                style="@style/timer_text_view_style"
+                tools:text="00:34" />
 
         </RelativeLayout>
 

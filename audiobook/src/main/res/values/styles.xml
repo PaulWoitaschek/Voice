@@ -73,5 +73,21 @@
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:mirrorForRtl" tools:ignore="NewApi">true</item>
+
+
+    </style>
+
+    <style name="timer_text_view_style">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_alignParentEnd" tools:ignore="NewApi">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:background">@drawable/current_playing_circle_background</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:lines">1</item>
     </style>
 </resources>
