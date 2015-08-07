@@ -392,11 +392,10 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         }
 
         if (MediaPlayerController.sleepTimerActive) {
-            long delay = System.currentTimeMillis() - MediaPlayerController.sleepTimerDelay;
-            int minutes = prefs.getSleepTime();
-            long time = minutes * 60 * 1000 - delay;
+            long sleepTimerDuration = TimeUnit.MINUTES.toMillis(prefs.getSleepTime());
+            long timeElapsed = System.currentTimeMillis() - MediaPlayerController.sleepTimerStartedAt;
             timerCountdownView.setVisibility(View.VISIBLE);
-            countDownTimer = new CountDownTimer(time, 1000) {
+            countDownTimer = new CountDownTimer(sleepTimerDuration - timeElapsed, 1000) {
                 @Override
                 public void onTick(long m) {
                     int timer = (int) m - 1000;
