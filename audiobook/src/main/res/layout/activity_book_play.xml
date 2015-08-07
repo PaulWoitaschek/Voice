@@ -50,8 +50,7 @@
         <Spinner
             android:id="@+id/book_spinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:dropDownSelector="@drawable/fab_label_background" />
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:layout_width="match_parent"
