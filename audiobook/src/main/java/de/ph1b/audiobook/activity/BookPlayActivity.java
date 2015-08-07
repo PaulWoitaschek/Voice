@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -103,7 +102,9 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                         snackbar.show();
                         long delay = System.currentTimeMillis() - MediaPlayerController.sleepTimerDelay;
                         showTimerCountdown(minutes * 60000 - delay);
-                    } else showTimerCountdown(0);
+                    } else {
+                        showTimerCountdown(0);
+                    }
                 }
             });
         }
@@ -150,7 +151,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                 }
             });
         }
-
     };
 
     public static Intent newIntent(Context c, long bookId) {
@@ -399,11 +399,13 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         if (time != 0) {
             timerCountdownView.setVisibility(View.VISIBLE);
             countDownTimer = new CountDownTimer(time, 1000) {
+                @Override
                 public void onTick(long m) {
                     int timer = (int) m - 1000;
                     timerCountdownView.setText(formatTime(timer, timer));
                 }
 
+                @Override
                 public void onFinish() {
                     timerCountdownView.setVisibility(View.GONE);
                     L.i(TAG, "Countdown timer finished");
