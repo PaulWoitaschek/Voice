@@ -355,13 +355,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             enterTransition.excludeTarget(android.R.id.navigationBarBackground, true);
             getWindow().setReturnTransition(null);
         }
-
-        // Sleep timer countdown view
-        if (MediaPlayerController.sleepTimerActive) {
-            long delay = System.currentTimeMillis() - MediaPlayerController.sleepTimerDelay;
-            int minutes = prefs.getSleepTime();
-            showTimerCountdown(minutes * 60000 - delay);
-        }
     }
 
     @Override
