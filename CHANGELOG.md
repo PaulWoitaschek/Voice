@@ -1,3 +1,8 @@
+# v2.2.3.1 Hotfix
+* Fixed base color tinting
+* Fixed a crash where a wrong attr was referenced
+* Make a .nomedia file insted of a folder
+
 # v2.2.3
 * Added mp3package as file extension
 * Add an option to hide the book from music players
