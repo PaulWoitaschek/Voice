@@ -398,8 +398,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             countDownTimer = new CountDownTimer(sleepTimerDuration - timeElapsed, 1000) {
                 @Override
                 public void onTick(long m) {
-                    int timer = (int) m - 1000;
-                    timerCountdownView.setText(formatTime(timer, timer));
+                    timerCountdownView.setText(formatTime((int) m, (int) m));
                 }
 
                 @Override
