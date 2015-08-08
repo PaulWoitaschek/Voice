@@ -9,5 +9,4 @@
     android:contentDescription="@string/cover"
     android:onClick="onClick"
     android:scaleType="centerCrop"
-    android:transitionName="@string/transition_cover"
     tools:ignore="UnusedAttribute" />

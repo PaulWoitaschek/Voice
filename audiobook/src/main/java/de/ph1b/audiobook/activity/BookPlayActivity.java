@@ -13,6 +13,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
@@ -335,13 +336,15 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             bookSpinner.setVisibility(View.VISIBLE);
         }
 
+        // transitions stuff
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Transition enterTransition = getWindow().getEnterTransition();
             enterTransition.excludeTarget(R.id.toolbar, true);
             enterTransition.excludeTarget(android.R.id.statusBarBackground, true);
             enterTransition.excludeTarget(android.R.id.navigationBarBackground, true);
-            getWindow().setReturnTransition(null);
+            //  getWindow().setReturnTransition(null);
         }
+        ViewCompat.setTransitionName(coverView, book.getName());
     }
 
     @Override

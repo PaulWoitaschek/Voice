@@ -281,8 +281,9 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
             BookShelfAdapter.ViewHolder viewHolder = (BookShelfAdapter.ViewHolder) recyclerView.findViewHolderForItemId(currentBook.getId());
             if (viewHolder != null) {
-                ViewCompat.setTransitionName(viewHolder.coverView, getString(R.string.transition_cover));
-                optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, viewHolder.coverView, getString(R.string.transition_cover));
+                // use book name as transition nae
+                ViewCompat.setTransitionName(viewHolder.coverView, currentBook.getName());
+                optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, viewHolder.coverView, currentBook.getName());
             }
             ActivityCompat.startActivity(this, BookPlayActivity.newIntent(this, prefs.getCurrentBookId()), optionsCompat.toBundle());
         }
