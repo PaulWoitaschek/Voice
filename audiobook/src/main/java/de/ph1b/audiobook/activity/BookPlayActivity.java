@@ -69,7 +69,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     private Snackbar snackbar;
     private TextView playedTimeView;
     private SeekBar seekBar;
-    private volatile Spinner bookSpinner;
+    private Spinner bookSpinner;
     private TextView maxTimeView;
     private PrefsManager prefs;
     private ServiceController controller;
@@ -291,8 +291,8 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                             BookPlayActivity.this, R.attr.colorAccent)));
                     textView.setTextColor(getResources().getColor(R.color.abc_primary_text_material_dark));
                 } else {
-                    textView.setBackgroundColor(getResources().getColor(ThemeUtil.getResourceId(
-                            BookPlayActivity.this, android.R.attr.windowBackground)));
+                    textView.setBackgroundResource(ThemeUtil.getResourceId(BookPlayActivity.this,
+                            R.attr.selectableItemBackground));
                     textView.setTextColor(getResources().getColor(ThemeUtil.getResourceId(
                             BookPlayActivity.this, android.R.attr.textColorPrimary)));
                 }
