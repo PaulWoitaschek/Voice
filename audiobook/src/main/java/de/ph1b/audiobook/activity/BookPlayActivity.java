@@ -287,8 +287,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                 // highlights the selected item and un-highlights an item if it is not selected.
                 // default implementation uses a ViewHolder, so this is necessary.
                 if (position == bookSpinner.getSelectedItemPosition()) {
-                    textView.setBackgroundColor(getResources().getColor(ThemeUtil.getResourceId(
-                            BookPlayActivity.this, R.attr.colorAccent)));
+                    textView.setBackgroundResource(R.drawable.spinner_selected_background);
                     textView.setTextColor(getResources().getColor(R.color.abc_primary_text_material_dark));
                 } else {
                     textView.setBackgroundResource(ThemeUtil.getResourceId(BookPlayActivity.this,
