@@ -27,7 +27,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -267,22 +266,13 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             chaptersAsStrings.add(chapterName);
         }
 
-        SpinnerAdapter adapter = new ArrayAdapter<String>(this,
-                R.layout.activity_book_play_spinner, chaptersAsStrings) {
+        ArrayAdapter adapter = new ArrayAdapter<String>(this,
+                R.layout.activity_book_play_spinner, R.id.spinnerTextItem, chaptersAsStrings) {
             @Override
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                final TextView textView = (TextView) super.getDropDownView(position, convertView,
-                        parent);
+                View view = super.getDropDownView(position, convertView, parent);
 
-                // this is necessary due to a bug in android causing the layout to be ignored.
-                // see: http://stackoverflow.com/questions/14139106/spinner-does-not-wrap-text-is-th
-                // is-an-android-bug
-                textView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        textView.setSingleLine(false);
-                    }
-                });
+                TextView textView = (TextView) view.findViewById(R.id.spinnerTextItem);
 
                 // highlights the selected item and un-highlights an item if it is not selected.
                 // default implementation uses a ViewHolder, so this is necessary.
@@ -296,7 +286,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                             BookPlayActivity.this, android.R.attr.textColorPrimary)));
                 }
 
-                return textView;
+                return view;
             }
         };
         bookSpinner.setAdapter(adapter);
