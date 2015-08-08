@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewCompat;
@@ -118,8 +117,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         }
     };
     private DataBaseHelper db;
-    @Nullable
-    private View lastTransitionedView;
 
     public static Intent malformedFileIntent(Context c, String malformedFile) {
         Intent intent = new Intent(c, BookShelfActivity.class);
@@ -285,7 +282,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             BookShelfAdapter.ViewHolder viewHolder = (BookShelfAdapter.ViewHolder) recyclerView.findViewHolderForItemId(currentBook.getId());
             if (viewHolder != null) {
                 ViewCompat.setTransitionName(viewHolder.coverView, getString(R.string.transition_cover));
-                lastTransitionedView = viewHolder.coverView;
                 optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, viewHolder.coverView, getString(R.string.transition_cover));
             }
             ActivityCompat.startActivity(this, BookPlayActivity.newIntent(this, prefs.getCurrentBookId()), optionsCompat.toBundle());
