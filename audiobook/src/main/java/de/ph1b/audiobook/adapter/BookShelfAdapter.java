@@ -3,6 +3,7 @@ package de.ph1b.audiobook.adapter;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.util.SortedListAdapterCallback;
@@ -138,40 +139,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, int position) {
-        Book b = sortedList.get(position);
-
-        //setting text
-        String name = b.getName();
-        viewHolder.titleView.setText(name);
-
-        // (Cover)
-        File coverFile = b.getCoverFile();
-        Drawable coverReplacement = new CoverReplacement(b.getName(), c);
-        if (!b.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-            Picasso.with(c).load(coverFile).placeholder(coverReplacement).into(viewHolder.coverView);
-        } else {
-            Picasso.with(c).cancelRequest(viewHolder.coverView);
-            viewHolder.coverView.setImageDrawable(coverReplacement);
-        }
-
-        if (b.getId() == prefs.getCurrentBookId()) {
-            viewHolder.currentPlayingIndicator.setVisibility(View.VISIBLE);
-        } else {
-            viewHolder.currentPlayingIndicator.setVisibility(View.GONE);
-        }
-
-        viewHolder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onItemClickListener.onCoverClicked(viewHolder.getAdapterPosition());
-            }
-        });
-        viewHolder.editBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onItemClickListener.onMenuClicked(viewHolder.getAdapterPosition(), v);
-            }
-        });
+        viewHolder.bind(position);
     }
 
     @Override
@@ -188,18 +156,57 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final ImageView coverView;
-        final TextView titleView;
-        final View editBook;
-        final ImageView currentPlayingIndicator;
-        final View view;
+        private final TextView titleView;
+        private final View editBook;
+        private final ImageView currentPlayingIndicator;
+        private final View view;
 
         public ViewHolder(final ViewGroup itemView) {
             super(itemView);
             this.view = itemView;
-            coverView = (ImageView) itemView.findViewById(R.id.edit_book);
+            coverView = (ImageView) itemView.findViewById(R.id.coverView);
             titleView = (TextView) itemView.findViewById(R.id.title);
             editBook = itemView.findViewById(R.id.editBook);
             currentPlayingIndicator = (ImageView) itemView.findViewById(R.id.currentPlayingIndicator);
+        }
+
+        public void bind(int position) {
+            Book b = sortedList.get(position);
+
+            //setting text
+            String name = b.getName();
+            titleView.setText(name);
+
+            // (Cover)
+            File coverFile = b.getCoverFile();
+            Drawable coverReplacement = new CoverReplacement(b.getName(), c);
+            if (!b.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
+                Picasso.with(c).load(coverFile).placeholder(coverReplacement).into(coverView);
+            } else {
+                Picasso.with(c).cancelRequest(coverView);
+                coverView.setImageDrawable(coverReplacement);
+            }
+
+            if (b.getId() == prefs.getCurrentBookId()) {
+                currentPlayingIndicator.setVisibility(View.VISIBLE);
+            } else {
+                currentPlayingIndicator.setVisibility(View.GONE);
+            }
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.onCoverClicked(getAdapterPosition());
+                }
+            });
+            editBook.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.onMenuClicked(getAdapterPosition(), v);
+                }
+            });
+
+            ViewCompat.setTransitionName(coverView, b.getCoverTransitionName());
         }
     }
 }

@@ -6,7 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.view.ViewCompat;
+import android.support.v4.app.SharedElementCallback;
+import android.support.v4.util.Pair;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,13 +16,16 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.BookShelfAdapter;
@@ -49,6 +53,35 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     private static final String MALFORMED_FILE = "malformedFile";
     private static final Communication COMMUNICATION = Communication.getInstance();
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
+    private final SharedElementCallback sharedElementCallback = new SharedElementCallback() {
+        @Override
+        public void onSharedElementStart(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
+            super.onSharedElementStart(sharedElementNames, sharedElements, sharedElementSnapshots);
+            L.d(TAG, "onSharedElementStart(sharedElementNames=" + sharedElementNames +
+                    ", sharedElements=" + sharedElements +
+                    ", sharedElementSnapshots=" + sharedElementSnapshots);
+        }
+
+        @Override
+        public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
+            super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
+            L.d(TAG, "onSharedElementEnd(sharedElementNames=" + sharedElementNames +
+                    ", sharedElements=" + sharedElements +
+                    ", sharedElementSnapshots=" + sharedElementSnapshots);
+        }
+
+        @Override
+        public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+            super.onMapSharedElements(names, sharedElements);
+            L.d(TAG, "onMapSharedElements(names=" + names + ", sharedElements=" + sharedElements);
+        }
+
+        @Override
+        public void onRejectSharedElements(List<View> rejectedSharedElements) {
+            super.onRejectSharedElements(rejectedSharedElements);
+            L.d(TAG, "onRegjectSharedElements(rejectedSharedElements=" + rejectedSharedElements);
+        }
+    };
     private BookShelfAdapter adapter;
     private PrefsManager prefs;
     private ServiceController controller;
@@ -89,7 +122,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
         @Override
         public void onBookSetChanged(@NonNull final List<Book> activeBooks) {
-            L.v(TAG, "onBookSetChanged called");
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -176,6 +208,8 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                         .show();
             }
         }
+
+        setExitSharedElementCallback(sharedElementCallback);
     }
 
     /**
@@ -224,7 +258,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
     private void checkVisibilities() {
         final boolean hideRecycler = adapter.getItemCount() == 0 && BookAdder.scannerActive;
-        L.v(TAG, "checkVisibilities hidesRecycler=" + hideRecycler);
         if (hideRecycler) {
             recyclerReplacementView.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
@@ -274,19 +307,37 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void startBookPlay() {
+        L.i(TAG, "startBookPlay");
         Book currentBook = db.getBook(prefs.getCurrentBookId());
         if (currentBook != null) {
-            @SuppressWarnings("unchecked")
-            ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this);
+            List<Pair<View, String>> sharedElements = new ArrayList<>(2);
 
             BookShelfAdapter.ViewHolder viewHolder = (BookShelfAdapter.ViewHolder) recyclerView.findViewHolderForItemId(currentBook.getId());
             if (viewHolder != null) {
-                // use book name as transition nae
-                ViewCompat.setTransitionName(viewHolder.coverView, currentBook.getName());
-                optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, viewHolder.coverView, currentBook.getName());
+                sharedElements.add(new Pair<View, String>(viewHolder.coverView, currentBook.getCoverTransitionName()));
             }
-            ActivityCompat.startActivity(this, BookPlayActivity.newIntent(this, prefs.getCurrentBookId()), optionsCompat.toBundle());
+            Pair[] pairs = sharedElements.toArray(new Pair[sharedElements.size()]);
+            @SuppressWarnings("unchecked")
+            Bundle opts = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairs).toBundle();
+            ActivityCompat.startActivity(this, BookPlayActivity.newIntent(this, prefs.getCurrentBookId()), opts);
         }
+    }
+
+    @Override
+    public void onActivityReenter(int requestCode, Intent data) {
+        super.onActivityReenter(requestCode, data);
+
+        supportPostponeEnterTransition();
+        recyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                recyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
+                // TODO: hack! not sure why, but requesting a layout pass is necessary in order to fix re-mapping + scrolling glitches!
+                //recyclerView.requestLayout();
+                supportStartPostponedEnterTransition();
+                return true;
+            }
+        });
     }
 
 

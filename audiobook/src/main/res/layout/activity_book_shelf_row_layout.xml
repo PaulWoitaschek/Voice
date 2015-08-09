@@ -9,7 +9,7 @@
     android:orientation="vertical">
 
     <de.ph1b.audiobook.uitools.SquareImageView
-        android:id="@+id/edit_book"
+        android:id="@+id/coverView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

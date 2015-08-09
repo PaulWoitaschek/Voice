@@ -18,6 +18,7 @@ public class Book implements Comparable<Book> {
 
     public static final String TAG = Book.class.getSimpleName();
     public static final long ID_UNKNOWN = -1;
+    private static final String COVER_TRANSITION_PREFIX = "bookCoverTransition_";
     @NonNull
     private final String root;
     @NonNull
@@ -62,7 +63,6 @@ public class Book implements Comparable<Book> {
         this.useCoverReplacement = that.useCoverReplacement;
     }
 
-
     public Book(@NonNull String root,
                 @NonNull String name,
                 @Nullable String author,
@@ -88,6 +88,16 @@ public class Book implements Comparable<Book> {
         this.packageName = c.getPackageName();
         setPosition(0, currentMediaPath);
         this.currentMediaPath = currentMediaPath;
+    }
+
+    /**
+     * Gets the transition name for the cover transition.
+     *
+     * @return The transition name
+     */
+    @NonNull
+    public String getCoverTransitionName() {
+        return COVER_TRANSITION_PREFIX + id;
     }
 
     public ContentValues getContentValues() {

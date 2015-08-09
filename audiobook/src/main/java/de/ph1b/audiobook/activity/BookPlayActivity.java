@@ -11,7 +11,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
@@ -31,6 +30,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -86,7 +86,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ActivityCompat.invalidateOptionsMenu(BookPlayActivity.this);
+                    supportInvalidateOptionsMenu();
                     if (MediaPlayerController.sleepTimerActive) {
                         int minutes = prefs.getSleepTime();
                         String message = getString(R.string.sleep_timer_started) + " " + minutes + " " +
@@ -311,8 +311,19 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         // (Cover)
         File coverFile = book.getCoverFile();
         final Drawable coverReplacement = new CoverReplacement(book.getName(), this);
+        supportPostponeEnterTransition();
         if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-            Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(coverView);
+            Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(coverView, new Callback() {
+                @Override
+                public void onSuccess() {
+                    supportStartPostponedEnterTransition();
+                }
+
+                @Override
+                public void onError() {
+                    supportStartPostponedEnterTransition();
+                }
+            });
         } else {
             // this hack is necessary because otherwise the transition will fail
             coverView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -320,6 +331,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                 public boolean onPreDraw() {
                     coverView.setImageBitmap(ImageHelper.drawableToBitmap(coverReplacement, coverView.getWidth(), coverView.getHeight()));
                     coverView.getViewTreeObserver().removeOnPreDrawListener(this);
+                    supportStartPostponedEnterTransition();
                     return true;
                 }
             });
@@ -342,9 +354,9 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             enterTransition.excludeTarget(R.id.toolbar, true);
             enterTransition.excludeTarget(android.R.id.statusBarBackground, true);
             enterTransition.excludeTarget(android.R.id.navigationBarBackground, true);
-            //  getWindow().setReturnTransition(null);
+            getWindow().setReturnTransition(null);
         }
-        ViewCompat.setTransitionName(coverView, book.getName());
+        ViewCompat.setTransitionName(coverView, book.getCoverTransitionName());
     }
 
     @Override
@@ -454,7 +466,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                         BookmarkDialogFragment.TAG);
                 return true;
             case android.R.id.home:
-                ActivityCompat.finishAfterTransition(this);
+                supportFinishAfterTransition();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -480,7 +492,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             listener.onBookContentChanged(book);
         }
 
-        ActivityCompat.invalidateOptionsMenu(this);
+        supportInvalidateOptionsMenu();
 
         COMMUNICATION.addBookCommunicationListener(listener);
 
