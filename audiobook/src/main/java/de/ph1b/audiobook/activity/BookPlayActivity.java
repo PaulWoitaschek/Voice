@@ -363,7 +363,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.play:
-            case R.id.book_cover:
+            case R.id.cover_frame:
                 controller.playPause();
                 break;
             case R.id.rewind:

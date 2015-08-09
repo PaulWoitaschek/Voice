@@ -78,9 +78,7 @@
     <style name="timer_text_view_style">
         <item name="android:layout_width">60dp</item>
         <item name="android:layout_height">60dp</item>
-        <item name="android:layout_alignParentEnd" tools:ignore="NewApi">true</item>
-        <item name="android:layout_alignParentRight">true</item>
-        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_gravity">right|end</item>
         <item name="android:layout_margin">8dp</item>
         <item name="android:background">@drawable/current_playing_circle_background</item>
         <item name="android:gravity">center</item>

@@ -14,28 +14,11 @@
 
         <include layout="@layout/toolbar" />
 
-        <RelativeLayout
+        <include
+            layout="@layout/include_cover"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
-
-            <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/book_cover"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/cover"
-                android:onClick="onClick"
-                android:scaleType="centerCrop"
-                tools:ignore="UnusedAttribute" />
-
-            <TextView
-                android:id="@+id/timerView"
-                style="@style/timer_text_view_style"
-                tools:text="00:34" />
-
-        </RelativeLayout>
+            android:layout_weight="1" />
 
         <Spinner
             android:id="@+id/book_spinner"
