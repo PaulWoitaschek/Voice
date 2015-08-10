@@ -18,7 +18,6 @@
     <string name="play">Spustit</string>
     <string name="pause">Pozastavit</string>
     <string name="stop">Zastavit</string>
-    <string name="sleep_timer_started">Časovač vypnutí: </string>
     <!--NoExternalStorage-->
   <string name="no_external_storage">Externí úložiště není dostupné. Ověřte prosím, že je
         připojeno a není používáno vaším počítačem.</string>
@@ -27,7 +26,6 @@
     <string name="dialog_confirm">Nastavit</string>
     <string name="dialog_cancel">Ukončit</string>
     <!--EditBookDialog-->
-    <string name="book_add_empty_title">Přidat titul</string>
     <string name="content_previous_cover">Vybere předchozí obal</string>
     <string name="content_next_cover">Vybere další obal</string>
     <string name="content_cover">Zobrazí obaly pro vybrání</string>

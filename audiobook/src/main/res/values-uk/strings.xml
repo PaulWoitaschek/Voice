@@ -18,7 +18,6 @@
     <string name="play">Програвати</string>
     <string name="pause">Пауза</string>
     <string name="stop">Зупинити</string>
-    <string name="sleep_timer_started">Таймер сну: </string>
     <!-- NoExternalStorage -->
     <string name="no_external_storage">Картка пам’яті не знайдена. Будь ласка, переконайтеся, що вона встановлена та ваш пристрій не з’єднаний із комп’ютером кабелем.</string>
     <string name="no_external_storage_action_bar_title">Картка пам’яті</string>
@@ -26,7 +25,6 @@
     <string name="dialog_confirm">Встановити</string>
     <string name="dialog_cancel">Відмінити</string>
     <!-- EditBookDialog -->
-    <string name="book_add_empty_title">Додати заголовок</string>
     <string name="content_previous_cover">Обрати попередню обкладинку</string>
     <string name="content_next_cover">Обрати наступну обкладинку</string>
     <string name="content_cover">Показати обрану обкладинку</string>

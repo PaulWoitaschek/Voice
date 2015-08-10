@@ -22,8 +22,7 @@ public class FolderChooserAdapter extends BaseAdapter {
     private final List<File> data;
     private final int mode;
 
-    public FolderChooserAdapter(final @NonNull Context c, final @NonNull List<File> data,
-                                final int mode) {
+    public FolderChooserAdapter(@NonNull Context c, @NonNull List<File> data, int mode) {
         this.c = c;
         this.data = data;
 
@@ -54,9 +53,8 @@ public class FolderChooserAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, final ViewGroup parent) {
         final ViewHolder viewHolder;
         if (convertView == null) {
-            LayoutInflater vi = (LayoutInflater) c.getSystemService(
-                    Context.LAYOUT_INFLATER_SERVICE);
-            convertView = vi.inflate(R.layout.activity_folder_chooser_adapter_row_layout, parent,
+            LayoutInflater li = LayoutInflater.from(c);
+            convertView = li.inflate(R.layout.activity_folder_chooser_adapter_row_layout, parent,
                     false);
 
             viewHolder = new ViewHolder();
@@ -78,14 +76,10 @@ public class FolderChooserAdapter extends BaseAdapter {
             viewHolder.textView.setEnabled(isDirectory);
         }
 
-        Drawable icon;
-        if (isDirectory) {
-            //noinspection deprecation
-            icon = c.getResources().getDrawable(R.drawable.ic_folder_white_48dp);
-        } else {
-            //noinspection deprecation
-            icon = c.getResources().getDrawable(R.drawable.ic_audiotrack_white_48dp);
-        }
+        //noinspection deprecation
+        Drawable icon = c.getResources().getDrawable(isDirectory ?
+                R.drawable.ic_folder_white_48dp :
+                R.drawable.ic_audiotrack_white_48dp);
         viewHolder.imageView.setImageDrawable(icon);
 
         return convertView;

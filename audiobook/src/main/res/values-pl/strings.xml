@@ -20,7 +20,6 @@
     <string name="play">Odtwórz</string>
     <string name="pause">Pauza</string>
     <string name="stop">Zatrzymaj</string>
-    <string name="sleep_timer_started">Zatrzymaj za: </string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Pamięć Zewnętrzna jest niedostępna. Upewnij się, że jest podłączona i zamontowana w twoim urządzeniu.</string>
     <string name="no_external_storage_action_bar_title">Pamięć Zewnętrzna</string>
@@ -28,7 +27,6 @@
     <string name="dialog_confirm">Wybierz</string>
     <string name="dialog_cancel">Anuluj</string>
     <!--EditBookDialog-->
-    <string name="book_add_empty_title">Dodaj tytuł</string>
     <string name="content_previous_cover">Wybiera poprzednią okładkę</string>
     <string name="content_next_cover">Wybiera następną okładkę</string>
     <string name="content_cover">Pokazuje okładki do wyboru</string>

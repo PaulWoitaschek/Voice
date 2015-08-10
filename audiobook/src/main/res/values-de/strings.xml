@@ -18,7 +18,6 @@
     <string name="play">Abspielen</string>
     <string name="pause">Pause</string>
     <string name="stop">Stop</string>
-    <string name="sleep_timer_started">Einschlaftimer: </string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Der externe Speicher ist nicht verfügbar. Prüfen Sie, ob Ihre Speicherkarte eingesteckt und nicht mit dem Computer verbunden ist.</string>
     <string name="no_external_storage_action_bar_title">Externer Speicher</string>
@@ -26,7 +25,6 @@
     <string name="dialog_confirm">Okay</string>
     <string name="dialog_cancel">Abbrechen</string>
     <!--EditBookDialog-->
-    <string name="book_add_empty_title">Geben Sie einen Titel ein</string>
     <string name="content_previous_cover">Wählt voriges Cover</string>
     <string name="content_next_cover">Wählt nächstes Cover</string>
     <string name="content_cover">Zeigt aktuelles Cover an</string>

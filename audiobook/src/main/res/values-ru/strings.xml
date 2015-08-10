@@ -18,7 +18,6 @@
     <string name="play">Воспроизвести</string>
     <string name="pause">Пауза</string>
     <string name="stop">Остановить</string>
-    <string name="sleep_timer_started">Таймер сна:</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Карта памяти недоступна. Пожалуйста убедитесь, что она установлена и вы не соединены кабелем с компьютером.</string>
     <string name="no_external_storage_action_bar_title">Карта памяти</string>
@@ -26,7 +25,6 @@
     <string name="dialog_confirm">Установить</string>
     <string name="dialog_cancel">Отмена</string>
     <!--EditBookDialog-->
-    <string name="book_add_empty_title">Добавить название</string>
     <string name="content_previous_cover">Выбрать предыдущую обложку</string>
     <string name="content_next_cover">Выбрать следующую обложку</string>
     <string name="content_cover">Показать выбранную обложку</string>

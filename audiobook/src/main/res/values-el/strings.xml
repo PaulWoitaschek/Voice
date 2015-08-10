@@ -19,7 +19,6 @@
     <string name="play">Αναπαραγωγή</string>
     <string name="pause">Παύση</string>
     <string name="stop">Στοπ</string>
-    <string name="sleep_timer_started">Χρονοδιακόπτης ύπνου: </string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Τα εξωτερικά μέσα αποθήκευσης δεν είναι διαθέσιμα. Παρακαλούμε βεβαιωθείτε ότι είναι συνδεδεμένα και όχι τοποθετημένα στον υπολογιστή σας.</string>
     <string name="no_external_storage_action_bar_title">Εξωτερικά μέσα αποθήκευσης</string>
@@ -27,7 +26,6 @@
     <string name="dialog_confirm">Ορισμός</string>
     <string name="dialog_cancel">Ακύρωση</string>
     <!--EditBookDialog-->
-    <string name="book_add_empty_title">Προσθήκη τίτλου</string>
     <string name="content_previous_cover">Επιλέγει τα προηγούμενα εξώφυλλα</string>
     <string name="content_next_cover">Επιλέγει το επόμενο εξώφυλλο</string>
     <string name="content_cover">Εμφανίζει εξώφυλλο για να επιλέξετε</string>
