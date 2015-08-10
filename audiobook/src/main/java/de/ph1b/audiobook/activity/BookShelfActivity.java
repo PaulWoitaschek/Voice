@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.SharedElementCallback;
 import android.support.v4.util.Pair;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -314,8 +315,10 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
             BookShelfAdapter.ViewHolder viewHolder = (BookShelfAdapter.ViewHolder) recyclerView.findViewHolderForItemId(currentBook.getId());
             if (viewHolder != null) {
-                sharedElements.add(new Pair<View, String>(viewHolder.coverView, currentBook.getCoverTransitionName()));
+                sharedElements.add(new Pair<View, String>(viewHolder.coverView, ViewCompat.getTransitionName(viewHolder.coverView)));
             }
+            sharedElements.add(new Pair<View, String>(fab, ViewCompat.getTransitionName(fab)));
+
             Pair[] pairs = sharedElements.toArray(new Pair[sharedElements.size()]);
             @SuppressWarnings("unchecked")
             Bundle opts = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairs).toBundle();
