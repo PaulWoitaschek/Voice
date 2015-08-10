@@ -8,9 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
@@ -65,8 +62,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     private static final String BOOK_ID = "bookId";
     private static final Communication COMMUNICATION = Communication.getInstance();
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
-    @Nullable
-    private Snackbar snackbar;
     private TextView playedTimeView;
     private SeekBar seekBar;
     private Spinner bookSpinner;
@@ -75,7 +70,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     private ServiceController controller;
     private long bookId;
     private DataBaseHelper db;
-    private CoordinatorLayout coordinatorLayout;
     private TextView timerCountdownView;
     private CountDownTimer countDownTimer;
 
@@ -87,21 +81,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                 @Override
                 public void run() {
                     supportInvalidateOptionsMenu();
-                    if (MediaPlayerController.sleepTimerActive) {
-                        int minutes = prefs.getSleepTime();
-                        String message = getString(R.string.sleep_timer_started) + " " + minutes + " " +
-                                getString(R.string.minutes);
-                        snackbar = Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).setAction(
-                                R.string.stop, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        controller.toggleSleepSand();
-                                    }
-                                });
-                        ThemeUtil.theme(snackbar);
-                        snackbar.show();
-                    }
-
                     initializeTimerCountdown();
                 }
             });
@@ -205,7 +184,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
 
 
         //init buttons
-        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator);
         seekBar = (SeekBar) findViewById(R.id.seekBar);
         FloatingActionButton playButton = (FloatingActionButton) findViewById(R.id.play);
         View previous_button = findViewById(R.id.previous);
@@ -446,9 +424,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                 return true;
             case R.id.action_sleep:
                 controller.toggleSleepSand();
-                if (MediaPlayerController.sleepTimerActive && snackbar != null) {
-                    snackbar.dismiss();
-                }
                 if (prefs.setBookmarkOnSleepTimer() && !MediaPlayerController.sleepTimerActive) {
                     String date = DateUtils.formatDateTime(this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE |
                             DateUtils.FORMAT_SHOW_TIME |

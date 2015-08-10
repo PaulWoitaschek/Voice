@@ -12,13 +12,11 @@ import android.support.annotation.AnyRes;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import java.lang.reflect.Field;
 
@@ -37,23 +35,6 @@ public class ThemeUtil {
     private static void tint(Drawable drawable, @ColorInt int color) {
         Drawable wrapped = DrawableCompat.wrap(drawable.mutate());
         DrawableCompat.setTint(wrapped, color);
-    }
-
-    public static void theme(@NonNull Snackbar bar) {
-        Context c = bar.getView().getContext();
-        Resources r = c.getResources();
-        TextView textView = (TextView) bar.getView().findViewById(android.support.design.R.id.snackbar_text);
-        if (textView != null) {
-            int theme = ThemeUtil.getTheme(c);
-            switch (theme) {
-                case R.style.DarkTheme:
-                    bar.getView().setBackgroundColor(r.getColor(R.color.background_material_light));
-                    textView.setTextColor(r.getColor(R.color.abc_primary_text_material_light));
-                    break;
-                default:
-                    break;
-            }
-        }
     }
 
     public static int getTheme(@NonNull Context c) {
