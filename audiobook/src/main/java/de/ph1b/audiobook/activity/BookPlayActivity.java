@@ -332,10 +332,10 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             enterTransition.excludeTarget(R.id.toolbar, true);
             enterTransition.excludeTarget(android.R.id.statusBarBackground, true);
             enterTransition.excludeTarget(android.R.id.navigationBarBackground, true);
-            getWindow().setReturnTransition(null);
         }
         ViewCompat.setTransitionName(coverView, book.getCoverTransitionName());
     }
+
 
     @Override
     public void onClick(View view) {
