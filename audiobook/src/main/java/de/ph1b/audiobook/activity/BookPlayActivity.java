@@ -27,7 +27,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -289,19 +288,8 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         // (Cover)
         File coverFile = book.getCoverFile();
         final Drawable coverReplacement = new CoverReplacement(book.getName(), this);
-        supportPostponeEnterTransition();
         if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-            Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(coverView, new Callback() {
-                @Override
-                public void onSuccess() {
-                    supportStartPostponedEnterTransition();
-                }
-
-                @Override
-                public void onError() {
-                    supportStartPostponedEnterTransition();
-                }
-            });
+            Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(coverView);
         } else {
             // this hack is necessary because otherwise the transition will fail
             coverView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -309,7 +297,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                 public boolean onPreDraw() {
                     coverView.setImageBitmap(ImageHelper.drawableToBitmap(coverReplacement, coverView.getWidth(), coverView.getHeight()));
                     coverView.getViewTreeObserver().removeOnPreDrawListener(this);
-                    supportStartPostponedEnterTransition();
                     return true;
                 }
             });
