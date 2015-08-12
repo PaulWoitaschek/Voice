@@ -56,11 +56,6 @@ public class EditBookTitleDialogFragment extends BaseDialogFragment {
         this.listener = listener;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     public interface OnTextChanged {
         void onTitleChanged(@NonNull String newTitle);
     }

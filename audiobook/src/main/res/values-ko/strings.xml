@@ -20,7 +20,6 @@
     <string name="play">재생</string>
     <string name="pause">정지</string>
     <string name="stop">닫기</string>
-    <string name="sleep_timer_started">취침예약</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">외부저장공간을 찾지 못했습니다. 연결/인식상태를 확인해주세요.</string>
     <string name="no_external_storage_action_bar_title">외부저장공간</string>
@@ -28,7 +27,6 @@
     <string name="dialog_confirm">결정</string>
     <string name="dialog_cancel">취소</string>
     <!--EditBookDialog-->
-    <string name="book_add_empty_title">제목 정하기</string>
     <string name="content_previous_cover">전 표지 고르기</string>
     <string name="content_next_cover">다음표지 고르기</string>
     <string name="content_cover">책표지 보여주기</string>

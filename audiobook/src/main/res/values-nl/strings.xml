@@ -18,7 +18,6 @@
     <string name="play">Speel</string>
     <string name="pause">Pauzeer</string>
     <string name="stop">Stop</string>
-    <string name="sleep_timer_started">Slaap timer:</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Externe opslag is niet beschikbaar. Controleer of deze is aangesloten en niet in gebruik is door uw PC.</string>
     <string name="no_external_storage_action_bar_title">Externe opslag</string>
@@ -26,7 +25,6 @@
     <string name="dialog_confirm">Opslaan</string>
     <string name="dialog_cancel">Annuleer</string>
     <!--EditBookDialog-->
-    <string name="book_add_empty_title">Voeg titel toe</string>
     <string name="content_previous_cover">Kies vorige cover</string>
     <string name="content_next_cover">Kies volgende cover</string>
     <string name="content_cover">Toont cover om te kiezen</string>

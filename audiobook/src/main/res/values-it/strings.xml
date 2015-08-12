@@ -19,7 +19,6 @@
     <string name="play">Play</string>
     <string name="pause">Pausa</string>
     <string name="stop">Stop</string>
-    <string name="sleep_timer_started">Timer standby:</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Memoria Esterna non disponibile. Per favore assicurarsi che sia collegata e non montata sul computer.</string>
     <string name="no_external_storage_action_bar_title">Memoria Esterna</string>
@@ -27,7 +26,6 @@
     <string name="dialog_confirm">Imposta</string>
     <string name="dialog_cancel">Annulla</string>
     <!--EditBookDialog-->
-    <string name="book_add_empty_title">Aggiungi un titolo</string>
     <string name="content_previous_cover">Sceglie la copertina precedente</string>
     <string name="content_next_cover">Sceglie la copertina successiva</string>
     <string name="content_cover">Mostra la copertina da scegliere</string>

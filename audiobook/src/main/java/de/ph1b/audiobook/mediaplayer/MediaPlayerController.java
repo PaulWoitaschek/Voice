@@ -33,6 +33,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
 
     private static final String TAG = MediaPlayerController.class.getSimpleName();
     public static volatile boolean sleepTimerActive = false;
+    public static volatile long sleepTimerStartedAt = 0;
     private static volatile PlayState playState = PlayState.STOPPED;
     private final Context c;
     private final ReentrantLock lock = new ReentrantLock();
@@ -329,6 +330,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                 L.i(TAG, "sleepSand is active. cancelling now");
                 sleepSand.cancel(false);
                 sleepTimerActive = false;
+                sleepTimerStartedAt = 0;
             } else {
                 L.i(TAG, "preparing new sleep sand");
                 final int minutes = prefs.getSleepTime();
@@ -341,11 +343,13 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                             pause(true);
                             sleepTimerActive = false;
                             communication.sleepStateChanged();
+                            sleepTimerStartedAt = 0;
                         } finally {
                             lock.unlock();
                         }
                     }
                 }, minutes, TimeUnit.MINUTES);
+                sleepTimerStartedAt = System.currentTimeMillis();
             }
             communication.sleepStateChanged();
         } finally {

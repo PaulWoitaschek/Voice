@@ -20,7 +20,6 @@
     <string name="play">Lire</string>
     <string name="pause">Pause</string>
     <string name="stop">Arrêt</string>
-    <string name="sleep_timer_started">Minuteur:</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Le stockage externe n\'est pas disponible. Veuillez vous assurez qu\'il est connecté et n\'est pas monté sur votre ordinateur.</string>
     <string name="no_external_storage_action_bar_title">Stockage externe</string>
@@ -28,7 +27,6 @@
     <string name="dialog_confirm">Définir</string>
     <string name="dialog_cancel">Annuler</string>
     <!--EditBookDialog-->
-    <string name="book_add_empty_title">Ajouter un titre</string>
     <string name="content_previous_cover">Choisis la couverture précédente</string>
     <string name="content_next_cover">Choisis la couverture suivante</string>
     <string name="content_cover">Montre la couverture à choisir</string>

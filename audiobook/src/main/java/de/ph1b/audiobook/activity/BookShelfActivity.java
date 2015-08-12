@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.ph1b.audiobook.R;
@@ -90,7 +91,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
         @Override
         public void onBookSetChanged(@NonNull final List<Book> activeBooks) {
-            L.v(TAG, "onBookSetChanged called");
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -118,8 +118,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         }
     };
     private DataBaseHelper db;
-    @Nullable
-    private View lastTransitionedView;
 
     public static Intent malformedFileIntent(Context c, String malformedFile) {
         Intent intent = new Intent(c, BookShelfActivity.class);
@@ -227,7 +225,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
     private void checkVisibilities() {
         final boolean hideRecycler = adapter.getItemCount() == 0 && BookAdder.scannerActive;
-        L.v(TAG, "checkVisibilities hidesRecycler=" + hideRecycler);
         if (hideRecycler) {
             recyclerReplacementView.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
@@ -277,21 +274,23 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void startBookPlay() {
+        L.i(TAG, "startBookPlay");
         Book currentBook = db.getBook(prefs.getCurrentBookId());
         if (currentBook != null) {
-            @SuppressWarnings("unchecked")
-            ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this);
+            List<Pair<View, String>> sharedElements = new ArrayList<>(2);
 
             BookShelfAdapter.ViewHolder viewHolder = (BookShelfAdapter.ViewHolder) recyclerView.findViewHolderForItemId(currentBook.getId());
             if (viewHolder != null) {
-                ViewCompat.setTransitionName(viewHolder.coverView, getString(R.string.transition_cover));
-                lastTransitionedView = viewHolder.coverView;
-                optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, viewHolder.coverView, getString(R.string.transition_cover));
+                sharedElements.add(new Pair<View, String>(viewHolder.coverView, ViewCompat.getTransitionName(viewHolder.coverView)));
             }
-            ActivityCompat.startActivity(this, BookPlayActivity.newIntent(this, prefs.getCurrentBookId()), optionsCompat.toBundle());
+            sharedElements.add(new Pair<View, String>(fab, ViewCompat.getTransitionName(fab)));
+
+            Pair[] pairs = sharedElements.toArray(new Pair[sharedElements.size()]);
+            @SuppressWarnings("unchecked")
+            Bundle opts = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairs).toBundle();
+            ActivityCompat.startActivity(this, BookPlayActivity.newIntent(this, prefs.getCurrentBookId()), opts);
         }
     }
-
 
     @Override
     public void onClick(View view) {
@@ -313,8 +312,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onCoverClicked(int position) {
-        Book book = adapter.getItem(position);
-        prefs.setCurrentBookIdAndInform(book.getId());
+        prefs.setCurrentBookIdAndInform(adapter.getItemId(position));
         startBookPlay();
     }
 

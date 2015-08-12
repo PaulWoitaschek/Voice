@@ -18,7 +18,6 @@
     <string name="play">Play</string>
     <string name="pause">Pause</string>
     <string name="stop">Stop</string>
-    <string name="sleep_timer_started">Sleep timer: </string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">External Storage is not available. Please make sure it is connected and not mounted in your computer.</string>
     <string name="no_external_storage_action_bar_title">External Storage</string>
@@ -26,7 +25,6 @@
     <string name="dialog_confirm">Set</string>
     <string name="dialog_cancel">Cancel</string>
     <!--EditBookDialog-->
-    <string name="book_add_empty_title">Add a title</string>
     <string name="content_previous_cover">Chooses previous cover</string>
     <string name="content_next_cover">Chooses next cover</string>
     <string name="content_cover">Shows cover to choose</string>

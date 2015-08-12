@@ -6,12 +6,10 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
@@ -26,7 +24,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -62,19 +59,19 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
 
     private static final String TAG = BookPlayActivity.class.getSimpleName();
     private static final String BOOK_ID = "bookId";
-    private static final Communication communication = Communication.getInstance();
+    private static final Communication COMMUNICATION = Communication.getInstance();
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
-    @Nullable
-    private Snackbar snackbar;
     private TextView playedTimeView;
     private SeekBar seekBar;
-    private volatile Spinner bookSpinner;
+    private Spinner bookSpinner;
     private TextView maxTimeView;
     private PrefsManager prefs;
     private ServiceController controller;
     private long bookId;
     private DataBaseHelper db;
-    private CoordinatorLayout coordinatorLayout;
+    private TextView timerCountdownView;
+    private CountDownTimer countDownTimer;
+
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
 
         @Override
@@ -82,21 +79,8 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ActivityCompat.invalidateOptionsMenu(BookPlayActivity.this);
-                    if (MediaPlayerController.sleepTimerActive) {
-                        int minutes = prefs.getSleepTime();
-                        String message = getString(R.string.sleep_timer_started) + " " + minutes + " " +
-                                getString(R.string.minutes);
-                        snackbar = Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).setAction(
-                                R.string.stop, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        controller.toggleSleepSand();
-                                    }
-                                });
-                        ThemeUtil.theme(snackbar);
-                        snackbar.show();
-                    }
+                    supportInvalidateOptionsMenu();
+                    initializeTimerCountdown();
                 }
             });
         }
@@ -143,7 +127,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                 }
             });
         }
-
     };
 
     public static Intent newIntent(Context c, long bookId) {
@@ -200,7 +183,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
 
 
         //init buttons
-        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator);
         seekBar = (SeekBar) findViewById(R.id.seekBar);
         FloatingActionButton playButton = (FloatingActionButton) findViewById(R.id.play);
         View previous_button = findViewById(R.id.previous);
@@ -209,6 +191,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         final ImageView coverView = (ImageView) findViewById(R.id.book_cover);
         maxTimeView = (TextView) findViewById(R.id.maxTime);
         bookSpinner = (Spinner) findViewById(R.id.book_spinner);
+        timerCountdownView = (TextView) findViewById(R.id.timerView);
 
         //setup buttons
         playButton.setIconDrawable(playPauseDrawable);
@@ -261,37 +244,27 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             chaptersAsStrings.add(chapterName);
         }
 
-        SpinnerAdapter adapter = new ArrayAdapter<String>(this,
-                R.layout.activity_book_play_spinner, chaptersAsStrings) {
+        ArrayAdapter adapter = new ArrayAdapter<String>(this,
+                R.layout.activity_book_play_spinner, R.id.spinnerTextItem, chaptersAsStrings) {
             @Override
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                final TextView textView = (TextView) super.getDropDownView(position, convertView,
-                        parent);
+                View view = super.getDropDownView(position, convertView, parent);
 
-                // this is necessary due to a bug in android causing the layout to be ignored.
-                // see: http://stackoverflow.com/questions/14139106/spinner-does-not-wrap-text-is-th
-                // is-an-android-bug
-                textView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        textView.setSingleLine(false);
-                    }
-                });
+                TextView textView = (TextView) view.findViewById(R.id.spinnerTextItem);
 
                 // highlights the selected item and un-highlights an item if it is not selected.
                 // default implementation uses a ViewHolder, so this is necessary.
                 if (position == bookSpinner.getSelectedItemPosition()) {
-                    textView.setBackgroundColor(getResources().getColor(ThemeUtil.getResourceId(
-                            BookPlayActivity.this, R.attr.colorAccent)));
+                    textView.setBackgroundResource(R.drawable.spinner_selected_background);
                     textView.setTextColor(getResources().getColor(R.color.abc_primary_text_material_dark));
                 } else {
-                    textView.setBackgroundColor(getResources().getColor(ThemeUtil.getResourceId(
-                            BookPlayActivity.this, android.R.attr.windowBackground)));
+                    textView.setBackgroundResource(ThemeUtil.getResourceId(BookPlayActivity.this,
+                            R.attr.selectableItemBackground));
                     textView.setTextColor(getResources().getColor(ThemeUtil.getResourceId(
                             BookPlayActivity.this, android.R.attr.textColorPrimary)));
                 }
 
-                return textView;
+                return view;
             }
         };
         bookSpinner.setAdapter(adapter);
@@ -340,20 +313,22 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             bookSpinner.setVisibility(View.VISIBLE);
         }
 
+        // transitions stuff
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Transition enterTransition = getWindow().getEnterTransition();
             enterTransition.excludeTarget(R.id.toolbar, true);
             enterTransition.excludeTarget(android.R.id.statusBarBackground, true);
             enterTransition.excludeTarget(android.R.id.navigationBarBackground, true);
-            getWindow().setReturnTransition(null);
         }
+        ViewCompat.setTransitionName(coverView, book.getCoverTransitionName());
     }
+
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.play:
-            case R.id.book_cover:
+            case R.id.cover_frame:
                 controller.playPause();
                 break;
             case R.id.rewind:
@@ -378,6 +353,32 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
 
     private void launchJumpToPositionDialog() {
         new JumpToPositionDialogFragment().show(getSupportFragmentManager(), JumpToPositionDialogFragment.TAG);
+    }
+
+    private void initializeTimerCountdown() {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+
+        if (MediaPlayerController.sleepTimerActive) {
+            long sleepTimerDuration = TimeUnit.MINUTES.toMillis(prefs.getSleepTime());
+            long timeElapsed = System.currentTimeMillis() - MediaPlayerController.sleepTimerStartedAt;
+            timerCountdownView.setVisibility(View.VISIBLE);
+            countDownTimer = new CountDownTimer(sleepTimerDuration - timeElapsed, 1000) {
+                @Override
+                public void onTick(long m) {
+                    timerCountdownView.setText(formatTime((int) m, (int) m));
+                }
+
+                @Override
+                public void onFinish() {
+                    timerCountdownView.setVisibility(View.GONE);
+                    L.i(TAG, "Countdown timer finished");
+                }
+            }.start();
+        } else {
+            timerCountdownView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -410,9 +411,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                 return true;
             case R.id.action_sleep:
                 controller.toggleSleepSand();
-                if (MediaPlayerController.sleepTimerActive && snackbar != null) {
-                    snackbar.dismiss();
-                }
                 if (prefs.setBookmarkOnSleepTimer() && !MediaPlayerController.sleepTimerActive) {
                     String date = DateUtils.formatDateTime(this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE |
                             DateUtils.FORMAT_SHOW_TIME |
@@ -430,7 +428,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                         BookmarkDialogFragment.TAG);
                 return true;
             case android.R.id.home:
-                ActivityCompat.finishAfterTransition(this);
+                supportFinishAfterTransition();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -456,15 +454,22 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             listener.onBookContentChanged(book);
         }
 
-        ActivityCompat.invalidateOptionsMenu(this);
+        supportInvalidateOptionsMenu();
 
-        communication.addBookCommunicationListener(listener);
+        COMMUNICATION.addBookCommunicationListener(listener);
+
+        // Sleep timer countdown view
+        initializeTimerCountdown();
     }
 
     @Override
     public void onStop() {
         super.onStop();
 
-        communication.removeBookCommunicationListener(listener);
+        COMMUNICATION.removeBookCommunicationListener(listener);
+
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
     }
 }

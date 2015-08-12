@@ -12,14 +12,11 @@ import android.support.annotation.AnyRes;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import java.lang.reflect.Field;
 
@@ -40,23 +37,6 @@ public class ThemeUtil {
         DrawableCompat.setTint(wrapped, color);
     }
 
-    public static void theme(@NonNull Snackbar bar) {
-        Context c = bar.getView().getContext();
-        Resources r = c.getResources();
-        TextView textView = (TextView) bar.getView().findViewById(android.support.design.R.id.snackbar_text);
-        if (textView != null) {
-            int theme = ThemeUtil.getTheme(c);
-            switch (theme) {
-                case R.style.DarkTheme:
-                    bar.getView().setBackgroundColor(r.getColor(R.color.background_material_light));
-                    textView.setTextColor(r.getColor(R.color.abc_primary_text_material_light));
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
     public static int getTheme(@NonNull Context c) {
         Resources r = c.getResources();
 
@@ -74,15 +54,12 @@ public class ThemeUtil {
 
     @AnyRes
     public static int getResourceId(@NonNull Context c, @AttrRes int attr) {
-        TypedValue typedValue = new TypedValue();
-        c.getTheme().resolveAttribute(attr, typedValue, true);
-        int[] attrArray = new int[]{attr};
-        TypedArray typedArray = c.obtainStyledAttributes(typedValue.data, attrArray);
-        int resId = typedArray.getResourceId(0, -1);
+        TypedArray ta = c.obtainStyledAttributes(new int[]{attr});
+        int resId = ta.getResourceId(0, -1);
+        ta.recycle();
         if (resId == -1) {
             throw new IllegalArgumentException("Resource with attr=" + attr + " not found");
         }
-        typedArray.recycle();
         return resId;
     }
 
