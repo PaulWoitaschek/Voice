@@ -4,8 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="56dp">
 
-    <ImageButton
+    <ImageView
         android:id="@+id/icon"
+        style="@style/TintedImageViewStyle"
         android:layout_width="56dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
