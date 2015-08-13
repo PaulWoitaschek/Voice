@@ -17,12 +17,6 @@ public class Chapter {
     private final String name;
     private final int duration;
 
-    public Chapter(Chapter that) {
-        this.path = that.path;
-        this.name = that.name;
-        this.duration = that.duration;
-    }
-
 
     public Chapter(@NonNull String path,
                    @NonNull String name,

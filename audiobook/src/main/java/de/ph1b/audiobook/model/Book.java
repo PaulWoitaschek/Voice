@@ -43,11 +43,7 @@ public class Book implements Comparable<Book> {
     public Book(Book that) {
         this.id = that.id;
         this.root = that.root;
-        List<Chapter> copyChapters = new ArrayList<>(that.chapters.size());
-        for (Chapter c : that.chapters) {
-            copyChapters.add(new Chapter(c));
-        }
-        this.chapters = copyChapters;
+        this.chapters = new ArrayList<>(that.chapters);
         this.type = Type.valueOf(that.type.name());
         this.packageName = that.packageName;
         List<Bookmark> copyBookmarks = new ArrayList<>(that.bookmarks.size());
