@@ -86,8 +86,10 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         boolean microMaxA116 = Build.MODEL.equals("Micromax A116") && Build.HARDWARE.equals("mt6589");
         boolean hmNote1w = Build.MODEL.equals("HM NOTE 1W") && Build.HARDWARE.equals("mt6592");
         boolean gSmartRomaR2 = Build.MODEL.equals("GSmart Roma R2") && Build.HARDWARE.equals("mt6572");
+        boolean lgE455 = Build.MODEL.equals("LG-E455") && Build.HARDWARE.equals("mt6575");
 
-        return greaterJellyBean && !me173x && !n903 && !microMaxA116 && !hmNote1w && !gSmartRomaR2;
+        return greaterJellyBean &&
+                !(me173x || n903 || microMaxA116 || hmNote1w || gSmartRomaR2 || lgE455);
     }
 
     public static PlayState getPlayState() {
