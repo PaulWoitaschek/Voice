@@ -58,7 +58,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private final ExecutorService playerExecutor = new ThreadPoolExecutor(
             1, 1, // single thread
-            5, TimeUnit.SECONDS,
+            2, TimeUnit.SECONDS,
             new LinkedBlockingQueue<Runnable>(3), // queue capacity
             new ThreadPoolExecutor.DiscardOldestPolicy()
     );
@@ -252,6 +252,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
+        L.v(TAG, "onStartCommand,intent=" + intent + ", flags=" + flags + ", startId=" + startId);
         if (intent != null && intent.getAction() != null) {
             playerExecutor.execute(new Runnable() {
                 @Override
