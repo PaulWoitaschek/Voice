@@ -27,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -50,6 +51,7 @@ import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
+import de.ph1b.audiobook.utils.TransitionPostponeHelper;
 
 /**
  * Created by Paul Woitaschek (woitaschek@posteo.de, paul-woitaschek.de) on 12.07.15.
@@ -163,6 +165,8 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         prefs = PrefsManager.getInstance(this);
         db = DataBaseHelper.getInstance(this);
         controller = new ServiceController(this);
+        // one for cover, one for fab
+        final TransitionPostponeHelper transitionPostponeHelper = new TransitionPostponeHelper(this, 2);
 
         setContentView(R.layout.activity_book_play);
 
@@ -184,7 +188,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
 
         //init buttons
         seekBar = (SeekBar) findViewById(R.id.seekBar);
-        FloatingActionButton playButton = (FloatingActionButton) findViewById(R.id.play);
+        final FloatingActionButton playButton = (FloatingActionButton) findViewById(R.id.play);
         View previous_button = findViewById(R.id.previous);
         View next_button = findViewById(R.id.next);
         playedTimeView = (TextView) findViewById(R.id.played);
@@ -195,6 +199,14 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
 
         //setup buttons
         playButton.setIconDrawable(playPauseDrawable);
+        playButton.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                transitionPostponeHelper.elementDone();
+                playButton.getViewTreeObserver().removeOnPreDrawListener(this);
+                return true;
+            }
+        });
         ThemeUtil.theme(seekBar);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -289,7 +301,17 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         File coverFile = book.getCoverFile();
         final Drawable coverReplacement = new CoverReplacement(book.getName(), this);
         if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-            Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(coverView);
+            Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(coverView, new Callback() {
+                @Override
+                public void onSuccess() {
+                    transitionPostponeHelper.elementDone();
+                }
+
+                @Override
+                public void onError() {
+                    transitionPostponeHelper.elementDone();
+                }
+            });
         } else {
             // this hack is necessary because otherwise the transition will fail
             coverView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -297,6 +319,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                 public boolean onPreDraw() {
                     coverView.setImageBitmap(ImageHelper.drawableToBitmap(coverReplacement, coverView.getWidth(), coverView.getHeight()));
                     coverView.getViewTreeObserver().removeOnPreDrawListener(this);
+                    transitionPostponeHelper.elementDone();
                     return true;
                 }
             });
