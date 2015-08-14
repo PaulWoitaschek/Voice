@@ -343,7 +343,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             enterTransition.excludeTarget(android.R.id.statusBarBackground, true);
             enterTransition.excludeTarget(android.R.id.navigationBarBackground, true);
         }
-        ViewCompat.setTransitionName(coverView, book.getCoverTransitionName());
+        ViewCompat.setTransitionName(coverView, book.getCoverFile().getAbsolutePath());
     }
 
 
@@ -451,6 +451,9 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                         BookmarkDialogFragment.TAG);
                 return true;
             case android.R.id.home:
+                // set result ok so the activity that started the transition will receive its
+                // onActivityReenter
+                setResult(RESULT_OK);
                 supportFinishAfterTransition();
                 return true;
             default:
@@ -483,6 +486,14 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
 
         // Sleep timer countdown view
         initializeTimerCountdown();
+    }
+
+    @Override
+    public void onBackPressed() {
+        // set result ok so the activity that started the transition will receive its
+        // onActivityReenter
+        setResult(RESULT_OK);
+        super.onBackPressed();
     }
 
     @Override
