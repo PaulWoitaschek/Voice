@@ -229,7 +229,8 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     public void onActivityReenter(int resultCode, Intent data) {
         super.onActivityReenter(resultCode, data);
 
-        final TransitionPostponeHelper postponeHelper = new TransitionPostponeHelper(this, 2);
+        final TransitionPostponeHelper postponeHelper = new TransitionPostponeHelper(this);
+        postponeHelper.startPostponing(2);
         fab.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {

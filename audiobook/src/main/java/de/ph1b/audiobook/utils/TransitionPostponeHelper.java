@@ -14,13 +14,17 @@ public class TransitionPostponeHelper {
     private int postponeCount;
 
     /**
-     * @param activity      The activity to be postponed
+     * @param activity The activity to be postponed
+     */
+    public TransitionPostponeHelper(Activity activity) {
+        this.activity = activity;
+    }
+
+    /**
      * @param postponeCount The amount of items after which the postpone should be released.
      */
-    public TransitionPostponeHelper(Activity activity, int postponeCount) {
-        this.activity = activity;
+    public synchronized void startPostponing(int postponeCount) {
         this.postponeCount = postponeCount;
-
         ActivityCompat.postponeEnterTransition(activity);
     }
 
@@ -29,6 +33,10 @@ public class TransitionPostponeHelper {
      * postponed transition will start.
      */
     public synchronized void elementDone() {
+        if (postponeCount == 0) {
+            throw new IllegalStateException("Must not call this when the the postponing is already" +
+                    " done");
+        }
         postponeCount--;
         if (postponeCount == 0) {
             ActivityCompat.startPostponedEnterTransition(activity);

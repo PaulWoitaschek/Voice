@@ -166,7 +166,8 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         db = DataBaseHelper.getInstance(this);
         controller = new ServiceController(this);
         // one for cover, one for fab
-        final TransitionPostponeHelper transitionPostponeHelper = new TransitionPostponeHelper(this, 2);
+        final TransitionPostponeHelper transitionPostponeHelper = new TransitionPostponeHelper(this);
+        transitionPostponeHelper.startPostponing(2);
 
         setContentView(R.layout.activity_book_play);
 
@@ -343,7 +344,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             enterTransition.excludeTarget(android.R.id.statusBarBackground, true);
             enterTransition.excludeTarget(android.R.id.navigationBarBackground, true);
         }
-        ViewCompat.setTransitionName(coverView, book.getCoverFile().getAbsolutePath());
+        ViewCompat.setTransitionName(coverView, book.getCoverTransitionName());
     }
 
 
