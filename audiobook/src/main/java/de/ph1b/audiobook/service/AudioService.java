@@ -208,7 +208,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
         MediaPlayerController.setPlayState(MediaPlayerController.PlayState.STOPPED);
 
-        controller = new MediaPlayerController(this);
+        controller = MediaPlayerController.getInstance(this);
 
         communication.addBookCommunicationListener(listener);
 

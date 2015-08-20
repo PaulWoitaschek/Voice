@@ -35,6 +35,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     public static volatile boolean sleepTimerActive = false;
     public static volatile long sleepTimerStartedAt = 0;
     private static volatile PlayState playState = PlayState.STOPPED;
+    private static MediaPlayerController INSTANCE;
     private final Context c;
     private final ReentrantLock lock = new ReentrantLock();
     private final PrefsManager prefs;
@@ -51,23 +52,25 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     private ScheduledFuture updater = null;
     private volatile int prepareTries = 0;
 
-    public MediaPlayerController(@NonNull final Context c) {
-        lock.lock();
-        try {
-            this.c = c;
-            prefs = PrefsManager.getInstance(c);
-            db = DataBaseHelper.getInstance(c);
+    private MediaPlayerController(@NonNull final Context c) {
+        this.c = c;
+        prefs = PrefsManager.getInstance(c);
+        db = DataBaseHelper.getInstance(c);
 
-            if (canSetSpeed()) {
-                player = new CustomMediaPlayer();
-            } else {
-                player = new AndroidMediaPlayer();
-            }
-            state = State.IDLE;
-            setPlayState(PlayState.STOPPED);
-        } finally {
-            lock.unlock();
+        if (canSetSpeed()) {
+            player = new CustomMediaPlayer();
+        } else {
+            player = new AndroidMediaPlayer();
         }
+        state = State.IDLE;
+        setPlayState(PlayState.STOPPED);
+    }
+
+    public static synchronized MediaPlayerController getInstance(Context c) {
+        if (INSTANCE == null) {
+            INSTANCE = new MediaPlayerController(c);
+        }
+        return INSTANCE;
     }
 
     /**
