@@ -23,7 +23,7 @@ public class TransitionPostponeHelper {
     /**
      * @param postponeCount The amount of items after which the postpone should be released.
      */
-    public synchronized void startPostponing(int postponeCount) {
+    public synchronized void startPostponing(@SuppressWarnings("SameParameterValue") int postponeCount) {
         this.postponeCount = postponeCount;
         ActivityCompat.postponeEnterTransition(activity);
     }

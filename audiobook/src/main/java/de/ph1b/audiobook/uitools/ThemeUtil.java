@@ -26,7 +26,7 @@ public class ThemeUtil {
 
     public static void theme(@NonNull SeekBar seekBar) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            int colorAccent = seekBar.getResources().getColor(ThemeUtil.getResourceId(
+            @SuppressWarnings("deprecation") int colorAccent = seekBar.getResources().getColor(ThemeUtil.getResourceId(
                     seekBar.getContext(), R.attr.colorAccent));
             tint(seekBar.getProgressDrawable(), colorAccent);
         }
@@ -72,7 +72,7 @@ public class ThemeUtil {
                     try {
                         Field selectorWheelPaintField = numberPicker.getClass().getDeclaredField("mSelectorWheelPaint");
                         selectorWheelPaintField.setAccessible(true);
-                        int colorAccent = numberPicker.getResources().getColor(ThemeUtil.getResourceId(numberPicker.getContext(), R.attr.colorAccent));
+                        @SuppressWarnings("deprecation") int colorAccent = numberPicker.getResources().getColor(ThemeUtil.getResourceId(numberPicker.getContext(), R.attr.colorAccent));
                         ((Paint) selectorWheelPaintField.get(numberPicker)).setColor(colorAccent);
                         ((EditText) child).setTextColor(colorAccent);
                         numberPicker.invalidate();

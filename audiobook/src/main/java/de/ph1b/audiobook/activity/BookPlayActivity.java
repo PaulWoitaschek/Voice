@@ -269,10 +269,12 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                 // default implementation uses a ViewHolder, so this is necessary.
                 if (position == bookSpinner.getSelectedItemPosition()) {
                     textView.setBackgroundResource(R.drawable.spinner_selected_background);
+                    //noinspection deprecation
                     textView.setTextColor(getResources().getColor(R.color.abc_primary_text_material_dark));
                 } else {
                     textView.setBackgroundResource(ThemeUtil.getResourceId(BookPlayActivity.this,
                             R.attr.selectableItemBackground));
+                    //noinspection deprecation
                     textView.setTextColor(getResources().getColor(ThemeUtil.getResourceId(
                             BookPlayActivity.this, android.R.attr.textColorPrimary)));
                 }
