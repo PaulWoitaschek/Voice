@@ -4,8 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.os.StrictMode;
-import android.preference.PreferenceFragment;
-import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -32,12 +31,12 @@ public class BaseApplication extends Application {
         return application.refWatcher;
     }
 
-    public static void leakWatch(DialogFragment dialogFragment) {
-        getRefWatcher(dialogFragment.getActivity()).watch(dialogFragment);
+    public static void leakWatch(Fragment fragment) {
+        leakWatch(fragment.getActivity());
     }
 
-    public static void leakWatch(PreferenceFragment preferenceFragment) {
-        getRefWatcher(preferenceFragment.getActivity()).watch(preferenceFragment);
+    public static void leakWatch(android.app.Fragment fragment) {
+        leakWatch(fragment.getActivity());
     }
 
     public static void leakWatch(Activity activity) {
