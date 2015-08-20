@@ -18,7 +18,6 @@
     <string name="next_track">Traccia successiva</string>
     <string name="play">Play</string>
     <string name="pause">Pausa</string>
-    <string name="stop">Stop</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Memoria Esterna non disponibile. Per favore assicurarsi che sia collegata e non montata sul computer.</string>
     <string name="no_external_storage_action_bar_title">Memoria Esterna</string>
