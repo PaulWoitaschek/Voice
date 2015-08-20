@@ -234,6 +234,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         fab.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
+                fab.getViewTreeObserver().removeOnPreDrawListener(this);
                 postponeHelper.elementDone();
                 return true;
             }
