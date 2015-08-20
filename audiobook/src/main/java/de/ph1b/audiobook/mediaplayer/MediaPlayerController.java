@@ -30,12 +30,12 @@ import de.ph1b.audiobook.utils.PrefsManager;
 public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         MediaPlayerInterface.OnCompletionListener {
 
-
     private static final String TAG = MediaPlayerController.class.getSimpleName();
-    public static volatile boolean sleepTimerActive = false;
-    public static volatile long sleepTimerStartedAt = 0;
+    private static volatile boolean sleepTimerActive = false;
     private static volatile PlayState playState = PlayState.STOPPED;
     private static MediaPlayerController INSTANCE;
+    @Nullable
+    private static ScheduledFuture<?> sleepSand;
     private final Context c;
     private final ReentrantLock lock = new ReentrantLock();
     private final PrefsManager prefs;
@@ -48,10 +48,8 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     @Nullable
     private Book book;
     private volatile State state;
-    private ScheduledFuture<?> sleepSand;
     private ScheduledFuture updater = null;
     private volatile int prepareTries = 0;
-
     private MediaPlayerController(@NonNull final Context c) {
         this.c = c;
         prefs = PrefsManager.getInstance(c);
@@ -64,6 +62,18 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         }
         state = State.IDLE;
         setPlayState(PlayState.STOPPED);
+    }
+
+    public static boolean isSleepTimerActive() {
+        return sleepTimerActive;
+    }
+
+    public static long getLeftSleepTimerTime() {
+        if (sleepSand == null || sleepSand.isCancelled() || sleepSand.isDone()) {
+            return 0;
+        } else {
+            return sleepSand.getDelay(TimeUnit.MILLISECONDS);
+        }
     }
 
     public static synchronized MediaPlayerController getInstance(Context c) {
@@ -332,10 +342,10 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         lock.lock();
         try {
             if (sleepSandActive()) {
+                assert sleepSand != null;
                 L.i(TAG, "sleepSand is active. cancelling now");
                 sleepSand.cancel(false);
                 sleepTimerActive = false;
-                sleepTimerStartedAt = 0;
             } else {
                 L.i(TAG, "preparing new sleep sand");
                 final int minutes = prefs.getSleepTime();
@@ -348,13 +358,11 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                             pause(true);
                             sleepTimerActive = false;
                             communication.sleepStateChanged();
-                            sleepTimerStartedAt = 0;
                         } finally {
                             lock.unlock();
                         }
                     }
                 }, minutes, TimeUnit.MINUTES);
-                sleepTimerStartedAt = System.currentTimeMillis();
             }
             communication.sleepStateChanged();
         } finally {
@@ -559,6 +567,9 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
      */
     public void onDestroy() {
         player.release();
+        if (sleepSand != null && !sleepSand.isCancelled() && !sleepSand.isDone()) {
+            sleepSand.cancel(false);
+        }
     }
 
     public enum PlayState {

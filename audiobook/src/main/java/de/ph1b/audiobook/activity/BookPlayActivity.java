@@ -386,11 +386,9 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             countDownTimer.cancel();
         }
 
-        if (MediaPlayerController.sleepTimerActive) {
-            long sleepTimerDuration = TimeUnit.MINUTES.toMillis(prefs.getSleepTime());
-            long timeElapsed = System.currentTimeMillis() - MediaPlayerController.sleepTimerStartedAt;
+        if (MediaPlayerController.isSleepTimerActive()) {
             timerCountdownView.setVisibility(View.VISIBLE);
-            countDownTimer = new CountDownTimer(sleepTimerDuration - timeElapsed, 1000) {
+            countDownTimer = new CountDownTimer(MediaPlayerController.getLeftSleepTimerTime(), 1000) {
                 @Override
                 public void onTick(long m) {
                     timerCountdownView.setText(formatTime((int) m, (int) m));
@@ -418,7 +416,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         MenuItem timeLapseItem = menu.findItem(R.id.action_time_lapse);
         timeLapseItem.setVisible(MediaPlayerController.canSetSpeed());
         MenuItem sleepTimerItem = menu.findItem(R.id.action_sleep);
-        if (MediaPlayerController.sleepTimerActive) {
+        if (MediaPlayerController.isSleepTimerActive()) {
             sleepTimerItem.setIcon(R.drawable.ic_alarm_on_white_24dp);
         } else {
             sleepTimerItem.setIcon(R.drawable.ic_snooze_white_24dp);
@@ -437,7 +435,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                 return true;
             case R.id.action_sleep:
                 controller.toggleSleepSand();
-                if (prefs.setBookmarkOnSleepTimer() && !MediaPlayerController.sleepTimerActive) {
+                if (prefs.setBookmarkOnSleepTimer() && !MediaPlayerController.isSleepTimerActive()) {
                     String date = DateUtils.formatDateTime(this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE |
                             DateUtils.FORMAT_SHOW_TIME |
                             DateUtils.FORMAT_NUMERIC_DATE);
