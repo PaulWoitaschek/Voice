@@ -11,18 +11,19 @@ import java.util.List;
 
 /**
  * Class containing methods for recognizing different file types by their file ending.
+ *
+ * @author Paul Woitaschek
  */
 public class FileRecognition {
 
-    private static final List<String> audioTypes = new ArrayList<>(30);
+    private static final List<String> AUDIO_TYPES = new ArrayList<>(30);
     /**
      * Recognizing supported audio files
-     * {@inheritDoc}
      */
-    public static final FileFilter audioFilter = new FileFilter() {
+    public static final FileFilter AUDIO_FILTER = new FileFilter() {
         @Override
         public boolean accept(File f) {
-            for (String s : audioTypes) {
+            for (String s : AUDIO_TYPES) {
                 if (f.getName().toLowerCase().endsWith(s)) {
                     return true;
                 }
@@ -30,21 +31,21 @@ public class FileRecognition {
             return false;
         }
     };
-    public static final FileFilter folderAndMusicFilter = new FileFilter() {
+    public static final FileFilter FOLDER_AND_MUSIC_FILTER = new FileFilter() {
         @Override
         public boolean accept(File pathname) {
-            return audioFilter.accept(pathname) || pathname.isDirectory();
+            return AUDIO_FILTER.accept(pathname) || pathname.isDirectory();
         }
     };
-    private static final List<String> imageTypes = Arrays.asList(".jpg", ".jpeg", ".png", ".bmp");
+    private static final List<String> IMAGE_TYPES = Arrays.asList(".jpg", ".jpeg", ".png", ".bmp");
     /**
      * Recognizing supported image types.
      * {@inheritDoc}
      */
-    public static final FileFilter imageFilter = new FileFilter() {
+    public static final FileFilter IMAGE_FILTER = new FileFilter() {
         @Override
         public boolean accept(File pathname) {
-            for (String s : imageTypes) {
+            for (String s : IMAGE_TYPES) {
                 if (pathname.getAbsolutePath().toLowerCase().endsWith(s)) {
                     return true;
                 }
@@ -55,35 +56,37 @@ public class FileRecognition {
 
 
     static {
-        audioTypes.add(".3gp");
+        AUDIO_TYPES.add(".3gp");
 
-        audioTypes.add(".aac");
-        audioTypes.add(".awb");
+        AUDIO_TYPES.add(".aac");
+        AUDIO_TYPES.add(".awb");
 
-        audioTypes.add(".flac");
+        AUDIO_TYPES.add(".flac");
 
-        audioTypes.add(".imy");
+        AUDIO_TYPES.add(".imy");
 
-        audioTypes.add(".m4a");
-        audioTypes.add(".m4b");
-        audioTypes.add(".mp4");
-        audioTypes.add(".mid");
-        audioTypes.add(".mkv");
-        audioTypes.add(".mp3");
-        audioTypes.add(".mp3package");
-        audioTypes.add(".mxmf");
+        AUDIO_TYPES.add(".m4a");
+        AUDIO_TYPES.add(".m4b");
+        AUDIO_TYPES.add(".mp4");
+        AUDIO_TYPES.add(".mid");
+        AUDIO_TYPES.add(".mkv");
+        AUDIO_TYPES.add(".mp3");
+        AUDIO_TYPES.add(".mp3package");
+        AUDIO_TYPES.add(".mxmf");
 
-        audioTypes.add(".ogg");
-        audioTypes.add(".oga");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) audioTypes.add(".opus");
-        audioTypes.add(".ota");
+        AUDIO_TYPES.add(".ogg");
+        AUDIO_TYPES.add(".oga");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AUDIO_TYPES.add(".opus");
+        }
+        AUDIO_TYPES.add(".ota");
 
-        audioTypes.add(".rtttl");
-        audioTypes.add(".rtx");
+        AUDIO_TYPES.add(".rtttl");
+        AUDIO_TYPES.add(".rtx");
 
-        audioTypes.add(".wav");
-        audioTypes.add(".wma");
+        AUDIO_TYPES.add(".wav");
+        AUDIO_TYPES.add(".wma");
 
-        audioTypes.add(".xmf");
+        AUDIO_TYPES.add(".xmf");
     }
 }

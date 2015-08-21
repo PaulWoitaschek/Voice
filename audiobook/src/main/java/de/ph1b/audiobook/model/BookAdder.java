@@ -14,6 +14,7 @@ import com.google.common.io.Files;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -111,6 +112,7 @@ public class BookAdder {
      * @return True if the Chapters in the array differ by {@link Chapter#name} or {@link Chapter#file}
      */
     private static boolean chaptersDiffer(@NonNull List<Chapter> left, @NonNull List<Chapter> right) {
+        // todo: Simplify this by assuming the lists are already sorted, so we can use a simple equals!
         if (left.size() != right.size()) {
             // different chapter size, so book must have changed
             return true;
@@ -133,35 +135,37 @@ public class BookAdder {
      * Adds files recursively. First takes all files and adds them sorted to the return list. Then
      * sorts the folders, and then adds their content sorted to the return list.
      *
-     * @param dir The dirs and files to be added
+     * @param source     The dirs and files to be added
+     * @param fileFilter The filter to be used for the filtering
      * @return All the files containing in a natural sorted order.
      */
-    private static List<File> addFilesRecursive(@NonNull List<File> dir) {
-        List<File> fileList = new ArrayList<>(dir.size());
-        List<File> dirList = new ArrayList<>(dir.size());
-        for (File f : dir) {
+    private static List<File> getAllContainingFiles(@NonNull List<File> source, FileFilter fileFilter) {
+        // split the files in dirs and files
+        List<File> fileList = new ArrayList<>(source.size());
+        List<File> dirList = new ArrayList<>(source.size());
+        for (File f : source) {
             if (f.exists() && f.isFile()) {
                 fileList.add(f);
             } else if (f.exists() && f.isDirectory()) {
                 dirList.add(f);
             }
         }
-        Collections.sort(fileList, NaturalOrderComparator.FILE_COMPARATOR);
-        List<File> returnList = new ArrayList<>(fileList.size());
-        returnList.addAll(fileList);
-        Collections.sort(dirList, NaturalOrderComparator.FILE_COMPARATOR);
+
+        // get the containing files and add them recursively
         for (File f : dirList) {
-            List<File> content = new ArrayList<>(10);
-            File[] containing = f.listFiles();
+            List<File> content = Collections.emptyList();
+            File[] containing = f.listFiles(fileFilter);
             if (containing != null) {
                 content = new ArrayList<>(Arrays.asList(containing));
             }
             if (!content.isEmpty()) {
-                List<File> tempReturn = addFilesRecursive(content);
-                returnList.addAll(tempReturn);
+                List<File> tempReturn = getAllContainingFiles(content, fileFilter);
+                fileList.addAll(tempReturn);
             }
         }
-        return returnList;
+
+        // return all the files only^
+        return fileList;
     }
 
     /**
@@ -199,14 +203,14 @@ public class BookAdder {
      * @throws InterruptedException If the scanner has been requested to reset.
      */
     @Nullable
-    private Bitmap getCoverFromDisk(@NonNull File[] coverFiles) throws InterruptedException {
+    private Bitmap getCoverFromDisk(@NonNull List<File> coverFiles) throws InterruptedException {
         // if there are images, get the first one.
         ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
         ActivityManager activityManager = (ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
         activityManager.getMemoryInfo(mi);
         int dimen = ImageHelper.getSmallerScreenSize(c);
         for (File f : coverFiles) {
-            if (stopScanner) throw new InterruptedException("Interrupted at getCoverFromDisk");
+            throwIfStopRequested();
             // only read cover if its size is less than a third of the available memory
             if (f.length() < (mi.availMem / 3L)) {
                 try {
@@ -232,7 +236,7 @@ public class BookAdder {
         int maxTries = 5;
         for (Chapter c : chapters) {
             if (++tries < maxTries) {
-                if (stopScanner) throw new InterruptedException("Interrupted at getEmbeddedCover");
+                throwIfStopRequested();
                 Bitmap cover = ImageHelper.getEmbeddedCover(c.getFile(), this.c);
                 if (cover != null) {
                     return cover;
@@ -251,21 +255,19 @@ public class BookAdder {
      */
     private void findCovers() throws InterruptedException {
         for (Book b : db.getActiveBooks()) {
-            if (stopScanner) throw new InterruptedException("interrupted at findCover");
+            throwIfStopRequested();
             File coverFile = b.getCoverFile();
             if (!coverFile.exists()) {
                 if (b.getType() == Book.Type.COLLECTION_FOLDER || b.getType() == Book.Type.SINGLE_FOLDER) {
                     File root = new File(b.getRoot());
                     if (root.exists()) {
-                        File[] images = root.listFiles(FileRecognition.imageFilter);
-                        if (images != null) {
-                            Bitmap cover = getCoverFromDisk(images);
-                            if (cover != null) {
-                                ImageHelper.saveCover(cover, c, coverFile);
-                                Picasso.with(c).invalidate(coverFile);
-                                communication.sendBookContentChanged(b);
-                                continue;
-                            }
+                        List<File> images = getAllContainingFiles(Collections.singletonList(root), FileRecognition.IMAGE_FILTER);
+                        Bitmap cover = getCoverFromDisk(images);
+                        if (cover != null) {
+                            ImageHelper.saveCover(cover, c, coverFile);
+                            Picasso.with(c).invalidate(coverFile);
+                            communication.sendBookContentChanged(b);
+                            continue;
                         }
                     }
                 }
@@ -346,7 +348,7 @@ public class BookAdder {
         for (String s : collectionFoldersStringList) {
             File f = new File(s);
             if (f.exists() && f.isDirectory()) {
-                File[] containing = f.listFiles(FileRecognition.folderAndMusicFilter);
+                File[] containing = f.listFiles(FileRecognition.FOLDER_AND_MUSIC_FILTER);
                 if (containing != null) {
                     containingFiles.addAll(Arrays.asList(containing));
                 }
@@ -579,23 +581,16 @@ public class BookAdder {
      */
     @NonNull
     private List<Chapter> getChaptersByRootFile(@NonNull File rootFile) throws InterruptedException {
-        List<File> containingFiles = new ArrayList<>(100);
-        containingFiles.add(rootFile);
-        containingFiles = addFilesRecursive(containingFiles);
-
-        List<File> musicFiles = new ArrayList<>(containingFiles.size());
-        for (File f : containingFiles) {
-            if (FileRecognition.audioFilter.accept(f)) {
-                musicFiles.add(f);
-            }
-        }
+        List<File> containingFiles = getAllContainingFiles(Collections.singletonList(rootFile), FileRecognition.AUDIO_FILTER);
+        // sort the files in a natural way
+        Collections.sort(containingFiles, NaturalOrderComparator.FILE_COMPARATOR);
+        L.i(TAG, "Got files=" + containingFiles);
 
         // get duration and if there is no cover yet, try to get an embedded dover (up to 5 times)
-        List<Chapter> containingMedia = new ArrayList<>(musicFiles.size());
+        List<Chapter> containingMedia = new ArrayList<>(containingFiles.size());
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         try {
-            for (int i = 0; i < musicFiles.size(); i++) {
-                File f = musicFiles.get(i);
+            for (File f : containingFiles) {
                 try {
                     mmr.setDataSource(f.getAbsolutePath());
 
@@ -609,24 +604,34 @@ public class BookAdder {
 
                     String durationString = mmr.extractMetadata(
                             MediaMetadataRetriever.METADATA_KEY_DURATION);
-                    if (durationString == null) {
-                        continue;
-                    } else {
+                    if (durationString != null) {
                         int duration = Integer.parseInt(durationString);
                         if (duration > 0) {
                             containingMedia.add(new Chapter(f, chapterName, duration));
                         }
                     }
-                    if (stopScanner) {
-                        throw new InterruptedException("getChaptersByRootFile interrupted");
-                    }
-                } catch (RuntimeException ignored) {
+
+                    throwIfStopRequested();
+                } catch (RuntimeException e) {
+                    L.e(TAG, "Error at file=" + f);
+                    e.printStackTrace();
                 }
             }
         } finally {
             mmr.release();
         }
         return containingMedia;
+    }
+
+    /**
+     * Throws an interruption if {@link #stopScanner} is true.
+     *
+     * @throws InterruptedException
+     */
+    private void throwIfStopRequested() throws InterruptedException {
+        if (stopScanner) {
+            throw new InterruptedException("Interruption requested");
+        }
     }
 
 
