@@ -70,7 +70,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         int size = book.getChapters().size();
         Chapter currentChapter = null;
         for (Chapter c : book.getChapters()) {
-            if (c.getPath().equals(bookmark.getMediaPath())) {
+            if (c.getFile().equals(bookmark.getMediaFile())) {
                 currentChapter = c;
             }
         }

@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.model;
 
+import java.io.File;
 import java.util.Comparator;
 import java.util.List;
 
@@ -18,11 +19,11 @@ public class NaturalBookmarkComparator implements Comparator<Bookmark> {
         int indexRhs = -1;
 
         for (int i = 0; i < chapters.size(); i++) {
-            String chapterPath = chapters.get(i).getPath();
-            if (lhs.getMediaPath().equals(chapterPath)) {
+            File chapterFile = chapters.get(i).getFile();
+            if (lhs.getMediaFile().equals(chapterFile)) {
                 indexLhs = i;
             }
-            if (rhs.getMediaPath().equals(chapterPath)) {
+            if (rhs.getMediaFile().equals(chapterFile)) {
                 indexRhs = i;
             }
         }

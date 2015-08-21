@@ -93,7 +93,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                 break;
             case PAUSED:
                 state = State.STARTED;
-                L.d(TAG, "State changed to: " + state);
+                L.d(TAG, "State changed to: " + state + " with path=" + path);
                 synchronized (decoderLock) {
                     decoderLock.notify();
                 }

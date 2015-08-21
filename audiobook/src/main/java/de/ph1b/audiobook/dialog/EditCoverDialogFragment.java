@@ -280,7 +280,7 @@ public class EditCoverDialogFragment extends BaseDialogFragment implements View.
         @Override
         protected void onPreExecute() {
             nextCover.setVisibility(View.INVISIBLE);
-            if (imageURLS.size() > 0) {
+            if (!imageURLS.isEmpty()) {
                 previousCover.setVisibility(View.VISIBLE);
             }
             loadingProgressBar.setVisibility(View.VISIBLE);

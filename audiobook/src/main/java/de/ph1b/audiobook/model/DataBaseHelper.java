@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 
 import net.jcip.annotations.ThreadSafe;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Iterator;
@@ -98,7 +99,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 long bookId = bookCursor.getLong(0);
                 String bookName = bookCursor.getString(1);
                 String bookAuthor = bookCursor.getString(2);
-                String bookmarkCurrentMediaPath = bookCursor.getString(3);
+                File bookmarkCurrentMediaPath = new File(bookCursor.getString(3));
                 float bookSpeed = bookCursor.getFloat(4);
                 String bookRoot = bookCursor.getString(5);
                 int bookTime = bookCursor.getInt(6);
@@ -116,8 +117,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     while (chapterCursor.moveToNext()) {
                         int chapterDuration = chapterCursor.getInt(0);
                         String chapterName = chapterCursor.getString(1);
-                        String chapterPath = chapterCursor.getString(2);
-                        chapters.add(new Chapter(chapterPath, chapterName, chapterDuration));
+                        File chapterFile = new File(chapterCursor.getString(2));
+                        chapters.add(new Chapter(chapterFile, chapterName, chapterDuration));
                     }
                 } finally {
                     chapterCursor.close();
@@ -130,10 +131,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 List<Bookmark> bookmarks = new ArrayList<>(bookmarkCursor.getCount());
                 try {
                     while (bookmarkCursor.moveToNext()) {
-                        String bookmarkPath = bookmarkCursor.getString(0);
+                        File bookmarkFile = new File(bookmarkCursor.getString(0));
                         int bookmarkTime = bookmarkCursor.getInt(1);
                         String bookmarkTitle = bookmarkCursor.getString(2);
-                        bookmarks.add(new Bookmark(bookmarkPath, bookmarkTitle, bookmarkTime));
+                        bookmarks.add(new Bookmark(bookmarkFile, bookmarkTitle, bookmarkTime));
                     }
                 } finally {
                     bookmarkCursor.close();

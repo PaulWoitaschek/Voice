@@ -109,9 +109,9 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     private MediaSessionCompat mediaSession;
     private DataBaseHelper db;
     /**
-     * The last path the {@link #notifyChange(String)} has used to update the metadata.
+     * The last file the {@link #notifyChange(String)} has used to update the metadata.
      */
-    private volatile String lastPathForMetaData = "";
+    private volatile File lastFileForMetaData = new File("");
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
 
 
@@ -275,8 +275,8 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                             break;
                         case ServiceController.CONTROL_CHANGE_POSITION:
                             int newTime = intent.getIntExtra(ServiceController.CONTROL_CHANGE_POSITION_EXTRA_TIME, 0);
-                            String relativePath = intent.getStringExtra(ServiceController.CONTROL_CHANGE_POSITION_EXTRA_PATH_RELATIVE);
-                            controller.changePosition(newTime, relativePath);
+                            File file = (File) intent.getSerializableExtra(ServiceController.CONTROL_CHANGE_POSITION_EXTRA_FILE);
+                            controller.changePosition(newTime, file);
                             break;
                         case ServiceController.CONTROL_NEXT:
                             controller.next();
@@ -502,7 +502,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                         }
                         playbackStateBuilder.setState(state, position, controller.getPlaybackSpeed());
                         mediaSession.setPlaybackState(playbackStateBuilder.build());
-                    } else if (what.equals(META_CHANGED) && !lastPathForMetaData.equals(book.getCurrentMediaPath())) {
+                    } else if (what.equals(META_CHANGED) && !lastFileForMetaData.equals(book.getCurrentFile())) {
                         // this check is necessary. Else the lockscreen controls will flicker due to
                         // an updated picture
                         Bitmap bitmap = null;
@@ -542,7 +542,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                                 .putString(MediaMetadataCompat.METADATA_KEY_GENRE, "Audiobook");
                         mediaSession.setMetadata(mediaMetaDataBuilder.build());
 
-                        lastPathForMetaData = book.getCurrentMediaPath();
+                        lastFileForMetaData = book.getCurrentFile();
                     }
                 }
             }

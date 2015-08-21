@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 
 import net.jcip.annotations.Immutable;
 
+import java.io.File;
+
 import static com.google.common.base.Preconditions.checkArgument;
 
 @Immutable
@@ -12,19 +14,18 @@ public class Chapter {
 
     private static final String TAG = Chapter.class.getSimpleName();
     @NonNull
-    private final String path;
+    private final File file;
     @NonNull
     private final String name;
     private final int duration;
 
 
-    public Chapter(@NonNull String path,
+    public Chapter(@NonNull File file,
                    @NonNull String name,
                    int duration) {
-        checkArgument(!path.isEmpty());
         checkArgument(!name.isEmpty());
 
-        this.path = path;
+        this.file = file;
         this.name = name;
         this.duration = duration;
     }
@@ -37,7 +38,7 @@ public class Chapter {
 
         if (o instanceof Chapter) {
             Chapter that = (Chapter) o;
-            return this.path.equals(that.path) && this.duration == that.duration;
+            return this.file.equals(that.file) && this.duration == that.duration;
         }
         return false;
     }
@@ -45,7 +46,7 @@ public class Chapter {
     @Override
     public int hashCode() {
         final int PRIME = 31;
-        int result = PRIME + path.hashCode();
+        int result = PRIME + file.hashCode();
         result = PRIME * result + duration;
         return result;
     }
@@ -53,7 +54,7 @@ public class Chapter {
     @Override
     public String toString() {
         return TAG + "[" +
-                "path=" + path +
+                "file=" + file +
                 ",name=" + name +
                 ",duration=" + duration +
                 "]";
@@ -69,15 +70,15 @@ public class Chapter {
     }
 
     @NonNull
-    public String getPath() {
-        return path;
+    public File getFile() {
+        return file;
     }
 
     public ContentValues getContentValues(long bookId) {
         ContentValues chapterCv = new ContentValues();
         chapterCv.put(DataBaseHelper.CHAPTER_DURATION, duration);
         chapterCv.put(DataBaseHelper.CHAPTER_NAME, name);
-        chapterCv.put(DataBaseHelper.CHAPTER_PATH, path);
+        chapterCv.put(DataBaseHelper.CHAPTER_PATH, file.getAbsolutePath());
         chapterCv.put(DataBaseHelper.BOOK_ID, bookId);
         return chapterCv;
     }

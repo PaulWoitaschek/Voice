@@ -226,7 +226,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                 Book currentBook = db.getBook(bookId);
                 if (currentBook != null) {
                     controller.changeTime(progress, currentBook.getCurrentChapter()
-                            .getPath());
+                            .getFile());
                     playedTimeView.setText(formatTime(progress, seekBar.getMax()));
                 }
             }
@@ -290,7 +290,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                 if (parent.getTag() != null && ((int) parent.getTag()) != newPosition) {
                     L.i(TAG, "spinner, onItemSelected, firing:" + newPosition);
                     controller.changeTime(0, book.getChapters().get(
-                            newPosition).getPath());
+                            newPosition).getFile());
                     parent.setTag(newPosition);
                 }
             }
@@ -320,8 +320,8 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             coverView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                 @Override
                 public boolean onPreDraw() {
-                    coverView.setImageBitmap(ImageHelper.drawableToBitmap(coverReplacement, coverView.getWidth(), coverView.getHeight()));
                     coverView.getViewTreeObserver().removeOnPreDrawListener(this);
+                    coverView.setImageBitmap(ImageHelper.drawableToBitmap(coverReplacement, coverView.getWidth(), coverView.getHeight()));
                     transitionPostponeHelper.elementDone();
                     return true;
                 }

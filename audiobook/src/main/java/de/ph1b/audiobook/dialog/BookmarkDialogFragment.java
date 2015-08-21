@@ -62,7 +62,7 @@ public class BookmarkDialogFragment extends BaseDialogFragment {
 
         Book book = db.getBook(bookId);
         if (book != null) {
-            Bookmark bookmark = new Bookmark(book.getCurrentChapter().getPath(), title, book.getTime());
+            Bookmark bookmark = new Bookmark(book.getCurrentChapter().getFile(), title, book.getTime());
 
             book.getBookmarks().add(bookmark);
             Collections.sort(book.getBookmarks(), new NaturalBookmarkComparator(book.getChapters()));
@@ -152,7 +152,7 @@ public class BookmarkDialogFragment extends BaseDialogFragment {
             public void onBookmarkClicked(int position) {
                 Bookmark bookmark = adapter.getItem(position);
                 PrefsManager.getInstance(getActivity()).setCurrentBookIdAndInform(bookId);
-                controller.changeTime(bookmark.getTime(), bookmark.getMediaPath());
+                controller.changeTime(bookmark.getTime(), bookmark.getMediaFile());
 
                 getDialog().cancel();
             }
@@ -182,7 +182,7 @@ public class BookmarkDialogFragment extends BaseDialogFragment {
             @Override
             public void onClick(View v) {
                 String title = bookmarkTitle.getText().toString();
-                if (title.equals("")) {
+                if (title.isEmpty()) {
                     title = book.getCurrentChapter().getName();
                 }
 

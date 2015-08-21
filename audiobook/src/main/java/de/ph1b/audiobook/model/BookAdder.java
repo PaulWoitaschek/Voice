@@ -62,19 +62,19 @@ public class BookAdder {
      * Returns the name of the book we want to add. If there is a tag embedded, use that one. Else
      * derive the title from the filename.
      *
-     * @param firstChapterPath A path to a file
+     * @param firstChapterFile A path to a file
      * @param rootFile         The root of the book to add
      * @return The name of the book we add
      */
     @NonNull
-    private static String getBookName(@NonNull String firstChapterPath, @NonNull File rootFile, @NonNull MediaMetadataRetriever mmr) {
+    private static String getBookName(@NonNull File firstChapterFile, @NonNull File rootFile, @NonNull MediaMetadataRetriever mmr) {
         String bookName = null;
         try {
-            mmr.setDataSource(firstChapterPath);
+            mmr.setDataSource(firstChapterFile.getAbsolutePath());
             bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
         } catch (RuntimeException ignored) {
         }
-        if (bookName == null || bookName.length() == 0) {
+        if (bookName == null || bookName.isEmpty()) {
             String withoutExtension = Files.getNameWithoutExtension(rootFile.getAbsolutePath());
             bookName = withoutExtension.isEmpty() ? rootFile.getName() : withoutExtension;
         }
@@ -85,18 +85,18 @@ public class BookAdder {
      * Returns the author of the book we want to add. If there is a tag embedded, use that one. Else
      * return null
      *
-     * @param firstChapterPath A path to a file
+     * @param firstChapterFile A path to a file
      * @return The name of the book we add
      */
     @Nullable
-    private static String getAuthor(@NonNull String firstChapterPath, @NonNull MediaMetadataRetriever mmr) {
+    private static String getAuthor(@NonNull File firstChapterFile, @NonNull MediaMetadataRetriever mmr) {
         try {
-            mmr.setDataSource(firstChapterPath);
+            mmr.setDataSource(firstChapterFile.getAbsolutePath());
             String bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_COMPOSER);
-            if (bookName == null || bookName.length() == 0) {
+            if (bookName == null || bookName.isEmpty()) {
                 bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_AUTHOR);
             }
-            if (bookName == null || bookName.length() == 0) {
+            if (bookName == null || bookName.isEmpty()) {
                 bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
             }
             return bookName;
@@ -108,7 +108,7 @@ public class BookAdder {
     /**
      * @param left  First chapter to compare
      * @param right Second chapter to compare
-     * @return True if the Chapters in the array differ by {@link Chapter#name} or {@link Chapter#path}
+     * @return True if the Chapters in the array differ by {@link Chapter#name} or {@link Chapter#file}
      */
     private static boolean chaptersDiffer(@NonNull List<Chapter> left, @NonNull List<Chapter> right) {
         if (left.size() != right.size()) {
@@ -118,7 +118,7 @@ public class BookAdder {
             for (int i = 0; i < left.size(); i++) {
                 Chapter ex = left.get(i);
                 Chapter ne = right.get(i);
-                boolean pathSame = ex.getPath().equals(ne.getPath());
+                boolean pathSame = ex.getFile().equals(ne.getFile());
                 boolean durationSame = ex.getDuration() == ne.getDuration();
                 if (!pathSame || !durationSame) {
                     // duration of path have changed, so book has changed
@@ -156,7 +156,7 @@ public class BookAdder {
             if (containing != null) {
                 content = new ArrayList<>(Arrays.asList(containing));
             }
-            if (content.size() > 0) {
+            if (!content.isEmpty()) {
                 List<File> tempReturn = addFilesRecursive(content);
                 returnList.addAll(tempReturn);
             }
@@ -233,7 +233,7 @@ public class BookAdder {
         for (Chapter c : chapters) {
             if (++tries < maxTries) {
                 if (stopScanner) throw new InterruptedException("Interrupted at getEmbeddedCover");
-                Bitmap cover = ImageHelper.getEmbeddedCover(new File(c.getPath()), this.c);
+                Bitmap cover = ImageHelper.getEmbeddedCover(c.getFile(), this.c);
                 if (cover != null) {
                     return cover;
                 }
@@ -375,8 +375,8 @@ public class BookAdder {
                     for (File f : collectionBookFolders) {
                         if (f.isFile()) {
                             List<Chapter> chapters = book.getChapters();
-                            String singleBookChapterPath = chapters.get(0).getPath();
-                            if (singleBookChapterPath.equals(f.getAbsolutePath())) {
+                            File singleBookChapterFile = chapters.get(0).getFile();
+                            if (singleBookChapterFile.equals(f)) {
                                 bookExists = true;
                             }
                         }
@@ -395,8 +395,8 @@ public class BookAdder {
                     for (File f : singleBookFiles) {
                         if (f.isFile()) {
                             List<Chapter> chapters = book.getChapters();
-                            String singleBookChapterPath = chapters.get(0).getPath();
-                            if (singleBookChapterPath.equals(f.getAbsolutePath())) {
+                            File singleBookChapterFile = chapters.get(0).getFile();
+                            if (singleBookChapterFile.equals(f)) {
                                 bookExists = true;
                             }
                         }
@@ -442,16 +442,16 @@ public class BookAdder {
                 rootFile.getAbsolutePath() :
                 rootFile.getParent();
 
-        String firstChapterPath = newChapters.get(0).getPath();
+        File firstChapterFile = newChapters.get(0).getFile();
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-        String bookName = getBookName(firstChapterPath, rootFile, mmr);
-        String author = getAuthor(firstChapterPath, mmr);
+        String bookName = getBookName(firstChapterFile, rootFile, mmr);
+        String author = getAuthor(firstChapterFile, mmr);
         mmr.release();
 
         final Book orphanedBook = getBookFromDb(rootFile, type, true);
         if (orphanedBook == null) {
             Book newBook = new Book(bookRoot, bookName, author, newChapters,
-                    firstChapterPath, type, new ArrayList<Bookmark>(10), c);
+                    firstChapterFile, type, new ArrayList<Bookmark>(10), c);
             L.d(TAG, "adding newBook=" + newBook);
             db.addBook(newBook);
         } else { // restore old books
@@ -465,7 +465,7 @@ public class BookAdder {
                         @Override
                         public boolean apply(Bookmark input) {
                             for (Chapter c : orphanedBook.getChapters()) {
-                                if (c.getPath().equals(input.getMediaPath())) {
+                                if (c.getFile().equals(input.getMediaFile())) {
                                     return true;
                                 }
                             }
@@ -478,12 +478,12 @@ public class BookAdder {
             // checks if current path is still valid. if not, reset position.
             boolean pathValid = false;
             for (Chapter c : orphanedBook.getChapters()) {
-                if (c.getPath().equals(orphanedBook.getCurrentMediaPath())) {
+                if (c.getFile().equals(orphanedBook.getCurrentFile())) {
                     pathValid = true;
                 }
             }
             if (!pathValid) {
-                orphanedBook.setPosition(0, orphanedBook.getChapters().get(0).getPath());
+                orphanedBook.setPosition(0, orphanedBook.getChapters().get(0).getFile());
             }
 
             // now finally un-hide this book
@@ -493,7 +493,7 @@ public class BookAdder {
 
     /**
      * Updates a book. Adds the new chapters to the book and corrects the
-     * {@link Book#currentMediaPath} and {@link Book#time}.
+     * {@link Book#currentFile} and {@link Book#time}.
      *
      * @param bookExisting The existing book
      * @param newChapters  The new chapters matching to the book
@@ -507,18 +507,18 @@ public class BookAdder {
 
             // check if the chapter set as the current still exists
             boolean currentPathIsGone = true;
-            String currentPath = bookExisting.getCurrentMediaPath();
+            File currentFile = bookExisting.getCurrentFile();
             int currentTime = bookExisting.getTime();
             for (Chapter c : bookExisting.getChapters()) {
-                if (c.getPath().equals(currentPath)) {
+                if (c.getFile().equals(currentFile)) {
                     if (c.getDuration() < currentTime) {
-                        bookExisting.setPosition(0, c.getPath());
+                        bookExisting.setPosition(0, c.getFile());
                     }
                     currentPathIsGone = false;
                 }
             }
             if (currentPathIsGone) {
-                bookExisting.setPosition(0, bookExisting.getChapters().get(0).getPath());
+                bookExisting.setPosition(0, bookExisting.getChapters().get(0).getFile());
             }
 
             // removes the bookmarks that no longer represent an existing file
@@ -527,7 +527,7 @@ public class BookAdder {
                 @Override
                 public boolean apply(Bookmark input) {
                     for (Chapter c : bookExisting.getChapters()) {
-                        if (c.getPath().equals(input.getMediaPath())) {
+                        if (c.getFile().equals(input.getMediaFile())) {
                             return true;
                         }
                     }
@@ -602,7 +602,7 @@ public class BookAdder {
                     // getting chapter-name
                     String chapterName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
                     // checking for dot index because otherwise a file called ".mp3" would have no name.
-                    if (chapterName == null || chapterName.length() == 0) {
+                    if (chapterName == null || chapterName.isEmpty()) {
                         String fileName = Files.getNameWithoutExtension(f.getAbsolutePath());
                         chapterName = fileName.isEmpty() ? f.getName() : fileName;
                     }
@@ -614,7 +614,7 @@ public class BookAdder {
                     } else {
                         int duration = Integer.parseInt(durationString);
                         if (duration > 0) {
-                            containingMedia.add(new Chapter(f.getAbsolutePath(), chapterName, duration));
+                            containingMedia.add(new Chapter(f, chapterName, duration));
                         }
                     }
                     if (stopScanner) {
@@ -660,8 +660,8 @@ public class BookAdder {
                 L.v(TAG, "comparing bookRoot=" + b.getRoot() + " with " + rootFile.getParentFile().getAbsolutePath());
                 if (rootFile.getParentFile().getAbsolutePath().equals(b.getRoot()) && type == b.getType()) {
                     Chapter singleChapter = b.getChapters().get(0);
-                    L.d(TAG, "getBookFromDb, singleChapterPath=" + singleChapter.getPath() + " compared with=" + rootFile.getAbsolutePath());
-                    if (singleChapter.getPath().equals(rootFile.getAbsolutePath())) {
+                    L.d(TAG, "getBookFromDb, singleChapterPath=" + singleChapter.getFile() + " compared with=" + rootFile.getAbsolutePath());
+                    if (singleChapter.getFile().equals(rootFile)) {
                         return b;
                     }
                 }
