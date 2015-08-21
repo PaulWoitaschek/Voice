@@ -12,7 +12,7 @@ public class NaturalOrderComparator {
             if (lhs instanceof Chapter && rhs instanceof Chapter) {
                 Chapter a = (Chapter) lhs;
                 Chapter b = (Chapter) rhs;
-                return compare(new File(a.getPath()), new File(b.getPath()));
+                return compare(a.getPath(), b.getPath());
             } else if (lhs instanceof File && rhs instanceof File) {
                 File a = (File) lhs;
                 File b = (File) rhs;
