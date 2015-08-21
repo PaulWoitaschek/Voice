@@ -297,7 +297,7 @@ public class Book implements Comparable<Book> {
         if (this.equals(that)) {
             return 0;
         } else {
-            return NaturalOrderComparator.INSTANCE.compare(this.name, that.name);
+            return NaturalOrderComparator.naturalCompare(this.name, that.name);
         }
     }
 

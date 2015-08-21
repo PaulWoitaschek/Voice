@@ -35,7 +35,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
 
         @Override
         public int compare(Book o1, Book o2) {
-            return NaturalOrderComparator.INSTANCE.compare(o1.getName(), o2.getName());
+            return NaturalOrderComparator.naturalCompare(o1.getName(), o2.getName());
         }
 
         @Override

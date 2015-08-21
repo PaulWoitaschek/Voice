@@ -146,10 +146,10 @@ public class BookAdder {
                 dirList.add(f);
             }
         }
-        Collections.sort(fileList, NaturalOrderComparator.INSTANCE);
+        Collections.sort(fileList, NaturalOrderComparator.FILE_COMPARATOR);
         List<File> returnList = new ArrayList<>(fileList.size());
         returnList.addAll(fileList);
-        Collections.sort(dirList, NaturalOrderComparator.INSTANCE);
+        Collections.sort(dirList, NaturalOrderComparator.FILE_COMPARATOR);
         for (File f : dirList) {
             List<File> content = new ArrayList<>(10);
             File[] containing = f.listFiles();
@@ -328,7 +328,7 @@ public class BookAdder {
         for (String s : singleBooksAsStrings) {
             singleBooks.add(new File(s));
         }
-        Collections.sort(singleBooks, NaturalOrderComparator.INSTANCE);
+        Collections.sort(singleBooks, NaturalOrderComparator.FILE_COMPARATOR);
         return singleBooks;
     }
 
@@ -352,7 +352,7 @@ public class BookAdder {
                 }
             }
         }
-        Collections.sort(containingFiles, NaturalOrderComparator.INSTANCE);
+        Collections.sort(containingFiles, NaturalOrderComparator.FILE_COMPARATOR);
         return containingFiles;
     }
 

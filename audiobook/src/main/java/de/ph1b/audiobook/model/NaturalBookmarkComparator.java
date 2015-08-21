@@ -51,6 +51,6 @@ public class NaturalBookmarkComparator implements Comparator<Bookmark> {
         }
 
         // if there is nothing else to compare, compare the titles.
-        return NaturalOrderComparator.INSTANCE.compare(lhs.getTitle(), rhs.getTitle());
+        return NaturalOrderComparator.naturalCompare(lhs.getTitle(), rhs.getTitle());
     }
 }
