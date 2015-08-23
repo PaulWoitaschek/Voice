@@ -17,32 +17,19 @@ import java.util.List;
 public class FileRecognition {
 
     private static final List<String> AUDIO_TYPES = new ArrayList<>(30);
-    /**
-     * Recognizing supported audio files
-     */
-    public static final FileFilter AUDIO_FILTER = new FileFilter() {
-        @Override
-        public boolean accept(File f) {
-            for (String s : AUDIO_TYPES) {
-                if (f.getName().toLowerCase().endsWith(s)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    };
     public static final FileFilter FOLDER_AND_MUSIC_FILTER = new FileFilter() {
         @Override
         public boolean accept(File pathname) {
-            return AUDIO_FILTER.accept(pathname) || pathname.isDirectory();
+            for (String s : AUDIO_TYPES) {
+                if (pathname.getName().toLowerCase().endsWith(s)) {
+                    return true;
+                }
+            }
+            return pathname.isDirectory();
         }
     };
     private static final List<String> IMAGE_TYPES = Arrays.asList(".jpg", ".jpeg", ".png", ".bmp");
-    /**
-     * Recognizing supported image types.
-     * {@inheritDoc}
-     */
-    public static final FileFilter IMAGE_FILTER = new FileFilter() {
+    public static final FileFilter FOLDER_AND_IMAGES_FILTER = new FileFilter() {
         @Override
         public boolean accept(File pathname) {
             for (String s : IMAGE_TYPES) {
@@ -50,10 +37,9 @@ public class FileRecognition {
                     return true;
                 }
             }
-            return false;
+            return pathname.isDirectory();
         }
     };
-
 
     static {
         AUDIO_TYPES.add(".3gp");

@@ -14,7 +14,6 @@ import com.google.common.io.Files;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -131,36 +130,30 @@ public class BookAdder {
         return false;
     }
 
+
     /**
      * Adds files recursively. First takes all files and adds them sorted to the return list. Then
      * sorts the folders, and then adds their content sorted to the return list.
      *
-     * @param source     The dirs and files to be added
-     * @param fileFilter The filter to be used for the filtering
+     * @param source The dirs and files to be added
+     * @param audio  True if audio should be filtered. Else images will be filtered
      * @return All the files containing in a natural sorted order.
      */
-    private static List<File> getAllContainingFiles(@NonNull List<File> source, FileFilter fileFilter) {
+    private static List<File> getAllContainingFiles(@NonNull List<File> source, boolean audio) {
         // split the files in dirs and files
         List<File> fileList = new ArrayList<>(source.size());
-        List<File> dirList = new ArrayList<>(source.size());
         for (File f : source) {
-            if (f.exists() && f.isFile()) {
+            if (f.isFile()) {
                 fileList.add(f);
-            } else if (f.exists() && f.isDirectory()) {
-                dirList.add(f);
-            }
-        }
-
-        // get the containing files and add them recursively
-        for (File f : dirList) {
-            List<File> content = Collections.emptyList();
-            File[] containing = f.listFiles(fileFilter);
-            if (containing != null) {
-                content = new ArrayList<>(Arrays.asList(containing));
-            }
-            if (!content.isEmpty()) {
-                List<File> tempReturn = getAllContainingFiles(content, fileFilter);
-                fileList.addAll(tempReturn);
+            } else if (f.isDirectory()) {
+                // recursively add the content of the directory
+                File[] containing = f.listFiles(audio ?
+                        FileRecognition.FOLDER_AND_MUSIC_FILTER :
+                        FileRecognition.FOLDER_AND_IMAGES_FILTER);
+                if (containing != null) {
+                    List<File> content = new ArrayList<>(Arrays.asList(containing));
+                    fileList.addAll(getAllContainingFiles(content, audio));
+                }
             }
         }
 
@@ -261,7 +254,7 @@ public class BookAdder {
                 if (b.getType() == Book.Type.COLLECTION_FOLDER || b.getType() == Book.Type.SINGLE_FOLDER) {
                     File root = new File(b.getRoot());
                     if (root.exists()) {
-                        List<File> images = getAllContainingFiles(Collections.singletonList(root), FileRecognition.IMAGE_FILTER);
+                        List<File> images = getAllContainingFiles(Collections.singletonList(root), false);
                         Bitmap cover = getCoverFromDisk(images);
                         if (cover != null) {
                             ImageHelper.saveCover(cover, c, coverFile);
@@ -581,7 +574,7 @@ public class BookAdder {
      */
     @NonNull
     private List<Chapter> getChaptersByRootFile(@NonNull File rootFile) throws InterruptedException {
-        List<File> containingFiles = getAllContainingFiles(Collections.singletonList(rootFile), FileRecognition.AUDIO_FILTER);
+        List<File> containingFiles = getAllContainingFiles(Collections.singletonList(rootFile), true);
         // sort the files in a natural way
         Collections.sort(containingFiles, NaturalOrderComparator.FILE_COMPARATOR);
         L.i(TAG, "Got files=" + containingFiles);
