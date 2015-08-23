@@ -10,7 +10,7 @@ import java.io.File;
 import static com.google.common.base.Preconditions.checkArgument;
 
 @Immutable
-public class Chapter {
+public class Chapter implements Comparable<Chapter> {
 
     private static final String TAG = Chapter.class.getSimpleName();
     @NonNull
@@ -81,5 +81,10 @@ public class Chapter {
         chapterCv.put(DataBaseHelper.CHAPTER_PATH, file.getAbsolutePath());
         chapterCv.put(DataBaseHelper.BOOK_ID, bookId);
         return chapterCv;
+    }
+
+    @Override
+    public int compareTo(@NonNull Chapter another) {
+        return NaturalOrderComparator.FILE_COMPARATOR.compare(file, another.file);
     }
 }

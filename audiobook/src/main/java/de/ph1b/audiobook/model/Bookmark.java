@@ -7,7 +7,7 @@ import java.io.File;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-public class Bookmark {
+public class Bookmark implements Comparable<Bookmark> {
 
     private static final String TAG = Bookmark.class.getSimpleName();
     private final int time;
@@ -89,5 +89,24 @@ public class Bookmark {
         cv.put(DataBaseHelper.BOOKMARK_TITLE, title);
         cv.put(DataBaseHelper.BOOK_ID, bookId);
         return cv;
+    }
+
+    @Override
+    public int compareTo(@NonNull Bookmark another) {
+        // compare files
+        int fileCompare = NaturalOrderComparator.FILE_COMPARATOR.compare(mediaFile, another.mediaFile);
+        if (fileCompare != 0) {
+            return fileCompare;
+        }
+
+        // if files are the same compare time
+        if (time > another.time) {
+            return 1;
+        } else if (time < another.time) {
+            return -1;
+        }
+
+        // if time is the same compare the titles
+        return NaturalOrderComparator.naturalCompare(title, another.title);
     }
 }

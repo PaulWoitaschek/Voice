@@ -30,7 +30,6 @@ import de.ph1b.audiobook.adapter.BookmarkAdapter;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.DataBaseHelper;
-import de.ph1b.audiobook.model.NaturalBookmarkComparator;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.DividerItemDecoration;
 import de.ph1b.audiobook.utils.L;
@@ -63,9 +62,8 @@ public class BookmarkDialogFragment extends BaseDialogFragment {
         Book book = db.getBook(bookId);
         if (book != null) {
             Bookmark bookmark = new Bookmark(book.getCurrentChapter().getFile(), title, book.getTime());
-
             book.getBookmarks().add(bookmark);
-            Collections.sort(book.getBookmarks(), new NaturalBookmarkComparator(book.getChapters()));
+            Collections.sort(book.getBookmarks());
             db.updateBook(book);
             L.v(TAG, "Added bookmark=" + bookmark);
         } else {

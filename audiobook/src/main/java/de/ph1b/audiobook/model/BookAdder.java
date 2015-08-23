@@ -32,6 +32,8 @@ import de.ph1b.audiobook.utils.PrefsManager;
 
 /**
  * Base class for adding new books.
+ *
+ * @author Paul Woitaschek
  */
 public class BookAdder {
 
@@ -103,31 +105,6 @@ public class BookAdder {
         } catch (RuntimeException ignored) {
             return null;
         }
-    }
-
-    /**
-     * @param left  First chapter to compare
-     * @param right Second chapter to compare
-     * @return True if the Chapters in the array differ by {@link Chapter#name} or {@link Chapter#file}
-     */
-    private static boolean chaptersDiffer(@NonNull List<Chapter> left, @NonNull List<Chapter> right) {
-        // todo: Simplify this by assuming the lists are already sorted, so we can use a simple equals!
-        if (left.size() != right.size()) {
-            // different chapter size, so book must have changed
-            return true;
-        } else {
-            for (int i = 0; i < left.size(); i++) {
-                Chapter ex = left.get(i);
-                Chapter ne = right.get(i);
-                boolean pathSame = ex.getFile().equals(ne.getFile());
-                boolean durationSame = ex.getDuration() == ne.getDuration();
-                if (!pathSame || !durationSame) {
-                    // duration of path have changed, so book has changed
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
 
@@ -494,7 +471,7 @@ public class BookAdder {
      * @param newChapters  The new chapters matching to the book
      */
     private void updateBook(@NonNull final Book bookExisting, @NonNull List<Chapter> newChapters) {
-        boolean bookHasChanged = chaptersDiffer(bookExisting.getChapters(), newChapters);
+        boolean bookHasChanged = !(bookExisting.getChapters().equals(newChapters));
         // sort chapters
         if (bookHasChanged) {
             bookExisting.getChapters().clear();

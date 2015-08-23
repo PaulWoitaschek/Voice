@@ -12,6 +12,7 @@ import net.jcip.annotations.ThreadSafe;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Iterator;
 import java.util.List;
@@ -123,6 +124,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 } finally {
                     chapterCursor.close();
                 }
+                Collections.sort(chapters);
 
                 Cursor bookmarkCursor = db.query(TABLE_BOOKMARKS,
                         new String[]{BOOKMARK_PATH, BOOKMARK_TIME, BOOKMARK_TITLE},
