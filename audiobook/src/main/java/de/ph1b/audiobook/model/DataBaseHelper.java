@@ -42,12 +42,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String BOOK_TYPE = "bookType";
     public static final String BOOK_USE_COVER_REPLACEMENT = "bookUseCoverReplacement";
     public static final String BOOK_ACTIVE = "BOOK_ACTIVE";
-    public static final String CHAPTER_DURATION = "chapterDuration";
-    public static final String CHAPTER_NAME = "chapterName";
-    public static final String CHAPTER_PATH = "chapterPath";
     public static final String BOOKMARK_TIME = "bookmarkTime";
     public static final String BOOKMARK_PATH = "bookmarkPath";
     public static final String BOOKMARK_TITLE = "bookmarkTitle";
+    private static final String CHAPTER_DURATION = "chapterDuration";
+    private static final String CHAPTER_NAME = "chapterName";
+    private static final String CHAPTER_PATH = "chapterPath";
     private static final int DATABASE_VERSION = 32;
     private static final String DATABASE_NAME = "autoBookDB";
     private static final String TABLE_BOOK = "tableBooks";
@@ -167,6 +167,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return instance;
     }
 
+    public static ContentValues getContentValues(Chapter chapter, long bookId) {
+        ContentValues chapterCv = new ContentValues();
+        chapterCv.put(DataBaseHelper.CHAPTER_DURATION, chapter.getDuration());
+        chapterCv.put(DataBaseHelper.CHAPTER_NAME, chapter.getName());
+        chapterCv.put(DataBaseHelper.CHAPTER_PATH, chapter.getFile().getAbsolutePath());
+        chapterCv.put(DataBaseHelper.BOOK_ID, bookId);
+        return chapterCv;
+    }
+
     public synchronized void addBook(@NonNull final Book mutableBook) {
         L.v(TAG, "addBook=" + mutableBook.getName());
         checkArgument(!mutableBook.getChapters().isEmpty());
@@ -180,7 +189,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             mutableBook.setId(bookId);
 
             for (Chapter c : mutableBook.getChapters()) {
-                ContentValues chapterCv = c.getContentValues(mutableBook.getId());
+                ContentValues chapterCv = getContentValues(c, mutableBook.getId());
                 db.insert(TABLE_CHAPTERS, null, chapterCv);
             }
 
@@ -247,7 +256,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     // delete old chapters and replace them with new ones
                     db.delete(TABLE_CHAPTERS, BOOK_ID + "=?", new String[]{String.valueOf(mutableBook.getId())});
                     for (Chapter c : mutableBook.getChapters()) {
-                        ContentValues chapterCv = c.getContentValues(mutableBook.getId());
+                        ContentValues chapterCv = getContentValues(c, mutableBook.getId());
                         db.insert(TABLE_CHAPTERS, null, chapterCv);
                     }
 

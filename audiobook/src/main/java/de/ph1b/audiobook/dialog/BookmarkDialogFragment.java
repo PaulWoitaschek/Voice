@@ -108,7 +108,6 @@ public class BookmarkDialogFragment extends BaseDialogFragment {
                         switch (item.getItemId()) {
                             case R.id.edit:
                                 final Bookmark editBookmark = adapter.getItem(position);
-
                                 new MaterialDialog.Builder(getActivity())
                                         .title(R.string.bookmark_edit_title)
                                         .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
