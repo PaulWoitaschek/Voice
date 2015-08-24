@@ -17,6 +17,7 @@
     <string name="next_track">Next track</string>
     <string name="play">Play</string>
     <string name="pause">Pause</string>
+    <string name="chapter_number">Chapter %1$d of %2$d</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">External Storage is not available. Please make sure it is connected and not mounted in your computer.</string>
     <string name="no_external_storage_action_bar_title">External Storage</string>
