@@ -48,11 +48,7 @@ public class Book implements Comparable<Book> {
         this.chapters = new ArrayList<>(that.chapters);
         this.type = Type.valueOf(that.type.name());
         this.packageName = that.packageName;
-        List<Bookmark> copyBookmarks = new ArrayList<>(that.bookmarks.size());
-        for (Bookmark b : that.bookmarks) {
-            copyBookmarks.add(new Bookmark(b));
-        }
-        this.bookmarks = copyBookmarks;
+        this.bookmarks = new ArrayList<>(that.bookmarks);
         this.name = that.name;
         this.author = that.author;
         this.time = that.time;

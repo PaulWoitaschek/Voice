@@ -97,7 +97,7 @@ public class BookmarkDialogFragment extends BaseDialogFragment {
 
         BookmarkAdapter.OnOptionsMenuClickedListener listener = new BookmarkAdapter.OnOptionsMenuClickedListener() {
             @Override
-            public void onOptionsMenuClicked(final int position, View v) {
+            public void onOptionsMenuClicked(final Bookmark clickedBookmark, View v) {
                 PopupMenu popup = new PopupMenu(getActivity(), v);
                 MenuInflater inflater = popup.getMenuInflater();
                 inflater.inflate(R.menu.bookmark_popup, popup.getMenu());
@@ -107,31 +107,29 @@ public class BookmarkDialogFragment extends BaseDialogFragment {
                         MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity());
                         switch (item.getItemId()) {
                             case R.id.edit:
-                                final Bookmark editBookmark = adapter.getItem(position);
                                 new MaterialDialog.Builder(getActivity())
                                         .title(R.string.bookmark_edit_title)
                                         .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
-                                        .input(getString(R.string.bookmark_edit_hint), editBookmark.getTitle(), false, new MaterialDialog.InputCallback() {
+                                        .input(getString(R.string.bookmark_edit_hint), clickedBookmark.getTitle(), false, new MaterialDialog.InputCallback() {
                                             @Override
                                             public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
-                                                editBookmark.setTitle(charSequence.toString());
+                                                Bookmark newBookmark = new Bookmark(clickedBookmark.getMediaFile(), charSequence.toString(), clickedBookmark.getTime());
+                                                adapter.bookmarkUpdated(clickedBookmark, newBookmark);
                                                 db.updateBook(book);
-                                                adapter.notifyItemChanged(position);
                                             }
                                         })
                                         .positiveText(R.string.dialog_confirm)
                                         .show();
                                 return true;
                             case R.id.delete:
-                                final Bookmark deleteBookmark = adapter.getItem(position);
                                 builder.title(R.string.bookmark_delete_title)
-                                        .content(deleteBookmark.getTitle())
+                                        .content(clickedBookmark.getTitle())
                                         .positiveText(R.string.remove)
                                         .negativeText(R.string.dialog_cancel)
                                         .callback(new MaterialDialog.ButtonCallback() {
                                             @Override
                                             public void onPositive(MaterialDialog dialog) {
-                                                adapter.removeItem(position);
+                                                adapter.removeItem(clickedBookmark);
                                                 db.updateBook(book);
                                             }
                                         })
@@ -146,8 +144,7 @@ public class BookmarkDialogFragment extends BaseDialogFragment {
             }
 
             @Override
-            public void onBookmarkClicked(int position) {
-                Bookmark bookmark = adapter.getItem(position);
+            public void onBookmarkClicked(Bookmark bookmark) {
                 PrefsManager.getInstance(getActivity()).setCurrentBookIdAndInform(bookId);
                 controller.changeTime(bookmark.getTime(), bookmark.getMediaFile());
 

@@ -42,9 +42,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String BOOK_TYPE = "bookType";
     public static final String BOOK_USE_COVER_REPLACEMENT = "bookUseCoverReplacement";
     public static final String BOOK_ACTIVE = "BOOK_ACTIVE";
-    public static final String BOOKMARK_TIME = "bookmarkTime";
-    public static final String BOOKMARK_PATH = "bookmarkPath";
-    public static final String BOOKMARK_TITLE = "bookmarkTitle";
+    private static final String BOOKMARK_TIME = "bookmarkTime";
+    private static final String BOOKMARK_PATH = "bookmarkPath";
+    private static final String BOOKMARK_TITLE = "bookmarkTitle";
     private static final String CHAPTER_DURATION = "chapterDuration";
     private static final String CHAPTER_NAME = "chapterName";
     private static final String CHAPTER_PATH = "chapterPath";
@@ -176,6 +176,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return chapterCv;
     }
 
+    public static ContentValues getContentValues(Bookmark bookmark, long bookId) {
+        ContentValues cv = new ContentValues();
+        cv.put(DataBaseHelper.BOOKMARK_TIME, bookmark.getTime());
+        cv.put(DataBaseHelper.BOOKMARK_PATH, bookmark.getMediaFile().getAbsolutePath());
+        cv.put(DataBaseHelper.BOOKMARK_TITLE, bookmark.getTitle());
+        cv.put(DataBaseHelper.BOOK_ID, bookId);
+        return cv;
+    }
+
     public synchronized void addBook(@NonNull final Book mutableBook) {
         L.v(TAG, "addBook=" + mutableBook.getName());
         checkArgument(!mutableBook.getChapters().isEmpty());
@@ -194,7 +203,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             }
 
             for (Bookmark b : mutableBook.getBookmarks()) {
-                ContentValues bookmarkCv = b.getContentValues(mutableBook.getId());
+                ContentValues bookmarkCv = getContentValues(b, mutableBook.getId());
                 db.insert(TABLE_BOOKMARKS, null, bookmarkCv);
             }
 
@@ -263,7 +272,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     // replace old bookmarks and replace them with new ones
                     db.delete(TABLE_BOOKMARKS, BOOK_ID + "=?", new String[]{String.valueOf(mutableBook.getId())});
                     for (Bookmark b : mutableBook.getBookmarks()) {
-                        ContentValues bookmarkCV = b.getContentValues(mutableBook.getId());
+                        ContentValues bookmarkCV = getContentValues(b, mutableBook.getId());
                         db.insert(TABLE_BOOKMARKS, null, bookmarkCV);
                     }
 

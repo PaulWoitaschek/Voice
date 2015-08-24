@@ -38,7 +38,7 @@ import de.ph1b.audiobook.utils.PrefsManager;
 public class BookAdder {
 
     private static final String TAG = BookAdder.class.getSimpleName();
-    private static final Communication communication = Communication.getInstance();
+    private static final Communication COMMUNICATION = Communication.getInstance();
     public static volatile boolean scannerActive = false;
     private static BookAdder instance;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -236,7 +236,7 @@ public class BookAdder {
                         if (cover != null) {
                             ImageHelper.saveCover(cover, c, coverFile);
                             Picasso.with(c).invalidate(coverFile);
-                            communication.sendBookContentChanged(b);
+                            COMMUNICATION.sendBookContentChanged(b);
                             continue;
                         }
                     }
@@ -245,7 +245,7 @@ public class BookAdder {
                 if (cover != null) {
                     ImageHelper.saveCover(cover, c, coverFile);
                     Picasso.with(c).invalidate(coverFile);
-                    communication.sendBookContentChanged(b);
+                    COMMUNICATION.sendBookContentChanged(b);
                 }
             }
         }
@@ -265,7 +265,7 @@ public class BookAdder {
                 public void run() {
                     L.v(TAG, "started");
                     scannerActive = true;
-                    communication.sendScannerStateChanged();
+                    COMMUNICATION.sendScannerStateChanged();
                     stopScanner = false;
 
                     try {
@@ -278,7 +278,7 @@ public class BookAdder {
 
                     stopScanner = false;
                     scannerActive = false;
-                    communication.sendScannerStateChanged();
+                    COMMUNICATION.sendScannerStateChanged();
                     L.v(TAG, "stopped");
                 }
             });
