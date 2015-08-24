@@ -74,7 +74,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     private DataBaseHelper db;
     private TextView timerCountdownView;
     private CountDownTimer countDownTimer;
-    private TextView bookProgressView, chapterNumberView, bookDurationView;
+    private TextView bookProgressView, bookDurationView;
     private boolean showRemainingTime = false;
 
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
@@ -142,7 +142,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                                 bookProgressView.setText(formatTime(bookProgress, bookDuration));
                             }
                             bookDurationView.setText(formatTime(bookDuration, bookDuration));
-                            chapterNumberView.setText(getResources().getString(R.string.chapter_number, position + 1, chapters.size()));
                         }
                     }
                 }
@@ -228,7 +227,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         timerCountdownView = (TextView) findViewById(R.id.timerView);
         LinearLayout bookProgressGroupView = (LinearLayout) findViewById(R.id.book_progress_group);
         bookProgressView = (TextView) findViewById(R.id.book_progress_view);
-        chapterNumberView = (TextView) findViewById(R.id.chapter_number_view);
         bookDurationView = (TextView) findViewById(R.id.book_duration_view);
 
         //setup buttons

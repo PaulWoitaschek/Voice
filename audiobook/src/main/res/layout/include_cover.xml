@@ -37,12 +37,6 @@
             android:text="@string/zeroTime" />
 
         <TextView
-            android:id="@+id/chapter_number_view"
-            style="@style/progress_text_view_style"
-            android:gravity="center|center_vertical"
-            tools:text="Chapter %1 of %2"/>
-
-        <TextView
             android:id="@+id/book_duration_view"
             style="@style/progress_text_view_style"
             android:gravity="end|center_vertical"
