@@ -106,7 +106,7 @@ public class JumpToPositionDialogFragment extends BaseDialogFragment {
                         int h = hPicker.getValue();
                         int m = mPicker.getValue();
                         int newPosition = (m + 60 * h) * 60 * 1000;
-                        new ServiceController(getActivity()).changeTime(newPosition, book.getCurrentChapter().getPath());
+                        new ServiceController(getActivity()).changeTime(newPosition, book.getCurrentChapter().getFile());
                     }
                 })
                 .positiveText(R.string.dialog_confirm)

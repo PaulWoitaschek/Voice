@@ -12,6 +12,7 @@ import com.google.common.base.Preconditions;
 
 import net.jcip.annotations.GuardedBy;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -30,11 +31,12 @@ import de.ph1b.audiobook.utils.PrefsManager;
 public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         MediaPlayerInterface.OnCompletionListener {
 
-
     private static final String TAG = MediaPlayerController.class.getSimpleName();
-    public static volatile boolean sleepTimerActive = false;
-    public static volatile long sleepTimerStartedAt = 0;
+    private static volatile boolean sleepTimerActive = false;
     private static volatile PlayState playState = PlayState.STOPPED;
+    private static MediaPlayerController INSTANCE;
+    @Nullable
+    private static ScheduledFuture<?> sleepSand;
     private final Context c;
     private final ReentrantLock lock = new ReentrantLock();
     private final PrefsManager prefs;
@@ -47,27 +49,40 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     @Nullable
     private Book book;
     private volatile State state;
-    private ScheduledFuture<?> sleepSand;
     private ScheduledFuture updater = null;
     private volatile int prepareTries = 0;
 
-    public MediaPlayerController(@NonNull final Context c) {
-        lock.lock();
-        try {
-            this.c = c;
-            prefs = PrefsManager.getInstance(c);
-            db = DataBaseHelper.getInstance(c);
+    private MediaPlayerController(@NonNull final Context c) {
+        this.c = c;
+        prefs = PrefsManager.getInstance(c);
+        db = DataBaseHelper.getInstance(c);
 
-            if (canSetSpeed()) {
-                player = new CustomMediaPlayer();
-            } else {
-                player = new AndroidMediaPlayer();
-            }
-            state = State.IDLE;
-            setPlayState(PlayState.STOPPED);
-        } finally {
-            lock.unlock();
+        if (canSetSpeed()) {
+            player = new CustomMediaPlayer();
+        } else {
+            player = new AndroidMediaPlayer();
         }
+        state = State.IDLE;
+        setPlayState(PlayState.STOPPED);
+    }
+
+    public static boolean isSleepTimerActive() {
+        return sleepTimerActive;
+    }
+
+    public static long getLeftSleepTimerTime() {
+        if (sleepSand == null || sleepSand.isCancelled() || sleepSand.isDone()) {
+            return 0;
+        } else {
+            return sleepSand.getDelay(TimeUnit.MILLISECONDS);
+        }
+    }
+
+    public static synchronized MediaPlayerController getInstance(Context c) {
+        if (INSTANCE == null) {
+            INSTANCE = new MediaPlayerController(c);
+        }
+        return INSTANCE;
     }
 
     /**
@@ -86,8 +101,10 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         boolean microMaxA116 = Build.MODEL.equals("Micromax A116") && Build.HARDWARE.equals("mt6589");
         boolean hmNote1w = Build.MODEL.equals("HM NOTE 1W") && Build.HARDWARE.equals("mt6592");
         boolean gSmartRomaR2 = Build.MODEL.equals("GSmart Roma R2") && Build.HARDWARE.equals("mt6572");
+        boolean lgE455 = Build.MODEL.equals("LG-E455") && Build.HARDWARE.equals("mt6575");
 
-        return greaterJellyBean && !me173x && !n903 && !microMaxA116 && !hmNote1w && !gSmartRomaR2;
+        return greaterJellyBean &&
+                !(me173x || n903 || microMaxA116 || hmNote1w || gSmartRomaR2 || lgE455);
     }
 
     public static PlayState getPlayState() {
@@ -107,7 +124,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     public void init(@NonNull Book book) {
         lock.lock();
         try {
-            L.e(TAG, "constructor called with book=" + book);
+            L.i(TAG, "constructor called with book=" + book);
             Preconditions.checkNotNull(book);
             this.book = book;
             prepare();
@@ -139,7 +156,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                 player.setWakeMode(c, PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE);
 
                 try {
-                    player.setDataSource(book.getCurrentChapter().getPath());
+                    player.setDataSource(book.getCurrentChapter().getFile().getAbsolutePath());
                     player.prepare();
                     player.seekTo(book.getTime());
                     player.setPlaybackSpeed(book.getPlaybackSpeed());
@@ -205,7 +222,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                     lock.lock();
                     try {
                         if (book != null) {
-                            book.setPosition(player.getCurrentPosition(), book.getCurrentMediaPath());
+                            book.setPosition(player.getCurrentPosition(), book.getCurrentFile());
                             db.updateBook(book);
                         }
                     } finally {
@@ -239,7 +256,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                 } else if (seekTo > duration) {
                     next();
                 } else {
-                    changePosition(seekTo, book.getCurrentMediaPath());
+                    changePosition(seekTo, book.getCurrentFile());
                 }
             }
         } finally {
@@ -256,14 +273,14 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
             if (book != null) {
                 if (player.getCurrentPosition() > 2000 || book.getPreviousChapter() == null) {
                     player.seekTo(0);
-                    book.setPosition(0, book.getCurrentMediaPath());
+                    book.setPosition(0, book.getCurrentFile());
                     db.updateBook(book);
                 } else {
                     if (toNullOfNewTrack) {
-                        changePosition(0, book.getPreviousChapter().getPath());
+                        changePosition(0, book.getPreviousChapter().getFile());
                     } else {
                         changePosition(book.getPreviousChapter().getDuration() -
-                                (prefs.getSeekTime() * 1000), book.getPreviousChapter().getPath());
+                                (prefs.getSeekTime() * 1000), book.getPreviousChapter().getFile());
                     }
                 }
             }
@@ -327,10 +344,10 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         lock.lock();
         try {
             if (sleepSandActive()) {
+                assert sleepSand != null;
                 L.i(TAG, "sleepSand is active. cancelling now");
                 sleepSand.cancel(false);
                 sleepTimerActive = false;
-                sleepTimerStartedAt = 0;
             } else {
                 L.i(TAG, "preparing new sleep sand");
                 final int minutes = prefs.getSleepTime();
@@ -343,13 +360,11 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                             pause(true);
                             sleepTimerActive = false;
                             communication.sleepStateChanged();
-                            sleepTimerStartedAt = 0;
                         } finally {
                             lock.unlock();
                         }
                     }
                 }, minutes, TimeUnit.MINUTES);
-                sleepTimerStartedAt = System.currentTimeMillis();
             }
             communication.sleepStateChanged();
         } finally {
@@ -387,7 +402,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                                 int seekTo = originalPosition - autoRewind;
                                 seekTo = Math.max(seekTo, 0);
                                 player.seekTo(seekTo);
-                                book.setPosition(seekTo, book.getCurrentMediaPath());
+                                book.setPosition(seekTo, book.getCurrentFile());
                             }
                         }
                         db.updateBook(book);
@@ -412,7 +427,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         try {
             L.e(TAG, "onError");
             if (book != null) {
-                c.startActivity(BookShelfActivity.malformedFileIntent(c, book.getCurrentMediaPath()));
+                c.startActivity(BookShelfActivity.malformedFileIntent(c, book.getCurrentFile()));
             } else {
                 Intent intent = new Intent(c, BookShelfActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -461,7 +476,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
             if (book != null) {
                 Chapter nextChapter = book.getNextChapter();
                 if (nextChapter != null) {
-                    changePosition(0, nextChapter.getPath());
+                    changePosition(0, nextChapter.getFile());
                 }
             }
         } finally {
@@ -474,19 +489,19 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
      * Else calls {@link #prepare()} to prepare the next file
      *
      * @param time The time in chapter at which to start
-     * @param path The path of the media to play (relative to the books root path)
+     * @param file The path of the media to play (relative to the books root path)
      */
-    public void changePosition(int time, String path) {
+    public void changePosition(int time, File file) {
         final String TAG = MediaPlayerController.TAG + ":changePosition()";
         lock.lock();
         try {
-            L.v(TAG, "time=" + time + ", relPath=" + path);
+            L.v(TAG, "time=" + time + ", relPath=" + file);
             if (book != null) {
-                boolean changeFile = (!book.getCurrentChapter().getPath().equals(path));
+                boolean changeFile = (!book.getCurrentChapter().getFile().equals(file));
                 L.v(TAG, "changeFile=" + changeFile);
                 if (changeFile) {
                     boolean wasPlaying = (state == State.STARTED);
-                    book.setPosition(time, path);
+                    book.setPosition(time, file);
                     db.updateBook(book);
                     prepare();
                     if (wasPlaying) {
@@ -504,7 +519,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                         case PAUSED:
                         case PLAYBACK_COMPLETED:
                             player.seekTo(time);
-                            book.setPosition(time, book.getCurrentChapter().getPath());
+                            book.setPosition(time, book.getCurrentChapter().getFile());
                             db.updateBook(book);
                             break;
                         default:
@@ -554,6 +569,9 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
      */
     public void onDestroy() {
         player.release();
+        if (sleepSand != null && !sleepSand.isCancelled() && !sleepSand.isDone()) {
+            sleepSand.cancel(false);
+        }
     }
 
     public enum PlayState {

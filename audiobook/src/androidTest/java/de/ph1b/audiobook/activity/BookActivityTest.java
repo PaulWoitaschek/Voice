@@ -3,6 +3,7 @@ package de.ph1b.audiobook.activity;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.MediumTest;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,7 +44,7 @@ public class BookActivityTest extends ActivityInstrumentationTestCase2<BookShelf
                         lock.lock();
 
                         for (int i = 0; i < BOOKS_AT_ONCE; i++) {
-                            if (allBooks.size() > 0) {
+                            if (!allBooks.isEmpty()) {
                                 Book book = allBooks.get(rnd.nextInt(allBooks.size()));
                                 db.hideBook(book);
                             }
@@ -75,9 +76,9 @@ public class BookActivityTest extends ActivityInstrumentationTestCase2<BookShelf
     }
 
     private Book randomBook() {
-        List<Chapter> chapters = Collections.singletonList(new Chapter(randomString(), randomString(), rnd.nextInt()));
+        List<Chapter> chapters = Collections.singletonList(new Chapter(new File(randomString()), randomString(), rnd.nextInt()));
 
-        return new Book(randomString(), randomString(), randomString(), chapters, chapters.get(0).getPath(),
+        return new Book(randomString(), randomString(), randomString(), chapters, chapters.get(0).getFile(),
                 Book.Type.COLLECTION_FILE, new ArrayList<Bookmark>(0), getActivity());
 
     }

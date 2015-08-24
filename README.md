@@ -8,14 +8,20 @@ MaterialAudiobookPlayer
 
 # Contribution
 
+## Development
+
+All help is very welcomed! We track all the issues and ideas in a separate [issue](https://github.com/Ph1b/MaterialAudiobookPlayer/issues). If you search for work to do, you can check the list of [approved features](https://github.com/Ph1b/MaterialAudiobookPlayer/issues?q=is%3Aopen+is%3Aissue+label%3A%22feature+approved%22). 
+Its always a good idea to talk about what are going to do before you actually start it, so frustration can be avoided.
+
+Some rules for coding:
+* Use the code style the project uses
+* For each feature, make a seperate branch, so it can be reviewed separately
+* Use commits with a good description, so one can see, what you did
+
 ## Translations
 The project page is on [transifex](https://www.transifex.com/projects/p/material-audiobook-player/). There all the localizations are maintained. If you want to contribute, check if there are untranslated or wrong translated words. 
 
 Or you can start translating a new language if you speak it ;-)
-
-## Code
-
-If you like to contribute to the project just let me know which ideas you have!
 
 # License
 Copyright (C) 2015 Paul Woitaschek

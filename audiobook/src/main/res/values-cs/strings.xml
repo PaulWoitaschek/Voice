@@ -17,7 +17,6 @@
     <string name="next_track">Následující skladba</string>
     <string name="play">Spustit</string>
     <string name="pause">Pozastavit</string>
-    <string name="stop">Zastavit</string>
     <!--NoExternalStorage-->
   <string name="no_external_storage">Externí úložiště není dostupné. Ověřte prosím, že je
         připojeno a není používáno vaším počítačem.</string>

@@ -6,7 +6,8 @@
     android:background="?attr/selectableItemBackground"
     android:descendantFocusability="blocksDescendants"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    tools:ignore="Overdraw">
 
     <ImageButton
         android:id="@+id/edit"

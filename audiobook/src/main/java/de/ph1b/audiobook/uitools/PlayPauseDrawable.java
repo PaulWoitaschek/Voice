@@ -205,8 +205,6 @@ public class PlayPauseDrawable extends Drawable {
     private void setProgress(float progress) {
         this.progress = progress;
         invalidateSelf();
-
-        L.v(TAG, "setProgress(" + progress + ")");
     }
 
     @Override

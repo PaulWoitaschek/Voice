@@ -1,6 +1,4 @@
 <?xml version='1.0' encoding='UTF-8'?>
-
-
 <resources>
     <!--BookShelf-->
     <string name="mal_file_message">선택한 파일을 인식할 수 없습니다:</string>
@@ -19,7 +17,6 @@
     <string name="next_track">다음 트랙</string>
     <string name="play">재생</string>
     <string name="pause">정지</string>
-    <string name="stop">닫기</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">외부저장공간을 찾지 못했습니다. 연결/인식상태를 확인해주세요.</string>
     <string name="no_external_storage_action_bar_title">외부저장공간</string>
@@ -30,6 +27,8 @@
     <string name="content_previous_cover">전 표지 고르기</string>
     <string name="content_next_cover">다음표지 고르기</string>
     <string name="content_cover">책표지 보여주기</string>
+    <string name="edit_book_name">제목 수정</string>
+    <string name="edit_book_cover">앨범아트 교체</string>
     <string name="edit_book_title">제목 수정</string>
     <!--JumpToPosition-->
     <string name="action_time_change">이동</string>
@@ -87,4 +86,8 @@
     <!--Misc-->
     <string name="popup_edit">수정</string>
     <string name="remove">삭제</string>
+    <!--hide folder dialog-->
+    <string name="hide_folder_title">폴더 숨기기</string>
+    <string name="hide_folder_content">폴더를 숨겨서, 음악 앱이 이 책을 음악으로 인식하지 않도록 할까요?</string>
+    <string name="hide_confirm">숨기기</string>
 </resources>

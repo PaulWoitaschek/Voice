@@ -18,7 +18,6 @@
     <string name="next_track">Επόμενο τραγούδι</string>
     <string name="play">Αναπαραγωγή</string>
     <string name="pause">Παύση</string>
-    <string name="stop">Στοπ</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Τα εξωτερικά μέσα αποθήκευσης δεν είναι διαθέσιμα. Παρακαλούμε βεβαιωθείτε ότι είναι συνδεδεμένα και όχι τοποθετημένα στον υπολογιστή σας.</string>
     <string name="no_external_storage_action_bar_title">Εξωτερικά μέσα αποθήκευσης</string>

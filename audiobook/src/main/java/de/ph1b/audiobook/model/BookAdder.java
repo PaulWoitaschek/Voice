@@ -32,11 +32,13 @@ import de.ph1b.audiobook.utils.PrefsManager;
 
 /**
  * Base class for adding new books.
+ *
+ * @author Paul Woitaschek
  */
 public class BookAdder {
 
     private static final String TAG = BookAdder.class.getSimpleName();
-    private static final Communication communication = Communication.getInstance();
+    private static final Communication COMMUNICATION = Communication.getInstance();
     public static volatile boolean scannerActive = false;
     private static BookAdder instance;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -62,19 +64,19 @@ public class BookAdder {
      * Returns the name of the book we want to add. If there is a tag embedded, use that one. Else
      * derive the title from the filename.
      *
-     * @param firstChapterPath A path to a file
+     * @param firstChapterFile A path to a file
      * @param rootFile         The root of the book to add
      * @return The name of the book we add
      */
     @NonNull
-    private static String getBookName(@NonNull String firstChapterPath, @NonNull File rootFile, @NonNull MediaMetadataRetriever mmr) {
+    private static String getBookName(@NonNull File firstChapterFile, @NonNull File rootFile, @NonNull MediaMetadataRetriever mmr) {
         String bookName = null;
         try {
-            mmr.setDataSource(firstChapterPath);
+            mmr.setDataSource(firstChapterFile.getAbsolutePath());
             bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
         } catch (RuntimeException ignored) {
         }
-        if (bookName == null || bookName.length() == 0) {
+        if (bookName == null || bookName.isEmpty()) {
             String withoutExtension = Files.getNameWithoutExtension(rootFile.getAbsolutePath());
             bookName = withoutExtension.isEmpty() ? rootFile.getName() : withoutExtension;
         }
@@ -85,18 +87,18 @@ public class BookAdder {
      * Returns the author of the book we want to add. If there is a tag embedded, use that one. Else
      * return null
      *
-     * @param firstChapterPath A path to a file
+     * @param firstChapterFile A path to a file
      * @return The name of the book we add
      */
     @Nullable
-    private static String getAuthor(@NonNull String firstChapterPath, @NonNull MediaMetadataRetriever mmr) {
+    private static String getAuthor(@NonNull File firstChapterFile, @NonNull MediaMetadataRetriever mmr) {
         try {
-            mmr.setDataSource(firstChapterPath);
+            mmr.setDataSource(firstChapterFile.getAbsolutePath());
             String bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_COMPOSER);
-            if (bookName == null || bookName.length() == 0) {
+            if (bookName == null || bookName.isEmpty()) {
                 bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_AUTHOR);
             }
-            if (bookName == null || bookName.length() == 0) {
+            if (bookName == null || bookName.isEmpty()) {
                 bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
             }
             return bookName;
@@ -105,63 +107,35 @@ public class BookAdder {
         }
     }
 
-    /**
-     * @param left  First chapter to compare
-     * @param right Second chapter to compare
-     * @return True if the Chapters in the array differ by {@link Chapter#name} or {@link Chapter#path}
-     */
-    private static boolean chaptersDiffer(@NonNull List<Chapter> left, @NonNull List<Chapter> right) {
-        if (left.size() != right.size()) {
-            // different chapter size, so book must have changed
-            return true;
-        } else {
-            for (int i = 0; i < left.size(); i++) {
-                Chapter ex = left.get(i);
-                Chapter ne = right.get(i);
-                boolean pathSame = ex.getPath().equals(ne.getPath());
-                boolean durationSame = ex.getDuration() == ne.getDuration();
-                if (!pathSame || !durationSame) {
-                    // duration of path have changed, so book has changed
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
     /**
      * Adds files recursively. First takes all files and adds them sorted to the return list. Then
      * sorts the folders, and then adds their content sorted to the return list.
      *
-     * @param dir The dirs and files to be added
+     * @param source The dirs and files to be added
+     * @param audio  True if audio should be filtered. Else images will be filtered
      * @return All the files containing in a natural sorted order.
      */
-    private static List<File> addFilesRecursive(@NonNull List<File> dir) {
-        List<File> fileList = new ArrayList<>(dir.size());
-        List<File> dirList = new ArrayList<>(dir.size());
-        for (File f : dir) {
-            if (f.exists() && f.isFile()) {
+    private static List<File> getAllContainingFiles(@NonNull List<File> source, boolean audio) {
+        // split the files in dirs and files
+        List<File> fileList = new ArrayList<>(source.size());
+        for (File f : source) {
+            if (f.isFile()) {
                 fileList.add(f);
-            } else if (f.exists() && f.isDirectory()) {
-                dirList.add(f);
+            } else if (f.isDirectory()) {
+                // recursively add the content of the directory
+                File[] containing = f.listFiles(audio ?
+                        FileRecognition.FOLDER_AND_MUSIC_FILTER :
+                        FileRecognition.FOLDER_AND_IMAGES_FILTER);
+                if (containing != null) {
+                    List<File> content = new ArrayList<>(Arrays.asList(containing));
+                    fileList.addAll(getAllContainingFiles(content, audio));
+                }
             }
         }
-        Collections.sort(fileList, NaturalOrderComparator.INSTANCE);
-        List<File> returnList = new ArrayList<>(fileList.size());
-        returnList.addAll(fileList);
-        Collections.sort(dirList, NaturalOrderComparator.INSTANCE);
-        for (File f : dirList) {
-            List<File> content = new ArrayList<>(10);
-            File[] containing = f.listFiles();
-            if (containing != null) {
-                content = new ArrayList<>(Arrays.asList(containing));
-            }
-            if (content.size() > 0) {
-                List<File> tempReturn = addFilesRecursive(content);
-                returnList.addAll(tempReturn);
-            }
-        }
-        return returnList;
+
+        // return all the files only^
+        return fileList;
     }
 
     /**
@@ -199,14 +173,14 @@ public class BookAdder {
      * @throws InterruptedException If the scanner has been requested to reset.
      */
     @Nullable
-    private Bitmap getCoverFromDisk(@NonNull File[] coverFiles) throws InterruptedException {
+    private Bitmap getCoverFromDisk(@NonNull List<File> coverFiles) throws InterruptedException {
         // if there are images, get the first one.
         ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
         ActivityManager activityManager = (ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
         activityManager.getMemoryInfo(mi);
         int dimen = ImageHelper.getSmallerScreenSize(c);
         for (File f : coverFiles) {
-            if (stopScanner) throw new InterruptedException("Interrupted at getCoverFromDisk");
+            throwIfStopRequested();
             // only read cover if its size is less than a third of the available memory
             if (f.length() < (mi.availMem / 3L)) {
                 try {
@@ -232,8 +206,8 @@ public class BookAdder {
         int maxTries = 5;
         for (Chapter c : chapters) {
             if (++tries < maxTries) {
-                if (stopScanner) throw new InterruptedException("Interrupted at getEmbeddedCover");
-                Bitmap cover = ImageHelper.getEmbeddedCover(new File(c.getPath()), this.c);
+                throwIfStopRequested();
+                Bitmap cover = ImageHelper.getEmbeddedCover(c.getFile(), this.c);
                 if (cover != null) {
                     return cover;
                 }
@@ -251,21 +225,19 @@ public class BookAdder {
      */
     private void findCovers() throws InterruptedException {
         for (Book b : db.getActiveBooks()) {
-            if (stopScanner) throw new InterruptedException("interrupted at findCover");
+            throwIfStopRequested();
             File coverFile = b.getCoverFile();
             if (!coverFile.exists()) {
                 if (b.getType() == Book.Type.COLLECTION_FOLDER || b.getType() == Book.Type.SINGLE_FOLDER) {
                     File root = new File(b.getRoot());
                     if (root.exists()) {
-                        File[] images = root.listFiles(FileRecognition.imageFilter);
-                        if (images != null) {
-                            Bitmap cover = getCoverFromDisk(images);
-                            if (cover != null) {
-                                ImageHelper.saveCover(cover, c, coverFile);
-                                Picasso.with(c).invalidate(coverFile);
-                                communication.sendBookContentChanged(b);
-                                continue;
-                            }
+                        List<File> images = getAllContainingFiles(Collections.singletonList(root), false);
+                        Bitmap cover = getCoverFromDisk(images);
+                        if (cover != null) {
+                            ImageHelper.saveCover(cover, c, coverFile);
+                            Picasso.with(c).invalidate(coverFile);
+                            COMMUNICATION.sendBookContentChanged(b);
+                            continue;
                         }
                     }
                 }
@@ -273,7 +245,7 @@ public class BookAdder {
                 if (cover != null) {
                     ImageHelper.saveCover(cover, c, coverFile);
                     Picasso.with(c).invalidate(coverFile);
-                    communication.sendBookContentChanged(b);
+                    COMMUNICATION.sendBookContentChanged(b);
                 }
             }
         }
@@ -293,7 +265,7 @@ public class BookAdder {
                 public void run() {
                     L.v(TAG, "started");
                     scannerActive = true;
-                    communication.sendScannerStateChanged();
+                    COMMUNICATION.sendScannerStateChanged();
                     stopScanner = false;
 
                     try {
@@ -306,7 +278,7 @@ public class BookAdder {
 
                     stopScanner = false;
                     scannerActive = false;
-                    communication.sendScannerStateChanged();
+                    COMMUNICATION.sendScannerStateChanged();
                     L.v(TAG, "stopped");
                 }
             });
@@ -328,7 +300,7 @@ public class BookAdder {
         for (String s : singleBooksAsStrings) {
             singleBooks.add(new File(s));
         }
-        Collections.sort(singleBooks, NaturalOrderComparator.INSTANCE);
+        Collections.sort(singleBooks, NaturalOrderComparator.FILE_COMPARATOR);
         return singleBooks;
     }
 
@@ -346,13 +318,13 @@ public class BookAdder {
         for (String s : collectionFoldersStringList) {
             File f = new File(s);
             if (f.exists() && f.isDirectory()) {
-                File[] containing = f.listFiles(FileRecognition.folderAndMusicFilter);
+                File[] containing = f.listFiles(FileRecognition.FOLDER_AND_MUSIC_FILTER);
                 if (containing != null) {
                     containingFiles.addAll(Arrays.asList(containing));
                 }
             }
         }
-        Collections.sort(containingFiles, NaturalOrderComparator.INSTANCE);
+        Collections.sort(containingFiles, NaturalOrderComparator.FILE_COMPARATOR);
         return containingFiles;
     }
 
@@ -375,8 +347,8 @@ public class BookAdder {
                     for (File f : collectionBookFolders) {
                         if (f.isFile()) {
                             List<Chapter> chapters = book.getChapters();
-                            String singleBookChapterPath = chapters.get(0).getPath();
-                            if (singleBookChapterPath.equals(f.getAbsolutePath())) {
+                            File singleBookChapterFile = chapters.get(0).getFile();
+                            if (singleBookChapterFile.equals(f)) {
                                 bookExists = true;
                             }
                         }
@@ -395,8 +367,8 @@ public class BookAdder {
                     for (File f : singleBookFiles) {
                         if (f.isFile()) {
                             List<Chapter> chapters = book.getChapters();
-                            String singleBookChapterPath = chapters.get(0).getPath();
-                            if (singleBookChapterPath.equals(f.getAbsolutePath())) {
+                            File singleBookChapterFile = chapters.get(0).getFile();
+                            if (singleBookChapterFile.equals(f)) {
                                 bookExists = true;
                             }
                         }
@@ -442,16 +414,16 @@ public class BookAdder {
                 rootFile.getAbsolutePath() :
                 rootFile.getParent();
 
-        String firstChapterPath = newChapters.get(0).getPath();
+        File firstChapterFile = newChapters.get(0).getFile();
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-        String bookName = getBookName(firstChapterPath, rootFile, mmr);
-        String author = getAuthor(firstChapterPath, mmr);
+        String bookName = getBookName(firstChapterFile, rootFile, mmr);
+        String author = getAuthor(firstChapterFile, mmr);
         mmr.release();
 
         final Book orphanedBook = getBookFromDb(rootFile, type, true);
         if (orphanedBook == null) {
             Book newBook = new Book(bookRoot, bookName, author, newChapters,
-                    firstChapterPath, type, new ArrayList<Bookmark>(10), c);
+                    firstChapterFile, type, new ArrayList<Bookmark>(10), c);
             L.d(TAG, "adding newBook=" + newBook);
             db.addBook(newBook);
         } else { // restore old books
@@ -465,7 +437,7 @@ public class BookAdder {
                         @Override
                         public boolean apply(Bookmark input) {
                             for (Chapter c : orphanedBook.getChapters()) {
-                                if (c.getPath().equals(input.getMediaPath())) {
+                                if (c.getFile().equals(input.getMediaFile())) {
                                     return true;
                                 }
                             }
@@ -478,12 +450,12 @@ public class BookAdder {
             // checks if current path is still valid. if not, reset position.
             boolean pathValid = false;
             for (Chapter c : orphanedBook.getChapters()) {
-                if (c.getPath().equals(orphanedBook.getCurrentMediaPath())) {
+                if (c.getFile().equals(orphanedBook.getCurrentFile())) {
                     pathValid = true;
                 }
             }
             if (!pathValid) {
-                orphanedBook.setPosition(0, orphanedBook.getChapters().get(0).getPath());
+                orphanedBook.setPosition(0, orphanedBook.getChapters().get(0).getFile());
             }
 
             // now finally un-hide this book
@@ -493,13 +465,13 @@ public class BookAdder {
 
     /**
      * Updates a book. Adds the new chapters to the book and corrects the
-     * {@link Book#currentMediaPath} and {@link Book#time}.
+     * {@link Book#currentFile} and {@link Book#time}.
      *
      * @param bookExisting The existing book
      * @param newChapters  The new chapters matching to the book
      */
     private void updateBook(@NonNull final Book bookExisting, @NonNull List<Chapter> newChapters) {
-        boolean bookHasChanged = chaptersDiffer(bookExisting.getChapters(), newChapters);
+        boolean bookHasChanged = !(bookExisting.getChapters().equals(newChapters));
         // sort chapters
         if (bookHasChanged) {
             bookExisting.getChapters().clear();
@@ -507,18 +479,18 @@ public class BookAdder {
 
             // check if the chapter set as the current still exists
             boolean currentPathIsGone = true;
-            String currentPath = bookExisting.getCurrentMediaPath();
+            File currentFile = bookExisting.getCurrentFile();
             int currentTime = bookExisting.getTime();
             for (Chapter c : bookExisting.getChapters()) {
-                if (c.getPath().equals(currentPath)) {
+                if (c.getFile().equals(currentFile)) {
                     if (c.getDuration() < currentTime) {
-                        bookExisting.setPosition(0, c.getPath());
+                        bookExisting.setPosition(0, c.getFile());
                     }
                     currentPathIsGone = false;
                 }
             }
             if (currentPathIsGone) {
-                bookExisting.setPosition(0, bookExisting.getChapters().get(0).getPath());
+                bookExisting.setPosition(0, bookExisting.getChapters().get(0).getFile());
             }
 
             // removes the bookmarks that no longer represent an existing file
@@ -527,7 +499,7 @@ public class BookAdder {
                 @Override
                 public boolean apply(Bookmark input) {
                     for (Chapter c : bookExisting.getChapters()) {
-                        if (c.getPath().equals(input.getMediaPath())) {
+                        if (c.getFile().equals(input.getMediaFile())) {
                             return true;
                         }
                     }
@@ -579,54 +551,57 @@ public class BookAdder {
      */
     @NonNull
     private List<Chapter> getChaptersByRootFile(@NonNull File rootFile) throws InterruptedException {
-        List<File> containingFiles = new ArrayList<>(100);
-        containingFiles.add(rootFile);
-        containingFiles = addFilesRecursive(containingFiles);
-
-        List<File> musicFiles = new ArrayList<>(containingFiles.size());
-        for (File f : containingFiles) {
-            if (FileRecognition.audioFilter.accept(f)) {
-                musicFiles.add(f);
-            }
-        }
+        List<File> containingFiles = getAllContainingFiles(Collections.singletonList(rootFile), true);
+        // sort the files in a natural way
+        Collections.sort(containingFiles, NaturalOrderComparator.FILE_COMPARATOR);
+        L.i(TAG, "Got files=" + containingFiles);
 
         // get duration and if there is no cover yet, try to get an embedded dover (up to 5 times)
-        List<Chapter> containingMedia = new ArrayList<>(musicFiles.size());
+        List<Chapter> containingMedia = new ArrayList<>(containingFiles.size());
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         try {
-            for (int i = 0; i < musicFiles.size(); i++) {
-                File f = musicFiles.get(i);
+            for (File f : containingFiles) {
                 try {
                     mmr.setDataSource(f.getAbsolutePath());
 
                     // getting chapter-name
                     String chapterName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
                     // checking for dot index because otherwise a file called ".mp3" would have no name.
-                    if (chapterName == null || chapterName.length() == 0) {
+                    if (chapterName == null || chapterName.isEmpty()) {
                         String fileName = Files.getNameWithoutExtension(f.getAbsolutePath());
                         chapterName = fileName.isEmpty() ? f.getName() : fileName;
                     }
 
                     String durationString = mmr.extractMetadata(
                             MediaMetadataRetriever.METADATA_KEY_DURATION);
-                    if (durationString == null) {
-                        continue;
-                    } else {
+                    if (durationString != null) {
                         int duration = Integer.parseInt(durationString);
                         if (duration > 0) {
-                            containingMedia.add(new Chapter(f.getAbsolutePath(), chapterName, duration));
+                            containingMedia.add(new Chapter(f, chapterName, duration));
                         }
                     }
-                    if (stopScanner) {
-                        throw new InterruptedException("getChaptersByRootFile interrupted");
-                    }
-                } catch (RuntimeException ignored) {
+
+                    throwIfStopRequested();
+                } catch (RuntimeException e) {
+                    L.e(TAG, "Error at file=" + f);
+                    e.printStackTrace();
                 }
             }
         } finally {
             mmr.release();
         }
         return containingMedia;
+    }
+
+    /**
+     * Throws an interruption if {@link #stopScanner} is true.
+     *
+     * @throws InterruptedException
+     */
+    private void throwIfStopRequested() throws InterruptedException {
+        if (stopScanner) {
+            throw new InterruptedException("Interruption requested");
+        }
     }
 
 
@@ -660,8 +635,8 @@ public class BookAdder {
                 L.v(TAG, "comparing bookRoot=" + b.getRoot() + " with " + rootFile.getParentFile().getAbsolutePath());
                 if (rootFile.getParentFile().getAbsolutePath().equals(b.getRoot()) && type == b.getType()) {
                     Chapter singleChapter = b.getChapters().get(0);
-                    L.d(TAG, "getBookFromDb, singleChapterPath=" + singleChapter.getPath() + " compared with=" + rootFile.getAbsolutePath());
-                    if (singleChapter.getPath().equals(rootFile.getAbsolutePath())) {
+                    L.d(TAG, "getBookFromDb, singleChapterPath=" + singleChapter.getFile() + " compared with=" + rootFile.getAbsolutePath());
+                    if (singleChapter.getFile().equals(rootFile)) {
                         return b;
                     }
                 }

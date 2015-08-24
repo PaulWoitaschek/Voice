@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.KeyEvent;
 
+import java.io.File;
+
 /**
  * @author <a href="mailto:woitaschek@posteo.de">Paul Woitaschek</a>
  * @link {http://www.paul-woitaschek.de}
@@ -17,7 +19,7 @@ public class ServiceController {
     public static final String CONTROL_TOGGLE_SLEEP_SAND = "CONTROL_TOGGLE_SLEEP_SAND";
     public static final String CONTROL_CHANGE_POSITION = "CONTROL_CHANGE_POSITION";
     public static final String CONTROL_CHANGE_POSITION_EXTRA_TIME = "CONTROL_CHANGE_POSITION_EXTRA_TIME";
-    public static final String CONTROL_CHANGE_POSITION_EXTRA_PATH_RELATIVE = "CONTROL_CHANGE_POSITION_EXTRA_PATH_RELATIVE";
+    public static final String CONTROL_CHANGE_POSITION_EXTRA_FILE = "CONTROL_CHANGE_POSITION_EXTRA_FILE";
     public static final String CONTROL_NEXT = "CONTROL_NEXT";
     public static final String CONTROL_PREVIOUS = "CONTROL_PREVIOUS";
     private final Context c;
@@ -65,11 +67,11 @@ public class ServiceController {
         c.startService(i);
     }
 
-    public void changeTime(int time, String relativePath) {
+    public void changeTime(int time, File file) {
         Intent intent = new Intent(c, AudioService.class);
         intent.setAction(CONTROL_CHANGE_POSITION);
         intent.putExtra(CONTROL_CHANGE_POSITION_EXTRA_TIME, time);
-        intent.putExtra(CONTROL_CHANGE_POSITION_EXTRA_PATH_RELATIVE, relativePath);
+        intent.putExtra(CONTROL_CHANGE_POSITION_EXTRA_FILE, file);
         c.startService(intent);
     }
 

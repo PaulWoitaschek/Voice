@@ -19,7 +19,6 @@
     <string name="next_track">Piste suivante</string>
     <string name="play">Lire</string>
     <string name="pause">Pause</string>
-    <string name="stop">Arrêt</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Le stockage externe n\'est pas disponible. Veuillez vous assurez qu\'il est connecté et n\'est pas monté sur votre ordinateur.</string>
     <string name="no_external_storage_action_bar_title">Stockage externe</string>

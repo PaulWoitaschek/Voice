@@ -10,7 +10,9 @@ import android.support.annotation.Nullable;
 
 import net.jcip.annotations.ThreadSafe;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Iterator;
 import java.util.List;
@@ -40,12 +42,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String BOOK_TYPE = "bookType";
     public static final String BOOK_USE_COVER_REPLACEMENT = "bookUseCoverReplacement";
     public static final String BOOK_ACTIVE = "BOOK_ACTIVE";
-    public static final String CHAPTER_DURATION = "chapterDuration";
-    public static final String CHAPTER_NAME = "chapterName";
-    public static final String CHAPTER_PATH = "chapterPath";
-    public static final String BOOKMARK_TIME = "bookmarkTime";
-    public static final String BOOKMARK_PATH = "bookmarkPath";
-    public static final String BOOKMARK_TITLE = "bookmarkTitle";
+    private static final String BOOKMARK_TIME = "bookmarkTime";
+    private static final String BOOKMARK_PATH = "bookmarkPath";
+    private static final String BOOKMARK_TITLE = "bookmarkTitle";
+    private static final String CHAPTER_DURATION = "chapterDuration";
+    private static final String CHAPTER_NAME = "chapterName";
+    private static final String CHAPTER_PATH = "chapterPath";
     private static final int DATABASE_VERSION = 32;
     private static final String DATABASE_NAME = "autoBookDB";
     private static final String TABLE_BOOK = "tableBooks";
@@ -98,7 +100,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 long bookId = bookCursor.getLong(0);
                 String bookName = bookCursor.getString(1);
                 String bookAuthor = bookCursor.getString(2);
-                String bookmarkCurrentMediaPath = bookCursor.getString(3);
+                File bookmarkCurrentMediaPath = new File(bookCursor.getString(3));
                 float bookSpeed = bookCursor.getFloat(4);
                 String bookRoot = bookCursor.getString(5);
                 int bookTime = bookCursor.getInt(6);
@@ -116,12 +118,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     while (chapterCursor.moveToNext()) {
                         int chapterDuration = chapterCursor.getInt(0);
                         String chapterName = chapterCursor.getString(1);
-                        String chapterPath = chapterCursor.getString(2);
-                        chapters.add(new Chapter(chapterPath, chapterName, chapterDuration));
+                        File chapterFile = new File(chapterCursor.getString(2));
+                        chapters.add(new Chapter(chapterFile, chapterName, chapterDuration));
                     }
                 } finally {
                     chapterCursor.close();
                 }
+                Collections.sort(chapters);
 
                 Cursor bookmarkCursor = db.query(TABLE_BOOKMARKS,
                         new String[]{BOOKMARK_PATH, BOOKMARK_TIME, BOOKMARK_TITLE},
@@ -130,10 +133,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 List<Bookmark> bookmarks = new ArrayList<>(bookmarkCursor.getCount());
                 try {
                     while (bookmarkCursor.moveToNext()) {
-                        String bookmarkPath = bookmarkCursor.getString(0);
+                        File bookmarkFile = new File(bookmarkCursor.getString(0));
                         int bookmarkTime = bookmarkCursor.getInt(1);
                         String bookmarkTitle = bookmarkCursor.getString(2);
-                        bookmarks.add(new Bookmark(bookmarkPath, bookmarkTitle, bookmarkTime));
+                        bookmarks.add(new Bookmark(bookmarkFile, bookmarkTitle, bookmarkTime));
                     }
                 } finally {
                     bookmarkCursor.close();
@@ -164,6 +167,24 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return instance;
     }
 
+    public static ContentValues getContentValues(Chapter chapter, long bookId) {
+        ContentValues chapterCv = new ContentValues();
+        chapterCv.put(DataBaseHelper.CHAPTER_DURATION, chapter.getDuration());
+        chapterCv.put(DataBaseHelper.CHAPTER_NAME, chapter.getName());
+        chapterCv.put(DataBaseHelper.CHAPTER_PATH, chapter.getFile().getAbsolutePath());
+        chapterCv.put(DataBaseHelper.BOOK_ID, bookId);
+        return chapterCv;
+    }
+
+    public static ContentValues getContentValues(Bookmark bookmark, long bookId) {
+        ContentValues cv = new ContentValues();
+        cv.put(DataBaseHelper.BOOKMARK_TIME, bookmark.getTime());
+        cv.put(DataBaseHelper.BOOKMARK_PATH, bookmark.getMediaFile().getAbsolutePath());
+        cv.put(DataBaseHelper.BOOKMARK_TITLE, bookmark.getTitle());
+        cv.put(DataBaseHelper.BOOK_ID, bookId);
+        return cv;
+    }
+
     public synchronized void addBook(@NonNull final Book mutableBook) {
         L.v(TAG, "addBook=" + mutableBook.getName());
         checkArgument(!mutableBook.getChapters().isEmpty());
@@ -177,12 +198,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             mutableBook.setId(bookId);
 
             for (Chapter c : mutableBook.getChapters()) {
-                ContentValues chapterCv = c.getContentValues(mutableBook.getId());
+                ContentValues chapterCv = getContentValues(c, mutableBook.getId());
                 db.insert(TABLE_CHAPTERS, null, chapterCv);
             }
 
             for (Bookmark b : mutableBook.getBookmarks()) {
-                ContentValues bookmarkCv = b.getContentValues(mutableBook.getId());
+                ContentValues bookmarkCv = getContentValues(b, mutableBook.getId());
                 db.insert(TABLE_BOOKMARKS, null, bookmarkCv);
             }
 
@@ -244,14 +265,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     // delete old chapters and replace them with new ones
                     db.delete(TABLE_CHAPTERS, BOOK_ID + "=?", new String[]{String.valueOf(mutableBook.getId())});
                     for (Chapter c : mutableBook.getChapters()) {
-                        ContentValues chapterCv = c.getContentValues(mutableBook.getId());
+                        ContentValues chapterCv = getContentValues(c, mutableBook.getId());
                         db.insert(TABLE_CHAPTERS, null, chapterCv);
                     }
 
                     // replace old bookmarks and replace them with new ones
                     db.delete(TABLE_BOOKMARKS, BOOK_ID + "=?", new String[]{String.valueOf(mutableBook.getId())});
                     for (Bookmark b : mutableBook.getBookmarks()) {
-                        ContentValues bookmarkCV = b.getContentValues(mutableBook.getId());
+                        ContentValues bookmarkCV = getContentValues(b, mutableBook.getId());
                         db.insert(TABLE_BOOKMARKS, null, bookmarkCV);
                     }
 

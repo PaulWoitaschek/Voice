@@ -31,6 +31,7 @@ public class DraggableBoxImageView extends ImageView {
         int strokeWidth = getContext().getResources().getDimensionPixelSize(R.dimen.cover_edit_stroke_width);
 
         borderLinePaint = new Paint();
+        //noinspection deprecation
         borderLinePaint.setColor(getResources().getColor(ThemeUtil.getResourceId(getContext(), R.attr.colorAccent)));
         borderLinePaint.setStyle(Paint.Style.STROKE);
         borderLinePaint.setStrokeWidth(strokeWidth);

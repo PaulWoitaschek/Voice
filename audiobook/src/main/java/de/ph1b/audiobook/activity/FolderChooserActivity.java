@@ -120,7 +120,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
                 paths.add(f);
             }
         }
-        Collections.sort(paths, NaturalOrderComparator.INSTANCE);
+        Collections.sort(paths, NaturalOrderComparator.FILE_COMPARATOR);
         return paths;
     }
 
@@ -132,10 +132,10 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
      * @return The containing files
      */
     private static List<File> getFilesFromFolder(File file) {
-        File[] containing = file.listFiles(FileRecognition.folderAndMusicFilter);
+        File[] containing = file.listFiles(FileRecognition.FOLDER_AND_MUSIC_FILTER);
         if (containing != null) {
             List<File> asList = new ArrayList<>(Arrays.asList(containing));
-            Collections.sort(asList, NaturalOrderComparator.INSTANCE);
+            Collections.sort(asList, NaturalOrderComparator.FILE_COMPARATOR);
             return asList;
         } else {
             return Collections.emptyList();

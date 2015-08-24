@@ -109,7 +109,7 @@ public class CoverDownloader {
                 int startPoint = containing.size();
                 L.v(TAG, "looking for new set at startPoint=" + startPoint);
                 List<String> newSet = getNewLinks(searchText, startPoint);
-                if (newSet.size() > 0) {
+                if (!newSet.isEmpty()) {
                     containing.addAll(newSet);
                     return newSet.get(0);
                 } else {
@@ -118,7 +118,7 @@ public class CoverDownloader {
             }
         } else {
             List<String> newSet = getNewLinks(searchText, 0);
-            if (newSet.size() > 0) {
+            if (!newSet.isEmpty()) {
                 SEARCH_MAPPING.put(searchText, newSet);
                 return newSet.get(0);
             } else {

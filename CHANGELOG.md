@@ -1,3 +1,13 @@
+# v2.3.0
+* Dont auto rewind when pausing due to interruption
+* Enabled scene transitions for cover
+* Enabled scene transitions for fab
+* More ripples
+* Translations updated
+* Have the media style notification for pre lollipop as well
+* Performance improved
+* Removed snackbar and have a timer for the sleep timer instead.
+
 # v2.2.3.1 Hotfix
 * Fixed base color tinting
 * Fixed a crash where a wrong attr was referenced

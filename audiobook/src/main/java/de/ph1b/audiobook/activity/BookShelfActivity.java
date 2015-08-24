@@ -16,12 +16,14 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,10 +41,12 @@ import de.ph1b.audiobook.uitools.PlayPauseDrawable;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PrefsManager;
+import de.ph1b.audiobook.utils.TransitionPostponeHelper;
 
 /**
- * Created by Paul Woitaschek (woitaschek@posteo.de, paul-woitaschek.de) on 12.07.15.
  * Showing the shelf of all the available books and provide a navigation to each book
+ *
+ * @author Paul Woitaschek
  */
 public class BookShelfActivity extends BaseActivity implements View.OnClickListener,
         BookShelfAdapter.OnItemClickListener {
@@ -119,7 +123,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     };
     private DataBaseHelper db;
 
-    public static Intent malformedFileIntent(Context c, String malformedFile) {
+    public static Intent malformedFileIntent(Context c, File malformedFile) {
         Intent intent = new Intent(c, BookShelfActivity.class);
         intent.putExtra(MALFORMED_FILE, malformedFile);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -170,7 +174,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
         if (savedInstanceState == null) {
             if (getIntent().hasExtra(MALFORMED_FILE)) {
-                String malformedFile = getIntent().getStringExtra(MALFORMED_FILE);
+                File malformedFile = (File) getIntent().getSerializableExtra(MALFORMED_FILE);
                 new MaterialDialog.Builder(this)
                         .title(R.string.mal_file_title)
                         .content(getString(R.string.mal_file_message) + "\n\n" + malformedFile)
@@ -221,6 +225,30 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         } else {
             playPauseDrawable.transformToPlay(animated);
         }
+    }
+
+    @Override
+    public void onActivityReenter(int resultCode, Intent data) {
+        super.onActivityReenter(resultCode, data);
+
+        final TransitionPostponeHelper postponeHelper = new TransitionPostponeHelper(this);
+        postponeHelper.startPostponing(2);
+        fab.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                fab.getViewTreeObserver().removeOnPreDrawListener(this);
+                postponeHelper.elementDone();
+                return true;
+            }
+        });
+        recyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                recyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
+                postponeHelper.elementDone();
+                return true;
+            }
+        });
     }
 
     private void checkVisibilities() {
@@ -341,6 +369,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                         editBookTitle.setOnTextChangedListener(new EditBookTitleDialogFragment.OnTextChanged() {
                             @Override
                             public void onTitleChanged(@NonNull String newTitle) {
+                                //noinspection SynchronizeOnNonFinalField
                                 synchronized (db) {
                                     Book dbBook = db.getBook(book.getId());
                                     if (dbBook != null) {

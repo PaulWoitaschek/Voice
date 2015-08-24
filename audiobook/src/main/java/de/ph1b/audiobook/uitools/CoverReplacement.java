@@ -32,11 +32,9 @@ public class CoverReplacement extends Drawable {
         textPaint.setTextAlign(Align.CENTER);
 
         // background
-        if (ThemeUtil.getTheme(c) == R.style.LightTheme) {
-            backgroundColor = c.getResources().getColor(R.color.light_primary_dark);
-        } else {
-            backgroundColor = c.getResources().getColor(R.color.dark_primary_dark);
-        }
+        boolean lightTheme = ThemeUtil.getTheme(c) == R.style.LightTheme;
+        //noinspection deprecation
+        backgroundColor = c.getResources().getColor(lightTheme ? R.color.light_primary_dark : R.color.dark_primary_dark);
     }
 
     @Override

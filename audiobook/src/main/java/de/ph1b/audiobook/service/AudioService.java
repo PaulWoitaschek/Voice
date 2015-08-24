@@ -13,14 +13,13 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
-import android.media.session.MediaSession;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.support.v7.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 
@@ -58,7 +57,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private final ExecutorService playerExecutor = new ThreadPoolExecutor(
             1, 1, // single thread
-            5, TimeUnit.SECONDS,
+            2, TimeUnit.SECONDS,
             new LinkedBlockingQueue<Runnable>(3), // queue capacity
             new ThreadPoolExecutor.DiscardOldestPolicy()
     );
@@ -110,9 +109,9 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     private MediaSessionCompat mediaSession;
     private DataBaseHelper db;
     /**
-     * The last path the {@link #notifyChange(String)} has used to update the metadata.
+     * The last file the {@link #notifyChange(String)} has used to update the metadata.
      */
-    private volatile String lastPathForMetaData = "";
+    private volatile File lastFileForMetaData = new File("");
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
 
 
@@ -209,7 +208,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
         MediaPlayerController.setPlayState(MediaPlayerController.PlayState.STOPPED);
 
-        controller = new MediaPlayerController(this);
+        controller = MediaPlayerController.getInstance(this);
 
         communication.addBookCommunicationListener(listener);
 
@@ -252,6 +251,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
+        L.v(TAG, "onStartCommand,intent=" + intent + ", flags=" + flags + ", startId=" + startId);
         if (intent != null && intent.getAction() != null) {
             playerExecutor.execute(new Runnable() {
                 @Override
@@ -275,8 +275,8 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                             break;
                         case ServiceController.CONTROL_CHANGE_POSITION:
                             int newTime = intent.getIntExtra(ServiceController.CONTROL_CHANGE_POSITION_EXTRA_TIME, 0);
-                            String relativePath = intent.getStringExtra(ServiceController.CONTROL_CHANGE_POSITION_EXTRA_PATH_RELATIVE);
-                            controller.changePosition(newTime, relativePath);
+                            File file = (File) intent.getSerializableExtra(ServiceController.CONTROL_CHANGE_POSITION_EXTRA_FILE);
+                            controller.changePosition(newTime, file);
                             break;
                         case ServiceController.CONTROL_NEXT:
                             controller.next();
@@ -385,24 +385,10 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private Notification getNotification(@NonNull Book book) {
-        Notification.Builder notificationBuilder = new Notification.Builder(this);
-        Chapter chapter = book.getCurrentChapter();
 
-        // content click
-        PendingIntent contentIntent = BookPlayActivity.getTaskStackPI(this, book.getId());
-
-        /**
-         * Cover. NOTE: On Android 21 + the MediaStyle will use the cover as the background. So it
-         * has to be a large image. On Android < 21 there will be a wrong cropping, so there we must
-         * set the size to the correct notification sizes, otherwise notification will look ugly.
-         */
-        int width = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
-                ImageHelper.getSmallerScreenSize(this) :
-                getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_width);
-        int height = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
-                ImageHelper.getSmallerScreenSize(this) :
-                getResources().getDimensionPixelSize(android.R.dimen.notification_large_icon_height);
-
+        // cover
+        int width = ImageHelper.getSmallerScreenSize(this);
+        int height = ImageHelper.getSmallerScreenSize(this);
         Bitmap cover = null;
         try {
             File coverFile = book.getCoverFile();
@@ -417,70 +403,62 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                     book.getName(),
                     this), width, height);
         }
-        notificationBuilder.setLargeIcon(cover);
 
-        // stop intent
-        Intent stopIntent = ServiceController.getStopIntent(this);
-        PendingIntent stopPI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_STOP, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        notificationBuilder.setContentIntent(contentIntent)
-                .setContentTitle(book.getName())
-                .setSmallIcon(R.drawable.ic_notification)
-                .setWhen(0)
-                .setDeleteIntent(stopPI)
-                .setAutoCancel(true);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
+        Chapter chapter = book.getCurrentChapter();
 
         List<Chapter> chapters = book.getChapters();
         if (chapters.size() > 1) {
             // we need the current chapter title and number only if there is more than one chapter.
-
             notificationBuilder.setContentInfo((chapters.indexOf(chapter) + 1) + "/" +
                     chapters.size());
             notificationBuilder.setContentText(chapter.getName());
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            notificationBuilder.setPriority(Notification.PRIORITY_HIGH);
+        // rewind
+        Intent rewindIntent = ServiceController.getRewindIntent(this);
+        PendingIntent rewindPI = PendingIntent.getService(getApplicationContext(), KeyEvent.KEYCODE_MEDIA_REWIND, rewindIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        notificationBuilder.addAction(R.drawable.ic_fast_rewind_white_36dp, getString(R.string.rewind), rewindPI);
 
-            // rewind
-            Intent rewindIntent = ServiceController.getRewindIntent(this);
-            PendingIntent rewindPI = PendingIntent.getService(getApplicationContext(), KeyEvent.KEYCODE_MEDIA_REWIND, rewindIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            notificationBuilder.addAction(R.drawable.ic_fast_rewind_white_36dp, getString(R.string.rewind), rewindPI);
-
-            // play/pause
-            Intent playPauseIntent = ServiceController.getPlayPauseIntent(this);
-            PendingIntent playPausePI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            if (MediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
-                notificationBuilder.addAction(R.drawable.ic_pause_white_36dp, getString(R.string.pause), playPausePI);
-            } else {
-                notificationBuilder.addAction(R.drawable.ic_play_arrow_white_36dp, getString(R.string.play), playPausePI);
-            }
-
-            // have stop action only on api < 21 because from then on, media style is dismissible
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                notificationBuilder.addAction(R.drawable.ic_close_white_36dp, getString(R.string.stop), stopPI);
-            }
+        // play/pause
+        Intent playPauseIntent = ServiceController.getPlayPauseIntent(this);
+        PendingIntent playPausePI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        if (MediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
+            notificationBuilder.addAction(R.drawable.ic_pause_white_36dp, getString(R.string.pause), playPausePI);
+        } else {
+            notificationBuilder.addAction(R.drawable.ic_play_arrow_white_36dp, getString(R.string.play), playPausePI);
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            notificationBuilder.setShowWhen(false);
-        }
+        // fast forward
+        Intent fastForwardIntent = ServiceController.getFastForwardIntent(this);
+        PendingIntent fastForwardPI = PendingIntent.getService(getApplicationContext(), KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, fastForwardIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        notificationBuilder.addAction(R.drawable.ic_fast_forward_white_36dp, getString(R.string.fast_forward), fastForwardPI);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            notificationBuilder.setStyle(new Notification.MediaStyle()
-                    .setShowActionsInCompactView(0, 1)
-                    .setMediaSession((MediaSession.Token) mediaSession.getSessionToken().getToken()))
-                    .setCategory(Notification.CATEGORY_TRANSPORT)
-                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+        // stop intent
+        Intent stopIntent = ServiceController.getStopIntent(this);
+        PendingIntent stopPI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_STOP, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            // fast forward. Since we don't need a stop button, we have space for a fast forward button on api >= 21
-            Intent fastForwardIntent = ServiceController.getFastForwardIntent(this);
-            PendingIntent fastForwardPI = PendingIntent.getService(getApplicationContext(), KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, fastForwardIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            notificationBuilder.addAction(R.drawable.ic_fast_forward_white_36dp, getString(R.string.fast_forward), fastForwardPI);
-        }
+        // content click
+        PendingIntent contentIntent = BookPlayActivity.getTaskStackPI(this, book.getId());
 
-        //noinspection deprecation
-        return notificationBuilder.getNotification();
+        return notificationBuilder.setStyle(
+                new NotificationCompat.MediaStyle()
+                        .setShowActionsInCompactView(0, 1)
+                        .setCancelButtonIntent(stopPI)
+                        .setShowCancelButton(true)
+                        .setMediaSession(mediaSession.getSessionToken()))
+                .setCategory(NotificationCompat.CATEGORY_TRANSPORT)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setShowWhen(false)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(contentIntent)
+                .setContentTitle(book.getName())
+                .setSmallIcon(R.drawable.ic_notification)
+                .setWhen(0)
+                .setDeleteIntent(stopPI)
+                .setAutoCancel(true)
+                .setLargeIcon(cover)
+                .build();
     }
 
     private void notifyChange(final String what) {
@@ -524,7 +502,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                         }
                         playbackStateBuilder.setState(state, position, controller.getPlaybackSpeed());
                         mediaSession.setPlaybackState(playbackStateBuilder.build());
-                    } else if (what.equals(META_CHANGED) && !lastPathForMetaData.equals(book.getCurrentMediaPath())) {
+                    } else if (what.equals(META_CHANGED) && !lastFileForMetaData.equals(book.getCurrentFile())) {
                         // this check is necessary. Else the lockscreen controls will flicker due to
                         // an updated picture
                         Bitmap bitmap = null;
@@ -564,7 +542,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                                 .putString(MediaMetadataCompat.METADATA_KEY_GENRE, "Audiobook");
                         mediaSession.setMetadata(mediaMetaDataBuilder.build());
 
-                        lastPathForMetaData = book.getCurrentMediaPath();
+                        lastFileForMetaData = book.getCurrentFile();
                     }
                 }
             }

@@ -17,7 +17,6 @@
     <string name="next_track">Volgende track</string>
     <string name="play">Speel</string>
     <string name="pause">Pauzeer</string>
-    <string name="stop">Stop</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Externe opslag is niet beschikbaar. Controleer of deze is aangesloten en niet in gebruik is door uw PC.</string>
     <string name="no_external_storage_action_bar_title">Externe opslag</string>
