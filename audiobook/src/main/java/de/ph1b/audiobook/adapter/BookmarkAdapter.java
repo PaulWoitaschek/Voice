@@ -53,11 +53,6 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         notifyItemRemoved(index);
     }
 
-    @NonNull
-    public Bookmark getItem(int position) {
-        return book.getBookmarks().get(position);
-    }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate
@@ -76,7 +71,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Bookmark bookmark = getItem(position);
+        Bookmark bookmark = book.getBookmarks().get(position);
         holder.title.setText(bookmark.getTitle());
 
         int size = book.getChapters().size();

@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.model;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -9,8 +8,6 @@ import android.support.annotation.Nullable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import de.ph1b.audiobook.persistence.DataBaseHelper;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -92,20 +89,6 @@ public class Book implements Comparable<Book> {
     @NonNull
     public String getCoverTransitionName() {
         return COVER_TRANSITION_PREFIX + id;
-    }
-
-    public ContentValues getContentValues() {
-        ContentValues bookCv = new ContentValues();
-        bookCv.put(DataBaseHelper.BOOK_NAME, name);
-        bookCv.put(DataBaseHelper.BOOK_AUTHOR, author);
-        bookCv.put(DataBaseHelper.BOOK_ACTIVE, 1);
-        bookCv.put(DataBaseHelper.BOOK_CURRENT_MEDIA_PATH, currentFile.getAbsolutePath());
-        bookCv.put(DataBaseHelper.BOOK_PLAYBACK_SPEED, playbackSpeed);
-        bookCv.put(DataBaseHelper.BOOK_ROOT, root);
-        bookCv.put(DataBaseHelper.BOOK_TIME, time);
-        bookCv.put(DataBaseHelper.BOOK_TYPE, type.name());
-        bookCv.put(DataBaseHelper.BOOK_USE_COVER_REPLACEMENT, useCoverReplacement);
-        return bookCv;
     }
 
     @NonNull

@@ -45,7 +45,7 @@ public class NaturalOrderComparatorTest extends TestCase {
         assertTrue(indexOf(f9) < indexOf(f2));
     }
 
-    public int indexOf(File file) {
+    private int indexOf(File file) {
         return list.indexOf(file);
     }
 
