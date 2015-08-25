@@ -33,7 +33,6 @@
             android:id="@+id/book_progress_view"
             style="@style/progress_text_view_style"
             android:gravity="start|center_vertical"
-            android:onClick="onClick"
             android:text="@string/zeroTime" />
 
         <TextView

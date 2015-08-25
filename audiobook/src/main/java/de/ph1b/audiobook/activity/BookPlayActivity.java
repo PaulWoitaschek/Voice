@@ -75,7 +75,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     private TextView timerCountdownView;
     private CountDownTimer countDownTimer;
     private TextView bookProgressView, bookDurationView;
-    private boolean showRemainingTime = false;
 
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
 
@@ -130,16 +129,10 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                         }
 
                         // Setting book progress views
+                        // Show book progress as elapsed time
                         int bookDuration = chaptersLength.get(chaptersLength.size() - 1);
-                        if (showRemainingTime) {
-                            // Show book progress as negative value of remaining time
-                            int bookProgress = bookDuration - (chaptersLength.get(position) - duration + progress);
-                            bookProgressView.setText('-' + formatTime(bookProgress, bookDuration));
-                        } else {
-                            // Show book progress as elapsed time
-                            int bookProgress = chaptersLength.get(position) - duration + progress;
-                            bookProgressView.setText(formatTime(bookProgress, bookDuration));
-                        }
+                        int bookProgress = chaptersLength.get(position) - duration + progress;
+                        bookProgressView.setText(formatTime(bookProgress, bookDuration));
                         bookDurationView.setText(formatTime(bookDuration, bookDuration));
                     }
                 }
@@ -403,9 +396,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.played:
                 launchJumpToPositionDialog();
-                break;
-            case R.id.book_progress_view:
-                showRemainingTime = !showRemainingTime;
                 break;
             default:
                 break;
