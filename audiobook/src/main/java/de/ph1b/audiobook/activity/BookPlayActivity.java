@@ -22,6 +22,7 @@ import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -73,6 +74,8 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     private DataBaseHelper db;
     private TextView timerCountdownView;
     private CountDownTimer countDownTimer;
+    private TextView bookProgressView, bookDurationView;
+    private boolean showRemainingTime = false;
 
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
 
@@ -110,10 +113,35 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                         maxTimeView.setText(formatTime(duration, duration));
 
                         // Setting seekBar and played time view
+                        int progress = book.getTime();
                         if (!seekBar.isPressed()) {
-                            int progress = book.getTime();
                             seekBar.setProgress(progress);
                             playedTimeView.setText(formatTime(progress, duration));
+                        }
+
+                        if (chapters.size() > 1) {
+                            // Calculate chapters overall duration (current chapter + sum of prev. chapters' duration )
+                            final List<Integer> chaptersLength = new ArrayList<>();
+                            for (int i = 0; i < chapters.size(); i++) {
+                                if (i > 0) {
+                                    chaptersLength.add(chaptersLength.get(i - 1) + chapters.get(i).getDuration());
+                                } else {
+                                    chaptersLength.add(chapters.get(i).getDuration());
+                                }
+                            }
+
+                            // Setting book progress views
+                            int bookDuration = chaptersLength.get(chaptersLength.size() - 1);
+                            if (showRemainingTime) {
+                                // Show book progress as negative value of remaining time
+                                int bookProgress = bookDuration - (chaptersLength.get(position) - duration + progress);
+                                bookProgressView.setText('-' + formatTime(bookProgress, bookDuration));
+                            } else {
+                                // Show book progress as elapsed time
+                                int bookProgress = chaptersLength.get(position) - duration + progress;
+                                bookProgressView.setText(formatTime(bookProgress, bookDuration));
+                            }
+                            bookDurationView.setText(formatTime(bookDuration, bookDuration));
                         }
                     }
                 }
@@ -197,6 +225,9 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         maxTimeView = (TextView) findViewById(R.id.maxTime);
         bookSpinner = (Spinner) findViewById(R.id.book_spinner);
         timerCountdownView = (TextView) findViewById(R.id.timerView);
+        LinearLayout bookProgressGroupView = (LinearLayout) findViewById(R.id.book_progress_group);
+        bookProgressView = (TextView) findViewById(R.id.book_progress_view);
+        bookDurationView = (TextView) findViewById(R.id.book_duration_view);
 
         //setup buttons
         playButton.setIconDrawable(playPauseDrawable);
@@ -328,16 +359,19 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             });
         }
 
-        // Next/Prev/spinner hiding
+        // Next/Prev/spinner/book progress views hiding
         if (book.getChapters().size() == 1) {
             next_button.setVisibility(View.GONE);
             previous_button.setVisibility(View.GONE);
             bookSpinner.setVisibility(View.GONE);
+            bookProgressGroupView.setVisibility(View.GONE);
         } else {
             next_button.setVisibility(View.VISIBLE);
             previous_button.setVisibility(View.VISIBLE);
             bookSpinner.setVisibility(View.VISIBLE);
+            bookProgressGroupView.setVisibility(View.VISIBLE);
         }
+
 
         // transitions stuff
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -371,6 +405,9 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.played:
                 launchJumpToPositionDialog();
+                break;
+            case R.id.book_progress_view:
+                showRemainingTime = !showRemainingTime;
                 break;
             default:
                 break;
