@@ -6,8 +6,6 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.google.common.base.Preconditions;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -113,6 +111,34 @@ public class Book implements Comparable<Book> {
         return bookmarks;
     }
 
+    /**
+     * @return The global duration. It sums up the duration of all chapters.
+     */
+    public int getGlobalDuration() {
+        int globalDuration = 0;
+        for (Chapter c : chapters) {
+            globalDuration += c.getDuration();
+        }
+        return globalDuration;
+    }
+
+    /**
+     * @return The global position. It sums up the duration of all elapsed chapters plus the position
+     * in the current chapter.
+     */
+    public int getGlobalPosition() {
+        int globalPosition = 0;
+        for (Chapter c : chapters) {
+            if (c.equals(getCurrentChapter())) {
+                globalPosition += time;
+                return globalPosition;
+            } else {
+                globalPosition += c.getDuration();
+            }
+        }
+        throw new IllegalStateException("Current chapter was not found while looking up the global position");
+    }
+
 
     @NonNull
     public File getCoverFile() {
@@ -132,9 +158,6 @@ public class Book implements Comparable<Book> {
     }
 
     public void setPosition(int time, @NonNull File currentFile) {
-        Preconditions.checkNotNull(currentFile);
-        //TODO CHECK HERE
-
         boolean relativeMediaPathExists = false;
         for (Chapter c : chapters) {
             if (c.getFile().equals(currentFile)) {

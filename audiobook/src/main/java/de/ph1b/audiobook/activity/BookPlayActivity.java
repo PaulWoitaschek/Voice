@@ -118,22 +118,10 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                             playedTimeView.setText(formatTime(progress, duration));
                         }
 
-                        // Calculate chapters overall duration (current chapter + sum of prev. chapters' duration )
-                        final List<Integer> chaptersLength = new ArrayList<>();
-                        for (int i = 0; i < chapters.size(); i++) {
-                            if (i > 0) {
-                                chaptersLength.add(chaptersLength.get(i - 1) + chapters.get(i).getDuration());
-                            } else {
-                                chaptersLength.add(chapters.get(i).getDuration());
-                            }
-                        }
-
-                        // Setting book progress views
                         // Show book progress as elapsed time
-                        int bookDuration = chaptersLength.get(chaptersLength.size() - 1);
-                        int bookProgress = chaptersLength.get(position) - duration + progress;
-                        bookProgressView.setText(formatTime(bookProgress, bookDuration));
-                        bookDurationView.setText(formatTime(bookDuration, bookDuration));
+                        int globalDuration = book.getGlobalDuration();
+                        bookProgressView.setText(formatTime(book.getGlobalPosition(), globalDuration));
+                        bookDurationView.setText(formatTime(globalDuration, globalDuration));
                     }
                 }
             });
