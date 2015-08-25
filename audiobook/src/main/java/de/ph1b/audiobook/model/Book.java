@@ -10,6 +10,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.ph1b.audiobook.persistence.DataBaseHelper;
+
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 

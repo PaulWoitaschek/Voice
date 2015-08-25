@@ -27,9 +27,9 @@ import java.util.List;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.FolderOverviewAdapter;
 import de.ph1b.audiobook.model.BookAdder;
+import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.DividerItemDecoration;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.PrefsManager;
 
 public class FolderOverviewActivity extends BaseActivity {
 

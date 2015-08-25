@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.model;
+package de.ph1b.audiobook.persistence;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -18,6 +18,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import de.ph1b.audiobook.model.Book;
+import de.ph1b.audiobook.model.Bookmark;
+import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
 

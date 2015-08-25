@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
-import de.ph1b.audiobook.model.DataBaseHelper;
+import de.ph1b.audiobook.persistence.DataBaseHelper;
 
 
 public class BookActivityTest extends ActivityInstrumentationTestCase2<BookShelfActivity> {

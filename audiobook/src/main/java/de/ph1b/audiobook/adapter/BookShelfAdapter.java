@@ -22,8 +22,8 @@ import java.util.List;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.NaturalOrderComparator;
+import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.CoverReplacement;
-import de.ph1b.audiobook.utils.PrefsManager;
 
 public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.ViewHolder> {
 

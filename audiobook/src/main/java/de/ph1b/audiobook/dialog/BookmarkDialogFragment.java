@@ -29,11 +29,11 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.BookmarkAdapter;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
-import de.ph1b.audiobook.model.DataBaseHelper;
+import de.ph1b.audiobook.persistence.DataBaseHelper;
+import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.DividerItemDecoration;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.PrefsManager;
 
 /**
  * @author <a href="mailto:woitaschek@posteo.de">Paul Woitaschek</a>

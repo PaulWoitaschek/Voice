@@ -23,10 +23,10 @@ import java.util.concurrent.locks.ReentrantLock;
 import de.ph1b.audiobook.activity.BookShelfActivity;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
-import de.ph1b.audiobook.model.DataBaseHelper;
+import de.ph1b.audiobook.persistence.DataBaseHelper;
+import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.PrefsManager;
 
 public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         MediaPlayerInterface.OnCompletionListener {

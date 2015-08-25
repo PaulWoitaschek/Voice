@@ -32,12 +32,12 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookShelfActivity;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
-import de.ph1b.audiobook.model.DataBaseHelper;
+import de.ph1b.audiobook.persistence.DataBaseHelper;
+import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.receiver.BaseWidgetProvider;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.Communication;
-import de.ph1b.audiobook.utils.PrefsManager;
 
 public class WidgetUpdateService extends Service {
     private final ExecutorService executor = new ThreadPoolExecutor(

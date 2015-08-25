@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.utils;
+package de.ph1b.audiobook.persistence;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,6 +14,7 @@ import java.util.Set;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
+import de.ph1b.audiobook.utils.Communication;
 
 /**
  * Preference manager, managing the setting and getting of {@link SharedPreferences}

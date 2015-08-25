@@ -13,8 +13,8 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.ThemeUtil;
-import de.ph1b.audiobook.utils.PrefsManager;
 
 public class SleepDialogPreference extends DialogPreference {
 

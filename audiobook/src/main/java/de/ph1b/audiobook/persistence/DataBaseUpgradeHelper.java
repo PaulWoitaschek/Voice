@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.model;
+package de.ph1b.audiobook.persistence;
 
 import android.content.ContentValues;
 import android.content.Context;

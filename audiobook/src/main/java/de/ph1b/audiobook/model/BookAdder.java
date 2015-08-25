@@ -23,11 +23,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import de.ph1b.audiobook.activity.BaseActivity;
+import de.ph1b.audiobook.persistence.DataBaseHelper;
+import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.FileRecognition;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.PrefsManager;
 
 
 /**

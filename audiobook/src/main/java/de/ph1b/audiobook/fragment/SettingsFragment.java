@@ -23,9 +23,9 @@ import de.ph1b.audiobook.dialog.DonationDialogFragment;
 import de.ph1b.audiobook.dialog.SeekDialogPreference;
 import de.ph1b.audiobook.dialog.SleepDialogPreference;
 import de.ph1b.audiobook.dialog.SupportDialogFragment;
+import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.utils.BaseApplication;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.PrefsManager;
 import de.ph1b.audiobook.vendinghelper.IabHelper;
 import de.ph1b.audiobook.vendinghelper.IabResult;
 

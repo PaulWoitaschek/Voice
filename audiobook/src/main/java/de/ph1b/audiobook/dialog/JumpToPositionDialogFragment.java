@@ -14,10 +14,10 @@ import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
-import de.ph1b.audiobook.model.DataBaseHelper;
+import de.ph1b.audiobook.persistence.DataBaseHelper;
+import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.ThemeUtil;
-import de.ph1b.audiobook.utils.PrefsManager;
 
 public class JumpToPositionDialogFragment extends BaseDialogFragment {
 

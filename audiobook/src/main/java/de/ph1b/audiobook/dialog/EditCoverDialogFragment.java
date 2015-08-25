@@ -24,7 +24,7 @@ import java.util.concurrent.Executors;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
-import de.ph1b.audiobook.model.DataBaseHelper;
+import de.ph1b.audiobook.persistence.DataBaseHelper;
 import de.ph1b.audiobook.uitools.CoverDownloader;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.DraggableBoxImageView;
