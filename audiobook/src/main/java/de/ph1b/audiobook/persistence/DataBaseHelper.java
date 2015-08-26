@@ -48,10 +48,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         this.c = c;
 
         SQLiteDatabase db = getReadableDatabase();
-        Cursor bookCursor = db.query(BookTable.TABLE_BOOK,
-                new String[]{BookTable.BOOK_ID, BookTable.BOOK_NAME, BookTable.BOOK_AUTHOR, BookTable.BOOK_CURRENT_MEDIA_PATH,
-                        BookTable.BOOK_PLAYBACK_SPEED, BookTable.BOOK_ROOT, BookTable.BOOK_TIME, BookTable.BOOK_TYPE, BookTable.BOOK_USE_COVER_REPLACEMENT,
-                        BookTable.BOOK_ACTIVE},
+        Cursor bookCursor = db.query(BookTable.TABLE_NAME,
+                new String[]{BookTable.ID, BookTable.NAME, BookTable.AUTHOR, BookTable.CURRENT_MEDIA_PATH,
+                        BookTable.PLAYBACK_SPEED, BookTable.ROOT, BookTable.TIME, BookTable.TYPE, BookTable.USE_COVER_REPLACEMENT,
+                        BookTable.ACTIVE},
                 null, null, null, null, null);
         try {
             activeBooks = new ArrayList<>(bookCursor.getCount());
@@ -68,9 +68,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 boolean bookUseCoverReplacement = bookCursor.getInt(8) == 1;
                 boolean bookActive = bookCursor.getInt(9) == 1;
 
-                Cursor chapterCursor = db.query(ChapterTable.TABLE_CHAPTERS,
-                        new String[]{ChapterTable.CHAPTER_DURATION, ChapterTable.CHAPTER_NAME, ChapterTable.CHAPTER_PATH},
-                        BookTable.BOOK_ID + "=?",
+                Cursor chapterCursor = db.query(ChapterTable.TABLE_NAME,
+                        new String[]{ChapterTable.DURATION, ChapterTable.NAME, ChapterTable.PATH},
+                        BookTable.ID + "=?",
                         new String[]{String.valueOf(bookId)},
                         null, null, null);
                 List<Chapter> chapters = new ArrayList<>(chapterCursor.getCount());
@@ -86,9 +86,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 }
                 Collections.sort(chapters);
 
-                Cursor bookmarkCursor = db.query(BookmarkTable.TABLE_BOOKMARKS,
-                        new String[]{BookmarkTable.BOOKMARK_PATH, BookmarkTable.BOOKMARK_TIME, BookmarkTable.BOOKMARK_TITLE},
-                        BookTable.BOOK_ID + "=?", new String[]{String.valueOf(bookId)}
+                Cursor bookmarkCursor = db.query(BookmarkTable.TABLE_NAME,
+                        new String[]{BookmarkTable.PATH, BookmarkTable.TIME, BookmarkTable.TITLE},
+                        BookTable.ID + "=?", new String[]{String.valueOf(bookId)}
                         , null, null, null);
                 List<Bookmark> bookmarks = new ArrayList<>(bookmarkCursor.getCount());
                 try {
@@ -136,17 +136,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         try {
             ContentValues bookCv = BookTable.getContentValues(mutableBook);
 
-            long bookId = db.insert(BookTable.TABLE_BOOK, null, bookCv);
+            long bookId = db.insert(BookTable.TABLE_NAME, null, bookCv);
             mutableBook.setId(bookId);
 
             for (Chapter c : mutableBook.getChapters()) {
                 ContentValues chapterCv = ChapterTable.getContentValues(c, mutableBook.getId());
-                db.insert(ChapterTable.TABLE_CHAPTERS, null, chapterCv);
+                db.insert(ChapterTable.TABLE_NAME, null, chapterCv);
             }
 
             for (Bookmark b : mutableBook.getBookmarks()) {
                 ContentValues bookmarkCv = BookmarkTable.getContentValues(b, mutableBook.getId());
-                db.insert(BookmarkTable.TABLE_BOOKMARKS, null, bookmarkCv);
+                db.insert(BookmarkTable.TABLE_NAME, null, bookmarkCv);
             }
 
             db.setTransactionSuccessful();
@@ -203,20 +203,20 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 try {
                     // update book itself
                     ContentValues bookCv = BookTable.getContentValues(mutableBook);
-                    db.update(BookTable.TABLE_BOOK, bookCv, BookTable.BOOK_ID + "=?", new String[]{String.valueOf(mutableBook.getId())});
+                    db.update(BookTable.TABLE_NAME, bookCv, BookTable.ID + "=?", new String[]{String.valueOf(mutableBook.getId())});
 
                     // delete old chapters and replace them with new ones
-                    db.delete(ChapterTable.TABLE_CHAPTERS, BookTable.BOOK_ID + "=?", new String[]{String.valueOf(mutableBook.getId())});
+                    db.delete(ChapterTable.TABLE_NAME, BookTable.ID + "=?", new String[]{String.valueOf(mutableBook.getId())});
                     for (Chapter c : mutableBook.getChapters()) {
                         ContentValues chapterCv = ChapterTable.getContentValues(c, mutableBook.getId());
-                        db.insert(ChapterTable.TABLE_CHAPTERS, null, chapterCv);
+                        db.insert(ChapterTable.TABLE_NAME, null, chapterCv);
                     }
 
                     // replace old bookmarks and replace them with new ones
-                    db.delete(BookmarkTable.TABLE_BOOKMARKS, BookTable.BOOK_ID + "=?", new String[]{String.valueOf(mutableBook.getId())});
+                    db.delete(BookmarkTable.TABLE_NAME, BookTable.ID + "=?", new String[]{String.valueOf(mutableBook.getId())});
                     for (Bookmark b : mutableBook.getBookmarks()) {
                         ContentValues bookmarkCV = BookmarkTable.getContentValues(b, mutableBook.getId());
-                        db.insert(BookmarkTable.TABLE_BOOKMARKS, null, bookmarkCV);
+                        db.insert(BookmarkTable.TABLE_NAME, null, bookmarkCV);
                     }
 
                     db.setTransactionSuccessful();
@@ -241,8 +241,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             if (next.getId() == mutableBook.getId()) {
                 iterator.remove();
                 ContentValues cv = new ContentValues();
-                cv.put(BookTable.BOOK_ACTIVE, 0);
-                getWritableDatabase().update(BookTable.TABLE_BOOK, cv, BookTable.BOOK_ID + "=?", new String[]{String.valueOf(mutableBook.getId())});
+                cv.put(BookTable.ACTIVE, 0);
+                getWritableDatabase().update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", new String[]{String.valueOf(mutableBook.getId())});
                 break;
             }
         }
@@ -258,8 +258,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             if (orphanedBookIterator.next().getId() == mutableBook.getId()) {
                 orphanedBookIterator.remove();
                 ContentValues cv = new ContentValues();
-                cv.put(BookTable.BOOK_ACTIVE, 1);
-                getWritableDatabase().update(BookTable.TABLE_BOOK, cv, BookTable.BOOK_ID + "=?", new String[]{String.valueOf(mutableBook.getId())});
+                cv.put(BookTable.ACTIVE, 1);
+                getWritableDatabase().update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", new String[]{String.valueOf(mutableBook.getId())});
                 break;
             }
         }

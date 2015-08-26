@@ -11,32 +11,32 @@ import de.ph1b.audiobook.model.Bookmark;
  * @author Paul Woitaschek
  */
 class BookmarkTable {
-    static final String BOOKMARK_PATH = "bookmarkPath";
-    static final String BOOKMARK_TITLE = "bookmarkTitle";
-    static final String TABLE_BOOKMARKS = "tableBookmarks";
-    static final String BOOKMARK_TIME = "bookmarkTime";
-    private static final String CREATE_TABLE_BOOKMARKS = "CREATE TABLE " + TABLE_BOOKMARKS + " ( " +
-            BOOKMARK_PATH + " TEXT NOT NULL, " +
-            BOOKMARK_TITLE + " TEXT NOT NULL, " +
-            BOOKMARK_TIME + " INTEGER NOT NULL, " +
-            BookTable.BOOK_ID + " INTEGER NOT NULL, " +
-            "FOREIGN KEY (" + BookTable.BOOK_ID + ") REFERENCES " + BookTable.TABLE_BOOK + "(" + BookTable.BOOK_ID + "))";
+    static final String PATH = "bookmarkPath";
+    static final String TITLE = "bookmarkTitle";
+    static final String TABLE_NAME = "tableBookmarks";
+    static final String TIME = "bookmarkTime";
+    private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ( " +
+            PATH + " TEXT NOT NULL, " +
+            TITLE + " TEXT NOT NULL, " +
+            TIME + " INTEGER NOT NULL, " +
+            BookTable.ID + " INTEGER NOT NULL, " +
+            "FOREIGN KEY (" + BookTable.ID + ") REFERENCES " + BookTable.TABLE_NAME + "(" + BookTable.ID + "))";
 
     static ContentValues getContentValues(Bookmark bookmark, long bookId) {
         ContentValues cv = new ContentValues();
-        cv.put(BOOKMARK_TIME, bookmark.getTime());
-        cv.put(BOOKMARK_PATH, bookmark.getMediaFile().getAbsolutePath());
-        cv.put(BOOKMARK_TITLE, bookmark.getTitle());
-        cv.put(BookTable.BOOK_ID, bookId);
+        cv.put(TIME, bookmark.getTime());
+        cv.put(PATH, bookmark.getMediaFile().getAbsolutePath());
+        cv.put(TITLE, bookmark.getTitle());
+        cv.put(BookTable.ID, bookId);
         return cv;
     }
 
 
     public static void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLE_BOOKMARKS);
+        db.execSQL(CREATE_TABLE);
     }
 
     public static void dropTableIfExists(SQLiteDatabase db) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BOOKMARKS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
     }
 }
