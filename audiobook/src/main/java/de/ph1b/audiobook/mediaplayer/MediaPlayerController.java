@@ -14,6 +14,8 @@ import net.jcip.annotations.GuardedBy;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -93,19 +95,10 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
      * @return true if the device can set variable playback speed.
      */
     public static boolean canSetSpeed() {
-        boolean greaterJellyBean = Build.VERSION.SDK_INT >=
-                Build.VERSION_CODES.JELLY_BEAN;
-
-        boolean me173x = Build.MODEL.equals("ME173X") && Build.HARDWARE.equals("mt8125");
-        boolean n903 = Build.MODEL.equals("N903") && Build.HARDWARE.equals("mt6582");
-        boolean microMaxA116 = Build.MODEL.equals("Micromax A116") && Build.HARDWARE.equals("mt6589");
-        boolean hmNote1w = Build.MODEL.equals("HM NOTE 1W") && Build.HARDWARE.equals("mt6592");
-        boolean gSmartRomaR2 = Build.MODEL.equals("GSmart Roma R2") && Build.HARDWARE.equals("mt6572");
-        boolean lgE455 = Build.MODEL.equals("LG-E455") && Build.HARDWARE.equals("mt6575");
-        boolean fp1u = Build.MODEL.equals("FP1U") && Build.HARDWARE.equals("mt6589");
-
-        return greaterJellyBean &&
-                !(me173x || n903 || microMaxA116 || hmNote1w || gSmartRomaR2 || lgE455 || fp1u);
+        boolean greaterJellyBean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
+        List<String> hwBlacklist = Arrays.asList("mt6572", "mt6575", "mt6582", "mt6589", "mt6592",
+                "mt8125");
+        return greaterJellyBean && !(hwBlacklist.contains(Build.HARDWARE));
     }
 
     public static PlayState getPlayState() {
