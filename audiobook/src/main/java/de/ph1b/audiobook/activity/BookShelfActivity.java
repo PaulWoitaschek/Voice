@@ -9,10 +9,8 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +36,7 @@ import de.ph1b.audiobook.model.BookAdder;
 import de.ph1b.audiobook.persistence.DataBaseHelper;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.ServiceController;
+import de.ph1b.audiobook.uitools.ListGridSetter;
 import de.ph1b.audiobook.uitools.PlayPauseDrawable;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
@@ -122,6 +121,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         }
     };
     private DataBaseHelper db;
+    private ListGridSetter listGridSetter;
 
     public static Intent malformedFileIntent(Context c, File malformedFile) {
         Intent intent = new Intent(c, BookShelfActivity.class);
@@ -168,7 +168,8 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         fab.setIconDrawable(playPauseDrawable);
         fab.setOnClickListener(this);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, getAmountOfColumns()));
+        listGridSetter = new ListGridSetter(recyclerView);
+        listGridSetter.setDisplayMode(ListGridSetter.DisplayMode.GRID);
         adapter = new BookShelfAdapter(this, this);
         recyclerView.setAdapter(adapter);
 
@@ -181,19 +182,6 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                         .show();
             }
         }
-    }
-
-    /**
-     * Returns the amount of columns the main-grid will need.
-     *
-     * @return The amount of columns, but at least 2.
-     */
-    private int getAmountOfColumns() {
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        float widthPx = displayMetrics.widthPixels;
-        float desiredPx = getResources().getDimensionPixelSize(R.dimen.desired_medium_cover);
-        int columns = Math.round(widthPx / desiredPx);
-        return Math.max(columns, 2);
     }
 
     @Override
@@ -284,6 +272,9 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         // sets menu item visible if there is a current book
         MenuItem currentPlaying = menu.findItem(R.id.action_current);
         currentPlaying.setVisible(db.getBook(prefs.getCurrentBookId()) != null);
+
+        MenuItem displayMode = menu.findItem(R.id.action_change_layout);
+        displayMode.setIcon(listGridSetter.getMenuIcon());
         return true;
     }
 
@@ -295,6 +286,13 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 return true;
             case R.id.action_current:
                 startBookPlay();
+                return true;
+            case R.id.action_change_layout:
+                ListGridSetter.DisplayMode mode = listGridSetter.getDisplayMode();
+                ListGridSetter.DisplayMode invertedMode = mode == ListGridSetter.DisplayMode.GRID ?
+                        ListGridSetter.DisplayMode.LIST : ListGridSetter.DisplayMode.GRID;
+                listGridSetter.setDisplayMode(invertedMode);
+                invalidateOptionsMenu();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

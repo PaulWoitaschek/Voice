@@ -10,6 +10,13 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/action_change_layout"
+        android:icon="@drawable/ic_view_grid_white_24dp"
+        android:orderInCategory="95"
+        android:title="@string/change_layout_type"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
