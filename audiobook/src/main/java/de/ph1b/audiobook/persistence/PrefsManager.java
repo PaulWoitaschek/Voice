@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.activity.BookShelfActivity;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.utils.Communication;
 
@@ -26,6 +27,7 @@ public class PrefsManager {
     private static final String PREF_KEY_COLLECTION_FOLDERS = "folders";
     private static final String PREF_KEY_SINGLE_BOOK_FOLDERS = "singleBookFolders";
     private static final Communication communication = Communication.getInstance();
+    private static final String PREF_KEY_DISPLAY_MODE = "displayMode";
     private static PrefsManager instance;
     @NonNull
     private final Context c;
@@ -101,7 +103,6 @@ public class PrefsManager {
         return new ArrayList<>(set);
     }
 
-
     /**
      * Like {@link PrefsManager#setCollectionFolders(List)} ()} but with
      * {@link de.ph1b.audiobook.model.Book.Type#SINGLE_FILE} or
@@ -115,7 +116,6 @@ public class PrefsManager {
         sp.edit().putStringSet(PREF_KEY_SINGLE_BOOK_FOLDERS, set)
                 .apply();
     }
-
 
     /**
      * Returns the time to sleep after which the player should pause the book when sleep timer has
@@ -196,5 +196,21 @@ public class PrefsManager {
      */
     public synchronized boolean setBookmarkOnSleepTimer() {
         return sp.getBoolean(c.getString(R.string.pref_key_bookmark_on_sleep), false);
+    }
+
+    /**
+     * @return the display mode that has been set or the default.
+     */
+    public synchronized BookShelfActivity.DisplayMode getDisplayMode() {
+        return BookShelfActivity.DisplayMode.valueOf(sp.getString(PREF_KEY_DISPLAY_MODE, BookShelfActivity.DisplayMode.GRID.name()));
+    }
+
+    /**
+     * Sets the display mode.
+     *
+     * @param displayMode the mode to set
+     */
+    public synchronized void setDisplayMode(BookShelfActivity.DisplayMode displayMode) {
+        sp.edit().putString(PREF_KEY_DISPLAY_MODE, displayMode.name()).apply();
     }
 }

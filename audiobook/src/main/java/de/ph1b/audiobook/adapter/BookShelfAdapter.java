@@ -20,13 +20,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.activity.BookShelfActivity;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.NaturalOrderComparator;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 
-public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.ViewHolder> {
+public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.BaseViewHolder> {
 
+    private final BookShelfActivity.DisplayMode displayMode;
     @NonNull
     private final Context c;
     private final PrefsManager prefs;
@@ -50,11 +52,11 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
         }
     });
 
-    public BookShelfAdapter(@NonNull Context c, OnItemClickListener onItemClickListener) {
+    public BookShelfAdapter(@NonNull Context c, BookShelfActivity.DisplayMode displayMode, OnItemClickListener onItemClickListener) {
         this.c = c;
         this.onItemClickListener = onItemClickListener;
         this.prefs = PrefsManager.getInstance(c);
-
+        this.displayMode = displayMode;
         setHasStableIds(true);
     }
 
@@ -111,6 +113,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
         }
     }
 
+
     @Override
     public long getItemId(int position) {
         return sortedList.get(position).getId();
@@ -122,10 +125,21 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-        ViewGroup v = (ViewGroup) LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.activity_book_shelf_row_layout, parent, false);
-        return new ViewHolder(v);
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
+
+
+    @Override
+    public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        switch (displayMode) {
+            case GRID:
+                return new GridViewHolder(parent);
+            case LIST:
+                return new ListViewHolder(parent);
+            default:
+                throw new IllegalStateException("Illegal viewType=" + viewType);
+        }
     }
 
     public void notifyItemAtIdChanged(long id) {
@@ -138,7 +152,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(final BaseViewHolder viewHolder, int position) {
         viewHolder.bind(position);
     }
 
@@ -154,16 +168,30 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
         void onMenuClicked(final int position, View view);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ListViewHolder extends BaseViewHolder {
+
+        public ListViewHolder(ViewGroup parent) {
+            super(LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.activity_book_shelf_list_layout, parent, false));
+        }
+    }
+
+    public class GridViewHolder extends BaseViewHolder {
+
+        public GridViewHolder(ViewGroup parent) {
+            super(LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.activity_book_shelf_grid_layout, parent, false));
+        }
+    }
+
+    public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
         public final ImageView coverView;
         private final TextView titleView;
         private final View editBook;
         private final ImageView currentPlayingIndicator;
-        private final View view;
 
-        public ViewHolder(final ViewGroup itemView) {
+        public BaseViewHolder(View itemView) {
             super(itemView);
-            this.view = itemView;
             coverView = (ImageView) itemView.findViewById(R.id.coverView);
             titleView = (TextView) itemView.findViewById(R.id.title);
             editBook = itemView.findViewById(R.id.editBook);
@@ -193,7 +221,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
                 currentPlayingIndicator.setVisibility(View.GONE);
             }
 
-            view.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onItemClickListener.onCoverClicked(getAdapterPosition());

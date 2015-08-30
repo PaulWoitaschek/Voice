@@ -2,6 +2,7 @@ package de.ph1b.audiobook.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -9,8 +10,11 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,7 +40,7 @@ import de.ph1b.audiobook.model.BookAdder;
 import de.ph1b.audiobook.persistence.DataBaseHelper;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.ServiceController;
-import de.ph1b.audiobook.uitools.ListGridSetter;
+import de.ph1b.audiobook.uitools.DividerItemDecoration;
 import de.ph1b.audiobook.uitools.PlayPauseDrawable;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
@@ -121,7 +125,9 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         }
     };
     private DataBaseHelper db;
-    private ListGridSetter listGridSetter;
+    private RecyclerView.ItemDecoration listDecoration;
+    private RecyclerView.LayoutManager gridLayoutManager;
+    private RecyclerView.LayoutManager linearLayoutManager;
 
     public static Intent malformedFileIntent(Context c, File malformedFile) {
         Intent intent = new Intent(c, BookShelfActivity.class);
@@ -168,10 +174,11 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         fab.setIconDrawable(playPauseDrawable);
         fab.setOnClickListener(this);
         recyclerView.setHasFixedSize(true);
-        listGridSetter = new ListGridSetter(recyclerView);
-        listGridSetter.setDisplayMode(ListGridSetter.DisplayMode.GRID);
-        adapter = new BookShelfAdapter(this, this);
-        recyclerView.setAdapter(adapter);
+
+        listDecoration = new DividerItemDecoration(recyclerView.getContext());
+        gridLayoutManager = new GridLayoutManager(recyclerView.getContext(), getAmountOfColumns());
+        linearLayoutManager = new LinearLayoutManager(recyclerView.getContext());
+        initViewType();
 
         if (savedInstanceState == null) {
             if (getIntent().hasExtra(MALFORMED_FILE)) {
@@ -182,6 +189,36 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                         .show();
             }
         }
+    }
+
+    private void initViewType() {
+        DisplayMode defaultDisplayMode = prefs.getDisplayMode();
+        recyclerView.invalidateItemDecorations();
+        if (defaultDisplayMode == BookShelfActivity.DisplayMode.GRID) {
+            recyclerView.setLayoutManager(gridLayoutManager);
+        } else {
+            recyclerView.setLayoutManager(linearLayoutManager);
+            recyclerView.addItemDecoration(listDecoration);
+        }
+        adapter = new BookShelfAdapter(this, defaultDisplayMode, this);
+        adapter.newDataSet(db.getActiveBooks());
+        recyclerView.setAdapter(adapter);
+        invalidateOptionsMenu();
+    }
+
+
+    /**
+     * Returns the amount of columns the main-grid will need.
+     *
+     * @return The amount of columns, but at least 2.
+     */
+    private int getAmountOfColumns() {
+        Resources r = recyclerView.getResources();
+        DisplayMetrics displayMetrics = r.getDisplayMetrics();
+        float widthPx = displayMetrics.widthPixels;
+        float desiredPx = r.getDimensionPixelSize(R.dimen.desired_medium_cover);
+        int columns = Math.round(widthPx / desiredPx);
+        return Math.max(columns, 2);
     }
 
     @Override
@@ -273,8 +310,10 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         MenuItem currentPlaying = menu.findItem(R.id.action_current);
         currentPlaying.setVisible(db.getBook(prefs.getCurrentBookId()) != null);
 
-        MenuItem displayMode = menu.findItem(R.id.action_change_layout);
-        displayMode.setIcon(listGridSetter.getMenuIcon());
+        MenuItem displayModeItem = menu.findItem(R.id.action_change_layout);
+        DisplayMode displayMode = prefs.getDisplayMode();
+        displayModeItem.setIcon(displayMode == DisplayMode.GRID ?
+                R.drawable.ic_view_list_white_24dp : R.drawable.ic_view_grid_white_24dp);
         return true;
     }
 
@@ -288,11 +327,10 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
                 startBookPlay();
                 return true;
             case R.id.action_change_layout:
-                ListGridSetter.DisplayMode mode = listGridSetter.getDisplayMode();
-                ListGridSetter.DisplayMode invertedMode = mode == ListGridSetter.DisplayMode.GRID ?
-                        ListGridSetter.DisplayMode.LIST : ListGridSetter.DisplayMode.GRID;
-                listGridSetter.setDisplayMode(invertedMode);
-                invalidateOptionsMenu();
+                DisplayMode mode = prefs.getDisplayMode();
+                DisplayMode invertedMode = mode == DisplayMode.GRID ? DisplayMode.LIST : DisplayMode.GRID;
+                prefs.setDisplayMode(invertedMode);
+                initViewType();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -305,7 +343,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         if (currentBook != null) {
             List<Pair<View, String>> sharedElements = new ArrayList<>(2);
 
-            BookShelfAdapter.ViewHolder viewHolder = (BookShelfAdapter.ViewHolder) recyclerView.findViewHolderForItemId(currentBook.getId());
+            BookShelfAdapter.BaseViewHolder viewHolder = (BookShelfAdapter.BaseViewHolder) recyclerView.findViewHolderForItemId(currentBook.getId());
             if (viewHolder != null) {
                 sharedElements.add(new Pair<View, String>(viewHolder.coverView, ViewCompat.getTransitionName(viewHolder.coverView)));
             }
@@ -389,5 +427,10 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
             }
         });
         popupMenu.show();
+    }
+
+    public enum DisplayMode {
+        GRID,
+        LIST
     }
 }
