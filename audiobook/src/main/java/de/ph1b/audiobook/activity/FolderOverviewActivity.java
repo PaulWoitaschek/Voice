@@ -202,8 +202,6 @@ public class FolderOverviewActivity extends BaseActivity {
         intent.putExtra(FolderChooserActivity.ACTIVITY_FOR_RESULT_REQUEST_CODE,
                 requestCode);
         startActivityForResult(intent, requestCode);
-
-        fam.setOnFloatingActionsMenuUpdateListener(null);
     }
 
     /**
@@ -246,9 +244,12 @@ public class FolderOverviewActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        // we don't want our listener be informed.
+        fam.setOnFloatingActionsMenuUpdateListener(null);
         fam.collapseImmediately();
-        backgroundOverlay.setVisibility(View.GONE);
         fam.setOnFloatingActionsMenuUpdateListener(famMenuListener);
+
+        backgroundOverlay.setVisibility(View.GONE);
 
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
