@@ -23,6 +23,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="top|right"
+            android:layout_margin="4dp"
             android:background="@drawable/current_playing_circle_background"
             android:contentDescription="@string/content_current_book"
             android:padding="4dp"

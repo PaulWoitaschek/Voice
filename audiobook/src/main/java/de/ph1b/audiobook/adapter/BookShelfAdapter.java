@@ -2,6 +2,7 @@ package de.ph1b.audiobook.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.util.SortedList;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -42,8 +44,9 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
 
         @Override
         public boolean areContentsTheSame(Book oldItem, Book newItem) {
-            return oldItem.getName().equals(newItem.getName()) &&
-                    oldItem.isUseCoverReplacement() == newItem.isUseCoverReplacement();
+            return oldItem.getGlobalPosition() == newItem.getGlobalPosition()
+                    && oldItem.getName().equals(newItem.getName())
+                    && oldItem.isUseCoverReplacement() == newItem.isUseCoverReplacement();
         }
 
         @Override
@@ -170,9 +173,21 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
 
     public class ListViewHolder extends BaseViewHolder {
 
+        private final ProgressBar progressBar;
+
         public ListViewHolder(ViewGroup parent) {
             super(LayoutInflater.from(parent.getContext()).inflate(
                     R.layout.activity_book_shelf_list_layout, parent, false));
+            progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
+        }
+
+        @Override
+        public void bind(int position) {
+            super.bind(position);
+
+            Book b = sortedList.get(position);
+            int progress = Math.round(100f * (float) b.getGlobalPosition() / (float) b.getGlobalDuration());
+            progressBar.setProgress(progress);
         }
     }
 
@@ -198,6 +213,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
             currentPlayingIndicator = (ImageView) itemView.findViewById(R.id.currentPlayingIndicator);
         }
 
+        @CallSuper
         public void bind(int position) {
             Book b = sortedList.get(position);
 
@@ -208,6 +224,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
             // (Cover)
             File coverFile = b.getCoverFile();
             Drawable coverReplacement = new CoverReplacement(b.getName(), c);
+
             if (!b.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
                 Picasso.with(c).load(coverFile).placeholder(coverReplacement).into(coverView);
             } else {
