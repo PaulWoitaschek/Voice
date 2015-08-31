@@ -193,7 +193,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
 
     private void initViewType() {
         DisplayMode defaultDisplayMode = prefs.getDisplayMode();
-        recyclerView.invalidateItemDecorations();
+        recyclerView.removeItemDecoration(listDecoration);
         if (defaultDisplayMode == BookShelfActivity.DisplayMode.GRID) {
             recyclerView.setLayoutManager(gridLayoutManager);
         } else {
