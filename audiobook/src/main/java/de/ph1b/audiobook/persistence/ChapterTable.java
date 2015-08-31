@@ -15,12 +15,13 @@ class ChapterTable {
     static final String NAME = "chapterName";
     static final String PATH = "chapterPath";
     static final String TABLE_NAME = "tableChapters";
+    static final String BOOK_ID = "bookId";
     private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ( " +
             DURATION + " INTEGER NOT NULL, " +
             NAME + " TEXT NOT NULL, " +
             PATH + " TEXT NOT NULL, " +
-            BookTable.ID + " INTEGER NOT NULL, " +
-            "FOREIGN KEY (" + BookTable.ID + ") REFERENCES " + BookTable.TABLE_NAME + "(" + BookTable.ID + "))";
+            BOOK_ID + " INTEGER NOT NULL, " +
+            "FOREIGN KEY (" + BOOK_ID + ") REFERENCES " + BookTable.TABLE_NAME + "(" + BookTable.ID + "))";
 
     public static ContentValues getContentValues(Chapter chapter, long bookId) {
         ContentValues chapterCv = new ContentValues();

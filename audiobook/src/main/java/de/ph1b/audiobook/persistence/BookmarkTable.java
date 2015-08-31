@@ -15,12 +15,13 @@ class BookmarkTable {
     static final String TITLE = "bookmarkTitle";
     static final String TABLE_NAME = "tableBookmarks";
     static final String TIME = "bookmarkTime";
+    static final String BOOK_ID = "bookId";
     private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ( " +
             PATH + " TEXT NOT NULL, " +
             TITLE + " TEXT NOT NULL, " +
             TIME + " INTEGER NOT NULL, " +
-            BookTable.ID + " INTEGER NOT NULL, " +
-            "FOREIGN KEY (" + BookTable.ID + ") REFERENCES " + BookTable.TABLE_NAME + "(" + BookTable.ID + "))";
+            BOOK_ID + " INTEGER NOT NULL, " +
+            "FOREIGN KEY (" + BOOK_ID + ") REFERENCES " + BookTable.TABLE_NAME + "(" + BookTable.ID + "))";
 
     static ContentValues getContentValues(Bookmark bookmark, long bookId) {
         ContentValues cv = new ContentValues();
