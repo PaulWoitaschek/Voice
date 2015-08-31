@@ -22,7 +22,6 @@ import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -55,8 +54,9 @@ import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.TransitionPostponeHelper;
 
 /**
- * Created by Paul Woitaschek (woitaschek@posteo.de, paul-woitaschek.de) on 12.07.15.
  * Base class for book playing interaction.
+ *
+ * @author Paul Woitaschek
  */
 public class BookPlayActivity extends BaseActivity implements View.OnClickListener {
 
@@ -74,7 +74,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     private DataBaseHelper db;
     private TextView timerCountdownView;
     private CountDownTimer countDownTimer;
-    private TextView bookProgressView, bookDurationView;
 
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
 
@@ -117,11 +116,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                             seekBar.setProgress(progress);
                             playedTimeView.setText(formatTime(progress, duration));
                         }
-
-                        // Show book progress as elapsed time
-                        int globalDuration = book.getGlobalDuration();
-                        bookProgressView.setText(formatTime(book.getGlobalPosition(), globalDuration));
-                        bookDurationView.setText(formatTime(globalDuration, globalDuration));
                     }
                 }
             });
@@ -204,9 +198,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         maxTimeView = (TextView) findViewById(R.id.maxTime);
         bookSpinner = (Spinner) findViewById(R.id.book_spinner);
         timerCountdownView = (TextView) findViewById(R.id.timerView);
-        LinearLayout bookProgressGroupView = (LinearLayout) findViewById(R.id.book_progress_group);
-        bookProgressView = (TextView) findViewById(R.id.book_progress_view);
-        bookDurationView = (TextView) findViewById(R.id.book_duration_view);
 
         //setup buttons
         playButton.setIconDrawable(playPauseDrawable);
@@ -343,14 +334,11 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             next_button.setVisibility(View.GONE);
             previous_button.setVisibility(View.GONE);
             bookSpinner.setVisibility(View.GONE);
-            bookProgressGroupView.setVisibility(View.GONE);
         } else {
             next_button.setVisibility(View.VISIBLE);
             previous_button.setVisibility(View.VISIBLE);
             bookSpinner.setVisibility(View.VISIBLE);
-            bookProgressGroupView.setVisibility(View.VISIBLE);
         }
-
 
         // transitions stuff
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
