@@ -174,6 +174,8 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         fab.setIconDrawable(playPauseDrawable);
         fab.setOnClickListener(this);
         recyclerView.setHasFixedSize(true);
+        // without this the item would blink on every change
+        recyclerView.getItemAnimator().setSupportsChangeAnimations(false);
 
         listDecoration = new DividerItemDecoration(recyclerView.getContext());
         gridLayoutManager = new GridLayoutManager(recyclerView.getContext(), getAmountOfColumns());
@@ -255,12 +257,14 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onActivityReenter(int resultCode, Intent data) {
         super.onActivityReenter(resultCode, data);
+        L.i(TAG, "onActivityReenter");
 
         final TransitionPostponeHelper postponeHelper = new TransitionPostponeHelper(this);
         postponeHelper.startPostponing(2);
         fab.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
+                L.i(TAG, "onPreDraw(fab)");
                 fab.getViewTreeObserver().removeOnPreDrawListener(this);
                 postponeHelper.elementDone();
                 return true;
@@ -269,6 +273,7 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         recyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
+                L.i(TAG, "onPreDraw(recycler)");
                 recyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
                 postponeHelper.elementDone();
                 return true;
