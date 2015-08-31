@@ -20,6 +20,7 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookShelfActivity;
@@ -61,6 +62,12 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
         this.prefs = PrefsManager.getInstance(c);
         this.displayMode = displayMode;
         setHasStableIds(true);
+    }
+
+    private static String formatTime(int ms) {
+        String h = String.format("%02d", (TimeUnit.MILLISECONDS.toHours(ms)));
+        String m = String.format("%02d", (TimeUnit.MILLISECONDS.toMinutes(ms) % 60));
+        return h + ":" + m;
     }
 
     /**
@@ -116,7 +123,6 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
         }
     }
 
-
     @Override
     public long getItemId(int position) {
         return sortedList.get(position).getId();
@@ -131,7 +137,6 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
     public int getItemViewType(int position) {
         return super.getItemViewType(position);
     }
-
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -164,7 +169,6 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
         return sortedList.size();
     }
 
-
     public interface OnItemClickListener {
         void onCoverClicked(final int position);
 
@@ -174,11 +178,15 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
     public class ListViewHolder extends BaseViewHolder {
 
         private final ProgressBar progressBar;
+        private final TextView leftTime;
+        private final TextView rightTime;
 
         public ListViewHolder(ViewGroup parent) {
             super(LayoutInflater.from(parent.getContext()).inflate(
                     R.layout.activity_book_shelf_list_layout, parent, false));
             progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
+            leftTime = (TextView) itemView.findViewById(R.id.leftTime);
+            rightTime = (TextView) itemView.findViewById(R.id.rightTime);
         }
 
         @Override
@@ -186,8 +194,13 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
             super.bind(position);
 
             Book b = sortedList.get(position);
-            int progress = Math.round(100f * (float) b.getGlobalPosition() / (float) b.getGlobalDuration());
+            int globalPosition = b.getGlobalPosition();
+            int globalDuration = b.getGlobalDuration();
+            int progress = Math.round(100f * (float) globalPosition / (float) globalDuration);
+
+            leftTime.setText(formatTime(globalPosition));
             progressBar.setProgress(progress);
+            rightTime.setText(formatTime(globalDuration));
         }
     }
 
