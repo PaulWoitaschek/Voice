@@ -18,6 +18,7 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
@@ -43,6 +44,7 @@ import de.ph1b.audiobook.uitools.DividerItemDecoration;
 import de.ph1b.audiobook.uitools.PlayPauseDrawable;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
+import de.ph1b.audiobook.utils.TransitionPostponeHelper;
 
 /**
  * Showing the shelf of all the available books and provide a navigation to each book
@@ -248,6 +250,30 @@ public class BookShelfActivity extends BaseActivity implements View.OnClickListe
         } else {
             playPauseDrawable.transformToPlay(animated);
         }
+    }
+
+    @Override
+    public void onActivityReenter(int resultCode, Intent data) {
+        super.onActivityReenter(resultCode, data);
+
+        final TransitionPostponeHelper postponeHelper = new TransitionPostponeHelper(this);
+        postponeHelper.startPostponing(2);
+        fab.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                fab.getViewTreeObserver().removeOnPreDrawListener(this);
+                postponeHelper.elementDone();
+                return true;
+            }
+        });
+        recyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                recyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
+                postponeHelper.elementDone();
+                return true;
+            }
+        });
     }
 
     private void checkVisibilities() {
