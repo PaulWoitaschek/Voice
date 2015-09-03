@@ -177,7 +177,7 @@ public class FolderOverviewActivity extends BaseActivity {
         fam.setOnFloatingActionsMenuUpdateListener(famMenuListener);
 
         FloatingActionButton single = (FloatingActionButton) findViewById(R.id.add_single);
-        single.setTitle(getString(R.string.folder_add_book) + "\n" + getString(R.string.for_example)
+        single.setTitle(getString(R.string.folder_add_single_book) + "\n" + getString(R.string.for_example)
                 + " Harry Potter 4");
         single.setOnClickListener(new View.OnClickListener() {
             @Override

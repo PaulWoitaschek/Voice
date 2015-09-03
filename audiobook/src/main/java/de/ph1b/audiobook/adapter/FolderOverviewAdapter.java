@@ -50,9 +50,11 @@ public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAd
         if (bookCollections.contains(file)) {
             //noinspection deprecation
             holder.icon.setImageDrawable(c.getResources().getDrawable(R.drawable.ic_folder_multiple_white_48dp));
+            holder.icon.setContentDescription(c.getString(R.string.folder_add_collection));
         } else {
             //noinspection deprecation
             holder.icon.setImageDrawable(c.getResources().getDrawable(R.drawable.ic_folder_white_48dp));
+            holder.icon.setContentDescription(c.getString(R.string.folder_add_single_book));
         }
     }
 

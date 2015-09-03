@@ -42,7 +42,7 @@
     <string name="delete_folder">Ordner entfernen</string>
     <string name="delete_folder_content">Möchten Sie den folgenden Ordner aus Ihrer Bücherei entfernen?</string>
     <string name="content_file_folder">Zeigt an, ob es sich um einen Ordner oder um eine Datei handelt</string>
-    <string name="folder_add_book">Ein Buch</string>
+    <string name="folder_add_single_book">Ein Buch</string>
     <string name="folder_add_collection">Ordner mit mehreren Büchern</string>
     <string name="for_example">z.B.</string>
     <!--PlaybackSpeed-->

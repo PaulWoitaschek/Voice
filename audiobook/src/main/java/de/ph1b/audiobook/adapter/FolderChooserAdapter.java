@@ -81,6 +81,8 @@ public class FolderChooserAdapter extends BaseAdapter {
                 R.drawable.ic_folder_white_48dp :
                 R.drawable.ic_audiotrack_white_48dp);
         viewHolder.imageView.setImageDrawable(icon);
+        viewHolder.imageView.setContentDescription(c.getString(isDirectory ?
+                R.string.content_is_folder : R.string.content_is_file));
 
         return convertView;
     }

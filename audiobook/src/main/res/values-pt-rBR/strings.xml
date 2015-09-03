@@ -42,7 +42,7 @@
     <string name="delete_folder">Remover da Biblioteca?</string>
     <string name="delete_folder_content">Você quer remover a seguinte pasta da biblioteca?</string>
     <string name="content_file_folder">Indique se é um arquivo ou uma pasta</string>
-    <string name="folder_add_book">Livro único</string>
+    <string name="folder_add_single_book">Livro único</string>
     <string name="folder_add_collection">Pasta com múltiplos livros</string>
     <string name="for_example">Ex.</string>
     <!--PlaybackSpeed-->

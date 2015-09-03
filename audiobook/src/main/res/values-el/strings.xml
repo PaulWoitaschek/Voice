@@ -41,7 +41,7 @@
     <string name="delete_folder">Αφαίρεση από τη βιβλιοθήκη;</string>
     <string name="delete_folder_content">Θέλετε να αφαιρέσετε τον ακόλουθο φάκελο από τη βιβλιοθήκη;</string>
     <string name="content_file_folder">Αναγραφή αν ειναι αρχείο ή φάκελος</string>
-    <string name="folder_add_book">Ενιαίο βιβλίο</string>
+    <string name="folder_add_single_book">Ενιαίο βιβλίο</string>
     <string name="folder_add_collection">Φάκελος με πολλαπλά βιβλία</string>
     <string name="for_example">π.χ.</string>
     <!--PlaybackSpeed-->

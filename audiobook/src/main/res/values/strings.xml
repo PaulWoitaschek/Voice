@@ -43,9 +43,13 @@
     <string name="delete_folder">Remove from Library?</string>
     <string name="delete_folder_content">Do you want to remove the following folder from the library?</string>
     <string name="content_file_folder">Indicating if its a file or a folder</string>
-    <string name="folder_add_book">Single book</string>
+    <string name="folder_add_single_book">Single book</string>
     <string name="folder_add_collection">Folder with multiple books</string>
     <string name="for_example">e.g.</string>
+    <string name="content_add_book">Add a book</string>
+    <string name="content_is_folder">This is a folder</string>
+    <string name="content_is_file">This is a file</string>
+    <string name="content_navigate_up">Go to parent folder</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Playback speed</string>
     <!--Bookmarks-->

@@ -32,6 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end|right"
             android:layout_margin="16dp"
+            android:contentDescription="@string/content_add_book"
             fab:fab_addButtonColorNormal="?attr/colorAccent"
             fab:fab_addButtonColorPressed="?attr/colorAccentDark"
             fab:fab_labelStyle="@style/fab_label_style"
@@ -41,16 +42,18 @@
                 android:id="@+id/add_single"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/folder_add_single_book"
                 fab:fab_colorNormal="?attr/colorAccent"
                 fab:fab_colorPressed="?attr/colorAccentDark"
                 fab:fab_icon="@drawable/ic_folder_white_48dp"
                 fab:fab_size="mini"
-                fab:fab_title="@string/folder_add_book" />
+                fab:fab_title="@string/folder_add_single_book" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/add_library"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/folder_add_collection"
                 fab:fab_colorNormal="?attr/colorAccent"
                 fab:fab_colorPressed="?attr/colorAccentDark"
                 fab:fab_icon="@drawable/ic_folder_multiple_white_48dp"

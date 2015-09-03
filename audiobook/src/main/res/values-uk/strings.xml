@@ -40,7 +40,7 @@
     <string name="delete_folder">Видалити із бібліотеки?</string>
     <string name="delete_folder_content">Ви хочете видалити наступну папку із бібліотеки?</string>
     <string name="content_file_folder">Індикатор відображає, че є це файл або папка</string>
-    <string name="folder_add_book">Книга</string>
+    <string name="folder_add_single_book">Книга</string>
     <string name="folder_add_collection">Папка з декількома книгами</string>
     <string name="for_example">наприклад</string>
     <!-- PlaybackSpeed -->

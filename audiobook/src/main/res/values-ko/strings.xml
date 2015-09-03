@@ -42,7 +42,7 @@
     <string name="delete_folder">서재에서 제거합니까?</string>
     <string name="delete_folder_content">선택한 책을 서재에서 제거합니까?</string>
     <string name="content_file_folder">선택한 것이 파일, 혹은 폴더인지를 표시</string>
-    <string name="folder_add_book">폴더에 책 한권</string>
+    <string name="folder_add_single_book">폴더에 책 한권</string>
     <string name="folder_add_collection">폴더에 책 여러 권</string>
     <string name="for_example">예시 </string>
     <!--PlaybackSpeed-->

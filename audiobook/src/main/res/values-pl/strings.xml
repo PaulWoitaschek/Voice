@@ -42,7 +42,7 @@
     <string name="delete_folder">Usunąć z Biblioteki?</string>
     <string name="delete_folder_content">Czy chcesz usunąć poniższy folder z biblioteki?</string>
     <string name="content_file_folder">Wskazuje czy jest to plik, czy folder</string>
-    <string name="folder_add_book">Pojedyncza książka</string>
+    <string name="folder_add_single_book">Pojedyncza książka</string>
     <string name="folder_add_collection">Folder z wieloma książkami</string>
     <string name="for_example">np.</string>
     <!--PlaybackSpeed-->
