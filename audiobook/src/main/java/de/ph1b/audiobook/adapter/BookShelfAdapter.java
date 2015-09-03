@@ -134,11 +134,6 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
     }
 
     @Override
-    public int getItemViewType(int position) {
-        return super.getItemViewType(position);
-    }
-
-    @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (displayMode) {
             case GRID:
