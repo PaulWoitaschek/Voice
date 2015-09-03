@@ -5,6 +5,7 @@
     <string name="mal_file_title">Beschädigte Datei</string>
     <string name="content_current_book">Dies ist das aktuelle Buch</string>
     <string name="current_book">Aktuelles Buch</string>
+    <string name="change_layout_type">Layout verändern</string>
     <!--BookPlayActivity-->
     <string name="cover">Cover</string>
     <string name="play_pause">Play / Pause</string>
@@ -41,9 +42,13 @@
     <string name="chosen_folder_description">Gewählter Ordner: </string>
     <string name="delete_folder">Ordner entfernen</string>
     <string name="delete_folder_content">Möchten Sie den folgenden Ordner aus Ihrer Bücherei entfernen?</string>
-    <string name="folder_add_single_book">Ein Buch</string>
+    <string name="folder_add_single_book">Einzelnes Buch</string>
     <string name="folder_add_collection">Ordner mit mehreren Büchern</string>
     <string name="for_example">z.B.</string>
+    <string name="content_add_book">Buch hinzufügen</string>
+    <string name="content_is_folder">Ordner</string>
+    <string name="content_is_file">Datei</string>
+    <string name="content_navigate_up">Zum übergeordneten Ordner</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Geschwindigkeit</string>
     <!--Bookmarks-->
