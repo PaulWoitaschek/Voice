@@ -39,7 +39,6 @@
     <string name="chosen_folder_description">Kies map:</string>
     <string name="delete_folder">Uit bibliotheek verwijderen?</string>
     <string name="delete_folder_content">Wilt u deze map uit uw bibliotheek verwijderen?</string>
-    <string name="content_file_folder">Geeft aan of dit een map of bestand is</string>
     <string name="folder_add_single_book">Één boek</string>
     <string name="folder_add_collection">Map met meerdere boeken</string>
     <string name="for_example">bvb.</string>

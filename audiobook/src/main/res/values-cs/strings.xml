@@ -40,7 +40,6 @@
     <string name="chosen_folder_description">Vybraný adresář:</string>
     <string name="delete_folder">Odstranit z knihovny?</string>
     <string name="delete_folder_content">Opravdu chcete odstranit následující adresář z knihovny?</string>
-    <string name="content_file_folder">Určení zda jde o soubor nebo adresář</string>
     <string name="folder_add_single_book">Samotná kniha</string>
     <string name="folder_add_collection">Adresář s vícero knihami</string>
     <string name="for_example">např.</string>

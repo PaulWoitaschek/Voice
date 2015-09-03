@@ -41,7 +41,6 @@
     <string name="chosen_folder_description">Выбранная папка:</string>
     <string name="delete_folder">Удалить из библиотеки?</string>
     <string name="delete_folder_content">Вы хотите удалить эту папку из библиотеки?</string>
-    <string name="content_file_folder">Индикатор показывает если это файл или папка</string>
     <string name="folder_add_single_book">Одна книга</string>
     <string name="folder_add_collection">Несколько книг в одной папке</string>
     <string name="for_example">например</string>

@@ -42,7 +42,6 @@
     <string name="chosen_folder_description">Chosen folder:</string>
     <string name="delete_folder">Remove from Library?</string>
     <string name="delete_folder_content">Do you want to remove the following folder from the library?</string>
-    <string name="content_file_folder">Indicating if its a file or a folder</string>
     <string name="folder_add_single_book">Single book</string>
     <string name="folder_add_collection">Folder with multiple books</string>
     <string name="for_example">e.g.</string>
