@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.internal.MDTintHelper;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -181,6 +182,8 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
             super(LayoutInflater.from(parent.getContext()).inflate(
                     R.layout.fragment_book_shelf_list_layout, parent, false));
             progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
+            //noinspection deprecation
+            MDTintHelper.setTint(progressBar, parent.getContext().getResources().getColor(R.color.accent));
             leftTime = (TextView) itemView.findViewById(R.id.leftTime);
             rightTime = (TextView) itemView.findViewById(R.id.rightTime);
         }
