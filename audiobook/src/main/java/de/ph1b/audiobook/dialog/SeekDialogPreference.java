@@ -11,10 +11,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.internal.MDTintHelper;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.persistence.PrefsManager;
-import de.ph1b.audiobook.uitools.ThemeUtil;
 
 public class SeekDialogPreference extends DialogPreference {
 
@@ -38,7 +38,9 @@ public class SeekDialogPreference extends DialogPreference {
 
         //seekBar
         int position = prefs.getSeekTime();
-        ThemeUtil.theme(seekBar);
+
+        //noinspection deprecation
+        MDTintHelper.setTint(seekBar, getContext().getResources().getColor(R.color.accent));
         seekBar.setMax(SEEK_BAR_MAX - SEEK_BAR_MIN);
         seekBar.setProgress(position - SEEK_BAR_MIN);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

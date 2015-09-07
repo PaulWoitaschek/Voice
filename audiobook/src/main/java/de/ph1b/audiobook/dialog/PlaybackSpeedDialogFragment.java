@@ -11,6 +11,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.internal.MDTintHelper;
 
 import java.text.DecimalFormat;
 
@@ -19,7 +20,6 @@ import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.persistence.DataBaseHelper;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.ServiceController;
-import de.ph1b.audiobook.uitools.ThemeUtil;
 
 /**
  * Dialog for setting the playback speed of the current book.
@@ -50,7 +50,9 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_amount_chooser, null);
         SeekBar seekBar = (SeekBar) v.findViewById(R.id.seekBar);
         final TextView textView = (TextView) v.findViewById(R.id.textView);
-        ThemeUtil.theme(seekBar);
+
+        //noinspection deprecation
+        MDTintHelper.setTint(seekBar, getResources().getColor(R.color.accent));
 
         // setting current speed
         final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());

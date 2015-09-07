@@ -5,37 +5,20 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.AnyRes;
 import android.support.annotation.AttrRes;
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.NumberPicker;
-import android.widget.SeekBar;
 
 import java.lang.reflect.Field;
 
 import de.ph1b.audiobook.R;
 
 public class ThemeUtil {
-
-    public static void theme(@NonNull SeekBar seekBar) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            @SuppressWarnings("deprecation") int colorAccent = seekBar.getResources().getColor(ThemeUtil.getResourceId(
-                    seekBar.getContext(), R.attr.colorAccent));
-            tint(seekBar.getProgressDrawable(), colorAccent);
-        }
-    }
-
-    private static void tint(Drawable drawable, @ColorInt int color) {
-        Drawable wrapped = DrawableCompat.wrap(drawable.mutate());
-        DrawableCompat.setTint(wrapped, color);
-    }
 
     public static int getTheme(@NonNull Context c) {
         Resources r = c.getResources();

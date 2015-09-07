@@ -25,6 +25,7 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.internal.MDTintHelper;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
@@ -189,7 +190,8 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
                 return true;
             }
         });
-        ThemeUtil.theme(seekBar);
+        //noinspection deprecation
+        MDTintHelper.setTint(seekBar, getResources().getColor(R.color.accent));
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
