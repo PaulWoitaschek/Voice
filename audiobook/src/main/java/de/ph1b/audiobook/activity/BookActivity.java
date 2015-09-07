@@ -158,10 +158,6 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
             fm.beginTransaction().remove(bookPlayFragment).commit();
             fm.executePendingTransactions();
 
-            fm.beginTransaction().remove(bookPlayFragment)
-                    .commit();
-            fm.executePendingTransactions();
-
             FragmentTransaction ft = fm.beginTransaction();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !multiPane) {
                 Transition move = TransitionInflater.from(this).inflateTransition(android.R.transition.move);
