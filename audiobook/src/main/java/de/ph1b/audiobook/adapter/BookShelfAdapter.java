@@ -157,7 +157,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
 
     @Override
     public void onBindViewHolder(final BaseViewHolder viewHolder, int position) {
-        viewHolder.bind(position);
+        viewHolder.bind(sortedList.get(position));
     }
 
     @Override
@@ -186,12 +186,11 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
         }
 
         @Override
-        public void bind(int position) {
-            super.bind(position);
+        public void bind(Book book) {
+            super.bind(book);
 
-            Book b = sortedList.get(position);
-            int globalPosition = b.getGlobalPosition();
-            int globalDuration = b.getGlobalDuration();
+            int globalPosition = book.getGlobalPosition();
+            int globalDuration = book.getGlobalDuration();
             int progress = Math.round(100f * (float) globalPosition / (float) globalDuration);
 
             leftTime.setText(formatTime(globalPosition));
@@ -223,18 +222,17 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
         }
 
         @CallSuper
-        public void bind(int position) {
-            Book b = sortedList.get(position);
+        public void bind(Book book) {
 
             //setting text
-            String name = b.getName();
+            String name = book.getName();
             titleView.setText(name);
 
             // (Cover)
-            final File coverFile = b.getCoverFile();
-            final Drawable coverReplacement = new CoverReplacement(b.getName(), c);
+            final File coverFile = book.getCoverFile();
+            final Drawable coverReplacement = new CoverReplacement(book.getName(), c);
 
-            if (!b.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
+            if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
                 Picasso.with(c).load(coverFile).placeholder(coverReplacement).into(coverView);
             } else {
                 Picasso.with(c).cancelRequest(coverView);
@@ -249,7 +247,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
                 });
             }
 
-            if (b.getId() == prefs.getCurrentBookId()) {
+            if (book.getId() == prefs.getCurrentBookId()) {
                 currentPlayingIndicator.setVisibility(View.VISIBLE);
             } else {
                 currentPlayingIndicator.setVisibility(View.GONE);
@@ -268,7 +266,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
                 }
             });
 
-            ViewCompat.setTransitionName(coverView, b.getCoverTransitionName());
+            ViewCompat.setTransitionName(coverView, book.getCoverTransitionName());
         }
     }
 }
