@@ -5,6 +5,7 @@
     <string name="mal_file_title"> 고장난 파일</string>
     <string name="content_current_book">재생 중인 책</string>
     <string name="current_book">재생 중인 책</string>
+    <string name="change_layout_type">서재모양</string>
     <!--BookPlayFragment-->
     <string name="cover">책표지</string>
     <string name="play_pause">재생 / 일시정지</string>
@@ -44,6 +45,10 @@
     <string name="folder_add_single_book">폴더에 책 한권</string>
     <string name="folder_add_collection">폴더에 책 여러 권</string>
     <string name="for_example">예시 </string>
+    <string name="content_add_book">책 추가</string>
+    <string name="content_is_folder">폴더</string>
+    <string name="content_is_file">파일</string>
+    <string name="content_navigate_up">윗 폴더로 가기</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">재생 속도</string>
     <!--Bookmarks-->

@@ -1,12 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
-
-
 <resources>
     <!--BookShelf-->
     <string name="mal_file_message">O seguinte arquivo pode estar corrompido:</string>
     <string name="mal_file_title">Arquivo corrompido</string>
     <string name="content_current_book">Este é o livro atual</string>
     <string name="current_book">Livro atual</string>
+    <string name="change_layout_type">Trocar layout</string>
     <!--BookPlayFragment-->
     <string name="cover">Capa</string>
     <string name="play_pause">Tocar / Pausar</string>
@@ -20,7 +19,7 @@
     <string name="play">Tocar</string>
     <string name="pause">Pausar</string>
     <!--NoExternalStorage-->
-    <string name="no_external_storage">Memória Externa não está disponível. Por favor verifique se está conectado e montado em seu computador</string>
+    <string name="no_external_storage">Memória Externa não está disponível. Por favor verifique se está conectado e montado em seu computador.</string>
     <string name="no_external_storage_action_bar_title">Memória Externa</string>
     <!--Dialogs-->
     <string name="dialog_confirm">Definir</string>
@@ -29,6 +28,8 @@
     <string name="content_previous_cover">Escolher capa anterior</string>
     <string name="content_next_cover">Escolher próxima capa</string>
     <string name="content_cover">Mostrar capa para escolher</string>
+    <string name="edit_book_name">Editar nome</string>
+    <string name="edit_book_cover">Editar capa</string>
     <string name="edit_book_title">Editar livro</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Pular para</string>
@@ -44,6 +45,10 @@
     <string name="folder_add_single_book">Livro único</string>
     <string name="folder_add_collection">Pasta com múltiplos livros</string>
     <string name="for_example">Ex.</string>
+    <string name="content_add_book">Adicionar livro</string>
+    <string name="content_is_folder">Pasta</string>
+    <string name="content_is_file">Arquivo</string>
+    <string name="content_navigate_up">Vá para a pasta superior</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Velocidade de reprodução</string>
     <!--Bookmarks-->
@@ -85,4 +90,8 @@
     <!--Misc-->
     <string name="popup_edit">Editar</string>
     <string name="remove">Remover</string>
+    <!--hide folder dialog-->
+    <string name="hide_folder_title">Esconder pasta</string>
+    <string name="hide_folder_content">Você gostaria de esconder a pasta dos players de música, para que eles não reconheçam seu livro como música?</string>
+    <string name="hide_confirm">Esconder</string>
 </resources>

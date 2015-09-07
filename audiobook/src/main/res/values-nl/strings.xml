@@ -1,10 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="mal_file_message">Dit bestand is mogelijks beschadigd:</string>
+    <string name="mal_file_message">Dit bestand is mogelijk beschadigd:</string>
     <string name="mal_file_title">Beschadigd bestand</string>
     <string name="content_current_book">Dit is het huidige boek</string>
     <string name="current_book">Huidig boek</string>
+    <string name="change_layout_type">Verander layout</string>
     <!--BookPlayFragment-->
     <string name="cover">Omslag</string>
     <string name="play_pause">Speel / Pauze</string>
@@ -27,6 +28,8 @@
     <string name="content_previous_cover">Kies vorige cover</string>
     <string name="content_next_cover">Kies volgende cover</string>
     <string name="content_cover">Toont cover om te kiezen</string>
+    <string name="edit_book_name">Wijzig naam</string>
+    <string name="edit_book_cover">Wijzig cover</string>
     <string name="edit_book_title">Bewerk boek</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Ga naar</string>
@@ -39,9 +42,13 @@
     <string name="chosen_folder_description">Kies map:</string>
     <string name="delete_folder">Uit bibliotheek verwijderen?</string>
     <string name="delete_folder_content">Wilt u deze map uit uw bibliotheek verwijderen?</string>
-    <string name="folder_add_single_book">Één boek</string>
+    <string name="folder_add_single_book">Enkel boek</string>
     <string name="folder_add_collection">Map met meerdere boeken</string>
     <string name="for_example">bvb.</string>
+    <string name="content_add_book">Voeg een boek toe</string>
+    <string name="content_is_folder">Map</string>
+    <string name="content_is_file">Bestand</string>
+    <string name="content_navigate_up">Ga naar bovenliggende map</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Afspeelsnelheid</string>
     <!--Bookmarks-->
@@ -77,7 +84,7 @@
     <string name="pref_support_title">Steun</string>
     <string name="pref_support_translations">App vertalen</string>
     <string name="pref_support_contribute">Steunen en suggesties</string>
-    <string name="pref_support_donation">Donneer</string>
+    <string name="pref_support_donation">Doneer</string>
     <string name="donation_worked_thanks">Bedankt, dat helpt écht! :)</string>
     <string name="donation_not_worked">Oeps… er ging iets mis</string>
     <!--Misc-->
