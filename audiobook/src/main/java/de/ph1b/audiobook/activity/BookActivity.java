@@ -147,29 +147,19 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
     @Override
     public void onBookSelected(long bookId, Map<View, String> sharedElements) {
         L.i(TAG, "onBookSelected(" + bookId + ")");
-        FragmentManager fm = getSupportFragmentManager();
 
-        BookPlayFragment bookPlayFragment = (BookPlayFragment) fm.findFragmentByTag(FM_BOOK_PLAY);
-        if (bookPlayFragment == null || bookPlayFragment.getBookId() != bookId) {
-            bookPlayFragment = BookPlayFragment.newInstance(bookId);
-        }
-
-        if (!bookPlayFragment.isVisible()) {
-            fm.beginTransaction().remove(bookPlayFragment).commit();
-            fm.executePendingTransactions();
-
-            FragmentTransaction ft = fm.beginTransaction();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !multiPane) {
-                Transition move = TransitionInflater.from(this).inflateTransition(android.R.transition.move);
-                bookPlayFragment.setSharedElementEnterTransition(move);
-                for (Map.Entry<View, String> entry : sharedElements.entrySet()) {
-                    ft.addSharedElement(entry.getKey(), entry.getValue());
-                }
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        BookPlayFragment bookPlayFragment = BookPlayFragment.newInstance(bookId);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !multiPane) {
+            Transition move = TransitionInflater.from(this).inflateTransition(android.R.transition.move);
+            bookPlayFragment.setSharedElementEnterTransition(move);
+            for (Map.Entry<View, String> entry : sharedElements.entrySet()) {
+                ft.addSharedElement(entry.getKey(), entry.getValue());
             }
-            ft.replace(multiPane ? ADDITIONAL_CONTAINER_ID : BASE_CONTAINER_ID, bookPlayFragment, FM_BOOK_PLAY)
-                    .addToBackStack(null)
-                    .commit();
         }
+        ft.replace(multiPane ? ADDITIONAL_CONTAINER_ID : BASE_CONTAINER_ID, bookPlayFragment, FM_BOOK_PLAY)
+                .addToBackStack(null)
+                .commit();
     }
 
 
@@ -186,5 +176,14 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
         }
 
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().findFragmentById(BASE_CONTAINER_ID) instanceof BookShelfFragment) {
+            finish();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
