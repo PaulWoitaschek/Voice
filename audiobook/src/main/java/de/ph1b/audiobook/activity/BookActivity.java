@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
@@ -22,7 +21,9 @@ import com.google.common.base.MoreObjects;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.fragment.BookPlayFragment;
@@ -138,13 +139,13 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
             }
             if (getIntent().hasExtra(NI_GO_TO_BOOK)) {
                 long bookId = getIntent().getLongExtra(NI_GO_TO_BOOK, -1);
-                onBookSelected(bookId, new ArrayList<Pair<View, String>>(0));
+                onBookSelected(bookId, new HashMap<View, String>(0));
             }
         }
     }
 
     @Override
-    public void onBookSelected(long bookId, List<Pair<View, String>> sharedElements) {
+    public void onBookSelected(long bookId, Map<View, String> sharedElements) {
         L.i(TAG, "onBookSelected(" + bookId + ")");
         FragmentManager fm = getSupportFragmentManager();
 
@@ -165,8 +166,8 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !multiPane) {
                 Transition move = TransitionInflater.from(this).inflateTransition(android.R.transition.move);
                 bookPlayFragment.setSharedElementEnterTransition(move);
-                for (Pair<View, String> p : sharedElements) {
-                    ft.addSharedElement(p.first, p.second);
+                for (Map.Entry<View, String> entry : sharedElements.entrySet()) {
+                    ft.addSharedElement(entry.getKey(), entry.getValue());
                 }
             }
             ft.replace(multiPane ? ADDITIONAL_CONTAINER_ID : BASE_CONTAINER_ID, bookPlayFragment, FM_BOOK_PLAY)

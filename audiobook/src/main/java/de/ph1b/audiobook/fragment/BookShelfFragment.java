@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -26,8 +25,9 @@ import android.widget.ProgressBar;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.FolderOverviewActivity;
@@ -330,12 +330,12 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     private void invokeBookSelectionCallback(long bookId) {
         prefs.setCurrentBookIdAndInform(bookId);
 
-        List<Pair<View, String>> sharedElements = new ArrayList<>(2);
+        Map<View, String> sharedElements = new HashMap<>(2);
         BookShelfAdapter.BaseViewHolder viewHolder = (BookShelfAdapter.BaseViewHolder) recyclerView.findViewHolderForItemId(bookId);
         if (viewHolder != null) {
-            sharedElements.add(new Pair<View, String>(viewHolder.coverView, ViewCompat.getTransitionName(viewHolder.coverView)));
+            sharedElements.put(viewHolder.coverView, ViewCompat.getTransitionName(viewHolder.coverView));
         }
-        sharedElements.add(new Pair<View, String>(fab, ViewCompat.getTransitionName(fab)));
+        sharedElements.put(fab, ViewCompat.getTransitionName(fab));
         ((BookSelectionCallback) getActivity()).onBookSelected(bookId, sharedElements);
     }
 
@@ -418,6 +418,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     }
 
     public interface BookSelectionCallback {
-        void onBookSelected(long bookId, List<Pair<View, String>> sharedViews);
+        void onBookSelected(long bookId, Map<View, String> sharedViews);
     }
 }
