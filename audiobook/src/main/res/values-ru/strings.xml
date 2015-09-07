@@ -5,7 +5,7 @@
     <string name="mal_file_title">Поврежденный файл</string>
     <string name="content_current_book">Книга, которую вы сейчас слушаете</string>
     <string name="current_book">Текущая книга</string>
-    <!--BookPlayActivity-->
+    <!--BookPlayFragment-->
     <string name="cover">Обложка</string>
     <string name="play_pause">Воспроизвести / Пауза</string>
     <string name="action_sleep">Таймер сна</string>

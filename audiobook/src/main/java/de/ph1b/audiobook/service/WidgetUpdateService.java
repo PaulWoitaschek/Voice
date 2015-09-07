@@ -29,7 +29,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.BookShelfActivity;
+import de.ph1b.audiobook.activity.BookActivity;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.persistence.DataBaseHelper;
@@ -132,7 +132,8 @@ public class WidgetUpdateService extends Service {
                         }
                     } else {
                         // directly going back to bookChoose
-                        Intent wholeWidgetClickI = new Intent(WidgetUpdateService.this, BookShelfActivity.class);
+                        Intent wholeWidgetClickI = new Intent(WidgetUpdateService.this, BookActivity.class);
+                        wholeWidgetClickI.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         PendingIntent wholeWidgetClickPI = PendingIntent.getActivity
                                 (WidgetUpdateService.this, (int) System.currentTimeMillis(),
                                         wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -208,7 +209,7 @@ public class WidgetUpdateService extends Service {
 
         remoteViews.setTextViewText(R.id.summary, name);
 
-        Intent wholeWidgetClickI = new Intent(this, BookShelfActivity.class);
+        Intent wholeWidgetClickI = BookActivity.goToBookIntent(this, book.getId());
         PendingIntent wholeWidgetClickPI = PendingIntent.getActivity
                 (WidgetUpdateService.this, (int) System.currentTimeMillis(), wholeWidgetClickI,
                         PendingIntent.FLAG_UPDATE_CURRENT);

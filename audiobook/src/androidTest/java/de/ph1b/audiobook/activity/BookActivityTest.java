@@ -11,18 +11,20 @@ import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.ReentrantLock;
 
+import de.ph1b.audiobook.activity.BookActivity;
+import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.persistence.DataBaseHelper;
 
 
-public class BookActivityTest extends ActivityInstrumentationTestCase2<BookShelfActivity> {
+public class BookActivityTest extends ActivityInstrumentationTestCase2<BookActivity> {
 
     private final Random rnd = new Random();
 
     public BookActivityTest() {
-        super(BookShelfActivity.class);
+        super(BookActivity.class);
     }
 
     @MediumTest

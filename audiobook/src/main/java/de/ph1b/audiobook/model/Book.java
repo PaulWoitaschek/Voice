@@ -81,6 +81,7 @@ public class Book implements Comparable<Book> {
         this.currentFile = currentFile;
     }
 
+
     /**
      * Gets the transition name for the cover transition.
      *

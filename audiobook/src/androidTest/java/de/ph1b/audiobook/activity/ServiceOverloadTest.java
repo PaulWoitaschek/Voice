@@ -11,8 +11,9 @@ import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.service.ServiceController;
 
 /**
- * Created by Paul Woitaschek (woitaschek@posteo.de, paul-woitaschek.de) on 14.08.15.
- * TODO: Edit class description
+ * A simple test that sends a large amount of controls to the media player.
+ *
+ * @author Paul Woitaschek
  */
 public class ServiceOverloadTest extends AndroidTestCase {
 

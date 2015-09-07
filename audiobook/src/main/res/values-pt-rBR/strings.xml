@@ -7,7 +7,7 @@
     <string name="mal_file_title">Arquivo corrompido</string>
     <string name="content_current_book">Este é o livro atual</string>
     <string name="current_book">Livro atual</string>
-    <!--BookPlayActivity-->
+    <!--BookPlayFragment-->
     <string name="cover">Capa</string>
     <string name="play_pause">Tocar / Pausar</string>
     <string name="action_sleep">Desligamento automático</string>

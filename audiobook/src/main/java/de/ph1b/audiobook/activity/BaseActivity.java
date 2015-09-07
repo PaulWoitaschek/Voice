@@ -9,7 +9,6 @@ import android.util.TypedValue;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.service.AudioService;
 import de.ph1b.audiobook.uitools.ThemeUtil;
-import de.ph1b.audiobook.utils.BaseApplication;
 
 /**
  * Base class for all Activities which checks in onResume, if the storage
@@ -54,12 +53,5 @@ public abstract class BaseActivity extends AppCompatActivity {
             // themes have changed. recreate
             recreate();
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        BaseApplication.leakWatch(this);
     }
 }

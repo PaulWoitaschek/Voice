@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.BookShelfActivity;
+import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.utils.Communication;
 
@@ -201,8 +201,8 @@ public class PrefsManager {
     /**
      * @return the display mode that has been set or the default.
      */
-    public synchronized BookShelfActivity.DisplayMode getDisplayMode() {
-        return BookShelfActivity.DisplayMode.valueOf(sp.getString(PREF_KEY_DISPLAY_MODE, BookShelfActivity.DisplayMode.GRID.name()));
+    public synchronized BookShelfFragment.DisplayMode getDisplayMode() {
+        return BookShelfFragment.DisplayMode.valueOf(sp.getString(PREF_KEY_DISPLAY_MODE, BookShelfFragment.DisplayMode.GRID.name()));
     }
 
     /**
@@ -210,7 +210,7 @@ public class PrefsManager {
      *
      * @param displayMode the mode to set
      */
-    public synchronized void setDisplayMode(BookShelfActivity.DisplayMode displayMode) {
+    public synchronized void setDisplayMode(BookShelfFragment.DisplayMode displayMode) {
         sp.edit().putString(PREF_KEY_DISPLAY_MODE, displayMode.name()).apply();
     }
 }

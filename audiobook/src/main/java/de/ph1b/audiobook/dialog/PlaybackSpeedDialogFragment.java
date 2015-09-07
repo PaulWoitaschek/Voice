@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
@@ -23,7 +24,7 @@ import de.ph1b.audiobook.uitools.ThemeUtil;
 /**
  * Dialog for setting the playback speed of the current book.
  */
-public class PlaybackSpeedDialogFragment extends BaseDialogFragment {
+public class PlaybackSpeedDialogFragment extends DialogFragment {
 
     public static final String TAG = PlaybackSpeedDialogFragment.class.getSimpleName();
     private static final float SPEED_DELTA = 0.02f;

@@ -35,7 +35,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.BookPlayActivity;
+import de.ph1b.audiobook.activity.BookActivity;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
@@ -439,7 +439,8 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         PendingIntent stopPI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_STOP, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // content click
-        PendingIntent contentIntent = BookPlayActivity.getTaskStackPI(this, book.getId());
+        Intent contentIntent = BookActivity.goToBookIntent(this, book.getId());
+        PendingIntent contentPI = PendingIntent.getActivity(this, 0, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         return notificationBuilder.setStyle(
                 new NotificationCompat.MediaStyle()
@@ -451,7 +452,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setShowWhen(false)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentIntent(contentIntent)
+                .setContentIntent(contentPI)
                 .setContentTitle(book.getName())
                 .setSmallIcon(R.drawable.ic_notification)
                 .setWhen(0)

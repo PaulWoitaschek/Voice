@@ -359,7 +359,6 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     @Override
     public void release() {
         reset();
-        // TODO: Release all resources
         state = State.END;
     }
 

@@ -7,7 +7,7 @@
     <string name="mal_file_title">Fichier défectueux</string>
     <string name="content_current_book">Ceci est le livre en cours</string>
     <string name="current_book">Livre en cours</string>
-    <!--BookPlayActivity-->
+    <!--BookPlayFragment-->
     <string name="cover">Couverture</string>
     <string name="play_pause">Lire / Pause</string>
     <string name="action_sleep">Minuteur</string>

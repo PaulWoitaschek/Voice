@@ -5,7 +5,7 @@
     <string name="mal_file_title">Najít soubor</string>
     <string name="content_current_book">Toto je aktuální kniha</string>
     <string name="current_book">Aktuální kniha</string>
-    <!--BookPlayActivity-->
+    <!--BookPlayFragment-->
     <string name="cover">Obal</string>
     <string name="play_pause">Přehrát / Pozastavit</string>
     <string name="action_sleep">Časovač vypnutí</string>

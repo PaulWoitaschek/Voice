@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
@@ -40,7 +41,7 @@ import de.ph1b.audiobook.utils.L;
  * @link {http://www.paul-woitaschek.de}
  * @see <a href="http://www.paul-woitaschek.de">http://www.paul-woitaschek.de</a>
  */
-public class BookmarkDialogFragment extends BaseDialogFragment {
+public class BookmarkDialogFragment extends DialogFragment {
 
     public static final String TAG = BookmarkDialogFragment.class.getSimpleName();
     private static final String BOOK_ID = "bookId";

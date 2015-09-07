@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
@@ -19,7 +20,7 @@ import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 
-public class JumpToPositionDialogFragment extends BaseDialogFragment {
+public class JumpToPositionDialogFragment extends DialogFragment {
 
     public static final String TAG = JumpToPositionDialogFragment.class.getSimpleName();
     private int durationInMinutes;

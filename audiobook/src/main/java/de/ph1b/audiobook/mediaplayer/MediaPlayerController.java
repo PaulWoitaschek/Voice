@@ -22,7 +22,8 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
-import de.ph1b.audiobook.activity.BookShelfActivity;
+import de.ph1b.audiobook.activity.BookActivity;
+import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.persistence.DataBaseHelper;
@@ -421,9 +422,9 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         try {
             L.e(TAG, "onError");
             if (book != null) {
-                c.startActivity(BookShelfActivity.malformedFileIntent(c, book.getCurrentFile()));
+                c.startActivity(BookActivity.malformedFileIntent(c, book.getCurrentFile()));
             } else {
-                Intent intent = new Intent(c, BookShelfActivity.class);
+                Intent intent = new Intent(c, BookShelfFragment.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 c.startActivity(intent);
             }

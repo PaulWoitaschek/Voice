@@ -7,7 +7,7 @@
     <string name="mal_file_title">Uszkodzony plik</string>
     <string name="content_current_book">To jest aktualna książka</string>
     <string name="current_book">Aktualna książka</string>
-    <!--BookPlayActivity-->
+    <!--BookPlayFragment-->
     <string name="cover">Okładka</string>
     <string name="play_pause">Odtwarzaj/Pauza</string>
     <string name="action_sleep">Wyłącznik czasowy</string>

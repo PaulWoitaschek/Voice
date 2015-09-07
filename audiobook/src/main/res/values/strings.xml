@@ -6,7 +6,7 @@
     <string name="content_current_book">This is the current book</string>
     <string name="current_book">Current book</string>
     <string name="change_layout_type">Change layout</string>
-    <!--BookPlayActivity-->
+    <!--BookPlayFragment-->
     <string name="cover">Cover</string>
     <string name="play_pause">Play / Pause</string>
     <string name="action_sleep">Sleep-Timer</string>

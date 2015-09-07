@@ -11,6 +11,7 @@ import android.support.v7.widget.util.SortedListAdapterCallback;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -23,7 +24,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.BookShelfActivity;
+import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.NaturalOrderComparator;
 import de.ph1b.audiobook.persistence.PrefsManager;
@@ -31,7 +32,7 @@ import de.ph1b.audiobook.uitools.CoverReplacement;
 
 public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.BaseViewHolder> {
 
-    private final BookShelfActivity.DisplayMode displayMode;
+    private final BookShelfFragment.DisplayMode displayMode;
     @NonNull
     private final Context c;
     private final PrefsManager prefs;
@@ -56,7 +57,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
         }
     });
 
-    public BookShelfAdapter(@NonNull Context c, BookShelfActivity.DisplayMode displayMode, OnItemClickListener onItemClickListener) {
+    public BookShelfAdapter(@NonNull Context c, BookShelfFragment.DisplayMode displayMode, OnItemClickListener onItemClickListener) {
         this.c = c;
         this.onItemClickListener = onItemClickListener;
         this.prefs = PrefsManager.getInstance(c);
@@ -178,7 +179,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
 
         public ListViewHolder(ViewGroup parent) {
             super(LayoutInflater.from(parent.getContext()).inflate(
-                    R.layout.activity_book_shelf_list_layout, parent, false));
+                    R.layout.fragment_book_shelf_list_layout, parent, false));
             progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
             leftTime = (TextView) itemView.findViewById(R.id.leftTime);
             rightTime = (TextView) itemView.findViewById(R.id.rightTime);
@@ -203,7 +204,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
 
         public GridViewHolder(ViewGroup parent) {
             super(LayoutInflater.from(parent.getContext()).inflate(
-                    R.layout.activity_book_shelf_grid_layout, parent, false));
+                    R.layout.fragment_book_shelf_grid_layout, parent, false));
         }
     }
 
@@ -230,14 +231,22 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
             titleView.setText(name);
 
             // (Cover)
-            File coverFile = b.getCoverFile();
-            Drawable coverReplacement = new CoverReplacement(b.getName(), c);
+            final File coverFile = b.getCoverFile();
+            final Drawable coverReplacement = new CoverReplacement(b.getName(), c);
 
             if (!b.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
                 Picasso.with(c).load(coverFile).placeholder(coverReplacement).into(coverView);
             } else {
                 Picasso.with(c).cancelRequest(coverView);
-                coverView.setImageDrawable(coverReplacement);
+                // we have to set the replacement in onPreDraw, else the transition will fail.
+                coverView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        coverView.getViewTreeObserver().removeOnPreDrawListener(this);
+                        coverView.setImageDrawable(coverReplacement);
+                        return true;
+                    }
+                });
             }
 
             if (b.getId() == prefs.getCurrentBookId()) {

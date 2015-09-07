@@ -27,6 +27,7 @@ public class Chapter implements Comparable<Chapter> {
         this.duration = duration;
     }
 
+
     @Override
     public String toString() {
         return "Chapter{" +

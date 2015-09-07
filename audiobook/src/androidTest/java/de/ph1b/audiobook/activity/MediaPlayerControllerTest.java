@@ -12,8 +12,9 @@ import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.persistence.DataBaseHelper;
 
 /**
- * Created by Paul Woitaschek (woitaschek@posteo.de, paul-woitaschek.de) on 14.08.15.
- * TODO: Edit class description
+ * Tests basic playback controls.
+ *
+ * @author Paul Woitaschek
  */
 public class MediaPlayerControllerTest extends AndroidTestCase {
 

@@ -1,20 +1,19 @@
-package de.ph1b.audiobook.activity;
+package de.ph1b.audiobook.fragment;
 
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
-import android.support.v4.app.TaskStackBuilder;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateUtils;
-import android.transition.Transition;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,18 +26,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.activity.SettingsActivity;
 import de.ph1b.audiobook.dialog.BookmarkDialogFragment;
 import de.ph1b.audiobook.dialog.JumpToPositionDialogFragment;
 import de.ph1b.audiobook.dialog.PlaybackSpeedDialogFragment;
+import de.ph1b.audiobook.interfaces.MultiPaneInformer;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
@@ -46,23 +45,21 @@ import de.ph1b.audiobook.persistence.DataBaseHelper;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.CoverReplacement;
-import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.uitools.PlayPauseDrawable;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.TransitionPostponeHelper;
 
 /**
  * Base class for book playing interaction.
  *
  * @author Paul Woitaschek
  */
-public class BookPlayActivity extends BaseActivity implements View.OnClickListener {
+public class BookPlayFragment extends Fragment implements View.OnClickListener {
 
-    private static final String TAG = BookPlayActivity.class.getSimpleName();
-    private static final String BOOK_ID = "bookId";
+    public static final String TAG = BookPlayFragment.class.getSimpleName();
     private static final Communication COMMUNICATION = Communication.getInstance();
+    private static final String NI_BOOK_ID = "nigetArguments().getLong(NI_BOOK_ID)";
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
     private TextView playedTimeView;
     private SeekBar seekBar;
@@ -70,19 +67,17 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     private TextView maxTimeView;
     private PrefsManager prefs;
     private ServiceController controller;
-    private long bookId;
     private DataBaseHelper db;
     private TextView timerCountdownView;
     private CountDownTimer countDownTimer;
-
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
 
         @Override
         public void onSleepStateChanged() {
-            runOnUiThread(new Runnable() {
+            getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    supportInvalidateOptionsMenu();
+                    getActivity().invalidateOptionsMenu();
                     initializeTimerCountdown();
                 }
             });
@@ -90,12 +85,11 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
 
         @Override
         public void onBookContentChanged(@NonNull final Book book) {
-            runOnUiThread(new Runnable() {
+            getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    L.d(TAG, "onBookContentChangedReciever called with bookId=" + book.getId());
-                    if (book.getId() == bookId) {
-
+                    L.d(TAG, "onBookContentChangedReciever called with getArguments().getLong(NI_BOOK_ID)=" + book.getId());
+                    if (book.getId() == getArguments().getLong(NI_BOOK_ID)) {
                         List<Chapter> chapters = book.getChapters();
                         Chapter chapter = book.getCurrentChapter();
 
@@ -123,7 +117,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
 
         @Override
         public void onPlayStateChanged() {
-            runOnUiThread(new Runnable() {
+            getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     setPlayState(true);
@@ -131,21 +125,6 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             });
         }
     };
-
-    public static Intent newIntent(Context c, long bookId) {
-        Intent intent = new Intent(c, BookPlayActivity.class);
-        intent.putExtra(BOOK_ID, bookId);
-        return intent;
-    }
-
-    public static PendingIntent getTaskStackPI(Context c, long bookId) {
-        // Use TaskStackBuilder to build the back stack and get the PendingIntent
-        Intent bookPlayIntent = newIntent(c, bookId);
-        return TaskStackBuilder.create(c)
-                .addParentStack(BookShelfActivity.class)
-                .addNextIntentWithParentStack(bookPlayIntent)
-                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
 
     private static String formatTime(int ms, int duration) {
         String h = String.valueOf(TimeUnit.MILLISECONDS.toHours(ms));
@@ -159,52 +138,53 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    public static BookPlayFragment newInstance(long bookId) {
+        BookPlayFragment bookPlayFragment = new BookPlayFragment();
+
+        Bundle args = new Bundle();
+        args.putLong(NI_BOOK_ID, bookId);
+        bookPlayFragment.setArguments(args);
+
+        return bookPlayFragment;
+    }
+
+    public long getBookId() {
+        return getArguments().getLong(NI_BOOK_ID);
+    }
+
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_book_play, container, false);
 
-        prefs = PrefsManager.getInstance(this);
-        db = DataBaseHelper.getInstance(this);
-        controller = new ServiceController(this);
-        // one for cover, one for fab
-        final TransitionPostponeHelper transitionPostponeHelper = new TransitionPostponeHelper(this);
-        transitionPostponeHelper.startPostponing(2);
+        L.i(TAG, "onCreateView");
 
-        setContentView(R.layout.activity_book_play);
+        final Book book = db.getBook(getArguments().getLong(NI_BOOK_ID));
 
-        bookId = getIntent().getLongExtra(BOOK_ID, -1);
-        final Book book = db.getBook(bookId);
-        if (book == null) {
-            startActivity(new Intent(this, BookShelfActivity.class));
-            return;
-        }
-
-        //setup actionbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
+        //init views
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         assert actionBar != null;
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(book.getName());
-
-
-        //init buttons
-        seekBar = (SeekBar) findViewById(R.id.seekBar);
-        final FloatingActionButton playButton = (FloatingActionButton) findViewById(R.id.play);
-        View previous_button = findViewById(R.id.previous);
-        View next_button = findViewById(R.id.next);
-        playedTimeView = (TextView) findViewById(R.id.played);
-        final ImageView coverView = (ImageView) findViewById(R.id.book_cover);
-        maxTimeView = (TextView) findViewById(R.id.maxTime);
-        bookSpinner = (Spinner) findViewById(R.id.book_spinner);
-        timerCountdownView = (TextView) findViewById(R.id.timerView);
+        boolean multipaneLayout = ((MultiPaneInformer) getActivity()).isMultiPane();
+        actionBar.setDisplayHomeAsUpEnabled(!multipaneLayout);
+        seekBar = (SeekBar) view.findViewById(R.id.seekBar);
+        View previous_button = view.findViewById(R.id.previous);
+        View rewindButton = view.findViewById(R.id.rewind);
+        final FloatingActionButton playButton = (FloatingActionButton) view.findViewById(R.id.play);
+        View fastForwardButton = view.findViewById(R.id.fastForward);
+        View next_button = view.findViewById(R.id.next);
+        playedTimeView = (TextView) view.findViewById(R.id.played);
+        final ImageView coverView = (ImageView) view.findViewById(R.id.book_cover);
+        maxTimeView = (TextView) view.findViewById(R.id.maxTime);
+        bookSpinner = (Spinner) view.findViewById(R.id.book_spinner);
+        timerCountdownView = (TextView) view.findViewById(R.id.timerView);
+        View coverFrame = view.findViewById(R.id.cover_frame);
 
         //setup buttons
         playButton.setIconDrawable(playPauseDrawable);
         playButton.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
-                transitionPostponeHelper.elementDone();
+                //transitionPostponeHelper.elementDone();
                 playButton.getViewTreeObserver().removeOnPreDrawListener(this);
                 return true;
             }
@@ -224,7 +204,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 int progress = seekBar.getProgress();
-                Book currentBook = db.getBook(bookId);
+                Book currentBook = db.getBook(getArguments().getLong(NI_BOOK_ID));
                 if (currentBook != null) {
                     controller.changeTime(progress, currentBook.getCurrentChapter()
                             .getFile());
@@ -232,122 +212,128 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
                 }
             }
         });
+        coverFrame.setOnClickListener(this);
+        previous_button.setOnClickListener(this);
+        rewindButton.setOnClickListener(this);
+        playButton.setOnClickListener(this);
+        fastForwardButton.setOnClickListener(this);
+        next_button.setOnClickListener(this);
 
-        // adapter
-        List<Chapter> chapters = book.getChapters();
-        final List<String> chaptersAsStrings = new ArrayList<>(chapters.size());
-        for (int i = 0; i < chapters.size(); i++) {
-            String chapterName = chapters.get(i).getName();
+        if (book != null) {
+            actionBar.setTitle(book.getName());
 
-            // cutting leading zeros
-            chapterName = chapterName.replaceFirst("^0", "");
-            String number = String.valueOf(i + 1);
+            // adapter
+            List<Chapter> chapters = book.getChapters();
+            final List<String> chaptersAsStrings = new ArrayList<>(chapters.size());
+            for (int i = 0; i < chapters.size(); i++) {
+                String chapterName = chapters.get(i).getName();
 
-            // desired format is "1 - Title"
-            if (!chapterName.startsWith(number + " - ")) { // if title does not match desired format
-                if (chapterName.startsWith(number)) {
-                    // if it starts with a number, a " - " should follow
-                    chapterName = number + " - " + chapterName.substring(chapterName.indexOf(number)
-                            + number.length());
-                } else {
-                    // if the name does not match at all, set the correct format
-                    chapterName = number + " - " + chapterName;
-                }
-            }
+                // cutting leading zeros
+                chapterName = chapterName.replaceFirst("^0", "");
+                String number = String.valueOf(i + 1);
 
-            chaptersAsStrings.add(chapterName);
-        }
-
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,
-                R.layout.activity_book_play_spinner, R.id.spinnerTextItem, chaptersAsStrings) {
-            @Override
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View view = super.getDropDownView(position, convertView, parent);
-
-                TextView textView = (TextView) view.findViewById(R.id.spinnerTextItem);
-
-                // highlights the selected item and un-highlights an item if it is not selected.
-                // default implementation uses a ViewHolder, so this is necessary.
-                if (position == bookSpinner.getSelectedItemPosition()) {
-                    textView.setBackgroundResource(R.drawable.spinner_selected_background);
-                    //noinspection deprecation
-                    textView.setTextColor(getResources().getColor(R.color.abc_primary_text_material_dark));
-                } else {
-                    textView.setBackgroundResource(ThemeUtil.getResourceId(BookPlayActivity.this,
-                            R.attr.selectableItemBackground));
-                    //noinspection deprecation
-                    textView.setTextColor(getResources().getColor(ThemeUtil.getResourceId(
-                            BookPlayActivity.this, android.R.attr.textColorPrimary)));
+                // desired format is "1 - Title"
+                if (!chapterName.startsWith(number + " - ")) { // if title does not match desired format
+                    if (chapterName.startsWith(number)) {
+                        // if it starts with a number, a " - " should follow
+                        chapterName = number + " - " + chapterName.substring(chapterName.indexOf(number)
+                                + number.length());
+                    } else {
+                        // if the name does not match at all, set the correct format
+                        chapterName = number + " - " + chapterName;
+                    }
                 }
 
-                return view;
-            }
-        };
-        bookSpinner.setAdapter(adapter);
-
-        bookSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int newPosition, long id) {
-                if (parent.getTag() != null && ((int) parent.getTag()) != newPosition) {
-                    L.i(TAG, "spinner, onItemSelected, firing:" + newPosition);
-                    controller.changeTime(0, book.getChapters().get(
-                            newPosition).getFile());
-                    parent.setTag(newPosition);
-                }
+                chaptersAsStrings.add(chapterName);
             }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        // (Cover)
-        File coverFile = book.getCoverFile();
-        final Drawable coverReplacement = new CoverReplacement(book.getName(), this);
-        if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-            Picasso.with(this).load(coverFile).placeholder(coverReplacement).into(coverView, new Callback() {
+            ArrayAdapter adapter = new ArrayAdapter<String>(getActivity(),
+                    R.layout.fragment_book_play_spinner, R.id.spinnerTextItem, chaptersAsStrings) {
                 @Override
-                public void onSuccess() {
-                    transitionPostponeHelper.elementDone();
+                public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                    View view = super.getDropDownView(position, convertView, parent);
+
+                    TextView textView = (TextView) view.findViewById(R.id.spinnerTextItem);
+
+                    // highlights the selected item and un-highlights an item if it is not selected.
+                    // default implementation uses a ViewHolder, so this is necessary.
+                    if (position == bookSpinner.getSelectedItemPosition()) {
+                        textView.setBackgroundResource(R.drawable.spinner_selected_background);
+                        //noinspection deprecation
+                        textView.setTextColor(getResources().getColor(R.color.abc_primary_text_material_dark));
+                    } else {
+                        textView.setBackgroundResource(ThemeUtil.getResourceId(getActivity(),
+                                R.attr.selectableItemBackground));
+                        //noinspection deprecation
+                        textView.setTextColor(getResources().getColor(ThemeUtil.getResourceId(
+                                getActivity(), android.R.attr.textColorPrimary)));
+                    }
+
+                    return view;
+                }
+            };
+            bookSpinner.setAdapter(adapter);
+
+            bookSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int newPosition, long id) {
+                    if (parent.getTag() != null && ((int) parent.getTag()) != newPosition) {
+                        L.i(TAG, "spinner, onItemSelected, firing:" + newPosition);
+                        controller.changeTime(0, book.getChapters().get(
+                                newPosition).getFile());
+                        parent.setTag(newPosition);
+                    }
                 }
 
                 @Override
-                public void onError() {
-                    transitionPostponeHelper.elementDone();
+                public void onNothingSelected(AdapterView<?> parent) {
                 }
             });
+
+            // Next/Prev/spinner/book progress views hiding
+            if (book.getChapters().size() == 1) {
+                next_button.setVisibility(View.GONE);
+                previous_button.setVisibility(View.GONE);
+                bookSpinner.setVisibility(View.GONE);
+            } else {
+                next_button.setVisibility(View.VISIBLE);
+                previous_button.setVisibility(View.VISIBLE);
+                bookSpinner.setVisibility(View.VISIBLE);
+            }
+
+            ViewCompat.setTransitionName(coverView, book.getCoverTransitionName());
+        }
+
+        // (Cover)
+        final Drawable coverReplacement = new CoverReplacement(book == null ? "M" : book.getName(), getActivity());
+        if (book != null && !book.isUseCoverReplacement() && book.getCoverFile().canRead()) {
+            Picasso.with(getActivity()).load(book.getCoverFile()).placeholder(coverReplacement).into(coverView);
         } else {
-            // this hack is necessary because otherwise the transition will fail
+            // we have to set the cover in onPreDraw. Else the transition will fail.
             coverView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                 @Override
                 public boolean onPreDraw() {
                     coverView.getViewTreeObserver().removeOnPreDrawListener(this);
-                    coverView.setImageBitmap(ImageHelper.drawableToBitmap(coverReplacement, coverView.getWidth(), coverView.getHeight()));
-                    transitionPostponeHelper.elementDone();
+                    coverView.setImageDrawable(coverReplacement);
                     return true;
                 }
             });
         }
 
-        // Next/Prev/spinner/book progress views hiding
-        if (book.getChapters().size() == 1) {
-            next_button.setVisibility(View.GONE);
-            previous_button.setVisibility(View.GONE);
-            bookSpinner.setVisibility(View.GONE);
-        } else {
-            next_button.setVisibility(View.VISIBLE);
-            previous_button.setVisibility(View.VISIBLE);
-            bookSpinner.setVisibility(View.VISIBLE);
-        }
+        ViewCompat.setTransitionName(playButton, getString(R.string.fab_transition));
 
-        // transitions stuff
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Transition enterTransition = getWindow().getEnterTransition();
-            enterTransition.excludeTarget(R.id.toolbar, true);
-            enterTransition.excludeTarget(android.R.id.statusBarBackground, true);
-            enterTransition.excludeTarget(android.R.id.navigationBarBackground, true);
-        }
-        ViewCompat.setTransitionName(coverView, book.getCoverTransitionName());
+        return view;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu(true);
+
+        prefs = PrefsManager.getInstance(getActivity());
+        db = DataBaseHelper.getInstance(getActivity());
+        controller = new ServiceController(getActivity());
     }
 
 
@@ -379,7 +365,7 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void launchJumpToPositionDialog() {
-        new JumpToPositionDialogFragment().show(getSupportFragmentManager(), JumpToPositionDialogFragment.TAG);
+        new JumpToPositionDialogFragment().show(getFragmentManager(), JumpToPositionDialogFragment.TAG);
     }
 
     private void initializeTimerCountdown() {
@@ -407,13 +393,13 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.book_play, menu);
-        return true;
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.book_play, menu);
     }
 
+
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
+    public void onPrepareOptionsMenu(Menu menu) {
         MenuItem timeLapseItem = menu.findItem(R.id.action_time_lapse);
         timeLapseItem.setVisible(MediaPlayerController.canSetSpeed());
         MenuItem sleepTimerItem = menu.findItem(R.id.action_sleep);
@@ -422,14 +408,19 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
         } else {
             sleepTimerItem.setIcon(R.drawable.ic_snooze_white_24dp);
         }
-        return true;
+
+        // if we are in multipane layout, we dont show the settings menu here. It will be handled
+        // by the other fragment.
+        if (((MultiPaneInformer) getActivity()).isMultiPane()) {
+            menu.findItem(R.id.action_settings).setVisible(false);
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
+                startActivity(new Intent(getActivity(), SettingsActivity.class));
                 return true;
             case R.id.action_time_change:
                 launchJumpToPositionDialog();
@@ -437,26 +428,23 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
             case R.id.action_sleep:
                 controller.toggleSleepSand();
                 if (prefs.setBookmarkOnSleepTimer() && !MediaPlayerController.isSleepTimerActive()) {
-                    String date = DateUtils.formatDateTime(this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE |
+                    String date = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE |
                             DateUtils.FORMAT_SHOW_TIME |
                             DateUtils.FORMAT_NUMERIC_DATE);
-                    BookmarkDialogFragment.addBookmark(bookId, date + ": " +
-                            getString(R.string.action_sleep), this);
+                    BookmarkDialogFragment.addBookmark(getArguments().getLong(NI_BOOK_ID), date + ": " +
+                            getString(R.string.action_sleep), getActivity());
                 }
                 return true;
             case R.id.action_time_lapse:
-                new PlaybackSpeedDialogFragment().show(getSupportFragmentManager(),
+                new PlaybackSpeedDialogFragment().show(getFragmentManager(),
                         PlaybackSpeedDialogFragment.TAG);
                 return true;
             case R.id.action_bookmark:
-                BookmarkDialogFragment.newInstance(bookId).show(getSupportFragmentManager(),
+                BookmarkDialogFragment.newInstance(getArguments().getLong(NI_BOOK_ID)).show(getFragmentManager(),
                         BookmarkDialogFragment.TAG);
                 return true;
             case android.R.id.home:
-                // set result ok so the activity that started the transition will receive its
-                // onActivityReenter
-                setResult(RESULT_OK);
-                supportFinishAfterTransition();
+                getActivity().onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -477,25 +465,17 @@ public class BookPlayActivity extends BaseActivity implements View.OnClickListen
 
         setPlayState(false);
 
-        Book book = db.getBook(bookId);
+        Book book = db.getBook(getArguments().getLong(NI_BOOK_ID));
         if (book != null) {
             listener.onBookContentChanged(book);
         }
 
-        supportInvalidateOptionsMenu();
+        getActivity().invalidateOptionsMenu();
 
         COMMUNICATION.addBookCommunicationListener(listener);
 
         // Sleep timer countdown view
         initializeTimerCountdown();
-    }
-
-    @Override
-    public void onBackPressed() {
-        // set result ok so the activity that started the transition will receive its
-        // onActivityReenter
-        setResult(RESULT_OK);
-        super.onBackPressed();
     }
 
     @Override
