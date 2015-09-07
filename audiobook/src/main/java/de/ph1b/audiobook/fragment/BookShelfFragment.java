@@ -12,13 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
@@ -151,31 +151,14 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         // without this the item would blink on every change
         recyclerView.getItemAnimator().setSupportsChangeAnimations(false);
 
-        listDecoration = new DividerItemDecoration(recyclerView.getContext());
-        // onstart will handle the amount of columns
-        gridLayoutManager = new GridLayoutManager(recyclerView.getContext(), 2);
-        linearLayoutManager = new LinearLayoutManager(recyclerView.getContext());
+        listDecoration = new DividerItemDecoration(getActivity());
+        gridLayoutManager = new GridLayoutManager(getActivity(), getAmountOfColumns());
+        linearLayoutManager = new LinearLayoutManager(getActivity());
         initRecyclerView();
 
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        final View rootView = getView();
-        if (rootView != null) {
-            rootView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    rootView.getViewTreeObserver().removeOnPreDrawListener(this);
-                    gridLayoutManager.setSpanCount(getAmountOfColumns(rootView));
-                    return true;
-                }
-            });
-        }
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -223,9 +206,13 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
      *
      * @return The amount of columns, but at least 2.
      */
-    private int getAmountOfColumns(@NonNull View root) {
+    private int getAmountOfColumns() {
         Resources r = recyclerView.getResources();
-        float widthPx = root.getMeasuredWidth();
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float widthPx = displayMetrics.widthPixels;
+        if (((MultiPaneInformer) getActivity()).isMultiPane()) {
+            widthPx = widthPx / 2;
+        }
         float desiredPx = r.getDimensionPixelSize(R.dimen.desired_medium_cover);
         int columns = Math.round(widthPx / desiredPx);
         return Math.max(columns, 2);
