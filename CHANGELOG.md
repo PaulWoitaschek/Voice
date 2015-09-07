@@ -1,3 +1,9 @@
+# v2.4.0
+* Switch between the grid and a detailed view with a global progress
+* Improved accesibility
+* Performance greatly improved
+* More ripples
+
 # v2.3.0
 * Dont auto rewind when pausing due to interruption
 * Enabled scene transitions for cover
