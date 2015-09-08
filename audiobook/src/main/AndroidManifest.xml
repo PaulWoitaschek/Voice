@@ -11,6 +11,7 @@
     <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
+        android:name=".utils.BaseApplication"
         android:allowBackup="true"
         android:backupAgent=".persistence.CustomBackupAgent"
         android:fullBackupContent="true"
