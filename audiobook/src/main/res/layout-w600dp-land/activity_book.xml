@@ -14,13 +14,13 @@
         android:orientation="horizontal">
 
         <FrameLayout
-            android:id="@+id/base_container"
+            android:id="@+id/shelf_container"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <FrameLayout
-            android:id="@+id/additional_container"
+            android:id="@+id/play_container"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />

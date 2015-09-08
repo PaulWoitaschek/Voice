@@ -165,7 +165,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         //init views
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         assert actionBar != null;
-        boolean multipaneLayout = ((MultiPaneInformer) getActivity()).isMultiPane();
+        boolean multipaneLayout = ((MultiPaneInformer) getActivity()).isMultiPanel();
         actionBar.setDisplayHomeAsUpEnabled(!multipaneLayout);
         seekBar = (SeekBar) view.findViewById(R.id.seekBar);
         View previous_button = view.findViewById(R.id.previous);
@@ -413,7 +413,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
 
         // if we are in multipane layout, we dont show the settings menu here. It will be handled
         // by the other fragment.
-        if (((MultiPaneInformer) getActivity()).isMultiPane()) {
+        if (((MultiPaneInformer) getActivity()).isMultiPanel()) {
             menu.findItem(R.id.action_settings).setVisible(false);
         }
     }

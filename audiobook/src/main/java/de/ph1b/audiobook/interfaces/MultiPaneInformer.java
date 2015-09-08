@@ -10,5 +10,5 @@ public interface MultiPaneInformer {
     /**
      * @return true if the layout has multiple panels.
      */
-    boolean isMultiPane();
+    boolean isMultiPanel();
 }

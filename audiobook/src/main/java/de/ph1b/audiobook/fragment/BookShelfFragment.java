@@ -210,7 +210,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         Resources r = recyclerView.getResources();
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         float widthPx = displayMetrics.widthPixels;
-        if (((MultiPaneInformer) getActivity()).isMultiPane()) {
+        if (((MultiPaneInformer) getActivity()).isMultiPanel()) {
             widthPx = widthPx / 2;
         }
         float desiredPx = r.getDimensionPixelSize(R.dimen.desired_medium_cover);
@@ -269,7 +269,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             }
         }
 
-        if (((MultiPaneInformer) getActivity()).isMultiPane() || !currentBookExists) {
+        if (((MultiPaneInformer) getActivity()).isMultiPanel() || !currentBookExists) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);
@@ -285,7 +285,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public void onPrepareOptionsMenu(Menu menu) {
         // sets menu item visible if there is a current book
         MenuItem currentPlaying = menu.findItem(R.id.action_current);
-        boolean multiPane = ((MultiPaneInformer) getActivity()).isMultiPane();
+        boolean multiPane = ((MultiPaneInformer) getActivity()).isMultiPanel();
         currentPlaying.setVisible(!multiPane && db.getBook(prefs.getCurrentBookId()) != null);
 
         MenuItem displayModeItem = menu.findItem(R.id.action_change_layout);

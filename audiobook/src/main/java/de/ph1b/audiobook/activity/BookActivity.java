@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -17,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.common.base.MoreObjects;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,13 +41,25 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
     private static final String FM_BOOK_SHELF = TAG + BookShelfFragment.TAG;
     private static final String FM_BOOK_PLAY = TAG + BookPlayFragment.TAG;
     @IdRes
-    private static final int BASE_CONTAINER_ID = R.id.base_container;
+    private static final int CONTAINER_PLAY = R.id.play_container;
     @IdRes
-    private static final int ADDITIONAL_CONTAINER_ID = R.id.additional_container;
+    private static final int CONTAINER_SHELF = R.id.shelf_container;
     private static final String NI_MALFORMED_FILE = "malformedFile";
     private static final String NI_GO_TO_BOOK = "niGotoBook";
-    private boolean multiPane = false;
+    /**
+     * Used for {@link #onSaveInstanceState(Bundle)} to get the previous panel mode.
+     */
+    private static final String SI_MULTI_PANEL = "siMultiPanel";
+    private boolean multiPanel = false;
 
+    /**
+     * Returns an intent to start the activity with to inform the user that a certain file may be
+     * defect
+     *
+     * @param c             The context
+     * @param malformedFile The defect file
+     * @return The intent to start the activity with.
+     */
     public static Intent malformedFileIntent(Context c, File malformedFile) {
         Intent intent = new Intent(c, BookActivity.class);
         intent.putExtra(NI_MALFORMED_FILE, malformedFile);
@@ -57,6 +67,13 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
         return intent;
     }
 
+    /**
+     * Returns an intent that lets you go directly to the playback screen for a certain book
+     *
+     * @param c      The context
+     * @param bookId The book id to target
+     * @return The intent
+     */
     public static Intent goToBookIntent(Context c, long bookId) {
         Intent intent = new Intent(c, BookActivity.class);
         intent.putExtra(NI_GO_TO_BOOK, bookId);
@@ -65,26 +82,15 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
     }
 
     @Override
-    public boolean isMultiPane() {
-        return multiPane;
+    public boolean isMultiPanel() {
+        return multiPanel;
     }
 
-    /**
-     * Makes sure a fragment of the same class is in the container. If it is not, set the instance
-     * provided as the new fragment.
-     *
-     * @param container   The id of the container for the fragment
-     * @param fragmentTag The fragment to identify the fragment by
-     * @param newInstance A new instance of the fragment if there is none.
-     */
-    private void makeSureFragmentIsInContainer(@IdRes int container, @NonNull String fragmentTag, @NonNull Fragment newInstance) {
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment containingFragment = fm.findFragmentById(container);
-        if (containingFragment == null || (!(newInstance.getClass().isInstance(containingFragment)))) {
-            Fragment fragmentByTag = MoreObjects.firstNonNull(fm.findFragmentByTag(fragmentTag), newInstance);
-            fm.beginTransaction().replace(container, fragmentByTag, fragmentTag)
-                    .commit();
-        }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putBoolean(SI_MULTI_PANEL, isMultiPanel());
     }
 
     @Override
@@ -98,36 +104,40 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        multiPane = findViewById(ADDITIONAL_CONTAINER_ID) != null;
-        L.i(TAG, "multiPane=" + multiPane);
+        multiPanel = findViewById(CONTAINER_SHELF) != null;
+        boolean multiPaneChanged = savedInstanceState != null && savedInstanceState.getBoolean(SI_MULTI_PANEL) != multiPanel;
+        L.i(TAG, "multiPane=" + multiPanel + ", multiPaneChanged=" + multiPaneChanged);
 
-        // if we are in multipane make sure every fragment is in place.
-        if (multiPane) {
-            makeSureFragmentIsInContainer(BASE_CONTAINER_ID, FM_BOOK_SHELF, new BookShelfFragment());
-            makeSureFragmentIsInContainer(ADDITIONAL_CONTAINER_ID, FM_BOOK_PLAY,
-                    BookPlayFragment.newInstance(prefs.getCurrentBookId()));
-        } // if we are not in multipane, only react if there is no fragment in the container
-        else if (getSupportFragmentManager().findFragmentById(BASE_CONTAINER_ID) == null) {
-            L.i(TAG, "There is no fragment in the baseContainer.");
-            // use the bookplay fragment if it exists
-            Fragment bookPlayFragment = getSupportFragmentManager().findFragmentByTag(FM_BOOK_PLAY);
-            if (bookPlayFragment != null) {
-                makeSureFragmentIsInContainer(BASE_CONTAINER_ID, FM_BOOK_PLAY, bookPlayFragment);
-            } // else use a bookshelf fragment
-            else {
-                makeSureFragmentIsInContainer(BASE_CONTAINER_ID, FM_BOOK_SHELF, new BookShelfFragment());
+        // first retrieve the fragments
+        FragmentManager fm = getSupportFragmentManager();
+
+        if (savedInstanceState == null) {
+            BookShelfFragment bookShelfFragment = new BookShelfFragment();
+            if (multiPanel) {
+                fm.beginTransaction()
+                        .replace(CONTAINER_SHELF, bookShelfFragment, FM_BOOK_SHELF)
+                        .replace(CONTAINER_PLAY, BookPlayFragment.newInstance(prefs.getCurrentBookId()), FM_BOOK_PLAY)
+                        .commit();
+            } else {
+                fm.beginTransaction()
+                        .replace(CONTAINER_PLAY, bookShelfFragment, FM_BOOK_SHELF)
+                        .commit();
             }
-        } else {
-            L.i(TAG, "There is a fragment in the baseContainer");
-            Fragment obsoleteFragment = getSupportFragmentManager().findFragmentById(ADDITIONAL_CONTAINER_ID);
-            if (obsoleteFragment != null) {
-                L.i(TAG, "Remove the fragment from the addtitional container=" + obsoleteFragment);
-                getSupportFragmentManager().beginTransaction().remove(obsoleteFragment).commit();
-                // execute pending transactions so book play fragments onCreateView does not get called again.
-                getSupportFragmentManager().executePendingTransactions();
+        } else if (multiPaneChanged) {
+            if (multiPanel) {
+                fm.beginTransaction()
+                        .replace(CONTAINER_SHELF, new BookShelfFragment(), FM_BOOK_SHELF)
+                        .commit();
+            } else {
+                fm.beginTransaction()
+                        .replace(CONTAINER_PLAY, new BookShelfFragment(), FM_BOOK_SHELF)
+                        .commit();
+                fm.beginTransaction()
+                        .replace(CONTAINER_PLAY, BookPlayFragment.newInstance(prefs.getCurrentBookId()), FM_BOOK_PLAY)
+                        .addToBackStack(null)
+                        .commit();
             }
         }
-
 
         if (savedInstanceState == null) {
             if (getIntent().hasExtra(NI_MALFORMED_FILE)) {
@@ -145,21 +155,25 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
     }
 
     @Override
-    public void onBookSelected(long bookId, Map<View, String> sharedElements) {
+    public void onBookSelected(long bookId, Map<View, String> sharedViews) {
         L.i(TAG, "onBookSelected(" + bookId + ")");
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         BookPlayFragment bookPlayFragment = BookPlayFragment.newInstance(bookId);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !multiPane) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !multiPanel) {
             Transition move = TransitionInflater.from(this).inflateTransition(android.R.transition.move);
             bookPlayFragment.setSharedElementEnterTransition(move);
-            for (Map.Entry<View, String> entry : sharedElements.entrySet()) {
+            for (Map.Entry<View, String> entry : sharedViews.entrySet()) {
+                L.v(TAG, "Added sharedElement=" + entry);
                 ft.addSharedElement(entry.getKey(), entry.getValue());
             }
         }
-        ft.replace(multiPane ? ADDITIONAL_CONTAINER_ID : BASE_CONTAINER_ID, bookPlayFragment, FM_BOOK_PLAY)
-                .addToBackStack(null)
-                .commit();
+
+        Fragment containingFragment = getSupportFragmentManager().findFragmentById(CONTAINER_PLAY);
+        if (containingFragment == null || !(containingFragment instanceof BookPlayFragment) || (((BookPlayFragment) containingFragment).getBookId() != bookId)) {
+            ft.replace(CONTAINER_PLAY, bookPlayFragment, FM_BOOK_PLAY).addToBackStack(null)
+                    .commit();
+        }
     }
 
 
@@ -180,7 +194,8 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
 
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().findFragmentById(BASE_CONTAINER_ID) instanceof BookShelfFragment) {
+        Fragment bookShelfFragment = getSupportFragmentManager().findFragmentByTag(FM_BOOK_SHELF);
+        if ((bookShelfFragment != null && bookShelfFragment.isVisible())) {
             finish();
         } else {
             super.onBackPressed();

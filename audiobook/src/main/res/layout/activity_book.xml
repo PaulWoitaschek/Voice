@@ -7,7 +7,7 @@
     <include layout="@layout/toolbar" />
 
     <FrameLayout
-        android:id="@+id/base_container"
+        android:id="@+id/play_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
