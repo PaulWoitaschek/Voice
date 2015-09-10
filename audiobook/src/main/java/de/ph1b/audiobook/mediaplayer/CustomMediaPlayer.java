@@ -402,7 +402,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                         }
                         continue;
                     }
-                    if (null != sonic) {
+                    if (sonic != null) {
                         sonic.setSpeed(speed);
                         sonic.setPitch(1);
                     }
@@ -423,8 +423,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                                 0,
                                 sampleSize,
                                 presentationTimeUs,
-                                sawInputEOS ? MediaCodec.BUFFER_FLAG_END_OF_STREAM
-                                        : 0);
+                                sawInputEOS ? MediaCodec.BUFFER_FLAG_END_OF_STREAM : 0);
                         if (flushCodec) {
                             codec.flush();
                             flushCodec = false;
