@@ -84,6 +84,8 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                     initStream();
                 } catch (IOException e) {
                     e.printStackTrace();
+                    error("start");
+                    break;
                 }
             case PREPARED:
                 state = State.STARTED;
@@ -253,6 +255,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                 break;
             default:
                 error("setDataSource");
+                break;
         }
     }
 
