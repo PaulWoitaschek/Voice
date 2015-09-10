@@ -341,6 +341,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setRetainInstance(true);
         setHasOptionsMenu(true);
 
         prefs = PrefsManager.getInstance(getActivity());
