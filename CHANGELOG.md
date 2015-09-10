@@ -1,4 +1,9 @@
-# v2.4.0
+# v2.4.0.1 Hotfix
+* Fixed tablet orientation problems
+* Fixed audio track crash
+* Fixed scene transitions after rotation
+
+# v2.4.0 Detail view
 * Switch between the grid and a detailed view with a global progress
 * Improved accesibility
 * Performance greatly improved
