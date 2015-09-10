@@ -126,6 +126,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
             });
         }
     };
+    private boolean isMultiPanel = false;
 
     private static String formatTime(int ms, int duration) {
         String h = String.valueOf(TimeUnit.MILLISECONDS.toHours(ms));
@@ -170,12 +171,12 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         L.i(TAG, "onCreateView");
 
         final Book book = db.getBook(getArguments().getLong(NI_BOOK_ID));
+        isMultiPanel = ((MultiPaneInformer) getActivity()).isMultiPanel();
 
         //init views
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         assert actionBar != null;
-        boolean multipaneLayout = ((MultiPaneInformer) getActivity()).isMultiPanel();
-        actionBar.setDisplayHomeAsUpEnabled(!multipaneLayout);
+        actionBar.setDisplayHomeAsUpEnabled(!isMultiPanel);
         seekBar = (SeekBar) view.findViewById(R.id.seekBar);
         View previous_button = view.findViewById(R.id.previous);
         View rewindButton = view.findViewById(R.id.rewind);
@@ -347,7 +348,6 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         controller = new ServiceController(getActivity());
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -422,9 +422,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
 
         // if we are in multipane layout, we dont show the settings menu here. It will be handled
         // by the other fragment.
-        if (((MultiPaneInformer) getActivity()).isMultiPanel()) {
-            menu.findItem(R.id.action_settings).setVisible(false);
-        }
+        menu.findItem(R.id.action_settings).setVisible(!isMultiPanel);
     }
 
     @Override
