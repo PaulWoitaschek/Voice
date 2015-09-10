@@ -406,13 +406,12 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.book_play, menu);
-    }
 
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
+        // sets playback speed icon enabled / disabled depending on device functionallity
         MenuItem timeLapseItem = menu.findItem(R.id.action_time_lapse);
         timeLapseItem.setVisible(MediaPlayerController.canSetSpeed());
+
+        // sets the correct sleep timer icon
         MenuItem sleepTimerItem = menu.findItem(R.id.action_sleep);
         if (MediaPlayerController.isSleepTimerActive()) {
             sleepTimerItem.setIcon(R.drawable.ic_alarm_on_white_24dp);
@@ -420,7 +419,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
             sleepTimerItem.setIcon(R.drawable.ic_snooze_white_24dp);
         }
 
-        // if we are in multipane layout, we dont show the settings menu here. It will be handled
+        // if we are in multipane layout, we don't show the settings menu here. It will be handled
         // by the other fragment.
         menu.findItem(R.id.action_settings).setVisible(!isMultiPanel);
     }

@@ -280,18 +280,15 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.book_shelf, menu);
-    }
 
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
         // sets menu item visible if there is a current book
         MenuItem currentPlaying = menu.findItem(R.id.action_current);
         currentPlaying.setVisible(!isMultiPanel && db.getBook(prefs.getCurrentBookId()) != null);
 
+        // sets the grid / list toggle icon
         MenuItem displayModeItem = menu.findItem(R.id.action_change_layout);
-        DisplayMode displayMode = prefs.getDisplayMode();
-        displayModeItem.setIcon(displayMode == DisplayMode.GRID ?
-                R.drawable.ic_view_list_white_24dp : R.drawable.ic_view_grid_white_24dp);
+        boolean gridMode = prefs.getDisplayMode() == DisplayMode.GRID;
+        displayModeItem.setIcon(gridMode ? R.drawable.ic_view_list_white_24dp : R.drawable.ic_view_grid_white_24dp);
     }
 
     @Override
