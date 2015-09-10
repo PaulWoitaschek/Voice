@@ -1,17 +1,5 @@
-package de.ph1b.audiobook.mediaplayer;//Copyright 2012 James Falcon
-//Edited by Paul Woitaschek
-//
-//Licensed under the Apache License, Version 2.0 (the "License");
-//you may not use this file except in compliance with the License.
-//You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-//Unless required by applicable law or agreed to in writing, software
-//distributed under the License is distributed on an "AS IS" BASIS,
-//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//See the License for the specific language governing permissions and
-//limitations under the License.
+package de.ph1b.audiobook.mediaplayer;
+
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -35,6 +23,22 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import de.ph1b.audiobook.utils.L;
 
+/**
+ * <p/>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @author James Falcon, Paul Woitaschek
+ */
 @TargetApi(16)
 public class CustomMediaPlayer implements MediaPlayerInterface {
     private static final String TAG = CustomMediaPlayer.class.getSimpleName();
@@ -239,11 +243,11 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     }
 
     @Override
-    public void setDataSource(String path) {
-        L.d(TAG, "setDataSource: " + path);
+    public void setDataSource(String source) {
+        L.d(TAG, "setDataSource: " + source);
         switch (state) {
             case IDLE:
-                this.path = path;
+                this.path = source;
                 state = State.INITIALIZED;
                 L.d(TAG, "State changed to: " + state);
                 break;
@@ -258,8 +262,8 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     }
 
     @Override
-    public void setOnCompletionListener(@Nullable MediaPlayerInterface.OnCompletionListener listener) {
-        this.onCompletionListener = listener;
+    public void setOnCompletionListener(@Nullable MediaPlayerInterface.OnCompletionListener onCompletionListener) {
+        this.onCompletionListener = onCompletionListener;
     }
 
     @Override
@@ -330,13 +334,25 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
         L.e(TAG, "Called " + methodName + " in state=" + oldState);
     }
 
-    private void initDevice(int sampleRate, int numChannels) {
+
+    /**
+     * Initializes the basic audio track to be able to playback.
+     *
+     * @param sampleRate  The sample rate of the track
+     * @param numChannels The number of channels available in the track.
+     */
+    private void initDevice(int sampleRate, int numChannels) throws IOException {
         L.d(TAG, "initDevice called in state:" + state);
         lock.lock();
         try {
             final int format = findFormatFromChannels(numChannels);
             final int minSize = AudioTrack.getMinBufferSize(sampleRate, format,
                     AudioFormat.ENCODING_PCM_16BIT);
+
+            if (minSize == AudioTrack.ERROR || minSize == AudioTrack.ERROR_BAD_VALUE) {
+                L.e(TAG, "minSize=" + minSize);
+                throw new IOException("getMinBufferSize returned " + minSize);
+            }
             track = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, format,
                     AudioFormat.ENCODING_PCM_16BIT, minSize * 4,
                     AudioTrack.MODE_STREAM);
@@ -369,8 +385,8 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
             public void run() {
                 isDecoding = true;
                 codec.start();
-                ByteBuffer[] inputBuffers = codec.getInputBuffers();
-                ByteBuffer[] outputBuffers = codec.getOutputBuffers();
+                @SuppressWarnings("deprecation") ByteBuffer[] inputBuffers = codec.getInputBuffers();
+                @SuppressWarnings("deprecation") ByteBuffer[] outputBuffers = codec.getOutputBuffers();
                 boolean sawInputEOS = false;
                 boolean sawOutputEOS = false;
                 while (!sawInputEOS && !sawOutputEOS && continuing) {
@@ -418,6 +434,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                     final MediaCodec.BufferInfo info = new MediaCodec.BufferInfo();
                     byte[] modifiedSamples = new byte[info.size];
                     int res;
+                    //noinspection deprecation
                     do {
                         res = codec.dequeueOutputBuffer(info, 200);
                         if (res >= 0) {
@@ -441,25 +458,30 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                             if ((info.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
                                 sawOutputEOS = true;
                             }
-                        } else if (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED) {
-                            outputBuffers = codec.getOutputBuffers();
-                        } else if (res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
-                            track.stop();
-                            lock.lock();
-                            try {
-                                track.release();
-                                final MediaFormat oFormat = codec
-                                        .getOutputFormat();
-
-                                initDevice(
-                                        oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE),
-                                        oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT));
+                        } else //noinspection deprecation
+                            if (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED) {
+                                //noinspection deprecation
                                 outputBuffers = codec.getOutputBuffers();
-                                track.play();
-                            } finally {
-                                lock.unlock();
+                            } else if (res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
+                                track.stop();
+                                lock.lock();
+                                try {
+                                    track.release();
+                                    final MediaFormat oFormat = codec
+                                            .getOutputFormat();
+
+                                    initDevice(
+                                            oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE),
+                                            oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT));
+                                    //noinspection deprecation
+                                    outputBuffers = codec.getOutputBuffers();
+                                    track.play();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } finally {
+                                    lock.unlock();
+                                }
                             }
-                        }
                     } while (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED
                             || res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED);
                 }
