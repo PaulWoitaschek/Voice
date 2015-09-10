@@ -52,8 +52,6 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
 
     private static final String TAG = AudioService.class.getSimpleName();
     private static final int NOTIFICATION_ID = 42;
-    private static final String PLAYSTATE_CHANGED = "com.android.music.playstatechanged";
-    private static final String META_CHANGED = "com.android.music.metachanged";
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private final ExecutorService playerExecutor = new ThreadPoolExecutor(
             1, 1, // single thread
@@ -109,7 +107,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     private MediaSessionCompat mediaSession;
     private DataBaseHelper db;
     /**
-     * The last file the {@link #notifyChange(String)} has used to update the metadata.
+     * The last file the {@link #notifyChange(de.ph1b.audiobook.service.AudioService.ChangeType)} has used to update the metadata.
      */
     private volatile File lastFileForMetaData = new File("");
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
@@ -119,7 +117,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         public void onBookContentChanged(@NonNull Book book) {
             if (book.getId() == prefs.getCurrentBookId()) {
                 controller.updateBook(db.getBook(prefs.getCurrentBookId()));
-                notifyChange(META_CHANGED);
+                notifyChange(ChangeType.METADATA);
             }
         }
 
@@ -157,7 +155,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                                 break;
                         }
 
-                        notifyChange(PLAYSTATE_CHANGED);
+                        notifyChange(ChangeType.PLAYSTATE);
                     }
                 }
             });
@@ -361,9 +359,9 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                         pauseBecauseHeadset = false;
                     }
 
-                    /**
-                     * Only break here. if we should pause, AUDIO_FOCUS_LOSS_TRANSIENT will handle
-                     * that for us.
+                    /*
+                      Only break here. if we should pause, AUDIO_FOCUS_LOSS_TRANSIENT will handle
+                      that for us.
                      */
                     break;
                 }
@@ -462,7 +460,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 .build();
     }
 
-    private void notifyChange(final String what) {
+    private void notifyChange(final ChangeType what) {
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -478,7 +476,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                     String author = book.getAuthor();
                     int position = book.getTime();
 
-                    Intent i = new Intent(what);
+                    Intent i = new Intent(what.intentUrl);
                     i.putExtra("id", 1);
                     if (author != null) {
                         i.putExtra("artist", author);
@@ -489,7 +487,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                     i.putExtra("position", book.getTime());
                     sendBroadcast(i);
 
-                    if (what.equals(PLAYSTATE_CHANGED)) {
+                    if (what == ChangeType.PLAYSTATE) {
                         int state;
                         if (playState == MediaPlayerController.PlayState.PLAYING) {
                             //noinspection deprecation
@@ -503,7 +501,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                         }
                         playbackStateBuilder.setState(state, position, controller.getPlaybackSpeed());
                         mediaSession.setPlaybackState(playbackStateBuilder.build());
-                    } else if (what.equals(META_CHANGED) && !lastFileForMetaData.equals(book.getCurrentFile())) {
+                    } else if ((what == ChangeType.METADATA) && !lastFileForMetaData.equals(book.getCurrentFile())) {
                         // this check is necessary. Else the lockscreen controls will flicker due to
                         // an updated picture
                         Bitmap bitmap = null;
@@ -548,5 +546,16 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 }
             }
         });
+    }
+
+    private enum ChangeType {
+        METADATA("com.android.music.metachanged"),
+        PLAYSTATE("com.android.music.playstatechange");
+
+        public final String intentUrl;
+
+        ChangeType(String intentUrl) {
+            this.intentUrl = intentUrl;
+        }
     }
 }
