@@ -105,7 +105,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                 stayAwake(true);
                 break;
             default:
-                error("start", state);
+                error("start");
                 break;
         }
     }
@@ -160,7 +160,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                 L.d(TAG, "State changed to: " + state);
                 break;
             default:
-                error("prepare", state);
+                error("prepare");
         }
     }
 
@@ -191,7 +191,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                 t.start();
                 break;
             default:
-                error("seekTo", state);
+                error("seekTo");
         }
     }
 
@@ -199,7 +199,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     public int getCurrentPosition() {
         switch (state) {
             case ERROR:
-                error("getCurrentPosition", state);
+                error("getCurrentPosition");
                 if (onErrorListener != null) {
                     onErrorListener.onError(null, 0, 0);
                 }
@@ -228,7 +228,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                 stayAwake(false);
                 break;
             default:
-                error("pause", state);
+                error("pause");
         }
     }
 
@@ -252,7 +252,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                 L.d(TAG, "State changed to: " + state);
                 break;
             default:
-                error("setDataSource", state);
+                error("setDataSource");
         }
     }
 
@@ -286,32 +286,32 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
             if (path != null) {
                 extractor.setDataSource(path);
             } else {
-                error("initStream", state);
+                error("initStream");
                 throw new IOException();
             }
             int trackNum = 0;
             final MediaFormat oFormat = extractor.getTrackFormat(trackNum);
 
             if (!oFormat.containsKey(MediaFormat.KEY_SAMPLE_RATE)) {
-                error("initStream", state);
+                error("initStream");
                 throw new IOException("No KEY_SAMPLE_RATE");
             }
             int sampleRate = oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
 
             if (!oFormat.containsKey(MediaFormat.KEY_CHANNEL_COUNT)) {
-                error("initStream", state);
+                error("initStream");
                 throw new IOException("No KEY_CHANNEL_COUNT");
             }
             int channelCount = oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
 
             if (!oFormat.containsKey(MediaFormat.KEY_MIME)) {
-                error("initStream", state);
+                error("initStream");
                 throw new IOException("No KEY_MIME");
             }
             final String mime = oFormat.getString(MediaFormat.KEY_MIME);
 
             if (!oFormat.containsKey(MediaFormat.KEY_DURATION)) {
-                error("initStream", state);
+                error("initStream");
                 throw new IOException("No KEY_DURATION");
             }
             duration = oFormat.getLong(MediaFormat.KEY_DURATION);
@@ -327,11 +327,10 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
         }
     }
 
-    private void error(String methodName, State lastState) {
-        State oldState = State.values()[lastState.ordinal()];
+    private void error(String methodName) {
+        L.e(TAG, "Error in " + methodName + " at state=" + state);
         state = State.ERROR;
         stayAwake(false);
-        L.e(TAG, "Called " + methodName + " in state=" + oldState);
     }
 
 
