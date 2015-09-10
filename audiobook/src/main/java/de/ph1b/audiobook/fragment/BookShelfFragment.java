@@ -65,6 +65,11 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     private RecyclerView recyclerView;
     private ProgressBar recyclerReplacementView;
     private FloatingActionButton fab;
+    private DataBaseHelper db;
+    private RecyclerView.ItemDecoration listDecoration;
+    private GridLayoutManager gridLayoutManager;
+    private RecyclerView.LayoutManager linearLayoutManager;
+    private boolean isMultiPanel;
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
         @Override
         public void onBookContentChanged(@NonNull final Book book) {
@@ -124,16 +129,13 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             });
         }
     };
-    private DataBaseHelper db;
-    private RecyclerView.ItemDecoration listDecoration;
-    private GridLayoutManager gridLayoutManager;
-    private RecyclerView.LayoutManager linearLayoutManager;
-
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_book_shelf, container, false);
+
+        isMultiPanel = ((MultiPaneInformer) getActivity()).isMultiPanel();
 
         // find views
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
@@ -158,7 +160,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
         return view;
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -210,7 +211,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         Resources r = recyclerView.getResources();
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         float widthPx = displayMetrics.widthPixels;
-        if (((MultiPaneInformer) getActivity()).isMultiPanel()) {
+        if (isMultiPanel) {
             widthPx = widthPx / 2;
         }
         float desiredPx = r.getDimensionPixelSize(R.dimen.desired_medium_cover);
@@ -269,7 +270,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             }
         }
 
-        if (((MultiPaneInformer) getActivity()).isMultiPanel() || !currentBookExists) {
+        if (isMultiPanel || !currentBookExists) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);
@@ -285,8 +286,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public void onPrepareOptionsMenu(Menu menu) {
         // sets menu item visible if there is a current book
         MenuItem currentPlaying = menu.findItem(R.id.action_current);
-        boolean multiPane = ((MultiPaneInformer) getActivity()).isMultiPanel();
-        currentPlaying.setVisible(!multiPane && db.getBook(prefs.getCurrentBookId()) != null);
+        currentPlaying.setVisible(!isMultiPanel && db.getBook(prefs.getCurrentBookId()) != null);
 
         MenuItem displayModeItem = menu.findItem(R.id.action_change_layout);
         DisplayMode displayMode = prefs.getDisplayMode();
