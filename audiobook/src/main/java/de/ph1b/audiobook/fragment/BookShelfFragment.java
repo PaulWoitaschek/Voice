@@ -251,6 +251,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         }
     }
 
+
     private void checkVisibilities() {
         final boolean hideRecycler = adapter.getItemCount() == 0 && BookAdder.scannerActive;
         if (hideRecycler) {

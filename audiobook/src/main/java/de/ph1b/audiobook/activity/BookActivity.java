@@ -124,16 +124,50 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
                         .commit();
             }
         } else if (multiPaneChanged) {
+            // we need to pop the whole back-stack. Else we can't change the container id
+            fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            // restore book shelf or create new one
+            BookShelfFragment bookShelfFragment = (BookShelfFragment) fm.findFragmentByTag(FM_BOOK_SHELF);
+            if (bookShelfFragment == null) {
+                bookShelfFragment = new BookShelfFragment();
+                L.v(TAG, "new fragment=" + bookShelfFragment);
+            } else {
+                fm.beginTransaction()
+                        .remove(bookShelfFragment)
+                        .commit();
+                fm.executePendingTransactions();
+                L.v(TAG, "restored fragment=" + bookShelfFragment);
+            }
+
+            // restore book play fragment or create new one
+            BookPlayFragment bookPlayFragment = (BookPlayFragment) fm.findFragmentByTag(FM_BOOK_PLAY);
+            if (bookPlayFragment == null) {
+                bookPlayFragment = BookPlayFragment.newInstance(prefs.getCurrentBookId());
+                L.v(TAG, "new fragment=" + bookPlayFragment);
+            } else {
+                fm.beginTransaction()
+                        .remove(bookPlayFragment)
+                        .commit();
+                fm.executePendingTransactions();
+                L.v(TAG, "restored fragment=" + bookPlayFragment);
+                if (bookPlayFragment.getBookId() != prefs.getCurrentBookId()) {
+                    bookPlayFragment = BookPlayFragment.newInstance(prefs.getCurrentBookId());
+                    L.v(TAG, "id did not match. Created new fragment=" + bookPlayFragment);
+                }
+            }
+
             if (multiPanel) {
                 fm.beginTransaction()
-                        .replace(CONTAINER_SHELF, new BookShelfFragment(), FM_BOOK_SHELF)
+                        .replace(CONTAINER_SHELF, bookShelfFragment, FM_BOOK_SHELF)
+                        .replace(CONTAINER_PLAY, bookPlayFragment, FM_BOOK_PLAY)
                         .commit();
             } else {
                 fm.beginTransaction()
-                        .replace(CONTAINER_PLAY, new BookShelfFragment(), FM_BOOK_SHELF)
+                        .replace(CONTAINER_PLAY, bookShelfFragment, FM_BOOK_SHELF)
                         .commit();
                 fm.beginTransaction()
-                        .replace(CONTAINER_PLAY, BookPlayFragment.newInstance(prefs.getCurrentBookId()), FM_BOOK_PLAY)
+                        .replace(CONTAINER_PLAY, bookPlayFragment, FM_BOOK_PLAY)
                         .addToBackStack(null)
                         .commit();
             }
@@ -169,6 +203,7 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
             }
         }
 
+        // only replace if there is not already a fragment with that id
         Fragment containingFragment = getSupportFragmentManager().findFragmentById(CONTAINER_PLAY);
         if (containingFragment == null || !(containingFragment instanceof BookPlayFragment) || (((BookPlayFragment) containingFragment).getBookId() != bookId)) {
             ft.replace(CONTAINER_PLAY, bookPlayFragment, FM_BOOK_PLAY).addToBackStack(null)
