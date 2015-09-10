@@ -48,6 +48,11 @@ import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
 
 
+/**
+ * Service that hosts the longtime playback and handles its controls.
+ *
+ * @author Paul Woitaschek
+ */
 public class AudioService extends Service implements AudioManager.OnAudioFocusChangeListener {
 
     private static final String TAG = AudioService.class.getSimpleName();
