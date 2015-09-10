@@ -60,7 +60,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
 
     public static final String TAG = BookPlayFragment.class.getSimpleName();
     private static final Communication COMMUNICATION = Communication.getInstance();
-    private static final String NI_BOOK_ID = "nigetArguments().getLong(NI_BOOK_ID)";
+    private static final String NI_BOOK_ID = "niBookId";
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
     private TextView playedTimeView;
     private SeekBar seekBar;
@@ -95,9 +95,9 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
                         Chapter chapter = book.getCurrentChapter();
 
                         int position = chapters.indexOf(chapter);
-                        /**
-                         * Setting position as a tag, so we can make sure onItemSelected is only fired when
-                         * the user changes the position himself.
+                        /*
+                          Setting position as a tag, so we can make sure onItemSelected is only fired when
+                          the user changes the position himself.
                          */
                         bookSpinner.setTag(position);
                         bookSpinner.setSelection(position, true);
@@ -139,6 +139,12 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Method to create a new instance of this fragment. Do not create a new instance yourself.
+     *
+     * @param bookId the id to use
+     * @return The new instance
+     */
     public static BookPlayFragment newInstance(long bookId) {
         BookPlayFragment bookPlayFragment = new BookPlayFragment();
 
@@ -149,6 +155,9 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         return bookPlayFragment;
     }
 
+    /**
+     * @return the book id this fragment was instantiated with.
+     */
     public long getBookId() {
         return getArguments().getLong(NI_BOOK_ID);
     }
@@ -278,12 +287,12 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
 
             bookSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int newPosition, long id) {
-                    if (parent.getTag() != null && ((int) parent.getTag()) != newPosition) {
-                        L.i(TAG, "spinner, onItemSelected, firing:" + newPosition);
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (parent.getTag() != null && ((int) parent.getTag()) != position) {
+                        L.i(TAG, "spinner, onItemSelected, firing:" + position);
                         controller.changeTime(0, book.getChapters().get(
-                                newPosition).getFile());
-                        parent.setTag(newPosition);
+                                position).getFile());
+                        parent.setTag(position);
                     }
                 }
 
@@ -340,8 +349,8 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
 
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
+    public void onClick(View v) {
+        switch (v.getId()) {
             case R.id.play:
             case R.id.cover_frame:
                 controller.playPause();
@@ -379,8 +388,8 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
             timerCountdownView.setVisibility(View.VISIBLE);
             countDownTimer = new CountDownTimer(MediaPlayerController.getLeftSleepTimerTime(), 1000) {
                 @Override
-                public void onTick(long m) {
-                    timerCountdownView.setText(formatTime((int) m, (int) m));
+                public void onTick(long millisUntilFinished) {
+                    timerCountdownView.setText(formatTime((int) millisUntilFinished, (int) millisUntilFinished));
                 }
 
                 @Override
