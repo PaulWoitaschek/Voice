@@ -31,6 +31,9 @@ import de.ph1b.audiobook.model.NaturalOrderComparator;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 
+/**
+ * Adapter for a recycler-view book shelf that keeps the items in a sorted list.
+ */
 public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.BaseViewHolder> {
 
     private final BookShelfFragment.DisplayMode displayMode;
@@ -58,6 +61,11 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
         }
     });
 
+    /**
+     * @param c                   the context
+     * @param displayMode         the display mode
+     * @param onItemClickListener the listener that will be called when a book has been selected
+     */
     public BookShelfAdapter(@NonNull Context c, BookShelfFragment.DisplayMode displayMode, OnItemClickListener onItemClickListener) {
         this.c = c;
         this.onItemClickListener = onItemClickListener;
@@ -93,6 +101,11 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
         }
     }
 
+    /**
+     * Adds a new set of books and removes the ones that do not exist any longer
+     *
+     * @param books The new set of books
+     */
     public void newDataSet(@NonNull List<Book> books) {
         sortedList.beginBatchedUpdates();
         try {
@@ -130,6 +143,12 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
         return sortedList.get(position).getId();
     }
 
+    /**
+     * Gets the item at a requested position
+     *
+     * @param position the adapter position
+     * @return the book at the position
+     */
     @NonNull
     public Book getItem(int position) {
         return sortedList.get(position);
@@ -147,6 +166,11 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
         }
     }
 
+    /**
+     * Calls {@link #notifyItemChanged(int)} for a specified id
+     *
+     * @param id the id of the item
+     */
     public void notifyItemAtIdChanged(long id) {
         for (int i = 0; i < sortedList.size(); i++) {
             if (sortedList.get(i).getId() == id) {
@@ -157,8 +181,8 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
     }
 
     @Override
-    public void onBindViewHolder(final BaseViewHolder viewHolder, int position) {
-        viewHolder.bind(sortedList.get(position));
+    public void onBindViewHolder(final BaseViewHolder holder, int position) {
+        holder.bind(sortedList.get(position));
     }
 
     @Override
@@ -167,9 +191,20 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
     }
 
     public interface OnItemClickListener {
-        void onCoverClicked(final int position);
+        /**
+         * This method will be invoked when a item has been clicked
+         *
+         * @param position adapter position of the item
+         */
+        void onItemClicked(final int position);
 
-        void onMenuClicked(final int position, View view);
+        /**
+         * This method will be invoked when the menu of an item has been clicked
+         *
+         * @param position The adapter position
+         * @param view     The view that was clicked
+         */
+        void onMenuClicked(final int position, final View view);
     }
 
     public class ListViewHolder extends BaseViewHolder {
@@ -178,6 +213,11 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
         private final TextView leftTime;
         private final TextView rightTime;
 
+        /**
+         * Constructor for a list viewholder
+         *
+         * @param parent The parent view
+         */
         public ListViewHolder(ViewGroup parent) {
             super(LayoutInflater.from(parent.getContext()).inflate(
                     R.layout.fragment_book_shelf_list_layout, parent, false));
@@ -204,6 +244,11 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
 
     public class GridViewHolder extends BaseViewHolder {
 
+        /**
+         * Constructor for a new grid viewholder
+         *
+         * @param parent The parent
+         */
         public GridViewHolder(ViewGroup parent) {
             super(LayoutInflater.from(parent.getContext()).inflate(
                     R.layout.fragment_book_shelf_grid_layout, parent, false));
@@ -216,6 +261,11 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
         private final View editBook;
         private final ImageView currentPlayingIndicator;
 
+        /**
+         * Constructor of a viewholder.
+         *
+         * @param itemView The view to bind to
+         */
         public BaseViewHolder(View itemView) {
             super(itemView);
             coverView = (ImageView) itemView.findViewById(R.id.coverView);
@@ -224,6 +274,11 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
             currentPlayingIndicator = (ImageView) itemView.findViewById(R.id.currentPlayingIndicator);
         }
 
+        /**
+         * Binds the ViewHolder to a book
+         *
+         * @param book The book to bind to
+         */
         @CallSuper
         public void bind(Book book) {
 
@@ -259,7 +314,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onCoverClicked(getAdapterPosition());
+                    onItemClickListener.onItemClicked(getAdapterPosition());
                 }
             });
             editBook.setOnClickListener(new View.OnClickListener() {

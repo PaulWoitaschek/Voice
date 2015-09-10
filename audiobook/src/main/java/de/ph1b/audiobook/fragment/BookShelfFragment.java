@@ -327,8 +327,8 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
+    public void onClick(View v) {
+        switch (v.getId()) {
             case R.id.fab:
                 controller.playPause();
                 break;
@@ -345,14 +345,14 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onCoverClicked(int position) {
+    public void onItemClicked(int position) {
         long bookId = adapter.getItemId(position);
         invokeBookSelectionCallback(bookId);
     }
 
     @Override
-    public void onMenuClicked(final int position, final View editBook) {
-        PopupMenu popupMenu = new PopupMenu(getActivity(), editBook);
+    public void onMenuClicked(final int position, final View view) {
+        PopupMenu popupMenu = new PopupMenu(getActivity(), view);
         popupMenu.inflate(R.menu.bookshelf_popup);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -405,6 +405,12 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     }
 
     public interface BookSelectionCallback {
+        /**
+         * This is called when a selection has been made
+         *
+         * @param bookId      the id of the selected book
+         * @param sharedViews A mapping of the shared views and their transition names
+         */
         void onBookSelected(long bookId, Map<View, String> sharedViews);
     }
 }
