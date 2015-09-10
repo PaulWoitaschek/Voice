@@ -64,7 +64,7 @@
                 android:value=".activity.BookActivity" />
         </activity>
 
-        <service android:name=".service.AudioService" />
+        <service android:name=".service.BookReaderService" />
 
         <service android:name=".service.WidgetUpdateService" />
 

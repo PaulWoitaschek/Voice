@@ -53,9 +53,9 @@ import de.ph1b.audiobook.utils.L;
  *
  * @author Paul Woitaschek
  */
-public class AudioService extends Service implements AudioManager.OnAudioFocusChangeListener {
+public class BookReaderService extends Service implements AudioManager.OnAudioFocusChangeListener {
 
-    private static final String TAG = AudioService.class.getSimpleName();
+    private static final String TAG = BookReaderService.class.getSimpleName();
     private static final int NOTIFICATION_ID = 42;
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private final ExecutorService playerExecutor = new ThreadPoolExecutor(
@@ -112,7 +112,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     private MediaSessionCompat mediaSession;
     private DataBaseHelper db;
     /**
-     * The last file the {@link #notifyChange(de.ph1b.audiobook.service.AudioService.ChangeType)} has used to update the metadata.
+     * The last file the {@link #notifyChange(BookReaderService.ChangeType)} has used to update the metadata.
      */
     private volatile File lastFileForMetaData = new File("");
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
@@ -138,7 +138,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                     if (controllerBook != null) {
                         switch (state) {
                             case PLAYING:
-                                audioManager.requestAudioFocus(AudioService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+                                audioManager.requestAudioFocus(BookReaderService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
                                 mediaSession.setActive(true);
 
@@ -153,7 +153,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                             case STOPPED:
                                 mediaSession.setActive(false);
 
-                                audioManager.abandonAudioFocus(AudioService.this);
+                                audioManager.abandonAudioFocus(BookReaderService.this);
                                 notificationManager.cancel(NOTIFICATION_ID);
                                 stopForeground(true);
 
@@ -183,7 +183,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
-        ComponentName eventReceiver = new ComponentName(AudioService.this.getPackageName(), RemoteControlReceiver.class.getName());
+        ComponentName eventReceiver = new ComponentName(BookReaderService.this.getPackageName(), RemoteControlReceiver.class.getName());
         Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
         mediaButtonIntent.setComponent(eventReceiver);
         PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, mediaButtonIntent, 0);
@@ -396,7 +396,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         try {
             File coverFile = book.getCoverFile();
             if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-                cover = Picasso.with(AudioService.this).load(coverFile).resize(width, height).get();
+                cover = Picasso.with(BookReaderService.this).load(coverFile).resize(width, height).get();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -513,7 +513,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                         File coverFile = book.getCoverFile();
                         if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
                             try {
-                                bitmap = Picasso.with(AudioService.this).load(coverFile).get();
+                                bitmap = Picasso.with(BookReaderService.this).load(coverFile).get();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -521,12 +521,12 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                         if (bitmap == null) {
                             Drawable replacement = new CoverReplacement(
                                     book.getName(),
-                                    AudioService.this);
+                                    BookReaderService.this);
                             L.d(TAG, "replacement dimen: " + replacement.getIntrinsicWidth() + ":" + replacement.getIntrinsicHeight());
                             bitmap = ImageHelper.drawableToBitmap(
                                     replacement,
-                                    ImageHelper.getSmallerScreenSize(AudioService.this),
-                                    ImageHelper.getSmallerScreenSize(AudioService.this));
+                                    ImageHelper.getSmallerScreenSize(BookReaderService.this),
+                                    ImageHelper.getSmallerScreenSize(BookReaderService.this));
                         }
                         // we make a copy because we do not want to use picassos bitmap, since
                         // MediaSessionCompat recycles our bitmap eventually which would make

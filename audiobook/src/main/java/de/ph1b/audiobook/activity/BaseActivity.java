@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.service.AudioService;
+import de.ph1b.audiobook.service.BookReaderService;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 
 /**
@@ -31,7 +31,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (!storageMounted()) {
-            Intent serviceIntent = new Intent(this, AudioService.class);
+            Intent serviceIntent = new Intent(this, BookReaderService.class);
             stopService(serviceIntent);
 
             Intent i = new Intent(this, NoExternalStorageActivity.class);

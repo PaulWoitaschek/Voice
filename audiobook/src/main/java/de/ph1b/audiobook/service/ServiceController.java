@@ -29,7 +29,7 @@ public class ServiceController {
     }
 
     public static Intent getStopIntent(Context c) {
-        Intent intent = new Intent(c, AudioService.class);
+        Intent intent = new Intent(c, BookReaderService.class);
         intent.setAction(Intent.ACTION_MEDIA_BUTTON);
         KeyEvent keyEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_STOP);
         intent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent);
@@ -37,7 +37,7 @@ public class ServiceController {
     }
 
     public static Intent getPlayPauseIntent(Context c) {
-        Intent intent = new Intent(c, AudioService.class);
+        Intent intent = new Intent(c, BookReaderService.class);
         intent.setAction(Intent.ACTION_MEDIA_BUTTON);
         KeyEvent keyEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
         intent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent);
@@ -45,7 +45,7 @@ public class ServiceController {
     }
 
     public static Intent getFastForwardIntent(Context c) {
-        Intent intent = new Intent(c, AudioService.class);
+        Intent intent = new Intent(c, BookReaderService.class);
         intent.setAction(Intent.ACTION_MEDIA_BUTTON);
         KeyEvent keyEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD);
         intent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent);
@@ -53,7 +53,7 @@ public class ServiceController {
     }
 
     public static Intent getRewindIntent(Context c) {
-        Intent intent = new Intent(c, AudioService.class);
+        Intent intent = new Intent(c, BookReaderService.class);
         intent.setAction(Intent.ACTION_MEDIA_BUTTON);
         KeyEvent keyEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_REWIND);
         intent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent);
@@ -61,14 +61,14 @@ public class ServiceController {
     }
 
     public void setPlaybackSpeed(float speed) {
-        Intent i = new Intent(c, AudioService.class);
+        Intent i = new Intent(c, BookReaderService.class);
         i.setAction(CONTROL_SET_PLAYBACK_SPEED);
         i.putExtra(CONTROL_SET_PLAYBACK_SPEED_EXTRA_SPEED, speed);
         c.startService(i);
     }
 
     public void changeTime(int time, File file) {
-        Intent intent = new Intent(c, AudioService.class);
+        Intent intent = new Intent(c, BookReaderService.class);
         intent.setAction(CONTROL_CHANGE_POSITION);
         intent.putExtra(CONTROL_CHANGE_POSITION_EXTRA_TIME, time);
         intent.putExtra(CONTROL_CHANGE_POSITION_EXTRA_FILE, file);
@@ -88,19 +88,19 @@ public class ServiceController {
     }
 
     public void next() {
-        Intent intent = new Intent(c, AudioService.class);
+        Intent intent = new Intent(c, BookReaderService.class);
         intent.setAction(CONTROL_NEXT);
         c.startService(intent);
     }
 
     public void previous() {
-        Intent intent = new Intent(c, AudioService.class);
+        Intent intent = new Intent(c, BookReaderService.class);
         intent.setAction(CONTROL_PREVIOUS);
         c.startService(intent);
     }
 
     public void toggleSleepSand() {
-        Intent intent = new Intent(c, AudioService.class);
+        Intent intent = new Intent(c, BookReaderService.class);
         intent.setAction(CONTROL_TOGGLE_SLEEP_SAND);
         c.startService(intent);
     }
