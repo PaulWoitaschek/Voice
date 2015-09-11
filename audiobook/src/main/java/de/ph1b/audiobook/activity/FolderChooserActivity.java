@@ -112,6 +112,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         rv.add("/storage/emulated/0");
         rv.add("/storage/sdcard1");
         rv.add("/storage/external_SD");
+        rv.add("/storage/ext_sd");
 
         List<File> paths = new ArrayList<>(rv.size());
         for (String s : rv) {
