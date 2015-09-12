@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
@@ -33,11 +32,11 @@ import java.util.regex.Pattern;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.FolderChooserAdapter;
-import de.ph1b.audiobook.dialog.ExplainReadExtStoragePermissionDialogFragment;
 import de.ph1b.audiobook.dialog.HideFolderDialog;
 import de.ph1b.audiobook.model.NaturalOrderComparator;
 import de.ph1b.audiobook.utils.FileRecognition;
 import de.ph1b.audiobook.utils.L;
+import de.ph1b.audiobook.utils.PermissionHelper;
 
 /**
  * Activity for choosing an audiobook folder. If there are multiple SD-Cards, the Activity unifies
@@ -49,7 +48,7 @@ import de.ph1b.audiobook.utils.L;
  *
  * @author Paul Woitaschek
  */
-public class FolderChooserActivity extends BaseActivity implements View.OnClickListener, ExplainReadExtStoragePermissionDialogFragment.RescanCallback {
+public class FolderChooserActivity extends BaseActivity implements View.OnClickListener {
 
     public static final String RESULT_CHOSEN_FILE = "chosenFile";
     public static final String RESULT_OPERATION_MODE = "operationMode";
@@ -58,7 +57,6 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
     private static final String TAG = FolderChooserActivity.class.getSimpleName();
     private static final String NI_OPERATION_MODE = "niOperationMode";
     private static final int PERMISSION_RESULT_READ_EXT_STORAGE = 1;
-    private static final String FM_EXPLAIN_READ_EXT_STORAGE_PERM = TAG + ExplainReadExtStoragePermissionDialogFragment.TAG;
     private final List<File> currentFolderContent = new ArrayList<>(30);
     private boolean multiSd = true;
     private List<File> rootDirs;
@@ -178,26 +176,21 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == PERMISSION_RESULT_READ_EXT_STORAGE) {
-            boolean grantHandled = false;
-            for (int i = 0; i < permissions.length; i++) {
-                if (permissions[i].equals(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    grantHandled = true;
-
-                    boolean granted = grantResults[i] == PackageManager.PERMISSION_GRANTED;
-                    L.v(TAG, "Permission granted=" + granted);
-                    if (granted) {
-                        refreshRootDirs();
-                    } else {
-                        new ExplainReadExtStoragePermissionDialogFragment().show(getSupportFragmentManager(), FM_EXPLAIN_READ_EXT_STORAGE_PERM);
-                        L.e(TAG, "could not get permission");
-                    }
-                }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            boolean permissionGrantingWorked = PermissionHelper.permissionGrantingWorked(requestCode,
+                    PERMISSION_RESULT_READ_EXT_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,
+                    permissions, grantResults);
+            L.i(TAG, "permissionGrantingWorked=" + permissionGrantingWorked);
+            if (permissionGrantingWorked) {
+                refreshRootDirs();
+            } else {
+                PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE);
+                L.e(TAG, "could not get permission");
             }
-            L.v(TAG, "GrantHandled=" + grantHandled);
         }
     }
 
@@ -205,6 +198,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
     private void askForReadExternalStoragePermission() {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_RESULT_READ_EXT_STORAGE);
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -215,8 +209,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
             L.i(TAG, "hasExternalStoragePermission=" + hasExternalStoragePermission);
             if (!hasExternalStoragePermission) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    DialogFragment dialogFragment = new ExplainReadExtStoragePermissionDialogFragment();
-                    dialogFragment.show(getSupportFragmentManager(), FM_EXPLAIN_READ_EXT_STORAGE_PERM);
+                    PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE);
                 } else {
                     askForReadExternalStoragePermission();
                 }
@@ -401,13 +394,6 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         data.putExtra(RESULT_OPERATION_MODE, mode.name());
         setResult(RESULT_OK, data);
         finish();
-    }
-
-    @Override
-    public void onRescan() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            askForReadExternalStoragePermission();
-        }
     }
 
     public enum OperationMode {

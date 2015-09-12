@@ -1,10 +1,14 @@
 package de.ph1b.audiobook.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -29,6 +33,7 @@ import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.interfaces.MultiPaneInformer;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.utils.L;
+import de.ph1b.audiobook.utils.PermissionHelper;
 
 /**
  * Activity that coordinates the book shelf and play screens.
@@ -50,6 +55,7 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
      * Used for {@link #onSaveInstanceState(Bundle)} to get the previous panel mode.
      */
     private static final String SI_MULTI_PANEL = "siMultiPanel";
+    private static final int PERMISSION_RESULT_READ_EXT_STORAGE = 17;
     private boolean multiPanel = false;
 
     /**
@@ -94,12 +100,37 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            boolean permissionGrantingWorked = PermissionHelper.permissionGrantingWorked(requestCode,
+                    PERMISSION_RESULT_READ_EXT_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,
+                    permissions, grantResults);
+            L.i(TAG, "permissionGrantingWorked=" + permissionGrantingWorked);
+            if (!permissionGrantingWorked) {
+                PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE);
+                L.e(TAG, "could not get permission");
+            }
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         PrefsManager prefs = PrefsManager.getInstance(this);
 
         setContentView(R.layout.activity_book);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            boolean anyFolderSet = prefs.getCollectionFolders().size() + prefs.getSingleBookFolders().size() > 0;
+            boolean canReadStorage = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+            if (anyFolderSet && !canReadStorage) {
+                PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE);
+            }
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
