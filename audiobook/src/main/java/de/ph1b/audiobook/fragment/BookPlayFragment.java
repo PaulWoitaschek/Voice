@@ -71,6 +71,8 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
     private DataBaseHelper db;
     private TextView timerCountdownView;
     private CountDownTimer countDownTimer;
+    private boolean isMultiPanel = false;
+    private long bookId;
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
 
         @Override
@@ -89,8 +91,8 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    L.d(TAG, "onBookContentChangedReciever called with getArguments().getLong(NI_BOOK_ID)=" + book.getId());
-                    if (book.getId() == getArguments().getLong(NI_BOOK_ID)) {
+                    L.d(TAG, "onBookContentChangedReciever called with bookId=" + book.getId());
+                    if (book.getId() == bookId) {
                         List<Chapter> chapters = book.getChapters();
                         Chapter chapter = book.getCurrentChapter();
 
@@ -126,7 +128,6 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
             });
         }
     };
-    private boolean isMultiPanel = false;
 
     private static String formatTime(int ms, int duration) {
         String h = String.valueOf(TimeUnit.MILLISECONDS.toHours(ms));
@@ -170,7 +171,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
 
         L.i(TAG, "onCreateView");
 
-        final Book book = db.getBook(getArguments().getLong(NI_BOOK_ID));
+        final Book book = db.getBook(bookId);
         isMultiPanel = ((MultiPaneInformer) getActivity()).isMultiPanel();
 
         //init views
@@ -216,7 +217,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 int progress = seekBar.getProgress();
-                Book currentBook = db.getBook(getArguments().getLong(NI_BOOK_ID));
+                Book currentBook = db.getBook(bookId);
                 if (currentBook != null) {
                     controller.changeTime(progress, currentBook.getCurrentChapter()
                             .getFile());
@@ -341,6 +342,8 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        bookId = getArguments().getLong(NI_BOOK_ID);
+
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
@@ -440,7 +443,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
                     String date = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE |
                             DateUtils.FORMAT_SHOW_TIME |
                             DateUtils.FORMAT_NUMERIC_DATE);
-                    BookmarkDialogFragment.addBookmark(getArguments().getLong(NI_BOOK_ID), date + ": " +
+                    BookmarkDialogFragment.addBookmark(bookId, date + ": " +
                             getString(R.string.action_sleep), getActivity());
                 }
                 return true;
@@ -449,7 +452,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
                         PlaybackSpeedDialogFragment.TAG);
                 return true;
             case R.id.action_bookmark:
-                BookmarkDialogFragment.newInstance(getArguments().getLong(NI_BOOK_ID)).show(getFragmentManager(),
+                BookmarkDialogFragment.newInstance(bookId).show(getFragmentManager(),
                         BookmarkDialogFragment.TAG);
                 return true;
             case android.R.id.home:
@@ -474,7 +477,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
 
         setPlayState(false);
 
-        Book book = db.getBook(getArguments().getLong(NI_BOOK_ID));
+        Book book = db.getBook(bookId);
         if (book != null) {
             listener.onBookContentChanged(book);
         }
