@@ -372,7 +372,9 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
                 controller.previous();
                 break;
             case R.id.played:
-                launchJumpToPositionDialog();
+                if (db.getBook(bookId) != null) {
+                    launchJumpToPositionDialog();
+                }
                 break;
             default:
                 break;
@@ -422,6 +424,13 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         } else {
             sleepTimerItem.setIcon(R.drawable.ic_snooze_white_24dp);
         }
+
+        // hide bookmark and time change item if there is no valid book
+        boolean currentBookExists = db.getBook(bookId) != null;
+        MenuItem bookmarkItem = menu.findItem(R.id.action_bookmark);
+        MenuItem timeChangeItem = menu.findItem(R.id.action_time_change);
+        bookmarkItem.setVisible(currentBookExists);
+        timeChangeItem.setVisible(currentBookExists);
 
         // if we are in multipane layout, we don't show the settings menu here. It will be handled
         // by the other fragment.
