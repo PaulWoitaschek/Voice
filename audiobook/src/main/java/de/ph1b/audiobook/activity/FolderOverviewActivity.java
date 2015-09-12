@@ -31,11 +31,17 @@ import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.DividerItemDecoration;
 import de.ph1b.audiobook.utils.L;
 
+/**
+ * Activity that lets the user add, edit or remove the set audiobook folders.
+ *
+ * @author Paul Woitaschek
+ */
 public class FolderOverviewActivity extends BaseActivity {
 
 
     private static final String TAG = FolderOverviewActivity.class.getSimpleName();
     private static final String BACKGROUND_OVERLAY_VISIBLE = "backgroundOverlayVisibility";
+    private static final int PICKER_REQUEST_CODE = 42;
     private final List<String> bookCollections = new ArrayList<>(10);
     private final List<String> singleBooks = new ArrayList<>(10);
     private PrefsManager prefs;
@@ -43,7 +49,8 @@ public class FolderOverviewActivity extends BaseActivity {
     private FloatingActionsMenu fam;
     private FloatingActionButton buttonRepresentingTheFam;
     private View backgroundOverlay;
-    private final FloatingActionsMenu.OnFloatingActionsMenuUpdateListener famMenuListener = new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+    private final FloatingActionsMenu.OnFloatingActionsMenuUpdateListener famMenuListener =
+            new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
 
         private final Point famCenter = new Point();
 
@@ -182,7 +189,7 @@ public class FolderOverviewActivity extends BaseActivity {
         single.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startFolderChooserActivity(FolderChooserActivity.ACTIVITY_FOR_RESULT_CODE_SINGLE_BOOK);
+                startFolderChooserActivity(FolderChooserActivity.OperationMode.SINGLE_BOOK);
             }
         });
         FloatingActionButton library = (FloatingActionButton) findViewById(R.id.add_library);
@@ -191,17 +198,14 @@ public class FolderOverviewActivity extends BaseActivity {
         library.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startFolderChooserActivity(FolderChooserActivity.ACTIVITY_FOR_RESULT_CODE_COLLECTION);
+                startFolderChooserActivity(FolderChooserActivity.OperationMode.COLLECTION_BOOK);
             }
         });
     }
 
-    private void startFolderChooserActivity(int requestCode) {
-        Intent intent = new Intent(FolderOverviewActivity.this,
-                FolderChooserActivity.class);
-        intent.putExtra(FolderChooserActivity.ACTIVITY_FOR_RESULT_REQUEST_CODE,
-                requestCode);
-        startActivityForResult(intent, requestCode);
+    private void startFolderChooserActivity(FolderChooserActivity.OperationMode operationMode) {
+        Intent intent = FolderChooserActivity.newInstanceIntent(this, operationMode);
+        startActivityForResult(intent, PICKER_REQUEST_CODE);
     }
 
     /**
@@ -251,20 +255,21 @@ public class FolderOverviewActivity extends BaseActivity {
 
         backgroundOverlay.setVisibility(View.GONE);
 
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case FolderChooserActivity.ACTIVITY_FOR_RESULT_CODE_COLLECTION:
+        if (resultCode == RESULT_OK && requestCode == PICKER_REQUEST_CODE) {
+            FolderChooserActivity.OperationMode mode = FolderChooserActivity.OperationMode.valueOf(data.getStringExtra(FolderChooserActivity.RESULT_OPERATION_MODE));
+            switch (mode) {
+                case COLLECTION_BOOK:
                     String chosenCollection = data.getStringExtra(
-                            FolderChooserActivity.CHOSEN_FILE);
+                            FolderChooserActivity.RESULT_CHOSEN_FILE);
                     if (canAddNewFolder(chosenCollection)) {
                         bookCollections.add(chosenCollection);
                         prefs.setCollectionFolders(bookCollections);
                     }
                     L.v(TAG, "chosenCollection=" + chosenCollection);
                     break;
-                case FolderChooserActivity.ACTIVITY_FOR_RESULT_CODE_SINGLE_BOOK:
+                case SINGLE_BOOK:
                     String chosenSingleBook = data.getStringExtra(
-                            FolderChooserActivity.CHOSEN_FILE);
+                            FolderChooserActivity.RESULT_CHOSEN_FILE);
                     if (canAddNewFolder(chosenSingleBook)) {
                         singleBooks.add(chosenSingleBook);
                         prefs.setSingleBookFolders(singleBooks);

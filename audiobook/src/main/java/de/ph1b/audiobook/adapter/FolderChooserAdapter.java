@@ -16,18 +16,31 @@ import java.util.List;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.FolderChooserActivity;
 
+
+/**
+ * Adapter for displaying files and folders.
+ *
+ * @author Paul Woitaschek
+ */
 public class FolderChooserAdapter extends BaseAdapter {
 
     private final Context c;
     private final List<File> data;
-    private final int mode;
+    private final FolderChooserActivity.OperationMode mode;
 
-    public FolderChooserAdapter(@NonNull Context c, @NonNull List<File> data, int mode) {
+    /**
+     * Constructor that initializes the class with the necessary values
+     *
+     * @param c    The context
+     * @param data The files to show
+     * @param mode The operation mode which defines the interaction.
+     */
+    public FolderChooserAdapter(@NonNull Context c, @NonNull List<File> data, FolderChooserActivity.OperationMode mode) {
         this.c = c;
         this.data = data;
 
-        if (mode != FolderChooserActivity.ACTIVITY_FOR_RESULT_CODE_SINGLE_BOOK &&
-                mode != FolderChooserActivity.ACTIVITY_FOR_RESULT_CODE_COLLECTION) {
+        if (mode != FolderChooserActivity.OperationMode.SINGLE_BOOK &&
+                mode != FolderChooserActivity.OperationMode.COLLECTION_BOOK) {
             throw new IllegalArgumentException("Invalid mode=" + mode);
         }
         this.mode = mode;
@@ -72,7 +85,7 @@ public class FolderChooserAdapter extends BaseAdapter {
         viewHolder.textView.setText(selectedFile.getName());
 
         // if its not a collection its also fine to pick a file
-        if (mode == FolderChooserActivity.ACTIVITY_FOR_RESULT_CODE_COLLECTION) {
+        if (mode == FolderChooserActivity.OperationMode.COLLECTION_BOOK) {
             viewHolder.textView.setEnabled(isDirectory);
         }
 

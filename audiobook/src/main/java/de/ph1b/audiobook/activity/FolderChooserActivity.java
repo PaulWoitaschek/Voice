@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -36,16 +37,20 @@ import de.ph1b.audiobook.utils.L;
  * Activity for choosing an audiobook folder. If there are multiple SD-Cards, the Activity unifies
  * them to a fake-folder structure. We must make sure that this is not choosable. When there are no
  * multiple sd-cards, we will directly show the content of the 1 SD Card.
+ * <p/>
+ * Use {@link #newInstanceIntent(Context, OperationMode)} to get a new intent with the necessary
+ * values.
+ *
+ * @author Paul Woitaschek
  */
 public class FolderChooserActivity extends BaseActivity implements View.OnClickListener {
 
-    public static final String ACTIVITY_FOR_RESULT_REQUEST_CODE = "requestCode";
-    public static final String CHOSEN_FILE = "chosenFile";
-    public static final int ACTIVITY_FOR_RESULT_CODE_COLLECTION = 1;
-    public static final int ACTIVITY_FOR_RESULT_CODE_SINGLE_BOOK = 2;
+    public static final String RESULT_CHOSEN_FILE = "chosenFile";
+    public static final String RESULT_OPERATION_MODE = "operationMode";
 
     private static final String CURRENT_FOLDER_NAME = "currentFolderName";
     private static final String TAG = FolderChooserActivity.class.getSimpleName();
+    private static final String NI_OPERATION_MODE = "niOperationMode";
     private final List<File> currentFolderContent = new ArrayList<>(30);
     private boolean multiSd = true;
     private List<File> rootDirs;
@@ -55,7 +60,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
     private Button chooseButton;
     private FolderChooserAdapter adapter;
     private ImageButton upButton;
-    private int mode;
+    private OperationMode mode;
 
     private static List<File> getStorageDirectories() {
         Pattern DIR_SEPARATOR = Pattern.compile("/");
@@ -143,6 +148,19 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         }
     }
 
+    /**
+     * Generates a new intent with the necessary extras
+     *
+     * @param c             The context
+     * @param operationMode The operation mode for the activity
+     * @return The new intent
+     */
+    public static Intent newInstanceIntent(Context c, OperationMode operationMode) {
+        Intent intent = new Intent(c, FolderChooserActivity.class);
+        intent.putExtra(NI_OPERATION_MODE, operationMode.name());
+        return intent;
+    }
+
     private void changeFolder(File newFolder) {
         currentFolder = newFolder;
         currentFolderContent.clear();
@@ -155,12 +173,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        int requestCode = getIntent().getIntExtra(ACTIVITY_FOR_RESULT_REQUEST_CODE, -1);
-        if (requestCode != ACTIVITY_FOR_RESULT_CODE_COLLECTION && requestCode != ACTIVITY_FOR_RESULT_CODE_SINGLE_BOOK) {
-            throw new IllegalArgumentException("Illegal requestCode=" + requestCode);
-        } else {
-            mode = requestCode;
-        }
+        mode = OperationMode.valueOf(getIntent().getStringExtra(NI_OPERATION_MODE));
 
         // init fields
         setContentView(R.layout.activity_folder_chooser);
@@ -193,7 +206,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
                     chosenFile = selectedFile;
                     currentFolderName.setText(chosenFile.getName());
                     changeFolder(adapter.getItem(position));
-                } else if (mode == ACTIVITY_FOR_RESULT_CODE_SINGLE_BOOK && selectedFile.isFile()) {
+                } else if (mode == OperationMode.SINGLE_BOOK && selectedFile.isFile()) {
                     chosenFile = selectedFile;
                     currentFolderName.setText(chosenFile.getName());
                 }
@@ -327,8 +340,14 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
 
     private void finishActivityWithSuccess(@NonNull File chosenFile) {
         Intent data = new Intent();
-        data.putExtra(CHOSEN_FILE, chosenFile.getAbsolutePath());
+        data.putExtra(RESULT_CHOSEN_FILE, chosenFile.getAbsolutePath());
+        data.putExtra(RESULT_OPERATION_MODE, mode.name());
         setResult(RESULT_OK, data);
         finish();
+    }
+
+    public enum OperationMode {
+        COLLECTION_BOOK,
+        SINGLE_BOOK
     }
 }
