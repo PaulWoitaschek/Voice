@@ -1,11 +1,15 @@
 package de.ph1b.audiobook.model;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -170,7 +174,7 @@ public class BookAdder {
      * Returns a Bitmap from an array of {@link File} that should be images
      *
      * @param coverFiles The image files to check
-     * @return A bitmap or <code>null</code> if there is none.
+     * @return A bitmap or {@code null} if there is none.
      * @throws InterruptedException If the scanner has been requested to reset.
      */
     @Nullable
@@ -396,6 +400,12 @@ public class BookAdder {
         if (!BaseActivity.storageMounted()) {
             throw new InterruptedException("Storage is not mounted");
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            if (ContextCompat.checkSelfPermission(c, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                throw new InterruptedException("Does not have external storage permission");
+            }
+        }
+
         for (Book b : booksToRemove) {
             L.d(TAG, "deleting book=" + b);
             db.hideBook(b);
@@ -613,7 +623,7 @@ public class BookAdder {
      * @param type     The type of the book
      * @param orphaned If we sould return a book that is orphaned, or a book that is currently
      *                 active
-     * @return The Book if available, or <code>null</code>
+     * @return The Book if available, or {@code null}
      */
     @Nullable
     private Book getBookFromDb(@NonNull File rootFile, @NonNull Book.Type type, boolean orphaned) {
