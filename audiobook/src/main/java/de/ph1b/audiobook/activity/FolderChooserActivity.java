@@ -1,13 +1,18 @@
 package de.ph1b.audiobook.activity;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
@@ -28,6 +33,7 @@ import java.util.regex.Pattern;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.FolderChooserAdapter;
+import de.ph1b.audiobook.dialog.ExplainReadExtStoragePermissionDialogFragment;
 import de.ph1b.audiobook.dialog.HideFolderDialog;
 import de.ph1b.audiobook.model.NaturalOrderComparator;
 import de.ph1b.audiobook.utils.FileRecognition;
@@ -43,7 +49,7 @@ import de.ph1b.audiobook.utils.L;
  *
  * @author Paul Woitaschek
  */
-public class FolderChooserActivity extends BaseActivity implements View.OnClickListener {
+public class FolderChooserActivity extends BaseActivity implements View.OnClickListener, ExplainReadExtStoragePermissionDialogFragment.RescanCallback {
 
     public static final String RESULT_CHOSEN_FILE = "chosenFile";
     public static final String RESULT_OPERATION_MODE = "operationMode";
@@ -51,6 +57,8 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
     private static final String CURRENT_FOLDER_NAME = "currentFolderName";
     private static final String TAG = FolderChooserActivity.class.getSimpleName();
     private static final String NI_OPERATION_MODE = "niOperationMode";
+    private static final int PERMISSION_RESULT_READ_EXT_STORAGE = 1;
+    private static final String FM_EXPLAIN_READ_EXT_STORAGE_PERM = TAG + ExplainReadExtStoragePermissionDialogFragment.TAG;
     private final List<File> currentFolderContent = new ArrayList<>(30);
     private boolean multiSd = true;
     private List<File> rootDirs;
@@ -170,8 +178,50 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PERMISSION_RESULT_READ_EXT_STORAGE) {
+            boolean grantHandled = false;
+            for (int i = 0; i < permissions.length; i++) {
+                if (permissions[i].equals(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    grantHandled = true;
+
+                    boolean granted = grantResults[i] == PackageManager.PERMISSION_GRANTED;
+                    L.v(TAG, "Permission granted=" + granted);
+                    if (granted) {
+                        refreshRootDirs();
+                    } else {
+                        new ExplainReadExtStoragePermissionDialogFragment().show(getSupportFragmentManager(), FM_EXPLAIN_READ_EXT_STORAGE_PERM);
+                        L.e(TAG, "could not get permission");
+                    }
+                }
+            }
+            L.v(TAG, "GrantHandled=" + grantHandled);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private void askForReadExternalStoragePermission() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_RESULT_READ_EXT_STORAGE);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            boolean hasExternalStoragePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+            L.i(TAG, "hasExternalStoragePermission=" + hasExternalStoragePermission);
+            if (!hasExternalStoragePermission) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    DialogFragment dialogFragment = new ExplainReadExtStoragePermissionDialogFragment();
+                    dialogFragment.show(getSupportFragmentManager(), FM_EXPLAIN_READ_EXT_STORAGE_PERM);
+                } else {
+                    askForReadExternalStoragePermission();
+                }
+            }
+        }
 
         mode = OperationMode.valueOf(getIntent().getStringExtra(NI_OPERATION_MODE));
 
@@ -213,15 +263,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
             }
         });
 
-        rootDirs = getStorageDirectories();
-        if (rootDirs.size() == 1) {
-            chosenFile = rootDirs.get(0);
-            currentFolderName.setText(chosenFile.getName());
-            changeFolder(chosenFile);
-            multiSd = false;
-        } else {
-            currentFolderContent.addAll(rootDirs);
-        }
+        refreshRootDirs();
 
         //handle runtime
         if (savedInstanceState != null) {
@@ -237,6 +279,21 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         }
 
         setButtonEnabledDisabled();
+    }
+
+    private void refreshRootDirs() {
+        rootDirs = getStorageDirectories();
+        currentFolderContent.clear();
+
+        L.i(TAG, "refreshRootDirs found rootDirs=" + rootDirs);
+        if (rootDirs.size() == 1) {
+            chosenFile = rootDirs.get(0);
+            currentFolderName.setText(chosenFile.getName());
+            changeFolder(chosenFile);
+            multiSd = false;
+        } else {
+            currentFolderContent.addAll(rootDirs);
+        }
     }
 
     @Override
@@ -344,6 +401,13 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         data.putExtra(RESULT_OPERATION_MODE, mode.name());
         setResult(RESULT_OK, data);
         finish();
+    }
+
+    @Override
+    public void onRescan() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            askForReadExternalStoragePermission();
+        }
     }
 
     public enum OperationMode {

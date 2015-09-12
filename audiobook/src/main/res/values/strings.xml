@@ -49,6 +49,8 @@
     <string name="content_is_folder">Folder</string>
     <string name="content_is_file">File</string>
     <string name="content_navigate_up">Go to parent folder</string>
+    <string name="permission_read_ext_explanation">The app needs to read your storage so it can find and play the audio books.</string>
+    <string name="permission_read_ext_request">Should we ask for the permission again?</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Playback speed</string>
     <!--Bookmarks-->
