@@ -6,7 +6,8 @@ android {
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 23
+        targetSdkVersion 22
+        // TODO: Increase after this is fixed. https://code.google.com/p/android-developer-preview/issues/detail?id=2982&q=Type%3DDefect&colspec=ID%20Type%20Status%20Owner%20Summary%20Stars
         versionCode 74
         versionName '74-preview'
     }
