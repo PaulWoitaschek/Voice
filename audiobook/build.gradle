@@ -8,7 +8,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 74
-        versionName '74-preview'
+        versionName '2.4.1'
     }
 
     signingConfigs {
