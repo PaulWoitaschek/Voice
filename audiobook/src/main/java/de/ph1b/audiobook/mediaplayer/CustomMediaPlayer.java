@@ -24,7 +24,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import de.ph1b.audiobook.utils.L;
 
 /**
- * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -37,7 +36,8 @@ import de.ph1b.audiobook.utils.L;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @author James Falcon, Paul Woitaschek
+ * @author James Falcon
+ * @author Paul Woitaschek
  */
 @TargetApi(16)
 public class CustomMediaPlayer implements MediaPlayerInterface {
@@ -50,7 +50,6 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     private Sonic sonic;
     private MediaExtractor extractor;
     private MediaCodec codec;
-    private Runnable decoderRunnable = null;
     @Nullable
     private String path = null;
     private volatile boolean continuing = false;
@@ -60,6 +59,134 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     @Nullable
     private MediaPlayerInterface.OnCompletionListener onCompletionListener;
     private volatile State state = State.IDLE;
+    private final Runnable decoderRunnable = new Runnable() {
+        @Override
+        public void run() {
+            isDecoding = true;
+            codec.start();
+            @SuppressWarnings("deprecation") ByteBuffer[] inputBuffers = codec.getInputBuffers();
+            @SuppressWarnings("deprecation") ByteBuffer[] outputBuffers = codec.getOutputBuffers();
+            boolean sawInputEOS = false;
+            boolean sawOutputEOS = false;
+            while (!sawInputEOS && !sawOutputEOS && continuing) {
+                if (state == State.PAUSED) {
+                    try {
+                        synchronized (decoderLock) {
+                            decoderLock.wait();
+                        }
+                    } catch (InterruptedException e) {
+                        // Purposely not doing anything here
+                    }
+                    continue;
+                }
+                if (sonic != null) {
+                    sonic.setSpeed(speed);
+                    sonic.setPitch(1);
+                }
+
+                int inputBufIndex = codec.dequeueInputBuffer(200);
+                if (inputBufIndex >= 0) {
+                    ByteBuffer dstBuf = inputBuffers[inputBufIndex];
+                    int sampleSize = extractor.readSampleData(dstBuf, 0);
+                    long presentationTimeUs = 0;
+                    if (sampleSize < 0) {
+                        sawInputEOS = true;
+                        sampleSize = 0;
+                    } else {
+                        presentationTimeUs = extractor.getSampleTime();
+                    }
+                    codec.queueInputBuffer(
+                            inputBufIndex,
+                            0,
+                            sampleSize,
+                            presentationTimeUs,
+                            sawInputEOS ? MediaCodec.BUFFER_FLAG_END_OF_STREAM : 0);
+                    if (flushCodec) {
+                        codec.flush();
+                        flushCodec = false;
+                    }
+                    if (!sawInputEOS) {
+                        extractor.advance();
+                    }
+                }
+                final MediaCodec.BufferInfo info = new MediaCodec.BufferInfo();
+                byte[] modifiedSamples = new byte[info.size];
+                int res;
+                //noinspection deprecation
+                do {
+                    res = codec.dequeueOutputBuffer(info, 200);
+                    if (res >= 0) {
+                        final byte[] chunk = new byte[info.size];
+                        outputBuffers[res].get(chunk);
+                        outputBuffers[res].clear();
+                        if (chunk.length > 0) {
+                            sonic.writeBytesToStream(chunk, chunk.length);
+                        } else {
+                            sonic.flushStream();
+                        }
+                        int available = sonic.availableBytes();
+                        if (available > 0) {
+                            if (modifiedSamples.length < available) {
+                                modifiedSamples = new byte[available];
+                            }
+                            sonic.readBytesFromStream(modifiedSamples, available);
+                            track.write(modifiedSamples, 0, available);
+                        }
+                        codec.releaseOutputBuffer(res, false);
+                        if ((info.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
+                            sawOutputEOS = true;
+                        }
+                    } else //noinspection deprecation
+                        if (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED) {
+                            //noinspection deprecation
+                            outputBuffers = codec.getOutputBuffers();
+                        } else if (res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
+                            track.stop();
+                            lock.lock();
+                            try {
+                                track.release();
+                                final MediaFormat oFormat = codec
+                                        .getOutputFormat();
+
+                                initDevice(
+                                        oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE),
+                                        oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT));
+                                //noinspection deprecation
+                                outputBuffers = codec.getOutputBuffers();
+                                track.play();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } finally {
+                                lock.unlock();
+                            }
+                        }
+                } while (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED
+                        || res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED);
+            }
+
+            codec.stop();
+            track.stop();
+            isDecoding = false;
+            if (continuing && (sawInputEOS || sawOutputEOS)) {
+                state = State.PLAYBACK_COMPLETED;
+                L.d(TAG, "State changed to: " + state);
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (onCompletionListener != null) {
+                            onCompletionListener.onCompletion();
+                        }
+                        stayAwake(false);
+                    }
+                });
+                t.setDaemon(true);
+                t.start();
+            }
+            synchronized (decoderLock) {
+                decoderLock.notifyAll();
+            }
+        }
+    };
     @Nullable
     private MediaPlayer.OnErrorListener onErrorListener;
     private long duration;
@@ -120,7 +247,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
         try {
             continuing = false;
             try {
-                if (decoderRunnable != null && state != State.PLAYBACK_COMPLETED) {
+                if (state != State.PLAYBACK_COMPLETED) {
                     while (isDecoding) {
                         synchronized (decoderLock) {
                             decoderLock.notify();
@@ -382,135 +509,6 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
 
     private void decode() {
         L.d(TAG, "decode called ins state=" + state);
-        decoderRunnable = new Runnable() {
-            @Override
-            public void run() {
-                isDecoding = true;
-                codec.start();
-                @SuppressWarnings("deprecation") ByteBuffer[] inputBuffers = codec.getInputBuffers();
-                @SuppressWarnings("deprecation") ByteBuffer[] outputBuffers = codec.getOutputBuffers();
-                boolean sawInputEOS = false;
-                boolean sawOutputEOS = false;
-                while (!sawInputEOS && !sawOutputEOS && continuing) {
-                    if (state == State.PAUSED) {
-                        try {
-                            synchronized (decoderLock) {
-                                decoderLock.wait();
-                            }
-                        } catch (InterruptedException e) {
-                            // Purposely not doing anything here
-                        }
-                        continue;
-                    }
-                    if (sonic != null) {
-                        sonic.setSpeed(speed);
-                        sonic.setPitch(1);
-                    }
-
-                    int inputBufIndex = codec.dequeueInputBuffer(200);
-                    if (inputBufIndex >= 0) {
-                        ByteBuffer dstBuf = inputBuffers[inputBufIndex];
-                        int sampleSize = extractor.readSampleData(dstBuf, 0);
-                        long presentationTimeUs = 0;
-                        if (sampleSize < 0) {
-                            sawInputEOS = true;
-                            sampleSize = 0;
-                        } else {
-                            presentationTimeUs = extractor.getSampleTime();
-                        }
-                        codec.queueInputBuffer(
-                                inputBufIndex,
-                                0,
-                                sampleSize,
-                                presentationTimeUs,
-                                sawInputEOS ? MediaCodec.BUFFER_FLAG_END_OF_STREAM : 0);
-                        if (flushCodec) {
-                            codec.flush();
-                            flushCodec = false;
-                        }
-                        if (!sawInputEOS) {
-                            extractor.advance();
-                        }
-                    }
-                    final MediaCodec.BufferInfo info = new MediaCodec.BufferInfo();
-                    byte[] modifiedSamples = new byte[info.size];
-                    int res;
-                    //noinspection deprecation
-                    do {
-                        res = codec.dequeueOutputBuffer(info, 200);
-                        if (res >= 0) {
-                            final byte[] chunk = new byte[info.size];
-                            outputBuffers[res].get(chunk);
-                            outputBuffers[res].clear();
-                            if (chunk.length > 0) {
-                                sonic.writeBytesToStream(chunk, chunk.length);
-                            } else {
-                                sonic.flushStream();
-                            }
-                            int available = sonic.availableBytes();
-                            if (available > 0) {
-                                if (modifiedSamples.length < available) {
-                                    modifiedSamples = new byte[available];
-                                }
-                                sonic.readBytesFromStream(modifiedSamples, available);
-                                track.write(modifiedSamples, 0, available);
-                            }
-                            codec.releaseOutputBuffer(res, false);
-                            if ((info.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
-                                sawOutputEOS = true;
-                            }
-                        } else //noinspection deprecation
-                            if (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED) {
-                                //noinspection deprecation
-                                outputBuffers = codec.getOutputBuffers();
-                            } else if (res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
-                                track.stop();
-                                lock.lock();
-                                try {
-                                    track.release();
-                                    final MediaFormat oFormat = codec
-                                            .getOutputFormat();
-
-                                    initDevice(
-                                            oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE),
-                                            oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT));
-                                    //noinspection deprecation
-                                    outputBuffers = codec.getOutputBuffers();
-                                    track.play();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                } finally {
-                                    lock.unlock();
-                                }
-                            }
-                    } while (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED
-                            || res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED);
-                }
-
-                codec.stop();
-                track.stop();
-                isDecoding = false;
-                if (continuing && (sawInputEOS || sawOutputEOS)) {
-                    state = State.PLAYBACK_COMPLETED;
-                    L.d(TAG, "State changed to: " + state);
-                    Thread t = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (onCompletionListener != null) {
-                                onCompletionListener.onCompletion();
-                            }
-                            stayAwake(false);
-                        }
-                    });
-                    t.setDaemon(true);
-                    t.start();
-                }
-                synchronized (decoderLock) {
-                    decoderLock.notifyAll();
-                }
-            }
-        };
-
         executor.execute(decoderRunnable);
     }
 
