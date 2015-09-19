@@ -10,8 +10,6 @@
     <string name="cover">Cover</string>
     <string name="play_pause">Play / Pause</string>
     <string name="action_sleep">Einschlaf-Timer</string>
-    <string name="action_sleep_title_hint_left">Pausiert nach</string>
-    <string name="action_sleep_title_hint_right">Minuten</string>
     <string name="rewind">Zurückspulen</string>
     <string name="fast_forward">Vorspulen</string>
     <string name="previous_track">Voriger Song</string>
@@ -78,7 +76,6 @@
     <string name="pref_send_bugs_title">Sende Fehlerberichte</string>
     <string name="pref_send_bugs_summary">Sendet automatisch anonymisierte Fehlerberichte um die Entwicklung zu vereinfachen.</string>
     <string name="pref_auto_rewind_title">Automatisch zurückspulen</string>
-    <string name="pref_auto_rewind_summary">Spult nach manuellem pausieren automatisch zurück:</string>
     <string name="pref_bookmark_on_sleep_title">Lesezeichen beim Einschlafen</string>
     <string name="pref_bookmark_on_sleep_summary">Legt jedes Mal ein Lesezeichen an, wenn der Einschlaftimer gesetzt wird.</string>
     <string name="pref_support_title">Support</string>

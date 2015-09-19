@@ -10,8 +10,6 @@
     <string name="cover">Omslag</string>
     <string name="play_pause">Speel / Pauze</string>
     <string name="action_sleep">Slaap-timer</string>
-    <string name="action_sleep_title_hint_left">Pauzeer na</string>
-    <string name="action_sleep_title_hint_right">minuten</string>
     <string name="rewind">Spoel terug</string>
     <string name="fast_forward">Spoel door</string>
     <string name="previous_track">Vorige track</string>
@@ -78,7 +76,6 @@
     <string name="pref_send_bugs_title">Rapporteer lieveheersbeestjes</string>
     <string name="pref_send_bugs_summary">Automatisch anoniem bugs rapporteren wanneer de app crasht, om de verdere ontwikkeling te helpen.</string>
     <string name="pref_auto_rewind_title">Automatisch terugspoelen</string>
-    <string name="pref_auto_rewind_summary">Spoel automatisch terug na handmatig pauzeren:</string>
     <string name="pref_bookmark_on_sleep_title">Bladwijzer toevoegen bij inslapen</string>
     <string name="pref_bookmark_on_sleep_summary">Maak automatisch een bladwijzer aan elke keer de slaap-timer afgaat.</string>
     <string name="pref_support_title">Steun</string>

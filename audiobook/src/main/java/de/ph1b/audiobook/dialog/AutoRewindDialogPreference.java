@@ -28,9 +28,8 @@ public class AutoRewindDialogPreference extends DialogPreference {
     }
 
     private void setText(int progress) {
-        String autoRewindSummary = getContext().getString(R.string.pref_auto_rewind_summary)
-                + " " + String.valueOf(progress + SEEK_BAR_MIN) + " "
-                + getContext().getString(R.string.seconds);
+        String autoRewindSummary = getContext().getResources().getQuantityString(
+                R.plurals.pref_auto_rewind_summary, progress, progress);
         textView.setText(autoRewindSummary);
     }
 

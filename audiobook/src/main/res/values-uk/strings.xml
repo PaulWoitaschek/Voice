@@ -9,8 +9,6 @@
     <string name="cover">Обкладинка</string>
     <string name="play_pause">Програвати / Пауза</string>
     <string name="action_sleep">Таймер сну</string>
-    <string name="action_sleep_title_hint_left">Зупинити через</string>
-    <string name="action_sleep_title_hint_right">хвилин</string>
     <string name="rewind">Прокрутити назад</string>
     <string name="fast_forward">Прокрутити вперед</string>
     <string name="previous_track">Попередній файл</string>
@@ -71,7 +69,6 @@
     <string name="pref_send_bugs_title">Відправити звіт про помилки</string>
     <string name="pref_send_bugs_summary">Автоматично відсилати звіти про помилки під час збою для допомоги розробки проекту.</string>
     <string name="pref_auto_rewind_title">Автоматична перекрутка назад</string>
-    <string name="pref_auto_rewind_summary">Автоматично прокручувати назад після паузи:</string>
     <string name="pref_bookmark_on_sleep_title">Автоматично додавати закладку, коли спрацьовує таймер сну</string>
     <string name="pref_bookmark_on_sleep_summary">Автоматично додавати закладку, коли таймер сну включається.</string>
     <string name="pref_support_title">Підтримка</string>

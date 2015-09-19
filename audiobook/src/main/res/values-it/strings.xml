@@ -1,6 +1,4 @@
 <?xml version='1.0' encoding='UTF-8'?>
-
-
 <resources>
     <!--BookShelf-->
     <string name="mal_file_message">Questo file potrebbe essere corrotto:</string>
@@ -10,8 +8,6 @@
     <string name="cover">Copertina</string>
     <string name="play_pause">Play / Pausa</string>
     <string name="action_sleep">Timer standby</string>
-    <string name="action_sleep_title_hint_left">Metti in pausa dopo</string>
-    <string name="action_sleep_title_hint_right">minuti</string>
     <string name="rewind">Riavvolgi</string>
     <string name="fast_forward">Avanti veloce</string>
     <string name="previous_track">Traccia precedente</string>
@@ -72,7 +68,6 @@
     <string name="pref_send_bugs_title">Segnala bug</string>
     <string name="pref_send_bugs_summary">Invia automaticamente segnalazioni anonime dei crash per aiutare lo sviluppo dell\'applicazione.</string>
     <string name="pref_auto_rewind_title">Riavvolgimento automatico</string>
-    <string name="pref_auto_rewind_summary">Riavvolgimento automatico dopo aver messo in pausa manualmente:</string>
     <string name="pref_bookmark_on_sleep_title">Segnalibro in modalità standby</string>
     <string name="pref_bookmark_on_sleep_summary">Aggiunge automaticamente un segnalibro ogni volta che la modalità standby è impostata.</string>
     <string name="pref_support_title">Supporto</string>

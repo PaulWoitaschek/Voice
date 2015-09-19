@@ -16,13 +16,19 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 
+/**
+ * Dialog for setting the sleep time.
+ *
+ * @author Paul Woitaschek
+ */
 public class SleepDialogPreference extends DialogPreference {
 
+
+    private TextView timeView;
 
     public SleepDialogPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-
 
     @Override
     protected void showDialog(Bundle state) {
@@ -30,7 +36,7 @@ public class SleepDialogPreference extends DialogPreference {
         final PrefsManager prefs = PrefsManager.getInstance(getContext());
 
         //init views
-        final TextView timeView = (TextView) view.findViewById(R.id.minute_text);
+        timeView = (TextView) view.findViewById(R.id.minute_text);
         final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.minute);
         ThemeUtil.theme(numberPicker);
 
@@ -42,12 +48,10 @@ public class SleepDialogPreference extends DialogPreference {
         numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                timeView.setText(" " + String.valueOf(newVal) + " ");
+                updateText(newVal);
             }
         });
-
-        //init text
-        timeView.setText(" " + String.valueOf(numberPicker.getValue()) + " ");
+        updateText(numberPicker.getValue());
 
         new MaterialDialog.Builder(getContext())
                 .title(R.string.pref_sleep_time)
@@ -56,12 +60,15 @@ public class SleepDialogPreference extends DialogPreference {
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-
                         int sleepAmount = numberPicker.getValue();
                         prefs.setSleepTime(sleepAmount);
                     }
                 })
                 .customView(view, true)
                 .show();
+    }
+
+    private void updateText(int newVal) {
+        timeView.setText(getContext().getResources().getQuantityString(R.plurals.pauses_after, newVal, newVal));
     }
 }

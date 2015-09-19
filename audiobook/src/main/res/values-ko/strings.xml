@@ -10,8 +10,6 @@
     <string name="cover">책표지</string>
     <string name="play_pause">재생 / 일시정지</string>
     <string name="action_sleep">취침예약</string>
-    <string name="action_sleep_title_hint_left">취침시간 설정</string>
-    <string name="action_sleep_title_hint_right">분</string>
     <string name="rewind">뒤로</string>
     <string name="fast_forward">빨리감기</string>
     <string name="previous_track">이전 트랙</string>
@@ -78,7 +76,6 @@
     <string name="pref_send_bugs_title">오류 보내기</string>
     <string name="pref_send_bugs_summary">앱의 품질향상을 위해 익명으로 오류를 보냅니다.</string>
     <string name="pref_auto_rewind_title">자동 다시감기</string>
-    <string name="pref_auto_rewind_summary">재생 시 자동으로 다시감기:</string>
     <string name="pref_bookmark_on_sleep_title">취침 시작위치 자동책갈피</string>
     <string name="pref_bookmark_on_sleep_summary">취침타이머가 시작하는 지점을 자동으로 책갈피 합니다.</string>
     <string name="pref_support_title">앱 계발 지원</string>

@@ -1,6 +1,4 @@
 <?xml version='1.0' encoding='UTF-8'?>
-
-
 <resources>
     <!--BookShelf-->
     <string name="mal_file_message">Poniższy plik może być uszkodzony</string>
@@ -11,8 +9,6 @@
     <string name="cover">Okładka</string>
     <string name="play_pause">Odtwarzaj/Pauza</string>
     <string name="action_sleep">Wyłącznik czasowy</string>
-    <string name="action_sleep_title_hint_left">Zatrzymaj po</string>
-    <string name="action_sleep_title_hint_right">minut(y)</string>
     <string name="rewind">Przewiń</string>
     <string name="fast_forward">Do przodu</string>
     <string name="previous_track">Poprzednia ścieżka</string>
@@ -73,7 +69,6 @@
     <string name="pref_send_bugs_title">Zgłoś błędy</string>
     <string name="pref_send_bugs_summary">Automatycznie wysyłaj anonimowe raporty o błędach by pomóc rozwijać aplikację.</string>
     <string name="pref_auto_rewind_title">Automatyczne przewijanie</string>
-    <string name="pref_auto_rewind_summary">Automatycznie przewija po ręcznej pauzie:</string>
     <string name="pref_bookmark_on_sleep_title">Zakładka podczas drzemki</string>
     <string name="pref_bookmark_on_sleep_summary">Automatycznie ustawia zakładkę za każdym razem gdy sleep timer jest ustawiony</string>
     <string name="pref_support_title">Wsparcie</string>

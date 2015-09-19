@@ -10,8 +10,6 @@
     <string name="cover">Capa</string>
     <string name="play_pause">Tocar / Pausar</string>
     <string name="action_sleep">Desligamento automático</string>
-    <string name="action_sleep_title_hint_left">Pausas após</string>
-    <string name="action_sleep_title_hint_right">minutos</string>
     <string name="rewind">Retroceder</string>
     <string name="fast_forward">Avanço rápido</string>
     <string name="previous_track">Capítulo anterior</string>
@@ -78,7 +76,6 @@
     <string name="pref_send_bugs_title">Reportar falhas</string>
     <string name="pref_send_bugs_summary">Automaticamente enviar relatórios anônimos sobre falhas para ajudar o desenvolvedor.</string>
     <string name="pref_auto_rewind_title">Retornar automaticamente</string>
-    <string name="pref_auto_rewind_summary">Automaticamente retornar depois de pausar manualmente:</string>
     <string name="pref_bookmark_on_sleep_title">Marcador ao desligar automaticamente</string>
     <string name="pref_bookmark_on_sleep_summary">Define automaticamente um marcador cada vez que o desligamento automático estiver ajustado.</string>
     <string name="pref_support_title">Suporte</string>
