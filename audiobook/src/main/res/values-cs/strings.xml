@@ -55,10 +55,7 @@
     <string name="pref_category_playback">Nastavení přehrávání</string>
     <string name="action_settings">Nastavení</string>
     <string name="pref_resume_on_replug">Pokračovat v přehrávání</string>
-  <string name="pref_resume_on_replug_hint">Pokud pozastavíte přehrávání vytažením sluchátek, při jejich
-        připojení bude znovu spuštěno.</string>
-    <string name="minutes">minut</string>
-    <string name="seconds">sekund</string>
+    <string name="pref_resume_on_replug_hint">Pokud pozastavíte přehrávání vytažením sluchátek, při jejich připojení bude znovu spuštěno.</string>
     <string name="pref_seek_time">Přeskočit o</string>
     <string name="pref_sleep_time">Časovač vypnutí</string>
     <string name="pref_root_folder_title">Adresář audioknihy</string>

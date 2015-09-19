@@ -91,19 +91,22 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     private void initValues() {
         // seek pref
         int seekAmount = prefs.getSeekTime();
-        String seekSummary = seekAmount + " " + getString(R.string.seconds);
+
+        L.d(TAG, "hiihi");
+
+        String seekSummary = getResources().getQuantityString(R.plurals.seconds, seekAmount, seekAmount);
         SeekDialogPreference seekDialogPreference = (SeekDialogPreference) findPreference(getString(R.string.pref_key_seek_time));
         seekDialogPreference.setSummary(seekSummary);
 
         // auto rewind pref
         int autoRewindAmount = prefs.getAutoRewindAmount();
-        String autoRewindSummary = autoRewindAmount + " " + getString(R.string.seconds);
+        String autoRewindSummary = getResources().getQuantityString(R.plurals.seconds, autoRewindAmount, autoRewindAmount);
         AutoRewindDialogPreference autoRewindDialogPreference = (AutoRewindDialogPreference) findPreference(getString(R.string.pref_key_auto_rewind));
         autoRewindDialogPreference.setSummary(autoRewindSummary);
 
         // sleep pref
         int sleepAmount = prefs.getSleepTime();
-        String sleepSummary = String.valueOf(sleepAmount) + " " + getString(R.string.minutes);
+        String sleepSummary = getResources().getQuantityString(R.plurals.minutes, sleepAmount, sleepAmount);
         SleepDialogPreference sleepDialogPreference = (SleepDialogPreference) findPreference(getString(R.string.pref_key_sleep_time));
         sleepDialogPreference.setSummary(sleepSummary);
 

@@ -55,8 +55,6 @@
     <string name="action_settings">Параметри</string>
     <string name="pref_resume_on_replug">Відновити програвання</string>
     <string name="pref_resume_on_replug_hint">Якщо програвання було припинено витяганням навушників, воно буде подовжено після підключення їх знову.</string>
-    <string name="minutes">хвилин</string>
-    <string name="seconds">секунд</string>
     <string name="pref_seek_time">Пропустити</string>
     <string name="pref_sleep_time">Час засинання</string>
     <string name="pref_root_folder_title">Папка аудіокниги</string>

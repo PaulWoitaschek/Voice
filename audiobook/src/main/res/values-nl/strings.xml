@@ -62,8 +62,6 @@
     <string name="action_settings">Voorkeuren</string>
     <string name="pref_resume_on_replug">Afspelen hervatten</string>
     <string name="pref_resume_on_replug_hint">Als u pauzeert door de headset te ontkoppelen, zal het afspelen hervatten als u deze weer aansluit.</string>
-    <string name="minutes">minuten</string>
-    <string name="seconds">seconden</string>
     <string name="pref_seek_time">Skiptijd</string>
     <string name="pref_sleep_time">Slaap timer</string>
     <string name="pref_root_folder_title">Luisterboekmap</string>

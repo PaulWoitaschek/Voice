@@ -54,8 +54,6 @@
     <string name="action_settings">Προτιμήσεις</string>
     <string name="pref_resume_on_replug">Συνέχιση αναπαραγωγής</string>
     <string name="pref_resume_on_replug_hint">Αν διακοψετε βγαζοντας τα ακουστικά, θα επαναληφθεί η διαδικασια.</string>
-    <string name="minutes">λεπτά</string>
-    <string name="seconds">δευτερόλεπτα</string>
     <string name="pref_seek_time">Μεταφορά ποσότητας</string>
     <string name="pref_sleep_time">Ωρα ύπνου</string>
     <string name="pref_root_folder_title">Φάκελος ηχητικού βιβλίου</string>

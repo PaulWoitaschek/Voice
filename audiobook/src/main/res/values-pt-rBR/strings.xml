@@ -62,8 +62,6 @@
     <string name="action_settings">Preferências</string>
     <string name="pref_resume_on_replug">Retomar reprodução</string>
     <string name="pref_resume_on_replug_hint">Se você pausou removendo os fones, a reprodução será retomada ao reconectar.</string>
-    <string name="minutes">minutos</string>
-    <string name="seconds">segundos</string>
     <string name="pref_seek_time">Pular para</string>
     <string name="pref_sleep_time">Desligamento automático</string>
     <string name="pref_root_folder_title">Pasta de Audiolivros</string>

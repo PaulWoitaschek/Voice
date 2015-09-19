@@ -54,8 +54,6 @@
     <string name="action_settings">Preferenze</string>
     <string name="pref_resume_on_replug">Riprendi la riproduzione</string>
     <string name="pref_resume_on_replug_hint">Se hai messo in pausa disinserendo le cuffie, la riproduzione continuerà una volta reinserite.</string>
-    <string name="minutes">minuti</string>
-    <string name="seconds">secondi</string>
     <string name="pref_seek_time">Salta</string>
     <string name="pref_sleep_time">Tempo di standby</string>
     <string name="pref_root_folder_title">Cartella audiolibro</string>

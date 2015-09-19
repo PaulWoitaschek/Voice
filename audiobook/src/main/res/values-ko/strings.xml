@@ -62,8 +62,6 @@
     <string name="action_settings">설정</string>
     <string name="pref_resume_on_replug">이어서 재생</string>
     <string name="pref_resume_on_replug_hint">이어폰잭을 빼면 자동으로 일시정지, 끼면 이어서 재생됩니다.</string>
-    <string name="minutes">분</string>
-    <string name="seconds">초</string>
     <string name="pref_seek_time">건너뛸 시간</string>
     <string name="pref_sleep_time">취침예약 시간</string>
     <string name="pref_root_folder_title">오디오북 폴더</string>

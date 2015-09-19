@@ -55,8 +55,6 @@
     <string name="action_settings">Préférences</string>
     <string name="pref_resume_on_replug">Reprendre la lecture</string>
     <string name="pref_resume_on_replug_hint">Si vous avez mis en pause en débranchant le casque, la lecture reprendra en le rebranchant.</string>
-    <string name="minutes">minutes</string>
-    <string name="seconds">secondes</string>
     <string name="pref_seek_time">Sauter par</string>
     <string name="pref_sleep_time">Temps avant la pause</string>
     <string name="pref_root_folder_title">Dossier de livre audio</string>

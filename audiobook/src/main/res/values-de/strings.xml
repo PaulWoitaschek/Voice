@@ -62,8 +62,6 @@
     <string name="action_settings">Einstellungen</string>
     <string name="pref_resume_on_replug">Wiedergabe fortsetzen</string>
     <string name="pref_resume_on_replug_hint">Nimmt die Wiedergabe beim Einstecken der Kopfhörer wieder auf.</string>
-    <string name="minutes">Minuten</string>
-    <string name="seconds">Sekunden</string>
     <string name="pref_seek_time">Vor- und zurückspulen</string>
     <string name="pref_sleep_time">Einschlafzeit</string>
     <string name="pref_root_folder_title">Hörbuch Ordner</string>

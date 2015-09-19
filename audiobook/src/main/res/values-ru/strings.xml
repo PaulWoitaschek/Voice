@@ -57,8 +57,6 @@
     <string name="action_settings">Настройки</string>
     <string name="pref_resume_on_replug">Прокрутка назад</string>
     <string name="pref_resume_on_replug_hint">Автоматическая прокрутка назад после паузы.</string>
-    <string name="minutes">минут</string>
-    <string name="seconds">секунд</string>
     <string name="pref_seek_time">Ускоренная перемотка</string>
     <string name="pref_sleep_time">Время сна</string>
     <string name="pref_root_folder_title">Папки с аудиокнигами</string>
