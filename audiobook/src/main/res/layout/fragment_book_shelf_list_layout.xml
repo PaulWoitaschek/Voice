@@ -76,34 +76,12 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <!-- We use a hack here. We have two invisible edit texts which determine the distance for the items. That way we have all columns at the same width.-->
-
-            <TextView
-                android:id="@+id/leftTimeWidthHack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="00:00"
-                android:visibility="invisible"
-                tools:ignore="HardcodedText" />
-
             <TextView
                 android:id="@+id/leftTime"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_alignEnd="@id/leftTimeWidthHack"
-                android:layout_alignRight="@id/leftTimeWidthHack"
                 android:gravity="center_vertical"
-                tools:text="1:04" />
-
-            <TextView
-                android:id="@+id/rightTimeWidthHack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:text="00:00"
-                android:visibility="invisible"
-                tools:ignore="HardcodedText" />
+                tools:text="01:04" />
 
             <TextView
                 android:id="@+id/rightTime"
@@ -124,10 +102,10 @@
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:layout_marginStart="4dp"
-                android:layout_toEndOf="@id/leftTimeWidthHack"
-                android:layout_toLeftOf="@id/rightTimeWidthHack"
-                android:layout_toRightOf="@id/leftTimeWidthHack"
-                android:layout_toStartOf="@id/rightTimeWidthHack"
+                android:layout_toEndOf="@id/leftTime"
+                android:layout_toLeftOf="@id/rightTime"
+                android:layout_toRightOf="@id/leftTime"
+                android:layout_toStartOf="@id/rightTime"
                 android:max="100"
                 tools:progress="33" />
 
