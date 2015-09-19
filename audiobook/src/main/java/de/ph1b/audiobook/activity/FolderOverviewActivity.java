@@ -148,7 +148,7 @@ public class FolderOverviewActivity extends BaseActivity {
             if (savedInstanceState.getBoolean(BACKGROUND_OVERLAY_VISIBLE)) {
                 backgroundOverlay.setVisibility(View.VISIBLE);
             } else {
-                backgroundOverlay.setVisibility(View.GONE);
+                backgroundOverlay.setVisibility(View.INVISIBLE);
             }
         }
 
@@ -253,7 +253,7 @@ public class FolderOverviewActivity extends BaseActivity {
         fam.collapseImmediately();
         fam.setOnFloatingActionsMenuUpdateListener(famMenuListener);
 
-        backgroundOverlay.setVisibility(View.GONE);
+        backgroundOverlay.setVisibility(View.INVISIBLE);
 
         if (resultCode == RESULT_OK && requestCode == PICKER_REQUEST_CODE) {
             FolderChooserActivity.OperationMode mode = FolderChooserActivity.OperationMode.valueOf(data.getStringExtra(FolderChooserActivity.RESULT_OPERATION_MODE));
