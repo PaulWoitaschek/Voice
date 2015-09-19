@@ -33,7 +33,6 @@ interface MediaPlayerInterface {
 
     void setOnCompletionListener(OnCompletionListener onCompletionListener);
 
-    @SuppressWarnings("UnusedParameters")
     void setWakeMode(Context context, int mode);
 
     int getDuration();

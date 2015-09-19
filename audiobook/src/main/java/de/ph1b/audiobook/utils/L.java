@@ -8,7 +8,6 @@ import java.util.List;
 
 import de.ph1b.audiobook.BuildConfig;
 
-@SuppressWarnings("SameParameterValue")
 public class L {
 
     public static void d(String tag, Object msg) {

@@ -97,7 +97,7 @@ public class CoverDownloader {
     /**
      * @param searchText The text to search the cover by
      * @param number     The nth cover with the given searchText. Starts at 0
-     * @return The URL of the cover found or <code>null</code> if none was found
+     * @return The URL of the cover found or {@code null} if none was found
      */
     @Nullable
     private String getBitmapUrl(@NonNull String searchText, int number) {

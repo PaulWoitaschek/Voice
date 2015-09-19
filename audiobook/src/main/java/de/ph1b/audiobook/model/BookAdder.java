@@ -202,7 +202,7 @@ public class BookAdder {
      * Finds an embedded cover within a {@link Chapter}
      *
      * @param chapters The chapters to search trough
-     * @return An embedded cover if there is one. Else return <code>null</code>
+     * @return An embedded cover if there is one. Else return {@code null}
      * @throws InterruptedException If the scanner has been requested to reset.
      */
     @Nullable

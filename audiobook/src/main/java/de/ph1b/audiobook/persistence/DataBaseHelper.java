@@ -26,12 +26,13 @@ import de.ph1b.audiobook.utils.L;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-@ThreadSafe
-@SuppressWarnings("TryFinallyCanBeTryWithResources")
+
 /**
  * This is the helper for the apps database. All Database writing is done by an executor and the
  * helper holds a internal array of the books.
  */
+@ThreadSafe
+@SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class DataBaseHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 32;

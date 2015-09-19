@@ -370,7 +370,6 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                      */
                     break;
                 }
-                //noinspection fallthrough: See text above!
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                 if (MediaPlayerController.getPlayState() ==
                         MediaPlayerController.PlayState.PLAYING) {
@@ -495,13 +494,10 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                     if (what == ChangeType.PLAYSTATE) {
                         int state;
                         if (playState == MediaPlayerController.PlayState.PLAYING) {
-                            //noinspection deprecation
                             state = PlaybackStateCompat.STATE_PLAYING;
                         } else if (playState == MediaPlayerController.PlayState.PAUSED) {
-                            //noinspection deprecation
                             state = PlaybackStateCompat.STATE_PAUSED;
                         } else {
-                            //noinspection deprecation
                             state = PlaybackStateCompat.STATE_STOPPED;
                         }
                         playbackStateBuilder.setState(state, position, controller.getPlaybackSpeed());
