@@ -5,11 +5,15 @@
     <string name="mal_file_title">Повреден файл</string>
     <string name="content_current_book">Това е текущата книга</string>
     <string name="current_book">Текуща книга</string>
-    <string name="change_layout_type">Променя изгледа</string>
+    <string name="change_layout_type">Промяна на изгледа</string>
     <!--BookPlayFragment-->
     <string name="cover">Обложка</string>
     <string name="play_pause">Възпроизвеждане / Пауза</string>
-    <string name="action_sleep">Таймер за сън</string>
+    <string name="action_sleep">Таймер за пауза</string>
+    <plurals name="pauses_after">
+        <item quantity="one">Минава на паузла след %d минута.</item>
+        <item quantity="other">Минава на пауза след %d минути.</item>
+    </plurals>
     <string name="rewind">Пренавиване</string>
     <string name="fast_forward">Прескачане напред</string>
     <string name="previous_track">Предишен запис</string>
@@ -17,11 +21,11 @@
     <string name="play">Възпроизвеждане</string>
     <string name="pause">Пауза</string>
     <!--NoExternalStorage-->
-    <string name="no_external_storage">Външното хранилище не е достъпно. Моля уверете се че е свързано и не се ползва от компютъра Ви.</string>
+    <string name="no_external_storage">Външното хранилище не е достъпно. Моля уверете се че не е свързано и не се ползва от компютъра Ви.</string>
     <string name="no_external_storage_action_bar_title">Външно хранилище</string>
     <!--Dialogs-->
-    <string name="dialog_confirm">Задаване на</string>
-    <string name="dialog_cancel">Отмяна</string>
+    <string name="dialog_confirm">Да</string>
+    <string name="dialog_cancel">Не</string>
     <!--EditBookDialog-->
     <string name="content_previous_cover">Избира предишната обложка</string>
     <string name="content_next_cover">Избира следващата обложка</string>
@@ -30,7 +34,7 @@
     <string name="edit_book_cover">Редактиране на обложка</string>
     <string name="edit_book_title">Редактиране на книга</string>
     <!--JumpToPosition-->
-    <string name="action_time_change">Прескачане до</string>
+    <string name="action_time_change">Прескочи до</string>
     <!--BookAdding-->
     <string name="adding_failed_subfolder">Папките не могат да бъдат подпапки една на друга</string>
     <string name="audiobook_folders_title">Папка за аудио книги</string>
@@ -62,27 +66,39 @@
     <!--Settings-->
     <string name="pref_category_general">Общи настройки</string>
     <string name="pref_category_playback">Настройки за възпроизвеждане</string>
-    <string name="action_settings">Предпочитания</string>
+    <string name="action_settings">Настройки</string>
     <string name="pref_resume_on_replug">Продължи възпроизвеждането</string>
     <string name="pref_resume_on_replug_hint">Ако паузата е била пусната от изваждането на слушалки, възпроизвеждането ще продължи при повторното им включване.</string>
+    <plurals name="minutes">
+        <item quantity="one">%d минута</item>
+        <item quantity="other">%d минути</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%d секунда</item>
+        <item quantity="other">%d секунди</item>
+    </plurals>
     <string name="pref_seek_time">Количестество на прескачане</string>
     <string name="pref_sleep_time">Време на таймера за сън</string>
     <string name="pref_root_folder_title">Папка с аудио книги</string>
-    <string name="pref_root_folder_summary">Избраните папки с аудио книги.</string>
+    <string name="pref_root_folder_summary">Списък на папки с аудио книги.</string>
     <string name="pref_theme_title">Фон на приложението</string>
     <string name="pref_theme_light">Светъл</string>
     <string name="pref_theme_dark">Тъмен</string>
-    <string name="pref_pause_on_can_duck_title">Поставяне на пауза при прекъсване</string>
-    <string name="pref_pause_on_can_duck_summary">Вместо да се намаля звука при прекъсване, да се включи на пауза.</string>
+    <string name="pref_pause_on_can_duck_title">Пауза при получаване на известие</string>
+    <string name="pref_pause_on_can_duck_summary">Вместо да се намаля звука при получаване на изввестие, да се включи на пауза.</string>
     <string name="pref_send_bugs_title">Докладване на бъгове</string>
-    <string name="pref_send_bugs_summary">Автоматично изпраща анонимни данни за крашове с цел подобряване на разразботването на приложението.</string>
+    <string name="pref_send_bugs_summary">Автоматично изпраща анонимни данни за възникнали грешки с цел подобряване на разразботването на приложението.</string>
     <string name="pref_auto_rewind_title">Авто пренавиване</string>
-    <string name="pref_bookmark_on_sleep_title">Поставяне на отметка при заспиване</string>
-    <string name="pref_bookmark_on_sleep_summary">Автоматично поставя отметка при всяко задаване на таймера за сън.</string>
+    <plurals name="pref_auto_rewind_summary">
+        <item quantity="one">Автоматично пренавива %d секунда след ръчно паузиране</item>
+        <item quantity="other">Автоматично пренавива %d секунди след ръчно поставяне на пауза.</item>
+    </plurals>
+    <string name="pref_bookmark_on_sleep_title">Поставяне на отметка при пауза от страна на таймера</string>
+    <string name="pref_bookmark_on_sleep_summary">Автоматично поставя отметка при всяко задаване на таймера за пауза.</string>
     <string name="pref_support_title">Поддръжка</string>
     <string name="pref_support_translations">Преводи</string>
     <string name="pref_support_contribute">Поддръжка и предложения</string>
-    <string name="pref_support_donation">Дарете</string>
+    <string name="pref_support_donation">Дарения</string>
     <string name="donation_worked_thanks">Много благодаря, това наистина помага много :)</string>
     <string name="donation_not_worked">Опаа… нещо се обърка</string>
     <!--Misc-->
@@ -91,5 +107,5 @@
     <!--hide folder dialog-->
     <string name="hide_folder_title">Скриване на папката</string>
     <string name="hide_folder_content">Желаете ли да скриете папката от музикални плеъри, за да не разпознават книгите Ви като музика?</string>
-    <string name="hide_confirm">Скриване</string>
+    <string name="hide_confirm">Да</string>
 </resources>
