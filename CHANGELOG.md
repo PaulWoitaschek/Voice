@@ -1,5 +1,6 @@
 # v2.4.2
 * Added bulgarian translation
+* Prevent time overlapping the progress view in the list
 * Improved general translations (support for plurals)
 * Minor performance improvements
 
