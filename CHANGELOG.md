@@ -1,3 +1,8 @@
+# v2.4.2
+* Added bulgarian translation
+* Improved general translations (support for plurals)
+* Minor performance improvements
+
 # v2.4.1
 * Updated for android 6
 * Fixed crashed on new tablet installations
