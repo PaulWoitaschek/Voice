@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
@@ -24,7 +25,7 @@ import java.util.concurrent.Executors;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
-import de.ph1b.audiobook.model.DataBaseHelper;
+import de.ph1b.audiobook.persistence.DataBaseHelper;
 import de.ph1b.audiobook.uitools.CoverDownloader;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.DraggableBoxImageView;
@@ -34,7 +35,7 @@ import de.ph1b.audiobook.utils.L;
 /**
  * Simple dialog to edit the cover of a book.
  */
-public class EditCoverDialogFragment extends BaseDialogFragment implements View.OnClickListener {
+public class EditCoverDialogFragment extends DialogFragment implements View.OnClickListener {
     public static final String TAG = EditCoverDialogFragment.class.getSimpleName();
     private static final String SI_COVER_POSITION = "siCoverPosition";
     private static final String SI_COVER_URLS = "siCoverUrls";
@@ -280,7 +281,7 @@ public class EditCoverDialogFragment extends BaseDialogFragment implements View.
         @Override
         protected void onPreExecute() {
             nextCover.setVisibility(View.INVISIBLE);
-            if (imageURLS.size() > 0) {
+            if (!imageURLS.isEmpty()) {
                 previousCover.setVisibility(View.VISIBLE);
             }
             loadingProgressBar.setVisibility(View.VISIBLE);

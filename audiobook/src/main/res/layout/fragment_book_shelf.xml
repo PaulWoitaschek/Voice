@@ -6,15 +6,12 @@
     android:orientation="vertical"
     tools:context=".activity.BookShelfActivity">
 
-    <include layout="@layout/toolbar" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
-        android:layout_marginTop="?attr/actionBarSize"
         android:clipToPadding="false"
         android:paddingBottom="104dp"
         android:paddingTop="4dp" />
@@ -36,6 +33,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
+        android:contentDescription="@string/play_pause"
         android:transitionName="@string/fab_transition"
         fab:fab_colorNormal="?attr/colorAccent"
         fab:fab_colorPressed="?attr/colorAccentDark"

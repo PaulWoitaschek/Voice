@@ -1,70 +1,56 @@
 package de.ph1b.audiobook.model;
 
-import android.content.ContentValues;
 import android.support.annotation.NonNull;
 
-import static com.google.common.base.Preconditions.checkArgument;
+import com.google.common.base.Objects;
 
-public class Bookmark {
+import net.jcip.annotations.Immutable;
 
-    private static final String TAG = Bookmark.class.getSimpleName();
+import java.io.File;
+
+
+@Immutable
+public class Bookmark implements Comparable<Bookmark> {
+
     private final int time;
     @NonNull
-    private final String mediaPath;
+    private final File mediaFile;
     @NonNull
-    private String title;
+    private final String title;
 
-
-    public Bookmark(Bookmark that) {
-        this.time = that.time;
-        this.mediaPath = that.mediaPath;
-        this.title = that.title;
-    }
-
-    public Bookmark(@NonNull String mediaPath, @NonNull String title, int time) {
-        checkArgument(!mediaPath.isEmpty());
-        checkArgument(!title.isEmpty());
-
-        this.mediaPath = mediaPath;
+    public Bookmark(@NonNull File mediaFile, @NonNull String title, int time) {
+        this.mediaFile = mediaFile;
         this.title = title;
         this.time = time;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-
-        if (o instanceof Bookmark) {
-            Bookmark that = (Bookmark) o;
-            return this.time == that.time && this.mediaPath.equals(that.mediaPath) && that.title.equals(this.title);
-        }
-
-        return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Bookmark bookmark = (Bookmark) o;
+        return Objects.equal(time, bookmark.time) &&
+                Objects.equal(mediaFile, bookmark.mediaFile) &&
+                Objects.equal(title, bookmark.title);
     }
 
     @Override
     public int hashCode() {
-        final int PRIME = 31;
-        int result = PRIME + time;
-        result = PRIME * result + mediaPath.hashCode();
-        result = PRIME * result + title.hashCode();
-        return result;
+        return Objects.hashCode(time, mediaFile, title);
     }
 
     @Override
     public String toString() {
-        return TAG + "[" +
-                "title=" + title +
-                ",time=" + time +
-                ",mediaPath=" + mediaPath +
-                "]";
+        return "Bookmark{" +
+                "time=" + time +
+                ", mediaFile=" + mediaFile +
+                ", title='" + title + '\'' +
+                '}';
     }
 
     @NonNull
-    public String getMediaPath() {
-        return mediaPath;
+    public File getMediaFile() {
+        return mediaFile;
     }
 
     @NonNull
@@ -72,21 +58,26 @@ public class Bookmark {
         return title;
     }
 
-    public void setTitle(@NonNull String title) {
-        checkArgument(!title.isEmpty());
-        this.title = title;
-    }
-
     public int getTime() {
         return time;
     }
 
-    public ContentValues getContentValues(long bookId) {
-        ContentValues cv = new ContentValues();
-        cv.put(DataBaseHelper.BOOKMARK_TIME, time);
-        cv.put(DataBaseHelper.BOOKMARK_PATH, mediaPath);
-        cv.put(DataBaseHelper.BOOKMARK_TITLE, title);
-        cv.put(DataBaseHelper.BOOK_ID, bookId);
-        return cv;
+    @Override
+    public int compareTo(@NonNull Bookmark another) {
+        // compare files
+        int fileCompare = NaturalOrderComparator.FILE_COMPARATOR.compare(mediaFile, another.mediaFile);
+        if (fileCompare != 0) {
+            return fileCompare;
+        }
+
+        // if files are the same compare time
+        if (time > another.time) {
+            return 1;
+        } else if (time < another.time) {
+            return -1;
+        }
+
+        // if time is the same compare the titles
+        return NaturalOrderComparator.naturalCompare(title, another.title);
     }
 }

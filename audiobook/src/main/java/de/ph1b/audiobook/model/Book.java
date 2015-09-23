@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.model;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -37,7 +36,7 @@ public class Book implements Comparable<Book> {
     private int time = 0;
     private float playbackSpeed = 1.0f;
     @NonNull
-    private String currentMediaPath;
+    private File currentFile;
     private boolean useCoverReplacement = false;
 
     public Book(Book that) {
@@ -46,16 +45,12 @@ public class Book implements Comparable<Book> {
         this.chapters = new ArrayList<>(that.chapters);
         this.type = Type.valueOf(that.type.name());
         this.packageName = that.packageName;
-        List<Bookmark> copyBookmarks = new ArrayList<>(that.bookmarks.size());
-        for (Bookmark b : that.bookmarks) {
-            copyBookmarks.add(new Bookmark(b));
-        }
-        this.bookmarks = copyBookmarks;
+        this.bookmarks = new ArrayList<>(that.bookmarks);
         this.name = that.name;
         this.author = that.author;
         this.time = that.time;
         this.playbackSpeed = that.playbackSpeed;
-        this.currentMediaPath = that.currentMediaPath;
+        this.currentFile = that.currentFile;
         this.useCoverReplacement = that.useCoverReplacement;
     }
 
@@ -63,12 +58,12 @@ public class Book implements Comparable<Book> {
                 @NonNull String name,
                 @Nullable String author,
                 @NonNull List<Chapter> chapters,
-                @NonNull String currentMediaPath,
+                @NonNull File currentFile,
                 @NonNull Type type,
                 @NonNull List<Bookmark> bookmarks,
                 @NonNull Context c) {
         checkNotNull(chapters);
-        checkNotNull(currentMediaPath);
+        checkNotNull(currentFile);
         checkNotNull(type);
         checkNotNull(bookmarks);
         checkArgument(!root.isEmpty());
@@ -82,9 +77,10 @@ public class Book implements Comparable<Book> {
         this.type = type;
         this.bookmarks = bookmarks;
         this.packageName = c.getPackageName();
-        setPosition(0, currentMediaPath);
-        this.currentMediaPath = currentMediaPath;
+        setPosition(0, currentFile);
+        this.currentFile = currentFile;
     }
+
 
     /**
      * Gets the transition name for the cover transition.
@@ -96,23 +92,37 @@ public class Book implements Comparable<Book> {
         return COVER_TRANSITION_PREFIX + id;
     }
 
-    public ContentValues getContentValues() {
-        ContentValues bookCv = new ContentValues();
-        bookCv.put(DataBaseHelper.BOOK_NAME, name);
-        bookCv.put(DataBaseHelper.BOOK_AUTHOR, author);
-        bookCv.put(DataBaseHelper.BOOK_ACTIVE, 1);
-        bookCv.put(DataBaseHelper.BOOK_CURRENT_MEDIA_PATH, currentMediaPath);
-        bookCv.put(DataBaseHelper.BOOK_PLAYBACK_SPEED, playbackSpeed);
-        bookCv.put(DataBaseHelper.BOOK_ROOT, root);
-        bookCv.put(DataBaseHelper.BOOK_TIME, time);
-        bookCv.put(DataBaseHelper.BOOK_TYPE, type.name());
-        bookCv.put(DataBaseHelper.BOOK_USE_COVER_REPLACEMENT, useCoverReplacement);
-        return bookCv;
-    }
-
     @NonNull
     public List<Bookmark> getBookmarks() {
         return bookmarks;
+    }
+
+    /**
+     * @return The global duration. It sums up the duration of all chapters.
+     */
+    public int getGlobalDuration() {
+        int globalDuration = 0;
+        for (Chapter c : chapters) {
+            globalDuration += c.getDuration();
+        }
+        return globalDuration;
+    }
+
+    /**
+     * @return The global position. It sums up the duration of all elapsed chapters plus the position
+     * in the current chapter.
+     */
+    public int getGlobalPosition() {
+        int globalPosition = 0;
+        for (Chapter c : chapters) {
+            if (c.equals(getCurrentChapter())) {
+                globalPosition += time;
+                return globalPosition;
+            } else {
+                globalPosition += c.getDuration();
+            }
+        }
+        throw new IllegalStateException("Current chapter was not found while looking up the global position");
     }
 
 
@@ -133,21 +143,21 @@ public class Book implements Comparable<Book> {
         return type;
     }
 
-    public void setPosition(int time, @NonNull String currentMediaPath) {
+    public void setPosition(int time, @NonNull File currentFile) {
         boolean relativeMediaPathExists = false;
         for (Chapter c : chapters) {
-            if (c.getPath().equals(currentMediaPath)) {
+            if (c.getFile().equals(currentFile)) {
                 relativeMediaPathExists = true;
             }
         }
         if (!relativeMediaPathExists) {
             throw new IllegalArgumentException("Creating book with name=" + name +
-                    " failed because currentMediaPath=" + currentMediaPath +
-                    " does not exist in chapters");
+                    " failed because currentFile=" + currentFile +
+                    " does not exist in chapters=" + chapters);
         }
 
         this.time = time;
-        this.currentMediaPath = currentMediaPath;
+        this.currentFile = currentFile;
     }
 
     public boolean isUseCoverReplacement() {
@@ -205,7 +215,7 @@ public class Book implements Comparable<Book> {
                 ", author=" + author +
                 ", time=" + time +
                 ", playbackSpeed=" + playbackSpeed +
-                ", currentMediaPath=" + currentMediaPath +
+                ", currentFile=" + currentFile +
                 ", useCoverReplacement=" + useCoverReplacement +
                 ", packageName=" + packageName +
                 ", chapters=" + chapters +
@@ -214,8 +224,8 @@ public class Book implements Comparable<Book> {
     }
 
     @NonNull
-    public String getCurrentMediaPath() {
-        return currentMediaPath;
+    public File getCurrentFile() {
+        return currentFile;
     }
 
     @Nullable
@@ -230,12 +240,12 @@ public class Book implements Comparable<Book> {
     @NonNull
     public Chapter getCurrentChapter() {
         for (Chapter c : chapters) {
-            if (c.getPath().equals(currentMediaPath)) {
+            if (c.getFile().equals(currentFile)) {
                 return c;
             }
         }
         throw new IllegalArgumentException("getCurrentChapter has no valid id with" +
-                " currentMediaPath=" + currentMediaPath);
+                " currentFile=" + currentFile);
     }
 
     @Nullable
@@ -292,7 +302,7 @@ public class Book implements Comparable<Book> {
         if (this.equals(that)) {
             return 0;
         } else {
-            return NaturalOrderComparator.INSTANCE.compare(this.name, that.name);
+            return NaturalOrderComparator.naturalCompare(this.name, that.name);
         }
     }
 

@@ -7,7 +7,6 @@ import net.jcip.annotations.ThreadSafe;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -22,7 +21,7 @@ import de.ph1b.audiobook.model.Book;
 public class Communication {
 
     private static final Communication INSTANCE = new Communication();
-    private final List<BookCommunication> listeners = new CopyOnWriteArrayList<>();
+    private final List<BookCommunication> listeners = new ArrayList<>(10);
     private final Executor executor = Executors.newSingleThreadScheduledExecutor();
 
     private Communication() {

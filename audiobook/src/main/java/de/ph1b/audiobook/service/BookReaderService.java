@@ -35,25 +35,28 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.activity.BookPlayActivity;
+import de.ph1b.audiobook.activity.BookActivity;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
-import de.ph1b.audiobook.model.DataBaseHelper;
+import de.ph1b.audiobook.persistence.DataBaseHelper;
+import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.receiver.RemoteControlReceiver;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.PrefsManager;
 
 
-public class AudioService extends Service implements AudioManager.OnAudioFocusChangeListener {
+/**
+ * Service that hosts the longtime playback and handles its controls.
+ *
+ * @author Paul Woitaschek
+ */
+public class BookReaderService extends Service implements AudioManager.OnAudioFocusChangeListener {
 
-    private static final String TAG = AudioService.class.getSimpleName();
+    private static final String TAG = BookReaderService.class.getSimpleName();
     private static final int NOTIFICATION_ID = 42;
-    private static final String PLAYSTATE_CHANGED = "com.android.music.playstatechanged";
-    private static final String META_CHANGED = "com.android.music.metachanged";
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private final ExecutorService playerExecutor = new ThreadPoolExecutor(
             1, 1, // single thread
@@ -109,9 +112,9 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
     private MediaSessionCompat mediaSession;
     private DataBaseHelper db;
     /**
-     * The last path the {@link #notifyChange(String)} has used to update the metadata.
+     * The last file the {@link #notifyChange(BookReaderService.ChangeType)} has used to update the metadata.
      */
-    private volatile String lastPathForMetaData = "";
+    private volatile File lastFileForMetaData = new File("");
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
 
 
@@ -119,7 +122,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         public void onBookContentChanged(@NonNull Book book) {
             if (book.getId() == prefs.getCurrentBookId()) {
                 controller.updateBook(db.getBook(prefs.getCurrentBookId()));
-                notifyChange(META_CHANGED);
+                notifyChange(ChangeType.METADATA);
             }
         }
 
@@ -135,7 +138,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                     if (controllerBook != null) {
                         switch (state) {
                             case PLAYING:
-                                audioManager.requestAudioFocus(AudioService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+                                audioManager.requestAudioFocus(BookReaderService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
                                 mediaSession.setActive(true);
 
@@ -150,14 +153,14 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                             case STOPPED:
                                 mediaSession.setActive(false);
 
-                                audioManager.abandonAudioFocus(AudioService.this);
+                                audioManager.abandonAudioFocus(BookReaderService.this);
                                 notificationManager.cancel(NOTIFICATION_ID);
                                 stopForeground(true);
 
                                 break;
                         }
 
-                        notifyChange(PLAYSTATE_CHANGED);
+                        notifyChange(ChangeType.PLAYSTATE);
                     }
                 }
             });
@@ -180,7 +183,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
-        ComponentName eventReceiver = new ComponentName(AudioService.this.getPackageName(), RemoteControlReceiver.class.getName());
+        ComponentName eventReceiver = new ComponentName(BookReaderService.this.getPackageName(), RemoteControlReceiver.class.getName());
         Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
         mediaButtonIntent.setComponent(eventReceiver);
         PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, mediaButtonIntent, 0);
@@ -275,8 +278,8 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                             break;
                         case ServiceController.CONTROL_CHANGE_POSITION:
                             int newTime = intent.getIntExtra(ServiceController.CONTROL_CHANGE_POSITION_EXTRA_TIME, 0);
-                            String relativePath = intent.getStringExtra(ServiceController.CONTROL_CHANGE_POSITION_EXTRA_PATH_RELATIVE);
-                            controller.changePosition(newTime, relativePath);
+                            File file = (File) intent.getSerializableExtra(ServiceController.CONTROL_CHANGE_POSITION_EXTRA_FILE);
+                            controller.changePosition(newTime, file);
                             break;
                         case ServiceController.CONTROL_NEXT:
                             controller.next();
@@ -361,13 +364,12 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                         pauseBecauseHeadset = false;
                     }
 
-                    /**
-                     * Only break here. if we should pause, AUDIO_FOCUS_LOSS_TRANSIENT will handle
-                     * that for us.
+                    /*
+                      Only break here. if we should pause, AUDIO_FOCUS_LOSS_TRANSIENT will handle
+                      that for us.
                      */
                     break;
                 }
-                //noinspection fallthrough: See text above!
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                 if (MediaPlayerController.getPlayState() ==
                         MediaPlayerController.PlayState.PLAYING) {
@@ -393,7 +395,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         try {
             File coverFile = book.getCoverFile();
             if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-                cover = Picasso.with(AudioService.this).load(coverFile).resize(width, height).get();
+                cover = Picasso.with(BookReaderService.this).load(coverFile).resize(width, height).get();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -439,7 +441,8 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
         PendingIntent stopPI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_STOP, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // content click
-        PendingIntent contentIntent = BookPlayActivity.getTaskStackPI(this, book.getId());
+        Intent contentIntent = BookActivity.goToBookIntent(this, book.getId());
+        PendingIntent contentPI = PendingIntent.getActivity(this, 0, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         return notificationBuilder.setStyle(
                 new NotificationCompat.MediaStyle()
@@ -451,7 +454,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setShowWhen(false)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentIntent(contentIntent)
+                .setContentIntent(contentPI)
                 .setContentTitle(book.getName())
                 .setSmallIcon(R.drawable.ic_notification)
                 .setWhen(0)
@@ -461,7 +464,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                 .build();
     }
 
-    private void notifyChange(final String what) {
+    private void notifyChange(final ChangeType what) {
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -477,7 +480,7 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                     String author = book.getAuthor();
                     int position = book.getTime();
 
-                    Intent i = new Intent(what);
+                    Intent i = new Intent(what.intentUrl);
                     i.putExtra("id", 1);
                     if (author != null) {
                         i.putExtra("artist", author);
@@ -488,28 +491,25 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                     i.putExtra("position", book.getTime());
                     sendBroadcast(i);
 
-                    if (what.equals(PLAYSTATE_CHANGED)) {
+                    if (what == ChangeType.PLAYSTATE) {
                         int state;
                         if (playState == MediaPlayerController.PlayState.PLAYING) {
-                            //noinspection deprecation
                             state = PlaybackStateCompat.STATE_PLAYING;
                         } else if (playState == MediaPlayerController.PlayState.PAUSED) {
-                            //noinspection deprecation
                             state = PlaybackStateCompat.STATE_PAUSED;
                         } else {
-                            //noinspection deprecation
                             state = PlaybackStateCompat.STATE_STOPPED;
                         }
                         playbackStateBuilder.setState(state, position, controller.getPlaybackSpeed());
                         mediaSession.setPlaybackState(playbackStateBuilder.build());
-                    } else if (what.equals(META_CHANGED) && !lastPathForMetaData.equals(book.getCurrentMediaPath())) {
+                    } else if ((what == ChangeType.METADATA) && !lastFileForMetaData.equals(book.getCurrentFile())) {
                         // this check is necessary. Else the lockscreen controls will flicker due to
                         // an updated picture
                         Bitmap bitmap = null;
                         File coverFile = book.getCoverFile();
                         if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
                             try {
-                                bitmap = Picasso.with(AudioService.this).load(coverFile).get();
+                                bitmap = Picasso.with(BookReaderService.this).load(coverFile).get();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -517,12 +517,12 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                         if (bitmap == null) {
                             Drawable replacement = new CoverReplacement(
                                     book.getName(),
-                                    AudioService.this);
+                                    BookReaderService.this);
                             L.d(TAG, "replacement dimen: " + replacement.getIntrinsicWidth() + ":" + replacement.getIntrinsicHeight());
                             bitmap = ImageHelper.drawableToBitmap(
                                     replacement,
-                                    ImageHelper.getSmallerScreenSize(AudioService.this),
-                                    ImageHelper.getSmallerScreenSize(AudioService.this));
+                                    ImageHelper.getSmallerScreenSize(BookReaderService.this),
+                                    ImageHelper.getSmallerScreenSize(BookReaderService.this));
                         }
                         // we make a copy because we do not want to use picassos bitmap, since
                         // MediaSessionCompat recycles our bitmap eventually which would make
@@ -542,10 +542,21 @@ public class AudioService extends Service implements AudioManager.OnAudioFocusCh
                                 .putString(MediaMetadataCompat.METADATA_KEY_GENRE, "Audiobook");
                         mediaSession.setMetadata(mediaMetaDataBuilder.build());
 
-                        lastPathForMetaData = book.getCurrentMediaPath();
+                        lastFileForMetaData = book.getCurrentFile();
                     }
                 }
             }
         });
+    }
+
+    private enum ChangeType {
+        METADATA("com.android.music.metachanged"),
+        PLAYSTATE("com.android.music.playstatechange");
+
+        public final String intentUrl;
+
+        ChangeType(String intentUrl) {
+            this.intentUrl = intentUrl;
+        }
     }
 }

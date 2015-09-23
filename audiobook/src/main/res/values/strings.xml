@@ -5,12 +5,15 @@
     <string name="mal_file_title">Defect file</string>
     <string name="content_current_book">This is the current book</string>
     <string name="current_book">Current book</string>
-    <!--BookPlayActivity-->
+    <string name="change_layout_type">Change layout</string>
+    <!--BookPlayFragment-->
     <string name="cover">Cover</string>
     <string name="play_pause">Play / Pause</string>
     <string name="action_sleep">Sleep-Timer</string>
-    <string name="action_sleep_title_hint_left">Pauses after</string>
-    <string name="action_sleep_title_hint_right">minutes</string>
+    <plurals name="pauses_after">
+        <item quantity="one">Pauses after %d minute.</item>
+        <item quantity="other">Pauses after %d minutes.</item>
+    </plurals>
     <string name="rewind">Rewind</string>
     <string name="fast_forward">Fast forward</string>
     <string name="previous_track">Previous track</string>
@@ -41,10 +44,16 @@
     <string name="chosen_folder_description">Chosen folder:</string>
     <string name="delete_folder">Remove from Library?</string>
     <string name="delete_folder_content">Do you want to remove the following folder from the library?</string>
-    <string name="content_file_folder">Indicating if its a file or a folder</string>
-    <string name="folder_add_book">Single book</string>
+    <string name="folder_add_single_book">Single book</string>
     <string name="folder_add_collection">Folder with multiple books</string>
     <string name="for_example">e.g.</string>
+    <string name="content_add_book">Add a book</string>
+    <string name="content_is_folder">Folder</string>
+    <string name="content_is_file">File</string>
+    <string name="content_navigate_up">Go to parent folder</string>
+    <string name="permission_read_ext_explanation">The app needs to read your storage so it can find and play the audio books.</string>
+    <string name="permission_read_ext_request">Should we ask for the permission again?</string>
+    <string name="permission_rescan">Request again</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Playback speed</string>
     <!--Bookmarks-->
@@ -60,8 +69,14 @@
     <string name="action_settings">Preferences</string>
     <string name="pref_resume_on_replug">Resume playback</string>
     <string name="pref_resume_on_replug_hint">If you paused by plugging headset out, it will resume on replug.</string>
-    <string name="minutes">minutes</string>
-    <string name="seconds">seconds</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
     <string name="pref_seek_time">Skip amount</string>
     <string name="pref_sleep_time">Sleep time</string>
     <string name="pref_root_folder_title">Audiobook folder</string>
@@ -74,7 +89,10 @@
     <string name="pref_send_bugs_title">Report bugs</string>
     <string name="pref_send_bugs_summary">Automatically sends anonymous reports about crashes to help development.</string>
     <string name="pref_auto_rewind_title">Auto rewind</string>
-    <string name="pref_auto_rewind_summary">Automatically rewinds after manual pausing:</string>
+    <plurals name="pref_auto_rewind_summary">
+        <item quantity="one">Automatically rewinds %d second after manual pausing.</item>
+        <item quantity="other">Automatically rewinds %d seconds after manual pausing.</item>
+    </plurals>
     <string name="pref_bookmark_on_sleep_title">Bookmark on sleep</string>
     <string name="pref_bookmark_on_sleep_summary">Automatically sets a bookmark each time the sleep timer is set.</string>
     <string name="pref_support_title">Support</string>

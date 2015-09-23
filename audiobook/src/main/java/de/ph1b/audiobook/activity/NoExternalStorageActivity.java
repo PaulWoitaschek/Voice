@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.utils.BaseApplication;
 
 public class NoExternalStorageActivity extends AppCompatActivity {
 
@@ -43,12 +42,5 @@ public class NoExternalStorageActivity extends AppCompatActivity {
         if (BaseActivity.storageMounted()) {
             onBackPressed();
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        BaseApplication.leakWatch(this);
     }
 }

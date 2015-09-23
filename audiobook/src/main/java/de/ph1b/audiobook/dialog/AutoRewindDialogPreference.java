@@ -11,10 +11,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.internal.MDTintHelper;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.uitools.ThemeUtil;
-import de.ph1b.audiobook.utils.PrefsManager;
+import de.ph1b.audiobook.persistence.PrefsManager;
 
 
 public class AutoRewindDialogPreference extends DialogPreference {
@@ -28,9 +28,8 @@ public class AutoRewindDialogPreference extends DialogPreference {
     }
 
     private void setText(int progress) {
-        String autoRewindSummary = getContext().getString(R.string.pref_auto_rewind_summary)
-                + " " + String.valueOf(progress + SEEK_BAR_MIN) + " "
-                + getContext().getString(R.string.seconds);
+        String autoRewindSummary = getContext().getResources().getQuantityString(
+                R.plurals.pref_auto_rewind_summary, progress, progress);
         textView.setText(autoRewindSummary);
     }
 
@@ -44,7 +43,8 @@ public class AutoRewindDialogPreference extends DialogPreference {
         textView = (TextView) customView.findViewById(R.id.textView);
 
         //seekBar
-        ThemeUtil.theme(seekBar);
+        //noinspection deprecation
+        MDTintHelper.setTint(seekBar, getContext().getResources().getColor(R.color.accent));
         int position = prefs.getAutoRewindAmount();
         seekBar.setMax(SEEK_BAR_MAX - SEEK_BAR_MIN);
         seekBar.setProgress(position - SEEK_BAR_MIN);

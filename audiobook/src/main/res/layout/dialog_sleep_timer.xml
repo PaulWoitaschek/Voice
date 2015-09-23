@@ -1,35 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/timePickerLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/minute_text"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/action_sleep_title_hint_left"
-            android:textSize="@dimen/dialog_content_text_size" />
-
-        <TextView
-            android:id="@+id/minute_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/dialog_content_text_size" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/action_sleep_title_hint_right"
-            android:textSize="@dimen/dialog_content_text_size" />
-
-    </LinearLayout>
+        android:textSize="@dimen/dialog_content_text_size"
+        tools:text="Pauses after 8 minutes" />
 
     <NumberPicker
         android:id="@+id/minute"

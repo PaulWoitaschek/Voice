@@ -23,9 +23,8 @@ import de.ph1b.audiobook.dialog.DonationDialogFragment;
 import de.ph1b.audiobook.dialog.SeekDialogPreference;
 import de.ph1b.audiobook.dialog.SleepDialogPreference;
 import de.ph1b.audiobook.dialog.SupportDialogFragment;
-import de.ph1b.audiobook.utils.BaseApplication;
+import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.PrefsManager;
 import de.ph1b.audiobook.vendinghelper.IabHelper;
 import de.ph1b.audiobook.vendinghelper.IabResult;
 
@@ -43,7 +42,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         super.onDestroy();
 
         iabHelper.dispose();
-        BaseApplication.leakWatch(this);
     }
 
     @Override
@@ -93,19 +91,22 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     private void initValues() {
         // seek pref
         int seekAmount = prefs.getSeekTime();
-        String seekSummary = seekAmount + " " + getString(R.string.seconds);
+
+        L.d(TAG, "hiihi");
+
+        String seekSummary = getResources().getQuantityString(R.plurals.seconds, seekAmount, seekAmount);
         SeekDialogPreference seekDialogPreference = (SeekDialogPreference) findPreference(getString(R.string.pref_key_seek_time));
         seekDialogPreference.setSummary(seekSummary);
 
         // auto rewind pref
         int autoRewindAmount = prefs.getAutoRewindAmount();
-        String autoRewindSummary = autoRewindAmount + " " + getString(R.string.seconds);
+        String autoRewindSummary = getResources().getQuantityString(R.plurals.seconds, autoRewindAmount, autoRewindAmount);
         AutoRewindDialogPreference autoRewindDialogPreference = (AutoRewindDialogPreference) findPreference(getString(R.string.pref_key_auto_rewind));
         autoRewindDialogPreference.setSummary(autoRewindSummary);
 
         // sleep pref
         int sleepAmount = prefs.getSleepTime();
-        String sleepSummary = String.valueOf(sleepAmount) + " " + getString(R.string.minutes);
+        String sleepSummary = getResources().getQuantityString(R.plurals.minutes, sleepAmount, sleepAmount);
         SleepDialogPreference sleepDialogPreference = (SleepDialogPreference) findPreference(getString(R.string.pref_key_sleep_time));
         sleepDialogPreference.setSummary(sleepSummary);
 

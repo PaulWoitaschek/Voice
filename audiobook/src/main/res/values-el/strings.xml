@@ -1,17 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
-
-
 <resources>
     <!--BookShelf-->
     <string name="mal_file_message">Το ακόλουθο αρχείο μπορεί να είναι κατεστραμμένο:</string>
     <string name="mal_file_title">Αρχείο με ελαττώματα</string>
     <string name="content_current_book">Αυτό είναι το τρέχον βιβλίο</string>
-    <!--BookPlayActivity-->
+    <!--BookPlayFragment-->
     <string name="cover">Εξώφυλλο</string>
     <string name="play_pause">Αναπαραγωγή / Παύση</string>
     <string name="action_sleep">Χρονοδιακόπτης ύπνου</string>
-    <string name="action_sleep_title_hint_left">Παύσεις μετα απο</string>
-    <string name="action_sleep_title_hint_right">λεπτά</string>
     <string name="rewind">Επανέλαση</string>
     <string name="fast_forward">Γρήγορη προώθηση</string>
     <string name="previous_track">Προηγούμενο τραγούδι</string>
@@ -40,8 +36,7 @@
     <string name="chosen_folder_description">Επιλεγμένος φάκελος:</string>
     <string name="delete_folder">Αφαίρεση από τη βιβλιοθήκη;</string>
     <string name="delete_folder_content">Θέλετε να αφαιρέσετε τον ακόλουθο φάκελο από τη βιβλιοθήκη;</string>
-    <string name="content_file_folder">Αναγραφή αν ειναι αρχείο ή φάκελος</string>
-    <string name="folder_add_book">Ενιαίο βιβλίο</string>
+    <string name="folder_add_single_book">Ενιαίο βιβλίο</string>
     <string name="folder_add_collection">Φάκελος με πολλαπλά βιβλία</string>
     <string name="for_example">π.χ.</string>
     <!--PlaybackSpeed-->
@@ -59,8 +54,6 @@
     <string name="action_settings">Προτιμήσεις</string>
     <string name="pref_resume_on_replug">Συνέχιση αναπαραγωγής</string>
     <string name="pref_resume_on_replug_hint">Αν διακοψετε βγαζοντας τα ακουστικά, θα επαναληφθεί η διαδικασια.</string>
-    <string name="minutes">λεπτά</string>
-    <string name="seconds">δευτερόλεπτα</string>
     <string name="pref_seek_time">Μεταφορά ποσότητας</string>
     <string name="pref_sleep_time">Ωρα ύπνου</string>
     <string name="pref_root_folder_title">Φάκελος ηχητικού βιβλίου</string>
@@ -73,7 +66,6 @@
     <string name="pref_send_bugs_title">Αναφορά σφαλμάτων </string>
     <string name="pref_send_bugs_summary">Αποστέλλει αυτόματα ανώνυμες καταγγελίες σχετικά με τις διακοπές για να βοηθήσει την ανάπτυξη.</string>
     <string name="pref_auto_rewind_title">Αυτόματη αναζήτηση προς τα πίσω </string>
-    <string name="pref_auto_rewind_summary">Αναζήτηση προς τα πίσω αυτόματα μετά τη χειροκίνητη παύση:</string>
     <string name="pref_bookmark_on_sleep_title">Ρυθμιση του σελιδοδείκτη για εναρξη του χρονοδιακόπτη ύπνου</string>
     <string name="pref_bookmark_on_sleep_summary">Ορίζει αυτόματα ένα σελιδοδείκτη κάθε φορά που ο χρονοδιακόπτης ύπνου έχει ρυθμιστεί.</string>
     <string name="pref_support_title">Υποστήριξη</string>

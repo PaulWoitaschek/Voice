@@ -1,12 +1,17 @@
 package de.ph1b.audiobook.activity;
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
@@ -31,21 +36,27 @@ import de.ph1b.audiobook.dialog.HideFolderDialog;
 import de.ph1b.audiobook.model.NaturalOrderComparator;
 import de.ph1b.audiobook.utils.FileRecognition;
 import de.ph1b.audiobook.utils.L;
+import de.ph1b.audiobook.utils.PermissionHelper;
 
 /**
  * Activity for choosing an audiobook folder. If there are multiple SD-Cards, the Activity unifies
  * them to a fake-folder structure. We must make sure that this is not choosable. When there are no
  * multiple sd-cards, we will directly show the content of the 1 SD Card.
+ * <p/>
+ * Use {@link #newInstanceIntent(Context, OperationMode)} to get a new intent with the necessary
+ * values.
+ *
+ * @author Paul Woitaschek
  */
 public class FolderChooserActivity extends BaseActivity implements View.OnClickListener {
 
-    public static final String ACTIVITY_FOR_RESULT_REQUEST_CODE = "requestCode";
-    public static final String CHOSEN_FILE = "chosenFile";
-    public static final int ACTIVITY_FOR_RESULT_CODE_COLLECTION = 1;
-    public static final int ACTIVITY_FOR_RESULT_CODE_SINGLE_BOOK = 2;
+    public static final String RESULT_CHOSEN_FILE = "chosenFile";
+    public static final String RESULT_OPERATION_MODE = "operationMode";
 
     private static final String CURRENT_FOLDER_NAME = "currentFolderName";
     private static final String TAG = FolderChooserActivity.class.getSimpleName();
+    private static final String NI_OPERATION_MODE = "niOperationMode";
+    private static final int PERMISSION_RESULT_READ_EXT_STORAGE = 1;
     private final List<File> currentFolderContent = new ArrayList<>(30);
     private boolean multiSd = true;
     private List<File> rootDirs;
@@ -55,7 +66,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
     private Button chooseButton;
     private FolderChooserAdapter adapter;
     private ImageButton upButton;
-    private int mode;
+    private OperationMode mode;
 
     private static List<File> getStorageDirectories() {
         Pattern DIR_SEPARATOR = Pattern.compile("/");
@@ -112,6 +123,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         rv.add("/storage/emulated/0");
         rv.add("/storage/sdcard1");
         rv.add("/storage/external_SD");
+        rv.add("/storage/ext_sd");
 
         List<File> paths = new ArrayList<>(rv.size());
         for (String s : rv) {
@@ -120,7 +132,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
                 paths.add(f);
             }
         }
-        Collections.sort(paths, NaturalOrderComparator.INSTANCE);
+        Collections.sort(paths, NaturalOrderComparator.FILE_COMPARATOR);
         return paths;
     }
 
@@ -132,14 +144,27 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
      * @return The containing files
      */
     private static List<File> getFilesFromFolder(File file) {
-        File[] containing = file.listFiles(FileRecognition.folderAndMusicFilter);
+        File[] containing = file.listFiles(FileRecognition.FOLDER_AND_MUSIC_FILTER);
         if (containing != null) {
             List<File> asList = new ArrayList<>(Arrays.asList(containing));
-            Collections.sort(asList, NaturalOrderComparator.INSTANCE);
+            Collections.sort(asList, NaturalOrderComparator.FILE_COMPARATOR);
             return asList;
         } else {
             return Collections.emptyList();
         }
+    }
+
+    /**
+     * Generates a new intent with the necessary extras
+     *
+     * @param c             The context
+     * @param operationMode The operation mode for the activity
+     * @return The new intent
+     */
+    public static Intent newInstanceIntent(Context c, OperationMode operationMode) {
+        Intent intent = new Intent(c, FolderChooserActivity.class);
+        intent.putExtra(NI_OPERATION_MODE, operationMode.name());
+        return intent;
     }
 
     private void changeFolder(File newFolder) {
@@ -151,15 +176,47 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            boolean permissionGrantingWorked = PermissionHelper.permissionGrantingWorked(requestCode,
+                    PERMISSION_RESULT_READ_EXT_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,
+                    permissions, grantResults);
+            L.i(TAG, "permissionGrantingWorked=" + permissionGrantingWorked);
+            if (permissionGrantingWorked) {
+                refreshRootDirs();
+            } else {
+                PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE);
+                L.e(TAG, "could not get permission");
+            }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private void askForReadExternalStoragePermission() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_RESULT_READ_EXT_STORAGE);
+    }
+
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        int requestCode = getIntent().getIntExtra(ACTIVITY_FOR_RESULT_REQUEST_CODE, -1);
-        if (requestCode != ACTIVITY_FOR_RESULT_CODE_COLLECTION && requestCode != ACTIVITY_FOR_RESULT_CODE_SINGLE_BOOK) {
-            throw new IllegalArgumentException("Illegal requestCode=" + requestCode);
-        } else {
-            mode = requestCode;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            boolean hasExternalStoragePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+            L.i(TAG, "hasExternalStoragePermission=" + hasExternalStoragePermission);
+            if (!hasExternalStoragePermission) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE);
+                } else {
+                    askForReadExternalStoragePermission();
+                }
+            }
         }
+
+        mode = OperationMode.valueOf(getIntent().getStringExtra(NI_OPERATION_MODE));
 
         // init fields
         setContentView(R.layout.activity_folder_chooser);
@@ -192,22 +249,14 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
                     chosenFile = selectedFile;
                     currentFolderName.setText(chosenFile.getName());
                     changeFolder(adapter.getItem(position));
-                } else if (mode == ACTIVITY_FOR_RESULT_CODE_SINGLE_BOOK && selectedFile.isFile()) {
+                } else if (mode == OperationMode.SINGLE_BOOK && selectedFile.isFile()) {
                     chosenFile = selectedFile;
                     currentFolderName.setText(chosenFile.getName());
                 }
             }
         });
 
-        rootDirs = getStorageDirectories();
-        if (rootDirs.size() == 1) {
-            chosenFile = rootDirs.get(0);
-            currentFolderName.setText(chosenFile.getName());
-            changeFolder(chosenFile);
-            multiSd = false;
-        } else {
-            currentFolderContent.addAll(rootDirs);
-        }
+        refreshRootDirs();
 
         //handle runtime
         if (savedInstanceState != null) {
@@ -223,6 +272,21 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         }
 
         setButtonEnabledDisabled();
+    }
+
+    private void refreshRootDirs() {
+        rootDirs = getStorageDirectories();
+        currentFolderContent.clear();
+
+        L.i(TAG, "refreshRootDirs found rootDirs=" + rootDirs);
+        if (rootDirs.size() == 1) {
+            chosenFile = rootDirs.get(0);
+            currentFolderName.setText(chosenFile.getName());
+            changeFolder(chosenFile);
+            multiSd = false;
+        } else {
+            currentFolderContent.addAll(rootDirs);
+        }
     }
 
     @Override
@@ -326,8 +390,14 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
 
     private void finishActivityWithSuccess(@NonNull File chosenFile) {
         Intent data = new Intent();
-        data.putExtra(CHOSEN_FILE, chosenFile.getAbsolutePath());
+        data.putExtra(RESULT_CHOSEN_FILE, chosenFile.getAbsolutePath());
+        data.putExtra(RESULT_OPERATION_MODE, mode.name());
         setResult(RESULT_OK, data);
         finish();
+    }
+
+    public enum OperationMode {
+        COLLECTION_BOOK,
+        SINGLE_BOOK
     }
 }

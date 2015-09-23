@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
@@ -14,12 +15,12 @@ import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
-import de.ph1b.audiobook.model.DataBaseHelper;
+import de.ph1b.audiobook.persistence.DataBaseHelper;
+import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.ThemeUtil;
-import de.ph1b.audiobook.utils.PrefsManager;
 
-public class JumpToPositionDialogFragment extends BaseDialogFragment {
+public class JumpToPositionDialogFragment extends DialogFragment {
 
     public static final String TAG = JumpToPositionDialogFragment.class.getSimpleName();
     private int durationInMinutes;
@@ -106,7 +107,7 @@ public class JumpToPositionDialogFragment extends BaseDialogFragment {
                         int h = hPicker.getValue();
                         int m = mPicker.getValue();
                         int newPosition = (m + 60 * h) * 60 * 1000;
-                        new ServiceController(getActivity()).changeTime(newPosition, book.getCurrentChapter().getPath());
+                        new ServiceController(getActivity()).changeTime(newPosition, book.getCurrentChapter().getFile());
                     }
                 })
                 .positiveText(R.string.dialog_confirm)

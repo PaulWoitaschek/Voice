@@ -24,8 +24,8 @@
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:clickable="true"
+            android:contentDescription="@string/content_navigate_up"
             android:scaleType="fitStart"
-            tools:ignore="ContentDescription"
             tools:src="@drawable/ic_arrow_up_white_48dp" />
 
         <LinearLayout

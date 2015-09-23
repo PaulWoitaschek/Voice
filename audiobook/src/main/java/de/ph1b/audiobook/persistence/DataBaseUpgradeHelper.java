@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.model;
+package de.ph1b.audiobook.persistence;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -127,7 +127,7 @@ class DataBaseUpgradeHelper {
                 try {
                     if (configFileValid) {
                         String retString = Files.toString(configFile, Charsets.UTF_8);
-                        if (retString.length() > 0) {
+                        if (!retString.isEmpty()) {
                             playingInformation = new JSONObject(retString);
                         }
                     }

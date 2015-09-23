@@ -1,62 +1,55 @@
 package de.ph1b.audiobook.model;
 
-import android.content.ContentValues;
 import android.support.annotation.NonNull;
+
+import com.google.common.base.Objects;
 
 import net.jcip.annotations.Immutable;
 
-import static com.google.common.base.Preconditions.checkArgument;
+import java.io.File;
+
 
 @Immutable
-public class Chapter {
+public class Chapter implements Comparable<Chapter> {
 
-    private static final String TAG = Chapter.class.getSimpleName();
     @NonNull
-    private final String path;
+    private final File file;
     @NonNull
     private final String name;
     private final int duration;
 
-
-    public Chapter(@NonNull String path,
+    public Chapter(@NonNull File file,
                    @NonNull String name,
                    int duration) {
-        checkArgument(!path.isEmpty());
-        checkArgument(!name.isEmpty());
 
-        this.path = path;
+        this.file = file;
         this.name = name;
         this.duration = duration;
     }
 
+
+    @Override
+    public String toString() {
+        return "Chapter{" +
+                "file=" + file +
+                ", name='" + name + '\'' +
+                ", duration=" + duration +
+                '}';
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (o == this) {
-            return true;
-        }
-
-        if (o instanceof Chapter) {
-            Chapter that = (Chapter) o;
-            return this.path.equals(that.path) && this.duration == that.duration;
-        }
-        return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Chapter chapter = (Chapter) o;
+        return Objects.equal(duration, chapter.duration) &&
+                Objects.equal(file, chapter.file) &&
+                Objects.equal(name, chapter.name);
     }
 
     @Override
     public int hashCode() {
-        final int PRIME = 31;
-        int result = PRIME + path.hashCode();
-        result = PRIME * result + duration;
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return TAG + "[" +
-                "path=" + path +
-                ",name=" + name +
-                ",duration=" + duration +
-                "]";
+        return Objects.hashCode(file, name, duration);
     }
 
     @NonNull
@@ -69,16 +62,12 @@ public class Chapter {
     }
 
     @NonNull
-    public String getPath() {
-        return path;
+    public File getFile() {
+        return file;
     }
 
-    public ContentValues getContentValues(long bookId) {
-        ContentValues chapterCv = new ContentValues();
-        chapterCv.put(DataBaseHelper.CHAPTER_DURATION, duration);
-        chapterCv.put(DataBaseHelper.CHAPTER_NAME, name);
-        chapterCv.put(DataBaseHelper.CHAPTER_PATH, path);
-        chapterCv.put(DataBaseHelper.BOOK_ID, bookId);
-        return chapterCv;
+    @Override
+    public int compareTo(@NonNull Chapter another) {
+        return NaturalOrderComparator.FILE_COMPARATOR.compare(file, another.file);
     }
 }

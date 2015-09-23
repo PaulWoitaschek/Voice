@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
@@ -45,14 +47,10 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         return returnString;
     }
 
-    public void removeItem(int position) {
-        book.getBookmarks().remove(position);
-        notifyItemRemoved(position);
-    }
-
-    @NonNull
-    public Bookmark getItem(int position) {
-        return book.getBookmarks().get(position);
+    public void removeItem(Bookmark bookmark) {
+        int index = book.getBookmarks().indexOf(bookmark);
+        book.getBookmarks().remove(bookmark);
+        notifyItemRemoved(index);
     }
 
     @Override
@@ -62,15 +60,24 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         return new ViewHolder(v, listener);
     }
 
+    public void bookmarkUpdated(Bookmark oldBookmark, Bookmark newBookmark) {
+        List<Bookmark> bookmarks = book.getBookmarks();
+        int oldIndex = bookmarks.indexOf(oldBookmark);
+        bookmarks.set(oldIndex, newBookmark);
+        notifyItemChanged(oldIndex);
+        Collections.sort(bookmarks);
+        notifyItemMoved(oldIndex, bookmarks.indexOf(newBookmark));
+    }
+
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Bookmark bookmark = getItem(position);
+        Bookmark bookmark = book.getBookmarks().get(position);
         holder.title.setText(bookmark.getTitle());
 
         int size = book.getChapters().size();
         Chapter currentChapter = null;
         for (Chapter c : book.getChapters()) {
-            if (c.getPath().equals(bookmark.getMediaPath())) {
+            if (c.getFile().equals(bookmark.getMediaFile())) {
                 currentChapter = c;
             }
         }
@@ -94,12 +101,12 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
     }
 
     public interface OnOptionsMenuClickedListener {
-        void onOptionsMenuClicked(int position, View v);
+        void onOptionsMenuClicked(Bookmark bookmark, View v);
 
-        void onBookmarkClicked(int position);
+        void onBookmarkClicked(Bookmark bookmark);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         final ImageButton imageButton;
         final TextView title;
@@ -116,14 +123,14 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onBookmarkClicked(getAdapterPosition());
+                    listener.onBookmarkClicked(book.getBookmarks().get(getAdapterPosition()));
                 }
             });
 
             imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onOptionsMenuClicked(getAdapterPosition(), imageButton);
+                    listener.onOptionsMenuClicked(book.getBookmarks().get(getAdapterPosition()), imageButton);
                 }
             });
         }

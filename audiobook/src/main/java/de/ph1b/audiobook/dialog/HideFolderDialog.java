@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -16,7 +17,7 @@ import de.ph1b.audiobook.R;
 /**
  * A dialog giving the option to hide the selected book from other players.
  */
-public class HideFolderDialog extends BaseDialogFragment {
+public class HideFolderDialog extends DialogFragment {
 
     public static final String TAG = HideFolderDialog.class.getSimpleName();
     private static final String PATH_TO_HIDE = "pathToHide";

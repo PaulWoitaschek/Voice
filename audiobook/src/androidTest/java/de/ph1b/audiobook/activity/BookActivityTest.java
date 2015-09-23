@@ -3,6 +3,7 @@ package de.ph1b.audiobook.activity;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.MediumTest;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,18 +11,20 @@ import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.ReentrantLock;
 
+import de.ph1b.audiobook.activity.BookActivity;
+import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
-import de.ph1b.audiobook.model.DataBaseHelper;
+import de.ph1b.audiobook.persistence.DataBaseHelper;
 
 
-public class BookActivityTest extends ActivityInstrumentationTestCase2<BookShelfActivity> {
+public class BookActivityTest extends ActivityInstrumentationTestCase2<BookActivity> {
 
     private final Random rnd = new Random();
 
     public BookActivityTest() {
-        super(BookShelfActivity.class);
+        super(BookActivity.class);
     }
 
     @MediumTest
@@ -43,7 +46,7 @@ public class BookActivityTest extends ActivityInstrumentationTestCase2<BookShelf
                         lock.lock();
 
                         for (int i = 0; i < BOOKS_AT_ONCE; i++) {
-                            if (allBooks.size() > 0) {
+                            if (!allBooks.isEmpty()) {
                                 Book book = allBooks.get(rnd.nextInt(allBooks.size()));
                                 db.hideBook(book);
                             }
@@ -75,9 +78,9 @@ public class BookActivityTest extends ActivityInstrumentationTestCase2<BookShelf
     }
 
     private Book randomBook() {
-        List<Chapter> chapters = Collections.singletonList(new Chapter(randomString(), randomString(), rnd.nextInt()));
+        List<Chapter> chapters = Collections.singletonList(new Chapter(new File(randomString()), randomString(), rnd.nextInt()));
 
-        return new Book(randomString(), randomString(), randomString(), chapters, chapters.get(0).getPath(),
+        return new Book(randomString(), randomString(), randomString(), chapters, chapters.get(0).getFile(),
                 Book.Type.COLLECTION_FILE, new ArrayList<Bookmark>(0), getActivity());
 
     }

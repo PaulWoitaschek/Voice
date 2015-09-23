@@ -1,3 +1,25 @@
+# v2.4.2
+* Added bulgarian translation
+* Prevent time overlapping the progress view in the list
+* Improved general translations (support for plurals)
+* Minor performance improvements
+
+# v2.4.1
+* Updated for android 6
+* Fixed crashed on new tablet installations
+* Fixed rare crashes
+
+# v2.4.0.1 Hotfix
+* Fixed tablet orientation problems
+* Fixed audio track crash
+* Fixed scene transitions after rotation
+
+# v2.4.0 Detail view
+* Switch between the grid and a detailed view with a global progress
+* Improved accesibility
+* Performance greatly improved
+* More ripples
+
 # v2.3.0
 * Dont auto rewind when pausing due to interruption
 * Enabled scene transitions for cover

@@ -2,6 +2,7 @@ package de.ph1b.audiobook.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.util.SortedList;
@@ -10,23 +11,32 @@ import android.support.v7.widget.util.SortedListAdapterCallback;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.internal.MDTintHelper;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.NaturalOrderComparator;
+import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.CoverReplacement;
-import de.ph1b.audiobook.utils.PrefsManager;
 
-public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.ViewHolder> {
+/**
+ * Adapter for a recycler-view book shelf that keeps the items in a sorted list.
+ */
+public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.BaseViewHolder> {
 
+    private final BookShelfFragment.DisplayMode displayMode;
     @NonNull
     private final Context c;
     private final PrefsManager prefs;
@@ -35,13 +45,14 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
 
         @Override
         public int compare(Book o1, Book o2) {
-            return NaturalOrderComparator.INSTANCE.compare(o1.getName(), o2.getName());
+            return NaturalOrderComparator.naturalCompare(o1.getName(), o2.getName());
         }
 
         @Override
         public boolean areContentsTheSame(Book oldItem, Book newItem) {
-            return oldItem.getName().equals(newItem.getName()) &&
-                    oldItem.isUseCoverReplacement() == newItem.isUseCoverReplacement();
+            return oldItem.getGlobalPosition() == newItem.getGlobalPosition()
+                    && oldItem.getName().equals(newItem.getName())
+                    && oldItem.isUseCoverReplacement() == newItem.isUseCoverReplacement();
         }
 
         @Override
@@ -50,12 +61,23 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
         }
     });
 
-    public BookShelfAdapter(@NonNull Context c, OnItemClickListener onItemClickListener) {
+    /**
+     * @param c                   the context
+     * @param displayMode         the display mode
+     * @param onItemClickListener the listener that will be called when a book has been selected
+     */
+    public BookShelfAdapter(@NonNull Context c, BookShelfFragment.DisplayMode displayMode, OnItemClickListener onItemClickListener) {
         this.c = c;
         this.onItemClickListener = onItemClickListener;
         this.prefs = PrefsManager.getInstance(c);
-
+        this.displayMode = displayMode;
         setHasStableIds(true);
+    }
+
+    private static String formatTime(int ms) {
+        String h = String.format("%02d", (TimeUnit.MILLISECONDS.toHours(ms)));
+        String m = String.format("%02d", (TimeUnit.MILLISECONDS.toMinutes(ms) % 60));
+        return h + ":" + m;
     }
 
     /**
@@ -79,6 +101,11 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
         }
     }
 
+    /**
+     * Adds a new set of books and removes the ones that do not exist any longer
+     *
+     * @param books The new set of books
+     */
     public void newDataSet(@NonNull List<Book> books) {
         sortedList.beginBatchedUpdates();
         try {
@@ -116,18 +143,34 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
         return sortedList.get(position).getId();
     }
 
+    /**
+     * Gets the item at a requested position
+     *
+     * @param position the adapter position
+     * @return the book at the position
+     */
     @NonNull
     public Book getItem(int position) {
         return sortedList.get(position);
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-        ViewGroup v = (ViewGroup) LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.activity_book_shelf_row_layout, parent, false);
-        return new ViewHolder(v);
+    public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        switch (displayMode) {
+            case GRID:
+                return new GridViewHolder(parent);
+            case LIST:
+                return new ListViewHolder(parent);
+            default:
+                throw new IllegalStateException("Illegal viewType=" + viewType);
+        }
     }
 
+    /**
+     * Calls {@link #notifyItemChanged(int)} for a specified id
+     *
+     * @param id the id of the item
+     */
     public void notifyItemAtIdChanged(long id) {
         for (int i = 0; i < sortedList.size(); i++) {
             if (sortedList.get(i).getId() == id) {
@@ -138,8 +181,8 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder viewHolder, int position) {
-        viewHolder.bind(position);
+    public void onBindViewHolder(final BaseViewHolder holder, int position) {
+        holder.bind(sortedList.get(position));
     }
 
     @Override
@@ -147,56 +190,131 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
         return sortedList.size();
     }
 
-
     public interface OnItemClickListener {
-        void onCoverClicked(final int position);
+        /**
+         * This method will be invoked when a item has been clicked
+         *
+         * @param position adapter position of the item
+         */
+        void onItemClicked(final int position);
 
-        void onMenuClicked(final int position, View view);
+        /**
+         * This method will be invoked when the menu of an item has been clicked
+         *
+         * @param position The adapter position
+         * @param view     The view that was clicked
+         */
+        void onMenuClicked(final int position, final View view);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ListViewHolder extends BaseViewHolder {
+
+        private final ProgressBar progressBar;
+        private final TextView leftTime;
+        private final TextView rightTime;
+
+        /**
+         * Constructor for a list viewholder
+         *
+         * @param parent The parent view
+         */
+        public ListViewHolder(ViewGroup parent) {
+            super(LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.fragment_book_shelf_list_layout, parent, false));
+            progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
+            //noinspection deprecation
+            MDTintHelper.setTint(progressBar, parent.getContext().getResources().getColor(R.color.accent));
+            leftTime = (TextView) itemView.findViewById(R.id.leftTime);
+            rightTime = (TextView) itemView.findViewById(R.id.rightTime);
+        }
+
+        @Override
+        public void bind(Book book) {
+            super.bind(book);
+
+            int globalPosition = book.getGlobalPosition();
+            int globalDuration = book.getGlobalDuration();
+            int progress = Math.round(100f * (float) globalPosition / (float) globalDuration);
+
+            leftTime.setText(formatTime(globalPosition));
+            progressBar.setProgress(progress);
+            rightTime.setText(formatTime(globalDuration));
+        }
+    }
+
+    public class GridViewHolder extends BaseViewHolder {
+
+        /**
+         * Constructor for a new grid viewholder
+         *
+         * @param parent The parent
+         */
+        public GridViewHolder(ViewGroup parent) {
+            super(LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.fragment_book_shelf_grid_layout, parent, false));
+        }
+    }
+
+    public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
         public final ImageView coverView;
         private final TextView titleView;
         private final View editBook;
         private final ImageView currentPlayingIndicator;
-        private final View view;
 
-        public ViewHolder(final ViewGroup itemView) {
+        /**
+         * Constructor of a viewholder.
+         *
+         * @param itemView The view to bind to
+         */
+        public BaseViewHolder(View itemView) {
             super(itemView);
-            this.view = itemView;
             coverView = (ImageView) itemView.findViewById(R.id.coverView);
             titleView = (TextView) itemView.findViewById(R.id.title);
             editBook = itemView.findViewById(R.id.editBook);
             currentPlayingIndicator = (ImageView) itemView.findViewById(R.id.currentPlayingIndicator);
         }
 
-        public void bind(int position) {
-            Book b = sortedList.get(position);
+        /**
+         * Binds the ViewHolder to a book
+         *
+         * @param book The book to bind to
+         */
+        @CallSuper
+        public void bind(Book book) {
 
             //setting text
-            String name = b.getName();
+            String name = book.getName();
             titleView.setText(name);
 
             // (Cover)
-            File coverFile = b.getCoverFile();
-            Drawable coverReplacement = new CoverReplacement(b.getName(), c);
-            if (!b.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
+            final File coverFile = book.getCoverFile();
+            final Drawable coverReplacement = new CoverReplacement(book.getName(), c);
+
+            if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
                 Picasso.with(c).load(coverFile).placeholder(coverReplacement).into(coverView);
             } else {
                 Picasso.with(c).cancelRequest(coverView);
-                coverView.setImageDrawable(coverReplacement);
+                // we have to set the replacement in onPreDraw, else the transition will fail.
+                coverView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        coverView.getViewTreeObserver().removeOnPreDrawListener(this);
+                        coverView.setImageDrawable(coverReplacement);
+                        return true;
+                    }
+                });
             }
 
-            if (b.getId() == prefs.getCurrentBookId()) {
+            if (book.getId() == prefs.getCurrentBookId()) {
                 currentPlayingIndicator.setVisibility(View.VISIBLE);
             } else {
                 currentPlayingIndicator.setVisibility(View.GONE);
             }
 
-            view.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onCoverClicked(getAdapterPosition());
+                    onItemClickListener.onItemClicked(getAdapterPosition());
                 }
             });
             editBook.setOnClickListener(new View.OnClickListener() {
@@ -206,7 +324,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.View
                 }
             });
 
-            ViewCompat.setTransitionName(coverView, b.getCoverTransitionName());
+            ViewCompat.setTransitionName(coverView, book.getCoverTransitionName());
         }
     }
 }

@@ -5,12 +5,10 @@
     <string name="mal_file_title">Najít soubor</string>
     <string name="content_current_book">Toto je aktuální kniha</string>
     <string name="current_book">Aktuální kniha</string>
-    <!--BookPlayActivity-->
+    <!--BookPlayFragment-->
     <string name="cover">Obal</string>
     <string name="play_pause">Přehrát / Pozastavit</string>
     <string name="action_sleep">Časovač vypnutí</string>
-    <string name="action_sleep_title_hint_left">Pozastavit po</string>
-    <string name="action_sleep_title_hint_right">minutách</string>
     <string name="rewind">Přetočit</string>
     <string name="fast_forward">Posun vpřed</string>
     <string name="previous_track">Předchozí skladba</string>
@@ -40,8 +38,7 @@
     <string name="chosen_folder_description">Vybraný adresář:</string>
     <string name="delete_folder">Odstranit z knihovny?</string>
     <string name="delete_folder_content">Opravdu chcete odstranit následující adresář z knihovny?</string>
-    <string name="content_file_folder">Určení zda jde o soubor nebo adresář</string>
-    <string name="folder_add_book">Samotná kniha</string>
+    <string name="folder_add_single_book">Samotná kniha</string>
     <string name="folder_add_collection">Adresář s vícero knihami</string>
     <string name="for_example">např.</string>
     <!--PlaybackSpeed-->
@@ -58,10 +55,7 @@
     <string name="pref_category_playback">Nastavení přehrávání</string>
     <string name="action_settings">Nastavení</string>
     <string name="pref_resume_on_replug">Pokračovat v přehrávání</string>
-  <string name="pref_resume_on_replug_hint">Pokud pozastavíte přehrávání vytažením sluchátek, při jejich
-        připojení bude znovu spuštěno.</string>
-    <string name="minutes">minut</string>
-    <string name="seconds">sekund</string>
+    <string name="pref_resume_on_replug_hint">Pokud pozastavíte přehrávání vytažením sluchátek, při jejich připojení bude znovu spuštěno.</string>
     <string name="pref_seek_time">Přeskočit o</string>
     <string name="pref_sleep_time">Časovač vypnutí</string>
     <string name="pref_root_folder_title">Adresář audioknihy</string>
@@ -74,7 +68,6 @@
     <string name="pref_send_bugs_title">Nahlásit chybu</string>
     <string name="pref_send_bugs_summary">Automaticky odesílat anonymní hlášení o pádech aplikace pro zlepšení vývoje.</string>
     <string name="pref_auto_rewind_title">Automaticky přetočit</string>
-    <string name="pref_auto_rewind_summary">Automaticky přetočí po ručním pozastavení:</string>
     <string name="pref_bookmark_on_sleep_title">Vytvořit záložku při časovaném vypnutí</string>
     <string name="pref_bookmark_on_sleep_summary">Automaticky vytvoří záložku při každé aktivaci časovače vypnutí.</string>
     <string name="pref_support_title">Podpora</string>

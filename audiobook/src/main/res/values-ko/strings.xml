@@ -5,12 +5,11 @@
     <string name="mal_file_title"> 고장난 파일</string>
     <string name="content_current_book">재생 중인 책</string>
     <string name="current_book">재생 중인 책</string>
-    <!--BookPlayActivity-->
+    <string name="change_layout_type">서재모양</string>
+    <!--BookPlayFragment-->
     <string name="cover">책표지</string>
     <string name="play_pause">재생 / 일시정지</string>
     <string name="action_sleep">취침예약</string>
-    <string name="action_sleep_title_hint_left">취침시간 설정</string>
-    <string name="action_sleep_title_hint_right">분</string>
     <string name="rewind">뒤로</string>
     <string name="fast_forward">빨리감기</string>
     <string name="previous_track">이전 트랙</string>
@@ -41,10 +40,13 @@
     <string name="chosen_folder_description">선택된 폴더:</string>
     <string name="delete_folder">서재에서 제거합니까?</string>
     <string name="delete_folder_content">선택한 책을 서재에서 제거합니까?</string>
-    <string name="content_file_folder">선택한 것이 파일, 혹은 폴더인지를 표시</string>
-    <string name="folder_add_book">폴더에 책 한권</string>
+    <string name="folder_add_single_book">폴더에 책 한권</string>
     <string name="folder_add_collection">폴더에 책 여러 권</string>
     <string name="for_example">예시 </string>
+    <string name="content_add_book">책 추가</string>
+    <string name="content_is_folder">폴더</string>
+    <string name="content_is_file">파일</string>
+    <string name="content_navigate_up">윗 폴더로 가기</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">재생 속도</string>
     <!--Bookmarks-->
@@ -60,8 +62,6 @@
     <string name="action_settings">설정</string>
     <string name="pref_resume_on_replug">이어서 재생</string>
     <string name="pref_resume_on_replug_hint">이어폰잭을 빼면 자동으로 일시정지, 끼면 이어서 재생됩니다.</string>
-    <string name="minutes">분</string>
-    <string name="seconds">초</string>
     <string name="pref_seek_time">건너뛸 시간</string>
     <string name="pref_sleep_time">취침예약 시간</string>
     <string name="pref_root_folder_title">오디오북 폴더</string>
@@ -74,7 +74,6 @@
     <string name="pref_send_bugs_title">오류 보내기</string>
     <string name="pref_send_bugs_summary">앱의 품질향상을 위해 익명으로 오류를 보냅니다.</string>
     <string name="pref_auto_rewind_title">자동 다시감기</string>
-    <string name="pref_auto_rewind_summary">재생 시 자동으로 다시감기:</string>
     <string name="pref_bookmark_on_sleep_title">취침 시작위치 자동책갈피</string>
     <string name="pref_bookmark_on_sleep_summary">취침타이머가 시작하는 지점을 자동으로 책갈피 합니다.</string>
     <string name="pref_support_title">앱 계발 지원</string>

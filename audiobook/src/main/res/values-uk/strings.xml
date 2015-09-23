@@ -5,12 +5,10 @@
     <string name="mal_file_title">Зіпсований файл</string>
     <string name="content_current_book">Книга, яку ви прослуховуюєте</string>
     <string name="current_book">Поточна книга</string>
-    <!-- BookPlayActivity -->
+    <!-- BookPlayFragment -->
     <string name="cover">Обкладинка</string>
     <string name="play_pause">Програвати / Пауза</string>
     <string name="action_sleep">Таймер сну</string>
-    <string name="action_sleep_title_hint_left">Зупинити через</string>
-    <string name="action_sleep_title_hint_right">хвилин</string>
     <string name="rewind">Прокрутити назад</string>
     <string name="fast_forward">Прокрутити вперед</string>
     <string name="previous_track">Попередній файл</string>
@@ -39,8 +37,7 @@
     <string name="chosen_folder_description">Обрати папку:</string>
     <string name="delete_folder">Видалити із бібліотеки?</string>
     <string name="delete_folder_content">Ви хочете видалити наступну папку із бібліотеки?</string>
-    <string name="content_file_folder">Індикатор відображає, че є це файл або папка</string>
-    <string name="folder_add_book">Книга</string>
+    <string name="folder_add_single_book">Книга</string>
     <string name="folder_add_collection">Папка з декількома книгами</string>
     <string name="for_example">наприклад</string>
     <!-- PlaybackSpeed -->
@@ -58,8 +55,6 @@
     <string name="action_settings">Параметри</string>
     <string name="pref_resume_on_replug">Відновити програвання</string>
     <string name="pref_resume_on_replug_hint">Якщо програвання було припинено витяганням навушників, воно буде подовжено після підключення їх знову.</string>
-    <string name="minutes">хвилин</string>
-    <string name="seconds">секунд</string>
     <string name="pref_seek_time">Пропустити</string>
     <string name="pref_sleep_time">Час засинання</string>
     <string name="pref_root_folder_title">Папка аудіокниги</string>
@@ -72,7 +67,6 @@
     <string name="pref_send_bugs_title">Відправити звіт про помилки</string>
     <string name="pref_send_bugs_summary">Автоматично відсилати звіти про помилки під час збою для допомоги розробки проекту.</string>
     <string name="pref_auto_rewind_title">Автоматична перекрутка назад</string>
-    <string name="pref_auto_rewind_summary">Автоматично прокручувати назад після паузи:</string>
     <string name="pref_bookmark_on_sleep_title">Автоматично додавати закладку, коли спрацьовує таймер сну</string>
     <string name="pref_bookmark_on_sleep_summary">Автоматично додавати закладку, коли таймер сну включається.</string>
     <string name="pref_support_title">Підтримка</string>

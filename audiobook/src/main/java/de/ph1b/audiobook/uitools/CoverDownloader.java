@@ -97,7 +97,7 @@ public class CoverDownloader {
     /**
      * @param searchText The text to search the cover by
      * @param number     The nth cover with the given searchText. Starts at 0
-     * @return The URL of the cover found or <code>null</code> if none was found
+     * @return The URL of the cover found or {@code null} if none was found
      */
     @Nullable
     private String getBitmapUrl(@NonNull String searchText, int number) {
@@ -109,7 +109,7 @@ public class CoverDownloader {
                 int startPoint = containing.size();
                 L.v(TAG, "looking for new set at startPoint=" + startPoint);
                 List<String> newSet = getNewLinks(searchText, startPoint);
-                if (newSet.size() > 0) {
+                if (!newSet.isEmpty()) {
                     containing.addAll(newSet);
                     return newSet.get(0);
                 } else {
@@ -118,7 +118,7 @@ public class CoverDownloader {
             }
         } else {
             List<String> newSet = getNewLinks(searchText, 0);
-            if (newSet.size() > 0) {
+            if (!newSet.isEmpty()) {
                 SEARCH_MAPPING.put(searchText, newSet);
                 return newSet.get(0);
             } else {

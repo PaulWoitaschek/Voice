@@ -1,8 +1,29 @@
+
+
+package de.ph1b.audiobook.uitools;
+
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
+import android.util.Property;
+import android.view.animation.DecelerateInterpolator;
+
+import de.ph1b.audiobook.utils.L;
+
 /**
  * This code was modified by me, Paul Woitaschek. All these changes are licensed under GPLv3. The
- * original source can be found here: {@link https://github.com/alexjlockwood/material-pause-play-
+ * original source can be found here: {@see https://github.com/alexjlockwood/material-pause-play-
  * animation/blob/master/app/src/main/java/com/alexjlockwood/example/playpauseanimation/
  * PlayPauseView.java}
+ * <p/>
  * <p/>
  * The original licensing is as follows:
  * <p/>
@@ -26,25 +47,6 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
-package de.ph1b.audiobook.uitools;
-
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.PixelFormat;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.Nullable;
-import android.util.Property;
-import android.view.animation.DecelerateInterpolator;
-
-import de.ph1b.audiobook.utils.L;
-
 public class PlayPauseDrawable extends Drawable {
 
 

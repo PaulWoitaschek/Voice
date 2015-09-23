@@ -1,18 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
-
-
 <resources>
     <!--BookShelf-->
     <string name="mal_file_message">Le fichier suivant est peut-être corrompu:</string>
     <string name="mal_file_title">Fichier défectueux</string>
     <string name="content_current_book">Ceci est le livre en cours</string>
     <string name="current_book">Livre en cours</string>
-    <!--BookPlayActivity-->
+    <!--BookPlayFragment-->
     <string name="cover">Couverture</string>
     <string name="play_pause">Lire / Pause</string>
     <string name="action_sleep">Minuteur</string>
-    <string name="action_sleep_title_hint_left">Pause après</string>
-    <string name="action_sleep_title_hint_right">minutes</string>
     <string name="rewind">Rembobiner</string>
     <string name="fast_forward">Avance rapide</string>
     <string name="previous_track">Piste précédente</string>
@@ -41,8 +37,7 @@
     <string name="chosen_folder_description">Dossier choisi:</string>
     <string name="delete_folder">Enlever de la bibliothèque?</string>
     <string name="delete_folder_content">Voulez vous enlever le dossier suivant de la bibliothèque?</string>
-    <string name="content_file_folder">Indiquer si c\'est un fichier ou un dossier</string>
-    <string name="folder_add_book">Livre unique</string>
+    <string name="folder_add_single_book">Livre unique</string>
     <string name="folder_add_collection">Dossier de plusieurs livres</string>
     <string name="for_example">Par ex.</string>
     <!--PlaybackSpeed-->
@@ -60,8 +55,6 @@
     <string name="action_settings">Préférences</string>
     <string name="pref_resume_on_replug">Reprendre la lecture</string>
     <string name="pref_resume_on_replug_hint">Si vous avez mis en pause en débranchant le casque, la lecture reprendra en le rebranchant.</string>
-    <string name="minutes">minutes</string>
-    <string name="seconds">secondes</string>
     <string name="pref_seek_time">Sauter par</string>
     <string name="pref_sleep_time">Temps avant la pause</string>
     <string name="pref_root_folder_title">Dossier de livre audio</string>
@@ -74,7 +67,6 @@
     <string name="pref_send_bugs_title">Signaler des bugs</string>
     <string name="pref_send_bugs_summary">Envoie automatiquement des rapports anonymes sur les plantage pour aider au développement.</string>
     <string name="pref_auto_rewind_title">Rembobinage automatique</string>
-    <string name="pref_auto_rewind_summary">Rembobine automatiquement après une mise en pause manuelle:</string>
     <string name="pref_bookmark_on_sleep_title">Marque-page à la mise en veille</string>
     <string name="pref_bookmark_on_sleep_summary">Place un marque-page automatiquement à chaque fois que le minuteur est réglé.</string>
     <string name="pref_support_title">Assistance</string>

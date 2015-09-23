@@ -11,10 +11,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.internal.MDTintHelper;
 
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.uitools.ThemeUtil;
-import de.ph1b.audiobook.utils.PrefsManager;
+import de.ph1b.audiobook.persistence.PrefsManager;
 
 public class SeekDialogPreference extends DialogPreference {
 
@@ -38,13 +38,15 @@ public class SeekDialogPreference extends DialogPreference {
 
         //seekBar
         int position = prefs.getSeekTime();
-        ThemeUtil.theme(seekBar);
+
+        //noinspection deprecation
+        MDTintHelper.setTint(seekBar, getContext().getResources().getColor(R.color.accent));
         seekBar.setMax(SEEK_BAR_MAX - SEEK_BAR_MIN);
-        seekBar.setProgress(position - SEEK_BAR_MIN);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                textView.setText(String.valueOf(progress + SEEK_BAR_MIN) + " " + getContext().getString(R.string.seconds));
+                int value = progress + SEEK_BAR_MIN;
+                textView.setText(getContext().getResources().getQuantityString(R.plurals.seconds, value, value));
             }
 
             @Override
@@ -55,9 +57,7 @@ public class SeekDialogPreference extends DialogPreference {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
-
-        // text
-        textView.setText(String.valueOf(seekBar.getProgress() + SEEK_BAR_MIN) + " " + getContext().getString(R.string.seconds));
+        seekBar.setProgress(position - SEEK_BAR_MIN);
 
         new MaterialDialog.Builder(getContext())
                 .title(R.string.pref_seek_time)

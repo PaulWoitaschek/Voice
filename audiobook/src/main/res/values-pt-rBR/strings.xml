@@ -1,18 +1,15 @@
 <?xml version='1.0' encoding='UTF-8'?>
-
-
 <resources>
     <!--BookShelf-->
     <string name="mal_file_message">O seguinte arquivo pode estar corrompido:</string>
     <string name="mal_file_title">Arquivo corrompido</string>
     <string name="content_current_book">Este é o livro atual</string>
     <string name="current_book">Livro atual</string>
-    <!--BookPlayActivity-->
+    <string name="change_layout_type">Trocar layout</string>
+    <!--BookPlayFragment-->
     <string name="cover">Capa</string>
     <string name="play_pause">Tocar / Pausar</string>
     <string name="action_sleep">Desligamento automático</string>
-    <string name="action_sleep_title_hint_left">Pausas após</string>
-    <string name="action_sleep_title_hint_right">minutos</string>
     <string name="rewind">Retroceder</string>
     <string name="fast_forward">Avanço rápido</string>
     <string name="previous_track">Capítulo anterior</string>
@@ -20,7 +17,7 @@
     <string name="play">Tocar</string>
     <string name="pause">Pausar</string>
     <!--NoExternalStorage-->
-    <string name="no_external_storage">Memória Externa não está disponível. Por favor verifique se está conectado e montado em seu computador</string>
+    <string name="no_external_storage">Memória Externa não está disponível. Por favor verifique se está conectado e montado em seu computador.</string>
     <string name="no_external_storage_action_bar_title">Memória Externa</string>
     <!--Dialogs-->
     <string name="dialog_confirm">Definir</string>
@@ -29,6 +26,8 @@
     <string name="content_previous_cover">Escolher capa anterior</string>
     <string name="content_next_cover">Escolher próxima capa</string>
     <string name="content_cover">Mostrar capa para escolher</string>
+    <string name="edit_book_name">Editar nome</string>
+    <string name="edit_book_cover">Editar capa</string>
     <string name="edit_book_title">Editar livro</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Pular para</string>
@@ -41,10 +40,13 @@
     <string name="chosen_folder_description">Pasta escolhida:</string>
     <string name="delete_folder">Remover da Biblioteca?</string>
     <string name="delete_folder_content">Você quer remover a seguinte pasta da biblioteca?</string>
-    <string name="content_file_folder">Indique se é um arquivo ou uma pasta</string>
-    <string name="folder_add_book">Livro único</string>
+    <string name="folder_add_single_book">Livro único</string>
     <string name="folder_add_collection">Pasta com múltiplos livros</string>
     <string name="for_example">Ex.</string>
+    <string name="content_add_book">Adicionar livro</string>
+    <string name="content_is_folder">Pasta</string>
+    <string name="content_is_file">Arquivo</string>
+    <string name="content_navigate_up">Vá para a pasta superior</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Velocidade de reprodução</string>
     <!--Bookmarks-->
@@ -60,8 +62,6 @@
     <string name="action_settings">Preferências</string>
     <string name="pref_resume_on_replug">Retomar reprodução</string>
     <string name="pref_resume_on_replug_hint">Se você pausou removendo os fones, a reprodução será retomada ao reconectar.</string>
-    <string name="minutes">minutos</string>
-    <string name="seconds">segundos</string>
     <string name="pref_seek_time">Pular para</string>
     <string name="pref_sleep_time">Desligamento automático</string>
     <string name="pref_root_folder_title">Pasta de Audiolivros</string>
@@ -74,7 +74,6 @@
     <string name="pref_send_bugs_title">Reportar falhas</string>
     <string name="pref_send_bugs_summary">Automaticamente enviar relatórios anônimos sobre falhas para ajudar o desenvolvedor.</string>
     <string name="pref_auto_rewind_title">Retornar automaticamente</string>
-    <string name="pref_auto_rewind_summary">Automaticamente retornar depois de pausar manualmente:</string>
     <string name="pref_bookmark_on_sleep_title">Marcador ao desligar automaticamente</string>
     <string name="pref_bookmark_on_sleep_summary">Define automaticamente um marcador cada vez que o desligamento automático estiver ajustado.</string>
     <string name="pref_support_title">Suporte</string>
@@ -86,4 +85,8 @@
     <!--Misc-->
     <string name="popup_edit">Editar</string>
     <string name="remove">Remover</string>
+    <!--hide folder dialog-->
+    <string name="hide_folder_title">Esconder pasta</string>
+    <string name="hide_folder_content">Você gostaria de esconder a pasta dos players de música, para que eles não reconheçam seu livro como música?</string>
+    <string name="hide_confirm">Esconder</string>
 </resources>

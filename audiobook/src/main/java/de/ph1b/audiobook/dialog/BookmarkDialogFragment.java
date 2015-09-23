@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
@@ -29,19 +30,18 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.BookmarkAdapter;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
-import de.ph1b.audiobook.model.DataBaseHelper;
-import de.ph1b.audiobook.model.NaturalBookmarkComparator;
+import de.ph1b.audiobook.persistence.DataBaseHelper;
+import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.DividerItemDecoration;
 import de.ph1b.audiobook.utils.L;
-import de.ph1b.audiobook.utils.PrefsManager;
 
 /**
  * @author <a href="mailto:woitaschek@posteo.de">Paul Woitaschek</a>
  * @link {http://www.paul-woitaschek.de}
  * @see <a href="http://www.paul-woitaschek.de">http://www.paul-woitaschek.de</a>
  */
-public class BookmarkDialogFragment extends BaseDialogFragment {
+public class BookmarkDialogFragment extends DialogFragment {
 
     public static final String TAG = BookmarkDialogFragment.class.getSimpleName();
     private static final String BOOK_ID = "bookId";
@@ -62,10 +62,9 @@ public class BookmarkDialogFragment extends BaseDialogFragment {
 
         Book book = db.getBook(bookId);
         if (book != null) {
-            Bookmark bookmark = new Bookmark(book.getCurrentChapter().getPath(), title, book.getTime());
-
+            Bookmark bookmark = new Bookmark(book.getCurrentChapter().getFile(), title, book.getTime());
             book.getBookmarks().add(bookmark);
-            Collections.sort(book.getBookmarks(), new NaturalBookmarkComparator(book.getChapters()));
+            Collections.sort(book.getBookmarks());
             db.updateBook(book);
             L.v(TAG, "Added bookmark=" + bookmark);
         } else {
@@ -99,7 +98,7 @@ public class BookmarkDialogFragment extends BaseDialogFragment {
 
         BookmarkAdapter.OnOptionsMenuClickedListener listener = new BookmarkAdapter.OnOptionsMenuClickedListener() {
             @Override
-            public void onOptionsMenuClicked(final int position, View v) {
+            public void onOptionsMenuClicked(final Bookmark clickedBookmark, View v) {
                 PopupMenu popup = new PopupMenu(getActivity(), v);
                 MenuInflater inflater = popup.getMenuInflater();
                 inflater.inflate(R.menu.bookmark_popup, popup.getMenu());
@@ -109,32 +108,29 @@ public class BookmarkDialogFragment extends BaseDialogFragment {
                         MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity());
                         switch (item.getItemId()) {
                             case R.id.edit:
-                                final Bookmark editBookmark = adapter.getItem(position);
-
                                 new MaterialDialog.Builder(getActivity())
                                         .title(R.string.bookmark_edit_title)
                                         .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
-                                        .input(getString(R.string.bookmark_edit_hint), editBookmark.getTitle(), false, new MaterialDialog.InputCallback() {
+                                        .input(getString(R.string.bookmark_edit_hint), clickedBookmark.getTitle(), false, new MaterialDialog.InputCallback() {
                                             @Override
                                             public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
-                                                editBookmark.setTitle(charSequence.toString());
+                                                Bookmark newBookmark = new Bookmark(clickedBookmark.getMediaFile(), charSequence.toString(), clickedBookmark.getTime());
+                                                adapter.bookmarkUpdated(clickedBookmark, newBookmark);
                                                 db.updateBook(book);
-                                                adapter.notifyItemChanged(position);
                                             }
                                         })
                                         .positiveText(R.string.dialog_confirm)
                                         .show();
                                 return true;
                             case R.id.delete:
-                                final Bookmark deleteBookmark = adapter.getItem(position);
                                 builder.title(R.string.bookmark_delete_title)
-                                        .content(deleteBookmark.getTitle())
+                                        .content(clickedBookmark.getTitle())
                                         .positiveText(R.string.remove)
                                         .negativeText(R.string.dialog_cancel)
                                         .callback(new MaterialDialog.ButtonCallback() {
                                             @Override
                                             public void onPositive(MaterialDialog dialog) {
-                                                adapter.removeItem(position);
+                                                adapter.removeItem(clickedBookmark);
                                                 db.updateBook(book);
                                             }
                                         })
@@ -149,10 +145,9 @@ public class BookmarkDialogFragment extends BaseDialogFragment {
             }
 
             @Override
-            public void onBookmarkClicked(int position) {
-                Bookmark bookmark = adapter.getItem(position);
+            public void onBookmarkClicked(Bookmark bookmark) {
                 PrefsManager.getInstance(getActivity()).setCurrentBookIdAndInform(bookId);
-                controller.changeTime(bookmark.getTime(), bookmark.getMediaPath());
+                controller.changeTime(bookmark.getTime(), bookmark.getMediaFile());
 
                 getDialog().cancel();
             }
@@ -182,7 +177,7 @@ public class BookmarkDialogFragment extends BaseDialogFragment {
             @Override
             public void onClick(View v) {
                 String title = bookmarkTitle.getText().toString();
-                if (title.equals("")) {
+                if (title.isEmpty()) {
                     title = book.getCurrentChapter().getName();
                 }
 

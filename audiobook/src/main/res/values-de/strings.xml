@@ -5,12 +5,15 @@
     <string name="mal_file_title">Beschädigte Datei</string>
     <string name="content_current_book">Dies ist das aktuelle Buch</string>
     <string name="current_book">Aktuelles Buch</string>
-    <!--BookPlayActivity-->
+    <string name="change_layout_type">Layout ändern</string>
+    <!--BookPlayFragment-->
     <string name="cover">Cover</string>
     <string name="play_pause">Play / Pause</string>
     <string name="action_sleep">Einschlaf-Timer</string>
-    <string name="action_sleep_title_hint_left">Pausiert nach</string>
-    <string name="action_sleep_title_hint_right">Minuten</string>
+    <plurals name="pauses_after">
+        <item quantity="one">Pausiert nach %d Minute.</item>
+        <item quantity="other">Pausiert nach %d Minuten.</item>
+    </plurals>
     <string name="rewind">Zurückspulen</string>
     <string name="fast_forward">Vorspulen</string>
     <string name="previous_track">Voriger Song</string>
@@ -27,7 +30,7 @@
     <string name="content_previous_cover">Wählt voriges Cover</string>
     <string name="content_next_cover">Wählt nächstes Cover</string>
     <string name="content_cover">Zeigt aktuelles Cover an</string>
-    <string name="edit_book_name">Name bearbeiten</string>
+    <string name="edit_book_name">Titel bearbeiten</string>
     <string name="edit_book_cover">Cover bearbeiten</string>
     <string name="edit_book_title">Buch bearbeiten</string>
     <!--JumpToPosition-->
@@ -41,10 +44,16 @@
     <string name="chosen_folder_description">Gewählter Ordner: </string>
     <string name="delete_folder">Ordner entfernen</string>
     <string name="delete_folder_content">Möchten Sie den folgenden Ordner aus Ihrer Bücherei entfernen?</string>
-    <string name="content_file_folder">Zeigt an, ob es sich um einen Ordner oder um eine Datei handelt</string>
-    <string name="folder_add_book">Ein Buch</string>
+    <string name="folder_add_single_book">Einzelnes Buch</string>
     <string name="folder_add_collection">Ordner mit mehreren Büchern</string>
     <string name="for_example">z.B.</string>
+    <string name="content_add_book">Buch hinzufügen</string>
+    <string name="content_is_folder">Ordner</string>
+    <string name="content_is_file">Datei</string>
+    <string name="content_navigate_up">Zum übergeordneten Ordner</string>
+    <string name="permission_read_ext_explanation">Die App benötigt Zugriff auf den externen Speicher, um die Hörbücher finden und abspielen zu können.</string>
+    <string name="permission_read_ext_request">Erneut nach der Berechtigung fragen?</string>
+    <string name="permission_rescan">Erneut nachfragen?</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Geschwindigkeit</string>
     <!--Bookmarks-->
@@ -60,8 +69,14 @@
     <string name="action_settings">Einstellungen</string>
     <string name="pref_resume_on_replug">Wiedergabe fortsetzen</string>
     <string name="pref_resume_on_replug_hint">Nimmt die Wiedergabe beim Einstecken der Kopfhörer wieder auf.</string>
-    <string name="minutes">Minuten</string>
-    <string name="seconds">Sekunden</string>
+    <plurals name="minutes">
+        <item quantity="one">%d Minute</item>
+        <item quantity="other">%d Minuten</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%d Sekunde</item>
+        <item quantity="other">%d Sekunden</item>
+    </plurals>
     <string name="pref_seek_time">Vor- und zurückspulen</string>
     <string name="pref_sleep_time">Einschlafzeit</string>
     <string name="pref_root_folder_title">Hörbuch Ordner</string>
@@ -74,7 +89,10 @@
     <string name="pref_send_bugs_title">Sende Fehlerberichte</string>
     <string name="pref_send_bugs_summary">Sendet automatisch anonymisierte Fehlerberichte um die Entwicklung zu vereinfachen.</string>
     <string name="pref_auto_rewind_title">Automatisch zurückspulen</string>
-    <string name="pref_auto_rewind_summary">Spult nach manuellem pausieren automatisch zurück:</string>
+    <plurals name="pref_auto_rewind_summary">
+        <item quantity="one">Spult nach manuellem Pausieren automatisch um %d Sekunde zurück.</item>
+        <item quantity="other">Spult nach manuellem Pausieren automatisch um %d Sekunden zurück.</item>
+    </plurals>
     <string name="pref_bookmark_on_sleep_title">Lesezeichen beim Einschlafen</string>
     <string name="pref_bookmark_on_sleep_summary">Legt jedes Mal ein Lesezeichen an, wenn der Einschlaftimer gesetzt wird.</string>
     <string name="pref_support_title">Support</string>
