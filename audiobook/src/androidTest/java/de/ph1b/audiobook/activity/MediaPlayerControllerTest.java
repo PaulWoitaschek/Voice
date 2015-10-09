@@ -20,7 +20,7 @@ public class MediaPlayerControllerTest extends AndroidTestCase {
 
 
     public void testBasicControls() throws InterruptedException {
-        final MediaPlayerController mediaPlayerController = new MediaPlayerController(getContext());
+        final MediaPlayerController mediaPlayerController = MediaPlayerController.getInstance(getContext());
 
         DataBaseHelper db = DataBaseHelper.getInstance(getContext());
         List<Book> books = db.getActiveBooks();
