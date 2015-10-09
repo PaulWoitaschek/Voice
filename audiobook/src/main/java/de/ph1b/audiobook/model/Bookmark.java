@@ -4,12 +4,9 @@ import android.support.annotation.NonNull;
 
 import com.google.common.base.Objects;
 
-import net.jcip.annotations.Immutable;
-
 import java.io.File;
 
 
-@Immutable
 public class Bookmark implements Comparable<Bookmark> {
 
     private final int time;

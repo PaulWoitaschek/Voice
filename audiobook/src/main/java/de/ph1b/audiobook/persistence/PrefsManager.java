@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
-import net.jcip.annotations.ThreadSafe;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +18,6 @@ import de.ph1b.audiobook.utils.Communication;
 /**
  * Preference manager, managing the setting and getting of {@link SharedPreferences}
  */
-@ThreadSafe
 public class PrefsManager {
 
     private static final String PREF_KEY_CURRENT_BOOK = "currentBook";

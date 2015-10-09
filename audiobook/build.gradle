@@ -77,9 +77,10 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.5.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.5.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.afollestad:material-dialogs:0.7.9.1'
+    compile('com.afollestad.material-dialogs:core:0.8.2.0@aar') {
+        transitive = true
+    }
     compile 'com.getbase:floatingactionbutton:1.10.0'
-    compile 'net.jcip:jcip-annotations:1.0'
     compile 'ch.acra:acra:4.7.0-RC.1'
     compile 'com.google.guava:guava:18.0'
 }

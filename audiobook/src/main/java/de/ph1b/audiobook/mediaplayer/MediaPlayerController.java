@@ -10,8 +10,6 @@ import android.support.annotation.Nullable;
 
 import com.google.common.base.Preconditions;
 
-import net.jcip.annotations.GuardedBy;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -45,10 +43,8 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     private final PrefsManager prefs;
     private final DataBaseHelper db;
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
-    @GuardedBy("lock")
     private final MediaPlayerInterface player;
     private final Communication communication = Communication.getInstance();
-    @GuardedBy("lock")
     @Nullable
     private Book book;
     private volatile State state;

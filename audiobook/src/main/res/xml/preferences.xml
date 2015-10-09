@@ -5,10 +5,7 @@
             android:key="@string/pref_key_audiobook_folders"
             android:summary="@string/pref_root_folder_summary"
             android:title="@string/pref_root_folder_title" />
-        <com.afollestad.materialdialogs.prefs.MaterialListPreference
-            android:defaultValue="light"
-            android:entries="@array/pref_theme_entries"
-            android:entryValues="@array/pref_theme_values"
+        <Preference
             android:key="@string/pref_key_theme"
             android:summary="@string/pref_theme_light"
             android:title="@string/pref_theme_title" />

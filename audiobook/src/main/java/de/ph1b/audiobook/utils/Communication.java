@@ -3,8 +3,6 @@ package de.ph1b.audiobook.utils;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 
-import net.jcip.annotations.ThreadSafe;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -17,7 +15,6 @@ import de.ph1b.audiobook.model.Book;
 /**
  * Class for communicating on different events through {@link LocalBroadcastManager}.
  */
-@ThreadSafe
 public class Communication {
 
     private static final Communication INSTANCE = new Communication();

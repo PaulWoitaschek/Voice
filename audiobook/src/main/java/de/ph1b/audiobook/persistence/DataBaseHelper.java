@@ -8,8 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import net.jcip.annotations.ThreadSafe;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,7 +29,6 @@ import static com.google.common.base.Preconditions.checkArgument;
  * This is the helper for the apps database. All Database writing is done by an executor and the
  * helper holds a internal array of the books.
  */
-@ThreadSafe
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class DataBaseHelper extends SQLiteOpenHelper {
 

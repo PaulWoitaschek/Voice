@@ -11,9 +11,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.prefs.MaterialListPreference;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BaseActivity;
@@ -91,9 +92,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     private void initValues() {
         // seek pref
         int seekAmount = prefs.getSeekTime();
-
-        L.d(TAG, "hiihi");
-
         String seekSummary = getResources().getQuantityString(R.plurals.seconds, seekAmount, seekAmount);
         SeekDialogPreference seekDialogPreference = (SeekDialogPreference) findPreference(getString(R.string.pref_key_seek_time));
         seekDialogPreference.setSummary(seekSummary);
@@ -121,20 +119,33 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         });
 
         // theme pref
-        MaterialListPreference themePreference = (MaterialListPreference) findPreference(getString(R.string.pref_key_theme));
-        String theme = sp.getString(getString(R.string.pref_key_theme), null);
-        String themeSummary;
-        switch (theme == null ? "light" : theme) {
-            case "light":
-                themeSummary = getString(R.string.pref_theme_light);
-                break;
-            case "dark":
-                themeSummary = getString(R.string.pref_theme_dark);
-                break;
-            default:
-                throw new AssertionError("This should not have happened. There is no theme for key=" + theme);
-        }
+        Preference themePreference = findPreference(getString(R.string.pref_key_theme));
+        final boolean lightTheme = sp.getString(getString(R.string.pref_key_theme), "light").equals("light");
+        String themeSummary = getString(lightTheme ? R.string.pref_theme_light : R.string.pref_theme_dark);
         themePreference.setSummary(themeSummary);
+        themePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new MaterialDialog.Builder(getActivity())
+                        .items(R.array.pref_theme_entries)
+                        .itemsCallbackSingleChoice(lightTheme ? 0 : 1, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
+                                boolean newThemeLight = i == 0;
+                                sp.edit().putString(getString(R.string.pref_key_theme),
+                                        getString(newThemeLight ? R.string.pref_key_theme_light :
+                                                R.string.pref_key_theme_dark)).apply();
+                                initValues();
+                                return true;
+                            }
+                        })
+                        .positiveText(R.string.dialog_confirm)
+                        .negativeText(R.string.dialog_cancel)
+                        .title(R.string.pref_theme_title)
+                        .show();
+                return true;
+            }
+        });
 
         BaseActivity baseActivity = (BaseActivity) getActivity();
         baseActivity.recreateIfThemeChanged();
