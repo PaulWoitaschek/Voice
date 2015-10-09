@@ -18,11 +18,10 @@ public class NaturalOrderComparatorTest extends TestCase {
 
     private List<File> list;
 
-
     /**
-     * Tests if the comparation results in the desired order.
+     * Tests if the comparison results in the desired order.
      */
-    public void testFileComparation() {
+    public void testFileComparison() {
         File f1 = new File("a.jpg");
         File f2 = new File("b.jpg");
         File f3 = new File("/folder/a.jpg");
@@ -32,7 +31,11 @@ public class NaturalOrderComparatorTest extends TestCase {
         File f7 = new File("/folder");
         File f8 = new File("Ab.jpg");
         File f9 = new File("aC.jpg");
-        list = Arrays.asList(f1, f2, f3, f4, f5, f6, f7, f8, f9);
+        File f10 = new File("00 Introduction.mp3");
+        File f11 = new File("01 How to build a universe.mp3");
+        File f12 = new File("9.mp3");
+        File f13 = new File("10.mp3");
+        list = Arrays.asList(f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13);
         Collections.sort(list, NaturalOrderComparator.FILE_COMPARATOR);
         System.out.println(list);
 
@@ -43,6 +46,8 @@ public class NaturalOrderComparatorTest extends TestCase {
         assertTrue(indexOf(f8) < indexOf(f9));
         assertTrue(indexOf(f9) > indexOf(f1));
         assertTrue(indexOf(f9) < indexOf(f2));
+        assertTrue(indexOf(f11) > indexOf(f10));
+        assertTrue(indexOf(f12) < indexOf(f13));
     }
 
     private int indexOf(File file) {
