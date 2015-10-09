@@ -1,3 +1,4 @@
+*.apk
 .DS_Store
 captures
 *.mp3

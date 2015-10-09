@@ -43,9 +43,8 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
-            output.outputFile = new File(
-                    output.outputFile.parent,
-                    output.outputFile.name.replace(".apk", "-${variant.versionCode}-${variant.versionName}.apk"))
+            output.outputFile = file("apks/" + variant.versionCode + "-" + variant.versionName + "-" +
+                    variant.name + "-" + variant.applicationId + ".apk")
         }
     }
 }
