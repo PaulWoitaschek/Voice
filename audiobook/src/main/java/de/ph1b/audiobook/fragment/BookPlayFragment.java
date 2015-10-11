@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -59,7 +61,7 @@ import de.ph1b.audiobook.utils.L;
 public class BookPlayFragment extends Fragment implements View.OnClickListener {
 
     public static final String TAG = BookPlayFragment.class.getSimpleName();
-    private static final Communication COMMUNICATION = Communication.getInstance();
+    private static final Communication communication = Communication.getInstance();
     private static final String NI_BOOK_ID = "niBookId";
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
     private TextView playedTimeView;
@@ -73,14 +75,15 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
     private CountDownTimer countDownTimer;
     private boolean isMultiPanel = false;
     private long bookId;
+    private AppCompatActivity hostingActivity;
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
 
         @Override
         public void onSleepStateChanged() {
-            getActivity().runOnUiThread(new Runnable() {
+            hostingActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    getActivity().invalidateOptionsMenu();
+                    hostingActivity.invalidateOptionsMenu();
                     initializeTimerCountdown();
                 }
             });
@@ -88,7 +91,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public void onBookContentChanged(@NonNull final Book book) {
-            getActivity().runOnUiThread(new Runnable() {
+            hostingActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     L.d(TAG, "onBookContentChangedReciever called with bookId=" + book.getId());
@@ -120,7 +123,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public void onPlayStateChanged() {
-            getActivity().runOnUiThread(new Runnable() {
+            hostingActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     setPlayState(true);
@@ -128,6 +131,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
             });
         }
     };
+    private MultiPaneInformer multiPaneInformer;
 
     private static String formatTime(int ms, int duration) {
         String h = String.valueOf(TimeUnit.MILLISECONDS.toHours(ms));
@@ -172,10 +176,10 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         L.i(TAG, "onCreateView");
 
         final Book book = db.getBook(bookId);
-        isMultiPanel = ((MultiPaneInformer) getActivity()).isMultiPanel();
+        isMultiPanel = multiPaneInformer.isMultiPanel();
 
         //init views
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        ActionBar actionBar = hostingActivity.getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(!isMultiPanel);
         seekBar = (SeekBar) view.findViewById(R.id.seekBar);
@@ -196,13 +200,11 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         playButton.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
-                //transitionPostponeHelper.elementDone();
                 playButton.getViewTreeObserver().removeOnPreDrawListener(this);
                 return true;
             }
         });
-        //noinspection deprecation
-        MDTintHelper.setTint(seekBar, getResources().getColor(R.color.accent));
+        MDTintHelper.setTint(seekBar, ContextCompat.getColor(getContext(), R.color.accent));
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -260,7 +262,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
                 chaptersAsStrings.add(chapterName);
             }
 
-            ArrayAdapter adapter = new ArrayAdapter<String>(getActivity(),
+            ArrayAdapter adapter = new ArrayAdapter<String>(getContext(),
                     R.layout.fragment_book_play_spinner, R.id.spinnerTextItem, chaptersAsStrings) {
                 @Override
                 public View getDropDownView(int position, View convertView, ViewGroup parent) {
@@ -272,14 +274,12 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
                     // default implementation uses a ViewHolder, so this is necessary.
                     if (position == bookSpinner.getSelectedItemPosition()) {
                         textView.setBackgroundResource(R.drawable.spinner_selected_background);
-                        //noinspection deprecation
-                        textView.setTextColor(getResources().getColor(R.color.abc_primary_text_material_dark));
+                        textView.setTextColor(ContextCompat.getColor(getContext(), R.color.copy_abc_primary_text_material_dark));
                     } else {
-                        textView.setBackgroundResource(ThemeUtil.getResourceId(getActivity(),
+                        textView.setBackgroundResource(ThemeUtil.getResourceId(getContext(),
                                 R.attr.selectableItemBackground));
-                        //noinspection deprecation
-                        textView.setTextColor(getResources().getColor(ThemeUtil.getResourceId(
-                                getActivity(), android.R.attr.textColorPrimary)));
+                        textView.setTextColor(ContextCompat.getColor(getContext(), ThemeUtil.getResourceId(
+                                getContext(), android.R.attr.textColorPrimary)));
                     }
 
                     return view;
@@ -318,9 +318,9 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         }
 
         // (Cover)
-        final Drawable coverReplacement = new CoverReplacement(book == null ? "M" : book.getName(), getActivity());
+        final Drawable coverReplacement = new CoverReplacement(book == null ? "M" : book.getName(), getContext());
         if (book != null && !book.isUseCoverReplacement() && book.getCoverFile().canRead()) {
-            Picasso.with(getActivity()).load(book.getCoverFile()).placeholder(coverReplacement).into(coverView);
+            Picasso.with(getContext()).load(book.getCoverFile()).placeholder(coverReplacement).into(coverView);
         } else {
             // we have to set the cover in onPreDraw. Else the transition will fail.
             coverView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -332,8 +332,6 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
                 }
             });
         }
-
-        ViewCompat.setTransitionName(playButton, getString(R.string.fab_transition));
 
         return view;
     }
@@ -347,9 +345,9 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
-        prefs = PrefsManager.getInstance(getActivity());
-        db = DataBaseHelper.getInstance(getActivity());
-        controller = new ServiceController(getActivity());
+        prefs = PrefsManager.getInstance(getContext());
+        db = DataBaseHelper.getInstance(getContext());
+        controller = new ServiceController(getContext());
     }
 
     @Override
@@ -410,6 +408,14 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        hostingActivity = (AppCompatActivity) context;
+        multiPaneInformer = (MultiPaneInformer) context;
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.book_play, menu);
 
@@ -441,7 +447,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                startActivity(new Intent(getContext(), SettingsActivity.class));
                 return true;
             case R.id.action_time_change:
                 launchJumpToPositionDialog();
@@ -449,11 +455,11 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
             case R.id.action_sleep:
                 controller.toggleSleepSand();
                 if (prefs.setBookmarkOnSleepTimer() && !MediaPlayerController.isSleepTimerActive()) {
-                    String date = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE |
+                    String date = DateUtils.formatDateTime(getContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE |
                             DateUtils.FORMAT_SHOW_TIME |
                             DateUtils.FORMAT_NUMERIC_DATE);
                     BookmarkDialogFragment.addBookmark(bookId, date + ": " +
-                            getString(R.string.action_sleep), getActivity());
+                            getString(R.string.action_sleep), getContext());
                 }
                 return true;
             case R.id.action_time_lapse:
@@ -465,7 +471,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
                         BookmarkDialogFragment.TAG);
                 return true;
             case android.R.id.home:
-                getActivity().onBackPressed();
+                hostingActivity.onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -491,9 +497,9 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
             listener.onBookContentChanged(book);
         }
 
-        getActivity().invalidateOptionsMenu();
+        hostingActivity.invalidateOptionsMenu();
 
-        COMMUNICATION.addBookCommunicationListener(listener);
+        communication.addBookCommunicationListener(listener);
 
         // Sleep timer countdown view
         initializeTimerCountdown();
@@ -503,7 +509,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
     public void onStop() {
         super.onStop();
 
-        COMMUNICATION.removeBookCommunicationListener(listener);
+        communication.removeBookCommunicationListener(listener);
 
         if (countDownTimer != null) {
             countDownTimer.cancel();

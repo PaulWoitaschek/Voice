@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
@@ -56,7 +58,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         BookShelfAdapter.OnItemClickListener {
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
-    private static final Communication COMMUNICATION = Communication.getInstance();
+    private static final Communication communication = Communication.getInstance();
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
     private BookShelfAdapter adapter;
     private PrefsManager prefs;
@@ -70,10 +72,13 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     private GridLayoutManager gridLayoutManager;
     private RecyclerView.LayoutManager linearLayoutManager;
     private boolean isMultiPanel;
+    private MultiPaneInformer multiPaneInformer;
+    private BookSelectionCallback bookSelectionCallback;
+    private AppCompatActivity hostingActivity;
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
         @Override
         public void onBookContentChanged(@NonNull final Book book) {
-            getActivity().runOnUiThread(new Runnable() {
+            hostingActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     adapter.updateOrAddBook(book);
@@ -83,7 +88,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
         @Override
         public void onPlayStateChanged() {
-            getActivity().runOnUiThread(new Runnable() {
+            hostingActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     setPlayState(true);
@@ -93,7 +98,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
         @Override
         public void onScannerStateChanged() {
-            getActivity().runOnUiThread(new Runnable() {
+            hostingActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     checkVisibilities();
@@ -103,7 +108,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
         @Override
         public void onBookSetChanged(@NonNull final List<Book> activeBooks) {
-            getActivity().runOnUiThread(new Runnable() {
+            hostingActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     adapter.newDataSet(activeBooks);
@@ -112,10 +117,9 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             });
         }
 
-
         @Override
         public void onCurrentBookIdChanged(final long oldId) {
-            getActivity().runOnUiThread(new Runnable() {
+            hostingActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     for (int i = 0; i < adapter.getItemCount(); i++) {
@@ -135,10 +139,10 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_book_shelf, container, false);
 
-        isMultiPanel = ((MultiPaneInformer) getActivity()).isMultiPanel();
+        isMultiPanel = multiPaneInformer.isMultiPanel();
 
         // find views
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        ActionBar actionBar = hostingActivity.getSupportActionBar();
         assert actionBar != null;
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerReplacementView = (ProgressBar) view.findViewById(R.id.recyclerReplacement);
@@ -153,9 +157,9 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         // without this the item would blink on every change
         recyclerView.getItemAnimator().setSupportsChangeAnimations(false);
 
-        listDecoration = new DividerItemDecoration(getActivity());
-        gridLayoutManager = new GridLayoutManager(getActivity(), getAmountOfColumns());
-        linearLayoutManager = new LinearLayoutManager(getActivity());
+        listDecoration = new DividerItemDecoration(getContext());
+        gridLayoutManager = new GridLayoutManager(getContext(), getAmountOfColumns());
+        linearLayoutManager = new LinearLayoutManager(getContext());
         initRecyclerView();
 
         return view;
@@ -169,18 +173,18 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         setHasOptionsMenu(true);
 
         // init variables
-        prefs = PrefsManager.getInstance(getActivity());
-        db = DataBaseHelper.getInstance(getActivity());
-        controller = new ServiceController(getActivity());
-        noFolderWarning = new MaterialDialog.Builder(getActivity())
+        prefs = PrefsManager.getInstance(getContext());
+        db = DataBaseHelper.getInstance(getContext());
+        controller = new ServiceController(getContext());
+        noFolderWarning = new MaterialDialog.Builder(getContext())
                 .title(R.string.no_audiobook_folders_title)
                 .content(getString(R.string.no_audiobook_folders_summary_start) + "\n\n" +
                         getString(R.string.no_audiobook_folders_end))
                 .positiveText(R.string.dialog_confirm)
-                .callback(new MaterialDialog.ButtonCallback() {
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        startActivity(new Intent(getActivity(), FolderOverviewActivity.class));
+                    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
+                        startActivity(new Intent(getContext(), FolderOverviewActivity.class));
                     }
                 })
                 .cancelable(false)
@@ -196,12 +200,11 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             recyclerView.setLayoutManager(linearLayoutManager);
             recyclerView.addItemDecoration(listDecoration);
         }
-        adapter = new BookShelfAdapter(getActivity(), defaultDisplayMode, this);
+        adapter = new BookShelfAdapter(getContext(), defaultDisplayMode, this);
         adapter.newDataSet(db.getActiveBooks());
         recyclerView.setAdapter(adapter);
-        getActivity().invalidateOptionsMenu();
+        hostingActivity.invalidateOptionsMenu();
     }
-
 
     /**
      * Returns the amount of columns the main-grid will need.
@@ -220,13 +223,12 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         return Math.max(columns, 2);
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
 
         // scan for files
-        BookAdder.getInstance(getActivity()).scanForFiles(false);
+        BookAdder.getInstance(getContext()).scanForFiles(false);
 
         // show dialog if no folders are set
         boolean audioFoldersEmpty = (prefs.getCollectionFolders().size() +
@@ -241,7 +243,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         listener.onBookSetChanged(db.getActiveBooks());
 
         // register receivers
-        COMMUNICATION.addBookCommunicationListener(listener);
+        communication.addBookCommunicationListener(listener);
     }
 
     private void setPlayState(boolean animated) {
@@ -251,7 +253,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             playPauseDrawable.transformToPlay(animated);
         }
     }
-
 
     private void checkVisibilities() {
         final boolean hideRecycler = adapter.getItemCount() == 0 && BookAdder.scannerActive;
@@ -297,7 +298,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                startActivity(new Intent(getContext(), SettingsActivity.class));
                 return true;
             case R.id.action_current:
                 invokeBookSelectionCallback(prefs.getCurrentBookId());
@@ -322,7 +323,16 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             sharedElements.put(viewHolder.coverView, ViewCompat.getTransitionName(viewHolder.coverView));
         }
         sharedElements.put(fab, ViewCompat.getTransitionName(fab));
-        ((BookSelectionCallback) getActivity()).onBookSelected(bookId, sharedElements);
+        bookSelectionCallback.onBookSelected(bookId, sharedElements);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        bookSelectionCallback = (BookSelectionCallback) context;
+        multiPaneInformer = (MultiPaneInformer) context;
+        hostingActivity = (AppCompatActivity) context;
     }
 
     @Override
@@ -340,7 +350,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     public void onPause() {
         super.onPause();
 
-        COMMUNICATION.removeBookCommunicationListener(listener);
+        communication.removeBookCommunicationListener(listener);
     }
 
     @Override
@@ -351,7 +361,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onMenuClicked(final int position, final View view) {
-        PopupMenu popupMenu = new PopupMenu(getActivity(), view);
+        PopupMenu popupMenu = new PopupMenu(getContext(), view);
         popupMenu.inflate(R.menu.bookshelf_popup);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
