@@ -171,7 +171,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
             switch (state) {
                 case PLAYBACK_COMPLETED:
                     player.seekTo(0);
-                    //noinspection fallthrough: we pass directly to start()
                 case PREPARED:
                 case PAUSED:
                     player.start();

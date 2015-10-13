@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.preference.DialogPreference;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,8 +42,7 @@ public class SeekDialogPreference extends DialogPreference {
         //seekBar
         int position = prefs.getSeekTime();
 
-        //noinspection deprecation
-        MDTintHelper.setTint(seekBar, getContext().getResources().getColor(R.color.accent));
+        MDTintHelper.setTint(seekBar, ContextCompat.getColor(getContext(), R.color.accent));
         seekBar.setMax(SEEK_BAR_MAX - SEEK_BAR_MIN);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override

@@ -3,6 +3,7 @@ package de.ph1b.audiobook.adapter;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,8 +89,7 @@ public class FolderChooserAdapter extends BaseAdapter {
             viewHolder.textView.setEnabled(isDirectory);
         }
 
-        //noinspection deprecation
-        Drawable icon = c.getResources().getDrawable(isDirectory ?
+        Drawable icon = ContextCompat.getDrawable(c, isDirectory ?
                 R.drawable.ic_folder_white_48dp :
                 R.drawable.ic_audiotrack_white_48dp);
         viewHolder.imageView.setImageDrawable(icon);

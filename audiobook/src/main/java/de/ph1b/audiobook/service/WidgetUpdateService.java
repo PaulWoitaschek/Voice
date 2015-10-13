@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -137,10 +138,9 @@ public class WidgetUpdateService extends Service {
                         PendingIntent wholeWidgetClickPI = PendingIntent.getActivity
                                 (WidgetUpdateService.this, (int) System.currentTimeMillis(),
                                         wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
-                        //noinspection deprecation
                         remoteViews.setImageViewBitmap(R.id.imageView,
                                 ImageHelper.drawableToBitmap(
-                                        getResources().getDrawable(R.drawable.icon_108dp),
+                                        ContextCompat.getDrawable(WidgetUpdateService.this, R.drawable.icon_108dp),
                                         ImageHelper.getSmallerScreenSize(WidgetUpdateService.this),
                                         ImageHelper.getSmallerScreenSize(
                                                 WidgetUpdateService.this)));

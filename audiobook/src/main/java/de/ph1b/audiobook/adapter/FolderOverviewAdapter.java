@@ -2,6 +2,7 @@ package de.ph1b.audiobook.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,12 +51,10 @@ public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAd
         holder.textView.setText(file);
 
         if (bookCollections.contains(file)) {
-            //noinspection deprecation
-            holder.icon.setImageDrawable(c.getResources().getDrawable(R.drawable.ic_folder_multiple_white_48dp));
+            holder.icon.setImageDrawable(ContextCompat.getDrawable(c, R.drawable.ic_folder_multiple_white_48dp));
             holder.icon.setContentDescription(c.getString(R.string.folder_add_collection));
         } else {
-            //noinspection deprecation
-            holder.icon.setImageDrawable(c.getResources().getDrawable(R.drawable.ic_folder_white_48dp));
+            holder.icon.setImageDrawable(ContextCompat.getDrawable(c, R.drawable.ic_folder_white_48dp));
             holder.icon.setContentDescription(c.getString(R.string.folder_add_single_book));
         }
     }

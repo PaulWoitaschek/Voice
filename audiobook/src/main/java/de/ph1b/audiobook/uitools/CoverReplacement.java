@@ -9,6 +9,7 @@ import android.graphics.Paint.Align;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
 
 import com.google.common.base.Preconditions;
@@ -33,8 +34,7 @@ public class CoverReplacement extends Drawable {
 
         // background
         boolean lightTheme = ThemeUtil.getTheme(c) == R.style.LightTheme;
-        //noinspection deprecation
-        backgroundColor = c.getResources().getColor(lightTheme ? R.color.light_primary_dark : R.color.dark_primary_dark);
+        backgroundColor = ContextCompat.getColor(c, lightTheme ? R.color.light_primary_dark : R.color.dark_primary_dark);
     }
 
     @Override
