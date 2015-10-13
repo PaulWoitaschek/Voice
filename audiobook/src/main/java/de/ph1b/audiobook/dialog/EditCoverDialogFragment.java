@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -34,6 +36,7 @@ import de.ph1b.audiobook.uitools.CoverDownloader;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.DraggableBoxImageView;
 import de.ph1b.audiobook.uitools.ImageHelper;
+import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.L;
 
 /**
@@ -49,6 +52,7 @@ public class EditCoverDialogFragment extends DialogFragment {
     @Bind(R.id.cover_replacement) ProgressBar loadingProgressBar;
     @Bind(R.id.previous_cover) ImageButton previousCover;
     @Bind(R.id.next_cover) ImageButton nextCover;
+    @Inject DataBaseHelper db;
     private CoverDownloader coverDownloader;
     private AddCoverAsync addCoverAsync;
     /**
@@ -76,14 +80,12 @@ public class EditCoverDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-        // init ui
         LayoutInflater inflater = getActivity().getLayoutInflater();
         @SuppressLint("InflateParams") View customView = inflater.inflate(R.layout.dialog_cover_edit, null);
         ButterKnife.bind(this, customView);
+        App.getComponent().inject(this);
 
         // init values
-        final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
         final long bookId = getArguments().getLong(Book.TAG);
         book = db.getBook(bookId);
         assert book != null;
@@ -125,6 +127,7 @@ public class EditCoverDialogFragment extends DialogFragment {
                     useCoverReplacement = true;
                 }
 
+                //noinspection SynchronizeOnNonFinalField
                 synchronized (db) {
                     Book dbBook = db.getBook(book.getId());
                     if (dbBook != null) {

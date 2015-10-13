@@ -16,6 +16,8 @@ import com.afollestad.materialdialogs.internal.MDTintHelper;
 
 import java.text.DecimalFormat;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.ph1b.audiobook.R;
@@ -23,6 +25,7 @@ import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.persistence.DataBaseHelper;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.ServiceController;
+import de.ph1b.audiobook.utils.App;
 
 /**
  * Dialog for setting the playback speed of the current book.
@@ -38,6 +41,8 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
     private static final DecimalFormat df = new DecimalFormat("0.00");
     @Bind(R.id.seekBar) SeekBar seekBar;
     @Bind(R.id.textView) TextView textView;
+    @Inject PrefsManager prefs;
+    @Inject DataBaseHelper db;
 
     private static float speedStepValueToSpeed(int step) {
         return (SPEED_MIN + (step * SPEED_DELTA));
@@ -54,12 +59,12 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_amount_chooser, null);
         ButterKnife.bind(this, v);
+        App.getComponent().inject(this);
 
         MDTintHelper.setTint(seekBar, ContextCompat.getColor(getContext(), R.color.accent));
 
         // setting current speed
-        final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
-        final Book book = db.getBook(PrefsManager.getInstance(getActivity()).getCurrentBookId());
+        final Book book = db.getBook(prefs.getCurrentBookId());
         if (book == null) {
             throw new AssertionError("Cannot instantiate " + TAG + " without a current book");
         }

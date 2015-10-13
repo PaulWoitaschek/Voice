@@ -6,7 +6,7 @@ import android.media.MediaPlayer;
 
 import java.io.IOException;
 
-interface MediaPlayerInterface {
+public interface MediaPlayerInterface {
 
     void release();
 

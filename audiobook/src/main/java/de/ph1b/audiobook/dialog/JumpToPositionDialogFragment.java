@@ -14,6 +14,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.ph1b.audiobook.R;
@@ -22,6 +24,7 @@ import de.ph1b.audiobook.persistence.DataBaseHelper;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.ThemeUtil;
+import de.ph1b.audiobook.utils.App;
 
 public class JumpToPositionDialogFragment extends DialogFragment {
 
@@ -29,6 +32,8 @@ public class JumpToPositionDialogFragment extends DialogFragment {
     @Bind(R.id.number_minute) NumberPicker mPicker;
     @Bind(R.id.number_hour) NumberPicker hPicker;
     @Bind(R.id.colon) View colon;
+    @Inject PrefsManager prefs;
+    @Inject DataBaseHelper db;
     private int durationInMinutes;
     private int biggestHour;
 
@@ -38,10 +43,10 @@ public class JumpToPositionDialogFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_time_picker, null);
         ButterKnife.bind(this, v);
+        App.getComponent().inject(this);
 
 
-        final Book book = DataBaseHelper.getInstance(getActivity()).getBook(
-                PrefsManager.getInstance(getActivity()).getCurrentBookId());
+        final Book book = db.getBook(prefs.getCurrentBookId());
         if (book == null) {
             throw new AssertionError("Cannot instantiate " + TAG + " without a current book");
         }

@@ -35,6 +35,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -53,6 +55,8 @@ import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.PlayPauseDrawable;
 import de.ph1b.audiobook.uitools.ThemeUtil;
+import de.ph1b.audiobook.utils.App;
+import de.ph1b.audiobook.utils.BaseModule;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
 
@@ -64,9 +68,9 @@ import de.ph1b.audiobook.utils.L;
 public class BookPlayFragment extends Fragment {
 
     public static final String TAG = BookPlayFragment.class.getSimpleName();
-    private static final Communication communication = Communication.getInstance();
     private static final String NI_BOOK_ID = "niBookId";
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
+    @Inject Communication communication;
     @Bind(R.id.previous) View previous_button;
     @Bind(R.id.rewind) View rewindButton;
     @Bind(R.id.play) FloatingActionButton playButton;
@@ -79,9 +83,9 @@ public class BookPlayFragment extends Fragment {
     @Bind(R.id.book_spinner) Spinner bookSpinner;
     @Bind(R.id.maxTime) TextView maxTimeView;
     @Bind(R.id.timerView) TextView timerCountdownView;
-    private PrefsManager prefs;
+    @Inject PrefsManager prefs;
+    @Inject DataBaseHelper db;
     private ServiceController controller;
-    private DataBaseHelper db;
     private CountDownTimer countDownTimer;
     private boolean isMultiPanel = false;
     private long bookId;
@@ -330,14 +334,13 @@ public class BookPlayFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.getComponent().inject(this);
 
         bookId = getArguments().getLong(NI_BOOK_ID);
 
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
-        prefs = PrefsManager.getInstance(getContext());
-        db = DataBaseHelper.getInstance(getContext());
         controller = new ServiceController(getContext());
     }
 
@@ -412,7 +415,7 @@ public class BookPlayFragment extends Fragment {
 
         // sets playback speed icon enabled / disabled depending on device functionallity
         MenuItem timeLapseItem = menu.findItem(R.id.action_time_lapse);
-        timeLapseItem.setVisible(MediaPlayerController.canSetSpeed());
+        timeLapseItem.setVisible(BaseModule.canSetSpeed());
 
         // sets the correct sleep timer icon
         MenuItem sleepTimerItem = menu.findItem(R.id.action_sleep);
@@ -450,7 +453,7 @@ public class BookPlayFragment extends Fragment {
                             DateUtils.FORMAT_SHOW_TIME |
                             DateUtils.FORMAT_NUMERIC_DATE);
                     BookmarkDialogFragment.addBookmark(bookId, date + ": " +
-                            getString(R.string.action_sleep), getContext());
+                            getString(R.string.action_sleep), db);
                 }
                 return true;
             case R.id.action_time_lapse:

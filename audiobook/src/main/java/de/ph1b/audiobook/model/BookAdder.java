@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.ph1b.audiobook.activity.BaseActivity;
 import de.ph1b.audiobook.persistence.DataBaseHelper;
 import de.ph1b.audiobook.persistence.PrefsManager;
@@ -40,30 +43,26 @@ import de.ph1b.audiobook.utils.L;
  *
  * @author Paul Woitaschek
  */
+@Singleton
 public class BookAdder {
 
     private static final String TAG = BookAdder.class.getSimpleName();
-    private static final Communication COMMUNICATION = Communication.getInstance();
     public static volatile boolean scannerActive = false;
-    private static BookAdder instance;
+    private final Communication communication;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Context c;
     private final PrefsManager prefs;
     private final DataBaseHelper db;
     private volatile boolean stopScanner = false;
 
-    private BookAdder(@NonNull Context c) {
+    @Inject
+    public BookAdder(@NonNull Context c, PrefsManager prefs, Communication communication, DataBaseHelper db) {
         this.c = c;
-        prefs = PrefsManager.getInstance(c);
-        db = DataBaseHelper.getInstance(c);
+        this.prefs = prefs;
+        this.communication = communication;
+        this.db = db;
     }
 
-    public static synchronized BookAdder getInstance(Context c) {
-        if (instance == null) {
-            instance = new BookAdder(c.getApplicationContext());
-        }
-        return instance;
-    }
 
     /**
      * Returns the name of the book we want to add. If there is a tag embedded, use that one. Else
@@ -241,7 +240,7 @@ public class BookAdder {
                         if (cover != null) {
                             ImageHelper.saveCover(cover, c, coverFile);
                             Picasso.with(c).invalidate(coverFile);
-                            COMMUNICATION.sendBookContentChanged(b);
+                            communication.sendBookContentChanged(b);
                             continue;
                         }
                     }
@@ -250,7 +249,7 @@ public class BookAdder {
                 if (cover != null) {
                     ImageHelper.saveCover(cover, c, coverFile);
                     Picasso.with(c).invalidate(coverFile);
-                    COMMUNICATION.sendBookContentChanged(b);
+                    communication.sendBookContentChanged(b);
                 }
             }
         }
@@ -270,7 +269,7 @@ public class BookAdder {
                 public void run() {
                     L.v(TAG, "started");
                     scannerActive = true;
-                    COMMUNICATION.sendScannerStateChanged();
+                    communication.sendScannerStateChanged();
                     stopScanner = false;
 
                     try {
@@ -283,7 +282,7 @@ public class BookAdder {
 
                     stopScanner = false;
                     scannerActive = false;
-                    COMMUNICATION.sendScannerStateChanged();
+                    communication.sendScannerStateChanged();
                     L.v(TAG, "stopped");
                 }
             });

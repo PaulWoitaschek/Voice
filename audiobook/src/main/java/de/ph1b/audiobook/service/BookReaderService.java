@@ -34,6 +34,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookActivity;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
@@ -44,6 +46,7 @@ import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.receiver.RemoteControlReceiver;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
+import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
 
@@ -74,10 +77,11 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                     | PlaybackStateCompat.ACTION_SKIP_TO_NEXT
                     | PlaybackStateCompat.ACTION_SEEK_TO);
     private final MediaMetadataCompat.Builder mediaMetaDataBuilder = new MediaMetadataCompat.Builder();
-    private final Communication communication = Communication.getInstance();
+    @Inject Communication communication;
+    @Inject PrefsManager prefs;
+    @Inject MediaPlayerController controller;
+    @Inject DataBaseHelper db;
     private NotificationManager notificationManager;
-    private PrefsManager prefs;
-    private MediaPlayerController controller;
     private AudioManager audioManager;
     private volatile boolean pauseBecauseLossTransient = false;
     private volatile boolean pauseBecauseHeadset = false;
@@ -110,7 +114,6 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
         }
     };
     private MediaSessionCompat mediaSession;
-    private DataBaseHelper db;
     /**
      * The last file the {@link #notifyChange(BookReaderService.ChangeType)} has used to update the metadata.
      */
@@ -178,8 +181,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
     @Override
     public void onCreate() {
         super.onCreate();
-        prefs = PrefsManager.getInstance(this);
-        db = DataBaseHelper.getInstance(this);
+        App.getComponent().inject(this);
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
@@ -209,9 +211,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                 AudioManager.ACTION_AUDIO_BECOMING_NOISY));
         registerReceiver(headsetPlugReceiver, new IntentFilter(Intent.ACTION_HEADSET_PLUG));
 
-        MediaPlayerController.setPlayState(MediaPlayerController.PlayState.STOPPED);
-
-        controller = MediaPlayerController.getInstance(this);
+        controller.setPlayState(MediaPlayerController.PlayState.STOPPED);
 
         communication.addBookCommunicationListener(listener);
 
@@ -305,7 +305,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
 
         communication.removeBookCommunicationListener(listener);
 
-        MediaPlayerController.setPlayState(MediaPlayerController.PlayState.STOPPED);
+        controller.setPlayState(MediaPlayerController.PlayState.STOPPED);
 
         try {
             unregisterReceiver(audioBecomingNoisyReceiver);

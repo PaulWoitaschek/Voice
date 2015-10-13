@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.ph1b.audiobook.R;
@@ -35,6 +37,7 @@ import de.ph1b.audiobook.fragment.BookPlayFragment;
 import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.interfaces.MultiPaneInformer;
 import de.ph1b.audiobook.persistence.PrefsManager;
+import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PermissionHelper;
 
@@ -63,6 +66,7 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
     @Nullable
     @Bind(CONTAINER_SHELF)
     View bookShelfContainer;
+    @Inject PrefsManager prefs;
     private boolean multiPanel = false;
 
     /**
@@ -128,8 +132,8 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book);
         ButterKnife.bind(this);
+        App.getComponent().inject(this);
 
-        PrefsManager prefs = PrefsManager.getInstance(this);
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {

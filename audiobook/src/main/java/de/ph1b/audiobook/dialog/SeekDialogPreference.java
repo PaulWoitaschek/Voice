@@ -16,10 +16,13 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.internal.MDTintHelper;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.persistence.PrefsManager;
+import de.ph1b.audiobook.utils.App;
 
 public class SeekDialogPreference extends DialogPreference {
 
@@ -27,14 +30,16 @@ public class SeekDialogPreference extends DialogPreference {
     private static final int SEEK_BAR_MAX = 60;
     @Bind(R.id.seekBar) SeekBar seekBar;
     @Bind(R.id.textView) TextView textView;
+    @Inject PrefsManager prefs;
 
     public SeekDialogPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        App.getComponent().inject(this);
     }
 
     @Override
     protected void showDialog(Bundle state) {
-        final PrefsManager prefs = PrefsManager.getInstance(getContext());
         @SuppressLint("InflateParams") View customView = LayoutInflater.from(getContext())
                 .inflate(R.layout.dialog_amount_chooser, null);
         ButterKnife.bind(this, customView);

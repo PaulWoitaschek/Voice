@@ -31,6 +31,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -50,6 +52,7 @@ import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.DividerItemDecoration;
 import de.ph1b.audiobook.uitools.PlayPauseDrawable;
+import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.Communication;
 
 /**
@@ -60,16 +63,17 @@ import de.ph1b.audiobook.utils.Communication;
 public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnItemClickListener {
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
-    private static final Communication communication = Communication.getInstance();
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
+    @Inject Communication communication;
     @Bind(R.id.recyclerView) RecyclerView recyclerView;
     @Bind(R.id.recyclerReplacement) ProgressBar recyclerReplacementView;
     @Bind(R.id.fab) FloatingActionButton fab;
+    @Inject PrefsManager prefs;
+    @Inject BookAdder bookAdder;
+    @Inject DataBaseHelper db;
     private BookShelfAdapter adapter;
-    private PrefsManager prefs;
     private ServiceController controller;
     private MaterialDialog noFolderWarning;
-    private DataBaseHelper db;
     private RecyclerView.ItemDecoration listDecoration;
     private GridLayoutManager gridLayoutManager;
     private RecyclerView.LayoutManager linearLayoutManager;
@@ -168,12 +172,12 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        App.getComponent().inject(this);
+
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
         // init variables
-        prefs = PrefsManager.getInstance(getContext());
-        db = DataBaseHelper.getInstance(getContext());
         controller = new ServiceController(getContext());
         noFolderWarning = new MaterialDialog.Builder(getContext())
                 .title(R.string.no_audiobook_folders_title)
@@ -227,7 +231,7 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
         super.onResume();
 
         // scan for files
-        BookAdder.getInstance(getContext()).scanForFiles(false);
+        bookAdder.scanForFiles(false);
 
         // show dialog if no folders are set
         boolean audioFoldersEmpty = (prefs.getCollectionFolders().size() +

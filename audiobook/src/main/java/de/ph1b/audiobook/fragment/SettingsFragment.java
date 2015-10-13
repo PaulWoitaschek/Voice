@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import javax.inject.Inject;
+
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BaseActivity;
 import de.ph1b.audiobook.activity.FolderOverviewActivity;
@@ -25,6 +27,7 @@ import de.ph1b.audiobook.dialog.SeekDialogPreference;
 import de.ph1b.audiobook.dialog.SleepDialogPreference;
 import de.ph1b.audiobook.dialog.SupportDialogFragment;
 import de.ph1b.audiobook.persistence.PrefsManager;
+import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.vendinghelper.IabHelper;
 import de.ph1b.audiobook.vendinghelper.IabResult;
@@ -33,7 +36,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         OnSharedPreferenceChangeListener, DonationDialogFragment.OnDonationClickedListener {
 
     public static final String TAG = SettingsFragment.class.getSimpleName();
-    private PrefsManager prefs;
+    @Inject PrefsManager prefs;
     private SharedPreferences sp;
     private boolean donationAvailable = false;
     private IabHelper iabHelper;
@@ -48,8 +51,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.getComponent().inject(this);
 
-        prefs = PrefsManager.getInstance(getActivity());
         addPreferencesFromResource(R.xml.preferences);
 
         setHasOptionsMenu(true);

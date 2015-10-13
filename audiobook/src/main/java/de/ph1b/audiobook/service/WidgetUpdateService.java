@@ -29,6 +29,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookActivity;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
@@ -38,6 +40,7 @@ import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.receiver.BaseWidgetProvider;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
+import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.Communication;
 
 public class WidgetUpdateService extends Service {
@@ -47,9 +50,9 @@ public class WidgetUpdateService extends Service {
             new LinkedBlockingQueue<Runnable>(2), // queue capacity
             new ThreadPoolExecutor.DiscardOldestPolicy()
     );
-    private final Communication communication = Communication.getInstance();
-    private DataBaseHelper db;
-    private PrefsManager prefs;
+    @Inject Communication communication;
+    @Inject PrefsManager prefs;
+    @Inject DataBaseHelper db;
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
 
         @Override
@@ -74,9 +77,7 @@ public class WidgetUpdateService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        db = DataBaseHelper.getInstance(this);
-        prefs = PrefsManager.getInstance(this);
+        App.getComponent().inject(this);
 
         communication.addBookCommunicationListener(listener);
     }

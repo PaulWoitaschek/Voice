@@ -3,7 +3,6 @@ package de.ph1b.audiobook.mediaplayer;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,13 +11,14 @@ import com.google.common.base.Preconditions;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import de.ph1b.audiobook.activity.BookActivity;
 import de.ph1b.audiobook.fragment.BookShelfFragment;
@@ -29,13 +29,13 @@ import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
 
+@Singleton
 public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         MediaPlayerInterface.OnCompletionListener {
 
     private static final String TAG = MediaPlayerController.class.getSimpleName();
     private static volatile boolean sleepTimerActive = false;
     private static volatile PlayState playState = PlayState.STOPPED;
-    private static MediaPlayerController INSTANCE;
     @Nullable
     private static ScheduledFuture<?> sleepSand;
     private final Context c;
@@ -44,23 +44,23 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     private final DataBaseHelper db;
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
     private final MediaPlayerInterface player;
-    private final Communication communication = Communication.getInstance();
+    private final Communication communication;
     @Nullable
     private Book book;
     private volatile State state;
     private ScheduledFuture updater = null;
     private volatile int prepareTries = 0;
 
-    private MediaPlayerController(@NonNull final Context c) {
+    @Inject
+    public MediaPlayerController(@NonNull final Context c, PrefsManager prefs,
+                                 Communication communication, DataBaseHelper dataBaseHelper,
+                                 MediaPlayerInterface player) {
         this.c = c;
-        prefs = PrefsManager.getInstance(c);
-        db = DataBaseHelper.getInstance(c);
+        this.prefs = prefs;
+        this.communication = communication;
+        this.db = dataBaseHelper;
+        this.player = player;
 
-        if (canSetSpeed()) {
-            player = new CustomMediaPlayer();
-        } else {
-            player = new AndroidMediaPlayer();
-        }
         state = State.IDLE;
         setPlayState(PlayState.STOPPED);
     }
@@ -77,34 +77,14 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         }
     }
 
-    public static synchronized MediaPlayerController getInstance(Context c) {
-        if (INSTANCE == null) {
-            INSTANCE = new MediaPlayerController(c);
-        }
-        return INSTANCE;
-    }
-
-    /**
-     * Checks if the device can set playback-seed by {@link MediaPlayerInterface#setPlaybackSpeed(float)}
-     * Therefore it has to be >= {@link android.os.Build.VERSION_CODES#JELLY_BEAN} and not blacklisted
-     * due to a bug.
-     *
-     * @return true if the device can set variable playback speed.
-     */
-    public static boolean canSetSpeed() {
-        boolean greaterJellyBean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
-        List<String> hwBlacklist = Arrays.asList("mt6572", "mt6575", "mt6582", "mt6589", "mt6592",
-                "mt8125");
-        return greaterJellyBean && !(hwBlacklist.contains(Build.HARDWARE));
-    }
 
     public static PlayState getPlayState() {
         return playState;
     }
 
-    public static void setPlayState(PlayState playState) {
+    public void setPlayState(PlayState playState) {
         MediaPlayerController.playState = playState;
-        Communication.getInstance().playStateChanged();
+        communication.playStateChanged();
     }
 
     /**

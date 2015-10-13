@@ -10,6 +10,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.model.Book;
@@ -18,29 +21,23 @@ import de.ph1b.audiobook.utils.Communication;
 /**
  * Preference manager, managing the setting and getting of {@link SharedPreferences}
  */
+@Singleton
 public class PrefsManager {
 
     private static final String PREF_KEY_CURRENT_BOOK = "currentBook";
     private static final String PREF_KEY_COLLECTION_FOLDERS = "folders";
     private static final String PREF_KEY_SINGLE_BOOK_FOLDERS = "singleBookFolders";
-    private static final Communication communication = Communication.getInstance();
     private static final String PREF_KEY_DISPLAY_MODE = "displayMode";
-    private static PrefsManager instance;
-    @NonNull
+    private final Communication communication;
     private final Context c;
     private final SharedPreferences sp;
 
-    private PrefsManager(@NonNull Context c) {
+    @Inject
+    public PrefsManager(@NonNull Context c, Communication communication) {
         PreferenceManager.setDefaultValues(c, R.xml.preferences, false);
         this.c = c;
+        this.communication = communication;
         sp = PreferenceManager.getDefaultSharedPreferences(c);
-    }
-
-    public static synchronized PrefsManager getInstance(@NonNull Context c) {
-        if (instance == null) {
-            instance = new PrefsManager(c.getApplicationContext());
-        }
-        return instance;
     }
 
     /**

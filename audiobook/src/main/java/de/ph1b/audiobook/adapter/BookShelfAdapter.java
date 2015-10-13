@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.ph1b.audiobook.R;
@@ -33,6 +35,7 @@ import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.NaturalOrderComparator;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.CoverReplacement;
+import de.ph1b.audiobook.utils.App;
 
 /**
  * Adapter for a recycler-view book shelf that keeps the items in a sorted list.
@@ -42,7 +45,6 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
     private final BookShelfFragment.DisplayMode displayMode;
     @NonNull
     private final Context c;
-    private final PrefsManager prefs;
     private final OnItemClickListener onItemClickListener;
     private final SortedList<Book> sortedList = new SortedList<>(Book.class, new SortedListAdapterCallback<Book>(this) {
 
@@ -63,6 +65,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
             return item1.getId() == item2.getId();
         }
     });
+    @Inject PrefsManager prefs;
 
     /**
      * @param c                   the context
@@ -72,8 +75,8 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
     public BookShelfAdapter(@NonNull Context c, BookShelfFragment.DisplayMode displayMode, OnItemClickListener onItemClickListener) {
         this.c = c;
         this.onItemClickListener = onItemClickListener;
-        this.prefs = PrefsManager.getInstance(c);
         this.displayMode = displayMode;
+        App.getComponent().inject(this);
         setHasStableIds(true);
     }
 

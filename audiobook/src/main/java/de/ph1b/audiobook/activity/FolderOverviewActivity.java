@@ -25,6 +25,8 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -33,6 +35,7 @@ import de.ph1b.audiobook.adapter.FolderOverviewAdapter;
 import de.ph1b.audiobook.model.BookAdder;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.DividerItemDecoration;
+import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.L;
 
 /**
@@ -109,7 +112,8 @@ public class FolderOverviewActivity extends BaseActivity {
             };
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.recycler) RecyclerView recyclerView;
-    private PrefsManager prefs;
+    @Inject PrefsManager prefs;
+    @Inject BookAdder bookAdder;
     private FolderOverviewAdapter adapter;
 
     /**
@@ -138,6 +142,7 @@ public class FolderOverviewActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_folder_overview);
         ButterKnife.bind(this);
+        App.getComponent().inject(this);
 
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -145,7 +150,6 @@ public class FolderOverviewActivity extends BaseActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(getString(R.string.audiobook_folders_title));
 
-        prefs = PrefsManager.getInstance(this);
 
         //init views
         if (savedInstanceState != null) { // restoring overlay
@@ -177,7 +181,7 @@ public class FolderOverviewActivity extends BaseActivity {
                                         adapter.removeItem(position);
                                         prefs.setCollectionFolders(bookCollections);
                                         prefs.setSingleBookFolders(singleBooks);
-                                        BookAdder.getInstance(FolderOverviewActivity.this).scanForFiles(true);
+                                        bookAdder.scanForFiles(true);
                                     }
                                 })
                                 .show();
@@ -275,7 +279,7 @@ public class FolderOverviewActivity extends BaseActivity {
                 default:
                     break;
             }
-            BookAdder.getInstance(this).scanForFiles(true);
+            bookAdder.scanForFiles(true);
         }
     }
 

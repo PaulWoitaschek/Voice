@@ -16,6 +16,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
@@ -30,20 +33,22 @@ import static com.google.common.base.Preconditions.checkArgument;
  * helper holds a internal array of the books.
  */
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
+@Singleton
 public class DataBaseHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 32;
     private static final String DATABASE_NAME = "autoBookDB";
     private static final String TAG = DataBaseHelper.class.getSimpleName();
-    private static final Communication COMMUNICATION = Communication.getInstance();
-    private static DataBaseHelper instance;
+    private final Communication communication;
     private final Context c;
     private final List<Book> activeBooks;
     private final List<Book> orphanedBooks;
 
-    private DataBaseHelper(Context c) {
+    @Inject
+    public DataBaseHelper(Context c, Communication communication) {
         super(c, DATABASE_NAME, null, DATABASE_VERSION);
         this.c = c;
+        this.communication = communication;
 
         SQLiteDatabase db = getReadableDatabase();
         Cursor bookCursor = db.query(BookTable.TABLE_NAME,
@@ -118,13 +123,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public static synchronized DataBaseHelper getInstance(Context c) {
-        if (instance == null) {
-            instance = new DataBaseHelper(c.getApplicationContext());
-        }
-        return instance;
-    }
-
     public synchronized void addBook(@NonNull final Book mutableBook) {
         L.v(TAG, "addBook=" + mutableBook.getName());
         checkArgument(!mutableBook.getChapters().isEmpty());
@@ -153,7 +151,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
 
         activeBooks.add(new Book(mutableBook));
-        COMMUNICATION.bookSetChanged(activeBooks);
+        communication.bookSetChanged(activeBooks);
     }
 
 
@@ -226,7 +224,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             }
         }
 
-        COMMUNICATION.sendBookContentChanged(mutableBook);
+        communication.sendBookContentChanged(mutableBook);
     }
 
     public synchronized void hideBook(@NonNull Book mutableBook) {
@@ -245,7 +243,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             }
         }
         orphanedBooks.add(new Book(mutableBook));
-        COMMUNICATION.bookSetChanged(activeBooks);
+        communication.bookSetChanged(activeBooks);
     }
 
     public synchronized void revealBook(@NonNull Book mutableBook) {
@@ -262,7 +260,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             }
         }
         activeBooks.add(new Book(mutableBook));
-        COMMUNICATION.bookSetChanged(activeBooks);
+        communication.bookSetChanged(activeBooks);
     }
 
     @Override

@@ -14,11 +14,14 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.ThemeUtil;
+import de.ph1b.audiobook.utils.App;
 
 /**
  * Dialog for setting the sleep time.
@@ -30,17 +33,18 @@ public class SleepDialogPreference extends DialogPreference {
 
     @Bind(R.id.minute_text) TextView timeView;
     @Bind(R.id.minute) NumberPicker numberPicker;
+    @Inject PrefsManager prefs;
 
 
     public SleepDialogPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
+        App.getComponent().inject(this);
     }
 
     @Override
     protected void showDialog(Bundle state) {
         @SuppressLint("InflateParams") View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_sleep_timer, null);
         ButterKnife.bind(this, view);
-        final PrefsManager prefs = PrefsManager.getInstance(getContext());
 
         //init views
         ThemeUtil.theme(numberPicker);

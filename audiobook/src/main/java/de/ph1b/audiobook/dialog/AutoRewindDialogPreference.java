@@ -16,10 +16,13 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.internal.MDTintHelper;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.persistence.PrefsManager;
+import de.ph1b.audiobook.utils.App;
 
 
 public class AutoRewindDialogPreference extends DialogPreference {
@@ -28,6 +31,7 @@ public class AutoRewindDialogPreference extends DialogPreference {
     private static final int SEEK_BAR_MAX = 20;
     @Bind(R.id.textView) TextView textView;
     @Bind(R.id.seekBar) SeekBar seekBar;
+    @Inject PrefsManager prefs;
 
     public AutoRewindDialogPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -44,8 +48,8 @@ public class AutoRewindDialogPreference extends DialogPreference {
         @SuppressLint("InflateParams") View customView = LayoutInflater.from(getContext()).inflate
                 (R.layout.dialog_amount_chooser, null);
         ButterKnife.bind(this, customView);
+        App.getComponent().inject(this);
 
-        final PrefsManager prefs = PrefsManager.getInstance(getContext());
 
         MDTintHelper.setTint(seekBar, ContextCompat.getColor(getContext(), R.color.accent));
         int position = prefs.getAutoRewindAmount();

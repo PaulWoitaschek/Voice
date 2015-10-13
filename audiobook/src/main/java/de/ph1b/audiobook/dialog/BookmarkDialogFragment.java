@@ -2,7 +2,6 @@ package de.ph1b.audiobook.dialog;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,6 +26,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.Collections;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -38,6 +39,7 @@ import de.ph1b.audiobook.persistence.DataBaseHelper;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.DividerItemDecoration;
+import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.L;
 
 /**
@@ -51,8 +53,9 @@ public class BookmarkDialogFragment extends DialogFragment {
     private static final String BOOK_ID = "bookId";
     @Bind(R.id.add) ImageView addButton;
     @Bind(R.id.edit1) EditText bookmarkTitle;
+    @Inject PrefsManager prefs;
+    @Inject DataBaseHelper db;
     private BookmarkAdapter adapter;
-    private DataBaseHelper db;
     private ServiceController controller;
     private Book book;
 
@@ -64,9 +67,7 @@ public class BookmarkDialogFragment extends DialogFragment {
         return bookmarkDialogFragment;
     }
 
-    public static void addBookmark(long bookId, @NonNull String title, @NonNull Context c) {
-        DataBaseHelper db = DataBaseHelper.getInstance(c);
-
+    public static void addBookmark(long bookId, @NonNull String title, @NonNull DataBaseHelper db) {
         Book book = db.getBook(bookId);
         if (book != null) {
             Bookmark bookmark = new Bookmark(book.getCurrentChapter().getFile(), title, book.getTime());
@@ -86,7 +87,7 @@ public class BookmarkDialogFragment extends DialogFragment {
             title = book.getCurrentChapter().getName();
         }
 
-        addBookmark(book.getId(), title, getActivity());
+        addBookmark(book.getId(), title, db);
         Toast.makeText(getActivity(), R.string.bookmark_added, Toast.LENGTH_SHORT).show();
         bookmarkTitle.setText("");
         dismiss();
@@ -95,8 +96,8 @@ public class BookmarkDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.getComponent().inject(this);
 
-        db = DataBaseHelper.getInstance(getActivity());
         controller = new ServiceController(getActivity());
     }
 
@@ -165,7 +166,7 @@ public class BookmarkDialogFragment extends DialogFragment {
 
             @Override
             public void onBookmarkClicked(Bookmark bookmark) {
-                PrefsManager.getInstance(getActivity()).setCurrentBookIdAndInform(bookId);
+                prefs.setCurrentBookIdAndInform(bookId);
                 controller.changeTime(bookmark.getTime(), bookmark.getMediaFile());
 
                 getDialog().cancel();

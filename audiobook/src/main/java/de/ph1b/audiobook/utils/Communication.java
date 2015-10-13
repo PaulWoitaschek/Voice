@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 
@@ -15,17 +18,14 @@ import de.ph1b.audiobook.model.Book;
 /**
  * Class for communicating on different events through {@link LocalBroadcastManager}.
  */
+@Singleton
 public class Communication {
 
-    private static final Communication INSTANCE = new Communication();
     private final List<BookCommunication> listeners = new ArrayList<>(10);
     private final Executor executor = Executors.newSingleThreadScheduledExecutor();
 
-    private Communication() {
-    }
-
-    public static synchronized Communication getInstance() {
-        return INSTANCE;
+    @Inject
+    public Communication() {
     }
 
 
