@@ -4,18 +4,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.dialog.DonationDialogFragment;
 import de.ph1b.audiobook.fragment.SettingsFragment;
 
 public class SettingsActivity extends BaseActivity implements DonationDialogFragment.OnDonationClickedListener {
 
+    @Bind(R.id.toolbar) Toolbar toolbar;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_settings);
+        ButterKnife.bind(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         if (savedInstanceState == null) {

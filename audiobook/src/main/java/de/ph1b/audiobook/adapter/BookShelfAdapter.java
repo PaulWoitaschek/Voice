@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.model.Book;
@@ -209,9 +212,9 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
 
     public class ListViewHolder extends BaseViewHolder {
 
-        private final ProgressBar progressBar;
-        private final TextView leftTime;
-        private final TextView rightTime;
+        @Bind(R.id.progressBar) ProgressBar progressBar;
+        @Bind(R.id.leftTime) TextView leftTime;
+        @Bind(R.id.rightTime) TextView rightTime;
 
         /**
          * Constructor for a list viewholder
@@ -221,11 +224,8 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
         public ListViewHolder(ViewGroup parent) {
             super(LayoutInflater.from(parent.getContext()).inflate(
                     R.layout.fragment_book_shelf_list_layout, parent, false));
-            progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
-            //noinspection deprecation
-            MDTintHelper.setTint(progressBar, parent.getContext().getResources().getColor(R.color.accent));
-            leftTime = (TextView) itemView.findViewById(R.id.leftTime);
-            rightTime = (TextView) itemView.findViewById(R.id.rightTime);
+            ButterKnife.bind(this, itemView);
+            MDTintHelper.setTint(progressBar, ContextCompat.getColor(parent.getContext(), R.color.accent));
         }
 
         @Override
@@ -256,10 +256,10 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
     }
 
     public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
-        public final ImageView coverView;
-        private final TextView titleView;
-        private final View editBook;
-        private final ImageView currentPlayingIndicator;
+        @Bind(R.id.coverView) public ImageView coverView;
+        @Bind(R.id.currentPlayingIndicator) ImageView currentPlayingIndicator;
+        @Bind(R.id.title) TextView titleView;
+        @Bind(R.id.editBook) View editBook;
 
         /**
          * Constructor of a viewholder.
@@ -268,10 +268,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
          */
         public BaseViewHolder(View itemView) {
             super(itemView);
-            coverView = (ImageView) itemView.findViewById(R.id.coverView);
-            titleView = (TextView) itemView.findViewById(R.id.title);
-            editBook = itemView.findViewById(R.id.editBook);
-            currentPlayingIndicator = (ImageView) itemView.findViewById(R.id.currentPlayingIndicator);
+            ButterKnife.bind(this, itemView);
         }
 
         /**

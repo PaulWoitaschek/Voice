@@ -31,6 +31,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.FolderOverviewActivity;
 import de.ph1b.audiobook.activity.SettingsActivity;
@@ -54,19 +57,18 @@ import de.ph1b.audiobook.utils.Communication;
  *
  * @author Paul Woitaschek
  */
-public class BookShelfFragment extends Fragment implements View.OnClickListener,
-        BookShelfAdapter.OnItemClickListener {
+public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnItemClickListener {
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
     private static final Communication communication = Communication.getInstance();
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
+    @Bind(R.id.recyclerView) RecyclerView recyclerView;
+    @Bind(R.id.recyclerReplacement) ProgressBar recyclerReplacementView;
+    @Bind(R.id.fab) FloatingActionButton fab;
     private BookShelfAdapter adapter;
     private PrefsManager prefs;
     private ServiceController controller;
     private MaterialDialog noFolderWarning;
-    private RecyclerView recyclerView;
-    private ProgressBar recyclerReplacementView;
-    private FloatingActionButton fab;
     private DataBaseHelper db;
     private RecyclerView.ItemDecoration listDecoration;
     private GridLayoutManager gridLayoutManager;
@@ -138,21 +140,18 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_book_shelf, container, false);
+        ButterKnife.bind(this, view);
 
         isMultiPanel = multiPaneInformer.isMultiPanel();
 
         // find views
         ActionBar actionBar = hostingActivity.getSupportActionBar();
         assert actionBar != null;
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        recyclerReplacementView = (ProgressBar) view.findViewById(R.id.recyclerReplacement);
-        fab = (FloatingActionButton) view.findViewById(R.id.fab);
 
         // init views
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setTitle(getString(R.string.app_name));
         fab.setIconDrawable(playPauseDrawable);
-        fab.setOnClickListener(this);
         recyclerView.setHasFixedSize(true);
         // without this the item would blink on every change
         recyclerView.getItemAnimator().setSupportsChangeAnimations(false);
@@ -335,15 +334,9 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         hostingActivity = (AppCompatActivity) context;
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fab:
-                controller.playPause();
-                break;
-            default:
-                break;
-        }
+    @OnClick(R.id.fab)
+    void playPauseClicked() {
+        controller.playPause();
     }
 
     @Override

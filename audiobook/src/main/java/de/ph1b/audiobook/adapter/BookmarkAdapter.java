@@ -12,6 +12,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
@@ -108,17 +111,14 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        final ImageButton imageButton;
-        final TextView title;
-        final TextView summary;
-        final TextView time;
+        @Bind(R.id.edit) ImageButton imageButton;
+        @Bind(R.id.text1) TextView title;
+        @Bind(R.id.text2) TextView summary;
+        @Bind(R.id.text3) TextView time;
 
         public ViewHolder(View itemView, final OnOptionsMenuClickedListener listener) {
             super(itemView);
-            imageButton = (ImageButton) itemView.findViewById(R.id.edit);
-            title = (TextView) itemView.findViewById(R.id.text1);
-            summary = (TextView) itemView.findViewById(R.id.text2);
-            time = (TextView) itemView.findViewById(R.id.text3);
+            ButterKnife.bind(this, itemView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -126,13 +126,11 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
                     listener.onBookmarkClicked(book.getBookmarks().get(getAdapterPosition()));
                 }
             });
+        }
 
-            imageButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onOptionsMenuClicked(book.getBookmarks().get(getAdapterPosition()), imageButton);
-                }
-            });
+        @OnClick(R.id.edit)
+        void optionsMenuClicked() {
+            listener.onOptionsMenuClicked(book.getBookmarks().get(getAdapterPosition()), imageButton);
         }
     }
 }

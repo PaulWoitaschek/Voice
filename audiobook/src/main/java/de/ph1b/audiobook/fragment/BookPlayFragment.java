@@ -35,6 +35,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.SettingsActivity;
 import de.ph1b.audiobook.dialog.BookmarkDialogFragment;
@@ -58,20 +61,27 @@ import de.ph1b.audiobook.utils.L;
  *
  * @author Paul Woitaschek
  */
-public class BookPlayFragment extends Fragment implements View.OnClickListener {
+public class BookPlayFragment extends Fragment {
 
     public static final String TAG = BookPlayFragment.class.getSimpleName();
     private static final Communication communication = Communication.getInstance();
     private static final String NI_BOOK_ID = "niBookId";
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
-    private TextView playedTimeView;
-    private SeekBar seekBar;
-    private Spinner bookSpinner;
-    private TextView maxTimeView;
+    @Bind(R.id.previous) View previous_button;
+    @Bind(R.id.rewind) View rewindButton;
+    @Bind(R.id.play) FloatingActionButton playButton;
+    @Bind(R.id.fastForward) View fastForwardButton;
+    @Bind(R.id.next) View next_button;
+    @Bind(R.id.book_cover) ImageView coverView;
+    @Bind(R.id.cover_frame) View coverFrame;
+    @Bind(R.id.played) TextView playedTimeView;
+    @Bind(R.id.seekBar) SeekBar seekBar;
+    @Bind(R.id.book_spinner) Spinner bookSpinner;
+    @Bind(R.id.maxTime) TextView maxTimeView;
+    @Bind(R.id.timerView) TextView timerCountdownView;
     private PrefsManager prefs;
     private ServiceController controller;
     private DataBaseHelper db;
-    private TextView timerCountdownView;
     private CountDownTimer countDownTimer;
     private boolean isMultiPanel = false;
     private long bookId;
@@ -172,8 +182,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_book_play, container, false);
-
-        L.i(TAG, "onCreateView");
+        ButterKnife.bind(this, view);
 
         final Book book = db.getBook(bookId);
         isMultiPanel = multiPaneInformer.isMultiPanel();
@@ -182,18 +191,6 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         ActionBar actionBar = hostingActivity.getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(!isMultiPanel);
-        seekBar = (SeekBar) view.findViewById(R.id.seekBar);
-        View previous_button = view.findViewById(R.id.previous);
-        View rewindButton = view.findViewById(R.id.rewind);
-        final FloatingActionButton playButton = (FloatingActionButton) view.findViewById(R.id.play);
-        View fastForwardButton = view.findViewById(R.id.fastForward);
-        View next_button = view.findViewById(R.id.next);
-        playedTimeView = (TextView) view.findViewById(R.id.played);
-        final ImageView coverView = (ImageView) view.findViewById(R.id.book_cover);
-        maxTimeView = (TextView) view.findViewById(R.id.maxTime);
-        bookSpinner = (Spinner) view.findViewById(R.id.book_spinner);
-        timerCountdownView = (TextView) view.findViewById(R.id.timerView);
-        View coverFrame = view.findViewById(R.id.cover_frame);
 
         //setup buttons
         playButton.setIconDrawable(playPauseDrawable);
@@ -227,12 +224,6 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
                 }
             }
         });
-        coverFrame.setOnClickListener(this);
-        previous_button.setOnClickListener(this);
-        rewindButton.setOnClickListener(this);
-        playButton.setOnClickListener(this);
-        fastForwardButton.setOnClickListener(this);
-        next_button.setOnClickListener(this);
 
         if (book != null) {
             actionBar.setTitle(book.getName());
@@ -268,7 +259,7 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
                 public View getDropDownView(int position, View convertView, ViewGroup parent) {
                     View view = super.getDropDownView(position, convertView, parent);
 
-                    TextView textView = (TextView) view.findViewById(R.id.spinnerTextItem);
+                    TextView textView = ButterKnife.findById(view, R.id.spinnerTextItem);
 
                     // highlights the selected item and un-highlights an item if it is not selected.
                     // default implementation uses a ViewHolder, so this is necessary.
@@ -350,8 +341,8 @@ public class BookPlayFragment extends Fragment implements View.OnClickListener {
         controller = new ServiceController(getContext());
     }
 
-    @Override
-    public void onClick(View v) {
+    @OnClick({R.id.play, R.id.cover_frame, R.id.rewind, R.id.fastForward, R.id.next, R.id.previous, R.id.played})
+    void playbackControlClicked(View v) {
         switch (v.getId()) {
             case R.id.play:
             case R.id.cover_frame:

@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -24,6 +25,9 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.FolderOverviewAdapter;
 import de.ph1b.audiobook.model.BookAdder;
@@ -44,65 +48,69 @@ public class FolderOverviewActivity extends BaseActivity {
     private static final int PICKER_REQUEST_CODE = 42;
     private final List<String> bookCollections = new ArrayList<>(10);
     private final List<String> singleBooks = new ArrayList<>(10);
-    private PrefsManager prefs;
-    private FolderOverviewAdapter adapter;
-    private FloatingActionsMenu fam;
-    private FloatingActionButton buttonRepresentingTheFam;
-    private View backgroundOverlay;
+    @Bind(R.id.fam) FloatingActionsMenu fam;
+    @Bind(R.id.add_library) FloatingActionButton libraryBookButton;
+    @Bind(R.id.add_single) FloatingActionButton singleBookButton;
+    @Bind(R.id.fab_expand_menu_button) FloatingActionButton buttonRepresentingTheFam;
+    @Bind(R.id.overlay) View backgroundOverlay;
     private final FloatingActionsMenu.OnFloatingActionsMenuUpdateListener famMenuListener =
             new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
 
-        private final Point famCenter = new Point();
+                private final Point famCenter = new Point();
 
-        @Override
-        public void onMenuExpanded() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getFamCenter(famCenter);
+                @Override
+                public void onMenuExpanded() {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        getFamCenter(famCenter);
 
-                // get the final radius for the clipping circle
-                int finalRadius = Math.max(backgroundOverlay.getWidth(), backgroundOverlay.getHeight());
+                        // get the final radius for the clipping circle
+                        int finalRadius = Math.max(backgroundOverlay.getWidth(), backgroundOverlay.getHeight());
 
-                // create the animator for this view (the start radius is zero)
-                Animator anim = ViewAnimationUtils.createCircularReveal(backgroundOverlay,
-                        famCenter.x, famCenter.y, 0, finalRadius);
+                        // create the animator for this view (the start radius is zero)
+                        Animator anim = ViewAnimationUtils.createCircularReveal(backgroundOverlay,
+                                famCenter.x, famCenter.y, 0, finalRadius);
 
-                // make the view visible and start the animation
-                backgroundOverlay.setVisibility(View.VISIBLE);
-                anim.start();
-            } else {
-                backgroundOverlay.setVisibility(View.VISIBLE);
-            }
-        }
+                        // make the view visible and start the animation
+                        backgroundOverlay.setVisibility(View.VISIBLE);
+                        anim.start();
+                    } else {
+                        backgroundOverlay.setVisibility(View.VISIBLE);
+                    }
+                }
 
-        @Override
-        public void onMenuCollapsed() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                // get the center for the clipping circle
-                getFamCenter(famCenter);
+                @Override
+                public void onMenuCollapsed() {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        // get the center for the clipping circle
+                        getFamCenter(famCenter);
 
-                // get the initial radius for the clipping circle
-                int initialRadius = Math.max(backgroundOverlay.getHeight(), backgroundOverlay.getWidth());
+                        // get the initial radius for the clipping circle
+                        int initialRadius = Math.max(backgroundOverlay.getHeight(), backgroundOverlay.getWidth());
 
-                // create the animation (the final radius is zero)
-                Animator anim = ViewAnimationUtils.createCircularReveal(backgroundOverlay,
-                        famCenter.x, famCenter.y, initialRadius, 0);
+                        // create the animation (the final radius is zero)
+                        Animator anim = ViewAnimationUtils.createCircularReveal(backgroundOverlay,
+                                famCenter.x, famCenter.y, initialRadius, 0);
 
-                // make the view invisible when the animation is done
-                anim.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
+                        // make the view invisible when the animation is done
+                        anim.addListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                backgroundOverlay.setVisibility(View.INVISIBLE);
+                            }
+                        });
+
+                        // start the animation
+                        anim.start();
+                    } else {
                         backgroundOverlay.setVisibility(View.INVISIBLE);
                     }
-                });
-
-                // start the animation
-                anim.start();
-            } else {
-                backgroundOverlay.setVisibility(View.INVISIBLE);
-            }
-        }
-    };
+                }
+            };
+    @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.recycler) RecyclerView recyclerView;
+    private PrefsManager prefs;
+    private FolderOverviewAdapter adapter;
 
     /**
      * Calculates the point representing the center of the floating action menus button. Note, that
@@ -129,8 +137,8 @@ public class FolderOverviewActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_folder_overview);
+        ButterKnife.bind(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -140,10 +148,6 @@ public class FolderOverviewActivity extends BaseActivity {
         prefs = PrefsManager.getInstance(this);
 
         //init views
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        fam = (FloatingActionsMenu) findViewById(R.id.fam);
-        buttonRepresentingTheFam = (FloatingActionButton) findViewById(R.id.fab_expand_menu_button);
-        backgroundOverlay = findViewById(R.id.overlay);
         if (savedInstanceState != null) { // restoring overlay
             if (savedInstanceState.getBoolean(BACKGROUND_OVERLAY_VISIBLE)) {
                 backgroundOverlay.setVisibility(View.VISIBLE);
@@ -167,9 +171,9 @@ public class FolderOverviewActivity extends BaseActivity {
                                         + adapter.getItem(position))
                                 .positiveText(R.string.remove)
                                 .negativeText(R.string.dialog_cancel)
-                                .callback(new MaterialDialog.ButtonCallback() {
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
                                     @Override
-                                    public void onPositive(MaterialDialog dialog) {
+                                    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
                                         adapter.removeItem(position);
                                         prefs.setCollectionFolders(bookCollections);
                                         prefs.setSingleBookFolders(singleBooks);
@@ -183,24 +187,16 @@ public class FolderOverviewActivity extends BaseActivity {
 
         fam.setOnFloatingActionsMenuUpdateListener(famMenuListener);
 
-        FloatingActionButton single = (FloatingActionButton) findViewById(R.id.add_single);
-        single.setTitle(getString(R.string.folder_add_single_book) + "\n" + getString(R.string.for_example)
+        singleBookButton.setTitle(getString(R.string.folder_add_single_book) + "\n" + getString(R.string.for_example)
                 + " Harry Potter 4");
-        single.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startFolderChooserActivity(FolderChooserActivity.OperationMode.SINGLE_BOOK);
-            }
-        });
-        FloatingActionButton library = (FloatingActionButton) findViewById(R.id.add_library);
-        library.setTitle(getString(R.string.folder_add_collection) + "\n" + getString(R.string.for_example)
+        libraryBookButton.setTitle(getString(R.string.folder_add_collection) + "\n" + getString(R.string.for_example)
                 + " AudioBooks");
-        library.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startFolderChooserActivity(FolderChooserActivity.OperationMode.COLLECTION_BOOK);
-            }
-        });
+    }
+
+    @OnClick({R.id.add_single, R.id.add_library})
+    void clickedAdd(View view) {
+        startFolderChooserActivity(view.getId() == R.id.add_single ? FolderChooserActivity.OperationMode.SINGLE_BOOK :
+                FolderChooserActivity.OperationMode.COLLECTION_BOOK);
     }
 
     private void startFolderChooserActivity(FolderChooserActivity.OperationMode operationMode) {

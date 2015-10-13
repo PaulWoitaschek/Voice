@@ -4,15 +4,20 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.preference.DialogPreference;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.internal.MDTintHelper;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.persistence.PrefsManager;
 
@@ -21,7 +26,8 @@ public class AutoRewindDialogPreference extends DialogPreference {
 
     private static final int SEEK_BAR_MIN = 0;
     private static final int SEEK_BAR_MAX = 20;
-    private TextView textView;
+    @Bind(R.id.textView) TextView textView;
+    @Bind(R.id.seekBar) SeekBar seekBar;
 
     public AutoRewindDialogPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -35,16 +41,13 @@ public class AutoRewindDialogPreference extends DialogPreference {
 
     @Override
     protected void showDialog(Bundle state) {
+        @SuppressLint("InflateParams") View customView = LayoutInflater.from(getContext()).inflate
+                (R.layout.dialog_amount_chooser, null);
+        ButterKnife.bind(this, customView);
+
         final PrefsManager prefs = PrefsManager.getInstance(getContext());
 
-        // init custom view
-        @SuppressLint("InflateParams") View customView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_amount_chooser, null);
-        final SeekBar seekBar = (SeekBar) customView.findViewById(R.id.seekBar);
-        textView = (TextView) customView.findViewById(R.id.textView);
-
-        //seekBar
-        //noinspection deprecation
-        MDTintHelper.setTint(seekBar, getContext().getResources().getColor(R.color.accent));
+        MDTintHelper.setTint(seekBar, ContextCompat.getColor(getContext(), R.color.accent));
         int position = prefs.getAutoRewindAmount();
         seekBar.setMax(SEEK_BAR_MAX - SEEK_BAR_MIN);
         seekBar.setProgress(position - SEEK_BAR_MIN);
@@ -71,9 +74,9 @@ public class AutoRewindDialogPreference extends DialogPreference {
                 .customView(customView, true)
                 .positiveText(R.string.dialog_confirm)
                 .negativeText(R.string.dialog_cancel)
-                .callback(new MaterialDialog.ButtonCallback() {
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
-                    public void onPositive(MaterialDialog dialog) {
+                    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
                         int autoRewindAmount = seekBar.getProgress();
                         prefs.setAutoRewindAmount(autoRewindAmount + SEEK_BAR_MIN);
                     }

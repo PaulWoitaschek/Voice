@@ -22,10 +22,14 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.Collections;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.BookmarkAdapter;
 import de.ph1b.audiobook.model.Book;
@@ -37,17 +41,20 @@ import de.ph1b.audiobook.uitools.DividerItemDecoration;
 import de.ph1b.audiobook.utils.L;
 
 /**
- * @author <a href="mailto:woitaschek@posteo.de">Paul Woitaschek</a>
- * @link {http://www.paul-woitaschek.de}
- * @see <a href="http://www.paul-woitaschek.de">http://www.paul-woitaschek.de</a>
+ * Dialog for creating a bookmark
+ *
+ * @author Paul Woitaschek
  */
 public class BookmarkDialogFragment extends DialogFragment {
 
     public static final String TAG = BookmarkDialogFragment.class.getSimpleName();
     private static final String BOOK_ID = "bookId";
+    @Bind(R.id.add) ImageView addButton;
+    @Bind(R.id.edit1) EditText bookmarkTitle;
     private BookmarkAdapter adapter;
     private DataBaseHelper db;
     private ServiceController controller;
+    private Book book;
 
     public static BookmarkDialogFragment newInstance(long bookId) {
         BookmarkDialogFragment bookmarkDialogFragment = new BookmarkDialogFragment();
@@ -72,6 +79,19 @@ public class BookmarkDialogFragment extends DialogFragment {
         }
     }
 
+    @OnClick(R.id.add)
+    void addClicked() {
+        String title = bookmarkTitle.getText().toString();
+        if (title.isEmpty()) {
+            title = book.getCurrentChapter().getName();
+        }
+
+        addBookmark(book.getId(), title, getActivity());
+        Toast.makeText(getActivity(), R.string.bookmark_added, Toast.LENGTH_SHORT).show();
+        bookmarkTitle.setText("");
+        dismiss();
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,13 +105,12 @@ public class BookmarkDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-
-        //passing null is fine because of fragment
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_bookmark, null);
+        ButterKnife.bind(this, v);
 
 
         final long bookId = getArguments().getLong(BOOK_ID);
-        final Book book = db.getBook(bookId);
+        book = db.getBook(bookId);
         if (book == null) {
             throw new AssertionError("Cannot instantiate " + TAG + " without a book");
         }
@@ -113,7 +132,7 @@ public class BookmarkDialogFragment extends DialogFragment {
                                         .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
                                         .input(getString(R.string.bookmark_edit_hint), clickedBookmark.getTitle(), false, new MaterialDialog.InputCallback() {
                                             @Override
-                                            public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+                                            public void onInput(@NonNull MaterialDialog materialDialog, CharSequence charSequence) {
                                                 Bookmark newBookmark = new Bookmark(clickedBookmark.getMediaFile(), charSequence.toString(), clickedBookmark.getTime());
                                                 adapter.bookmarkUpdated(clickedBookmark, newBookmark);
                                                 db.updateBook(book);
@@ -127,9 +146,9 @@ public class BookmarkDialogFragment extends DialogFragment {
                                         .content(clickedBookmark.getTitle())
                                         .positiveText(R.string.remove)
                                         .negativeText(R.string.dialog_cancel)
-                                        .callback(new MaterialDialog.ButtonCallback() {
+                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
                                             @Override
-                                            public void onPositive(MaterialDialog dialog) {
+                                            public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
                                                 adapter.removeItem(clickedBookmark);
                                                 db.updateBook(book);
                                             }
@@ -153,15 +172,13 @@ public class BookmarkDialogFragment extends DialogFragment {
             }
         };
 
-        final RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler);
+        final RecyclerView recyclerView = ButterKnife.findById(v, R.id.recycler);
         adapter = new BookmarkAdapter(book, listener);
         recyclerView.setAdapter(adapter);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
         recyclerView.setLayoutManager(layoutManager);
 
-        final ImageView addButton = (ImageView) v.findViewById(R.id.add);
-        final EditText bookmarkTitle = (EditText) v.findViewById(R.id.edit1);
         bookmarkTitle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -170,21 +187,6 @@ public class BookmarkDialogFragment extends DialogFragment {
                     return true;
                 }
                 return false;
-            }
-        });
-
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String title = bookmarkTitle.getText().toString();
-                if (title.isEmpty()) {
-                    title = book.getCurrentChapter().getName();
-                }
-
-                addBookmark(book.getId(), title, getActivity());
-                Toast.makeText(getActivity(), R.string.bookmark_added, Toast.LENGTH_SHORT).show();
-                bookmarkTitle.setText("");
-                dismiss();
             }
         });
 

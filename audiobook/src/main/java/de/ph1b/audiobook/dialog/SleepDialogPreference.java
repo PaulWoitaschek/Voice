@@ -4,14 +4,18 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.preference.DialogPreference;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.ThemeUtil;
@@ -24,7 +28,9 @@ import de.ph1b.audiobook.uitools.ThemeUtil;
 public class SleepDialogPreference extends DialogPreference {
 
 
-    private TextView timeView;
+    @Bind(R.id.minute_text) TextView timeView;
+    @Bind(R.id.minute) NumberPicker numberPicker;
+
 
     public SleepDialogPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -33,11 +39,10 @@ public class SleepDialogPreference extends DialogPreference {
     @Override
     protected void showDialog(Bundle state) {
         @SuppressLint("InflateParams") View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_sleep_timer, null);
+        ButterKnife.bind(this, view);
         final PrefsManager prefs = PrefsManager.getInstance(getContext());
 
         //init views
-        timeView = (TextView) view.findViewById(R.id.minute_text);
-        final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.minute);
         ThemeUtil.theme(numberPicker);
 
         //init number picker
@@ -57,9 +62,9 @@ public class SleepDialogPreference extends DialogPreference {
                 .title(R.string.pref_sleep_time)
                 .positiveText(R.string.dialog_confirm)
                 .negativeText(R.string.dialog_cancel)
-                .callback(new MaterialDialog.ButtonCallback() {
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
-                    public void onPositive(MaterialDialog dialog) {
+                    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
                         int sleepAmount = numberPicker.getValue();
                         prefs.setSleepTime(sleepAmount);
                     }

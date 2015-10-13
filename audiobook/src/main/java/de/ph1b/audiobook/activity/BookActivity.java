@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,6 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.fragment.BookPlayFragment;
 import de.ph1b.audiobook.fragment.BookShelfFragment;
@@ -56,6 +59,10 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
      */
     private static final String SI_MULTI_PANEL = "siMultiPanel";
     private static final int PERMISSION_RESULT_READ_EXT_STORAGE = 17;
+    @Bind(R.id.toolbar) Toolbar toolbar;
+    @Nullable
+    @Bind(CONTAINER_SHELF)
+    View bookShelfContainer;
     private boolean multiPanel = false;
 
     /**
@@ -119,10 +126,11 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_book);
+        ButterKnife.bind(this);
 
         PrefsManager prefs = PrefsManager.getInstance(this);
 
-        setContentView(R.layout.activity_book);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             boolean anyFolderSet = prefs.getCollectionFolders().size() + prefs.getSingleBookFolders().size() > 0;
@@ -132,10 +140,9 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
             }
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        multiPanel = findViewById(CONTAINER_SHELF) != null;
+        multiPanel = bookShelfContainer != null;
         boolean multiPaneChanged = savedInstanceState != null && savedInstanceState.getBoolean(SI_MULTI_PANEL) != multiPanel;
         L.i(TAG, "multiPane=" + multiPanel + ", multiPaneChanged=" + multiPaneChanged);
 

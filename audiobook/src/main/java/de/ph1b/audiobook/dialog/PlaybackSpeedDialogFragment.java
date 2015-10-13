@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
@@ -15,6 +16,8 @@ import com.afollestad.materialdialogs.internal.MDTintHelper;
 
 import java.text.DecimalFormat;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.persistence.DataBaseHelper;
@@ -33,6 +36,8 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
     private static final int MAX_STEPS = Math.round((SPEED_MAX - SPEED_MIN) / SPEED_DELTA);
 
     private static final DecimalFormat df = new DecimalFormat("0.00");
+    @Bind(R.id.seekBar) SeekBar seekBar;
+    @Bind(R.id.textView) TextView textView;
 
     private static float speedStepValueToSpeed(int step) {
         return (SPEED_MIN + (step * SPEED_DELTA));
@@ -46,13 +51,11 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // init views
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        LayoutInflater inflater = LayoutInflater.from(getContext());
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_amount_chooser, null);
-        SeekBar seekBar = (SeekBar) v.findViewById(R.id.seekBar);
-        final TextView textView = (TextView) v.findViewById(R.id.textView);
+        ButterKnife.bind(this, v);
 
-        //noinspection deprecation
-        MDTintHelper.setTint(seekBar, getResources().getColor(R.color.accent));
+        MDTintHelper.setTint(seekBar, ContextCompat.getColor(getContext(), R.color.accent));
 
         // setting current speed
         final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
