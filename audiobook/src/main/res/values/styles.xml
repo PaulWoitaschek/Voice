@@ -4,7 +4,7 @@
         <item name="android:windowContentTransitions" tools:ignore="NewApi">true</item>
         <item name="android:windowActivityTransitions" tools:ignore="NewApi">true</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:imageButtonStyle">@style/TintedImageButtonStyle</item>
+        <item name="imageButtonStyle">@style/TintedImageButtonStyle</item>
         <item name="android:seekBarStyle">@style/seek_style</item>
 
         <item name="colorPrimary">@color/light_primary</item>
@@ -23,7 +23,7 @@
         <item name="android:windowContentTransitions" tools:ignore="NewApi">true</item>
         <item name="android:windowActivityTransitions" tools:ignore="NewApi">true</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:imageButtonStyle">@style/TintedImageButtonStyle</item>
+        <item name="imageButtonStyle">@style/TintedImageButtonStyle</item>
         <item name="android:seekBarStyle">@style/seek_style</item>
 
         <item name="colorPrimary">@color/dark_primary</item>
@@ -37,7 +37,7 @@
         <item name="background_overlay">@color/copy_primary_text_disabled_material_dark</item>
     </style>
 
-    <style name="BaseImageButtonStyle" parent="@android:style/Widget.ImageButton">
+    <style name="BaseImageButtonStyle" parent="Base.Widget.AppCompat.ImageButton">
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
         <item name="android:tint">@null</item>
     </style>
