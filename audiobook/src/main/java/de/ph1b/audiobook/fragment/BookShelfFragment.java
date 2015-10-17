@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -158,7 +159,8 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
         fab.setIconDrawable(playPauseDrawable);
         recyclerView.setHasFixedSize(true);
         // without this the item would blink on every change
-        recyclerView.getItemAnimator().setSupportsChangeAnimations(false);
+        SimpleItemAnimator anim = (SimpleItemAnimator) recyclerView.getItemAnimator();
+        anim.setSupportsChangeAnimations(false);
 
         listDecoration = new DividerItemDecoration(getContext());
         gridLayoutManager = new GridLayoutManager(getContext(), getAmountOfColumns());

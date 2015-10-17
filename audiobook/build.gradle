@@ -73,12 +73,12 @@ if (propFile.canRead()) {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.android.support:recyclerview-v7:23.0.1'
+    compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'com.android.support:recyclerview-v7:23.1.0'
     compile 'com.squareup.okhttp:okhttp:2.5.0' // http library
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.5.0'
     compile 'com.squareup.picasso:picasso:2.5.2' // image loading
-    compile('com.afollestad.material-dialogs:core:0.8.2.0@aar') { // material styled dialogs
+    compile('com.afollestad.material-dialogs:core:0.8.4.0@aar') { // material styled dialogs
         transitive = true
     }
     compile 'com.getbase:floatingactionbutton:1.10.0' // fab
