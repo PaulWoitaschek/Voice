@@ -5,8 +5,10 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import de.ph1b.audiobook.R;
@@ -54,10 +56,10 @@ public class PermissionHelper {
         new MaterialDialog.Builder(activity)
                 .cancelable(false)
                 .positiveText(R.string.permission_rescan)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
-                    public void onPositive(MaterialDialog dialog) {
+                    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+                    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
                         ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                                 requestCode);
                     }
