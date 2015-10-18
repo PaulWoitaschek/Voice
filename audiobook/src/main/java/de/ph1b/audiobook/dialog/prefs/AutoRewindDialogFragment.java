@@ -6,7 +6,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.internal.MDTintHelper;
 
 import javax.inject.Inject;
 
@@ -56,8 +54,6 @@ public class AutoRewindDialogFragment extends DialogFragment {
         ButterKnife.bind(this, customView);
         App.getComponent().inject(this);
 
-
-        MDTintHelper.setTint(seekBar, ContextCompat.getColor(getContext(), R.color.accent));
         final int oldRewindAmount = prefs.getAutoRewindAmount();
         seekBar.setMax(SEEK_BAR_MAX - SEEK_BAR_MIN);
         seekBar.setProgress(oldRewindAmount - SEEK_BAR_MIN);

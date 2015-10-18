@@ -5,14 +5,12 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.internal.MDTintHelper;
 
 import java.text.DecimalFormat;
 
@@ -62,8 +60,6 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
         @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.dialog_amount_chooser, null);
         ButterKnife.bind(this, v);
         App.getComponent().inject(this);
-
-        MDTintHelper.setTint(seekBar, ContextCompat.getColor(getContext(), R.color.accent));
 
         // setting current speed
         final Book book = db.getBook(prefs.getCurrentBookId());
