@@ -9,7 +9,24 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-
+/**
+ * The natural compare algorithm is based of {@link "https://github.com/sourcefrog/natsort"}.
+ * <p/>
+ * This software is provided 'as-is', without any express or implied warranty. In no event will the
+ * authors be held liable for any damages arising from the use of this software.
+ * <p/>
+ * Permission is granted to anyone to use this software for any purpose, including commercial
+ * applications, and to alter it and redistribute it freely, subject to the following restrictions:
+ * <p/>
+ * The origin of this software must not be misrepresented; you must not claim that you wrote the
+ * original software. If you use this software in a product, an acknowledgment in the product
+ * documentation would be appreciated but is not required.
+ * <p/>
+ * Altered source versions must be plainly marked as such, and must not be misrepresented as being
+ * the original software.
+ * <p/>
+ * This notice may not be removed or altered from any source distribution.
+ */
 public class NaturalOrderComparator {
 
     public static final Comparator<File> FILE_COMPARATOR = new Comparator<File>() {

@@ -1,5 +1,4 @@
-package de.ph1b.audiobook.model;
-
+import android.test.suitebuilder.annotation.SmallTest;
 
 import junit.framework.TestCase;
 
@@ -8,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import de.ph1b.audiobook.model.NaturalOrderComparator;
 
 /**
  * A simple test for the file comparator that sorts in a 'natural' way.
@@ -18,9 +18,17 @@ public class NaturalOrderComparatorTest extends TestCase {
 
     private List<File> list;
 
+    @SmallTest
+    public void testNaturalCompare() {
+        String first = "00 I";
+        String second = "01 I";
+        assertTrue(NaturalOrderComparator.naturalCompare(first, second) < 0);
+    }
+
     /**
      * Tests if the comparison results in the desired order.
      */
+    @SmallTest
     public void testFileComparison() {
         File f1 = new File("a.jpg");
         File f2 = new File("b.jpg");
@@ -53,5 +61,4 @@ public class NaturalOrderComparatorTest extends TestCase {
     private int indexOf(File file) {
         return list.indexOf(file);
     }
-
 }
