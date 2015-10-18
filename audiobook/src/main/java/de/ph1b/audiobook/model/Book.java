@@ -4,9 +4,11 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import auto.parcel.AutoParcel;
@@ -18,6 +20,8 @@ public abstract class Book implements Comparable<Book> {
 
     public static final String TAG = Book.class.getSimpleName();
     public static final long ID_UNKNOWN = -1;
+    public static final float SPEED_MIN = 0.5f;
+    public static final float SPEED_MAX = 2f;
     private static final String COVER_TRANSITION_PREFIX = "bookCoverTransition_";
 
     public static Builder builder(@NonNull String root, @NonNull List<Chapter> chapters, @NonNull Type type,
@@ -65,7 +69,7 @@ public abstract class Book implements Comparable<Book> {
     }
 
     /**
-     * @return The global position. It sums up the duration of all elapsed chapters plus the position
+     * @return the global position. It sums up the duration of all elapsed chapters plus the position
      * in the current chapter.
      */
     public int globalPosition() {
@@ -99,7 +103,7 @@ public abstract class Book implements Comparable<Book> {
     public abstract boolean useCoverReplacement();
 
     /**
-     * @return the author of the book or null if not set.
+     * @return the author of the book or null if not set
      */
     @Nullable
     public abstract String author();
@@ -163,6 +167,24 @@ public abstract class Book implements Comparable<Book> {
         }
     }
 
+    @AutoParcel.Validate
+    public void validate() {
+        List<Chapter> chapters = chapters();
+        List<File> chapterFiles = new ArrayList<>(chapters.size());
+        for (Chapter c : chapters) {
+            chapterFiles.add(c.file());
+        }
+        Preconditions.checkArgument(playbackSpeed() >= SPEED_MIN && playbackSpeed() <= SPEED_MAX);
+        for (Bookmark b : bookmarks()) {
+            Preconditions.checkArgument(chapterFiles.contains(b.mediaFile()));
+        }
+        Preconditions.checkArgument(!chapters.isEmpty());
+        Preconditions.checkArgument(chapterFiles.contains(currentFile()));
+        Preconditions.checkArgument(!name().isEmpty());
+        Preconditions.checkArgument(!root().isEmpty());
+    }
+
+
     public enum Type {
         COLLECTION_FOLDER,
         COLLECTION_FILE,
@@ -171,31 +193,30 @@ public abstract class Book implements Comparable<Book> {
     }
 
     @AutoParcel.Builder
-    public abstract static class Builder {
+    public interface Builder {
+        Builder currentFile(File currentFile);
 
-        public abstract Book build();
+        Book build();
 
-        public abstract Builder currentFile(File currentFile);
+        Builder useCoverReplacement(boolean useCoverReplacement);
 
-        public abstract Builder useCoverReplacement(boolean useCoverReplacement);
+        Builder name(String name);
 
-        public abstract Builder name(String name);
+        Builder bookmarks(ImmutableList<Bookmark> bookmarks);
 
-        public abstract Builder bookmarks(ImmutableList<Bookmark> bookmarks);
+        Builder chapters(ImmutableList<Chapter> chapters);
 
-        public abstract Builder chapters(ImmutableList<Chapter> chapters);
+        Builder root(String root);
 
-        public abstract Builder root(String root);
+        Builder type(Type type);
 
-        public abstract Builder type(Type type);
+        Builder playbackSpeed(float playbackSpeed);
 
-        public abstract Builder playbackSpeed(float playbackSpeed);
+        Builder id(long id);
 
-        public abstract Builder id(long id);
+        Builder time(int time);
 
-        public abstract Builder time(int time);
-
-        public abstract Builder author(String author);
+        Builder author(String author);
     }
 }
 

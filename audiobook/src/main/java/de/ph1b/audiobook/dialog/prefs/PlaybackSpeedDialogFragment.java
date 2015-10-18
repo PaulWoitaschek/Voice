@@ -34,9 +34,8 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
 
     public static final String TAG = PlaybackSpeedDialogFragment.class.getSimpleName();
     private static final float SPEED_DELTA = 0.02f;
-    private static final float SPEED_MIN = 0.5f;
-    private static final float SPEED_MAX = 2f;
-    private static final int MAX_STEPS = Math.round((SPEED_MAX - SPEED_MIN) / SPEED_DELTA);
+
+    private static final int MAX_STEPS = Math.round((Book.SPEED_MAX - Book.SPEED_MIN) / SPEED_DELTA);
 
     private static final DecimalFormat df = new DecimalFormat("0.00");
     @Bind(R.id.seekBar) SeekBar seekBar;
@@ -45,11 +44,11 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
     @Inject DataBaseHelper db;
 
     private static float speedStepValueToSpeed(int step) {
-        return (SPEED_MIN + (step * SPEED_DELTA));
+        return (Book.SPEED_MIN + (step * SPEED_DELTA));
     }
 
     private static int speedValueToSteps(float speed) {
-        return Math.round((speed - SPEED_MIN) * (MAX_STEPS + 1) / (SPEED_MAX - SPEED_MIN));
+        return Math.round((speed - Book.SPEED_MIN) * (MAX_STEPS + 1) / (Book.SPEED_MAX - Book.SPEED_MIN));
     }
 
     @NonNull
