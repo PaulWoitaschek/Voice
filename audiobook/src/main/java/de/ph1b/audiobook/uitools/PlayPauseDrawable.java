@@ -1,5 +1,3 @@
-
-
 package de.ph1b.audiobook.uitools;
 
 import android.animation.Animator;
@@ -188,9 +186,11 @@ public class PlayPauseDrawable extends Drawable {
         }
 
         animator = ObjectAnimator.ofFloat(this, PROGRESS, isPlay ? 1.0F : 0.0F, isPlay ? 0.0F : 1.0F);
+        assert animator != null;
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
                 isPlay = !isPlay;
             }
         });

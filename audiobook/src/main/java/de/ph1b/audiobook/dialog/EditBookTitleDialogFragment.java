@@ -42,7 +42,7 @@ public class EditBookTitleDialogFragment extends DialogFragment {
                 .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
                 .input(getString(R.string.bookmark_edit_hint), presetName, false, new MaterialDialog.InputCallback() {
                     @Override
-                    public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+                    public void onInput(@NonNull MaterialDialog materialDialog, CharSequence charSequence) {
                         String newText = charSequence.toString();
                         if (!newText.equals(presetName) && listener != null) {
                             listener.onTitleChanged(newText);
