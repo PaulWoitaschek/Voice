@@ -34,10 +34,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         MediaPlayerInterface.OnCompletionListener {
 
     private static final String TAG = MediaPlayerController.class.getSimpleName();
-    private static volatile boolean sleepTimerActive = false;
-    private static volatile PlayState playState = PlayState.STOPPED;
-    @Nullable
-    private static ScheduledFuture<?> sleepSand;
     private final Context c;
     private final ReentrantLock lock = new ReentrantLock();
     private final PrefsManager prefs;
@@ -45,6 +41,10 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
     private final MediaPlayerInterface player;
     private final Communication communication;
+    private volatile boolean sleepTimerActive = false;
+    private volatile PlayState playState = PlayState.STOPPED;
+    @Nullable
+    private ScheduledFuture<?> sleepSand;
     @Nullable
     private Book book;
     private volatile State state;
@@ -65,11 +65,11 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         setPlayState(PlayState.STOPPED);
     }
 
-    public static boolean isSleepTimerActive() {
+    public boolean isSleepTimerActive() {
         return sleepTimerActive;
     }
 
-    public static long getLeftSleepTimerTime() {
+    public long getLeftSleepTimerTime() {
         if (sleepSand == null || sleepSand.isCancelled() || sleepSand.isDone()) {
             return 0;
         } else {
@@ -78,12 +78,12 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     }
 
 
-    public static PlayState getPlayState() {
+    public PlayState getPlayState() {
         return playState;
     }
 
     public void setPlayState(PlayState playState) {
-        MediaPlayerController.playState = playState;
+        this.playState = playState;
         communication.playStateChanged();
     }
 

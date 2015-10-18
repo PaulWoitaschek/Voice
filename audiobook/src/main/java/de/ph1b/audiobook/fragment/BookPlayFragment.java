@@ -71,6 +71,7 @@ public class BookPlayFragment extends Fragment {
     private static final String NI_BOOK_ID = "niBookId";
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
     @Inject Communication communication;
+    @Inject MediaPlayerController mediaPlayerController;
     @Bind(R.id.previous) View previous_button;
     @Bind(R.id.rewind) View rewindButton;
     @Bind(R.id.play) FloatingActionButton playButton;
@@ -382,9 +383,9 @@ public class BookPlayFragment extends Fragment {
             countDownTimer.cancel();
         }
 
-        if (MediaPlayerController.isSleepTimerActive()) {
+        if (mediaPlayerController.isSleepTimerActive()) {
             timerCountdownView.setVisibility(View.VISIBLE);
-            countDownTimer = new CountDownTimer(MediaPlayerController.getLeftSleepTimerTime(), 1000) {
+            countDownTimer = new CountDownTimer(mediaPlayerController.getLeftSleepTimerTime(), 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
                     timerCountdownView.setText(formatTime((int) millisUntilFinished, (int) millisUntilFinished));
@@ -419,7 +420,7 @@ public class BookPlayFragment extends Fragment {
 
         // sets the correct sleep timer icon
         MenuItem sleepTimerItem = menu.findItem(R.id.action_sleep);
-        if (MediaPlayerController.isSleepTimerActive()) {
+        if (mediaPlayerController.isSleepTimerActive()) {
             sleepTimerItem.setIcon(R.drawable.ic_alarm_on_white_24dp);
         } else {
             sleepTimerItem.setIcon(R.drawable.ic_snooze_white_24dp);
@@ -448,7 +449,7 @@ public class BookPlayFragment extends Fragment {
                 return true;
             case R.id.action_sleep:
                 controller.toggleSleepSand();
-                if (prefs.setBookmarkOnSleepTimer() && !MediaPlayerController.isSleepTimerActive()) {
+                if (prefs.setBookmarkOnSleepTimer() && !mediaPlayerController.isSleepTimerActive()) {
                     String date = DateUtils.formatDateTime(getContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE |
                             DateUtils.FORMAT_SHOW_TIME |
                             DateUtils.FORMAT_NUMERIC_DATE);
@@ -473,7 +474,7 @@ public class BookPlayFragment extends Fragment {
     }
 
     private void setPlayState(boolean animated) {
-        if (MediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
+        if (mediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
             playPauseDrawable.transformToPause(animated);
         } else {
             playPauseDrawable.transformToPlay(animated);

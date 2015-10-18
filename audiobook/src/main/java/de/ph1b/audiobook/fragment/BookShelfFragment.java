@@ -72,6 +72,7 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
     @Inject PrefsManager prefs;
     @Inject DataBaseHelper db;
     @Inject BookAdder bookAdder;
+    @Inject MediaPlayerController mediaPlayerController;
     private BookShelfAdapter adapter;
     private ServiceController controller;
     private MaterialDialog noFolderWarning;
@@ -252,7 +253,7 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
     }
 
     private void setPlayState(boolean animated) {
-        if (MediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
+        if (mediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
             playPauseDrawable.transformToPause(animated);
         } else {
             playPauseDrawable.transformToPlay(animated);

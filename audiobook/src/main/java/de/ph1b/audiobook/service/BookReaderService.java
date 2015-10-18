@@ -88,7 +88,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
     private final BroadcastReceiver audioBecomingNoisyReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (MediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
+            if (controller.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
                 pauseBecauseHeadset = true;
                 controller.pause(true);
             }
@@ -131,7 +131,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
 
         @Override
         public void onPlayStateChanged() {
-            final MediaPlayerController.PlayState state = MediaPlayerController.getPlayState();
+            final MediaPlayerController.PlayState state = controller.getPlayState();
             L.d(TAG, "onPlayStateChanged:" + state);
             executor.execute(new Runnable() {
                 @Override
@@ -229,8 +229,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
             case KeyEvent.KEYCODE_MEDIA_PAUSE:
             case KeyEvent.KEYCODE_HEADSETHOOK:
             case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-                if (MediaPlayerController.getPlayState() ==
-                        MediaPlayerController.PlayState.PLAYING) {
+                if (controller.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
                     controller.pause(true);
                 } else {
                     controller.play();
@@ -357,8 +356,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                 break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                 if (!prefs.pauseOnTempFocusLoss()) {
-                    if (MediaPlayerController.getPlayState() ==
-                            MediaPlayerController.PlayState.PLAYING) {
+                    if (controller.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
                         L.d(TAG, "lowering volume");
                         audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
                         pauseBecauseHeadset = false;
@@ -371,8 +369,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                     break;
                 }
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                if (MediaPlayerController.getPlayState() ==
-                        MediaPlayerController.PlayState.PLAYING) {
+                if (controller.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
                     L.d(TAG, "Paused by audio-focus loss transient.");
                     // Only rewind if loss is transient. When we only pause temporary, don't rewind
                     // automatically.
@@ -425,7 +422,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
         // play/pause
         Intent playPauseIntent = ServiceController.getPlayPauseIntent(this);
         PendingIntent playPausePI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        if (MediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
+        if (controller.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
             notificationBuilder.addAction(R.drawable.ic_pause_white_36dp, getString(R.string.pause), playPausePI);
         } else {
             notificationBuilder.addAction(R.drawable.ic_play_arrow_white_36dp, getString(R.string.play), playPausePI);
@@ -473,7 +470,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                 Book book = controller.getBook();
                 if (book != null) {
                     Chapter c = book.currentChapter();
-                    MediaPlayerController.PlayState playState = MediaPlayerController.getPlayState();
+                    MediaPlayerController.PlayState playState = controller.getPlayState();
 
                     String bookName = book.name();
                     String chapterName = c.name();

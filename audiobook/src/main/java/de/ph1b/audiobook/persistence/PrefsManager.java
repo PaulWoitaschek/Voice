@@ -18,7 +18,6 @@ import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.Communication;
-import de.ph1b.audiobook.utils.L;
 
 /**
  * Preference manager, managing the setting and getting of {@link SharedPreferences}
@@ -60,16 +59,13 @@ public class PrefsManager {
     public synchronized ThemeUtil.Theme getTheme() {
         String value = sp.getString(PREF_KEY_THEME, null);
         if (value == null) {
-            L.i("pref", "returning default value light");
             return ThemeUtil.Theme.LIGHT;
         } else {
-            L.i("pf", "saved value=" + value);
             return ThemeUtil.Theme.valueOf(value);
         }
     }
 
     public synchronized void setTheme(ThemeUtil.Theme theme) {
-        L.i("prefs", "settheme to " + theme);
         sp.edit().putString(PREF_KEY_THEME, theme.name()).apply();
     }
 
