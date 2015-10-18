@@ -15,6 +15,12 @@ import auto.parcel.AutoParcel;
 import de.ph1b.audiobook.utils.App;
 
 
+/**
+ * Class describing a book. This is the basic model. It is fully immutable and thus can be shared
+ * freely.
+ *
+ * @author Paul Woitaschek
+ */
 @AutoParcel
 public abstract class Book implements Comparable<Book> {
 
