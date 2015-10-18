@@ -345,7 +345,8 @@ public class BookPlayFragment extends Fragment {
         controller = new ServiceController(getContext());
     }
 
-    @OnClick({R.id.play, R.id.cover_frame, R.id.rewind, R.id.fastForward, R.id.next, R.id.previous, R.id.played})
+    @OnClick({R.id.play, R.id.cover_frame, R.id.rewind, R.id.fastForward, R.id.next, R.id.previous,
+            R.id.played})
     void playbackControlClicked(View v) {
         switch (v.getId()) {
             case R.id.play:
