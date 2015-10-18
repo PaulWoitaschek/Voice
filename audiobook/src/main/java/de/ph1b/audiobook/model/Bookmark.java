@@ -2,6 +2,8 @@ package de.ph1b.audiobook.model;
 
 import android.support.annotation.NonNull;
 
+import com.google.common.base.Preconditions;
+
 import java.io.File;
 
 import auto.parcel.AutoParcel;
@@ -17,7 +19,9 @@ public abstract class Bookmark implements Comparable<Bookmark> {
     }
 
     public static Bookmark of(@NonNull File mediaFile, @NonNull String title, int time) {
-        return new AutoParcel_Bookmark(time, mediaFile, title);
+        Bookmark bookmark = new AutoParcel_Bookmark(time, mediaFile, title);
+        Preconditions.checkArgument(!bookmark.title().isEmpty());
+        return bookmark;
     }
 
     public abstract int time();
