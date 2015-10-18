@@ -417,21 +417,21 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
         // rewind
         Intent rewindIntent = ServiceController.getRewindIntent(this);
         PendingIntent rewindPI = PendingIntent.getService(getApplicationContext(), KeyEvent.KEYCODE_MEDIA_REWIND, rewindIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        notificationBuilder.addAction(R.drawable.ic_fast_rewind_white_36dp, getString(R.string.rewind), rewindPI);
+        notificationBuilder.addAction(R.drawable.ic_fast_rewind, getString(R.string.rewind), rewindPI);
 
         // play/pause
         Intent playPauseIntent = ServiceController.getPlayPauseIntent(this);
         PendingIntent playPausePI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (controller.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
-            notificationBuilder.addAction(R.drawable.ic_pause_white_36dp, getString(R.string.pause), playPausePI);
+            notificationBuilder.addAction(R.drawable.ic_pause, getString(R.string.pause), playPausePI);
         } else {
-            notificationBuilder.addAction(R.drawable.ic_play_arrow_white_36dp, getString(R.string.play), playPausePI);
+            notificationBuilder.addAction(R.drawable.ic_play_arrow, getString(R.string.play), playPausePI);
         }
 
         // fast forward
         Intent fastForwardIntent = ServiceController.getFastForwardIntent(this);
         PendingIntent fastForwardPI = PendingIntent.getService(getApplicationContext(), KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, fastForwardIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        notificationBuilder.addAction(R.drawable.ic_fast_forward_white_36dp, getString(R.string.fast_forward), fastForwardPI);
+        notificationBuilder.addAction(R.drawable.ic_fast_forward, getString(R.string.fast_forward), fastForwardPI);
 
         // stop intent
         Intent stopIntent = ServiceController.getStopIntent(this);

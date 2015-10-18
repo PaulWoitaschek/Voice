@@ -54,7 +54,7 @@ public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAd
             holder.icon.setImageDrawable(ContextCompat.getDrawable(c, R.drawable.ic_folder_multiple_white_48dp));
             holder.icon.setContentDescription(c.getString(R.string.folder_add_collection));
         } else {
-            holder.icon.setImageDrawable(ContextCompat.getDrawable(c, R.drawable.ic_folder_white_48dp));
+            holder.icon.setImageDrawable(ContextCompat.getDrawable(c, R.drawable.ic_folder));
             holder.icon.setContentDescription(c.getString(R.string.folder_add_single_book));
         }
     }

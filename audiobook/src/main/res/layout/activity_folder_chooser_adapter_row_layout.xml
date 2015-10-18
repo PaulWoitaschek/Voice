@@ -15,7 +15,7 @@
         android:layout_marginStart="16dp"
         android:maxWidth="56dp"
         android:scaleType="fitStart"
-        android:src="@drawable/ic_folder_white_48dp"
+        android:src="@drawable/ic_folder"
         tools:ignore="ContentDescription" />
 
     <TextView

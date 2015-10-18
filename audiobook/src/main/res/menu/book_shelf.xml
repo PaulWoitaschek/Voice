@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/action_current"
-        android:icon="@drawable/ic_play_circle_outline_white_24dp"
+        android:icon="@drawable/ic_play_circle_outline"
         android:orderInCategory="90"
         android:title="@string/current_book"
         app:showAsAction="ifRoom" />

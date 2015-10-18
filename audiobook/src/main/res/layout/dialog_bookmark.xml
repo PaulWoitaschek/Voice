@@ -33,7 +33,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:contentDescription="@string/acc_button_add_bookmark"
-            android:src="@drawable/ic_add_circle_outline_white_36dp" />
+            android:src="@drawable/ic_add_circle_outline"/>
 
     </LinearLayout>
 

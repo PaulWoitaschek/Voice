@@ -45,7 +45,7 @@
                 android:contentDescription="@string/folder_add_single_book"
                 fab:fab_colorNormal="?attr/colorAccent"
                 fab:fab_colorPressed="?attr/colorAccentDark"
-                fab:fab_icon="@drawable/ic_folder_white_48dp"
+                fab:fab_icon="@drawable/ic_folder"
                 fab:fab_size="mini"
                 fab:fab_title="@string/folder_add_single_book" />
 

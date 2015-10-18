@@ -297,7 +297,7 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
         // sets the grid / list toggle icon
         MenuItem displayModeItem = menu.findItem(R.id.action_change_layout);
         boolean gridMode = prefs.getDisplayMode() == DisplayMode.GRID;
-        displayModeItem.setIcon(gridMode ? R.drawable.ic_view_list_white_24dp : R.drawable.ic_view_grid_white_24dp);
+        displayModeItem.setIcon(gridMode ? R.drawable.ic_view_list : R.drawable.ic_view_grid_white_24dp);
     }
 
     @Override

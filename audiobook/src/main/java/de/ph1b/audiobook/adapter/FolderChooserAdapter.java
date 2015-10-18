@@ -90,7 +90,7 @@ public class FolderChooserAdapter extends BaseAdapter {
         }
 
         Drawable icon = ContextCompat.getDrawable(c, isDirectory ?
-                R.drawable.ic_folder_white_48dp :
+                R.drawable.ic_folder :
                 R.drawable.ic_audiotrack_white_48dp);
         viewHolder.imageView.setImageDrawable(icon);
         viewHolder.imageView.setContentDescription(c.getString(isDirectory ?
