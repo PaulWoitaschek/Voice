@@ -150,7 +150,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             db.endTransaction();
         }
 
-        activeBooks.add(Book.of(mutableBook));
+        activeBooks.add(new Book.Builder(mutableBook).build());
         communication.bookSetChanged(activeBooks);
     }
 
@@ -159,7 +159,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public synchronized Book getBook(long id) {
         for (Book b : activeBooks) {
             if (b.getId() == id) {
-                return Book.of(b);
+                return new Book.Builder(b).build();
             }
         }
         return null;
@@ -170,7 +170,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public synchronized List<Book> getActiveBooks() {
         List<Book> copyBooks = new ArrayList<>(activeBooks.size());
         for (Book b : activeBooks) {
-            copyBooks.add(Book.of(b));
+            copyBooks.add(new Book.Builder(b).build());
         }
         return copyBooks;
     }
@@ -179,7 +179,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public synchronized List<Book> getOrphanedBooks() {
         List<Book> copyBooks = new ArrayList<>(orphanedBooks.size());
         for (Book b : orphanedBooks) {
-            copyBooks.add(Book.of(b));
+            copyBooks.add(new Book.Builder(b).build());
         }
         return copyBooks;
     }
@@ -192,7 +192,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         while (bookIterator.hasNext()) {
             Book next = bookIterator.next();
             if (mutableBook.getId() == next.getId()) {
-                bookIterator.set(Book.of(mutableBook));
+                bookIterator.set(new Book.Builder(mutableBook).build());
 
                 SQLiteDatabase db = getWritableDatabase();
                 db.beginTransaction();
@@ -242,7 +242,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 break;
             }
         }
-        orphanedBooks.add(Book.of(mutableBook));
+        orphanedBooks.add(new Book.Builder(mutableBook).build());
         communication.bookSetChanged(activeBooks);
     }
 
@@ -259,7 +259,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 break;
             }
         }
-        activeBooks.add(Book.of(mutableBook));
+        activeBooks.add(new Book.Builder(mutableBook).build());
         communication.bookSetChanged(activeBooks);
     }
 

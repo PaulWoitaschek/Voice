@@ -109,7 +109,7 @@ public class Communication {
                 for (BookCommunication listener : listeners) {
                     List<Book> copyBooks = new ArrayList<>(allBooks.size());
                     for (Book b : allBooks) {
-                        copyBooks.add(Book.of(b));
+                        copyBooks.add(new Book.Builder(b).build());
                     }
                     listener.onBookSetChanged(copyBooks);
                 }
@@ -137,7 +137,7 @@ public class Communication {
             public void run() {
                 for (BookCommunication listener : listeners) {
                     // copy constructor for immutabliity
-                    listener.onBookContentChanged(Book.of(book));
+                    listener.onBookContentChanged(new Book.Builder(book).build());
                 }
             }
         });

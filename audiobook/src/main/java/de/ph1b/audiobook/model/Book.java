@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import de.ph1b.audiobook.interfaces.GenericBuilder;
 import de.ph1b.audiobook.utils.App;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -44,6 +45,21 @@ public class Book implements Comparable<Book> {
     private File currentFile;
     private boolean useCoverReplacement = false;
 
+    private Book(Builder builder) {
+        this.root = builder.root;
+        this.chapters = new ArrayList<>(builder.chapters);
+        this.type = builder.type;
+        this.packageName = builder.packageName;
+        this.bookmarks = new ArrayList<>(builder.bookmarks);
+        this.author = builder.author;
+        this.name = builder.name;
+        this.currentFile = builder.currentFile;
+        this.useCoverReplacement = builder.useCoverReplacement;
+        this.playbackSpeed = builder.playbackSpeed;
+        this.id = builder.id;
+        this.time = builder.time;
+    }
+
     public Book(@NonNull String root,
                 @NonNull String name,
                 @Nullable String author,
@@ -70,17 +86,6 @@ public class Book implements Comparable<Book> {
         this.packageName = c.getPackageName();
         setPosition(0, currentFile);
         this.currentFile = currentFile;
-    }
-
-    public static Book of(Book that) {
-        Book book = new Book(that.root, that.name, that.author, new ArrayList<>(that.chapters), that.currentFile,
-                that.type, new ArrayList<>(that.bookmarks));
-        book.id = that.id;
-        book.time = that.time;
-        book.playbackSpeed = that.playbackSpeed;
-        book.currentFile = that.currentFile;
-        book.useCoverReplacement = that.useCoverReplacement;
-        return book;
     }
 
     public static Book of(@NonNull String root,
@@ -136,7 +141,6 @@ public class Book implements Comparable<Book> {
         throw new IllegalStateException("Current chapter was not found while looking up the global position");
     }
 
-
     @NonNull
     public File getCoverFile() {
         File coverFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
@@ -178,7 +182,6 @@ public class Book implements Comparable<Book> {
     public void setUseCoverReplacement(boolean useCoverReplacement) {
         this.useCoverReplacement = useCoverReplacement;
     }
-
 
     /**
      * @return the author of the book or null if not set.
@@ -322,6 +325,63 @@ public class Book implements Comparable<Book> {
         COLLECTION_FILE,
         SINGLE_FOLDER,
         SINGLE_FILE,
+    }
+
+    public static class Builder implements GenericBuilder<Book> {
+
+        private final String root;
+        private final List<Chapter> chapters;
+        private final Type type;
+        private final String packageName;
+        private final List<Bookmark> bookmarks;
+        private final String author;
+        private long id = ID_UNKNOWN;
+        private int time = 0;
+        private File currentFile;
+        private boolean useCoverReplacement;
+        private String name;
+        private float playbackSpeed = 1.0f;
+
+        public Builder(Book book) {
+            this.root = book.root;
+            this.chapters = book.chapters;
+            this.type = book.type;
+            this.packageName = book.packageName;
+            this.bookmarks = book.bookmarks;
+            this.author = book.author;
+
+            this.id = book.id;
+            this.time = book.time;
+            this.playbackSpeed = book.playbackSpeed;
+            this.currentFile = book.currentFile;
+            this.useCoverReplacement = book.useCoverReplacement;
+            this.name = book.name;
+        }
+
+        public Builder(String root, List<Chapter> chapters, Type type, String packageName, List<Bookmark> bookmarks,
+                       String author) {
+            this.root = root;
+            this.chapters = chapters;
+            this.type = type;
+            this.packageName = packageName;
+            this.bookmarks = bookmarks;
+            this.author = author;
+        }
+
+        public Builder id(long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder time(int time) {
+            this.time = time;
+            return this;
+        }
+
+        @Override
+        public Book build() {
+            return new Book(this);
+        }
     }
 }
 
