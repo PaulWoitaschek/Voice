@@ -192,7 +192,9 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                     lock.lock();
                     try {
                         if (book != null) {
-                            book.setPosition(player.getCurrentPosition(), book.getCurrentFile());
+                            book = new Book.Builder(book)
+                                    .time(player.getCurrentPosition())
+                                    .build();
                             db.updateBook(book);
                         }
                     } finally {
@@ -243,7 +245,9 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
             if (book != null) {
                 if (player.getCurrentPosition() > 2000 || book.getPreviousChapter() == null) {
                     player.seekTo(0);
-                    book.setPosition(0, book.getCurrentFile());
+                    book = new Book.Builder(book)
+                            .time(0)
+                            .build();
                     db.updateBook(book);
                 } else {
                     if (toNullOfNewTrack) {
@@ -372,7 +376,9 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                                 int seekTo = originalPosition - autoRewind;
                                 seekTo = Math.max(seekTo, 0);
                                 player.seekTo(seekTo);
-                                book.setPosition(seekTo, book.getCurrentFile());
+                                book = new Book.Builder(book)
+                                        .time(seekTo)
+                                        .build();
                             }
                         }
                         db.updateBook(book);
@@ -471,7 +477,10 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                 L.v(TAG, "changeFile=" + changeFile);
                 if (changeFile) {
                     boolean wasPlaying = (state == State.STARTED);
-                    book.setPosition(time, file);
+                    book = new Book.Builder(book)
+                            .time(time)
+                            .currentFile(file)
+                            .build();
                     db.updateBook(book);
                     prepare();
                     if (wasPlaying) {
@@ -489,7 +498,9 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                         case PAUSED:
                         case PLAYBACK_COMPLETED:
                             player.seekTo(time);
-                            book.setPosition(time, book.getCurrentChapter().file());
+                            book = new Book.Builder(book)
+                                    .time(time)
+                                    .build();
                             db.updateBook(book);
                             break;
                         default:

@@ -28,10 +28,10 @@ public class Book implements Comparable<Book> {
     private final boolean useCoverReplacement;
     @NonNull private final String name;
     private final float playbackSpeed;
+    private final int time;
+    @NonNull private final File currentFile;
     @Inject Context c;
     private long id = ID_UNKNOWN;
-    private int time = 0;
-    @NonNull private File currentFile;
 
     private Book(Builder builder) {
         App.getComponent().inject(this);
@@ -106,23 +106,6 @@ public class Book implements Comparable<Book> {
     @NonNull
     public Type getType() {
         return type;
-    }
-
-    public void setPosition(int time, @NonNull File currentFile) {
-        boolean relativeMediaPathExists = false;
-        for (Chapter c : chapters) {
-            if (c.file().equals(currentFile)) {
-                relativeMediaPathExists = true;
-            }
-        }
-        if (!relativeMediaPathExists) {
-            throw new IllegalArgumentException("Creating book with name=" + name +
-                    " failed because currentFile=" + currentFile +
-                    " does not exist in chapters=" + chapters);
-        }
-
-        this.time = time;
-        this.currentFile = currentFile;
     }
 
     public boolean isUseCoverReplacement() {
@@ -283,7 +266,6 @@ public class Book implements Comparable<Book> {
             this.type = book.type;
             this.bookmarks = book.bookmarks;
             this.author = book.author;
-
             this.id = book.id;
             this.time = book.time;
             this.playbackSpeed = book.playbackSpeed;
@@ -304,6 +286,11 @@ public class Book implements Comparable<Book> {
             this.currentFile = currentFile;
             this.useCoverReplacement = useCoverReplacement;
             this.playbackSpeed = playbackSpeed;
+        }
+
+        public Builder currentFile(File currentFile) {
+            this.currentFile = currentFile;
+            return this;
         }
 
         public Builder useCoverReplacement(boolean useCoverReplacement) {

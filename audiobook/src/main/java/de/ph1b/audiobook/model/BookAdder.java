@@ -430,7 +430,7 @@ public class BookAdder {
         String author = getAuthor(firstChapterFile, mmr);
         mmr.release();
 
-        final Book orphanedBook = getBookFromDb(rootFile, type, true);
+        Book orphanedBook = getBookFromDb(rootFile, type, true);
         if (orphanedBook == null) {
             Book newBook = new Book.Builder(bookRoot, newChapters, type, new ArrayList<Bookmark>(),
                     author, firstChapterFile, bookName, false, 1.0f)
@@ -443,11 +443,12 @@ public class BookAdder {
             orphanedBook.getChapters().addAll(newChapters);
 
             // now removes invalid bookmarks
+            final List<Chapter> chapters = orphanedBook.getChapters();
             List<Bookmark> filteredBookmarks = Lists.newArrayList(Collections2.filter(
                     orphanedBook.getBookmarks(), new Predicate<Bookmark>() {
                         @Override
                         public boolean apply(Bookmark input) {
-                            for (Chapter c : orphanedBook.getChapters()) {
+                            for (Chapter c : chapters) {
                                 if (c.file().equals(input.mediaFile())) {
                                     return true;
                                 }
@@ -466,7 +467,10 @@ public class BookAdder {
                 }
             }
             if (!pathValid) {
-                orphanedBook.setPosition(0, orphanedBook.getChapters().get(0).file());
+                orphanedBook = new Book.Builder(orphanedBook)
+                        .time(0)
+                        .currentFile(orphanedBook.getChapters().get(0).file())
+                        .build();
             }
 
             // now finally un-hide this book
@@ -481,7 +485,7 @@ public class BookAdder {
      * @param bookExisting The existing book
      * @param newChapters  The new chapters matching to the book
      */
-    private void updateBook(@NonNull final Book bookExisting, @NonNull List<Chapter> newChapters) {
+    private void updateBook(@NonNull Book bookExisting, @NonNull List<Chapter> newChapters) {
         boolean bookHasChanged = !(bookExisting.getChapters().equals(newChapters));
         // sort chapters
         if (bookHasChanged) {
@@ -495,21 +499,28 @@ public class BookAdder {
             for (Chapter c : bookExisting.getChapters()) {
                 if (c.file().equals(currentFile)) {
                     if (c.duration() < currentTime) {
-                        bookExisting.setPosition(0, c.file());
+                        bookExisting = new Book.Builder(bookExisting)
+                                .time(0)
+                                .currentFile(c.file())
+                                .build();
                     }
                     currentPathIsGone = false;
                 }
             }
             if (currentPathIsGone) {
-                bookExisting.setPosition(0, bookExisting.getChapters().get(0).file());
+                bookExisting = new Book.Builder(bookExisting)
+                        .time(0)
+                        .currentFile(bookExisting.getChapters().get(0).file())
+                        .build();
             }
 
             // removes the bookmarks that no longer represent an existing file
             List<Bookmark> existingBookmarks = bookExisting.getBookmarks();
+            final List<Chapter> chapters = bookExisting.getChapters();
             List<Bookmark> filtered = Lists.newArrayList(Collections2.filter(existingBookmarks, new Predicate<Bookmark>() {
                 @Override
                 public boolean apply(Bookmark input) {
-                    for (Chapter c : bookExisting.getChapters()) {
+                    for (Chapter c : chapters) {
                         if (c.file().equals(input.mediaFile())) {
                             return true;
                         }
