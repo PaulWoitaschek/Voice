@@ -1,9 +1,10 @@
-package de.ph1b.audiobook.dialog;
+package de.ph1b.audiobook.dialog.prefs;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.interfaces.SettingsSetListener;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.persistence.DataBaseHelper;
 import de.ph1b.audiobook.persistence.PrefsManager;
@@ -29,6 +31,8 @@ import de.ph1b.audiobook.utils.App;
 
 /**
  * Dialog for setting the playback speed of the current book.
+ *
+ * @author Paul Woitaschek
  */
 public class PlaybackSpeedDialogFragment extends DialogFragment {
 
@@ -43,6 +47,7 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
     @Bind(R.id.textView) TextView textView;
     @Inject PrefsManager prefs;
     @Inject DataBaseHelper db;
+    @Nullable private SettingsSetListener listener;
 
     private static float speedStepValueToSpeed(int step) {
         return (SPEED_MIN + (step * SPEED_DELTA));
@@ -100,5 +105,9 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
 
     private String formatTime(float time) {
         return getString(R.string.playback_speed) + ": " + df.format(time) + "x";
+    }
+
+    public void setSettingsSetListener(@Nullable SettingsSetListener listener) {
+        this.listener = listener;
     }
 }

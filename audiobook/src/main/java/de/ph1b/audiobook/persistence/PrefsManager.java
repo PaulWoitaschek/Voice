@@ -16,10 +16,14 @@ import javax.inject.Singleton;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.model.Book;
+import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.Communication;
+import de.ph1b.audiobook.utils.L;
 
 /**
  * Preference manager, managing the setting and getting of {@link SharedPreferences}
+ *
+ * @author Paul Woitaschek
  */
 @Singleton
 public class PrefsManager {
@@ -28,16 +32,45 @@ public class PrefsManager {
     private static final String PREF_KEY_COLLECTION_FOLDERS = "folders";
     private static final String PREF_KEY_SINGLE_BOOK_FOLDERS = "singleBookFolders";
     private static final String PREF_KEY_DISPLAY_MODE = "displayMode";
+    private final String PREF_KEY_RESUME_ON_REPLUG;
+    private final String PREF_KEY_THEME;
     private final Communication communication;
-    private final Context c;
     private final SharedPreferences sp;
+    private final String PREF_KEY_BOOKMARK_ON_SLEEP;
+    private final String PREF_KEY_SEEK_TIME;
+    private final String PREF_KEY_SLEEP_TIME;
+    private final String PREF_KEY_PAUSE_ON_CAN_DUCK;
+    private final String PREF_KEY_AUTO_REWIND;
 
     @Inject
     public PrefsManager(@NonNull Context c, Communication communication) {
         PreferenceManager.setDefaultValues(c, R.xml.preferences, false);
-        this.c = c;
         this.communication = communication;
         sp = PreferenceManager.getDefaultSharedPreferences(c);
+
+        PREF_KEY_THEME = c.getString(R.string.pref_key_theme);
+        PREF_KEY_SLEEP_TIME = c.getString(R.string.pref_key_sleep_time);
+        PREF_KEY_RESUME_ON_REPLUG = c.getString(R.string.pref_key_resume_on_replug);
+        PREF_KEY_SEEK_TIME = c.getString(R.string.pref_key_seek_time);
+        PREF_KEY_BOOKMARK_ON_SLEEP = c.getString(R.string.pref_key_bookmark_on_sleep);
+        PREF_KEY_AUTO_REWIND = c.getString(R.string.pref_key_auto_rewind);
+        PREF_KEY_PAUSE_ON_CAN_DUCK = c.getString(R.string.pref_key_pause_on_can_duck);
+    }
+
+    public synchronized ThemeUtil.Theme getTheme() {
+        String value = sp.getString(PREF_KEY_THEME, null);
+        if (value == null) {
+            L.i("pref", "returning default value light");
+            return ThemeUtil.Theme.LIGHT;
+        } else {
+            L.i("pf", "saved value=" + value);
+            return ThemeUtil.Theme.valueOf(value);
+        }
+    }
+
+    public synchronized void setTheme(ThemeUtil.Theme theme) {
+        L.i("prefs", "settheme to " + theme);
+        sp.edit().putString(PREF_KEY_THEME, theme.name()).apply();
     }
 
     /**
@@ -118,7 +151,7 @@ public class PrefsManager {
      * @return the time to sleep
      */
     public synchronized int getSleepTime() {
-        return sp.getInt(c.getString(R.string.pref_key_sleep_time), 20);
+        return sp.getInt(PREF_KEY_SLEEP_TIME, 20);
     }
 
     /**
@@ -127,7 +160,7 @@ public class PrefsManager {
      * @param time sleep time in Minutes
      */
     public synchronized void setSleepTime(int time) {
-        sp.edit().putInt(c.getString(R.string.pref_key_sleep_time), time)
+        sp.edit().putInt(PREF_KEY_SLEEP_TIME, time)
                 .apply();
     }
 
@@ -137,7 +170,7 @@ public class PrefsManager {
      * @return the time to seek
      */
     public synchronized int getSeekTime() {
-        return sp.getInt(c.getString(R.string.pref_key_seek_time), 20);
+        return sp.getInt(PREF_KEY_SEEK_TIME, 20);
     }
 
     /**
@@ -146,7 +179,7 @@ public class PrefsManager {
      * @param time the time to seek
      */
     public synchronized void setSeekTime(int time) {
-        sp.edit().putInt(c.getString(R.string.pref_key_seek_time), time)
+        sp.edit().putInt(PREF_KEY_SEEK_TIME, time)
                 .apply();
     }
 
@@ -155,14 +188,14 @@ public class PrefsManager {
      * paused by unplugging).
      */
     public synchronized boolean resumeOnReplug() {
-        return sp.getBoolean(c.getString(R.string.pref_key_resume_on_replug), true);
+        return sp.getBoolean(PREF_KEY_RESUME_ON_REPLUG, true);
     }
 
     /**
      * @return true if should pause the player on a temporary interruption.
      */
     public synchronized boolean pauseOnTempFocusLoss() {
-        return sp.getBoolean(c.getString(R.string.pref_key_pause_on_can_duck), false);
+        return sp.getBoolean(PREF_KEY_PAUSE_ON_CAN_DUCK, false);
     }
 
     /**
@@ -171,7 +204,7 @@ public class PrefsManager {
      * @return the rewind amount
      */
     public synchronized int getAutoRewindAmount() {
-        return sp.getInt(c.getString(R.string.pref_key_auto_rewind), 2);
+        return sp.getInt(PREF_KEY_AUTO_REWIND, 2);
     }
 
     /**
@@ -180,7 +213,7 @@ public class PrefsManager {
      * @param autoRewindAmount the amount to auto rewind
      */
     public synchronized void setAutoRewindAmount(int autoRewindAmount) {
-        sp.edit().putInt(c.getString(R.string.pref_key_auto_rewind), autoRewindAmount)
+        sp.edit().putInt(PREF_KEY_AUTO_REWIND, autoRewindAmount)
                 .apply();
     }
 
@@ -189,7 +222,7 @@ public class PrefsManager {
      * timer is called
      */
     public synchronized boolean setBookmarkOnSleepTimer() {
-        return sp.getBoolean(c.getString(R.string.pref_key_bookmark_on_sleep), false);
+        return sp.getBoolean(PREF_KEY_BOOKMARK_ON_SLEEP, false);
     }
 
     /**

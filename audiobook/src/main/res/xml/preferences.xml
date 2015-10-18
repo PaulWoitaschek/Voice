@@ -4,41 +4,41 @@
         <Preference
             android:key="@string/pref_key_audiobook_folders"
             android:summary="@string/pref_root_folder_summary"
-            android:title="@string/pref_root_folder_title" />
+            android:title="@string/pref_root_folder_title"/>
         <Preference
             android:key="@string/pref_key_theme"
             android:summary="@string/pref_theme_light"
-            android:title="@string/pref_theme_title" />
+            android:title="@string/pref_theme_title"/>
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="acra.enable"
             android:summary="@string/pref_send_bugs_summary"
-            android:title="@string/pref_send_bugs_title" />
+            android:title="@string/pref_send_bugs_title"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_category_playback">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="@string/pref_key_resume_on_replug"
             android:summary="@string/pref_resume_on_replug_hint"
-            android:title="@string/pref_resume_on_replug" />
+            android:title="@string/pref_resume_on_replug"/>
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/pref_key_pause_on_can_duck"
             android:summary="@string/pref_pause_on_can_duck_summary"
-            android:title="@string/pref_pause_on_can_duck_title" />
-        <de.ph1b.audiobook.dialog.SeekDialogPreference
+            android:title="@string/pref_pause_on_can_duck_title"/>
+        <Preference
             android:key="@string/pref_key_seek_time"
-            android:title="@string/pref_seek_time" />
-        <de.ph1b.audiobook.dialog.SleepDialogPreference
+            android:title="@string/pref_seek_time"/>
+        <Preference
             android:key="@string/pref_key_sleep_time"
-            android:title="@string/pref_sleep_time" />
+            android:title="@string/pref_sleep_time"/>
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/pref_key_bookmark_on_sleep"
             android:summary="@string/pref_bookmark_on_sleep_summary"
-            android:title="@string/pref_bookmark_on_sleep_title" />
-        <de.ph1b.audiobook.dialog.AutoRewindDialogPreference
+            android:title="@string/pref_bookmark_on_sleep_title"/>
+        <Preference
             android:key="@string/pref_key_auto_rewind"
-            android:title="@string/pref_auto_rewind_title" />
+            android:title="@string/pref_auto_rewind_title"/>
     </PreferenceCategory>
 </PreferenceScreen>

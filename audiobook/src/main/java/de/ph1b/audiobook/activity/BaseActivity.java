@@ -6,9 +6,12 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 
+import javax.inject.Inject;
+
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.BookReaderService;
-import de.ph1b.audiobook.uitools.ThemeUtil;
+import de.ph1b.audiobook.utils.App;
 
 /**
  * Base class for all Activities which checks in onResume, if the storage
@@ -16,6 +19,7 @@ import de.ph1b.audiobook.uitools.ThemeUtil;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
+    @Inject PrefsManager prefsManager;
 
     public static boolean storageMounted() {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
@@ -23,7 +27,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(ThemeUtil.getTheme(this));
+        App.getComponent().inject(this);
+        setTheme(prefsManager.getTheme().getThemeId());
         super.onCreate(savedInstanceState);
     }
 
@@ -45,12 +50,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void recreateIfThemeChanged() {
         TypedValue outValue = new TypedValue();
         getTheme().resolveAttribute(R.attr.theme_name, outValue, true);
-        String themeName = String.valueOf(outValue.string);
-        String darkThemeName = getString(R.string.pref_theme_dark);
-        String lightThemeName = getString(R.string.pref_theme_light);
-        int settingsTheme = ThemeUtil.getTheme(this);
-        if ((settingsTheme == R.style.DarkTheme && themeName.equals(lightThemeName)) || (settingsTheme == R.style.LightTheme && themeName.equals(darkThemeName))) {
-            // themes have changed. recreate
+        String oldThemeName = String.valueOf(outValue.string);
+        String newName = getString(prefsManager.getTheme().getNameId());
+
+        if (!newName.equals(oldThemeName)) {
             recreate();
         }
     }

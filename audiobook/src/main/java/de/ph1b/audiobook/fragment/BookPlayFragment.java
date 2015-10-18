@@ -44,7 +44,7 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.SettingsActivity;
 import de.ph1b.audiobook.dialog.BookmarkDialogFragment;
 import de.ph1b.audiobook.dialog.JumpToPositionDialogFragment;
-import de.ph1b.audiobook.dialog.PlaybackSpeedDialogFragment;
+import de.ph1b.audiobook.dialog.prefs.PlaybackSpeedDialogFragment;
 import de.ph1b.audiobook.interfaces.MultiPaneInformer;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;

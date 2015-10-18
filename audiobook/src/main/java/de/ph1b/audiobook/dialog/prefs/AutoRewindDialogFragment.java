@@ -1,12 +1,12 @@
-package de.ph1b.audiobook.dialog;
+package de.ph1b.audiobook.dialog.prefs;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.preference.DialogPreference;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
@@ -21,20 +21,25 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.interfaces.SettingsSetListener;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.utils.App;
 
 
-public class AutoRewindDialogPreference extends DialogPreference {
-
+public class AutoRewindDialogFragment extends DialogFragment {
+    public static final String TAG = AutoRewindDialogFragment.class.getSimpleName();
     private static final int SEEK_BAR_MIN = 0;
     private static final int SEEK_BAR_MAX = 20;
     @Bind(R.id.textView) TextView textView;
     @Bind(R.id.seekBar) SeekBar seekBar;
     @Inject PrefsManager prefs;
+    private SettingsSetListener settingsSetListener;
 
-    public AutoRewindDialogPreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        settingsSetListener = (SettingsSetListener) context;
     }
 
     private void setText(int progress) {
@@ -43,8 +48,9 @@ public class AutoRewindDialogPreference extends DialogPreference {
         textView.setText(autoRewindSummary);
     }
 
+    @NonNull
     @Override
-    protected void showDialog(Bundle state) {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         @SuppressLint("InflateParams") View customView = LayoutInflater.from(getContext()).inflate
                 (R.layout.dialog_amount_chooser, null);
         ButterKnife.bind(this, customView);
@@ -52,9 +58,9 @@ public class AutoRewindDialogPreference extends DialogPreference {
 
 
         MDTintHelper.setTint(seekBar, ContextCompat.getColor(getContext(), R.color.accent));
-        int position = prefs.getAutoRewindAmount();
+        final int oldRewindAmount = prefs.getAutoRewindAmount();
         seekBar.setMax(SEEK_BAR_MAX - SEEK_BAR_MIN);
-        seekBar.setProgress(position - SEEK_BAR_MIN);
+        seekBar.setProgress(oldRewindAmount - SEEK_BAR_MIN);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -73,7 +79,7 @@ public class AutoRewindDialogPreference extends DialogPreference {
         // text
         setText(seekBar.getProgress());
 
-        new MaterialDialog.Builder(getContext())
+        return new MaterialDialog.Builder(getContext())
                 .title(R.string.pref_auto_rewind_title)
                 .customView(customView, true)
                 .positiveText(R.string.dialog_confirm)
@@ -81,10 +87,12 @@ public class AutoRewindDialogPreference extends DialogPreference {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                        int autoRewindAmount = seekBar.getProgress();
-                        prefs.setAutoRewindAmount(autoRewindAmount + SEEK_BAR_MIN);
+                        int newRewindAmount = seekBar.getProgress() + SEEK_BAR_MIN;
+                        prefs.setAutoRewindAmount(newRewindAmount);
+                        settingsSetListener.onSettingsSet(oldRewindAmount != newRewindAmount);
                     }
                 })
-                .show();
+                .build();
     }
+
 }

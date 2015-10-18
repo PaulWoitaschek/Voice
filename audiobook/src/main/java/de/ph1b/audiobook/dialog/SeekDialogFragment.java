@@ -1,12 +1,12 @@
 package de.ph1b.audiobook.dialog;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.preference.DialogPreference;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
@@ -21,31 +21,43 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.interfaces.SettingsSetListener;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.utils.App;
 
-public class SeekDialogPreference extends DialogPreference {
+public class SeekDialogFragment extends DialogFragment {
 
+    public static final String TAG = SeekDialogFragment.class.getSimpleName();
     private static final int SEEK_BAR_MIN = 10;
     private static final int SEEK_BAR_MAX = 60;
     @Bind(R.id.seekBar) SeekBar seekBar;
     @Bind(R.id.textView) TextView textView;
     @Inject PrefsManager prefs;
+    private SettingsSetListener settingsSetListener;
 
-    public SeekDialogPreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        settingsSetListener = (SettingsSetListener) context;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         App.getComponent().inject(this);
     }
 
+    @NonNull
     @Override
-    protected void showDialog(Bundle state) {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         @SuppressLint("InflateParams") View customView = LayoutInflater.from(getContext())
                 .inflate(R.layout.dialog_amount_chooser, null);
         ButterKnife.bind(this, customView);
 
         //seekBar
-        int position = prefs.getSeekTime();
+        final int oldSeekTime = prefs.getSeekTime();
 
         MDTintHelper.setTint(seekBar, ContextCompat.getColor(getContext(), R.color.accent));
         seekBar.setMax(SEEK_BAR_MAX - SEEK_BAR_MIN);
@@ -64,9 +76,9 @@ public class SeekDialogPreference extends DialogPreference {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
-        seekBar.setProgress(position - SEEK_BAR_MIN);
+        seekBar.setProgress(oldSeekTime - SEEK_BAR_MIN);
 
-        new MaterialDialog.Builder(getContext())
+        return new MaterialDialog.Builder(getContext())
                 .title(R.string.pref_seek_time)
                 .customView(customView, true)
                 .positiveText(R.string.dialog_confirm)
@@ -74,10 +86,11 @@ public class SeekDialogPreference extends DialogPreference {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                        int seekAmount = seekBar.getProgress();
-                        prefs.setSeekTime(seekAmount + SEEK_BAR_MIN);
+                        int newSeekTime = seekBar.getProgress() + SEEK_BAR_MIN;
+                        prefs.setSeekTime(newSeekTime);
+                        settingsSetListener.onSettingsSet(oldSeekTime != newSeekTime);
                     }
                 })
-                .show();
+                .build();
     }
 }

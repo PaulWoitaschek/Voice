@@ -1,15 +1,15 @@
 package de.ph1b.audiobook.uitools;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.support.annotation.AnyRes;
 import android.support.annotation.AttrRes;
+import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
+import android.support.annotation.StyleRes;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.NumberPicker;
@@ -19,21 +19,6 @@ import java.lang.reflect.Field;
 import de.ph1b.audiobook.R;
 
 public class ThemeUtil {
-
-    public static int getTheme(@NonNull Context c) {
-        Resources r = c.getResources();
-
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
-        String theme = sp.getString(r.getString(R.string.pref_key_theme), null);
-        switch (theme == null ? "light" : theme) {
-            case "light":
-                return R.style.LightTheme;
-            case "dark":
-                return R.style.DarkTheme;
-            default:
-                throw new AssertionError("Unknown theme found=" + theme);
-        }
-    }
 
     @AnyRes
     public static int getResourceId(@NonNull Context c, @AttrRes int attr) {
@@ -64,6 +49,36 @@ public class ThemeUtil {
                     }
                 }
             }
+        }
+    }
+
+    public enum Theme {
+        LIGHT(R.style.LightTheme, R.string.pref_theme_light, R.color.light_primary_dark),
+        DARK(R.style.DarkTheme, R.string.pref_theme_dark, R.color.dark_primary_dark);
+
+        @StyleRes private final int themeId;
+        @StringRes private final int nameId;
+        @ColorRes private final int colorId;
+
+        Theme(@StyleRes int themeId, @StringRes int nameId, @ColorRes int colorId) {
+            this.themeId = themeId;
+            this.nameId = nameId;
+            this.colorId = colorId;
+        }
+
+        @StyleRes
+        public int getThemeId() {
+            return themeId;
+        }
+
+        @ColorRes
+        public int getColorId() {
+            return colorId;
+        }
+
+        @StringRes
+        public int getNameId() {
+            return nameId;
         }
     }
 }

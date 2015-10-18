@@ -1,51 +1,69 @@
 package de.ph1b.audiobook.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
-
-import com.afollestad.materialdialogs.MaterialDialog;
 
 import javax.inject.Inject;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BaseActivity;
 import de.ph1b.audiobook.activity.FolderOverviewActivity;
-import de.ph1b.audiobook.dialog.AutoRewindDialogPreference;
 import de.ph1b.audiobook.dialog.DonationDialogFragment;
-import de.ph1b.audiobook.dialog.SeekDialogPreference;
-import de.ph1b.audiobook.dialog.SleepDialogPreference;
+import de.ph1b.audiobook.dialog.SeekDialogFragment;
 import de.ph1b.audiobook.dialog.SupportDialogFragment;
+import de.ph1b.audiobook.dialog.prefs.AutoRewindDialogFragment;
+import de.ph1b.audiobook.dialog.prefs.SleepDialogFragment;
+import de.ph1b.audiobook.dialog.prefs.ThemePickerDialogFragment;
+import de.ph1b.audiobook.interfaces.SettingsSetListener;
 import de.ph1b.audiobook.persistence.PrefsManager;
+import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.vendinghelper.IabHelper;
 import de.ph1b.audiobook.vendinghelper.IabResult;
 
-public class SettingsFragment extends PreferenceFragment implements SharedPreferences.
-        OnSharedPreferenceChangeListener, DonationDialogFragment.OnDonationClickedListener {
+public class SettingsFragment extends PreferenceFragment implements DonationDialogFragment.OnDonationClickedListener,
+        SettingsSetListener {
 
     public static final String TAG = SettingsFragment.class.getSimpleName();
+    private final Handler handler = new Handler();
     @Inject PrefsManager prefs;
-    private SharedPreferences sp;
+    private Preference themePreference;
+    private Preference sleepPreference;
+    private Preference seekPreference;
+    private Preference autoRewindPreference;
     private boolean donationAvailable = false;
     private IabHelper iabHelper;
+    private BaseActivity hostingActivity;
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
         iabHelper.dispose();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ActionBar actionBar = hostingActivity.getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        updateValues();
+
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -57,7 +75,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
         setHasOptionsMenu(true);
 
-        sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         iabHelper = new IabHelper(getActivity(), "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApfo7lNYf9Mh" +
                 "GiHAZO8iG/LX3SDGg7Gv7s41FEf08rxCuIuE+6QdQ0u+yZEoirislWV7jMqHY3XlyJMrH+/nKqrtYgw" +
                 "qnFtwuwckS/5R+0dtSKL4F/aVm6a3p00BtCjqe7tXrEg90gpVk59p5qr1cOnOAAc/xmerFG9VCv8QHw" +
@@ -70,99 +87,81 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 donationAvailable = result.isSuccess();
             }
         });
-    }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        // we need this here since SettingsActivity sets toolbar in onCreate, but the fragment is
-        // reused.
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        initValues();
-
-        sp.registerOnSharedPreferenceChangeListener(this);
-    }
-
-    private void initValues() {
         // seek pref
-        int seekAmount = prefs.getSeekTime();
-        String seekSummary = getResources().getQuantityString(R.plurals.seconds, seekAmount, seekAmount);
-        SeekDialogPreference seekDialogPreference = (SeekDialogPreference) findPreference(getString(R.string.pref_key_seek_time));
-        seekDialogPreference.setSummary(seekSummary);
+        seekPreference = findPreference(getString(R.string.pref_key_seek_time));
+        seekPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new SeekDialogFragment().show(hostingActivity.getSupportFragmentManager(), SeekDialogFragment.TAG);
+                return true;
+            }
+        });
 
         // auto rewind pref
-        int autoRewindAmount = prefs.getAutoRewindAmount();
-        String autoRewindSummary = getResources().getQuantityString(R.plurals.seconds, autoRewindAmount, autoRewindAmount);
-        AutoRewindDialogPreference autoRewindDialogPreference = (AutoRewindDialogPreference) findPreference(getString(R.string.pref_key_auto_rewind));
-        autoRewindDialogPreference.setSummary(autoRewindSummary);
+        autoRewindPreference = findPreference(getString(R.string.pref_key_auto_rewind));
+        autoRewindPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new AutoRewindDialogFragment().show(hostingActivity.getSupportFragmentManager(), AutoRewindDialogFragment.TAG);
+                return true;
+            }
+        });
 
         // sleep pref
-        int sleepAmount = prefs.getSleepTime();
-        String sleepSummary = getResources().getQuantityString(R.plurals.minutes, sleepAmount, sleepAmount);
-        SleepDialogPreference sleepDialogPreference = (SleepDialogPreference) findPreference(getString(R.string.pref_key_sleep_time));
-        sleepDialogPreference.setSummary(sleepSummary);
+        sleepPreference = findPreference(getString(R.string.pref_key_sleep_time));
+        sleepPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new SleepDialogFragment().show(hostingActivity.getSupportFragmentManager(), SleepDialogFragment.TAG);
+                return true;
+            }
+        });
 
         // folder pref
         Preference folderPreference = findPreference(getString(R.string.pref_key_audiobook_folders));
         folderPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(getActivity(), FolderOverviewActivity.class));
+                startActivity(new Intent(hostingActivity, FolderOverviewActivity.class));
                 return true;
             }
         });
 
         // theme pref
-        Preference themePreference = findPreference(getString(R.string.pref_key_theme));
-        final boolean lightTheme = sp.getString(getString(R.string.pref_key_theme), "light").equals("light");
-        String themeSummary = getString(lightTheme ? R.string.pref_theme_light : R.string.pref_theme_dark);
-        themePreference.setSummary(themeSummary);
+        themePreference = findPreference(getString(R.string.pref_key_theme));
         themePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                new MaterialDialog.Builder(getActivity())
-                        .items(R.array.pref_theme_entries)
-                        .itemsCallbackSingleChoice(lightTheme ? 0 : 1, new MaterialDialog.ListCallbackSingleChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
-                                boolean newThemeLight = i == 0;
-                                sp.edit().putString(getString(R.string.pref_key_theme),
-                                        getString(newThemeLight ? R.string.pref_key_theme_light :
-                                                R.string.pref_key_theme_dark)).apply();
-                                initValues();
-                                return true;
-                            }
-                        })
-                        .positiveText(R.string.dialog_confirm)
-                        .negativeText(R.string.dialog_cancel)
-                        .title(R.string.pref_theme_title)
-                        .show();
+                new ThemePickerDialogFragment().show(hostingActivity.getSupportFragmentManager(), ThemePickerDialogFragment.TAG);
                 return true;
             }
         });
-
-        BaseActivity baseActivity = (BaseActivity) getActivity();
-        baseActivity.recreateIfThemeChanged();
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        sp.unregisterOnSharedPreferenceChangeListener(this);
+    private void updateValues() {
+        ThemeUtil.Theme theme = prefs.getTheme();
+        themePreference.setSummary(theme.getNameId());
+
+        int sleepAmount = prefs.getSleepTime();
+        String sleepSummary = getResources().getQuantityString(R.plurals.minutes, sleepAmount, sleepAmount);
+        sleepPreference.setSummary(sleepSummary);
+
+        int autoRewindAmount = prefs.getAutoRewindAmount();
+        String autoRewindSummary = getResources().getQuantityString(R.plurals.seconds, autoRewindAmount, autoRewindAmount);
+        autoRewindPreference.setSummary(autoRewindSummary);
+
+        int seekAmount = prefs.getSeekTime();
+        seekPreference.setSummary(getResources().getQuantityString(R.plurals.seconds, seekAmount, seekAmount));
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        initValues();
+    public void onAttach(Activity activity) {
+        //noinspection deprecation
+        super.onAttach(activity);
+
+        hostingActivity = (BaseActivity) activity;
     }
 
     @Override
@@ -174,7 +173,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_contribute:
-                new SupportDialogFragment().show(((BaseActivity) getActivity()).getSupportFragmentManager(),
+                new SupportDialogFragment().show(hostingActivity.getSupportFragmentManager(),
                         SupportDialogFragment.TAG);
                 return true;
             default:
@@ -186,7 +185,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void onDonationClicked(String item) {
         L.d(TAG, "onDonationClicked with item=" + item + " and donationAvailable=" + donationAvailable);
         if (donationAvailable) {
-            iabHelper.launchPurchaseFlow(getActivity(), item,
+            iabHelper.launchPurchaseFlow(hostingActivity, item,
                     new IabHelper.OnIabPurchaseFinishedListener() {
                         @Override
                         public void onIabPurchaseFinished(IabResult result) {
@@ -197,7 +196,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                                 message = getString(R.string.donation_not_worked) + ":\n"
                                         + result.getMessage();
                             }
-                            Toast.makeText(getActivity(), message,
+                            Toast.makeText(hostingActivity, message,
                                     Toast.LENGTH_LONG).show();
                         }
                     });
@@ -209,5 +208,18 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         super.onActivityResult(requestCode, resultCode, data);
 
         iabHelper.handleActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onSettingsSet(boolean settingsChanged) {
+        if (settingsChanged) {
+            updateValues();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    hostingActivity.recreateIfThemeChanged();
+                }
+            });
+        }
     }
 }

@@ -7,9 +7,7 @@
     <string name="pref_key_sleep_time">SLEEP_TIME</string>
     <string name="pref_key_resume_on_replug">RESUME_ON_REPLUG</string>
     <string name="pref_key_audiobook_folders">ROOT_FOLDER</string>
-    <string name="pref_key_theme">CUSTOM_THEME</string>
-    <string name="pref_key_theme_light">light</string>
-    <string name="pref_key_theme_dark">dark</string>
+    <string name="pref_key_theme">THEME_KEY</string>
     <string name="pref_key_pause_on_can_duck">PAUSE_ON_CAN_DUCK</string>
     <string name="pref_key_auto_rewind">AUTO_REWIND</string>
     <string name="pref_key_bookmark_on_sleep">BOOKMARK_ON_SLEEP</string>
