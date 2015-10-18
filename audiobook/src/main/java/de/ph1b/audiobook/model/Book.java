@@ -4,6 +4,8 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.google.common.collect.ImmutableList;
+
 import java.io.File;
 import java.util.List;
 
@@ -23,9 +25,9 @@ public abstract class Book implements Comparable<Book> {
                                   @NonNull String name, boolean useCoverReplacement, float playbackSpeed) {
         return new AutoParcel_Book.Builder()
                 .root(root)
-                .chapters(chapters)
+                .chapters(ImmutableList.copyOf(chapters))
                 .type(type)
-                .bookmarks(bookmarks)
+                .bookmarks(ImmutableList.copyOf(bookmarks))
                 .author(author)
                 .currentFile(currentFile)
                 .name(name)
@@ -49,7 +51,7 @@ public abstract class Book implements Comparable<Book> {
     }
 
     @NonNull
-    public abstract List<Bookmark> bookmarks();
+    public abstract ImmutableList<Bookmark> bookmarks();
 
     /**
      * @return The global duration. It sums up the duration of all chapters.
@@ -145,7 +147,7 @@ public abstract class Book implements Comparable<Book> {
     public abstract long id();
 
     @NonNull
-    public abstract List<Chapter> chapters();
+    public abstract ImmutableList<Chapter> chapters();
 
     public abstract float playbackSpeed();
 
@@ -171,15 +173,17 @@ public abstract class Book implements Comparable<Book> {
     @AutoParcel.Builder
     public abstract static class Builder {
 
+        public abstract Book build();
+
         public abstract Builder currentFile(File currentFile);
 
         public abstract Builder useCoverReplacement(boolean useCoverReplacement);
 
         public abstract Builder name(String name);
 
-        public abstract Builder bookmarks(List<Bookmark> bookmarks);
+        public abstract Builder bookmarks(ImmutableList<Bookmark> bookmarks);
 
-        public abstract Builder chapters(List<Chapter> chapters);
+        public abstract Builder chapters(ImmutableList<Chapter> chapters);
 
         public abstract Builder root(String root);
 
@@ -190,8 +194,6 @@ public abstract class Book implements Comparable<Book> {
         public abstract Builder id(long id);
 
         public abstract Builder time(int time);
-
-        public abstract Book build();
 
         public abstract Builder author(String author);
     }
