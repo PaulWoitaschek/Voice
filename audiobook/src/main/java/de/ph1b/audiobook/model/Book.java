@@ -57,20 +57,6 @@ public class Book implements Comparable<Book> {
         this.time = builder.time;
     }
 
-
-    public static Book of(@NonNull String root,
-                          @NonNull String name,
-                          @Nullable String author,
-                          @NonNull List<Chapter> chapters,
-                          @NonNull File currentFile,
-                          @NonNull Type type,
-                          @NonNull List<Bookmark> bookmarks) {
-        return new Builder(root, chapters, type, bookmarks, author)
-                .name(name)
-                .currentFile(currentFile)
-                .build();
-    }
-
     /**
      * Gets the transition name for the cover transition.
      *
