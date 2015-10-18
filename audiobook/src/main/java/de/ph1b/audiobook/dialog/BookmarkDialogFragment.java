@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 
 import java.util.ArrayList;
@@ -155,6 +156,11 @@ public class BookmarkDialogFragment extends DialogFragment {
                                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                                             @Override
                                             public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
+                                                List<Bookmark> mutableBookmarks = new ArrayList<>(book.bookmarks());
+                                                mutableBookmarks.remove(clickedBookmark);
+                                                book = Book.builder(book)
+                                                        .bookmarks(ImmutableList.copyOf(mutableBookmarks))
+                                                        .build();
                                                 adapter.removeItem(clickedBookmark);
                                                 db.updateBook(book);
                                             }
@@ -179,7 +185,7 @@ public class BookmarkDialogFragment extends DialogFragment {
         };
 
         final RecyclerView recyclerView = ButterKnife.findById(v, R.id.recycler);
-        adapter = new BookmarkAdapter(book, listener);
+        adapter = new BookmarkAdapter(book.bookmarks(), book.chapters(), listener);
         recyclerView.setAdapter(adapter);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
