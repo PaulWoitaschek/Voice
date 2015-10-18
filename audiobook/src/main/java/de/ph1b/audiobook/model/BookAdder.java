@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import com.squareup.picasso.Picasso;
@@ -350,7 +351,7 @@ public class BookAdder {
                 case COLLECTION_FILE:
                     for (File f : collectionBookFolders) {
                         if (f.isFile()) {
-                            List<Chapter> chapters = book.chapters();
+                            ImmutableList<Chapter> chapters = book.chapters();
                             File singleBookChapterFile = chapters.get(0).file();
                             if (singleBookChapterFile.equals(f)) {
                                 bookExists = true;
@@ -370,7 +371,7 @@ public class BookAdder {
                 case SINGLE_FILE:
                     for (File f : singleBookFiles) {
                         if (f.isFile()) {
-                            List<Chapter> chapters = book.chapters();
+                            ImmutableList<Chapter> chapters = book.chapters();
                             File singleBookChapterFile = chapters.get(0).file();
                             if (singleBookChapterFile.equals(f)) {
                                 bookExists = true;
@@ -419,7 +420,7 @@ public class BookAdder {
      * @param newChapters The new chapters that have been found matching to the location of the book
      * @param type        The type of the book
      */
-    private void addNewBook(@NonNull File rootFile, @NonNull List<Chapter> newChapters, @NonNull Book.Type type) {
+    private void addNewBook(@NonNull File rootFile, @NonNull final List<Chapter> newChapters, @NonNull Book.Type type) {
         String bookRoot = rootFile.isDirectory() ?
                 rootFile.getAbsolutePath() :
                 rootFile.getParent();
@@ -438,17 +439,12 @@ public class BookAdder {
             L.d(TAG, "adding newBook=" + newBook);
             db.addBook(newBook);
         } else { // restore old books
-            // first adds all chapters
-            orphanedBook.chapters().clear();
-            orphanedBook.chapters().addAll(newChapters);
-
             // now removes invalid bookmarks
-            final List<Chapter> chapters = orphanedBook.chapters();
             List<Bookmark> filteredBookmarks = Lists.newArrayList(Collections2.filter(
                     orphanedBook.bookmarks(), new Predicate<Bookmark>() {
                         @Override
                         public boolean apply(Bookmark input) {
-                            for (Chapter c : chapters) {
+                            for (Chapter c : newChapters) {
                                 if (c.file().equals(input.mediaFile())) {
                                     return true;
                                 }
@@ -456,8 +452,10 @@ public class BookAdder {
                             return false;
                         }
                     }));
-            orphanedBook.bookmarks().clear();
-            orphanedBook.bookmarks().addAll(filteredBookmarks);
+            orphanedBook = Book.builder(orphanedBook)
+                    .chapters(ImmutableList.copyOf(newChapters))
+                    .bookmarks(ImmutableList.copyOf(filteredBookmarks))
+                    .build();
 
             // checks if current path is still valid. if not, reset position.
             boolean pathValid = false;
@@ -485,18 +483,15 @@ public class BookAdder {
      * @param bookExisting The existing book
      * @param newChapters  The new chapters matching to the book
      */
-    private void updateBook(@NonNull Book bookExisting, @NonNull List<Chapter> newChapters) {
+    private void updateBook(@NonNull Book bookExisting, @NonNull final List<Chapter> newChapters) {
         boolean bookHasChanged = !(bookExisting.chapters().equals(newChapters));
         // sort chapters
         if (bookHasChanged) {
-            bookExisting.chapters().clear();
-            bookExisting.chapters().addAll(newChapters);
-
             // check if the chapter set as the current still exists
             boolean currentPathIsGone = true;
             File currentFile = bookExisting.currentFile();
             int currentTime = bookExisting.time();
-            for (Chapter c : bookExisting.chapters()) {
+            for (Chapter c : newChapters) {
                 if (c.file().equals(currentFile)) {
                     if (c.duration() < currentTime) {
                         bookExisting = Book.builder(bookExisting)
@@ -515,12 +510,11 @@ public class BookAdder {
             }
 
             // removes the bookmarks that no longer represent an existing file
-            List<Bookmark> existingBookmarks = bookExisting.bookmarks();
-            final List<Chapter> chapters = bookExisting.chapters();
-            List<Bookmark> filtered = Lists.newArrayList(Collections2.filter(existingBookmarks, new Predicate<Bookmark>() {
+            ImmutableList<Bookmark> existingBookmarks = bookExisting.bookmarks();
+            List<Bookmark> filteredBookmarks = Lists.newArrayList(Collections2.filter(existingBookmarks, new Predicate<Bookmark>() {
                 @Override
                 public boolean apply(Bookmark input) {
-                    for (Chapter c : chapters) {
+                    for (Chapter c : newChapters) {
                         if (c.file().equals(input.mediaFile())) {
                             return true;
                         }
@@ -528,8 +522,11 @@ public class BookAdder {
                     return false;
                 }
             }));
-            existingBookmarks.clear();
-            existingBookmarks.addAll(filtered);
+
+            bookExisting = Book.builder(bookExisting)
+                    .chapters(ImmutableList.copyOf(newChapters))
+                    .bookmarks(ImmutableList.copyOf(filteredBookmarks))
+                    .build();
 
             db.updateBook(bookExisting);
         }
