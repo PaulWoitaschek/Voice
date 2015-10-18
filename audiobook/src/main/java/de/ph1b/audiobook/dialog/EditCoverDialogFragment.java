@@ -131,7 +131,9 @@ public class EditCoverDialogFragment extends DialogFragment {
                 synchronized (db) {
                     Book dbBook = db.getBook(book.getId());
                     if (dbBook != null) {
-                        dbBook.setUseCoverReplacement(useCoverReplacement);
+                        dbBook = new Book.Builder(dbBook)
+                                .userCoverReplacement(useCoverReplacement)
+                                .build();
                         db.updateBook(dbBook);
                     }
                 }

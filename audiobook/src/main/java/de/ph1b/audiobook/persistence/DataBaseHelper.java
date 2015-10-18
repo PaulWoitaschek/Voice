@@ -110,9 +110,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         .currentFile(bookmarkCurrentMediaPath)
                         .time(bookTime)
                         .id(bookId)
+                        .userCoverReplacement(bookUseCoverReplacement)
                         .build();
                 book.setPlaybackSpeed(bookSpeed);
-                book.setUseCoverReplacement(bookUseCoverReplacement);
 
                 if (bookActive) {
                     activeBooks.add(book);

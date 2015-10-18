@@ -32,6 +32,7 @@ public class Book implements Comparable<Book> {
     private final List<Bookmark> bookmarks;
     @Nullable
     private final String author;
+    private final boolean useCoverReplacement;
     @Inject Context c;
     private long id = ID_UNKNOWN;
     @NonNull
@@ -40,7 +41,6 @@ public class Book implements Comparable<Book> {
     private float playbackSpeed = 1.0f;
     @NonNull
     private File currentFile;
-    private boolean useCoverReplacement = false;
 
     private Book(Builder builder) {
         App.getComponent().inject(this);
@@ -136,10 +136,6 @@ public class Book implements Comparable<Book> {
 
     public boolean isUseCoverReplacement() {
         return useCoverReplacement;
-    }
-
-    public void setUseCoverReplacement(boolean useCoverReplacement) {
-        this.useCoverReplacement = useCoverReplacement;
     }
 
     /**
@@ -321,6 +317,11 @@ public class Book implements Comparable<Book> {
             this.type = type;
             this.bookmarks = bookmarks;
             this.author = author;
+        }
+
+        public Builder userCoverReplacement(boolean useCoverReplacement) {
+            this.useCoverReplacement = useCoverReplacement;
+            return this;
         }
 
         public Builder currentFile(File currentFile) {
