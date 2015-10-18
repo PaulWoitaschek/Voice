@@ -105,12 +105,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     bookmarkCursor.close();
                 }
 
-                Book book = new Book(bookRoot, bookName, bookAuthor, chapters,
-                        bookmarkCurrentMediaPath, bookType, bookmarks);
+                Book book = new Book.Builder(bookRoot, chapters, bookType, bookmarks, bookAuthor)
+                        .name(bookName)
+                        .currentFile(bookmarkCurrentMediaPath)
+                        .time(bookTime)
+                        .id(bookId)
+                        .build();
                 book.setPlaybackSpeed(bookSpeed);
-                book.setPosition(bookTime, bookmarkCurrentMediaPath);
                 book.setUseCoverReplacement(bookUseCoverReplacement);
-                book.setId(bookId);
 
                 if (bookActive) {
                     activeBooks.add(book);

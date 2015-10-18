@@ -15,7 +15,6 @@ import de.ph1b.audiobook.interfaces.GenericBuilder;
 import de.ph1b.audiobook.utils.App;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 
 public class Book implements Comparable<Book> {
@@ -58,32 +57,6 @@ public class Book implements Comparable<Book> {
         this.time = builder.time;
     }
 
-    public Book(@NonNull String root,
-                @NonNull String name,
-                @Nullable String author,
-                @NonNull List<Chapter> chapters,
-                @NonNull File currentFile,
-                @NonNull Type type,
-                @NonNull List<Bookmark> bookmarks) {
-        checkNotNull(chapters);
-        checkNotNull(currentFile);
-        checkNotNull(type);
-        checkNotNull(bookmarks);
-        checkArgument(!root.isEmpty());
-        checkArgument(!name.isEmpty());
-        checkArgument(!chapters.isEmpty());
-
-        App.getComponent().inject(this);
-
-        this.root = root;
-        this.name = name;
-        this.author = author;
-        this.chapters = chapters;
-        this.type = type;
-        this.bookmarks = bookmarks;
-        setPosition(0, currentFile);
-        this.currentFile = currentFile;
-    }
 
     public static Book of(@NonNull String root,
                           @NonNull String name,
@@ -92,7 +65,10 @@ public class Book implements Comparable<Book> {
                           @NonNull File currentFile,
                           @NonNull Type type,
                           @NonNull List<Bookmark> bookmarks) {
-        return new Book(root, name, author, chapters, currentFile, type, bookmarks);
+        return new Builder(root, chapters, type, bookmarks, author)
+                .name(name)
+                .currentFile(currentFile)
+                .build();
     }
 
     /**
@@ -359,6 +335,16 @@ public class Book implements Comparable<Book> {
             this.type = type;
             this.bookmarks = bookmarks;
             this.author = author;
+        }
+
+        public Builder currentFile(File currentFile) {
+            this.currentFile = currentFile;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
         }
 
         public Builder id(long id) {
