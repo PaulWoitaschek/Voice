@@ -3,6 +3,7 @@ package de.ph1b.audiobook.uitools;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.AnyRes;
 import android.support.annotation.AttrRes;
@@ -10,6 +11,8 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.annotation.StyleRes;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.NumberPicker;
@@ -33,22 +36,28 @@ public class ThemeUtil {
 
     public static void theme(@NonNull NumberPicker numberPicker) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            final int count = numberPicker.getChildCount();
-            for (int i = 0; i < count; i++) {
+            int colorAccent = ContextCompat.getColor(numberPicker.getContext(), R.color.accent);
+            for (int i = 0, count = numberPicker.getChildCount(); i < count; i++) {
                 View child = numberPicker.getChildAt(i);
-                if (child instanceof EditText) {
-                    try {
-                        Field selectorWheelPaintField = numberPicker.getClass().getDeclaredField("mSelectorWheelPaint");
-                        selectorWheelPaintField.setAccessible(true);
-                        @SuppressWarnings("deprecation") int colorAccent = numberPicker.getResources().getColor(ThemeUtil.getResourceId(numberPicker.getContext(), R.attr.colorAccent));
-                        ((Paint) selectorWheelPaintField.get(numberPicker)).setColor(colorAccent);
-                        ((EditText) child).setTextColor(colorAccent);
-                        numberPicker.invalidate();
-                    } catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    Field selectorWheelPaintField = numberPicker.getClass().getDeclaredField("mSelectorWheelPaint");
+                    selectorWheelPaintField.setAccessible(true);
+                    ((Paint) selectorWheelPaintField.get(numberPicker)).setColor(colorAccent);
+                    ((EditText) child).setTextColor(colorAccent);
+                    numberPicker.invalidate();
+                } catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Field f1 = Class.forName("android.widget.NumberPicker").getDeclaredField("mSelectionDivider");
+                    f1.setAccessible(true);
+                    Drawable dividerDrawable = DrawableCompat.wrap((Drawable) f1.get(numberPicker));
+                    DrawableCompat.setTint(dividerDrawable, colorAccent);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
+            numberPicker.invalidate();
         }
     }
 
