@@ -134,8 +134,6 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
         ButterKnife.bind(this);
         App.getComponent().inject(this);
 
-
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             boolean anyFolderSet = prefs.getCollectionFolders().size() + prefs.getSingleBookFolders().size() > 0;
             boolean canReadStorage = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;

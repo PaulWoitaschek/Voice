@@ -99,7 +99,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         File bookmarkFile = new File(bookmarkCursor.getString(0));
                         int bookmarkTime = bookmarkCursor.getInt(1);
                         String bookmarkTitle = bookmarkCursor.getString(2);
-                        bookmarks.add(new Bookmark(bookmarkFile, bookmarkTitle, bookmarkTime));
+                        bookmarks.add(Bookmark.of(bookmarkFile, bookmarkTitle, bookmarkTime));
                     }
                 } finally {
                     bookmarkCursor.close();

@@ -447,7 +447,7 @@ public class BookAdder {
                         @Override
                         public boolean apply(Bookmark input) {
                             for (Chapter c : orphanedBook.getChapters()) {
-                                if (c.getFile().equals(input.getMediaFile())) {
+                                if (c.getFile().equals(input.mediaFile())) {
                                     return true;
                                 }
                             }
@@ -509,7 +509,7 @@ public class BookAdder {
                 @Override
                 public boolean apply(Bookmark input) {
                     for (Chapter c : bookExisting.getChapters()) {
-                        if (c.getFile().equals(input.getMediaFile())) {
+                        if (c.getFile().equals(input.mediaFile())) {
                             return true;
                         }
                     }
