@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -19,11 +22,12 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
+import de.ph1b.audiobook.utils.App;
 
 /**
- * @author <a href="mailto:woitaschek@posteo.de">Paul Woitaschek</a>
- * @link {http://www.paul-woitaschek.de}
- * @see <a href="http://www.paul-woitaschek.de">http://www.paul-woitaschek.de</a>
+ * Adapter for displaying a list of bookmarks.
+ *
+ * @author Paul Woitaschek
  */
 public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHolder> {
 
@@ -31,8 +35,11 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
     private final Book book;
     @NonNull
     private final OnOptionsMenuClickedListener listener;
+    @Inject Context c;
+
 
     public BookmarkAdapter(@NonNull Book book, @NonNull OnOptionsMenuClickedListener listener) {
+        App.getComponent().inject(this);
         this.book = book;
         this.listener = listener;
     }
@@ -89,8 +96,10 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         }
         int index = book.chapters().indexOf(currentChapter);
 
-        holder.summary.setText("(" + (index + 1) + "/" + size + ") ");
-        holder.time.setText(formatTime(bookmark.time()) + " / " + formatTime(currentChapter.duration()));
+
+        holder.summary.setText(c.getString(R.string.format_bookmarks_n_of, index + 1, size));
+        holder.time.setText(c.getString(R.string.format_bookmarks_time, formatTime(bookmark.time()),
+                formatTime(currentChapter.duration())));
     }
 
     @Override

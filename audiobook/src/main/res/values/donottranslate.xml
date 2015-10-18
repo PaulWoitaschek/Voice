@@ -25,4 +25,6 @@
         <item>@string/pref_support_donation</item>
     </string-array>
     <string name="fab_transition">FAB_TRANSITION</string>
+    <string name="format_bookmarks_n_of">(%1$d / %2$d)</string>
+    <string name="format_bookmarks_time">%1$s / %2$s</string>
 </resources>

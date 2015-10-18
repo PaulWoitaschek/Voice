@@ -16,6 +16,7 @@ import de.ph1b.audiobook.activity.BaseActivity;
 import de.ph1b.audiobook.activity.BookActivity;
 import de.ph1b.audiobook.activity.FolderOverviewActivity;
 import de.ph1b.audiobook.adapter.BookShelfAdapter;
+import de.ph1b.audiobook.adapter.BookmarkAdapter;
 import de.ph1b.audiobook.dialog.BookmarkDialogFragment;
 import de.ph1b.audiobook.dialog.EditCoverDialogFragment;
 import de.ph1b.audiobook.dialog.JumpToPositionDialogFragment;
@@ -68,6 +69,8 @@ public class App extends Application {
         Context getContext();
 
         void inject(WidgetUpdateService target);
+
+        void inject(BookmarkAdapter target);
 
         void inject(CoverReplacement target);
 
