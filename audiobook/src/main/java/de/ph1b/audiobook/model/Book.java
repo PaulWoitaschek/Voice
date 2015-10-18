@@ -14,33 +14,24 @@ import javax.inject.Inject;
 import de.ph1b.audiobook.interfaces.GenericBuilder;
 import de.ph1b.audiobook.utils.App;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 
 public class Book implements Comparable<Book> {
 
     public static final String TAG = Book.class.getSimpleName();
     public static final long ID_UNKNOWN = -1;
     private static final String COVER_TRANSITION_PREFIX = "bookCoverTransition_";
-    @NonNull
-    private final String root;
-    @NonNull
-    private final List<Chapter> chapters;
-    @NonNull
-    private final Type type;
-    @NonNull
-    private final List<Bookmark> bookmarks;
-    @Nullable
-    private final String author;
+    @NonNull private final String root;
+    @NonNull private final List<Chapter> chapters;
+    @NonNull private final Type type;
+    @NonNull private final List<Bookmark> bookmarks;
+    @Nullable private final String author;
     private final boolean useCoverReplacement;
+    @NonNull private final String name;
     @Inject Context c;
     private long id = ID_UNKNOWN;
-    @NonNull
-    private String name;
     private int time = 0;
     private float playbackSpeed = 1.0f;
-    @NonNull
-    private File currentFile;
+    @NonNull private File currentFile;
 
     private Book(Builder builder) {
         App.getComponent().inject(this);
@@ -234,11 +225,6 @@ public class Book implements Comparable<Book> {
         return name;
     }
 
-    public void setName(@NonNull String name) {
-        checkArgument(!name.isEmpty());
-        this.name = name;
-    }
-
     public long getId() {
         return id;
     }
@@ -283,16 +269,16 @@ public class Book implements Comparable<Book> {
 
     public static class Builder implements GenericBuilder<Book> {
 
-        private final String root;
-        private final List<Chapter> chapters;
-        private final Type type;
-        private final List<Bookmark> bookmarks;
-        private final String author;
+        @NonNull private final String root;
+        @NonNull private final List<Chapter> chapters;
+        @NonNull private final Type type;
+        @NonNull private final List<Bookmark> bookmarks;
+        @Nullable private final String author;
         private long id = ID_UNKNOWN;
         private int time = 0;
-        private File currentFile;
+        @NonNull private File currentFile;
         private boolean useCoverReplacement;
-        private String name;
+        @NonNull private String name;
         private float playbackSpeed = 1.0f;
 
         public Builder(Book book) {
@@ -310,22 +296,21 @@ public class Book implements Comparable<Book> {
             this.name = book.name;
         }
 
-        public Builder(String root, List<Chapter> chapters, Type type, List<Bookmark> bookmarks,
-                       String author) {
+        public Builder(@NonNull String root, @NonNull List<Chapter> chapters, @NonNull Type type,
+                       @NonNull List<Bookmark> bookmarks, @Nullable String author, @NonNull File currentFile,
+                       @NonNull String name, boolean useCoverReplacement) {
             this.root = root;
             this.chapters = chapters;
             this.type = type;
             this.bookmarks = bookmarks;
             this.author = author;
-        }
-
-        public Builder userCoverReplacement(boolean useCoverReplacement) {
-            this.useCoverReplacement = useCoverReplacement;
-            return this;
-        }
-
-        public Builder currentFile(File currentFile) {
+            this.name = name;
             this.currentFile = currentFile;
+            this.useCoverReplacement = useCoverReplacement;
+        }
+
+        public Builder useCoverReplacement(boolean useCoverReplacement) {
+            this.useCoverReplacement = useCoverReplacement;
             return this;
         }
 

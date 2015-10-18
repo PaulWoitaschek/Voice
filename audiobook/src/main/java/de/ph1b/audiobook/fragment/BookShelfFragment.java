@@ -387,7 +387,9 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
                                 synchronized (db) {
                                     Book dbBook = db.getBook(book.getId());
                                     if (dbBook != null) {
-                                        dbBook.setName(newTitle);
+                                        dbBook = new Book.Builder(dbBook)
+                                                .name(newTitle)
+                                                .build();
                                         db.updateBook(dbBook);
                                     }
                                 }
