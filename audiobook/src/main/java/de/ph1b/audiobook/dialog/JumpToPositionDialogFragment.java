@@ -50,7 +50,7 @@ public class JumpToPositionDialogFragment extends DialogFragment {
         if (book == null) {
             throw new AssertionError("Cannot instantiate " + TAG + " without a current book");
         }
-        int duration = book.getCurrentChapter().getDuration();
+        int duration = book.getCurrentChapter().duration();
         int position = book.getTime();
         biggestHour = (int) TimeUnit.MILLISECONDS.toHours(duration);
         durationInMinutes = (int) TimeUnit.MILLISECONDS.toMinutes(duration);
@@ -112,7 +112,7 @@ public class JumpToPositionDialogFragment extends DialogFragment {
                         int h = hPicker.getValue();
                         int m = mPicker.getValue();
                         int newPosition = (m + 60 * h) * 60 * 1000;
-                        new ServiceController(getActivity()).changeTime(newPosition, book.getCurrentChapter().getFile());
+                        new ServiceController(getActivity()).changeTime(newPosition, book.getCurrentChapter().file());
                     }
                 })
                 .positiveText(R.string.dialog_confirm)

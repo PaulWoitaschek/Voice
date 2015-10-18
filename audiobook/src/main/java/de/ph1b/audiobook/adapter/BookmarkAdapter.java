@@ -80,7 +80,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         int size = book.getChapters().size();
         Chapter currentChapter = null;
         for (Chapter c : book.getChapters()) {
-            if (c.getFile().equals(bookmark.mediaFile())) {
+            if (c.file().equals(bookmark.mediaFile())) {
                 currentChapter = c;
             }
         }
@@ -90,7 +90,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         int index = book.getChapters().indexOf(currentChapter);
 
         holder.summary.setText("(" + (index + 1) + "/" + size + ") ");
-        holder.time.setText(formatTime(bookmark.time()) + " / " + formatTime(currentChapter.getDuration()));
+        holder.time.setText(formatTime(bookmark.time()) + " / " + formatTime(currentChapter.duration()));
     }
 
     @Override

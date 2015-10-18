@@ -11,8 +11,6 @@ import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.ReentrantLock;
 
-import de.ph1b.audiobook.activity.BookActivity;
-import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
@@ -80,7 +78,7 @@ public class BookActivityTest extends ActivityInstrumentationTestCase2<BookActiv
     private Book randomBook() {
         List<Chapter> chapters = Collections.singletonList(new Chapter(new File(randomString()), randomString(), rnd.nextInt()));
 
-        return new Book(randomString(), randomString(), randomString(), chapters, chapters.get(0).getFile(),
+        return new Book(randomString(), randomString(), randomString(), chapters, chapters.get(0).file(),
                 Book.Type.COLLECTION_FILE, new ArrayList<Bookmark>(0), getActivity());
 
     }

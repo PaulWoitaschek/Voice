@@ -25,9 +25,9 @@ class ChapterTable {
 
     public static ContentValues getContentValues(Chapter chapter, long bookId) {
         ContentValues chapterCv = new ContentValues();
-        chapterCv.put(DURATION, chapter.getDuration());
-        chapterCv.put(NAME, chapter.getName());
-        chapterCv.put(PATH, chapter.getFile().getAbsolutePath());
+        chapterCv.put(DURATION, chapter.duration());
+        chapterCv.put(NAME, chapter.name());
+        chapterCv.put(PATH, chapter.file().getAbsolutePath());
         chapterCv.put(BookTable.ID, bookId);
         return chapterCv;
     }

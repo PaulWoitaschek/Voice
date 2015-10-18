@@ -10,14 +10,22 @@ import auto.parcel.AutoParcel;
 @AutoParcel
 public abstract class Bookmark implements Comparable<Bookmark> {
 
+    /**
+     * Package private constructor for auto-parcel
+     */
+    Bookmark() {
+    }
+
     public static Bookmark of(@NonNull File mediaFile, @NonNull String title, int time) {
         return new AutoParcel_Bookmark(time, mediaFile, title);
     }
 
     public abstract int time();
 
+    @NonNull
     public abstract File mediaFile();
 
+    @NonNull
     public abstract String title();
 
     @Override

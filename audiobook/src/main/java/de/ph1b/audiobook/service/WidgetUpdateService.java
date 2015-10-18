@@ -206,7 +206,7 @@ public class WidgetUpdateService extends Service {
         // if we have no book, simply have a click on the whole widget start BookChoose.
 
         remoteViews.setTextViewText(R.id.title, book.getName());
-        String name = book.getCurrentChapter().getName();
+        String name = book.getCurrentChapter().name();
 
         remoteViews.setTextViewText(R.id.summary, name);
 

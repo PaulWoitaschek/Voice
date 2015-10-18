@@ -82,7 +82,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         int chapterDuration = chapterCursor.getInt(0);
                         String chapterName = chapterCursor.getString(1);
                         File chapterFile = new File(chapterCursor.getString(2));
-                        chapters.add(new Chapter(chapterFile, chapterName, chapterDuration));
+                        chapters.add(Chapter.of(chapterFile, chapterName, chapterDuration));
                     }
                 } finally {
                     chapterCursor.close();

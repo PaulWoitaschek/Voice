@@ -103,7 +103,7 @@ public class Book implements Comparable<Book> {
     public int getGlobalDuration() {
         int globalDuration = 0;
         for (Chapter c : chapters) {
-            globalDuration += c.getDuration();
+            globalDuration += c.duration();
         }
         return globalDuration;
     }
@@ -119,7 +119,7 @@ public class Book implements Comparable<Book> {
                 globalPosition += time;
                 return globalPosition;
             } else {
-                globalPosition += c.getDuration();
+                globalPosition += c.duration();
             }
         }
         throw new IllegalStateException("Current chapter was not found while looking up the global position");
@@ -146,7 +146,7 @@ public class Book implements Comparable<Book> {
     public void setPosition(int time, @NonNull File currentFile) {
         boolean relativeMediaPathExists = false;
         for (Chapter c : chapters) {
-            if (c.getFile().equals(currentFile)) {
+            if (c.file().equals(currentFile)) {
                 relativeMediaPathExists = true;
             }
         }
@@ -240,7 +240,7 @@ public class Book implements Comparable<Book> {
     @NonNull
     public Chapter getCurrentChapter() {
         for (Chapter c : chapters) {
-            if (c.getFile().equals(currentFile)) {
+            if (c.file().equals(currentFile)) {
                 return c;
             }
         }

@@ -120,7 +120,7 @@ public class BookPlayFragment extends Fragment {
                          */
                         bookSpinner.setTag(position);
                         bookSpinner.setSelection(position, true);
-                        int duration = chapter.getDuration();
+                        int duration = chapter.duration();
                         seekBar.setMax(duration);
                         maxTimeView.setText(formatTime(duration, duration));
 
@@ -223,7 +223,7 @@ public class BookPlayFragment extends Fragment {
                 Book currentBook = db.getBook(bookId);
                 if (currentBook != null) {
                     controller.changeTime(progress, currentBook.getCurrentChapter()
-                            .getFile());
+                            .file());
                     playedTimeView.setText(formatTime(progress, seekBar.getMax()));
                 }
             }
@@ -236,7 +236,7 @@ public class BookPlayFragment extends Fragment {
             List<Chapter> chapters = book.getChapters();
             final List<String> chaptersAsStrings = new ArrayList<>(chapters.size());
             for (int i = 0; i < chapters.size(); i++) {
-                String chapterName = chapters.get(i).getName();
+                String chapterName = chapters.get(i).name();
 
                 // cutting leading zeros
                 chapterName = chapterName.replaceFirst("^0", "");
@@ -288,7 +288,7 @@ public class BookPlayFragment extends Fragment {
                     if (parent.getTag() != null && ((int) parent.getTag()) != position) {
                         L.i(TAG, "spinner, onItemSelected, firing:" + position);
                         controller.changeTime(0, book.getChapters().get(
-                                position).getFile());
+                                position).file());
                         parent.setTag(position);
                     }
                 }

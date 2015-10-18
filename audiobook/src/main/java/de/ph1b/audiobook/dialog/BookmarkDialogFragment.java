@@ -70,7 +70,7 @@ public class BookmarkDialogFragment extends DialogFragment {
     public static void addBookmark(long bookId, @NonNull String title, @NonNull DataBaseHelper db) {
         Book book = db.getBook(bookId);
         if (book != null) {
-            Bookmark bookmark = Bookmark.of(book.getCurrentChapter().getFile(), title, book.getTime());
+            Bookmark bookmark = Bookmark.of(book.getCurrentChapter().file(), title, book.getTime());
             book.getBookmarks().add(bookmark);
             Collections.sort(book.getBookmarks());
             db.updateBook(book);
@@ -84,7 +84,7 @@ public class BookmarkDialogFragment extends DialogFragment {
     void addClicked() {
         String title = bookmarkTitle.getText().toString();
         if (title.isEmpty()) {
-            title = book.getCurrentChapter().getName();
+            title = book.getCurrentChapter().name();
         }
 
         addBookmark(book.getId(), title, db);
