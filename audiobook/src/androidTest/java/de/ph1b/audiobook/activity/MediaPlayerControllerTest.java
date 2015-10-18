@@ -9,7 +9,7 @@ import java.util.concurrent.CountDownLatch;
 
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
-import de.ph1b.audiobook.persistence.DataBaseHelper;
+import de.ph1b.audiobook.persistence.BookShelf;
 
 /**
  * Tests basic playback controls.
@@ -22,7 +22,7 @@ public class MediaPlayerControllerTest extends AndroidTestCase {
     public void testBasicControls() throws InterruptedException {
         final MediaPlayerController mediaPlayerController = MediaPlayerController.getInstance(getContext());
 
-        DataBaseHelper db = DataBaseHelper.getInstance(getContext());
+        BookShelf db = BookShelf.getInstance(getContext());
         List<Book> books = db.getActiveBooks();
         Book firstBook = books.get(0);
 

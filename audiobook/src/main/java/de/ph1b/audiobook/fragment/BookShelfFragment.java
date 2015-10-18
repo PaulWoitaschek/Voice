@@ -48,7 +48,7 @@ import de.ph1b.audiobook.interfaces.MultiPaneInformer;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.BookAdder;
-import de.ph1b.audiobook.persistence.DataBaseHelper;
+import de.ph1b.audiobook.persistence.BookShelf;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.DividerItemDecoration;
@@ -70,7 +70,7 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
     @Bind(R.id.recyclerReplacement) ProgressBar recyclerReplacementView;
     @Bind(R.id.fab) FloatingActionButton fab;
     @Inject PrefsManager prefs;
-    @Inject DataBaseHelper db;
+    @Inject BookShelf db;
     @Inject BookAdder bookAdder;
     @Inject MediaPlayerController mediaPlayerController;
     private BookShelfAdapter adapter;

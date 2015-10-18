@@ -48,7 +48,7 @@ import de.ph1b.audiobook.interfaces.MultiPaneInformer;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
-import de.ph1b.audiobook.persistence.DataBaseHelper;
+import de.ph1b.audiobook.persistence.BookShelf;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.CoverReplacement;
@@ -84,7 +84,7 @@ public class BookPlayFragment extends Fragment {
     @Bind(R.id.maxTime) TextView maxTimeView;
     @Bind(R.id.timerView) TextView timerCountdownView;
     @Inject PrefsManager prefs;
-    @Inject DataBaseHelper db;
+    @Inject BookShelf db;
     private ServiceController controller;
     private CountDownTimer countDownTimer;
     private boolean isMultiPanel = false;

@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
-import de.ph1b.audiobook.persistence.DataBaseHelper;
+import de.ph1b.audiobook.persistence.BookShelf;
 import de.ph1b.audiobook.uitools.CoverDownloader;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.DraggableBoxImageView;
@@ -52,7 +52,7 @@ public class EditCoverDialogFragment extends DialogFragment {
     @Bind(R.id.cover_replacement) ProgressBar loadingProgressBar;
     @Bind(R.id.previous_cover) ImageButton previousCover;
     @Bind(R.id.next_cover) ImageButton nextCover;
-    @Inject DataBaseHelper db;
+    @Inject BookShelf db;
     private CoverDownloader coverDownloader;
     private AddCoverAsync addCoverAsync;
     /**

@@ -38,7 +38,7 @@ import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.BookmarkAdapter;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
-import de.ph1b.audiobook.persistence.DataBaseHelper;
+import de.ph1b.audiobook.persistence.BookShelf;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.DividerItemDecoration;
@@ -57,7 +57,7 @@ public class BookmarkDialogFragment extends DialogFragment {
     @Bind(R.id.add) ImageView addButton;
     @Bind(R.id.edit1) EditText bookmarkTitle;
     @Inject PrefsManager prefs;
-    @Inject DataBaseHelper db;
+    @Inject BookShelf db;
     private BookmarkAdapter adapter;
     private ServiceController controller;
     private Book book;
@@ -70,7 +70,7 @@ public class BookmarkDialogFragment extends DialogFragment {
         return bookmarkDialogFragment;
     }
 
-    public static void addBookmark(long bookId, @NonNull String title, @NonNull DataBaseHelper db) {
+    public static void addBookmark(long bookId, @NonNull String title, @NonNull BookShelf db) {
         Book book = db.getBook(bookId);
         if (book != null) {
             Bookmark addedBookmark = Bookmark.of(book.currentChapter().file(), title, book.time());

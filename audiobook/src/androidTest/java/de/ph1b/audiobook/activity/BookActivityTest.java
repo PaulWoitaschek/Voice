@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
-import de.ph1b.audiobook.persistence.DataBaseHelper;
+import de.ph1b.audiobook.persistence.BookShelf;
 
 
 public class BookActivityTest extends ActivityInstrumentationTestCase2<BookActivity> {
@@ -31,7 +31,7 @@ public class BookActivityTest extends ActivityInstrumentationTestCase2<BookActiv
         final ReentrantLock lock = new ReentrantLock();
         final int THREADS = 100;
         final CountDownLatch latch = new CountDownLatch(THREADS);
-        final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
+        final BookShelf db = BookShelf.getInstance(getActivity());
         final List<Book> allBooks = db.getActiveBooks();
         final int BOOKS_AT_ONCE = 3;
 

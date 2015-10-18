@@ -20,7 +20,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
-import de.ph1b.audiobook.persistence.DataBaseHelper;
+import de.ph1b.audiobook.persistence.BookShelf;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.utils.App;
@@ -41,7 +41,7 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
     @Bind(R.id.seekBar) SeekBar seekBar;
     @Bind(R.id.textView) TextView textView;
     @Inject PrefsManager prefs;
-    @Inject DataBaseHelper db;
+    @Inject BookShelf db;
 
     private static float speedStepValueToSpeed(int step) {
         return (Book.SPEED_MIN + (step * SPEED_DELTA));

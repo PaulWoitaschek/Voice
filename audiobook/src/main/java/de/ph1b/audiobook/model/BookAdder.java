@@ -31,7 +31,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import de.ph1b.audiobook.activity.BaseActivity;
-import de.ph1b.audiobook.persistence.DataBaseHelper;
+import de.ph1b.audiobook.persistence.BookShelf;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.Communication;
@@ -52,12 +52,12 @@ public class BookAdder {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Context c;
     private final PrefsManager prefs;
-    private final DataBaseHelper db;
+    private final BookShelf db;
     private volatile boolean scannerActive = false;
     private volatile boolean stopScanner = false;
 
     @Inject
-    public BookAdder(@NonNull Context c, PrefsManager prefs, Communication communication, DataBaseHelper db) {
+    public BookAdder(@NonNull Context c, PrefsManager prefs, Communication communication, BookShelf db) {
         this.c = c;
         this.prefs = prefs;
         this.communication = communication;

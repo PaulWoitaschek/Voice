@@ -33,21 +33,23 @@ import static com.google.common.base.Preconditions.checkArgument;
 /**
  * This is the helper for the apps database. All Database writing is done by an executor and the
  * helper holds a internal array of the books.
+ *
+ * @author Paul Woitaschek
  */
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
 @Singleton
-public class DataBaseHelper extends SQLiteOpenHelper {
+public class BookShelf extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 32;
     private static final String DATABASE_NAME = "autoBookDB";
-    private static final String TAG = DataBaseHelper.class.getSimpleName();
+    private static final String TAG = BookShelf.class.getSimpleName();
     private final Communication communication;
     private final Context c;
     private final List<Book> activeBooks;
     private final List<Book> orphanedBooks;
 
     @Inject
-    public DataBaseHelper(Context c, Communication communication) {
+    public BookShelf(Context c, Communication communication) {
         super(c, DATABASE_NAME, null, DATABASE_VERSION);
         this.c = c;
         this.communication = communication;

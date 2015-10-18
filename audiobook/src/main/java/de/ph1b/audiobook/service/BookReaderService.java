@@ -41,7 +41,7 @@ import de.ph1b.audiobook.activity.BookActivity;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
-import de.ph1b.audiobook.persistence.DataBaseHelper;
+import de.ph1b.audiobook.persistence.BookShelf;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.receiver.RemoteControlReceiver;
 import de.ph1b.audiobook.uitools.CoverReplacement;
@@ -80,7 +80,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
     @Inject Communication communication;
     @Inject PrefsManager prefs;
     @Inject MediaPlayerController controller;
-    @Inject DataBaseHelper db;
+    @Inject BookShelf db;
     private NotificationManager notificationManager;
     private AudioManager audioManager;
     private volatile boolean pauseBecauseLossTransient = false;

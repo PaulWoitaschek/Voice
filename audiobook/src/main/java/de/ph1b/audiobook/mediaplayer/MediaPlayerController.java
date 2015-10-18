@@ -24,7 +24,7 @@ import de.ph1b.audiobook.activity.BookActivity;
 import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
-import de.ph1b.audiobook.persistence.DataBaseHelper;
+import de.ph1b.audiobook.persistence.BookShelf;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.L;
@@ -37,7 +37,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     private final Context c;
     private final ReentrantLock lock = new ReentrantLock();
     private final PrefsManager prefs;
-    private final DataBaseHelper db;
+    private final BookShelf db;
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
     private final MediaPlayerInterface player;
     private final Communication communication;
@@ -53,12 +53,12 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
 
     @Inject
     public MediaPlayerController(@NonNull final Context c, PrefsManager prefs,
-                                 Communication communication, DataBaseHelper dataBaseHelper,
+                                 Communication communication, BookShelf bookShelf,
                                  MediaPlayerInterface player) {
         this.c = c;
         this.prefs = prefs;
         this.communication = communication;
-        this.db = dataBaseHelper;
+        this.db = bookShelf;
         this.player = player;
 
         state = State.IDLE;
