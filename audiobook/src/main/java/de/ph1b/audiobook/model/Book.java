@@ -44,16 +44,6 @@ public class Book implements Comparable<Book> {
     private File currentFile;
     private boolean useCoverReplacement = false;
 
-    public Book(Book that) {
-        this(that.root, that.name, that.author, new ArrayList<>(that.chapters), that.currentFile,
-                that.type, new ArrayList<>(that.bookmarks));
-        this.id = that.id;
-        this.time = that.time;
-        this.playbackSpeed = that.playbackSpeed;
-        this.currentFile = that.currentFile;
-        this.useCoverReplacement = that.useCoverReplacement;
-    }
-
     public Book(@NonNull String root,
                 @NonNull String name,
                 @Nullable String author,
@@ -82,6 +72,26 @@ public class Book implements Comparable<Book> {
         this.currentFile = currentFile;
     }
 
+    public static Book of(Book that) {
+        Book book = new Book(that.root, that.name, that.author, new ArrayList<>(that.chapters), that.currentFile,
+                that.type, new ArrayList<>(that.bookmarks));
+        book.id = that.id;
+        book.time = that.time;
+        book.playbackSpeed = that.playbackSpeed;
+        book.currentFile = that.currentFile;
+        book.useCoverReplacement = that.useCoverReplacement;
+        return book;
+    }
+
+    public static Book of(@NonNull String root,
+                          @NonNull String name,
+                          @Nullable String author,
+                          @NonNull List<Chapter> chapters,
+                          @NonNull File currentFile,
+                          @NonNull Type type,
+                          @NonNull List<Bookmark> bookmarks) {
+        return new Book(root, name, author, chapters, currentFile, type, bookmarks);
+    }
 
     /**
      * Gets the transition name for the cover transition.
