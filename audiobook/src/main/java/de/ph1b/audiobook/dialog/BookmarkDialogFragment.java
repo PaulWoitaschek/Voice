@@ -23,8 +23,10 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.common.collect.Ordering;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -70,11 +72,14 @@ public class BookmarkDialogFragment extends DialogFragment {
     public static void addBookmark(long bookId, @NonNull String title, @NonNull DataBaseHelper db) {
         Book book = db.getBook(bookId);
         if (book != null) {
-            Bookmark bookmark = Bookmark.of(book.currentChapter().file(), title, book.time());
-            book.bookmarks().add(bookmark);
-            Collections.sort(book.bookmarks());
+            Bookmark addedBookmark = Bookmark.of(book.currentChapter().file(), title, book.time());
+            List<Bookmark> newBookmarks = new ArrayList<>(book.bookmarks());
+            newBookmarks.add(addedBookmark);
+            book = Book.builder(book)
+                    .bookmarks(Ordering.natural().immutableSortedCopy(newBookmarks))
+                    .build();
             db.updateBook(book);
-            L.v(TAG, "Added bookmark=" + bookmark);
+            L.v(TAG, "Added bookmark=" + addedBookmark);
         } else {
             L.e(TAG, "Book does not exist");
         }
