@@ -71,7 +71,7 @@ public class EditCoverDialogFragment extends DialogFragment {
         EditCoverDialogFragment editCoverDialogFragment = new EditCoverDialogFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putLong(Book.TAG, book.getId());
+        bundle.putLong(Book.TAG, book.id());
         editCoverDialogFragment.setArguments(bundle);
 
         return editCoverDialogFragment;
@@ -89,7 +89,7 @@ public class EditCoverDialogFragment extends DialogFragment {
         final long bookId = getArguments().getLong(Book.TAG);
         book = db.getBook(bookId);
         assert book != null;
-        coverReplacement = new CoverReplacement(book.getName(), getActivity());
+        coverReplacement = new CoverReplacement(book.name(), getActivity());
         isOnline = ImageHelper.isOnline(getActivity());
         if (savedInstanceState == null) {
             coverPosition = -1;
@@ -116,9 +116,9 @@ public class EditCoverDialogFragment extends DialogFragment {
                     Bitmap cover = ImageHelper.picassoGetBlocking(getActivity(), imageURLS.get(coverPosition));
                     if (cover != null) {
                         cover = Bitmap.createBitmap(cover, r.left, r.top, r.width(), r.height());
-                        ImageHelper.saveCover(cover, getActivity(), book.getCoverFile());
+                        ImageHelper.saveCover(cover, getActivity(), book.coverFile());
 
-                        picasso.invalidate(book.getCoverFile());
+                        picasso.invalidate(book.coverFile());
                         useCoverReplacement = false;
                     } else {
                         useCoverReplacement = true;
@@ -129,9 +129,9 @@ public class EditCoverDialogFragment extends DialogFragment {
 
                 //noinspection SynchronizeOnNonFinalField
                 synchronized (db) {
-                    Book dbBook = db.getBook(book.getId());
+                    Book dbBook = db.getBook(book.id());
                     if (dbBook != null) {
-                        dbBook = new Book.Builder(dbBook)
+                        dbBook = Book.builder(dbBook)
                                 .useCoverReplacement(useCoverReplacement)
                                 .build();
                         db.updateBook(dbBook);
@@ -208,7 +208,7 @@ public class EditCoverDialogFragment extends DialogFragment {
                     coverPosition++;
                     loadCoverPosition();
                 } else {
-                    genCoverFromInternet(book.getName());
+                    genCoverFromInternet(book.name());
                 }
                 setNextPreviousEnabledDisabled();
                 break;

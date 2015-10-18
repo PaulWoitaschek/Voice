@@ -105,7 +105,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     bookmarkCursor.close();
                 }
 
-                Book book = new Book.Builder(bookRoot, chapters, bookType, bookmarks, bookAuthor,
+                Book book = Book.builder(bookRoot, chapters, bookType, bookmarks, bookAuthor,
                         bookmarkCurrentMediaPath, bookName, bookUseCoverReplacement, bookSpeed)
                         .time(bookTime)
                         .id(bookId)
@@ -122,25 +122,27 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public synchronized void addBook(@NonNull final Book mutableBook) {
-        L.v(TAG, "addBook=" + mutableBook.getName());
-        checkArgument(!mutableBook.getChapters().isEmpty());
+    public synchronized void addBook(@NonNull Book book) {
+        L.v(TAG, "addBook=" + book.name());
+        checkArgument(!book.chapters().isEmpty());
 
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
-            ContentValues bookCv = BookTable.getContentValues(mutableBook);
+            ContentValues bookCv = BookTable.getContentValues(book);
 
             long bookId = db.insert(BookTable.TABLE_NAME, null, bookCv);
-            mutableBook.setId(bookId);
+            book = Book.builder(book)
+                    .id(bookId)
+                    .build();
 
-            for (Chapter c : mutableBook.getChapters()) {
-                ContentValues chapterCv = ChapterTable.getContentValues(c, mutableBook.getId());
+            for (Chapter c : book.chapters()) {
+                ContentValues chapterCv = ChapterTable.getContentValues(c, book.id());
                 db.insert(ChapterTable.TABLE_NAME, null, chapterCv);
             }
 
-            for (Bookmark b : mutableBook.getBookmarks()) {
-                ContentValues bookmarkCv = BookmarkTable.getContentValues(b, mutableBook.getId());
+            for (Bookmark b : book.bookmarks()) {
+                ContentValues bookmarkCv = BookmarkTable.getContentValues(b, book.id());
                 db.insert(BookmarkTable.TABLE_NAME, null, bookmarkCv);
             }
 
@@ -149,7 +151,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             db.endTransaction();
         }
 
-        activeBooks.add(new Book.Builder(mutableBook).build());
+        activeBooks.add(book);
         communication.bookSetChanged(activeBooks);
     }
 
@@ -157,8 +159,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @Nullable
     public synchronized Book getBook(long id) {
         for (Book b : activeBooks) {
-            if (b.getId() == id) {
-                return new Book.Builder(b).build();
+            if (b.id() == id) {
+                return Book.builder(b).build();
             }
         }
         return null;
@@ -169,7 +171,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public synchronized List<Book> getActiveBooks() {
         List<Book> copyBooks = new ArrayList<>(activeBooks.size());
         for (Book b : activeBooks) {
-            copyBooks.add(new Book.Builder(b).build());
+            copyBooks.add(Book.builder(b).build());
         }
         return copyBooks;
     }
@@ -178,39 +180,39 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public synchronized List<Book> getOrphanedBooks() {
         List<Book> copyBooks = new ArrayList<>(orphanedBooks.size());
         for (Book b : orphanedBooks) {
-            copyBooks.add(new Book.Builder(b).build());
+            copyBooks.add(Book.builder(b).build());
         }
         return copyBooks;
     }
 
     public synchronized void updateBook(@NonNull Book mutableBook) {
-        L.v(TAG, "updateBook=" + mutableBook.getName());
-        checkArgument(!mutableBook.getChapters().isEmpty());
+        L.v(TAG, "updateBook=" + mutableBook.name());
+        checkArgument(!mutableBook.chapters().isEmpty());
 
         ListIterator<Book> bookIterator = activeBooks.listIterator();
         while (bookIterator.hasNext()) {
             Book next = bookIterator.next();
-            if (mutableBook.getId() == next.getId()) {
-                bookIterator.set(new Book.Builder(mutableBook).build());
+            if (mutableBook.id() == next.id()) {
+                bookIterator.set(Book.builder(mutableBook).build());
 
                 SQLiteDatabase db = getWritableDatabase();
                 db.beginTransaction();
                 try {
                     // update book itself
                     ContentValues bookCv = BookTable.getContentValues(mutableBook);
-                    db.update(BookTable.TABLE_NAME, bookCv, BookTable.ID + "=?", new String[]{String.valueOf(mutableBook.getId())});
+                    db.update(BookTable.TABLE_NAME, bookCv, BookTable.ID + "=?", new String[]{String.valueOf(mutableBook.id())});
 
                     // delete old chapters and replace them with new ones
-                    db.delete(ChapterTable.TABLE_NAME, BookTable.ID + "=?", new String[]{String.valueOf(mutableBook.getId())});
-                    for (Chapter c : mutableBook.getChapters()) {
-                        ContentValues chapterCv = ChapterTable.getContentValues(c, mutableBook.getId());
+                    db.delete(ChapterTable.TABLE_NAME, BookTable.ID + "=?", new String[]{String.valueOf(mutableBook.id())});
+                    for (Chapter c : mutableBook.chapters()) {
+                        ContentValues chapterCv = ChapterTable.getContentValues(c, mutableBook.id());
                         db.insert(ChapterTable.TABLE_NAME, null, chapterCv);
                     }
 
                     // replace old bookmarks and replace them with new ones
-                    db.delete(BookmarkTable.TABLE_NAME, BookTable.ID + "=?", new String[]{String.valueOf(mutableBook.getId())});
-                    for (Bookmark b : mutableBook.getBookmarks()) {
-                        ContentValues bookmarkCV = BookmarkTable.getContentValues(b, mutableBook.getId());
+                    db.delete(BookmarkTable.TABLE_NAME, BookTable.ID + "=?", new String[]{String.valueOf(mutableBook.id())});
+                    for (Bookmark b : mutableBook.bookmarks()) {
+                        ContentValues bookmarkCV = BookmarkTable.getContentValues(b, mutableBook.id());
                         db.insert(BookmarkTable.TABLE_NAME, null, bookmarkCV);
                     }
 
@@ -227,38 +229,38 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     public synchronized void hideBook(@NonNull Book mutableBook) {
-        L.v(TAG, "hideBook=" + mutableBook.getName());
-        checkArgument(!mutableBook.getChapters().isEmpty());
+        L.v(TAG, "hideBook=" + mutableBook.name());
+        checkArgument(!mutableBook.chapters().isEmpty());
 
         ListIterator<Book> iterator = activeBooks.listIterator();
         while (iterator.hasNext()) {
             Book next = iterator.next();
-            if (next.getId() == mutableBook.getId()) {
+            if (next.id() == mutableBook.id()) {
                 iterator.remove();
                 ContentValues cv = new ContentValues();
                 cv.put(BookTable.ACTIVE, 0);
-                getWritableDatabase().update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", new String[]{String.valueOf(mutableBook.getId())});
+                getWritableDatabase().update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", new String[]{String.valueOf(mutableBook.id())});
                 break;
             }
         }
-        orphanedBooks.add(new Book.Builder(mutableBook).build());
+        orphanedBooks.add(Book.builder(mutableBook).build());
         communication.bookSetChanged(activeBooks);
     }
 
     public synchronized void revealBook(@NonNull Book mutableBook) {
-        checkArgument(!mutableBook.getChapters().isEmpty());
+        checkArgument(!mutableBook.chapters().isEmpty());
 
         Iterator<Book> orphanedBookIterator = orphanedBooks.iterator();
         while (orphanedBookIterator.hasNext()) {
-            if (orphanedBookIterator.next().getId() == mutableBook.getId()) {
+            if (orphanedBookIterator.next().id() == mutableBook.id()) {
                 orphanedBookIterator.remove();
                 ContentValues cv = new ContentValues();
                 cv.put(BookTable.ACTIVE, 1);
-                getWritableDatabase().update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", new String[]{String.valueOf(mutableBook.getId())});
+                getWritableDatabase().update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", new String[]{String.valueOf(mutableBook.id())});
                 break;
             }
         }
-        activeBooks.add(new Book.Builder(mutableBook).build());
+        activeBooks.add(Book.builder(mutableBook).build());
         communication.bookSetChanged(activeBooks);
     }
 

@@ -1,51 +1,41 @@
 package de.ph1b.audiobook.model;
 
-import android.content.Context;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
-import de.ph1b.audiobook.interfaces.GenericBuilder;
+import auto.parcel.AutoParcel;
 import de.ph1b.audiobook.utils.App;
 
 
-public class Book implements Comparable<Book> {
+@AutoParcel
+public abstract class Book implements Comparable<Book> {
 
     public static final String TAG = Book.class.getSimpleName();
     public static final long ID_UNKNOWN = -1;
     private static final String COVER_TRANSITION_PREFIX = "bookCoverTransition_";
-    @NonNull private final String root;
-    @NonNull private final List<Chapter> chapters;
-    @NonNull private final Type type;
-    @NonNull private final List<Bookmark> bookmarks;
-    @Nullable private final String author;
-    private final boolean useCoverReplacement;
-    @NonNull private final String name;
-    private final float playbackSpeed;
-    private final int time;
-    @NonNull private final File currentFile;
-    @Inject Context c;
-    private long id = ID_UNKNOWN;
 
-    private Book(Builder builder) {
-        App.getComponent().inject(this);
-        this.root = builder.root;
-        this.chapters = new ArrayList<>(builder.chapters);
-        this.type = builder.type;
-        this.bookmarks = new ArrayList<>(builder.bookmarks);
-        this.author = builder.author;
-        this.name = builder.name;
-        this.currentFile = builder.currentFile;
-        this.useCoverReplacement = builder.useCoverReplacement;
-        this.playbackSpeed = builder.playbackSpeed;
-        this.id = builder.id;
-        this.time = builder.time;
+    public static Builder builder(@NonNull String root, @NonNull List<Chapter> chapters, @NonNull Type type,
+                                  @NonNull List<Bookmark> bookmarks, @Nullable String author, @NonNull File currentFile,
+                                  @NonNull String name, boolean useCoverReplacement, float playbackSpeed) {
+        return new AutoParcel_Book.Builder()
+                .root(root)
+                .chapters(chapters)
+                .type(type)
+                .bookmarks(bookmarks)
+                .author(author)
+                .currentFile(currentFile)
+                .name(name)
+                .useCoverReplacement(useCoverReplacement)
+                .id(ID_UNKNOWN)
+                .playbackSpeed(playbackSpeed);
+    }
+
+    public static Builder builder(Book book) {
+        return new AutoParcel_Book.Builder(book);
     }
 
     /**
@@ -54,21 +44,19 @@ public class Book implements Comparable<Book> {
      * @return The transition name
      */
     @NonNull
-    public String getCoverTransitionName() {
-        return COVER_TRANSITION_PREFIX + id;
+    public String coverTransitionName() {
+        return COVER_TRANSITION_PREFIX + id();
     }
 
     @NonNull
-    public List<Bookmark> getBookmarks() {
-        return bookmarks;
-    }
+    public abstract List<Bookmark> bookmarks();
 
     /**
      * @return The global duration. It sums up the duration of all chapters.
      */
-    public int getGlobalDuration() {
+    public int globalDuration() {
         int globalDuration = 0;
-        for (Chapter c : chapters) {
+        for (Chapter c : chapters()) {
             globalDuration += c.duration();
         }
         return globalDuration;
@@ -78,11 +66,11 @@ public class Book implements Comparable<Book> {
      * @return The global position. It sums up the duration of all elapsed chapters plus the position
      * in the current chapter.
      */
-    public int getGlobalPosition() {
+    public int globalPosition() {
         int globalPosition = 0;
-        for (Chapter c : chapters) {
-            if (c.equals(getCurrentChapter())) {
-                globalPosition += time;
+        for (Chapter c : chapters()) {
+            if (c.equals(currentChapter())) {
+                globalPosition += time();
                 return globalPosition;
             } else {
                 globalPosition += c.duration();
@@ -92,10 +80,10 @@ public class Book implements Comparable<Book> {
     }
 
     @NonNull
-    public File getCoverFile() {
+    public File coverFile() {
         File coverFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                File.separator + "Android" + File.separator + "data" + File.separator + c.getPackageName(),
-                id + ".jpg");
+                File.separator + "Android" + File.separator + "data" + File.separator + App.getComponent().getContext().getPackageName(),
+                id() + ".jpg");
         if (!coverFile.getParentFile().exists()) {
             //noinspection ResultOfMethodCallIgnored
             coverFile.getParentFile().mkdirs();
@@ -104,75 +92,23 @@ public class Book implements Comparable<Book> {
     }
 
     @NonNull
-    public Type getType() {
-        return type;
-    }
+    public abstract Type type();
 
-    public boolean isUseCoverReplacement() {
-        return useCoverReplacement;
-    }
+    public abstract boolean useCoverReplacement();
 
     /**
      * @return the author of the book or null if not set.
      */
     @Nullable
-    public String getAuthor() {
-        return author;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-
-        if (o instanceof Book) {
-            Book that = (Book) o;
-
-            return this.root.equals(that.root) &&
-                    this.chapters.equals(that.chapters) &&
-                    this.type == that.type &&
-                    this.name.equals(that.name);
-
-        }
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        final int PRIME = 31;
-        int result = PRIME;
-        result = PRIME * result + root.hashCode();
-        result = PRIME * result + chapters.hashCode();
-        result = PRIME * result + name.hashCode();
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return TAG + "[" +
-                "root=" + root +
-                ", type=" + type +
-                ", id=" + id +
-                ", name=" + name +
-                ", author=" + author +
-                ", time=" + time +
-                ", playbackSpeed=" + playbackSpeed +
-                ", currentFile=" + currentFile +
-                ", useCoverReplacement=" + useCoverReplacement +
-                ", chapters=" + chapters +
-                ", bookmarks=" + bookmarks +
-                "]";
-    }
+    public abstract String author();
 
     @NonNull
-    public File getCurrentFile() {
-        return currentFile;
-    }
+    public abstract File currentFile();
 
     @Nullable
-    public Chapter getNextChapter() {
-        int currentIndex = chapters.indexOf(getCurrentChapter());
+    public Chapter nextChapter() {
+        List<Chapter> chapters = chapters();
+        int currentIndex = chapters.indexOf(currentChapter());
         if (currentIndex < chapters.size() - 1) {
             return chapters.get(currentIndex + 1);
         }
@@ -180,62 +116,48 @@ public class Book implements Comparable<Book> {
     }
 
     @NonNull
-    public Chapter getCurrentChapter() {
+    public Chapter currentChapter() {
+        List<Chapter> chapters = chapters();
         for (Chapter c : chapters) {
-            if (c.file().equals(currentFile)) {
+            if (c.file().equals(currentFile())) {
                 return c;
             }
         }
-        throw new IllegalArgumentException("getCurrentChapter has no valid id with" +
-                " currentFile=" + currentFile);
+        throw new IllegalArgumentException("currentChapter has no valid id with" +
+                " currentFile=" + currentFile());
     }
 
     @Nullable
-    public Chapter getPreviousChapter() {
-        int currentIndex = chapters.indexOf(getCurrentChapter());
+    public Chapter previousChapter() {
+        List<Chapter> chapters = chapters();
+        int currentIndex = chapters.indexOf(currentChapter());
         if (currentIndex > 0) {
             return chapters.get(currentIndex - 1);
         }
         return null;
     }
 
-    public int getTime() {
-        return time;
-    }
+    public abstract int time();
 
     @NonNull
-    public String getName() {
-        return name;
-    }
+    public abstract String name();
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
+    public abstract long id();
 
     @NonNull
-    public List<Chapter> getChapters() {
-        return chapters;
-    }
+    public abstract List<Chapter> chapters();
 
-    public float getPlaybackSpeed() {
-        return playbackSpeed;
-    }
+    public abstract float playbackSpeed();
 
     @NonNull
-    public String getRoot() {
-        return root;
-    }
+    public abstract String root();
 
     @Override
     public int compareTo(@NonNull Book that) {
         if (this.equals(that)) {
             return 0;
         } else {
-            return NaturalOrderComparator.naturalCompare(this.name, that.name);
+            return NaturalOrderComparator.naturalCompare(this.name(), that.name());
         }
     }
 
@@ -246,82 +168,32 @@ public class Book implements Comparable<Book> {
         SINGLE_FILE,
     }
 
-    public static class Builder implements GenericBuilder<Book> {
+    @AutoParcel.Builder
+    public abstract static class Builder {
 
-        @NonNull private final String root;
-        @NonNull private final List<Chapter> chapters;
-        @NonNull private final Type type;
-        @NonNull private final List<Bookmark> bookmarks;
-        @Nullable private final String author;
-        private long id = ID_UNKNOWN;
-        private int time = 0;
-        @NonNull private File currentFile;
-        private boolean useCoverReplacement;
-        @NonNull private String name;
-        private float playbackSpeed = 1.0f;
+        public abstract Builder currentFile(File currentFile);
 
-        public Builder(Book book) {
-            this.root = book.root;
-            this.chapters = book.chapters;
-            this.type = book.type;
-            this.bookmarks = book.bookmarks;
-            this.author = book.author;
-            this.id = book.id;
-            this.time = book.time;
-            this.playbackSpeed = book.playbackSpeed;
-            this.currentFile = book.currentFile;
-            this.useCoverReplacement = book.useCoverReplacement;
-            this.name = book.name;
-        }
+        public abstract Builder useCoverReplacement(boolean useCoverReplacement);
 
-        public Builder(@NonNull String root, @NonNull List<Chapter> chapters, @NonNull Type type,
-                       @NonNull List<Bookmark> bookmarks, @Nullable String author, @NonNull File currentFile,
-                       @NonNull String name, boolean useCoverReplacement, float playbackSpeed) {
-            this.root = root;
-            this.chapters = chapters;
-            this.type = type;
-            this.bookmarks = bookmarks;
-            this.author = author;
-            this.name = name;
-            this.currentFile = currentFile;
-            this.useCoverReplacement = useCoverReplacement;
-            this.playbackSpeed = playbackSpeed;
-        }
+        public abstract Builder name(String name);
 
-        public Builder currentFile(File currentFile) {
-            this.currentFile = currentFile;
-            return this;
-        }
+        public abstract Builder bookmarks(List<Bookmark> bookmarks);
 
-        public Builder useCoverReplacement(boolean useCoverReplacement) {
-            this.useCoverReplacement = useCoverReplacement;
-            return this;
-        }
+        public abstract Builder chapters(List<Chapter> chapters);
 
-        public Builder name(String name) {
-            this.name = name;
-            return this;
-        }
+        public abstract Builder root(String root);
 
-        public Builder playbackSpeed(float playbackSpeed) {
-            this.playbackSpeed = playbackSpeed;
-            return this;
-        }
+        public abstract Builder type(Type type);
 
-        public Builder id(long id) {
-            this.id = id;
-            return this;
-        }
+        public abstract Builder playbackSpeed(float playbackSpeed);
 
-        public Builder time(int time) {
-            this.time = time;
-            return this;
-        }
+        public abstract Builder id(long id);
 
-        @Override
-        public Book build() {
-            return new Book(this);
-        }
+        public abstract Builder time(int time);
+
+        public abstract Book build();
+
+        public abstract Builder author(String author);
     }
 }
 

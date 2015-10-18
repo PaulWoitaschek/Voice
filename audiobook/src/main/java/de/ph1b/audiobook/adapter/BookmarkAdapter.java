@@ -51,8 +51,8 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
     }
 
     public void removeItem(Bookmark bookmark) {
-        int index = book.getBookmarks().indexOf(bookmark);
-        book.getBookmarks().remove(bookmark);
+        int index = book.bookmarks().indexOf(bookmark);
+        book.bookmarks().remove(bookmark);
         notifyItemRemoved(index);
     }
 
@@ -64,7 +64,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
     }
 
     public void bookmarkUpdated(Bookmark oldBookmark, Bookmark newBookmark) {
-        List<Bookmark> bookmarks = book.getBookmarks();
+        List<Bookmark> bookmarks = book.bookmarks();
         int oldIndex = bookmarks.indexOf(oldBookmark);
         bookmarks.set(oldIndex, newBookmark);
         notifyItemChanged(oldIndex);
@@ -74,12 +74,12 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Bookmark bookmark = book.getBookmarks().get(position);
+        Bookmark bookmark = book.bookmarks().get(position);
         holder.title.setText(bookmark.title());
 
-        int size = book.getChapters().size();
+        int size = book.chapters().size();
         Chapter currentChapter = null;
-        for (Chapter c : book.getChapters()) {
+        for (Chapter c : book.chapters()) {
             if (c.file().equals(bookmark.mediaFile())) {
                 currentChapter = c;
             }
@@ -87,7 +87,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         if (currentChapter == null) {
             throw new IllegalArgumentException("Current chapter not found with bookmark=" + bookmark);
         }
-        int index = book.getChapters().indexOf(currentChapter);
+        int index = book.chapters().indexOf(currentChapter);
 
         holder.summary.setText("(" + (index + 1) + "/" + size + ") ");
         holder.time.setText(formatTime(bookmark.time()) + " / " + formatTime(currentChapter.duration()));
@@ -100,7 +100,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return book.getBookmarks().size();
+        return book.bookmarks().size();
     }
 
     public interface OnOptionsMenuClickedListener {
@@ -123,14 +123,14 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onBookmarkClicked(book.getBookmarks().get(getAdapterPosition()));
+                    listener.onBookmarkClicked(book.bookmarks().get(getAdapterPosition()));
                 }
             });
         }
 
         @OnClick(R.id.edit)
         void optionsMenuClicked() {
-            listener.onOptionsMenuClicked(book.getBookmarks().get(getAdapterPosition()), imageButton);
+            listener.onOptionsMenuClicked(book.bookmarks().get(getAdapterPosition()), imageButton);
         }
     }
 }

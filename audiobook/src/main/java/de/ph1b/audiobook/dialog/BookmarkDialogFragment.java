@@ -70,9 +70,9 @@ public class BookmarkDialogFragment extends DialogFragment {
     public static void addBookmark(long bookId, @NonNull String title, @NonNull DataBaseHelper db) {
         Book book = db.getBook(bookId);
         if (book != null) {
-            Bookmark bookmark = Bookmark.of(book.getCurrentChapter().file(), title, book.getTime());
-            book.getBookmarks().add(bookmark);
-            Collections.sort(book.getBookmarks());
+            Bookmark bookmark = Bookmark.of(book.currentChapter().file(), title, book.time());
+            book.bookmarks().add(bookmark);
+            Collections.sort(book.bookmarks());
             db.updateBook(book);
             L.v(TAG, "Added bookmark=" + bookmark);
         } else {
@@ -84,10 +84,10 @@ public class BookmarkDialogFragment extends DialogFragment {
     void addClicked() {
         String title = bookmarkTitle.getText().toString();
         if (title.isEmpty()) {
-            title = book.getCurrentChapter().name();
+            title = book.currentChapter().name();
         }
 
-        addBookmark(book.getId(), title, db);
+        addBookmark(book.id(), title, db);
         Toast.makeText(getActivity(), R.string.bookmark_added, Toast.LENGTH_SHORT).show();
         bookmarkTitle.setText("");
         dismiss();

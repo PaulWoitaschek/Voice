@@ -50,19 +50,19 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
 
         @Override
         public int compare(Book o1, Book o2) {
-            return NaturalOrderComparator.naturalCompare(o1.getName(), o2.getName());
+            return NaturalOrderComparator.naturalCompare(o1.name(), o2.name());
         }
 
         @Override
         public boolean areContentsTheSame(Book oldItem, Book newItem) {
-            return oldItem.getGlobalPosition() == newItem.getGlobalPosition()
-                    && oldItem.getName().equals(newItem.getName())
-                    && oldItem.isUseCoverReplacement() == newItem.isUseCoverReplacement();
+            return oldItem.globalPosition() == newItem.globalPosition()
+                    && oldItem.name().equals(newItem.name())
+                    && oldItem.useCoverReplacement() == newItem.useCoverReplacement();
         }
 
         @Override
         public boolean areItemsTheSame(Book item1, Book item2) {
-            return item1.getId() == item2.getId();
+            return item1.id() == item2.id();
         }
     });
     @Inject PrefsManager prefs;
@@ -94,7 +94,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
     public void updateOrAddBook(@NonNull Book book) {
         int index = -1;
         for (int i = 0; i < sortedList.size(); i++) {
-            if (sortedList.get(i).getId() == book.getId()) {
+            if (sortedList.get(i).id() == book.id()) {
                 index = i;
                 break;
             }
@@ -121,7 +121,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
                 Book existing = sortedList.get(i);
                 boolean deleteBook = true;
                 for (Book b : books) {
-                    if (existing.getId() == b.getId()) {
+                    if (existing.id() == b.id()) {
                         deleteBook = false;
                         break;
                     }
@@ -146,7 +146,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
 
     @Override
     public long getItemId(int position) {
-        return sortedList.get(position).getId();
+        return sortedList.get(position).id();
     }
 
     /**
@@ -179,7 +179,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
      */
     public void notifyItemAtIdChanged(long id) {
         for (int i = 0; i < sortedList.size(); i++) {
-            if (sortedList.get(i).getId() == id) {
+            if (sortedList.get(i).id() == id) {
                 notifyItemChanged(i);
                 break;
             }
@@ -235,8 +235,8 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
         public void bind(Book book) {
             super.bind(book);
 
-            int globalPosition = book.getGlobalPosition();
-            int globalDuration = book.getGlobalDuration();
+            int globalPosition = book.globalPosition();
+            int globalDuration = book.globalDuration();
             int progress = Math.round(100f * (float) globalPosition / (float) globalDuration);
 
             leftTime.setText(formatTime(globalPosition));
@@ -283,14 +283,14 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
         public void bind(Book book) {
 
             //setting text
-            String name = book.getName();
+            String name = book.name();
             titleView.setText(name);
 
             // (Cover)
-            final File coverFile = book.getCoverFile();
-            final Drawable coverReplacement = new CoverReplacement(book.getName(), c);
+            final File coverFile = book.coverFile();
+            final Drawable coverReplacement = new CoverReplacement(book.name(), c);
 
-            if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
+            if (!book.useCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
                 Picasso.with(c).load(coverFile).placeholder(coverReplacement).into(coverView);
             } else {
                 Picasso.with(c).cancelRequest(coverView);
@@ -305,7 +305,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
                 });
             }
 
-            if (book.getId() == prefs.getCurrentBookId()) {
+            if (book.id() == prefs.getCurrentBookId()) {
                 currentPlayingIndicator.setVisibility(View.VISIBLE);
             } else {
                 currentPlayingIndicator.setVisibility(View.GONE);
@@ -324,7 +324,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
                 }
             });
 
-            ViewCompat.setTransitionName(coverView, book.getCoverTransitionName());
+            ViewCompat.setTransitionName(coverView, book.coverTransitionName());
         }
     }
 }

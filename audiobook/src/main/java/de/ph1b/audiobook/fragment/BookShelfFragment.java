@@ -373,21 +373,21 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
                             @Override
                             public void onEditBookFinished() {
                                 // this is necessary for the cover update
-                                adapter.notifyItemAtIdChanged(book.getId());
+                                adapter.notifyItemAtIdChanged(book.id());
                             }
                         });
                         fragment.show(getFragmentManager(), EditCoverDialogFragment.TAG);
                         return true;
                     case R.id.edit_title:
-                        EditBookTitleDialogFragment editBookTitle = EditBookTitleDialogFragment.newInstance(book.getName());
+                        EditBookTitleDialogFragment editBookTitle = EditBookTitleDialogFragment.newInstance(book.name());
                         editBookTitle.setOnTextChangedListener(new EditBookTitleDialogFragment.OnTextChanged() {
                             @Override
                             public void onTitleChanged(@NonNull String newTitle) {
                                 //noinspection SynchronizeOnNonFinalField
                                 synchronized (db) {
-                                    Book dbBook = db.getBook(book.getId());
+                                    Book dbBook = db.getBook(book.id());
                                     if (dbBook != null) {
-                                        dbBook = new Book.Builder(dbBook)
+                                        dbBook = Book.builder(dbBook)
                                                 .name(newTitle)
                                                 .build();
                                         db.updateBook(dbBook);
