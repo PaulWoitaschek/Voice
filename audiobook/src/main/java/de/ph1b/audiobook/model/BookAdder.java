@@ -48,14 +48,13 @@ import de.ph1b.audiobook.utils.L;
 public class BookAdder {
 
     private static final String TAG = BookAdder.class.getSimpleName();
-    public static volatile boolean scannerActive = false;
     private final Communication communication;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Context c;
     private final PrefsManager prefs;
     private final DataBaseHelper db;
+    private volatile boolean scannerActive = false;
     private volatile boolean stopScanner = false;
-
     @Inject
     public BookAdder(@NonNull Context c, PrefsManager prefs, Communication communication, DataBaseHelper db) {
         this.c = c;
@@ -63,7 +62,6 @@ public class BookAdder {
         this.communication = communication;
         this.db = db;
     }
-
 
     /**
      * Returns the name of the book we want to add. If there is a tag embedded, use that one. Else
@@ -112,7 +110,6 @@ public class BookAdder {
         }
     }
 
-
     /**
      * Adds files recursively. First takes all files and adds them sorted to the return list. Then
      * sorts the folders, and then adds their content sorted to the return list.
@@ -141,6 +138,10 @@ public class BookAdder {
 
         // return all the files only^
         return fileList;
+    }
+
+    public boolean isScannerActive() {
+        return scannerActive;
     }
 
     /**

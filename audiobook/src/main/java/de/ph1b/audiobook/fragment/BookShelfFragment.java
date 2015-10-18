@@ -70,8 +70,8 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
     @Bind(R.id.recyclerReplacement) ProgressBar recyclerReplacementView;
     @Bind(R.id.fab) FloatingActionButton fab;
     @Inject PrefsManager prefs;
-    @Inject BookAdder bookAdder;
     @Inject DataBaseHelper db;
+    @Inject BookAdder bookAdder;
     private BookShelfAdapter adapter;
     private ServiceController controller;
     private MaterialDialog noFolderWarning;
@@ -260,7 +260,7 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
     }
 
     private void checkVisibilities() {
-        final boolean hideRecycler = adapter.getItemCount() == 0 && BookAdder.scannerActive;
+        final boolean hideRecycler = adapter.getItemCount() == 0 && bookAdder.isScannerActive();
         if (hideRecycler) {
             recyclerReplacementView.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
