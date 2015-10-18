@@ -30,8 +30,6 @@ public class Book implements Comparable<Book> {
     @NonNull
     private final Type type;
     @NonNull
-    private final String packageName;
-    @NonNull
     private final List<Bookmark> bookmarks;
     @Nullable
     private final String author;
@@ -46,10 +44,10 @@ public class Book implements Comparable<Book> {
     private boolean useCoverReplacement = false;
 
     private Book(Builder builder) {
+        App.getComponent().inject(this);
         this.root = builder.root;
         this.chapters = new ArrayList<>(builder.chapters);
         this.type = builder.type;
-        this.packageName = builder.packageName;
         this.bookmarks = new ArrayList<>(builder.bookmarks);
         this.author = builder.author;
         this.name = builder.name;
@@ -83,7 +81,6 @@ public class Book implements Comparable<Book> {
         this.chapters = chapters;
         this.type = type;
         this.bookmarks = bookmarks;
-        this.packageName = c.getPackageName();
         setPosition(0, currentFile);
         this.currentFile = currentFile;
     }
@@ -144,7 +141,7 @@ public class Book implements Comparable<Book> {
     @NonNull
     public File getCoverFile() {
         File coverFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                File.separator + "Android" + File.separator + "data" + File.separator + packageName,
+                File.separator + "Android" + File.separator + "data" + File.separator + c.getPackageName(),
                 id + ".jpg");
         if (!coverFile.getParentFile().exists()) {
             //noinspection ResultOfMethodCallIgnored
@@ -231,7 +228,6 @@ public class Book implements Comparable<Book> {
                 ", playbackSpeed=" + playbackSpeed +
                 ", currentFile=" + currentFile +
                 ", useCoverReplacement=" + useCoverReplacement +
-                ", packageName=" + packageName +
                 ", chapters=" + chapters +
                 ", bookmarks=" + bookmarks +
                 "]";
@@ -332,7 +328,6 @@ public class Book implements Comparable<Book> {
         private final String root;
         private final List<Chapter> chapters;
         private final Type type;
-        private final String packageName;
         private final List<Bookmark> bookmarks;
         private final String author;
         private long id = ID_UNKNOWN;
@@ -346,7 +341,6 @@ public class Book implements Comparable<Book> {
             this.root = book.root;
             this.chapters = book.chapters;
             this.type = book.type;
-            this.packageName = book.packageName;
             this.bookmarks = book.bookmarks;
             this.author = book.author;
 
@@ -358,12 +352,11 @@ public class Book implements Comparable<Book> {
             this.name = book.name;
         }
 
-        public Builder(String root, List<Chapter> chapters, Type type, String packageName, List<Bookmark> bookmarks,
+        public Builder(String root, List<Chapter> chapters, Type type, List<Bookmark> bookmarks,
                        String author) {
             this.root = root;
             this.chapters = chapters;
             this.type = type;
-            this.packageName = packageName;
             this.bookmarks = bookmarks;
             this.author = author;
         }
