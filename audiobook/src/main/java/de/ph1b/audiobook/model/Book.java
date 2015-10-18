@@ -24,20 +24,19 @@ public abstract class Book implements Comparable<Book> {
     public static final float SPEED_MAX = 2f;
     private static final String COVER_TRANSITION_PREFIX = "bookCoverTransition_";
 
-    public static Builder builder(@NonNull String root, @NonNull List<Chapter> chapters, @NonNull Type type,
-                                  @NonNull List<Bookmark> bookmarks, @Nullable String author, @NonNull File currentFile,
-                                  @NonNull String name, boolean useCoverReplacement, float playbackSpeed) {
+    public static Builder builder(@NonNull String root, @NonNull List<Chapter> chapters,
+                                  @NonNull Type type, @NonNull File currentFile, @NonNull String name) {
         return new AutoParcel_Book.Builder()
                 .root(root)
                 .chapters(ImmutableList.copyOf(chapters))
                 .type(type)
-                .bookmarks(ImmutableList.copyOf(bookmarks))
-                .author(author)
+                .bookmarks(ImmutableList.<Bookmark>of())
                 .currentFile(currentFile)
                 .name(name)
-                .useCoverReplacement(useCoverReplacement)
+                .useCoverReplacement(false)
                 .id(ID_UNKNOWN)
-                .playbackSpeed(playbackSpeed);
+                .time(0)
+                .playbackSpeed(1.0f);
     }
 
     public static Builder builder(Book book) {

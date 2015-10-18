@@ -55,6 +55,7 @@ public class BookAdder {
     private final DataBaseHelper db;
     private volatile boolean scannerActive = false;
     private volatile boolean stopScanner = false;
+
     @Inject
     public BookAdder(@NonNull Context c, PrefsManager prefs, Communication communication, DataBaseHelper db) {
         this.c = c;
@@ -434,8 +435,8 @@ public class BookAdder {
 
         Book orphanedBook = getBookFromDb(rootFile, type, true);
         if (orphanedBook == null) {
-            Book newBook = Book.builder(bookRoot, newChapters, type, new ArrayList<Bookmark>(),
-                    author, firstChapterFile, bookName, false, 1.0f)
+            Book newBook = Book.builder(bookRoot, newChapters, type, firstChapterFile, bookName)
+                    .author(author)
                     .build();
             L.d(TAG, "adding newBook=" + newBook);
             db.addBook(newBook);
