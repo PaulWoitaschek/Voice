@@ -433,7 +433,7 @@ public class BookAdder {
         final Book orphanedBook = getBookFromDb(rootFile, type, true);
         if (orphanedBook == null) {
             Book newBook = new Book(bookRoot, bookName, author, newChapters,
-                    firstChapterFile, type, new ArrayList<Bookmark>(10), c);
+                    firstChapterFile, type, new ArrayList<Bookmark>(10));
             L.d(TAG, "adding newBook=" + newBook);
             db.addBook(newBook);
         } else { // restore old books

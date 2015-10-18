@@ -9,6 +9,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import de.ph1b.audiobook.utils.App;
+
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -30,6 +34,7 @@ public class Book implements Comparable<Book> {
     private final List<Bookmark> bookmarks;
     @Nullable
     private final String author;
+    @Inject Context c;
     private long id = ID_UNKNOWN;
     @NonNull
     private String name;
@@ -40,14 +45,9 @@ public class Book implements Comparable<Book> {
     private boolean useCoverReplacement = false;
 
     public Book(Book that) {
+        this(that.root, that.name, that.author, new ArrayList<>(that.chapters), that.currentFile,
+                that.type, new ArrayList<>(that.bookmarks));
         this.id = that.id;
-        this.root = that.root;
-        this.chapters = new ArrayList<>(that.chapters);
-        this.type = Type.valueOf(that.type.name());
-        this.packageName = that.packageName;
-        this.bookmarks = new ArrayList<>(that.bookmarks);
-        this.name = that.name;
-        this.author = that.author;
         this.time = that.time;
         this.playbackSpeed = that.playbackSpeed;
         this.currentFile = that.currentFile;
@@ -60,8 +60,7 @@ public class Book implements Comparable<Book> {
                 @NonNull List<Chapter> chapters,
                 @NonNull File currentFile,
                 @NonNull Type type,
-                @NonNull List<Bookmark> bookmarks,
-                @NonNull Context c) {
+                @NonNull List<Bookmark> bookmarks) {
         checkNotNull(chapters);
         checkNotNull(currentFile);
         checkNotNull(type);
@@ -69,6 +68,8 @@ public class Book implements Comparable<Book> {
         checkArgument(!root.isEmpty());
         checkArgument(!name.isEmpty());
         checkArgument(!chapters.isEmpty());
+
+        App.getComponent().inject(this);
 
         this.root = root;
         this.name = name;

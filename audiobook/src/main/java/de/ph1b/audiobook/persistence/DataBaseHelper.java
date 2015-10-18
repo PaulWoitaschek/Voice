@@ -106,7 +106,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 }
 
                 Book book = new Book(bookRoot, bookName, bookAuthor, chapters,
-                        bookmarkCurrentMediaPath, bookType, bookmarks, c);
+                        bookmarkCurrentMediaPath, bookType, bookmarks);
                 book.setPlaybackSpeed(bookSpeed);
                 book.setPosition(bookTime, bookmarkCurrentMediaPath);
                 book.setUseCoverReplacement(bookUseCoverReplacement);

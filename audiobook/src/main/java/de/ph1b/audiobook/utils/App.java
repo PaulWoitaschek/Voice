@@ -26,6 +26,7 @@ import de.ph1b.audiobook.dialog.prefs.ThemePickerDialogFragment;
 import de.ph1b.audiobook.fragment.BookPlayFragment;
 import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.fragment.SettingsFragment;
+import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.BookAdder;
 import de.ph1b.audiobook.service.BookReaderService;
 import de.ph1b.audiobook.service.WidgetUpdateService;
@@ -65,6 +66,8 @@ public class App extends Application {
     @Component(modules = BaseModule.class)
     public interface ApplicationComponent {
         void inject(WidgetUpdateService target);
+
+        void inject(Book target);
 
         void inject(CoverReplacement target);
 
