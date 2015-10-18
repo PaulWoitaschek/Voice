@@ -27,10 +27,10 @@ public class Book implements Comparable<Book> {
     @Nullable private final String author;
     private final boolean useCoverReplacement;
     @NonNull private final String name;
+    private final float playbackSpeed;
     @Inject Context c;
     private long id = ID_UNKNOWN;
     private int time = 0;
-    private float playbackSpeed = 1.0f;
     @NonNull private File currentFile;
 
     private Book(Builder builder) {
@@ -242,10 +242,6 @@ public class Book implements Comparable<Book> {
         return playbackSpeed;
     }
 
-    public void setPlaybackSpeed(float playbackSpeed) {
-        this.playbackSpeed = playbackSpeed;
-    }
-
     @NonNull
     public String getRoot() {
         return root;
@@ -298,7 +294,7 @@ public class Book implements Comparable<Book> {
 
         public Builder(@NonNull String root, @NonNull List<Chapter> chapters, @NonNull Type type,
                        @NonNull List<Bookmark> bookmarks, @Nullable String author, @NonNull File currentFile,
-                       @NonNull String name, boolean useCoverReplacement) {
+                       @NonNull String name, boolean useCoverReplacement, float playbackSpeed) {
             this.root = root;
             this.chapters = chapters;
             this.type = type;
@@ -307,6 +303,7 @@ public class Book implements Comparable<Book> {
             this.name = name;
             this.currentFile = currentFile;
             this.useCoverReplacement = useCoverReplacement;
+            this.playbackSpeed = playbackSpeed;
         }
 
         public Builder useCoverReplacement(boolean useCoverReplacement) {
@@ -316,6 +313,11 @@ public class Book implements Comparable<Book> {
 
         public Builder name(String name) {
             this.name = name;
+            return this;
+        }
+
+        public Builder playbackSpeed(float playbackSpeed) {
+            this.playbackSpeed = playbackSpeed;
             return this;
         }
 

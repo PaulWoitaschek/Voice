@@ -521,7 +521,9 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         lock.lock();
         try {
             if (book != null) {
-                book.setPlaybackSpeed(speed);
+                book = new Book.Builder(book)
+                        .playbackSpeed(speed)
+                        .build();
                 db.updateBook(book);
                 if (state != State.DEAD) {
                     player.setPlaybackSpeed(speed);

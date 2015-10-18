@@ -433,7 +433,7 @@ public class BookAdder {
         final Book orphanedBook = getBookFromDb(rootFile, type, true);
         if (orphanedBook == null) {
             Book newBook = new Book.Builder(bookRoot, newChapters, type, new ArrayList<Bookmark>(),
-                    author, firstChapterFile, bookName, false)
+                    author, firstChapterFile, bookName, false, 1.0f)
                     .build();
             L.d(TAG, "adding newBook=" + newBook);
             db.addBook(newBook);
