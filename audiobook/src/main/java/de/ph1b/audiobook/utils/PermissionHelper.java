@@ -31,7 +31,7 @@ public class PermissionHelper {
      * @param grantResults        The results for the permissions
      * @return true if permission granting worked
      */
-    public static boolean permissionGrantingWorked(int receivedRequestCode, int sentRequestCode, String targetPermission, String[] permissions, int[] grantResults) {
+    public static boolean permissionGrantingWorked(int receivedRequestCode, int sentRequestCode, @SuppressWarnings("SameParameterValue") String targetPermission, String[] permissions, int[] grantResults) {
         if (sentRequestCode == receivedRequestCode) {
             for (int i = 0; i < permissions.length; i++) {
                 if (permissions[i].equals(targetPermission)) {
