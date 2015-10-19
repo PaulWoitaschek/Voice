@@ -48,6 +48,6 @@ public abstract class Bookmark implements Comparable<Bookmark> {
         }
 
         // if time is the same compare the titles
-        return NaturalOrderComparator.naturalCompare(title(), another.title());
+        return NaturalOrderComparator.STRING_COMPARATOR.compare(title(), another.title());
     }
 }

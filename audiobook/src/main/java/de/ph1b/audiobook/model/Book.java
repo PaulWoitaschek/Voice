@@ -168,7 +168,7 @@ public abstract class Book implements Comparable<Book> {
         if (this.equals(that)) {
             return 0;
         } else {
-            return NaturalOrderComparator.naturalCompare(this.name(), that.name());
+            return NaturalOrderComparator.STRING_COMPARATOR.compare(this.name(), that.name());
         }
     }
 

@@ -17,7 +17,7 @@ import de.ph1b.audiobook.utils.AlphaComparator;
  */
 public class NaturalOrderComparator {
 
-    public static final Comparator<String> NATURAL_COMPARATOR = new AlphaComparator();
+    public static final Comparator<String> STRING_COMPARATOR = new AlphaComparator();
     public static final Comparator<File> FILE_COMPARATOR = new Comparator<File>() {
         @Override
         public int compare(File lhs, File rhs) {
@@ -52,14 +52,14 @@ public class NaturalOrderComparator {
                     File left = lhsParents.get(i);
                     File right = rhsParents.get(i);
                     if (!left.equals(right)) {
-                        return NATURAL_COMPARATOR.compare(left.getAbsolutePath(), right.getAbsolutePath());
+                        return STRING_COMPARATOR.compare(left.getAbsolutePath(), right.getAbsolutePath());
                     }
                 }
 
                 if (lhsParents.size() == rhsParents.size()) {
                     // if the amount of folders matches the files are within the same directory.
                     int lastIndex = lhsParents.size() - 1;
-                    return NATURAL_COMPARATOR.compare(lhsParents.get(lastIndex).getName(), rhsParents.get(lastIndex).getName());
+                    return STRING_COMPARATOR.compare(lhsParents.get(lastIndex).getName(), rhsParents.get(lastIndex).getName());
                 } else if (lhsParents.size() < rhsParents.size()) {
                     // if the first element has more parents, return a 1 so elements with a lower
                     // hierarchy will be first
