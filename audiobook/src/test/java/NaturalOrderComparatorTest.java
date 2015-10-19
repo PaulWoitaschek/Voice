@@ -22,7 +22,7 @@ public class NaturalOrderComparatorTest extends TestCase {
     public void testNaturalCompare() {
         String first = "00 I";
         String second = "01 I";
-        assertTrue(NaturalOrderComparator.naturalCompare(first, second) < 0);
+        assertTrue(NaturalOrderComparator.STRING_COMPARATOR.compare(first, second) < 0);
     }
 
     /**
