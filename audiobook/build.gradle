@@ -78,7 +78,7 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.5.0' // http library
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.5.0'
     compile 'com.squareup.picasso:picasso:2.5.2' // image loading
-    compile('com.afollestad.material-dialogs:core:0.8.4.0@aar') { // material styled dialogs
+    compile('com.afollestad.material-dialogs:core:0.8.5.0@aar') { // material styled dialogs
         transitive = true
     }
     compile 'com.getbase:floatingactionbutton:1.10.0' // fab
@@ -92,8 +92,6 @@ dependencies {
     provided 'javax.annotation:jsr250-api:1.0'
 
     // auto value
-    compile 'com.github.frankiesardo:auto-parcel:0.3'
-    apt 'com.github.frankiesardo:auto-parcel-processor:0.3'
-
-    testCompile 'junit:junit:4.12'
+    compile 'com.github.frankiesardo:auto-parcel:0.3.1'
+    apt 'com.github.frankiesardo:auto-parcel-processor:0.3.1'
 }
