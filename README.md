@@ -1,7 +1,7 @@
 MaterialAudiobookPlayer
 =======================
 
-This is my digital playground where I am learning. I'm integrating and validating new technologies and ideas here, playing around with new UI / UX components and using the best coding standard I come up with.
+This is my digital playground where I am learning. I'm integrating and validating new technologies and ideas here, playing around with new UI / UX components and developing with the best coding standard I come up with.
 
 At the same time I want to provide an audiobook player which is really easy in use and a joy to work with.
 There are still some components outdated.
