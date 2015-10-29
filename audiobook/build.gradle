@@ -94,4 +94,6 @@ dependencies {
     // auto value
     compile 'com.github.frankiesardo:auto-parcel:0.3.1'
     apt 'com.github.frankiesardo:auto-parcel-processor:0.3.1'
+
+    testCompile 'junit:junit:4.12'
 }
