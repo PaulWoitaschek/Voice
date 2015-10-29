@@ -8,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 76
-        versionName '2.4.2'
+        versionCode 77
+        versionName 'preview'
     }
 
     signingConfigs {
