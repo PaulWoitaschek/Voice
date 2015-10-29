@@ -1,6 +1,13 @@
 MaterialAudiobookPlayer
 =======================
 
+This is my digital playground where I am learning. I'm integrating and validating new technologies and ideas here, playing around with new UI / UX components and using the best coding standard I come up with.
+
+At the same time I want to provide an audiobook player which is really easy in use and a joy to work with.
+There are still some components outdated.
+
+If you like to contribute, feel free to (see section above). There might be impacting structural changes over time.
+
 <a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook"><img src="https://github.com/Ph1b/MaterialAudiobookPlayer/blob/master/Images/map-port.jpg" width="400" ></a>
 
 [![Download from Google Play](http://www.android.com/images/brand/android_app_on_play_large.png "Download from Google Play")](https://play.google.com/store/apps/details?id=de.ph1b.audiobook)
