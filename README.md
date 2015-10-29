@@ -6,14 +6,14 @@ This is my digital playground where I am learning. I'm integrating and validatin
 At the same time I want to provide an audiobook player which is really easy in use and a joy to work with.
 There are still some components outdated.
 
-If you like to contribute, feel free to (see section above). There might be impacting structural changes over time.
+If you like to [contribute](#contrib), feel free to. But there might be impacting structural changes over time.
 
 <a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook"><img src="https://github.com/Ph1b/MaterialAudiobookPlayer/blob/master/Images/map-port.jpg" width="400" ></a>
 
 [![Download from Google Play](http://www.android.com/images/brand/android_app_on_play_large.png "Download from Google Play")](https://play.google.com/store/apps/details?id=de.ph1b.audiobook)
 [![AntennaPod on fdroid.org](https://camo.githubusercontent.com/7df0eafa4433fa4919a56f87c3d99cf81b68d01c/68747470733a2f2f662d64726f69642e6f72672f77696b692f696d616765732f632f63342f462d44726f69642d627574746f6e5f617661696c61626c652d6f6e2e706e67 "Download from fdroid.org")](https://f-droid.org/repository/browse/?fdfilter=material&fdid=de.ph1b.audiobook)
 
-# Contribution
+# <a name="contrib">Contribution</a>
 
 ## Development
 
