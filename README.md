@@ -6,7 +6,7 @@ This is my digital playground where I am learning. I'm integrating and validatin
 At the same time I want to provide an audiobook player which is really easy in use and a joy to work with.
 There are still some components outdated.
 
-If you like to [contribute](#contrib), feel free to. But there might be impacting structural changes over time.
+If you like to [contribute](#contrib) or [translate](#trans), that is very appreciated. But there might be impacting structural changes over time.
 
 <a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook"><img src="https://github.com/Ph1b/MaterialAudiobookPlayer/blob/master/Images/map-port.jpg" width="400" ></a>
 
@@ -25,13 +25,13 @@ Some rules for coding:
 * For each feature, make a seperate branch, so it can be reviewed separately
 * Use commits with a good description, so one can see, what you did
 
-## Translations
+## <a name="trans">Translations</a>
 The project page is on [transifex](https://www.transifex.com/projects/p/material-audiobook-player/). There all the localizations are maintained. If you want to contribute, check if there are untranslated or wrong translated words. 
 
 Or you can start translating a new language if you speak it ;-)
 
 # License
-Copyright (C) 2015 Paul Woitaschek
+Copyright (C) 2015 [Paul Woitaschek](http://www.paul-woitaschek.de/)
 
 The license is [GnuGPLv3](https://github.com/Ph1b/MaterialAudiobookPlayer/blob/master/LICENSE.md). With contributing you agree to license your code under the same conditions.
 
