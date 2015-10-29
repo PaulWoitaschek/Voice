@@ -9,11 +9,15 @@ import android.graphics.Paint.Align;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
 
 import com.google.common.base.Preconditions;
 
-import de.ph1b.audiobook.R;
+import javax.inject.Inject;
+
+import de.ph1b.audiobook.persistence.PrefsManager;
+import de.ph1b.audiobook.utils.App;
 
 
 public class CoverReplacement extends Drawable {
@@ -22,9 +26,13 @@ public class CoverReplacement extends Drawable {
     private final Paint textPaint;
     private final int backgroundColor;
 
+    @Inject PrefsManager prefsManager;
+
     public CoverReplacement(@NonNull String text, @NonNull Context c) {
         Preconditions.checkArgument(!text.isEmpty());
         this.text = text;
+
+        App.getComponent().inject(this);
 
         // text
         textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
@@ -32,9 +40,7 @@ public class CoverReplacement extends Drawable {
         textPaint.setTextAlign(Align.CENTER);
 
         // background
-        boolean lightTheme = ThemeUtil.getTheme(c) == R.style.LightTheme;
-        //noinspection deprecation
-        backgroundColor = c.getResources().getColor(lightTheme ? R.color.light_primary_dark : R.color.dark_primary_dark);
+        backgroundColor = ContextCompat.getColor(c, prefsManager.getTheme().getColorId());
     }
 
     @Override

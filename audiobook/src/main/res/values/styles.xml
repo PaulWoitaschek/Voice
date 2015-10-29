@@ -4,8 +4,7 @@
         <item name="android:windowContentTransitions" tools:ignore="NewApi">true</item>
         <item name="android:windowActivityTransitions" tools:ignore="NewApi">true</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:imageButtonStyle">@style/TintedImageButtonStyle</item>
-        <item name="android:seekBarStyle">@style/seek_style</item>
+        <item name="imageButtonStyle">@style/TintedImageButtonStyle</item>
 
         <item name="colorPrimary">@color/light_primary</item>
         <item name="colorPrimaryDark">@color/light_primary_dark</item>
@@ -16,15 +15,14 @@
         </item>
         <item name="icon_color">@color/light_icon_color</item>
         <item name="toolbar_popup_theme">@style/ThemeOverlay.AppCompat.Light</item>
-        <item name="background_overlay">@color/primary_text_disabled_material_light</item>
+        <item name="background_overlay">@color/copy_primary_text_disabled_material_light</item>
     </style>
 
     <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowContentTransitions" tools:ignore="NewApi">true</item>
         <item name="android:windowActivityTransitions" tools:ignore="NewApi">true</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:imageButtonStyle">@style/TintedImageButtonStyle</item>
-        <item name="android:seekBarStyle">@style/seek_style</item>
+        <item name="imageButtonStyle">@style/TintedImageButtonStyle</item>
 
         <item name="colorPrimary">@color/dark_primary</item>
         <item name="colorPrimaryDark">@color/dark_primary_dark</item>
@@ -34,10 +32,10 @@
         <item name="android:navigationBarColor" tools:ignore="NewApi">@android:color/black</item>
         <item name="icon_color">@color/dark_icon_color</item>
         <item name="toolbar_popup_theme">@style/ThemeOverlay.AppCompat</item>
-        <item name="background_overlay">@color/primary_text_disabled_material_dark</item>
+        <item name="background_overlay">@color/copy_primary_text_disabled_material_dark</item>
     </style>
 
-    <style name="BaseImageButtonStyle" parent="@android:style/Widget.ImageButton">
+    <style name="BaseImageButtonStyle" parent="Base.Widget.AppCompat.ImageButton">
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
         <item name="android:tint">@null</item>
     </style>
@@ -52,7 +50,7 @@
 
     <style name="fab_label_style">
         <item name="android:background">@drawable/fab_label_background</item>
-        <item name="android:textColor">@color/abc_primary_text_material_dark</item>
+        <item name="android:textColor">@color/copy_abc_primary_text_material_dark</item>
     </style>
 
     <style name="toolbar_style" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -60,19 +58,6 @@
         <item name="popupTheme">?attr/toolbar_popup_theme</item>
         <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
         <item name="android:elevation" tools:ignore="NewApi">4dp</item>
-    </style>
-
-
-    <style name="seek_style">
-        <item name="android:indeterminateOnly">false</item>
-        <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_material</item>
-        <item name="android:indeterminateDrawable">@drawable/scrubber_progress_horizontal_material
-        </item>
-        <item name="android:thumb">@drawable/seek_thumb</item>
-        <item name="android:focusable">true</item>
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingRight">16dp</item>
-        <item name="android:mirrorForRtl" tools:ignore="NewApi">true</item>
     </style>
 
     <style name="timer_text_view_style">

@@ -37,15 +37,15 @@ class BookTable {
 
     public static ContentValues getContentValues(Book book) {
         ContentValues bookCv = new ContentValues();
-        bookCv.put(BookTable.NAME, book.getName());
-        bookCv.put(BookTable.AUTHOR, book.getAuthor());
+        bookCv.put(BookTable.NAME, book.name());
+        bookCv.put(BookTable.AUTHOR, book.author());
         bookCv.put(BookTable.ACTIVE, 1);
-        bookCv.put(BookTable.CURRENT_MEDIA_PATH, book.getCurrentFile().getAbsolutePath());
-        bookCv.put(BookTable.PLAYBACK_SPEED, book.getPlaybackSpeed());
-        bookCv.put(BookTable.ROOT, book.getRoot());
-        bookCv.put(BookTable.TIME, book.getTime());
-        bookCv.put(BookTable.TYPE, book.getType().name());
-        bookCv.put(BookTable.USE_COVER_REPLACEMENT, book.isUseCoverReplacement());
+        bookCv.put(BookTable.CURRENT_MEDIA_PATH, book.currentFile().getAbsolutePath());
+        bookCv.put(BookTable.PLAYBACK_SPEED, book.playbackSpeed());
+        bookCv.put(BookTable.ROOT, book.root());
+        bookCv.put(BookTable.TIME, book.time());
+        bookCv.put(BookTable.TYPE, book.type().name());
+        bookCv.put(BookTable.USE_COVER_REPLACEMENT, book.useCoverReplacement());
         return bookCv;
     }
 

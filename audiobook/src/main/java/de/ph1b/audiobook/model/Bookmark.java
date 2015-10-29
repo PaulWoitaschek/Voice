@@ -2,82 +2,52 @@ package de.ph1b.audiobook.model;
 
 import android.support.annotation.NonNull;
 
-import com.google.common.base.Objects;
-
-import net.jcip.annotations.Immutable;
+import com.google.common.base.Preconditions;
 
 import java.io.File;
 
+import auto.parcel.AutoParcel;
 
-@Immutable
-public class Bookmark implements Comparable<Bookmark> {
 
-    private final int time;
-    @NonNull
-    private final File mediaFile;
-    @NonNull
-    private final String title;
+@AutoParcel
+public abstract class Bookmark implements Comparable<Bookmark> {
 
-    public Bookmark(@NonNull File mediaFile, @NonNull String title, int time) {
-        this.mediaFile = mediaFile;
-        this.title = title;
-        this.time = time;
+    /**
+     * Package private constructor for auto-parcel
+     */
+    Bookmark() {
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Bookmark bookmark = (Bookmark) o;
-        return Objects.equal(time, bookmark.time) &&
-                Objects.equal(mediaFile, bookmark.mediaFile) &&
-                Objects.equal(title, bookmark.title);
+    public static Bookmark of(@NonNull File mediaFile, @NonNull String title, int time) {
+        Bookmark bookmark = new AutoParcel_Bookmark(time, mediaFile, title);
+        Preconditions.checkArgument(!bookmark.title().isEmpty());
+        return bookmark;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(time, mediaFile, title);
-    }
-
-    @Override
-    public String toString() {
-        return "Bookmark{" +
-                "time=" + time +
-                ", mediaFile=" + mediaFile +
-                ", title='" + title + '\'' +
-                '}';
-    }
+    public abstract int time();
 
     @NonNull
-    public File getMediaFile() {
-        return mediaFile;
-    }
+    public abstract File mediaFile();
 
     @NonNull
-    public String getTitle() {
-        return title;
-    }
-
-    public int getTime() {
-        return time;
-    }
+    public abstract String title();
 
     @Override
     public int compareTo(@NonNull Bookmark another) {
         // compare files
-        int fileCompare = NaturalOrderComparator.FILE_COMPARATOR.compare(mediaFile, another.mediaFile);
+        int fileCompare = NaturalOrderComparator.FILE_COMPARATOR.compare(mediaFile(), another.mediaFile());
         if (fileCompare != 0) {
             return fileCompare;
         }
 
         // if files are the same compare time
-        if (time > another.time) {
+        if (time() > another.time()) {
             return 1;
-        } else if (time < another.time) {
+        } else if (time() < another.time()) {
             return -1;
         }
 
         // if time is the same compare the titles
-        return NaturalOrderComparator.naturalCompare(title, another.title);
+        return NaturalOrderComparator.STRING_COMPARATOR.compare(title(), another.title());
     }
 }

@@ -2,6 +2,7 @@ package de.ph1b.audiobook.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import de.ph1b.audiobook.R;
 
 public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAdapter.ViewHolder> {
@@ -48,12 +51,10 @@ public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAd
         holder.textView.setText(file);
 
         if (bookCollections.contains(file)) {
-            //noinspection deprecation
-            holder.icon.setImageDrawable(c.getResources().getDrawable(R.drawable.ic_folder_multiple_white_48dp));
+            holder.icon.setImageDrawable(ContextCompat.getDrawable(c, R.drawable.ic_folder_multiple_white_48dp));
             holder.icon.setContentDescription(c.getString(R.string.folder_add_collection));
         } else {
-            //noinspection deprecation
-            holder.icon.setImageDrawable(c.getResources().getDrawable(R.drawable.ic_folder_white_48dp));
+            holder.icon.setImageDrawable(ContextCompat.getDrawable(c, R.drawable.ic_folder));
             holder.icon.setContentDescription(c.getString(R.string.folder_add_single_book));
         }
     }
@@ -92,15 +93,13 @@ public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAd
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        final ImageView icon;
-        final TextView textView;
-        final ImageButton imageButton;
+        @Bind(R.id.icon) ImageView icon;
+        @Bind(R.id.containing) TextView textView;
+        @Bind(R.id.remove) ImageButton imageButton;
 
         public ViewHolder(final View itemView, final OnFolderMoreClickedListener listener) {
             super(itemView);
-            icon = (ImageView) itemView.findViewById(R.id.icon);
-            textView = (TextView) itemView.findViewById(R.id.containing);
-            imageButton = (ImageButton) itemView.findViewById(R.id.remove);
+            ButterKnife.bind(this, itemView);
 
             imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override

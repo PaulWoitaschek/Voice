@@ -7,12 +7,8 @@
     <string name="pref_key_sleep_time">SLEEP_TIME</string>
     <string name="pref_key_resume_on_replug">RESUME_ON_REPLUG</string>
     <string name="pref_key_audiobook_folders">ROOT_FOLDER</string>
-    <string name="pref_key_theme">CUSTOM_THEME</string>
+    <string name="pref_key_theme">THEME_KEY</string>
     <string name="pref_key_pause_on_can_duck">PAUSE_ON_CAN_DUCK</string>
-    <string-array name="pref_theme_values">
-        <item>light</item>
-        <item>dark</item>
-    </string-array>
     <string name="pref_key_auto_rewind">AUTO_REWIND</string>
     <string name="pref_key_bookmark_on_sleep">BOOKMARK_ON_SLEEP</string>
     <string-array name="pref_support_money">
@@ -29,4 +25,6 @@
         <item>@string/pref_support_donation</item>
     </string-array>
     <string name="fab_transition">FAB_TRANSITION</string>
+    <string name="format_bookmarks_n_of">(%1$d / %2$d)</string>
+    <string name="format_bookmarks_time">%1$s / %2$s</string>
 </resources>

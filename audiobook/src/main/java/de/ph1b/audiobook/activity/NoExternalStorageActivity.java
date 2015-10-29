@@ -6,16 +6,21 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import de.ph1b.audiobook.R;
 
 public class NoExternalStorageActivity extends AppCompatActivity {
+
+    @Bind(R.id.toolbar) Toolbar toolbar;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_no_external);
+        ButterKnife.bind(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

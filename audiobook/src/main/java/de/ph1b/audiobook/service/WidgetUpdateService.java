@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -28,15 +29,18 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.BookActivity;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
-import de.ph1b.audiobook.persistence.DataBaseHelper;
+import de.ph1b.audiobook.persistence.BookShelf;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.receiver.BaseWidgetProvider;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
+import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.Communication;
 
 public class WidgetUpdateService extends Service {
@@ -46,14 +50,15 @@ public class WidgetUpdateService extends Service {
             new LinkedBlockingQueue<Runnable>(2), // queue capacity
             new ThreadPoolExecutor.DiscardOldestPolicy()
     );
-    private final Communication communication = Communication.getInstance();
-    private DataBaseHelper db;
-    private PrefsManager prefs;
+    @Inject Communication communication;
+    @Inject PrefsManager prefs;
+    @Inject BookShelf db;
+    @Inject MediaPlayerController mediaPlayerController;
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
 
         @Override
         public void onBookContentChanged(@NonNull Book book) {
-            if (book.getId() == prefs.getCurrentBookId()) {
+            if (book.id() == prefs.getCurrentBookId()) {
                 updateWidget();
             }
         }
@@ -73,9 +78,7 @@ public class WidgetUpdateService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        db = DataBaseHelper.getInstance(this);
-        prefs = PrefsManager.getInstance(this);
+        App.getComponent().inject(this);
 
         communication.addBookCommunicationListener(listener);
     }
@@ -127,7 +130,7 @@ public class WidgetUpdateService extends Service {
                             }
                             if (useWidth > 0 && useHeight > 0) {
                                 setVisibilities(remoteViews, useWidth, useHeight,
-                                        book.getChapters().size() == 1);
+                                        book.chapters().size() == 1);
                             }
                         }
                     } else {
@@ -137,10 +140,9 @@ public class WidgetUpdateService extends Service {
                         PendingIntent wholeWidgetClickPI = PendingIntent.getActivity
                                 (WidgetUpdateService.this, (int) System.currentTimeMillis(),
                                         wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
-                        //noinspection deprecation
                         remoteViews.setImageViewBitmap(R.id.imageView,
                                 ImageHelper.drawableToBitmap(
-                                        getResources().getDrawable(R.drawable.icon_108dp),
+                                        ContextCompat.getDrawable(WidgetUpdateService.this, R.drawable.icon_108dp),
                                         ImageHelper.getSmallerScreenSize(WidgetUpdateService.this),
                                         ImageHelper.getSmallerScreenSize(
                                                 WidgetUpdateService.this)));
@@ -195,29 +197,29 @@ public class WidgetUpdateService extends Service {
                 rewindI, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI);
 
-        if (MediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
-            remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_36dp);
+        if (mediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
+            remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_pause);
         } else {
-            remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow_white_36dp);
+            remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow);
         }
 
         // if we have any book, init the views and have a click on the whole widget start BookPlay.
         // if we have no book, simply have a click on the whole widget start BookChoose.
 
-        remoteViews.setTextViewText(R.id.title, book.getName());
-        String name = book.getCurrentChapter().getName();
+        remoteViews.setTextViewText(R.id.title, book.name());
+        String name = book.currentChapter().name();
 
         remoteViews.setTextViewText(R.id.summary, name);
 
-        Intent wholeWidgetClickI = BookActivity.goToBookIntent(this, book.getId());
+        Intent wholeWidgetClickI = BookActivity.goToBookIntent(this, book.id());
         PendingIntent wholeWidgetClickPI = PendingIntent.getActivity
                 (WidgetUpdateService.this, (int) System.currentTimeMillis(), wholeWidgetClickI,
                         PendingIntent.FLAG_UPDATE_CURRENT);
 
         Bitmap cover = null;
         try {
-            File coverFile = book.getCoverFile();
-            if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
+            File coverFile = book.coverFile();
+            if (!book.useCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
                 cover = Picasso.with(WidgetUpdateService.this).load(coverFile).get();
             }
         } catch (IOException e) {
@@ -225,7 +227,7 @@ public class WidgetUpdateService extends Service {
         }
         if (cover == null) {
             cover = ImageHelper.drawableToBitmap(new CoverReplacement(
-                            book.getName(),
+                            book.name(),
                             WidgetUpdateService.this), ImageHelper.getSmallerScreenSize(this),
                     ImageHelper.getSmallerScreenSize(this));
         }

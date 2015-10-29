@@ -30,6 +30,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.adapter.FolderChooserAdapter;
 import de.ph1b.audiobook.dialog.HideFolderDialog;
@@ -48,7 +51,7 @@ import de.ph1b.audiobook.utils.PermissionHelper;
  *
  * @author Paul Woitaschek
  */
-public class FolderChooserActivity extends BaseActivity implements View.OnClickListener {
+public class FolderChooserActivity extends BaseActivity {
 
     public static final String RESULT_CHOSEN_FILE = "chosenFile";
     public static final String RESULT_OPERATION_MODE = "operationMode";
@@ -58,14 +61,17 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
     private static final String NI_OPERATION_MODE = "niOperationMode";
     private static final int PERMISSION_RESULT_READ_EXT_STORAGE = 1;
     private final List<File> currentFolderContent = new ArrayList<>(30);
+    @Bind(R.id.twoline_image1) ImageButton upButton;
+    @Bind(R.id.twoline_text2) TextView currentFolderName;
+    @Bind(R.id.choose) Button chooseButton;
+    @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.listView) ListView listView;
+    @Bind(R.id.twoline_text1) TextView chosenFolderDescription;
     private boolean multiSd = true;
     private List<File> rootDirs;
     private File currentFolder = null;
     private File chosenFile = null;
-    private TextView currentFolderName;
-    private Button chooseButton;
     private FolderChooserAdapter adapter;
-    private ImageButton upButton;
     private OperationMode mode;
 
     private static List<File> getStorageDirectories() {
@@ -199,10 +205,11 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_RESULT_READ_EXT_STORAGE);
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_folder_chooser);
+        ButterKnife.bind(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             boolean hasExternalStoragePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
@@ -218,25 +225,8 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
 
         mode = OperationMode.valueOf(getIntent().getStringExtra(NI_OPERATION_MODE));
 
-        // init fields
-        setContentView(R.layout.activity_folder_chooser);
-
         // toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        //get views
-        ListView listView = (ListView) findViewById(R.id.listView);
-        upButton = (ImageButton) findViewById(R.id.twoline_image1);
-        currentFolderName = (TextView) findViewById(R.id.twoline_text2);
-        ((TextView) findViewById(R.id.twoline_text1)).setText(R.string.chosen_folder_description);
-        chooseButton = (Button) findViewById(R.id.choose);
-        Button abortButton = (Button) findViewById(R.id.abort);
-
-        //set listener
-        upButton.setOnClickListener(this);
-        chooseButton.setOnClickListener(this);
-        abortButton.setOnClickListener(this);
 
         //setup
         adapter = new FolderChooserAdapter(this, currentFolderContent, mode);
@@ -255,6 +245,7 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
                 }
             }
         });
+        chosenFolderDescription.setText(R.string.chosen_folder_description);
 
         refreshRootDirs();
 
@@ -319,7 +310,8 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         }
     }
 
-    private void up() {
+    @OnClick(R.id.twoline_image1)
+    void up() {
         L.d(TAG, "up called. currentFolder=" + currentFolder);
 
         boolean chosenFolderIsInRoot = false;
@@ -360,32 +352,25 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         upButton.setImageDrawable(upIcon);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.twoline_image1:
-                up();
-                break;
-            case R.id.choose:
-                if (chosenFile.isDirectory() && !HideFolderDialog.getNoMediaFileByFolder(chosenFile).exists()) {
-                    HideFolderDialog hideFolderDialog = HideFolderDialog.newInstance(chosenFile);
-                    hideFolderDialog.show(getSupportFragmentManager(), HideFolderDialog.TAG);
-                    hideFolderDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            finishActivityWithSuccess(chosenFile);
-                        }
-                    });
-                } else {
+    @OnClick(R.id.choose)
+    void chooseClicked() {
+        if (chosenFile.isDirectory() && !HideFolderDialog.getNoMediaFileByFolder(chosenFile).exists()) {
+            HideFolderDialog hideFolderDialog = HideFolderDialog.newInstance(chosenFile);
+            hideFolderDialog.show(getSupportFragmentManager(), HideFolderDialog.TAG);
+            hideFolderDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
                     finishActivityWithSuccess(chosenFile);
                 }
-                break;
-            case R.id.abort:
-                finish();
-                break;
-            default:
-                break;
+            });
+        } else {
+            finishActivityWithSuccess(chosenFile);
         }
+    }
+
+    @OnClick(R.id.abort)
+    void cancelClicked() {
+        finish();
     }
 
     private void finishActivityWithSuccess(@NonNull File chosenFile) {

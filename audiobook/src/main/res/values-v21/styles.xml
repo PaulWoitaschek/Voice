@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="seek_style" parent="@android:style/Widget.DeviceDefault.SeekBar" />
-</resources>

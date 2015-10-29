@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,29 +9,40 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.ph1b.audiobook.R;
-import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
+import de.ph1b.audiobook.utils.App;
 
 /**
- * @author <a href="mailto:woitaschek@posteo.de">Paul Woitaschek</a>
- * @link {http://www.paul-woitaschek.de}
- * @see <a href="http://www.paul-woitaschek.de">http://www.paul-woitaschek.de</a>
+ * Adapter for displaying a list of bookmarks.
+ *
+ * @author Paul Woitaschek
  */
 public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHolder> {
 
     @NonNull
-    private final Book book;
+    private final List<Bookmark> bookmarks;
+    private final List<Chapter> chapters;
     @NonNull
     private final OnOptionsMenuClickedListener listener;
+    @Inject Context c;
 
-    public BookmarkAdapter(@NonNull Book book, @NonNull OnOptionsMenuClickedListener listener) {
-        this.book = book;
+
+    public BookmarkAdapter(@NonNull List<Bookmark> bookmarks, List<Chapter> chapters, @NonNull OnOptionsMenuClickedListener listener) {
+        App.getComponent().inject(this);
+        this.bookmarks = new ArrayList<>(bookmarks);
+        this.chapters = new ArrayList<>(chapters);
         this.listener = listener;
     }
 
@@ -48,8 +60,8 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
     }
 
     public void removeItem(Bookmark bookmark) {
-        int index = book.getBookmarks().indexOf(bookmark);
-        book.getBookmarks().remove(bookmark);
+        int index = bookmarks.indexOf(bookmark);
+        bookmarks.remove(bookmark);
         notifyItemRemoved(index);
     }
 
@@ -61,7 +73,6 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
     }
 
     public void bookmarkUpdated(Bookmark oldBookmark, Bookmark newBookmark) {
-        List<Bookmark> bookmarks = book.getBookmarks();
         int oldIndex = bookmarks.indexOf(oldBookmark);
         bookmarks.set(oldIndex, newBookmark);
         notifyItemChanged(oldIndex);
@@ -71,23 +82,24 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Bookmark bookmark = book.getBookmarks().get(position);
-        holder.title.setText(bookmark.getTitle());
+        Bookmark bookmark = bookmarks.get(position);
+        holder.title.setText(bookmark.title());
 
-        int size = book.getChapters().size();
+        int size = chapters.size();
         Chapter currentChapter = null;
-        for (Chapter c : book.getChapters()) {
-            if (c.getFile().equals(bookmark.getMediaFile())) {
+        for (Chapter c : chapters) {
+            if (c.file().equals(bookmark.mediaFile())) {
                 currentChapter = c;
             }
         }
         if (currentChapter == null) {
             throw new IllegalArgumentException("Current chapter not found with bookmark=" + bookmark);
         }
-        int index = book.getChapters().indexOf(currentChapter);
+        int index = chapters.indexOf(currentChapter);
 
-        holder.summary.setText("(" + (index + 1) + "/" + size + ") ");
-        holder.time.setText(formatTime(bookmark.getTime()) + " / " + formatTime(currentChapter.getDuration()));
+        holder.summary.setText(c.getString(R.string.format_bookmarks_n_of, index + 1, size));
+        holder.time.setText(c.getString(R.string.format_bookmarks_time, formatTime(bookmark.time()),
+                formatTime(currentChapter.duration())));
     }
 
     @Override
@@ -97,7 +109,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return book.getBookmarks().size();
+        return bookmarks.size();
     }
 
     public interface OnOptionsMenuClickedListener {
@@ -108,31 +120,26 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        final ImageButton imageButton;
-        final TextView title;
-        final TextView summary;
-        final TextView time;
+        @Bind(R.id.edit) ImageButton imageButton;
+        @Bind(R.id.text1) TextView title;
+        @Bind(R.id.text2) TextView summary;
+        @Bind(R.id.text3) TextView time;
 
         public ViewHolder(View itemView, final OnOptionsMenuClickedListener listener) {
             super(itemView);
-            imageButton = (ImageButton) itemView.findViewById(R.id.edit);
-            title = (TextView) itemView.findViewById(R.id.text1);
-            summary = (TextView) itemView.findViewById(R.id.text2);
-            time = (TextView) itemView.findViewById(R.id.text3);
+            ButterKnife.bind(this, itemView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onBookmarkClicked(book.getBookmarks().get(getAdapterPosition()));
+                    listener.onBookmarkClicked(bookmarks.get(getAdapterPosition()));
                 }
             });
+        }
 
-            imageButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onOptionsMenuClicked(book.getBookmarks().get(getAdapterPosition()), imageButton);
-                }
-            });
+        @OnClick(R.id.edit)
+        void optionsMenuClicked() {
+            listener.onOptionsMenuClicked(bookmarks.get(getAdapterPosition()), imageButton);
         }
     }
 }

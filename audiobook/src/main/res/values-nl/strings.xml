@@ -10,6 +10,10 @@
     <string name="cover">Omslag</string>
     <string name="play_pause">Speel / Pauze</string>
     <string name="action_sleep">Slaap-timer</string>
+    <plurals name="pauses_after">
+        <item quantity="one">Pauzeert na %d minuut.</item>
+        <item quantity="other">Pauzeert na %d minuten.</item>
+    </plurals>
     <string name="rewind">Spoel terug</string>
     <string name="fast_forward">Spoel door</string>
     <string name="previous_track">Vorige track</string>
@@ -47,6 +51,9 @@
     <string name="content_is_folder">Map</string>
     <string name="content_is_file">Bestand</string>
     <string name="content_navigate_up">Ga naar bovenliggende map</string>
+    <string name="permission_read_ext_explanation">Toegang tot opslag is nodig om luisterboeken te vinden en af te spelen.</string>
+    <string name="permission_read_ext_request">Opnieuw om de permissie vragen?</string>
+    <string name="permission_rescan">Opnieuw vragen</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Afspeelsnelheid</string>
     <!--Bookmarks-->
@@ -62,6 +69,14 @@
     <string name="action_settings">Voorkeuren</string>
     <string name="pref_resume_on_replug">Afspelen hervatten</string>
     <string name="pref_resume_on_replug_hint">Als u pauzeert door de headset te ontkoppelen, zal het afspelen hervatten als u deze weer aansluit.</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minuut</item>
+        <item quantity="other">%d minuten</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%d seconde</item>
+        <item quantity="other">%d seconden</item>
+    </plurals>
     <string name="pref_seek_time">Skiptijd</string>
     <string name="pref_sleep_time">Slaap timer</string>
     <string name="pref_root_folder_title">Luisterboekmap</string>
@@ -74,6 +89,10 @@
     <string name="pref_send_bugs_title">Rapporteer lieveheersbeestjes</string>
     <string name="pref_send_bugs_summary">Automatisch anoniem bugs rapporteren wanneer de app crasht, om de verdere ontwikkeling te helpen.</string>
     <string name="pref_auto_rewind_title">Automatisch terugspoelen</string>
+    <plurals name="pref_auto_rewind_summary">
+        <item quantity="one">Spoel automatisch %d seconde terug na handmatig pauzeren.</item>
+        <item quantity="other">Spoel automatisch %d seconden terug na handmatig pauzeren.</item>
+    </plurals>
     <string name="pref_bookmark_on_sleep_title">Bladwijzer toevoegen bij inslapen</string>
     <string name="pref_bookmark_on_sleep_summary">Maak automatisch een bladwijzer aan elke keer de slaap-timer afgaat.</string>
     <string name="pref_support_title">Steun</string>

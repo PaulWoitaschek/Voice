@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:baselineAligned="false"
-    android:orientation="horizontal">
+              xmlns:fab="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:baselineAligned="false"
+              android:orientation="horizontal">
 
     <include
         layout="@layout/include_cover"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1" />
+        android:layout_weight="1"/>
 
     <LinearLayout
         android:layout_width="0dp"
@@ -23,7 +23,7 @@
         <Spinner
             android:id="@+id/book_spinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,8 +38,7 @@
                 android:id="@+id/played"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="onClick"
-                android:text="@string/zeroTime" />
+                android:text="@string/zeroTime"/>
 
             <SeekBar
                 android:id="@+id/seekBar"
@@ -47,13 +46,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"/>
 
             <TextView
                 android:id="@+id/maxTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/zeroTime" />
+                android:text="@string/zeroTime"/>
 
         </LinearLayout>
 
@@ -71,18 +70,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/previous_track"
-                android:onClick="onClick"
                 android:padding="8dp"
-                android:src="@drawable/ic_skip_previous_white_36dp" />
+                android:src="@drawable/ic_skip_previous"/>
 
             <ImageButton
                 android:id="@+id/rewind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/rewind"
-                android:onClick="onClick"
                 android:padding="8dp"
-                android:src="@drawable/ic_fast_rewind_white_36dp" />
+                android:src="@drawable/ic_fast_rewind"/>
 
 
             <com.getbase.floatingactionbutton.FloatingActionButton
@@ -90,29 +87,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/play_pause"
-                android:onClick="onClick"
                 android:transitionName="@string/fab_transition"
                 fab:fab_colorNormal="?attr/colorAccent"
                 fab:fab_colorPressed="?attr/colorAccentDark"
-                tools:ignore="UnusedAttribute" />
+                tools:ignore="UnusedAttribute"/>
 
             <ImageButton
                 android:id="@+id/fastForward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/fast_forward"
-                android:onClick="onClick"
                 android:padding="8dp"
-                android:src="@drawable/ic_fast_forward_white_36dp" />
+                android:src="@drawable/ic_fast_forward"/>
 
             <ImageButton
                 android:id="@+id/next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/next_track"
-                android:onClick="onClick"
                 android:padding="8dp"
-                android:src="@drawable/ic_skip_next_white_36dp" />
+                android:src="@drawable/ic_skip_next"/>
 
         </LinearLayout>
 

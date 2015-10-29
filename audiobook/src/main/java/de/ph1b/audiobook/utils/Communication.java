@@ -3,12 +3,13 @@ package de.ph1b.audiobook.utils;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 
-import net.jcip.annotations.ThreadSafe;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.Book;
@@ -17,18 +18,14 @@ import de.ph1b.audiobook.model.Book;
 /**
  * Class for communicating on different events through {@link LocalBroadcastManager}.
  */
-@ThreadSafe
+@Singleton
 public class Communication {
 
-    private static final Communication INSTANCE = new Communication();
     private final List<BookCommunication> listeners = new ArrayList<>(10);
     private final Executor executor = Executors.newSingleThreadScheduledExecutor();
 
-    private Communication() {
-    }
-
-    public static synchronized Communication getInstance() {
-        return INSTANCE;
+    @Inject
+    public Communication() {
     }
 
 
@@ -110,11 +107,7 @@ public class Communication {
             @Override
             public void run() {
                 for (BookCommunication listener : listeners) {
-                    List<Book> copyBooks = new ArrayList<>(allBooks.size());
-                    for (Book b : allBooks) {
-                        copyBooks.add(new Book(b));
-                    }
-                    listener.onBookSetChanged(copyBooks);
+                    listener.onBookSetChanged(new ArrayList<>(allBooks));
                 }
             }
         });
@@ -139,8 +132,7 @@ public class Communication {
             @Override
             public void run() {
                 for (BookCommunication listener : listeners) {
-                    // copy constructor for immutabliity
-                    listener.onBookContentChanged(new Book(book));
+                    listener.onBookContentChanged(book);
                 }
             }
         });

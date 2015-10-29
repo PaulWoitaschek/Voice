@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 23
@@ -17,7 +18,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false // enable this once acra is fixed
+            minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.pro'
             signingConfig signingConfigs.release
@@ -43,9 +44,8 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
-            output.outputFile = new File(
-                    output.outputFile.parent,
-                    output.outputFile.name.replace(".apk", "-${variant.versionCode}-${variant.versionName}.apk"))
+            output.outputFile = file("apks/" + variant.versionCode + "-" + variant.versionName + "-" +
+                    variant.name + "-" + variant.applicationId + ".apk")
         }
     }
 }
@@ -73,14 +73,25 @@ if (propFile.canRead()) {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.android.support:recyclerview-v7:23.0.1'
-    compile 'com.squareup.okhttp:okhttp:2.5.0'
+    compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'com.android.support:recyclerview-v7:23.1.0'
+    compile 'com.squareup.okhttp:okhttp:2.5.0' // http library
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.5.0'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.afollestad:material-dialogs:0.7.9.1'
-    compile 'com.getbase:floatingactionbutton:1.10.0'
-    compile 'net.jcip:jcip-annotations:1.0'
-    compile 'ch.acra:acra:4.6.2'
-    compile 'com.google.guava:guava:18.0'
+    compile 'com.squareup.picasso:picasso:2.5.2' // image loading
+    compile('com.afollestad.material-dialogs:core:0.8.5.0@aar') { // material styled dialogs
+        transitive = true
+    }
+    compile 'com.getbase:floatingactionbutton:1.10.0' // fab
+    compile 'ch.acra:acra:4.7.0-RC.1' // crash reporting
+    compile 'com.google.guava:guava:18.0' // common tools
+    compile 'com.jakewharton:butterknife:7.0.1' // view injection
+
+    // dependency injection
+    compile 'com.google.dagger:dagger:2.0.1'
+    apt "com.google.dagger:dagger-compiler:2.0.1"
+    provided 'javax.annotation:jsr250-api:1.0'
+
+    // auto value
+    compile 'com.github.frankiesardo:auto-parcel:0.3.1'
+    apt 'com.github.frankiesardo:auto-parcel-processor:0.3.1'
 }

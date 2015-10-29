@@ -1,86 +1,53 @@
 package de.ph1b.audiobook.model;
 
-import android.content.Context;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import auto.parcel.AutoParcel;
+import de.ph1b.audiobook.utils.App;
 
 
-public class Book implements Comparable<Book> {
+/**
+ * Class describing a book. This is the basic model. It is fully immutable and thus can be shared
+ * freely.
+ *
+ * @author Paul Woitaschek
+ */
+@AutoParcel
+public abstract class Book implements Comparable<Book> {
 
     public static final String TAG = Book.class.getSimpleName();
     public static final long ID_UNKNOWN = -1;
+    public static final float SPEED_MIN = 0.5f;
+    public static final float SPEED_MAX = 2f;
     private static final String COVER_TRANSITION_PREFIX = "bookCoverTransition_";
-    @NonNull
-    private final String root;
-    @NonNull
-    private final List<Chapter> chapters;
-    @NonNull
-    private final Type type;
-    @NonNull
-    private final String packageName;
-    @NonNull
-    private final List<Bookmark> bookmarks;
-    @Nullable
-    private final String author;
-    private long id = ID_UNKNOWN;
-    @NonNull
-    private String name;
-    private int time = 0;
-    private float playbackSpeed = 1.0f;
-    @NonNull
-    private File currentFile;
-    private boolean useCoverReplacement = false;
 
-    public Book(Book that) {
-        this.id = that.id;
-        this.root = that.root;
-        this.chapters = new ArrayList<>(that.chapters);
-        this.type = Type.valueOf(that.type.name());
-        this.packageName = that.packageName;
-        this.bookmarks = new ArrayList<>(that.bookmarks);
-        this.name = that.name;
-        this.author = that.author;
-        this.time = that.time;
-        this.playbackSpeed = that.playbackSpeed;
-        this.currentFile = that.currentFile;
-        this.useCoverReplacement = that.useCoverReplacement;
+    public static Builder builder(@NonNull String root, @NonNull List<Chapter> chapters,
+                                  @NonNull Type type, @NonNull File currentFile, @NonNull String name) {
+        return new AutoParcel_Book.Builder()
+                .root(root)
+                .chapters(ImmutableList.copyOf(chapters))
+                .type(type)
+                .bookmarks(ImmutableList.<Bookmark>of())
+                .currentFile(currentFile)
+                .name(name)
+                .useCoverReplacement(false)
+                .id(ID_UNKNOWN)
+                .time(0)
+                .playbackSpeed(1.0f);
     }
 
-    public Book(@NonNull String root,
-                @NonNull String name,
-                @Nullable String author,
-                @NonNull List<Chapter> chapters,
-                @NonNull File currentFile,
-                @NonNull Type type,
-                @NonNull List<Bookmark> bookmarks,
-                @NonNull Context c) {
-        checkNotNull(chapters);
-        checkNotNull(currentFile);
-        checkNotNull(type);
-        checkNotNull(bookmarks);
-        checkArgument(!root.isEmpty());
-        checkArgument(!name.isEmpty());
-        checkArgument(!chapters.isEmpty());
-
-        this.root = root;
-        this.name = name;
-        this.author = author;
-        this.chapters = chapters;
-        this.type = type;
-        this.bookmarks = bookmarks;
-        this.packageName = c.getPackageName();
-        setPosition(0, currentFile);
-        this.currentFile = currentFile;
+    public static Builder builder(Book book) {
+        return new AutoParcel_Book.Builder(book);
     }
-
 
     /**
      * Gets the transition name for the cover transition.
@@ -88,49 +55,46 @@ public class Book implements Comparable<Book> {
      * @return The transition name
      */
     @NonNull
-    public String getCoverTransitionName() {
-        return COVER_TRANSITION_PREFIX + id;
+    public String coverTransitionName() {
+        return COVER_TRANSITION_PREFIX + id();
     }
 
     @NonNull
-    public List<Bookmark> getBookmarks() {
-        return bookmarks;
-    }
+    public abstract ImmutableList<Bookmark> bookmarks();
 
     /**
      * @return The global duration. It sums up the duration of all chapters.
      */
-    public int getGlobalDuration() {
+    public int globalDuration() {
         int globalDuration = 0;
-        for (Chapter c : chapters) {
-            globalDuration += c.getDuration();
+        for (Chapter c : chapters()) {
+            globalDuration += c.duration();
         }
         return globalDuration;
     }
 
     /**
-     * @return The global position. It sums up the duration of all elapsed chapters plus the position
+     * @return the global position. It sums up the duration of all elapsed chapters plus the position
      * in the current chapter.
      */
-    public int getGlobalPosition() {
+    public int globalPosition() {
         int globalPosition = 0;
-        for (Chapter c : chapters) {
-            if (c.equals(getCurrentChapter())) {
-                globalPosition += time;
+        for (Chapter c : chapters()) {
+            if (c.equals(currentChapter())) {
+                globalPosition += time();
                 return globalPosition;
             } else {
-                globalPosition += c.getDuration();
+                globalPosition += c.duration();
             }
         }
         throw new IllegalStateException("Current chapter was not found while looking up the global position");
     }
 
-
     @NonNull
-    public File getCoverFile() {
+    public File coverFile() {
         File coverFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                File.separator + "Android" + File.separator + "data" + File.separator + packageName,
-                id + ".jpg");
+                File.separator + "Android" + File.separator + "data" + File.separator + App.getComponent().getContext().getPackageName(),
+                id() + ".jpg");
         if (!coverFile.getParentFile().exists()) {
             //noinspection ResultOfMethodCallIgnored
             coverFile.getParentFile().mkdirs();
@@ -139,98 +103,23 @@ public class Book implements Comparable<Book> {
     }
 
     @NonNull
-    public Type getType() {
-        return type;
-    }
+    public abstract Type type();
 
-    public void setPosition(int time, @NonNull File currentFile) {
-        boolean relativeMediaPathExists = false;
-        for (Chapter c : chapters) {
-            if (c.getFile().equals(currentFile)) {
-                relativeMediaPathExists = true;
-            }
-        }
-        if (!relativeMediaPathExists) {
-            throw new IllegalArgumentException("Creating book with name=" + name +
-                    " failed because currentFile=" + currentFile +
-                    " does not exist in chapters=" + chapters);
-        }
-
-        this.time = time;
-        this.currentFile = currentFile;
-    }
-
-    public boolean isUseCoverReplacement() {
-        return useCoverReplacement;
-    }
-
-    public void setUseCoverReplacement(boolean useCoverReplacement) {
-        this.useCoverReplacement = useCoverReplacement;
-    }
-
+    public abstract boolean useCoverReplacement();
 
     /**
-     * @return the author of the book or null if not set.
+     * @return the author of the book or null if not set
      */
     @Nullable
-    public String getAuthor() {
-        return author;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-
-        if (o instanceof Book) {
-            Book that = (Book) o;
-
-            return this.root.equals(that.root) &&
-                    this.chapters.equals(that.chapters) &&
-                    this.type == that.type &&
-                    this.name.equals(that.name);
-
-        }
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        final int PRIME = 31;
-        int result = PRIME;
-        result = PRIME * result + root.hashCode();
-        result = PRIME * result + chapters.hashCode();
-        result = PRIME * result + name.hashCode();
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return TAG + "[" +
-                "root=" + root +
-                ", type=" + type +
-                ", id=" + id +
-                ", name=" + name +
-                ", author=" + author +
-                ", time=" + time +
-                ", playbackSpeed=" + playbackSpeed +
-                ", currentFile=" + currentFile +
-                ", useCoverReplacement=" + useCoverReplacement +
-                ", packageName=" + packageName +
-                ", chapters=" + chapters +
-                ", bookmarks=" + bookmarks +
-                "]";
-    }
+    public abstract String author();
 
     @NonNull
-    public File getCurrentFile() {
-        return currentFile;
-    }
+    public abstract File currentFile();
 
     @Nullable
-    public Chapter getNextChapter() {
-        int currentIndex = chapters.indexOf(getCurrentChapter());
+    public Chapter nextChapter() {
+        List<Chapter> chapters = chapters();
+        int currentIndex = chapters.indexOf(currentChapter());
         if (currentIndex < chapters.size() - 1) {
             return chapters.get(currentIndex + 1);
         }
@@ -238,79 +127,101 @@ public class Book implements Comparable<Book> {
     }
 
     @NonNull
-    public Chapter getCurrentChapter() {
+    public Chapter currentChapter() {
+        List<Chapter> chapters = chapters();
         for (Chapter c : chapters) {
-            if (c.getFile().equals(currentFile)) {
+            if (c.file().equals(currentFile())) {
                 return c;
             }
         }
-        throw new IllegalArgumentException("getCurrentChapter has no valid id with" +
-                " currentFile=" + currentFile);
+        throw new IllegalArgumentException("currentChapter has no valid id with" +
+                " currentFile=" + currentFile());
     }
 
     @Nullable
-    public Chapter getPreviousChapter() {
-        int currentIndex = chapters.indexOf(getCurrentChapter());
+    public Chapter previousChapter() {
+        List<Chapter> chapters = chapters();
+        int currentIndex = chapters.indexOf(currentChapter());
         if (currentIndex > 0) {
             return chapters.get(currentIndex - 1);
         }
         return null;
     }
 
-    public int getTime() {
-        return time;
-    }
+    public abstract int time();
 
     @NonNull
-    public String getName() {
-        return name;
-    }
+    public abstract String name();
 
-    public void setName(@NonNull String name) {
-        checkArgument(!name.isEmpty());
-        this.name = name;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
+    public abstract long id();
 
     @NonNull
-    public List<Chapter> getChapters() {
-        return chapters;
-    }
+    public abstract ImmutableList<Chapter> chapters();
 
-    public float getPlaybackSpeed() {
-        return playbackSpeed;
-    }
-
-    public void setPlaybackSpeed(float playbackSpeed) {
-        this.playbackSpeed = playbackSpeed;
-    }
+    public abstract float playbackSpeed();
 
     @NonNull
-    public String getRoot() {
-        return root;
-    }
+    public abstract String root();
 
     @Override
     public int compareTo(@NonNull Book that) {
         if (this.equals(that)) {
             return 0;
         } else {
-            return NaturalOrderComparator.naturalCompare(this.name, that.name);
+            return NaturalOrderComparator.STRING_COMPARATOR.compare(this.name(), that.name());
         }
     }
+
+    @AutoParcel.Validate
+    public void validate() {
+        List<Chapter> chapters = chapters();
+        List<File> chapterFiles = new ArrayList<>(chapters.size());
+        for (Chapter c : chapters) {
+            chapterFiles.add(c.file());
+        }
+        Preconditions.checkArgument(playbackSpeed() >= SPEED_MIN && playbackSpeed() <= SPEED_MAX);
+        for (Bookmark b : bookmarks()) {
+            Preconditions.checkArgument(chapterFiles.contains(b.mediaFile()));
+        }
+        Preconditions.checkArgument(!chapters.isEmpty());
+        Preconditions.checkArgument(chapterFiles.contains(currentFile()));
+        Preconditions.checkArgument(!name().isEmpty());
+        Preconditions.checkArgument(!root().isEmpty());
+    }
+
 
     public enum Type {
         COLLECTION_FOLDER,
         COLLECTION_FILE,
         SINGLE_FOLDER,
         SINGLE_FILE,
+    }
+
+    @AutoParcel.Builder
+    public interface Builder {
+        Builder currentFile(File currentFile);
+
+        Book build();
+
+        Builder useCoverReplacement(boolean useCoverReplacement);
+
+        Builder name(String name);
+
+        Builder bookmarks(ImmutableList<Bookmark> bookmarks);
+
+        Builder chapters(ImmutableList<Chapter> chapters);
+
+        Builder root(String root);
+
+        Builder type(Type type);
+
+        Builder playbackSpeed(float playbackSpeed);
+
+        Builder id(long id);
+
+        Builder time(int time);
+
+        Builder author(String author);
     }
 }
 

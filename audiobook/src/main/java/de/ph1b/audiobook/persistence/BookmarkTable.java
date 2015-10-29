@@ -25,9 +25,9 @@ class BookmarkTable {
 
     static ContentValues getContentValues(Bookmark bookmark, long bookId) {
         ContentValues cv = new ContentValues();
-        cv.put(TIME, bookmark.getTime());
-        cv.put(PATH, bookmark.getMediaFile().getAbsolutePath());
-        cv.put(TITLE, bookmark.getTitle());
+        cv.put(TIME, bookmark.time());
+        cv.put(PATH, bookmark.mediaFile().getAbsolutePath());
+        cv.put(TITLE, bookmark.title());
         cv.put(BookTable.ID, bookId);
         return cv;
     }

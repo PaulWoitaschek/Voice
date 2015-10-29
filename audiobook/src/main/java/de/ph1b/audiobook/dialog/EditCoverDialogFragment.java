@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -23,29 +24,36 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
-import de.ph1b.audiobook.persistence.DataBaseHelper;
+import de.ph1b.audiobook.persistence.BookShelf;
 import de.ph1b.audiobook.uitools.CoverDownloader;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.DraggableBoxImageView;
 import de.ph1b.audiobook.uitools.ImageHelper;
+import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.L;
 
 /**
  * Simple dialog to edit the cover of a book.
  */
-public class EditCoverDialogFragment extends DialogFragment implements View.OnClickListener {
+public class EditCoverDialogFragment extends DialogFragment {
     public static final String TAG = EditCoverDialogFragment.class.getSimpleName();
     private static final String SI_COVER_POSITION = "siCoverPosition";
     private static final String SI_COVER_URLS = "siCoverUrls";
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final List<String> imageURLS = new ArrayList<>(20);
+    @Bind(R.id.edit_book) DraggableBoxImageView coverImageView;
+    @Bind(R.id.cover_replacement) ProgressBar loadingProgressBar;
+    @Bind(R.id.previous_cover) ImageButton previousCover;
+    @Bind(R.id.next_cover) ImageButton nextCover;
+    @Inject BookShelf db;
     private CoverDownloader coverDownloader;
-    private DraggableBoxImageView coverImageView;
-    private ProgressBar loadingProgressBar;
-    private ImageButton previousCover;
-    private ImageButton nextCover;
     private AddCoverAsync addCoverAsync;
     /**
      * The position in the {@link #imageURLS} or -1 if it is the {@link #coverReplacement}.
@@ -63,10 +71,95 @@ public class EditCoverDialogFragment extends DialogFragment implements View.OnCl
         EditCoverDialogFragment editCoverDialogFragment = new EditCoverDialogFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putLong(Book.TAG, book.getId());
+        bundle.putLong(Book.TAG, book.id());
         editCoverDialogFragment.setArguments(bundle);
 
         return editCoverDialogFragment;
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        @SuppressLint("InflateParams") View customView = inflater.inflate(R.layout.dialog_cover_edit, null);
+        ButterKnife.bind(this, customView);
+        App.getComponent().inject(this);
+
+        // init values
+        final long bookId = getArguments().getLong(Book.TAG);
+        book = db.getBook(bookId);
+        assert book != null;
+        coverReplacement = new CoverReplacement(book.name(), getActivity());
+        isOnline = ImageHelper.isOnline(getActivity());
+        if (savedInstanceState == null) {
+            coverPosition = -1;
+        } else {
+            imageURLS.clear();
+            //noinspection ConstantConditions
+            imageURLS.addAll(savedInstanceState.getStringArrayList(SI_COVER_URLS));
+            coverPosition = savedInstanceState.getInt(SI_COVER_POSITION);
+        }
+        loadCoverPosition();
+        setNextPreviousEnabledDisabled();
+
+        MaterialDialog.SingleButtonCallback positiveCallback = new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
+                L.d(TAG, "edit book positive clicked. CoverPosition=" + coverPosition);
+                if (addCoverAsync != null && !addCoverAsync.isCancelled()) {
+                    addCoverAsync.cancel(true);
+                }
+
+                final Rect r = coverImageView.getSelectedRect();
+                boolean useCoverReplacement;
+                if (coverPosition > -1 && !r.isEmpty()) {
+                    Bitmap cover = ImageHelper.picassoGetBlocking(getActivity(), imageURLS.get(coverPosition));
+                    if (cover != null) {
+                        cover = Bitmap.createBitmap(cover, r.left, r.top, r.width(), r.height());
+                        ImageHelper.saveCover(cover, getActivity(), book.coverFile());
+
+                        picasso.invalidate(book.coverFile());
+                        useCoverReplacement = false;
+                    } else {
+                        useCoverReplacement = true;
+                    }
+                } else {
+                    useCoverReplacement = true;
+                }
+
+                //noinspection SynchronizeOnNonFinalField
+                synchronized (db) {
+                    Book dbBook = db.getBook(book.id());
+                    if (dbBook != null) {
+                        dbBook = Book.builder(dbBook)
+                                .useCoverReplacement(useCoverReplacement)
+                                .build();
+                        db.updateBook(dbBook);
+                    }
+                }
+
+                if (listener != null) {
+                    listener.onEditBookFinished();
+                }
+            }
+        };
+        MaterialDialog.SingleButtonCallback negativeCallback = new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
+                if (addCoverAsync != null && !addCoverAsync.isCancelled()) {
+                    addCoverAsync.cancel(true);
+                }
+            }
+        };
+
+        return new MaterialDialog.Builder(getActivity())
+                .customView(customView, true)
+                .title(R.string.edit_book_cover)
+                .positiveText(R.string.dialog_confirm)
+                .negativeText(R.string.dialog_cancel)
+                .onPositive(positiveCallback)
+                .onNegative(negativeCallback)
+                .build();
     }
 
     public void setOnEditBookFinished(@Nullable OnEditBookFinished listener) {
@@ -99,8 +192,8 @@ public class EditCoverDialogFragment extends DialogFragment implements View.OnCl
         }
     }
 
-    @Override
-    public void onClick(View view) {
+    @OnClick({R.id.previous_cover, R.id.next_cover})
+    void nextPreviousCoverClicked(View view) {
         switch (view.getId()) {
             case R.id.previous_cover:
                 if (addCoverAsync != null && !addCoverAsync.isCancelled()) {
@@ -115,7 +208,7 @@ public class EditCoverDialogFragment extends DialogFragment implements View.OnCl
                     coverPosition++;
                     loadCoverPosition();
                 } else {
-                    genCoverFromInternet(book.getName());
+                    genCoverFromInternet(book.name());
                 }
                 setNextPreviousEnabledDisabled();
                 break;
@@ -175,92 +268,6 @@ public class EditCoverDialogFragment extends DialogFragment implements View.OnCl
         }
     }
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-        // init ui
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        @SuppressLint("InflateParams") View customView = inflater.inflate(R.layout.dialog_cover_edit, null);
-        coverImageView = (DraggableBoxImageView) customView.findViewById(R.id.edit_book);
-        loadingProgressBar = (ProgressBar) customView.findViewById(R.id.cover_replacement);
-        previousCover = (ImageButton) customView.findViewById(R.id.previous_cover);
-        nextCover = (ImageButton) customView.findViewById(R.id.next_cover);
-        nextCover.setOnClickListener(this);
-        previousCover.setOnClickListener(this);
-
-        // init values
-        final DataBaseHelper db = DataBaseHelper.getInstance(getActivity());
-        final long bookId = getArguments().getLong(Book.TAG);
-        book = db.getBook(bookId);
-        assert book != null;
-        coverReplacement = new CoverReplacement(book.getName(), getActivity());
-        isOnline = ImageHelper.isOnline(getActivity());
-        if (savedInstanceState == null) {
-            coverPosition = -1;
-        } else {
-            imageURLS.clear();
-            //noinspection ConstantConditions
-            imageURLS.addAll(savedInstanceState.getStringArrayList(SI_COVER_URLS));
-            coverPosition = savedInstanceState.getInt(SI_COVER_POSITION);
-        }
-        loadCoverPosition();
-        setNextPreviousEnabledDisabled();
-
-        MaterialDialog.ButtonCallback buttonCallback = new MaterialDialog.ButtonCallback() {
-            @Override
-            public void onPositive(MaterialDialog dialog) {
-                L.d(TAG, "edit book positive clicked. CoverPosition=" + coverPosition);
-                if (addCoverAsync != null && !addCoverAsync.isCancelled()) {
-                    addCoverAsync.cancel(true);
-                }
-
-                final Rect r = coverImageView.getSelectedRect();
-                boolean useCoverReplacement;
-                if (coverPosition > -1 && !r.isEmpty()) {
-                    Bitmap cover = ImageHelper.picassoGetBlocking(getActivity(), imageURLS.get(coverPosition));
-                    if (cover != null) {
-                        cover = Bitmap.createBitmap(cover, r.left, r.top, r.width(), r.height());
-                        ImageHelper.saveCover(cover, getActivity(), book.getCoverFile());
-
-                        picasso.invalidate(book.getCoverFile());
-                        useCoverReplacement = false;
-                    } else {
-                        useCoverReplacement = true;
-                    }
-                } else {
-                    useCoverReplacement = true;
-                }
-
-                synchronized (db) {
-                    Book dbBook = db.getBook(book.getId());
-                    if (dbBook != null) {
-                        dbBook.setUseCoverReplacement(useCoverReplacement);
-                        db.updateBook(dbBook);
-                    }
-                }
-
-                if (listener != null) {
-                    listener.onEditBookFinished();
-                }
-            }
-
-            @Override
-            public void onNegative(MaterialDialog dialog) {
-                if (addCoverAsync != null && !addCoverAsync.isCancelled()) {
-                    addCoverAsync.cancel(true);
-                }
-            }
-        };
-
-        return new MaterialDialog.Builder(getActivity())
-                .customView(customView, true)
-                .title(R.string.edit_book_cover)
-                .positiveText(R.string.dialog_confirm)
-                .negativeText(R.string.dialog_cancel)
-                .callback(buttonCallback)
-                .build();
-    }
 
     public interface OnEditBookFinished {
         void onEditBookFinished();

@@ -3,6 +3,7 @@ package de.ph1b.audiobook.adapter;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 import java.io.File;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.activity.FolderChooserActivity;
 
@@ -70,10 +73,7 @@ public class FolderChooserAdapter extends BaseAdapter {
             convertView = li.inflate(R.layout.activity_folder_chooser_adapter_row_layout, parent,
                     false);
 
-            viewHolder = new ViewHolder();
-            viewHolder.textView = (TextView) convertView.findViewById(R.id.singleline_text1);
-            viewHolder.imageView = (ImageView) convertView.findViewById(R.id.singleline_image1);
-
+            viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -89,9 +89,8 @@ public class FolderChooserAdapter extends BaseAdapter {
             viewHolder.textView.setEnabled(isDirectory);
         }
 
-        //noinspection deprecation
-        Drawable icon = c.getResources().getDrawable(isDirectory ?
-                R.drawable.ic_folder_white_48dp :
+        Drawable icon = ContextCompat.getDrawable(c, isDirectory ?
+                R.drawable.ic_folder :
                 R.drawable.ic_audiotrack_white_48dp);
         viewHolder.imageView.setImageDrawable(icon);
         viewHolder.imageView.setContentDescription(c.getString(isDirectory ?
@@ -100,8 +99,12 @@ public class FolderChooserAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private static class ViewHolder {
-        TextView textView;
-        ImageView imageView;
+    static class ViewHolder {
+        @Bind(R.id.singleline_text1) TextView textView;
+        @Bind(R.id.singleline_image1) ImageView imageView;
+
+        public ViewHolder(View parent) {
+            ButterKnife.bind(this, parent);
+        }
     }
 }

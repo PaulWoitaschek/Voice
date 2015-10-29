@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
@@ -24,12 +25,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.NaturalOrderComparator;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.CoverReplacement;
+import de.ph1b.audiobook.utils.App;
 
 /**
  * Adapter for a recycler-view book shelf that keeps the items in a sorted list.
@@ -39,27 +45,27 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
     private final BookShelfFragment.DisplayMode displayMode;
     @NonNull
     private final Context c;
-    private final PrefsManager prefs;
     private final OnItemClickListener onItemClickListener;
     private final SortedList<Book> sortedList = new SortedList<>(Book.class, new SortedListAdapterCallback<Book>(this) {
 
         @Override
         public int compare(Book o1, Book o2) {
-            return NaturalOrderComparator.naturalCompare(o1.getName(), o2.getName());
+            return NaturalOrderComparator.STRING_COMPARATOR.compare(o1.name(), o2.name());
         }
 
         @Override
         public boolean areContentsTheSame(Book oldItem, Book newItem) {
-            return oldItem.getGlobalPosition() == newItem.getGlobalPosition()
-                    && oldItem.getName().equals(newItem.getName())
-                    && oldItem.isUseCoverReplacement() == newItem.isUseCoverReplacement();
+            return oldItem.globalPosition() == newItem.globalPosition()
+                    && oldItem.name().equals(newItem.name())
+                    && oldItem.useCoverReplacement() == newItem.useCoverReplacement();
         }
 
         @Override
         public boolean areItemsTheSame(Book item1, Book item2) {
-            return item1.getId() == item2.getId();
+            return item1.id() == item2.id();
         }
     });
+    @Inject PrefsManager prefs;
 
     /**
      * @param c                   the context
@@ -69,8 +75,8 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
     public BookShelfAdapter(@NonNull Context c, BookShelfFragment.DisplayMode displayMode, OnItemClickListener onItemClickListener) {
         this.c = c;
         this.onItemClickListener = onItemClickListener;
-        this.prefs = PrefsManager.getInstance(c);
         this.displayMode = displayMode;
+        App.getComponent().inject(this);
         setHasStableIds(true);
     }
 
@@ -88,7 +94,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
     public void updateOrAddBook(@NonNull Book book) {
         int index = -1;
         for (int i = 0; i < sortedList.size(); i++) {
-            if (sortedList.get(i).getId() == book.getId()) {
+            if (sortedList.get(i).id() == book.id()) {
                 index = i;
                 break;
             }
@@ -115,7 +121,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
                 Book existing = sortedList.get(i);
                 boolean deleteBook = true;
                 for (Book b : books) {
-                    if (existing.getId() == b.getId()) {
+                    if (existing.id() == b.id()) {
                         deleteBook = false;
                         break;
                     }
@@ -140,7 +146,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
 
     @Override
     public long getItemId(int position) {
-        return sortedList.get(position).getId();
+        return sortedList.get(position).id();
     }
 
     /**
@@ -173,7 +179,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
      */
     public void notifyItemAtIdChanged(long id) {
         for (int i = 0; i < sortedList.size(); i++) {
-            if (sortedList.get(i).getId() == id) {
+            if (sortedList.get(i).id() == id) {
                 notifyItemChanged(i);
                 break;
             }
@@ -209,9 +215,9 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
 
     public class ListViewHolder extends BaseViewHolder {
 
-        private final ProgressBar progressBar;
-        private final TextView leftTime;
-        private final TextView rightTime;
+        @Bind(R.id.progressBar) ProgressBar progressBar;
+        @Bind(R.id.leftTime) TextView leftTime;
+        @Bind(R.id.rightTime) TextView rightTime;
 
         /**
          * Constructor for a list viewholder
@@ -221,19 +227,16 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
         public ListViewHolder(ViewGroup parent) {
             super(LayoutInflater.from(parent.getContext()).inflate(
                     R.layout.fragment_book_shelf_list_layout, parent, false));
-            progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
-            //noinspection deprecation
-            MDTintHelper.setTint(progressBar, parent.getContext().getResources().getColor(R.color.accent));
-            leftTime = (TextView) itemView.findViewById(R.id.leftTime);
-            rightTime = (TextView) itemView.findViewById(R.id.rightTime);
+            ButterKnife.bind(this, itemView);
+            MDTintHelper.setTint(progressBar, ContextCompat.getColor(parent.getContext(), R.color.accent));
         }
 
         @Override
         public void bind(Book book) {
             super.bind(book);
 
-            int globalPosition = book.getGlobalPosition();
-            int globalDuration = book.getGlobalDuration();
+            int globalPosition = book.globalPosition();
+            int globalDuration = book.globalDuration();
             int progress = Math.round(100f * (float) globalPosition / (float) globalDuration);
 
             leftTime.setText(formatTime(globalPosition));
@@ -256,10 +259,10 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
     }
 
     public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
-        public final ImageView coverView;
-        private final TextView titleView;
-        private final View editBook;
-        private final ImageView currentPlayingIndicator;
+        @Bind(R.id.coverView) public ImageView coverView;
+        @Bind(R.id.currentPlayingIndicator) ImageView currentPlayingIndicator;
+        @Bind(R.id.title) TextView titleView;
+        @Bind(R.id.editBook) View editBook;
 
         /**
          * Constructor of a viewholder.
@@ -268,10 +271,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
          */
         public BaseViewHolder(View itemView) {
             super(itemView);
-            coverView = (ImageView) itemView.findViewById(R.id.coverView);
-            titleView = (TextView) itemView.findViewById(R.id.title);
-            editBook = itemView.findViewById(R.id.editBook);
-            currentPlayingIndicator = (ImageView) itemView.findViewById(R.id.currentPlayingIndicator);
+            ButterKnife.bind(this, itemView);
         }
 
         /**
@@ -283,14 +283,14 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
         public void bind(Book book) {
 
             //setting text
-            String name = book.getName();
+            String name = book.name();
             titleView.setText(name);
 
             // (Cover)
-            final File coverFile = book.getCoverFile();
-            final Drawable coverReplacement = new CoverReplacement(book.getName(), c);
+            final File coverFile = book.coverFile();
+            final Drawable coverReplacement = new CoverReplacement(book.name(), c);
 
-            if (!book.isUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
+            if (!book.useCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
                 Picasso.with(c).load(coverFile).placeholder(coverReplacement).into(coverView);
             } else {
                 Picasso.with(c).cancelRequest(coverView);
@@ -305,7 +305,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
                 });
             }
 
-            if (book.getId() == prefs.getCurrentBookId()) {
+            if (book.id() == prefs.getCurrentBookId()) {
                 currentPlayingIndicator.setVisibility(View.VISIBLE);
             } else {
                 currentPlayingIndicator.setVisibility(View.GONE);
@@ -324,7 +324,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
                 }
             });
 
-            ViewCompat.setTransitionName(coverView, book.getCoverTransitionName());
+            ViewCompat.setTransitionName(coverView, book.coverTransitionName());
         }
     }
 }
