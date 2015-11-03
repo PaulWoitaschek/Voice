@@ -14,7 +14,7 @@ import android.support.annotation.Nullable;
 import android.util.Property;
 import android.view.animation.DecelerateInterpolator;
 
-import de.ph1b.audiobook.utils.L;
+import timber.log.Timber;
 
 /**
  * This code was modified by me, Paul Woitaschek. All these changes are licensed under GPLv3. The
@@ -48,7 +48,6 @@ import de.ph1b.audiobook.utils.L;
 public class PlayPauseDrawable extends Drawable {
 
 
-    private static final String TAG = PlayPauseDrawable.class.getSimpleName();
     private final Path leftPauseBar = new Path();
     private final Path rightPauseBar = new Path();
     private final Paint paint = new Paint();
@@ -145,7 +144,7 @@ public class PlayPauseDrawable extends Drawable {
 
         long timeElapsed = System.currentTimeMillis() - startDraw;
         if (timeElapsed > 16) {
-            L.e(TAG, "Drawing took too long=" + timeElapsed);
+            Timber.e("Drawing took %s", timeElapsed);
         }
     }
 
@@ -162,7 +161,7 @@ public class PlayPauseDrawable extends Drawable {
 
     @Override
     public void jumpToCurrentState() {
-        L.v(TAG, "jumpToCurrentState()");
+        Timber.v("jumpToCurrentState()");
         if (animator != null) {
             animator.cancel();
         }

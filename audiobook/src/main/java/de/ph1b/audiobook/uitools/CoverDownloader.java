@@ -26,14 +26,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import de.ph1b.audiobook.utils.L;
+import timber.log.Timber;
 
 /**
  * Helper class for downloading covers from the internet.
+ *
+ * @author Paul Woitaschek
  */
 public class CoverDownloader {
 
-    private static final String TAG = CoverDownloader.class.getSimpleName();
     private static final HashMap<String, List<String>> SEARCH_MAPPING = new HashMap<>(10);
     private final Picasso picasso;
     private Call call = null;
@@ -83,7 +84,7 @@ public class CoverDownloader {
     public String fetchCover(@NonNull String searchText, int number) {
         String bitmapUrl = getBitmapUrl(searchText, number);
         try {
-            L.v(TAG, "number=" + number + ", url=" + bitmapUrl);
+            Timber.v("number=%d, url=%s", number, bitmapUrl);
             Bitmap bitmap = picasso.load(bitmapUrl).get();
             if (bitmap != null) {
                 return bitmapUrl;
@@ -107,7 +108,7 @@ public class CoverDownloader {
                 return containing.get(number);
             } else {
                 int startPoint = containing.size();
-                L.v(TAG, "looking for new set at startPoint=" + startPoint);
+                Timber.v("looking for new set at startPoint=" + startPoint);
                 List<String> newSet = getNewLinks(searchText, startPoint);
                 if (!newSet.isEmpty()) {
                     containing.addAll(newSet);

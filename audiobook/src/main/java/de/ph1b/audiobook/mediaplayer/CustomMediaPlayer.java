@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
 
-import de.ph1b.audiobook.utils.L;
+import timber.log.Timber;
 
 /**
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -169,7 +169,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
             isDecoding = false;
             if (continuing && (sawInputEOS || sawOutputEOS)) {
                 state = State.PLAYBACK_COMPLETED;
-                L.d(TAG, "State changed to: " + state);
+                Timber.d("State changed to: %s", state);
                 Thread t = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -204,7 +204,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
 
     @Override
     public void start() {
-        L.v(TAG, "start called in state:" + state);
+        Timber.v("start called in state:" + state);
         switch (state) {
             case PLAYBACK_COMPLETED:
                 try {
@@ -216,7 +216,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                 }
             case PREPARED:
                 state = State.STARTED;
-                L.d(TAG, "State changed to: " + state);
+                Timber.d("State changed to: " + state);
                 continuing = true;
                 track.play();
                 decode();
@@ -226,7 +226,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                 break;
             case PAUSED:
                 state = State.STARTED;
-                L.d(TAG, "State changed to: " + state + " with path=" + path);
+                Timber.d("State changed to: " + state + " with path=" + path);
                 synchronized (decoderLock) {
                     decoderLock.notify();
                 }
@@ -241,7 +241,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
 
     @Override
     public void reset() {
-        L.v(TAG, "reset called in state: " + state);
+        Timber.v("reset called in state: " + state);
         stayAwake(false);
         lock.lock();
         try {
@@ -256,11 +256,11 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                     }
                 }
             } catch (InterruptedException e) {
-                L.e(TAG, "Interrupted in reset while waiting for decoder thread to stop.", e);
+                Timber.e("Interrupted in reset while waiting for decoder thread to stop.", e);
             }
             if (codec != null) {
                 codec.release();
-                L.d(TAG, "releasing codec");
+                Timber.d("releasing codec");
                 codec = null;
             }
             if (extractor != null) {
@@ -272,7 +272,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                 track = null;
             }
             state = State.IDLE;
-            L.d(TAG, "State changed to: " + state);
+            Timber.d("State changed to: " + state);
         } finally {
             lock.unlock();
         }
@@ -280,13 +280,13 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
 
     @Override
     public void prepare() throws IOException {
-        L.v(TAG, "prepare called in state: " + state);
+        Timber.v("prepare called in state: " + state);
         switch (state) {
             case INITIALIZED:
             case STOPPED:
                 initStream();
                 state = State.PREPARED;
-                L.d(TAG, "State changed to: " + state);
+                Timber.d("State changed to: " + state);
                 break;
             default:
                 error("prepare");
@@ -342,18 +342,18 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
 
     @Override
     public void pause() {
-        L.v(TAG, "pause called");
+        Timber.v("pause called");
         switch (state) {
             case PLAYBACK_COMPLETED:
                 state = State.PAUSED;
-                L.d(TAG, "State changed to: " + state);
+                Timber.d("State changed to: " + state);
                 stayAwake(false);
                 break;
             case STARTED:
             case PAUSED:
                 track.pause();
                 state = State.PAUSED;
-                L.d(TAG, "State changed to: " + state);
+                Timber.d("State changed to: " + state);
                 stayAwake(false);
                 break;
             default:
@@ -373,12 +373,12 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
 
     @Override
     public void setDataSource(String source) {
-        L.d(TAG, "setDataSource: " + source);
+        Timber.d("setDataSource: " + source);
         switch (state) {
             case IDLE:
                 this.path = source;
                 state = State.INITIALIZED;
-                L.d(TAG, "State changed to: " + state);
+                Timber.d("State changed to: " + state);
                 break;
             default:
                 error("setDataSource");
@@ -409,7 +409,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     }
 
     private void initStream() throws IOException, IllegalArgumentException {
-        L.v(TAG, "initStream called in state=" + state);
+        Timber.v("initStream called in state=" + state);
         lock.lock();
         try {
             extractor = new MediaExtractor();
@@ -446,8 +446,8 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
             }
             duration = oFormat.getLong(MediaFormat.KEY_DURATION);
 
-            L.v(TAG, "Sample rate: " + sampleRate);
-            L.v(TAG, "Mime type: " + mime);
+            Timber.v("Sample rate: " + sampleRate);
+            Timber.v("Mime type: " + mime);
             initDevice(sampleRate, channelCount);
             extractor.selectTrack(trackNum);
             codec = MediaCodec.createDecoderByType(mime);
@@ -458,7 +458,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     }
 
     private void error(String methodName) {
-        L.e(TAG, "Error in " + methodName + " at state=" + state);
+        Timber.e("Error in " + methodName + " at state=" + state);
         state = State.ERROR;
         stayAwake(false);
     }
@@ -471,7 +471,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
      * @param numChannels The number of channels available in the track.
      */
     private void initDevice(int sampleRate, int numChannels) throws IOException {
-        L.d(TAG, "initDevice called in state:" + state);
+        Timber.d("initDevice called in state:" + state);
         lock.lock();
         try {
             final int format = findFormatFromChannels(numChannels);
@@ -479,7 +479,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                     AudioFormat.ENCODING_PCM_16BIT);
 
             if (minSize == AudioTrack.ERROR || minSize == AudioTrack.ERROR_BAD_VALUE) {
-                L.e(TAG, "minSize=" + minSize);
+                Timber.e("minSize=" + minSize);
                 throw new IOException("getMinBufferSize returned " + minSize);
             }
             track = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, format,
@@ -508,7 +508,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     }
 
     private void decode() {
-        L.d(TAG, "decode called ins state=" + state);
+        Timber.d("decode called ins state=" + state);
         executor.execute(decoderRunnable);
     }
 

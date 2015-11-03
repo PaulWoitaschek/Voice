@@ -37,7 +37,7 @@ import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.DraggableBoxImageView;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.App;
-import de.ph1b.audiobook.utils.L;
+import timber.log.Timber;
 
 /**
  * Simple dialog to edit the cover of a book.
@@ -105,7 +105,7 @@ public class EditCoverDialogFragment extends DialogFragment {
         MaterialDialog.SingleButtonCallback positiveCallback = new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                L.d(TAG, "edit book positive clicked. CoverPosition=" + coverPosition);
+                Timber.d("edit book positive clicked. CoverPosition=%s", coverPosition);
                 if (addCoverAsync != null && !addCoverAsync.isCancelled()) {
                     addCoverAsync.cancel(true);
                 }

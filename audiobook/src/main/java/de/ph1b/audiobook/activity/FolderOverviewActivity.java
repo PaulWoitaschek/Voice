@@ -36,7 +36,7 @@ import de.ph1b.audiobook.model.BookAdder;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.DividerItemDecoration;
 import de.ph1b.audiobook.utils.App;
-import de.ph1b.audiobook.utils.L;
+import timber.log.Timber;
 
 /**
  * Activity that lets the user add, edit or remove the set audiobook folders.
@@ -46,7 +46,6 @@ import de.ph1b.audiobook.utils.L;
 public class FolderOverviewActivity extends BaseActivity {
 
 
-    private static final String TAG = FolderOverviewActivity.class.getSimpleName();
     private static final String BACKGROUND_OVERLAY_VISIBLE = "backgroundOverlayVisibility";
     private static final int PICKER_REQUEST_CODE = 42;
     private final List<String> bookCollections = new ArrayList<>(10);
@@ -265,7 +264,7 @@ public class FolderOverviewActivity extends BaseActivity {
                         bookCollections.add(chosenCollection);
                         prefs.setCollectionFolders(bookCollections);
                     }
-                    L.v(TAG, "chosenCollection=" + chosenCollection);
+                    Timber.v("chosenCollection=%s", chosenCollection);
                     break;
                 case SINGLE_BOOK:
                     String chosenSingleBook = data.getStringExtra(
@@ -274,7 +273,7 @@ public class FolderOverviewActivity extends BaseActivity {
                         singleBooks.add(chosenSingleBook);
                         prefs.setSingleBookFolders(singleBooks);
                     }
-                    L.v(TAG, "chosenSingleBook=" + chosenSingleBook);
+                    Timber.v("chosenSingleBook=%s", chosenSingleBook);
                     break;
                 default:
                     break;

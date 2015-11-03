@@ -32,6 +32,7 @@ import de.ph1b.audiobook.model.BookAdder;
 import de.ph1b.audiobook.service.BookReaderService;
 import de.ph1b.audiobook.service.WidgetUpdateService;
 import de.ph1b.audiobook.uitools.CoverReplacement;
+import timber.log.Timber;
 
 @ReportsCrashes(
         httpMethod = HttpSender.Method.PUT,
@@ -52,7 +53,9 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-        if (!BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        } else {
             ACRA.init(this);
         }
 

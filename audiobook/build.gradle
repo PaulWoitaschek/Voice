@@ -6,7 +6,7 @@ android {
     buildToolsVersion '23.0.1'
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 23
         versionCode 77
         versionName 'preview'
@@ -94,6 +94,9 @@ dependencies {
     // auto value
     compile 'com.github.frankiesardo:auto-parcel:0.3.1'
     apt 'com.github.frankiesardo:auto-parcel-processor:0.3.1'
+
+    // logging
+    compile 'com.jakewharton.timber:timber:4.1.0'
 
     testCompile 'junit:junit:4.12'
 }

@@ -43,7 +43,7 @@ import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.DividerItemDecoration;
 import de.ph1b.audiobook.utils.App;
-import de.ph1b.audiobook.utils.L;
+import timber.log.Timber;
 
 /**
  * Dialog for creating a bookmark
@@ -80,9 +80,9 @@ public class BookmarkDialogFragment extends DialogFragment {
                     .bookmarks(Ordering.natural().immutableSortedCopy(newBookmarks))
                     .build();
             db.updateBook(book);
-            L.v(TAG, "Added bookmark=" + addedBookmark);
+            Timber.v("Added bookmark=%s", addedBookmark);
         } else {
-            L.e(TAG, "Book does not exist");
+            Timber.e("Book does not exist");
         }
     }
 

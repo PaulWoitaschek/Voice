@@ -38,8 +38,8 @@ import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.interfaces.MultiPaneInformer;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.utils.App;
-import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PermissionHelper;
+import timber.log.Timber;
 
 /**
  * Activity that coordinates the book shelf and play screens.
@@ -119,10 +119,10 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
             boolean permissionGrantingWorked = PermissionHelper.permissionGrantingWorked(requestCode,
                     PERMISSION_RESULT_READ_EXT_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,
                     permissions, grantResults);
-            L.i(TAG, "permissionGrantingWorked=" + permissionGrantingWorked);
+            Timber.i("permissionGrantingWorked=%b", permissionGrantingWorked);
             if (!permissionGrantingWorked) {
                 PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE);
-                L.e(TAG, "could not get permission");
+                Timber.e("could not get permission");
             }
         }
     }
@@ -146,7 +146,7 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
 
         multiPanel = bookShelfContainer != null;
         boolean multiPaneChanged = savedInstanceState != null && savedInstanceState.getBoolean(SI_MULTI_PANEL) != multiPanel;
-        L.i(TAG, "multiPane=" + multiPanel + ", multiPaneChanged=" + multiPaneChanged);
+        Timber.i("multiPane=%b, multiPaneChanged=%b", multiPanel, multiPaneChanged);
 
         // first retrieve the fragments
         FragmentManager fm = getSupportFragmentManager();
@@ -171,29 +171,29 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
             BookShelfFragment bookShelfFragment = (BookShelfFragment) fm.findFragmentByTag(FM_BOOK_SHELF);
             if (bookShelfFragment == null) {
                 bookShelfFragment = new BookShelfFragment();
-                L.v(TAG, "new fragment=" + bookShelfFragment);
+                Timber.v("new fragment=%s", bookShelfFragment);
             } else {
                 fm.beginTransaction()
                         .remove(bookShelfFragment)
                         .commit();
                 fm.executePendingTransactions();
-                L.v(TAG, "restored fragment=" + bookShelfFragment);
+                Timber.v("restored fragment=%s", bookShelfFragment);
             }
 
             // restore book play fragment or create new one
             BookPlayFragment bookPlayFragment = (BookPlayFragment) fm.findFragmentByTag(FM_BOOK_PLAY);
             if (bookPlayFragment == null) {
                 bookPlayFragment = BookPlayFragment.newInstance(prefs.getCurrentBookId());
-                L.v(TAG, "new fragment=" + bookPlayFragment);
+                Timber.v("new fragment=%s", bookPlayFragment);
             } else {
                 fm.beginTransaction()
                         .remove(bookPlayFragment)
                         .commit();
                 fm.executePendingTransactions();
-                L.v(TAG, "restored fragment=" + bookPlayFragment);
+                Timber.v("restored fragment=%s", bookPlayFragment);
                 if (bookPlayFragment.getBookId() != prefs.getCurrentBookId()) {
                     bookPlayFragment = BookPlayFragment.newInstance(prefs.getCurrentBookId());
-                    L.v(TAG, "id did not match. Created new fragment=" + bookPlayFragment);
+                    Timber.v("id did not match. Created new fragment=%s", bookPlayFragment);
                 }
             }
 
@@ -230,7 +230,7 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
 
     @Override
     public void onBookSelected(long bookId, Map<View, String> sharedViews) {
-        L.i(TAG, "onBookSelected(" + bookId + ")");
+        Timber.i("onBookSelected with bookId=%d", bookId);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         BookPlayFragment bookPlayFragment = BookPlayFragment.newInstance(bookId);
@@ -238,7 +238,7 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
             Transition move = TransitionInflater.from(this).inflateTransition(android.R.transition.move);
             bookPlayFragment.setSharedElementEnterTransition(move);
             for (Map.Entry<View, String> entry : sharedViews.entrySet()) {
-                L.v(TAG, "Added sharedElement=" + entry);
+                Timber.v("Added sharedElement=%s", entry);
                 ft.addSharedElement(entry.getKey(), entry.getValue());
             }
         }

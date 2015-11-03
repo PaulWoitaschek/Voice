@@ -36,7 +36,7 @@ import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.FileRecognition;
-import de.ph1b.audiobook.utils.L;
+import timber.log.Timber;
 
 
 /**
@@ -47,7 +47,6 @@ import de.ph1b.audiobook.utils.L;
 @Singleton
 public class BookAdder {
 
-    private static final String TAG = BookAdder.class.getSimpleName();
     private final Communication communication;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Context c;
@@ -153,7 +152,7 @@ public class BookAdder {
     private void checkForBooks() throws InterruptedException {
         List<File> singleBooks = getSingleBookFiles();
         for (File f : singleBooks) {
-            L.d(TAG, "checkForBooks with singleBookFile=" + f);
+            Timber.d("checkForBooks with singleBookFile=%s", f);
             if (f.isFile() && f.canRead()) {
                 checkBook(f, Book.Type.SINGLE_FILE);
             } else if (f.isDirectory() && f.canRead()) {
@@ -163,7 +162,7 @@ public class BookAdder {
 
         List<File> collectionBooks = getCollectionBookFiles();
         for (File f : collectionBooks) {
-            L.d(TAG, "checking collectionBook=" + f);
+            Timber.d("checking collectionBook=%s", f);
             if (f.isFile() && f.canRead()) {
                 checkBook(f, Book.Type.COLLECTION_FILE);
             } else if (f.isDirectory() && f.canRead()) {
@@ -264,13 +263,13 @@ public class BookAdder {
      * @param interrupting true if a eventually running scanner should be interrupted.
      */
     public void scanForFiles(boolean interrupting) {
-        L.d(TAG, "scanForFiles called. scannerActive=" + scannerActive + ", interrupting=" + interrupting);
+        Timber.d("scanForFiles called with scannerActive=%b and interrupting=%b", scannerActive, interrupting);
         if (!scannerActive || interrupting) {
             stopScanner = true;
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    L.v(TAG, "started");
+                    Timber.v("started");
                     scannerActive = true;
                     communication.sendScannerStateChanged();
                     stopScanner = false;
@@ -280,17 +279,17 @@ public class BookAdder {
                         checkForBooks();
                         findCovers();
                     } catch (InterruptedException e) {
-                        L.d(TAG, "We were interrupted at adding a book", e);
+                        Timber.d(e, "We were interrupted at adding a book");
                     }
 
                     stopScanner = false;
                     scannerActive = false;
                     communication.sendScannerStateChanged();
-                    L.v(TAG, "stopped");
+                    Timber.v("stopped");
                 }
             });
         }
-        L.v(TAG, "scanforfiles method done (executor should be called");
+        Timber.v("scanforfiles method done (executor should be called");
     }
 
     /**
@@ -340,8 +339,7 @@ public class BookAdder {
      * audio book paths.
      */
     private void deleteOldBooks() throws InterruptedException {
-        final String TAG = BookAdder.TAG + "#deleteOldBooks()";
-        L.d(TAG, "started");
+        Timber.d("deleteOldBooks started");
         List<File> singleBookFiles = getSingleBookFiles();
         List<File> collectionBookFolders = getCollectionBookFiles();
 
@@ -409,10 +407,9 @@ public class BookAdder {
         }
 
         for (Book b : booksToRemove) {
-            L.d(TAG, "deleting book=" + b);
+            Timber.d("deleting book=%s", b);
             db.hideBook(b);
         }
-        L.d(TAG, "finished");
     }
 
     /**
@@ -438,7 +435,7 @@ public class BookAdder {
             Book newBook = Book.builder(bookRoot, newChapters, type, firstChapterFile, bookName)
                     .author(author)
                     .build();
-            L.d(TAG, "adding newBook=" + newBook);
+            Timber.d("adding newBook=%s", newBook);
             db.addBook(newBook);
         } else { // restore old books
             // now removes invalid bookmarks
@@ -575,7 +572,7 @@ public class BookAdder {
         List<File> containingFiles = getAllContainingFiles(Collections.singletonList(rootFile), true);
         // sort the files in a natural way
         Collections.sort(containingFiles, NaturalOrderComparator.FILE_COMPARATOR);
-        L.i(TAG, "Got files=" + containingFiles);
+        Timber.d("Got files=%s", containingFiles);
 
         // get duration and if there is no cover yet, try to get an embedded dover (up to 5 times)
         List<Chapter> containingMedia = new ArrayList<>(containingFiles.size());
@@ -604,7 +601,7 @@ public class BookAdder {
 
                     throwIfStopRequested();
                 } catch (RuntimeException e) {
-                    L.e(TAG, "Error at file=" + f);
+                    Timber.e("Error at file=%s", f);
                     e.printStackTrace();
                 }
             }
@@ -637,7 +634,7 @@ public class BookAdder {
      */
     @Nullable
     private Book getBookFromDb(@NonNull File rootFile, @NonNull Book.Type type, boolean orphaned) {
-        L.d(TAG, "getBookFromDb, rootFile=" + rootFile + ", type=" + type + ", orphaned=" + orphaned);
+        Timber.d("getBookFromDb, rootFile=%s, type=%s, orphaned=%b", rootFile, type, orphaned);
         List<Book> books;
         if (orphaned) {
             books = db.getOrphanedBooks();
@@ -651,12 +648,12 @@ public class BookAdder {
                 }
             }
         } else if (rootFile.isFile()) {
-            L.d(TAG, "getBookFromDb, its a file");
+            Timber.d("getBookFromDb, its a file");
             for (Book b : books) {
-                L.v(TAG, "comparing bookRoot=" + b.root() + " with " + rootFile.getParentFile().getAbsolutePath());
+                Timber.v("Comparing bookRoot=%s with %s", b.root(), rootFile.getParentFile().getAbsoluteFile());
                 if (rootFile.getParentFile().getAbsolutePath().equals(b.root()) && type == b.type()) {
                     Chapter singleChapter = b.chapters().get(0);
-                    L.d(TAG, "getBookFromDb, singleChapterPath=" + singleChapter.file() + " compared with=" + rootFile.getAbsolutePath());
+                    Timber.d("getBookFromDb, singleChapterPath=%s compared with=%s", singleChapter.file(), rootFile.getAbsoluteFile());
                     if (singleChapter.file().equals(rootFile)) {
                         return b;
                     }

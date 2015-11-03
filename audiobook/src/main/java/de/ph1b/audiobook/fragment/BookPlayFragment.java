@@ -57,7 +57,7 @@ import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.BaseModule;
 import de.ph1b.audiobook.utils.Communication;
-import de.ph1b.audiobook.utils.L;
+import timber.log.Timber;
 
 /**
  * Base class for book playing interaction.
@@ -108,7 +108,7 @@ public class BookPlayFragment extends Fragment {
             hostingActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    L.d(TAG, "onBookContentChangedReciever called with bookId=" + book.id());
+                    Timber.d("onBookContentChangedReciever called with bookId=%d", book.id());
                     if (book.id() == bookId) {
                         List<Chapter> chapters = book.chapters();
                         Chapter chapter = book.currentChapter();
@@ -285,7 +285,7 @@ public class BookPlayFragment extends Fragment {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (parent.getTag() != null && ((int) parent.getTag()) != position) {
-                        L.i(TAG, "spinner, onItemSelected, firing:" + position);
+                        Timber.i("spinner: onItemSelected. firing: %d", position);
                         controller.changeTime(0, book.chapters().get(
                                 position).file());
                         parent.setTag(position);
@@ -393,7 +393,7 @@ public class BookPlayFragment extends Fragment {
                 @Override
                 public void onFinish() {
                     timerCountdownView.setVisibility(View.GONE);
-                    L.i(TAG, "Countdown timer finished");
+                    Timber.i("Countdown timer finished");
                 }
             }.start();
         } else {

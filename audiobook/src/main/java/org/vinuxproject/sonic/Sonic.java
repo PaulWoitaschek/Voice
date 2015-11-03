@@ -6,8 +6,7 @@ package org.vinuxproject.sonic;/* Sonic library
    This file is licensed under the Apache 2.0 license.
 */
 
-
-import de.ph1b.audiobook.utils.L;
+import timber.log.Timber;
 
 @SuppressWarnings({"unused", "UnusedReturnValue"})
 public class Sonic {
@@ -16,7 +15,6 @@ public class Sonic {
     private static final int SONIC_MAX_PITCH = 400;
     /* This is used to down-sample some inputs to improve speed */
     private static final int SONIC_AMDF_FREQ = 4000;
-    private static final String TAG = Sonic.class.getSimpleName();
     private short inputBuffer[];
     private short outputBuffer[];
     private short pitchBuffer[];
@@ -792,7 +790,7 @@ public class Sonic {
             if (oldRatePosition == oldSampleRate) {
                 oldRatePosition = 0;
                 if (newRatePosition != newSampleRate) {
-                    L.e(TAG, "Assertion failed: newRatePosition != newSampleRate");
+                    Timber.e("Assertion failed: newRatePosition != newSampleRate");
                 }
                 newRatePosition = 0;
             }

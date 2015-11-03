@@ -48,7 +48,7 @@ import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.Communication;
-import de.ph1b.audiobook.utils.L;
+import timber.log.Timber;
 
 
 /**
@@ -132,11 +132,11 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
         @Override
         public void onPlayStateChanged() {
             final MediaPlayerController.PlayState state = controller.getPlayState();
-            L.d(TAG, "onPlayStateChanged:" + state);
+            Timber.d("onPlayStateChanged:%s", state);
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    L.d(TAG, "onPlayStateChanged executed:" + state);
+                    Timber.d("onPlayStateChanged executed:%s", state);
                     Book controllerBook = controller.getBook();
                     if (controllerBook != null) {
                         switch (state) {
@@ -197,7 +197,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                 if (keyEvent != null && keyEvent.getAction() == KeyEvent.ACTION_DOWN
                         && keyEvent.getRepeatCount() == 0) {
                     int keyCode = keyEvent.getKeyCode();
-                    L.d(TAG, "onMediaButtonEvent Received command=" + keyEvent);
+                    Timber.d("onMediaButtonEvent Received command=%s", keyEvent);
                     return handleKeyCode(keyCode);
                 } else {
                     return super.onMediaButtonEvent(mediaButtonEvent);
@@ -217,13 +217,13 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
 
         Book book = db.getBook(prefs.getCurrentBookId());
         if (book != null) {
-            L.d(TAG, "onCreated initialized book=" + book);
+            Timber.d("onCreated initialized book=%s", book);
             reInitController(book);
         }
     }
 
     private boolean handleKeyCode(int keyCode) {
-        L.v(TAG, "handling keyCode: " + keyCode);
+        Timber.v("handling keyCode: %s", keyCode);
         switch (keyCode) {
             case KeyEvent.KEYCODE_MEDIA_PLAY:
             case KeyEvent.KEYCODE_MEDIA_PAUSE:
@@ -253,12 +253,12 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
-        L.v(TAG, "onStartCommand,intent=" + intent + ", flags=" + flags + ", startId=" + startId);
+        Timber.v("onStartCommand, intent=%s, flags=%d, startId=%d", intent, flags, startId);
         if (intent != null && intent.getAction() != null) {
             playerExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    L.v(TAG, "handling intent action:" + intent.getAction());
+                    Timber.v("handling intent action:%s", intent.getAction());
                     switch (intent.getAction()) {
                         case Intent.ACTION_MEDIA_BUTTON:
                             KeyEvent keyEvent = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
@@ -298,7 +298,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
 
     @Override
     public void onDestroy() {
-        L.v(TAG, "onDestroy called");
+        Timber.v("onDestroy called");
         controller.stop();
         controller.onDestroy();
 
@@ -334,30 +334,30 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
     public void onAudioFocusChange(int focusChange) {
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         final int callState = (tm != null) ? tm.getCallState() : TelephonyManager.CALL_STATE_IDLE;
-        L.d(TAG, "Call state is: " + callState);
+        Timber.d("Call state is: %s", callState);
         if (callState != TelephonyManager.CALL_STATE_IDLE) {
             focusChange = AudioManager.AUDIOFOCUS_LOSS;
             // if there is an incoming call, we pause permanently. (tricking switch condition)
         }
         switch (focusChange) {
             case AudioManager.AUDIOFOCUS_GAIN:
-                L.d(TAG, "started by audioFocus gained");
+                Timber.d("started by audioFocus gained");
                 if (pauseBecauseLossTransient) {
                     controller.play();
                     pauseBecauseLossTransient = false;
                 } else {
-                    L.d(TAG, "increasing volume");
+                    Timber.d("increasing volume");
                     audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
                 }
                 break;
             case AudioManager.AUDIOFOCUS_LOSS:
-                L.d(TAG, "paused by audioFocus loss");
+                Timber.d("paused by audioFocus loss");
                 controller.stop();
                 break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                 if (!prefs.pauseOnTempFocusLoss()) {
                     if (controller.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
-                        L.d(TAG, "lowering volume");
+                        Timber.d("lowering volume");
                         audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0);
                         pauseBecauseHeadset = false;
                     }
@@ -370,7 +370,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                 }
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                 if (controller.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
-                    L.d(TAG, "Paused by audio-focus loss transient.");
+                    Timber.d("Paused by audio-focus loss transient.");
                     // Only rewind if loss is transient. When we only pause temporary, don't rewind
                     // automatically.
                     controller.pause(focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT);
@@ -465,7 +465,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                L.d(TAG, "updateRemoteControlClient called");
+                Timber.d("updateRemoteControlClient called");
 
                 Book book = controller.getBook();
                 if (book != null) {
@@ -515,7 +515,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                             Drawable replacement = new CoverReplacement(
                                     book.name(),
                                     BookReaderService.this);
-                            L.d(TAG, "replacement dimen: " + replacement.getIntrinsicWidth() + ":" + replacement.getIntrinsicHeight());
+                            Timber.d("replacement dimen:%d:%d", replacement.getIntrinsicWidth(), replacement.getIntrinsicHeight());
                             bitmap = ImageHelper.drawableToBitmap(
                                     replacement,
                                     ImageHelper.getSmallerScreenSize(BookReaderService.this),

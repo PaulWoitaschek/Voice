@@ -25,7 +25,7 @@ import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.utils.Communication;
-import de.ph1b.audiobook.utils.L;
+import timber.log.Timber;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -42,7 +42,6 @@ public class BookShelf extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 32;
     private static final String DATABASE_NAME = "autoBookDB";
-    private static final String TAG = BookShelf.class.getSimpleName();
     private final Communication communication;
     private final Context c;
     private final List<Book> activeBooks;
@@ -130,7 +129,7 @@ public class BookShelf extends SQLiteOpenHelper {
     }
 
     public synchronized void addBook(@NonNull Book book) {
-        L.v(TAG, "addBook=" + book.name());
+        Timber.v("addBook=%s", book.name());
         checkArgument(!book.chapters().isEmpty());
 
         SQLiteDatabase db = getWritableDatabase();
@@ -185,7 +184,7 @@ public class BookShelf extends SQLiteOpenHelper {
     }
 
     public synchronized void updateBook(@NonNull Book book) {
-        L.v(TAG, "updateBook=" + book.name());
+        Timber.v("updateBook=%s", book.name());
         checkArgument(!book.chapters().isEmpty());
 
         ListIterator<Book> bookIterator = activeBooks.listIterator();
@@ -228,7 +227,7 @@ public class BookShelf extends SQLiteOpenHelper {
     }
 
     public synchronized void hideBook(@NonNull Book book) {
-        L.v(TAG, "hideBook=" + book.name());
+        Timber.v("hideBook=%s", book.name());
         checkArgument(!book.chapters().isEmpty());
 
         ListIterator<Book> iterator = activeBooks.listIterator();
@@ -276,7 +275,7 @@ public class BookShelf extends SQLiteOpenHelper {
             DataBaseUpgradeHelper upgradeHelper = new DataBaseUpgradeHelper(db, c);
             upgradeHelper.upgrade(oldVersion);
         } catch (InvalidPropertiesFormatException e) {
-            L.e(TAG, "Error at upgrade", e);
+            Timber.e(e, "Error at upgrade");
             BookTable.dropTableIfExists(db);
             ChapterTable.dropTableIfExists(db);
             BookmarkTable.dropTableIfExists(db);

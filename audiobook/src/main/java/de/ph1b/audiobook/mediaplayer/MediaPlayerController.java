@@ -27,13 +27,12 @@ import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.persistence.BookShelf;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.utils.Communication;
-import de.ph1b.audiobook.utils.L;
+import timber.log.Timber;
 
 @Singleton
 public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         MediaPlayerInterface.OnCompletionListener {
 
-    private static final String TAG = MediaPlayerController.class.getSimpleName();
     private final Context c;
     private final ReentrantLock lock = new ReentrantLock();
     private final PrefsManager prefs;
@@ -95,7 +94,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     public void init(@NonNull Book book) {
         lock.lock();
         try {
-            L.i(TAG, "constructor called with book=" + book);
+            Timber.i("constructor called with book=%s", book);
             Preconditions.checkNotNull(book);
             this.book = book;
             prepare();
@@ -171,7 +170,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                     play();
                     break;
                 default:
-                    L.e(TAG, "play called in illegal state:" + state);
+                    Timber.e("play called in illegal state=%s", state);
                     break;
             }
         } finally {
@@ -184,7 +183,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
      * updates to the GUI.
      */
     private void startUpdating() {
-        L.v(TAG, "startupdating");
+        Timber.v("startUpdating");
         if (!updaterActive()) {
             updater = executor.scheduleAtFixedRate(new Runnable() {
                 @Override
@@ -211,8 +210,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
      * @param direction The direction to skip
      */
     public void skip(Direction direction) {
-        final String TAG = MediaPlayerController.TAG + ":skip()";
-        L.v(TAG, "direction=" + direction);
+        Timber.v("direction=%s", direction);
         lock.lock();
         try {
             if (book != null) {
@@ -221,7 +219,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                 final int delta = prefs.getSeekTime() * 1000;
 
                 final int seekTo = (direction == Direction.FORWARD) ? currentPos + delta : currentPos - delta;
-                L.v(TAG, "currentPos=" + currentPos + ",seekTo=" + seekTo + ",duration=" + duration);
+                Timber.v("currentPos=%d, seekTo=%d, duration=%d", currentPos, seekTo, duration);
 
                 if (seekTo < 0) {
                     previous(false);
@@ -315,16 +313,16 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
      * Turns the sleep timer on or off.
      */
     public void toggleSleepSand() {
-        L.i(TAG, "toggleSleepSand. Old state was:" + sleepSandActive());
+        Timber.i("toggleSleepSand. Old state was:%b", sleepSandActive());
         lock.lock();
         try {
             if (sleepSandActive()) {
                 assert sleepSand != null;
-                L.i(TAG, "sleepSand is active. cancelling now");
+                Timber.i("sleepSand is active. cancelling now");
                 sleepSand.cancel(false);
                 sleepTimerActive = false;
             } else {
-                L.i(TAG, "preparing new sleep sand");
+                Timber.i("preparing new sleep sand");
                 final int minutes = prefs.getSleepTime();
                 sleepTimerActive = true;
                 sleepSand = executor.schedule(new Runnable() {
@@ -363,7 +361,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     public void pause(boolean rewind) {
         lock.lock();
         try {
-            L.v(TAG, "pause acquired lock. state is=" + state);
+            Timber.v("pause acquired lock. state is=%s", state);
             if (book != null) {
                 switch (state) {
                     case STARTED:
@@ -389,7 +387,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                         state = State.PAUSED;
                         break;
                     default:
-                        L.e(TAG, "pause called in illegal state=" + state);
+                        Timber.e("pause called in illegal state=%s", state);
                         break;
                 }
             }
@@ -402,7 +400,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     public boolean onError(MediaPlayer mp, int what, int extra) {
         lock.lock();
         try {
-            L.e(TAG, "onError");
+            Timber.e("onError");
             if (book != null) {
                 c.startActivity(BookActivity.malformedFileIntent(c, book.currentFile()));
             } else {
@@ -428,11 +426,11 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         lock.lock();
         try {
             if (book != null) {
-                L.v(TAG, "onCompletion called, nextChapter=" + book.nextChapter());
+                Timber.v("onCompletion called, nextChapter=%s", book.nextChapter());
                 if (book.nextChapter() != null) {
                     next();
                 } else {
-                    L.v(TAG, "Reached last track. Stopping player");
+                    Timber.v("Reached last track. Stopping player");
                     stopUpdating();
                     setPlayState(PlayState.STOPPED);
 
@@ -469,13 +467,12 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
      * @param file The path of the media to play (relative to the books root path)
      */
     public void changePosition(int time, File file) {
-        final String TAG = MediaPlayerController.TAG + ":changePosition()";
         lock.lock();
         try {
-            L.v(TAG, "time=" + time + ", relPath=" + file);
+            Timber.v("time=%d, relPath=%s", time, file);
             if (book != null) {
                 boolean changeFile = (!book.currentChapter().file().equals(file));
-                L.v(TAG, "changeFile=" + changeFile);
+                Timber.v("changeFile=%s", changeFile);
                 if (changeFile) {
                     boolean wasPlaying = (state == State.STARTED);
                     book = Book.builder(book)
@@ -505,7 +502,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                             db.updateBook(book);
                             break;
                         default:
-                            L.e(TAG, "changePosition called in illegal state:" + state);
+                            Timber.e("changePosition called in illegal state=%s", state);
                             break;
                     }
                 }
@@ -540,7 +537,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                 if (state != State.DEAD) {
                     player.setPlaybackSpeed(speed);
                 } else {
-                    L.e(TAG, "setPlaybackSpeed called in illegal state: " + state);
+                    Timber.e("setPlaybackSpeed called in illegal state=%s", state);
                 }
             }
         } finally {

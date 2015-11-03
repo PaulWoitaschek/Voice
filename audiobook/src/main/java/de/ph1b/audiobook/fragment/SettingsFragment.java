@@ -30,9 +30,9 @@ import de.ph1b.audiobook.interfaces.SettingsSetListener;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.App;
-import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.vendinghelper.IabHelper;
 import de.ph1b.audiobook.vendinghelper.IabResult;
+import timber.log.Timber;
 
 public class SettingsFragment extends PreferenceFragment implements DonationDialogFragment.OnDonationClickedListener,
         SettingsSetListener {
@@ -183,7 +183,7 @@ public class SettingsFragment extends PreferenceFragment implements DonationDial
 
     @Override
     public void onDonationClicked(String item) {
-        L.d(TAG, "onDonationClicked with item=" + item + " and donationAvailable=" + donationAvailable);
+        Timber.d("onDonationClicked with item=%s and donationAvailable=%b", item, donationAvailable);
         if (donationAvailable) {
             iabHelper.launchPurchaseFlow(hostingActivity, item,
                     new IabHelper.OnIabPurchaseFinishedListener() {

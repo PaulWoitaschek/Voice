@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 
-import de.ph1b.audiobook.utils.L;
+import timber.log.Timber;
 
 
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
@@ -276,7 +276,7 @@ class DataBaseUpgradeHelper {
                     book.put("time", currentTime);
                     book.put("playbackSpeed", speed);
 
-                    L.d(TAG, "upgrade24 restored book=" + book);
+                    Timber.d("upgrade24 restored book=%s", book);
                     ContentValues cv = new ContentValues();
                     cv.put("BOOK_JSON", book.toString());
                     long newBookId = db.insert(newBookTable, null, cv);
@@ -395,7 +395,7 @@ class DataBaseUpgradeHelper {
      * @throws InvalidPropertiesFormatException
      */
     private void upgrade28() throws InvalidPropertiesFormatException {
-        L.d(TAG, "upgrade28");
+        Timber.d("upgrade28");
         Cursor cursor = db.query("TABLE_BOOK", new String[]{"BOOK_JSON", "BOOK_ID"}, null, null, null, null, null);
         try {
             while (cursor.moveToNext()) {
@@ -414,7 +414,7 @@ class DataBaseUpgradeHelper {
                     chapter.put("name", chapterName);
                 }
                 ContentValues cv = new ContentValues();
-                L.d(TAG, "so saving book=" + book.toString());
+                Timber.d("so saving book=%s", book.toString());
                 cv.put("BOOK_JSON", book.toString());
                 db.update("TABLE_BOOK", cv, "BOOK_ID" + "=?", new String[]{String.valueOf(cursor.getLong(1))});
             }
@@ -426,7 +426,7 @@ class DataBaseUpgradeHelper {
     }
 
     private void upgrade29() {
-        L.d(TAG, "upgrade29");
+        Timber.d("upgrade29");
 
         // fetching old contents
         Cursor cursor = db.query("TABLE_BOOK", new String[]{"BOOK_JSON", "BOOK_ACTIVE"},

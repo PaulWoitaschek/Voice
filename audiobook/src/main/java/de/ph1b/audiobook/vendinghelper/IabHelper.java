@@ -34,7 +34,7 @@ import org.json.JSONException;
 
 import java.util.List;
 
-import de.ph1b.audiobook.utils.L;
+import timber.log.Timber;
 
 
 /**
@@ -91,7 +91,6 @@ public class IabHelper {
     private static final String RESPONSE_INAPP_SIGNATURE = "INAPP_DATA_SIGNATURE";
     private static final String ITEM_TYPE_SUBS = "subs";
     // some fields on the getSkuDetails response bundle
-    private static final String TAG = IabHelper.class.getSimpleName();
     // Is setup done?
     private boolean mSetupDone = false;
     // Has this object been disposed of? (If so, we should ignore callbacks, etc)
@@ -134,7 +133,7 @@ public class IabHelper {
     public IabHelper(Context ctx, String base64PublicKey) {
         mContext = ctx.getApplicationContext();
         mSignatureBase64 = base64PublicKey;
-        L.d(TAG, "IAB helper created.");
+        Timber.d("IAB helper created.");
     }
 
     /**
@@ -174,7 +173,7 @@ public class IabHelper {
     private static int getResponseCodeFromBundle(Bundle b) {
         Object o = b.get(RESPONSE_CODE);
         if (o == null) {
-            L.d(TAG, "Bundle with null response code, assuming OK (known issue)");
+            Timber.d("Bundle with null response code, assuming OK (known issue)");
             return BILLING_RESPONSE_RESULT_OK;
         } else if (o instanceof Integer) {
             return (Integer) o;
@@ -220,22 +219,22 @@ public class IabHelper {
         if (mSetupDone) throw new IllegalStateException("IAB helper is already set up.");
 
         // Connection to IAB service
-        L.d(TAG, "Starting in-app billing setup.");
+        Timber.d("Starting in-app billing setup.");
         mServiceConn = new ServiceConnection() {
             @Override
             public void onServiceDisconnected(ComponentName name) {
-                L.d(TAG, "Billing service disconnected.");
+                Timber.d("Billing service disconnected.");
                 mService = null;
             }
 
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 if (mDisposed) return;
-                L.d(TAG, "Billing service connected.");
+                Timber.d("Billing service connected.");
                 mService = IInAppBillingService.Stub.asInterface(service);
                 String packageName = mContext.getPackageName();
                 try {
-                    L.d(TAG, "Checking for in-app billing 3 support.");
+                    Timber.d("Checking for in-app billing 3 support.");
 
                     // check for in-app billing v3 support
                     int response = mService.isBillingSupported(3, packageName, ITEM_TYPE_INAPP);
@@ -247,15 +246,15 @@ public class IabHelper {
                         mSubscriptionsSupported = false;
                         return;
                     }
-                    L.d(TAG, "In-app billing version 3 supported for " + packageName);
+                    Timber.d("In-app billing version 3 supported for %s", packageName);
 
                     // check for v3 subscriptions support
                     response = mService.isBillingSupported(3, packageName, ITEM_TYPE_SUBS);
                     if (response == BILLING_RESPONSE_RESULT_OK) {
-                        L.d(TAG, "Subscriptions AVAILABLE.");
+                        Timber.d("Subscriptions AVAILABLE.");
                         mSubscriptionsSupported = true;
                     } else {
-                        L.d(TAG, "Subscriptions NOT AVAILABLE. Response: " + response);
+                        Timber.d("Subscriptions NOT AVAILABLE. Response=%s", response);
                     }
 
                     mSetupDone = true;
@@ -297,10 +296,10 @@ public class IabHelper {
      * disposed of, it can't be used again.
      */
     public void dispose() {
-        L.d(TAG, "Disposing.");
+        Timber.d("Disposing.");
         mSetupDone = false;
         if (mServiceConn != null && mBound) {
-            L.d(TAG, "Unbinding from service.");
+            Timber.d("Unbinding from service.");
             if (mContext != null) {
                 mContext.unbindService(mServiceConn);
                 mBound = false;
@@ -338,7 +337,7 @@ public class IabHelper {
         flagStartAsync();
         IabResult result;
 
-        if (IabHelper.ITEM_TYPE_INAPP.equals(ITEM_TYPE_SUBS) && !mSubscriptionsSupported) {
+        if (ITEM_TYPE_INAPP.equals(ITEM_TYPE_SUBS) && !mSubscriptionsSupported) {
             IabResult r = new IabResult(IABHELPER_SUBSCRIPTIONS_NOT_AVAILABLE,
                     "Subscriptions are not available.");
             flagEndAsync();
@@ -347,7 +346,7 @@ public class IabHelper {
         }
 
         try {
-            L.d(TAG, "Constructing buy intent for " + sku + ", item type: " + IabHelper.ITEM_TYPE_INAPP);
+            Timber.d("Constructing buy intent for %s, item type: " + IabHelper.ITEM_TYPE_INAPP, sku);
             Bundle buyIntentBundle = mService.getBuyIntent(3, mContext.getPackageName(), sku, IabHelper.ITEM_TYPE_INAPP, "");
             int response = getResponseCodeFromBundle(buyIntentBundle);
             if (response != BILLING_RESPONSE_RESULT_OK) {
@@ -359,7 +358,7 @@ public class IabHelper {
             }
 
             PendingIntent pendingIntent = buyIntentBundle.getParcelable(RESPONSE_BUY_INTENT);
-            L.d(TAG, "Launching buy intent for " + sku + ". Request code: " + 10001);
+            Timber.d("Launching buy intent for " + sku + ". Request code: " + 10001);
             mRequestCode = 10001;
             mPurchaseListener = listener;
             mPurchasingItemType = IabHelper.ITEM_TYPE_INAPP;
@@ -419,15 +418,15 @@ public class IabHelper {
         String dataSignature = data.getStringExtra(RESPONSE_INAPP_SIGNATURE);
 
         if (resultCode == Activity.RESULT_OK && responseCode == BILLING_RESPONSE_RESULT_OK) {
-            L.d(TAG, "Successful resultcode from purchase activity.");
-            L.d(TAG, "Purchase data: " + purchaseData);
-            L.d(TAG, "Data signature: " + dataSignature);
-            L.d(TAG, "Extras: " + data.getExtras());
-            L.d(TAG, "Expected item type: " + mPurchasingItemType);
+            Timber.d("Successful resultcode from purchase activity.");
+            Timber.d("Purchase data: " + purchaseData);
+            Timber.d("Data signature: " + dataSignature);
+            Timber.d("Extras: " + data.getExtras());
+            Timber.d("Expected item type: " + mPurchasingItemType);
 
             if (purchaseData == null || dataSignature == null) {
                 logError("BUG: either purchaseData or dataSignature is null.");
-                L.d(TAG, "Extras: " + data.getExtras().toString());
+                Timber.d("Extras: " + data.getExtras().toString());
                 result = new IabResult(IABHELPER_UNKNOWN_ERROR, "IAB returned null purchaseData or dataSignature");
                 if (mPurchaseListener != null)
                     mPurchaseListener.onIabPurchaseFinished(result);
@@ -447,7 +446,7 @@ public class IabHelper {
                         mPurchaseListener.onIabPurchaseFinished(result);
                     return;
                 }
-                L.d(TAG, "Purchase signature successfully verified.");
+                Timber.d("Purchase signature successfully verified.");
             } catch (JSONException e) {
                 logError("Failed to parse purchase data.");
                 e.printStackTrace();
@@ -462,13 +461,13 @@ public class IabHelper {
             }
         } else if (resultCode == Activity.RESULT_OK) {
             // result code was OK, but in-app billing response was not OK.
-            L.d(TAG, "Result code was OK but in-app billing response was not OK: " + getResponseDesc(responseCode));
+            Timber.d("Result code was OK but in-app billing response was not OK: " + getResponseDesc(responseCode));
             if (mPurchaseListener != null) {
                 result = new IabResult(responseCode, "Problem purchashing item.");
                 mPurchaseListener.onIabPurchaseFinished(result);
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
-            L.d(TAG, "Purchase canceled - Response: " + getResponseDesc(responseCode));
+            Timber.d("Purchase canceled - Response: " + getResponseDesc(responseCode));
             result = new IabResult(IABHELPER_USER_CANCELLED, "User canceled.");
             if (mPurchaseListener != null) mPurchaseListener.onIabPurchaseFinished(result);
         } else {
@@ -492,11 +491,11 @@ public class IabHelper {
                 "launchPurchaseFlow" + ") because another async operation(" + mAsyncOperation + ") is in progress.");
         mAsyncOperation = "launchPurchaseFlow";
         mAsyncInProgress = true;
-        L.d(TAG, "Starting async operation: " + "launchPurchaseFlow");
+        Timber.d("Starting async operation: " + "launchPurchaseFlow");
     }
 
     private void flagEndAsync() {
-        L.d(TAG, "Ending async operation: " + mAsyncOperation);
+        Timber.d("Ending async operation: " + mAsyncOperation);
         mAsyncOperation = "";
         mAsyncInProgress = false;
     }

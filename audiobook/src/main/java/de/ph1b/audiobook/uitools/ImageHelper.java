@@ -20,7 +20,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
-import de.ph1b.audiobook.utils.L;
+import timber.log.Timber;
 
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class ImageHelper {
@@ -92,7 +92,7 @@ public class ImageHelper {
                 coverOut.close();
             }
         } catch (IOException e) {
-            L.e(TAG, "Error at saving image with destination=" + destination, e);
+            Timber.e(e, "Error at saving image with destination=%s", destination);
         }
     }
 

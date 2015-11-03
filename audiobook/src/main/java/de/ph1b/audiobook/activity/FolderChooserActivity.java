@@ -38,8 +38,8 @@ import de.ph1b.audiobook.adapter.FolderChooserAdapter;
 import de.ph1b.audiobook.dialog.HideFolderDialog;
 import de.ph1b.audiobook.model.NaturalOrderComparator;
 import de.ph1b.audiobook.utils.FileRecognition;
-import de.ph1b.audiobook.utils.L;
 import de.ph1b.audiobook.utils.PermissionHelper;
+import timber.log.Timber;
 
 /**
  * Activity for choosing an audiobook folder. If there are multiple SD-Cards, the Activity unifies
@@ -57,7 +57,6 @@ public class FolderChooserActivity extends BaseActivity {
     public static final String RESULT_OPERATION_MODE = "operationMode";
 
     private static final String CURRENT_FOLDER_NAME = "currentFolderName";
-    private static final String TAG = FolderChooserActivity.class.getSimpleName();
     private static final String NI_OPERATION_MODE = "niOperationMode";
     private static final int PERMISSION_RESULT_READ_EXT_STORAGE = 1;
     private final List<File> currentFolderContent = new ArrayList<>(30);
@@ -190,12 +189,12 @@ public class FolderChooserActivity extends BaseActivity {
             boolean permissionGrantingWorked = PermissionHelper.permissionGrantingWorked(requestCode,
                     PERMISSION_RESULT_READ_EXT_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,
                     permissions, grantResults);
-            L.i(TAG, "permissionGrantingWorked=" + permissionGrantingWorked);
+            Timber.i("permissionGrantingWorked=%b", permissionGrantingWorked);
             if (permissionGrantingWorked) {
                 refreshRootDirs();
             } else {
                 PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE);
-                L.e(TAG, "could not get permission");
+                Timber.e("could not get permission");
             }
         }
     }
@@ -213,7 +212,7 @@ public class FolderChooserActivity extends BaseActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             boolean hasExternalStoragePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-            L.i(TAG, "hasExternalStoragePermission=" + hasExternalStoragePermission);
+            Timber.i("hasExternalStoragePermission=%b", hasExternalStoragePermission);
             if (!hasExternalStoragePermission) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                     PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE);
@@ -269,7 +268,7 @@ public class FolderChooserActivity extends BaseActivity {
         rootDirs = getStorageDirectories();
         currentFolderContent.clear();
 
-        L.i(TAG, "refreshRootDirs found rootDirs=" + rootDirs);
+        Timber.i("refreshRootDirs found rootDirs=%s", rootDirs);
         if (rootDirs.size() == 1) {
             chosenFile = rootDirs.get(0);
             currentFolderName.setText(chosenFile.getName());
@@ -312,12 +311,12 @@ public class FolderChooserActivity extends BaseActivity {
 
     @OnClick(R.id.twoline_image1)
     void up() {
-        L.d(TAG, "up called. currentFolder=" + currentFolder);
+        Timber.d("up called. currentFolder=%s", currentFolder);
 
         boolean chosenFolderIsInRoot = false;
         for (File f : rootDirs) {
             if (f.equals(currentFolder)) {
-                L.d(TAG, "chosen folder is in root");
+                Timber.d("chosen folder is in root");
                 chosenFolderIsInRoot = true;
             }
         }
