@@ -42,6 +42,8 @@ import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.Communication;
+import rx.Subscription;
+import rx.functions.Action1;
 
 public class WidgetUpdateService extends Service {
     private final ExecutorService executor = new ThreadPoolExecutor(
@@ -64,22 +66,25 @@ public class WidgetUpdateService extends Service {
         }
 
         @Override
-        public void onPlayStateChanged() {
-            updateWidget();
-        }
-
-        @Override
         public void onCurrentBookIdChanged(long oldId) {
             updateWidget();
         }
 
     };
 
+    private Subscription playStateSubscription;
+
     @Override
     public void onCreate() {
         super.onCreate();
         App.getComponent().inject(this);
 
+        playStateSubscription = mediaPlayerController.getPlayState().subscribe(new Action1<MediaPlayerController.PlayState>() {
+            @Override
+            public void call(MediaPlayerController.PlayState playState) {
+                updateWidget();
+            }
+        });
         communication.addBookCommunicationListener(listener);
     }
 
@@ -333,6 +338,7 @@ public class WidgetUpdateService extends Service {
         executor.shutdown();
 
         communication.removeBookCommunicationListener(listener);
+        playStateSubscription.unsubscribe();
     }
 
     @Override

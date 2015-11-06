@@ -82,22 +82,6 @@ public class Communication {
 
 
     /**
-     * Sends a broadcast signaling that the
-     * {@link de.ph1b.audiobook.mediaplayer.MediaPlayerController.PlayState} has changed.
-     */
-    public synchronized void playStateChanged() {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                for (BookCommunication listener : listeners) {
-                    listener.onPlayStateChanged();
-                }
-            }
-        });
-    }
-
-
-    /**
      * Notifies listeners, that the whole set of Books has changed.
      *
      * @param allBooks The whole book set
@@ -144,8 +128,6 @@ public class Communication {
 
         void onScannerStateChanged();
 
-        void onPlayStateChanged();
-
         void onBookContentChanged(@NonNull Book book);
 
         void onSleepStateChanged();
@@ -162,11 +144,6 @@ public class Communication {
 
         @Override
         public void onScannerStateChanged() {
-
-        }
-
-        @Override
-        public void onPlayStateChanged() {
 
         }
 

@@ -48,6 +48,8 @@ import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.Communication;
+import rx.Subscription;
+import rx.functions.Action1;
 import timber.log.Timber;
 
 
@@ -130,46 +132,6 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
         }
 
         @Override
-        public void onPlayStateChanged() {
-            final MediaPlayerController.PlayState state = controller.getPlayState().getValue();
-            Timber.d("onPlayStateChanged:%s", state);
-            executor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    Timber.d("onPlayStateChanged executed:%s", state);
-                    Book controllerBook = controller.getBook();
-                    if (controllerBook != null) {
-                        switch (state) {
-                            case PLAYING:
-                                audioManager.requestAudioFocus(BookReaderService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-
-                                mediaSession.setActive(true);
-
-                                startForeground(NOTIFICATION_ID, getNotification(controllerBook));
-
-                                break;
-                            case PAUSED:
-                                stopForeground(false);
-                                notificationManager.notify(NOTIFICATION_ID, getNotification(controllerBook));
-
-                                break;
-                            case STOPPED:
-                                mediaSession.setActive(false);
-
-                                audioManager.abandonAudioFocus(BookReaderService.this);
-                                notificationManager.cancel(NOTIFICATION_ID);
-                                stopForeground(true);
-
-                                break;
-                        }
-
-                        notifyChange(ChangeType.PLAYSTATE);
-                    }
-                }
-            });
-        }
-
-        @Override
         public void onCurrentBookIdChanged(long oldId) {
             Book book = db.getBook(prefs.getCurrentBookId());
             if (book != null && (controller.getBook() == null || controller.getBook().id() != book.id())) {
@@ -177,11 +139,15 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
             }
         }
     };
+    private Subscription playStateSubscription;
+
+    public BookReaderService() {
+        App.getComponent().inject(this);
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        App.getComponent().inject(this);
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
@@ -220,6 +186,47 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
             Timber.d("onCreated initialized book=%s", book);
             reInitController(book);
         }
+
+        playStateSubscription = controller.getPlayState().subscribe(new Action1<MediaPlayerController.PlayState>() {
+            @Override
+            public void call(final MediaPlayerController.PlayState playState) {
+                Timber.d("onPlayStateChanged:%s", playState);
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        Timber.d("onPlayStateChanged executed:%s", playState);
+                        Book controllerBook = controller.getBook();
+                        if (controllerBook != null) {
+                            switch (playState) {
+                                case PLAYING:
+                                    audioManager.requestAudioFocus(BookReaderService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+
+                                    mediaSession.setActive(true);
+
+                                    startForeground(NOTIFICATION_ID, getNotification(controllerBook));
+
+                                    break;
+                                case PAUSED:
+                                    stopForeground(false);
+                                    notificationManager.notify(NOTIFICATION_ID, getNotification(controllerBook));
+
+                                    break;
+                                case STOPPED:
+                                    mediaSession.setActive(false);
+
+                                    audioManager.abandonAudioFocus(BookReaderService.this);
+                                    notificationManager.cancel(NOTIFICATION_ID);
+                                    stopForeground(true);
+
+                                    break;
+                            }
+
+                            notifyChange(ChangeType.PLAYSTATE);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     private boolean handleKeyCode(int keyCode) {
@@ -313,6 +320,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
         }
 
         mediaSession.release();
+        playStateSubscription.unsubscribe();
 
         super.onDestroy();
     }

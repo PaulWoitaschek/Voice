@@ -57,6 +57,9 @@ import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.BaseModule;
 import de.ph1b.audiobook.utils.Communication;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import timber.log.Timber;
 
 /**
@@ -134,18 +137,9 @@ public class BookPlayFragment extends Fragment {
                 }
             });
         }
-
-        @Override
-        public void onPlayStateChanged() {
-            hostingActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    setPlayState(true);
-                }
-            });
-        }
     };
     private MultiPaneInformer multiPaneInformer;
+    private Subscription playStateSubscription;
 
     private static String formatTime(int ms, int duration) {
         String h = String.valueOf(TimeUnit.MILLISECONDS.toHours(ms));
@@ -472,19 +466,29 @@ public class BookPlayFragment extends Fragment {
         }
     }
 
-    private void setPlayState(boolean animated) {
-        if (mediaPlayerController.getPlayState().getValue() == MediaPlayerController.PlayState.PLAYING) {
-            playPauseDrawable.transformToPause(animated);
-        } else {
-            playPauseDrawable.transformToPlay(animated);
-        }
-    }
-
     @Override
     public void onStart() {
         super.onStart();
 
-        setPlayState(false);
+        playStateSubscription = mediaPlayerController.getPlayState()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<MediaPlayerController.PlayState>() {
+                    private boolean firstRun = true;
+
+                    @Override
+                    public void call(MediaPlayerController.PlayState playState) {
+                        // animate only if this is not the first run
+                        Timber.i("onNext with playState %s", playState);
+                        if (playState == MediaPlayerController.PlayState.PLAYING) {
+                            playPauseDrawable.transformToPause(!firstRun);
+                        } else {
+                            playPauseDrawable.transformToPlay(!firstRun);
+                        }
+
+                        firstRun = false;
+                    }
+                });
+
 
         Book book = db.getBook(bookId);
         if (book != null) {
@@ -502,6 +506,8 @@ public class BookPlayFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
+
+        playStateSubscription.unsubscribe();
 
         communication.removeBookCommunicationListener(listener);
 

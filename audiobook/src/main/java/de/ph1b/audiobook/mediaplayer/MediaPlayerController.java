@@ -62,7 +62,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         this.player = player;
 
         state = State.IDLE;
-        setPlayState(PlayState.STOPPED);
     }
 
     public boolean isSleepTimerActive() {
@@ -84,7 +83,6 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
 
     public void setPlayState(PlayState playState) {
         this.playState.onNext(playState);
-        communication.playStateChanged();
     }
 
     /**

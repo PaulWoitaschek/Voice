@@ -55,6 +55,10 @@ import de.ph1b.audiobook.uitools.DividerItemDecoration;
 import de.ph1b.audiobook.uitools.PlayPauseDrawable;
 import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.Communication;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import timber.log.Timber;
 
 /**
  * Showing the shelf of all the available books and provide a navigation to each book
@@ -90,16 +94,6 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
                 @Override
                 public void run() {
                     adapter.updateOrAddBook(book);
-                }
-            });
-        }
-
-        @Override
-        public void onPlayStateChanged() {
-            hostingActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    setPlayState(true);
                 }
             });
         }
@@ -141,6 +135,7 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
             });
         }
     };
+    private Subscription playStateSubscription;
 
     @Nullable
     @Override
@@ -230,8 +225,8 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
 
         // scan for files
         bookAdder.scanForFiles(false);
@@ -245,19 +240,37 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
         }
 
         // update items and set ui
-        setPlayState(false);
         listener.onBookSetChanged(db.getActiveBooks());
 
         // register receivers
         communication.addBookCommunicationListener(listener);
+
+        playStateSubscription = mediaPlayerController.getPlayState()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<MediaPlayerController.PlayState>() {
+                    private boolean firstRun = true;
+
+                    @Override
+                    public void call(MediaPlayerController.PlayState playState) {
+                        // animate only if this is not the first run
+                        Timber.i("onNext with playState %s", playState);
+                        if (playState == MediaPlayerController.PlayState.PLAYING) {
+                            playPauseDrawable.transformToPause(!firstRun);
+                        } else {
+                            playPauseDrawable.transformToPlay(!firstRun);
+                        }
+
+                        firstRun = false;
+                    }
+                });
     }
 
-    private void setPlayState(boolean animated) {
-        if (mediaPlayerController.getPlayState().getValue() == MediaPlayerController.PlayState.PLAYING) {
-            playPauseDrawable.transformToPause(animated);
-        } else {
-            playPauseDrawable.transformToPlay(animated);
-        }
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        communication.removeBookCommunicationListener(listener);
+        playStateSubscription.unsubscribe();
     }
 
     private void checkVisibilities() {
@@ -344,13 +357,6 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
     @OnClick(R.id.fab)
     void playPauseClicked() {
         controller.playPause();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        communication.removeBookCommunicationListener(listener);
     }
 
     @Override
