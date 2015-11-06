@@ -21,6 +21,7 @@ import java.util.ListIterator;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import de.ph1b.audiobook.interfaces.ForApplication;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
@@ -48,7 +49,7 @@ public class BookShelf extends SQLiteOpenHelper {
     private final List<Book> orphanedBooks;
 
     @Inject
-    public BookShelf(Context c, Communication communication) {
+    public BookShelf(@NonNull @ForApplication Context c, @NonNull Communication communication) {
         super(c, DATABASE_NAME, null, DATABASE_VERSION);
         this.c = c;
         this.communication = communication;

@@ -15,6 +15,7 @@ import javax.inject.Singleton;
 
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.fragment.BookShelfFragment;
+import de.ph1b.audiobook.interfaces.ForApplication;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.Communication;
@@ -42,7 +43,7 @@ public class PrefsManager {
     private final String PREF_KEY_AUTO_REWIND;
 
     @Inject
-    public PrefsManager(@NonNull Context c, Communication communication) {
+    public PrefsManager(@NonNull @ForApplication Context c, @NonNull Communication communication) {
         PreferenceManager.setDefaultValues(c, R.xml.preferences, false);
         this.communication = communication;
         sp = PreferenceManager.getDefaultSharedPreferences(c);

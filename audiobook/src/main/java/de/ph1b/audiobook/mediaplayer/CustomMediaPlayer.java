@@ -295,6 +295,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
 
     @Override
     public void seekTo(final int ms) {
+        Timber.i("Seek to %d", ms);
         switch (state) {
             case PREPARED:
             case STARTED:
@@ -308,8 +309,9 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                             if (track != null) {
                                 track.flush();
                                 flushCodec = true;
-                                long to = ((long) ms * 1000);
-                                extractor.seekTo(to, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
+                                long to = ms * 1000;
+                                Timber.i("extractor seek to %d", to);
+                                extractor.seekTo(to, MediaExtractor.SEEK_TO_PREVIOUS_SYNC);
                             }
                         } finally {
                             lock.unlock();

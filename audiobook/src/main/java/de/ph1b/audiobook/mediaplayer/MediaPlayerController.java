@@ -22,6 +22,7 @@ import javax.inject.Singleton;
 
 import de.ph1b.audiobook.activity.BookActivity;
 import de.ph1b.audiobook.fragment.BookShelfFragment;
+import de.ph1b.audiobook.interfaces.ForApplication;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.persistence.BookShelf;
@@ -52,9 +53,9 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     private volatile int prepareTries = 0;
 
     @Inject
-    public MediaPlayerController(@NonNull final Context c, PrefsManager prefs,
-                                 Communication communication, BookShelf bookShelf,
-                                 MediaPlayerInterface player) {
+    public MediaPlayerController(@NonNull @ForApplication final Context c, @NonNull PrefsManager prefs,
+                                 @NonNull Communication communication, @NonNull BookShelf bookShelf,
+                                 @NonNull MediaPlayerInterface player) {
         this.c = c;
         this.prefs = prefs;
         this.communication = communication;

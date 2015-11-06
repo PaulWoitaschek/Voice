@@ -1,7 +1,9 @@
 package de.ph1b.audiobook.utils;
 
 import android.app.Application;
+import android.app.NotificationManager;
 import android.content.Context;
+import android.media.AudioManager;
 import android.os.Build;
 
 import java.util.Arrays;
@@ -11,6 +13,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import de.ph1b.audiobook.interfaces.ForApplication;
 import de.ph1b.audiobook.mediaplayer.AndroidMediaPlayer;
 import de.ph1b.audiobook.mediaplayer.CustomMediaPlayer;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerInterface;
@@ -45,6 +48,7 @@ public class BaseModule {
 
     @Singleton
     @Provides
+    @ForApplication
     Context provideAppContext() {
         return appContext;
     }
@@ -56,5 +60,17 @@ public class BaseModule {
         } else {
             return new AndroidMediaPlayer();
         }
+    }
+
+    @Provides
+    @Singleton
+    NotificationManager provideNotificationManager() {
+        return (NotificationManager) appContext.getSystemService(Context.NOTIFICATION_SERVICE);
+    }
+
+    @Provides
+    @Singleton
+    AudioManager provideAudioManager() {
+        return (AudioManager) appContext.getSystemService(Context.AUDIO_SERVICE);
     }
 }

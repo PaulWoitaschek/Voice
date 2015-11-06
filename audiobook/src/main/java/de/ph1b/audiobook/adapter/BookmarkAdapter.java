@@ -20,6 +20,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.ph1b.audiobook.R;
+import de.ph1b.audiobook.interfaces.ForApplication;
 import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.utils.App;
@@ -36,7 +37,9 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
     private final List<Chapter> chapters;
     @NonNull
     private final OnOptionsMenuClickedListener listener;
-    @Inject Context c;
+    @ForApplication
+    @Inject
+    Context c;
 
 
     public BookmarkAdapter(@NonNull List<Bookmark> bookmarks, List<Chapter> chapters, @NonNull OnOptionsMenuClickedListener listener) {

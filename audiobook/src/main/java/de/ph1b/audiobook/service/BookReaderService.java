@@ -83,8 +83,8 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
     @Inject PrefsManager prefs;
     @Inject MediaPlayerController controller;
     @Inject BookShelf db;
-    private NotificationManager notificationManager;
-    private AudioManager audioManager;
+    @Inject NotificationManager notificationManager;
+    @Inject AudioManager audioManager;
     private volatile boolean pauseBecauseLossTransient = false;
     private volatile boolean pauseBecauseHeadset = false;
     private final BroadcastReceiver audioBecomingNoisyReceiver = new BroadcastReceiver() {
@@ -148,8 +148,6 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
     @Override
     public void onCreate() {
         super.onCreate();
-        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         ComponentName eventReceiver = new ComponentName(BookReaderService.this.getPackageName(), RemoteControlReceiver.class.getName());
         Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
