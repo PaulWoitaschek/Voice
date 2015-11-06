@@ -197,7 +197,7 @@ public class WidgetUpdateService extends Service {
                 rewindI, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI);
 
-        if (mediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
+        if (mediaPlayerController.getPlayState().getValue() == MediaPlayerController.PlayState.PLAYING) {
             remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_pause);
         } else {
             remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow);

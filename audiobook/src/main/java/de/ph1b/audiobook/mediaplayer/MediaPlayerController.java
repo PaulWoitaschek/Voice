@@ -78,8 +78,8 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     }
 
 
-    public PlayState getPlayState() {
-        return playState.getValue();
+    public BehaviorSubject<PlayState> getPlayState() {
+        return playState;
     }
 
     public void setPlayState(PlayState playState) {

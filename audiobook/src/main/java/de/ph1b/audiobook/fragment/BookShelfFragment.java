@@ -253,7 +253,7 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
     }
 
     private void setPlayState(boolean animated) {
-        if (mediaPlayerController.getPlayState() == MediaPlayerController.PlayState.PLAYING) {
+        if (mediaPlayerController.getPlayState().getValue() == MediaPlayerController.PlayState.PLAYING) {
             playPauseDrawable.transformToPause(animated);
         } else {
             playPauseDrawable.transformToPlay(animated);
