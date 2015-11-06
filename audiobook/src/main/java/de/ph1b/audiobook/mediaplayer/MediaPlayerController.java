@@ -27,6 +27,7 @@ import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.persistence.BookShelf;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.utils.Communication;
+import rx.subjects.BehaviorSubject;
 import timber.log.Timber;
 
 @Singleton
@@ -40,8 +41,8 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
     private final MediaPlayerInterface player;
     private final Communication communication;
+    private final BehaviorSubject<PlayState> playState = BehaviorSubject.create(PlayState.STOPPED);
     private volatile boolean sleepTimerActive = false;
-    private volatile PlayState playState = PlayState.STOPPED;
     @Nullable
     private ScheduledFuture<?> sleepSand;
     @Nullable
@@ -78,11 +79,11 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
 
 
     public PlayState getPlayState() {
-        return playState;
+        return playState.getValue();
     }
 
     public void setPlayState(PlayState playState) {
-        this.playState = playState;
+        this.playState.onNext(playState);
         communication.playStateChanged();
     }
 
