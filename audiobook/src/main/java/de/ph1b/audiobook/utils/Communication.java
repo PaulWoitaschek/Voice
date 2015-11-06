@@ -47,24 +47,6 @@ public class Communication {
 
 
     /**
-     * Sends a broadcast signaling that the {@link de.ph1b.audiobook.model.BookAdder} has been
-     * either started or stopped.
-     *
-     * @see de.ph1b.audiobook.model.BookAdder#scannerActive
-     */
-    public synchronized void sendScannerStateChanged() {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                for (BookCommunication listener : listeners) {
-                    listener.onScannerStateChanged();
-                }
-            }
-        });
-    }
-
-
-    /**
      * Sends a broadcast signaling that the current book that should be playing has been changed
      *
      * @param oldId The old {@link de.ph1b.audiobook.model.Book#id}
@@ -126,8 +108,6 @@ public class Communication {
 
         void onCurrentBookIdChanged(long oldId);
 
-        void onScannerStateChanged();
-
         void onBookContentChanged(@NonNull Book book);
 
         void onSleepStateChanged();
@@ -139,11 +119,6 @@ public class Communication {
 
         @Override
         public void onCurrentBookIdChanged(long oldId) {
-
-        }
-
-        @Override
-        public void onScannerStateChanged() {
 
         }
 

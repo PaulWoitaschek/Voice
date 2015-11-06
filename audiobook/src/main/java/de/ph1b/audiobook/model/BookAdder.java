@@ -36,6 +36,7 @@ import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.FileRecognition;
+import rx.subjects.BehaviorSubject;
 import timber.log.Timber;
 
 
@@ -52,7 +53,7 @@ public class BookAdder {
     private final Context c;
     private final PrefsManager prefs;
     private final BookShelf db;
-    private volatile boolean scannerActive = false;
+    private final BehaviorSubject<Boolean> scannerActive = BehaviorSubject.create(false);
     private volatile boolean stopScanner = false;
 
     @Inject
@@ -140,7 +141,7 @@ public class BookAdder {
         return fileList;
     }
 
-    public boolean isScannerActive() {
+    public BehaviorSubject<Boolean> scannerActive() {
         return scannerActive;
     }
 
@@ -263,15 +264,14 @@ public class BookAdder {
      * @param interrupting true if a eventually running scanner should be interrupted.
      */
     public void scanForFiles(boolean interrupting) {
-        Timber.d("scanForFiles called with scannerActive=%b and interrupting=%b", scannerActive, interrupting);
-        if (!scannerActive || interrupting) {
+        Timber.d("scanForFiles called with scannerActive=%s and interrupting=%b", scannerActive, interrupting);
+        if (!scannerActive.getValue() || interrupting) {
             stopScanner = true;
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
                     Timber.v("started");
-                    scannerActive = true;
-                    communication.sendScannerStateChanged();
+                    scannerActive.onNext(true);
                     stopScanner = false;
 
                     try {
@@ -283,8 +283,7 @@ public class BookAdder {
                     }
 
                     stopScanner = false;
-                    scannerActive = false;
-                    communication.sendScannerStateChanged();
+                    scannerActive.onNext(false);
                     Timber.v("stopped");
                 }
             });

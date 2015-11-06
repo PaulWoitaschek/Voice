@@ -55,9 +55,9 @@ import de.ph1b.audiobook.uitools.DividerItemDecoration;
 import de.ph1b.audiobook.uitools.PlayPauseDrawable;
 import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.Communication;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 /**
@@ -69,6 +69,7 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
+    private final CompositeSubscription subscriptions = new CompositeSubscription();
     @Inject Communication communication;
     @Bind(R.id.recyclerView) RecyclerView recyclerView;
     @Bind(R.id.recyclerReplacement) ProgressBar recyclerReplacementView;
@@ -94,16 +95,6 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
                 @Override
                 public void run() {
                     adapter.updateOrAddBook(book);
-                }
-            });
-        }
-
-        @Override
-        public void onScannerStateChanged() {
-            hostingActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    checkVisibilities();
                 }
             });
         }
@@ -135,7 +126,6 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
             });
         }
     };
-    private Subscription playStateSubscription;
 
     @Nullable
     @Override
@@ -227,9 +217,16 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
     @Override
     public void onStart() {
         super.onStart();
-
         // scan for files
         bookAdder.scanForFiles(false);
+        subscriptions.add(bookAdder.scannerActive()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Boolean>() {
+                    @Override
+                    public void call(Boolean aBoolean) {
+                        checkVisibilities();
+                    }
+                }));
 
         // show dialog if no folders are set
         boolean audioFoldersEmpty = (prefs.getCollectionFolders().size() +
@@ -245,7 +242,7 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
         // register receivers
         communication.addBookCommunicationListener(listener);
 
-        playStateSubscription = mediaPlayerController.getPlayState()
+        subscriptions.add(mediaPlayerController.getPlayState()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<MediaPlayerController.PlayState>() {
                     private boolean firstRun = true;
@@ -262,7 +259,7 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
 
                         firstRun = false;
                     }
-                });
+                }));
     }
 
     @Override
@@ -270,11 +267,13 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
         super.onStop();
 
         communication.removeBookCommunicationListener(listener);
-        playStateSubscription.unsubscribe();
+
+        subscriptions.unsubscribe();
+        subscriptions.clear();
     }
 
     private void checkVisibilities() {
-        final boolean hideRecycler = adapter.getItemCount() == 0 && bookAdder.isScannerActive();
+        final boolean hideRecycler = adapter.getItemCount() == 0 && bookAdder.scannerActive().getValue();
         if (hideRecycler) {
             recyclerReplacementView.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
