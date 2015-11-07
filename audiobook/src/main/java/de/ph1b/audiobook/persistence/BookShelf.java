@@ -32,29 +32,25 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 
 /**
- * This is the helper for the apps database. All Database writing is done by an executor and the
- * helper holds a internal array of the books.
+ * This is the helper for the apps database.
  *
  * @author Paul Woitaschek
  */
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
 @Singleton
-public class BookShelf extends SQLiteOpenHelper {
+public class BookShelf {
 
-    private static final int DATABASE_VERSION = 32;
-    private static final String DATABASE_NAME = "autoBookDB";
     private final Communication communication;
-    private final Context c;
     private final List<Book> activeBooks;
     private final List<Book> orphanedBooks;
 
+    private final SQLiteDatabase db;
+
     @Inject
     public BookShelf(@NonNull @ForApplication Context c, @NonNull Communication communication) {
-        super(c, DATABASE_NAME, null, DATABASE_VERSION);
-        this.c = c;
         this.communication = communication;
+        this.db = new InternalDb(c).getWritableDatabase();
 
-        SQLiteDatabase db = getReadableDatabase();
         Cursor bookCursor = db.query(BookTable.TABLE_NAME,
                 new String[]{BookTable.ID, BookTable.NAME, BookTable.AUTHOR, BookTable.CURRENT_MEDIA_PATH,
                         BookTable.PLAYBACK_SPEED, BookTable.ROOT, BookTable.TIME, BookTable.TYPE, BookTable.USE_COVER_REPLACEMENT,
@@ -133,7 +129,6 @@ public class BookShelf extends SQLiteOpenHelper {
         Timber.v("addBook=%s", book.name());
         checkArgument(!book.chapters().isEmpty());
 
-        SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
             ContentValues bookCv = BookTable.getContentValues(book);
@@ -162,7 +157,6 @@ public class BookShelf extends SQLiteOpenHelper {
         communication.bookSetChanged(activeBooks);
     }
 
-
     @Nullable
     public synchronized Book getBook(long id) {
         for (Book b : activeBooks) {
@@ -172,7 +166,6 @@ public class BookShelf extends SQLiteOpenHelper {
         }
         return null;
     }
-
 
     @NonNull
     public synchronized List<Book> getActiveBooks() {
@@ -194,7 +187,6 @@ public class BookShelf extends SQLiteOpenHelper {
             if (book.id() == next.id()) {
                 bookIterator.set(book);
 
-                SQLiteDatabase db = getWritableDatabase();
                 db.beginTransaction();
                 try {
                     // update book itself
@@ -238,7 +230,7 @@ public class BookShelf extends SQLiteOpenHelper {
                 iterator.remove();
                 ContentValues cv = new ContentValues();
                 cv.put(BookTable.ACTIVE, 0);
-                getWritableDatabase().update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", new String[]{String.valueOf(book.id())});
+                db.update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", new String[]{String.valueOf(book.id())});
                 break;
             }
         }
@@ -255,7 +247,7 @@ public class BookShelf extends SQLiteOpenHelper {
                 orphanedBookIterator.remove();
                 ContentValues cv = new ContentValues();
                 cv.put(BookTable.ACTIVE, 1);
-                getWritableDatabase().update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", new String[]{String.valueOf(book.id())});
+                db.update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", new String[]{String.valueOf(book.id())});
                 break;
             }
         }
@@ -263,24 +255,34 @@ public class BookShelf extends SQLiteOpenHelper {
         communication.bookSetChanged(activeBooks);
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        BookTable.onCreate(db);
-        ChapterTable.onCreate(db);
-        BookmarkTable.onCreate(db);
-    }
+    private static class InternalDb extends SQLiteOpenHelper {
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        try {
-            DataBaseUpgradeHelper upgradeHelper = new DataBaseUpgradeHelper(db, c);
-            upgradeHelper.upgrade(oldVersion);
-        } catch (InvalidPropertiesFormatException e) {
-            Timber.e(e, "Error at upgrade");
-            BookTable.dropTableIfExists(db);
-            ChapterTable.dropTableIfExists(db);
-            BookmarkTable.dropTableIfExists(db);
-            onCreate(db);
+        private static final int DATABASE_VERSION = 32;
+        private static final String DATABASE_NAME = "autoBookDB";
+
+        public InternalDb(Context context) {
+            super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+            BookTable.onCreate(db);
+            ChapterTable.onCreate(db);
+            BookmarkTable.onCreate(db);
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            try {
+                DataBaseUpgradeHelper upgradeHelper = new DataBaseUpgradeHelper(db);
+                upgradeHelper.upgrade(oldVersion);
+            } catch (InvalidPropertiesFormatException e) {
+                Timber.e(e, "Error at upgrade");
+                BookTable.dropTableIfExists(db);
+                ChapterTable.dropTableIfExists(db);
+                BookmarkTable.dropTableIfExists(db);
+                onCreate(db);
+            }
         }
     }
 }

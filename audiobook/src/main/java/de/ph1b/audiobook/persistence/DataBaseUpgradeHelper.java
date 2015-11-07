@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.persistence;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
@@ -19,22 +18,18 @@ import java.util.ArrayList;
 import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 
+import de.ph1b.audiobook.utils.App;
 import timber.log.Timber;
 
 
 @SuppressWarnings("TryFinallyCanBeTryWithResources")
 class DataBaseUpgradeHelper {
 
-    private static final String TAG = DataBaseUpgradeHelper.class.getSimpleName();
-
     private final SQLiteDatabase db;
-    private final Context c;
 
-    public DataBaseUpgradeHelper(SQLiteDatabase db, Context c) {
+    public DataBaseUpgradeHelper(SQLiteDatabase db) {
         this.db = db;
-        this.c = c;
     }
-
 
     /**
      * Drops all tables and creates new ones.
@@ -295,7 +290,7 @@ class DataBaseUpgradeHelper {
                     if (coverFile.exists() && coverFile.canWrite()) {
                         try {
                             File newCoverFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +
-                                    File.separator + "Android" + File.separator + "data" + File.separator + c.getPackageName(),
+                                    File.separator + "Android" + File.separator + "data" + File.separator + App.getComponent().getContext().getPackageName(),
                                     newBookId + ".jpg");
                             if (!coverFile.getParentFile().exists()) {
                                 //noinspection ResultOfMethodCallIgnored
