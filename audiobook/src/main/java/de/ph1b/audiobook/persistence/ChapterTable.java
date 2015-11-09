@@ -15,7 +15,7 @@ class ChapterTable {
     static final String NAME = "chapterName";
     static final String PATH = "chapterPath";
     static final String TABLE_NAME = "tableChapters";
-    private static final String BOOK_ID = "bookId";
+     static final String BOOK_ID = "bookId";
     private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ( " +
             DURATION + " INTEGER NOT NULL, " +
             NAME + " TEXT NOT NULL, " +

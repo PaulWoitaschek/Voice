@@ -15,7 +15,7 @@ class BookmarkTable {
     static final String TITLE = "bookmarkTitle";
     static final String TABLE_NAME = "tableBookmarks";
     static final String TIME = "bookmarkTime";
-    private static final String BOOK_ID = "bookId";
+    static final String BOOK_ID = "bookId";
     private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ( " +
             PATH + " TEXT NOT NULL, " +
             TITLE + " TEXT NOT NULL, " +
