@@ -309,7 +309,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                             if (track != null) {
                                 track.flush();
                                 flushCodec = true;
-                                long to = ms * 1000;
+                                long to = ms * 1000L;
                                 Timber.i("extractor seek to %d", to);
                                 extractor.seekTo(to, MediaExtractor.SEEK_TO_PREVIOUS_SYNC);
                             }
