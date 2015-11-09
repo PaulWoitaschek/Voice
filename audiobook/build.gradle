@@ -3,7 +3,7 @@ apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.1'
+    buildToolsVersion '23.0.2'
 
     defaultConfig {
         minSdkVersion 15
@@ -84,7 +84,7 @@ dependencies {
         transitive = true
     }
     // fab
-    compile 'com.getbase:floatingactionbutton:1.10.0'
+    compile 'com.getbase:floatingactionbutton:1.10.1'
     // crash reporting
     compile 'ch.acra:acra:4.7.0-RC.1'
     // common tools
@@ -92,8 +92,8 @@ dependencies {
     // view injection
     compile 'com.jakewharton:butterknife:7.0.1'
     // dependency injection
-    compile 'com.google.dagger:dagger:2.0.1'
-    apt "com.google.dagger:dagger-compiler:2.0.1"
+    compile 'com.google.dagger:dagger:2.0.2'
+    apt "com.google.dagger:dagger-compiler:2.0.2"
     provided 'javax.annotation:jsr250-api:1.0'
     // auto value
     compile 'com.github.frankiesardo:auto-parcel:0.3.1'
@@ -103,5 +103,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     // rx extensions
     compile 'io.reactivex:rxandroid:1.0.1'
-    compile 'io.reactivex:rxjava:1.0.14'
+    compile 'io.reactivex:rxjava:1.0.15'
 }
