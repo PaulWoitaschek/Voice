@@ -204,7 +204,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
 
     @Override
     public void start() {
-        Timber.v("start called in state:" + state);
+        Timber.v("start called in state %s", state);
         switch (state) {
             case PLAYBACK_COMPLETED:
                 try {
@@ -216,7 +216,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                 }
             case PREPARED:
                 state = State.STARTED;
-                Timber.d("State changed to: " + state);
+                Timber.d("State changed to %s", state);
                 continuing = true;
                 track.play();
                 decode();
@@ -226,7 +226,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                 break;
             case PAUSED:
                 state = State.STARTED;
-                Timber.d("State changed to: " + state + " with path=" + path);
+                Timber.d("State changed to %s with path %s", state, path);
                 synchronized (decoderLock) {
                     decoderLock.notify();
                 }
@@ -241,7 +241,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
 
     @Override
     public void reset() {
-        Timber.v("reset called in state: " + state);
+        Timber.v("reset called in state %s", state);
         stayAwake(false);
         lock.lock();
         try {
@@ -256,7 +256,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                     }
                 }
             } catch (InterruptedException e) {
-                Timber.e("Interrupted in reset while waiting for decoder thread to stop.", e);
+                Timber.e(e, "Interrupted in reset while waiting for decoder thread to stop.");
             }
             if (codec != null) {
                 codec.release();
@@ -272,7 +272,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                 track = null;
             }
             state = State.IDLE;
-            Timber.d("State changed to: " + state);
+            Timber.d("State changed to %s", state);
         } finally {
             lock.unlock();
         }
@@ -280,13 +280,13 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
 
     @Override
     public void prepare() throws IOException {
-        Timber.v("prepare called in state: " + state);
+        Timber.v("prepare called in state %s", state);
         switch (state) {
             case INITIALIZED:
             case STOPPED:
                 initStream();
                 state = State.PREPARED;
-                Timber.d("State changed to: " + state);
+                Timber.d("State changed to %s", state);
                 break;
             default:
                 error("prepare");
@@ -348,14 +348,14 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
         switch (state) {
             case PLAYBACK_COMPLETED:
                 state = State.PAUSED;
-                Timber.d("State changed to: " + state);
+                Timber.d("State changed to %s", state);
                 stayAwake(false);
                 break;
             case STARTED:
             case PAUSED:
                 track.pause();
                 state = State.PAUSED;
-                Timber.d("State changed to: " + state);
+                Timber.d("State changed to %s", state);
                 stayAwake(false);
                 break;
             default:
@@ -375,12 +375,12 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
 
     @Override
     public void setDataSource(String source) {
-        Timber.d("setDataSource: " + source);
+        Timber.d("setDataSource %s", source);
         switch (state) {
             case IDLE:
                 this.path = source;
                 state = State.INITIALIZED;
-                Timber.d("State changed to: " + state);
+                Timber.d("State changed to %s", state);
                 break;
             default:
                 error("setDataSource");
@@ -411,7 +411,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     }
 
     private void initStream() throws IOException, IllegalArgumentException {
-        Timber.v("initStream called in state=" + state);
+        Timber.v("initStream called in state %s", state);
         lock.lock();
         try {
             extractor = new MediaExtractor();
@@ -448,8 +448,8 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
             }
             duration = oFormat.getLong(MediaFormat.KEY_DURATION);
 
-            Timber.v("Sample rate: " + sampleRate);
-            Timber.v("Mime type: " + mime);
+            Timber.v("Sample rate %d", sampleRate);
+            Timber.v("Mime type %s", mime);
             initDevice(sampleRate, channelCount);
             extractor.selectTrack(trackNum);
             codec = MediaCodec.createDecoderByType(mime);
@@ -460,7 +460,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     }
 
     private void error(String methodName) {
-        Timber.e("Error in " + methodName + " at state=" + state);
+        Timber.e("Error in %s at state %s", methodName, state);
         state = State.ERROR;
         stayAwake(false);
     }
@@ -473,7 +473,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
      * @param numChannels The number of channels available in the track.
      */
     private void initDevice(int sampleRate, int numChannels) throws IOException {
-        Timber.d("initDevice called in state:" + state);
+        Timber.d("initDevice called in state %s", state);
         lock.lock();
         try {
             final int format = findFormatFromChannels(numChannels);
@@ -481,7 +481,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
                     AudioFormat.ENCODING_PCM_16BIT);
 
             if (minSize == AudioTrack.ERROR || minSize == AudioTrack.ERROR_BAD_VALUE) {
-                Timber.e("minSize=" + minSize);
+                Timber.e("minSize %d", minSize);
                 throw new IOException("getMinBufferSize returned " + minSize);
             }
             track = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, format,
@@ -510,7 +510,7 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
     }
 
     private void decode() {
-        Timber.d("decode called ins state=" + state);
+        Timber.d("decode called ins state %s", state);
         executor.execute(decoderRunnable);
     }
 
