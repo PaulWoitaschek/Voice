@@ -63,7 +63,6 @@ public class App extends Application {
         applicationComponent = DaggerApp_ApplicationComponent.builder().baseModule(new BaseModule(this)).build();
         applicationComponent.inject(this);
 
-
         bookAdder.scanForFiles(true);
     }
 

@@ -30,7 +30,6 @@ import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.utils.Communication;
 import rx.Observable;
-import rx.functions.Func1;
 import timber.log.Timber;
 
 
@@ -39,7 +38,6 @@ import timber.log.Timber;
  *
  * @author Paul Woitaschek
  */
-@SuppressWarnings("TryFinallyCanBeTryWithResources")
 @Singleton
 public class BookShelf {
 
@@ -228,17 +226,14 @@ public class BookShelf {
         return db.createQuery(Arrays.asList(BookTable.TABLE_NAME, ChapterTable.TABLE_NAME, BookmarkTable.TABLE_NAME),
                 FULL_PROJECTION + APPEND_WHERE_ID,
                 String.valueOf(id))
-                .map(new Func1<SqlBrite.Query, Book>() {
-                    @Override
-                    public Book call(SqlBrite.Query query) {
-                        Cursor cursor = query.run();
-                        if (cursor.moveToFirst()) {
-                            Timber.i("Cursor is valid. Returning a book.");
-                            return byProjection(cursor);
-                        } else {
-                            Timber.i("no book found for id %d. Returning null now", id);
-                            return null;
-                        }
+                .map(query -> {
+                    Cursor cursor = query.run();
+                    if (cursor.moveToFirst()) {
+                        Timber.i("Cursor is valid. Returning a book.");
+                        return byProjection(cursor);
+                    } else {
+                        Timber.i("no book found for id %d. Returning null now", id);
+                        return null;
                     }
                 });
     }

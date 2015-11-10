@@ -24,7 +24,6 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
@@ -172,12 +171,7 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
                 .content(getString(R.string.no_audiobook_folders_summary_start) + "\n\n" +
                         getString(R.string.no_audiobook_folders_end))
                 .positiveText(R.string.dialog_confirm)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                        startActivity(new Intent(getContext(), FolderOverviewActivity.class));
-                    }
-                })
+                .onPositive((materialDialog, dialogAction) -> startActivity(new Intent(getContext(), FolderOverviewActivity.class)))
                 .cancelable(false)
                 .build();
     }
@@ -221,11 +215,8 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
         bookAdder.scanForFiles(false);
         subscriptions.add(bookAdder.scannerActive()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Boolean>() {
-                    @Override
-                    public void call(Boolean aBoolean) {
-                        checkVisibilities();
-                    }
+                .subscribe(aBoolean -> {
+                    checkVisibilities();
                 }));
 
         // show dialog if no folders are set
@@ -368,48 +359,39 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
     public void onMenuClicked(final int position, final View view) {
         PopupMenu popupMenu = new PopupMenu(getContext(), view);
         popupMenu.inflate(R.menu.bookshelf_popup);
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                final Book book = adapter.getItem(position);
-                switch (item.getItemId()) {
-                    case R.id.edit_cover:
-                        EditCoverDialogFragment fragment = EditCoverDialogFragment.newInstance(book);
-                        fragment.setOnEditBookFinished(new EditCoverDialogFragment.OnEditBookFinished() {
-                            @Override
-                            public void onEditBookFinished() {
-                                // this is necessary for the cover update
-                                adapter.notifyItemAtIdChanged(book.id());
+        popupMenu.setOnMenuItemClickListener(item -> {
+            final Book book = adapter.getItem(position);
+            switch (item.getItemId()) {
+                case R.id.edit_cover:
+                    EditCoverDialogFragment fragment = EditCoverDialogFragment.newInstance(book);
+                    fragment.setOnEditBookFinished(() -> {
+                        // this is necessary for the cover update
+                        adapter.notifyItemAtIdChanged(book.id());
+                    });
+                    fragment.show(getFragmentManager(), EditCoverDialogFragment.TAG);
+                    return true;
+                case R.id.edit_title:
+                    EditBookTitleDialogFragment editBookTitle = EditBookTitleDialogFragment.newInstance(book.name());
+                    editBookTitle.setOnTextChangedListener(newTitle -> {
+                        //noinspection SynchronizeOnNonFinalField
+                        synchronized (db) {
+                            Book dbBook = db.getBook(book.id()).toBlocking().first();
+                            if (dbBook != null) {
+                                dbBook = Book.builder(dbBook)
+                                        .name(newTitle)
+                                        .build();
+                                db.updateBook(dbBook);
                             }
-                        });
-                        fragment.show(getFragmentManager(), EditCoverDialogFragment.TAG);
-                        return true;
-                    case R.id.edit_title:
-                        EditBookTitleDialogFragment editBookTitle = EditBookTitleDialogFragment.newInstance(book.name());
-                        editBookTitle.setOnTextChangedListener(new EditBookTitleDialogFragment.OnTextChanged() {
-                            @Override
-                            public void onTitleChanged(@NonNull String newTitle) {
-                                //noinspection SynchronizeOnNonFinalField
-                                synchronized (db) {
-                                    Book dbBook = db.getBook(book.id()).toBlocking().first();
-                                    if (dbBook != null) {
-                                        dbBook = Book.builder(dbBook)
-                                                .name(newTitle)
-                                                .build();
-                                        db.updateBook(dbBook);
-                                    }
-                                }
-                            }
-                        });
-                        editBookTitle.show(getFragmentManager(), EditBookTitleDialogFragment.TAG);
-                        return true;
-                    case R.id.bookmark:
-                        BookmarkDialogFragment.newInstance(adapter.getItemId(position))
-                                .show(getFragmentManager(), TAG);
-                        return true;
-                    default:
-                        return false;
-                }
+                        }
+                    });
+                    editBookTitle.show(getFragmentManager(), EditBookTitleDialogFragment.TAG);
+                    return true;
+                case R.id.bookmark:
+                    BookmarkDialogFragment.newInstance(adapter.getItemId(position))
+                            .show(getFragmentManager(), TAG);
+                    return true;
+                default:
+                    return false;
             }
         });
         popupMenu.show();

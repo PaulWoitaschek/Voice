@@ -40,13 +40,10 @@ public class EditBookTitleDialogFragment extends DialogFragment {
         return new MaterialDialog.Builder(getActivity())
                 .title(R.string.edit_book_title)
                 .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
-                .input(getString(R.string.bookmark_edit_hint), presetName, false, new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(@NonNull MaterialDialog materialDialog, CharSequence charSequence) {
-                        String newText = charSequence.toString();
-                        if (!newText.equals(presetName) && listener != null) {
-                            listener.onTitleChanged(newText);
-                        }
+                .input(getString(R.string.bookmark_edit_hint), presetName, false, (materialDialog, charSequence) -> {
+                    String newText = charSequence.toString();
+                    if (!newText.equals(presetName) && listener != null) {
+                        listener.onTitleChanged(newText);
                     }
                 })
                 .positiveText(R.string.dialog_confirm)

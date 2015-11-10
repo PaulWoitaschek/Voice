@@ -22,10 +22,7 @@ import java.util.concurrent.CountDownLatch;
 
 import timber.log.Timber;
 
-@SuppressWarnings("TryFinallyCanBeTryWithResources")
 public class ImageHelper {
-
-    private static final String TAG = ImageHelper.class.getSimpleName();
 
     public static Bitmap drawableToBitmap(Drawable drawable, int width, int height) {
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -39,16 +36,13 @@ public class ImageHelper {
     public static Bitmap picassoGetBlocking(final Context context, final String path) {
         final CountDownLatch latch = new CountDownLatch(1);
         final Bitmap[] bitmap = new Bitmap[1];
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    bitmap[0] = Picasso.with(context).load(path).get();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    latch.countDown();
-                }
+        new Thread(() -> {
+            try {
+                bitmap[0] = Picasso.with(context).load(path).get();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                latch.countDown();
             }
         }).start();
 

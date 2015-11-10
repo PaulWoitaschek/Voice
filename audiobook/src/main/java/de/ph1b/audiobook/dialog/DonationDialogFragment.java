@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -17,35 +16,31 @@ public class DonationDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final MaterialDialog.ListCallback donationListCallback = new MaterialDialog.ListCallback() {
-            @Override
-            public void onSelection(MaterialDialog materialDialog, View view, int i,
-                                    CharSequence charSequence) {
-                String item;
-                switch (i) {
-                    case 0:
-                        item = "1donation";
-                        break;
-                    case 1:
-                        item = "2donation";
-                        break;
-                    case 2:
-                        item = "3donation";
-                        break;
-                    case 3:
-                        item = "5donation";
-                        break;
-                    case 4:
-                        item = "10donation";
-                        break;
-                    case 5:
-                        item = "20donation";
-                        break;
-                    default:
-                        throw new AssertionError("There are only 4 items");
-                }
-                ((OnDonationClickedListener) getActivity()).onDonationClicked(item);
+        final MaterialDialog.ListCallback donationListCallback = (materialDialog, view, i, charSequence) -> {
+            String item;
+            switch (i) {
+                case 0:
+                    item = "1donation";
+                    break;
+                case 1:
+                    item = "2donation";
+                    break;
+                case 2:
+                    item = "3donation";
+                    break;
+                case 3:
+                    item = "5donation";
+                    break;
+                case 4:
+                    item = "10donation";
+                    break;
+                case 5:
+                    item = "20donation";
+                    break;
+                default:
+                    throw new AssertionError("There are only 4 items");
             }
+            ((OnDonationClickedListener) getActivity()).onDonationClicked(item);
         };
 
         return new MaterialDialog.Builder(getActivity())

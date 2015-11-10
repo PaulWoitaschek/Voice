@@ -453,36 +453,33 @@ public class BookPlayFragment extends Fragment {
 
         subscriptions.add(db.getBook(getBookId())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Book>() {
-                    @Override
-                    public void call(Book book) {
-                        BookPlayFragment.this.book = book;
-                        if (book == null) {
-                            Timber.e("Book is null. Returning immediately.");
-                            return;
-                        }
-                        Timber.i("New book with time %d and content %s", book.time(), book);
+                .subscribe(book -> {
+                    BookPlayFragment.this.book = book;
+                    if (book == null) {
+                        Timber.e("Book is null. Returning immediately.");
+                        return;
+                    }
+                    Timber.i("New book with time %d and content %s", book.time(), book);
 
-                        List<Chapter> chapters = book.chapters();
-                        Chapter chapter = book.currentChapter();
+                    List<Chapter> chapters = book.chapters();
+                    Chapter chapter = book.currentChapter();
 
-                        int position = chapters.indexOf(chapter);
-                        /*
-                          Setting position as a tag, so we can make sure onItemSelected is only fired when
-                          the user changes the position himself.
-                         */
-                        bookSpinner.setTag(position);
-                        bookSpinner.setSelection(position, true);
-                        int duration = chapter.duration();
-                        seekBar.setMax(duration);
-                        maxTimeView.setText(formatTime(duration, duration));
+                    int position = chapters.indexOf(chapter);
+                    /*
+                      Setting position as a tag, so we can make sure onItemSelected is only fired when
+                      the user changes the position himself.
+                     */
+                    bookSpinner.setTag(position);
+                    bookSpinner.setSelection(position, true);
+                    int duration = chapter.duration();
+                    seekBar.setMax(duration);
+                    maxTimeView.setText(formatTime(duration, duration));
 
-                        // Setting seekBar and played time view
-                        int progress = book.time();
-                        if (!seekBar.isPressed()) {
-                            seekBar.setProgress(progress);
-                            playedTimeView.setText(formatTime(progress, duration));
-                        }
+                    // Setting seekBar and played time view
+                    int progress = book.time();
+                    if (!seekBar.isPressed()) {
+                        seekBar.setProgress(progress);
+                        playedTimeView.setText(formatTime(progress, duration));
                     }
                 }));
 

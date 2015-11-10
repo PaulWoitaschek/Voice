@@ -311,18 +311,8 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
                 currentPlayingIndicator.setVisibility(View.GONE);
             }
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onItemClickListener.onItemClicked(getAdapterPosition());
-                }
-            });
-            editBook.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onItemClickListener.onMenuClicked(getAdapterPosition(), v);
-                }
-            });
+            itemView.setOnClickListener(v -> onItemClickListener.onItemClicked(getAdapterPosition()));
+            editBook.setOnClickListener(v -> onItemClickListener.onMenuClicked(getAdapterPosition(), v));
 
             ViewCompat.setTransitionName(coverView, book.coverTransitionName());
         }

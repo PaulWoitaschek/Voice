@@ -108,7 +108,7 @@ public class CoverDownloader {
                 return containing.get(number);
             } else {
                 int startPoint = containing.size();
-                Timber.v("looking for new set at startPoint=" + startPoint);
+                Timber.v("looking for new set at startPoint %d", startPoint);
                 List<String> newSet = getNewLinks(searchText, startPoint);
                 if (!newSet.isEmpty()) {
                     containing.addAll(newSet);

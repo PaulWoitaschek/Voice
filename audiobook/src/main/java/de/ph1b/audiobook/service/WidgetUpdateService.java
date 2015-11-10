@@ -43,13 +43,12 @@ import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.Communication;
 import rx.Subscription;
-import rx.functions.Action1;
 
 public class WidgetUpdateService extends Service {
     private final ExecutorService executor = new ThreadPoolExecutor(
             1, 1, // single thread
             5, TimeUnit.SECONDS,
-            new LinkedBlockingQueue<Runnable>(2), // queue capacity
+            new LinkedBlockingQueue<>(2), // queue capacity
             new ThreadPoolExecutor.DiscardOldestPolicy()
     );
     @Inject Communication communication;
@@ -79,11 +78,8 @@ public class WidgetUpdateService extends Service {
         super.onCreate();
         App.getComponent().inject(this);
 
-        playStateSubscription = mediaPlayerController.getPlayState().subscribe(new Action1<MediaPlayerController.PlayState>() {
-            @Override
-            public void call(MediaPlayerController.PlayState playState) {
-                updateWidget();
-            }
+        playStateSubscription = mediaPlayerController.getPlayState().subscribe(playState -> {
+            updateWidget();
         });
         communication.addBookCommunicationListener(listener);
     }
@@ -98,64 +94,61 @@ public class WidgetUpdateService extends Service {
      * Asynchronously updates the widget
      */
     private void updateWidget() {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(WidgetUpdateService.this);
-                Book book = db.getBook(prefs.getCurrentBookId()).toBlocking().first();
-                boolean isPortrait = isPortrait();
-                int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(
-                        WidgetUpdateService.this, BaseWidgetProvider.class));
+        executor.execute(() -> {
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(WidgetUpdateService.this);
+            Book book = db.getBook(prefs.getCurrentBookId()).toBlocking().first();
+            boolean isPortrait = isPortrait();
+            int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(
+                    WidgetUpdateService.this, BaseWidgetProvider.class));
 
-                for (int widgetId : ids) {
-                    RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.widget);
+            for (int widgetId : ids) {
+                RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.widget);
 
-                    if (book != null) {
-                        initElements(remoteViews, book);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                            Bundle opts = appWidgetManager.getAppWidgetOptions(widgetId);
-                            int minHeight = dpToPx(opts.getInt(
-                                    AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT));
-                            int maxHeight = dpToPx(opts.getInt(
-                                    AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT));
-                            int minWidth = dpToPx(opts.getInt(
-                                    AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH));
-                            int maxWidth = dpToPx(opts.getInt(
-                                    AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH));
+                if (book != null) {
+                    initElements(remoteViews, book);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        Bundle opts = appWidgetManager.getAppWidgetOptions(widgetId);
+                        int minHeight = dpToPx(opts.getInt(
+                                AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT));
+                        int maxHeight = dpToPx(opts.getInt(
+                                AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT));
+                        int minWidth = dpToPx(opts.getInt(
+                                AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH));
+                        int maxWidth = dpToPx(opts.getInt(
+                                AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH));
 
-                            int useWidth;
-                            int useHeight;
+                        int useWidth;
+                        int useHeight;
 
-                            if (isPortrait) {
-                                useWidth = minWidth;
-                                useHeight = maxHeight;
-                            } else {
-                                useWidth = maxWidth;
-                                useHeight = minHeight;
-                            }
-                            if (useWidth > 0 && useHeight > 0) {
-                                setVisibilities(remoteViews, useWidth, useHeight,
-                                        book.chapters().size() == 1);
-                            }
+                        if (isPortrait) {
+                            useWidth = minWidth;
+                            useHeight = maxHeight;
+                        } else {
+                            useWidth = maxWidth;
+                            useHeight = minHeight;
                         }
-                    } else {
-                        // directly going back to bookChoose
-                        Intent wholeWidgetClickI = new Intent(WidgetUpdateService.this, BookActivity.class);
-                        wholeWidgetClickI.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        PendingIntent wholeWidgetClickPI = PendingIntent.getActivity
-                                (WidgetUpdateService.this, (int) System.currentTimeMillis(),
-                                        wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
-                        remoteViews.setImageViewBitmap(R.id.imageView,
-                                ImageHelper.drawableToBitmap(
-                                        ContextCompat.getDrawable(WidgetUpdateService.this, R.drawable.icon_108dp),
-                                        ImageHelper.getSmallerScreenSize(WidgetUpdateService.this),
-                                        ImageHelper.getSmallerScreenSize(
-                                                WidgetUpdateService.this)));
-                        remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI);
+                        if (useWidth > 0 && useHeight > 0) {
+                            setVisibilities(remoteViews, useWidth, useHeight,
+                                    book.chapters().size() == 1);
+                        }
                     }
-
-                    appWidgetManager.updateAppWidget(widgetId, remoteViews);
+                } else {
+                    // directly going back to bookChoose
+                    Intent wholeWidgetClickI = new Intent(WidgetUpdateService.this, BookActivity.class);
+                    wholeWidgetClickI.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    PendingIntent wholeWidgetClickPI = PendingIntent.getActivity
+                            (WidgetUpdateService.this, (int) System.currentTimeMillis(),
+                                    wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT);
+                    remoteViews.setImageViewBitmap(R.id.imageView,
+                            ImageHelper.drawableToBitmap(
+                                    ContextCompat.getDrawable(WidgetUpdateService.this, R.drawable.icon_108dp),
+                                    ImageHelper.getSmallerScreenSize(WidgetUpdateService.this),
+                                    ImageHelper.getSmallerScreenSize(
+                                            WidgetUpdateService.this)));
+                    remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI);
                 }
+
+                appWidgetManager.updateAppWidget(widgetId, remoteViews);
             }
         });
     }

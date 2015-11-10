@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import javax.inject.Inject;
@@ -68,25 +67,17 @@ public class SleepDialogFragment extends DialogFragment {
         numberPicker.setMinValue(1);
         numberPicker.setMaxValue(120);
         numberPicker.setValue(oldValue);
-        numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                updateText(newVal);
-            }
-        });
+        numberPicker.setOnValueChangedListener((picker, oldVal, newVal) -> updateText(newVal));
         updateText(numberPicker.getValue());
 
         return new MaterialDialog.Builder(getContext())
                 .title(R.string.pref_sleep_time)
                 .positiveText(R.string.dialog_confirm)
                 .negativeText(R.string.dialog_cancel)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                        int newValue = numberPicker.getValue();
-                        prefs.setSleepTime(newValue);
-                        settingsSetListener.onSettingsSet(newValue != oldValue);
-                    }
+                .onPositive((materialDialog, dialogAction) -> {
+                    int newValue = numberPicker.getValue();
+                    prefs.setSleepTime(newValue);
+                    settingsSetListener.onSettingsSet(newValue != oldValue);
                 })
                 .customView(view, true)
                 .build();

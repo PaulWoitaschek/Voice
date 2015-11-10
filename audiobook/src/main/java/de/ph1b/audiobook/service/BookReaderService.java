@@ -49,7 +49,6 @@ import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.Communication;
 import rx.Subscription;
-import rx.functions.Action1;
 import timber.log.Timber;
 
 
@@ -66,7 +65,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
     private final ExecutorService playerExecutor = new ThreadPoolExecutor(
             1, 1, // single thread
             2, TimeUnit.SECONDS,
-            new LinkedBlockingQueue<Runnable>(3), // queue capacity
+            new LinkedBlockingQueue<>(3), // queue capacity
             new ThreadPoolExecutor.DiscardOldestPolicy()
     );
     private final PlaybackStateCompat.Builder playbackStateBuilder = new PlaybackStateCompat.Builder()
@@ -185,45 +184,39 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
             reInitController(book);
         }
 
-        playStateSubscription = controller.getPlayState().subscribe(new Action1<MediaPlayerController.PlayState>() {
-            @Override
-            public void call(final MediaPlayerController.PlayState playState) {
-                Timber.d("onPlayStateChanged:%s", playState);
-                executor.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        Timber.d("onPlayStateChanged executed:%s", playState);
-                        Book controllerBook = controller.getBook();
-                        if (controllerBook != null) {
-                            switch (playState) {
-                                case PLAYING:
-                                    audioManager.requestAudioFocus(BookReaderService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        playStateSubscription = controller.getPlayState().subscribe(playState -> {
+            Timber.d("onPlayStateChanged:%s", playState);
+            executor.execute(() -> {
+                Timber.d("onPlayStateChanged executed:%s", playState);
+                Book controllerBook = controller.getBook();
+                if (controllerBook != null) {
+                    switch (playState) {
+                        case PLAYING:
+                            audioManager.requestAudioFocus(BookReaderService.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
-                                    mediaSession.setActive(true);
+                            mediaSession.setActive(true);
 
-                                    startForeground(NOTIFICATION_ID, getNotification(controllerBook));
+                            startForeground(NOTIFICATION_ID, getNotification(controllerBook));
 
-                                    break;
-                                case PAUSED:
-                                    stopForeground(false);
-                                    notificationManager.notify(NOTIFICATION_ID, getNotification(controllerBook));
+                            break;
+                        case PAUSED:
+                            stopForeground(false);
+                            notificationManager.notify(NOTIFICATION_ID, getNotification(controllerBook));
 
-                                    break;
-                                case STOPPED:
-                                    mediaSession.setActive(false);
+                            break;
+                        case STOPPED:
+                            mediaSession.setActive(false);
 
-                                    audioManager.abandonAudioFocus(BookReaderService.this);
-                                    notificationManager.cancel(NOTIFICATION_ID);
-                                    stopForeground(true);
+                            audioManager.abandonAudioFocus(BookReaderService.this);
+                            notificationManager.cancel(NOTIFICATION_ID);
+                            stopForeground(true);
 
-                                    break;
-                            }
-
-                            notifyChange(ChangeType.PLAYSTATE);
-                        }
+                            break;
                     }
-                });
-            }
+
+                    notifyChange(ChangeType.PLAYSTATE);
+                }
+            });
         });
     }
 
@@ -260,40 +253,37 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
     public int onStartCommand(final Intent intent, int flags, int startId) {
         Timber.v("onStartCommand, intent=%s, flags=%d, startId=%d", intent, flags, startId);
         if (intent != null && intent.getAction() != null) {
-            playerExecutor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    Timber.v("handling intent action:%s", intent.getAction());
-                    switch (intent.getAction()) {
-                        case Intent.ACTION_MEDIA_BUTTON:
-                            KeyEvent keyEvent = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
-                            if (keyEvent != null && keyEvent.getAction() == KeyEvent.ACTION_DOWN
-                                    && keyEvent.getRepeatCount() == 0) {
-                                int keyCode = keyEvent.getKeyCode();
-                                handleKeyCode(keyCode);
-                            }
-                            break;
-                        case ServiceController.CONTROL_SET_PLAYBACK_SPEED:
-                            float speed = intent.getFloatExtra(ServiceController.CONTROL_SET_PLAYBACK_SPEED_EXTRA_SPEED, 1);
-                            controller.setPlaybackSpeed(speed);
-                            break;
-                        case ServiceController.CONTROL_TOGGLE_SLEEP_SAND:
-                            controller.toggleSleepSand();
-                            break;
-                        case ServiceController.CONTROL_CHANGE_POSITION:
-                            int newTime = intent.getIntExtra(ServiceController.CONTROL_CHANGE_POSITION_EXTRA_TIME, 0);
-                            File file = (File) intent.getSerializableExtra(ServiceController.CONTROL_CHANGE_POSITION_EXTRA_FILE);
-                            controller.changePosition(newTime, file);
-                            break;
-                        case ServiceController.CONTROL_NEXT:
-                            controller.next();
-                            break;
-                        case ServiceController.CONTROL_PREVIOUS:
-                            controller.previous(true);
-                            break;
-                        default:
-                            break;
-                    }
+            playerExecutor.execute(() -> {
+                Timber.v("handling intent action:%s", intent.getAction());
+                switch (intent.getAction()) {
+                    case Intent.ACTION_MEDIA_BUTTON:
+                        KeyEvent keyEvent = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
+                        if (keyEvent != null && keyEvent.getAction() == KeyEvent.ACTION_DOWN
+                                && keyEvent.getRepeatCount() == 0) {
+                            int keyCode = keyEvent.getKeyCode();
+                            handleKeyCode(keyCode);
+                        }
+                        break;
+                    case ServiceController.CONTROL_SET_PLAYBACK_SPEED:
+                        float speed = intent.getFloatExtra(ServiceController.CONTROL_SET_PLAYBACK_SPEED_EXTRA_SPEED, 1);
+                        controller.setPlaybackSpeed(speed);
+                        break;
+                    case ServiceController.CONTROL_TOGGLE_SLEEP_SAND:
+                        controller.toggleSleepSand();
+                        break;
+                    case ServiceController.CONTROL_CHANGE_POSITION:
+                        int newTime = intent.getIntExtra(ServiceController.CONTROL_CHANGE_POSITION_EXTRA_TIME, 0);
+                        File file = (File) intent.getSerializableExtra(ServiceController.CONTROL_CHANGE_POSITION_EXTRA_FILE);
+                        controller.changePosition(newTime, file);
+                        break;
+                    case ServiceController.CONTROL_NEXT:
+                        controller.next();
+                        break;
+                    case ServiceController.CONTROL_PREVIOUS:
+                        controller.previous(true);
+                        break;
+                    default:
+                        break;
                 }
             });
         }
@@ -468,85 +458,82 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
     }
 
     private void notifyChange(final ChangeType what) {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                Timber.d("updateRemoteControlClient called");
+        executor.execute(() -> {
+            Timber.d("updateRemoteControlClient called");
 
-                Book book = controller.getBook();
-                if (book != null) {
-                    Chapter c = book.currentChapter();
-                    MediaPlayerController.PlayState playState = controller.getPlayState().getValue();
+            Book book = controller.getBook();
+            if (book != null) {
+                Chapter c = book.currentChapter();
+                MediaPlayerController.PlayState playState = controller.getPlayState().getValue();
 
-                    String bookName = book.name();
-                    String chapterName = c.name();
-                    String author = book.author();
-                    int position = book.time();
+                String bookName = book.name();
+                String chapterName = c.name();
+                String author = book.author();
+                int position = book.time();
 
-                    Intent i = new Intent(what.intentUrl);
-                    i.putExtra("id", 1);
-                    if (author != null) {
-                        i.putExtra("artist", author);
+                Intent i = new Intent(what.intentUrl);
+                i.putExtra("id", 1);
+                if (author != null) {
+                    i.putExtra("artist", author);
+                }
+                i.putExtra("album", bookName);
+                i.putExtra("track", chapterName);
+                i.putExtra("playing", playState == MediaPlayerController.PlayState.PLAYING);
+                i.putExtra("position", book.time());
+                sendBroadcast(i);
+
+                if (what == ChangeType.PLAYSTATE) {
+                    int state;
+                    if (playState == MediaPlayerController.PlayState.PLAYING) {
+                        state = PlaybackStateCompat.STATE_PLAYING;
+                    } else if (playState == MediaPlayerController.PlayState.PAUSED) {
+                        state = PlaybackStateCompat.STATE_PAUSED;
+                    } else {
+                        state = PlaybackStateCompat.STATE_STOPPED;
                     }
-                    i.putExtra("album", bookName);
-                    i.putExtra("track", chapterName);
-                    i.putExtra("playing", playState == MediaPlayerController.PlayState.PLAYING);
-                    i.putExtra("position", book.time());
-                    sendBroadcast(i);
-
-                    if (what == ChangeType.PLAYSTATE) {
-                        int state;
-                        if (playState == MediaPlayerController.PlayState.PLAYING) {
-                            state = PlaybackStateCompat.STATE_PLAYING;
-                        } else if (playState == MediaPlayerController.PlayState.PAUSED) {
-                            state = PlaybackStateCompat.STATE_PAUSED;
-                        } else {
-                            state = PlaybackStateCompat.STATE_STOPPED;
+                    playbackStateBuilder.setState(state, position, controller.getPlaybackSpeed());
+                    mediaSession.setPlaybackState(playbackStateBuilder.build());
+                } else if ((what == ChangeType.METADATA) && !lastFileForMetaData.equals(book.currentFile())) {
+                    // this check is necessary. Else the lockscreen controls will flicker due to
+                    // an updated picture
+                    Bitmap bitmap = null;
+                    File coverFile = book.coverFile();
+                    if (!book.useCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
+                        try {
+                            bitmap = Picasso.with(BookReaderService.this).load(coverFile).get();
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                        playbackStateBuilder.setState(state, position, controller.getPlaybackSpeed());
-                        mediaSession.setPlaybackState(playbackStateBuilder.build());
-                    } else if ((what == ChangeType.METADATA) && !lastFileForMetaData.equals(book.currentFile())) {
-                        // this check is necessary. Else the lockscreen controls will flicker due to
-                        // an updated picture
-                        Bitmap bitmap = null;
-                        File coverFile = book.coverFile();
-                        if (!book.useCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
-                            try {
-                                bitmap = Picasso.with(BookReaderService.this).load(coverFile).get();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        if (bitmap == null) {
-                            Drawable replacement = new CoverReplacement(
-                                    book.name(),
-                                    BookReaderService.this);
-                            Timber.d("replacement dimen:%d:%d", replacement.getIntrinsicWidth(), replacement.getIntrinsicHeight());
-                            bitmap = ImageHelper.drawableToBitmap(
-                                    replacement,
-                                    ImageHelper.getSmallerScreenSize(BookReaderService.this),
-                                    ImageHelper.getSmallerScreenSize(BookReaderService.this));
-                        }
-                        // we make a copy because we do not want to use picassos bitmap, since
-                        // MediaSessionCompat recycles our bitmap eventually which would make
-                        // picassos cached bitmap useless.
-                        bitmap = bitmap.copy(bitmap.getConfig(), true);
-                        mediaMetaDataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap)
-                                .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
-                                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, c.duration())
-                                .putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, (book.chapters().indexOf(book.currentChapter()) + 1))
-                                .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, book.chapters().size())
-                                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, chapterName)
-                                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, bookName)
-                                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, author)
-                                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, author)
-                                .putString(MediaMetadataCompat.METADATA_KEY_AUTHOR, author)
-                                .putString(MediaMetadataCompat.METADATA_KEY_COMPOSER, author)
-                                .putString(MediaMetadataCompat.METADATA_KEY_GENRE, "Audiobook");
-                        mediaSession.setMetadata(mediaMetaDataBuilder.build());
-
-                        lastFileForMetaData = book.currentFile();
                     }
+                    if (bitmap == null) {
+                        Drawable replacement = new CoverReplacement(
+                                book.name(),
+                                BookReaderService.this);
+                        Timber.d("replacement dimen:%d:%d", replacement.getIntrinsicWidth(), replacement.getIntrinsicHeight());
+                        bitmap = ImageHelper.drawableToBitmap(
+                                replacement,
+                                ImageHelper.getSmallerScreenSize(BookReaderService.this),
+                                ImageHelper.getSmallerScreenSize(BookReaderService.this));
+                    }
+                    // we make a copy because we do not want to use picassos bitmap, since
+                    // MediaSessionCompat recycles our bitmap eventually which would make
+                    // picassos cached bitmap useless.
+                    bitmap = bitmap.copy(bitmap.getConfig(), true);
+                    mediaMetaDataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap)
+                            .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
+                            .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, c.duration())
+                            .putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, (book.chapters().indexOf(book.currentChapter()) + 1))
+                            .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, book.chapters().size())
+                            .putString(MediaMetadataCompat.METADATA_KEY_TITLE, chapterName)
+                            .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, bookName)
+                            .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, author)
+                            .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, author)
+                            .putString(MediaMetadataCompat.METADATA_KEY_AUTHOR, author)
+                            .putString(MediaMetadataCompat.METADATA_KEY_COMPOSER, author)
+                            .putString(MediaMetadataCompat.METADATA_KEY_GENRE, "Audiobook");
+                    mediaSession.setMetadata(mediaMetaDataBuilder.build());
+
+                    lastFileForMetaData = book.currentFile();
                 }
             }
         });

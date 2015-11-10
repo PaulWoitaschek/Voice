@@ -35,12 +35,9 @@ public class Communication {
      * @see MediaPlayerController#sleepSandActive()
      */
     public synchronized void sleepStateChanged() {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                for (BookCommunication listener : listeners) {
-                    listener.onSleepStateChanged();
-                }
+        executor.execute(() -> {
+            for (BookCommunication listener : listeners) {
+                listener.onSleepStateChanged();
             }
         });
     }
@@ -52,12 +49,9 @@ public class Communication {
      * @param oldId The old {@link de.ph1b.audiobook.model.Book#id}
      */
     public synchronized void sendCurrentBookChanged(final long oldId) {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                for (BookCommunication listener : listeners) {
-                    listener.onCurrentBookIdChanged(oldId);
-                }
+        executor.execute(() -> {
+            for (BookCommunication listener : listeners) {
+                listener.onCurrentBookIdChanged(oldId);
             }
         });
     }
@@ -69,12 +63,9 @@ public class Communication {
      * @param allBooks The whole book set
      */
     public synchronized void bookSetChanged(final List<Book> allBooks) {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                for (BookCommunication listener : listeners) {
-                    listener.onBookSetChanged(new ArrayList<>(allBooks));
-                }
+        executor.execute(() -> {
+            for (BookCommunication listener : listeners) {
+                listener.onBookSetChanged(new ArrayList<>(allBooks));
             }
         });
     }
@@ -94,12 +85,9 @@ public class Communication {
      * @param book The book that has changed
      */
     public synchronized void sendBookContentChanged(@NonNull final Book book) {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                for (BookCommunication listener : listeners) {
-                    listener.onBookContentChanged(book);
-                }
+        executor.execute(() -> {
+            for (BookCommunication listener : listeners) {
+                listener.onBookContentChanged(book);
             }
         });
     }

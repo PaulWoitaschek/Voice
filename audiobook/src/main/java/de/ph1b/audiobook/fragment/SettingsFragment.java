@@ -31,7 +31,6 @@ import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.vendinghelper.IabHelper;
-import de.ph1b.audiobook.vendinghelper.IabResult;
 import timber.log.Timber;
 
 public class SettingsFragment extends PreferenceFragment implements DonationDialogFragment.OnDonationClickedListener,
@@ -81,61 +80,41 @@ public class SettingsFragment extends PreferenceFragment implements DonationDial
                 "I9arlShCcXz7eTKemxjkHMO3dTkTKDjYZMIozr0t9qTvTxPz1aV6TWAGs5E6Dt7UF78pntgG9bMwmIgL" +
                 "N6fOYuBaKd8IxA3iQ5IhWGVB8WG65Ax+u0RXsx0r8BC53JQq91lItka7b1OeBe6uPHeqk8IQWY0l57AW" +
                 "fjZOFlNyWQB4QIDAQAB");
-        iabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-            @Override
-            public void onIabSetupFinished(IabResult result) {
-                donationAvailable = result.isSuccess();
-            }
-        });
+        iabHelper.startSetup(result -> donationAvailable = result.isSuccess());
 
         // seek pref
         seekPreference = findPreference(getString(R.string.pref_key_seek_time));
-        seekPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                new SeekDialogFragment().show(hostingActivity.getSupportFragmentManager(), SeekDialogFragment.TAG);
-                return true;
-            }
+        seekPreference.setOnPreferenceClickListener(preference -> {
+            new SeekDialogFragment().show(hostingActivity.getSupportFragmentManager(), SeekDialogFragment.TAG);
+            return true;
         });
 
         // auto rewind pref
         autoRewindPreference = findPreference(getString(R.string.pref_key_auto_rewind));
-        autoRewindPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                new AutoRewindDialogFragment().show(hostingActivity.getSupportFragmentManager(), AutoRewindDialogFragment.TAG);
-                return true;
-            }
+        autoRewindPreference.setOnPreferenceClickListener(preference -> {
+            new AutoRewindDialogFragment().show(hostingActivity.getSupportFragmentManager(), AutoRewindDialogFragment.TAG);
+            return true;
         });
 
         // sleep pref
         sleepPreference = findPreference(getString(R.string.pref_key_sleep_time));
-        sleepPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                new SleepDialogFragment().show(hostingActivity.getSupportFragmentManager(), SleepDialogFragment.TAG);
-                return true;
-            }
+        sleepPreference.setOnPreferenceClickListener(preference -> {
+            new SleepDialogFragment().show(hostingActivity.getSupportFragmentManager(), SleepDialogFragment.TAG);
+            return true;
         });
 
         // folder pref
         Preference folderPreference = findPreference(getString(R.string.pref_key_audiobook_folders));
-        folderPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(hostingActivity, FolderOverviewActivity.class));
-                return true;
-            }
+        folderPreference.setOnPreferenceClickListener(preference -> {
+            startActivity(new Intent(hostingActivity, FolderOverviewActivity.class));
+            return true;
         });
 
         // theme pref
         themePreference = findPreference(getString(R.string.pref_key_theme));
-        themePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                new ThemePickerDialogFragment().show(hostingActivity.getSupportFragmentManager(), ThemePickerDialogFragment.TAG);
-                return true;
-            }
+        themePreference.setOnPreferenceClickListener(preference -> {
+            new ThemePickerDialogFragment().show(hostingActivity.getSupportFragmentManager(), ThemePickerDialogFragment.TAG);
+            return true;
         });
     }
 
@@ -186,19 +165,16 @@ public class SettingsFragment extends PreferenceFragment implements DonationDial
         Timber.d("onDonationClicked with item=%s and donationAvailable=%b", item, donationAvailable);
         if (donationAvailable) {
             iabHelper.launchPurchaseFlow(hostingActivity, item,
-                    new IabHelper.OnIabPurchaseFinishedListener() {
-                        @Override
-                        public void onIabPurchaseFinished(IabResult result) {
-                            String message;
-                            if (result.isSuccess()) {
-                                message = getString(R.string.donation_worked_thanks);
-                            } else {
-                                message = getString(R.string.donation_not_worked) + ":\n"
-                                        + result.getMessage();
-                            }
-                            Toast.makeText(hostingActivity, message,
-                                    Toast.LENGTH_LONG).show();
+                    result -> {
+                        String message;
+                        if (result.isSuccess()) {
+                            message = getString(R.string.donation_worked_thanks);
+                        } else {
+                            message = getString(R.string.donation_not_worked) + ":\n"
+                                    + result.getMessage();
                         }
+                        Toast.makeText(hostingActivity, message,
+                                Toast.LENGTH_LONG).show();
                     });
         }
     }
@@ -214,12 +190,7 @@ public class SettingsFragment extends PreferenceFragment implements DonationDial
     public void onSettingsSet(boolean settingsChanged) {
         if (settingsChanged) {
             updateValues();
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    hostingActivity.recreateIfThemeChanged();
-                }
-            });
+            handler.post(hostingActivity::recreateIfThemeChanged);
         }
     }
 }

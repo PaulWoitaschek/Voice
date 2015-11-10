@@ -101,12 +101,7 @@ public class FolderOverviewAdapter extends RecyclerView.Adapter<FolderOverviewAd
             super(itemView);
             ButterKnife.bind(this, itemView);
 
-            imageButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onFolderMoreClicked(getAdapterPosition());
-                }
-            });
+            imageButton.setOnClickListener(v -> listener.onFolderMoreClicked(getAdapterPosition()));
         }
     }
 }

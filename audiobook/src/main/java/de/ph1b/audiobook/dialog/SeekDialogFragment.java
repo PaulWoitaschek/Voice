@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import javax.inject.Inject;
@@ -80,13 +79,10 @@ public class SeekDialogFragment extends DialogFragment {
                 .customView(customView, true)
                 .positiveText(R.string.dialog_confirm)
                 .negativeText(R.string.dialog_cancel)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                        int newSeekTime = seekBar.getProgress() + SEEK_BAR_MIN;
-                        prefs.setSeekTime(newSeekTime);
-                        settingsSetListener.onSettingsSet(oldSeekTime != newSeekTime);
-                    }
+                .onPositive((materialDialog, dialogAction) -> {
+                    int newSeekTime = seekBar.getProgress() + SEEK_BAR_MIN;
+                    prefs.setSeekTime(newSeekTime);
+                    settingsSetListener.onSettingsSet(oldSeekTime != newSeekTime);
                 })
                 .build();
     }

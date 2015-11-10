@@ -2,7 +2,6 @@ package de.ph1b.audiobook.utils;
 
 import android.os.Build;
 
-import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,28 +16,22 @@ import java.util.List;
 public class FileRecognition {
 
     private static final List<String> AUDIO_TYPES = new ArrayList<>(30);
-    public static final FileFilter FOLDER_AND_MUSIC_FILTER = new FileFilter() {
-        @Override
-        public boolean accept(File pathname) {
-            for (String s : AUDIO_TYPES) {
-                if (pathname.getName().toLowerCase().endsWith(s)) {
-                    return true;
-                }
+    public static final FileFilter FOLDER_AND_MUSIC_FILTER = pathname -> {
+        for (String s : AUDIO_TYPES) {
+            if (pathname.getName().toLowerCase().endsWith(s)) {
+                return true;
             }
-            return pathname.isDirectory();
         }
+        return pathname.isDirectory();
     };
     private static final List<String> IMAGE_TYPES = Arrays.asList(".jpg", ".jpeg", ".png", ".bmp");
-    public static final FileFilter FOLDER_AND_IMAGES_FILTER = new FileFilter() {
-        @Override
-        public boolean accept(File pathname) {
-            for (String s : IMAGE_TYPES) {
-                if (pathname.getAbsolutePath().toLowerCase().endsWith(s)) {
-                    return true;
-                }
+    public static final FileFilter FOLDER_AND_IMAGES_FILTER = pathname -> {
+        for (String s : IMAGE_TYPES) {
+            if (pathname.getAbsolutePath().toLowerCase().endsWith(s)) {
+                return true;
             }
-            return pathname.isDirectory();
         }
+        return pathname.isDirectory();
     };
 
     static {

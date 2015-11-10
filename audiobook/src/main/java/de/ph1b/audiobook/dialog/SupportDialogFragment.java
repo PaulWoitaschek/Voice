@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -26,24 +25,20 @@ public class SupportDialogFragment extends DialogFragment {
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final MaterialDialog.ListCallback onSupportListItemClicked =
-                new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog materialDialog, View view, int i,
-                                            CharSequence charSequence) {
-                        switch (i) {
-                            case 0: //dev and support
-                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GITHUB_URL)));
-                                break;
-                            case 1: //translations
-                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(TRANSLATION_URL)));
-                                break;
-                            case 2:
-                                new DonationDialogFragment().show(getFragmentManager(),
-                                        DonationDialogFragment.TAG);
-                                break;
-                            default:
-                                throw new AssertionError("There are just 3 items");
-                        }
+                (materialDialog, view, i, charSequence) -> {
+                    switch (i) {
+                        case 0: //dev and support
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GITHUB_URL)));
+                            break;
+                        case 1: //translations
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(TRANSLATION_URL)));
+                            break;
+                        case 2:
+                            new DonationDialogFragment().show(getFragmentManager(),
+                                    DonationDialogFragment.TAG);
+                            break;
+                        default:
+                            throw new AssertionError("There are just 3 items");
                     }
                 };
 

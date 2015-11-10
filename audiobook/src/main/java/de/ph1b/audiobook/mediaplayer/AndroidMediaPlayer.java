@@ -16,11 +16,8 @@ public class AndroidMediaPlayer extends MediaPlayer implements MediaPlayerInterf
 
     @Override
     public void setOnCompletionListener(final MediaPlayerInterface.OnCompletionListener listener) {
-        setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                listener.onCompletion();
-            }
+        setOnCompletionListener(mp -> {
+            listener.onCompletion();
         });
     }
 }

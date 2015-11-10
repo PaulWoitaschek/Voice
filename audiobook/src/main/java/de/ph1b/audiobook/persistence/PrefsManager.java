@@ -96,7 +96,7 @@ public class PrefsManager {
      */
     @NonNull
     public synchronized List<String> getCollectionFolders() {
-        Set<String> set = sp.getStringSet(PREF_KEY_COLLECTION_FOLDERS, new HashSet<String>(10));
+        Set<String> set = sp.getStringSet(PREF_KEY_COLLECTION_FOLDERS, new HashSet<>(10));
         return new ArrayList<>(set);
     }
 
@@ -123,7 +123,7 @@ public class PrefsManager {
      */
     @NonNull
     public synchronized List<String> getSingleBookFolders() {
-        Set<String> set = sp.getStringSet(PREF_KEY_SINGLE_BOOK_FOLDERS, new HashSet<String>(10));
+        Set<String> set = sp.getStringSet(PREF_KEY_SINGLE_BOOK_FOLDERS, new HashSet<>(10));
         return new ArrayList<>(set);
     }
 

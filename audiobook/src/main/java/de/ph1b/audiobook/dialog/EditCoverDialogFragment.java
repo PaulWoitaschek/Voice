@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -102,53 +101,47 @@ public class EditCoverDialogFragment extends DialogFragment {
         loadCoverPosition();
         setNextPreviousEnabledDisabled();
 
-        MaterialDialog.SingleButtonCallback positiveCallback = new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                Timber.d("edit book positive clicked. CoverPosition=%s", coverPosition);
-                if (addCoverAsync != null && !addCoverAsync.isCancelled()) {
-                    addCoverAsync.cancel(true);
-                }
+        MaterialDialog.SingleButtonCallback positiveCallback = (materialDialog, dialogAction) -> {
+            Timber.d("edit book positive clicked. CoverPosition=%s", coverPosition);
+            if (addCoverAsync != null && !addCoverAsync.isCancelled()) {
+                addCoverAsync.cancel(true);
+            }
 
-                final Rect r = coverImageView.getSelectedRect();
-                boolean useCoverReplacement;
-                if (coverPosition > -1 && !r.isEmpty()) {
-                    Bitmap cover = ImageHelper.picassoGetBlocking(getActivity(), imageURLS.get(coverPosition));
-                    if (cover != null) {
-                        cover = Bitmap.createBitmap(cover, r.left, r.top, r.width(), r.height());
-                        ImageHelper.saveCover(cover, getActivity(), book.coverFile());
+            final Rect r = coverImageView.getSelectedRect();
+            boolean useCoverReplacement;
+            if (coverPosition > -1 && !r.isEmpty()) {
+                Bitmap cover = ImageHelper.picassoGetBlocking(getActivity(), imageURLS.get(coverPosition));
+                if (cover != null) {
+                    cover = Bitmap.createBitmap(cover, r.left, r.top, r.width(), r.height());
+                    ImageHelper.saveCover(cover, getActivity(), book.coverFile());
 
-                        picasso.invalidate(book.coverFile());
-                        useCoverReplacement = false;
-                    } else {
-                        useCoverReplacement = true;
-                    }
+                    picasso.invalidate(book.coverFile());
+                    useCoverReplacement = false;
                 } else {
                     useCoverReplacement = true;
                 }
+            } else {
+                useCoverReplacement = true;
+            }
 
-                //noinspection SynchronizeOnNonFinalField
-                synchronized (db) {
-                    Book dbBook = db.getBook(book.id()).toBlocking().first();
-                    if (dbBook != null) {
-                        dbBook = Book.builder(dbBook)
-                                .useCoverReplacement(useCoverReplacement)
-                                .build();
-                        db.updateBook(dbBook);
-                    }
-                }
-
-                if (listener != null) {
-                    listener.onEditBookFinished();
+            //noinspection SynchronizeOnNonFinalField
+            synchronized (db) {
+                Book dbBook = db.getBook(book.id()).toBlocking().first();
+                if (dbBook != null) {
+                    dbBook = Book.builder(dbBook)
+                            .useCoverReplacement(useCoverReplacement)
+                            .build();
+                    db.updateBook(dbBook);
                 }
             }
+
+            if (listener != null) {
+                listener.onEditBookFinished();
+            }
         };
-        MaterialDialog.SingleButtonCallback negativeCallback = new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                if (addCoverAsync != null && !addCoverAsync.isCancelled()) {
-                    addCoverAsync.cancel(true);
-                }
+        MaterialDialog.SingleButtonCallback negativeCallback = (materialDialog, dialogAction) -> {
+            if (addCoverAsync != null && !addCoverAsync.isCancelled()) {
+                addCoverAsync.cancel(true);
             }
         };
 
@@ -309,12 +302,7 @@ public class EditCoverDialogFragment extends DialogFragment {
 
         @Override
         protected void onCancelled() {
-            executor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    coverDownloader.cancel();
-                }
-            });
+            executor.execute(coverDownloader::cancel);
         }
     }
 }

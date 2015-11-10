@@ -185,20 +185,17 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     private void startUpdating() {
         Timber.v("startUpdating");
         if (!updaterActive()) {
-            updater = executor.scheduleAtFixedRate(new Runnable() {
-                @Override
-                public void run() {
-                    lock.lock();
-                    try {
-                        if (book != null) {
-                            book = Book.builder(book)
-                                    .time(player.getCurrentPosition())
-                                    .build();
-                            db.updateBook(book);
-                        }
-                    } finally {
-                        lock.unlock();
+            updater = executor.scheduleAtFixedRate(() -> {
+                lock.lock();
+                try {
+                    if (book != null) {
+                        book = Book.builder(book)
+                                .time(player.getCurrentPosition())
+                                .build();
+                        db.updateBook(book);
                     }
+                } finally {
+                    lock.unlock();
                 }
             }, 0, 1, TimeUnit.SECONDS);
         }
@@ -325,17 +322,14 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                 Timber.i("preparing new sleep sand");
                 final int minutes = prefs.getSleepTime();
                 sleepTimerActive = true;
-                sleepSand = executor.schedule(new Runnable() {
-                    @Override
-                    public void run() {
-                        lock.lock();
-                        try {
-                            pause(true);
-                            sleepTimerActive = false;
-                            communication.sleepStateChanged();
-                        } finally {
-                            lock.unlock();
-                        }
+                sleepSand = executor.schedule(() -> {
+                    lock.lock();
+                    try {
+                        pause(true);
+                        sleepTimerActive = false;
+                        communication.sleepStateChanged();
+                    } finally {
+                        lock.unlock();
                     }
                 }, minutes, TimeUnit.MINUTES);
             }

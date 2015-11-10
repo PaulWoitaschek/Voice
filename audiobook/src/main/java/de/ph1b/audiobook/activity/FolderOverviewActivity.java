@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -165,27 +164,19 @@ public class FolderOverviewActivity extends BaseActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(this));
         adapter = new FolderOverviewAdapter(this, bookCollections, singleBooks,
-                new FolderOverviewAdapter.OnFolderMoreClickedListener() {
-                    @Override
-                    public void onFolderMoreClicked(final int position) {
-                        new MaterialDialog.Builder(FolderOverviewActivity.this)
-                                .title(R.string.delete_folder)
-                                .content(getString(R.string.delete_folder_content) + "\n"
-                                        + adapter.getItem(position))
-                                .positiveText(R.string.remove)
-                                .negativeText(R.string.dialog_cancel)
-                                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                    @Override
-                                    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                                        adapter.removeItem(position);
-                                        prefs.setCollectionFolders(bookCollections);
-                                        prefs.setSingleBookFolders(singleBooks);
-                                        bookAdder.scanForFiles(true);
-                                    }
-                                })
-                                .show();
-                    }
-                });
+                position -> new MaterialDialog.Builder(FolderOverviewActivity.this)
+                        .title(R.string.delete_folder)
+                        .content(getString(R.string.delete_folder_content) + "\n"
+                                + adapter.getItem(position))
+                        .positiveText(R.string.remove)
+                        .negativeText(R.string.dialog_cancel)
+                        .onPositive((materialDialog, dialogAction) -> {
+                            adapter.removeItem(position);
+                            prefs.setCollectionFolders(bookCollections);
+                            prefs.setSingleBookFolders(singleBooks);
+                            bookAdder.scanForFiles(true);
+                        })
+                        .show());
         recyclerView.setAdapter(adapter);
 
         fam.setOnFloatingActionsMenuUpdateListener(famMenuListener);

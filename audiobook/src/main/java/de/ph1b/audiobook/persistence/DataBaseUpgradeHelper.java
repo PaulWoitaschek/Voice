@@ -22,7 +22,6 @@ import de.ph1b.audiobook.utils.App;
 import timber.log.Timber;
 
 
-@SuppressWarnings("TryFinallyCanBeTryWithResources")
 class DataBaseUpgradeHelper {
 
     private final SQLiteDatabase db;

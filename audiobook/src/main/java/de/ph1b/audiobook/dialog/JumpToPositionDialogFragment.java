@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.concurrent.TimeUnit;
@@ -73,30 +72,24 @@ public class JumpToPositionDialogFragment extends DialogFragment {
         hPicker.setValue(defaultHour);
         mPicker.setValue(defaultMinute);
 
-        hPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                if (newVal == biggestHour) {
-                    mPicker.setMaxValue((durationInMinutes - newVal * 60) % 60);
-                } else {
-                    mPicker.setMaxValue(59);
-                }
+        hPicker.setOnValueChangedListener((picker, oldVal, newVal) -> {
+            if (newVal == biggestHour) {
+                mPicker.setMaxValue((durationInMinutes - newVal * 60) % 60);
+            } else {
+                mPicker.setMaxValue(59);
             }
         });
 
-        mPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                int hValue = hPicker.getValue();
+        mPicker.setOnValueChangedListener((picker, oldVal, newVal) -> {
+            int hValue = hPicker.getValue();
 
-                if (oldVal == 59 && newVal == 0) //scrolling forward
-                {
-                    hPicker.setValue(++hValue);
-                }
-                if (oldVal == 0 && newVal == 59) //scrolling backward
-                {
-                    hPicker.setValue(--hValue);
-                }
+            if (oldVal == 59 && newVal == 0) //scrolling forward
+            {
+                hPicker.setValue(++hValue);
+            }
+            if (oldVal == 0 && newVal == 59) //scrolling backward
+            {
+                hPicker.setValue(--hValue);
             }
         });
 
@@ -106,14 +99,11 @@ public class JumpToPositionDialogFragment extends DialogFragment {
         return new MaterialDialog.Builder(getActivity())
                 .customView(v, true)
                 .title(R.string.action_time_change)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                        int h = hPicker.getValue();
-                        int m = mPicker.getValue();
-                        int newPosition = (m + 60 * h) * 60 * 1000;
-                        new ServiceController(getActivity()).changeTime(newPosition, book.currentChapter().file());
-                    }
+                .onPositive((materialDialog, dialogAction) -> {
+                    int h = hPicker.getValue();
+                    int m = mPicker.getValue();
+                    int newPosition = (m + 60 * h) * 60 * 1000;
+                    new ServiceController(getActivity()).changeTime(newPosition, book.currentChapter().file());
                 })
                 .positiveText(R.string.dialog_confirm)
                 .negativeText(R.string.dialog_cancel)

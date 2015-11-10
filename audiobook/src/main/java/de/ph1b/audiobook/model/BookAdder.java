@@ -11,7 +11,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -269,25 +268,22 @@ public class BookAdder {
         Timber.d("scanForFiles called with scannerActive=%s and interrupting=%b", scannerActive, interrupting);
         if (!scannerActive.getValue() || interrupting) {
             stopScanner = true;
-            executor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    Timber.v("started");
-                    scannerActive.onNext(true);
-                    stopScanner = false;
+            executor.execute(() -> {
+                Timber.v("started");
+                scannerActive.onNext(true);
+                stopScanner = false;
 
-                    try {
-                        deleteOldBooks();
-                        checkForBooks();
-                        findCovers();
-                    } catch (InterruptedException e) {
-                        Timber.d(e, "We were interrupted at adding a book");
-                    }
-
-                    stopScanner = false;
-                    scannerActive.onNext(false);
-                    Timber.v("stopped");
+                try {
+                    deleteOldBooks();
+                    checkForBooks();
+                    findCovers();
+                } catch (InterruptedException e) {
+                    Timber.d(e, "We were interrupted at adding a book");
                 }
+
+                stopScanner = false;
+                scannerActive.onNext(false);
+                Timber.v("stopped");
             });
         }
         Timber.v("scanforfiles method done (executor should be called");
@@ -441,16 +437,13 @@ public class BookAdder {
         } else { // restore old books
             // now removes invalid bookmarks
             List<Bookmark> filteredBookmarks = Lists.newArrayList(Collections2.filter(
-                    orphanedBook.bookmarks(), new Predicate<Bookmark>() {
-                        @Override
-                        public boolean apply(Bookmark input) {
-                            for (Chapter c : newChapters) {
-                                if (c.file().equals(input.mediaFile())) {
-                                    return true;
-                                }
+                    orphanedBook.bookmarks(), input -> {
+                        for (Chapter c : newChapters) {
+                            if (c.file().equals(input.mediaFile())) {
+                                return true;
                             }
-                            return false;
                         }
+                        return false;
                     }));
             orphanedBook = Book.builder(orphanedBook)
                     .chapters(ImmutableList.copyOf(newChapters))
@@ -511,16 +504,13 @@ public class BookAdder {
 
             // removes the bookmarks that no longer represent an existing file
             ImmutableList<Bookmark> existingBookmarks = bookExisting.bookmarks();
-            List<Bookmark> filteredBookmarks = Lists.newArrayList(Collections2.filter(existingBookmarks, new Predicate<Bookmark>() {
-                @Override
-                public boolean apply(Bookmark input) {
-                    for (Chapter c : newChapters) {
-                        if (c.file().equals(input.mediaFile())) {
-                            return true;
-                        }
+            List<Bookmark> filteredBookmarks = Lists.newArrayList(Collections2.filter(existingBookmarks, input -> {
+                for (Chapter c : newChapters) {
+                    if (c.file().equals(input.mediaFile())) {
+                        return true;
                     }
-                    return false;
                 }
+                return false;
             }));
 
             bookExisting = Book.builder(bookExisting)

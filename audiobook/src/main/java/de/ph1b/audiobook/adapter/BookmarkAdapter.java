@@ -132,12 +132,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             super(itemView);
             ButterKnife.bind(this, itemView);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onBookmarkClicked(bookmarks.get(getAdapterPosition()));
-                }
-            });
+            itemView.setOnClickListener(v -> listener.onBookmarkClicked(bookmarks.get(getAdapterPosition())));
         }
 
         @OnClick(R.id.edit)

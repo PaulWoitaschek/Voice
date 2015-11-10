@@ -3,7 +3,6 @@ package de.ph1b.audiobook.activity;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -14,8 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -230,18 +227,15 @@ public class FolderChooserActivity extends BaseActivity {
         //setup
         adapter = new FolderChooserAdapter(this, currentFolderContent, mode);
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                File selectedFile = adapter.getItem(position);
-                if (selectedFile.isDirectory() && selectedFile.canRead()) {
-                    chosenFile = selectedFile;
-                    currentFolderName.setText(chosenFile.getName());
-                    changeFolder(adapter.getItem(position));
-                } else if (mode == OperationMode.SINGLE_BOOK && selectedFile.isFile()) {
-                    chosenFile = selectedFile;
-                    currentFolderName.setText(chosenFile.getName());
-                }
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            File selectedFile = adapter.getItem(position);
+            if (selectedFile.isDirectory() && selectedFile.canRead()) {
+                chosenFile = selectedFile;
+                currentFolderName.setText(chosenFile.getName());
+                changeFolder(adapter.getItem(position));
+            } else if (mode == OperationMode.SINGLE_BOOK && selectedFile.isFile()) {
+                chosenFile = selectedFile;
+                currentFolderName.setText(chosenFile.getName());
             }
         });
         chosenFolderDescription.setText(R.string.chosen_folder_description);
@@ -356,12 +350,7 @@ public class FolderChooserActivity extends BaseActivity {
         if (chosenFile.isDirectory() && !HideFolderDialog.getNoMediaFileByFolder(chosenFile).exists()) {
             HideFolderDialog hideFolderDialog = HideFolderDialog.newInstance(chosenFile);
             hideFolderDialog.show(getSupportFragmentManager(), HideFolderDialog.TAG);
-            hideFolderDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    finishActivityWithSuccess(chosenFile);
-                }
-            });
+            hideFolderDialog.setOnDismissListener(dialog -> finishActivityWithSuccess(chosenFile));
         } else {
             finishActivityWithSuccess(chosenFile);
         }

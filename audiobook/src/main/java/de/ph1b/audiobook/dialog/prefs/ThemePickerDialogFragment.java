@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -58,14 +57,11 @@ public class ThemePickerDialogFragment extends DialogFragment {
 
         return new MaterialDialog.Builder(getContext())
                 .items(names.toArray(new CharSequence[names.size()]))
-                .itemsCallbackSingleChoice(existingThemes.indexOf(oldTheme), new MaterialDialog.ListCallbackSingleChoice() {
-                    @Override
-                    public boolean onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
-                        ThemeUtil.Theme newTheme = existingThemes.get(i);
-                        prefsManager.setTheme(newTheme);
-                        settingsSetListener.onSettingsSet(newTheme != oldTheme);
-                        return true;
-                    }
+                .itemsCallbackSingleChoice(existingThemes.indexOf(oldTheme), (materialDialog, view, i, charSequence) -> {
+                    ThemeUtil.Theme newTheme = existingThemes.get(i);
+                    prefsManager.setTheme(newTheme);
+                    settingsSetListener.onSettingsSet(newTheme != oldTheme);
+                    return true;
                 })
                 .positiveText(R.string.dialog_confirm)
                 .negativeText(R.string.dialog_cancel)

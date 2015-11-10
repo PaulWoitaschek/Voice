@@ -301,21 +301,18 @@ public class CustomMediaPlayer implements MediaPlayerInterface {
             case STARTED:
             case PAUSED:
             case PLAYBACK_COMPLETED:
-                Thread t = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        lock.lock();
-                        try {
-                            if (track != null) {
-                                track.flush();
-                                flushCodec = true;
-                                long to = ms * 1000L;
-                                Timber.i("extractor seek to %d", to);
-                                extractor.seekTo(to, MediaExtractor.SEEK_TO_PREVIOUS_SYNC);
-                            }
-                        } finally {
-                            lock.unlock();
+                Thread t = new Thread(() -> {
+                    lock.lock();
+                    try {
+                        if (track != null) {
+                            track.flush();
+                            flushCodec = true;
+                            long to = ms * 1000L;
+                            Timber.i("extractor seek to %d", to);
+                            extractor.seekTo(to, MediaExtractor.SEEK_TO_PREVIOUS_SYNC);
                         }
+                    } finally {
+                        lock.unlock();
                     }
                 });
                 t.setDaemon(true);

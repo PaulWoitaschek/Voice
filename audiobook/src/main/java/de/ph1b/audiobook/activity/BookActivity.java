@@ -223,7 +223,7 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
             }
             if (getIntent().hasExtra(NI_GO_TO_BOOK)) {
                 long bookId = getIntent().getLongExtra(NI_GO_TO_BOOK, -1);
-                onBookSelected(bookId, new HashMap<View, String>(0));
+                onBookSelected(bookId, new HashMap<>(0));
             }
         }
     }

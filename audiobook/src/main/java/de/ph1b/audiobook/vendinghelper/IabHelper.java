@@ -43,22 +43,22 @@ import timber.log.Timber;
  * It provides synchronous (blocking) and asynchronous (non-blocking) methods for
  * many common in-app billing operations, as well as automatic signature
  * verification.
- * <p/>
+ * <p>
  * After instantiating, you must perform setup in order to start using the object.
  * To perform setup, call the {@link #startSetup} method and provide a listener;
  * that listener will be notified when setup is complete, after which (and not before)
  * you may call other methods.
- * <p/>
+ * <p>
  * After setup is complete, you will typically want to request an inventory of owned
  * items and subscriptions. See queryInventory, queryInventoryAsync
  * and related methods.
- * <p/>
+ * <p>
  * When you are done with this object, don't forget to call {@link #dispose}
  * to ensure proper cleanup. This object holds a binding to the in-app billing
  * service, which will leak unless you dispose of it correctly. If you created
  * the object on an Activity's onCreate method, then the recommended
  * place to dispose of it is the Activity's onDestroy method.
- * <p/>
+ * <p>
  * A note about threading: When using this object from a background thread, you may
  * call the blocking versions of methods; when using from a UI thread, call
  * only the asynchronous versions and handle the results via callbacks.
@@ -346,7 +346,7 @@ public class IabHelper {
         }
 
         try {
-            Timber.d("Constructing buy intent for %s, item type: " + IabHelper.ITEM_TYPE_INAPP, sku);
+            Timber.d("Constructing buy intent for %s, item type is %s", IabHelper.ITEM_TYPE_INAPP, sku);
             Bundle buyIntentBundle = mService.getBuyIntent(3, mContext.getPackageName(), sku, IabHelper.ITEM_TYPE_INAPP, "");
             int response = getResponseCodeFromBundle(buyIntentBundle);
             if (response != BILLING_RESPONSE_RESULT_OK) {
@@ -358,7 +358,7 @@ public class IabHelper {
             }
 
             PendingIntent pendingIntent = buyIntentBundle.getParcelable(RESPONSE_BUY_INTENT);
-            Timber.d("Launching buy intent for " + sku + ". Request code: " + 10001);
+            Timber.d("Launching buy intent for %s with request code %d", sku, 10001);
             mRequestCode = 10001;
             mPurchaseListener = listener;
             mPurchasingItemType = IabHelper.ITEM_TYPE_INAPP;
@@ -419,14 +419,14 @@ public class IabHelper {
 
         if (resultCode == Activity.RESULT_OK && responseCode == BILLING_RESPONSE_RESULT_OK) {
             Timber.d("Successful resultcode from purchase activity.");
-            Timber.d("Purchase data: " + purchaseData);
-            Timber.d("Data signature: " + dataSignature);
-            Timber.d("Extras: " + data.getExtras());
-            Timber.d("Expected item type: " + mPurchasingItemType);
+            Timber.d("Purchase data %s", purchaseData);
+            Timber.d("Data signature %s", dataSignature);
+            Timber.d("Extras %s", data.getExtras());
+            Timber.d("Expected item type %s", mPurchasingItemType);
 
             if (purchaseData == null || dataSignature == null) {
                 logError("BUG: either purchaseData or dataSignature is null.");
-                Timber.d("Extras: " + data.getExtras().toString());
+                Timber.d("Extras %s", data.getExtras().toString());
                 result = new IabResult(IABHELPER_UNKNOWN_ERROR, "IAB returned null purchaseData or dataSignature");
                 if (mPurchaseListener != null)
                     mPurchaseListener.onIabPurchaseFinished(result);
@@ -461,13 +461,13 @@ public class IabHelper {
             }
         } else if (resultCode == Activity.RESULT_OK) {
             // result code was OK, but in-app billing response was not OK.
-            Timber.d("Result code was OK but in-app billing response was not OK: " + getResponseDesc(responseCode));
+            Timber.d("Result code was OK but in-app billing response was not OK: %s", getResponseDesc(responseCode));
             if (mPurchaseListener != null) {
                 result = new IabResult(responseCode, "Problem purchashing item.");
                 mPurchaseListener.onIabPurchaseFinished(result);
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
-            Timber.d("Purchase canceled - Response: " + getResponseDesc(responseCode));
+            Timber.d("Purchase canceled - Response: %s", getResponseDesc(responseCode));
             result = new IabResult(IABHELPER_USER_CANCELLED, "User canceled.");
             if (mPurchaseListener != null) mPurchaseListener.onIabPurchaseFinished(result);
         } else {
@@ -491,11 +491,11 @@ public class IabHelper {
                 "launchPurchaseFlow" + ") because another async operation(" + mAsyncOperation + ") is in progress.");
         mAsyncOperation = "launchPurchaseFlow";
         mAsyncInProgress = true;
-        Timber.d("Starting async operation: " + "launchPurchaseFlow");
+        Timber.d("Starting async operation: launchPurchaseFlow");
     }
 
     private void flagEndAsync() {
-        Timber.d("Ending async operation: " + mAsyncOperation);
+        Timber.d("Ending async operation %s", mAsyncOperation);
         mAsyncOperation = "";
         mAsyncInProgress = false;
     }

@@ -9,19 +9,15 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
@@ -128,48 +124,39 @@ public class BookmarkDialogFragment extends DialogFragment {
                 PopupMenu popup = new PopupMenu(getActivity(), v);
                 MenuInflater inflater = popup.getMenuInflater();
                 inflater.inflate(R.menu.bookmark_popup, popup.getMenu());
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity());
-                        switch (item.getItemId()) {
-                            case R.id.edit:
-                                new MaterialDialog.Builder(getActivity())
-                                        .title(R.string.bookmark_edit_title)
-                                        .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
-                                        .input(getString(R.string.bookmark_edit_hint), clickedBookmark.title(), false, new MaterialDialog.InputCallback() {
-                                            @Override
-                                            public void onInput(@NonNull MaterialDialog materialDialog, CharSequence charSequence) {
-                                                Bookmark newBookmark = Bookmark.of(clickedBookmark.mediaFile(), charSequence.toString(), clickedBookmark.time());
-                                                adapter.bookmarkUpdated(clickedBookmark, newBookmark);
-                                                db.updateBook(book);
-                                            }
-                                        })
-                                        .positiveText(R.string.dialog_confirm)
-                                        .show();
-                                return true;
-                            case R.id.delete:
-                                builder.title(R.string.bookmark_delete_title)
-                                        .content(clickedBookmark.title())
-                                        .positiveText(R.string.remove)
-                                        .negativeText(R.string.dialog_cancel)
-                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                            @Override
-                                            public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-                                                List<Bookmark> mutableBookmarks = new ArrayList<>(book.bookmarks());
-                                                mutableBookmarks.remove(clickedBookmark);
-                                                book = Book.builder(book)
-                                                        .bookmarks(ImmutableList.copyOf(mutableBookmarks))
-                                                        .build();
-                                                adapter.removeItem(clickedBookmark);
-                                                db.updateBook(book);
-                                            }
-                                        })
-                                        .show();
-                                return true;
-                            default:
-                                return false;
-                        }
+                popup.setOnMenuItemClickListener(item -> {
+                    MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity());
+                    switch (item.getItemId()) {
+                        case R.id.edit:
+                            new MaterialDialog.Builder(getActivity())
+                                    .title(R.string.bookmark_edit_title)
+                                    .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
+                                    .input(getString(R.string.bookmark_edit_hint), clickedBookmark.title(), false, (materialDialog, charSequence) -> {
+                                        Bookmark newBookmark = Bookmark.of(clickedBookmark.mediaFile(), charSequence.toString(), clickedBookmark.time());
+                                        adapter.bookmarkUpdated(clickedBookmark, newBookmark);
+                                        db.updateBook(book);
+                                    })
+                                    .positiveText(R.string.dialog_confirm)
+                                    .show();
+                            return true;
+                        case R.id.delete:
+                            builder.title(R.string.bookmark_delete_title)
+                                    .content(clickedBookmark.title())
+                                    .positiveText(R.string.remove)
+                                    .negativeText(R.string.dialog_cancel)
+                                    .onPositive((materialDialog, dialogAction) -> {
+                                        List<Bookmark> mutableBookmarks = new ArrayList<>(book.bookmarks());
+                                        mutableBookmarks.remove(clickedBookmark);
+                                        book = Book.builder(book)
+                                                .bookmarks(ImmutableList.copyOf(mutableBookmarks))
+                                                .build();
+                                        adapter.removeItem(clickedBookmark);
+                                        db.updateBook(book);
+                                    })
+                                    .show();
+                            return true;
+                        default:
+                            return false;
                     }
                 });
                 popup.show();
@@ -191,15 +178,12 @@ public class BookmarkDialogFragment extends DialogFragment {
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
         recyclerView.setLayoutManager(layoutManager);
 
-        bookmarkTitle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    addButton.performClick(); //same as clicking on the +
-                    return true;
-                }
-                return false;
+        bookmarkTitle.setOnEditorActionListener((v1, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                addButton.performClick(); //same as clicking on the +
+                return true;
             }
+            return false;
         });
 
         return new MaterialDialog.Builder(getActivity())
