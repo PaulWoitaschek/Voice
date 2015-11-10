@@ -6,13 +6,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import com.squareup.sqlbrite.BriteDatabase;
+import com.squareup.sqlbrite.SqlBrite;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Iterator;
@@ -27,6 +29,8 @@ import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.utils.Communication;
+import rx.Observable;
+import rx.functions.Func1;
 import timber.log.Timber;
 
 
@@ -81,17 +85,20 @@ public class BookShelf {
             "            group_concat(" + BookmarkTable.TIME + ") as " + KEY_BOOKMARK_POSITIONS +
             "     FROM " + BookmarkTable.TABLE_NAME +
             "     group by " + BookmarkTable.BOOK_ID + ") AS bmt on bmt." + BookmarkTable.BOOK_ID + " = bt." + BookTable.ID;
+    private static final String APPEND_WHERE_ID = " WHERE bt." + BookTable.ID + " = ? ";
     private final Communication communication;
     private final List<Book> activeBooks;
     private final List<Book> orphanedBooks;
-    private final SQLiteDatabase db;
+    private final BriteDatabase db;
 
     @Inject
     public BookShelf(@NonNull @ForApplication Context c, @NonNull Communication communication) {
         this.communication = communication;
-        this.db = new InternalDb(c).getWritableDatabase();
 
-        Cursor cursor = db.rawQuery(FULL_PROJECTION, null);
+        SqlBrite sqlBrite = SqlBrite.create();
+        this.db = sqlBrite.wrapDatabaseHelper(new InternalDb(c));
+
+        Cursor cursor = db.query(FULL_PROJECTION);
         try {
             activeBooks = new ArrayList<>();
             orphanedBooks = new ArrayList<>();
@@ -188,42 +195,52 @@ public class BookShelf {
     public synchronized void addBook(@NonNull Book book) {
         Timber.v("addBook=%s", book.name());
 
-        db.beginTransaction();
+        BriteDatabase.Transaction transaction = db.newTransaction();
         try {
             ContentValues bookCv = BookTable.getContentValues(book);
 
-            long bookId = db.insert(BookTable.TABLE_NAME, null, bookCv);
+            long bookId = db.insert(BookTable.TABLE_NAME, bookCv);
             book = Book.builder(book)
                     .id(bookId)
                     .build();
 
             for (Chapter c : book.chapters()) {
                 ContentValues chapterCv = ChapterTable.getContentValues(c, book.id());
-                db.insert(ChapterTable.TABLE_NAME, null, chapterCv);
+                db.insert(ChapterTable.TABLE_NAME, chapterCv);
             }
 
             for (Bookmark b : book.bookmarks()) {
                 ContentValues bookmarkCv = BookmarkTable.getContentValues(b, book.id());
-                db.insert(BookmarkTable.TABLE_NAME, null, bookmarkCv);
+                db.insert(BookmarkTable.TABLE_NAME, bookmarkCv);
             }
 
-            db.setTransactionSuccessful();
+            transaction.markSuccessful();
         } finally {
-            db.endTransaction();
+            transaction.end();
         }
 
         activeBooks.add(book);
         communication.bookSetChanged(activeBooks);
     }
 
-    @Nullable
-    public synchronized Book getBook(long id) {
-        for (Book b : activeBooks) {
-            if (b.id() == id) {
-                return b;
-            }
-        }
-        return null;
+    public synchronized Observable<Book> getBook(final long id) {
+        Timber.i("getBook with id %d", id);
+        return db.createQuery(Arrays.asList(BookTable.TABLE_NAME, ChapterTable.TABLE_NAME, BookmarkTable.TABLE_NAME),
+                FULL_PROJECTION + APPEND_WHERE_ID,
+                String.valueOf(id))
+                .map(new Func1<SqlBrite.Query, Book>() {
+                    @Override
+                    public Book call(SqlBrite.Query query) {
+                        Cursor cursor = query.run();
+                        if (cursor.moveToFirst()) {
+                            Timber.i("Cursor is valid. Returning a book.");
+                            return byProjection(cursor);
+                        } else {
+                            Timber.i("no book found for id %d. Returning null now", id);
+                            return null;
+                        }
+                    }
+                });
     }
 
     @NonNull
@@ -237,7 +254,7 @@ public class BookShelf {
     }
 
     public synchronized void updateBook(@NonNull Book book) {
-        Timber.v("updateBook=%s", book.name());
+        Timber.v("updateBook=%s with time %d", book.name(), book.time());
 
         ListIterator<Book> bookIterator = activeBooks.listIterator();
         while (bookIterator.hasNext()) {
@@ -245,29 +262,29 @@ public class BookShelf {
             if (book.id() == next.id()) {
                 bookIterator.set(book);
 
-                db.beginTransaction();
+                BriteDatabase.Transaction transaction = db.newTransaction();
                 try {
                     // update book itself
                     ContentValues bookCv = BookTable.getContentValues(book);
-                    db.update(BookTable.TABLE_NAME, bookCv, BookTable.ID + "=?", new String[]{String.valueOf(book.id())});
+                    db.update(BookTable.TABLE_NAME, bookCv, BookTable.ID + "=?", String.valueOf(book.id()));
 
                     // delete old chapters and replace them with new ones
-                    db.delete(ChapterTable.TABLE_NAME, BookTable.ID + "=?", new String[]{String.valueOf(book.id())});
+                    db.delete(ChapterTable.TABLE_NAME, BookTable.ID + "=?", String.valueOf(book.id()));
                     for (Chapter c : book.chapters()) {
                         ContentValues chapterCv = ChapterTable.getContentValues(c, book.id());
-                        db.insert(ChapterTable.TABLE_NAME, null, chapterCv);
+                        db.insert(ChapterTable.TABLE_NAME, chapterCv);
                     }
 
                     // replace old bookmarks and replace them with new ones
-                    db.delete(BookmarkTable.TABLE_NAME, BookTable.ID + "=?", new String[]{String.valueOf(book.id())});
+                    db.delete(BookmarkTable.TABLE_NAME, BookTable.ID + "=?", String.valueOf(book.id()));
                     for (Bookmark b : book.bookmarks()) {
                         ContentValues bookmarkCV = BookmarkTable.getContentValues(b, book.id());
-                        db.insert(BookmarkTable.TABLE_NAME, null, bookmarkCV);
+                        db.insert(BookmarkTable.TABLE_NAME, bookmarkCV);
                     }
 
-                    db.setTransactionSuccessful();
+                    transaction.markSuccessful();
                 } finally {
-                    db.endTransaction();
+                    transaction.end();
                 }
 
                 break;
@@ -287,7 +304,7 @@ public class BookShelf {
                 iterator.remove();
                 ContentValues cv = new ContentValues();
                 cv.put(BookTable.ACTIVE, BOOLEAN_FALSE);
-                db.update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", new String[]{String.valueOf(book.id())});
+                db.update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", String.valueOf(book.id()));
                 break;
             }
         }
@@ -302,7 +319,7 @@ public class BookShelf {
                 orphanedBookIterator.remove();
                 ContentValues cv = new ContentValues();
                 cv.put(BookTable.ACTIVE, BOOLEAN_TRUE);
-                db.update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", new String[]{String.valueOf(book.id())});
+                db.update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", String.valueOf(book.id()));
                 break;
             }
         }

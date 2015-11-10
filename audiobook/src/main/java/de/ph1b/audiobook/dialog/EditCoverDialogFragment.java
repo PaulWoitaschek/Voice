@@ -87,7 +87,7 @@ public class EditCoverDialogFragment extends DialogFragment {
 
         // init values
         final long bookId = getArguments().getLong(Book.TAG);
-        book = db.getBook(bookId);
+        book = db.getBook(bookId).toBlocking().first();
         assert book != null;
         coverReplacement = new CoverReplacement(book.name(), getActivity());
         isOnline = ImageHelper.isOnline(getActivity());
@@ -129,7 +129,7 @@ public class EditCoverDialogFragment extends DialogFragment {
 
                 //noinspection SynchronizeOnNonFinalField
                 synchronized (db) {
-                    Book dbBook = db.getBook(book.id());
+                    Book dbBook = db.getBook(book.id()).toBlocking().first();
                     if (dbBook != null) {
                         dbBook = Book.builder(dbBook)
                                 .useCoverReplacement(useCoverReplacement)

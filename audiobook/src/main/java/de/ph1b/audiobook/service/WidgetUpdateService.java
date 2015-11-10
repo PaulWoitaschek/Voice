@@ -102,7 +102,7 @@ public class WidgetUpdateService extends Service {
             @Override
             public void run() {
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(WidgetUpdateService.this);
-                Book book = db.getBook(prefs.getCurrentBookId());
+                Book book = db.getBook(prefs.getCurrentBookId()).toBlocking().first();
                 boolean isPortrait = isPortrait();
                 int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(
                         WidgetUpdateService.this, BaseWidgetProvider.class));

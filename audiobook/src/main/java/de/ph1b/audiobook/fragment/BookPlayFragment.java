@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -57,9 +56,9 @@ import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.BaseModule;
 import de.ph1b.audiobook.utils.Communication;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 /**
@@ -72,6 +71,7 @@ public class BookPlayFragment extends Fragment {
     public static final String TAG = BookPlayFragment.class.getSimpleName();
     private static final String NI_BOOK_ID = "niBookId";
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
+    private final CompositeSubscription subscriptions = new CompositeSubscription();
     @Inject Communication communication;
     @Inject MediaPlayerController mediaPlayerController;
     @Bind(R.id.previous) View previous_button;
@@ -91,7 +91,6 @@ public class BookPlayFragment extends Fragment {
     private ServiceController controller;
     private CountDownTimer countDownTimer;
     private boolean isMultiPanel = false;
-    private long bookId;
     private AppCompatActivity hostingActivity;
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
 
@@ -105,41 +104,9 @@ public class BookPlayFragment extends Fragment {
                 }
             });
         }
-
-        @Override
-        public void onBookContentChanged(@NonNull final Book book) {
-            hostingActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Timber.d("onBookContentChangedReciever called with bookId=%d", book.id());
-                    if (book.id() == bookId) {
-                        List<Chapter> chapters = book.chapters();
-                        Chapter chapter = book.currentChapter();
-
-                        int position = chapters.indexOf(chapter);
-                        /*
-                          Setting position as a tag, so we can make sure onItemSelected is only fired when
-                          the user changes the position himself.
-                         */
-                        bookSpinner.setTag(position);
-                        bookSpinner.setSelection(position, true);
-                        int duration = chapter.duration();
-                        seekBar.setMax(duration);
-                        maxTimeView.setText(formatTime(duration, duration));
-
-                        // Setting seekBar and played time view
-                        int progress = book.time();
-                        if (!seekBar.isPressed()) {
-                            seekBar.setProgress(progress);
-                            playedTimeView.setText(formatTime(progress, duration));
-                        }
-                    }
-                }
-            });
-        }
     };
     private MultiPaneInformer multiPaneInformer;
-    private Subscription playStateSubscription;
+    private Book book;
 
     private static String formatTime(int ms, int duration) {
         String h = String.valueOf(TimeUnit.MILLISECONDS.toHours(ms));
@@ -182,7 +149,7 @@ public class BookPlayFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_book_play, container, false);
         ButterKnife.bind(this, view);
 
-        final Book book = db.getBook(bookId);
+        book = db.getBook(getBookId()).toBlocking().first();
         isMultiPanel = multiPaneInformer.isMultiPanel();
 
         //init views
@@ -213,12 +180,9 @@ public class BookPlayFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 int progress = seekBar.getProgress();
-                Book currentBook = db.getBook(bookId);
-                if (currentBook != null) {
-                    controller.changeTime(progress, currentBook.currentChapter()
-                            .file());
-                    playedTimeView.setText(formatTime(progress, seekBar.getMax()));
-                }
+                controller.changeTime(progress, book.currentChapter()
+                        .file());
+                playedTimeView.setText(formatTime(progress, seekBar.getMax()));
             }
         });
 
@@ -329,8 +293,6 @@ public class BookPlayFragment extends Fragment {
         super.onCreate(savedInstanceState);
         App.getComponent().inject(this);
 
-        bookId = getArguments().getLong(NI_BOOK_ID);
-
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
@@ -358,7 +320,7 @@ public class BookPlayFragment extends Fragment {
                 controller.previous();
                 break;
             case R.id.played:
-                if (db.getBook(bookId) != null) {
+                if (book != null) {
                     launchJumpToPositionDialog();
                 }
                 break;
@@ -420,7 +382,7 @@ public class BookPlayFragment extends Fragment {
         }
 
         // hide bookmark and time change item if there is no valid book
-        boolean currentBookExists = db.getBook(bookId) != null;
+        boolean currentBookExists = book != null;
         MenuItem bookmarkItem = menu.findItem(R.id.action_bookmark);
         MenuItem timeChangeItem = menu.findItem(R.id.action_time_change);
         bookmarkItem.setVisible(currentBookExists);
@@ -446,7 +408,7 @@ public class BookPlayFragment extends Fragment {
                     String date = DateUtils.formatDateTime(getContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE |
                             DateUtils.FORMAT_SHOW_TIME |
                             DateUtils.FORMAT_NUMERIC_DATE);
-                    BookmarkDialogFragment.addBookmark(bookId, date + ": " +
+                    BookmarkDialogFragment.addBookmark(getBookId(), date + ": " +
                             getString(R.string.action_sleep), db);
                 }
                 return true;
@@ -455,7 +417,7 @@ public class BookPlayFragment extends Fragment {
                         PlaybackSpeedDialogFragment.TAG);
                 return true;
             case R.id.action_bookmark:
-                BookmarkDialogFragment.newInstance(bookId).show(getFragmentManager(),
+                BookmarkDialogFragment.newInstance(getBookId()).show(getFragmentManager(),
                         BookmarkDialogFragment.TAG);
                 return true;
             case android.R.id.home:
@@ -470,7 +432,7 @@ public class BookPlayFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        playStateSubscription = mediaPlayerController.getPlayState()
+        subscriptions.add(mediaPlayerController.getPlayState()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<MediaPlayerController.PlayState>() {
                     private boolean firstRun = true;
@@ -487,13 +449,42 @@ public class BookPlayFragment extends Fragment {
 
                         firstRun = false;
                     }
-                });
+                }));
 
+        subscriptions.add(db.getBook(getBookId())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Book>() {
+                    @Override
+                    public void call(Book book) {
+                        BookPlayFragment.this.book = book;
+                        if (book == null) {
+                            Timber.e("Book is null. Returning immediately.");
+                            return;
+                        }
+                        Timber.i("New book with time %d and content %s", book.time(), book);
 
-        Book book = db.getBook(bookId);
-        if (book != null) {
-            listener.onBookContentChanged(book);
-        }
+                        List<Chapter> chapters = book.chapters();
+                        Chapter chapter = book.currentChapter();
+
+                        int position = chapters.indexOf(chapter);
+                        /*
+                          Setting position as a tag, so we can make sure onItemSelected is only fired when
+                          the user changes the position himself.
+                         */
+                        bookSpinner.setTag(position);
+                        bookSpinner.setSelection(position, true);
+                        int duration = chapter.duration();
+                        seekBar.setMax(duration);
+                        maxTimeView.setText(formatTime(duration, duration));
+
+                        // Setting seekBar and played time view
+                        int progress = book.time();
+                        if (!seekBar.isPressed()) {
+                            seekBar.setProgress(progress);
+                            playedTimeView.setText(formatTime(progress, duration));
+                        }
+                    }
+                }));
 
         hostingActivity.invalidateOptionsMenu();
 
@@ -507,7 +498,7 @@ public class BookPlayFragment extends Fragment {
     public void onStop() {
         super.onStop();
 
-        playStateSubscription.unsubscribe();
+        subscriptions.clear();
 
         communication.removeBookCommunicationListener(listener);
 

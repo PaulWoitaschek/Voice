@@ -126,14 +126,14 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
         @Override
         public void onBookContentChanged(@NonNull Book book) {
             if (book.id() == prefs.getCurrentBookId()) {
-                controller.updateBook(db.getBook(prefs.getCurrentBookId()));
+                controller.updateBook(db.getBook(prefs.getCurrentBookId()).toBlocking().first());
                 notifyChange(ChangeType.METADATA);
             }
         }
 
         @Override
         public void onCurrentBookIdChanged(long oldId) {
-            Book book = db.getBook(prefs.getCurrentBookId());
+            Book book = db.getBook(prefs.getCurrentBookId()).toBlocking().first();
             if (book != null && (controller.getBook() == null || controller.getBook().id() != book.id())) {
                 reInitController(book);
             }
@@ -179,7 +179,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
 
         communication.addBookCommunicationListener(listener);
 
-        Book book = db.getBook(prefs.getCurrentBookId());
+        Book book = db.getBook(prefs.getCurrentBookId()).toBlocking().first();
         if (book != null) {
             Timber.d("onCreated initialized book=%s", book);
             reInitController(book);

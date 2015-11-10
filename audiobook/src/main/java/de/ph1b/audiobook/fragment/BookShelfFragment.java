@@ -391,7 +391,7 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
                             public void onTitleChanged(@NonNull String newTitle) {
                                 //noinspection SynchronizeOnNonFinalField
                                 synchronized (db) {
-                                    Book dbBook = db.getBook(book.id());
+                                    Book dbBook = db.getBook(book.id()).toBlocking().first();
                                     if (dbBook != null) {
                                         dbBook = Book.builder(dbBook)
                                                 .name(newTitle)

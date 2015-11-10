@@ -71,7 +71,7 @@ public class BookmarkDialogFragment extends DialogFragment {
     }
 
     public static void addBookmark(long bookId, @NonNull String title, @NonNull BookShelf db) {
-        Book book = db.getBook(bookId);
+        Book book = db.getBook(bookId).toBlocking().first();
         if (book != null) {
             Bookmark addedBookmark = Bookmark.of(book.currentChapter().file(), title, book.time());
             List<Bookmark> newBookmarks = new ArrayList<>(book.bookmarks());
@@ -117,7 +117,7 @@ public class BookmarkDialogFragment extends DialogFragment {
 
 
         final long bookId = getArguments().getLong(BOOK_ID);
-        book = db.getBook(bookId);
+        book = db.getBook(bookId).toBlocking().first();
         if (book == null) {
             throw new AssertionError("Cannot instantiate " + TAG + " without a book");
         }
