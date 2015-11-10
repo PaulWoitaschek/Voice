@@ -221,6 +221,7 @@ public class BookShelf {
         communication.bookSetChanged(activeBooks);
     }
 
+    @NonNull
     public synchronized Observable<Book> getBook(final long id) {
         Timber.i("getBook with id %d", id);
         return db.createQuery(Arrays.asList(BookTable.TABLE_NAME, ChapterTable.TABLE_NAME, BookmarkTable.TABLE_NAME),
