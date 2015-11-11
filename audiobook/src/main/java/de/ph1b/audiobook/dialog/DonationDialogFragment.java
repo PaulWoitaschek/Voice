@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.dialog;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -12,6 +13,7 @@ import de.ph1b.audiobook.R;
 
 public class DonationDialogFragment extends DialogFragment {
     public static final String TAG = DonationDialogFragment.class.getSimpleName();
+    private OnDonationClickedListener callback;
 
     @NonNull
     @Override
@@ -40,7 +42,7 @@ public class DonationDialogFragment extends DialogFragment {
                 default:
                     throw new AssertionError("There are only 4 items");
             }
-            ((OnDonationClickedListener) getActivity()).onDonationClicked(item);
+            callback.onDonationClicked(item);
         };
 
         return new MaterialDialog.Builder(getActivity())
@@ -48,6 +50,13 @@ public class DonationDialogFragment extends DialogFragment {
                 .items(R.array.pref_support_money)
                 .itemsCallback(donationListCallback)
                 .build();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        callback = (OnDonationClickedListener) context;
     }
 
     public interface OnDonationClickedListener {

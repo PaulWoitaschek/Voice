@@ -3,6 +3,9 @@ package de.ph1b.audiobook.utils;
 import android.app.Application;
 import android.content.Context;
 
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
+
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 import org.acra.sender.HttpSender;
@@ -44,7 +47,12 @@ import timber.log.Timber;
 public class App extends Application {
 
     private static ApplicationComponent applicationComponent;
+    private static RefWatcher refWatcher;
     @Inject BookAdder bookAdder;
+
+    public static void leakWatch(Object object) {
+        refWatcher.watch(object);
+    }
 
     public static ApplicationComponent getComponent() {
         return applicationComponent;
@@ -59,6 +67,7 @@ public class App extends Application {
         } else {
             ACRA.init(this);
         }
+        refWatcher = LeakCanary.install(this);
 
         applicationComponent = DaggerApp_ApplicationComponent.builder().baseModule(new BaseModule(this)).build();
         applicationComponent.inject(this);

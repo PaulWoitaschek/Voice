@@ -52,6 +52,7 @@ public class SettingsFragment extends PreferenceFragment implements DonationDial
         super.onDestroy();
 
         iabHelper.dispose();
+        App.leakWatch(this);
     }
 
     @Override

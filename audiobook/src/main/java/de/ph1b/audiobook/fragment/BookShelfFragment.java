@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -63,7 +63,7 @@ import timber.log.Timber;
  *
  * @author Paul Woitaschek
  */
-public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnItemClickListener {
+public class BookShelfFragment extends BaseFragment implements BookShelfAdapter.OnItemClickListener, EditBookTitleDialogFragment.OnTextChanged {
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
@@ -356,20 +356,8 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
                     fragment.show(getFragmentManager(), EditCoverDialogFragment.TAG);
                     return true;
                 case R.id.edit_title:
-                    EditBookTitleDialogFragment editBookTitle = EditBookTitleDialogFragment.newInstance(book.name());
-                    editBookTitle.setOnTextChangedListener(newTitle -> {
-                        //noinspection SynchronizeOnNonFinalField
-                        synchronized (db) {
-                            Book dbBook = bookVendor.byId(book.id());
-                            if (dbBook != null) {
-                                dbBook = Book.builder(dbBook)
-                                        .name(newTitle)
-                                        .build();
-                                db.updateBook(dbBook);
-                            }
-                        }
-                    });
-                    editBookTitle.show(getFragmentManager(), EditBookTitleDialogFragment.TAG);
+                    EditBookTitleDialogFragment.newInstance(this, book).show(getFragmentManager(),
+                            EditBookTitleDialogFragment.TAG);
                     return true;
                 case R.id.bookmark:
                     BookmarkDialogFragment.newInstance(adapter.getItemId(position))
@@ -380,6 +368,18 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
             }
         });
         popupMenu.show();
+    }
+
+    @Override
+    public void onTitleChanged(@NonNull String newTitle, long bookId) {
+        Timber.i("onTitleChanged with title %s and id %d", newTitle, bookId);
+        Book dbBook = bookVendor.byId(bookId);
+        if (dbBook != null) {
+            dbBook = Book.builder(dbBook)
+                    .name(newTitle)
+                    .build();
+            db.updateBook(dbBook);
+        }
     }
 
     public enum DisplayMode {

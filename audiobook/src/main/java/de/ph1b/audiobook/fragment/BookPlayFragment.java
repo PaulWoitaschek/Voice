@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
@@ -68,7 +67,7 @@ import timber.log.Timber;
  *
  * @author Paul Woitaschek
  */
-public class BookPlayFragment extends Fragment {
+public class BookPlayFragment extends BaseFragment {
 
     public static final String TAG = BookPlayFragment.class.getSimpleName();
     private static final String NI_BOOK_ID = "niBookId";
