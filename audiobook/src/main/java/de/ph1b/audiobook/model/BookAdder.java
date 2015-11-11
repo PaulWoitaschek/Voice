@@ -35,7 +35,6 @@ import de.ph1b.audiobook.persistence.BookShelf;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.BookVendor;
-import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.FileRecognition;
 import rx.subjects.BehaviorSubject;
 import timber.log.Timber;
@@ -49,7 +48,6 @@ import timber.log.Timber;
 @Singleton
 public class BookAdder {
 
-    private final Communication communication;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Context c;
     private final PrefsManager prefs;
@@ -60,10 +58,9 @@ public class BookAdder {
 
     @Inject
     public BookAdder(@NonNull @ForApplication Context c, @NonNull PrefsManager prefs,
-                     @NonNull Communication communication, @NonNull BookShelf db) {
+                     @NonNull BookShelf db) {
         this.c = c;
         this.prefs = prefs;
-        this.communication = communication;
         this.db = db;
     }
 
