@@ -1,12 +1,12 @@
 *.apk
 .DS_Store
 captures
+.idea/workspace.xml
+.idea/libraries/
 *.mp3
 audiobook/build
 build
-*.iml
 .gradle/
-.idea
 *~
 *.log
 local.properties
