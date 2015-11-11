@@ -55,7 +55,9 @@ import de.ph1b.audiobook.uitools.PlayPauseDrawable;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.BaseModule;
+import de.ph1b.audiobook.utils.BookVendor;
 import de.ph1b.audiobook.utils.Communication;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
@@ -88,6 +90,7 @@ public class BookPlayFragment extends Fragment {
     @Bind(R.id.timerView) TextView timerCountdownView;
     @Inject PrefsManager prefs;
     @Inject BookShelf db;
+    @Inject BookVendor bookVendor;
     private ServiceController controller;
     private CountDownTimer countDownTimer;
     private boolean isMultiPanel = false;
@@ -149,7 +152,7 @@ public class BookPlayFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_book_play, container, false);
         ButterKnife.bind(this, view);
 
-        book = db.getBook(getBookId()).toBlocking().first();
+        book = bookVendor.byId(getBookId());
         isMultiPanel = multiPaneInformer.isMultiPanel();
 
         //init views
@@ -451,8 +454,10 @@ public class BookPlayFragment extends Fragment {
                     }
                 }));
 
-        subscriptions.add(db.getBook(getBookId())
+
+        subscriptions.add((Observable.merge(db.getActiveBooks(), db.updateObservable()))
                 .observeOn(AndroidSchedulers.mainThread())
+                .filter(book -> book.id() == getBookId())
                 .subscribe(book -> {
                     BookPlayFragment.this.book = book;
                     if (book == null) {

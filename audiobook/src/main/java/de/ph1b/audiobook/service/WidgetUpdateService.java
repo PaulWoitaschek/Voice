@@ -41,6 +41,7 @@ import de.ph1b.audiobook.receiver.BaseWidgetProvider;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.App;
+import de.ph1b.audiobook.utils.BookVendor;
 import de.ph1b.audiobook.utils.Communication;
 import rx.Subscription;
 
@@ -55,6 +56,7 @@ public class WidgetUpdateService extends Service {
     @Inject PrefsManager prefs;
     @Inject BookShelf db;
     @Inject MediaPlayerController mediaPlayerController;
+    @Inject BookVendor bookVendor;
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
 
         @Override
@@ -70,7 +72,6 @@ public class WidgetUpdateService extends Service {
         }
 
     };
-
     private Subscription playStateSubscription;
 
     @Override
@@ -96,7 +97,7 @@ public class WidgetUpdateService extends Service {
     private void updateWidget() {
         executor.execute(() -> {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(WidgetUpdateService.this);
-            Book book = db.getBook(prefs.getCurrentBookId()).toBlocking().first();
+            Book book = bookVendor.byId(prefs.getCurrentBookId());
             boolean isPortrait = isPortrait();
             int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(
                     WidgetUpdateService.this, BaseWidgetProvider.class));

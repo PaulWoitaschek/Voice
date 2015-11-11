@@ -47,6 +47,7 @@ import de.ph1b.audiobook.receiver.RemoteControlReceiver;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.App;
+import de.ph1b.audiobook.utils.BookVendor;
 import de.ph1b.audiobook.utils.Communication;
 import rx.Subscription;
 import timber.log.Timber;
@@ -84,6 +85,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
     @Inject BookShelf db;
     @Inject NotificationManager notificationManager;
     @Inject AudioManager audioManager;
+    @Inject BookVendor bookVendor;
     private volatile boolean pauseBecauseLossTransient = false;
     private volatile boolean pauseBecauseHeadset = false;
     private final BroadcastReceiver audioBecomingNoisyReceiver = new BroadcastReceiver() {
@@ -125,14 +127,14 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
         @Override
         public void onBookContentChanged(@NonNull Book book) {
             if (book.id() == prefs.getCurrentBookId()) {
-                controller.updateBook(db.getBook(prefs.getCurrentBookId()).toBlocking().first());
+                controller.updateBook(book);
                 notifyChange(ChangeType.METADATA);
             }
         }
 
         @Override
         public void onCurrentBookIdChanged(long oldId) {
-            Book book = db.getBook(prefs.getCurrentBookId()).toBlocking().first();
+            Book book = bookVendor.byId(prefs.getCurrentBookId());
             if (book != null && (controller.getBook() == null || controller.getBook().id() != book.id())) {
                 reInitController(book);
             }
@@ -178,7 +180,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
 
         communication.addBookCommunicationListener(listener);
 
-        Book book = db.getBook(prefs.getCurrentBookId()).toBlocking().first();
+        Book book = bookVendor.byId(prefs.getCurrentBookId());
         if (book != null) {
             Timber.d("onCreated initialized book=%s", book);
             reInitController(book);

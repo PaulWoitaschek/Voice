@@ -9,12 +9,9 @@ import android.support.annotation.NonNull;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.squareup.sqlbrite.BriteDatabase;
-import com.squareup.sqlbrite.SqlBrite;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Iterator;
@@ -30,6 +27,7 @@ import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.utils.Communication;
 import rx.Observable;
+import rx.subjects.PublishSubject;
 import timber.log.Timber;
 
 
@@ -83,20 +81,21 @@ public class BookShelf {
             "            group_concat(" + BookmarkTable.TIME + ") as " + KEY_BOOKMARK_POSITIONS +
             "     FROM " + BookmarkTable.TABLE_NAME +
             "     group by " + BookmarkTable.BOOK_ID + ") AS bmt on bmt." + BookmarkTable.BOOK_ID + " = bt." + BookTable.ID;
-    private static final String APPEND_WHERE_ID = " WHERE bt." + BookTable.ID + " = ? ";
     private final Communication communication;
     private final List<Book> activeBooks;
     private final List<Book> orphanedBooks;
-    private final BriteDatabase db;
+    private final SQLiteDatabase db;
+    private final PublishSubject<Book> added = PublishSubject.create();
+    private final PublishSubject<Book> removed = PublishSubject.create();
+    private final PublishSubject<Book> updated = PublishSubject.create();
 
     @Inject
     public BookShelf(@NonNull @ForApplication Context c, @NonNull Communication communication) {
         this.communication = communication;
 
-        SqlBrite sqlBrite = SqlBrite.create();
-        this.db = sqlBrite.wrapDatabaseHelper(new InternalDb(c));
+        this.db = new InternalDb(c).getWritableDatabase();
 
-        Cursor cursor = db.query(FULL_PROJECTION);
+        Cursor cursor = db.rawQuery(FULL_PROJECTION, null);
         try {
             activeBooks = new ArrayList<>();
             orphanedBooks = new ArrayList<>();
@@ -190,58 +189,45 @@ public class BookShelf {
                 .build();
     }
 
+    public Observable<Book> updateObservable() {
+        return updated;
+    }
+
     public synchronized void addBook(@NonNull Book book) {
         Timber.v("addBook=%s", book.name());
 
-        BriteDatabase.Transaction transaction = db.newTransaction();
+        db.beginTransaction();
         try {
             ContentValues bookCv = BookTable.getContentValues(book);
 
-            long bookId = db.insert(BookTable.TABLE_NAME, bookCv);
+            long bookId = db.insert(BookTable.TABLE_NAME, null, bookCv);
             book = Book.builder(book)
                     .id(bookId)
                     .build();
 
             for (Chapter c : book.chapters()) {
                 ContentValues chapterCv = ChapterTable.getContentValues(c, book.id());
-                db.insert(ChapterTable.TABLE_NAME, chapterCv);
+                db.insert(ChapterTable.TABLE_NAME, null, chapterCv);
             }
 
             for (Bookmark b : book.bookmarks()) {
                 ContentValues bookmarkCv = BookmarkTable.getContentValues(b, book.id());
-                db.insert(BookmarkTable.TABLE_NAME, bookmarkCv);
+                db.insert(BookmarkTable.TABLE_NAME, null, bookmarkCv);
             }
 
-            transaction.markSuccessful();
+            db.setTransactionSuccessful();
         } finally {
-            transaction.end();
+            db.endTransaction();
         }
 
         activeBooks.add(book);
+        added.onNext(book);
         communication.bookSetChanged(activeBooks);
     }
 
     @NonNull
-    public synchronized Observable<Book> getBook(final long id) {
-        Timber.i("getBook with id %d", id);
-        return db.createQuery(Arrays.asList(BookTable.TABLE_NAME, ChapterTable.TABLE_NAME, BookmarkTable.TABLE_NAME),
-                FULL_PROJECTION + APPEND_WHERE_ID,
-                String.valueOf(id))
-                .map(query -> {
-                    Cursor cursor = query.run();
-                    if (cursor.moveToFirst()) {
-                        Timber.i("Cursor is valid. Returning a book.");
-                        return byProjection(cursor);
-                    } else {
-                        Timber.i("no book found for id %d. Returning null now", id);
-                        return null;
-                    }
-                });
-    }
-
-    @NonNull
-    public synchronized List<Book> getActiveBooks() {
-        return new ArrayList<>(activeBooks);
+    public synchronized Observable<Book> getActiveBooks() {
+        return Observable.from(activeBooks);
     }
 
     @NonNull
@@ -258,35 +244,36 @@ public class BookShelf {
             if (book.id() == next.id()) {
                 bookIterator.set(book);
 
-                BriteDatabase.Transaction transaction = db.newTransaction();
+                db.beginTransaction();
                 try {
                     // update book itself
                     ContentValues bookCv = BookTable.getContentValues(book);
-                    db.update(BookTable.TABLE_NAME, bookCv, BookTable.ID + "=?", String.valueOf(book.id()));
+                    db.update(BookTable.TABLE_NAME, bookCv, BookTable.ID + "=?", new String[]{String.valueOf(book.id())});
 
                     // delete old chapters and replace them with new ones
-                    db.delete(ChapterTable.TABLE_NAME, BookTable.ID + "=?", String.valueOf(book.id()));
+                    db.delete(ChapterTable.TABLE_NAME, BookTable.ID + "=?", new String[]{String.valueOf(book.id())});
                     for (Chapter c : book.chapters()) {
                         ContentValues chapterCv = ChapterTable.getContentValues(c, book.id());
-                        db.insert(ChapterTable.TABLE_NAME, chapterCv);
+                        db.insert(ChapterTable.TABLE_NAME, null, chapterCv);
                     }
 
                     // replace old bookmarks and replace them with new ones
-                    db.delete(BookmarkTable.TABLE_NAME, BookTable.ID + "=?", String.valueOf(book.id()));
+                    db.delete(BookmarkTable.TABLE_NAME, BookTable.ID + "=?", new String[]{String.valueOf(book.id())});
                     for (Bookmark b : book.bookmarks()) {
                         ContentValues bookmarkCV = BookmarkTable.getContentValues(b, book.id());
-                        db.insert(BookmarkTable.TABLE_NAME, bookmarkCV);
+                        db.insert(BookmarkTable.TABLE_NAME, null, bookmarkCV);
                     }
 
-                    transaction.markSuccessful();
+                    db.setTransactionSuccessful();
                 } finally {
-                    transaction.end();
+                    db.endTransaction();
                 }
 
                 break;
             }
         }
 
+        updated.onNext(book);
         communication.sendBookContentChanged(book);
     }
 
@@ -300,11 +287,12 @@ public class BookShelf {
                 iterator.remove();
                 ContentValues cv = new ContentValues();
                 cv.put(BookTable.ACTIVE, BOOLEAN_FALSE);
-                db.update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", String.valueOf(book.id()));
+                db.update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", new String[]{String.valueOf(book.id())});
                 break;
             }
         }
         orphanedBooks.add(book);
+        removed.onNext(book);
         communication.bookSetChanged(activeBooks);
     }
 
@@ -315,11 +303,12 @@ public class BookShelf {
                 orphanedBookIterator.remove();
                 ContentValues cv = new ContentValues();
                 cv.put(BookTable.ACTIVE, BOOLEAN_TRUE);
-                db.update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", String.valueOf(book.id()));
+                db.update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", new String[]{String.valueOf(book.id())});
                 break;
             }
         }
         activeBooks.add(book);
+        added.onNext(book);
         communication.bookSetChanged(activeBooks);
     }
 

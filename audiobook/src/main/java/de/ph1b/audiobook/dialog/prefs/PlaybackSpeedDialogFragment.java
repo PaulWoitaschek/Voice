@@ -24,6 +24,7 @@ import de.ph1b.audiobook.persistence.BookShelf;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.utils.App;
+import de.ph1b.audiobook.utils.BookVendor;
 
 /**
  * Dialog for setting the playback speed of the current book.
@@ -42,6 +43,7 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
     @Bind(R.id.textView) TextView textView;
     @Inject PrefsManager prefs;
     @Inject BookShelf db;
+    @Inject BookVendor bookVendor;
 
     private static float speedStepValueToSpeed(int step) {
         return (Book.SPEED_MIN + (step * SPEED_DELTA));
@@ -61,7 +63,7 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
         App.getComponent().inject(this);
 
         // setting current speed
-        final Book book = db.getBook(prefs.getCurrentBookId()).toBlocking().first();
+        final Book book = bookVendor.byId(prefs.getCurrentBookId());
         if (book == null) {
             throw new AssertionError("Cannot instantiate " + TAG + " without a current book");
         }

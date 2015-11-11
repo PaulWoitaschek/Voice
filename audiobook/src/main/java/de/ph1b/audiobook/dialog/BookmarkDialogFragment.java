@@ -39,6 +39,7 @@ import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.DividerItemDecoration;
 import de.ph1b.audiobook.utils.App;
+import de.ph1b.audiobook.utils.BookVendor;
 import timber.log.Timber;
 
 /**
@@ -54,6 +55,7 @@ public class BookmarkDialogFragment extends DialogFragment {
     @Bind(R.id.edit1) EditText bookmarkTitle;
     @Inject PrefsManager prefs;
     @Inject BookShelf db;
+    @Inject BookVendor bookVendor;
     private BookmarkAdapter adapter;
     private ServiceController controller;
     private Book book;
@@ -67,7 +69,10 @@ public class BookmarkDialogFragment extends DialogFragment {
     }
 
     public static void addBookmark(long bookId, @NonNull String title, @NonNull BookShelf db) {
-        Book book = db.getBook(bookId).toBlocking().first();
+        Book book = db.getActiveBooks()
+                .singleOrDefault(null, filterBook -> filterBook.id() == bookId)
+                .toBlocking()
+                .single();
         if (book != null) {
             Bookmark addedBookmark = Bookmark.of(book.currentChapter().file(), title, book.time());
             List<Bookmark> newBookmarks = new ArrayList<>(book.bookmarks());
@@ -113,7 +118,7 @@ public class BookmarkDialogFragment extends DialogFragment {
 
 
         final long bookId = getArguments().getLong(BOOK_ID);
-        book = db.getBook(bookId).toBlocking().first();
+        book = bookVendor.byId(bookId);
         if (book == null) {
             throw new AssertionError("Cannot instantiate " + TAG + " without a book");
         }

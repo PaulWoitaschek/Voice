@@ -34,6 +34,7 @@ import de.ph1b.audiobook.interfaces.ForApplication;
 import de.ph1b.audiobook.persistence.BookShelf;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.ImageHelper;
+import de.ph1b.audiobook.utils.BookVendor;
 import de.ph1b.audiobook.utils.Communication;
 import de.ph1b.audiobook.utils.FileRecognition;
 import rx.subjects.BehaviorSubject;
@@ -54,6 +55,7 @@ public class BookAdder {
     private final PrefsManager prefs;
     private final BookShelf db;
     private final BehaviorSubject<Boolean> scannerActive = BehaviorSubject.create(false);
+    @Inject BookVendor bookVendor;
     private volatile boolean stopScanner = false;
 
     @Inject
@@ -232,7 +234,7 @@ public class BookAdder {
      * @throws InterruptedException
      */
     private void findCovers() throws InterruptedException {
-        for (Book b : db.getActiveBooks()) {
+        for (Book b : bookVendor.all()) {
             throwIfStopRequested();
             File coverFile = b.coverFile();
             if (!coverFile.exists()) {
@@ -342,7 +344,7 @@ public class BookAdder {
 
         //getting books to remove
         List<Book> booksToRemove = new ArrayList<>(20);
-        for (Book book : db.getActiveBooks()) {
+        for (Book book : bookVendor.all()) {
             boolean bookExists = false;
             switch (book.type()) {
                 case COLLECTION_FILE:
@@ -630,7 +632,7 @@ public class BookAdder {
         if (orphaned) {
             books = db.getOrphanedBooks();
         } else {
-            books = db.getActiveBooks();
+            books = bookVendor.all();
         }
         if (rootFile.isDirectory()) {
             for (Book b : books) {

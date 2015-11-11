@@ -24,6 +24,7 @@ import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.ThemeUtil;
 import de.ph1b.audiobook.utils.App;
+import de.ph1b.audiobook.utils.BookVendor;
 
 public class JumpToPositionDialogFragment extends DialogFragment {
 
@@ -33,6 +34,7 @@ public class JumpToPositionDialogFragment extends DialogFragment {
     @Bind(R.id.colon) View colon;
     @Inject PrefsManager prefs;
     @Inject BookShelf db;
+    @Inject BookVendor bookVendor;
     private int durationInMinutes;
     private int biggestHour;
 
@@ -44,8 +46,7 @@ public class JumpToPositionDialogFragment extends DialogFragment {
         ButterKnife.bind(this, v);
         App.getComponent().inject(this);
 
-
-        final Book book = db.getBook(prefs.getCurrentBookId()).toBlocking().first();
+        final Book book = bookVendor.byId(prefs.getCurrentBookId());
         if (book == null) {
             throw new AssertionError("Cannot instantiate " + TAG + " without a current book");
         }

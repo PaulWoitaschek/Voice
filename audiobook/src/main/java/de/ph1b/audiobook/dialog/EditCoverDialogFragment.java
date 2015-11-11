@@ -36,6 +36,7 @@ import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.DraggableBoxImageView;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.App;
+import de.ph1b.audiobook.utils.BookVendor;
 import timber.log.Timber;
 
 /**
@@ -52,6 +53,7 @@ public class EditCoverDialogFragment extends DialogFragment {
     @Bind(R.id.previous_cover) ImageButton previousCover;
     @Bind(R.id.next_cover) ImageButton nextCover;
     @Inject BookShelf db;
+    @Inject BookVendor bookVendor;
     private CoverDownloader coverDownloader;
     private AddCoverAsync addCoverAsync;
     /**
@@ -86,7 +88,7 @@ public class EditCoverDialogFragment extends DialogFragment {
 
         // init values
         final long bookId = getArguments().getLong(Book.TAG);
-        book = db.getBook(bookId).toBlocking().first();
+        book = bookVendor.byId(bookId);
         assert book != null;
         coverReplacement = new CoverReplacement(book.name(), getActivity());
         isOnline = ImageHelper.isOnline(getActivity());
@@ -126,7 +128,7 @@ public class EditCoverDialogFragment extends DialogFragment {
 
             //noinspection SynchronizeOnNonFinalField
             synchronized (db) {
-                Book dbBook = db.getBook(book.id()).toBlocking().first();
+                Book dbBook = bookVendor.byId(bookId);
                 if (dbBook != null) {
                     dbBook = Book.builder(dbBook)
                             .useCoverReplacement(useCoverReplacement)

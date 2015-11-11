@@ -53,6 +53,7 @@ import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.DividerItemDecoration;
 import de.ph1b.audiobook.uitools.PlayPauseDrawable;
 import de.ph1b.audiobook.utils.App;
+import de.ph1b.audiobook.utils.BookVendor;
 import de.ph1b.audiobook.utils.Communication;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -77,6 +78,7 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
     @Inject BookShelf db;
     @Inject BookAdder bookAdder;
     @Inject MediaPlayerController mediaPlayerController;
+    @Inject BookVendor bookVendor;
     private BookShelfAdapter adapter;
     private ServiceController controller;
     private MaterialDialog noFolderWarning;
@@ -186,7 +188,7 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
             recyclerView.addItemDecoration(listDecoration);
         }
         adapter = new BookShelfAdapter(getContext(), defaultDisplayMode, this);
-        adapter.newDataSet(db.getActiveBooks());
+        adapter.newDataSet(db.getActiveBooks().toList().toBlocking().single());
         recyclerView.setAdapter(adapter);
         hostingActivity.invalidateOptionsMenu();
     }
@@ -228,7 +230,7 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
         }
 
         // update items and set ui
-        listener.onBookSetChanged(db.getActiveBooks());
+        listener.onBookSetChanged(db.getActiveBooks().toList().toBlocking().single());
 
         // register receivers
         communication.addBookCommunicationListener(listener);
@@ -295,7 +297,7 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
 
         // sets menu item visible if there is a current book
         MenuItem currentPlaying = menu.findItem(R.id.action_current);
-        currentPlaying.setVisible(!isMultiPanel && db.getBook(prefs.getCurrentBookId()) != null);
+        currentPlaying.setVisible(!isMultiPanel && bookVendor.byId(prefs.getCurrentBookId()) != null);
 
         // sets the grid / list toggle icon
         MenuItem displayModeItem = menu.findItem(R.id.action_change_layout);
@@ -375,7 +377,7 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
                     editBookTitle.setOnTextChangedListener(newTitle -> {
                         //noinspection SynchronizeOnNonFinalField
                         synchronized (db) {
-                            Book dbBook = db.getBook(book.id()).toBlocking().first();
+                            Book dbBook = bookVendor.byId(book.id());
                             if (dbBook != null) {
                                 dbBook = Book.builder(dbBook)
                                         .name(newTitle)
