@@ -40,7 +40,7 @@ public class PrefsManager {
     private final String PREF_KEY_SLEEP_TIME;
     private final String PREF_KEY_PAUSE_ON_CAN_DUCK;
     private final String PREF_KEY_AUTO_REWIND;
-    private BehaviorSubject<Long> currentBookId;
+    private final BehaviorSubject<Long> currentBookId;
 
     @Inject
     public PrefsManager(@NonNull @ForApplication Context c) {

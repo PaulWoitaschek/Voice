@@ -67,7 +67,6 @@ public class BookShelfFragment extends BaseFragment implements BookShelfAdapter.
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
-    private final CompositeSubscription subscriptions = new CompositeSubscription();
     @Bind(R.id.recyclerView) RecyclerView recyclerView;
     @Bind(R.id.recyclerReplacement) ProgressBar recyclerReplacementView;
     @Bind(R.id.fab) FloatingActionButton fab;
@@ -76,6 +75,7 @@ public class BookShelfFragment extends BaseFragment implements BookShelfAdapter.
     @Inject BookAdder bookAdder;
     @Inject MediaPlayerController mediaPlayerController;
     @Inject BookVendor bookVendor;
+    private CompositeSubscription subscriptions;
     private BookShelfAdapter adapter;
     private ServiceController controller;
     private MaterialDialog noFolderWarning;
@@ -122,7 +122,6 @@ public class BookShelfFragment extends BaseFragment implements BookShelfAdapter.
 
         App.getComponent().inject(this);
 
-        setRetainInstance(true);
         setHasOptionsMenu(true);
 
         // init variables
@@ -173,6 +172,7 @@ public class BookShelfFragment extends BaseFragment implements BookShelfAdapter.
         super.onStart();
         // scan for files
         bookAdder.scanForFiles(false);
+        subscriptions = new CompositeSubscription();
         subscriptions.add(bookAdder.scannerActive()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aBoolean -> {
@@ -198,7 +198,7 @@ public class BookShelfFragment extends BaseFragment implements BookShelfAdapter.
                 }));
 
         // Subscription that notifies the adapter when the current book has changed. It also notifies
-        // the item with the old indicator now falsely showing. */
+        // the item with the old indicator now falsely showing.
         subscriptions.add(prefs.getCurrentBookId()
                 .subscribe(bookId -> {
                     for (int i = 0; i < adapter.getItemCount(); i++) {
@@ -245,7 +245,7 @@ public class BookShelfFragment extends BaseFragment implements BookShelfAdapter.
     public void onStop() {
         super.onStop();
 
-        subscriptions.clear();
+        subscriptions.unsubscribe();
     }
 
     private void checkVisibilities() {

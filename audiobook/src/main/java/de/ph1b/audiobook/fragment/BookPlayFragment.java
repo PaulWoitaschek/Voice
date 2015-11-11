@@ -72,7 +72,6 @@ public class BookPlayFragment extends BaseFragment {
     public static final String TAG = BookPlayFragment.class.getSimpleName();
     private static final String NI_BOOK_ID = "niBookId";
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
-    private final CompositeSubscription subscriptions = new CompositeSubscription();
     @Inject Communication communication;
     @Inject MediaPlayerController mediaPlayerController;
     @Bind(R.id.previous) View previous_button;
@@ -90,6 +89,7 @@ public class BookPlayFragment extends BaseFragment {
     @Inject PrefsManager prefs;
     @Inject BookShelf db;
     @Inject BookVendor bookVendor;
+    private CompositeSubscription subscriptions;
     private ServiceController controller;
     private CountDownTimer countDownTimer;
     private boolean isMultiPanel = false;
@@ -293,9 +293,9 @@ public class BookPlayFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         App.getComponent().inject(this);
 
-        setRetainInstance(true);
         setHasOptionsMenu(true);
 
         controller = new ServiceController(getContext());
@@ -434,6 +434,7 @@ public class BookPlayFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
 
+        subscriptions = new CompositeSubscription();
         subscriptions.add(mediaPlayerController.getPlayState()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<MediaPlayerController.PlayState>() {
@@ -499,7 +500,7 @@ public class BookPlayFragment extends BaseFragment {
     public void onStop() {
         super.onStop();
 
-        subscriptions.clear();
+        subscriptions.unsubscribe();
 
         communication.removeBookCommunicationListener(listener);
 

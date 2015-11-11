@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
+import timber.log.Timber;
 
 
 /**
@@ -42,10 +43,12 @@ public class Communication {
 
     public synchronized void removeBookCommunicationListener(BookCommunication listener) {
         listeners.remove(listener);
+        Timber.d("removed listener. Now there are %d", listeners.size());
     }
 
     public synchronized void addBookCommunicationListener(BookCommunication listener) {
         listeners.add(listener);
+        Timber.d("added listener. Now there are %d", listeners.size());
     }
 
     public interface BookCommunication {

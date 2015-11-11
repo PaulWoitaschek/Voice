@@ -44,8 +44,7 @@ import timber.log.Timber;
 public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.BaseViewHolder> {
 
     private final BookShelfFragment.DisplayMode displayMode;
-    @NonNull
-    private final Context c;
+    @NonNull    private final Context c;
     private final OnItemClickListener onItemClickListener;
     private final SortedList<Book> sortedList = new SortedList<>(Book.class, new SortedListAdapterCallback<Book>(this) {
 
