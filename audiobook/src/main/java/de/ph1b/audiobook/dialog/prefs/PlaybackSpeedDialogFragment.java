@@ -63,7 +63,7 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
         App.getComponent().inject(this);
 
         // setting current speed
-        final Book book = bookVendor.byId(prefs.getCurrentBookId());
+        final Book book = bookVendor.byId(prefs.getCurrentBookId().getValue());
         if (book == null) {
             throw new AssertionError("Cannot instantiate " + TAG + " without a current book");
         }

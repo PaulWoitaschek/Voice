@@ -40,19 +40,6 @@ public class Communication {
         });
     }
 
-
-    /**
-     * Sends a broadcast signaling that the current book that should be playing has been changed
-     *
-     */
-    public synchronized void sendCurrentBookChanged() {
-        executor.execute(() -> {
-            for (BookCommunication listener : listeners) {
-                listener.onCurrentBookIdChanged();
-            }
-        });
-    }
-
     public synchronized void removeBookCommunicationListener(BookCommunication listener) {
         listeners.remove(listener);
     }
@@ -63,17 +50,10 @@ public class Communication {
 
     public interface BookCommunication {
 
-        void onCurrentBookIdChanged();
-
         void onSleepStateChanged();
     }
 
     public static class SimpleBookCommunication implements BookCommunication {
-
-        @Override
-        public void onCurrentBookIdChanged() {
-
-        }
 
         @Override
         public void onSleepStateChanged() {

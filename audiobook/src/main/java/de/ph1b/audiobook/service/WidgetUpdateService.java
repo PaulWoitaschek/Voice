@@ -42,7 +42,6 @@ import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.BookVendor;
-import de.ph1b.audiobook.utils.Communication;
 import rx.Observable;
 import rx.subscriptions.CompositeSubscription;
 
@@ -54,35 +53,27 @@ public class WidgetUpdateService extends Service {
             new ThreadPoolExecutor.DiscardOldestPolicy()
     );
     private final CompositeSubscription subscriptions = new CompositeSubscription();
-    @Inject Communication communication;
     @Inject PrefsManager prefs;
     @Inject BookShelf db;
     @Inject MediaPlayerController mediaPlayerController;
     @Inject BookVendor bookVendor;
-    private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
-
-        @Override
-        public void onCurrentBookIdChanged() {
-            updateWidget();
-        }
-    };
 
     @Override
     public void onCreate() {
         super.onCreate();
         App.getComponent().inject(this);
 
-        // update widget if current book or playState have changed.
+        // update widget if current book, current book id or playState have changed.
         subscriptions.add(
                 Observable.merge(
-                        db.updateObservable().filter(book -> book.id() == prefs.getCurrentBookId()),
-                        mediaPlayerController.getPlayState())
+                        db.updateObservable().filter(book -> book.id() == prefs.getCurrentBookId().getValue()),
+                        mediaPlayerController.getPlayState(),
+                        prefs.getCurrentBookId())
 
                         .subscribe(comparable -> {
                             updateWidget();
                         }));
 
-        communication.addBookCommunicationListener(listener);
     }
 
     @Override
@@ -97,7 +88,7 @@ public class WidgetUpdateService extends Service {
     private void updateWidget() {
         executor.execute(() -> {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(WidgetUpdateService.this);
-            Book book = bookVendor.byId(prefs.getCurrentBookId());
+            Book book = bookVendor.byId(prefs.getCurrentBookId().getValue());
             boolean isPortrait = isPortrait();
             int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(
                     WidgetUpdateService.this, BaseWidgetProvider.class));
@@ -330,7 +321,6 @@ public class WidgetUpdateService extends Service {
     public void onDestroy() {
         super.onDestroy();
 
-        communication.removeBookCommunicationListener(listener);
         subscriptions.unsubscribe();
 
         executor.shutdown();

@@ -48,7 +48,6 @@ import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.BookVendor;
-import de.ph1b.audiobook.utils.Communication;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -80,7 +79,6 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                     | PlaybackStateCompat.ACTION_SEEK_TO);
     private final MediaMetadataCompat.Builder mediaMetaDataBuilder = new MediaMetadataCompat.Builder();
     private final CompositeSubscription subscriptions = new CompositeSubscription();
-    @Inject Communication communication;
     @Inject PrefsManager prefs;
     @Inject MediaPlayerController controller;
     @Inject BookShelf db;
@@ -114,16 +112,6 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                         pauseBecauseHeadset = false;
                     }
                 }
-            }
-        }
-    };
-    private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
-
-        @Override
-        public void onCurrentBookIdChanged() {
-            Book book = bookVendor.byId(prefs.getCurrentBookId());
-            if (book != null && (controller.getBook() == null || controller.getBook().id() != book.id())) {
-                reInitController(book);
             }
         }
     };
@@ -169,16 +157,22 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
 
         controller.setPlayState(MediaPlayerController.PlayState.STOPPED);
 
-        communication.addBookCommunicationListener(listener);
-
-        Book book = bookVendor.byId(prefs.getCurrentBookId());
+        Book book = bookVendor.byId(prefs.getCurrentBookId().getValue());
         if (book != null) {
             Timber.d("onCreated initialized book=%s", book);
             reInitController(book);
         }
 
+        subscriptions.add(prefs.getCurrentBookId()
+                .map(bookVendor::byId)
+                .subscribe(newBook -> {
+                    if (newBook != null && (controller.getBook() == null || controller.getBook().id() != newBook.id())) {
+                        reInitController(newBook);
+                    }
+                }));
+
         subscriptions.add(db.updateObservable()
-                .filter(book1 -> book1.id() == prefs.getCurrentBookId())
+                .filter(book1 -> book1.id() == prefs.getCurrentBookId().getValue())
                 .subscribe(book1 -> {
                     controller.updateBook(book1);
                     notifyChange(ChangeType.METADATA);
@@ -296,8 +290,6 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
         Timber.v("onDestroy called");
         controller.stop();
         controller.onDestroy();
-
-        communication.removeBookCommunicationListener(listener);
 
         controller.setPlayState(MediaPlayerController.PlayState.STOPPED);
 

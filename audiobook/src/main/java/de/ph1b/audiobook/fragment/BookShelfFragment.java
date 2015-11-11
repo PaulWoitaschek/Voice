@@ -52,7 +52,7 @@ import de.ph1b.audiobook.uitools.DividerItemDecoration;
 import de.ph1b.audiobook.uitools.PlayPauseDrawable;
 import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.BookVendor;
-import de.ph1b.audiobook.utils.Communication;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
@@ -68,7 +68,6 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
     public static final String TAG = BookShelfFragment.class.getSimpleName();
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
     private final CompositeSubscription subscriptions = new CompositeSubscription();
-    @Inject Communication communication;
     @Bind(R.id.recyclerView) RecyclerView recyclerView;
     @Bind(R.id.recyclerReplacement) ProgressBar recyclerReplacementView;
     @Bind(R.id.fab) FloatingActionButton fab;
@@ -87,26 +86,6 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
     private MultiPaneInformer multiPaneInformer;
     private BookSelectionCallback bookSelectionCallback;
     private AppCompatActivity hostingActivity;
-    private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
-
-        @Override
-        public void onCurrentBookIdChanged() {
-            hostingActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    for (int i = 0; i < adapter.getItemCount(); i++) {
-                        long itemId = adapter.getItemId(i);
-                        BookShelfAdapter.BaseViewHolder vh = (BookShelfAdapter.BaseViewHolder) recyclerView
-                                .findViewHolderForItemId(itemId);
-                        if (itemId == prefs.getCurrentBookId() || (vh != null && vh.indicatorIsVisible())) {
-                            adapter.notifyItemChanged(i);
-                        }
-                    }
-                    checkVisibilities();
-                }
-            });
-        }
-    };
 
     @Nullable
     @Override
@@ -208,27 +187,40 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
             noFolderWarning.show();
         }
 
-        // update items and set ui
+        // initially updates the adapter with a new set of items
         adapter.newDataSet(bookVendor.all());
-        subscriptions.add(db.addedObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((book) -> {
-                    adapter.updateOrAddBook(book);
-                    checkVisibilities();
-                }));
+
+        // Subscription that informs the adapter about a removed book
         subscriptions.add(db.removedObservable()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(book -> {
                     adapter.removeBook(book.id());
                 }));
 
-        // register receivers
-        communication.addBookCommunicationListener(listener);
+        // Subscription that notifies the adapter when the current book has changed. It also notifies
+        // the item with the old indicator now falsely showing. */
+        subscriptions.add(prefs.getCurrentBookId()
+                .subscribe(bookId -> {
+                    for (int i = 0; i < adapter.getItemCount(); i++) {
+                        long itemId = adapter.getItemId(i);
+                        BookShelfAdapter.BaseViewHolder vh = (BookShelfAdapter.BaseViewHolder) recyclerView
+                                .findViewHolderForItemId(itemId);
+                        if (itemId == bookId || (vh != null && vh.indicatorIsVisible())) {
+                            adapter.notifyItemChanged(i);
+                        }
+                    }
+                    checkVisibilities();
+                }));
 
-        subscriptions.add(db.updateObservable()
+        // Subscription that notifies the adapter when there is a new or updated book.
+        subscriptions.add(Observable.merge(db.updateObservable(), db.addedObservable())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(adapter::updateOrAddBook));
+                .subscribe((book) -> {
+                    adapter.updateOrAddBook(book);
+                    checkVisibilities();
+                }));
 
+        // Subscription that updates the UI based on the play state.
         subscriptions.add(mediaPlayerController.getPlayState()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<MediaPlayerController.PlayState>() {
@@ -253,8 +245,6 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
     public void onStop() {
         super.onStop();
 
-        communication.removeBookCommunicationListener(listener);
-
         subscriptions.clear();
     }
 
@@ -269,7 +259,7 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
         }
 
         boolean currentBookExists = false;
-        long currentBookId = prefs.getCurrentBookId();
+        long currentBookId = prefs.getCurrentBookId().getValue();
         for (int i = 0; i < adapter.getItemCount(); i++) {
             if (currentBookId == adapter.getItemId(i)) {
                 currentBookExists = true;
@@ -290,7 +280,7 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
 
         // sets menu item visible if there is a current book
         MenuItem currentPlaying = menu.findItem(R.id.action_current);
-        currentPlaying.setVisible(!isMultiPanel && bookVendor.byId(prefs.getCurrentBookId()) != null);
+        currentPlaying.setVisible(!isMultiPanel && bookVendor.byId(prefs.getCurrentBookId().getValue()) != null);
 
         // sets the grid / list toggle icon
         MenuItem displayModeItem = menu.findItem(R.id.action_change_layout);
@@ -305,7 +295,7 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
                 startActivity(new Intent(getContext(), SettingsActivity.class));
                 return true;
             case R.id.action_current:
-                invokeBookSelectionCallback(prefs.getCurrentBookId());
+                invokeBookSelectionCallback(prefs.getCurrentBookId().getValue());
                 return true;
             case R.id.action_change_layout:
                 DisplayMode mode = prefs.getDisplayMode();
@@ -319,7 +309,7 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
     }
 
     private void invokeBookSelectionCallback(long bookId) {
-        prefs.setCurrentBookIdAndInform(bookId);
+        prefs.setCurrentBookId(bookId);
 
         Map<View, String> sharedElements = new HashMap<>(2);
         BookShelfAdapter.BaseViewHolder viewHolder = (BookShelfAdapter.BaseViewHolder) recyclerView.findViewHolderForItemId(bookId);

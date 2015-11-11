@@ -46,7 +46,7 @@ public class JumpToPositionDialogFragment extends DialogFragment {
         ButterKnife.bind(this, v);
         App.getComponent().inject(this);
 
-        final Book book = bookVendor.byId(prefs.getCurrentBookId());
+        final Book book = bookVendor.byId(prefs.getCurrentBookId().getValue());
         if (book == null) {
             throw new AssertionError("Cannot instantiate " + TAG + " without a current book");
         }

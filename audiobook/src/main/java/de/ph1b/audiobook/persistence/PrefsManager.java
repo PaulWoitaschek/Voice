@@ -18,7 +18,7 @@ import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.interfaces.ForApplication;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.uitools.ThemeUtil;
-import de.ph1b.audiobook.utils.Communication;
+import rx.subjects.BehaviorSubject;
 
 /**
  * Preference manager, managing the setting and getting of {@link SharedPreferences}
@@ -34,18 +34,17 @@ public class PrefsManager {
     private static final String PREF_KEY_DISPLAY_MODE = "displayMode";
     private final String PREF_KEY_RESUME_ON_REPLUG;
     private final String PREF_KEY_THEME;
-    private final Communication communication;
     private final SharedPreferences sp;
     private final String PREF_KEY_BOOKMARK_ON_SLEEP;
     private final String PREF_KEY_SEEK_TIME;
     private final String PREF_KEY_SLEEP_TIME;
     private final String PREF_KEY_PAUSE_ON_CAN_DUCK;
     private final String PREF_KEY_AUTO_REWIND;
+    private BehaviorSubject<Long> currentBookId;
 
     @Inject
-    public PrefsManager(@NonNull @ForApplication Context c, @NonNull Communication communication) {
+    public PrefsManager(@NonNull @ForApplication Context c) {
         PreferenceManager.setDefaultValues(c, R.xml.preferences, false);
-        this.communication = communication;
         sp = PreferenceManager.getDefaultSharedPreferences(c);
 
         PREF_KEY_THEME = c.getString(R.string.pref_key_theme);
@@ -55,6 +54,8 @@ public class PrefsManager {
         PREF_KEY_BOOKMARK_ON_SLEEP = c.getString(R.string.pref_key_bookmark_on_sleep);
         PREF_KEY_AUTO_REWIND = c.getString(R.string.pref_key_auto_rewind);
         PREF_KEY_PAUSE_ON_CAN_DUCK = c.getString(R.string.pref_key_pause_on_can_duck);
+
+        currentBookId = BehaviorSubject.create(sp.getLong(PREF_KEY_CURRENT_BOOK, Book.ID_UNKNOWN));
     }
 
     public synchronized ThemeUtil.Theme getTheme() {
@@ -71,22 +72,22 @@ public class PrefsManager {
     }
 
     /**
-     * @return the id of the current book, or {@link de.ph1b.audiobook.model.Book#ID_UNKNOWN} if
-     * there is none.
+     * @return an observable with the id of the current book, or
+     * {@link de.ph1b.audiobook.model.Book#ID_UNKNOWN} if there is none.
      */
-    public synchronized long getCurrentBookId() {
-        return sp.getLong(PREF_KEY_CURRENT_BOOK, Book.ID_UNKNOWN);
+    public BehaviorSubject<Long> getCurrentBookId() {
+        return currentBookId;
     }
 
     /**
-     * Sets the current bookId and calls {@link Communication#sendCurrentBookChanged()}
+     * Sets the current bookId.
      *
      * @param bookId the book Id to set
      */
-    public synchronized void setCurrentBookIdAndInform(long bookId) {
+    public synchronized void setCurrentBookId(long bookId) {
         sp.edit().putLong(PREF_KEY_CURRENT_BOOK, bookId)
                 .apply();
-        communication.sendCurrentBookChanged();
+        currentBookId.onNext(bookId);
     }
 
     /**

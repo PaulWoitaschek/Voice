@@ -156,7 +156,7 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
             if (multiPanel) {
                 fm.beginTransaction()
                         .replace(CONTAINER_SHELF, bookShelfFragment, FM_BOOK_SHELF)
-                        .replace(CONTAINER_PLAY, BookPlayFragment.newInstance(prefs.getCurrentBookId()), FM_BOOK_PLAY)
+                        .replace(CONTAINER_PLAY, BookPlayFragment.newInstance(prefs.getCurrentBookId().getValue()), FM_BOOK_PLAY)
                         .commit();
             } else {
                 fm.beginTransaction()
@@ -183,7 +183,7 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
             // restore book play fragment or create new one
             BookPlayFragment bookPlayFragment = (BookPlayFragment) fm.findFragmentByTag(FM_BOOK_PLAY);
             if (bookPlayFragment == null) {
-                bookPlayFragment = BookPlayFragment.newInstance(prefs.getCurrentBookId());
+                bookPlayFragment = BookPlayFragment.newInstance(prefs.getCurrentBookId().getValue());
                 Timber.v("new fragment=%s", bookPlayFragment);
             } else {
                 fm.beginTransaction()
@@ -191,8 +191,8 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
                         .commit();
                 fm.executePendingTransactions();
                 Timber.v("restored fragment=%s", bookPlayFragment);
-                if (bookPlayFragment.getBookId() != prefs.getCurrentBookId()) {
-                    bookPlayFragment = BookPlayFragment.newInstance(prefs.getCurrentBookId());
+                if (bookPlayFragment.getBookId() != prefs.getCurrentBookId().getValue()) {
+                    bookPlayFragment = BookPlayFragment.newInstance(prefs.getCurrentBookId().getValue());
                     Timber.v("id did not match. Created new fragment=%s", bookPlayFragment);
                 }
             }

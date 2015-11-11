@@ -139,6 +139,13 @@ public class BookmarkDialogFragment extends DialogFragment {
                                     .input(getString(R.string.bookmark_edit_hint), clickedBookmark.title(), false, (materialDialog, charSequence) -> {
                                         Bookmark newBookmark = Bookmark.of(clickedBookmark.mediaFile(), charSequence.toString(), clickedBookmark.time());
                                         adapter.bookmarkUpdated(clickedBookmark, newBookmark);
+
+                                        // replaces the bookmark in the book
+                                        List<Bookmark> mutableBookmarks = new ArrayList<>(book.bookmarks());
+                                        mutableBookmarks.set(mutableBookmarks.indexOf(clickedBookmark), newBookmark);
+                                        book = Book.builder(book)
+                                                .bookmarks(ImmutableList.copyOf(mutableBookmarks))
+                                                .build();
                                         db.updateBook(book);
                                     })
                                     .positiveText(R.string.dialog_confirm)
@@ -169,7 +176,7 @@ public class BookmarkDialogFragment extends DialogFragment {
 
             @Override
             public void onBookmarkClicked(Bookmark bookmark) {
-                prefs.setCurrentBookIdAndInform(bookId);
+                prefs.setCurrentBookId(bookId);
                 controller.changeTime(bookmark.time(), bookmark.mediaFile());
 
                 getDialog().cancel();

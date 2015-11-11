@@ -323,7 +323,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
                 });
             }
 
-            indicatorVisible = book.id() == prefs.getCurrentBookId();
+            indicatorVisible = book.id() == prefs.getCurrentBookId().getValue();
             if (indicatorVisible) {
                 currentPlayingIndicator.setVisibility(View.VISIBLE);
             } else {
