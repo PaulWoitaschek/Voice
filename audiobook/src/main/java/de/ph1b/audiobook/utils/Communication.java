@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.utils;
 
-import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 
 import java.util.ArrayList;
@@ -12,7 +11,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
-import de.ph1b.audiobook.model.Book;
 
 
 /**
@@ -56,21 +54,6 @@ public class Communication {
         });
     }
 
-
-    /**
-     * Notifies listeners, that the whole set of Books has changed.
-     *
-     * @param allBooks The whole book set
-     */
-    public synchronized void bookSetChanged(final List<Book> allBooks) {
-        executor.execute(() -> {
-            for (BookCommunication listener : listeners) {
-                listener.onBookSetChanged(new ArrayList<>(allBooks));
-            }
-        });
-    }
-
-
     public synchronized void removeBookCommunicationListener(BookCommunication listener) {
         listeners.remove(listener);
     }
@@ -84,8 +67,6 @@ public class Communication {
         void onCurrentBookIdChanged(long oldId);
 
         void onSleepStateChanged();
-
-        void onBookSetChanged(@NonNull List<Book> activeBooks);
     }
 
     public static class SimpleBookCommunication implements BookCommunication {
@@ -97,11 +78,6 @@ public class Communication {
 
         @Override
         public void onSleepStateChanged() {
-
-        }
-
-        @Override
-        public void onBookSetChanged(@NonNull List<Book> activeBooks) {
 
         }
     }

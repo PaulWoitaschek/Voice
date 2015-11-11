@@ -36,6 +36,7 @@ import de.ph1b.audiobook.model.NaturalOrderComparator;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.utils.App;
+import timber.log.Timber;
 
 /**
  * Adapter for a recycler-view book shelf that keeps the items in a sorted list.
@@ -84,6 +85,18 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
         String h = String.format("%02d", (TimeUnit.MILLISECONDS.toHours(ms)));
         String m = String.format("%02d", (TimeUnit.MILLISECONDS.toMinutes(ms) % 60));
         return h + ":" + m;
+    }
+
+    public void removeBook(long bookId) {
+        Timber.i("removeBook called with id %d", bookId);
+        for (int i = 0; i < sortedList.size(); i++) {
+            Book b = sortedList.get(i);
+            if (b.id() == bookId) {
+                Timber.i("Found our book to remove %s", b);
+                sortedList.remove(b);
+                break;
+            }
+        }
     }
 
     /**

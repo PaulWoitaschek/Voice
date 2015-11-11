@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
@@ -28,7 +27,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -90,17 +88,6 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
     private BookSelectionCallback bookSelectionCallback;
     private AppCompatActivity hostingActivity;
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
-
-        @Override
-        public void onBookSetChanged(@NonNull final List<Book> activeBooks) {
-            hostingActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    adapter.newDataSet(activeBooks);
-                    checkVisibilities();
-                }
-            });
-        }
 
         @Override
         public void onCurrentBookIdChanged(final long oldId) {
@@ -179,7 +166,6 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
             recyclerView.addItemDecoration(listDecoration);
         }
         adapter = new BookShelfAdapter(getContext(), defaultDisplayMode, this);
-        adapter.newDataSet(db.getActiveBooks().toList().toBlocking().single());
         recyclerView.setAdapter(adapter);
         hostingActivity.invalidateOptionsMenu();
     }
@@ -221,14 +207,25 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
         }
 
         // update items and set ui
-        listener.onBookSetChanged(db.getActiveBooks().toList().toBlocking().single());
+        adapter.newDataSet(bookVendor.all());
+        subscriptions.add(db.addedObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((book) -> {
+                    adapter.updateOrAddBook(book);
+                    checkVisibilities();
+                }));
+        subscriptions.add(db.removedObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(book -> {
+                    adapter.removeBook(book.id());
+                }));
 
         // register receivers
         communication.addBookCommunicationListener(listener);
 
         subscriptions.add(db.updateObservable()
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(adapter::updateOrAddBook));
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(adapter::updateOrAddBook));
 
         subscriptions.add(mediaPlayerController.getPlayState()
                 .observeOn(AndroidSchedulers.mainThread())

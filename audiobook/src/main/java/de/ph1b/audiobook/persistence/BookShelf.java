@@ -25,7 +25,6 @@ import de.ph1b.audiobook.interfaces.ForApplication;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
-import de.ph1b.audiobook.utils.Communication;
 import rx.Observable;
 import rx.subjects.PublishSubject;
 import timber.log.Timber;
@@ -81,7 +80,6 @@ public class BookShelf {
             "            group_concat(" + BookmarkTable.TIME + ") as " + KEY_BOOKMARK_POSITIONS +
             "     FROM " + BookmarkTable.TABLE_NAME +
             "     group by " + BookmarkTable.BOOK_ID + ") AS bmt on bmt." + BookmarkTable.BOOK_ID + " = bt." + BookTable.ID;
-    private final Communication communication;
     private final List<Book> activeBooks;
     private final List<Book> orphanedBooks;
     private final SQLiteDatabase db;
@@ -90,8 +88,7 @@ public class BookShelf {
     private final PublishSubject<Book> updated = PublishSubject.create();
 
     @Inject
-    public BookShelf(@NonNull @ForApplication Context c, @NonNull Communication communication) {
-        this.communication = communication;
+    public BookShelf(@NonNull @ForApplication Context c) {
 
         this.db = new InternalDb(c).getWritableDatabase();
 
@@ -189,6 +186,14 @@ public class BookShelf {
                 .build();
     }
 
+    public Observable<Book> removedObservable() {
+        return removed;
+    }
+
+    public Observable<Book> addedObservable() {
+        return added;
+    }
+
     public Observable<Book> updateObservable() {
         return updated;
     }
@@ -222,7 +227,6 @@ public class BookShelf {
 
         activeBooks.add(book);
         added.onNext(book);
-        communication.bookSetChanged(activeBooks);
     }
 
     @NonNull
@@ -292,7 +296,6 @@ public class BookShelf {
         }
         orphanedBooks.add(book);
         removed.onNext(book);
-        communication.bookSetChanged(activeBooks);
     }
 
     public synchronized void revealBook(@NonNull Book book) {
@@ -308,7 +311,6 @@ public class BookShelf {
         }
         activeBooks.add(book);
         added.onNext(book);
-        communication.bookSetChanged(activeBooks);
     }
 
     private static class InternalDb extends SQLiteOpenHelper {
