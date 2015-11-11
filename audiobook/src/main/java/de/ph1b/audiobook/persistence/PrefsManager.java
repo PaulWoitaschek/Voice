@@ -79,15 +79,14 @@ public class PrefsManager {
     }
 
     /**
-     * Sets the current bookId and calls {@link Communication#sendCurrentBookChanged(long)}
+     * Sets the current bookId and calls {@link Communication#sendCurrentBookChanged()}
      *
      * @param bookId the book Id to set
      */
     public synchronized void setCurrentBookIdAndInform(long bookId) {
-        long oldId = getCurrentBookId();
         sp.edit().putLong(PREF_KEY_CURRENT_BOOK, bookId)
                 .apply();
-        communication.sendCurrentBookChanged(oldId);
+        communication.sendCurrentBookChanged();
     }
 
     /**

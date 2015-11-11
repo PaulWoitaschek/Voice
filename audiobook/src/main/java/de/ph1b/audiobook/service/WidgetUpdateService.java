@@ -62,10 +62,9 @@ public class WidgetUpdateService extends Service {
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
 
         @Override
-        public void onCurrentBookIdChanged(long oldId) {
+        public void onCurrentBookIdChanged() {
             updateWidget();
         }
-
     };
 
     @Override

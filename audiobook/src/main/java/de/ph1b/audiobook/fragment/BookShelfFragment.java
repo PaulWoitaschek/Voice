@@ -90,13 +90,15 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
 
         @Override
-        public void onCurrentBookIdChanged(final long oldId) {
+        public void onCurrentBookIdChanged() {
             hostingActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     for (int i = 0; i < adapter.getItemCount(); i++) {
                         long itemId = adapter.getItemId(i);
-                        if (itemId == oldId || itemId == prefs.getCurrentBookId()) {
+                        BookShelfAdapter.BaseViewHolder vh = (BookShelfAdapter.BaseViewHolder) recyclerView
+                                .findViewHolderForItemId(itemId);
+                        if (itemId == prefs.getCurrentBookId() || (vh != null && vh.indicatorIsVisible())) {
                             adapter.notifyItemChanged(i);
                         }
                     }

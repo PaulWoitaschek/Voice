@@ -120,7 +120,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
 
         @Override
-        public void onCurrentBookIdChanged(long oldId) {
+        public void onCurrentBookIdChanged() {
             Book book = bookVendor.byId(prefs.getCurrentBookId());
             if (book != null && (controller.getBook() == null || controller.getBook().id() != book.id())) {
                 reInitController(book);

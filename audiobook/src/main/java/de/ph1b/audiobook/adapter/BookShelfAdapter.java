@@ -276,6 +276,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
         @Bind(R.id.currentPlayingIndicator) ImageView currentPlayingIndicator;
         @Bind(R.id.title) TextView titleView;
         @Bind(R.id.editBook) View editBook;
+        private boolean indicatorVisible = false;
 
         /**
          * Constructor of a viewholder.
@@ -285,6 +286,10 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
         public BaseViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+
+        public boolean indicatorIsVisible() {
+            return indicatorVisible;
         }
 
         /**
@@ -318,7 +323,8 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
                 });
             }
 
-            if (book.id() == prefs.getCurrentBookId()) {
+            indicatorVisible = book.id() == prefs.getCurrentBookId();
+            if (indicatorVisible) {
                 currentPlayingIndicator.setVisibility(View.VISIBLE);
             } else {
                 currentPlayingIndicator.setVisibility(View.GONE);

@@ -44,12 +44,11 @@ public class Communication {
     /**
      * Sends a broadcast signaling that the current book that should be playing has been changed
      *
-     * @param oldId The old {@link de.ph1b.audiobook.model.Book#id}
      */
-    public synchronized void sendCurrentBookChanged(final long oldId) {
+    public synchronized void sendCurrentBookChanged() {
         executor.execute(() -> {
             for (BookCommunication listener : listeners) {
-                listener.onCurrentBookIdChanged(oldId);
+                listener.onCurrentBookIdChanged();
             }
         });
     }
@@ -64,7 +63,7 @@ public class Communication {
 
     public interface BookCommunication {
 
-        void onCurrentBookIdChanged(long oldId);
+        void onCurrentBookIdChanged();
 
         void onSleepStateChanged();
     }
@@ -72,7 +71,7 @@ public class Communication {
     public static class SimpleBookCommunication implements BookCommunication {
 
         @Override
-        public void onCurrentBookIdChanged(long oldId) {
+        public void onCurrentBookIdChanged() {
 
         }
 
