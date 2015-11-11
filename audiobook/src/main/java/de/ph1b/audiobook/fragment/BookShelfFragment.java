@@ -90,15 +90,6 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
     private BookSelectionCallback bookSelectionCallback;
     private AppCompatActivity hostingActivity;
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
-        @Override
-        public void onBookContentChanged(@NonNull final Book book) {
-            hostingActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    adapter.updateOrAddBook(book);
-                }
-            });
-        }
 
         @Override
         public void onBookSetChanged(@NonNull final List<Book> activeBooks) {
@@ -235,6 +226,10 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
         // register receivers
         communication.addBookCommunicationListener(listener);
 
+        subscriptions.add(db.updateObservable()
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(adapter::updateOrAddBook));
+
         subscriptions.add(mediaPlayerController.getPlayState()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<MediaPlayerController.PlayState>() {
@@ -261,7 +256,6 @@ public class BookShelfFragment extends Fragment implements BookShelfAdapter.OnIt
 
         communication.removeBookCommunicationListener(listener);
 
-        subscriptions.unsubscribe();
         subscriptions.clear();
     }
 

@@ -274,7 +274,6 @@ public class BookShelf {
         }
 
         updated.onNext(book);
-        communication.sendBookContentChanged(book);
     }
 
     public synchronized void hideBook(@NonNull Book book) {

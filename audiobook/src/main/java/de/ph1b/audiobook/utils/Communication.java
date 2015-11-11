@@ -79,24 +79,9 @@ public class Communication {
         listeners.add(listener);
     }
 
-    /**
-     * Sends a broadcast signaling that a certain book has changed.
-     *
-     * @param book The book that has changed
-     */
-    public synchronized void sendBookContentChanged(@NonNull final Book book) {
-        executor.execute(() -> {
-            for (BookCommunication listener : listeners) {
-                listener.onBookContentChanged(book);
-            }
-        });
-    }
-
     public interface BookCommunication {
 
         void onCurrentBookIdChanged(long oldId);
-
-        void onBookContentChanged(@NonNull Book book);
 
         void onSleepStateChanged();
 
@@ -107,11 +92,6 @@ public class Communication {
 
         @Override
         public void onCurrentBookIdChanged(long oldId) {
-
-        }
-
-        @Override
-        public void onBookContentChanged(@NonNull Book book) {
 
         }
 

@@ -49,7 +49,7 @@ import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.BookVendor;
 import de.ph1b.audiobook.utils.Communication;
-import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 
@@ -79,6 +79,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                     | PlaybackStateCompat.ACTION_SKIP_TO_NEXT
                     | PlaybackStateCompat.ACTION_SEEK_TO);
     private final MediaMetadataCompat.Builder mediaMetaDataBuilder = new MediaMetadataCompat.Builder();
+    private final CompositeSubscription subscriptions = new CompositeSubscription();
     @Inject Communication communication;
     @Inject PrefsManager prefs;
     @Inject MediaPlayerController controller;
@@ -116,21 +117,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
             }
         }
     };
-    private MediaSessionCompat mediaSession;
-    /**
-     * The last file the {@link #notifyChange(BookReaderService.ChangeType)} has used to update the metadata.
-     */
-    private volatile File lastFileForMetaData = new File("");
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
-
-
-        @Override
-        public void onBookContentChanged(@NonNull Book book) {
-            if (book.id() == prefs.getCurrentBookId()) {
-                controller.updateBook(book);
-                notifyChange(ChangeType.METADATA);
-            }
-        }
 
         @Override
         public void onCurrentBookIdChanged(long oldId) {
@@ -140,7 +127,11 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
             }
         }
     };
-    private Subscription playStateSubscription;
+    private MediaSessionCompat mediaSession;
+    /**
+     * The last file the {@link #notifyChange(BookReaderService.ChangeType)} has used to update the metadata.
+     */
+    private volatile File lastFileForMetaData = new File("");
 
     public BookReaderService() {
         App.getComponent().inject(this);
@@ -186,7 +177,14 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
             reInitController(book);
         }
 
-        playStateSubscription = controller.getPlayState().subscribe(playState -> {
+        subscriptions.add(db.updateObservable()
+                .filter(book1 -> book1.id() == prefs.getCurrentBookId())
+                .subscribe(book1 -> {
+                    controller.updateBook(book1);
+                    notifyChange(ChangeType.METADATA);
+                }));
+
+        subscriptions.add(controller.getPlayState().subscribe(playState -> {
             Timber.d("onPlayStateChanged:%s", playState);
             executor.execute(() -> {
                 Timber.d("onPlayStateChanged executed:%s", playState);
@@ -219,7 +217,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                     notifyChange(ChangeType.PLAYSTATE);
                 }
             });
-        });
+        }));
     }
 
     private boolean handleKeyCode(int keyCode) {
@@ -310,7 +308,8 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
         }
 
         mediaSession.release();
-        playStateSubscription.unsubscribe();
+
+        subscriptions.unsubscribe();
 
         super.onDestroy();
     }

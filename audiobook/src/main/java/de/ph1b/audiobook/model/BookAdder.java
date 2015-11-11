@@ -246,7 +246,7 @@ public class BookAdder {
                         if (cover != null) {
                             ImageHelper.saveCover(cover, c, coverFile);
                             Picasso.with(c).invalidate(coverFile);
-                            communication.sendBookContentChanged(b);
+                            db.updateBook(b);
                             continue;
                         }
                     }
@@ -255,7 +255,7 @@ public class BookAdder {
                 if (cover != null) {
                     ImageHelper.saveCover(cover, c, coverFile);
                     Picasso.with(c).invalidate(coverFile);
-                    communication.sendBookContentChanged(b);
+                    db.updateBook(b);
                 }
             }
         }

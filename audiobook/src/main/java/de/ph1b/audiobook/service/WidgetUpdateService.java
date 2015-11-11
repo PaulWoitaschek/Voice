@@ -43,7 +43,8 @@ import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.BookVendor;
 import de.ph1b.audiobook.utils.Communication;
-import rx.Subscription;
+import rx.Observable;
+import rx.subscriptions.CompositeSubscription;
 
 public class WidgetUpdateService extends Service {
     private final ExecutorService executor = new ThreadPoolExecutor(
@@ -52,6 +53,7 @@ public class WidgetUpdateService extends Service {
             new LinkedBlockingQueue<>(2), // queue capacity
             new ThreadPoolExecutor.DiscardOldestPolicy()
     );
+    private final CompositeSubscription subscriptions = new CompositeSubscription();
     @Inject Communication communication;
     @Inject PrefsManager prefs;
     @Inject BookShelf db;
@@ -60,28 +62,27 @@ public class WidgetUpdateService extends Service {
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
 
         @Override
-        public void onBookContentChanged(@NonNull Book book) {
-            if (book.id() == prefs.getCurrentBookId()) {
-                updateWidget();
-            }
-        }
-
-        @Override
         public void onCurrentBookIdChanged(long oldId) {
             updateWidget();
         }
 
     };
-    private Subscription playStateSubscription;
 
     @Override
     public void onCreate() {
         super.onCreate();
         App.getComponent().inject(this);
 
-        playStateSubscription = mediaPlayerController.getPlayState().subscribe(playState -> {
-            updateWidget();
-        });
+        // update widget if current book or playState have changed.
+        subscriptions.add(
+                Observable.merge(
+                        db.updateObservable().filter(book -> book.id() == prefs.getCurrentBookId()),
+                        mediaPlayerController.getPlayState())
+
+                        .subscribe(comparable -> {
+                            updateWidget();
+                        }));
+
         communication.addBookCommunicationListener(listener);
     }
 
@@ -329,10 +330,11 @@ public class WidgetUpdateService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        executor.shutdown();
 
         communication.removeBookCommunicationListener(listener);
-        playStateSubscription.unsubscribe();
+        subscriptions.unsubscribe();
+
+        executor.shutdown();
     }
 
     @Override
