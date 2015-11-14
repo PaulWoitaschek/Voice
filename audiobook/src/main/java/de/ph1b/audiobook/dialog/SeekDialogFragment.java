@@ -39,19 +39,13 @@ public class SeekDialogFragment extends DialogFragment {
         settingsSetListener = (SettingsSetListener) context;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        App.getComponent().inject(this);
-    }
-
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         @SuppressLint("InflateParams") View customView = LayoutInflater.from(getContext())
                 .inflate(R.layout.dialog_amount_chooser, null);
         ButterKnife.bind(this, customView);
+        App.getComponent().inject(this);
 
         //seekBar
         final int oldSeekTime = prefs.getSeekTime();
