@@ -42,13 +42,13 @@ import timber.log.Timber;
  * Activity for choosing an audiobook folder. If there are multiple SD-Cards, the Activity unifies
  * them to a fake-folder structure. We must make sure that this is not choosable. When there are no
  * multiple sd-cards, we will directly show the content of the 1 SD Card.
- * <p/>
+ * <p>
  * Use {@link #newInstanceIntent(Context, OperationMode)} to get a new intent with the necessary
  * values.
  *
  * @author Paul Woitaschek
  */
-public class FolderChooserActivity extends BaseActivity {
+public class FolderChooserActivity extends BaseActivity implements HideFolderDialog.OnChosenListener {
 
     public static final String RESULT_CHOSEN_FILE = "chosenFile";
     public static final String RESULT_OPERATION_MODE = "operationMode";
@@ -350,7 +350,6 @@ public class FolderChooserActivity extends BaseActivity {
         if (chosenFile.isDirectory() && !HideFolderDialog.getNoMediaFileByFolder(chosenFile).exists()) {
             HideFolderDialog hideFolderDialog = HideFolderDialog.newInstance(chosenFile);
             hideFolderDialog.show(getSupportFragmentManager(), HideFolderDialog.TAG);
-            hideFolderDialog.setOnDismissListener(dialog -> finishActivityWithSuccess(chosenFile));
         } else {
             finishActivityWithSuccess(chosenFile);
         }
@@ -367,6 +366,11 @@ public class FolderChooserActivity extends BaseActivity {
         data.putExtra(RESULT_OPERATION_MODE, mode.name());
         setResult(RESULT_OK, data);
         finish();
+    }
+
+    @Override
+    public void onChosen() {
+        finishActivityWithSuccess(chosenFile);
     }
 
     public enum OperationMode {

@@ -1,10 +1,9 @@
 package de.ph1b.audiobook.dialog;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -13,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 
 import de.ph1b.audiobook.R;
+import timber.log.Timber;
 
 /**
  * A dialog giving the option to hide the selected book from other players.
@@ -21,8 +21,7 @@ public class HideFolderDialog extends DialogFragment {
 
     public static final String TAG = HideFolderDialog.class.getSimpleName();
     private static final String PATH_TO_HIDE = "pathToHide";
-    @Nullable
-    private DialogInterface.OnDismissListener listener;
+    private OnChosenListener callback;
 
     /**
      * Returns a file that called .nomedia that prevents music players from recognizing the book as
@@ -44,17 +43,11 @@ public class HideFolderDialog extends DialogFragment {
         return hideFolderDialog;
     }
 
-    public void setOnDismissListener(DialogInterface.OnDismissListener listener) {
-        this.listener = listener;
-    }
-
     @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
+    public void onAttach(Context context) {
+        super.onAttach(context);
 
-        if (listener != null) {
-            listener.onDismiss(dialog);
-        }
+        callback = (OnChosenListener) context;
     }
 
     @NonNull
@@ -70,12 +63,18 @@ public class HideFolderDialog extends DialogFragment {
                 .negativeText(R.string.dialog_cancel)
                 .onPositive((materialDialog, dialogAction) -> {
                     try {
+                        Timber.i("Create new File will be called.");
                         //noinspection ResultOfMethodCallIgnored
                         hideFile.createNewFile();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }) // TODO Replace dismiss by onNegative and use callback by targetFragment
+                })
+                .onAny((materialDialog, dialogAction) -> callback.onChosen())
                 .build();
+    }
+
+    public interface OnChosenListener {
+        void onChosen();
     }
 }
