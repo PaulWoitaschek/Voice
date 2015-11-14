@@ -458,8 +458,8 @@ public class BookPlayFragment extends BaseFragment {
         subscriptions.add((Observable.merge(db.getActiveBooks(), db.updateObservable()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(book -> book.id() == getBookId())
+                .doOnNext(book -> BookPlayFragment.this.book = book)
                 .subscribe(book -> {
-                    BookPlayFragment.this.book = book;
                     if (book == null) {
                         Timber.e("Book is null. Returning immediately.");
                         return;

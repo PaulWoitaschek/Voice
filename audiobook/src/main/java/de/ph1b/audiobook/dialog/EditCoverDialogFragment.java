@@ -7,14 +7,15 @@ import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.common.base.Preconditions;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -61,20 +62,22 @@ public class EditCoverDialogFragment extends DialogFragment {
      */
     private int coverPosition = -1;
     private int googleCount = 0;
-    @Nullable
-    private OnEditBookFinished listener;
     private Book book;
     private CoverReplacement coverReplacement;
     private Picasso picasso;
     private boolean isOnline;
 
-    public static EditCoverDialogFragment newInstance(@NonNull Book book) {
-        EditCoverDialogFragment editCoverDialogFragment = new EditCoverDialogFragment();
+    public static <T extends Fragment & OnEditBookFinished> EditCoverDialogFragment newInstance(
+            @NonNull T target, @NonNull Book book) {
+        Preconditions.checkNotNull(target);
+        Preconditions.checkNotNull(book);
 
         Bundle bundle = new Bundle();
         bundle.putLong(Book.TAG, book.id());
-        editCoverDialogFragment.setArguments(bundle);
 
+        EditCoverDialogFragment editCoverDialogFragment = new EditCoverDialogFragment();
+        editCoverDialogFragment.setTargetFragment(target, 42);
+        editCoverDialogFragment.setArguments(bundle);
         return editCoverDialogFragment;
     }
 
@@ -137,9 +140,8 @@ public class EditCoverDialogFragment extends DialogFragment {
                 }
             }
 
-            if (listener != null) {
-                listener.onEditBookFinished();
-            }
+            OnEditBookFinished callback = (OnEditBookFinished) getTargetFragment();
+            callback.onEditBookFinished(bookId);
         };
         MaterialDialog.SingleButtonCallback negativeCallback = (materialDialog, dialogAction) -> {
             if (addCoverAsync != null && !addCoverAsync.isCancelled()) {
@@ -155,10 +157,6 @@ public class EditCoverDialogFragment extends DialogFragment {
                 .onPositive(positiveCallback)
                 .onNegative(negativeCallback)
                 .build();
-    }
-
-    public void setOnEditBookFinished(@Nullable OnEditBookFinished listener) {
-        this.listener = listener;
     }
 
     /**
@@ -265,7 +263,7 @@ public class EditCoverDialogFragment extends DialogFragment {
 
 
     public interface OnEditBookFinished {
-        void onEditBookFinished();
+        void onEditBookFinished(long bookId);
     }
 
     private class AddCoverAsync extends AsyncTask<Void, Void, String> {

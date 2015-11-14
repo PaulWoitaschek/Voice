@@ -75,7 +75,7 @@ public class HideFolderDialog extends DialogFragment {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                })
+                }) // TODO Replace dismiss by onNegative and use callback by targetFragment
                 .build();
     }
 }

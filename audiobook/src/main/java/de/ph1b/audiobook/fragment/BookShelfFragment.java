@@ -63,7 +63,7 @@ import timber.log.Timber;
  *
  * @author Paul Woitaschek
  */
-public class BookShelfFragment extends BaseFragment implements BookShelfAdapter.OnItemClickListener, EditBookTitleDialogFragment.OnTextChanged {
+public class BookShelfFragment extends BaseFragment implements BookShelfAdapter.OnItemClickListener, EditBookTitleDialogFragment.OnTextChanged, EditCoverDialogFragment.OnEditBookFinished {
 
     public static final String TAG = BookShelfFragment.class.getSimpleName();
     private final PlayPauseDrawable playPauseDrawable = new PlayPauseDrawable();
@@ -170,9 +170,13 @@ public class BookShelfFragment extends BaseFragment implements BookShelfAdapter.
     @Override
     public void onStart() {
         super.onStart();
+
         // scan for files
         bookAdder.scanForFiles(false);
+
         subscriptions = new CompositeSubscription();
+
+        // observe if the scanner is active and show spinner accordingly.
         subscriptions.add(bookAdder.scannerActive()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aBoolean -> {
@@ -348,12 +352,7 @@ public class BookShelfFragment extends BaseFragment implements BookShelfAdapter.
             final Book book = adapter.getItem(position);
             switch (item.getItemId()) {
                 case R.id.edit_cover:
-                    EditCoverDialogFragment fragment = EditCoverDialogFragment.newInstance(book);
-                    fragment.setOnEditBookFinished(() -> {
-                        // this is necessary for the cover update
-                        adapter.notifyItemAtIdChanged(book.id());
-                    });
-                    fragment.show(getFragmentManager(), EditCoverDialogFragment.TAG);
+                    EditCoverDialogFragment.newInstance(this, book).show(getFragmentManager(), EditCoverDialogFragment.TAG);
                     return true;
                 case R.id.edit_title:
                     EditBookTitleDialogFragment.newInstance(this, book).show(getFragmentManager(),
@@ -380,6 +379,12 @@ public class BookShelfFragment extends BaseFragment implements BookShelfAdapter.
                     .build();
             db.updateBook(dbBook);
         }
+    }
+
+    @Override
+    public void onEditBookFinished(long bookId) {
+        // this is necessary for the cover update
+        adapter.notifyItemAtIdChanged(bookId);
     }
 
     public enum DisplayMode {

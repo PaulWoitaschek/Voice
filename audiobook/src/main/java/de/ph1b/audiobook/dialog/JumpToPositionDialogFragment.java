@@ -97,14 +97,14 @@ public class JumpToPositionDialogFragment extends DialogFragment {
         ThemeUtil.theme(mPicker);
         ThemeUtil.theme(hPicker);
 
-        return new MaterialDialog.Builder(getActivity())
+        return new MaterialDialog.Builder(getContext())
                 .customView(v, true)
                 .title(R.string.action_time_change)
                 .onPositive((materialDialog, dialogAction) -> {
                     int h = hPicker.getValue();
                     int m = mPicker.getValue();
                     int newPosition = (m + 60 * h) * 60 * 1000;
-                    new ServiceController(getActivity()).changeTime(newPosition, book.currentChapter().file());
+                    new ServiceController(getContext()).changeTime(newPosition, book.currentChapter().file());
                 })
                 .positiveText(R.string.dialog_confirm)
                 .negativeText(R.string.dialog_cancel)
