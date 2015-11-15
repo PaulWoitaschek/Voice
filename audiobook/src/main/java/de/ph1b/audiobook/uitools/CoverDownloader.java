@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import de.ph1b.audiobook.interfaces.ForApplication;
 import timber.log.Timber;
@@ -26,6 +27,7 @@ import timber.log.Timber;
  *
  * @author Paul Woitaschek
  */
+@Singleton
 public final class CoverDownloader {
 
     private static final HashMap<String, List<String>> SEARCH_MAPPING = new HashMap<>(10);
