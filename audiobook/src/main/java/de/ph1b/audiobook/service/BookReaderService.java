@@ -6,7 +6,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -17,6 +16,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.media.MediaMetadataCompat;
+import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.NotificationCompat;
@@ -43,7 +43,6 @@ import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Chapter;
 import de.ph1b.audiobook.persistence.BookShelf;
 import de.ph1b.audiobook.persistence.PrefsManager;
-import de.ph1b.audiobook.receiver.RemoteControlReceiver;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.uitools.ImageHelper;
 import de.ph1b.audiobook.utils.App;
@@ -129,11 +128,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
     public void onCreate() {
         super.onCreate();
 
-        ComponentName eventReceiver = new ComponentName(BookReaderService.this.getPackageName(), RemoteControlReceiver.class.getName());
-        Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-        mediaButtonIntent.setComponent(eventReceiver);
-        PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, mediaButtonIntent, 0);
-        mediaSession = new MediaSessionCompat(this, TAG, eventReceiver, mediaPendingIntent);
+        mediaSession = new MediaSessionCompat(this, TAG);
         mediaSession.setCallback(new MediaSessionCompat.Callback() {
             @Override
             public boolean onMediaButtonEvent(Intent mediaButtonEvent) {
@@ -251,12 +246,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                 Timber.v("handling intent action:%s", intent.getAction());
                 switch (intent.getAction()) {
                     case Intent.ACTION_MEDIA_BUTTON:
-                        KeyEvent keyEvent = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
-                        if (keyEvent != null && keyEvent.getAction() == KeyEvent.ACTION_DOWN
-                                && keyEvent.getRepeatCount() == 0) {
-                            int keyCode = keyEvent.getKeyCode();
-                            handleKeyCode(keyCode);
-                        }
+                        MediaButtonReceiver.handleIntent(mediaSession, intent);
                         break;
                     case ServiceController.CONTROL_SET_PLAYBACK_SPEED:
                         float speed = intent.getFloatExtra(ServiceController.CONTROL_SET_PLAYBACK_SPEED_EXTRA_SPEED, 1);
