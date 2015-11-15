@@ -55,7 +55,7 @@ public class EditCoverDialogFragment extends DialogFragment {
     @Bind(R.id.next_cover) ImageButton nextCover;
     @Inject BookShelf db;
     @Inject BookVendor bookVendor;
-    private CoverDownloader coverDownloader;
+    @Inject CoverDownloader coverDownloader;
     private AddCoverAsync addCoverAsync;
     /**
      * The position in the {@link #imageURLS} or -1 if it is the {@link #coverReplacement}.
@@ -93,8 +93,8 @@ public class EditCoverDialogFragment extends DialogFragment {
         final long bookId = getArguments().getLong(Book.TAG);
         book = bookVendor.byId(bookId);
         assert book != null;
-        coverReplacement = new CoverReplacement(book.name(), getActivity());
-        isOnline = ImageHelper.isOnline(getActivity());
+        coverReplacement = new CoverReplacement(book.name(), getContext());
+        isOnline = ImageHelper.isOnline(getContext());
         if (savedInstanceState == null) {
             coverPosition = -1;
         } else {
@@ -115,10 +115,10 @@ public class EditCoverDialogFragment extends DialogFragment {
             final Rect r = coverImageView.getSelectedRect();
             boolean useCoverReplacement;
             if (coverPosition > -1 && !r.isEmpty()) {
-                Bitmap cover = ImageHelper.picassoGetBlocking(getActivity(), imageURLS.get(coverPosition));
+                Bitmap cover = ImageHelper.picassoGetBlocking(getContext(), imageURLS.get(coverPosition));
                 if (cover != null) {
                     cover = Bitmap.createBitmap(cover, r.left, r.top, r.width(), r.height());
-                    ImageHelper.saveCover(cover, getActivity(), book.coverFile());
+                    ImageHelper.saveCover(cover, getContext(), book.coverFile());
 
                     picasso.invalidate(book.coverFile());
                     useCoverReplacement = false;
@@ -149,7 +149,7 @@ public class EditCoverDialogFragment extends DialogFragment {
             }
         };
 
-        return new MaterialDialog.Builder(getActivity())
+        return new MaterialDialog.Builder(getContext())
                 .customView(customView, true)
                 .title(R.string.edit_book_cover)
                 .positiveText(R.string.dialog_confirm)
@@ -231,8 +231,7 @@ public class EditCoverDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        coverDownloader = new CoverDownloader(getActivity());
-        picasso = Picasso.with(getActivity());
+        picasso = Picasso.with(getContext());
     }
 
     @Override

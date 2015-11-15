@@ -17,6 +17,10 @@ import de.ph1b.audiobook.interfaces.ForApplication;
 import de.ph1b.audiobook.mediaplayer.AndroidMediaPlayer;
 import de.ph1b.audiobook.mediaplayer.CustomMediaPlayer;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerInterface;
+import de.ph1b.audiobook.uitools.ImageLinkService;
+import retrofit.GsonConverterFactory;
+import retrofit.Retrofit;
+import retrofit.RxJavaCallAdapterFactory;
 
 /**
  * Basic providing module.
@@ -72,5 +76,17 @@ public class BaseModule {
     @Singleton
     AudioManager provideAudioManager() {
         return (AudioManager) appContext.getSystemService(Context.AUDIO_SERVICE);
+    }
+
+    @Provides
+    @Singleton
+    ImageLinkService provideImageLinkService() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://ajax.googleapis.com/ajax/services/search/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+
+        return retrofit.create(ImageLinkService.class);
     }
 }

@@ -2,30 +2,23 @@ package de.ph1b.audiobook.uitools;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.Size;
 
 import com.squareup.okhttp.Call;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 import com.squareup.picasso.Picasso;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import de.ph1b.audiobook.interfaces.ForApplication;
 import timber.log.Timber;
 
 /**
@@ -33,14 +26,17 @@ import timber.log.Timber;
  *
  * @author Paul Woitaschek
  */
-public class CoverDownloader {
+public final class CoverDownloader {
 
     private static final HashMap<String, List<String>> SEARCH_MAPPING = new HashMap<>(10);
     private final Picasso picasso;
+    private final ImageLinkService imageLinkService;
     private Call call = null;
 
-    public CoverDownloader(@NonNull Context c) {
+    @Inject
+    public CoverDownloader(@NonNull @ForApplication Context c, @NonNull ImageLinkService imageLinkService) {
         picasso = Picasso.with(c);
+        this.imageLinkService = imageLinkService;
     }
 
     /**
@@ -72,6 +68,7 @@ public class CoverDownloader {
             call.cancel();
         }
     }
+
 
     /**
      * Fetches a cover into Picassos internal cache and returns the url if that worked.
@@ -140,43 +137,10 @@ public class CoverDownloader {
     @NonNull
     @Size(min = 0)
     private List<String> getNewLinks(@NonNull String searchText, int startPage) {
-        try {
-            Uri uri = new Uri.Builder()
-                    .scheme("https")
-                    .authority("ajax.googleapis.com")
-                    .appendPath("ajax")
-                    .appendPath("services")
-                    .appendPath("search")
-                    .appendPath("images")
-                    .appendQueryParameter("v", "1.0")
-                    .appendQueryParameter("imgsz", "large|xlarge")
-                    .appendQueryParameter("rsz", "8")
-                    .appendQueryParameter("q", searchText + " cover")
-                    .appendQueryParameter("start", String.valueOf(startPage))
-                    .appendQueryParameter("userip", getIPAddress())
-                    .build();
-
-            URL url = new URL(uri.toString());
-
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder()
-                    .url(url)
-                    .build();
-
-            call = client.newCall(request);
-            Response response = call.execute();
-            JSONObject jsonObject = new JSONObject(response.body().string());
-            JSONObject responseData = jsonObject.getJSONObject("responseData");
-            JSONArray results = responseData.getJSONArray("results");
-
-            List<String> newStrings = new ArrayList<>(results.length());
-            for (int i = 0; i < results.length(); i++) {
-                newStrings.add(results.getJSONObject(i).getString("url"));
-            }
-            return newStrings;
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-            return Collections.emptyList();
-        }
+        searchText += " cover";
+        return imageLinkService.imageLinks(searchText, startPage, getIPAddress())
+                .toBlocking()
+                .single()
+                .urls();
     }
 }
