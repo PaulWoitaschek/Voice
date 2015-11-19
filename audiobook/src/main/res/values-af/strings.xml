@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <!--BookShelf-->
+    <string name="mal_file_message">Die volgende lêer is beskadig:</string>
+    <string name="mal_file_title">Defektiewe lêers</string>
+    <string name="content_current_book">Dit is die huidige boek</string>
+    <string name="current_book">Huidige boek</string>
+    <string name="change_layout_type">Verander uitleg</string>
+    <!--BookPlayFragment-->
+    <string name="cover">Voorblad</string>
+    <string name="play_pause">Speel / Breek</string>
+    <string name="action_sleep">Slaap-Timer</string>
+    <plurals name="pauses_after">
+        <item quantity="one">Breek na %d minuut.</item>
+        <item quantity="other">Breek na %d minute.</item>
+    </plurals>
+    <string name="rewind">Terugdraai</string>
+    <string name="fast_forward">Vinnig vorentoe</string>
+    <string name="previous_track">Vorige snit</string>
+    <string name="next_track">Volgende snit</string>
+    <string name="play">Speel</string>
+    <string name="pause">Breek</string>
+    <!--NoExternalStorage-->
+    <string name="no_external_storage">Eksterna stoor spasie is nie beskikbaar nie. Maak asseblief seker dit is gekonnekteer en nie gemonteer op die rekenaar nie.</string>
+    <string name="no_external_storage_action_bar_title">Eksterna stoor spasie</string>
+    <!--Dialogs-->
+    <string name="dialog_confirm">Stel</string>
+    <string name="dialog_cancel">Kanselleer</string>
+    <!--EditBookDialog-->
+    <string name="content_previous_cover">Kies vorige voorblad</string>
+    <string name="content_next_cover">Kies volgende voorblad</string>
+    <string name="content_cover">Wys voorblad om te kies</string>
+    <string name="edit_book_name">Wysig naam</string>
+    <string name="edit_book_cover">Wysig voorblad</string>
+    <string name="edit_book_title">Wysig boek</string>
+    <!--JumpToPosition-->
+    <string name="action_time_change">Spring na</string>
+    <!--BookAdding-->
+    <string name="adding_failed_subfolder">Die gidse moet nie /\'n subgids van mekaar wees nie:</string>
+    <string name="audiobook_folders_title">Klankboekgids</string>
+    <string name="no_audiobook_folders_title">Kies gids</string>
+    <string name="no_audiobook_folders_summary_start">Kies asseblief die klankboek gids(e) nou.</string>
+    <string name="no_audiobook_folders_end">Jy kan nou jou hoofgids kies wat verskillende boeke bevat of jy kan /\'n enkele boek kies.</string>
+    <string name="chosen_folder_description">Verkose gids:</string>
+    <string name="delete_folder">Verwyder uit biblioteek?</string>
+    <string name="delete_folder_content">Wil jy die volgende gids verwyder uit die biblioteek?</string>
+    <string name="folder_add_single_book">Enkele boek</string>
+    <string name="folder_add_collection">Gids met verskeie boeke</string>
+    <string name="for_example">bv.</string>
+    <string name="content_add_book">Voeg /\'n boek by</string>
+    <string name="content_is_folder">Gids</string>
+    <string name="content_is_file">Lêer</string>
+    <string name="content_navigate_up">Gaan na ouer gids</string>
+    <string name="permission_read_ext_explanation">Die app moet jou stoor spasie lees, sodat dit klankboeke kan vind en speel.</string>
+    <string name="permission_read_ext_request">Moet ons weer vra vir toestemming?</string>
+    <string name="permission_rescan">Versoek weer</string>
+    <!--PlaybackSpeed-->
+    <string name="playback_speed">Terugspeel spoed</string>
+    <!--Bookmarks-->
+    <string name="bookmark">Boekmerk</string>
+    <string name="bookmark_edit_title">Wysig boekmerk</string>
+    <string name="acc_button_add_bookmark">Voeg /\'n boekmerk by huidige posisie</string>
+    <string name="bookmark_edit_hint">Boekmerk naam</string>
+    <string name="bookmark_added">Boekmerk bygevoeg</string>
+    <string name="bookmark_delete_title">Verwyder die boekmerk?</string>
+    <!--Settings-->
+    <string name="pref_category_general">Algemene instellings</string>
+    <string name="pref_category_playback">Terugspeel gedrag</string>
+    <string name="action_settings">Voorkeure</string>
+    <string name="pref_resume_on_replug">Hervat terugspeling</string>
+    <string name="pref_resume_on_replug_hint">Indien speling gebreek is as gevolg van oorfone wat verwyder was sal dit hervat word sodra die oorfone terug gesit is.</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minuut</item>
+        <item quantity="other">%d minute</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%d sekonde</item>
+        <item quantity="other">%d sekondes</item>
+    </plurals>
+    <string name="pref_seek_time">Skip hoeveelheid</string>
+    <string name="pref_sleep_time">Slaap tyd</string>
+    <string name="pref_root_folder_title">Klankboek gids</string>
+    <string name="pref_root_folder_summary">Die geselekteerde klankboek gidse.</string>
+    <string name="pref_theme_title">Tema</string>
+    <string name="pref_theme_light">Lig</string>
+    <string name="pref_theme_dark">Donker</string>
+    <string name="pref_pause_on_can_duck_title">Breek op onderbreking</string>
+    <string name="pref_pause_on_can_duck_summary">Breek wanneer onderbreek in stede daarvan om volume te verlaag vir die durasie van die onderbreking.</string>
+    <string name="pref_send_bugs_title">Raporteer foute</string>
+    <string name="pref_send_bugs_summary">Stuur outomatiese anonieme berigte oor ongelukke om sodoende ontwikkeling mee te help.</string>
+    <string name="pref_auto_rewind_title">Outomatiese terugdraai</string>
+    <plurals name="pref_auto_rewind_summary">
+        <item quantity="one">Outomastiese terugdraai van %d sekonde na /\'n breek.</item>
+        <item quantity="other">Outomastiese terugdraai van %d sekondes na /\'n breek.</item>
+    </plurals>
+    <string name="pref_bookmark_on_sleep_title">Boekmerk op slaap</string>
+    <string name="pref_bookmark_on_sleep_summary">Stel outomaties /\'n boekmerk elke keer as die slaap timer gestel is.</string>
+    <string name="pref_support_title">Ondersteun</string>
+    <string name="pref_support_translations">Vertaal</string>
+    <string name="pref_support_contribute">Ondersteuning en terugvoering</string>
+    <string name="pref_support_donation">Skenk</string>
+    <string name="donation_worked_thanks">Baie dankie. Dit help werklik baie :)</string>
+    <string name="donation_not_worked">Gits… iets het skeef geloop</string>
+    <!--Misc-->
+    <string name="popup_edit">Wysig</string>
+    <string name="remove">Verwyder</string>
+    <!--hide folder dialog-->
+    <string name="hide_folder_title">Steek gids weg</string>
+    <string name="hide_folder_content">Wil jy die gids wegsteek van musiek spelers, sodat dit nie erken word as musiek nie?</string>
+    <string name="hide_confirm">Steek weg</string>
+</resources>
