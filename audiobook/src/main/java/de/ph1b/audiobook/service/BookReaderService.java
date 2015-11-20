@@ -211,6 +211,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
 
     private boolean handleKeyCode(int keyCode) {
         Timber.v("handling keyCode: %s", keyCode);
+        boolean handled = false;
         switch (keyCode) {
             case KeyEvent.KEYCODE_MEDIA_PLAY:
             case KeyEvent.KEYCODE_MEDIA_PAUSE:
@@ -221,21 +222,28 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                 } else {
                     controller.play();
                 }
-                return true;
+                handled = true;
+                break;
             case KeyEvent.KEYCODE_MEDIA_STOP:
                 controller.stop();
-                return true;
+                handled = true;
+                break;
             case KeyEvent.KEYCODE_MEDIA_NEXT:
             case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
                 controller.skip(MediaPlayerController.Direction.FORWARD);
-                return true;
+                handled = true;
+                break;
             case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
             case KeyEvent.KEYCODE_MEDIA_REWIND:
                 controller.skip(MediaPlayerController.Direction.BACKWARD);
-                return true;
+                handled = true;
+                break;
             default:
                 return false;
         }
+        if (handled)
+            notifyChange(ChangeType.PLAYSTATE);
+        return handled;
     }
 
     @Override
