@@ -11,7 +11,3 @@ build
 *.log
 local.properties
 MaterialAudiobookPlayer.iml
-
-# Signing
-audiobook/release.keystore
-signing.properties

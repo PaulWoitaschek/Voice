@@ -13,21 +13,18 @@ android {
         versionName 'preview'
     }
 
-    signingConfigs {
-        release
-    }
-
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.pro'
-            signingConfig signingConfigs.release
+            resValue "string", "app_name", "Material Player"
         }
         debug {
             minifyEnabled false
             shrinkResources false
             applicationIdSuffix ".debug"
+            resValue "string", "app_name", "[DBG] Material Player"
         }
     }
 
@@ -38,6 +35,7 @@ android {
     lintOptions {
         abortOnError false
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -49,28 +47,6 @@ android {
                     variant.name + "-" + variant.applicationId + ".apk")
         }
     }
-}
-
-def Properties props = new Properties()
-def propFile = new File('signing.properties')
-if (propFile.canRead()) {
-    props.load(new FileInputStream(propFile))
-    if (props != null &&
-            props.containsKey('STORE_FILE') &&
-            props.containsKey('STORE_PASSWORD') &&
-            props.containsKey('KEY_ALIAS') &&
-            props.containsKey('KEY_PASSWORD')) {
-        android.signingConfigs.release.storeFile = file(props['STORE_FILE'])
-        android.signingConfigs.release.storePassword = props['STORE_PASSWORD']
-        android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
-        android.signingConfigs.release.keyPassword = props['KEY_PASSWORD']
-    } else {
-        println 'signing.properties found but some entries are missing'
-        android.buildTypes.release.signingConfig = null
-    }
-} else {
-    println 'signing.properties not found'
-    android.buildTypes.release.signingConfig = null
 }
 
 dependencies {
