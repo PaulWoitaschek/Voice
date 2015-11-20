@@ -15,6 +15,7 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -49,6 +50,8 @@ import de.ph1b.audiobook.utils.App;
 import de.ph1b.audiobook.utils.BookVendor;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 
 /**
@@ -203,7 +206,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                             break;
                     }
 
-                    notifyChange(ChangeType.PLAYSTATE);
+                    notifyChange(ChangeType.PLAY_STATE);
                 }
             });
         }));
@@ -363,7 +366,6 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private Notification getNotification(@NonNull Book book) {
-
         // cover
         int width = ImageHelper.getSmallerScreenSize(this);
         int height = ImageHelper.getSmallerScreenSize(this);
@@ -420,8 +422,8 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
         Intent contentIntent = BookActivity.goToBookIntent(this, book.id());
         PendingIntent contentPI = PendingIntent.getActivity(this, 0, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        return notificationBuilder.setStyle(
-                new NotificationCompat.MediaStyle()
+        return notificationBuilder
+                .setStyle(new NotificationCompat.MediaStyle()
                         .setShowActionsInCompactView(0, 1)
                         .setCancelButtonIntent(stopPI)
                         .setShowCancelButton(true)
@@ -454,29 +456,13 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                 String author = book.author();
                 int position = book.time();
 
-                Intent i = new Intent(what.intentUrl);
-                i.putExtra("id", 1);
-                if (author != null) {
-                    i.putExtra("artist", author);
-                }
-                i.putExtra("album", bookName);
-                i.putExtra("track", chapterName);
-                i.putExtra("playing", playState == MediaPlayerController.PlayState.PLAYING);
-                i.putExtra("position", book.time());
-                sendBroadcast(i);
+                sendBroadcast(what.broadcastIntent(author, bookName, chapterName, playState, position));
 
-                if (what == ChangeType.PLAYSTATE) {
-                    int state;
-                    if (playState == MediaPlayerController.PlayState.PLAYING) {
-                        state = PlaybackStateCompat.STATE_PLAYING;
-                    } else if (playState == MediaPlayerController.PlayState.PAUSED) {
-                        state = PlaybackStateCompat.STATE_PAUSED;
-                    } else {
-                        state = PlaybackStateCompat.STATE_STOPPED;
-                    }
-                    playbackStateBuilder.setState(state, position, controller.getPlaybackSpeed());
-                    mediaSession.setPlaybackState(playbackStateBuilder.build());
-                } else if ((what == ChangeType.METADATA) && !lastFileForMetaData.equals(book.currentFile())) {
+                //noinspection ResourceType
+                playbackStateBuilder.setState(playState.playbackStateCompat(), position, controller.getPlaybackSpeed());
+                mediaSession.setPlaybackState(playbackStateBuilder.build());
+
+                if (what == ChangeType.METADATA && !lastFileForMetaData.equals(book.currentFile())) {
                     // this check is necessary. Else the lockscreen controls will flicker due to
                     // an updated picture
                     Bitmap bitmap = null;
@@ -492,7 +478,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                         Drawable replacement = new CoverReplacement(
                                 book.name(),
                                 BookReaderService.this);
-                        Timber.d("replacement dimen:%d:%d", replacement.getIntrinsicWidth(), replacement.getIntrinsicHeight());
+                        Timber.d("replacement dimen: %d:%d", replacement.getIntrinsicWidth(), replacement.getIntrinsicHeight());
                         bitmap = ImageHelper.drawableToBitmap(
                                 replacement,
                                 ImageHelper.getSmallerScreenSize(BookReaderService.this),
@@ -524,12 +510,33 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
 
     private enum ChangeType {
         METADATA("com.android.music.metachanged"),
-        PLAYSTATE("com.android.music.playstatechange");
+        PLAY_STATE("com.android.music.playstatechange");
 
-        public final String intentUrl;
+        private final String intentUrl;
 
         ChangeType(String intentUrl) {
             this.intentUrl = intentUrl;
+        }
+
+        public Intent broadcastIntent(@Nullable String author,
+                                      @NonNull String bookName,
+                                      @NonNull String chapterName,
+                                      @NonNull MediaPlayerController.PlayState playState,
+                                      int time) {
+            checkNotNull(bookName);
+            checkNotNull(chapterName);
+            checkNotNull(playState);
+
+            Intent i = new Intent(intentUrl);
+            i.putExtra("id", 1);
+            if (author != null) {
+                i.putExtra("artist", author);
+            }
+            i.putExtra("album", bookName);
+            i.putExtra("track", chapterName);
+            i.putExtra("playing", playState == MediaPlayerController.PlayState.PLAYING);
+            i.putExtra("position", time);
+            return i;
         }
     }
 }

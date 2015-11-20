@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.media.session.PlaybackStateCompat;
 
 import com.google.common.base.Preconditions;
 
@@ -550,9 +551,21 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
     }
 
     public enum PlayState {
-        PLAYING,
-        PAUSED,
-        STOPPED,
+        PLAYING(PlaybackStateCompat.STATE_PLAYING),
+        PAUSED(PlaybackStateCompat.STATE_PAUSED),
+        STOPPED(PlaybackStateCompat.STATE_STOPPED);
+
+        @PlaybackStateCompat.State
+        private final int playbackStateCompat;
+
+        PlayState(@PlaybackStateCompat.State int playbackStateCompat) {
+            this.playbackStateCompat = playbackStateCompat;
+        }
+
+        @PlaybackStateCompat.State
+        public int playbackStateCompat() {
+            return playbackStateCompat;
+        }
     }
 
     /**
