@@ -24,6 +24,7 @@ import de.ph1b.audiobook.service.ServiceController
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.utils.App
 import de.ph1b.audiobook.utils.BookVendor
+import rx.functions.Func1
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -61,7 +62,7 @@ class BookmarkDialogFragment : DialogFragment() {
         bookmarkTitle = customView.findViewById(R.id.bookmarkEdit) as EditText
 
         val bookId = arguments.getLong(BOOK_ID)
-        book = bookVendor.byId(bookId)!!
+        book = bookVendor.byId(bookId)
 
         var adapter: BookmarkAdapter
         val listener = object : BookmarkAdapter.OnOptionsMenuClickedListener {
@@ -155,9 +156,9 @@ class BookmarkDialogFragment : DialogFragment() {
 
         fun addBookmark(bookId: Long, title: String, db: BookShelf) {
             var book: Book? = db.getActiveBooks()
-                    .filter { it.id == bookId }
+                    .singleOrDefault(null, Func1 { it.id == bookId })
                     .toBlocking()
-                    .singleOrDefault(null)
+                    .single()
             if (book != null) {
                 val addedBookmark = Bookmark(book.currentChapter().file, title, book.time)
                 val newBookmarks = ArrayList(book.bookmarks)
