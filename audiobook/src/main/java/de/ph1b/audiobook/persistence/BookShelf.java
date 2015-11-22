@@ -118,7 +118,7 @@ public class BookShelf {
         int length = position.length;
         List<Bookmark> bookmarks = new ArrayList<>(length);
         for (int i = 0; i < length; i++) {
-            bookmarks.add(Bookmark.of(new File(path[i]), title[i], position[i]));
+            bookmarks.add(new Bookmark(new File(path[i]), title[i], position[i]));
         }
         return bookmarks;
     }
@@ -130,7 +130,7 @@ public class BookShelf {
         int length = position.length;
         List<Chapter> bookmarks = new ArrayList<>(length);
         for (int i = 0; i < length; i++) {
-            bookmarks.add(Chapter.of(new File(path[i]), title[i], position[i]));
+            bookmarks.add(new Chapter(new File(path[i]), title[i], position[i]));
         }
         return bookmarks;
     }

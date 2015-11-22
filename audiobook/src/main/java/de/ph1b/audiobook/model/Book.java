@@ -68,7 +68,7 @@ public abstract class Book implements Comparable<Book> {
     public int globalDuration() {
         int globalDuration = 0;
         for (Chapter c : chapters()) {
-            globalDuration += c.duration();
+            globalDuration += c.getDuration();
         }
         return globalDuration;
     }
@@ -84,7 +84,7 @@ public abstract class Book implements Comparable<Book> {
                 globalPosition += time();
                 return globalPosition;
             } else {
-                globalPosition += c.duration();
+                globalPosition += c.getDuration();
             }
         }
         throw new IllegalStateException("Current chapter was not found while looking up the global position");
@@ -130,7 +130,7 @@ public abstract class Book implements Comparable<Book> {
     public Chapter currentChapter() {
         List<Chapter> chapters = chapters();
         for (Chapter c : chapters) {
-            if (c.file().equals(currentFile())) {
+            if (c.getFile().equals(currentFile())) {
                 return c;
             }
         }
@@ -177,11 +177,11 @@ public abstract class Book implements Comparable<Book> {
         List<Chapter> chapters = chapters();
         List<File> chapterFiles = new ArrayList<>(chapters.size());
         for (Chapter c : chapters) {
-            chapterFiles.add(c.file());
+            chapterFiles.add(c.getFile());
         }
         Preconditions.checkArgument(playbackSpeed() >= SPEED_MIN && playbackSpeed() <= SPEED_MAX);
         for (Bookmark b : bookmarks()) {
-            Preconditions.checkArgument(chapterFiles.contains(b.mediaFile()));
+            Preconditions.checkArgument(chapterFiles.contains(b.getMediaFile()));
         }
         Preconditions.checkArgument(!chapters.isEmpty());
         Preconditions.checkArgument(chapterFiles.contains(currentFile()));

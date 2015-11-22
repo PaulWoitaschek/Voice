@@ -183,7 +183,7 @@ public class BookPlayFragment extends BaseFragment {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 int progress = seekBar.getProgress();
                 controller.changeTime(progress, book.currentChapter()
-                        .file());
+                        .getFile());
                 playedTimeView.setText(formatTime(progress, seekBar.getMax()));
             }
         });
@@ -195,14 +195,14 @@ public class BookPlayFragment extends BaseFragment {
             List<Chapter> chapters = book.chapters();
             final List<String> chaptersAsStrings = new ArrayList<>(chapters.size());
             for (int i = 0; i < chapters.size(); i++) {
-                String chapterName = chapters.get(i).name();
+                String chapterName = chapters.get(i).getName();
 
                 // cutting leading zeros
                 chapterName = chapterName.replaceFirst("^0", "");
                 String number = String.valueOf(i + 1);
 
                 // desired format is "1 - Title"
-                if (!chapterName.startsWith(number + " - ")) { // if title does not match desired format
+                if (!chapterName.startsWith(number + " - ")) { // if getTitle does not match desired format
                     if (chapterName.startsWith(number)) {
                         // if it starts with a number, a " - " should follow
                         chapterName = number + " - " + chapterName.substring(chapterName.indexOf(number)
@@ -247,7 +247,7 @@ public class BookPlayFragment extends BaseFragment {
                     if (parent.getTag() != null && ((int) parent.getTag()) != position) {
                         Timber.i("spinner: onItemSelected. firing: %d", position);
                         controller.changeTime(0, book.chapters().get(
-                                position).file());
+                                position).getFile());
                         parent.setTag(position);
                     }
                 }
@@ -383,7 +383,7 @@ public class BookPlayFragment extends BaseFragment {
             sleepTimerItem.setIcon(R.drawable.ic_snooze_white_24dp);
         }
 
-        // hide bookmark and time change item if there is no valid book
+        // hide bookmark and getTime change item if there is no valid book
         boolean currentBookExists = book != null;
         MenuItem bookmarkItem = menu.findItem(R.id.action_bookmark);
         MenuItem timeChangeItem = menu.findItem(R.id.action_time_change);
@@ -464,7 +464,7 @@ public class BookPlayFragment extends BaseFragment {
                         Timber.e("Book is null. Returning immediately.");
                         return;
                     }
-                    Timber.i("New book with time %d and content %s", book.time(), book);
+                    Timber.i("New book with getTime %d and content %s", book.time(), book);
 
                     List<Chapter> chapters = book.chapters();
                     Chapter chapter = book.currentChapter();
@@ -476,11 +476,11 @@ public class BookPlayFragment extends BaseFragment {
                      */
                     bookSpinner.setTag(position);
                     bookSpinner.setSelection(position, true);
-                    int duration = chapter.duration();
+                    int duration = chapter.getDuration();
                     seekBar.setMax(duration);
                     maxTimeView.setText(formatTime(duration, duration));
 
-                    // Setting seekBar and played time view
+                    // Setting seekBar and played getTime view
                     int progress = book.time();
                     if (!seekBar.isPressed()) {
                         seekBar.setProgress(progress);

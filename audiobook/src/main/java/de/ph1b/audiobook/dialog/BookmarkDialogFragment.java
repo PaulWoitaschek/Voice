@@ -74,7 +74,7 @@ public class BookmarkDialogFragment extends DialogFragment {
                 .toBlocking()
                 .single();
         if (book != null) {
-            Bookmark addedBookmark = Bookmark.of(book.currentChapter().file(), title, book.time());
+            Bookmark addedBookmark = new Bookmark(book.currentChapter().getFile(), title, book.time());
             List<Bookmark> newBookmarks = new ArrayList<>(book.bookmarks());
             newBookmarks.add(addedBookmark);
             book = Book.builder(book)
@@ -91,7 +91,7 @@ public class BookmarkDialogFragment extends DialogFragment {
     void addClicked() {
         String title = bookmarkTitle.getText().toString();
         if (title.isEmpty()) {
-            title = book.currentChapter().name();
+            title = book.currentChapter().getName();
         }
 
         addBookmark(book.id(), title, db);
@@ -136,8 +136,8 @@ public class BookmarkDialogFragment extends DialogFragment {
                             new MaterialDialog.Builder(getActivity())
                                     .title(R.string.bookmark_edit_title)
                                     .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
-                                    .input(getString(R.string.bookmark_edit_hint), clickedBookmark.title(), false, (materialDialog, charSequence) -> {
-                                        Bookmark newBookmark = Bookmark.of(clickedBookmark.mediaFile(), charSequence.toString(), clickedBookmark.time());
+                                    .input(getString(R.string.bookmark_edit_hint), clickedBookmark.getTitle(), false, (materialDialog, charSequence) -> {
+                                        Bookmark newBookmark = new Bookmark(clickedBookmark.getMediaFile(), charSequence.toString(), clickedBookmark.getTime());
                                         adapter.bookmarkUpdated(clickedBookmark, newBookmark);
 
                                         // replaces the bookmark in the book
@@ -153,7 +153,7 @@ public class BookmarkDialogFragment extends DialogFragment {
                             return true;
                         case R.id.delete:
                             builder.title(R.string.bookmark_delete_title)
-                                    .content(clickedBookmark.title())
+                                    .content(clickedBookmark.getTitle())
                                     .positiveText(R.string.remove)
                                     .negativeText(R.string.dialog_cancel)
                                     .onPositive((materialDialog, dialogAction) -> {
@@ -177,7 +177,7 @@ public class BookmarkDialogFragment extends DialogFragment {
             @Override
             public void onBookmarkClicked(Bookmark bookmark) {
                 prefs.setCurrentBookId(bookId);
-                controller.changeTime(bookmark.time(), bookmark.mediaFile());
+                controller.changeTime(bookmark.getTime(), bookmark.getMediaFile());
 
                 getDialog().cancel();
             }

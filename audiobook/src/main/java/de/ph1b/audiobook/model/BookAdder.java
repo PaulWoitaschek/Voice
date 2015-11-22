@@ -214,7 +214,7 @@ public class BookAdder {
         for (Chapter c : chapters) {
             if (++tries < maxTries) {
                 throwIfStopRequested();
-                Bitmap cover = ImageHelper.getEmbeddedCover(c.file(), this.c);
+                Bitmap cover = ImageHelper.getEmbeddedCover(c.getFile(), this.c);
                 if (cover != null) {
                     return cover;
                 }
@@ -348,7 +348,7 @@ public class BookAdder {
                     for (File f : collectionBookFolders) {
                         if (f.isFile()) {
                             ImmutableList<Chapter> chapters = book.chapters();
-                            File singleBookChapterFile = chapters.get(0).file();
+                            File singleBookChapterFile = chapters.get(0).getFile();
                             if (singleBookChapterFile.equals(f)) {
                                 bookExists = true;
                             }
@@ -368,7 +368,7 @@ public class BookAdder {
                     for (File f : singleBookFiles) {
                         if (f.isFile()) {
                             ImmutableList<Chapter> chapters = book.chapters();
-                            File singleBookChapterFile = chapters.get(0).file();
+                            File singleBookChapterFile = chapters.get(0).getFile();
                             if (singleBookChapterFile.equals(f)) {
                                 bookExists = true;
                             }
@@ -420,7 +420,7 @@ public class BookAdder {
                 rootFile.getAbsolutePath() :
                 rootFile.getParent();
 
-        File firstChapterFile = newChapters.get(0).file();
+        File firstChapterFile = newChapters.get(0).getFile();
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         String bookName = getBookName(firstChapterFile, rootFile, mmr);
         String author = getAuthor(firstChapterFile, mmr);
@@ -438,7 +438,7 @@ public class BookAdder {
             List<Bookmark> filteredBookmarks = Lists.newArrayList(Collections2.filter(
                     orphanedBook.bookmarks(), input -> {
                         for (Chapter c : newChapters) {
-                            if (c.file().equals(input.mediaFile())) {
+                            if (c.getFile().equals(input.getMediaFile())) {
                                 return true;
                             }
                         }
@@ -452,14 +452,14 @@ public class BookAdder {
             // checks if current path is still valid. if not, reset position.
             boolean pathValid = false;
             for (Chapter c : orphanedBook.chapters()) {
-                if (c.file().equals(orphanedBook.currentFile())) {
+                if (c.getFile().equals(orphanedBook.currentFile())) {
                     pathValid = true;
                 }
             }
             if (!pathValid) {
                 orphanedBook = Book.builder(orphanedBook)
                         .time(0)
-                        .currentFile(orphanedBook.chapters().get(0).file())
+                        .currentFile(orphanedBook.chapters().get(0).getFile())
                         .build();
             }
 
@@ -484,11 +484,11 @@ public class BookAdder {
             File currentFile = bookExisting.currentFile();
             int currentTime = bookExisting.time();
             for (Chapter c : newChapters) {
-                if (c.file().equals(currentFile)) {
-                    if (c.duration() < currentTime) {
+                if (c.getFile().equals(currentFile)) {
+                    if (c.getDuration() < currentTime) {
                         bookExisting = Book.builder(bookExisting)
                                 .time(0)
-                                .currentFile(c.file())
+                                .currentFile(c.getFile())
                                 .build();
                     }
                     currentPathIsGone = false;
@@ -497,7 +497,7 @@ public class BookAdder {
             if (currentPathIsGone) {
                 bookExisting = Book.builder(bookExisting)
                         .time(0)
-                        .currentFile(bookExisting.chapters().get(0).file())
+                        .currentFile(bookExisting.chapters().get(0).getFile())
                         .build();
             }
 
@@ -505,7 +505,7 @@ public class BookAdder {
             ImmutableList<Bookmark> existingBookmarks = bookExisting.bookmarks();
             List<Bookmark> filteredBookmarks = Lists.newArrayList(Collections2.filter(existingBookmarks, input -> {
                 for (Chapter c : newChapters) {
-                    if (c.file().equals(input.mediaFile())) {
+                    if (c.getFile().equals(input.getMediaFile())) {
                         return true;
                     }
                 }
@@ -585,7 +585,7 @@ public class BookAdder {
                     if (durationString != null) {
                         int duration = Integer.parseInt(durationString);
                         if (duration > 0) {
-                            containingMedia.add(Chapter.of(f, chapterName, duration));
+                            containingMedia.add(new Chapter(f, chapterName, duration));
                         }
                     }
 
@@ -643,8 +643,8 @@ public class BookAdder {
                 Timber.v("Comparing bookRoot=%s with %s", b.root(), rootFile.getParentFile().getAbsoluteFile());
                 if (rootFile.getParentFile().getAbsolutePath().equals(b.root()) && type == b.type()) {
                     Chapter singleChapter = b.chapters().get(0);
-                    Timber.d("getBookFromDb, singleChapterPath=%s compared with=%s", singleChapter.file(), rootFile.getAbsoluteFile());
-                    if (singleChapter.file().equals(rootFile)) {
+                    Timber.d("getBookFromDb, singleChapterPath=%s compared with=%s", singleChapter.getFile(), rootFile.getAbsoluteFile());
+                    if (singleChapter.getFile().equals(rootFile)) {
                         return b;
                     }
                 }

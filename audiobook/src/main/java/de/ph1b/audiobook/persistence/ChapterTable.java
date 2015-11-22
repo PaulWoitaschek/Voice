@@ -15,7 +15,7 @@ class ChapterTable {
     static final String NAME = "chapterName";
     static final String PATH = "chapterPath";
     static final String TABLE_NAME = "tableChapters";
-     static final String BOOK_ID = "bookId";
+    static final String BOOK_ID = "bookId";
     private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ( " +
             DURATION + " INTEGER NOT NULL, " +
             NAME + " TEXT NOT NULL, " +
@@ -25,9 +25,9 @@ class ChapterTable {
 
     public static ContentValues getContentValues(Chapter chapter, long bookId) {
         ContentValues chapterCv = new ContentValues();
-        chapterCv.put(DURATION, chapter.duration());
-        chapterCv.put(NAME, chapter.name());
-        chapterCv.put(PATH, chapter.file().getAbsolutePath());
+        chapterCv.put(DURATION, chapter.getDuration());
+        chapterCv.put(NAME, chapter.getName());
+        chapterCv.put(PATH, chapter.getFile().getAbsolutePath());
         chapterCv.put(BookTable.ID, bookId);
         return chapterCv;
     }

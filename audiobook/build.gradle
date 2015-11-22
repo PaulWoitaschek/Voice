@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 23
@@ -34,6 +35,10 @@ android {
 
     lintOptions {
         abortOnError false
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
     }
 
     compileOptions {
@@ -111,4 +116,6 @@ dependencies {
     compile "com.squareup.retrofit:retrofit:$retroFitVersion"
     compile "com.squareup.retrofit:converter-gson:$retroFitVersion"
     compile "com.squareup.retrofit:adapter-rxjava:$retroFitVersion"
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 }

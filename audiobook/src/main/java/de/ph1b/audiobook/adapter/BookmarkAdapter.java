@@ -86,12 +86,12 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Bookmark bookmark = bookmarks.get(position);
-        holder.title.setText(bookmark.title());
+        holder.title.setText(bookmark.getTitle());
 
         int size = chapters.size();
         Chapter currentChapter = null;
         for (Chapter c : chapters) {
-            if (c.file().equals(bookmark.mediaFile())) {
+            if (c.getFile().equals(bookmark.getMediaFile())) {
                 currentChapter = c;
             }
         }
@@ -101,8 +101,8 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         int index = chapters.indexOf(currentChapter);
 
         holder.summary.setText(c.getString(R.string.format_bookmarks_n_of, index + 1, size));
-        holder.time.setText(c.getString(R.string.format_bookmarks_time, formatTime(bookmark.time()),
-                formatTime(currentChapter.duration())));
+        holder.time.setText(c.getString(R.string.format_bookmarks_time, formatTime(bookmark.getTime()),
+                formatTime(currentChapter.getDuration())));
     }
 
     @Override

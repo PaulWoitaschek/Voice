@@ -392,7 +392,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
             // we need the current chapter title and number only if there is more than one chapter.
             notificationBuilder.setContentInfo((chapters.indexOf(chapter) + 1) + "/" +
                     chapters.size());
-            notificationBuilder.setContentText(chapter.name());
+            notificationBuilder.setContentText(chapter.getName());
         }
 
         // rewind
@@ -452,7 +452,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                 MediaPlayerController.PlayState playState = controller.getPlayState().getValue();
 
                 String bookName = book.name();
-                String chapterName = c.name();
+                String chapterName = c.getName();
                 String author = book.author();
                 int position = book.time();
 
@@ -490,7 +490,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                     bitmap = bitmap.copy(bitmap.getConfig(), true);
                     mediaMetaDataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap)
                             .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
-                            .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, c.duration())
+                            .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, c.getDuration())
                             .putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, (book.chapters().indexOf(book.currentChapter()) + 1))
                             .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, book.chapters().size())
                             .putString(MediaMetadataCompat.METADATA_KEY_TITLE, chapterName)

@@ -127,7 +127,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                 player.setWakeMode(c, PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE);
 
                 try {
-                    player.setDataSource(book.currentChapter().file().getAbsolutePath());
+                    player.setDataSource(book.currentChapter().getFile().getAbsolutePath());
                     player.prepare();
                     player.seekTo(book.time());
                     player.setPlaybackSpeed(book.playbackSpeed());
@@ -248,10 +248,10 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                     db.updateBook(book);
                 } else {
                     if (toNullOfNewTrack) {
-                        changePosition(0, previousChapter.file());
+                        changePosition(0, previousChapter.getFile());
                     } else {
-                        changePosition(previousChapter.duration() -
-                                (prefs.getSeekTime() * 1000), previousChapter.file());
+                        changePosition(previousChapter.getDuration() -
+                                (prefs.getSeekTime() * 1000), previousChapter.getFile());
                     }
                 }
             }
@@ -446,7 +446,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
             if (book != null) {
                 Chapter nextChapter = book.nextChapter();
                 if (nextChapter != null) {
-                    changePosition(0, nextChapter.file());
+                    changePosition(0, nextChapter.getFile());
                 }
             }
         } finally {
@@ -466,7 +466,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         try {
             Timber.v("time=%d, relPath=%s", time, file);
             if (book != null) {
-                boolean changeFile = (!book.currentChapter().file().equals(file));
+                boolean changeFile = (!book.currentChapter().getFile().equals(file));
                 Timber.v("changeFile=%s", changeFile);
                 if (changeFile) {
                     boolean wasPlaying = (state == State.STARTED);
