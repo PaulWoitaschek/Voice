@@ -51,7 +51,7 @@ public class JumpToPositionDialogFragment extends DialogFragment {
             throw new AssertionError("Cannot instantiate " + TAG + " without a current book");
         }
         int duration = book.currentChapter().getDuration();
-        int position = book.time();
+        int position = book.getTime();
         biggestHour = (int) TimeUnit.MILLISECONDS.toHours(duration);
         durationInMinutes = (int) TimeUnit.MILLISECONDS.toMinutes(duration);
         if (biggestHour == 0) { //sets visibility of hour related things to gone if max.hour is zero

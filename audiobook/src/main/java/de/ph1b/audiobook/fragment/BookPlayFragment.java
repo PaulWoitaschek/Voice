@@ -189,10 +189,10 @@ public class BookPlayFragment extends BaseFragment {
         });
 
         if (book != null) {
-            actionBar.setTitle(book.name());
+            actionBar.setTitle(book.getName());
 
             // adapter
-            List<Chapter> chapters = book.chapters();
+            List<Chapter> chapters = book.getChapters();
             final List<String> chaptersAsStrings = new ArrayList<>(chapters.size());
             for (int i = 0; i < chapters.size(); i++) {
                 String chapterName = chapters.get(i).getName();
@@ -246,7 +246,7 @@ public class BookPlayFragment extends BaseFragment {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (parent.getTag() != null && ((int) parent.getTag()) != position) {
                         Timber.i("spinner: onItemSelected. firing: %d", position);
-                        controller.changeTime(0, book.chapters().get(
+                        controller.changeTime(0, book.getChapters().get(
                                 position).getFile());
                         parent.setTag(position);
                     }
@@ -258,7 +258,7 @@ public class BookPlayFragment extends BaseFragment {
             });
 
             // Next/Prev/spinner/book progress views hiding
-            if (book.chapters().size() == 1) {
+            if (book.getChapters().size() == 1) {
                 next_button.setVisibility(View.GONE);
                 previous_button.setVisibility(View.GONE);
                 bookSpinner.setVisibility(View.GONE);
@@ -272,8 +272,8 @@ public class BookPlayFragment extends BaseFragment {
         }
 
         // (Cover)
-        final Drawable coverReplacement = new CoverReplacement(book == null ? "M" : book.name(), getContext());
-        if (book != null && !book.useCoverReplacement() && book.coverFile().canRead()) {
+        final Drawable coverReplacement = new CoverReplacement(book == null ? "M" : book.getName(), getContext());
+        if (book != null && !book.getUseCoverReplacement() && book.coverFile().canRead()) {
             Picasso.with(getContext()).load(book.coverFile()).placeholder(coverReplacement).into(coverView);
         } else {
             // we have to set the cover in onPreDraw. Else the transition will fail.
@@ -457,16 +457,16 @@ public class BookPlayFragment extends BaseFragment {
 
         subscriptions.add((Observable.merge(db.getActiveBooks(), db.updateObservable()))
                 .observeOn(AndroidSchedulers.mainThread())
-                .filter(book -> book.id() == getBookId())
+                .filter(book -> book.getId() == getBookId())
                 .doOnNext(book -> BookPlayFragment.this.book = book)
                 .subscribe(book -> {
                     if (book == null) {
                         Timber.e("Book is null. Returning immediately.");
                         return;
                     }
-                    Timber.i("New book with getTime %d and content %s", book.time(), book);
+                    Timber.i("New book with getTime %d and content %s", book.getTime(), book);
 
-                    List<Chapter> chapters = book.chapters();
+                    List<Chapter> chapters = book.getChapters();
                     Chapter chapter = book.currentChapter();
 
                     int position = chapters.indexOf(chapter);
@@ -481,7 +481,7 @@ public class BookPlayFragment extends BaseFragment {
                     maxTimeView.setText(formatTime(duration, duration));
 
                     // Setting seekBar and played getTime view
-                    int progress = book.time();
+                    int progress = book.getTime();
                     if (!seekBar.isPressed()) {
                         seekBar.setProgress(progress);
                         playedTimeView.setText(formatTime(progress, duration));

@@ -25,7 +25,7 @@ public class BookVendor {
 
     public Book byId(long id) {
         return bookShelf.getActiveBooks()
-                .singleOrDefault(null, book -> book.id() == id)
+                .singleOrDefault(null, book -> book.getId() == id)
                 .toBlocking()
                 .single();
     }

@@ -50,19 +50,19 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
 
         @Override
         public int compare(Book o1, Book o2) {
-            return NaturalOrderComparator.STRING_COMPARATOR.compare(o1.name(), o2.name());
+            return NaturalOrderComparator.STRING_COMPARATOR.compare(o1.getName(), o2.getName());
         }
 
         @Override
         public boolean areContentsTheSame(Book oldItem, Book newItem) {
             return oldItem.globalPosition() == newItem.globalPosition()
-                    && oldItem.name().equals(newItem.name())
-                    && oldItem.useCoverReplacement() == newItem.useCoverReplacement();
+                    && oldItem.getName().equals(newItem.getName())
+                    && oldItem.getUseCoverReplacement() == newItem.getUseCoverReplacement();
         }
 
         @Override
         public boolean areItemsTheSame(Book item1, Book item2) {
-            return item1.id() == item2.id();
+            return item1.getId() == item2.getId();
         }
     });
     @Inject PrefsManager prefs;
@@ -90,7 +90,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
         Timber.i("removeBook called with id %d", bookId);
         for (int i = 0; i < sortedList.size(); i++) {
             Book b = sortedList.get(i);
-            if (b.id() == bookId) {
+            if (b.getId() == bookId) {
                 Timber.i("Found our book to remove %s", b);
                 sortedList.remove(b);
                 break;
@@ -106,7 +106,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
     public void updateOrAddBook(@NonNull Book book) {
         int index = -1;
         for (int i = 0; i < sortedList.size(); i++) {
-            if (sortedList.get(i).id() == book.id()) {
+            if (sortedList.get(i).getId() == book.getId()) {
                 index = i;
                 break;
             }
@@ -133,7 +133,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
                 Book existing = sortedList.get(i);
                 boolean deleteBook = true;
                 for (Book b : books) {
-                    if (existing.id() == b.id()) {
+                    if (existing.getId() == b.getId()) {
                         deleteBook = false;
                         break;
                     }
@@ -158,7 +158,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
 
     @Override
     public long getItemId(int position) {
-        return sortedList.get(position).id();
+        return sortedList.get(position).getId();
     }
 
     /**
@@ -191,7 +191,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
      */
     public void notifyItemAtIdChanged(long id) {
         for (int i = 0; i < sortedList.size(); i++) {
-            if (sortedList.get(i).id() == id) {
+            if (sortedList.get(i).getId() == id) {
                 notifyItemChanged(i);
                 break;
             }
@@ -300,14 +300,14 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
         public void bind(Book book) {
 
             //setting text
-            String name = book.name();
+            String name = book.getName();
             titleView.setText(name);
 
             // (Cover)
             final File coverFile = book.coverFile();
-            final Drawable coverReplacement = new CoverReplacement(book.name(), c);
+            final Drawable coverReplacement = new CoverReplacement(book.getName(), c);
 
-            if (!book.useCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
+            if (!book.getUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
                 Picasso.with(c).load(coverFile).placeholder(coverReplacement).into(coverView);
             } else {
                 Picasso.with(c).cancelRequest(coverView);
@@ -322,7 +322,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<BookShelfAdapter.Base
                 });
             }
 
-            indicatorVisible = book.id() == prefs.getCurrentBookId().getValue();
+            indicatorVisible = book.getId() == prefs.getCurrentBookId().getValue();
             if (indicatorVisible) {
                 currentPlayingIndicator.setVisibility(View.VISIBLE);
             } else {

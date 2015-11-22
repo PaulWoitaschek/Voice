@@ -66,7 +66,7 @@ public class WidgetUpdateService extends Service {
         // update widget if current book, current book id or playState have changed.
         subscriptions.add(
                 Observable.merge(
-                        db.updateObservable().filter(book -> book.id() == prefs.getCurrentBookId().getValue()),
+                        db.updateObservable().filter(book -> book.getId() == prefs.getCurrentBookId().getValue()),
                         mediaPlayerController.getPlayState(),
                         prefs.getCurrentBookId())
 
@@ -121,7 +121,7 @@ public class WidgetUpdateService extends Service {
                         }
                         if (useWidth > 0 && useHeight > 0) {
                             setVisibilities(remoteViews, useWidth, useHeight,
-                                    book.chapters().size() == 1);
+                                    book.getChapters().size() == 1);
                         }
                     }
                 } else {
@@ -196,12 +196,12 @@ public class WidgetUpdateService extends Service {
         // if we have any book, init the views and have a click on the whole widget start BookPlay.
         // if we have no book, simply have a click on the whole widget start BookChoose.
 
-        remoteViews.setTextViewText(R.id.title, book.name());
+        remoteViews.setTextViewText(R.id.title, book.getName());
         String name = book.currentChapter().getName();
 
         remoteViews.setTextViewText(R.id.summary, name);
 
-        Intent wholeWidgetClickI = BookActivity.goToBookIntent(this, book.id());
+        Intent wholeWidgetClickI = BookActivity.goToBookIntent(this, book.getId());
         PendingIntent wholeWidgetClickPI = PendingIntent.getActivity
                 (WidgetUpdateService.this, (int) System.currentTimeMillis(), wholeWidgetClickI,
                         PendingIntent.FLAG_UPDATE_CURRENT);
@@ -209,7 +209,7 @@ public class WidgetUpdateService extends Service {
         Bitmap cover = null;
         try {
             File coverFile = book.coverFile();
-            if (!book.useCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
+            if (!book.getUseCoverReplacement() && coverFile.exists() && coverFile.canRead()) {
                 cover = Picasso.with(WidgetUpdateService.this).load(coverFile).get();
             }
         } catch (IOException e) {
@@ -217,7 +217,7 @@ public class WidgetUpdateService extends Service {
         }
         if (cover == null) {
             cover = ImageHelper.drawableToBitmap(new CoverReplacement(
-                            book.name(),
+                            book.getName(),
                             WidgetUpdateService.this), ImageHelper.getSmallerScreenSize(this),
                     ImageHelper.getSmallerScreenSize(this));
         }

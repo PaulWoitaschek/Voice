@@ -70,16 +70,25 @@ public class BookmarkDialogFragment extends DialogFragment {
 
     public static void addBookmark(long bookId, @NonNull String title, @NonNull BookShelf db) {
         Book book = db.getActiveBooks()
-                .singleOrDefault(null, filterBook -> filterBook.id() == bookId)
+                .singleOrDefault(null, filterBook -> filterBook.getId() == bookId)
                 .toBlocking()
                 .single();
         if (book != null) {
-            Bookmark addedBookmark = new Bookmark(book.currentChapter().getFile(), title, book.time());
-            List<Bookmark> newBookmarks = new ArrayList<>(book.bookmarks());
+            Bookmark addedBookmark = new Bookmark(book.currentChapter().getFile(), title, book.getTime());
+            List<Bookmark> newBookmarks = new ArrayList<>(book.getBookmarks());
             newBookmarks.add(addedBookmark);
-            book = Book.builder(book)
-                    .bookmarks(Ordering.natural().immutableSortedCopy(newBookmarks))
-                    .build();
+            book = book.copy(
+                    book.component1(),
+                    Ordering.natural().immutableSortedCopy(newBookmarks),
+                    book.component3(),
+                    book.component4(),
+                    book.component5(),
+                    book.component6(),
+                    book.component7(),
+                    book.component8(),
+                    book.component9(),
+                    book.component10(),
+                    book.component11());
             db.updateBook(book);
             Timber.v("Added bookmark=%s", addedBookmark);
         } else {
@@ -94,7 +103,7 @@ public class BookmarkDialogFragment extends DialogFragment {
             title = book.currentChapter().getName();
         }
 
-        addBookmark(book.id(), title, db);
+        addBookmark(book.getId(), title, db);
         Toast.makeText(getActivity(), R.string.bookmark_added, Toast.LENGTH_SHORT).show();
         bookmarkTitle.setText("");
         dismiss();
@@ -141,11 +150,20 @@ public class BookmarkDialogFragment extends DialogFragment {
                                         adapter.bookmarkUpdated(clickedBookmark, newBookmark);
 
                                         // replaces the bookmark in the book
-                                        List<Bookmark> mutableBookmarks = new ArrayList<>(book.bookmarks());
+                                        List<Bookmark> mutableBookmarks = new ArrayList<>(book.getBookmarks());
                                         mutableBookmarks.set(mutableBookmarks.indexOf(clickedBookmark), newBookmark);
-                                        book = Book.builder(book)
-                                                .bookmarks(ImmutableList.copyOf(mutableBookmarks))
-                                                .build();
+                                        book = book.copy(
+                                                book.component1(),
+                                                ImmutableList.copyOf(mutableBookmarks),
+                                                book.component3(),
+                                                book.component4(),
+                                                book.component5(),
+                                                book.component6(),
+                                                book.component7(),
+                                                book.component8(),
+                                                book.component9(),
+                                                book.component10(),
+                                                book.component11());
                                         db.updateBook(book);
                                     })
                                     .positiveText(R.string.dialog_confirm)
@@ -157,11 +175,20 @@ public class BookmarkDialogFragment extends DialogFragment {
                                     .positiveText(R.string.remove)
                                     .negativeText(R.string.dialog_cancel)
                                     .onPositive((materialDialog, dialogAction) -> {
-                                        List<Bookmark> mutableBookmarks = new ArrayList<>(book.bookmarks());
+                                        List<Bookmark> mutableBookmarks = new ArrayList<>(book.getBookmarks());
                                         mutableBookmarks.remove(clickedBookmark);
-                                        book = Book.builder(book)
-                                                .bookmarks(ImmutableList.copyOf(mutableBookmarks))
-                                                .build();
+                                        book = book.copy(
+                                                book.component1(),
+                                                ImmutableList.copyOf(mutableBookmarks),
+                                                book.component3(),
+                                                book.component4(),
+                                                book.component5(),
+                                                book.component6(),
+                                                book.component7(),
+                                                book.component8(),
+                                                book.component9(),
+                                                book.component10(),
+                                                book.component11());
                                         adapter.removeItem(clickedBookmark);
                                         db.updateBook(book);
                                     })
@@ -184,7 +211,7 @@ public class BookmarkDialogFragment extends DialogFragment {
         };
 
         final RecyclerView recyclerView = ButterKnife.findById(v, R.id.recycler);
-        adapter = new BookmarkAdapter(book.bookmarks(), book.chapters(), listener);
+        adapter = new BookmarkAdapter(book.getBookmarks(), book.getChapters(), listener);
         recyclerView.setAdapter(adapter);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));

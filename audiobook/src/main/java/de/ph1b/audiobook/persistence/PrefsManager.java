@@ -54,7 +54,6 @@ public class PrefsManager {
         PREF_KEY_BOOKMARK_ON_SLEEP = c.getString(R.string.pref_key_bookmark_on_sleep);
         PREF_KEY_AUTO_REWIND = c.getString(R.string.pref_key_auto_rewind);
         PREF_KEY_PAUSE_ON_CAN_DUCK = c.getString(R.string.pref_key_pause_on_can_duck);
-
         currentBookId = BehaviorSubject.create(sp.getLong(PREF_KEY_CURRENT_BOOK, Book.ID_UNKNOWN));
     }
 

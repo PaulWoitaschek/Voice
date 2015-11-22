@@ -67,7 +67,7 @@ public class PlaybackSpeedDialogFragment extends DialogFragment {
         if (book == null) {
             throw new AssertionError("Cannot instantiate " + TAG + " without a current book");
         }
-        float speed = book.playbackSpeed();
+        float speed = book.getPlaybackSpeed();
         textView.setText(formatTime(speed));
         seekBar.setMax(MAX_STEPS);
         seekBar.setProgress(speedValueToSteps(speed));

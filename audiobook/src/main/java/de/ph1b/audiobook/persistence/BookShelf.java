@@ -176,14 +176,17 @@ public class BookShelf {
         Book.Type bookType = Book.Type.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(BookTable.TYPE)));
         boolean bookUseCoverReplacement = cursor.getInt(cursor.getColumnIndexOrThrow(BookTable.USE_COVER_REPLACEMENT)) == BOOLEAN_TRUE;
 
-        return Book.builder(bookRoot, chapters, bookType, currentPath, bookName)
-                .id(bookId)
-                .author(bookAuthor)
-                .playbackSpeed(bookSpeed)
-                .time(bookTime)
-                .useCoverReplacement(bookUseCoverReplacement)
-                .bookmarks(ImmutableList.copyOf(bookmarks))
-                .build();
+        return new Book(bookId,
+                ImmutableList.copyOf(bookmarks),
+                bookType,
+                bookUseCoverReplacement,
+                bookAuthor,
+                currentPath,
+                bookTime,
+                bookName,
+                ImmutableList.copyOf(chapters),
+                bookSpeed,
+                bookRoot);
     }
 
     public Observable<Book> removedObservable() {
@@ -199,24 +202,34 @@ public class BookShelf {
     }
 
     public synchronized void addBook(@NonNull Book book) {
-        Timber.v("addBook=%s", book.name());
+        Timber.v("addBook=%s", book.getName());
 
         db.beginTransaction();
         try {
             ContentValues bookCv = BookTable.getContentValues(book);
 
             long bookId = db.insert(BookTable.TABLE_NAME, null, bookCv);
-            book = Book.builder(book)
-                    .id(bookId)
-                    .build();
 
-            for (Chapter c : book.chapters()) {
-                ContentValues chapterCv = ChapterTable.getContentValues(c, book.id());
+            book = book.copy(
+                    bookId,
+                    book.component2(),
+                    book.component3(),
+                    book.component4(),
+                    book.component5(),
+                    book.component6(),
+                    book.component7(),
+                    book.component8(),
+                    book.component9(),
+                    book.component10(),
+                    book.component11());
+
+            for (Chapter c : book.getChapters()) {
+                ContentValues chapterCv = ChapterTable.getContentValues(c, book.getId());
                 db.insert(ChapterTable.TABLE_NAME, null, chapterCv);
             }
 
-            for (Bookmark b : book.bookmarks()) {
-                ContentValues bookmarkCv = BookmarkTable.getContentValues(b, book.id());
+            for (Bookmark b : book.getBookmarks()) {
+                ContentValues bookmarkCv = BookmarkTable.getContentValues(b, book.getId());
                 db.insert(BookmarkTable.TABLE_NAME, null, bookmarkCv);
             }
 
@@ -240,31 +253,31 @@ public class BookShelf {
     }
 
     public synchronized void updateBook(@NonNull Book book) {
-        Timber.v("updateBook=%s with time %d", book.name(), book.time());
+        Timber.v("updateBook=%s with time %d", book.getName(), book.getTime());
 
         ListIterator<Book> bookIterator = activeBooks.listIterator();
         while (bookIterator.hasNext()) {
             Book next = bookIterator.next();
-            if (book.id() == next.id()) {
+            if (book.getId() == next.getId()) {
                 bookIterator.set(book);
 
                 db.beginTransaction();
                 try {
                     // update book itself
                     ContentValues bookCv = BookTable.getContentValues(book);
-                    db.update(BookTable.TABLE_NAME, bookCv, BookTable.ID + "=?", new String[]{String.valueOf(book.id())});
+                    db.update(BookTable.TABLE_NAME, bookCv, BookTable.ID + "=?", new String[]{String.valueOf(book.getId())});
 
                     // delete old chapters and replace them with new ones
-                    db.delete(ChapterTable.TABLE_NAME, BookTable.ID + "=?", new String[]{String.valueOf(book.id())});
-                    for (Chapter c : book.chapters()) {
-                        ContentValues chapterCv = ChapterTable.getContentValues(c, book.id());
+                    db.delete(ChapterTable.TABLE_NAME, BookTable.ID + "=?", new String[]{String.valueOf(book.getId())});
+                    for (Chapter c : book.getChapters()) {
+                        ContentValues chapterCv = ChapterTable.getContentValues(c, book.getId());
                         db.insert(ChapterTable.TABLE_NAME, null, chapterCv);
                     }
 
                     // replace old bookmarks and replace them with new ones
-                    db.delete(BookmarkTable.TABLE_NAME, BookTable.ID + "=?", new String[]{String.valueOf(book.id())});
-                    for (Bookmark b : book.bookmarks()) {
-                        ContentValues bookmarkCV = BookmarkTable.getContentValues(b, book.id());
+                    db.delete(BookmarkTable.TABLE_NAME, BookTable.ID + "=?", new String[]{String.valueOf(book.getId())});
+                    for (Bookmark b : book.getBookmarks()) {
+                        ContentValues bookmarkCV = BookmarkTable.getContentValues(b, book.getId());
                         db.insert(BookmarkTable.TABLE_NAME, null, bookmarkCV);
                     }
 
@@ -281,16 +294,16 @@ public class BookShelf {
     }
 
     public synchronized void hideBook(@NonNull Book book) {
-        Timber.v("hideBook=%s", book.name());
+        Timber.v("hideBook=%s", book.getName());
 
         ListIterator<Book> iterator = activeBooks.listIterator();
         while (iterator.hasNext()) {
             Book next = iterator.next();
-            if (next.id() == book.id()) {
+            if (next.getId() == book.getId()) {
                 iterator.remove();
                 ContentValues cv = new ContentValues();
                 cv.put(BookTable.ACTIVE, BOOLEAN_FALSE);
-                db.update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", new String[]{String.valueOf(book.id())});
+                db.update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", new String[]{String.valueOf(book.getId())});
                 break;
             }
         }
@@ -301,11 +314,11 @@ public class BookShelf {
     public synchronized void revealBook(@NonNull Book book) {
         Iterator<Book> orphanedBookIterator = orphanedBooks.iterator();
         while (orphanedBookIterator.hasNext()) {
-            if (orphanedBookIterator.next().id() == book.id()) {
+            if (orphanedBookIterator.next().getId() == book.getId()) {
                 orphanedBookIterator.remove();
                 ContentValues cv = new ContentValues();
                 cv.put(BookTable.ACTIVE, BOOLEAN_TRUE);
-                db.update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", new String[]{String.valueOf(book.id())});
+                db.update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", new String[]{String.valueOf(book.getId())});
                 break;
             }
         }

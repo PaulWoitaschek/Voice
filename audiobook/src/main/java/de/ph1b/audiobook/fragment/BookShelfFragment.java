@@ -198,7 +198,7 @@ public class BookShelfFragment extends BaseFragment implements BookShelfAdapter.
         subscriptions.add(db.removedObservable()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(book -> {
-                    adapter.removeBook(book.id());
+                    adapter.removeBook(book.getId());
                 }));
 
         // Subscription that notifies the adapter when the current book has changed. It also notifies
@@ -374,9 +374,18 @@ public class BookShelfFragment extends BaseFragment implements BookShelfAdapter.
         Timber.i("onTitleChanged with title %s and id %d", newTitle, bookId);
         Book dbBook = bookVendor.byId(bookId);
         if (dbBook != null) {
-            dbBook = Book.builder(dbBook)
-                    .name(newTitle)
-                    .build();
+            dbBook = dbBook.copy(
+                    dbBook.component1(),
+                    dbBook.component2(),
+                    dbBook.component3(),
+                    dbBook.component4(),
+                    dbBook.component5(),
+                    dbBook.component6(),
+                    dbBook.component7(),
+                    newTitle,
+                    dbBook.component9(),
+                    dbBook.component10(),
+                    dbBook.component11());
             db.updateBook(dbBook);
         }
     }

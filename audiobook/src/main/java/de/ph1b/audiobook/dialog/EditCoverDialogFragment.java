@@ -47,6 +47,7 @@ public class EditCoverDialogFragment extends DialogFragment {
     public static final String TAG = EditCoverDialogFragment.class.getSimpleName();
     private static final String SI_COVER_POSITION = "siCoverPosition";
     private static final String SI_COVER_URLS = "siCoverUrls";
+    private static final String NI_BOOK = "niBook";
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final List<String> imageURLS = new ArrayList<>(20);
     @Bind(R.id.edit_book) DraggableBoxImageView coverImageView;
@@ -73,7 +74,7 @@ public class EditCoverDialogFragment extends DialogFragment {
         Preconditions.checkNotNull(book);
 
         Bundle bundle = new Bundle();
-        bundle.putLong(Book.TAG, book.id());
+        bundle.putLong(NI_BOOK, book.getId());
 
         EditCoverDialogFragment editCoverDialogFragment = new EditCoverDialogFragment();
         editCoverDialogFragment.setTargetFragment(target, 42);
@@ -90,10 +91,10 @@ public class EditCoverDialogFragment extends DialogFragment {
         App.getComponent().inject(this);
 
         // init values
-        final long bookId = getArguments().getLong(Book.TAG);
+        final long bookId = getArguments().getLong(NI_BOOK);
         book = bookVendor.byId(bookId);
         assert book != null;
-        coverReplacement = new CoverReplacement(book.name(), getContext());
+        coverReplacement = new CoverReplacement(book.getName(), getContext());
         isOnline = ImageHelper.isOnline(getContext());
         if (savedInstanceState == null) {
             coverPosition = -1;
@@ -133,9 +134,18 @@ public class EditCoverDialogFragment extends DialogFragment {
             synchronized (db) {
                 Book dbBook = bookVendor.byId(bookId);
                 if (dbBook != null) {
-                    dbBook = Book.builder(dbBook)
-                            .useCoverReplacement(useCoverReplacement)
-                            .build();
+                    dbBook = dbBook.copy(
+                            dbBook.component1(),
+                            dbBook.component2(),
+                            dbBook.component3(),
+                            useCoverReplacement,
+                            dbBook.component5(),
+                            dbBook.component6(),
+                            dbBook.component7(),
+                            dbBook.component8(),
+                            dbBook.component9(),
+                            dbBook.component10(),
+                            dbBook.component11());
                     db.updateBook(dbBook);
                 }
             }
@@ -201,7 +211,7 @@ public class EditCoverDialogFragment extends DialogFragment {
                     coverPosition++;
                     loadCoverPosition();
                 } else {
-                    genCoverFromInternet(book.name());
+                    genCoverFromInternet(book.getName());
                 }
                 setNextPreviousEnabledDisabled();
                 break;

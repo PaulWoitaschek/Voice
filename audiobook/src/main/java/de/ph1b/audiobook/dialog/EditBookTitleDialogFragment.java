@@ -26,8 +26,8 @@ public class EditBookTitleDialogFragment extends DialogFragment {
     public static <T extends Fragment & OnTextChanged> EditBookTitleDialogFragment newInstance(T target, @NonNull Book book) {
 
         Bundle args = new Bundle();
-        args.putString(NI_PRESET_NAME, book.name());
-        args.putLong(NI_BOOK_ID, book.id());
+        args.putString(NI_PRESET_NAME, book.getName());
+        args.putLong(NI_BOOK_ID, book.getId());
 
         EditBookTitleDialogFragment dialog = new EditBookTitleDialogFragment();
         dialog.setTargetFragment(target, 42);
