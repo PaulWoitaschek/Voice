@@ -40,7 +40,6 @@ class BookmarkDialogFragment : DialogFragment() {
     @Inject lateinit internal var bookVendor: BookVendor
     private lateinit var book: Book
 
-
     fun addClicked() {
         Timber.i("Add bookmark clicked.");
         var title = bookmarkTitle.text.toString()
@@ -155,9 +154,10 @@ class BookmarkDialogFragment : DialogFragment() {
         }
 
         fun addBookmark(bookId: Long, title: String, db: BookShelf) {
-            var book: Book? = db.activeBooks.singleOrDefault(null) { it.id == bookId }
+            var book: Book? = db.getActiveBooks()
+                    .filter { it.id == bookId }
                     .toBlocking()
-                    .single()
+                    .singleOrDefault(null)
             if (book != null) {
                 val addedBookmark = Bookmark(book.currentChapter().file, title, book.time)
                 val newBookmarks = ArrayList(book.bookmarks)
