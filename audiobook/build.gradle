@@ -91,11 +91,6 @@ dependencies {
     apt "com.google.dagger:dagger-compiler:$daggerVersion"
     provided "javax.annotation:jsr250-api:1.0"
 
-    // auto value
-    def autoValueVersion = "0.3.1"
-    compile "com.github.frankiesardo:auto-parcel:$autoValueVersion"
-    apt "com.github.frankiesardo:auto-parcel-processor:$autoValueVersion"
-
     // logging
     compile "com.jakewharton.timber:timber:4.1.0"
 

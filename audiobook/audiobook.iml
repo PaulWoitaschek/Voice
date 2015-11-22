@@ -131,6 +131,5 @@
     <orderEntry type="library" exported="" name="floatingactionbutton-1.10.1" level="project" />
     <orderEntry type="library" exported="" name="acra-4.7.0-RC.1" level="project" />
     <orderEntry type="library" exported="" name="timber-4.1.0" level="project" />
-    <orderEntry type="library" exported="" name="auto-parcel-0.3.1" level="project" />
   </component>
 </module>

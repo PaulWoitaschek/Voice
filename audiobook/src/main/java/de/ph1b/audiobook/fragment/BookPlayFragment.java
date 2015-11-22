@@ -410,7 +410,7 @@ public class BookPlayFragment extends BaseFragment {
                     String date = DateUtils.formatDateTime(getContext(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE |
                             DateUtils.FORMAT_SHOW_TIME |
                             DateUtils.FORMAT_NUMERIC_DATE);
-                    BookmarkDialogFragment.addBookmark(getBookId(), date + ": " +
+                    BookmarkDialogFragment.Companion.addBookmark(getBookId(), date + ": " +
                             getString(R.string.action_sleep), db);
                 }
                 return true;
@@ -419,7 +419,7 @@ public class BookPlayFragment extends BaseFragment {
                         PlaybackSpeedDialogFragment.TAG);
                 return true;
             case R.id.action_bookmark:
-                BookmarkDialogFragment.newInstance(getBookId()).show(getFragmentManager(),
+                BookmarkDialogFragment.Companion.newInstance(getBookId()).show(getFragmentManager(),
                         BookmarkDialogFragment.TAG);
                 return true;
             case android.R.id.home:

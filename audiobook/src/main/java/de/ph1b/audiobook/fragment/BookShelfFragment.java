@@ -359,7 +359,7 @@ public class BookShelfFragment extends BaseFragment implements BookShelfAdapter.
                             EditBookTitleDialogFragment.TAG);
                     return true;
                 case R.id.bookmark:
-                    BookmarkDialogFragment.newInstance(adapter.getItemId(position))
+                    BookmarkDialogFragment.Companion.newInstance(adapter.getItemId(position))
                             .show(getFragmentManager(), TAG);
                     return true;
                 default:
