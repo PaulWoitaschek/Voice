@@ -16,7 +16,7 @@ class BookVendor
 @Inject
 constructor(private val bookShelf: BookShelf) {
 
-    fun byId(id: Long): Book {
+    fun byId(id: Long): Book? {
         return bookShelf.getActiveBooks()
                 .singleOrDefault(null, Func1 { it.id == id })
                 .toBlocking()

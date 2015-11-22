@@ -62,7 +62,7 @@ class BookmarkDialogFragment : DialogFragment() {
         bookmarkTitle = customView.findViewById(R.id.bookmarkEdit) as EditText
 
         val bookId = arguments.getLong(BOOK_ID)
-        book = bookVendor.byId(bookId)
+        book = bookVendor.byId(bookId)!!
 
         var adapter: BookmarkAdapter
         val listener = object : BookmarkAdapter.OnOptionsMenuClickedListener {
