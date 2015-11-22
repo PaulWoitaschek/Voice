@@ -21,8 +21,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 
@@ -48,7 +46,6 @@ public class EditCoverDialogFragment extends DialogFragment {
     private static final String SI_COVER_POSITION = "siCoverPosition";
     private static final String SI_COVER_URLS = "siCoverUrls";
     private static final String NI_BOOK = "niBook";
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final List<String> imageURLS = new ArrayList<>(20);
     @Bind(R.id.edit_book) DraggableBoxImageView coverImageView;
     @Bind(R.id.cover_replacement) ProgressBar loadingProgressBar;
@@ -307,11 +304,6 @@ public class EditCoverDialogFragment extends DialogFragment {
                 loadCoverPosition();
                 setNextPreviousEnabledDisabled();
             }
-        }
-
-        @Override
-        protected void onCancelled() {
-            executor.execute(coverDownloader::cancel);
         }
     }
 }

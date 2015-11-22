@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.Size;
 
-import com.squareup.okhttp.Call;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -33,7 +32,6 @@ public final class CoverDownloader {
     private static final HashMap<String, List<String>> SEARCH_MAPPING = new HashMap<>(10);
     private final Picasso picasso;
     private final ImageLinkService imageLinkService;
-    private Call call = null;
 
     @Inject
     public CoverDownloader(@NonNull @ForApplication Context c, @NonNull ImageLinkService imageLinkService) {
@@ -61,16 +59,6 @@ public final class CoverDownloader {
         }
         return "";
     }
-
-    /**
-     * Cancels the cover downloading if one is in progress
-     */
-    public void cancel() {
-        if (call != null) {
-            call.cancel();
-        }
-    }
-
 
     /**
      * Fetches a cover into Picassos internal cache and returns the url if that worked.

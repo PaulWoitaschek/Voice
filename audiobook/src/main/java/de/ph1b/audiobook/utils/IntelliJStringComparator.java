@@ -12,11 +12,11 @@ import java.util.Comparator;
  */
 public class IntelliJStringComparator implements Comparator<String> {
 
-    public static boolean isDecimalDigit(char c) {
+    private static boolean isDecimalDigit(char c) {
         return c >= '0' && c <= '9';
     }
 
-    public static char toUpperCase(char a) {
+    private static char toUpperCase(char a) {
         if (a < 'a') {
             return a;
         }
@@ -27,7 +27,7 @@ public class IntelliJStringComparator implements Comparator<String> {
     }
 
 
-    public static int naturalCompare(@Nullable String string1, @Nullable String string2, boolean caseSensitive) {
+    private static int naturalCompare(@Nullable String string1, @Nullable String string2, boolean caseSensitive) {
         //noinspection StringEquality
         if (string1 == string2) {
             return 0;
@@ -111,7 +111,7 @@ public class IntelliJStringComparator implements Comparator<String> {
         return string1Length - string2Length;
     }
 
-    public static char toLowerCase(char a) {
+    private static char toLowerCase(char a) {
         if (a < 'A' || a >= 'a' && a <= 'z') {
             return a;
         }

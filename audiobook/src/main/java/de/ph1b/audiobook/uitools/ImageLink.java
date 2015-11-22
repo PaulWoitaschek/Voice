@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author Paul Woitaschek
  */
-public final class ImageLink {
+final class ImageLink {
 
     @SerializedName("responseData")
     private final ResponseData responseData;
