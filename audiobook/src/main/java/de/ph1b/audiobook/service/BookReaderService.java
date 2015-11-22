@@ -327,7 +327,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                 if (pauseBecauseLossTransient) {
                     controller.play();
                     pauseBecauseLossTransient = false;
-                } else {
+                } else if (controller.getPlayState().getValue() == MediaPlayerController.PlayState.PLAYING) {
                     Timber.d("increasing volume");
                     audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0);
                 }
