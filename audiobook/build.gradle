@@ -50,42 +50,65 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:recyclerview-v7:23.1.1'
+    // support library
+    def supportVersion = "23.1.1"
+    compile "com.android.support:appcompat-v7:$supportVersion"
+    compile "com.android.support:recyclerview-v7:$supportVersion"
+
     // http library
-    compile 'com.squareup.okhttp:okhttp:2.5.0'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.5.0'
+    def okHttpVersion = "2.5.0"
+    compile "com.squareup.okhttp:okhttp:$okHttpVersion"
+    compile "com.squareup.okhttp:okhttp-urlconnection:$okHttpVersion"
+
     // image loading
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile('com.afollestad.material-dialogs:core:0.8.5.1@aar') { // material styled dialogs
+    compile "com.squareup.picasso:picasso:2.5.2"
+
+    // material styled dialogs
+    compile("com.afollestad.material-dialogs:core:0.8.5.1@aar") {
         transitive = true
     }
+
     // fab
-    compile 'com.getbase:floatingactionbutton:1.10.1'
+    compile "com.getbase:floatingactionbutton:1.10.1"
+
     // crash reporting
-    compile 'ch.acra:acra:4.7.0-RC.1'
+    compile "ch.acra:acra:4.7.0-RC.1"
+
     // common tools
-    compile 'com.google.guava:guava:18.0'
+    compile "com.google.guava:guava:18.0"
+
     // view injection
-    compile 'com.jakewharton:butterknife:7.0.1'
+    compile "com.jakewharton:butterknife:7.0.1"
+
     // dependency injection
-    compile 'com.google.dagger:dagger:2.0.2'
-    apt "com.google.dagger:dagger-compiler:2.0.2"
-    provided 'javax.annotation:jsr250-api:1.0'
+    def daggerVersion = "2.0.2"
+    compile "com.google.dagger:dagger:$daggerVersion"
+    apt "com.google.dagger:dagger-compiler:$daggerVersion"
+    provided "javax.annotation:jsr250-api:1.0"
+
     // auto value
-    compile 'com.github.frankiesardo:auto-parcel:0.3.1'
-    apt 'com.github.frankiesardo:auto-parcel-processor:0.3.1'
+    def autoValueVersion = "0.3.1"
+    compile "com.github.frankiesardo:auto-parcel:$autoValueVersion"
+    apt "com.github.frankiesardo:auto-parcel-processor:$autoValueVersion"
+
     // logging
-    compile 'com.jakewharton.timber:timber:4.1.0'
-    testCompile 'junit:junit:4.12'
+    compile "com.jakewharton.timber:timber:4.1.0"
+
+    //testing
+    testCompile "junit:junit:4.12"
+
     // rx extensions
-    compile 'io.reactivex:rxandroid:1.0.1'
-    compile 'io.reactivex:rxjava:1.0.16'
+    compile "io.reactivex:rxandroid:1.0.1"
+    compile "io.reactivex:rxjava:1.0.16"
+
     // detecting memory leaks
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
+    def leakCanaryVersion = "1.3.1"
+    debugCompile "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+
     // rest
-    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
-    compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
-    compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2'
+    def retroFitVersion = "2.0.0-beta2"
+    compile "com.squareup.retrofit:retrofit:$retroFitVersion"
+    compile "com.squareup.retrofit:converter-gson:$retroFitVersion"
+    compile "com.squareup.retrofit:adapter-rxjava:$retroFitVersion"
 }
