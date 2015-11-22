@@ -77,7 +77,7 @@ dependencies {
     compile "com.getbase:floatingactionbutton:1.10.1"
 
     // crash reporting
-    compile "ch.acra:acra:4.7.0-RC.1"
+    compile "ch.acra:acra:4.7.0-RC.2"
 
     // common tools
     compile "com.google.guava:guava:18.0"
