@@ -459,7 +459,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
                 sendBroadcast(what.broadcastIntent(author, bookName, chapterName, playState, position));
 
                 //noinspection ResourceType
-                playbackStateBuilder.setState(playState.playbackStateCompat(), position, controller.getPlaybackSpeed());
+                playbackStateBuilder.setState(playState.getPlaybackStateCompat(), position, controller.getPlaybackSpeed());
                 mediaSession.setPlaybackState(playbackStateBuilder.build());
 
                 if (what == ChangeType.METADATA && !lastFileForMetaData.equals(book.getCurrentFile())) {
