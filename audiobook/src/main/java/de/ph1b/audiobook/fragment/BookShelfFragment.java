@@ -355,7 +355,7 @@ public class BookShelfFragment extends BaseFragment implements BookShelfAdapter.
                     EditCoverDialogFragment.newInstance(this, book).show(getFragmentManager(), EditCoverDialogFragment.TAG);
                     return true;
                 case R.id.edit_title:
-                    EditBookTitleDialogFragment.newInstance(this, book).show(getFragmentManager(),
+                    EditBookTitleDialogFragment.Companion.newInstance(this, book).show(getFragmentManager(),
                             EditBookTitleDialogFragment.TAG);
                     return true;
                 case R.id.bookmark:
