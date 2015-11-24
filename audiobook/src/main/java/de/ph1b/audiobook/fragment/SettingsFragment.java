@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -162,7 +163,7 @@ public class SettingsFragment extends PreferenceFragment implements DonationDial
     }
 
     @Override
-    public void onDonationClicked(String item) {
+    public void onDonationClicked(@NonNull String item) {
         Timber.d("onDonationClicked with item=%s and donationAvailable=%b", item, donationAvailable);
         if (donationAvailable) {
             iabHelper.launchPurchaseFlow(hostingActivity, item,
