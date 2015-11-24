@@ -113,4 +113,6 @@ dependencies {
     compile "com.squareup.retrofit:adapter-rxjava:$retroFitVersion"
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+
+    compile 'com.github.AntennaPod:AntennaPod-AudioPlayer:v1.0.6'
 }

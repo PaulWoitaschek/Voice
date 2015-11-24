@@ -129,7 +129,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                 try {
                     player.setDataSource(book.currentChapter().getFile().getAbsolutePath());
                     player.prepare();
-                    player.seekTo(book.getTime());
+                    player.setCurrentPosition(book.getTime());
                     player.setPlaybackSpeed(book.getPlaybackSpeed());
                     state = State.PREPARED;
                 } catch (IOException e) {
@@ -150,7 +150,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
         try {
             switch (state) {
                 case PLAYBACK_COMPLETED:
-                    player.seekTo(0);
+                    player.setCurrentPosition(0);
                 case PREPARED:
                 case PAUSED:
                     player.start();
@@ -250,7 +250,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
             if (book != null) {
                 Chapter previousChapter = book.previousChapter();
                 if (player.getCurrentPosition() > 2000 || previousChapter == null) {
-                    player.seekTo(0);
+                    player.setCurrentPosition(0);
                     book = book.copy(
                             book.component1(),
                             book.component2(),
@@ -387,7 +387,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                                 int originalPosition = player.getCurrentPosition();
                                 int seekTo = originalPosition - autoRewind;
                                 seekTo = Math.max(seekTo, 0);
-                                player.seekTo(seekTo);
+                                player.setCurrentPosition(seekTo);
                                 book = book.copy(
                                         book.component1(),
                                         book.component2(),
@@ -525,7 +525,7 @@ public class MediaPlayerController implements MediaPlayer.OnErrorListener,
                         case STARTED:
                         case PAUSED:
                         case PLAYBACK_COMPLETED:
-                            player.seekTo(time);
+                            player.setCurrentPosition(time);
                             book = book.copy(
                                     book.component1(),
                                     book.component2(),

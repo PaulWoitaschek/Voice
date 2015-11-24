@@ -15,7 +15,7 @@ import dagger.Module;
 import dagger.Provides;
 import de.ph1b.audiobook.interfaces.ForApplication;
 import de.ph1b.audiobook.mediaplayer.AndroidMediaPlayer;
-import de.ph1b.audiobook.mediaplayer.CustomMediaPlayer;
+import de.ph1b.audiobook.mediaplayer.AntennaPlayer;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerInterface;
 import de.ph1b.audiobook.uitools.ImageLinkService;
 import retrofit.GsonConverterFactory;
@@ -60,7 +60,7 @@ public class BaseModule {
     @Provides
     MediaPlayerInterface provideMediaPlayer() {
         if (canSetSpeed()) {
-            return new CustomMediaPlayer();
+            return new AntennaPlayer(appContext);
         } else {
             return new AndroidMediaPlayer();
         }
