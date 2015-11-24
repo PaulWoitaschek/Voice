@@ -19,7 +19,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.ph1b.audiobook.R;
 import de.ph1b.audiobook.model.Book;
-import de.ph1b.audiobook.persistence.BookShelf;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.service.ServiceController;
 import de.ph1b.audiobook.uitools.ThemeUtil;
@@ -33,7 +32,6 @@ public class JumpToPositionDialogFragment extends DialogFragment {
     @Bind(R.id.number_hour) NumberPicker hPicker;
     @Bind(R.id.colon) View colon;
     @Inject PrefsManager prefs;
-    @Inject BookShelf db;
     @Inject BookVendor bookVendor;
     private int durationInMinutes;
     private int biggestHour;
