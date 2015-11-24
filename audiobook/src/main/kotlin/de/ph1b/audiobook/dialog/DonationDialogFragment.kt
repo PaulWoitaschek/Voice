@@ -11,7 +11,7 @@ import de.ph1b.audiobook.R
 
 
 class DonationDialogFragment : DialogFragment() {
-    private var callback: OnDonationClickedListener? = null
+    private lateinit var callback: OnDonationClickedListener
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val donationListCallback = MaterialDialog.ListCallback { materialDialog, view, i, charSequence ->
@@ -25,7 +25,7 @@ class DonationDialogFragment : DialogFragment() {
                 5 -> item = "20donation"
                 else -> throw AssertionError("There are only 4 items")
             }
-            callback!!.onDonationClicked(item)
+            callback.onDonationClicked(item)
         }
 
         return MaterialDialog.Builder(activity)
