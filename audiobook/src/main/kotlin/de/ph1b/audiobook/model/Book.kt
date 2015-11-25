@@ -106,7 +106,7 @@ data class Book(val id: Long,
     fun nextChapter(): Chapter? {
         val currentIndex = chapters.indexOf(currentChapter())
         if (currentIndex < chapters.size - 1) {
-            return chapters.get(currentIndex + 1)
+            return chapters[currentIndex + 1]
         }
         return null
     }
@@ -115,7 +115,7 @@ data class Book(val id: Long,
     fun previousChapter(): Chapter? {
         val currentIndex = chapters.indexOf(currentChapter())
         if (currentIndex > 0) {
-            return chapters.get(currentIndex - 1)
+            return chapters[currentIndex - 1]
         }
         return null
     }

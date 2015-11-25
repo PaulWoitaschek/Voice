@@ -229,7 +229,7 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
     }
 
     @Override
-    public void onBookSelected(long bookId, Map<View, String> sharedViews) {
+    public void onBookSelected(long bookId, @NonNull Map<View, ? extends String> sharedViews) {
         Timber.i("onBookSelected with bookId=%d", bookId);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -237,7 +237,7 @@ public class BookActivity extends BaseActivity implements BookShelfFragment.Book
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !multiPanel) {
             Transition move = TransitionInflater.from(this).inflateTransition(android.R.transition.move);
             bookPlayFragment.setSharedElementEnterTransition(move);
-            for (Map.Entry<View, String> entry : sharedViews.entrySet()) {
+            for (Map.Entry<View, ? extends String> entry : sharedViews.entrySet()) {
                 Timber.v("Added sharedElement=%s", entry);
                 ft.addSharedElement(entry.getKey(), entry.getValue());
             }

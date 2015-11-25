@@ -2,6 +2,7 @@ package de.ph1b.audiobook.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 
 import butterknife.Bind;
@@ -43,7 +44,7 @@ public class SettingsActivity extends BaseActivity implements DonationDialogFrag
     }
 
     @Override
-    public void onDonationClicked(String item) {
+    public void onDonationClicked(@NonNull String item) {
         SettingsFragment settingsFragment = (SettingsFragment) getFragmentManager().findFragmentByTag(SettingsFragment.TAG);
         if (settingsFragment != null && settingsFragment.isVisible()) {
             settingsFragment.onDonationClicked(item);
