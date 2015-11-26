@@ -19,6 +19,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
 
     @Inject internal lateinit var prefs: PrefsManager
     @Inject internal lateinit var bookVendor: BookVendor
+    @Inject internal lateinit var serviceController: ServiceController
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         App.getComponent().inject(this)
@@ -86,7 +87,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
                     val h = hPicker.value
                     val m = mPicker.value
                     val newPosition = (m + 60 * h) * 60 * 1000
-                    ServiceController(context).changeTime(newPosition, book.currentChapter().file)
+                    serviceController.changeTime(newPosition, book.currentChapter().file)
                 }
                 .positiveText(R.string.dialog_confirm)
                 .negativeText(R.string.dialog_cancel)

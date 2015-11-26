@@ -50,7 +50,7 @@ class BookActivity : BaseActivity(), BookShelfFragment.BookSelectionCallback, Mu
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putBoolean(SI_MULTI_PANEL, isMultiPanel)
+        outState.putBoolean(SI_MULTI_PANEL, multiPanel)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,

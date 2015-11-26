@@ -51,6 +51,7 @@ class BookPlayFragment : BaseFragment() {
     @Inject internal lateinit var prefs: PrefsManager
     @Inject internal lateinit var db: BookShelf
     @Inject internal lateinit var bookVendor: BookVendor
+    @Inject internal lateinit var serviceController: ServiceController
 
     private val playPauseDrawable = PlayPauseDrawable()
     private var subscriptions: CompositeSubscription? = null
@@ -60,7 +61,6 @@ class BookPlayFragment : BaseFragment() {
     private var book: Book? = null
 
     private lateinit var hostingActivity: AppCompatActivity
-    private lateinit var controller: ServiceController
 
     private lateinit var timerCountdownView: TextView
     private lateinit var playedTimeView: TextView
@@ -98,17 +98,17 @@ class BookPlayFragment : BaseFragment() {
         val rewindButton = view.findViewById(R.id.rewind)
         val previousButton = view.findViewById(R.id.previous)
 
-        playButton.setOnClickListener { controller.playPause() }
-        coverFrame.setOnClickListener { controller.playPause() }
-        rewindButton.setOnClickListener { controller.rewind() }
-        fastForwardButton.setOnClickListener { controller.fastForward() }
-        nextButton.setOnClickListener { controller.next() }
-        previousButton.setOnClickListener { controller.previous() }
+        playButton.setOnClickListener { serviceController.playPause() }
+        coverFrame.setOnClickListener { serviceController.playPause() }
+        rewindButton.setOnClickListener { serviceController.rewind() }
+        fastForwardButton.setOnClickListener { serviceController.fastForward() }
+        nextButton.setOnClickListener { serviceController.next() }
+        previousButton.setOnClickListener { serviceController.previous() }
         playedTimeView.setOnClickListener { launchJumpToPositionDialog() }
 
 
         book = bookVendor.byId(bookId)
-        isMultiPanel = multiPaneInformer.isMultiPanel
+        isMultiPanel = multiPaneInformer.isMultiPanel()
 
         //init views
         hostingActivity.supportActionBar.setDisplayHomeAsUpEnabled(!isMultiPanel)
@@ -126,7 +126,7 @@ class BookPlayFragment : BaseFragment() {
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 val progress = seekBar.progress
-                controller.changeTime(progress, book!!.currentChapter().file)
+                serviceController.changeTime(progress, book!!.currentChapter().file)
                 playedTimeView.text = formatTime(progress, seekBar.max)
             }
         })
@@ -186,7 +186,7 @@ class BookPlayFragment : BaseFragment() {
                 override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                     if (parent.tag != null && (parent.tag as Int) != position) {
                         Timber.i("spinner: onItemSelected. firing: %d", position)
-                        controller.changeTime(0, book!!.chapters[position].file)
+                        serviceController.changeTime(0, book!!.chapters[position].file)
                         parent.tag = position
                     }
                 }
@@ -233,8 +233,6 @@ class BookPlayFragment : BaseFragment() {
         App.getComponent().inject(this)
 
         setHasOptionsMenu(true)
-
-        controller = ServiceController(context)
     }
 
 
@@ -309,7 +307,7 @@ class BookPlayFragment : BaseFragment() {
                 return true
             }
             R.id.action_sleep -> {
-                controller.toggleSleepSand()
+                serviceController.toggleSleepSand()
                 if (prefs.setBookmarkOnSleepTimer() && !mediaPlayerController.isSleepTimerActive) {
                     val date = DateUtils.formatDateTime(context, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE)
                     BookmarkDialogFragment.addBookmark(bookId, date + ": " + getString(R.string.action_sleep), db)

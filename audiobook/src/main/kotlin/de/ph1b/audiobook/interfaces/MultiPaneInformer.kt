@@ -10,5 +10,5 @@ interface MultiPaneInformer {
     /**
      * true if the layout has multiple panels.
      */
-    val isMultiPanel: Boolean
+    fun isMultiPanel(): Boolean
 }

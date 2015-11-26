@@ -56,12 +56,12 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
     @Inject internal lateinit var bookAdder: BookAdder
     @Inject internal lateinit var mediaPlayerController: MediaPlayerController
     @Inject internal lateinit var bookVendor: BookVendor
+    @Inject internal lateinit var serviceController: ServiceController
 
     private var isMultiPanel: Boolean = false
     private var subscriptions: CompositeSubscription? = null
 
     private lateinit var adapter: BookShelfAdapter
-    private lateinit var controller: ServiceController
     private lateinit var noFolderWarning: MaterialDialog
     private lateinit var listDecoration: RecyclerView.ItemDecoration
     private lateinit var gridLayoutManager: GridLayoutManager
@@ -77,7 +77,7 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
         recyclerReplacementView = view.findViewById(R.id.recyclerReplacement)
         fab = view.findViewById(R.id.fab) as FloatingActionButton
 
-        isMultiPanel = multiPaneInformer.isMultiPanel
+        isMultiPanel = multiPaneInformer.isMultiPanel()
 
         // find views
         val actionBar = hostingActivity.supportActionBar!!
@@ -108,7 +108,6 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
         setHasOptionsMenu(true)
 
         // init variables
-        controller = ServiceController(context)
         noFolderWarning = MaterialDialog.Builder(context)
                 .title(R.string.no_audiobook_folders_title)
                 .content(getString(R.string.no_audiobook_folders_summary_start) +
@@ -309,7 +308,7 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
     }
 
     private fun playPauseClicked() {
-        controller.playPause()
+        serviceController.playPause()
     }
 
     override fun onItemClicked(position: Int) {

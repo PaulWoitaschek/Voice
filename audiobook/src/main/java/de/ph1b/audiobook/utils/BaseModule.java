@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Build;
+import android.telephony.TelephonyManager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -81,6 +82,12 @@ public class BaseModule {
     @Singleton
     ActivityManager provideActivityManager(Context context) {
         return (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+    }
+
+    @Provides
+    @Singleton
+    TelephonyManager provideTelephonyManager(Context context) {
+        return (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
     }
 
     @Provides

@@ -171,18 +171,18 @@ public class WidgetUpdateService extends Service {
      * @param book        The book to be initalized
      */
     private void initElements(@NonNull final RemoteViews remoteViews, @NonNull final Book book) {
-        Intent playPauseI = ServiceController.getPlayPauseIntent(this);
+        Intent playPauseI = ServiceController.Companion.getPlayPauseIntent(this);
         PendingIntent playPausePI = PendingIntent.getService(this,
                 KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseI, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI);
 
-        Intent fastForwardI = ServiceController.getFastForwardIntent(this);
+        Intent fastForwardI = ServiceController.Companion.getFastForwardIntent(this);
         PendingIntent fastForwardPI = PendingIntent.getService(this,
                 KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, fastForwardI,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.fastForward, fastForwardPI);
 
-        Intent rewindI = ServiceController.getRewindIntent(this);
+        Intent rewindI = ServiceController.Companion.getRewindIntent(this);
         PendingIntent rewindPI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_REWIND,
                 rewindI, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI);

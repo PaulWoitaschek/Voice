@@ -39,6 +39,7 @@ class BookmarkDialogFragment : DialogFragment() {
     @Inject lateinit internal var prefs: PrefsManager
     @Inject lateinit internal var db: BookShelf
     @Inject lateinit internal var bookVendor: BookVendor
+    @Inject lateinit internal var serviceController: ServiceController
     private lateinit var book: Book
 
     fun addClicked() {
@@ -112,7 +113,7 @@ class BookmarkDialogFragment : DialogFragment() {
 
             override fun onBookmarkClicked(bookmark: Bookmark) {
                 prefs.setCurrentBookId(bookId)
-                ServiceController(context).changeTime(bookmark.time, bookmark.mediaFile)
+                serviceController.changeTime(bookmark.time, bookmark.mediaFile)
 
                 dialog.cancel()
             }

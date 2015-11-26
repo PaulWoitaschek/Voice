@@ -27,6 +27,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
     @Inject internal lateinit var prefs: PrefsManager
     @Inject internal lateinit var db: BookShelf
     @Inject internal lateinit var bookVendor: BookVendor
+    @Inject internal lateinit var serviceController: ServiceController
 
     private val SPEED_DELTA = 0.02f
     private val MAX_STEPS = Math.round((Book.SPEED_MAX - Book.SPEED_MIN) / SPEED_DELTA)
@@ -56,7 +57,6 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
         seekBar.progress = speedValueToSteps(speed)
 
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            private val serviceController = ServiceController(activity)
 
             override fun onProgressChanged(seekBar: SeekBar, step: Int, fromUser: Boolean) {
                 val newSpeed = speedStepValueToSpeed(step)
