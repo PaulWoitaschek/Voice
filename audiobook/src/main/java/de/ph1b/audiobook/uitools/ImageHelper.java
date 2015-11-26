@@ -36,13 +36,16 @@ public class ImageHelper {
     public static Bitmap picassoGetBlocking(final Context context, final String path) {
         final CountDownLatch latch = new CountDownLatch(1);
         final Bitmap[] bitmap = new Bitmap[1];
-        new Thread(() -> {
-            try {
-                bitmap[0] = Picasso.with(context).load(path).get();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                latch.countDown();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    bitmap[0] = Picasso.with(context).load(path).get();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    latch.countDown();
+                }
             }
         }).start();
 
