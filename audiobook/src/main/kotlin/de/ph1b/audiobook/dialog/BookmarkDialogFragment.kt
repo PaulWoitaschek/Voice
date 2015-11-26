@@ -66,7 +66,7 @@ class BookmarkDialogFragment : DialogFragment() {
 
         var adapter: BookmarkAdapter
         val listener = object : BookmarkAdapter.OnOptionsMenuClickedListener {
-            override fun onOptionsMenuClicked(clickedBookmark: Bookmark, v: View) {
+            override fun onOptionsMenuClicked(bookmark: Bookmark, v: View) {
                 val popup = PopupMenu(activity, v)
                 popup.menuInflater.inflate(R.menu.bookmark_popup, popup.menu)
                 popup.setOnMenuItemClickListener {
@@ -76,14 +76,14 @@ class BookmarkDialogFragment : DialogFragment() {
                             MaterialDialog.Builder(context)
                                     .title(R.string.bookmark_edit_title)
                                     .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
-                                    .input(getString(R.string.bookmark_edit_hint), clickedBookmark.title, false) {
+                                    .input(getString(R.string.bookmark_edit_hint), bookmark.title, false) {
                                         materialDialog, charSequence ->
-                                        val newBookmark = Bookmark(clickedBookmark.mediaFile, charSequence.toString(), clickedBookmark.time)
-                                        adapter.bookmarkUpdated(clickedBookmark, newBookmark)
+                                        val newBookmark = Bookmark(bookmark.mediaFile, charSequence.toString(), bookmark.time)
+                                        adapter.bookmarkUpdated(bookmark, newBookmark)
 
                                         // replaces the bookmark in the book
                                         val mutableBookmarks = ArrayList(book.bookmarks)
-                                        mutableBookmarks[mutableBookmarks.indexOf(clickedBookmark)] = newBookmark
+                                        mutableBookmarks[mutableBookmarks.indexOf(bookmark)] = newBookmark
                                         book = book.copy(bookmarks = ImmutableList.copyOf(mutableBookmarks))
                                         db.updateBook(book)
                                     }.positiveText(R.string.dialog_confirm).show()
@@ -91,15 +91,15 @@ class BookmarkDialogFragment : DialogFragment() {
                         }
                         R.id.delete -> {
                             builder.title(R.string.bookmark_delete_title)
-                                    .content(clickedBookmark.title)
+                                    .content(bookmark.title)
                                     .positiveText(R.string.remove)
                                     .negativeText(R.string.dialog_cancel)
                                     .onPositive {
                                         materialDialog, dialogAction ->
                                         val mutableBookmarks = ArrayList(book.bookmarks)
-                                        mutableBookmarks.remove(clickedBookmark)
+                                        mutableBookmarks.remove(bookmark)
                                         book = book.copy(bookmarks = ImmutableList.copyOf(mutableBookmarks))
-                                        adapter.removeItem(clickedBookmark)
+                                        adapter.removeItem(bookmark)
                                         db.updateBook(book)
                                     }.show()
                             return@setOnMenuItemClickListener true

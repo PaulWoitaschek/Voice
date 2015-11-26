@@ -201,7 +201,7 @@ public class WidgetUpdateService extends Service {
 
         remoteViews.setTextViewText(R.id.summary, name);
 
-        Intent wholeWidgetClickI = BookActivity.goToBookIntent(this, book.getId());
+        Intent wholeWidgetClickI = BookActivity.Companion.goToBookIntent(this, book.getId());
         PendingIntent wholeWidgetClickPI = PendingIntent.getActivity
                 (WidgetUpdateService.this, (int) System.currentTimeMillis(), wholeWidgetClickI,
                         PendingIntent.FLAG_UPDATE_CURRENT);

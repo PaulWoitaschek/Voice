@@ -18,7 +18,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import de.ph1b.audiobook.interfaces.ForApplication;
 import timber.log.Timber;
 
 /**
@@ -34,7 +33,7 @@ public final class CoverDownloader {
     private final ImageLinkService imageLinkService;
 
     @Inject
-    public CoverDownloader(@NonNull @ForApplication Context c, @NonNull ImageLinkService imageLinkService) {
+    public CoverDownloader(@NonNull Context c, @NonNull ImageLinkService imageLinkService) {
         picasso = Picasso.with(c);
         this.imageLinkService = imageLinkService;
     }

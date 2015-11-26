@@ -82,9 +82,6 @@ dependencies {
     // common tools
     compile "com.google.guava:guava:18.0"
 
-    // view injection
-    compile "com.jakewharton:butterknife:7.0.1"
-
     // dependency injection
     def daggerVersion = "2.0.2"
     compile "com.google.dagger:dagger:$daggerVersion"

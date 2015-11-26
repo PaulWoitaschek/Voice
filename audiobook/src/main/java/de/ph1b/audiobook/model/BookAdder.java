@@ -30,7 +30,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import de.ph1b.audiobook.activity.BaseActivity;
-import de.ph1b.audiobook.interfaces.ForApplication;
 import de.ph1b.audiobook.persistence.BookShelf;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.uitools.ImageHelper;
@@ -57,7 +56,7 @@ public class BookAdder {
     private volatile boolean stopScanner = false;
 
     @Inject
-    public BookAdder(@NonNull @ForApplication Context c, @NonNull PrefsManager prefs,
+    public BookAdder(@NonNull Context c, @NonNull PrefsManager prefs,
                      @NonNull BookShelf db) {
         this.c = c;
         this.prefs = prefs;
@@ -393,7 +392,7 @@ public class BookAdder {
             }
         }
 
-        if (!BaseActivity.storageMounted()) {
+        if (!BaseActivity.Companion.storageMounted()) {
             throw new InterruptedException("Storage is not mounted");
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -581,7 +580,7 @@ public class BookAdder {
         List<Chapter> newChapters = getChaptersByRootFile(rootFile);
         Book bookExisting = getBookFromDb(rootFile, type, false);
 
-        if (!BaseActivity.storageMounted()) {
+        if (!BaseActivity.Companion.storageMounted()) {
             throw new InterruptedException("Storage not mounted");
         }
 

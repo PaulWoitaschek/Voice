@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.google.common.base.Preconditions
 import com.google.common.collect.ImmutableList
-import de.ph1b.audiobook.interfaces.ForApplication
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.model.Bookmark
 import de.ph1b.audiobook.model.Chapter
@@ -28,7 +27,7 @@ import javax.inject.Singleton
 @Singleton
 class BookShelf
 @Inject
-constructor(@ForApplication c: Context) {
+constructor(c: Context) {
     private val activeBooks: MutableList<Book> = ArrayList()
     private val orphanedBooks: MutableList<Book> = ArrayList()
     private val db: SQLiteDatabase

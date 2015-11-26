@@ -8,7 +8,6 @@ import android.support.v4.media.session.PlaybackStateCompat
 import com.google.common.base.Preconditions
 import de.ph1b.audiobook.activity.BookActivity
 import de.ph1b.audiobook.fragment.BookShelfFragment
-import de.ph1b.audiobook.interfaces.ForApplication
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookShelf
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -28,7 +27,7 @@ import kotlin.concurrent.withLock
 @Singleton
 class MediaPlayerController
 @Inject
-constructor(@ForApplication private val c: Context, private val prefs: PrefsManager,
+constructor(private val c: Context, private val prefs: PrefsManager,
             private val communication: Communication, private val db: BookShelf,
             private val player: MediaPlayerInterface) : MediaPlayer.OnErrorListener, MediaPlayerInterface.OnCompletionListener {
 

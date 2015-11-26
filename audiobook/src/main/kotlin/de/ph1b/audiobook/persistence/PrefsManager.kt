@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.fragment.BookShelfFragment
-import de.ph1b.audiobook.interfaces.ForApplication
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.uitools.ThemeUtil
 import rx.subjects.BehaviorSubject
@@ -21,7 +20,7 @@ import javax.inject.Singleton
 @Singleton
 class PrefsManager
 @Inject
-constructor(@ForApplication c: Context) {
+constructor(c: Context) {
     private val PREF_KEY_RESUME_ON_REPLUG: String
     private val PREF_KEY_THEME: String
     private val sp: SharedPreferences

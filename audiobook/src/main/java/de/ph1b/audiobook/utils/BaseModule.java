@@ -13,7 +13,6 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import de.ph1b.audiobook.interfaces.ForApplication;
 import de.ph1b.audiobook.mediaplayer.AndroidMediaPlayer;
 import de.ph1b.audiobook.mediaplayer.AntennaPlayer;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerInterface;
@@ -52,7 +51,6 @@ public class BaseModule {
 
     @Singleton
     @Provides
-    @ForApplication
     Context provideAppContext() {
         return appContext;
     }

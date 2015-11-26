@@ -419,7 +419,7 @@ public class BookReaderService extends Service implements AudioManager.OnAudioFo
         PendingIntent stopPI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_STOP, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // content click
-        Intent contentIntent = BookActivity.goToBookIntent(this, book.getId());
+        Intent contentIntent = BookActivity.Companion.goToBookIntent(this, book.getId());
         PendingIntent contentPI = PendingIntent.getActivity(this, 0, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         return notificationBuilder

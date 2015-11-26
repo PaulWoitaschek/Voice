@@ -31,7 +31,6 @@ import de.ph1b.audiobook.dialog.prefs.ThemePickerDialogFragment;
 import de.ph1b.audiobook.fragment.BookPlayFragment;
 import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.fragment.SettingsFragment;
-import de.ph1b.audiobook.interfaces.ForApplication;
 import de.ph1b.audiobook.model.BookAdder;
 import de.ph1b.audiobook.service.BookReaderService;
 import de.ph1b.audiobook.service.WidgetUpdateService;
@@ -78,7 +77,7 @@ public class App extends Application {
     @Singleton
     @Component(modules = BaseModule.class)
     public interface ApplicationComponent {
-        @ForApplication
+
         Context getContext();
 
         void inject(WidgetUpdateService target);
