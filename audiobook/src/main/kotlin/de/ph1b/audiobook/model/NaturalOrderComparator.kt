@@ -48,9 +48,9 @@ object NaturalOrderComparator {
 
     private fun getFileWithParents(target: File): List<File> {
         val all = ArrayList<File>(10)
-        var current = target
+        var current: File ? = target
         do {
-            all.add(current)
+            all.add(current!!)
             current = current.parentFile
         } while (current != null)
         Collections.reverse(all)
