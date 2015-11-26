@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.utils;
 
+import android.app.ActivityManager;
 import android.app.Application;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -56,9 +57,9 @@ public class BaseModule {
     }
 
     @Provides
-    MediaPlayerInterface provideMediaPlayer() {
+    MediaPlayerInterface provideMediaPlayer(Context context) {
         if (canSetSpeed()) {
-            return new AntennaPlayer(appContext);
+            return new AntennaPlayer(context);
         } else {
             return new AndroidMediaPlayer();
         }
@@ -66,14 +67,20 @@ public class BaseModule {
 
     @Provides
     @Singleton
-    NotificationManager provideNotificationManager() {
-        return (NotificationManager) appContext.getSystemService(Context.NOTIFICATION_SERVICE);
+    NotificationManager provideNotificationManager(Context context) {
+        return (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     @Provides
     @Singleton
-    AudioManager provideAudioManager() {
-        return (AudioManager) appContext.getSystemService(Context.AUDIO_SERVICE);
+    AudioManager provideAudioManager(Context context) {
+        return (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+    }
+
+    @Provides
+    @Singleton
+    ActivityManager provideActivityManager(Context context) {
+        return (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
     }
 
     @Provides
