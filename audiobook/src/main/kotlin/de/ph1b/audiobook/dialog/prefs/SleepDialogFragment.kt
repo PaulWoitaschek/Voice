@@ -9,10 +9,10 @@ import android.widget.NumberPicker
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.interfaces.SettingsSetListener
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.ThemeUtil
-import de.ph1b.audiobook.utils.App
 import javax.inject.Inject
 
 /**

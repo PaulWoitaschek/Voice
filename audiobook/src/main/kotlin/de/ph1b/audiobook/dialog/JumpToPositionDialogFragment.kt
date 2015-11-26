@@ -7,10 +7,10 @@ import android.view.View
 import android.widget.NumberPicker
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.service.ServiceController
 import de.ph1b.audiobook.uitools.ThemeUtil
-import de.ph1b.audiobook.utils.App
 import de.ph1b.audiobook.utils.BookVendor
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject

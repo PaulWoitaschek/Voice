@@ -18,11 +18,11 @@ import com.afollestad.materialdialogs.internal.MDTintHelper
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.fragment.BookShelfFragment
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.model.NaturalOrderComparator
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverReplacement
-import de.ph1b.audiobook.utils.App
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit

@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Bookmark
 import de.ph1b.audiobook.model.Chapter
-import de.ph1b.audiobook.utils.App
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject

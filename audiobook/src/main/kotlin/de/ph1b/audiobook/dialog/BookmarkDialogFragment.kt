@@ -16,13 +16,13 @@ import com.google.common.collect.ImmutableList
 import com.google.common.collect.Ordering
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.adapter.BookmarkAdapter
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.model.Bookmark
 import de.ph1b.audiobook.persistence.BookShelf
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.service.ServiceController
 import de.ph1b.audiobook.uitools.DividerItemDecoration
-import de.ph1b.audiobook.utils.App
 import de.ph1b.audiobook.utils.BookVendor
 import rx.functions.Func1
 import timber.log.Timber

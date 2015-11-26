@@ -20,6 +20,7 @@ import de.ph1b.audiobook.adapter.BookShelfAdapter
 import de.ph1b.audiobook.dialog.BookmarkDialogFragment
 import de.ph1b.audiobook.dialog.EditBookTitleDialogFragment
 import de.ph1b.audiobook.dialog.EditCoverDialogFragment
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.interfaces.MultiPaneInformer
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.BookAdder
@@ -28,7 +29,6 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.service.ServiceController
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
-import de.ph1b.audiobook.utils.App
 import de.ph1b.audiobook.utils.BookVendor
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers

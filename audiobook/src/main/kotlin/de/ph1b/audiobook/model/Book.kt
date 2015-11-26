@@ -3,7 +3,7 @@ package de.ph1b.audiobook.model
 
 import android.os.Environment
 import com.google.common.collect.ImmutableList
-import de.ph1b.audiobook.utils.App
+import de.ph1b.audiobook.injection.App
 import java.io.File
 import java.util.*
 

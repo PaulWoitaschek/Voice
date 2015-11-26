@@ -17,6 +17,8 @@ import de.ph1b.audiobook.activity.SettingsActivity
 import de.ph1b.audiobook.dialog.BookmarkDialogFragment
 import de.ph1b.audiobook.dialog.JumpToPositionDialogFragment
 import de.ph1b.audiobook.dialog.prefs.PlaybackSpeedDialogFragment
+import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.injection.BaseModule
 import de.ph1b.audiobook.interfaces.MultiPaneInformer
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.Book
@@ -26,8 +28,6 @@ import de.ph1b.audiobook.service.ServiceController
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
-import de.ph1b.audiobook.utils.App
-import de.ph1b.audiobook.utils.BaseModule
 import de.ph1b.audiobook.utils.BookVendor
 import de.ph1b.audiobook.utils.Communication
 import rx.Observable

@@ -17,9 +17,9 @@ import de.ph1b.audiobook.dialog.SupportDialogFragment
 import de.ph1b.audiobook.dialog.prefs.AutoRewindDialogFragment
 import de.ph1b.audiobook.dialog.prefs.SleepDialogFragment
 import de.ph1b.audiobook.dialog.prefs.ThemePickerDialogFragment
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.interfaces.SettingsSetListener
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.utils.App
 import de.ph1b.audiobook.vendinghelper.IabHelper
 import timber.log.Timber
 import javax.inject.Inject

@@ -17,9 +17,9 @@ import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.fragment.BookPlayFragment
 import de.ph1b.audiobook.fragment.BookShelfFragment
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.interfaces.MultiPaneInformer
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.utils.App
 import de.ph1b.audiobook.utils.PermissionHelper
 import timber.log.Timber
 import java.io.File

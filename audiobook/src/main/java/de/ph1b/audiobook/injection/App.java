@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.utils;
+package de.ph1b.audiobook.injection;
 
 import android.app.Application;
 import android.content.Context;

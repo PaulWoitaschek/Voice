@@ -12,7 +12,7 @@
     <uses-permission android:name="com.android.vending.BILLING"/>
 
     <application
-        android:name=".utils.App"
+        android:name=".injection.App"
         android:allowBackup="true"
         android:backupAgent=".persistence.CustomBackupAgent"
         android:fullBackupContent="true"

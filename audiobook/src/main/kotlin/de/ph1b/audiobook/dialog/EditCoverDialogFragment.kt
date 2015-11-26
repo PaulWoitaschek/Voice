@@ -12,13 +12,13 @@ import com.google.common.base.Preconditions
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookShelf
 import de.ph1b.audiobook.uitools.CoverDownloader
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.DraggableBoxImageView
 import de.ph1b.audiobook.uitools.ImageHelper
-import de.ph1b.audiobook.utils.App
 import de.ph1b.audiobook.utils.BookVendor
 import timber.log.Timber
 import java.util.*

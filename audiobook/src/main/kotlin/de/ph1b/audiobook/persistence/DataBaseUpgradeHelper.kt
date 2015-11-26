@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.os.Environment
 import com.google.common.base.Charsets
 import com.google.common.io.Files
-import de.ph1b.audiobook.utils.App
+import de.ph1b.audiobook.injection.App
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject

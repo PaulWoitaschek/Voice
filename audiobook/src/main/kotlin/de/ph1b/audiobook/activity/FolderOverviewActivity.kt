@@ -20,10 +20,10 @@ import com.getbase.floatingactionbutton.FloatingActionButton
 import com.getbase.floatingactionbutton.FloatingActionsMenu
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.adapter.FolderOverviewAdapter
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.BookAdder
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.DividerItemDecoration
-import de.ph1b.audiobook.utils.App
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject

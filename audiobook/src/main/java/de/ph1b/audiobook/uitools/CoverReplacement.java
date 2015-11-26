@@ -16,8 +16,8 @@ import com.google.common.base.Preconditions;
 
 import javax.inject.Inject;
 
+import de.ph1b.audiobook.injection.App;
 import de.ph1b.audiobook.persistence.PrefsManager;
-import de.ph1b.audiobook.utils.App;
 
 
 public class CoverReplacement extends Drawable {

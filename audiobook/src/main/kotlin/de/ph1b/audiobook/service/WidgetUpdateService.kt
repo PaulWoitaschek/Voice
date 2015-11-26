@@ -19,6 +19,7 @@ import android.widget.RemoteViews
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.activity.BookActivity
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookShelf
@@ -26,7 +27,6 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.receiver.BaseWidgetProvider
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
-import de.ph1b.audiobook.utils.App
 import de.ph1b.audiobook.utils.BookVendor
 import rx.Observable
 import rx.subscriptions.CompositeSubscription
