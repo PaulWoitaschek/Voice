@@ -28,9 +28,30 @@ import javax.inject.Singleton
 class BookShelf
 @Inject
 constructor(c: Context) {
-    private val activeBooks: MutableList<Book> = ArrayList()
-    private val orphanedBooks: MutableList<Book> = ArrayList()
-    private val db: SQLiteDatabase
+    private val activeBooks: MutableList<Book> by lazy {
+        val cursor = db.rawQuery(FULL_PROJECTION + APPEND_WHERE_ACTIVE, arrayOf(BOOLEAN_TRUE.toString()))
+        val active = ArrayList<Book>(cursor.count)
+        cursor.use {
+            while (cursor.moveToNext()) {
+                val book = byProjection(cursor)
+                active.add(book)
+            }
+        }
+        active
+    }
+    private val APPEND_WHERE_ACTIVE = " WHERE bt.${BookTable.ACTIVE} =?"
+    private val orphaned: MutableList<Book> by lazy {
+        val cursor = db.rawQuery(FULL_PROJECTION + APPEND_WHERE_ACTIVE, arrayOf(BOOLEAN_FALSE.toString()))
+        val active = ArrayList<Book>(cursor.count)
+        cursor.use {
+            while (cursor.moveToNext()) {
+                val book = byProjection(cursor)
+                active.add(book)
+            }
+        }
+        active
+    }
+    private val db: SQLiteDatabase by lazy { InternalDb(c).writableDatabase }
     private val added = PublishSubject.create<Book>()
     private val removed = PublishSubject.create<Book>()
     private val updated = PublishSubject.create<Book>()
@@ -77,26 +98,6 @@ constructor(c: Context) {
             "            group_concat(" + BookmarkTable.TIME + ") as " + KEY_BOOKMARK_POSITIONS +
             "     FROM " + BookmarkTable.TABLE_NAME +
             "     group by " + BookmarkTable.BOOK_ID + ") AS bmt on bmt." + BookmarkTable.BOOK_ID + " = bt." + BookTable.ID;
-
-
-    init {
-        this.db = InternalDb(c).writableDatabase
-
-        val cursor = db.rawQuery(FULL_PROJECTION, null)
-        cursor.use {
-            while (cursor.moveToNext()) {
-                val bookActive = cursor.getInt(cursor.getColumnIndexOrThrow(BookTable.ACTIVE)) == BOOLEAN_TRUE
-                val book = byProjection(cursor)
-
-                if (bookActive) {
-                    activeBooks.add(book)
-                } else {
-                    orphanedBooks.add(book)
-                }
-            }
-
-        }
-    }
 
     fun removedObservable(): Observable<Book> {
         return removed.asObservable()
@@ -146,7 +147,7 @@ constructor(c: Context) {
     }
 
     @Synchronized fun getOrphanedBooks(): List<Book> {
-        return ArrayList(orphanedBooks)
+        return ArrayList(orphaned)
     }
 
     @Synchronized fun updateBook(book: Book) {
@@ -204,12 +205,12 @@ constructor(c: Context) {
                 break
             }
         }
-        orphanedBooks.add(book)
+        orphaned.add(book)
         removed.onNext(book)
     }
 
     @Synchronized fun revealBook(book: Book) {
-        val orphanedBookIterator = orphanedBooks.iterator()
+        val orphanedBookIterator = orphaned.iterator()
         while (orphanedBookIterator.hasNext()) {
             if (orphanedBookIterator.next().id == book.id) {
                 orphanedBookIterator.remove()
