@@ -33,6 +33,7 @@ import de.ph1b.audiobook.utils.BookVendor
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.functions.Action1
+import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
 import java.util.*
@@ -159,10 +160,65 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
         bookAdder.scanForFiles(false)
 
         subscriptions = CompositeSubscription()
+        subscriptions!!.apply {
+            // Subscription that informs the adapter about a removed book
+            add(db.removedObservable()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe {
+                        adapter.removeBook(it.id)
+                    })
 
-        // observe if the scanner is active and show spinner accordingly.
-        subscriptions!!.add(bookAdder.scannerActive().observeOn(AndroidSchedulers.mainThread())
-                .subscribe { checkVisibilities() })
+            // Subscription that notifies the adapter when the current book has changed. It also notifies
+            // the item with the old indicator now falsely showing.
+            add(prefs.currentBookId
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe {
+                        for (i in 0..adapter.itemCount - 1) {
+                            val itemId = adapter.getItemId(i)
+                            val vh = recyclerView.findViewHolderForItemId(itemId) as BookShelfAdapter.BaseViewHolder?
+                            if (itemId == it || (vh != null && vh.indicatorIsVisible())) {
+                                adapter.notifyItemChanged(i)
+                            }
+                        }
+                        checkVisibilities()
+                    })
+
+            // Subscription that notifies the adapter when there is a new or updated book.
+            add(Observable.merge(db.updateObservable(), db.addedObservable())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe {
+                        adapter.updateOrAddBook(it)
+                        checkVisibilities()
+                    })
+
+
+
+            // Subscription that updates the UI based on the play state.
+            add(mediaPlayerController.playState
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(object : Action1<MediaPlayerController.PlayState> {
+                        private var firstRun = true
+
+                        override fun call(playState: MediaPlayerController.PlayState) {
+                            // animate only if this is not the first run
+                            Timber.i("onNext with playState %s", playState)
+                            if (playState === MediaPlayerController.PlayState.PLAYING) {
+                                playPauseDrawable.transformToPause(!firstRun)
+                            } else {
+                                playPauseDrawable.transformToPlay(!firstRun)
+                            }
+
+                            firstRun = false
+                        }
+                    }))
+
+            // observe if the scanner is active and show spinner accordingly.
+            add(bookAdder.scannerActive()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { checkVisibilities() })
+        }
 
         // show dialog if no folders are set
         val audioFoldersEmpty = (prefs.collectionFolders.size + prefs.singleBookFolders.size) == 0
@@ -173,52 +229,6 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
 
         // initially updates the adapter with a new set of items
         adapter.newDataSet(bookVendor.all())
-
-        // Subscription that informs the adapter about a removed book
-        subscriptions!!.add(db.removedObservable()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    adapter.removeBook(it.id)
-                })
-
-        // Subscription that notifies the adapter when the current book has changed. It also notifies
-        // the item with the old indicator now falsely showing.
-        subscriptions!!.add(prefs.currentBookId.subscribe {
-            for (i in 0..adapter.itemCount - 1) {
-                val itemId = adapter.getItemId(i)
-                val vh = recyclerView.findViewHolderForItemId(itemId) as BookShelfAdapter.BaseViewHolder?
-                if (itemId == it || (vh != null && vh.indicatorIsVisible())) {
-                    adapter.notifyItemChanged(i)
-                }
-            }
-            checkVisibilities()
-        })
-
-        // Subscription that notifies the adapter when there is a new or updated book.
-        subscriptions!!.add(Observable.merge(db.updateObservable(), db.addedObservable())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    adapter.updateOrAddBook(it)
-                    checkVisibilities()
-                })
-
-        // Subscription that updates the UI based on the play state.
-        subscriptions!!.add(mediaPlayerController.playState.observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Action1<MediaPlayerController.PlayState> {
-                    private var firstRun = true
-
-                    override fun call(playState: MediaPlayerController.PlayState) {
-                        // animate only if this is not the first run
-                        Timber.i("onNext with playState %s", playState)
-                        if (playState === MediaPlayerController.PlayState.PLAYING) {
-                            playPauseDrawable.transformToPause(!firstRun)
-                        } else {
-                            playPauseDrawable.transformToPlay(!firstRun)
-                        }
-
-                        firstRun = false
-                    }
-                }))
     }
 
     override fun onStop() {
