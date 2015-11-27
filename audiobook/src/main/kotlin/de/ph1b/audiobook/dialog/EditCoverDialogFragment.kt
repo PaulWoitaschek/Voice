@@ -222,7 +222,7 @@ class EditCoverDialogFragment : DialogFragment() {
 
     private inner class AddCoverAsync(private val searchString: String) : AsyncTask<Void, Void, String>() {
 
-        override fun doInBackground(vararg voids: Void): String {
+        override fun doInBackground(vararg voids: Void): String? {
             return coverDownloader.fetchCover(searchString, googleCount)
         }
 
