@@ -47,6 +47,7 @@ class WidgetUpdateService : Service() {
     @Inject internal lateinit var db: BookShelf
     @Inject internal lateinit var mediaPlayerController: MediaPlayerController
     @Inject internal lateinit var bookVendor: BookVendor
+    @Inject internal lateinit var imageHelper: ImageHelper;
 
     override fun onCreate() {
         super.onCreate()
@@ -115,11 +116,10 @@ class WidgetUpdateService : Service() {
                     val wholeWidgetClickPI = PendingIntent.getActivity(this@WidgetUpdateService, System.currentTimeMillis().toInt(),
                             wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT)
                     remoteViews.setImageViewBitmap(R.id.imageView,
-                            ImageHelper.drawableToBitmap(
+                            imageHelper.drawableToBitmap(
                                     ContextCompat.getDrawable(this@WidgetUpdateService, R.drawable.icon_108dp),
-                                    ImageHelper.getSmallerScreenSize(this@WidgetUpdateService),
-                                    ImageHelper.getSmallerScreenSize(
-                                            this@WidgetUpdateService)))
+                                    imageHelper.getSmallerScreenSize(),
+                                    imageHelper.getSmallerScreenSize()))
                     remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)
                 }
 
@@ -199,10 +199,9 @@ class WidgetUpdateService : Service() {
         }
 
         if (cover == null) {
-            cover = ImageHelper.drawableToBitmap(CoverReplacement(
-                    book.name,
-                    this@WidgetUpdateService), ImageHelper.getSmallerScreenSize(this),
-                    ImageHelper.getSmallerScreenSize(this))
+            cover = imageHelper.drawableToBitmap(CoverReplacement(book.name, this@WidgetUpdateService),
+                    imageHelper.smallerScreenSize,
+                    imageHelper.smallerScreenSize)
         }
         remoteViews.setImageViewBitmap(R.id.imageView, cover)
         remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)

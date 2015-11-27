@@ -73,6 +73,7 @@ class BookReaderService : Service(), AudioManager.OnAudioFocusChangeListener {
     @Inject internal lateinit var audioManager: AudioManager
     @Inject internal lateinit var bookVendor: BookVendor
     @Inject internal lateinit var telephonyManager: TelephonyManager
+    @Inject internal lateinit var imageHelper: ImageHelper;
     @Volatile private var pauseBecauseLossTransient = false
     @Volatile private var pauseBecauseHeadset = false
     private val audioBecomingNoisyReceiver = object : BroadcastReceiver() {
@@ -324,22 +325,23 @@ class BookReaderService : Service(), AudioManager.OnAudioFocusChangeListener {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private fun getNotification(book: Book): Notification {
         // cover
-        val width = ImageHelper.getSmallerScreenSize(this)
-        val height = ImageHelper.getSmallerScreenSize(this)
+        val width = imageHelper.smallerScreenSize
+        val height = imageHelper.smallerScreenSize
         var cover: Bitmap? = null
         try {
             val coverFile = book.coverFile()
             if (!book.useCoverReplacement && coverFile.exists() && coverFile.canRead()) {
-                cover = Picasso.with(this@BookReaderService).load(coverFile).resize(width, height).get()
+                cover = Picasso.with(this@BookReaderService)
+                        .load(coverFile)
+                        .resize(width, height)
+                        .get()
             }
         } catch (e: IOException) {
             e.printStackTrace()
         }
 
         if (cover == null) {
-            cover = ImageHelper.drawableToBitmap(CoverReplacement(
-                    book.name,
-                    this), width, height)
+            cover = imageHelper.drawableToBitmap(CoverReplacement(book.name, this), width, height)
         }
 
         val notificationBuilder = NotificationCompat.Builder(this)
@@ -433,20 +435,27 @@ class BookReaderService : Service(), AudioManager.OnAudioFocusChangeListener {
 
                     }
                     if (bitmap == null) {
-                        val replacement = CoverReplacement(
-                                book.name,
-                                this@BookReaderService)
+                        val replacement = CoverReplacement(book.name, this@BookReaderService)
                         Timber.d("replacement dimen: %d:%d", replacement.intrinsicWidth, replacement.intrinsicHeight)
-                        bitmap = ImageHelper.drawableToBitmap(
-                                replacement,
-                                ImageHelper.getSmallerScreenSize(this@BookReaderService),
-                                ImageHelper.getSmallerScreenSize(this@BookReaderService))
+                        bitmap = imageHelper.drawableToBitmap(replacement, imageHelper.smallerScreenSize, imageHelper.smallerScreenSize)
                     }
                     // we make a copy because we do not want to use picassos bitmap, since
                     // MediaSessionCompat recycles our bitmap eventually which would make
                     // picassos cached bitmap useless.
                     bitmap = bitmap!!.copy(bitmap.config, true)
-                    mediaMetaDataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap).putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap).putLong(MediaMetadataCompat.METADATA_KEY_DURATION, c.duration.toLong()).putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, (book.chapters.indexOf(book.currentChapter()) + 1).toLong()).putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, book.chapters.size.toLong()).putString(MediaMetadataCompat.METADATA_KEY_TITLE, chapterName).putString(MediaMetadataCompat.METADATA_KEY_ALBUM, bookName).putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, author).putString(MediaMetadataCompat.METADATA_KEY_ARTIST, author).putString(MediaMetadataCompat.METADATA_KEY_AUTHOR, author).putString(MediaMetadataCompat.METADATA_KEY_COMPOSER, author).putString(MediaMetadataCompat.METADATA_KEY_GENRE, "Audiobook")
+                    mediaMetaDataBuilder
+                            .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap)
+                            .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
+                            .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, c.duration.toLong())
+                            .putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, (book.chapters.indexOf(book.currentChapter()) + 1).toLong())
+                            .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, book.chapters.size.toLong())
+                            .putString(MediaMetadataCompat.METADATA_KEY_TITLE, chapterName)
+                            .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, bookName)
+                            .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, author)
+                            .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, author)
+                            .putString(MediaMetadataCompat.METADATA_KEY_AUTHOR, author)
+                            .putString(MediaMetadataCompat.METADATA_KEY_COMPOSER, author)
+                            .putString(MediaMetadataCompat.METADATA_KEY_GENRE, "Audiobook")
                     mediaSession.setMetadata(mediaMetaDataBuilder.build())
 
                     lastFileForMetaData = book.currentFile

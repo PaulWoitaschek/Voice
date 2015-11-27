@@ -20,11 +20,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import timber.log.Timber;
 
+@Singleton
 public class ImageHelper {
 
-    public static Bitmap drawableToBitmap(Drawable drawable, int width, int height) {
+    private final Context context;
+
+    @Inject
+    public ImageHelper(@NonNull Context context) {
+        this.context = context;
+    }
+
+    public Bitmap drawableToBitmap(Drawable drawable, int width, int height) {
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -33,7 +44,7 @@ public class ImageHelper {
     }
 
     @Nullable
-    public static Bitmap picassoGetBlocking(final Context context, final String path) {
+    public Bitmap picassoGetBlocking(final String path) {
         final CountDownLatch latch = new CountDownLatch(1);
         final Bitmap[] bitmap = new Bitmap[1];
         new Thread(new Runnable() {
@@ -62,9 +73,8 @@ public class ImageHelper {
      * Saves a bitmap as a file to the personal directory.
      *
      * @param bitmap The bitmap to be saved
-     * @param c      Application context
      */
-    public static synchronized void saveCover(@NonNull Bitmap bitmap, Context c, @NonNull File destination) {
+    public synchronized void saveCover(@NonNull Bitmap bitmap, @NonNull File destination) {
         // make bitmap square
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
@@ -74,7 +84,7 @@ public class ImageHelper {
         }
 
         // scale down if bitmap is too large
-        int preferredSize = getSmallerScreenSize(c);
+        int preferredSize = getSmallerScreenSize();
         if (size > preferredSize) {
             bitmap = Bitmap.createScaledBitmap(bitmap, preferredSize, preferredSize, true);
         }
@@ -94,15 +104,15 @@ public class ImageHelper {
     }
 
     @SuppressWarnings("deprecation")
-    public static int getSmallerScreenSize(Context c) {
-        Display display = ((WindowManager) c.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+    public int getSmallerScreenSize() {
+        Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         int displayWidth = display.getWidth();
         int displayHeight = display.getHeight();
         return displayWidth < displayHeight ? displayWidth : displayHeight;
     }
 
-    public static boolean isOnline(Context c) {
-        ConnectivityManager cm = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
+    public boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm != null) {
             NetworkInfo info = cm.getActiveNetworkInfo();
             if (info != null && info.isConnected()) {
@@ -113,7 +123,7 @@ public class ImageHelper {
     }
 
     @Nullable
-    public static Bitmap getEmbeddedCover(File f, Context c) {
+    public Bitmap getEmbeddedCover(File f) {
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         try {
             mmr.setDataSource(f.getAbsolutePath());
@@ -123,7 +133,7 @@ public class ImageHelper {
                 options.inJustDecodeBounds = true;
                 BitmapFactory.decodeByteArray(data, 0, data.length, options);
                 // Calculate inSampleSize
-                options.inSampleSize = calculateInSampleSize(options, c);
+                options.inSampleSize = calculateInSampleSize(options);
                 // Decode bitmap with inSampleSize set
                 options.inJustDecodeBounds = false;
                 return BitmapFactory.decodeByteArray(data, 0, data.length, options);
@@ -133,12 +143,12 @@ public class ImageHelper {
         return null;
     }
 
-    private static int calculateInSampleSize(BitmapFactory.Options options, Context c) {
+    private int calculateInSampleSize(BitmapFactory.Options options) {
 
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
-        int reqLength = getSmallerScreenSize(c);
+        int reqLength = getSmallerScreenSize();
 
         //setting reqWidth matching to desired 1:1 ratio and screen-size
         if (width < height) {

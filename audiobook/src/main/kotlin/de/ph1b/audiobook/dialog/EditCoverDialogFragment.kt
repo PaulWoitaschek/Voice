@@ -32,6 +32,7 @@ class EditCoverDialogFragment : DialogFragment() {
     @Inject internal lateinit var db: BookShelf
     @Inject internal lateinit var bookVendor: BookVendor
     @Inject internal lateinit var coverDownloader: CoverDownloader
+    @Inject internal lateinit var imageHelper: ImageHelper;
 
     private val imageURLS = ArrayList<String>(20)
     private lateinit var coverImageView: DraggableBoxImageView
@@ -81,7 +82,7 @@ class EditCoverDialogFragment : DialogFragment() {
         val bookId = arguments.getLong(NI_BOOK)
         book = bookVendor.byId(bookId)!!
         coverReplacement = CoverReplacement(book.name, context)
-        isOnline = ImageHelper.isOnline(context)
+        isOnline = imageHelper.isOnline
         if (savedInstanceState == null) {
             coverPosition = -1
         } else {
@@ -102,10 +103,10 @@ class EditCoverDialogFragment : DialogFragment() {
             val r = coverImageView.selectedRect
             val useCoverReplacement: Boolean
             if (coverPosition > -1 && !r.isEmpty) {
-                var cover = ImageHelper.picassoGetBlocking(context, imageURLS[coverPosition])
+                var cover = imageHelper.picassoGetBlocking(imageURLS[coverPosition])
                 if (cover != null) {
                     cover = Bitmap.createBitmap(cover, r.left, r.top, r.width(), r.height())
-                    ImageHelper.saveCover(cover, context, book.coverFile())
+                    imageHelper.saveCover(cover, book.coverFile())
 
                     picasso.invalidate(book.coverFile())
                     useCoverReplacement = false

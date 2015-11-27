@@ -44,6 +44,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
     private val scannerActive = BehaviorSubject.create(false)
     @Inject internal lateinit var bookVendor: BookVendor
     @Inject internal lateinit var activityManager: ActivityManager
+    @Inject internal lateinit var imageHelper: ImageHelper;
     @Volatile private var stopScanner = false
 
     /**
@@ -171,7 +172,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         // if there are images, get the first one.
         val mi = ActivityManager.MemoryInfo()
         activityManager.getMemoryInfo(mi)
-        val dimen = ImageHelper.getSmallerScreenSize(c)
+        val dimen = imageHelper.smallerScreenSize
         for (f in coverFiles) {
             throwIfStopRequested()
             // only read cover if its size is less than a third of the available memory
@@ -203,7 +204,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         for (c in chapters) {
             if (++tries < maxTries) {
                 throwIfStopRequested()
-                val cover = ImageHelper.getEmbeddedCover(c.file, this.c)
+                val cover = imageHelper.getEmbeddedCover(c.file)
                 if (cover != null) {
                     return cover
                 }
@@ -231,7 +232,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                         val images = getAllContainingFiles(listOf(root), false)
                         val cover = getCoverFromDisk(images)
                         if (cover != null) {
-                            ImageHelper.saveCover(cover, c, coverFile)
+                            imageHelper.saveCover(cover, coverFile)
                             Picasso.with(c).invalidate(coverFile)
                             db.updateBook(b)
                             continue
@@ -240,7 +241,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                 }
                 val cover = getEmbeddedCover(b.chapters)
                 if (cover != null) {
-                    ImageHelper.saveCover(cover, c, coverFile)
+                    imageHelper.saveCover(cover, coverFile)
                     Picasso.with(c).invalidate(coverFile)
                     db.updateBook(b)
                 }
