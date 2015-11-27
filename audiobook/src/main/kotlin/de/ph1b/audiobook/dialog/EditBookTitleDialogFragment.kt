@@ -42,7 +42,7 @@ class EditBookTitleDialogFragment : DialogFragment() {
 
     companion object {
 
-        @JvmField val TAG = EditBookTitleDialogFragment::class.java.simpleName
+        val TAG = EditBookTitleDialogFragment::class.java.simpleName
         private val NI_PRESET_NAME = "niPresetName"
         private val NI_BOOK_ID = "niBookId"
 

@@ -72,6 +72,6 @@ class SeekDialogFragment : DialogFragment() {
 
     companion object {
 
-        @JvmField val TAG = SeekDialogFragment::class.java.simpleName
+        val TAG = SeekDialogFragment::class.java.simpleName
     }
 }

@@ -8,17 +8,14 @@ import android.os.Build
 import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.v4.app.ActivityCompat
-import android.support.v4.app.FragmentManager
 import android.support.v7.widget.Toolbar
 import android.transition.TransitionInflater
-import android.view.Menu
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.fragment.BookPlayFragment
 import de.ph1b.audiobook.fragment.BookShelfFragment
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.interfaces.MultiPaneInformer
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.utils.PermissionHelper
 import timber.log.Timber
@@ -31,27 +28,14 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class BookActivity : BaseActivity(), BookShelfFragment.BookSelectionCallback, MultiPaneInformer {
+class BookActivity : BaseActivity(), BookShelfFragment.BookSelectionCallback {
 
     private val TAG = BookActivity::class.java.simpleName
     private val FM_BOOK_SHELF = TAG + BookShelfFragment.TAG
     private val FM_BOOK_PLAY = TAG + BookPlayFragment.TAG
-    @IdRes private val CONTAINER_PLAY = R.id.play_container
-    @IdRes private val CONTAINER_SHELF = R.id.shelf_container
+    @IdRes private val FRAME_CONTAINER = R.id.play_container
 
     @Inject internal lateinit var prefs: PrefsManager
-    internal var bookShelfContainer: View? = null
-    private var multiPanel = false
-
-    override fun isMultiPanel(): Boolean {
-        return multiPanel
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        outState.putBoolean(SI_MULTI_PANEL, multiPanel)
-    }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
                                             grantResults: IntArray) {
@@ -72,7 +56,6 @@ class BookActivity : BaseActivity(), BookShelfFragment.BookSelectionCallback, Mu
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book)
-        bookShelfContainer = findViewById(CONTAINER_SHELF)
         App.getComponent().inject(this)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -82,59 +65,12 @@ class BookActivity : BaseActivity(), BookShelfFragment.BookSelectionCallback, Mu
                 PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE)
             }
         }
-
         setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
 
-        multiPanel = bookShelfContainer != null
-        val multiPaneChanged = savedInstanceState != null && savedInstanceState.getBoolean(SI_MULTI_PANEL) != multiPanel
-        Timber.i("multiPane=%b, multiPaneChanged=%b", multiPanel, multiPaneChanged)
-
-        // first retrieve the fragments
-        val fm = supportFragmentManager
-
         if (savedInstanceState == null) {
-            val bookShelfFragment = BookShelfFragment()
-            if (multiPanel) {
-                fm.beginTransaction().replace(CONTAINER_SHELF, bookShelfFragment, FM_BOOK_SHELF).replace(CONTAINER_PLAY, BookPlayFragment.newInstance(prefs.currentBookId.value), FM_BOOK_PLAY).commit()
-            } else {
-                fm.beginTransaction().replace(CONTAINER_PLAY, bookShelfFragment, FM_BOOK_SHELF).commit()
-            }
-        } else if (multiPaneChanged) {
-            // we need to pop the whole back-stack. Else we can't change the container id
-            fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-
-            // restore book shelf or create new one
-            var bookShelfFragment: BookShelfFragment? = fm.findFragmentByTag(FM_BOOK_SHELF) as BookShelfFragment
-            if (bookShelfFragment == null) {
-                bookShelfFragment = BookShelfFragment()
-                Timber.v("new fragment=%s", bookShelfFragment)
-            } else {
-                fm.beginTransaction().remove(bookShelfFragment).commit()
-                fm.executePendingTransactions()
-                Timber.v("restored fragment=%s", bookShelfFragment)
-            }
-
-            // restore book play fragment or create new one
-            var bookPlayFragment: BookPlayFragment? = fm.findFragmentByTag(FM_BOOK_PLAY) as BookPlayFragment
-            if (bookPlayFragment == null) {
-                bookPlayFragment = BookPlayFragment.newInstance(prefs.currentBookId.value)
-                Timber.v("new fragment=%s", bookPlayFragment)
-            } else {
-                fm.beginTransaction().remove(bookPlayFragment).commit()
-                fm.executePendingTransactions()
-                Timber.v("restored fragment=%s", bookPlayFragment)
-                if (bookPlayFragment.bookId != prefs.currentBookId.value) {
-                    bookPlayFragment = BookPlayFragment.newInstance(prefs.currentBookId.value)
-                    Timber.v("id did not match. Created new fragment=%s", bookPlayFragment)
-                }
-            }
-
-            if (multiPanel) {
-                fm.beginTransaction().replace(CONTAINER_SHELF, bookShelfFragment, FM_BOOK_SHELF).replace(CONTAINER_PLAY, bookPlayFragment, FM_BOOK_PLAY).commit()
-            } else {
-                fm.beginTransaction().replace(CONTAINER_PLAY, bookShelfFragment, FM_BOOK_SHELF).commit()
-                fm.beginTransaction().replace(CONTAINER_PLAY, bookPlayFragment, FM_BOOK_PLAY).addToBackStack(null).commit()
-            }
+            supportFragmentManager.beginTransaction()
+                    .replace(FRAME_CONTAINER, BookShelfFragment(), FM_BOOK_SHELF)
+                    .commit()
         }
 
         if (savedInstanceState == null) {
@@ -154,7 +90,7 @@ class BookActivity : BaseActivity(), BookShelfFragment.BookSelectionCallback, Mu
 
         val ft = supportFragmentManager.beginTransaction()
         val bookPlayFragment = BookPlayFragment.newInstance(bookId)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !multiPanel) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
             val move = TransitionInflater.from(this).inflateTransition(android.R.transition.move)
             bookPlayFragment.sharedElementEnterTransition = move
             for (entry in sharedViews.entries) {
@@ -163,26 +99,9 @@ class BookActivity : BaseActivity(), BookShelfFragment.BookSelectionCallback, Mu
             }
         }
 
-        // only replace if there is not already a fragment with that id
-        val containingFragment = supportFragmentManager.findFragmentById(CONTAINER_PLAY)
-        if (containingFragment == null || containingFragment !is BookPlayFragment || (containingFragment.bookId != bookId)) {
-            ft.replace(CONTAINER_PLAY, bookPlayFragment, FM_BOOK_PLAY).addToBackStack(null).commit()
-        }
-    }
-
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val menuItemIds = ArrayList<Int>(menu.size())
-        for (i in 0..menu.size() - 1) {
-            val item = menu.getItem(i)
-            if (menuItemIds.contains(item.itemId)) {
-                menu.removeItem(item.itemId)
-            } else {
-                menuItemIds.add(item.itemId)
-            }
-        }
-
-        return true
+        ft.replace(FRAME_CONTAINER, bookPlayFragment, FM_BOOK_PLAY)
+                .addToBackStack(null)
+                .commit()
     }
 
     override fun onBackPressed() {
@@ -198,10 +117,6 @@ class BookActivity : BaseActivity(), BookShelfFragment.BookSelectionCallback, Mu
         private val NI_MALFORMED_FILE = "malformedFile"
         private val NI_GO_TO_BOOK = "niGotoBook"
 
-        /**
-         * Used for [.onSaveInstanceState] to get the previous panel mode.
-         */
-        private val SI_MULTI_PANEL = "siMultiPanel"
         private val PERMISSION_RESULT_READ_EXT_STORAGE = 17
 
         /**

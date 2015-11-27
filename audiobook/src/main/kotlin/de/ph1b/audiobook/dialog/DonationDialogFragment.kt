@@ -11,6 +11,7 @@ import de.ph1b.audiobook.R
 
 
 class DonationDialogFragment : DialogFragment() {
+
     private lateinit var callback: OnDonationClickedListener
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -28,7 +29,7 @@ class DonationDialogFragment : DialogFragment() {
             callback.onDonationClicked(item)
         }
 
-        return MaterialDialog.Builder(activity)
+        return MaterialDialog.Builder(context)
                 .title(R.string.pref_support_donation)
                 .items(R.array.pref_support_money)
                 .itemsCallback(donationListCallback)
@@ -46,6 +47,6 @@ class DonationDialogFragment : DialogFragment() {
     }
 
     companion object {
-        @JvmField val TAG = DonationDialogFragment::class.java.simpleName
+        val TAG = DonationDialogFragment::class.java.simpleName
     }
 }

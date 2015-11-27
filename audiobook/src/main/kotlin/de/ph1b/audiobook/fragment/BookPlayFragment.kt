@@ -19,7 +19,6 @@ import de.ph1b.audiobook.dialog.JumpToPositionDialogFragment
 import de.ph1b.audiobook.dialog.prefs.PlaybackSpeedDialogFragment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.BaseModule
-import de.ph1b.audiobook.interfaces.MultiPaneInformer
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookShelf
@@ -56,8 +55,6 @@ class BookPlayFragment : BaseFragment() {
     private val playPauseDrawable = PlayPauseDrawable()
     private var subscriptions: CompositeSubscription? = null
     private var countDownTimer: CountDownTimer? = null
-    private var isMultiPanel = false
-    private lateinit var multiPaneInformer: MultiPaneInformer
     private var book: Book? = null
 
     private lateinit var hostingActivity: AppCompatActivity
@@ -108,10 +105,9 @@ class BookPlayFragment : BaseFragment() {
 
 
         book = bookVendor.byId(bookId)
-        isMultiPanel = multiPaneInformer.isMultiPanel()
 
         //init views
-        hostingActivity.supportActionBar.setDisplayHomeAsUpEnabled(!isMultiPanel)
+        hostingActivity.supportActionBar.setDisplayHomeAsUpEnabled(true)
 
         //setup buttons
         playButton.setIconDrawable(playPauseDrawable)
@@ -266,7 +262,6 @@ class BookPlayFragment : BaseFragment() {
         super.onAttach(context)
 
         hostingActivity = context as AppCompatActivity
-        multiPaneInformer = context as MultiPaneInformer
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -290,10 +285,6 @@ class BookPlayFragment : BaseFragment() {
         val timeChangeItem = menu.findItem(R.id.action_time_change)
         bookmarkItem.setVisible(currentBookExists)
         timeChangeItem.setVisible(currentBookExists)
-
-        // if we are in multipane layout, we don't show the settings menu here. It will be handled
-        // by the other fragment.
-        menu.findItem(R.id.action_settings).setVisible(!isMultiPanel)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

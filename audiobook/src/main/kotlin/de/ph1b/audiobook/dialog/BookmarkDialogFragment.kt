@@ -144,7 +144,7 @@ class BookmarkDialogFragment : DialogFragment() {
 
     companion object {
 
-        @JvmField val TAG = BookmarkDialogFragment::class.java.simpleName
+        val TAG = BookmarkDialogFragment::class.java.simpleName
         private val BOOK_ID = "bookId"
 
         fun newInstance(bookId: Long): BookmarkDialogFragment {

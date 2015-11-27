@@ -21,7 +21,6 @@ import de.ph1b.audiobook.dialog.BookmarkDialogFragment
 import de.ph1b.audiobook.dialog.EditBookTitleDialogFragment
 import de.ph1b.audiobook.dialog.EditCoverDialogFragment
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.interfaces.MultiPaneInformer
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.BookAdder
 import de.ph1b.audiobook.persistence.BookShelf
@@ -59,7 +58,6 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
     @Inject internal lateinit var bookVendor: BookVendor
     @Inject internal lateinit var serviceController: ServiceController
 
-    private var isMultiPanel: Boolean = false
     private var subscriptions: CompositeSubscription? = null
 
     private lateinit var adapter: BookShelfAdapter
@@ -68,26 +66,23 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
     private lateinit var gridLayoutManager: GridLayoutManager
     private lateinit var linearLayoutManager: RecyclerView.LayoutManager
 
-    private lateinit var multiPaneInformer: MultiPaneInformer
     private lateinit var bookSelectionCallback: BookSelectionCallback
     private lateinit var hostingActivity: AppCompatActivity
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        Timber.i("onCreateView with savedInstanceState %s", savedInstanceState)
         val view = inflater.inflate(R.layout.fragment_book_shelf, container, false)
         recyclerView = view.findViewById(R.id.recyclerView) as RecyclerView
         recyclerReplacementView = view.findViewById(R.id.recyclerReplacement)
         fab = view.findViewById(R.id.fab) as FloatingActionButton
 
-        isMultiPanel = multiPaneInformer.isMultiPanel()
-
-        // find views
-        val actionBar = hostingActivity.supportActionBar!!
-
-        // init views
-        actionBar.setDisplayHomeAsUpEnabled(false)
-        actionBar.title = getString(R.string.app_name)
         fab.setIconDrawable(playPauseDrawable)
         fab.setOnClickListener({ playPauseClicked() })
+
+        // init views
+        val actionBar = hostingActivity.supportActionBar!!
+        actionBar.setDisplayHomeAsUpEnabled(false)
+        actionBar.title = getString(R.string.app_name)
         recyclerView.setHasFixedSize(true)
         // without this the item would blink on every change
         val anim = recyclerView.itemAnimator as SimpleItemAnimator
@@ -103,6 +98,7 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Timber.i("onCreate")
 
         App.getComponent().inject(this)
 
@@ -119,6 +115,7 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
                 }
                 .cancelable(false)
                 .build()
+        adapter = BookShelfAdapter(context, this)
     }
 
     private fun initRecyclerView() {
@@ -130,7 +127,7 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
             recyclerView.layoutManager = linearLayoutManager
             recyclerView.addItemDecoration(listDecoration)
         }
-        adapter = BookShelfAdapter(context, defaultDisplayMode, this)
+        adapter.displayMode = defaultDisplayMode
         recyclerView.adapter = adapter
         hostingActivity.invalidateOptionsMenu()
     }
@@ -145,9 +142,6 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
             val r = recyclerView.resources
             val displayMetrics = resources.displayMetrics
             var widthPx = displayMetrics.widthPixels.toFloat()
-            if (isMultiPanel) {
-                widthPx /= 2
-            }
             val desiredPx = r.getDimensionPixelSize(R.dimen.desired_medium_cover).toFloat()
             val columns = Math.round(widthPx / desiredPx)
             return Math.max(columns, 2)
@@ -258,7 +252,7 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
             }
         }
 
-        if (isMultiPanel || !currentBookExists) {
+        if ( !currentBookExists) {
             fab.visibility = View.GONE
         } else {
             fab.visibility = View.VISIBLE
@@ -270,7 +264,7 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
 
         // sets menu item visible if there is a current book
         val currentPlaying = menu!!.findItem(R.id.action_current)
-        currentPlaying.setVisible(!isMultiPanel && bookVendor.byId(prefs.currentBookId.value) != null)
+        currentPlaying.setVisible(bookVendor.byId(prefs.currentBookId.value) != null)
 
         // sets the grid / list toggle icon
         val displayModeItem = menu.findItem(R.id.action_change_layout)
@@ -315,7 +309,6 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
         super.onAttach(context)
 
         bookSelectionCallback = context as BookSelectionCallback
-        multiPaneInformer = context as MultiPaneInformer
         hostingActivity = context as AppCompatActivity
     }
 
@@ -384,6 +377,6 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
 
     companion object {
 
-        @JvmField val TAG = BookShelfFragment::class.java.simpleName
+        val TAG = BookShelfFragment::class.java.simpleName
     }
 }

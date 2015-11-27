@@ -35,7 +35,7 @@ import javax.inject.Inject
  * @param displayMode         the display mode
  * @param onItemClickListener the listener that will be called when a book has been selected
  */
-class BookShelfAdapter(private val c: Context, private val displayMode: BookShelfFragment.DisplayMode, private val onItemClickListener: BookShelfAdapter.OnItemClickListener) : RecyclerView.Adapter<BookShelfAdapter.BaseViewHolder>() {
+class BookShelfAdapter(private val c: Context, private val onItemClickListener: BookShelfAdapter.OnItemClickListener) : RecyclerView.Adapter<BookShelfAdapter.BaseViewHolder>() {
 
     private val sortedList = SortedList(Book::class.java, object : SortedListAdapterCallback<Book>(this) {
 
@@ -55,6 +55,7 @@ class BookShelfAdapter(private val c: Context, private val displayMode: BookShel
     @Inject internal lateinit var prefs: PrefsManager
 
     init {
+        Timber.i("A new adapter was created.");
         App.getComponent().inject(this)
         setHasStableIds(true)
     }
@@ -104,6 +105,7 @@ class BookShelfAdapter(private val c: Context, private val displayMode: BookShel
      * @param books The new set of books
      */
     fun newDataSet(books: List<Book>) {
+        Timber.i("newDataSet was called.")
         sortedList.beginBatchedUpdates()
         try {
             // remove old books
@@ -150,10 +152,18 @@ class BookShelfAdapter(private val c: Context, private val displayMode: BookShel
         return sortedList.get(position)
     }
 
+    var displayMode: BookShelfFragment.DisplayMode = BookShelfFragment.DisplayMode.LIST
+        set(value) {
+            if (value != field) {
+                field = value
+                notifyDataSetChanged()
+            }
+        }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-        when (displayMode) {
-            BookShelfFragment.DisplayMode.GRID -> return GridViewHolder(parent)
-            BookShelfFragment.DisplayMode.LIST -> return ListViewHolder(parent)
+        when (viewType) {
+            1 -> return GridViewHolder(parent)
+            0 -> return ListViewHolder(parent)
             else -> throw IllegalStateException("Illegal viewType=" + viewType)
         }
     }
@@ -178,6 +188,10 @@ class BookShelfAdapter(private val c: Context, private val displayMode: BookShel
 
     override fun getItemCount(): Int {
         return sortedList.size()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (displayMode == BookShelfFragment.DisplayMode.LIST ) 0 else 1
     }
 
     interface OnItemClickListener {

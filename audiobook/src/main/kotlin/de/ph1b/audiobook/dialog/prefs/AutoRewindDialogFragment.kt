@@ -77,6 +77,6 @@ class AutoRewindDialogFragment : DialogFragment() {
     }
 
     companion object {
-        @JvmField val TAG = AutoRewindDialogFragment::class.java.simpleName
+        val TAG = AutoRewindDialogFragment::class.java.simpleName
     }
 }

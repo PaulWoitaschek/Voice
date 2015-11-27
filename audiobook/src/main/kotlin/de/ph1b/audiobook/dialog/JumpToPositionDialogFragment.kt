@@ -96,6 +96,6 @@ class JumpToPositionDialogFragment : DialogFragment() {
 
     companion object {
 
-        @JvmField val TAG = JumpToPositionDialogFragment::class.java.simpleName
+        val TAG = JumpToPositionDialogFragment::class.java.simpleName
     }
 }

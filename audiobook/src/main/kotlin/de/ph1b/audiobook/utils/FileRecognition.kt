@@ -14,7 +14,7 @@ object FileRecognition {
 
     private val AUDIO_TYPES: ArrayList<String> ;
 
-    @JvmField val FOLDER_AND_MUSIC_FILTER = FileFilter {
+    val FOLDER_AND_MUSIC_FILTER = FileFilter {
         for (s in AUDIO_TYPES) {
             if (it.name.toLowerCase().endsWith(s)) {
                 return@FileFilter true
@@ -23,7 +23,7 @@ object FileRecognition {
         it.isDirectory
     }
     private val IMAGE_TYPES = Arrays.asList(".jpg", ".jpeg", ".png", ".bmp")
-    @JvmField val FOLDER_AND_IMAGES_FILTER = FileFilter {
+    val FOLDER_AND_IMAGES_FILTER = FileFilter {
         for (s in IMAGE_TYPES) {
             if (it.absolutePath.toLowerCase().endsWith(s)) {
                 return@FileFilter true

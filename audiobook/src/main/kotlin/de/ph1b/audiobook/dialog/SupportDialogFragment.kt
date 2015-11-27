@@ -38,6 +38,6 @@ class SupportDialogFragment : DialogFragment() {
     private val TRANSLATION_URL = "https://www.transifex.com/projects/p/material-audiobook-player"
 
     companion object {
-        @JvmField val TAG = SupportDialogFragment::class.java.simpleName
+        val TAG = SupportDialogFragment::class.java.simpleName
     }
 }

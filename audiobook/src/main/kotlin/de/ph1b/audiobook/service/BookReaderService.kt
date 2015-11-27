@@ -442,7 +442,7 @@ class BookReaderService : Service(), AudioManager.OnAudioFocusChangeListener {
                     // we make a copy because we do not want to use picassos bitmap, since
                     // MediaSessionCompat recycles our bitmap eventually which would make
                     // picassos cached bitmap useless.
-                    bitmap = bitmap!!.copy(bitmap.config, true)
+                    bitmap = bitmap.copy(bitmap.config, true)
                     mediaMetaDataBuilder
                             .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap)
                             .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
