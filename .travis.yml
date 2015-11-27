@@ -1,6 +1,4 @@
 language: android
-jdk:
-  - oraclejdk7
 android:
   components:
     - tools
