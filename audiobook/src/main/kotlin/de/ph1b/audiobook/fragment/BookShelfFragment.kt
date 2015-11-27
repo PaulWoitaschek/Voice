@@ -161,6 +161,7 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
 
         subscriptions = CompositeSubscription()
         subscriptions!!.apply {
+
             // Subscription that informs the adapter about a removed book
             add(db.removedObservable()
                     .subscribeOn(Schedulers.io())
@@ -168,6 +169,21 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
                     .subscribe {
                         adapter.removeBook(it.id)
                     })
+
+            // Subscription that notifies the adapter when there is a new or updated book.
+            add(Observable.merge(db.updateObservable(), db.addedObservable())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe {
+                        adapter.updateOrAddBook(it)
+                        checkVisibilities()
+                    })
+
+            // initially updates the adapter with a new set of items
+            add(db.getActiveBooks().subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .toList()
+                    .subscribe { adapter.newDataSet(it) })
 
             // Subscription that notifies the adapter when the current book has changed. It also notifies
             // the item with the old indicator now falsely showing.
@@ -183,17 +199,6 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
                         }
                         checkVisibilities()
                     })
-
-            // Subscription that notifies the adapter when there is a new or updated book.
-            add(Observable.merge(db.updateObservable(), db.addedObservable())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
-                        adapter.updateOrAddBook(it)
-                        checkVisibilities()
-                    })
-
-
 
             // Subscription that updates the UI based on the play state.
             add(mediaPlayerController.playState
@@ -226,9 +231,6 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
         if (audioFoldersEmpty && !noFolderWarningIsShowing) {
             noFolderWarning.show()
         }
-
-        // initially updates the adapter with a new set of items
-        adapter.newDataSet(bookVendor.all())
     }
 
     override fun onStop() {
@@ -329,9 +331,9 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
     override fun onMenuClicked(position: Int, view: View) {
         val popupMenu = PopupMenu(context, view)
         popupMenu.inflate(R.menu.bookshelf_popup)
-        popupMenu.setOnMenuItemClickListener { item ->
+        popupMenu.setOnMenuItemClickListener {
             val book = adapter.getItem(position)
-            when (item.itemId) {
+            when (it.itemId) {
                 R.id.edit_cover -> {
                     EditCoverDialogFragment.newInstance(this, book).show(fragmentManager, EditCoverDialogFragment.TAG)
                     return@setOnMenuItemClickListener true
