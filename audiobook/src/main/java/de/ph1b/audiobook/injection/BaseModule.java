@@ -1,12 +1,7 @@
 package de.ph1b.audiobook.injection;
 
-import android.app.ActivityManager;
-import android.app.Application;
-import android.app.NotificationManager;
 import android.content.Context;
-import android.media.AudioManager;
 import android.os.Build;
-import android.telephony.TelephonyManager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,12 +26,6 @@ import retrofit.RxJavaCallAdapterFactory;
 @Module
 public class BaseModule {
 
-    private final Context appContext;
-
-    public BaseModule(Application application) {
-        this.appContext = application;
-    }
-
     /**
      * Checks if the device can set playback-seed by {@link MediaPlayerInterface#setPlaybackSpeed(float)}
      * Therefore it has to be >= {@link android.os.Build.VERSION_CODES#JELLY_BEAN} and not blacklisted
@@ -51,12 +40,6 @@ public class BaseModule {
         return greaterJellyBean && !(hwBlacklist.contains(Build.HARDWARE));
     }
 
-    @Singleton
-    @Provides
-    Context provideAppContext() {
-        return appContext;
-    }
-
     @Provides
     MediaPlayerInterface provideMediaPlayer(Context context) {
         if (canSetSpeed()) {
@@ -64,30 +47,6 @@ public class BaseModule {
         } else {
             return new AndroidMediaPlayer();
         }
-    }
-
-    @Provides
-    @Singleton
-    NotificationManager provideNotificationManager(Context context) {
-        return (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-    }
-
-    @Provides
-    @Singleton
-    AudioManager provideAudioManager(Context context) {
-        return (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-    }
-
-    @Provides
-    @Singleton
-    ActivityManager provideActivityManager(Context context) {
-        return (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-    }
-
-    @Provides
-    @Singleton
-    TelephonyManager provideTelephonyManager(Context context) {
-        return (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
     }
 
     @Provides

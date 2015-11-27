@@ -118,8 +118,8 @@ class WidgetUpdateService : Service() {
                     remoteViews.setImageViewBitmap(R.id.imageView,
                             imageHelper.drawableToBitmap(
                                     ContextCompat.getDrawable(this@WidgetUpdateService, R.drawable.icon_108dp),
-                                    imageHelper.getSmallerScreenSize(),
-                                    imageHelper.getSmallerScreenSize()))
+                                    imageHelper.smallerScreenSize,
+                                    imageHelper.smallerScreenSize))
                     remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)
                 }
 

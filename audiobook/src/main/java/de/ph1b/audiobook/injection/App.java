@@ -68,14 +68,17 @@ public class App extends Application {
         }
         refWatcher = LeakCanary.install(this);
 
-        applicationComponent = DaggerApp_ApplicationComponent.builder().baseModule(new BaseModule(this)).build();
+        applicationComponent = DaggerApp_ApplicationComponent.builder()
+                .baseModule(new BaseModule())
+                .androidModule(new AndroidModule(this))
+                .build();
         applicationComponent.inject(this);
 
         bookAdder.scanForFiles(true);
     }
 
     @Singleton
-    @Component(modules = BaseModule.class)
+    @Component(modules = {BaseModule.class, AndroidModule.class})
     public interface ApplicationComponent {
 
         Context getContext();
