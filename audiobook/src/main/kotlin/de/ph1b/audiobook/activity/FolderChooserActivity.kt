@@ -163,6 +163,7 @@ class FolderChooserActivity : BaseActivity(), HideFolderDialog.OnChosenListener 
             multiSd = false
         } else {
             currentFolderContent.addAll(rootDirs)
+            adapter.notifyDataSetChanged()
         }
     }
 
