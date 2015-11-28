@@ -58,13 +58,9 @@ data class Book(val id: Long,
     }
 
     /**
-     * Gets the transition name for the cover transition.
-
-     * @return The transition name
+     * The transition name for the cover transition.
      */
-    fun coverTransitionName(): String {
-        return COVER_TRANSITION_PREFIX + id
-    }
+    val coverTransitionName = COVER_TRANSITION_PREFIX + id
 
 
     /**

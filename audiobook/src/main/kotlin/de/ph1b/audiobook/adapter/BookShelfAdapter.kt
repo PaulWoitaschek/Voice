@@ -311,7 +311,7 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
             itemView.setOnClickListener { onItemClickListener.onItemClicked(adapterPosition) }
             editBook.setOnClickListener { onItemClickListener.onMenuClicked(adapterPosition, it) }
 
-            ViewCompat.setTransitionName(coverView, book.coverTransitionName())
+            ViewCompat.setTransitionName(coverView, book.coverTransitionName)
         }
     }
 }

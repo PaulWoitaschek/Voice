@@ -202,7 +202,7 @@ class BookPlayFragment : BaseFragment() {
                 bookSpinner.visibility = View.VISIBLE
             }
 
-            ViewCompat.setTransitionName(coverView, book!!.coverTransitionName())
+            ViewCompat.setTransitionName(coverView, book!!.coverTransitionName)
         }
 
         // (Cover)
