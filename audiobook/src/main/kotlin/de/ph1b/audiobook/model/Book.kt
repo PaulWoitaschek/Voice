@@ -66,16 +66,18 @@ data class Book(val id: Long,
         return COVER_TRANSITION_PREFIX + id
     }
 
+
     /**
-     * @return The global duration. It sums up the duration of all chapters.
+     * The global duration. It sums up the duration of all chapters.
      */
-    fun globalDuration(): Int {
+    val globalDuration: Int by lazy {
         var globalDuration = 0
         for (c in chapters) {
             globalDuration += c.duration;
         }
-        return globalDuration;
+        globalDuration;
     }
+
 
     /**
      * @return the global position. It sums up the duration of all elapsed chapters plus the position

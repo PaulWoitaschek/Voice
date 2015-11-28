@@ -32,7 +32,6 @@ import javax.inject.Inject
  * Adapter for a recycler-view book shelf that keeps the items in a sorted list.
  *
  * @param c                   the context
- * @param displayMode         the display mode
  * @param onItemClickListener the listener that will be called when a book has been selected
  */
 class BookShelfAdapter(private val c: Context, private val onItemClickListener: BookShelfAdapter.OnItemClickListener) : RecyclerView.Adapter<BookShelfAdapter.BaseViewHolder>() {
@@ -233,7 +232,7 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
             super.bind(book)
 
             val globalPosition = book.globalPosition()
-            val globalDuration = book.globalDuration()
+            val globalDuration = book.globalDuration
             val progress = Math.round(100f * globalPosition.toFloat() / globalDuration.toFloat())
 
             leftTime.text = formatTime(globalPosition)
