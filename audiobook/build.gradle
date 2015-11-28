@@ -84,7 +84,7 @@ dependencies {
     // dependency injection
     def daggerVersion = "2.0.2"
     compile "com.google.dagger:dagger:$daggerVersion"
-    apt "com.google.dagger:dagger-compiler:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     provided "javax.annotation:jsr250-api:1.0"
 
     // logging

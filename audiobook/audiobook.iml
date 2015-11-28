@@ -102,8 +102,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="haha-1.3" level="project" />
     <orderEntry type="library" exported="" name="gson-2.3.1" level="project" />
-    <orderEntry type="library" exported="" name="kotlin-runtime-1.0.0-beta-2423" level="project" />
     <orderEntry type="library" exported="" name="okio-1.6.0" level="project" />
+    <orderEntry type="library" exported="" name="kotlin-runtime-1.0.0-beta-2423" level="project" />
     <orderEntry type="library" exported="" name="picasso-2.5.2" level="project" />
     <orderEntry type="library" exported="" name="base64-2.3.8" level="project" />
     <orderEntry type="library" exported="" name="okhttp-2.5.0" level="project" />
