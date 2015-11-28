@@ -179,7 +179,7 @@ class BookPlayFragment : BaseFragment() {
             bookSpinner.adapter = adapter
 
             bookSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                     if (parent.tag != null && (parent.tag as Int) != position) {
                         Timber.i("spinner: onItemSelected. firing: %d", position)
                         serviceController.changeTime(0, book!!.chapters[position].file)
