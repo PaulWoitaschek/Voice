@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 78
-        versionName 'nightly-2015-11-28'
+        versionCode 79
+        versionName 'nightly-2015-11-28-2'
     }
 
     buildTypes {
