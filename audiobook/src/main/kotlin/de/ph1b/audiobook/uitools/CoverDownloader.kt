@@ -60,7 +60,7 @@ constructor(c: Context, private val imageLinkService: ImageLinkService) {
         if (SEARCH_MAPPING.containsKey(searchText)) {
             val containing = SEARCH_MAPPING[searchText]!!
             if (number < containing.size) {
-                return containing.get(number)
+                return containing[number]
             } else {
                 val startPoint = containing.size
                 Timber.v("looking for new set at startPoint %d", startPoint)
