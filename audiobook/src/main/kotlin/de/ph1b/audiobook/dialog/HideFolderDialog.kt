@@ -40,7 +40,7 @@ class HideFolderDialog : DialogFragment() {
                         //noinspection ResultOfMethodCallIgnored
                         hideFile.createNewFile()
                     } catch (e: IOException) {
-                        e.printStackTrace()
+                        Timber.e(e, "Error at creating the hide-file")
                     }
                 }
                 .onAny { materialDialog, dialogAction -> callback.onChosen() }

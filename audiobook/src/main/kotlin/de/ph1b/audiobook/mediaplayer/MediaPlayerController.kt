@@ -5,7 +5,6 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.PowerManager
 import android.support.v4.media.session.PlaybackStateCompat
-import com.google.common.base.Preconditions
 import de.ph1b.audiobook.activity.BookActivity
 import de.ph1b.audiobook.fragment.BookShelfFragment
 import de.ph1b.audiobook.model.Book
@@ -35,8 +34,7 @@ constructor(private val c: Context, private val prefs: PrefsManager,
     private val executor = Executors.newScheduledThreadPool(2)
     public val playState = BehaviorSubject.create(PlayState.STOPPED)
     @Volatile var isSleepTimerActive = false
-        set(value) {
-        }
+        private set
     private var sleepSand: ScheduledFuture<*>? = null
     var book: Book? = null
         private set
@@ -65,9 +63,7 @@ constructor(private val c: Context, private val prefs: PrefsManager,
     fun init(book: Book) {
         lock.withLock {
             Timber.i("constructor called with book=%s", book)
-            Preconditions.checkNotNull(book)
             this.book = book
-            prepare()
         }
     }
 
@@ -96,7 +92,7 @@ constructor(private val c: Context, private val prefs: PrefsManager,
                     player.playbackSpeed = book!!.playbackSpeed
                     state = State.PREPARED
                 } catch (e: IOException) {
-                    e.printStackTrace()
+                    Timber.e(e, "Error when preparing the player.")
                     state = State.DEAD
                 }
             }

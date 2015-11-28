@@ -24,7 +24,6 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.service.ServiceController
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.utils.BookVendor
-import rx.functions.Func1
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -156,10 +155,9 @@ class BookmarkDialogFragment : DialogFragment() {
         }
 
         fun addBookmark(bookId: Long, title: String, db: BookShelf) {
-            var book: Book? = db.getActiveBooks()
-                    .singleOrDefault(null, Func1 { it.id == bookId })
+            var book: Book? = db.activeBooks
                     .toBlocking()
-                    .single()
+                    .singleOrDefault(null, { it.id == bookId })
             if (book != null) {
                 val addedBookmark = Bookmark(book.currentChapter().file, title, book.time)
                 val newBookmarks = ArrayList(book.bookmarks)

@@ -180,9 +180,8 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                 try {
                     return Picasso.with(c).load(f).resize(dimen, dimen).get()
                 } catch (e: IOException) {
-                    e.printStackTrace()
+                    Timber.e(e, "Error when saving cover %s", f)
                 }
-
             }
         }
         return null
@@ -594,7 +593,6 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                     throwIfStopRequested()
                 } catch (e: RuntimeException) {
                     Timber.e("Error at file=%s", f)
-                    e.printStackTrace()
                 }
 
             }

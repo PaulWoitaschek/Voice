@@ -337,7 +337,7 @@ class BookReaderService : Service(), AudioManager.OnAudioFocusChangeListener {
                         .get()
             }
         } catch (e: IOException) {
-            e.printStackTrace()
+            Timber.e(e, "Error when retrieving cover from %s", book)
         }
 
         if (cover == null) {
@@ -430,9 +430,8 @@ class BookReaderService : Service(), AudioManager.OnAudioFocusChangeListener {
                         try {
                             bitmap = Picasso.with(this@BookReaderService).load(coverFile).get()
                         } catch (e: IOException) {
-                            e.printStackTrace()
+                            Timber.e(e, "Error when retrieving cover for book %s", book)
                         }
-
                     }
                     if (bitmap == null) {
                         val replacement = CoverReplacement(book.name, this@BookReaderService)

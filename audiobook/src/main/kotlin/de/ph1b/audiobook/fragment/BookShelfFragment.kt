@@ -148,6 +148,8 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
     override fun onStart() {
         super.onStart()
 
+        Timber.i("onStart at %d", System.currentTimeMillis())
+
         // scan for files
         bookAdder.scanForFiles(false)
 
@@ -172,7 +174,8 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
                     })
 
             // initially updates the adapter with a new set of items
-            add(db.getActiveBooks().subscribeOn(Schedulers.io())
+            add(db.activeBooks
+                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .toList()
                     .subscribe { adapter.newDataSet(it) })
@@ -223,6 +226,8 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
         if (audioFoldersEmpty && !noFolderWarningIsShowing) {
             noFolderWarning.show()
         }
+
+        Timber.i("onStart done at %d", System.currentTimeMillis())
     }
 
     override fun onStop() {
@@ -262,7 +267,7 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
 
         // sets menu item visible if there is a current book
         val currentPlaying = menu!!.findItem(R.id.action_current)
-        db.getActiveBooks()
+        db.activeBooks
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .singleOrDefault(null, { it.id == prefs.currentBookId.value })
@@ -285,9 +290,7 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
                 return true
             }
             R.id.action_change_layout -> {
-                val mode = prefs.displayMode
-                val invertedMode = if (mode == DisplayMode.GRID) DisplayMode.LIST else DisplayMode.GRID
-                prefs.displayMode = invertedMode
+                prefs.displayMode = prefs.displayMode.inverted()
                 initRecyclerView()
                 return true
             }
@@ -350,7 +353,7 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
 
     override fun onTitleChanged(newTitle: String, bookId: Long) {
         Timber.i("onTitleChanged with title %s and id %d", newTitle, bookId)
-        db.getActiveBooks()
+        db.activeBooks
                 .filter { it.id == bookId } // find book
                 .subscribeOn(Schedulers.io()) // dont block
                 .subscribe {
@@ -366,7 +369,9 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
 
     enum class DisplayMode {
         GRID,
-        LIST
+        LIST;
+
+        fun inverted(): DisplayMode = if (this == GRID) LIST else GRID
     }
 
     interface BookSelectionCallback {

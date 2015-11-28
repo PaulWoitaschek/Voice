@@ -43,7 +43,7 @@ constructor(c: Context, private val imageLinkService: ImageLinkService) {
                 return bitmapUrl
             }
         } catch (e: IOException) {
-            e.printStackTrace()
+            Timber.e(e, "error at fetching cover from %s", bitmapUrl)
         }
 
         return null
@@ -121,9 +121,9 @@ constructor(c: Context, private val imageLinkService: ImageLinkService) {
                         }
                     }
                 } catch (e: Exception) {
+                    Timber.e(e, "Error at retrieving ip address")
                     e.printStackTrace()
                 }
-
                 return ""
             }
     }

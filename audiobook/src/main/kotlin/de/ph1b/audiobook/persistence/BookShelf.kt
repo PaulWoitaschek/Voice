@@ -28,7 +28,7 @@ import javax.inject.Singleton
 class BookShelf
 @Inject
 constructor(c: Context) {
-    private val activeBooks: MutableList<Book> by lazy {
+    private val active: MutableList<Book> by lazy {
         val cursor = db.rawQuery(FULL_PROJECTION + APPEND_WHERE_ACTIVE, arrayOf(BOOLEAN_TRUE.toString()))
         val active = ArrayList<Book>(cursor.count)
         cursor.use {
@@ -138,13 +138,14 @@ constructor(c: Context) {
             db.endTransaction()
         }
 
-        activeBooks.add(newBook)
+        active.add(newBook)
         added.onNext(newBook)
     }
 
-    @Synchronized fun getActiveBooks(): Observable<Book> {
-        return Observable.from(activeBooks)
-    }
+    /**
+     * All active books. We
+     */
+    val activeBooks = Observable.defer { Observable.from(active) }
 
     @Synchronized fun getOrphanedBooks(): List<Book> {
         return ArrayList(orphaned)
@@ -153,7 +154,7 @@ constructor(c: Context) {
     @Synchronized fun updateBook(book: Book) {
         Timber.v("updateBook=%s with time %d", book.name, book.time)
 
-        val bookIterator = activeBooks.listIterator()
+        val bookIterator = active.listIterator()
         while (bookIterator.hasNext()) {
             val next = bookIterator.next()
             if (book.id == next.id) {
@@ -194,7 +195,7 @@ constructor(c: Context) {
     @Synchronized fun hideBook(book: Book) {
         Timber.v("hideBook=%s", book.name)
 
-        val iterator = activeBooks.listIterator()
+        val iterator = active.listIterator()
         while (iterator.hasNext()) {
             val next = iterator.next()
             if (next.id == book.id) {
@@ -220,7 +221,7 @@ constructor(c: Context) {
                 break
             }
         }
-        activeBooks.add(book)
+        active.add(book)
         added.onNext(book)
     }
 

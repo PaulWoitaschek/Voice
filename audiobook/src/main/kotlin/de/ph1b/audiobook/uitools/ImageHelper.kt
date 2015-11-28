@@ -37,7 +37,7 @@ constructor(private val context: Context, private val windowManager: WindowManag
             try {
                 bitmap[0] = Picasso.with(context).load(path).get()
             } catch (e: IOException) {
-                e.printStackTrace()
+                Timber.e(e, "Exception at file retrieving for %s", path)
             } finally {
                 latch.countDown()
             }
@@ -46,7 +46,7 @@ constructor(private val context: Context, private val windowManager: WindowManag
         try {
             latch.await()
         } catch (e: InterruptedException) {
-            e.printStackTrace()
+            Timber.wtf(e, "Latch was interrupted!")
         }
 
         return bitmap[0]

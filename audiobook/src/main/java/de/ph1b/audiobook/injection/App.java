@@ -66,6 +66,7 @@ public class App extends Application {
         } else {
             ACRA.init(this);
         }
+        Timber.i("onCreate");
         refWatcher = LeakCanary.install(this);
 
         applicationComponent = DaggerApp_ApplicationComponent.builder()

@@ -30,6 +30,7 @@ import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.utils.BookVendor
 import rx.Observable
 import rx.subscriptions.CompositeSubscription
+import timber.log.Timber
 import java.io.IOException
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
@@ -195,7 +196,7 @@ class WidgetUpdateService : Service() {
                 cover = Picasso.with(this@WidgetUpdateService).load(coverFile).get()
             }
         } catch (e: IOException) {
-            e.printStackTrace()
+            Timber.e(e, "Error when retrieving cover for book %s", book)
         }
 
         if (cover == null) {

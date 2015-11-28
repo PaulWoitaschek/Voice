@@ -2,7 +2,6 @@ package de.ph1b.audiobook.utils
 
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookShelf
-import rx.functions.Func1
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,13 +16,12 @@ class BookVendor
 constructor(private val bookShelf: BookShelf) {
 
     fun byId(id: Long): Book? {
-        return bookShelf.getActiveBooks()
-                .singleOrDefault(null, Func1 { it.id == id })
+        return bookShelf.activeBooks
                 .toBlocking()
-                .single()
+                .singleOrDefault(null, { it.id == id })
     }
 
     fun all(): List<Book> {
-        return bookShelf.getActiveBooks().toList().toBlocking().first()
+        return bookShelf.activeBooks.toList().toBlocking().first()
     }
 }

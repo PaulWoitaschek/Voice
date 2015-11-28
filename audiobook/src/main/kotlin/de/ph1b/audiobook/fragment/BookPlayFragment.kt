@@ -346,7 +346,7 @@ class BookPlayFragment : BaseFragment() {
                 }))
 
 
-        subscriptions!!.add((Observable.merge(db.getActiveBooks(), db.updateObservable()))
+        subscriptions!!.add((Observable.merge(db.activeBooks, db.updateObservable()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter { book -> book.id == bookId }
                 .doOnNext { book -> this@BookPlayFragment.book = book }
