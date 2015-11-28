@@ -82,4 +82,33 @@
         <item name="android:lines">1</item>
     </style>
 
+    <!-- PlaceHolder style for a cold start when no appbar can be shown yet. It mimics the appbar
+    so the subjective start time will be significantly faster -->
+    <style name="PlaceHolder" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowTitleSize">?attr/actionBarSize</item>
+        <item name="android:windowTitleStyle">@style/CustomWindowTitle</item>
+        <item name="android:windowTitleBackgroundStyle">@style/CustomWindowTitleBackground</item>
+        <item name="android:windowNoTitle">false</item>
+
+        <item name="colorPrimary">@color/light_primary</item>
+        <item name="colorPrimaryDark">@color/light_primary_dark</item>
+        <item name="android:navigationBarColor" tools:ignore="NewApi">@color/light_primary_dark
+        </item>
+    </style>
+
+    <style name="CustomWindowTitleBackground">
+        <item name="android:background">@color/light_primary</item>
+    </style>
+
+    <style name="CustomWindowTitle">
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textAppearance">@style/CustomWindowTitleText</item>
+    </style>
+
+    <style name="CustomWindowTitleText" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:layout_marginLeft">16dp</item>
+    </style>
+
 </resources>
