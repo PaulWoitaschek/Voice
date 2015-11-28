@@ -15,6 +15,11 @@ If you like to [contribute](#contrib) or [translate](#trans), that is very appre
 
 # <a name="contrib">Contribution</a>
 
+## Testing
+It's always great to have testers to test new features. We use Google Play Beta Tests so everyone with a google account can join these here:
+[**BETA**](https://play.google.com/apps/testing/de.ph1b.audiobook)
+Please report issues like usual but tell that and which beta you are using ;-)
+
 ## Development
 
 All help is very welcomed! We track all the issues and ideas in a separate [issue](https://github.com/Ph1b/MaterialAudiobookPlayer/issues). If you search for work to do, you can check the list of [approved features](https://github.com/Ph1b/MaterialAudiobookPlayer/issues?q=is%3Aopen+is%3Aissue+label%3A%22feature+approved%22). 
