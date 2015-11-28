@@ -2,6 +2,8 @@ package de.ph1b.audiobook.mediaplayer
 
 import android.content.Context
 import android.media.MediaPlayer
+import android.media.PlaybackParams
+import android.os.Build
 
 import java.io.IOException
 
@@ -10,22 +12,31 @@ import java.io.IOException
  * Simple delegate on the Androids MediaPlayer
  */
 class AndroidMediaPlayer : MediaPlayerInterface {
+
+    private val canUsePlaybackParams = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+    private val mediaPlayer: MediaPlayer
+
+    init {
+        mediaPlayer = MediaPlayer()
+    }
+
     override var currentPosition: Int
         get() = mediaPlayer.currentPosition
         set(value) {
             mediaPlayer.seekTo(value)
         }
 
-    override var playbackSpeed: Float
-        get() = 1f
+    override var playbackSpeed: Float = 1.0f
         set(value) {
-            // ignore as android media-player is not capable of this
+            if (canUsePlaybackParams) {
+                mediaPlayer.playbackParams = PlaybackParams().setSpeed(value)
+            }
+            field = value
         }
 
     override val duration: Int
         get() = mediaPlayer.duration
 
-    private val mediaPlayer = MediaPlayer()
 
     override fun release() {
         mediaPlayer.release()

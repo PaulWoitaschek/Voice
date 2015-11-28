@@ -26,6 +26,9 @@ import retrofit.RxJavaCallAdapterFactory;
 @Module
 public class BaseModule {
 
+    private static final boolean MIN_MARSHMALLOW = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
+    private static final boolean MIN_JELLYBEAN = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
+
     /**
      * Checks if the device can set playback-seed by {@link MediaPlayerInterface#setPlaybackSpeed(float)}
      * Therefore it has to be >= {@link android.os.Build.VERSION_CODES#JELLY_BEAN} and not blacklisted
@@ -34,18 +37,21 @@ public class BaseModule {
      * @return true if the device can set variable playback speed.
      */
     public static boolean canSetSpeed() {
-        boolean greaterJellyBean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
+        return MIN_MARSHMALLOW || canUseSonic();
+    }
+
+    private static boolean canUseSonic() {
         List<String> hwBlacklist = Arrays.asList("mt6572", "mt6575", "mt6582", "mt6589", "mt6592",
                 "mt8125");
-        return greaterJellyBean && !(hwBlacklist.contains(Build.HARDWARE));
+        return MIN_JELLYBEAN && !hwBlacklist.contains(Build.HARDWARE.toLowerCase());
     }
 
     @Provides
     MediaPlayerInterface provideMediaPlayer(Context context) {
-        if (canSetSpeed()) {
-            return new AntennaPlayer(context);
-        } else {
+        if (MIN_MARSHMALLOW || !canUseSonic()) {
             return new AndroidMediaPlayer();
+        } else {
+            return new AntennaPlayer(context);
         }
     }
 
