@@ -232,7 +232,7 @@ class FolderOverviewActivity : BaseActivity() {
         return firstAddedFolder || (!sameFolder && !filesAreSubsets)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         // we don't want our listener be informed.
@@ -242,7 +242,7 @@ class FolderOverviewActivity : BaseActivity() {
 
         backgroundOverlay.visibility = View.INVISIBLE
 
-        if (resultCode == Activity.RESULT_OK && requestCode == PICKER_REQUEST_CODE) {
+        if (resultCode == Activity.RESULT_OK && requestCode == PICKER_REQUEST_CODE && data != null) {
             val mode = FolderChooserActivity.OperationMode.valueOf(data.getStringExtra(FolderChooserActivity.RESULT_OPERATION_MODE))
             when (mode) {
                 FolderChooserActivity.OperationMode.COLLECTION_BOOK -> {
