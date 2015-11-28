@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'kotlin-android'
 
 android {
@@ -9,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 79
-        versionName 'nightly-2015-11-28-2'
+        versionCode 80
+        versionName '2.4.2-beta1'
     }
 
     buildTypes {
@@ -76,7 +75,7 @@ dependencies {
     compile "com.getbase:floatingactionbutton:1.10.1"
 
     // crash reporting
-    compile "ch.acra:acra:4.7.0-RC.2"
+    compile "ch.acra:acra:4.7.0-RC.3"
 
     // common tools
     compile "com.google.guava:guava:18.0"
@@ -108,7 +107,9 @@ dependencies {
     compile "com.squareup.retrofit:converter-gson:$retroFitVersion"
     compile "com.squareup.retrofit:adapter-rxjava:$retroFitVersion"
 
+    // kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
+    // compat music player when no speed can be set
     compile 'com.github.AntennaPod:AntennaPod-AudioPlayer:v1.0.6'
 }
