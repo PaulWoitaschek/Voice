@@ -28,7 +28,6 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.service.ServiceController
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
-import de.ph1b.audiobook.utils.BookVendor
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.functions.Action1
@@ -55,7 +54,6 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
     @Inject internal lateinit var db: BookShelf
     @Inject internal lateinit var bookAdder: BookAdder
     @Inject internal lateinit var mediaPlayerController: MediaPlayerController
-    @Inject internal lateinit var bookVendor: BookVendor
     @Inject internal lateinit var serviceController: ServiceController
 
     private var subscriptions: CompositeSubscription? = null
@@ -264,7 +262,11 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
 
         // sets menu item visible if there is a current book
         val currentPlaying = menu!!.findItem(R.id.action_current)
-        currentPlaying.setVisible(bookVendor.byId(prefs.currentBookId.value) != null)
+        db.getActiveBooks()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .singleOrDefault(null, { it.id == prefs.currentBookId.value })
+                .subscribe { currentPlaying.setVisible(it != null) }
 
         // sets the grid / list toggle icon
         val displayModeItem = menu.findItem(R.id.action_change_layout)
@@ -348,10 +350,13 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
 
     override fun onTitleChanged(newTitle: String, bookId: Long) {
         Timber.i("onTitleChanged with title %s and id %d", newTitle, bookId)
-        var dbBook = bookVendor.byId(bookId)?.copy(name = newTitle)
-        if (dbBook != null) {
-            db.updateBook(dbBook)
-        }
+        db.getActiveBooks()
+                .filter { it.id == bookId } // find book
+                .subscribeOn(Schedulers.io()) // dont block
+                .subscribe {
+                    val updatedBook = it.copy(name = newTitle) // update title
+                    db.updateBook(updatedBook) // update book
+                }
     }
 
     override fun onEditBookFinished(bookId: Long) {
