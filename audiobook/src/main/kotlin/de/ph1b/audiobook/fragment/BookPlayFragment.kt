@@ -11,6 +11,12 @@ import android.text.format.DateUtils
 import android.view.*
 import android.widget.*
 import com.getbase.floatingactionbutton.FloatingActionButton
+import com.jakewharton.rxbinding.view.clicks
+import com.jakewharton.rxbinding.view.longClicks
+import com.jakewharton.rxbinding.widget.RxAdapterView
+import com.jakewharton.rxbinding.widget.RxSeekBar
+import com.jakewharton.rxbinding.widget.SeekBarProgressChangeEvent
+import com.jakewharton.rxbinding.widget.SeekBarStopChangeEvent
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.activity.SettingsActivity
@@ -37,6 +43,7 @@ import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+
 
 /**
  * Base class for book playing interaction.
@@ -95,14 +102,13 @@ class BookPlayFragment : BaseFragment() {
         val rewindButton = view.findViewById(R.id.rewind)
         val previousButton = view.findViewById(R.id.previous)
 
-        playButton.setOnClickListener { serviceController.playPause() }
-        coverFrame.setOnClickListener { serviceController.playPause() }
-        rewindButton.setOnClickListener { serviceController.rewind() }
-        fastForwardButton.setOnClickListener { serviceController.fastForward() }
-        nextButton.setOnClickListener { serviceController.next() }
-        previousButton.setOnClickListener { serviceController.previous() }
-        playedTimeView.setOnClickListener { launchJumpToPositionDialog() }
-
+        Observable.merge(playButton.clicks(), coverFrame.longClicks())
+                .subscribe { serviceController.playPause() }
+        rewindButton.clicks().subscribe { serviceController.rewind() }
+        fastForwardButton.clicks().subscribe { serviceController.fastForward() }
+        nextButton.clicks().subscribe { serviceController.next() }
+        previousButton.clicks().subscribe { serviceController.previous() }
+        playedTimeView.clicks().subscribe { launchJumpToPositionDialog() }
 
         book = bookVendor.byId(bookId)
 
@@ -111,21 +117,20 @@ class BookPlayFragment : BaseFragment() {
 
         //setup buttons
         playButton.setIconDrawable(playPauseDrawable)
-        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                //sets text to adjust while using seekBar
-                playedTimeView.text = formatTime(progress, seekBar.max)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                val progress = seekBar.progress
-                serviceController.changeTime(progress, book!!.currentChapter().file)
-                playedTimeView.text = formatTime(progress, seekBar.max)
-            }
-        })
+        RxSeekBar.changeEvents(seekBar)
+                .subscribe { eventType ->
+                    when (eventType ) {
+                        is  SeekBarProgressChangeEvent -> {
+                            //sets text to adjust while using seekBar
+                            playedTimeView.text = formatTime(eventType.progress(), seekBar.max)
+                        }
+                        is SeekBarStopChangeEvent -> {
+                            val progress = seekBar.progress
+                            serviceController.changeTime(progress, book!!.currentChapter().file)
+                            playedTimeView.text = formatTime(progress, seekBar.max)
+                        }
+                    }
+                }
 
         if (book != null) {
             hostingActivity.supportActionBar.title = book!!.name
@@ -155,9 +160,8 @@ class BookPlayFragment : BaseFragment() {
                 chaptersAsStrings.add(chapterName)
             }
 
-            val adapter = object : ArrayAdapter<String>(context,
-                    R.layout.fragment_book_play_spinner, R.id.spinnerTextItem, chaptersAsStrings) {
-                override fun getDropDownView(position: Int, convertView: View, parent: ViewGroup): View {
+            val adapter = object : ArrayAdapter<String>(context, R.layout.fragment_book_play_spinner, R.id.spinnerTextItem, chaptersAsStrings) {
+                override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
                     val dropDownView = super.getDropDownView(position, convertView, parent)
                     val textView = dropDownView.findViewById(R.id.spinnerTextItem) as TextView
 
@@ -177,17 +181,12 @@ class BookPlayFragment : BaseFragment() {
                 }
             }
             bookSpinner.adapter = adapter
-
-            bookSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                    if (parent.tag != null && (parent.tag as Int) != position) {
-                        Timber.i("spinner: onItemSelected. firing: %d", position)
-                        serviceController.changeTime(0, book!!.chapters[position].file)
-                        parent.tag = position
-                    }
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>) {
+            RxAdapterView.itemSelections(bookSpinner).subscribe {
+                val newPosition = (bookSpinner.tag as Int?) != it
+                if (newPosition) {
+                    Timber.i("spinner: onItemSelected. firing: %d", it)
+                    serviceController.changeTime(0, book!!.chapters[it].file)
+                    bookSpinner.tag = it
                 }
             }
 
@@ -237,9 +236,7 @@ class BookPlayFragment : BaseFragment() {
     }
 
     private fun initializeTimerCountdown() {
-        if (countDownTimer != null) {
-            countDownTimer!!.cancel()
-        }
+        countDownTimer?.cancel()
 
         if (mediaPlayerController.isSleepTimerActive) {
             timerCountdownView.visibility = View.VISIBLE
@@ -361,10 +358,8 @@ class BookPlayFragment : BaseFragment() {
                     val chapter = book.currentChapter()
 
                     val position = chapters.indexOf(chapter)
-                    /*
-                              Setting position as a tag, so we can make sure onItemSelected is only fired when
-                              the user changes the position himself.
-                             */
+                    /* Setting position as a tag, so we can make sure onItemSelected is only fired when
+                     the user changes the position himself.  */
                     bookSpinner.tag = position
                     bookSpinner.setSelection(position, true)
                     val duration = chapter.duration
@@ -394,9 +389,7 @@ class BookPlayFragment : BaseFragment() {
 
         communication.removeBookCommunicationListener(listener)
 
-        if (countDownTimer != null) {
-            countDownTimer!!.cancel()
-        }
+        countDownTimer?.cancel()
     }
 
     private fun formatTime(ms: Int, duration: Int): String {
