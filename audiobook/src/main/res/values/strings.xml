@@ -109,7 +109,7 @@
     <string name="hide_folder_title">Hide folder</string>
     <string name="hide_folder_content">Do you want to hide the folder from music players, so they don\'t recognize your book as music?</string>
     <string name="hide_confirm">Hide</string>
-    <!-- license activit -->
-    <string name="license_activity_title">Dependency Licenses</string>
+    <!-- license activity -->
+    <string name="license_activity_title">Used Licenses</string>
     <string name="licenses">Licenses</string>
 </resources>

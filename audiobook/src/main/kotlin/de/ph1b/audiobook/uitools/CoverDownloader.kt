@@ -122,7 +122,6 @@ constructor(c: Context, private val imageLinkService: ImageLinkService) {
                     }
                 } catch (e: Exception) {
                     Timber.e(e, "Error at retrieving ip address")
-                    e.printStackTrace()
                 }
                 return ""
             }
