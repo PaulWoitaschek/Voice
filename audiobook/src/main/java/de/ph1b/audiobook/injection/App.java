@@ -17,6 +17,7 @@ import dagger.Component;
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.activity.BaseActivity;
 import de.ph1b.audiobook.activity.BookActivity;
+import de.ph1b.audiobook.activity.DependencyLicensesActivity;
 import de.ph1b.audiobook.activity.FolderOverviewActivity;
 import de.ph1b.audiobook.adapter.BookShelfAdapter;
 import de.ph1b.audiobook.adapter.BookmarkAdapter;
@@ -91,6 +92,8 @@ public class App extends Application {
         void inject(CoverReplacement target);
 
         void inject(BaseActivity target);
+
+        void inject(DependencyLicensesActivity target);
 
         void inject(ThemePickerDialogFragment target);
 

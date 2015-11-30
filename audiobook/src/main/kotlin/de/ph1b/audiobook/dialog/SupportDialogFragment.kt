@@ -10,6 +10,7 @@ import android.support.v4.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.activity.DependencyLicensesActivity
 
 
 class SupportDialogFragment : DialogFragment() {
@@ -23,6 +24,7 @@ class SupportDialogFragment : DialogFragment() {
                 -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(TRANSLATION_URL)))
                 2 -> DonationDialogFragment().show(fragmentManager,
                         DonationDialogFragment.TAG)
+                3 -> startActivity(Intent(context, DependencyLicensesActivity::class.java))
                 else -> throw AssertionError("There are just 3 items")
             }
         }

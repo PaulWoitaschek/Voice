@@ -54,6 +54,10 @@
         </activity>
 
         <activity
+            android:name=".activity.DependencyLicensesActivity"
+            android:label="@string/license_activity_title"/>
+
+        <activity
             android:name=".activity.NoExternalStorageActivity"
             android:label="@string/no_external_storage_action_bar_title"/>
 

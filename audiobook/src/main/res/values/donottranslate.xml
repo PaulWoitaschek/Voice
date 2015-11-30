@@ -22,6 +22,7 @@
         <item>@string/pref_support_contribute</item>
         <item>@string/pref_support_translations</item>
         <item>@string/pref_support_donation</item>
+        <item>@string/licenses</item>
     </string-array>
     <string name="fab_transition" translatable="false">FAB_TRANSITION</string>
     <string name="format_bookmarks_n_of" translatable="false">(%1$d / %2$d)</string>
