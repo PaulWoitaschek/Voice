@@ -45,6 +45,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
+
 /**
  * Base class for book playing interaction.
 
@@ -182,8 +183,10 @@ class BookPlayFragment : BaseFragment() {
             }
             bookSpinner.adapter = adapter
             RxAdapterView.itemSelections(bookSpinner).subscribe {
-                val newPosition = (bookSpinner.tag as Int?) != it
-                if (newPosition) {
+                // fire event only when that tag has been set (= this is not the first event) and
+                // this is a new value
+                val realInput = bookSpinner.tag != null && bookSpinner.tag != it
+                if (realInput) {
                     Timber.i("spinner: onItemSelected. firing: %d", it)
                     serviceController.changeTime(0, book!!.chapters[it].file)
                     bookSpinner.tag = it
