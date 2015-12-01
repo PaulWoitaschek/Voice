@@ -114,3 +114,11 @@ dependencies {
     // compat music player when no speed can be set
     compile 'com.github.AntennaPod:AntennaPod-AudioPlayer:v1.0.6'
 }
+buildscript {
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlinVersion"
+    }
+    repositories {
+        jcenter()
+    }
+}
