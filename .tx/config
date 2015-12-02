@@ -1,0 +1,8 @@
+[main]
+host = https://www.transifex.com
+
+[material-audiobook-player.strings]
+file_filter = audiobook/src/main/res/values-<lang>/strings.xml
+source_file = audiobook/src/main/res/values/strings.xml
+source_lang = en
+type = ANDROID
