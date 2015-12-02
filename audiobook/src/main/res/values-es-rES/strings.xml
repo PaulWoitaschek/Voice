@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <!--BookShelf-->
+    <!--BookPlayFragment-->
+    <string name="cover">Portada</string>
+    <string name="play_pause">Tocar / Pausa</string>
+    <string name="action_sleep">sueño acción</string>
+    <string name="rewind">Rebobinar</string>
+    <string name="fast_forward">Avance rápido</string>
+    <string name="previous_track">Pista anterior</string>
+    <string name="next_track">Proxima pista </string>
+    <!--NoExternalStorage-->
+    <string name="no_external_storage">Almacenamiento externo no está disponible. Por favor, asegúrese que esta conectado a su computadora.</string>
+    <string name="no_external_storage_action_bar_title">Almacenamiento externo</string>
+    <!--Dialogs-->
+    <string name="dialog_confirm">Confirmar</string>
+    <string name="dialog_cancel">Cancelar</string>
+    <!--EditBookDialog-->
+    <string name="content_previous_cover">Elejir la portada anterior.</string>
+    <string name="content_next_cover">Elejir la proxima portada.</string>
+    <string name="content_cover">Muenstre a portada para escojer</string>
+    <string name="edit_book_title">Editar libro</string>
+    <!--JumpToPosition-->
+    <string name="action_time_change">Saltar a</string>
+    <!--BookAdding-->
+    <string name="chosen_folder_description">Carpeta elegida:</string>
+    <!--PlaybackSpeed-->
+    <string name="playback_speed">Velocidad de reproducción</string>
+    <!--Bookmarks-->
+    <!--Settings-->
+    <string name="action_settings">Preferencias</string>
+    <string name="pref_resume_on_replug">Reanudar la reproduccion</string>
+    <string name="pref_resume_on_replug_hint">Si usted hizo una pausa por desconnectando el cable, se reanudara cuando conecten el cable.</string>
+    <string name="pref_seek_time">Saltar cantidad</string>
+    <string name="pref_sleep_time">Temporizador para dormir</string>
+    <!--Misc-->
+    <string name="popup_edit">Editar</string>
+    <string name="remove">Borrar</string>
+    <!--hide folder dialog-->
+    <!--license activity-->
+</resources>
