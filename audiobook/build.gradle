@@ -115,7 +115,3 @@ dependencies {
     // compat music player when no speed can be set
     compile 'com.github.AntennaPod:AntennaPod-AudioPlayer:v1.0.6'
 }
-
-kapt {
-    generateStubs = true
-}
