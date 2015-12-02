@@ -120,7 +120,7 @@ data class Book(val id: Long,
 
 
     fun coverFile(): File {
-        val coverFile = File(Environment.getExternalStorageDirectory().absolutePath + File.separator + "Android" + File.separator + "data" + File.separator + App.getComponent().context.packageName,
+        val coverFile = File(Environment.getExternalStorageDirectory().absolutePath + File.separator + "Android" + File.separator + "data" + File.separator + App.component().context.packageName,
                 id.toString() + ".jpg")
         if (!coverFile.parentFile.exists()) {
             //noinspection ResultOfMethodCallIgnored

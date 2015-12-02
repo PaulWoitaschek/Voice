@@ -55,7 +55,7 @@ class BookmarkDialogFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        App.getComponent().inject(this)
+        App.component().inject(this)
 
         val inflater = activity.layoutInflater
         val customView = inflater.inflate(R.layout.dialog_bookmark, null)

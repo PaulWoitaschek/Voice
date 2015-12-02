@@ -56,7 +56,7 @@ class BookActivity : BaseActivity(), BookShelfFragment.BookSelectionCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book)
-        App.getComponent().inject(this)
+        App.component().inject(this)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             val anyFolderSet = prefs.collectionFolders.size + prefs.singleBookFolders.size > 0

@@ -125,7 +125,7 @@ class FolderOverviewActivity : BaseActivity() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        App.getComponent().inject(this)
+        App.component().inject(this)
 
         setContentView(R.layout.activity_folder_overview)
         val toolbar = findViewById(R.id.toolbar) as Toolbar

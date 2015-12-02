@@ -52,7 +52,7 @@ class WidgetUpdateService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        App.getComponent().inject(this)
+        App.component().inject(this)
 
         // update widget if current book, current book id or playState have changed.
         subscriptions.add(

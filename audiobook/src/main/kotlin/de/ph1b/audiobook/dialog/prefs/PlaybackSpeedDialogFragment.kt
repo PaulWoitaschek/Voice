@@ -41,7 +41,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        App.getComponent().inject(this)
+        App.component().inject(this)
 
         // init views
         val inflater = LayoutInflater.from(context)

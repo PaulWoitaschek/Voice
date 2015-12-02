@@ -20,7 +20,7 @@ abstract class BaseActivity : AppCompatActivity() {
     @Inject internal lateinit var prefsManager: PrefsManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        App.getComponent().inject(this)
+        App.component().inject(this)
         setTheme(prefsManager.theme.themeId)
         super.onCreate(savedInstanceState)
     }

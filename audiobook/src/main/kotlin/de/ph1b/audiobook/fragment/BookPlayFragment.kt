@@ -228,7 +228,7 @@ class BookPlayFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        App.getComponent().inject(this)
+        App.component().inject(this)
 
         setHasOptionsMenu(true)
     }

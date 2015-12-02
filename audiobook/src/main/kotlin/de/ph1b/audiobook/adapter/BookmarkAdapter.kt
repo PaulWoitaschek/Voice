@@ -30,7 +30,7 @@ class BookmarkAdapter(bookmarks: List<Bookmark>, chapters: List<Chapter>, privat
 
 
     init {
-        App.getComponent().inject(this)
+        App.component().inject(this)
         this.bookmarks = ArrayList(bookmarks)
         this.chapters = ArrayList(chapters)
     }

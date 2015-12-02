@@ -98,7 +98,7 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
         super.onCreate(savedInstanceState)
         Timber.i("onCreate")
 
-        App.getComponent().inject(this)
+        App.component().inject(this)
 
         setHasOptionsMenu(true)
 

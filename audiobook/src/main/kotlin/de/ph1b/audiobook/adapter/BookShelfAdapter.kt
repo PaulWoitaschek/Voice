@@ -55,7 +55,7 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
 
     init {
         Timber.i("A new adapter was created.");
-        App.getComponent().inject(this)
+        App.component().inject(this)
         setHasStableIds(true)
     }
 

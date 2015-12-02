@@ -27,7 +27,7 @@ class DependencyLicensesActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        App.getComponent().inject(this)
+        App.component().inject(this)
 
         setContentView(R.layout.activity_dependency_licenses)
 

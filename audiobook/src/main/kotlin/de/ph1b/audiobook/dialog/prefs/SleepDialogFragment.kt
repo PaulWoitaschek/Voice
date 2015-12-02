@@ -35,7 +35,7 @@ class SleepDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        App.getComponent().inject(this)
+        App.component().inject(this)
 
         // init views
         val view = LayoutInflater.from(context).inflate(R.layout.dialog_sleep_timer, null)

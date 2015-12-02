@@ -22,7 +22,7 @@ class CoverReplacement(private val text: String, c: Context) : Drawable() {
     @Inject internal lateinit var prefsManager: PrefsManager
 
     init {
-        App.getComponent().inject(this)
+        App.component().inject(this)
 
         Preconditions.checkArgument(text.isNotEmpty())
 

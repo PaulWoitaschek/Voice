@@ -109,7 +109,7 @@ class BookReaderService : Service(), AudioManager.OnAudioFocusChangeListener {
     @Volatile private var lastFileForMetaData = File("")
 
     init {
-        App.getComponent().inject(this)
+        App.component().inject(this)
     }
 
     override fun onCreate() {

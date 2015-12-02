@@ -32,7 +32,7 @@ public class NaturalOrderComparatorTest extends TestCase {
         );
 
         List<File> sorted = new ArrayList<>(desiredOrder);
-        Collections.sort(sorted, NaturalOrderComparator.FILE_COMPARATOR);
+        Collections.sort(sorted, NaturalOrderComparator.INSTANCE.getFILE_COMPARATOR());
         assertEquals(desiredOrder, sorted);
     }
 
@@ -57,7 +57,7 @@ public class NaturalOrderComparatorTest extends TestCase {
         );
 
         List<String> sorted = new ArrayList<>(desiredOrder);
-        Collections.sort(sorted, NaturalOrderComparator.STRING_COMPARATOR);
+        Collections.sort(sorted, NaturalOrderComparator.INSTANCE.getSTRING_COMPARATOR());
         assertEquals(desiredOrder, sorted);
     }
 }

@@ -51,7 +51,7 @@ class EditCoverDialogFragment : DialogFragment() {
     private var isOnline: Boolean = false
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        App.getComponent().inject(this)
+        App.component().inject(this)
 
         // retrieve views
         val customView = activity.layoutInflater.inflate(R.layout.dialog_cover_edit, null)

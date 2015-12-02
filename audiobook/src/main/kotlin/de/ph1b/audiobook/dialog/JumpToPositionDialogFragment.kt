@@ -22,7 +22,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
     @Inject internal lateinit var serviceController: ServiceController
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        App.getComponent().inject(this)
+        App.component().inject(this)
 
         // find views
         val v = activity.layoutInflater.inflate(R.layout.dialog_time_picker, null)

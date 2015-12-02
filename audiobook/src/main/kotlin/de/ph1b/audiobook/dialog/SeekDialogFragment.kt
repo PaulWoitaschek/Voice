@@ -33,7 +33,7 @@ class SeekDialogFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        App.getComponent().inject(this)
+        App.component().inject(this)
 
         // find views
         val customView = LayoutInflater.from(context).inflate(R.layout.dialog_amount_chooser, null)
