@@ -3,6 +3,7 @@ package de.ph1b.audiobook.mediaplayer
 import android.content.Context
 import org.antennapod.audio.MediaPlayer
 import rx.Observable
+import timber.log.Timber
 
 /**
  * Simple delegate on AntennaPods MediaPlayer
@@ -30,8 +31,18 @@ class AntennaPlayer(private val context: Context) : MediaPlayerInterface {
     override val duration: Int
         get() = mediaPlayer.duration
 
-    override fun setOnErrorListener(onErrorListener: android.media.MediaPlayer.OnErrorListener) {
-        mediaPlayer.setOnErrorListener { mediaPlayer, what, extra -> onErrorListener.onError(null, what, extra) }
+    override val errorObservable = Observable.defer<Unit> {
+        Observable.create { subscriber ->
+            mediaPlayer.setOnErrorListener { mediaPlayer, what, extra ->
+                Timber.e("onError with what=$what and extra=$extra")
+                if (subscriber.isUnsubscribed) {
+                    false
+                } else {
+                    subscriber.onNext(Unit)
+                    true
+                }
+            }
+        }
     }
 
     val mediaPlayer = object : MediaPlayer(context, false) {

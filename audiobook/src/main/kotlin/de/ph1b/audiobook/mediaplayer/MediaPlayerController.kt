@@ -2,7 +2,6 @@ package de.ph1b.audiobook.mediaplayer
 
 import android.content.Context
 import android.content.Intent
-import android.media.MediaPlayer
 import android.os.PowerManager
 import android.support.v4.media.session.PlaybackStateCompat
 import de.ph1b.audiobook.activity.BookActivity
@@ -28,7 +27,7 @@ class MediaPlayerController
 @Inject
 constructor(private val c: Context, private val prefs: PrefsManager,
             private val communication: Communication, private val db: BookShelf,
-            private val player: MediaPlayerInterface) : MediaPlayer.OnErrorListener {
+            private val player: MediaPlayerInterface) {
 
     private val lock = ReentrantLock()
     private val executor = Executors.newScheduledThreadPool(2)
@@ -100,7 +99,24 @@ constructor(private val c: Context, private val prefs: PrefsManager,
                                 }
                             }
                         }
-                player.setOnErrorListener(this)
+
+                player.errorObservable
+                        .subscribe {
+                            // inform user on errors
+                            lock.withLock {
+                                Timber.e("onError")
+                                if (book != null) {
+                                    c.startActivity(BookActivity.malformedFileIntent(c, book!!.currentFile))
+                                } else {
+                                    val intent = Intent(c, BookShelfFragment::class.java)
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    c.startActivity(intent)
+                                }
+
+                                state = State.DEAD
+                            }
+                        }
+
                 player.setWakeMode(c, PowerManager.PARTIAL_WAKE_LOCK or PowerManager.ON_AFTER_RELEASE)
 
                 try {
@@ -321,23 +337,6 @@ constructor(private val c: Context, private val prefs: PrefsManager,
                 }
             }
         }
-    }
-
-    override fun onError(mp: MediaPlayer, what: Int, extra: Int): Boolean {
-        lock.withLock {
-            Timber.e("onError")
-            if (book != null) {
-                c.startActivity(BookActivity.malformedFileIntent(c, book!!.currentFile))
-            } else {
-                val intent = Intent(c, BookShelfFragment::class.java)
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                c.startActivity(intent)
-            }
-
-            state = State.DEAD
-        }
-
-        return false
     }
 
 

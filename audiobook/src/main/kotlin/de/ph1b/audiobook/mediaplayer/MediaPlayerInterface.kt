@@ -2,9 +2,7 @@ package de.ph1b.audiobook.mediaplayer
 
 
 import android.content.Context
-import android.media.MediaPlayer
 import rx.Observable
-
 import java.io.IOException
 
 
@@ -31,7 +29,7 @@ interface MediaPlayerInterface {
     @Throws(IOException::class)
     fun setDataSource(source: String)
 
-    fun setOnErrorListener(onErrorListener: MediaPlayer.OnErrorListener)
+    val errorObservable: Observable<Unit>
 
     val completionObservable : Observable<Unit>
 

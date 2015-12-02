@@ -64,8 +64,17 @@ class AndroidMediaPlayer : MediaPlayerInterface {
         mediaPlayer.setDataSource(source)
     }
 
-    override fun setOnErrorListener(onErrorListener: MediaPlayer.OnErrorListener) {
-        mediaPlayer.setOnErrorListener(onErrorListener)
+    override val errorObservable = Observable.defer<Unit> {
+        Observable.create { subscriber ->
+            mediaPlayer.setOnErrorListener { mediaPlayer, i, j ->
+                if (subscriber.isUnsubscribed) {
+                    false
+                } else {
+                    subscriber.onNext(Unit)
+                    true
+                }
+            }
+        }
     }
 
     override val completionObservable: Observable<Unit> = Observable.defer {
