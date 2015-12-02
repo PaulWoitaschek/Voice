@@ -21,3 +21,8 @@ allprojects {
         maven { url "https://jitpack.io" }
     }
 }
+
+task updateTranslations(type: Exec) {
+    executable 'tx'
+    args "pull", "--minimum-perc=5", "--all"
+}
