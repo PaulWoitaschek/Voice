@@ -37,7 +37,7 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
-        main.java.srcDirs += 'src/androidTest/java'
+        main.java.srcDirs += 'src/androidTest/kotlin'
     }
 
     compileOptions {
@@ -51,6 +51,10 @@ android {
                     variant.name + "-" + variant.applicationId + ".apk")
         }
     }
+}
+
+kapt {
+    generateStubs = true
 }
 
 dependencies {
@@ -114,4 +118,13 @@ dependencies {
 
     // compat music player when no speed can be set
     compile 'com.github.AntennaPod:AntennaPod-AudioPlayer:v1.0.6'
+}
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        //It's required to place this dependency in Android module build.gradle directly.
+        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlinVersion"
+    }
 }

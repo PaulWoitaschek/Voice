@@ -107,7 +107,7 @@ class App : Application() {
 
     companion object {
 
-        private lateinit var internalComponent: ApplicationComponent
+        lateinit var internalComponent: ApplicationComponent
         fun component(): ApplicationComponent = internalComponent
         private var refWatcher: RefWatcher? = null
 
