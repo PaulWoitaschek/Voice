@@ -45,7 +45,7 @@ class BaseModule {
         private val MIN_JELLYBEAN = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
 
         /**
-         * Checks if the device can set playback-seed by [MediaPlayerInterface.setPlaybackSpeed]
+         * Checks if the device can set playback-seed by [MediaPlayerInterface.playbackSpeed]
          * Therefore it has to be >= [android.os.Build.VERSION_CODES.JELLY_BEAN] and not blacklisted
          * due to a bug.
 

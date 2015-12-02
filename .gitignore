@@ -3,7 +3,6 @@
 captures
 .idea/workspace.xml
 .idea/libraries/
-*.mp3
 audiobook/build
 build
 .gradle/
