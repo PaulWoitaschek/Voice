@@ -4,12 +4,8 @@ import android.os.Environment
 import android.test.AndroidTestCase
 import android.test.suitebuilder.annotation.MediumTest
 import android.test.suitebuilder.annotation.SmallTest
-import com.google.common.collect.ImmutableList
-import com.google.common.collect.Lists
 import com.google.common.io.ByteStreams
 import de.ph1b.audiobook.model.Book
-import de.ph1b.audiobook.model.Bookmark
-import de.ph1b.audiobook.model.Chapter
 import de.ph1b.audiobook.testing.MockProvider
 import java.io.File
 import java.io.FileOutputStream
@@ -33,7 +29,8 @@ class MediaPlayerControllerTest : AndroidTestCase () {
     override fun setUp() {
         super.setUp()
 
-        MockProvider(context).mockAppComponent.inject(this)
+        val provider = MockProvider(context)
+        provider.newMockComponent().inject(this)
 
         val externalStorage = Environment.getExternalStorageDirectory()
 
@@ -43,29 +40,7 @@ class MediaPlayerControllerTest : AndroidTestCase () {
         ByteStreams.copy(context.assets.open("3rdState.mp3"), FileOutputStream(file1))
         ByteStreams.copy(context.assets.open("Crashed.mp3"), FileOutputStream(file2))
 
-        val id = 1L
-        val bookmarks = ArrayList<Bookmark>()
-        val type = Book.Type.SINGLE_FILE
-        val useCoverReplacement = false
-        val author = "TestAuthor"
-        val currentFile = file1
-        val time = 0
-        val name = "TestBook"
-        val chapter1 = Chapter(file1, file1.name, 100000)
-        val chapter2 = Chapter(file2, file2.name, 200000)
-        val chapters = Lists.newArrayList(chapter1, chapter2)
-        val playbackSpeed = 1F
-        val root = Environment.getExternalStorageDirectory().path
-        book = Book(id,
-                ImmutableList.copyOf(bookmarks),
-                type, useCoverReplacement,
-                author,
-                currentFile,
-                time,
-                name,
-                ImmutableList.copyOf(chapters),
-                playbackSpeed,
-                root)
+        book = provider.dummyBook(file1, file2)
 
         mediaPlayerController.init(book)
     }
