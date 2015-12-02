@@ -28,7 +28,7 @@ class MediaPlayerController
 @Inject
 constructor(private val c: Context, private val prefs: PrefsManager,
             private val communication: Communication, private val db: BookShelf,
-            private val player: MediaPlayerInterface) : MediaPlayer.OnErrorListener, MediaPlayerInterface.OnCompletionListener {
+            private val player: MediaPlayerInterface) : MediaPlayer.OnErrorListener {
 
     private val lock = ReentrantLock()
     private val executor = Executors.newScheduledThreadPool(2)
@@ -81,7 +81,25 @@ constructor(private val c: Context, private val prefs: PrefsManager,
             if (book != null) {
                 player.reset()
 
-                player.setOnCompletionListener(this)
+                player.completionObservable
+                        .subscribe {
+                            // After the current song has ended, prepare the next one if there is one. Else stop the
+                            // resources.
+                            lock.withLock {
+                                if (book != null) {
+                                    Timber.v("onCompletion called, nextChapter=%s", book!!.nextChapter())
+                                    if (book!!.nextChapter() != null) {
+                                        next()
+                                    } else {
+                                        Timber.v("Reached last track. Stopping player")
+                                        stopUpdating()
+                                        setPlayState(PlayState.STOPPED)
+
+                                        state = State.PLAYBACK_COMPLETED
+                                    }
+                                }
+                            }
+                        }
                 player.setOnErrorListener(this)
                 player.setWakeMode(c, PowerManager.PARTIAL_WAKE_LOCK or PowerManager.ON_AFTER_RELEASE)
 
@@ -322,26 +340,6 @@ constructor(private val c: Context, private val prefs: PrefsManager,
         return false
     }
 
-    /**
-     * After the current song has ended, prepare the next one if there is one. Else stop the
-     * resources.
-     */
-    override fun onCompletion() {
-        lock.withLock {
-            if (book != null) {
-                Timber.v("onCompletion called, nextChapter=%s", book!!.nextChapter())
-                if (book!!.nextChapter() != null) {
-                    next()
-                } else {
-                    Timber.v("Reached last track. Stopping player")
-                    stopUpdating()
-                    setPlayState(PlayState.STOPPED)
-
-                    state = State.PLAYBACK_COMPLETED
-                }
-            }
-        }
-    }
 
     /**
      * Plays the next chapter. If there is none, don't do anything.

@@ -2,6 +2,7 @@ package de.ph1b.audiobook.mediaplayer
 
 import android.content.Context
 import org.antennapod.audio.MediaPlayer
+import rx.Observable
 
 /**
  * Simple delegate on AntennaPods MediaPlayer
@@ -15,7 +16,6 @@ class AntennaPlayer(private val context: Context) : MediaPlayerInterface {
         set(value) {
             mediaPlayer.seekTo(value)
         }
-
 
     override var playbackSpeed: Float
         get() = mediaPlayer.currentSpeedMultiplier
@@ -64,7 +64,13 @@ class AntennaPlayer(private val context: Context) : MediaPlayerInterface {
         mediaPlayer.setDataSource(source)
     }
 
-    override fun setOnCompletionListener(onCompletionListener: MediaPlayerInterface.OnCompletionListener) {
-        mediaPlayer.setOnCompletionListener({ onCompletionListener.onCompletion() })
+    override val completionObservable = Observable.defer<Unit> {
+        Observable.create { subscriber ->
+            mediaPlayer.setOnCompletionListener {
+                if (!subscriber.isUnsubscribed) {
+                    subscriber.onNext(Unit)
+                }
+            }
+        }
     }
 }

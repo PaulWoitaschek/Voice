@@ -3,6 +3,7 @@ package de.ph1b.audiobook.mediaplayer
 
 import android.content.Context
 import android.media.MediaPlayer
+import rx.Observable
 
 import java.io.IOException
 
@@ -32,13 +33,9 @@ interface MediaPlayerInterface {
 
     fun setOnErrorListener(onErrorListener: MediaPlayer.OnErrorListener)
 
-    fun setOnCompletionListener(onCompletionListener: OnCompletionListener)
+    val completionObservable : Observable<Unit>
 
     fun setWakeMode(context: Context, mode: Int)
 
     val duration: Int
-
-    interface OnCompletionListener {
-        fun onCompletion()
-    }
 }

@@ -4,7 +4,7 @@ import android.content.Context
 import android.media.MediaPlayer
 import android.media.PlaybackParams
 import android.os.Build
-
+import rx.Observable
 import java.io.IOException
 
 
@@ -68,8 +68,14 @@ class AndroidMediaPlayer : MediaPlayerInterface {
         mediaPlayer.setOnErrorListener(onErrorListener)
     }
 
-    override fun setOnCompletionListener(onCompletionListener: MediaPlayerInterface.OnCompletionListener) {
-        mediaPlayer.setOnCompletionListener { mp -> onCompletionListener.onCompletion() }
+    override val completionObservable: Observable<Unit> = Observable.defer {
+        Observable.create<Unit> { subscriber ->
+            mediaPlayer.setOnCompletionListener {
+                if (!subscriber.isUnsubscribed) {
+                    subscriber.onNext(Unit)
+                }
+            }
+        }
     }
 
     override fun setWakeMode(context: Context, mode: Int) {
