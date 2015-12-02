@@ -53,10 +53,6 @@ android {
     }
 }
 
-kapt {
-    generateStubs = true
-}
-
 dependencies {
     // support library
     def supportVersion = "23.1.1"
@@ -118,13 +114,4 @@ dependencies {
 
     // compat music player when no speed can be set
     compile 'com.github.AntennaPod:AntennaPod-AudioPlayer:v1.0.6'
-}
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        //It's required to place this dependency in Android module build.gradle directly.
-        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlinVersion"
-    }
 }
