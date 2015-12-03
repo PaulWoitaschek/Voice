@@ -64,7 +64,8 @@ class BookmarkDialogFragment : DialogFragment() {
         val bookId = arguments.getLong(BOOK_ID)
         book = bookVendor.byId(bookId)!!
 
-        var adapter: BookmarkAdapter
+        // init later. Cyclic depeFixedFixndency here between adapter and listener.
+        var adapter: BookmarkAdapter? = null
         val listener = object : BookmarkAdapter.OnOptionsMenuClickedListener {
             override fun onOptionsMenuClicked(bookmark: Bookmark, v: View) {
                 val popup = PopupMenu(activity, v)
@@ -79,7 +80,7 @@ class BookmarkDialogFragment : DialogFragment() {
                                     .input(getString(R.string.bookmark_edit_hint), bookmark.title, false) {
                                         materialDialog, charSequence ->
                                         val newBookmark = Bookmark(bookmark.mediaFile, charSequence.toString(), bookmark.time)
-                                        adapter.bookmarkUpdated(bookmark, newBookmark)
+                                        adapter!!.bookmarkUpdated(bookmark, newBookmark)
 
                                         // replaces the bookmark in the book
                                         val mutableBookmarks = ArrayList(book.bookmarks)
@@ -99,7 +100,7 @@ class BookmarkDialogFragment : DialogFragment() {
                                         val mutableBookmarks = ArrayList(book.bookmarks)
                                         mutableBookmarks.remove(bookmark)
                                         book = book.copy(bookmarks = ImmutableList.copyOf(mutableBookmarks))
-                                        adapter.removeItem(bookmark)
+                                        adapter!!.removeItem(bookmark)
                                         db.updateBook(book)
                                     }.show()
                             return@setOnMenuItemClickListener true

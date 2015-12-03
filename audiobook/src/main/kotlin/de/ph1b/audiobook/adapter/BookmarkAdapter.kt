@@ -94,7 +94,7 @@ class BookmarkAdapter(bookmarks: List<Bookmark>, chapters: List<Chapter>, privat
         fun onBookmarkClicked(bookmark: Bookmark)
     }
 
-    internal inner class ViewHolder(itemView: View, listener: OnOptionsMenuClickedListener) : RecyclerView.ViewHolder(itemView) {
+    public inner class ViewHolder(itemView: View, listener: OnOptionsMenuClickedListener) : RecyclerView.ViewHolder(itemView) {
 
         private val imageButton: ImageButton
         internal val title: TextView

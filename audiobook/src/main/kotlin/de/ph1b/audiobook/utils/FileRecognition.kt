@@ -12,25 +12,7 @@ import java.util.*
  */
 object FileRecognition {
 
-    private val AUDIO_TYPES: ArrayList<String> ;
-
-    val FOLDER_AND_MUSIC_FILTER = FileFilter {
-        for (s in AUDIO_TYPES) {
-            if (it.name.toLowerCase().endsWith(s)) {
-                return@FileFilter true
-            }
-        }
-        it.isDirectory
-    }
-    private val IMAGE_TYPES = Arrays.asList(".jpg", ".jpeg", ".png", ".bmp")
-    val FOLDER_AND_IMAGES_FILTER = FileFilter {
-        for (s in IMAGE_TYPES) {
-            if (it.absolutePath.toLowerCase().endsWith(s)) {
-                return@FileFilter true
-            }
-        }
-        it.isDirectory
-    }
+    private val AUDIO_TYPES: ArrayList<String>;
 
     init {
         AUDIO_TYPES = ArrayList<String>(30)
@@ -66,5 +48,23 @@ object FileRecognition {
         AUDIO_TYPES.add(".wma")
 
         AUDIO_TYPES.add(".xmf")
+    }
+
+    val FOLDER_AND_MUSIC_FILTER = FileFilter {
+        for (s in AUDIO_TYPES) {
+            if (it.name.toLowerCase().endsWith(s)) {
+                return@FileFilter true
+            }
+        }
+        it.isDirectory
+    }
+    private val IMAGE_TYPES = Arrays.asList(".jpg", ".jpeg", ".png", ".bmp")
+    val FOLDER_AND_IMAGES_FILTER = FileFilter {
+        for (s in IMAGE_TYPES) {
+            if (it.absolutePath.toLowerCase().endsWith(s)) {
+                return@FileFilter true
+            }
+        }
+        it.isDirectory
     }
 }
