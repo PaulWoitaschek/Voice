@@ -1,9 +1,12 @@
 package de.ph1b.audiobook.uitools;
 
+import android.support.annotation.Nullable;
+
 import com.google.common.base.MoreObjects;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -13,19 +16,22 @@ import java.util.List;
  */
 final class ImageLink {
 
+    @Nullable
     @SerializedName("responseData")
-    private final ResponseData responseData;
-
-    public ImageLink(ResponseData responseData) {
-        this.responseData = responseData;
-    }
+    public ResponseData responseData;
 
     public List<String> urls() {
-        List<String> urls = new ArrayList<>(responseData.results.size());
-        for (ResponseData.Result r : responseData.results) {
-            urls.add(r.url);
+        if (responseData == null || responseData.results == null) {
+            return Collections.emptyList();
+        } else {
+            List<String> urls = new ArrayList<>(responseData.results.size());
+            for (ResponseData.Result r : responseData.results) {
+                if (r != null) {
+                    urls.add(r.url);
+                }
+            }
+            return urls;
         }
-        return urls;
     }
 
     @Override
@@ -36,21 +42,16 @@ final class ImageLink {
     }
 
     public static final class ResponseData {
+
+        @Nullable
         @SerializedName("results")
-        private final List<ResponseData.Result> results;
-
-        public ResponseData(List<ResponseData.Result> results) {
-            this.results = results;
-        }
-
+        public List<ResponseData.Result> results;
 
         public static final class Result {
-            @SerializedName("url")
-            private final String url;
 
-            public Result(String url) {
-                this.url = url;
-            }
+            @Nullable
+            @SerializedName("url")
+            public String url;
         }
     }
 }
