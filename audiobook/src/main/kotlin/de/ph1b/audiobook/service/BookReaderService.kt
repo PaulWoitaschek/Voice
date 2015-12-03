@@ -28,6 +28,7 @@ import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookShelf
 import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.receiver.HeadsetPlugReceiver
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.utils.BookVendor
@@ -74,6 +75,7 @@ class BookReaderService : Service(), AudioManager.OnAudioFocusChangeListener {
     @Inject internal lateinit var bookVendor: BookVendor
     @Inject internal lateinit var telephonyManager: TelephonyManager
     @Inject internal lateinit var imageHelper: ImageHelper;
+    @Inject internal lateinit var headsetPlugReceiver: HeadsetPlugReceiver
     @Volatile private var pauseBecauseLossTransient = false
     @Volatile private var pauseBecauseHeadset = false
     private val audioBecomingNoisyReceiver = object : BroadcastReceiver() {
@@ -81,24 +83,6 @@ class BookReaderService : Service(), AudioManager.OnAudioFocusChangeListener {
             if (controller.playState.value === MediaPlayerController.PlayState.PLAYING) {
                 pauseBecauseHeadset = true
                 controller.pause(true)
-            }
-        }
-    }
-    private val headsetPlugReceiver = object : BroadcastReceiver() {
-        private val PLUGGED = 1
-        private val UNPLUGGED = 0
-
-        override fun onReceive(context: Context, intent: Intent) {
-            val action = intent.action
-            if (action != null && action == Intent.ACTION_HEADSET_PLUG) {
-                if (intent.getIntExtra("state", UNPLUGGED) == PLUGGED) {
-                    if (pauseBecauseHeadset) {
-                        if (prefs.resumeOnReplug()) {
-                            controller.play()
-                        }
-                        pauseBecauseHeadset = false
-                    }
-                }
             }
         }
     }
@@ -132,7 +116,7 @@ class BookReaderService : Service(), AudioManager.OnAudioFocusChangeListener {
 
         registerReceiver(audioBecomingNoisyReceiver, IntentFilter(
                 AudioManager.ACTION_AUDIO_BECOMING_NOISY))
-        registerReceiver(headsetPlugReceiver, IntentFilter(Intent.ACTION_HEADSET_PLUG))
+        registerReceiver(headsetPlugReceiver.broadcastReceiver, IntentFilter(Intent.ACTION_HEADSET_PLUG))
 
         controller.setPlayState(MediaPlayerController.PlayState.STOPPED)
 
@@ -142,52 +126,71 @@ class BookReaderService : Service(), AudioManager.OnAudioFocusChangeListener {
             reInitController(book)
         }
 
-        subscriptions.add(prefs.currentBookId.map<Book>(Func1<Long, Book> { bookVendor.byId(it) })
-                .subscribe {
+        subscriptions.apply {
+            // re-init controller when there is a new book set as the current book
+            add(prefs.currentBookId.map<Book>(Func1<Long, Book> { bookVendor.byId(it) })
+                    .subscribe {
+                        val controllerBook = controller.book
+                        if (it != null && (controllerBook == null || controllerBook.id != it.id)) {
+                            reInitController(it)
+                        }
+                    })
+
+            // notify player about changes in the current book
+            add(db.updateObservable()
+                    .filter { it.id == prefs.currentBookId.value }
+                    .subscribe {
+                        controller.updateBook(it)
+                        notifyChange(ChangeType.METADATA)
+                    })
+
+            // handle changes on the play state
+            add(controller.playState.subscribe {
+                Timber.d("onPlayStateChanged:%s", it)
+                executor.execute {
+                    Timber.d("onPlayStateChanged executed:%s", it)
                     val controllerBook = controller.book
-                    if (it != null && (controllerBook == null || controllerBook.id != it.id)) {
-                        reInitController(it)
+                    if (controllerBook != null) {
+                        when (it!!) {
+                            MediaPlayerController.PlayState.PLAYING -> {
+                                audioManager.requestAudioFocus(this@BookReaderService, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
+
+                                mediaSession.isActive = true
+
+                                startForeground(NOTIFICATION_ID, getNotification(controllerBook))
+                            }
+                            MediaPlayerController.PlayState.PAUSED -> {
+                                stopForeground(false)
+                                notificationManager.notify(NOTIFICATION_ID, getNotification(controllerBook))
+                            }
+                            MediaPlayerController.PlayState.STOPPED -> {
+                                mediaSession.isActive = false
+
+                                audioManager.abandonAudioFocus(this@BookReaderService)
+                                notificationManager.cancel(NOTIFICATION_ID)
+                                stopForeground(true)
+                            }
+                        }
+
+                        notifyChange(ChangeType.PLAY_STATE)
                     }
-                })
-
-        subscriptions.add(db.updateObservable()
-                .filter { it.id == prefs.currentBookId.value }
-                .subscribe {
-                    controller.updateBook(it)
-                    notifyChange(ChangeType.METADATA)
-                })
-
-        subscriptions.add(controller.playState.subscribe {
-            Timber.d("onPlayStateChanged:%s", it)
-            executor.execute {
-                Timber.d("onPlayStateChanged executed:%s", it)
-                val controllerBook = controller.book
-                if (controllerBook != null) {
-                    when (it!!) {
-                        MediaPlayerController.PlayState.PLAYING -> {
-                            audioManager.requestAudioFocus(this@BookReaderService, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
-
-                            mediaSession.isActive = true
-
-                            startForeground(NOTIFICATION_ID, getNotification(controllerBook))
-                        }
-                        MediaPlayerController.PlayState.PAUSED -> {
-                            stopForeground(false)
-                            notificationManager.notify(NOTIFICATION_ID, getNotification(controllerBook))
-                        }
-                        MediaPlayerController.PlayState.STOPPED -> {
-                            mediaSession.isActive = false
-
-                            audioManager.abandonAudioFocus(this@BookReaderService)
-                            notificationManager.cancel(NOTIFICATION_ID)
-                            stopForeground(true)
-                        }
-                    }
-
-                    notifyChange(ChangeType.PLAY_STATE)
                 }
-            }
-        })
+            })
+
+            // resume playback when headset is reconnected. (if settings are set)
+            add(headsetPlugReceiver.observable()
+                    .subscribe { headsetState ->
+                        if (headsetState == HeadsetPlugReceiver.HeadsetState.PLUGGED) {
+                            if (pauseBecauseHeadset) {
+                                if (prefs.resumeOnReplug()) {
+                                    controller.play()
+                                }
+                                pauseBecauseHeadset = false
+                            }
+                        }
+                    }
+            )
+        }
     }
 
     private fun handleKeyCode(keyCode: Int): Boolean {
@@ -254,7 +257,7 @@ class BookReaderService : Service(), AudioManager.OnAudioFocusChangeListener {
 
         try {
             unregisterReceiver(audioBecomingNoisyReceiver)
-            unregisterReceiver(headsetPlugReceiver)
+            unregisterReceiver(headsetPlugReceiver.broadcastReceiver)
         } catch (ignored: IllegalArgumentException) {
         }
 

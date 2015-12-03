@@ -34,6 +34,7 @@ import javax.inject.Inject
  * @author Paul Woitaschek
  */
 class BookmarkDialogFragment : DialogFragment() {
+
     private lateinit var bookmarkTitle: EditText;
     @Inject lateinit internal var prefs: PrefsManager
     @Inject lateinit internal var db: BookShelf
@@ -64,7 +65,7 @@ class BookmarkDialogFragment : DialogFragment() {
         val bookId = arguments.getLong(BOOK_ID)
         book = bookVendor.byId(bookId)!!
 
-        // init later. Cyclic depeFixedFixndency here between adapter and listener.
+        // init later. Cyclic dependency here between adapter and listener.
         var adapter: BookmarkAdapter? = null
         val listener = object : BookmarkAdapter.OnOptionsMenuClickedListener {
             override fun onOptionsMenuClicked(bookmark: Bookmark, v: View) {
