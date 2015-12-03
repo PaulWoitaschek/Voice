@@ -1,10 +1,12 @@
-import android.test.suitebuilder.annotation.MediumTest;
-
 import com.google.common.collect.Lists;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,27 +18,37 @@ import de.ph1b.audiobook.model.NaturalOrderComparator;
  *
  * @author Paul Woitaschek
  */
-public class NaturalOrderComparatorTest extends TestCase {
+public class NaturalOrderComparatorTest {
 
-    @MediumTest
-    public void testFileSpecific() {
+    @Rule
+    public final TemporaryFolder testFolder = new TemporaryFolder();
+
+    @Test
+    public void testWhatEver() throws IOException {
+        testFolder.newFolder("folder", "subfolder", "subsubfolder");
+        testFolder.newFolder("storage", "emulated", "0");
+        testFolder.newFolder("xFolder");
+
+        File alarmsFolder = testFolder.newFolder("storage", "emulated", "0", "Alarms");
         List<File> desiredOrder = Lists.newArrayList(
-                new File("/folder/subfolder/subsubfolder/test2.mp3"),
-                new File("/folder/subfolder/test.mp3"),
-                new File("/folder/subfolder/test2.mp3"),
-                new File("/folder/a.jpg"),
-                new File("/folder/aC.jpg"),
-                new File("/xfolder/d.jpg"),
-                new File("/xFolder/d.jpg"),
-                new File("/a.jpg")
-        );
+                alarmsFolder,
+                testFolder.newFile("folder/subfolder/subsubfolder/test2.mp3"),
+                testFolder.newFile("folder/subfolder/test.mp3"),
+                testFolder.newFile("folder/subfolder/test2.mp3"),
+                testFolder.newFile("folder/a.jpg"),
+                testFolder.newFile("folder/aC.jpg"),
+                testFolder.newFile("storage/emulated/0/1.ogg"),
+                testFolder.newFile("storage/emulated/0/2.ogg"),
+                testFolder.newFile("xFolder/d.jpg"),
+                testFolder.newFile("1.mp3"),
+                testFolder.newFile("a.jpg"));
 
         List<File> sorted = new ArrayList<>(desiredOrder);
         Collections.sort(sorted, NaturalOrderComparator.INSTANCE.getFILE_COMPARATOR());
-        assertEquals(desiredOrder, sorted);
+        Assert.assertEquals(desiredOrder, sorted);
     }
 
-    @MediumTest
+    @Test
     public void testSimpleComparison() {
         List<String> desiredOrder = Lists.newArrayList(
                 "00 I",
@@ -53,11 +65,10 @@ public class NaturalOrderComparatorTest extends TestCase {
                 "Ba",
                 "cA",
                 "D",
-                "e"
-        );
+                "e");
 
         List<String> sorted = new ArrayList<>(desiredOrder);
         Collections.sort(sorted, NaturalOrderComparator.INSTANCE.getSTRING_COMPARATOR());
-        assertEquals(desiredOrder, sorted);
+        Assert.assertEquals(desiredOrder, sorted);
     }
 }
