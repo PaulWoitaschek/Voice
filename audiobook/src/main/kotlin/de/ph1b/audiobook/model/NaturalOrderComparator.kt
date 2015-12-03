@@ -15,8 +15,11 @@ object NaturalOrderComparator {
 
     val STRING_COMPARATOR: Comparator<String> = IntelliJStringComparator()
     val FILE_COMPARATOR = Comparator<File> { lhs, rhs ->
-        if (lhs.isDirectory || rhs.isDirectory) {
-            return@Comparator lhs.compareTo(rhs)
+
+        if (lhs.isDirectory && !rhs.isDirectory) {
+            return@Comparator -1
+        } else if (!lhs.isDirectory && rhs.isDirectory) {
+            return@Comparator 1
         }
 
         val left = getFileWithParents(lhs)
