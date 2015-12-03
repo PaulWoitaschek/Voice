@@ -2,13 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/edit_title"
-        android:title="@string/edit_book_name" />
+        android:title="@string/edit_book_name"/>
 
+    <!-- TODO Visibility temporary false as we have no api any more /> -->
     <item
         android:id="@+id/edit_cover"
-        android:title="@string/edit_book_cover" />
+        android:title="@string/edit_book_cover"
+        android:visible="false"/>
 
     <item
         android:id="@+id/bookmark"
-        android:title="@string/bookmark" />
+        android:title="@string/bookmark"/>
 </menu>
