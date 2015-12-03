@@ -6,7 +6,6 @@ import android.content.Intent
 import rx.Observable
 import rx.subjects.PublishSubject
 import timber.log.Timber
-import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
@@ -15,8 +14,7 @@ import javax.inject.Singleton
  * @author Paul Woitaschek
  */
 @Singleton
-class HeadsetPlugReceiver
-@Inject constructor() {
+class HeadsetPlugReceiver {
 
     private val publishSubject = PublishSubject.create<HeadsetState>()
 

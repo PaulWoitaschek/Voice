@@ -13,6 +13,7 @@ import dagger.Provides;
 import de.ph1b.audiobook.mediaplayer.AndroidMediaPlayer;
 import de.ph1b.audiobook.mediaplayer.AntennaPlayer;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerInterface;
+import de.ph1b.audiobook.receiver.HeadsetPlugReceiver;
 import de.ph1b.audiobook.uitools.ImageLinkService;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
@@ -65,5 +66,11 @@ public class BaseModule {
                 .build();
 
         return retrofit.create(ImageLinkService.class);
+    }
+
+    @Provides
+    @Singleton
+    HeadsetPlugReceiver provideHeadsetPlugReceiver() {
+        return new HeadsetPlugReceiver();
     }
 }
