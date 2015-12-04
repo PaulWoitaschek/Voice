@@ -22,18 +22,10 @@ class AudioFocusReceiver
         } else {
             Timber.i("FocusChange is $focusChange")
             when (focusChange) {
-                AudioManager.AUDIOFOCUS_GAIN -> {
-                    subject.onNext(AudioFocus.GAIN)
-                }
-                AudioManager.AUDIOFOCUS_LOSS -> {
-                    subject.onNext(AudioFocus.LOSS)
-                }
-                AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
-                    subject.onNext(AudioFocus.LOSS_TRANSIENT_CAN_DUCK)
-                }
-                AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
-                    subject.onNext(AudioFocus.LOSS_TRANSIENT)
-                }
+                AudioManager.AUDIOFOCUS_GAIN -> subject.onNext(AudioFocus.GAIN)
+                AudioManager.AUDIOFOCUS_LOSS -> subject.onNext(AudioFocus.LOSS)
+                AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> subject.onNext(AudioFocus.LOSS_TRANSIENT_CAN_DUCK)
+                AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> subject.onNext(AudioFocus.LOSS_TRANSIENT)
             }
         }
     }
