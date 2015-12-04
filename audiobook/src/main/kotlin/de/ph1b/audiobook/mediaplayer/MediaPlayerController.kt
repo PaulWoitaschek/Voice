@@ -32,8 +32,6 @@ constructor(private val c: Context, private val prefs: PrefsManager,
     private val lock = ReentrantLock()
     private val executor = Executors.newScheduledThreadPool(2)
     public val playState = BehaviorSubject.create(PlayState.STOPPED)
-    @Volatile var isSleepTimerActive = false
-        private set
     private var sleepSand: ScheduledFuture<*>? = null
     var book: Book? = null
         private set
@@ -41,12 +39,13 @@ constructor(private val c: Context, private val prefs: PrefsManager,
     private var updater: ScheduledFuture<*>? = null
     @Volatile private var prepareTries = 0
 
-    val leftSleepTimerTime: Long
+    val leftSleepTime: Long
         get() {
-            if (sleepSand == null || sleepSand!!.isCancelled || sleepSand!!.isDone) {
+            val sand = sleepSand
+            if (sand == null || sand.isCancelled || sand.isDone) {
                 return 0
             } else {
-                return sleepSand!!.getDelay(TimeUnit.MILLISECONDS)
+                return sand.getDelay(TimeUnit.MILLISECONDS)
             }
         }
 
@@ -244,7 +243,8 @@ constructor(private val c: Context, private val prefs: PrefsManager,
             stopUpdating()
             player.reset()
             setPlayState(PlayState.STOPPED)
-            if (sleepSandActive()) {
+            if (leftSleepTime > 0) {
+                // if its active use toggle to stop the sleep timer
                 toggleSleepSand()
             }
             state = State.IDLE
@@ -261,32 +261,20 @@ constructor(private val c: Context, private val prefs: PrefsManager,
     }
 
     /**
-     * @return true if a sleep timer has been set.
-     */
-    private fun sleepSandActive(): Boolean {
-        lock.withLock {
-            return sleepSand != null && !sleepSand!!.isCancelled && !sleepSand!!.isDone
-        }
-    }
-
-    /**
      * Turns the sleep timer on or off.
      */
     fun toggleSleepSand() {
-        Timber.i("toggleSleepSand. Old state was:%b", sleepSandActive())
+        Timber.i("toggleSleepSand. Left sleepTime is $leftSleepTime")
         lock.withLock {
-            if (sleepSandActive()) {
+            if (leftSleepTime > 0L) {
                 Timber.i("sleepSand is active. cancelling now")
-                sleepSand!!.cancel(false)
-                isSleepTimerActive = false
+                sleepSand?.cancel(false)
             } else {
                 Timber.i("preparing new sleep sand")
                 val minutes = prefs.sleepTime
-                isSleepTimerActive = true
                 sleepSand = executor.schedule({
                     lock.withLock {
                         pause(true)
-                        isSleepTimerActive = false
                         communication.sleepStateChanged()
                     }
                 }, minutes.toLong(), TimeUnit.MINUTES)

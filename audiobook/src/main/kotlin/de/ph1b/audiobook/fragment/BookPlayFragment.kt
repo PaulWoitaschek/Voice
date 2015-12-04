@@ -239,9 +239,9 @@ class BookPlayFragment : BaseFragment() {
     private fun initializeTimerCountdown() {
         countDownTimer?.cancel()
 
-        if (mediaPlayerController.isSleepTimerActive) {
+        if (mediaPlayerController.leftSleepTime > 0) {
             timerCountdownView.visibility = View.VISIBLE
-            countDownTimer = object : CountDownTimer(mediaPlayerController.leftSleepTimerTime, 1000) {
+            countDownTimer = object : CountDownTimer(mediaPlayerController.leftSleepTime, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
                     timerCountdownView.text = formatTime(millisUntilFinished.toInt(), millisUntilFinished.toInt())
                 }
@@ -271,7 +271,7 @@ class BookPlayFragment : BaseFragment() {
 
         // sets the correct sleep timer icon
         val sleepTimerItem = menu.findItem(R.id.action_sleep)
-        if (mediaPlayerController.isSleepTimerActive) {
+        if (mediaPlayerController.leftSleepTime > 0) {
             sleepTimerItem.setIcon(R.drawable.ic_alarm_on_white_24dp)
         } else {
             sleepTimerItem.setIcon(R.drawable.ic_snooze_white_24dp)
@@ -297,7 +297,7 @@ class BookPlayFragment : BaseFragment() {
             }
             R.id.action_sleep -> {
                 mediaPlayerController.toggleSleepSand()
-                if (prefs.setBookmarkOnSleepTimer() && !mediaPlayerController.isSleepTimerActive) {
+                if (prefs.setBookmarkOnSleepTimer() && mediaPlayerController.leftSleepTime == 0L) {
                     val date = DateUtils.formatDateTime(context, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE)
                     BookmarkDialogFragment.addBookmark(bookId, date + ": " + getString(R.string.action_sleep), db)
                 }
