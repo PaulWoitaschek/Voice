@@ -31,8 +31,6 @@ import de.ph1b.audiobook.receiver.AudioFocusReceiver
 import de.ph1b.audiobook.receiver.HeadsetPlugReceiver
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
-import de.ph1b.audiobook.utils.BookVendor
-import rx.functions.Func1
 import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
 import java.io.File
@@ -72,7 +70,6 @@ class BookReaderService : Service() {
     @Inject internal lateinit var db: BookShelf
     @Inject internal lateinit var notificationManager: NotificationManager
     @Inject internal lateinit var audioManager: AudioManager
-    @Inject internal lateinit var bookVendor: BookVendor
     @Inject internal lateinit var audioFocusReceiver: AudioFocusReceiver
     @Inject internal lateinit var imageHelper: ImageHelper;
     @Inject internal lateinit var headsetPlugReceiver: HeadsetPlugReceiver
@@ -92,12 +89,9 @@ class BookReaderService : Service() {
      */
     @Volatile private var lastFileForMetaData = File("")
 
-    init {
-        App.component().inject(this)
-    }
-
     override fun onCreate() {
         super.onCreate()
+        App.component().inject(this)
 
         mediaSession = MediaSessionCompat(this, TAG)
         mediaSession.setCallback(object : MediaSessionCompat.Callback() {
@@ -120,18 +114,14 @@ class BookReaderService : Service() {
 
         controller.setPlayState(MediaPlayerController.PlayState.STOPPED)
 
-        val book = bookVendor.byId(prefs.currentBookId.value)
-        if (book != null) {
-            Timber.d("onCreated initialized book=%s", book)
-            reInitController(book)
-        }
-
         subscriptions.apply {
             // re-init controller when there is a new book set as the current book
-            add(prefs.currentBookId.map<Book>(Func1<Long, Book> { bookVendor.byId(it) })
+            add(prefs.currentBookId
+                    .flatMap({ updatedId ->
+                        db.activeBooks.singleOrDefault(null) { it.id == updatedId }
+                    })
                     .subscribe {
-                        val controllerBook = controller.book
-                        if (it != null && (controllerBook == null || controllerBook.id != it.id)) {
+                        if (it != null && (controller.book?.id != it.id)) {
                             reInitController(it)
                         }
                     })
@@ -265,10 +255,11 @@ class BookReaderService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Timber.v("onStartCommand, intent=%s, flags=%d, startId=%d", intent, flags, startId)
-        if (intent != null && intent.action != null) {
+        val intentAction = intent?.action
+        if ( intent != null && intentAction != null) {
             playerExecutor.execute {
-                Timber.v("handling intent action:%s", intent.action)
-                when (intent.action!!) {
+                Timber.v("handling intent action=${intent.action}")
+                when (intentAction) {
                     Intent.ACTION_MEDIA_BUTTON -> MediaButtonReceiver.handleIntent(mediaSession, intent)
                     ServiceController.CONTROL_SET_PLAYBACK_SPEED -> {
                         val speed = intent.getFloatExtra(ServiceController.CONTROL_SET_PLAYBACK_SPEED_EXTRA_SPEED, 1f)
@@ -282,8 +273,6 @@ class BookReaderService : Service() {
                     }
                     ServiceController.CONTROL_NEXT -> controller.next()
                     ServiceController.CONTROL_PREVIOUS -> controller.previous(true)
-                    else -> {
-                    }
                 }
             }
         }
@@ -474,14 +463,16 @@ class BookReaderService : Service() {
                             playState: MediaPlayerController.PlayState,
                             time: Int): Intent {
             val i = Intent(intentUrl)
-            i.putExtra("id", 1)
-            if (author != null) {
-                i.putExtra("artist", author)
+            i.apply {
+                putExtra("id", 1)
+                if (author != null) {
+                    putExtra("artist", author)
+                }
+                putExtra("album", bookName)
+                putExtra("track", chapterName)
+                putExtra("playing", playState === MediaPlayerController.PlayState.PLAYING)
+                putExtra("position", time)
             }
-            i.putExtra("album", bookName)
-            i.putExtra("track", chapterName)
-            i.putExtra("playing", playState === MediaPlayerController.PlayState.PLAYING)
-            i.putExtra("position", time)
             return i
         }
     }
