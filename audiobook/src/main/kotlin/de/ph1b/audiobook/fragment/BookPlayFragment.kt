@@ -106,7 +106,7 @@ class BookPlayFragment : BaseFragment() {
         rewindButton.clicks().subscribe { mediaPlayerController.skip(MediaPlayerController.Direction.BACKWARD) }
         fastForwardButton.clicks().subscribe { mediaPlayerController.skip(MediaPlayerController.Direction.FORWARD) }
         nextButton.clicks().subscribe { mediaPlayerController.next() }
-        previousButton.clicks().subscribe { mediaPlayerController.previous(false) }
+        previousButton.clicks().subscribe { mediaPlayerController.previous(true) }
         playedTimeView.clicks().subscribe { launchJumpToPositionDialog() }
 
         book = bookVendor.byId(bookId)

@@ -58,7 +58,7 @@ class BookReaderService : Service() {
     @Inject internal lateinit var audioFocusReceiver: AudioFocusReceiver
     @Inject internal lateinit var imageHelper: ImageHelper;
     @Inject internal lateinit var headsetPlugReceiver: HeadsetPlugReceiver
-    @Inject internal lateinit var notificationAnnouncher: NotificationAnnouncer
+    @Inject internal lateinit var notificationAnnouncer: NotificationAnnouncer
     private val audioBecomingNoisyReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (controller.playState.value === PlayState.PLAYING) {
@@ -152,14 +152,14 @@ class BookReaderService : Service() {
                                     audioManager.requestAudioFocus(audioFocusReceiver.audioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
 
                                     mediaSession.isActive = true
-                                    val notification = notificationAnnouncher.getNotification(controllerBook, it, mediaSession.sessionToken)
+                                    val notification = notificationAnnouncer.getNotification(controllerBook, it, mediaSession.sessionToken)
                                     startForeground(NOTIFICATION_ID, notification)
 
                                     pauseReason = PauseReason.NONE
                                 }
                                 PlayState.PAUSED -> {
                                     stopForeground(false)
-                                    val notification = notificationAnnouncher.getNotification(controllerBook, it, mediaSession.sessionToken)
+                                    val notification = notificationAnnouncer.getNotification(controllerBook, it, mediaSession.sessionToken)
                                     notificationManager.notify(NOTIFICATION_ID, notification)
                                 }
                                 PlayState.STOPPED -> {
