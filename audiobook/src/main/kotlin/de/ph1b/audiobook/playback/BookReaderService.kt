@@ -23,6 +23,7 @@ import de.ph1b.audiobook.receiver.AudioFocusReceiver
 import de.ph1b.audiobook.receiver.HeadsetPlugReceiver
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
+import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
 import java.io.File
@@ -132,6 +133,7 @@ class BookReaderService : Service() {
 
             // notify player about changes in the current book
             add(db.updateObservable()
+                    .observeOn(Schedulers.io())
                     .filter { it.id == prefs.currentBookId.value }
                     .subscribe {
                         controller.updateBook(it)
@@ -139,37 +141,39 @@ class BookReaderService : Service() {
                     })
 
             // handle changes on the play state
-            add(controller.playState.subscribe {
-                Timber.d("onPlayStateChanged:%s", it)
-                val controllerBook = controller.book
-                if (controllerBook != null) {
-                    when (it!!) {
-                        PlayState.PLAYING -> {
-                            audioManager.requestAudioFocus(audioFocusReceiver.audioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
+            add(controller.playState
+                    .observeOn(Schedulers.io())
+                    .subscribe {
+                        Timber.d("onPlayStateChanged:%s", it)
+                        val controllerBook = controller.book
+                        if (controllerBook != null) {
+                            when (it!!) {
+                                PlayState.PLAYING -> {
+                                    audioManager.requestAudioFocus(audioFocusReceiver.audioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
 
-                            mediaSession.isActive = true
-                            val notification = notificationAnnouncher.getNotification(controllerBook, it, mediaSession.sessionToken)
-                            startForeground(NOTIFICATION_ID, notification)
+                                    mediaSession.isActive = true
+                                    val notification = notificationAnnouncher.getNotification(controllerBook, it, mediaSession.sessionToken)
+                                    startForeground(NOTIFICATION_ID, notification)
 
-                            pauseReason = PauseReason.NONE
+                                    pauseReason = PauseReason.NONE
+                                }
+                                PlayState.PAUSED -> {
+                                    stopForeground(false)
+                                    val notification = notificationAnnouncher.getNotification(controllerBook, it, mediaSession.sessionToken)
+                                    notificationManager.notify(NOTIFICATION_ID, notification)
+                                }
+                                PlayState.STOPPED -> {
+                                    mediaSession.isActive = false
+
+                                    audioManager.abandonAudioFocus(audioFocusReceiver.audioFocusListener)
+                                    notificationManager.cancel(NOTIFICATION_ID)
+                                    stopForeground(true)
+                                }
+                            }
+
+                            notifyChange(ChangeType.PLAY_STATE)
                         }
-                        PlayState.PAUSED -> {
-                            stopForeground(false)
-                            val notification = notificationAnnouncher.getNotification(controllerBook, it, mediaSession.sessionToken)
-                            notificationManager.notify(NOTIFICATION_ID, notification)
-                        }
-                        PlayState.STOPPED -> {
-                            mediaSession.isActive = false
-
-                            audioManager.abandonAudioFocus(audioFocusReceiver.audioFocusListener)
-                            notificationManager.cancel(NOTIFICATION_ID)
-                            stopForeground(true)
-                        }
-                    }
-
-                    notifyChange(ChangeType.PLAY_STATE)
-                }
-            })
+                    })
 
             // resume playback when headset is reconnected. (if settings are set)
             add(headsetPlugReceiver.observable()
