@@ -18,7 +18,6 @@ import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.support.v7.app.NotificationCompat
-import android.telephony.TelephonyManager
 import android.view.KeyEvent
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
@@ -28,6 +27,7 @@ import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookShelf
 import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.receiver.AudioFocusReceiver
 import de.ph1b.audiobook.receiver.HeadsetPlugReceiver
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
@@ -49,7 +49,7 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class BookReaderService : Service(), AudioManager.OnAudioFocusChangeListener {
+class BookReaderService : Service() {
     private val executor = Executors.newCachedThreadPool()
     private val playerExecutor = ThreadPoolExecutor(
             1, 1, // single thread
@@ -73,7 +73,7 @@ class BookReaderService : Service(), AudioManager.OnAudioFocusChangeListener {
     @Inject internal lateinit var notificationManager: NotificationManager
     @Inject internal lateinit var audioManager: AudioManager
     @Inject internal lateinit var bookVendor: BookVendor
-    @Inject internal lateinit var telephonyManager: TelephonyManager
+    @Inject internal lateinit var audioFocusReceiver: AudioFocusReceiver
     @Inject internal lateinit var imageHelper: ImageHelper;
     @Inject internal lateinit var headsetPlugReceiver: HeadsetPlugReceiver
     @Volatile private var pauseBecauseLossTransient = false
@@ -153,7 +153,7 @@ class BookReaderService : Service(), AudioManager.OnAudioFocusChangeListener {
                     if (controllerBook != null) {
                         when (it!!) {
                             MediaPlayerController.PlayState.PLAYING -> {
-                                audioManager.requestAudioFocus(this@BookReaderService, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
+                                audioManager.requestAudioFocus(audioFocusReceiver.audioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
 
                                 mediaSession.isActive = true
 
@@ -166,7 +166,7 @@ class BookReaderService : Service(), AudioManager.OnAudioFocusChangeListener {
                             MediaPlayerController.PlayState.STOPPED -> {
                                 mediaSession.isActive = false
 
-                                audioManager.abandonAudioFocus(this@BookReaderService)
+                                audioManager.abandonAudioFocus(audioFocusReceiver.audioFocusListener)
                                 notificationManager.cancel(NOTIFICATION_ID)
                                 stopForeground(true)
                             }
@@ -186,6 +186,49 @@ class BookReaderService : Service(), AudioManager.OnAudioFocusChangeListener {
                                     controller.play()
                                 }
                                 pauseBecauseHeadset = false
+                            }
+                        }
+                    }
+            )
+
+            add(audioFocusReceiver.focusObservable()
+                    .subscribe { audioFocus ->
+                        when (audioFocus!!) {
+                            AudioFocusReceiver.AudioFocus.GAIN -> {
+                                Timber.d("started by audioFocus gained")
+                                if (pauseBecauseLossTransient) {
+                                    controller.play()
+                                    pauseBecauseLossTransient = false
+                                } else if (controller.playState.value === MediaPlayerController.PlayState.PLAYING) {
+                                    Timber.d("increasing volume")
+                                    audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0)
+                                }
+                            }
+                            AudioFocusReceiver.AudioFocus.LOSS,
+                            AudioFocusReceiver.AudioFocus.INCOMING_CALL -> {
+                                Timber.d("paused by audioFocus loss")
+                                controller.stop()
+                            }
+                            AudioFocusReceiver.AudioFocus.LOSS_TRANSIENT_CAN_DUCK -> {
+                                if (controller.playState.value === MediaPlayerController.PlayState.PLAYING) {
+                                    if (prefs.pauseOnTempFocusLoss()) {
+                                        Timber.d("Paused by audio-focus loss transient.")
+                                        // Pause is temporary, don't rewind
+                                        controller.pause(false)
+                                        pauseBecauseLossTransient = true
+                                    } else {
+                                        Timber.d("lowering volume")
+                                        audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0)
+                                        pauseBecauseHeadset = false
+                                    }
+                                }
+                            }
+                            AudioFocusReceiver.AudioFocus.LOSS_TRANSIENT -> {
+                                if (controller.playState.value === MediaPlayerController.PlayState.PLAYING) {
+                                    Timber.d("Paused by audio-focus loss transient.")
+                                    controller.pause(true) // auto pause
+                                    pauseBecauseLossTransient = true
+                                }
                             }
                         }
                     }
@@ -278,51 +321,6 @@ class BookReaderService : Service(), AudioManager.OnAudioFocusChangeListener {
 
         pauseBecauseHeadset = false
         pauseBecauseLossTransient = false
-    }
-
-    override fun onAudioFocusChange(focusChange: Int) {
-        var newFocus = focusChange
-        Timber.d("Call state is: %s", telephonyManager.callState)
-        if (telephonyManager.callState != TelephonyManager.CALL_STATE_IDLE) {
-            newFocus = AudioManager.AUDIOFOCUS_LOSS
-            // if there is an incoming call, we pause permanently. (tricking switch condition)
-        }
-        when (newFocus) {
-            AudioManager.AUDIOFOCUS_GAIN -> {
-                Timber.d("started by audioFocus gained")
-                if (pauseBecauseLossTransient) {
-                    controller.play()
-                    pauseBecauseLossTransient = false
-                } else if (controller.playState.value === MediaPlayerController.PlayState.PLAYING) {
-                    Timber.d("increasing volume")
-                    audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0)
-                }
-            }
-            AudioManager.AUDIOFOCUS_LOSS -> {
-                Timber.d("paused by audioFocus loss")
-                controller.stop()
-            }
-            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
-                if (controller.playState.value === MediaPlayerController.PlayState.PLAYING) {
-                    if (prefs.pauseOnTempFocusLoss()) {
-                        Timber.d("Paused by audio-focus loss transient.")
-                        // Only rewind if loss is transient. When we only pause temporary, don't rewind
-                        // automatically.
-                        controller.pause(newFocus == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)
-                        pauseBecauseLossTransient = true
-                    } else {
-                        Timber.d("lowering volume")
-                        audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0)
-                        pauseBecauseHeadset = false
-                    }
-                }
-            }
-            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> if (controller.playState.value === MediaPlayerController.PlayState.PLAYING) {
-                Timber.d("Paused by audio-focus loss transient.")
-                controller.pause(true) // auto pause
-                pauseBecauseLossTransient = true
-            }
-        }
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
