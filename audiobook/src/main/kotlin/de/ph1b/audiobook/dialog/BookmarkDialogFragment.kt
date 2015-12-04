@@ -21,7 +21,7 @@ import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.model.Bookmark
 import de.ph1b.audiobook.persistence.BookShelf
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.service.ServiceController
+import de.ph1b.audiobook.playback.ServiceController
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.utils.BookVendor
 import timber.log.Timber

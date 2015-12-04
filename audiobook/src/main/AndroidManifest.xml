@@ -70,14 +70,14 @@
         </activity>
 
         <service
-            android:name=".service.BookReaderService"
+            android:name=".playback.BookReaderService"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON"/>
             </intent-filter>
         </service>
 
-        <service android:name=".service.WidgetUpdateService"/>
+        <service android:name=".playback.WidgetUpdateService"/>
 
         <receiver android:name="android.support.v4.media.session.MediaButtonReceiver">
             <intent-filter>

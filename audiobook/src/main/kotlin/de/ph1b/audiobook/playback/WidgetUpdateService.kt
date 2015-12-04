@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.service
+package de.ph1b.audiobook.playback
 
 import android.app.PendingIntent
 import android.app.Service
@@ -171,7 +171,7 @@ class WidgetUpdateService : Service() {
                 rewindI, PendingIntent.FLAG_UPDATE_CURRENT)
         remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI)
 
-        if (mediaPlayerController.playState.value === MediaPlayerController.PlayState.PLAYING) {
+        if (mediaPlayerController.playState.value === PlayState.PLAYING) {
             remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_pause)
         } else {
             remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow)

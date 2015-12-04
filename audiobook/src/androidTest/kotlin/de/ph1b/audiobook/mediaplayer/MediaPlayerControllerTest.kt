@@ -6,6 +6,7 @@ import android.test.suitebuilder.annotation.MediumTest
 import android.test.suitebuilder.annotation.SmallTest
 import com.google.common.io.ByteStreams
 import de.ph1b.audiobook.model.Book
+import de.ph1b.audiobook.playback.PlayState
 import de.ph1b.audiobook.testing.MockProvider
 import java.io.File
 import java.io.FileOutputStream
@@ -59,10 +60,10 @@ class MediaPlayerControllerTest : AndroidTestCase () {
     @SmallTest
     fun testSimplePlayback() {
         mediaPlayerController.play()
-        check(mediaPlayerController.playState.value == MediaPlayerController.PlayState.PLAYING)
+        check(mediaPlayerController.playState.value == PlayState.PLAYING)
         Thread.sleep(1000)
         mediaPlayerController.pause(false)
-        check(mediaPlayerController.playState.value == MediaPlayerController.PlayState.PAUSED)
+        check(mediaPlayerController.playState.value == PlayState.PAUSED)
     }
 
     private val rnd = Random()
@@ -71,10 +72,10 @@ class MediaPlayerControllerTest : AndroidTestCase () {
         synchronized(mediaPlayerController, {
             if (rnd.nextBoolean()) {
                 mediaPlayerController.play()
-                check(mediaPlayerController.playState.value == MediaPlayerController.PlayState.PLAYING)
+                check(mediaPlayerController.playState.value == PlayState.PLAYING)
             } else {
                 mediaPlayerController.pause(false)
-                check(mediaPlayerController.playState.value == MediaPlayerController.PlayState.PAUSED)
+                check(mediaPlayerController.playState.value == PlayState.PAUSED)
             }
         })
     }

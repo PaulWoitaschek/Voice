@@ -7,7 +7,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 
-import de.ph1b.audiobook.service.WidgetUpdateService
+import de.ph1b.audiobook.playback.WidgetUpdateService
 
 class BaseWidgetProvider : AppWidgetProvider() {
 

@@ -25,7 +25,8 @@ import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.BookAdder
 import de.ph1b.audiobook.persistence.BookShelf
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.service.ServiceController
+import de.ph1b.audiobook.playback.PlayState
+import de.ph1b.audiobook.playback.ServiceController
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import rx.Observable
@@ -198,13 +199,13 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
             // Subscription that updates the UI based on the play state.
             add(mediaPlayerController.playState
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(object : Action1<MediaPlayerController.PlayState> {
+                    .subscribe(object : Action1<PlayState> {
                         private var firstRun = true
 
-                        override fun call(playState: MediaPlayerController.PlayState) {
+                        override fun call(playState: PlayState) {
                             // animate only if this is not the first run
                             Timber.i("onNext with playState %s", playState)
-                            if (playState === MediaPlayerController.PlayState.PLAYING) {
+                            if (playState === PlayState.PLAYING) {
                                 playPauseDrawable.transformToPause(!firstRun)
                             } else {
                                 playPauseDrawable.transformToPlay(!firstRun)

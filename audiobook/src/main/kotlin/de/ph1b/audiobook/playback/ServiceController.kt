@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.service
+package de.ph1b.audiobook.playback
 
 import android.content.Context
 import android.content.Intent

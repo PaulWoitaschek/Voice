@@ -33,8 +33,8 @@ import de.ph1b.audiobook.fragment.BookPlayFragment;
 import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.fragment.SettingsFragment;
 import de.ph1b.audiobook.model.BookAdder;
-import de.ph1b.audiobook.service.BookReaderService;
-import de.ph1b.audiobook.service.WidgetUpdateService;
+import de.ph1b.audiobook.playback.BookReaderService;
+import de.ph1b.audiobook.playback.WidgetUpdateService;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import timber.log.Timber;
 

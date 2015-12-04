@@ -29,7 +29,8 @@ import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookShelf
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.service.ServiceController
+import de.ph1b.audiobook.playback.PlayState
+import de.ph1b.audiobook.playback.ServiceController
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
@@ -329,13 +330,13 @@ class BookPlayFragment : BaseFragment() {
         subscriptions = CompositeSubscription()
         subscriptions!!.add(mediaPlayerController.playState
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Action1<MediaPlayerController.PlayState> {
+                .subscribe(object : Action1<PlayState> {
                     private var firstRun = true
 
-                    override fun call(playState: MediaPlayerController.PlayState) {
+                    override fun call(playState: PlayState) {
                         // animate only if this is not the first run
                         Timber.i("onNext with playState %s", playState)
-                        if (playState === MediaPlayerController.PlayState.PLAYING) {
+                        if (playState === PlayState.PLAYING) {
                             playPauseDrawable.transformToPause(!firstRun)
                         } else {
                             playPauseDrawable.transformToPlay(!firstRun)

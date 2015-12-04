@@ -3,12 +3,12 @@ package de.ph1b.audiobook.mediaplayer
 import android.content.Context
 import android.content.Intent
 import android.os.PowerManager
-import android.support.v4.media.session.PlaybackStateCompat
 import de.ph1b.audiobook.activity.BookActivity
 import de.ph1b.audiobook.fragment.BookShelfFragment
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookShelf
 import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.playback.PlayState
 import de.ph1b.audiobook.utils.Communication
 import rx.subjects.BehaviorSubject
 import timber.log.Timber
@@ -424,12 +424,6 @@ constructor(private val c: Context, private val prefs: PrefsManager,
         if (sleepSand != null && !sleepSand!!.isCancelled && !sleepSand!!.isDone) {
             sleepSand!!.cancel(false)
         }
-    }
-
-    enum class PlayState internal constructor(@PlaybackStateCompat.State public val playbackStateCompat: Int) {
-        PLAYING(PlaybackStateCompat.STATE_PLAYING),
-        PAUSED(PlaybackStateCompat.STATE_PAUSED),
-        STOPPED(PlaybackStateCompat.STATE_STOPPED);
     }
 
     /**

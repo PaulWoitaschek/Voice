@@ -1,9 +1,6 @@
-package de.ph1b.audiobook.service
+package de.ph1b.audiobook.playback
 
-import android.annotation.TargetApi
-import android.app.Notification
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -11,17 +8,13 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.media.AudioManager
-import android.os.Build
 import android.os.IBinder
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.support.v7.app.NotificationCompat
 import android.view.KeyEvent
 import com.squareup.picasso.Picasso
-import de.ph1b.audiobook.R
-import de.ph1b.audiobook.activity.BookActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.Book
@@ -65,6 +58,8 @@ class BookReaderService : Service() {
                     PlaybackStateCompat.ACTION_SEEK_TO)
     private val mediaMetaDataBuilder = MediaMetadataCompat.Builder()
     private val subscriptions = CompositeSubscription()
+    private val TAG = BookReaderService::class.java.simpleName
+    private val NOTIFICATION_ID = 42
     @Inject internal lateinit var prefs: PrefsManager
     @Inject internal lateinit var controller: MediaPlayerController
     @Inject internal lateinit var db: BookShelf
@@ -73,11 +68,12 @@ class BookReaderService : Service() {
     @Inject internal lateinit var audioFocusReceiver: AudioFocusReceiver
     @Inject internal lateinit var imageHelper: ImageHelper;
     @Inject internal lateinit var headsetPlugReceiver: HeadsetPlugReceiver
+    @Inject internal lateinit var notificationAnnouncher: NotificationAnnouncer
     @Volatile private var pauseBecauseLossTransient = false
     @Volatile private var pauseBecauseHeadset = false
     private val audioBecomingNoisyReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            if (controller.playState.value === MediaPlayerController.PlayState.PLAYING) {
+            if (controller.playState.value === PlayState.PLAYING) {
                 pauseBecauseHeadset = true
                 controller.pause(true)
             }
@@ -112,7 +108,7 @@ class BookReaderService : Service() {
                 AudioManager.ACTION_AUDIO_BECOMING_NOISY))
         registerReceiver(headsetPlugReceiver.broadcastReceiver, IntentFilter(Intent.ACTION_HEADSET_PLUG))
 
-        controller.setPlayState(MediaPlayerController.PlayState.STOPPED)
+        controller.setPlayState(PlayState.STOPPED)
 
         subscriptions.apply {
             // re-init controller when there is a new book set as the current book
@@ -142,18 +138,19 @@ class BookReaderService : Service() {
                     val controllerBook = controller.book
                     if (controllerBook != null) {
                         when (it!!) {
-                            MediaPlayerController.PlayState.PLAYING -> {
+                            PlayState.PLAYING -> {
                                 audioManager.requestAudioFocus(audioFocusReceiver.audioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
 
                                 mediaSession.isActive = true
-
-                                startForeground(NOTIFICATION_ID, getNotification(controllerBook))
+                                val notification = notificationAnnouncher.getNotification(controllerBook, it, mediaSession.sessionToken)
+                                startForeground(NOTIFICATION_ID, notification)
                             }
-                            MediaPlayerController.PlayState.PAUSED -> {
+                            PlayState.PAUSED -> {
                                 stopForeground(false)
-                                notificationManager.notify(NOTIFICATION_ID, getNotification(controllerBook))
+                                val notification = notificationAnnouncher.getNotification(controllerBook, it, mediaSession.sessionToken)
+                                notificationManager.notify(NOTIFICATION_ID, notification)
                             }
-                            MediaPlayerController.PlayState.STOPPED -> {
+                            PlayState.STOPPED -> {
                                 mediaSession.isActive = false
 
                                 audioManager.abandonAudioFocus(audioFocusReceiver.audioFocusListener)
@@ -189,7 +186,7 @@ class BookReaderService : Service() {
                                 if (pauseBecauseLossTransient) {
                                     controller.play()
                                     pauseBecauseLossTransient = false
-                                } else if (controller.playState.value === MediaPlayerController.PlayState.PLAYING) {
+                                } else if (controller.playState.value === PlayState.PLAYING) {
                                     Timber.d("increasing volume")
                                     audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0)
                                 }
@@ -200,7 +197,7 @@ class BookReaderService : Service() {
                                 controller.stop()
                             }
                             AudioFocusReceiver.AudioFocus.LOSS_TRANSIENT_CAN_DUCK -> {
-                                if (controller.playState.value === MediaPlayerController.PlayState.PLAYING) {
+                                if (controller.playState.value === PlayState.PLAYING) {
                                     if (prefs.pauseOnTempFocusLoss()) {
                                         Timber.d("Paused by audio-focus loss transient.")
                                         // Pause is temporary, don't rewind
@@ -214,7 +211,7 @@ class BookReaderService : Service() {
                                 }
                             }
                             AudioFocusReceiver.AudioFocus.LOSS_TRANSIENT -> {
-                                if (controller.playState.value === MediaPlayerController.PlayState.PLAYING) {
+                                if (controller.playState.value === PlayState.PLAYING) {
                                     Timber.d("Paused by audio-focus loss transient.")
                                     controller.pause(true) // auto pause
                                     pauseBecauseLossTransient = true
@@ -230,7 +227,7 @@ class BookReaderService : Service() {
         Timber.v("handling keyCode: %s", keyCode)
         when (keyCode) {
             KeyEvent.KEYCODE_MEDIA_PLAY, KeyEvent.KEYCODE_MEDIA_PAUSE, KeyEvent.KEYCODE_HEADSETHOOK, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
-                if (controller.playState.value === MediaPlayerController.PlayState.PLAYING) {
+                if (controller.playState.value === PlayState.PLAYING) {
                     controller.pause(true)
                 } else {
                     controller.play()
@@ -285,7 +282,7 @@ class BookReaderService : Service() {
         controller.stop()
         controller.onDestroy()
 
-        controller.setPlayState(MediaPlayerController.PlayState.STOPPED)
+        controller.setPlayState(PlayState.STOPPED)
 
         try {
             unregisterReceiver(audioBecomingNoisyReceiver)
@@ -310,85 +307,6 @@ class BookReaderService : Service() {
 
         pauseBecauseHeadset = false
         pauseBecauseLossTransient = false
-    }
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private fun getNotification(book: Book): Notification {
-        // cover
-        val width = imageHelper.smallerScreenSize
-        val height = imageHelper.smallerScreenSize
-        var cover: Bitmap? = null
-        try {
-            val coverFile = book.coverFile()
-            if (!book.useCoverReplacement && coverFile.exists() && coverFile.canRead()) {
-                cover = Picasso.with(this@BookReaderService)
-                        .load(coverFile)
-                        .resize(width, height)
-                        .get()
-            }
-        } catch (e: IOException) {
-            Timber.e(e, "Error when retrieving cover from %s", book)
-        }
-
-        if (cover == null) {
-            cover = imageHelper.drawableToBitmap(CoverReplacement(book.name, this), width, height)
-        }
-
-        val notificationBuilder = NotificationCompat.Builder(this)
-        val chapter = book.currentChapter()
-
-        val chapters = book.chapters
-        if (chapters.size > 1) {
-            // we need the current chapter title and number only if there is more than one chapter.
-            notificationBuilder.setContentInfo("${(chapters.indexOf(chapter) + 1)}/${chapters.size}")
-            notificationBuilder.setContentText(chapter.name)
-        }
-
-        // rewind
-        val rewindIntent = ServiceController.getRewindIntent(this)
-        val rewindPI = PendingIntent.getService(applicationContext, KeyEvent.KEYCODE_MEDIA_REWIND, rewindIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-        notificationBuilder.addAction(R.drawable.ic_fast_rewind, getString(R.string.rewind), rewindPI)
-
-        // play/pause
-        val playPauseIntent = ServiceController.getPlayPauseIntent(this)
-        val playPausePI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-        if (controller.playState.value === MediaPlayerController.PlayState.PLAYING) {
-            notificationBuilder.addAction(R.drawable.ic_pause, getString(R.string.pause), playPausePI)
-        } else {
-            notificationBuilder.addAction(R.drawable.ic_play_arrow, getString(R.string.play), playPausePI)
-        }
-
-        // fast forward
-        val fastForwardIntent = ServiceController.getFastForwardIntent(this)
-        val fastForwardPI = PendingIntent.getService(applicationContext, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, fastForwardIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-        notificationBuilder.addAction(R.drawable.ic_fast_forward, getString(R.string.fast_forward), fastForwardPI)
-
-        // stop intent
-        val stopIntent = ServiceController.getStopIntent(this)
-        val stopPI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_STOP, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-
-        // content click
-        val contentIntent = BookActivity.goToBookIntent(this, book.id)
-        val contentPI = PendingIntent.getActivity(this, 0, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-
-        return notificationBuilder
-                .setStyle(NotificationCompat.MediaStyle()
-                        .setShowActionsInCompactView(0, 1)
-                        .setCancelButtonIntent(stopPI)
-                        .setShowCancelButton(true)
-                        .setMediaSession(mediaSession.sessionToken))
-                .setCategory(NotificationCompat.CATEGORY_TRANSPORT)
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setShowWhen(false)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentIntent(contentPI)
-                .setContentTitle(book.name)
-                .setSmallIcon(R.drawable.ic_notification)
-                .setWhen(0)
-                .setDeleteIntent(stopPI)
-                .setAutoCancel(true)
-                .setLargeIcon(cover)
-                .build()
     }
 
     private fun notifyChange(what: ChangeType) {
@@ -460,7 +378,7 @@ class BookReaderService : Service() {
         fun broadcastIntent(author: String?,
                             bookName: String,
                             chapterName: String,
-                            playState: MediaPlayerController.PlayState,
+                            playState: PlayState,
                             time: Int): Intent {
             val i = Intent(intentUrl)
             i.apply {
@@ -470,16 +388,10 @@ class BookReaderService : Service() {
                 }
                 putExtra("album", bookName)
                 putExtra("track", chapterName)
-                putExtra("playing", playState === MediaPlayerController.PlayState.PLAYING)
+                putExtra("playing", playState === PlayState.PLAYING)
                 putExtra("position", time)
             }
             return i
         }
-    }
-
-    companion object {
-
-        private val TAG = BookReaderService::class.java.simpleName
-        private val NOTIFICATION_ID = 42
     }
 }

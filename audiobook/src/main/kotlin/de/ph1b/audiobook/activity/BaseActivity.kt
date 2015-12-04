@@ -8,7 +8,7 @@ import android.util.TypedValue
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.service.BookReaderService
+import de.ph1b.audiobook.playback.BookReaderService
 import javax.inject.Inject
 
 /**
