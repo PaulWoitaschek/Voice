@@ -339,6 +339,16 @@ constructor(private val c: Context, private val prefs: PrefsManager,
         }
     }
 
+    fun playPause() {
+        lock.withLock {
+            if (playState.value != PlayState.PLAYING) {
+                play()
+            } else {
+                pause(true)
+            }
+        }
+    }
+
 
     /**
      * Plays the next chapter. If there is none, don't do anything.

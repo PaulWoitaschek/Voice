@@ -26,7 +26,6 @@ import de.ph1b.audiobook.model.BookAdder
 import de.ph1b.audiobook.persistence.BookShelf
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayState
-import de.ph1b.audiobook.playback.ServiceController
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import rx.Observable
@@ -55,7 +54,6 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
     @Inject internal lateinit var db: BookShelf
     @Inject internal lateinit var bookAdder: BookAdder
     @Inject internal lateinit var mediaPlayerController: MediaPlayerController
-    @Inject internal lateinit var serviceController: ServiceController
 
     private var subscriptions: CompositeSubscription? = null
 
@@ -319,7 +317,7 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
     }
 
     private fun playPauseClicked() {
-        serviceController.playPause()
+        mediaPlayerController.playPause()
     }
 
     override fun onItemClicked(position: Int) {

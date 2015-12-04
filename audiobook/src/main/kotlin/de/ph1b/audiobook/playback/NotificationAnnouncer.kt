@@ -23,7 +23,7 @@ import javax.inject.Inject
  * @author Paul Woitaschek
  */
 class NotificationAnnouncer
-@Inject constructor(private val context: Context, private val imageHelper: ImageHelper) {
+@Inject constructor(private val context: Context, private val imageHelper: ImageHelper, private val serviceController: ServiceController) {
 
     public fun getNotification(book: Book, playState: PlayState, sessionToken: MediaSessionCompat.Token): Notification {
         // cover
@@ -57,12 +57,12 @@ class NotificationAnnouncer
         }
 
         // rewind
-        val rewindIntent = ServiceController.getRewindIntent(context)
+        val rewindIntent = serviceController.getRewindIntent()
         val rewindPI = PendingIntent.getService(context, KeyEvent.KEYCODE_MEDIA_REWIND, rewindIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         notificationBuilder.addAction(R.drawable.ic_fast_rewind, context.getString(R.string.rewind), rewindPI)
 
         // play/pause
-        val playPauseIntent = ServiceController.getPlayPauseIntent(context)
+        val playPauseIntent = serviceController.getPlayPauseIntent()
         val playPausePI = PendingIntent.getService(context, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         if (playState == PlayState.PLAYING) {
             notificationBuilder.addAction(R.drawable.ic_pause, context.getString(R.string.pause), playPausePI)
@@ -71,12 +71,12 @@ class NotificationAnnouncer
         }
 
         // fast forward
-        val fastForwardIntent = ServiceController.getFastForwardIntent(context)
+        val fastForwardIntent = serviceController.getFastForwardIntent()
         val fastForwardPI = PendingIntent.getService(context, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, fastForwardIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         notificationBuilder.addAction(R.drawable.ic_fast_forward, context.getString(R.string.fast_forward), fastForwardPI)
 
         // stop intent
-        val stopIntent = ServiceController.getStopIntent(context)
+        val stopIntent = serviceController.getStopIntent()
         val stopPI = PendingIntent.getService(context, KeyEvent.KEYCODE_MEDIA_STOP, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         // content click

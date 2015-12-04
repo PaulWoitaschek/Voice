@@ -48,7 +48,8 @@ class WidgetUpdateService : Service() {
     @Inject internal lateinit var db: BookShelf
     @Inject internal lateinit var mediaPlayerController: MediaPlayerController
     @Inject internal lateinit var bookVendor: BookVendor
-    @Inject internal lateinit var imageHelper: ImageHelper;
+    @Inject internal lateinit var imageHelper: ImageHelper
+    @Inject internal lateinit var serviceController: ServiceController
 
     override fun onCreate() {
         super.onCreate()
@@ -141,8 +142,8 @@ class WidgetUpdateService : Service() {
             val window = getSystemService(Context.WINDOW_SERVICE) as WindowManager
             val display = window.defaultDisplay
 
-            @SuppressWarnings("deprecation") val displayWidth = display.width
-            @SuppressWarnings("deprecation") val displayHeight = display.height
+            val displayWidth = display.width
+            val displayHeight = display.height
 
             return orientation != Configuration.ORIENTATION_LANDSCAPE && (orientation == Configuration.ORIENTATION_PORTRAIT || displayWidth == displayHeight || displayWidth < displayHeight)
         }
@@ -155,18 +156,18 @@ class WidgetUpdateService : Service() {
      * @param book        The book to be initalized
      */
     private fun initElements(remoteViews: RemoteViews, book: Book) {
-        val playPauseI = ServiceController.getPlayPauseIntent(this)
+        val playPauseI = serviceController.getPlayPauseIntent()
         val playPausePI = PendingIntent.getService(this,
                 KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseI, PendingIntent.FLAG_UPDATE_CURRENT)
         remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI)
 
-        val fastForwardI = ServiceController.getFastForwardIntent(this)
+        val fastForwardI = serviceController.getFastForwardIntent()
         val fastForwardPI = PendingIntent.getService(this,
                 KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, fastForwardI,
                 PendingIntent.FLAG_UPDATE_CURRENT)
         remoteViews.setOnClickPendingIntent(R.id.fastForward, fastForwardPI)
 
-        val rewindI = ServiceController.getRewindIntent(this)
+        val rewindI = serviceController.getRewindIntent()
         val rewindPI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_REWIND,
                 rewindI, PendingIntent.FLAG_UPDATE_CURRENT)
         remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI)
@@ -179,7 +180,6 @@ class WidgetUpdateService : Service() {
 
         // if we have any book, init the views and have a click on the whole widget start BookPlay.
         // if we have no book, simply have a click on the whole widget start BookChoose.
-
         remoteViews.setTextViewText(R.id.title, book.name)
         val name = book.currentChapter().name
 

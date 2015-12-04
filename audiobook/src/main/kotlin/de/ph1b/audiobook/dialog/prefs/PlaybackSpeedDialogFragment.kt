@@ -9,10 +9,10 @@ import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookShelf
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.playback.ServiceController
 import de.ph1b.audiobook.utils.BookVendor
 import java.text.DecimalFormat
 import javax.inject.Inject
@@ -27,7 +27,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
     @Inject internal lateinit var prefs: PrefsManager
     @Inject internal lateinit var db: BookShelf
     @Inject internal lateinit var bookVendor: BookVendor
-    @Inject internal lateinit var serviceController: ServiceController
+    @Inject internal lateinit var mediaPlayerController: MediaPlayerController
 
     private val SPEED_DELTA = 0.02f
     private val MAX_STEPS = Math.round((Book.SPEED_MAX - Book.SPEED_MIN) / SPEED_DELTA)
@@ -61,7 +61,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
             override fun onProgressChanged(seekBar: SeekBar, step: Int, fromUser: Boolean) {
                 val newSpeed = speedStepValueToSpeed(step)
                 textView.text = formatTime(newSpeed)
-                serviceController.setPlaybackSpeed(newSpeed)
+                mediaPlayerController.playbackSpeed = newSpeed
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {

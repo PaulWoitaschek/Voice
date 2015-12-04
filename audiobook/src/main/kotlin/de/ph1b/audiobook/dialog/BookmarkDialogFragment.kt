@@ -17,11 +17,11 @@ import com.google.common.collect.Ordering
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.adapter.BookmarkAdapter
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.model.Bookmark
 import de.ph1b.audiobook.persistence.BookShelf
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.playback.ServiceController
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.utils.BookVendor
 import timber.log.Timber
@@ -39,7 +39,7 @@ class BookmarkDialogFragment : DialogFragment() {
     @Inject lateinit internal var prefs: PrefsManager
     @Inject lateinit internal var db: BookShelf
     @Inject lateinit internal var bookVendor: BookVendor
-    @Inject lateinit internal var serviceController: ServiceController
+    @Inject internal lateinit var mediaPlayerController: MediaPlayerController
     private lateinit var book: Book
 
     fun addClicked() {
@@ -114,7 +114,7 @@ class BookmarkDialogFragment : DialogFragment() {
 
             override fun onBookmarkClicked(bookmark: Bookmark) {
                 prefs.setCurrentBookId(bookId)
-                serviceController.changeTime(bookmark.time, bookmark.mediaFile)
+                mediaPlayerController.changePosition(bookmark.time, bookmark.mediaFile)
 
                 dialog.cancel()
             }

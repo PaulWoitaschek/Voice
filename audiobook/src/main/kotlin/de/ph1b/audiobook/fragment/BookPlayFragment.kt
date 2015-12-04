@@ -30,7 +30,6 @@ import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookShelf
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayState
-import de.ph1b.audiobook.playback.ServiceController
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
@@ -46,7 +45,6 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
-
 /**
  * Base class for book playing interaction.
 
@@ -59,7 +57,6 @@ class BookPlayFragment : BaseFragment() {
     @Inject internal lateinit var prefs: PrefsManager
     @Inject internal lateinit var db: BookShelf
     @Inject internal lateinit var bookVendor: BookVendor
-    @Inject internal lateinit var serviceController: ServiceController
 
     private val playPauseDrawable = PlayPauseDrawable()
     private var subscriptions: CompositeSubscription? = null
@@ -105,11 +102,11 @@ class BookPlayFragment : BaseFragment() {
         val previousButton = view.findViewById(R.id.previous)
 
         Observable.merge(playButton.clicks(), coverFrame.longClicks())
-                .subscribe { serviceController.playPause() }
-        rewindButton.clicks().subscribe { serviceController.rewind() }
-        fastForwardButton.clicks().subscribe { serviceController.fastForward() }
-        nextButton.clicks().subscribe { serviceController.next() }
-        previousButton.clicks().subscribe { serviceController.previous() }
+                .subscribe { mediaPlayerController.playPause() }
+        rewindButton.clicks().subscribe { mediaPlayerController.skip(MediaPlayerController.Direction.BACKWARD) }
+        fastForwardButton.clicks().subscribe { mediaPlayerController.skip(MediaPlayerController.Direction.FORWARD) }
+        nextButton.clicks().subscribe { mediaPlayerController.next() }
+        previousButton.clicks().subscribe { mediaPlayerController.previous(false) }
         playedTimeView.clicks().subscribe { launchJumpToPositionDialog() }
 
         book = bookVendor.byId(bookId)
@@ -128,7 +125,7 @@ class BookPlayFragment : BaseFragment() {
                         }
                         is SeekBarStopChangeEvent -> {
                             val progress = seekBar.progress
-                            serviceController.changeTime(progress, book!!.currentChapter().file)
+                            mediaPlayerController.changePosition(progress, book!!.currentChapter().file)
                             playedTimeView.text = formatTime(progress, seekBar.max)
                         }
                     }
@@ -189,7 +186,7 @@ class BookPlayFragment : BaseFragment() {
                 val realInput = bookSpinner.tag != null && bookSpinner.tag != it
                 if (realInput) {
                     Timber.i("spinner: onItemSelected. firing: %d", it)
-                    serviceController.changeTime(0, book!!.chapters[it].file)
+                    mediaPlayerController.changePosition(0, book!!.chapters[it].file)
                     bookSpinner.tag = it
                 }
             }
@@ -299,7 +296,7 @@ class BookPlayFragment : BaseFragment() {
                 return true
             }
             R.id.action_sleep -> {
-                serviceController.toggleSleepSand()
+                mediaPlayerController.toggleSleepSand()
                 if (prefs.setBookmarkOnSleepTimer() && !mediaPlayerController.isSleepTimerActive) {
                     val date = DateUtils.formatDateTime(context, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE)
                     BookmarkDialogFragment.addBookmark(bookId, date + ": " + getString(R.string.action_sleep), db)
