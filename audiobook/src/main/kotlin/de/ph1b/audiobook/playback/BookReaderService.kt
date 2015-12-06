@@ -125,17 +125,17 @@ class BookReaderService : Service() {
                     .flatMap({ updatedId ->
                         db.activeBooks.singleOrDefault(null) { it.id == updatedId }
                     })
+                    .filter { it != null && (controller.book?.id != it.id) }
+                    .observeOn(Schedulers.io())
                     .subscribe {
-                        if (it != null && (controller.book?.id != it.id)) {
-                            controller.stop()
-                            controller.init(it)
-                        }
+                        controller.stop()
+                        controller.init(it)
                     })
 
             // notify player about changes in the current book
             add(db.updateObservable()
-                    .observeOn(Schedulers.io())
                     .filter { it.id == prefs.currentBookId.value }
+                    .observeOn(Schedulers.io())
                     .subscribe {
                         controller.init(it)
                         notifyChange(ChangeType.METADATA)
