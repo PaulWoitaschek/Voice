@@ -18,9 +18,9 @@ class HeadsetPlugReceiver {
 
     private val publishSubject = PublishSubject.create<HeadsetState>()
 
-    public fun observable(): Observable<HeadsetState> = publishSubject.asObservable()
+    fun observable(): Observable<HeadsetState> = publishSubject.asObservable()
 
-    public val broadcastReceiver = object : BroadcastReceiver() {
+    val broadcastReceiver = object : BroadcastReceiver() {
         private val PLUGGED = 1
         private val UNPLUGGED = 0
 

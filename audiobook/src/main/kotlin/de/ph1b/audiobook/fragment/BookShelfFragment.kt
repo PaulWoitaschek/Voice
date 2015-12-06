@@ -25,7 +25,7 @@ import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.BookAdder
 import de.ph1b.audiobook.persistence.BookShelf
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.playback.PlayState
+import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import rx.Observable
@@ -54,6 +54,8 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
     @Inject internal lateinit var db: BookShelf
     @Inject internal lateinit var bookAdder: BookAdder
     @Inject internal lateinit var mediaPlayerController: MediaPlayerController
+    @Inject internal lateinit var playStateManager: PlayStateManager
+
 
     private var subscriptions: CompositeSubscription? = null
 
@@ -195,15 +197,15 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
                     })
 
             // Subscription that updates the UI based on the play state.
-            add(mediaPlayerController.playState
+            add(playStateManager.playState
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(object : Action1<PlayState> {
+                    .subscribe(object : Action1<PlayStateManager.PlayState> {
                         private var firstRun = true
 
-                        override fun call(playState: PlayState) {
+                        override fun call(playState: PlayStateManager.PlayState) {
                             // animate only if this is not the first run
                             Timber.i("onNext with playState %s", playState)
-                            if (playState === PlayState.PLAYING) {
+                            if (playState === PlayStateManager.PlayState.PLAYING) {
                                 playPauseDrawable.transformToPause(!firstRun)
                             } else {
                                 playPauseDrawable.transformToPlay(!firstRun)

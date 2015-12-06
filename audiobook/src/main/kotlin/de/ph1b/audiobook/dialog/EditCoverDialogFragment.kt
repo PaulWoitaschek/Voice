@@ -32,7 +32,7 @@ class EditCoverDialogFragment : DialogFragment() {
     @Inject internal lateinit var db: BookShelf
     @Inject internal lateinit var bookVendor: BookVendor
     @Inject internal lateinit var coverDownloader: CoverDownloader
-    @Inject internal lateinit var imageHelper: ImageHelper;
+    @Inject internal lateinit var imageHelper: ImageHelper
 
     private val imageURLS = ArrayList<String>(20)
     private lateinit var coverImageView: DraggableBoxImageView

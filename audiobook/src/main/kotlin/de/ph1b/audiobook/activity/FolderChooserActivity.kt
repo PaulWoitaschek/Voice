@@ -246,7 +246,7 @@ class FolderChooserActivity : BaseActivity(), HideFolderDialog.OnChosenListener 
     }
 
     private fun storageDirs(): List<File> {
-        val dirSeparator = Pattern.compile("/");
+        val dirSeparator = Pattern.compile("/")
 
         // Final set of paths
         val rv: HashSet<String> = HashSet(5)
@@ -261,57 +261,57 @@ class FolderChooserActivity : BaseActivity(), HideFolderDialog.OnChosenListener 
             // Device has physical external storage; use plain paths.
             if (TextUtils.isEmpty(rawExternalStorage)) {
                 // EXTERNAL_STORAGE undefined; falling back to default.
-                rv.add("/storage/sdcard0");
+                rv.add("/storage/sdcard0")
             } else {
-                rv.add(rawExternalStorage);
+                rv.add(rawExternalStorage)
             }
         } else {
             // Device has emulated storage; external storage paths should have
             // userId burned into them.
-            val rawUserId: String;
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                rawUserId = "";
-            } else {
-                val path = Environment.getExternalStorageDirectory().absolutePath;
-                val folders = dirSeparator.split(path);
-                val lastFolder = folders[folders.size - 1];
-                var isDigit = false;
-                try {
-                    Integer.valueOf(lastFolder);
-                    isDigit = true;
-                } catch (ignored: NumberFormatException) {
-                }
-                rawUserId = if (isDigit) lastFolder else ""
-            }
+            val rawUserId =
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        ""
+                    } else {
+                        val path = Environment.getExternalStorageDirectory().absolutePath
+                        val folders = dirSeparator.split(path)
+                        val lastFolder = folders[folders.size - 1]
+                        var isDigit = false
+                        try {
+                            Integer.valueOf(lastFolder)
+                            isDigit = true
+                        } catch (ignored: NumberFormatException) {
+                        }
+                        if (isDigit) lastFolder else ""
+                    }
             // /storage/emulated/0[1,2,...]
             if (TextUtils.isEmpty(rawUserId)) {
-                rv.add(rawEmulatedStorageTarget);
+                rv.add(rawEmulatedStorageTarget)
             } else {
-                rv.add(rawEmulatedStorageTarget + File.separator + rawUserId);
+                rv.add(rawEmulatedStorageTarget + File.separator + rawUserId)
             }
         }
         // Add all secondary storage
         if (!TextUtils.isEmpty(rawSecondaryStorageStr)) {
             // All Secondary SD-CARDs splitted into array
-            val rawSecondaryStorage = rawSecondaryStorageStr.split(File.pathSeparator);
+            val rawSecondaryStorage = rawSecondaryStorageStr.split(File.pathSeparator)
             rv.addAll(rawSecondaryStorage)
         }
-        rv.add("/storage/extSdCard");
-        rv.add(Environment.getExternalStorageDirectory().absolutePath);
-        rv.add("/storage/emulated/0");
-        rv.add("/storage/sdcard1");
-        rv.add("/storage/external_SD");
-        rv.add("/storage/ext_sd");
+        rv.add("/storage/extSdCard")
+        rv.add(Environment.getExternalStorageDirectory().absolutePath)
+        rv.add("/storage/emulated/0")
+        rv.add("/storage/sdcard1")
+        rv.add("/storage/external_SD")
+        rv.add("/storage/ext_sd")
 
-        val paths = ArrayList<File>(rv.size);
+        val paths = ArrayList<File>(rv.size)
         for (item  in rv) {
-            val f = File(item);
+            val f = File(item)
             if (f.exists() && f.isDirectory && f.canRead() && f.listFiles() != null && f.listFiles().size > 0) {
-                paths.add(f);
+                paths.add(f)
             }
         }
-        Collections.sort(paths, NaturalOrderComparator.FILE_COMPARATOR);
-        return paths;
+        Collections.sort(paths, NaturalOrderComparator.FILE_COMPARATOR)
+        return paths
     }
 
     private fun finishActivityWithSuccess(chosenFile: File) {

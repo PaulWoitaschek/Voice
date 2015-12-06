@@ -20,7 +20,6 @@ import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.activity.BookActivity
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookShelf
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -46,7 +45,7 @@ class WidgetUpdateService : Service() {
     private val subscriptions = CompositeSubscription()
     @Inject internal lateinit var prefs: PrefsManager
     @Inject internal lateinit var db: BookShelf
-    @Inject internal lateinit var mediaPlayerController: MediaPlayerController
+    @Inject internal lateinit var playStateManager: PlayStateManager
     @Inject internal lateinit var bookVendor: BookVendor
     @Inject internal lateinit var imageHelper: ImageHelper
     @Inject internal lateinit var serviceController: ServiceController
@@ -59,7 +58,7 @@ class WidgetUpdateService : Service() {
         subscriptions.add(
                 Observable.merge(
                         db.updateObservable().filter { it.id == prefs.currentBookId.value },
-                        mediaPlayerController.playState,
+                        playStateManager.playState,
                         prefs.currentBookId).subscribe { updateWidget() })
 
     }
@@ -172,7 +171,7 @@ class WidgetUpdateService : Service() {
                 rewindI, PendingIntent.FLAG_UPDATE_CURRENT)
         remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI)
 
-        if (mediaPlayerController.playState.value === PlayState.PLAYING) {
+        if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
             remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_pause)
         } else {
             remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow)

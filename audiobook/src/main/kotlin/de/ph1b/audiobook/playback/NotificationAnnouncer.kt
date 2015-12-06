@@ -25,7 +25,7 @@ import javax.inject.Inject
 class NotificationAnnouncer
 @Inject constructor(private val context: Context, private val imageHelper: ImageHelper, private val serviceController: ServiceController) {
 
-    public fun getNotification(book: Book, playState: PlayState, sessionToken: MediaSessionCompat.Token): Notification {
+    fun getNotification(book: Book, playState: PlayStateManager.PlayState, sessionToken: MediaSessionCompat.Token): Notification {
         // cover
         val width = imageHelper.smallerScreenSize
         val height = imageHelper.smallerScreenSize
@@ -64,7 +64,7 @@ class NotificationAnnouncer
         // play/pause
         val playPauseIntent = serviceController.getPlayPauseIntent()
         val playPausePI = PendingIntent.getService(context, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-        if (playState == PlayState.PLAYING) {
+        if (playState == PlayStateManager.PlayState.PLAYING) {
             notificationBuilder.addAction(R.drawable.ic_pause, context.getString(R.string.pause), playPausePI)
         } else {
             notificationBuilder.addAction(R.drawable.ic_play_arrow, context.getString(R.string.play), playPausePI)

@@ -69,9 +69,9 @@ data class Book(val id: Long,
     val globalDuration: Int by lazy {
         var globalDuration = 0
         for (c in chapters) {
-            globalDuration += c.duration;
+            globalDuration += c.duration
         }
-        globalDuration;
+        globalDuration
     }
 
 

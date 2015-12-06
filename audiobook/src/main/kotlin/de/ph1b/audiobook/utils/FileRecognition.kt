@@ -12,7 +12,7 @@ import java.util.*
  */
 object FileRecognition {
 
-    private val AUDIO_TYPES: ArrayList<String>;
+    private val AUDIO_TYPES: ArrayList<String>
 
     init {
         AUDIO_TYPES = ArrayList<String>(30)

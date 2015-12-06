@@ -43,8 +43,8 @@ class DependencyLicensesActivity : BaseActivity() {
 
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 // open external browser
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(intent);
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                startActivity(intent)
 
                 return true
             }

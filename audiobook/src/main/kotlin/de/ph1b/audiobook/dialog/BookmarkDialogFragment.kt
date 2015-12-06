@@ -35,7 +35,7 @@ import javax.inject.Inject
  */
 class BookmarkDialogFragment : DialogFragment() {
 
-    private lateinit var bookmarkTitle: EditText;
+    private lateinit var bookmarkTitle: EditText
     @Inject lateinit internal var prefs: PrefsManager
     @Inject lateinit internal var db: BookShelf
     @Inject lateinit internal var bookVendor: BookVendor
@@ -43,7 +43,7 @@ class BookmarkDialogFragment : DialogFragment() {
     private lateinit var book: Book
 
     fun addClicked() {
-        Timber.i("Add bookmark clicked.");
+        Timber.i("Add bookmark clicked.")
         var title = bookmarkTitle.text.toString()
         if (title.isEmpty()) {
             title = book.currentChapter().name

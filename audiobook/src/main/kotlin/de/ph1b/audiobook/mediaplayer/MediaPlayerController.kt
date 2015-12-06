@@ -8,9 +8,8 @@ import de.ph1b.audiobook.fragment.BookShelfFragment
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookShelf
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.playback.PlayState
+import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.utils.Communication
-import rx.subjects.BehaviorSubject
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -27,11 +26,10 @@ class MediaPlayerController
 @Inject
 constructor(private val c: Context, private val prefs: PrefsManager,
             private val communication: Communication, private val db: BookShelf,
-            private val player: MediaPlayerInterface) {
+            private val player: MediaPlayerInterface, private val playStateManager: PlayStateManager) {
 
     private val lock = ReentrantLock()
     private val executor = Executors.newScheduledThreadPool(2)
-    public val playState = BehaviorSubject.create(PlayState.STOPPED)
     private var sleepSand: ScheduledFuture<*>? = null
     var book: Book? = null
         private set
@@ -48,10 +46,6 @@ constructor(private val c: Context, private val prefs: PrefsManager,
                 return sand.getDelay(TimeUnit.MILLISECONDS)
             }
         }
-
-    fun setPlayState(playState: PlayState) {
-        this.playState.onNext(playState)
-    }
 
     /**
      * Initializes a new book. After this, a call to play can be made.
@@ -91,7 +85,7 @@ constructor(private val c: Context, private val prefs: PrefsManager,
                                     } else {
                                         Timber.v("Reached last track. Stopping player")
                                         stopUpdating()
-                                        setPlayState(PlayState.STOPPED)
+                                        playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
 
                                         state = State.PLAYBACK_COMPLETED
                                     }
@@ -142,14 +136,14 @@ constructor(private val c: Context, private val prefs: PrefsManager,
                     player.currentPosition = 0
                     player.start()
                     startUpdating()
-                    setPlayState(PlayState.PLAYING)
+                    playStateManager.playState.onNext(PlayStateManager.PlayState.PLAYING)
                     state = State.STARTED
                     prepareTries = 0
                 }
                 MediaPlayerController.State.PREPARED, MediaPlayerController.State.PAUSED -> {
                     player.start()
                     startUpdating()
-                    setPlayState(PlayState.PLAYING)
+                    playStateManager.playState.onNext(PlayStateManager.PlayState.PLAYING)
                     state = State.STARTED
                     prepareTries = 0
                 }
@@ -242,7 +236,7 @@ constructor(private val c: Context, private val prefs: PrefsManager,
         lock.withLock {
             stopUpdating()
             player.reset()
-            setPlayState(PlayState.STOPPED)
+            playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
             if (leftSleepTime > 0) {
                 // if its active use toggle to stop the sleep timer
                 toggleSleepSand()
@@ -317,7 +311,7 @@ constructor(private val c: Context, private val prefs: PrefsManager,
                         }
                         db.updateBook(book!!)
 
-                        setPlayState(PlayState.PAUSED)
+                        playStateManager.playState.onNext(PlayStateManager.PlayState.PAUSED)
 
                         state = State.PAUSED
                     }
@@ -329,7 +323,7 @@ constructor(private val c: Context, private val prefs: PrefsManager,
 
     fun playPause() {
         lock.withLock {
-            if (playState.value != PlayState.PLAYING) {
+            if (playStateManager.playState.value != PlayStateManager.PlayState.PLAYING) {
                 play()
             } else {
                 pause(true)
@@ -372,10 +366,10 @@ constructor(private val c: Context, private val prefs: PrefsManager,
                     if (wasPlaying) {
                         player.start()
                         state = State.STARTED
-                        setPlayState(PlayState.PLAYING)
+                        playStateManager.playState.onNext(PlayStateManager.PlayState.PLAYING)
                     } else {
                         state = State.PREPARED
-                        setPlayState(PlayState.PAUSED)
+                        playStateManager.playState.onNext(PlayStateManager.PlayState.PAUSED)
                     }
                 } else {
                     when (state) {

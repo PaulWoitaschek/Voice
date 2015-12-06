@@ -6,7 +6,7 @@ import android.test.suitebuilder.annotation.MediumTest
 import android.test.suitebuilder.annotation.SmallTest
 import com.google.common.io.ByteStreams
 import de.ph1b.audiobook.model.Book
-import de.ph1b.audiobook.playback.PlayState
+import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.testing.MockProvider
 import java.io.File
 import java.io.FileOutputStream
@@ -22,6 +22,7 @@ import javax.inject.Inject
 class MediaPlayerControllerTest : AndroidTestCase () {
 
     @Inject internal lateinit var mediaPlayerController: MediaPlayerController
+    @Inject internal lateinit var playStateManager: PlayStateManager
     lateinit var file1: File
     lateinit var file2: File
     lateinit var book: Book
@@ -60,10 +61,10 @@ class MediaPlayerControllerTest : AndroidTestCase () {
     @SmallTest
     fun testSimplePlayback() {
         mediaPlayerController.play()
-        check(mediaPlayerController.playState.value == PlayState.PLAYING)
+        check(playStateManager.playState.value == PlayStateManager.PlayState.PLAYING)
         Thread.sleep(1000)
         mediaPlayerController.pause(false)
-        check(mediaPlayerController.playState.value == PlayState.PAUSED)
+        check(playStateManager.playState.value == PlayStateManager.PlayState.PAUSED)
     }
 
     private val rnd = Random()
@@ -72,10 +73,10 @@ class MediaPlayerControllerTest : AndroidTestCase () {
         synchronized(mediaPlayerController, {
             if (rnd.nextBoolean()) {
                 mediaPlayerController.play()
-                check(mediaPlayerController.playState.value == PlayState.PLAYING)
+                check(playStateManager.playState.value == PlayStateManager.PlayState.PLAYING)
             } else {
                 mediaPlayerController.pause(false)
-                check(mediaPlayerController.playState.value == PlayState.PAUSED)
+                check(playStateManager.playState.value == PlayStateManager.PlayState.PAUSED)
             }
         })
     }
@@ -116,6 +117,4 @@ class MediaPlayerControllerTest : AndroidTestCase () {
         file1.delete()
         file2.delete()
     }
-
-
 }

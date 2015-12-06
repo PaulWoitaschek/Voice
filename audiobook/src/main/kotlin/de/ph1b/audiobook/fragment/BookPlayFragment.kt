@@ -29,7 +29,7 @@ import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookShelf
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.playback.PlayState
+import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
@@ -57,6 +57,7 @@ class BookPlayFragment : BaseFragment() {
     @Inject internal lateinit var prefs: PrefsManager
     @Inject internal lateinit var db: BookShelf
     @Inject internal lateinit var bookVendor: BookVendor
+    @Inject internal lateinit var playStateManager: PlayStateManager
 
     private val playPauseDrawable = PlayPauseDrawable()
     private var subscriptions: CompositeSubscription? = null
@@ -213,8 +214,8 @@ class BookPlayFragment : BaseFragment() {
             // we have to set the cover in onPreDraw. Else the transition will fail.
             coverView.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
                 override fun onPreDraw(): Boolean {
-                    coverView.viewTreeObserver.removeOnPreDrawListener(this);
-                    coverView.setImageDrawable(coverReplacement);
+                    coverView.viewTreeObserver.removeOnPreDrawListener(this)
+                    coverView.setImageDrawable(coverReplacement)
                     return true
                 }
             })
@@ -325,15 +326,15 @@ class BookPlayFragment : BaseFragment() {
         super.onStart()
 
         subscriptions = CompositeSubscription()
-        subscriptions!!.add(mediaPlayerController.playState
+        subscriptions!!.add(playStateManager.playState
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Action1<PlayState> {
+                .subscribe(object : Action1<PlayStateManager.PlayState> {
                     private var firstRun = true
 
-                    override fun call(playState: PlayState) {
+                    override fun call(playState: PlayStateManager.PlayState) {
                         // animate only if this is not the first run
                         Timber.i("onNext with playState %s", playState)
-                        if (playState === PlayState.PLAYING) {
+                        if (playState === PlayStateManager.PlayState.PLAYING) {
                             playPauseDrawable.transformToPause(!firstRun)
                         } else {
                             playPauseDrawable.transformToPlay(!firstRun)

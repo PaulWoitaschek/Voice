@@ -97,7 +97,7 @@ constructor(c: Context) {
             "            group_concat(" + BookmarkTable.PATH + ", '" + stringSeparator + "') as " + KEY_BOOKMARK_PATHS + "," +
             "            group_concat(" + BookmarkTable.TIME + ") as " + KEY_BOOKMARK_POSITIONS +
             "     FROM " + BookmarkTable.TABLE_NAME +
-            "     group by " + BookmarkTable.BOOK_ID + ") AS bmt on bmt." + BookmarkTable.BOOK_ID + " = bt." + BookTable.ID;
+            "     group by " + BookmarkTable.BOOK_ID + ") AS bmt on bmt." + BookmarkTable.BOOK_ID + " = bt." + BookTable.ID
 
     fun removedObservable(): Observable<Book> {
         return removed.asObservable()

@@ -44,7 +44,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
     private val scannerActive = BehaviorSubject.create(false)
     @Inject internal lateinit var bookVendor: BookVendor
     @Inject internal lateinit var activityManager: ActivityManager
-    @Inject internal lateinit var imageHelper: ImageHelper;
+    @Inject internal lateinit var imageHelper: ImageHelper
     @Volatile private var stopScanner = false
 
     /**
