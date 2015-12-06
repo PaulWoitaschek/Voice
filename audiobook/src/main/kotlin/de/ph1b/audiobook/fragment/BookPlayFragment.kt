@@ -12,7 +12,6 @@ import android.view.*
 import android.widget.*
 import com.getbase.floatingactionbutton.FloatingActionButton
 import com.jakewharton.rxbinding.view.clicks
-import com.jakewharton.rxbinding.view.longClicks
 import com.jakewharton.rxbinding.widget.RxAdapterView
 import com.jakewharton.rxbinding.widget.RxSeekBar
 import com.jakewharton.rxbinding.widget.SeekBarProgressChangeEvent
@@ -87,6 +86,8 @@ class BookPlayFragment : BaseFragment() {
     val bookId: Long
         get() = arguments.getLong(NI_BOOK_ID)
 
+    private lateinit var coverFrame: View
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_book_play, container, false)
         timerCountdownView = view.findViewById(R.id.timerView) as TextView
@@ -94,7 +95,7 @@ class BookPlayFragment : BaseFragment() {
         bookSpinner = view.findViewById(R.id.book_spinner) as Spinner
         seekBar = view.findViewById(R.id.seekBar) as SeekBar
         playedTimeView = view.findViewById(R.id.played) as TextView
-        val coverFrame = view.findViewById(R.id.cover_frame)
+        coverFrame = view.findViewById(R.id.cover_frame)
         val coverView = view.findViewById(R.id.book_cover) as ImageView
         val nextButton = view.findViewById(R.id.next)
         val fastForwardButton = view.findViewById(R.id.fastForward)
@@ -102,8 +103,7 @@ class BookPlayFragment : BaseFragment() {
         val rewindButton = view.findViewById(R.id.rewind)
         val previousButton = view.findViewById(R.id.previous)
 
-        Observable.merge(playButton.clicks(), coverFrame.longClicks())
-                .subscribe { mediaPlayerController.playPause() }
+        playButton.clicks().subscribe { mediaPlayerController.playPause() }
         rewindButton.clicks().subscribe { mediaPlayerController.skip(MediaPlayerController.Direction.BACKWARD) }
         fastForwardButton.clicks().subscribe { mediaPlayerController.skip(MediaPlayerController.Direction.FORWARD) }
         nextButton.clicks().subscribe { mediaPlayerController.next() }
@@ -326,55 +326,69 @@ class BookPlayFragment : BaseFragment() {
         super.onStart()
 
         subscriptions = CompositeSubscription()
-        subscriptions!!.add(playStateManager.playState
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Action1<PlayStateManager.PlayState> {
-                    private var firstRun = true
+        subscriptions!!.apply {
 
-                    override fun call(playState: PlayStateManager.PlayState) {
-                        // animate only if this is not the first run
-                        Timber.i("onNext with playState %s", playState)
-                        if (playState === PlayStateManager.PlayState.PLAYING) {
-                            playPauseDrawable.transformToPause(!firstRun)
-                        } else {
-                            playPauseDrawable.transformToPlay(!firstRun)
+            // double click (=more than one click in a 200ms frame)
+            var clickBefore = 0L
+            var lastClick = 0L
+            add(coverFrame.clicks()
+                    .doOnNext {
+                        clickBefore = lastClick
+                        lastClick = System.currentTimeMillis()
+                    }
+                    .filter { lastClick - clickBefore < 200 }
+                    .doOnNext { lastClick = 0 } // resets so triple clicks won't cause another invoke
+                    .subscribe { mediaPlayerController.playPause() })
+
+            add(playStateManager.playState
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(object : Action1<PlayStateManager.PlayState> {
+                        private var firstRun = true
+
+                        override fun call(playState: PlayStateManager.PlayState) {
+                            // animate only if this is not the first run
+                            Timber.i("onNext with playState %s", playState)
+                            if (playState === PlayStateManager.PlayState.PLAYING) {
+                                playPauseDrawable.transformToPause(!firstRun)
+                            } else {
+                                playPauseDrawable.transformToPlay(!firstRun)
+                            }
+
+                            firstRun = false
                         }
+                    }))
 
-                        firstRun = false
-                    }
-                }))
+            add(Observable.merge(db.activeBooks, db.updateObservable())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .filter { book -> book.id == bookId }
+                    .doOnNext { book -> this@BookPlayFragment.book = book }
+                    .subscribe { book ->
+                        if (book == null) {
+                            Timber.e("Book is null. Returning immediately.")
+                            return@subscribe
+                        }
+                        Timber.i("New book with getTime %d and content %s", book.time, book)
 
+                        val chapters = book.chapters
+                        val chapter = book.currentChapter()
 
-        subscriptions!!.add((Observable.merge(db.activeBooks, db.updateObservable()))
-                .observeOn(AndroidSchedulers.mainThread())
-                .filter { book -> book.id == bookId }
-                .doOnNext { book -> this@BookPlayFragment.book = book }
-                .subscribe { book ->
-                    if (book == null) {
-                        Timber.e("Book is null. Returning immediately.")
-                        return@subscribe
-                    }
-                    Timber.i("New book with getTime %d and content %s", book.time, book)
+                        val position = chapters.indexOf(chapter)
+                        /* Setting position as a tag, so we can make sure onItemSelected is only fired when
+                         the user changes the position himself.  */
+                        bookSpinner.tag = position
+                        bookSpinner.setSelection(position, true)
+                        val duration = chapter.duration
+                        seekBar.max = duration
+                        maxTimeView.text = formatTime(duration, duration)
 
-                    val chapters = book.chapters
-                    val chapter = book.currentChapter()
-
-                    val position = chapters.indexOf(chapter)
-                    /* Setting position as a tag, so we can make sure onItemSelected is only fired when
-                     the user changes the position himself.  */
-                    bookSpinner.tag = position
-                    bookSpinner.setSelection(position, true)
-                    val duration = chapter.duration
-                    seekBar.max = duration
-                    maxTimeView.text = formatTime(duration, duration)
-
-                    // Setting seekBar and played getTime view
-                    val progress = book.time
-                    if (!seekBar.isPressed) {
-                        seekBar.progress = progress
-                        playedTimeView.text = formatTime(progress, duration)
-                    }
-                })
+                        // Setting seekBar and played getTime view
+                        val progress = book.time
+                        if (!seekBar.isPressed) {
+                            seekBar.progress = progress
+                            playedTimeView.text = formatTime(progress, duration)
+                        }
+                    })
+        }
 
         hostingActivity.invalidateOptionsMenu()
 
