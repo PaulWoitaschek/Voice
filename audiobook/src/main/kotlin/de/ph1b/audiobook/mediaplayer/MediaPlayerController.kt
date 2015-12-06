@@ -409,16 +409,6 @@ constructor(private val c: Context, private val prefs: PrefsManager,
         }
 
     /**
-     * After this this object should no longer be used.
-     */
-    fun onDestroy() {
-        player.release()
-        if (sleepSand != null && !sleepSand!!.isCancelled && !sleepSand!!.isDone) {
-            sleepSand!!.cancel(false)
-        }
-    }
-
-    /**
      * The direction to skip.
      */
     enum class Direction {

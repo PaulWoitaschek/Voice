@@ -243,8 +243,6 @@ class BookReaderService : Service() {
     override fun onDestroy() {
         Timber.v("onDestroy called")
         controller.stop()
-        controller.onDestroy()
-        playStateManager.playState.onNext(PlayState.STOPPED)
 
         try {
             unregisterReceiver(audioBecomingNoisyReceiver)
