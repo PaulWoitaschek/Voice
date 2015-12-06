@@ -19,6 +19,8 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.persistence.BookShelf
 import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.playback.PlayStateManager.PauseReason
+import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.receiver.AudioFocusReceiver
 import de.ph1b.audiobook.receiver.HeadsetPlugReceiver
 import de.ph1b.audiobook.uitools.CoverReplacement
@@ -62,8 +64,8 @@ class BookReaderService : Service() {
     @Inject internal lateinit var playStateManager: PlayStateManager
     private val audioBecomingNoisyReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
-                pauseReason = PauseReason.BECAUSE_HEADSET
+            if (playStateManager.playState.value === PlayState.PLAYING) {
+                playStateManager.pauseReason = PauseReason.BECAUSE_HEADSET
                 controller.pause(true)
             }
         }
@@ -115,7 +117,7 @@ class BookReaderService : Service() {
                 AudioManager.ACTION_AUDIO_BECOMING_NOISY))
         registerReceiver(headsetPlugReceiver.broadcastReceiver, IntentFilter(Intent.ACTION_HEADSET_PLUG))
 
-        playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
+        playStateManager.playState.onNext(PlayState.STOPPED)
 
         subscriptions.apply {
             // re-init controller when there is a new book set as the current book
@@ -127,8 +129,6 @@ class BookReaderService : Service() {
                         if (it != null && (controller.book?.id != it.id)) {
                             controller.stop()
                             controller.init(it)
-
-                            pauseReason = PauseReason.NONE
                         }
                     })
 
@@ -149,21 +149,19 @@ class BookReaderService : Service() {
                         val controllerBook = controller.book
                         if (controllerBook != null) {
                             when (it!!) {
-                                PlayStateManager.PlayState.PLAYING -> {
+                                PlayState.PLAYING -> {
                                     audioManager.requestAudioFocus(audioFocusReceiver.audioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
 
                                     mediaSession.isActive = true
                                     val notification = notificationAnnouncer.getNotification(controllerBook, it, mediaSession.sessionToken)
                                     startForeground(NOTIFICATION_ID, notification)
-
-                                    pauseReason = PauseReason.NONE
                                 }
-                                PlayStateManager.PlayState.PAUSED -> {
+                                PlayState.PAUSED -> {
                                     stopForeground(false)
                                     val notification = notificationAnnouncer.getNotification(controllerBook, it, mediaSession.sessionToken)
                                     notificationManager.notify(NOTIFICATION_ID, notification)
                                 }
-                                PlayStateManager.PlayState.STOPPED -> {
+                                PlayState.STOPPED -> {
                                     mediaSession.isActive = false
 
                                     audioManager.abandonAudioFocus(audioFocusReceiver.audioFocusListener)
@@ -180,7 +178,7 @@ class BookReaderService : Service() {
             add(headsetPlugReceiver.observable()
                     .subscribe { headsetState ->
                         if (headsetState == HeadsetPlugReceiver.HeadsetState.PLUGGED) {
-                            if (pauseReason == PauseReason.BECAUSE_HEADSET) {
+                            if (playStateManager.pauseReason == PauseReason.BECAUSE_HEADSET) {
                                 if (prefs.resumeOnReplug()) {
                                     controller.play()
                                 }
@@ -194,9 +192,9 @@ class BookReaderService : Service() {
                         when (audioFocus!!) {
                             AudioFocusReceiver.AudioFocus.GAIN -> {
                                 Timber.d("started by audioFocus gained")
-                                if (pauseReason == PauseReason.LOSS_TRANSIENT) {
+                                if (playStateManager.pauseReason == PlayStateManager.PauseReason.LOSS_TRANSIENT) {
                                     controller.play()
-                                } else if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
+                                } else if (playStateManager.playState.value === PlayState.PLAYING) {
                                     Timber.d("increasing volume")
                                     audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0)
                                 }
@@ -207,12 +205,12 @@ class BookReaderService : Service() {
                                 controller.stop()
                             }
                             AudioFocusReceiver.AudioFocus.LOSS_TRANSIENT_CAN_DUCK -> {
-                                if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
+                                if (playStateManager.playState.value === PlayState.PLAYING) {
                                     if (prefs.pauseOnTempFocusLoss()) {
                                         Timber.d("Paused by audio-focus loss transient.")
                                         // Pause is temporary, don't rewind
                                         controller.pause(false)
-                                        pauseReason = PauseReason.LOSS_TRANSIENT
+                                        playStateManager.pauseReason = PauseReason.LOSS_TRANSIENT
                                     } else {
                                         Timber.d("lowering volume")
                                         audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0)
@@ -220,10 +218,10 @@ class BookReaderService : Service() {
                                 }
                             }
                             AudioFocusReceiver.AudioFocus.LOSS_TRANSIENT -> {
-                                if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
+                                if (playStateManager.playState.value === PlayState.PLAYING) {
                                     Timber.d("Paused by audio-focus loss transient.")
                                     controller.pause(true) // auto pause
-                                    pauseReason = PauseReason.LOSS_TRANSIENT
+                                    playStateManager.pauseReason = PauseReason.LOSS_TRANSIENT
                                 }
                             }
                         }
@@ -246,7 +244,7 @@ class BookReaderService : Service() {
         Timber.v("onDestroy called")
         controller.stop()
         controller.onDestroy()
-        playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
+        playStateManager.playState.onNext(PlayState.STOPPED)
 
         try {
             unregisterReceiver(audioBecomingNoisyReceiver)
@@ -325,13 +323,6 @@ class BookReaderService : Service() {
         }
     }
 
-    private var pauseReason = PauseReason.NONE
-
-    private enum class PauseReason {
-        NONE,
-        BECAUSE_HEADSET,
-        LOSS_TRANSIENT
-    }
 
     private enum class ChangeType internal constructor(private val intentUrl: String) {
         METADATA("com.android.music.metachanged"),
@@ -340,7 +331,7 @@ class BookReaderService : Service() {
         fun broadcastIntent(author: String?,
                             bookName: String,
                             chapterName: String,
-                            playState: PlayStateManager.PlayState,
+                            playState: PlayState,
                             time: Int): Intent {
             val i = Intent(intentUrl)
             i.apply {
@@ -350,7 +341,7 @@ class BookReaderService : Service() {
                 }
                 putExtra("album", bookName)
                 putExtra("track", chapterName)
-                putExtra("playing", playState === PlayStateManager.PlayState.PLAYING)
+                putExtra("playing", playState === PlayState.PLAYING)
                 putExtra("position", time)
             }
             return i

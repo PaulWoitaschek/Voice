@@ -7,6 +7,7 @@ import javax.inject.Singleton
 
 /**
  * Manages the playback state and is able to inform subscriber.
+ * Also manages the reason for pausing and sets it to none if the state gets stopped is playing.
  *
  * @author Paul Woitaschek
  */
@@ -17,6 +18,16 @@ constructor() {
 
     val playState = BehaviorSubject.create(PlayStateManager.PlayState.STOPPED)
 
+    init {
+        playState.subscribe({
+            if (it == PlayState.PLAYING || it == PlayState.STOPPED) {
+                pauseReason = PauseReason.NONE
+            }
+        })
+    }
+
+    var pauseReason = PauseReason.NONE
+
     /**
      * Represents the play states for the playback.
      *
@@ -26,5 +37,11 @@ constructor() {
         PLAYING(PlaybackStateCompat.STATE_PLAYING),
         PAUSED(PlaybackStateCompat.STATE_PAUSED),
         STOPPED(PlaybackStateCompat.STATE_STOPPED)
+    }
+
+    enum class PauseReason {
+        NONE,
+        BECAUSE_HEADSET,
+        LOSS_TRANSIENT
     }
 }
