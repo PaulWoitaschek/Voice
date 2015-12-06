@@ -137,7 +137,7 @@ class BookReaderService : Service() {
                     .observeOn(Schedulers.io())
                     .filter { it.id == prefs.currentBookId.value }
                     .subscribe {
-                        controller.updateBook(it)
+                        controller.init(it)
                         notifyChange(ChangeType.METADATA)
                     })
 

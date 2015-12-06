@@ -59,12 +59,6 @@ constructor(private val c: Context, private val prefs: PrefsManager,
         }
     }
 
-    fun updateBook(book: Book?) {
-        lock.withLock {
-            this.book = book
-        }
-    }
-
     /**
      * Prepares the current chapter set in book.
      */
