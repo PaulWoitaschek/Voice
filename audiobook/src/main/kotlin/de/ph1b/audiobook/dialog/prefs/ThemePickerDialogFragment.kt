@@ -35,9 +35,9 @@ class ThemePickerDialogFragment : DialogFragment() {
         App.component().inject(this)
 
         val oldTheme = prefsManager.theme
-        val existingThemes = ThemeUtil.Theme.values
+        val existingThemes = ThemeUtil.Theme.values()
         val names = ArrayList<String>(existingThemes.size)
-        for (t in ThemeUtil.Theme.values) {
+        for (t in existingThemes) {
             names.add(getString(t.nameId))
         }
 
