@@ -329,14 +329,14 @@ class BookPlayFragment : BaseFragment() {
         subscriptions!!.apply {
 
             // double click (=more than one click in a 200ms frame)
-            var clickBefore = 0L
             var lastClick = 0L
             add(coverFrame.clicks()
-                    .doOnNext {
-                        clickBefore = lastClick
-                        lastClick = System.currentTimeMillis()
+                    .filter {
+                        val currentTime = System.currentTimeMillis()
+                        val doubleClick = currentTime - lastClick < 200
+                        lastClick = currentTime
+                        doubleClick
                     }
-                    .filter { lastClick - clickBefore < 200 }
                     .doOnNext { lastClick = 0 } // resets so triple clicks won't cause another invoke
                     .subscribe { mediaPlayerController.playPause() })
 
