@@ -286,38 +286,38 @@ constructor(c: Context) {
         return out
     }
 
+
     private fun byProjection(cursor: Cursor): Book {
-        val rawDurations = cursor.getString(cursor.getColumnIndexOrThrow(KEY_CHAPTER_DURATIONS))
-        val rawChapterNames = cursor.getString(cursor.getColumnIndexOrThrow(KEY_CHAPTER_NAMES))
-        val rawChapterPaths = cursor.getString(cursor.getColumnIndexOrThrow(KEY_CHAPTER_PATHS))
+        val rawDurations = cursor.string(KEY_CHAPTER_DURATIONS)
+        val rawChapterNames = cursor.string(KEY_CHAPTER_NAMES)
+        val rawChapterPaths = cursor.string(KEY_CHAPTER_PATHS)
 
         val chapterDurations = convertToStringArray(rawDurations.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
         val chapterNames = rawChapterNames.split(stringSeparator.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val chapterPaths = rawChapterPaths.split(stringSeparator.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
-        val chapters = generateChapters(chapterDurations, chapterPaths, chapterNames)
-        Collections.sort(chapters)
+        val chapters = generateChapters(chapterDurations, chapterPaths, chapterNames).sorted()
 
-        val rawBookmarkPositions: String? = cursor.getString(cursor.getColumnIndexOrThrow(KEY_BOOKMARK_POSITIONS))
-        val rawBookmarkPaths: String? = cursor.getString(cursor.getColumnIndexOrThrow(KEY_BOOKMARK_PATHS))
-        val rawBookmarkTitles: String? = cursor.getString(cursor.getColumnIndexOrThrow(KEY_BOOKMARK_TITLES))
+        val rawBookmarkPositions: String? = cursor.string(KEY_BOOKMARK_POSITIONS)
+        val rawBookmarkPaths: String? = cursor.string(KEY_BOOKMARK_PATHS)
+        val rawBookmarkTitles: String? = cursor.string(KEY_BOOKMARK_TITLES)
 
         val bookmarkPositions = if (rawBookmarkPositions == null) IntArray(0) else convertToStringArray(rawBookmarkPositions.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
         val bookmarkPaths = if (rawBookmarkPaths == null) arrayOf<String>() else rawBookmarkPaths.split(stringSeparator.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val bookmarkTitles = if (rawBookmarkTitles == null) arrayOf<String>() else rawBookmarkTitles.split(stringSeparator.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
         val bookmarks = generateBookmarks(bookmarkPositions, bookmarkPaths, bookmarkTitles)
-        Collections.sort(bookmarks)
+                .sorted()
 
-        val bookId = cursor.getLong(cursor.getColumnIndexOrThrow(BookTable.ID))
-        val bookName = cursor.getString(cursor.getColumnIndexOrThrow(BookTable.NAME))
-        val bookAuthor = cursor.getString(cursor.getColumnIndexOrThrow(BookTable.AUTHOR))
-        val currentPath = File(cursor.getString(cursor.getColumnIndexOrThrow(BookTable.CURRENT_MEDIA_PATH)))
-        val bookSpeed = cursor.getFloat(cursor.getColumnIndexOrThrow(BookTable.PLAYBACK_SPEED))
-        val bookRoot = cursor.getString(cursor.getColumnIndexOrThrow(BookTable.ROOT))
-        val bookTime = cursor.getInt(cursor.getColumnIndexOrThrow(BookTable.TIME))
-        val bookType = Book.Type.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(BookTable.TYPE)))
-        val bookUseCoverReplacement = cursor.getInt(cursor.getColumnIndexOrThrow(BookTable.USE_COVER_REPLACEMENT)) == BOOLEAN_TRUE
+        val bookId = cursor.long(BookTable.ID)
+        val bookName = cursor.string(BookTable.NAME)
+        val bookAuthor = cursor.string(BookTable.AUTHOR)
+        val currentPath = File(cursor.string(BookTable.CURRENT_MEDIA_PATH))
+        val bookSpeed = cursor.float(BookTable.PLAYBACK_SPEED)
+        val bookRoot = cursor.string(BookTable.ROOT)
+        val bookTime = cursor.int(BookTable.TIME)
+        val bookType = Book.Type.valueOf(cursor.string(BookTable.TYPE))
+        val bookUseCoverReplacement = cursor.int(BookTable.USE_COVER_REPLACEMENT) == BOOLEAN_TRUE
 
         return Book(bookId,
                 ImmutableList.copyOf(bookmarks),
