@@ -11,7 +11,6 @@ import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import com.google.common.collect.Collections2
 import com.google.common.collect.ImmutableList
-import com.google.common.collect.Lists
 import com.google.common.io.Files
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.activity.BaseActivity
@@ -294,8 +293,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
             for (s in singleBooksAsStrings) {
                 singleBooks.add(File(s))
             }
-            Collections.sort(singleBooks, NaturalOrderComparator.FILE_COMPARATOR)
-            return singleBooks
+            return singleBooks.sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
         }
 
     /**
@@ -320,8 +318,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                     }
                 }
             }
-            Collections.sort(containingFiles, NaturalOrderComparator.FILE_COMPARATOR)
-            return containingFiles
+            return containingFiles.sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
         }
 
     /**
@@ -436,7 +433,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         } else {
             // restore old books
             // now removes invalid bookmarks
-            val filteredBookmarks = Lists.newArrayList(Collections2.filter(orphanedBook.bookmarks) {
+            val filteredBookmarks = ArrayList(orphanedBook.bookmarks.filter {
                 for (c in newChapters) {
                     if (c.file == it.mediaFile) {
                         return@filter true
@@ -496,7 +493,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
 
             // removes the bookmarks that no longer represent an existing file
             val existingBookmarks = bookToUpdate.bookmarks
-            val filteredBookmarks = Lists.newArrayList(Collections2.filter(existingBookmarks) { input ->
+            val filteredBookmarks = ArrayList(Collections2.filter(existingBookmarks) { input ->
                 for (c in newChapters) {
                     if (c.file == input.mediaFile) {
                         return@filter true
@@ -560,8 +557,8 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
     @Throws(InterruptedException::class)
     private fun getChaptersByRootFile(rootFile: File): List<Chapter> {
         val containingFiles = getAllContainingFiles(listOf(rootFile), true)
+                .sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
         // sort the files in a natural way
-        Collections.sort(containingFiles, NaturalOrderComparator.FILE_COMPARATOR)
         Timber.d("Got files=%s", containingFiles)
 
         // get duration and if there is no cover yet, try to get an embedded dover (up to 5 times)

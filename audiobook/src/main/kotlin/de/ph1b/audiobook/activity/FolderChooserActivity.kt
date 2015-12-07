@@ -310,8 +310,7 @@ class FolderChooserActivity : BaseActivity(), HideFolderDialog.OnChosenListener 
                 paths.add(f)
             }
         }
-        Collections.sort(paths, NaturalOrderComparator.FILE_COMPARATOR)
-        return paths
+        return paths.sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
     }
 
     private fun finishActivityWithSuccess(chosenFile: File) {
@@ -354,8 +353,7 @@ class FolderChooserActivity : BaseActivity(), HideFolderDialog.OnChosenListener 
             val containing = file.listFiles(FileRecognition.FOLDER_AND_MUSIC_FILTER)
             if (containing != null) {
                 val asList = ArrayList(Arrays.asList(*containing))
-                Collections.sort(asList, NaturalOrderComparator.FILE_COMPARATOR)
-                return asList
+                return asList.sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
             } else {
                 return emptyList()
             }

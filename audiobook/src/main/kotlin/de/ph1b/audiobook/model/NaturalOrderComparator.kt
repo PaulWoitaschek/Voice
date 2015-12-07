@@ -56,7 +56,6 @@ object NaturalOrderComparator {
             all.add(current!!)
             current = current.parentFile
         } while (current != null)
-        Collections.reverse(all)
-        return all
+        return all.reversed()
     }
 }

@@ -111,9 +111,9 @@ constructor(c: Context, private val imageLinkService: ImageLinkService) {
         private val ipAddress: String
             get() {
                 try {
-                    val interfaces = Collections.list(NetworkInterface.getNetworkInterfaces())
+                    val interfaces = NetworkInterface.getNetworkInterfaces().toList()
                     for (i in interfaces) {
-                        val internetAddresses = Collections.list(i.inetAddresses)
+                        val internetAddresses = i.inetAddresses.toList()
                         for (a in internetAddresses) {
                             if (!a.isLoopbackAddress) {
                                 return a.hostAddress.toUpperCase()

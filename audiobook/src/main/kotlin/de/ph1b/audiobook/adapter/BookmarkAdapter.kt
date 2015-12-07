@@ -62,7 +62,7 @@ class BookmarkAdapter(bookmarks: List<Bookmark>, chapters: List<Chapter>, privat
         val oldIndex = bookmarks.indexOf(oldBookmark)
         bookmarks[oldIndex] = newBookmark
         notifyItemChanged(oldIndex)
-        Collections.sort(bookmarks)
+        bookmarks.sort()
         notifyItemMoved(oldIndex, bookmarks.indexOf(newBookmark))
     }
 
