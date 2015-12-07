@@ -29,7 +29,7 @@ class BookShelf
 @Inject
 constructor(c: Context) {
     private val active: MutableList<Book> by lazy {
-        val cursor = db.rawQuery(FULL_PROJECTION + APPEND_WHERE_ACTIVE, arrayOf(BOOLEAN_TRUE.toString()))
+        val cursor = db.rawQuery("$FULL_PROJECTION $APPEND_WHERE_ACTIVE", arrayOf(BOOLEAN_TRUE.toString()))
         val active = ArrayList<Book>(cursor.count)
         cursor.use {
             while (cursor.moveToNext()) {
@@ -41,7 +41,7 @@ constructor(c: Context) {
     }
     private val APPEND_WHERE_ACTIVE = " WHERE bt.${BookTable.ACTIVE} =?"
     private val orphaned: MutableList<Book> by lazy {
-        val cursor = db.rawQuery(FULL_PROJECTION + APPEND_WHERE_ACTIVE, arrayOf(BOOLEAN_FALSE.toString()))
+        val cursor = db.rawQuery("$FULL_PROJECTION $APPEND_WHERE_ACTIVE", arrayOf(BOOLEAN_FALSE.toString()))
         val active = ArrayList<Book>(cursor.count)
         cursor.use {
             while (cursor.moveToNext()) {
@@ -164,17 +164,17 @@ constructor(c: Context) {
                 try {
                     // update book itself
                     val bookCv = BookTable.getContentValues(book)
-                    db.update(BookTable.TABLE_NAME, bookCv, BookTable.ID + "=?", arrayOf(book.id.toString()))
+                    db.update(BookTable.TABLE_NAME, bookCv, "${BookTable.ID}=?", arrayOf(book.id.toString()))
 
                     // delete old chapters and replace them with new ones
-                    db.delete(ChapterTable.TABLE_NAME, BookTable.ID + "=?", arrayOf(book.id.toString()))
+                    db.delete(ChapterTable.TABLE_NAME, "${BookTable.ID}=?", arrayOf(book.id.toString()))
                     for (c in book.chapters) {
                         val chapterCv = ChapterTable.getContentValues(c, book.id)
                         db.insert(ChapterTable.TABLE_NAME, null, chapterCv)
                     }
 
                     // replace old bookmarks and replace them with new ones
-                    db.delete(BookmarkTable.TABLE_NAME, BookTable.ID + "=?", arrayOf(book.id.toString()))
+                    db.delete(BookmarkTable.TABLE_NAME, "${BookTable.ID}=?", arrayOf(book.id.toString()))
                     for (b in book.bookmarks) {
                         val bookmarkCV = BookmarkTable.getContentValues(b, book.id)
                         db.insert(BookmarkTable.TABLE_NAME, null, bookmarkCV)
@@ -202,7 +202,7 @@ constructor(c: Context) {
                 iterator.remove()
                 val cv = ContentValues()
                 cv.put(BookTable.ACTIVE, BOOLEAN_FALSE)
-                db.update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", arrayOf(book.id.toString()))
+                db.update(BookTable.TABLE_NAME, cv, "${BookTable.ID}=?", arrayOf(book.id.toString()))
                 break
             }
         }
@@ -217,7 +217,7 @@ constructor(c: Context) {
                 orphanedBookIterator.remove()
                 val cv = ContentValues()
                 cv.put(BookTable.ACTIVE, BOOLEAN_TRUE)
-                db.update(BookTable.TABLE_NAME, cv, BookTable.ID + "=?", arrayOf(book.id.toString()))
+                db.update(BookTable.TABLE_NAME, cv, "${BookTable.ID}=?", arrayOf(book.id.toString()))
                 break
             }
         }
@@ -296,18 +296,19 @@ constructor(c: Context) {
         val chapterNames = rawChapterNames.split(stringSeparator.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val chapterPaths = rawChapterPaths.split(stringSeparator.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
-        val chapters = generateChapters(chapterDurations, chapterPaths, chapterNames).sorted()
+        val chapters = ImmutableList.copyOf(generateChapters(chapterDurations, chapterPaths, chapterNames)
+                .sorted())
 
-        val rawBookmarkPositions: String? = cursor.string(KEY_BOOKMARK_POSITIONS)
-        val rawBookmarkPaths: String? = cursor.string(KEY_BOOKMARK_PATHS)
-        val rawBookmarkTitles: String? = cursor.string(KEY_BOOKMARK_TITLES)
+        val rawBookmarkPositions = cursor.stringNullable(KEY_BOOKMARK_POSITIONS)
+        val rawBookmarkPaths = cursor.stringNullable(KEY_BOOKMARK_PATHS)
+        val rawBookmarkTitles = cursor.stringNullable(KEY_BOOKMARK_TITLES)
 
         val bookmarkPositions = if (rawBookmarkPositions == null) IntArray(0) else convertToStringArray(rawBookmarkPositions.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
         val bookmarkPaths = if (rawBookmarkPaths == null) arrayOf<String>() else rawBookmarkPaths.split(stringSeparator.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val bookmarkTitles = if (rawBookmarkTitles == null) arrayOf<String>() else rawBookmarkTitles.split(stringSeparator.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
-        val bookmarks = generateBookmarks(bookmarkPositions, bookmarkPaths, bookmarkTitles)
-                .sorted()
+        val bookmarks = ImmutableList.copyOf(generateBookmarks(bookmarkPositions, bookmarkPaths, bookmarkTitles)
+                .sorted())
 
         val bookId = cursor.long(BookTable.ID)
         val bookName = cursor.string(BookTable.NAME)
@@ -320,14 +321,14 @@ constructor(c: Context) {
         val bookUseCoverReplacement = cursor.int(BookTable.USE_COVER_REPLACEMENT) == BOOLEAN_TRUE
 
         return Book(bookId,
-                ImmutableList.copyOf(bookmarks),
+                bookmarks,
                 bookType,
                 bookUseCoverReplacement,
                 bookAuthor,
                 currentPath,
                 bookTime,
                 bookName,
-                ImmutableList.copyOf(chapters),
+                chapters,
                 bookSpeed,
                 bookRoot)
     }

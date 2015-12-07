@@ -3,6 +3,10 @@ package de.ph1b.audiobook.persistence
 import android.database.Cursor
 
 fun Cursor.string(columnName: String): String {
+    return stringNullable(columnName)!!
+}
+
+fun Cursor.stringNullable(columnName: String) : String?{
     return getString(getColumnIndexOrThrow(columnName))
 }
 
