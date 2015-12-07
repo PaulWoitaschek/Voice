@@ -37,3 +37,6 @@
 -keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
     rx.internal.util.atomic.LinkedQueueNode consumerNode;
 }
+
+# Kotlin exceptions. TODO: Remove this once Kotlin bug https://youtrack.jetbrains.com/issue/KT-10259 is fixed
+-dontwarn de.ph1b.audiobook.playback.BookReaderService$onCreate$$inlined$apply$lambda$1
