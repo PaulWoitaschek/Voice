@@ -17,6 +17,7 @@ import android.view.KeyEvent
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController
+import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookShelf
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager.PauseReason
@@ -138,7 +139,7 @@ class BookReaderService : Service() {
                     .observeOn(Schedulers.io())
                     .subscribe {
                         controller.init(it)
-                        notifyChange(ChangeType.METADATA)
+                        notifyChange(ChangeType.METADATA, it)
                     })
 
             // handle changes on the play state
@@ -170,7 +171,7 @@ class BookReaderService : Service() {
                                 }
                             }
 
-                            notifyChange(ChangeType.PLAY_STATE)
+                            notifyChange(ChangeType.PLAY_STATE, controllerBook)
                         }
                     })
 
@@ -187,6 +188,7 @@ class BookReaderService : Service() {
                     }
             )
 
+            // adjusts stream and playback based on audio focus.
             add(audioFocusReceiver.focusObservable()
                     .subscribe { audioFocus ->
                         when (audioFocus!!) {
@@ -261,63 +263,60 @@ class BookReaderService : Service() {
         return null
     }
 
-    private fun notifyChange(what: ChangeType) {
+    private fun notifyChange(what: ChangeType, book: Book) {
         Timber.d("updateRemoteControlClient called")
 
-        val book = controller.book
-        if (book != null) {
-            val c = book.currentChapter()
-            val playState = playStateManager.playState.value
+        val c = book.currentChapter()
+        val playState = playStateManager.playState.value
 
-            val bookName = book.name
-            val chapterName = c.name
-            val author = book.author
-            val position = book.time
+        val bookName = book.name
+        val chapterName = c.name
+        val author = book.author
+        val position = book.time
 
-            sendBroadcast(what.broadcastIntent(author, bookName, chapterName, playState, position))
+        sendBroadcast(what.broadcastIntent(author, bookName, chapterName, playState, position))
 
-            //noinspection ResourceType
-            playbackStateBuilder.setState(playState.playbackStateCompat, position.toLong(), controller.playbackSpeed)
-            mediaSession.setPlaybackState(playbackStateBuilder.build())
+        //noinspection ResourceType
+        playbackStateBuilder.setState(playState.playbackStateCompat, position.toLong(), controller.playbackSpeed)
+        mediaSession.setPlaybackState(playbackStateBuilder.build())
 
-            if (what == ChangeType.METADATA && lastFileForMetaData != book.currentFile) {
-                // this check is necessary. Else the lockscreen controls will flicker due to
-                // an updated picture
-                var bitmap: Bitmap? = null
-                val coverFile = book.coverFile()
-                if (!book.useCoverReplacement && coverFile.exists() && coverFile.canRead()) {
-                    try {
-                        bitmap = Picasso.with(this@BookReaderService).load(coverFile).get()
-                    } catch (e: IOException) {
-                        Timber.e(e, "Error when retrieving cover for book %s", book)
-                    }
+        if (what == ChangeType.METADATA && lastFileForMetaData != book.currentFile) {
+            // this check is necessary. Else the lockscreen controls will flicker due to
+            // an updated picture
+            var bitmap: Bitmap? = null
+            val coverFile = book.coverFile()
+            if (!book.useCoverReplacement && coverFile.exists() && coverFile.canRead()) {
+                try {
+                    bitmap = Picasso.with(this@BookReaderService).load(coverFile).get()
+                } catch (e: IOException) {
+                    Timber.e(e, "Error when retrieving cover for book %s", book)
                 }
-                if (bitmap == null) {
-                    val replacement = CoverReplacement(book.name, this@BookReaderService)
-                    Timber.d("replacement dimen: %d:%d", replacement.intrinsicWidth, replacement.intrinsicHeight)
-                    bitmap = imageHelper.drawableToBitmap(replacement, imageHelper.smallerScreenSize, imageHelper.smallerScreenSize)
-                }
-                // we make a copy because we do not want to use picassos bitmap, since
-                // MediaSessionCompat recycles our bitmap eventually which would make
-                // picassos cached bitmap useless.
-                bitmap = bitmap.copy(bitmap.config, true)
-                mediaMetaDataBuilder
-                        .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap)
-                        .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
-                        .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, c.duration.toLong())
-                        .putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, (book.chapters.indexOf(book.currentChapter()) + 1).toLong())
-                        .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, book.chapters.size.toLong())
-                        .putString(MediaMetadataCompat.METADATA_KEY_TITLE, chapterName)
-                        .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, bookName)
-                        .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, author)
-                        .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, author)
-                        .putString(MediaMetadataCompat.METADATA_KEY_AUTHOR, author)
-                        .putString(MediaMetadataCompat.METADATA_KEY_COMPOSER, author)
-                        .putString(MediaMetadataCompat.METADATA_KEY_GENRE, "Audiobook")
-                mediaSession.setMetadata(mediaMetaDataBuilder.build())
-
-                lastFileForMetaData = book.currentFile
             }
+            if (bitmap == null) {
+                val replacement = CoverReplacement(book.name, this@BookReaderService)
+                Timber.d("replacement dimen: %d:%d", replacement.intrinsicWidth, replacement.intrinsicHeight)
+                bitmap = imageHelper.drawableToBitmap(replacement, imageHelper.smallerScreenSize, imageHelper.smallerScreenSize)
+            }
+            // we make a copy because we do not want to use picassos bitmap, since
+            // MediaSessionCompat recycles our bitmap eventually which would make
+            // picassos cached bitmap useless.
+            bitmap = bitmap.copy(bitmap.config, true)
+            mediaMetaDataBuilder
+                    .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, bitmap)
+                    .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap)
+                    .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, c.duration.toLong())
+                    .putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, (book.chapters.indexOf(book.currentChapter()) + 1).toLong())
+                    .putLong(MediaMetadataCompat.METADATA_KEY_NUM_TRACKS, book.chapters.size.toLong())
+                    .putString(MediaMetadataCompat.METADATA_KEY_TITLE, chapterName)
+                    .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, bookName)
+                    .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, author)
+                    .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, author)
+                    .putString(MediaMetadataCompat.METADATA_KEY_AUTHOR, author)
+                    .putString(MediaMetadataCompat.METADATA_KEY_COMPOSER, author)
+                    .putString(MediaMetadataCompat.METADATA_KEY_GENRE, "Audiobook")
+            mediaSession.setMetadata(mediaMetaDataBuilder.build())
+
+            lastFileForMetaData = book.currentFile
         }
     }
 
