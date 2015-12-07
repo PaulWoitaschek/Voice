@@ -18,7 +18,7 @@ class AudioFocusReceiver
     public val audioFocusListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
         if (telephonyManager.callState != TelephonyManager.CALL_STATE_IDLE) {
             Timber.d("Call state is: ${telephonyManager.callState}")
-            subject.onNext(AudioFocus.INCOMING_CALL)
+            subject.onNext(AudioFocus.LOSS_INCOMING_CALL)
         } else {
             Timber.i("FocusChange is $focusChange")
             when (focusChange) {
@@ -34,11 +34,4 @@ class AudioFocusReceiver
 
     private val subject = PublishSubject.create<AudioFocus>()
 
-    enum class AudioFocus {
-        GAIN,
-        LOSS,
-        LOSS_TRANSIENT_CAN_DUCK,
-        LOSS_TRANSIENT,
-        INCOMING_CALL
-    }
 }

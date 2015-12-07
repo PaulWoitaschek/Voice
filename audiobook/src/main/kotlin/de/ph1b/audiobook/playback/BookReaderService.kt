@@ -63,6 +63,7 @@ class BookReaderService : Service() {
     @Inject internal lateinit var headsetPlugReceiver: HeadsetPlugReceiver
     @Inject internal lateinit var notificationAnnouncer: NotificationAnnouncer
     @Inject internal lateinit var playStateManager: PlayStateManager
+    @Inject internal lateinit var audioFocusManager: AudioFocusManager
     private val audioBecomingNoisyReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (playStateManager.playState.value === PlayState.PLAYING) {
@@ -189,46 +190,7 @@ class BookReaderService : Service() {
             )
 
             // adjusts stream and playback based on audio focus.
-            add(audioFocusReceiver.focusObservable()
-                    .subscribe { audioFocus ->
-                        when (audioFocus!!) {
-                            AudioFocusReceiver.AudioFocus.GAIN -> {
-                                Timber.d("started by audioFocus gained")
-                                if (playStateManager.pauseReason == PlayStateManager.PauseReason.LOSS_TRANSIENT) {
-                                    controller.play()
-                                } else if (playStateManager.playState.value === PlayState.PLAYING) {
-                                    Timber.d("increasing volume")
-                                    audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0)
-                                }
-                            }
-                            AudioFocusReceiver.AudioFocus.LOSS,
-                            AudioFocusReceiver.AudioFocus.INCOMING_CALL -> {
-                                Timber.d("paused by audioFocus loss")
-                                controller.stop()
-                            }
-                            AudioFocusReceiver.AudioFocus.LOSS_TRANSIENT_CAN_DUCK -> {
-                                if (playStateManager.playState.value === PlayState.PLAYING) {
-                                    if (prefs.pauseOnTempFocusLoss()) {
-                                        Timber.d("Paused by audio-focus loss transient.")
-                                        // Pause is temporary, don't rewind
-                                        controller.pause(false)
-                                        playStateManager.pauseReason = PauseReason.LOSS_TRANSIENT
-                                    } else {
-                                        Timber.d("lowering volume")
-                                        audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0)
-                                    }
-                                }
-                            }
-                            AudioFocusReceiver.AudioFocus.LOSS_TRANSIENT -> {
-                                if (playStateManager.playState.value === PlayState.PLAYING) {
-                                    Timber.d("Paused by audio-focus loss transient.")
-                                    controller.pause(true) // auto pause
-                                    playStateManager.pauseReason = PauseReason.LOSS_TRANSIENT
-                                }
-                            }
-                        }
-                    }
-            )
+            add(audioFocusManager.handleAudioFocus(audioFocusReceiver.focusObservable()))
         }
     }
 
