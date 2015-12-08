@@ -9,12 +9,12 @@ import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookShelf
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
-import de.ph1b.audiobook.utils.Communication
+import rx.Observable
+import rx.subjects.BehaviorSubject
+import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
-import java.util.concurrent.Executors
-import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock
 import javax.inject.Inject
@@ -24,28 +24,37 @@ import kotlin.concurrent.withLock
 @Singleton
 class MediaPlayerController
 @Inject
-constructor(private val c: Context, private val prefs: PrefsManager,
-            private val communication: Communication, private val db: BookShelf,
+constructor(private val c: Context, private val prefs: PrefsManager, private val db: BookShelf,
             private val player: MediaPlayerInterface, private val playStateManager: PlayStateManager) {
 
     private val lock = ReentrantLock()
-    private val executor = Executors.newScheduledThreadPool(2)
-    private var sleepSand: ScheduledFuture<*>? = null
     var book: Book? = null
         private set
     @Volatile private var state: State = State.IDLE
-    private var updater: ScheduledFuture<*>? = null
     @Volatile private var prepareTries = 0
 
-    val leftSleepTime: Long
-        get() {
-            val sand = sleepSand
-            if (sand == null || sand.isCancelled || sand.isDone) {
-                return 0
-            } else {
-                return sand.getDelay(TimeUnit.MILLISECONDS)
-            }
-        }
+    private val subscriptions = CompositeSubscription()
+
+
+    /**
+     * The time left till the playback stops in ms. If this is -1 the timer was stopped manually.
+     * If this is 0 the timer simple counted down.
+     */
+    private val internalSleepSand = BehaviorSubject.create<Long>(-1L)
+
+    /**
+     * This observable holds the time in ms left that the sleep timer has left. This is updated
+     * periodically
+     */
+    val sleepSand = internalSleepSand.asObservable()
+
+    fun sleepTimerActive(): Boolean = lock.withLock { internalSleepSand.value > 0 }
+
+    init {
+        // stops the player when the timer reaches 0
+        internalSleepSand.filter { it == 0L } // when this reaches 0
+                .subscribe { stop() } // stop the player
+    }
 
     /**
      * Initializes a new book. After this, a call to play can be made.
@@ -54,7 +63,7 @@ constructor(private val c: Context, private val prefs: PrefsManager,
      */
     fun init(book: Book) {
         lock.withLock {
-            Timber.i("constructor called with book=%s", book)
+            Timber.i("constructor called with ${book.name}")
             this.book = book
         }
     }
@@ -162,15 +171,25 @@ constructor(private val c: Context, private val prefs: PrefsManager,
      */
     private fun startUpdating() {
         Timber.v("startUpdating")
-        if (!updaterActive()) {
-            updater = executor.scheduleAtFixedRate({
-                lock.withLock {
-                    book = book?.copy(time = player.currentPosition)
-                    if (book != null) {
-                        db.updateBook(book!!)
-                    }
-                }
-            }, 0, 1, TimeUnit.SECONDS)
+        subscriptions.apply {
+            if (!hasSubscriptions()) {
+                // counts down the sleep sand
+                val sleepUpdateInterval = 500L
+                add(Observable.interval(sleepUpdateInterval, TimeUnit.MILLISECONDS)
+                        .filter { internalSleepSand.value > 0 } // only notify if there is still time left
+                        .map { internalSleepSand.value - sleepUpdateInterval } // calculate the new time
+                        .map { it.coerceAtLeast(0) } // but keep at least 0
+                        .subscribe { internalSleepSand.onNext(it) })
+
+                // updates the book automatically with the current position
+                add(Observable.interval(1, TimeUnit.SECONDS)
+                        .map { lock.withLock { player.currentPosition } } // pass the current position
+                        .map { lock.withLock { book?.copy(time = it) } } // create a copy with new position
+                        .filter { it != null } // let it pass when it exists
+                        .doOnNext { lock.withLock { book = it } } // update local var
+                        .subscribe { lock.withLock { db.updateBook(it!!) } } // update the book
+                )
+            }
         }
     }
 
@@ -231,7 +250,7 @@ constructor(private val c: Context, private val prefs: PrefsManager,
             stopUpdating()
             player.reset()
             playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
-            if (leftSleepTime > 0) {
+            if (sleepTimerActive()) {
                 // if its active use toggle to stop the sleep timer
                 toggleSleepSand()
             }
@@ -243,39 +262,26 @@ constructor(private val c: Context, private val prefs: PrefsManager,
      * Stops updating the book with the current position.
      */
     private fun stopUpdating() {
-        if (updaterActive()) {
-            updater!!.cancel(true)
-        }
+        subscriptions.clear()
     }
 
     /**
      * Turns the sleep timer on or off.
+     *
+     * @return true if the timer is now active, false if it now inactive
      */
     fun toggleSleepSand() {
-        Timber.i("toggleSleepSand. Left sleepTime is $leftSleepTime")
+        Timber.i("toggleSleepSand. Left sleepTime is ${internalSleepSand.value}")
         lock.withLock {
-            if (leftSleepTime > 0L) {
+            if (internalSleepSand.value > 0L) {
                 Timber.i("sleepSand is active. cancelling now")
-                sleepSand?.cancel(false)
+                internalSleepSand.onNext(-1L)
             } else {
                 Timber.i("preparing new sleep sand")
                 val minutes = prefs.sleepTime
-                sleepSand = executor.schedule({
-                    lock.withLock {
-                        pause(true)
-                        communication.sleepStateChanged()
-                    }
-                }, minutes.toLong(), TimeUnit.MINUTES)
+                internalSleepSand.onNext(TimeUnit.MINUTES.toMillis(minutes.toLong()))
             }
-            communication.sleepStateChanged()
         }
-    }
-
-    /**
-     * @return true if the position updater is active.
-     */
-    private fun updaterActive(): Boolean {
-        return updater != null && !updater!!.isCancelled && !updater!!.isDone
     }
 
     /**

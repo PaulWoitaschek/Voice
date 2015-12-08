@@ -3,7 +3,6 @@ package de.ph1b.audiobook.fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
@@ -33,7 +32,6 @@ import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
 import de.ph1b.audiobook.utils.BookVendor
-import de.ph1b.audiobook.utils.Communication
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.functions.Action1
@@ -51,7 +49,6 @@ import javax.inject.Inject
  */
 class BookPlayFragment : BaseFragment() {
 
-    @Inject internal lateinit var communication: Communication
     @Inject internal lateinit var mediaPlayerController: MediaPlayerController
     @Inject internal lateinit var prefs: PrefsManager
     @Inject internal lateinit var db: BookShelf
@@ -60,7 +57,6 @@ class BookPlayFragment : BaseFragment() {
 
     private val playPauseDrawable = PlayPauseDrawable()
     private var subscriptions: CompositeSubscription? = null
-    private var countDownTimer: CountDownTimer? = null
     private var book: Book? = null
 
     private lateinit var hostingActivity: AppCompatActivity
@@ -70,15 +66,6 @@ class BookPlayFragment : BaseFragment() {
     private lateinit var seekBar: SeekBar
     private lateinit var bookSpinner: Spinner
     private lateinit var maxTimeView: TextView
-
-    private val listener = object : Communication.SimpleBookCommunication() {
-        override fun onSleepStateChanged() {
-            hostingActivity.runOnUiThread {
-                hostingActivity.invalidateOptionsMenu()
-                initializeTimerCountdown()
-            }
-        }
-    }
 
     /**
      * @return the book id this fragment was instantiated with.
@@ -122,12 +109,12 @@ class BookPlayFragment : BaseFragment() {
                     when (eventType ) {
                         is  SeekBarProgressChangeEvent -> {
                             //sets text to adjust while using seekBar
-                            playedTimeView.text = formatTime(eventType.progress(), seekBar.max)
+                            playedTimeView.text = formatTime(eventType.progress().toLong(), seekBar.max.toLong())
                         }
                         is SeekBarStopChangeEvent -> {
                             val progress = seekBar.progress
                             mediaPlayerController.changePosition(progress, book!!.currentChapter().file)
-                            playedTimeView.text = formatTime(progress, seekBar.max)
+                            playedTimeView.text = formatTime(progress.toLong(), seekBar.max.toLong())
                         }
                     }
                 }
@@ -237,26 +224,6 @@ class BookPlayFragment : BaseFragment() {
         JumpToPositionDialogFragment().show(fragmentManager, JumpToPositionDialogFragment.TAG)
     }
 
-    private fun initializeTimerCountdown() {
-        countDownTimer?.cancel()
-
-        if (mediaPlayerController.leftSleepTime > 0) {
-            timerCountdownView.visibility = View.VISIBLE
-            countDownTimer = object : CountDownTimer(mediaPlayerController.leftSleepTime, 1000) {
-                override fun onTick(millisUntilFinished: Long) {
-                    timerCountdownView.text = formatTime(millisUntilFinished.toInt(), millisUntilFinished.toInt())
-                }
-
-                override fun onFinish() {
-                    timerCountdownView.visibility = View.GONE
-                    Timber.i("Countdown timer finished")
-                }
-            }.start()
-        } else {
-            timerCountdownView.visibility = View.GONE
-        }
-    }
-
     override fun onAttach(context: Context?) {
         super.onAttach(context)
 
@@ -272,7 +239,7 @@ class BookPlayFragment : BaseFragment() {
 
         // sets the correct sleep timer icon
         val sleepTimerItem = menu.findItem(R.id.action_sleep)
-        if (mediaPlayerController.leftSleepTime > 0) {
+        if (mediaPlayerController.sleepTimerActive()) {
             sleepTimerItem.setIcon(R.drawable.ic_alarm_on_white_24dp)
         } else {
             sleepTimerItem.setIcon(R.drawable.ic_snooze_white_24dp)
@@ -298,7 +265,7 @@ class BookPlayFragment : BaseFragment() {
             }
             R.id.action_sleep -> {
                 mediaPlayerController.toggleSleepSand()
-                if (prefs.setBookmarkOnSleepTimer() && mediaPlayerController.leftSleepTime == 0L) {
+                if (prefs.setBookmarkOnSleepTimer() && mediaPlayerController.sleepTimerActive()) {
                     val date = DateUtils.formatDateTime(context, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE)
                     BookmarkDialogFragment.addBookmark(bookId, date + ": " + getString(R.string.action_sleep), db)
                 }
@@ -360,15 +327,9 @@ class BookPlayFragment : BaseFragment() {
 
             add(Observable.merge(db.activeBooks, db.updateObservable())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .filter { book -> book.id == bookId }
-                    .doOnNext { book -> this@BookPlayFragment.book = book }
-                    .subscribe { book ->
-                        if (book == null) {
-                            Timber.e("Book is null. Returning immediately.")
-                            return@subscribe
-                        }
-                        Timber.i("New book with getTime %d and content %s", book.time, book)
-
+                    .filter { it.id == bookId }
+                    .doOnNext { this@BookPlayFragment.book = it }
+                    .subscribe { book: Book ->
                         val chapters = book.chapters
                         val chapter = book.currentChapter()
 
@@ -379,36 +340,54 @@ class BookPlayFragment : BaseFragment() {
                         bookSpinner.setSelection(position, true)
                         val duration = chapter.duration
                         seekBar.max = duration
-                        maxTimeView.text = formatTime(duration, duration)
+                        maxTimeView.text = formatTime(duration.toLong(), duration.toLong())
 
                         // Setting seekBar and played getTime view
                         val progress = book.time
                         if (!seekBar.isPressed) {
                             seekBar.progress = progress
-                            playedTimeView.text = formatTime(progress, duration)
+                            playedTimeView.text = formatTime(progress.toLong(), duration.toLong())
                         }
                     })
+
+            // hide / show left time view
+            add(mediaPlayerController.sleepSand
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .map { it > 0 }
+                    .map { active ->
+                        if (active) View.VISIBLE else View.GONE
+                    }
+                    .distinctUntilChanged() // only set when visibility has changed
+                    .subscribe { visibility ->
+                        timerCountdownView.visibility = visibility
+                    })
+
+            // invalidates the actionbar items
+            add(mediaPlayerController.sleepSand
+                    .map { it > 0 } // sleep timer is active
+                    .distinctUntilChanged() // only notify when event has changed
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { hostingActivity.invalidateOptionsMenu() }
+            )
+
+            // set the correct time to the sleep time view
+            add(mediaPlayerController.sleepSand
+                    .distinctUntilChanged()
+                    .filter { it > 0 }
+                    .map { formatTime(it, it) }
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { timerCountdownView.text = it })
         }
 
-        hostingActivity.invalidateOptionsMenu()
-
-        communication.addBookCommunicationListener(listener)
-
-        // Sleep timer countdown view
-        initializeTimerCountdown()
     }
 
     override fun onStop() {
         super.onStop()
 
         subscriptions!!.unsubscribe()
-
-        communication.removeBookCommunicationListener(listener)
-
-        countDownTimer?.cancel()
     }
 
-    private fun formatTime(ms: Int, duration: Int): String {
+    private fun formatTime(ms: Long, duration: Long): String {
         val h = TimeUnit.MILLISECONDS.toHours(ms.toLong()).toString()
         val m = "%02d".format((TimeUnit.MILLISECONDS.toMinutes(ms.toLong()) % 60))
         val s = "%02d".format((TimeUnit.MILLISECONDS.toSeconds(ms.toLong()) % 60))
