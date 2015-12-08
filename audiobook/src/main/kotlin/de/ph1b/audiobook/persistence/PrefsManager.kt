@@ -36,7 +36,7 @@ constructor(c: Context) {
 
 
     /**
-     * an observable with the id of the current book, or [Book.ID_UNKNOW] if there is none.
+     * an observable with the id of the current book, or [Book.ID_UNKNOWN] if there is none.
      */
     val currentBookId: BehaviorSubject<Long>
 
