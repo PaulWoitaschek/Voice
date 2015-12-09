@@ -113,7 +113,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                 fileList.add(f)
             } else if (f.isDirectory) {
                 // recursively add the content of the directory
-                val containing = f.listFiles(if (audio) FileRecognition.FOLDER_AND_MUSIC_FILTER else FileRecognition.FOLDER_AND_IMAGES_FILTER)
+                val containing = f.listFiles(if (audio) FileRecognition.folderAndMusicFilter else FileRecognition.folderAndImagesFilter)
                 if (containing != null) {
                     val content = ArrayList(Arrays.asList(*containing))
                     fileList.addAll(getAllContainingFiles(content, audio))
@@ -312,7 +312,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
             for (s in collectionFoldersStringList) {
                 val f = File(s)
                 if (f.exists() && f.isDirectory) {
-                    val containing = f.listFiles(FileRecognition.FOLDER_AND_MUSIC_FILTER)
+                    val containing = f.listFiles(FileRecognition.folderAndMusicFilter)
                     if (containing != null) {
                         containingFiles.addAll(Arrays.asList(*containing))
                     }

@@ -350,7 +350,7 @@ class FolderChooserActivity : BaseActivity(), HideFolderDialog.OnChosenListener 
          * @return The containing files
          */
         private fun getFilesFromFolder(file: File): List<File> {
-            val containing = file.listFiles(FileRecognition.FOLDER_AND_MUSIC_FILTER)
+            val containing = file.listFiles(FileRecognition.folderAndMusicFilter)
             if (containing != null) {
                 val asList = ArrayList(Arrays.asList(*containing))
                 return asList.sortedWith(NaturalOrderComparator.FILE_COMPARATOR)

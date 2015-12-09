@@ -1,6 +1,8 @@
 package de.ph1b.audiobook.utils
 
 import android.os.Build
+import com.google.common.collect.Lists
+import com.google.common.io.Files
 import java.io.FileFilter
 import java.util.*
 
@@ -12,59 +14,53 @@ import java.util.*
  */
 object FileRecognition {
 
-    private val AUDIO_TYPES: ArrayList<String>
+    private val imageTypes = Arrays.asList("jpg", "jpeg", "png", "bmp")
+    private val audioTypes: List<String>
 
     init {
-        AUDIO_TYPES = ArrayList<String>(30)
-        AUDIO_TYPES.add(".3gp")
-
-        AUDIO_TYPES.add(".aac")
-        AUDIO_TYPES.add(".awb")
-
-        AUDIO_TYPES.add(".flac")
-
-        AUDIO_TYPES.add(".imy")
-
-        AUDIO_TYPES.add(".m4a")
-        AUDIO_TYPES.add(".m4b")
-        AUDIO_TYPES.add(".mp4")
-        AUDIO_TYPES.add(".mid")
-        AUDIO_TYPES.add(".mkv")
-        AUDIO_TYPES.add(".mp3")
-        AUDIO_TYPES.add(".mp3package")
-        AUDIO_TYPES.add(".mxmf")
-
-        AUDIO_TYPES.add(".ogg")
-        AUDIO_TYPES.add(".oga")
+        audioTypes = Lists.newArrayList("3gp",
+                "aac",
+                "awb",
+                "flac",
+                "imy",
+                "m4a",
+                "m4b",
+                "mp4",
+                "mid",
+                "mkv",
+                "mp3",
+                "mp3package",
+                "mxmf",
+                "ogg",
+                "oga",
+                "ota",
+                "rtttl",
+                "rtx",
+                "wav",
+                "wma",
+                "xmf"
+        )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            AUDIO_TYPES.add(".opus")
+            audioTypes.add("opus")
         }
-        AUDIO_TYPES.add(".ota")
-
-        AUDIO_TYPES.add(".rtttl")
-        AUDIO_TYPES.add(".rtx")
-
-        AUDIO_TYPES.add(".wav")
-        AUDIO_TYPES.add(".wma")
-
-        AUDIO_TYPES.add(".xmf")
     }
 
-    val FOLDER_AND_MUSIC_FILTER = FileFilter {
-        for (s in AUDIO_TYPES) {
-            if (it.name.toLowerCase().endsWith(s)) {
-                return@FileFilter true
-            }
+    val folderAndMusicFilter = FileFilter {
+        if (it.isDirectory) {
+            return@FileFilter true
+        } else {
+            val extension = Files.getFileExtension(it.name)
+                    .toLowerCase()
+            return@FileFilter audioTypes.contains(extension)
         }
-        it.isDirectory
     }
-    private val IMAGE_TYPES = Arrays.asList(".jpg", ".jpeg", ".png", ".bmp")
-    val FOLDER_AND_IMAGES_FILTER = FileFilter {
-        for (s in IMAGE_TYPES) {
-            if (it.absolutePath.toLowerCase().endsWith(s)) {
-                return@FileFilter true
-            }
+    val folderAndImagesFilter = FileFilter {
+        if (it.isDirectory) {
+            return@FileFilter true
+        } else {
+            val extension = Files.getFileExtension(it.name)
+                    .toLowerCase()
+            return@FileFilter imageTypes.contains(extension)
         }
-        it.isDirectory
     }
 }
