@@ -21,7 +21,6 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.adapter.FolderOverviewAdapter
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.model.BookAdder
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.presenter.FolderOverviewPresenter
 import de.ph1b.audiobook.uitools.DividerItemDecoration
@@ -51,7 +50,6 @@ class FolderOverviewActivity : NucleusBaseActivity<FolderOverviewPresenter>() {
     private lateinit var recyclerView: RecyclerView
 
     @Inject internal lateinit var prefs: PrefsManager
-    @Inject internal lateinit var bookAdder: BookAdder
 
     private lateinit var adapter: FolderOverviewAdapter
 
@@ -180,7 +178,6 @@ class FolderOverviewActivity : NucleusBaseActivity<FolderOverviewPresenter>() {
                             adapter.removeItem(position)
                             prefs.collectionFolders = bookCollections
                             prefs.singleBookFolders = singleBooks
-                            bookAdder.scanForFiles(true)
                         }
                         .show()
             }
@@ -266,10 +263,7 @@ class FolderOverviewActivity : NucleusBaseActivity<FolderOverviewPresenter>() {
                     }
                     Timber.v("chosenSingleBook=%s", chosenSingleBook)
                 }
-                else -> {
-                }
             }
-            bookAdder.scanForFiles(true)
         }
     }
 

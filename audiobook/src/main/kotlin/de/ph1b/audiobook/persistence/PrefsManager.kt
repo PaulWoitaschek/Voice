@@ -6,6 +6,7 @@ import android.preference.PreferenceManager
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.fragment.BookShelfFragment
 import de.ph1b.audiobook.model.Book
+import de.ph1b.audiobook.model.BookAdder
 import de.ph1b.audiobook.uitools.ThemeUtil
 import rx.subjects.BehaviorSubject
 import java.util.*
@@ -20,7 +21,7 @@ import javax.inject.Singleton
 @Singleton
 class PrefsManager
 @Inject
-constructor(c: Context) {
+constructor(c: Context, private val bookAdder: BookAdder) {
     private val PREF_KEY_RESUME_ON_REPLUG: String
     private val PREF_KEY_THEME: String
     private val sp: SharedPreferences
@@ -91,6 +92,7 @@ constructor(c: Context) {
             val set = HashSet<String>(folders.size)
             set.addAll(folders)
             sp.edit { setStringSet(PREF_KEY_COLLECTION_FOLDERS to set) }
+            bookAdder.scanForFiles(true)
         }
 
     /**
@@ -107,6 +109,7 @@ constructor(c: Context) {
             val set = HashSet<String>(folders.size)
             set.addAll(folders)
             sp.edit { setStringSet(PREF_KEY_SINGLE_BOOK_FOLDERS to set) }
+            bookAdder.scanForFiles(true)
         }
 
 
