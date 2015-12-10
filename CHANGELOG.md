@@ -1,6 +1,7 @@
 # v2.4.3 Oh sweet sweet kotlin
 * Everythign rewritten in Kotlin
 * Reactive Programming (rxJava)
+* External storage on MarshMallow fixed
 * Software architecture rethought and many components decoupled
 * Optimized images
 * Higher test coverage
