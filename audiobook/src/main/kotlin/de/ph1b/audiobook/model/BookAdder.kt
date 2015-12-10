@@ -388,7 +388,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         }
 
         for (b in booksToRemove) {
-            Timber.d("deleting book=%s", b)
+            Timber.d("deleting book=${b.name}");
             db.hideBook(b)
         }
     }
@@ -428,7 +428,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                     ImmutableList.copyOf(newChapters),
                     1.0f,
                     bookRoot)
-            Timber.d("adding newBook=%s", newBook)
+            Timber.d("adding newBook=${newBook.name}")
             db.addBook(newBook)
         } else {
             // restore old books
@@ -559,7 +559,6 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         val containingFiles = getAllContainingFiles(listOf(rootFile), true)
                 .sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
         // sort the files in a natural way
-        Timber.d("Got files=%s", containingFiles)
 
         // get duration and if there is no cover yet, try to get an embedded dover (up to 5 times)
         val containingMedia = ArrayList<Chapter>(containingFiles.size)
@@ -589,7 +588,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
 
                     throwIfStopRequested()
                 } catch (e: RuntimeException) {
-                    Timber.e("Error at file=%s", f)
+                    Timber.e("Error at file=$f")
                 }
 
             }
@@ -625,7 +624,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      * @return The Book if available, or `null`
      */
     private fun getBookFromDb(rootFile: File, type: Book.Type, orphaned: Boolean): Book? {
-        Timber.d("getBookFromDb, rootFile=%s, type=%s, orphaned=%b", rootFile, type, orphaned)
+        Timber.d("getBookFromDb, rootFile=$rootFile, type=$type, orphaned=$orphaned")
         val books: List<Book>
         if (orphaned) {
             books = db.getOrphanedBooks()
@@ -641,7 +640,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         } else if (rootFile.isFile) {
             Timber.d("getBookFromDb, its a file")
             for (b in books) {
-                Timber.v("Comparing bookRoot=%s with %s", b.root, rootFile.parentFile.absoluteFile)
+                Timber.v("Comparing bookRoot=${b.root} with ${rootFile.parentFile.absoluteFile}")
                 if (rootFile.parentFile.absolutePath == b.root && type === b.type) {
                     val singleChapter = b.chapters[0]
                     Timber.d("getBookFromDb, singleChapterPath=%s compared with=%s", singleChapter.file, rootFile.absoluteFile)

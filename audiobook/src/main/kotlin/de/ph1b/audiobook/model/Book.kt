@@ -33,9 +33,9 @@ data class Book(val id: Long,
     }
 
     companion object {
-        const val ID_UNKNOWN = -1
-        const val SPEED_MAX = 2f
-        const val SPEED_MIN = 0.5f
+        const val ID_UNKNOWN = -1L
+        const val SPEED_MAX = 2F
+        const val SPEED_MIN = 0.5F
     }
 
     private val COVER_TRANSITION_PREFIX = "bookCoverTransition_"
