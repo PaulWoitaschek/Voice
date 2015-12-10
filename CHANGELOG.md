@@ -1,3 +1,20 @@
+# v2.4.3 Oh sweet sweet kotlin
+* Everythign rewritten in Kotlin
+* Reactive Programming (rxJava)
+* Software architecture rethought and many components decoupled
+* Optimized images
+* Higher test coverage
+* Updated dependencies
+* File sorting optimized
+* Play on cover only through double click
+* Dagger 2 used as Dependency Injection Framework
+* Made all data classes immutable
+* Added Hindi translation
+* Added afrikaans translation
+* Added swedish translation
+* Added chinese translation
+* Updated translations
+
 # v2.4.2
 * Added bulgarian translation
 * Prevent time overlapping the progress view in the list
