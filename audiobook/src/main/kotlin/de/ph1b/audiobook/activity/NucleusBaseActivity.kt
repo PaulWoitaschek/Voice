@@ -10,7 +10,6 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.BookReaderService
 import nucleus.presenter.Presenter
 import nucleus.view.NucleusAppCompatActivity
-import javax.inject.Inject
 
 /**
  * Base class for all MVP Activities to inherit from.
@@ -19,8 +18,7 @@ import javax.inject.Inject
  */
 abstract class NucleusBaseActivity <P : Presenter<out Any>> : NucleusAppCompatActivity<P> () {
 
-
-    @Inject internal lateinit var prefsManager: PrefsManager
+   private lateinit var prefsManager: PrefsManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         prefsManager = App.component().prefsManager
