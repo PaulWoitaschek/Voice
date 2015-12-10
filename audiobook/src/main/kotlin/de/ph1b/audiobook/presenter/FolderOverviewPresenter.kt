@@ -7,7 +7,7 @@ import de.ph1b.audiobook.activity.FolderChooserActivity
 import de.ph1b.audiobook.activity.FolderOverviewActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.persistence.PrefsManager
-import nucleus.presenter.RxPresenter
+import nucleus.presenter.Presenter
 import timber.log.Timber
 import java.io.File
 import java.util.*
@@ -18,7 +18,7 @@ import javax.inject.Inject
  *
  * @author Paul Woitaschek
  */
-class FolderOverviewPresenter : RxPresenter<FolderOverviewActivity> () {
+class FolderOverviewPresenter : Presenter<FolderOverviewActivity> () {
 
     @Inject internal lateinit var prefsManager: PrefsManager
 
