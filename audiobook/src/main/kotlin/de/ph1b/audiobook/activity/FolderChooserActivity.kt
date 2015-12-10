@@ -13,14 +13,12 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import android.text.TextUtils
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.adapter.FolderChooserAdapter
 import de.ph1b.audiobook.dialog.HideFolderDialog
 import de.ph1b.audiobook.model.NaturalOrderComparator
+import de.ph1b.audiobook.uitools.HighlightedSpinnerAdapter
 import de.ph1b.audiobook.utils.FileRecognition
 import de.ph1b.audiobook.utils.PermissionHelper
 import timber.log.Timber
@@ -34,7 +32,7 @@ import java.util.regex.Pattern
  * multiple sd-cards, we will directly show the content of the 1 SD Card.
  *
  *
- * Use [.newInstanceIntent] to get a new intent with the necessary
+ * Use [newInstanceIntent] to get a new intent with the necessary
  * values.
 
  * @author Paul Woitaschek
@@ -48,7 +46,7 @@ class FolderChooserActivity : BaseActivity(), HideFolderDialog.OnChosenListener 
     private lateinit var listView: ListView
     private lateinit var chosenFolderDescription: TextView
     private var multiSd = true
-    private lateinit var rootDirs: List<File>
+    private val rootDirs = ArrayList<File>()
     private var currentFolder: File? = null
     private var chosenFile: File? = null
     private lateinit var adapter: FolderChooserAdapter
@@ -85,6 +83,9 @@ class FolderChooserActivity : BaseActivity(), HideFolderDialog.OnChosenListener 
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSION_RESULT_READ_EXT_STORAGE)
     }
 
+    private lateinit var spinner: Spinner
+    private lateinit var spinnerAdapter: HighlightedSpinnerAdapter
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_folder_chooser)
@@ -94,6 +95,10 @@ class FolderChooserActivity : BaseActivity(), HideFolderDialog.OnChosenListener 
         toolbar = findViewById(R.id.toolbar) as Toolbar
         listView = findViewById(R.id.listView) as ListView
         chosenFolderDescription = findViewById(R.id.twoline_text1) as TextView
+        spinner = findViewById(R.id.toolSpinner) as Spinner
+
+        spinnerAdapter = HighlightedSpinnerAdapter(this, spinner)
+        spinner.adapter = spinnerAdapter
 
         chooseButton.setOnClickListener({ chooseClicked() })
         // cancel button
@@ -116,6 +121,8 @@ class FolderChooserActivity : BaseActivity(), HideFolderDialog.OnChosenListener 
 
         // toolbar
         setSupportActionBar(toolbar)
+        supportActionBar.setDisplayShowTitleEnabled(false)
+        supportActionBar.setDisplayHomeAsUpEnabled(true)
 
         //setup
         adapter = FolderChooserAdapter(this, currentFolderContent, mode)
@@ -151,9 +158,17 @@ class FolderChooserActivity : BaseActivity(), HideFolderDialog.OnChosenListener 
         setButtonEnabledDisabled()
     }
 
+
     private fun refreshRootDirs() {
-        rootDirs = storageDirs()
+        rootDirs.clear()
+        rootDirs.addAll(storageDirs())
         currentFolderContent.clear()
+
+        val stringList = ArrayList<String>()
+        for (f in rootDirs) {
+            stringList.add(f.name)
+        }
+        spinnerAdapter.setContent(stringList)
 
         Timber.i("refreshRootDirs found rootDirs=%s", rootDirs)
         if (rootDirs.size == 1) {

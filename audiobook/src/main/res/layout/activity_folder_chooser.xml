@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
     style="?android:buttonBarStyle"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar" />
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/toolbar_style"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+        <Spinner
+            android:id="@+id/toolSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"/>
+
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="72dp"
         android:gravity="center_vertical">
@@ -26,7 +40,7 @@
             android:clickable="true"
             android:contentDescription="@string/content_navigate_up"
             android:scaleType="fitStart"
-            tools:src="@drawable/ic_arrow_up_white_48dp" />
+            tools:src="@drawable/ic_arrow_up_white_48dp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -44,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:textSize="@dimen/list_text_primary_size"
-                tools:text="This is the primary text which is surprisingly too long long long" />
+                tools:text="This is the primary text which is surprisingly too long long long"/>
 
             <TextView
                 android:id="@+id/twoline_text2"
@@ -53,7 +67,7 @@
                 android:singleLine="true"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="@dimen/list_text_secondary_size"
-                tools:text="This is the secondary text which is surprisingly too long long long" />
+                tools:text="This is the secondary text which is surprisingly too long long long"/>
 
         </LinearLayout>
 
@@ -65,10 +79,11 @@
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:layout_weight="1"
-        tools:listitem="@layout/activity_folder_chooser_adapter_row_layout" />
+        tools:listitem="@layout/activity_folder_chooser_adapter_row_layout"/>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         style="?android:buttonBarStyle"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -79,7 +94,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/dialog_cancel" />
+            android:text="@string/dialog_cancel"/>
 
         <Button
             android:id="@+id/choose"
@@ -87,7 +102,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/dialog_confirm" />
+            android:text="@string/dialog_confirm"/>
 
     </LinearLayout>
 
