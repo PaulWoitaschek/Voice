@@ -108,4 +108,7 @@
     <string name="hide_folder_title">Verberg map</string>
     <string name="hide_folder_content">Wilt u deze map verbergen voor andere mediaspelers, zodat uw luisterboeken niet als muziek worden gezien?</string>
     <string name="hide_confirm">Verberg</string>
+    <!--license activity-->
+    <string name="license_activity_title">Gebruikte licenties</string>
+    <string name="licenses">Licenties</string>
 </resources>
