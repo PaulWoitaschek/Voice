@@ -1,7 +1,5 @@
 package de.ph1b.audiobook.testing;
 
-import android.app.Application;
-import android.content.Context;
 import android.os.Environment;
 
 import com.google.common.collect.ImmutableList;
@@ -12,39 +10,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.inject.Singleton;
-
-import dagger.Component;
-import de.ph1b.audiobook.injection.AndroidModule;
-import de.ph1b.audiobook.injection.BaseModule;
-import de.ph1b.audiobook.mediaplayer.MediaPlayerControllerTest;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
-import de.ph1b.audiobook.persistence.BookShelfTest;
 
 /**
  * Mock provider for mocking objects and injecting them.
  *
  * @author Paul Woitaschek
  */
-public class MockProvider {
+public class DummyCreator {
 
-    private final Random rnd = new Random();
-    private final Context context;
+    private static final Random rnd = new Random();
 
-    public MockProvider(Context context) {
-        this.context = context;
-    }
-
-    public MockComponent newMockComponent() {
-        return DaggerMockProvider_MockComponent.builder()
-                .baseModule(new BaseModule())
-                .androidModule(new AndroidModule((Application) context.getApplicationContext()))
-                .build();
-    }
-
-    public Book dummyBook(File file1, File file2) {
+    public static Book dummyBook(File file1, File file2) {
         long id = 1L;
         List<Bookmark> bookmarks = new ArrayList<>();
         Book.Type type = Book.Type.SINGLE_FILE;
@@ -67,14 +46,5 @@ public class MockProvider {
                 ImmutableList.copyOf(chapters),
                 playbackSpeed,
                 root);
-    }
-
-    @Singleton
-    @Component(modules = {BaseModule.class, AndroidModule.class})
-    public interface MockComponent {
-
-        void inject(MediaPlayerControllerTest target);
-
-        void inject(BookShelfTest target);
     }
 }
