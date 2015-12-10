@@ -175,9 +175,8 @@ class FolderOverviewActivity : NucleusBaseActivity<FolderOverviewPresenter>() {
                         .positiveText(R.string.remove)
                         .negativeText(R.string.dialog_cancel)
                         .onPositive { materialDialog, dialogAction ->
-                            adapter.removeItem(position)
-                            prefs.collectionFolders = bookCollections
-                            prefs.singleBookFolders = singleBooks
+                            val itemToDelete = adapter.getItem(position)
+                            presenter.removeFolder(itemToDelete)
                         }
                         .show()
             }

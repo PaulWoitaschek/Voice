@@ -41,15 +41,6 @@ class FolderOverviewAdapter(private val c: Context,
         return bookCollections.size + singleBooks.size
     }
 
-    fun removeItem(position: Int) {
-        if (bookCollections.size > position) {
-            bookCollections.removeAt(position)
-        } else {
-            singleBooks.removeAt(position - bookCollections.size)
-        }
-        notifyItemRemoved(position)
-    }
-
     fun getItem(position: Int): String {
         if (bookCollections.size > position) {
             return bookCollections[position]

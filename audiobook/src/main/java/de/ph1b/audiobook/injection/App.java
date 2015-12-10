@@ -91,6 +91,8 @@ public class App extends Application {
 
         PrefsManager getPrefsManager();
 
+        BookAdder getBookAdder();
+
         void inject(WidgetUpdateService target);
 
         void inject(BookmarkAdapter target);
