@@ -18,9 +18,11 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.adapter.FolderChooserAdapter
 import de.ph1b.audiobook.dialog.HideFolderDialog
 import de.ph1b.audiobook.model.NaturalOrderComparator
+import de.ph1b.audiobook.presenter.FolderChooserPresenter
 import de.ph1b.audiobook.uitools.HighlightedSpinnerAdapter
 import de.ph1b.audiobook.utils.FileRecognition
 import de.ph1b.audiobook.utils.PermissionHelper
+import nucleus.factory.RequiresPresenter
 import timber.log.Timber
 import java.io.File
 import java.util.*
@@ -37,7 +39,8 @@ import java.util.regex.Pattern
 
  * @author Paul Woitaschek
  */
-class FolderChooserActivity : BaseActivity(), HideFolderDialog.OnChosenListener {
+@RequiresPresenter(FolderChooserPresenter::class)
+class FolderChooserActivity : NucleusBaseActivity<FolderChooserPresenter>(), HideFolderDialog.OnChosenListener {
     private val currentFolderContent = ArrayList<File>(30)
     private lateinit var upButton: ImageButton
     private lateinit var currentFolderName: TextView
