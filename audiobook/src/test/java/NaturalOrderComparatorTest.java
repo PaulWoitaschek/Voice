@@ -1,9 +1,13 @@
-import android.test.suitebuilder.annotation.SmallTest;
+import com.google.common.collect.Lists;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
-import java.util.Arrays;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,51 +18,57 @@ import de.ph1b.audiobook.model.NaturalOrderComparator;
  *
  * @author Paul Woitaschek
  */
-public class NaturalOrderComparatorTest extends TestCase {
+public class NaturalOrderComparatorTest {
 
-    private List<File> list;
+    @Rule
+    public final TemporaryFolder testFolder = new TemporaryFolder();
 
-    @SmallTest
-    public void testNaturalCompare() {
-        String first = "00 I";
-        String second = "01 I";
-        assertTrue(NaturalOrderComparator.STRING_COMPARATOR.compare(first, second) < 0);
+    @Test
+    public void testWhatEver() throws IOException {
+        testFolder.newFolder("folder", "subfolder", "subsubfolder");
+        testFolder.newFolder("storage", "emulated", "0");
+        testFolder.newFolder("xFolder");
+
+        File alarmsFolder = testFolder.newFolder("storage", "emulated", "0", "Alarms");
+        List<File> desiredOrder = Lists.newArrayList(
+                alarmsFolder,
+                testFolder.newFile("folder/subfolder/subsubfolder/test2.mp3"),
+                testFolder.newFile("folder/subfolder/test.mp3"),
+                testFolder.newFile("folder/subfolder/test2.mp3"),
+                testFolder.newFile("folder/a.jpg"),
+                testFolder.newFile("folder/aC.jpg"),
+                testFolder.newFile("storage/emulated/0/1.ogg"),
+                testFolder.newFile("storage/emulated/0/2.ogg"),
+                testFolder.newFile("xFolder/d.jpg"),
+                testFolder.newFile("1.mp3"),
+                testFolder.newFile("a.jpg"));
+
+        List<File> sorted = new ArrayList<>(desiredOrder);
+        Collections.sort(sorted, NaturalOrderComparator.INSTANCE.getFILE_COMPARATOR());
+        Assert.assertEquals(desiredOrder, sorted);
     }
 
-    /**
-     * Tests if the comparison results in the desired order.
-     */
-    @SmallTest
-    public void testFileComparison() {
-        File f1 = new File("a.jpg");
-        File f2 = new File("b.jpg");
-        File f3 = new File("/folder/a.jpg");
-        File f4 = new File("/folder/b.jpg");
-        File f5 = new File("/xfolder/d.jpg");
-        File f6 = new File("/xfolder");
-        File f7 = new File("/folder");
-        File f8 = new File("Ab.jpg");
-        File f9 = new File("aC.jpg");
-        File f10 = new File("00 Introduction.mp3");
-        File f11 = new File("01 How to build a universe.mp3");
-        File f12 = new File("9.mp3");
-        File f13 = new File("10.mp3");
-        list = Arrays.asList(f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13);
-        Collections.sort(list, NaturalOrderComparator.FILE_COMPARATOR);
-        System.out.println(list);
+    @Test
+    public void testSimpleComparison() {
+        List<String> desiredOrder = Lists.newArrayList(
+                "00 I",
+                "00 Introduction",
+                "1",
+                "01 How to build a universe",
+                "01 I",
+                "2",
+                "9",
+                "10",
+                "a",
+                "Ab",
+                "aC",
+                "Ba",
+                "cA",
+                "D",
+                "e");
 
-        assertTrue(indexOf(f1) < indexOf(f2));
-        assertTrue(indexOf(f3) < indexOf(f1));
-        assertTrue(indexOf(f5) > indexOf(f3));
-        assertTrue(indexOf(f7) < indexOf(f5));
-        assertTrue(indexOf(f8) < indexOf(f9));
-        assertTrue(indexOf(f9) > indexOf(f1));
-        assertTrue(indexOf(f9) < indexOf(f2));
-        assertTrue(indexOf(f11) > indexOf(f10));
-        assertTrue(indexOf(f12) < indexOf(f13));
-    }
-
-    private int indexOf(File file) {
-        return list.indexOf(file);
+        List<String> sorted = new ArrayList<>(desiredOrder);
+        Collections.sort(sorted, NaturalOrderComparator.INSTANCE.getSTRING_COMPARATOR());
+        Assert.assertEquals(desiredOrder, sorted);
     }
 }

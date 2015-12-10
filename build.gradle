@@ -1,12 +1,17 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+
+    ext.kotlinVersion = '1.0.0-beta-3594'
+
     repositories {
         jcenter()
     }
+
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.4.0-beta6'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'com.android.tools.build:gradle:1.5.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
 
@@ -17,6 +22,7 @@ allprojects {
     }
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.7' //version required
+task updateTranslations(type: Exec) {
+    executable 'tx'
+    args "pull", "--minimum-perc=5", "--all"
 }

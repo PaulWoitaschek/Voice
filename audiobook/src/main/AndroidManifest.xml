@@ -4,34 +4,34 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="com.android.vending.BILLING"/>
 
     <application
-        android:name=".utils.App"
+        android:name=".injection.App"
         android:allowBackup="true"
         android:backupAgent=".persistence.CustomBackupAgent"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/LightTheme"
+        android:theme="@style/PlaceHolder"
         tools:ignore="UnusedAttribute">
 
         <meta-data
             android:name="com.google.android.backup.api_key"
-            android:value="AEdPqrEAAAAIjeSB6A5JNJpRSV5yPq22PvZtl95fWDzDIuk63w" />
+            android:value="AEdPqrEAAAAIjeSB6A5JNJpRSV5yPq22PvZtl95fWDzDIuk63w"/>
 
         <activity
             android:name=".activity.BookActivity"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
@@ -41,7 +41,7 @@
             android:parentActivityName=".activity.BookActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.BookActivity" />
+                android:value=".activity.BookActivity"/>
         </activity>
 
         <activity
@@ -50,28 +50,38 @@
             android:parentActivityName=".activity.SettingsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.SettingsActivity" />
+                android:value=".activity.SettingsActivity"/>
         </activity>
 
         <activity
+            android:name=".activity.DependencyLicensesActivity"
+            android:label="@string/license_activity_title"/>
+
+        <activity
             android:name=".activity.NoExternalStorageActivity"
-            android:label="@string/no_external_storage_action_bar_title" />
+            android:label="@string/no_external_storage_action_bar_title"/>
 
         <activity
             android:name=".activity.FolderChooserActivity"
             android:parentActivityName=".activity.BookActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.BookActivity" />
+                android:value=".activity.BookActivity"/>
         </activity>
 
-        <service android:name=".service.BookReaderService" />
-
-        <service android:name=".service.WidgetUpdateService" />
-
-        <receiver android:name=".receiver.RemoteControlReceiver">
+        <service
+            android:name=".playback.BookReaderService"
+            android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.MEDIA_BUTTON" />
+                <action android:name="android.intent.action.MEDIA_BUTTON"/>
+            </intent-filter>
+        </service>
+
+        <service android:name=".playback.WidgetUpdateService"/>
+
+        <receiver android:name="android.support.v4.media.session.MediaButtonReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON"/>
             </intent-filter>
         </receiver>
 
@@ -80,12 +90,12 @@
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/widget_info" />
+                android:resource="@xml/widget_info"/>
         </receiver>
     </application>
 
