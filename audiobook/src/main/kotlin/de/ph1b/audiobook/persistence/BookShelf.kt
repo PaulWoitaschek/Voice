@@ -115,10 +115,8 @@ constructor(c: Context) {
         var newBook = book
         Timber.v("addBook=%s", newBook.name)
 
-        db.beginTransaction()
-        try {
+        db.asTransaction {
             val bookCv = BookTable.getContentValues(newBook)
-
             val bookId = db.insert(BookTable.TABLE_NAME, null, bookCv)
 
             newBook = newBook.copy(id = bookId)
@@ -132,10 +130,6 @@ constructor(c: Context) {
                 val bookmarkCv = BookmarkTable.getContentValues(b, newBook.id)
                 db.insert(BookmarkTable.TABLE_NAME, null, bookmarkCv)
             }
-
-            db.setTransactionSuccessful()
-        } finally {
-            db.endTransaction()
         }
 
         active.add(newBook)
@@ -160,8 +154,7 @@ constructor(c: Context) {
             if (book.id == next.id) {
                 bookIterator.set(book)
 
-                db.beginTransaction()
-                try {
+                db.asTransaction {
                     // update book itself
                     val bookCv = BookTable.getContentValues(book)
                     db.update(BookTable.TABLE_NAME, bookCv, "${BookTable.ID}=?", arrayOf(book.id.toString()))
@@ -179,10 +172,6 @@ constructor(c: Context) {
                         val bookmarkCV = BookmarkTable.getContentValues(b, book.id)
                         db.insert(BookmarkTable.TABLE_NAME, null, bookmarkCV)
                     }
-
-                    db.setTransactionSuccessful()
-                } finally {
-                    db.endTransaction()
                 }
 
                 break
