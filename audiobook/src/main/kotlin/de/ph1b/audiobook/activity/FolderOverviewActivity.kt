@@ -23,7 +23,9 @@ import de.ph1b.audiobook.adapter.FolderOverviewAdapter
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.BookAdder
 import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.presenter.FolderOverviewPresenter
 import de.ph1b.audiobook.uitools.DividerItemDecoration
+import nucleus.factory.RequiresPresenter
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -33,7 +35,8 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class FolderOverviewActivity : BaseActivity() {
+@RequiresPresenter(FolderOverviewPresenter::class)
+class FolderOverviewActivity : NucleusBaseActivity<FolderOverviewPresenter>() {
 
     private val BACKGROUND_OVERLAY_VISIBLE = "backgroundOverlayVisibility"
     private val PICKER_REQUEST_CODE = 42
@@ -136,12 +139,12 @@ class FolderOverviewActivity : BaseActivity() {
         buttonRepresentingTheFam = findViewById(R.id.fab_expand_menu_button)
         singleBookButton = findViewById(R.id.add_single) as FloatingActionButton
 
-        singleBookButton.setOnClickListener({
+        singleBookButton.setOnClickListener {
             startFolderChooserActivity(FolderChooserActivity.OperationMode.SINGLE_BOOK)
-        })
-        libraryBookButton.setOnClickListener({
+        }
+        libraryBookButton.setOnClickListener {
             startFolderChooserActivity(FolderChooserActivity.OperationMode.COLLECTION_BOOK)
-        })
+        }
 
         setSupportActionBar(toolbar)
         val actionBar = supportActionBar
@@ -278,14 +281,17 @@ class FolderOverviewActivity : BaseActivity() {
         }
     }
 
-
-    override fun onResume() {
-        super.onResume()
-
-        bookCollections.clear()
-        bookCollections.addAll(prefs.collectionFolders)
-        singleBooks.clear()
-        singleBooks.addAll(prefs.singleBookFolders)
+    /**
+     * Updates the adapter with new contents.
+     *
+     * @param bookCollections The folders added as book collections.
+     * @param singleBooks The folders added as single books.
+     */
+    fun updateAdapterData(bookCollections: List<String>, singleBooks: List<String>) {
+        this.bookCollections.clear()
+        this.bookCollections.addAll(bookCollections)
+        this.singleBooks.clear()
+        this.singleBooks.addAll(singleBooks)
         adapter.notifyDataSetChanged()
     }
 

@@ -71,6 +71,12 @@ dependencies {
         transitive = true
     }
 
+    // nucleus for MVP
+    def nucleusVersion = "2.0.3"
+    compile "info.android15.nucleus:nucleus:$nucleusVersion"
+    compile "info.android15.nucleus:nucleus-support-v4:$nucleusVersion"
+    compile "info.android15.nucleus:nucleus-support-v7:$nucleusVersion"
+
     // fab
     compile "com.getbase:floatingactionbutton:1.10.1"
 

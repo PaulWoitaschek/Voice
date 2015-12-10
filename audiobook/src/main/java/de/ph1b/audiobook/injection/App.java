@@ -34,8 +34,10 @@ import de.ph1b.audiobook.fragment.BookPlayFragment;
 import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.fragment.SettingsFragment;
 import de.ph1b.audiobook.model.BookAdder;
+import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.playback.BookReaderService;
 import de.ph1b.audiobook.playback.WidgetUpdateService;
+import de.ph1b.audiobook.presenter.FolderOverviewPresenter;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import timber.log.Timber;
 
@@ -87,6 +89,8 @@ public class App extends Application {
 
         Context getContext();
 
+        PrefsManager getPrefsManager();
+
         void inject(WidgetUpdateService target);
 
         void inject(BookmarkAdapter target);
@@ -128,5 +132,7 @@ public class App extends Application {
         void inject(BookShelfAdapter target);
 
         void inject(BookShelfFragment target);
+
+        void inject(FolderOverviewPresenter target);
     }
 }
