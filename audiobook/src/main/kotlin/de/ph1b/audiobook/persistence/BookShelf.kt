@@ -117,18 +117,18 @@ constructor(c: Context) {
 
         db.asTransaction {
             val bookCv = BookTable.getContentValues(newBook)
-            val bookId = db.insert(BookTable.TABLE_NAME, null, bookCv)
+            val bookId = insert(BookTable.TABLE_NAME, null, bookCv)
 
             newBook = newBook.copy(id = bookId)
 
             for (c in newBook.chapters) {
                 val chapterCv = ChapterTable.getContentValues(c, newBook.id)
-                db.insert(ChapterTable.TABLE_NAME, null, chapterCv)
+                insert(ChapterTable.TABLE_NAME, null, chapterCv)
             }
 
             for (b in newBook.bookmarks) {
                 val bookmarkCv = BookmarkTable.getContentValues(b, newBook.id)
-                db.insert(BookmarkTable.TABLE_NAME, null, bookmarkCv)
+                insert(BookmarkTable.TABLE_NAME, null, bookmarkCv)
             }
         }
 
@@ -157,20 +157,20 @@ constructor(c: Context) {
                 db.asTransaction {
                     // update book itself
                     val bookCv = BookTable.getContentValues(book)
-                    db.update(BookTable.TABLE_NAME, bookCv, "${BookTable.ID}=?", arrayOf(book.id.toString()))
+                    update(BookTable.TABLE_NAME, bookCv, "${BookTable.ID}=?", arrayOf(book.id.toString()))
 
                     // delete old chapters and replace them with new ones
-                    db.delete(ChapterTable.TABLE_NAME, "${BookTable.ID}=?", arrayOf(book.id.toString()))
+                    delete(ChapterTable.TABLE_NAME, "${BookTable.ID}=?", arrayOf(book.id.toString()))
                     for (c in book.chapters) {
                         val chapterCv = ChapterTable.getContentValues(c, book.id)
-                        db.insert(ChapterTable.TABLE_NAME, null, chapterCv)
+                        insert(ChapterTable.TABLE_NAME, null, chapterCv)
                     }
 
                     // replace old bookmarks and replace them with new ones
-                    db.delete(BookmarkTable.TABLE_NAME, "${BookTable.ID}=?", arrayOf(book.id.toString()))
+                    delete(BookmarkTable.TABLE_NAME, "${BookTable.ID}=?", arrayOf(book.id.toString()))
                     for (b in book.bookmarks) {
                         val bookmarkCV = BookmarkTable.getContentValues(b, book.id)
-                        db.insert(BookmarkTable.TABLE_NAME, null, bookmarkCV)
+                        insert(BookmarkTable.TABLE_NAME, null, bookmarkCV)
                     }
                 }
 

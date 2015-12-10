@@ -63,7 +63,7 @@ constructor(c: Context) {
                 return ThemeUtil.Theme.valueOf(value)
             }
         }
-        @Synchronized set(theme) = sp.edit().putString(PREF_KEY_THEME, theme.name).apply()
+        @Synchronized set(theme) = sp.edit { setString(PREF_KEY_THEME to theme.name) }
 
     /**
      * Sets the current bookId.
@@ -71,14 +71,14 @@ constructor(c: Context) {
      * @param bookId the book Id to set
      */
     @Synchronized fun setCurrentBookId(bookId: Long) {
-        sp.edit().putLong(PREF_KEY_CURRENT_BOOK, bookId).apply()
+        sp.edit { setLong(PREF_KEY_CURRENT_BOOK to bookId) }
         currentBookId.onNext(bookId)
     }
 
 
     /**
-     * All book paths that are set as [de.ph1b.audiobook.model.Book.Type.COLLECTION_FOLDER] or
-     * [de.ph1b.audiobook.model.Book.Type.COLLECTION_FILE]
+     * All book paths that are set as [Book.Type.COLLECTION_FOLDER] or
+     * [Book.Type.COLLECTION_FILE]
      *
      * @see PrefsManager.collectionFolders
      */
@@ -90,7 +90,7 @@ constructor(c: Context) {
         @Synchronized set(folders) {
             val set = HashSet<String>(folders.size)
             set.addAll(folders)
-            sp.edit().putStringSet(PREF_KEY_COLLECTION_FOLDERS, set).apply()
+            sp.edit { setStringSet(PREF_KEY_COLLECTION_FOLDERS to set) }
         }
 
     /**
@@ -106,7 +106,7 @@ constructor(c: Context) {
         @Synchronized set(folders) {
             val set = HashSet<String>(folders.size)
             set.addAll(folders)
-            sp.edit().putStringSet(PREF_KEY_SINGLE_BOOK_FOLDERS, set).apply()
+            sp.edit { setStringSet(PREF_KEY_SINGLE_BOOK_FOLDERS to set) }
         }
 
 
@@ -116,7 +116,7 @@ constructor(c: Context) {
      */
     var sleepTime: Int
         @Synchronized get() = sp.getInt(PREF_KEY_SLEEP_TIME, 20)
-        @Synchronized set(time) = sp.edit().putInt(PREF_KEY_SLEEP_TIME, time).apply()
+        @Synchronized set(time) = sp.edit { setInt(PREF_KEY_SLEEP_TIME to time) }
 
 
     /**
@@ -124,7 +124,7 @@ constructor(c: Context) {
      */
     var seekTime: Int
         @Synchronized get() = sp.getInt(PREF_KEY_SEEK_TIME, 20)
-        @Synchronized set(time) = sp.edit().putInt(PREF_KEY_SEEK_TIME, time).apply()
+        @Synchronized set(time) = sp.edit { setInt(PREF_KEY_SEEK_TIME to time) }
 
     /**
      * @return true if the player should resume after the headset has been replugged. (If previously
@@ -146,7 +146,7 @@ constructor(c: Context) {
      */
     var autoRewindAmount: Int
         @Synchronized get() = sp.getInt(PREF_KEY_AUTO_REWIND, 2)
-        @Synchronized set(autoRewindAmount) = sp.edit().putInt(PREF_KEY_AUTO_REWIND, autoRewindAmount).apply()
+        @Synchronized set(autoRewindAmount) = sp.edit { setInt(PREF_KEY_AUTO_REWIND to autoRewindAmount) }
 
     /**
      * @return true if a [de.ph1b.audiobook.model.Bookmark] should be set each time the sleep
@@ -162,6 +162,6 @@ constructor(c: Context) {
      */
     var displayMode: BookShelfFragment.DisplayMode
         @Synchronized get() = BookShelfFragment.DisplayMode.valueOf(sp.getString(PREF_KEY_DISPLAY_MODE, BookShelfFragment.DisplayMode.GRID.name))
-        @Synchronized set(displayMode) = sp.edit().putString(PREF_KEY_DISPLAY_MODE, displayMode.name).apply()
+        @Synchronized set(displayMode) = sp.edit { setString(PREF_KEY_DISPLAY_MODE to displayMode.name) }
 
 }
