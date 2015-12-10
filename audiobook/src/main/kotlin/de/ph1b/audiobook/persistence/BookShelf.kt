@@ -301,7 +301,7 @@ constructor(c: Context) {
 
         val bookId = cursor.long(BookTable.ID)
         val bookName = cursor.string(BookTable.NAME)
-        val bookAuthor = cursor.string(BookTable.AUTHOR)
+        val bookAuthor = cursor.stringNullable(BookTable.AUTHOR)
         val currentPath = File(cursor.string(BookTable.CURRENT_MEDIA_PATH))
         val bookSpeed = cursor.float(BookTable.PLAYBACK_SPEED)
         val bookRoot = cursor.string(BookTable.ROOT)
