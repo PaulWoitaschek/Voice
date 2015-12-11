@@ -34,7 +34,7 @@ data class Book(val id: Long,
 
     companion object {
         const val ID_UNKNOWN = -1L
-        const val SPEED_MAX = 2F
+        const val SPEED_MAX = 3F
         const val SPEED_MIN = 0.5F
     }
 
