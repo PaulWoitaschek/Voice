@@ -35,14 +35,13 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
 
         refreshRootDirs()
 
-        if (chosenFile != null) {
-            fileSelected(chosenFile!!)
+        if (chosenFile != null ) {
+            fileSelected(chosenFile)
         } else if (rootDirs.isNotEmpty()) {
             fileSelected(rootDirs.first())
+        } else {
+            fileSelected(null)
         }
-
-        view.setUpButtonEnabled(canGoBack())
-        view.setChooseButtonEnabled(rootDirs.isNotEmpty())
     }
 
     override fun onSave(state: Bundle) {
@@ -86,11 +85,11 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
     /**
      * Call this when a file was selected by the user or the root folder has changed
      */
-    fun fileSelected(selectedFile: File) {
+    fun fileSelected(selectedFile: File?) {
         chosenFile = selectedFile
-        view.showNewData(selectedFile.closestFolder()
-                .getContentsSorted())
-        view.setCurrentFolderText(selectedFile.name)
+        view.showNewData(selectedFile?.closestFolder()?.getContentsSorted() ?: emptyList())
+        view.setCurrentFolderText(selectedFile?.name ?: "")
+        view.setUpButtonEnabled(canGoBack())
     }
 
     private fun canGoBack(): Boolean {
@@ -132,6 +131,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
         rootDirs.clear()
         rootDirs.addAll(storageDirs())
         view.newRootFolders(rootDirs)
+        view.setChooseButtonEnabled(rootDirs.isNotEmpty())
     }
 
 
