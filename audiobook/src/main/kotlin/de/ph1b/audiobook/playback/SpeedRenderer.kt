@@ -73,7 +73,7 @@ class SpeedRenderer(source: SampleSource) : MediaCodecAudioTrackRenderer(source)
         super.onOutputFormatChanged(format)
 
         // this is only necessary below marshmallow. Else we use playback params directly.
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             val sampleRate = format.getInteger(MediaFormat.KEY_SAMPLE_RATE)
             val channelCount = format.getInteger(MediaFormat.KEY_CHANNEL_COUNT)
 
