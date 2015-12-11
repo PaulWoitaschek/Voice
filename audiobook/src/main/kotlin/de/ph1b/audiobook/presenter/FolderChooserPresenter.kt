@@ -22,35 +22,33 @@ import java.util.regex.Pattern
 class FolderChooserPresenter : Presenter<FolderChooserView>() {
 
     private val rootDirs = ArrayList<File>()
-    private var currentFolder: File? = null
     private var chosenFile: File? = null
 
     override fun onCreate(savedState: Bundle?) {
         super.onCreate(savedState)
 
         chosenFile = savedState?.getSerializable(SI_CHOSEN_FILE) as File?
-        currentFolder = savedState?.getSerializable(SI_CURRENT_FOLDER) as File?
     }
 
     override fun onTakeView(view: FolderChooserView) {
+        super.onTakeView(view)
+
         refreshRootDirs()
 
-        if (currentFolder != null && chosenFile != null) {
-            changeFolder(currentFolder!!)
+        if (chosenFile != null) {
             fileSelected(chosenFile!!)
+        } else if (rootDirs.isNotEmpty()) {
+            fileSelected(rootDirs.first())
         }
 
         view.setUpButtonEnabled(canGoBack())
         view.setChooseButtonEnabled(rootDirs.isNotEmpty())
-
-        super.onTakeView(view)
     }
 
     override fun onSave(state: Bundle) {
         super.onSave(state)
 
         state.putSerializable(SI_CHOSEN_FILE, chosenFile)
-        state.putSerializable(SI_CURRENT_FOLDER, currentFolder)
     }
 
     /**
@@ -74,24 +72,24 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
     }
 
     /**
-     * Call this when the root (usually the sd card) was changed by the user.
-     *
-     * Informs the view about changes.
-     *
-     * @param newRoot the new root
+     * Returns the closest folder. If this is a folder return itself. Else return the parent.
      */
-    fun rootChanged(newRoot: File) {
-        if (currentFolder != newRoot) changeFolder(newRoot)
+    private fun File.closestFolder(): File {
+        if (isDirectory) {
+            return this
+        } else {
+            return parentFile
+        }
     }
 
+
     /**
-     * Call this when a file was selected by the user.
+     * Call this when a file was selected by the user or the root folder has changed
      */
     fun fileSelected(selectedFile: File) {
         chosenFile = selectedFile
-        if (selectedFile.isDirectory && selectedFile.canRead()) {
-            changeFolder(selectedFile)
-        }
+        view.showNewData(selectedFile.closestFolder()
+                .getContentsSorted())
         view.setCurrentFolderText(selectedFile.name)
     }
 
@@ -101,7 +99,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
         }
 
         for (f in rootDirs) {
-            if (f == currentFolder) {
+            if (f == chosenFile!!.closestFolder()) {
                 return false // to go up we must not already be in top level
             }
         }
@@ -114,9 +112,9 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
      * @return true if the presenter handled the back command.
      */
     fun backConsumed(): Boolean {
-        Timber.d("up called. currentFolder=%s", currentFolder)
+        Timber.d("up called. currentFolder=$chosenFile")
         if (canGoBack()) {
-            changeFolder(currentFolder!!.parentFile)
+            fileSelected(chosenFile!!.closestFolder().parentFile)
             return true
         } else {
             return false
@@ -134,14 +132,6 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
         rootDirs.clear()
         rootDirs.addAll(storageDirs())
         view.newRootFolders(rootDirs)
-    }
-
-    private fun changeFolder(newFolder: File) {
-        currentFolder = newFolder
-        chosenFile = null
-        view.showNewData(getFilesFromFolder(newFolder))
-        view.setUpButtonEnabled(canGoBack())
-        view.setCurrentFolderText(newFolder.name)
     }
 
 
@@ -221,13 +211,11 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
     /**
      * Gets the containing files of a folder (restricted to music and folders) in a naturally sorted
      * order.
-
-     * @param file The file to look for containing files
      * *
      * @return The containing files
      */
-    private fun getFilesFromFolder(file: File): List<File> {
-        val containing = file.listFiles(FileRecognition.folderAndMusicFilter)
+    private fun File.getContentsSorted(): List<File> {
+        val containing = listFiles(FileRecognition.folderAndMusicFilter)
         if (containing != null) {
             val asList = ArrayList(Arrays.asList(*containing))
             return asList.sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
@@ -237,7 +225,6 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
     }
 
     companion object {
-        private val SI_CURRENT_FOLDER = "siCurrentFolder"
         private val SI_CHOSEN_FILE = "siChosenFile"
     }
 }
