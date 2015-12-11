@@ -108,4 +108,5 @@
     <string name="hide_folder_title">Steek gids weg</string>
     <string name="hide_folder_content">Wil jy die gids wegsteek van musiek spelers, sodat dit nie erken word as musiek nie?</string>
     <string name="hide_confirm">Steek weg</string>
+    <!--license activity-->
 </resources>

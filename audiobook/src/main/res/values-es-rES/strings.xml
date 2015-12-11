@@ -10,7 +10,8 @@
     <string name="previous_track">Pista anterior</string>
     <string name="next_track">Proxima pista </string>
     <!--NoExternalStorage-->
-    <string name="no_external_storage">Almacenamiento externo no está disponible. Por favor, asegúrese que esta conectado a su computadora.</string>
+  <string name="no_external_storage">Almacenamiento externo no está disponible. Por favor, asegúrese que esta
+         conectado a su computadora.</string>
     <string name="no_external_storage_action_bar_title">Almacenamiento externo</string>
     <!--Dialogs-->
     <string name="dialog_confirm">Confirmar</string>
