@@ -6,7 +6,7 @@ android {
     buildToolsVersion '23.0.2'
 
     defaultConfig {
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 85
         versionName '2.4.3.2'
@@ -121,5 +121,5 @@ dependencies {
     // compat music player when no speed can be set
     compile 'com.github.AntennaPod:AntennaPod-AudioPlayer:v1.0.6'
 
-    compile 'com.google.android.exoplayer:exoplayer:r1.5.2'
+    compile 'com.google.android.exoplayer:exoplayer:r1.5.3'
 }

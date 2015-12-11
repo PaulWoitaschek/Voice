@@ -10,8 +10,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import de.ph1b.audiobook.mediaplayer.AndroidMediaPlayer;
-import de.ph1b.audiobook.mediaplayer.AntennaPlayer;
+import de.ph1b.audiobook.mediaplayer.ExoMediaPlayer;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerInterface;
 import de.ph1b.audiobook.receiver.HeadsetPlugReceiver;
 import de.ph1b.audiobook.uitools.ImageLinkService;
@@ -49,11 +48,7 @@ public class BaseModule {
 
     @Provides
     MediaPlayerInterface provideMediaPlayer(Context context) {
-        if (MIN_MARSHMALLOW || !canUseSonic()) {
-            return new AndroidMediaPlayer();
-        } else {
-            return new AntennaPlayer(context);
-        }
+        return new ExoMediaPlayer(context);
     }
 
     @Provides
