@@ -10,16 +10,15 @@ import android.widget.TextView
 import de.ph1b.audiobook.R
 
 /**
- * TODO: Class description
+ * An extension of [ArrayAdapter] that forces the consumer to decide what it will show by wrapping
+ * the type inside [SpinnerData].
+ *
+ * It also highlights the current selection.
  *
  * @author Paul Woitaschek
  */
-class HighlightedSpinnerAdapter(context: Context, private val spinner: Spinner) : ArrayAdapter<String>(context, R.layout.fragment_book_play_spinner, R.id.spinnerTextItem) {
+class HighlightedSpinnerAdapter<SpinnerType>(context: Context, private val spinner: Spinner) : ArrayAdapter<HighlightedSpinnerAdapter.SpinnerData<SpinnerType>>(context, R.layout.fragment_book_play_spinner, R.id.spinnerTextItem) {
 
-    fun setContent(content: List<String>) {
-        clear()
-        addAll(content)
-    }
 
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
         val dropDownView = super.getDropDownView(position, convertView, parent)
@@ -38,5 +37,19 @@ class HighlightedSpinnerAdapter(context: Context, private val spinner: Spinner) 
         }
 
         return dropDownView
+    }
+
+    /**
+     * As ArrayAdapter uses [toString] on its Type, we use this wrapper class that forces consumers
+     * to explicitly define a name while at the same time still being able to retrieve the
+     * underlying data.
+     */
+    abstract class SpinnerData<E>(public val data: E) {
+
+        abstract fun getStringRepresentation(toRepresent: E): String;
+
+        final override fun toString(): String {
+            return getStringRepresentation(data)
+        }
     }
 }

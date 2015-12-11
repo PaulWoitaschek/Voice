@@ -126,7 +126,7 @@ class BookPlayFragment : BaseFragment() {
 
             // adapter
             val chapters = book!!.chapters
-            val chaptersAsStrings = ArrayList<String>(chapters.size)
+            val chapterNames = ArrayList<SpinnerData>(chapters.size)
             for (i in chapters.indices) {
                 var chapterName = chapters[i].name
 
@@ -146,11 +146,11 @@ class BookPlayFragment : BaseFragment() {
                     }
                 }
 
-                chaptersAsStrings.add(chapterName)
+                chapterNames.add(SpinnerData(chapterName))
             }
 
-            val spinnerAdapter = HighlightedSpinnerAdapter(context, bookSpinner)
-            spinnerAdapter.setContent(chaptersAsStrings)
+            val spinnerAdapter = HighlightedSpinnerAdapter<String>(context, bookSpinner)
+            spinnerAdapter.addAll(chapterNames)
             bookSpinner.adapter = spinnerAdapter
             RxAdapterView.itemSelections(bookSpinner).subscribe {
                 // fire event only when that tag has been set (= this is not the first event) and
@@ -193,6 +193,10 @@ class BookPlayFragment : BaseFragment() {
         }
 
         return view
+    }
+
+    private class SpinnerData(data: String) : HighlightedSpinnerAdapter.SpinnerData<String>(data) {
+        override fun getStringRepresentation(toRepresent: String): String = toRepresent
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
