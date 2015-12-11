@@ -12,8 +12,8 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import android.view.View
 import android.widget.*
+import com.jakewharton.rxbinding.widget.RxAdapterView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.adapter.FolderChooserAdapter
 import de.ph1b.audiobook.dialog.HideFolderDialog
@@ -22,6 +22,7 @@ import de.ph1b.audiobook.uitools.HighlightedSpinnerAdapter
 import de.ph1b.audiobook.utils.PermissionHelper
 import de.ph1b.audiobook.view.FolderChooserView
 import nucleus.factory.RequiresPresenter
+import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
 import java.io.File
 import java.util.*
@@ -134,37 +135,26 @@ class FolderChooserActivity : NucleusBaseActivity<FolderChooserPresenter>(), Fol
         // spinner
         spinnerAdapter = HighlightedSpinnerAdapter(this, spinner)
         spinner.adapter = spinnerAdapter
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                Timber.i("spinner selected with position $position and adapter.count ${spinnerAdapter.count}")
-                //   val item = if (it == -1 || it >= spinnerAdapter.count) null else adapter.getItem(it)
-                val item = if (position == -1 ) null else spinnerAdapter.getItem(position)
-                if (item != null) {
-                    Timber.i("selected item $item")
-                    presenter.rootChanged(item.data)
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-
-        }
-        /**   RxAdapterView.itemSelections(spinner).subscribe {
-        Timber.i("spinner selected with position $it and adapter.count ${spinnerAdapter.count}")
-        //   val item = if (it == -1 || it >= spinnerAdapter.count) null else adapter.getItem(it)
-        val item = if (it == -1 ) null else spinnerAdapter.getItem(it)
-        if (item != null) {
-        Timber.i("selected item $item")
-        presenter.rootChanged(item.data)
-            }
-        }**/
     }
 
     override fun onBackPressed() {
         if (!presenter.backConsumed()) {
             super.onBackPressed()
         }
+    }
+
+    override fun onResume(subscription: CompositeSubscription) {
+        super.onResume(subscription)
+
+        subscription.add(RxAdapterView.itemSelections(spinner)
+                .filter { it != AdapterView.INVALID_POSITION } // filter invalid entries
+                .skip(1) // skip the first that passed as its no real user input
+                .subscribe {
+                    Timber.i("spinner selected with position $it and adapter.count ${spinnerAdapter.count}")
+                    val item = spinnerAdapter.getItem(it)
+                    Timber.i("selected item $item")
+                    presenter.fileSelected(item.data)
+                })
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

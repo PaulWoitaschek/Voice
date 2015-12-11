@@ -3,6 +3,7 @@ package de.ph1b.audiobook.activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
+import android.support.annotation.CallSuper
 import android.util.TypedValue
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
@@ -10,6 +11,7 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.BookReaderService
 import nucleus.presenter.Presenter
 import nucleus.view.NucleusAppCompatActivity
+import rx.subscriptions.CompositeSubscription
 
 /**
  * Base class for all MVP Activities to inherit from.
@@ -18,12 +20,25 @@ import nucleus.view.NucleusAppCompatActivity
  */
 abstract class NucleusBaseActivity <P : Presenter<out Any>> : NucleusAppCompatActivity<P> () {
 
-   private lateinit var prefsManager: PrefsManager
+    private lateinit var prefsManager: PrefsManager
+    private var onResumeSubscriptions: CompositeSubscription? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         prefsManager = App.component().prefsManager
         setTheme(prefsManager.theme.themeId)
         super.onCreate(savedInstanceState)
+    }
+
+
+    @CallSuper
+  open  fun onResume(subscription: CompositeSubscription) {
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        onResumeSubscriptions!!.unsubscribe()
     }
 
     override fun onResume() {
@@ -38,6 +53,9 @@ abstract class NucleusBaseActivity <P : Presenter<out Any>> : NucleusAppCompatAc
             return
         }
         recreateIfThemeChanged()
+
+        onResumeSubscriptions = CompositeSubscription()
+        onResume(onResumeSubscriptions!!)
     }
 
     fun recreateIfThemeChanged() {
