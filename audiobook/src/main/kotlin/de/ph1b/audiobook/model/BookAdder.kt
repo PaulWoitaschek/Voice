@@ -339,7 +339,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                 Book.Type.COLLECTION_FILE -> for (f in collectionBookFolders) {
                     if (f.isFile) {
                         val chapters = book.chapters
-                        val singleBookChapterFile = chapters[0].file
+                        val singleBookChapterFile = chapters.first().file
                         if (singleBookChapterFile == f) {
                             bookExists = true
                         }
@@ -356,7 +356,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                 Book.Type.SINGLE_FILE -> for (f in singleBookFiles) {
                     if (f.isFile) {
                         val chapters = book.chapters
-                        val singleBookChapterFile = chapters[0].file
+                        val singleBookChapterFile = chapters.first().file
                         if (singleBookChapterFile == f) {
                             bookExists = true
                         }
@@ -408,7 +408,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         else
             rootFile.getParent()
 
-        val firstChapterFile = newChapters[0].file
+        val firstChapterFile = newChapters.first().file
         val mmr = MediaMetadataRetriever()
         val bookName = getBookName(firstChapterFile, rootFile, mmr)
         val author = getAuthor(firstChapterFile, mmr)
@@ -452,7 +452,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                 }
             }
             if (!pathValid) {
-                orphanedBook = orphanedBook.copy(currentFile = orphanedBook.chapters[0].file,
+                orphanedBook = orphanedBook.copy(currentFile = orphanedBook.chapters.first().file,
                         time = 0)
             }
 
@@ -487,7 +487,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                 }
             }
             if (currentPathIsGone) {
-                bookToUpdate = bookToUpdate.copy(currentFile = bookToUpdate.chapters[0].file,
+                bookToUpdate = bookToUpdate.copy(currentFile = bookToUpdate.chapters.first().file,
                         time = 0)
             }
 
@@ -642,7 +642,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
             for (b in books) {
                 Timber.v("Comparing bookRoot=${b.root} with ${rootFile.parentFile.absoluteFile}")
                 if (rootFile.parentFile.absolutePath == b.root && type === b.type) {
-                    val singleChapter = b.chapters[0]
+                    val singleChapter = b.chapters.first()
                     Timber.d("getBookFromDb, singleChapterPath=%s compared with=%s", singleChapter.file, rootFile.absoluteFile)
                     if (singleChapter.file == rootFile) {
                         return b

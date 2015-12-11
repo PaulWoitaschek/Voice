@@ -65,18 +65,14 @@ constructor(c: Context, private val imageLinkService: ImageLinkService) {
                 val startPoint = containing.size
                 Timber.v("looking for new set at startPoint %d", startPoint)
                 val newSet = getNewLinks(searchText, startPoint)
-                if (!newSet.isEmpty()) {
-                    containing.addAll(newSet)
-                    return newSet[0]
-                } else {
-                    return null
-                }
+                containing.addAll(newSet)
+                return newSet.firstOrNull()
             }
         } else {
             val newSet = getNewLinks(searchText, 0)
             if (!newSet.isEmpty()) {
                 SEARCH_MAPPING.put(searchText, ArrayList(newSet))
-                return newSet[0]
+                return newSet.first()
             } else {
                 return null
             }
