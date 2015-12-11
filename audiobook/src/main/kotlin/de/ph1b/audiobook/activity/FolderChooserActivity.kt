@@ -13,7 +13,9 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.widget.*
+import com.jakewharton.rxbinding.view.clicks
 import com.jakewharton.rxbinding.widget.RxAdapterView
+import com.jakewharton.rxbinding.widget.itemClicks
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.adapter.FolderChooserAdapter
 import de.ph1b.audiobook.dialog.HideFolderDialog
@@ -22,7 +24,6 @@ import de.ph1b.audiobook.uitools.HighlightedSpinnerAdapter
 import de.ph1b.audiobook.utils.PermissionHelper
 import de.ph1b.audiobook.view.FolderChooserView
 import nucleus.factory.RequiresPresenter
-import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
 import java.io.File
 import java.util.*
@@ -89,7 +90,7 @@ class FolderChooserActivity : NucleusBaseActivity<FolderChooserPresenter>(), Fol
         // permissions
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             val hasExternalStoragePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-            Timber.i("hasExternalStoragePermission=%b", hasExternalStoragePermission)
+            Timber.i("hasExternalStoragePermission=$hasExternalStoragePermission")
             if (!hasExternalStoragePermission) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                     PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE)
@@ -116,9 +117,10 @@ class FolderChooserActivity : NucleusBaseActivity<FolderChooserPresenter>(), Fol
         supportActionBar.setDisplayHomeAsUpEnabled(true)
 
         // listeners
-        chooseButton.setOnClickListener { presenter.chooseClicked() }
-        upButton.setOnClickListener { presenter.backConsumed() }
-        abortButton.setOnClickListener { finish() }
+        chooseButton.clicks()
+                .subscribe() { presenter.chooseClicked() }
+        abortButton.clicks().mergeWith(upButton.clicks())
+                .subscribe { finish() }
 
         // text
         chosenFolderDescription.setText(R.string.chosen_folder_description)
@@ -126,35 +128,29 @@ class FolderChooserActivity : NucleusBaseActivity<FolderChooserPresenter>(), Fol
         //recycler
         adapter = FolderChooserAdapter(this, getMode())
         listView.adapter = adapter
-        listView.setOnItemClickListener { parent, view, position, id ->
-            val selectedFile = adapter.getItem(position)
-            presenter.fileSelected(selectedFile)
-
-        }
+        listView.itemClicks()
+                .subscribe {
+                    val selectedFile = adapter.getItem(it)
+                    presenter.fileSelected(selectedFile)
+                }
 
         // spinner
         spinnerAdapter = HighlightedSpinnerAdapter(this, spinner)
         spinner.adapter = spinnerAdapter
+        RxAdapterView.itemSelections(spinner)
+                .filter { it != AdapterView.INVALID_POSITION } // filter invalid entries
+                .skip(1) // skip the first that passed as its no real user input
+                .subscribe {
+                    Timber.i("spinner selected with position $it and adapter.count ${spinnerAdapter.count}")
+                    val item = spinnerAdapter.getItem(it)
+                    presenter.fileSelected(item.data)
+                }
     }
 
     override fun onBackPressed() {
         if (!presenter.backConsumed()) {
             super.onBackPressed()
         }
-    }
-
-    override fun onResume(subscription: CompositeSubscription) {
-        super.onResume(subscription)
-
-        subscription.add(RxAdapterView.itemSelections(spinner)
-                .filter { it != AdapterView.INVALID_POSITION } // filter invalid entries
-                .skip(1) // skip the first that passed as its no real user input
-                .subscribe {
-                    Timber.i("spinner selected with position $it and adapter.count ${spinnerAdapter.count}")
-                    val item = spinnerAdapter.getItem(it)
-                    Timber.i("selected item $item")
-                    presenter.fileSelected(item.data)
-                })
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
