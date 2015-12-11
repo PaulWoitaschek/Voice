@@ -63,7 +63,7 @@ class WidgetUpdateService : Service() {
 
     }
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         updateWidget()
         return Service.START_STICKY
     }
