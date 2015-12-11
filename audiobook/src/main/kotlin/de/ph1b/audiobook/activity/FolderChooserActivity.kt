@@ -12,6 +12,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
+import android.view.View
 import android.widget.*
 import com.jakewharton.rxbinding.view.clicks
 import com.jakewharton.rxbinding.widget.RxAdapterView
@@ -49,6 +50,7 @@ class FolderChooserActivity : NucleusBaseActivity<FolderChooserPresenter>(), Fol
     private lateinit var listView: ListView
     private lateinit var chosenFolderDescription: TextView
     private lateinit var spinner: Spinner
+    private lateinit var spinnerGroup: View
 
     private lateinit var adapter: FolderChooserAdapter
     private lateinit var spinnerAdapter: HighlightedSpinnerAdapter<File>
@@ -109,6 +111,7 @@ class FolderChooserActivity : NucleusBaseActivity<FolderChooserPresenter>(), Fol
         listView = findViewById(R.id.listView) as ListView
         chosenFolderDescription = findViewById(R.id.twoline_text1) as TextView
         spinner = findViewById(R.id.toolSpinner) as Spinner
+        spinnerGroup = findViewById(R.id.spinnerGroup)
         val abortButton = findViewById(R.id.abort)
 
         // toolbar
@@ -119,8 +122,10 @@ class FolderChooserActivity : NucleusBaseActivity<FolderChooserPresenter>(), Fol
         // listeners
         chooseButton.clicks()
                 .subscribe() { presenter.chooseClicked() }
-        abortButton.clicks().mergeWith(upButton.clicks())
+        abortButton.clicks()
                 .subscribe { finish() }
+        upButton.clicks()
+                .subscribe { onBackPressed() }
 
         // text
         chosenFolderDescription.setText(R.string.chosen_folder_description)
@@ -155,7 +160,7 @@ class FolderChooserActivity : NucleusBaseActivity<FolderChooserPresenter>(), Fol
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == android.R.id.home) {
-            onBackPressed()
+            finish()
             return true
         } else {
             return super.onOptionsItemSelected(item)
@@ -176,6 +181,7 @@ class FolderChooserActivity : NucleusBaseActivity<FolderChooserPresenter>(), Fol
 
     override fun newRootFolders(newFolders: List<File>) {
         Timber.i("newRootFolders called with $newFolders")
+        spinnerGroup.visibility = if (newFolders.size <= 1) View.INVISIBLE else View.VISIBLE
         val spinnerList = ArrayList<FileSpinnerData>()
         newFolders.forEach { spinnerList.add(FileSpinnerData(it)) }
         spinnerAdapter.clear()
