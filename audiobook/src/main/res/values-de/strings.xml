@@ -54,6 +54,7 @@
     <string name="permission_read_ext_explanation">Die App benötigt Zugriff auf den externen Speicher, um die Hörbücher finden und abspielen zu können.</string>
     <string name="permission_read_ext_request">Erneut nach der Berechtigung fragen?</string>
     <string name="permission_rescan">Erneut nachfragen?</string>
+    <string name="storage_pre_device">Speicher:</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Geschwindigkeit</string>
     <!--Bookmarks-->

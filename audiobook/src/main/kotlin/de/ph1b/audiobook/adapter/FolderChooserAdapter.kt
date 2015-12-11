@@ -11,6 +11,7 @@ import android.widget.TextView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.activity.FolderChooserActivity
 import java.io.File
+import java.util.*
 
 
 /**
@@ -18,17 +19,18 @@ import java.io.File
  * Constructor that initializes the class with the necessary values
  *
  * @param c    The context
- * @param data The files to show
  * @param mode The operation mode which defines the interaction.
  *
  * @author Paul Woitaschek
  */
-class FolderChooserAdapter(private val c: Context, private val data: List<File>, private val mode: FolderChooserActivity.OperationMode) : BaseAdapter() {
+class FolderChooserAdapter(private val c: Context, private val mode: FolderChooserActivity.OperationMode) : BaseAdapter() {
 
-    init {
-        if (mode !== FolderChooserActivity.OperationMode.SINGLE_BOOK && mode !== FolderChooserActivity.OperationMode.COLLECTION_BOOK) {
-            throw IllegalArgumentException("Invalid mode=" + mode)
-        }
+    private val data = ArrayList<File>()
+
+    fun newData(newData: List<File>) {
+        data.clear()
+        data.addAll(newData)
+        notifyDataSetChanged()
     }
 
     override fun getCount(): Int {

@@ -99,17 +99,11 @@ constructor(c: Context) {
             "     FROM " + BookmarkTable.TABLE_NAME +
             "     group by " + BookmarkTable.BOOK_ID + ") AS bmt on bmt." + BookmarkTable.BOOK_ID + " = bt." + BookTable.ID
 
-    fun removedObservable(): Observable<Book> {
-        return removed.asObservable()
-    }
+    @Synchronized fun removedObservable(): Observable<Book> = removed.asObservable()
 
-    fun addedObservable(): Observable<Book> {
-        return added.asObservable()
-    }
+    @Synchronized fun addedObservable(): Observable<Book> = added.asObservable()
 
-    fun updateObservable(): Observable<Book> {
-        return updated.asObservable()
-    }
+    @Synchronized fun updateObservable(): Observable<Book> = updated.asObservable()
 
     @Synchronized fun addBook(book: Book) {
         var newBook = book
@@ -139,7 +133,7 @@ constructor(c: Context) {
     /**
      * All active books. We
      */
-    val activeBooks = Observable.defer { Observable.from(active) }
+    val activeBooks = Observable.defer { synchronized(this) { Observable.from(active) } }
 
     @Synchronized fun getOrphanedBooks(): List<Book> {
         return ArrayList(orphaned)
@@ -301,7 +295,7 @@ constructor(c: Context) {
 
         val bookId = cursor.long(BookTable.ID)
         val bookName = cursor.string(BookTable.NAME)
-        val bookAuthor = cursor.string(BookTable.AUTHOR)
+        val bookAuthor = cursor.stringNullable(BookTable.AUTHOR)
         val currentPath = File(cursor.string(BookTable.CURRENT_MEDIA_PATH))
         val bookSpeed = cursor.float(BookTable.PLAYBACK_SPEED)
         val bookRoot = cursor.string(BookTable.ROOT)

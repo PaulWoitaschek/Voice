@@ -3,12 +3,14 @@ package de.ph1b.audiobook.fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
 import android.text.format.DateUtils
 import android.view.*
-import android.widget.*
+import android.widget.ImageView
+import android.widget.SeekBar
+import android.widget.Spinner
+import android.widget.TextView
 import com.getbase.floatingactionbutton.FloatingActionButton
 import com.jakewharton.rxbinding.view.clicks
 import com.jakewharton.rxbinding.widget.RxAdapterView
@@ -29,8 +31,8 @@ import de.ph1b.audiobook.persistence.BookShelf
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.CoverReplacement
+import de.ph1b.audiobook.uitools.HighlightedSpinnerAdapter
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
-import de.ph1b.audiobook.uitools.ThemeUtil
 import de.ph1b.audiobook.utils.BookVendor
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
@@ -124,7 +126,7 @@ class BookPlayFragment : BaseFragment() {
 
             // adapter
             val chapters = book!!.chapters
-            val chaptersAsStrings = ArrayList<String>(chapters.size)
+            val chapterNames = ArrayList<SpinnerData>(chapters.size)
             for (i in chapters.indices) {
                 var chapterName = chapters[i].name
 
@@ -144,30 +146,12 @@ class BookPlayFragment : BaseFragment() {
                     }
                 }
 
-                chaptersAsStrings.add(chapterName)
+                chapterNames.add(SpinnerData(chapterName))
             }
 
-            val adapter = object : ArrayAdapter<String>(context, R.layout.fragment_book_play_spinner, R.id.spinnerTextItem, chaptersAsStrings) {
-                override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-                    val dropDownView = super.getDropDownView(position, convertView, parent)
-                    val textView = dropDownView.findViewById(R.id.spinnerTextItem) as TextView
-
-                    // highlights the selected item and un-highlights an item if it is not selected.
-                    // default implementation uses a ViewHolder, so this is necessary.
-                    if (position == bookSpinner.selectedItemPosition) {
-                        textView.setBackgroundResource(R.drawable.spinner_selected_background)
-                        textView.setTextColor(ContextCompat.getColor(context, R.color.copy_abc_primary_text_material_dark))
-                    } else {
-                        textView.setBackgroundResource(ThemeUtil.getResourceId(context,
-                                R.attr.selectableItemBackground))
-                        textView.setTextColor(ContextCompat.getColor(context, ThemeUtil.getResourceId(
-                                context, android.R.attr.textColorPrimary)))
-                    }
-
-                    return dropDownView
-                }
-            }
-            bookSpinner.adapter = adapter
+            val spinnerAdapter = HighlightedSpinnerAdapter<String>(context, bookSpinner)
+            spinnerAdapter.addAll(chapterNames)
+            bookSpinner.adapter = spinnerAdapter
             RxAdapterView.itemSelections(bookSpinner).subscribe {
                 // fire event only when that tag has been set (= this is not the first event) and
                 // this is a new value
@@ -209,6 +193,10 @@ class BookPlayFragment : BaseFragment() {
         }
 
         return view
+    }
+
+    private class SpinnerData(data: String) : HighlightedSpinnerAdapter.SpinnerData<String>(data) {
+        override fun getStringRepresentation(toRepresent: String): String = toRepresent
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

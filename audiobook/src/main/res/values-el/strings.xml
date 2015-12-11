@@ -36,7 +36,6 @@
     <string name="chosen_folder_description">Επιλεγμένος φάκελος:</string>
     <string name="delete_folder">Αφαίρεση από τη βιβλιοθήκη;</string>
     <string name="delete_folder_content">Θέλετε να αφαιρέσετε τον ακόλουθο φάκελο από τη βιβλιοθήκη;</string>
-    <string name="folder_add_single_book">Ενιαίο βιβλίο</string>
     <string name="folder_add_collection">Φάκελος με πολλαπλά βιβλία</string>
     <string name="for_example">π.χ.</string>
     <!--PlaybackSpeed-->
@@ -77,4 +76,6 @@
     <!--Misc-->
     <string name="popup_edit">Επεξεργασία </string>
     <string name="remove">Αφαίρεση</string>
+    <!--hide folder dialog-->
+    <!--license activity-->
 </resources>

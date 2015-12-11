@@ -5,9 +5,10 @@ import android.test.AndroidTestCase
 import android.test.suitebuilder.annotation.MediumTest
 import android.test.suitebuilder.annotation.SmallTest
 import com.google.common.io.ByteStreams
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.playback.PlayStateManager
-import de.ph1b.audiobook.testing.MockProvider
+import de.ph1b.audiobook.testing.DummyCreator
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -31,8 +32,7 @@ class MediaPlayerControllerTest : AndroidTestCase () {
     override fun setUp() {
         super.setUp()
 
-        val provider = MockProvider(context)
-        provider.newMockComponent().inject(this)
+        App.component().inject(this)
 
         val externalStorage = Environment.getExternalStorageDirectory()
 
@@ -42,7 +42,7 @@ class MediaPlayerControllerTest : AndroidTestCase () {
         ByteStreams.copy(context.assets.open("3rdState.mp3"), FileOutputStream(file1))
         ByteStreams.copy(context.assets.open("Crashed.mp3"), FileOutputStream(file2))
 
-        book = provider.dummyBook(file1, file2)
+        book = DummyCreator.dummyBook(file1, file2)
 
         mediaPlayerController.init(book)
     }

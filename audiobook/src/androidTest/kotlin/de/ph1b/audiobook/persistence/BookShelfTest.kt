@@ -1,8 +1,9 @@
 package de.ph1b.audiobook.persistence
 
 import android.test.AndroidTestCase
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
-import de.ph1b.audiobook.testing.MockProvider
+import de.ph1b.audiobook.testing.DummyCreator
 import java.io.File
 import javax.inject.Inject
 
@@ -20,16 +21,15 @@ class BookShelfTest : AndroidTestCase() {
      * Tests if the book we insert inTestsTTto our bookshelf is the same we retrieve later
      */
     fun testBookInOut() {
-        val provider = MockProvider(context)
-
-        provider.newMockComponent().inject(this)
+        App.component().inject(this)
 
         // add a fresh book to the database
-        val bookIn = provider.dummyBook(File("/storage/one.mp3"), File("/storage/two.mp3"))
+        val bookIn = DummyCreator.dummyBook(File("/storage/one.mp3"), File("/storage/two.mp3"))
         bookShelf.addBook(bookIn)
 
         // recall inject so we have a new instance of book-shelf
-        provider.newMockComponent().inject(this)
+        (context.applicationContext as App).initNewComponent()
+        App.component().inject(this)
 
         // retrieve the book by chapters
         val allBooks = bookShelf.activeBooks.toList().toBlocking().first()

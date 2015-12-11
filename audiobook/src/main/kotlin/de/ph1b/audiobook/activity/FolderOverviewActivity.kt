@@ -3,7 +3,6 @@ package de.ph1b.audiobook.activity
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.app.Activity
 import android.content.Intent
 import android.graphics.Point
 import android.os.Build
@@ -21,22 +20,20 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.adapter.FolderOverviewAdapter
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.model.BookAdder
-import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.presenter.FolderOverviewPresenter
 import de.ph1b.audiobook.uitools.DividerItemDecoration
-import timber.log.Timber
+import nucleus.factory.RequiresPresenter
 import java.util.*
-import javax.inject.Inject
 
 /**
  * Activity that lets the user add, edit or remove the set audiobook folders.
 
  * @author Paul Woitaschek
  */
-class FolderOverviewActivity : BaseActivity() {
+@RequiresPresenter(FolderOverviewPresenter::class)
+class FolderOverviewActivity : NucleusBaseActivity<FolderOverviewPresenter>() {
 
     private val BACKGROUND_OVERLAY_VISIBLE = "backgroundOverlayVisibility"
-    private val PICKER_REQUEST_CODE = 42
 
     private val bookCollections = ArrayList<String>(10)
     private val singleBooks = ArrayList<String>(10)
@@ -46,9 +43,6 @@ class FolderOverviewActivity : BaseActivity() {
     private lateinit var buttonRepresentingTheFam: View
     private lateinit var backgroundOverlay: View
     private lateinit var recyclerView: RecyclerView
-
-    @Inject internal lateinit var prefs: PrefsManager
-    @Inject internal lateinit var bookAdder: BookAdder
 
     private lateinit var adapter: FolderOverviewAdapter
 
@@ -136,12 +130,12 @@ class FolderOverviewActivity : BaseActivity() {
         buttonRepresentingTheFam = findViewById(R.id.fab_expand_menu_button)
         singleBookButton = findViewById(R.id.add_single) as FloatingActionButton
 
-        singleBookButton.setOnClickListener({
+        singleBookButton.setOnClickListener {
             startFolderChooserActivity(FolderChooserActivity.OperationMode.SINGLE_BOOK)
-        })
-        libraryBookButton.setOnClickListener({
+        }
+        libraryBookButton.setOnClickListener {
             startFolderChooserActivity(FolderChooserActivity.OperationMode.COLLECTION_BOOK)
-        })
+        }
 
         setSupportActionBar(toolbar)
         val actionBar = supportActionBar
@@ -174,10 +168,8 @@ class FolderOverviewActivity : BaseActivity() {
                         .positiveText(R.string.remove)
                         .negativeText(R.string.dialog_cancel)
                         .onPositive { materialDialog, dialogAction ->
-                            adapter.removeItem(position)
-                            prefs.collectionFolders = bookCollections
-                            prefs.singleBookFolders = singleBooks
-                            bookAdder.scanForFiles(true)
+                            val itemToDelete = adapter.getItem(position)
+                            presenter.removeFolder(itemToDelete)
                         }
                         .show()
             }
@@ -196,40 +188,9 @@ class FolderOverviewActivity : BaseActivity() {
         startActivityForResult(intent, PICKER_REQUEST_CODE)
     }
 
-    /**
-     * @param newFile the new folder file
-     * *
-     * @return true if the new folder is not added yet and is no sub- or parent folder of an existing
-     * * book folder
-     */
-    private fun canAddNewFolder(newFile: String): Boolean {
-        val folders = ArrayList<String>(bookCollections.size + singleBooks.size)
-        folders.addAll(bookCollections)
-        folders.addAll(singleBooks)
-
-        var filesAreSubsets = true
-        val firstAddedFolder = folders.isEmpty()
-        var sameFolder = false
-        for (s in folders) {
-            if (s == newFile) {
-                sameFolder = true
-            }
-            val oldParts = s.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            val newParts = newFile.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            for (i in 0..Math.min(oldParts.size, newParts.size) - 1) {
-                if (oldParts[i] != newParts[i]) {
-                    filesAreSubsets = false
-                }
-            }
-            if (!sameFolder && filesAreSubsets) {
-                Toast.makeText(this, "${getString(R.string.adding_failed_subfolder)}\n$s\n$newFile", Toast.LENGTH_LONG).show()
-            }
-            if (filesAreSubsets) {
-                break
-            }
-        }
-
-        return firstAddedFolder || (!sameFolder && !filesAreSubsets)
+    fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG)
+                .show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -242,32 +203,10 @@ class FolderOverviewActivity : BaseActivity() {
 
         backgroundOverlay.visibility = View.INVISIBLE
 
-        if (resultCode == Activity.RESULT_OK && requestCode == PICKER_REQUEST_CODE && data != null) {
-            val mode = FolderChooserActivity.OperationMode.valueOf(data.getStringExtra(FolderChooserActivity.RESULT_OPERATION_MODE))
-            when (mode) {
-                FolderChooserActivity.OperationMode.COLLECTION_BOOK -> {
-                    val chosenCollection = data.getStringExtra(
-                            FolderChooserActivity.RESULT_CHOSEN_FILE)
-                    if (canAddNewFolder(chosenCollection)) {
-                        bookCollections.add(chosenCollection)
-                        prefs.collectionFolders = bookCollections
-                    }
-                    Timber.v("chosenCollection=%s", chosenCollection)
-                }
-                FolderChooserActivity.OperationMode.SINGLE_BOOK -> {
-                    val chosenSingleBook = data.getStringExtra(
-                            FolderChooserActivity.RESULT_CHOSEN_FILE)
-                    if (canAddNewFolder(chosenSingleBook)) {
-                        singleBooks.add(chosenSingleBook)
-                        prefs.singleBookFolders = singleBooks
-                    }
-                    Timber.v("chosenSingleBook=%s", chosenSingleBook)
-                }
-                else -> {
-                }
-            }
-            bookAdder.scanForFiles(true)
-        }
+        // this is necessary as we did not reach onResume at this point and thus the presenter
+        // has no view
+        presenter.takeView(this)
+        presenter.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onBackPressed() {
@@ -278,14 +217,17 @@ class FolderOverviewActivity : BaseActivity() {
         }
     }
 
-
-    override fun onResume() {
-        super.onResume()
-
-        bookCollections.clear()
-        bookCollections.addAll(prefs.collectionFolders)
-        singleBooks.clear()
-        singleBooks.addAll(prefs.singleBookFolders)
+    /**
+     * Updates the adapter with new contents.
+     *
+     * @param bookCollections The folders added as book collections.
+     * @param singleBooks The folders added as single books.
+     */
+    fun updateAdapterData(bookCollections: List<String>, singleBooks: List<String>) {
+        this.bookCollections.clear()
+        this.bookCollections.addAll(bookCollections)
+        this.singleBooks.clear()
+        this.singleBooks.addAll(singleBooks)
         adapter.notifyDataSetChanged()
     }
 
@@ -293,5 +235,9 @@ class FolderOverviewActivity : BaseActivity() {
         outState.putBoolean(BACKGROUND_OVERLAY_VISIBLE, backgroundOverlay.visibility == View.VISIBLE)
 
         super.onSaveInstanceState(outState)
+    }
+
+    companion object {
+        val PICKER_REQUEST_CODE = 42
     }
 }

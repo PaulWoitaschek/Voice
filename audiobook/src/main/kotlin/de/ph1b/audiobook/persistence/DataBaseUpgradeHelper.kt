@@ -181,7 +181,7 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
                     }
                 }
                 if (!relPathExists) {
-                    currentPath = chapterPaths[0]
+                    currentPath = chapterPaths.first()
                     currentTime = 0
                 }
 
@@ -203,7 +203,7 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
 
                 if (name.isEmpty()) {
                     if (chapterPaths.size == 1) {
-                        val chapterPath = chapterPaths[0]
+                        val chapterPath = chapterPaths.first()
                         name = chapterPath.substring(0, chapterPath.lastIndexOf("."))
                     } else {
                         name = File(root).name
@@ -256,7 +256,7 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
                     // move cover file if possible
                     val coverFile: File
                     if (chapterPaths.size == 1) {
-                        val fileName = "." + chapterNames[0] + ".jpg"
+                        val fileName = "." + chapterNames.first() + ".jpg"
                         coverFile = File(root, fileName)
                     } else {
                         val fileName = "." + (File(root).name) + ".jpg"
@@ -595,7 +595,7 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
                     }
                     if (!mediaPathValid) {
                         val cv = ContentValues()
-                        cv.put(BOOK_CURRENT_MEDIA_PATH, chapterPaths[0])
+                        cv.put(BOOK_CURRENT_MEDIA_PATH, chapterPaths.first())
                         db.update(TABLE_BOOK, cv, BOOK_ID + "=?", arrayOf(bookId.toString()))
                     }
                 }

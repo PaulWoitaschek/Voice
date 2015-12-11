@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="mal_file_message">Следният файл е възможно да е повреден:</string>
+    <string name="mal_file_message">Възможно е следният файл да е повреден:</string>
     <string name="mal_file_title">Повреден файл</string>
     <string name="content_current_book">Това е текущата книга</string>
     <string name="current_book">Текуща книга</string>
@@ -108,4 +108,7 @@
     <string name="hide_folder_title">Скриване на папката</string>
     <string name="hide_folder_content">Желаете ли да скриете папката от музикални плеъри, за да не разпознават книгите Ви като музика?</string>
     <string name="hide_confirm">Да</string>
+    <!--license activity-->
+    <string name="license_activity_title">Използвани Лицензи</string>
+    <string name="licenses">Лицензи</string>
 </resources>

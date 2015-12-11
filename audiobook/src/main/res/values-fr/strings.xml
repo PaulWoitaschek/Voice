@@ -37,7 +37,6 @@
     <string name="chosen_folder_description">Dossier choisi:</string>
     <string name="delete_folder">Enlever de la bibliothèque?</string>
     <string name="delete_folder_content">Voulez vous enlever le dossier suivant de la bibliothèque?</string>
-    <string name="folder_add_single_book">Livre unique</string>
     <string name="folder_add_collection">Dossier de plusieurs livres</string>
     <string name="for_example">Par ex.</string>
     <!--PlaybackSpeed-->
@@ -78,4 +77,6 @@
     <!--Misc-->
     <string name="popup_edit">Modifer</string>
     <string name="remove">Enlever</string>
+    <!--hide folder dialog-->
+    <!--license activity-->
 </resources>

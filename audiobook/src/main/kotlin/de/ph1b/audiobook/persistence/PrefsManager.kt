@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.fragment.BookShelfFragment
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.uitools.ThemeUtil
 import rx.subjects.BehaviorSubject
@@ -91,6 +92,7 @@ constructor(c: Context) {
             val set = HashSet<String>(folders.size)
             set.addAll(folders)
             sp.edit { setStringSet(PREF_KEY_COLLECTION_FOLDERS to set) }
+            App.component().bookAdder.scanForFiles(true)
         }
 
     /**
@@ -107,6 +109,7 @@ constructor(c: Context) {
             val set = HashSet<String>(folders.size)
             set.addAll(folders)
             sp.edit { setStringSet(PREF_KEY_SINGLE_BOOK_FOLDERS to set) }
+            App.component().bookAdder.scanForFiles(true)
         }
 
 

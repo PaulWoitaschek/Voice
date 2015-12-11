@@ -36,7 +36,6 @@
     <string name="chosen_folder_description">Cartella scelta:</string>
     <string name="delete_folder">Rimuovere dalla Libreria?</string>
     <string name="delete_folder_content">Vuoi rimuovere la seguente cartella dalla libreria?</string>
-    <string name="folder_add_single_book">Libro singolo</string>
     <string name="folder_add_collection">Cartella con più libri</string>
     <string name="for_example">e.g.</string>
     <!--PlaybackSpeed-->
@@ -77,4 +76,6 @@
     <!--Misc-->
     <string name="popup_edit">Modifica</string>
     <string name="remove">Rimuovi</string>
+    <!--hide folder dialog-->
+    <!--license activity-->
 </resources>

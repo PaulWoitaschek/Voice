@@ -38,7 +38,6 @@
     <string name="chosen_folder_description">Vybraný adresář:</string>
     <string name="delete_folder">Odstranit z knihovny?</string>
     <string name="delete_folder_content">Opravdu chcete odstranit následující adresář z knihovny?</string>
-    <string name="folder_add_single_book">Samotná kniha</string>
     <string name="folder_add_collection">Adresář s vícero knihami</string>
     <string name="for_example">např.</string>
     <!--PlaybackSpeed-->
@@ -55,7 +54,8 @@
     <string name="pref_category_playback">Nastavení přehrávání</string>
     <string name="action_settings">Nastavení</string>
     <string name="pref_resume_on_replug">Pokračovat v přehrávání</string>
-    <string name="pref_resume_on_replug_hint">Pokud pozastavíte přehrávání vytažením sluchátek, při jejich připojení bude znovu spuštěno.</string>
+  <string name="pref_resume_on_replug_hint">Pokud pozastavíte přehrávání vytažením sluchátek, při jejich
+        připojení bude znovu spuštěno.</string>
     <string name="pref_seek_time">Přeskočit o</string>
     <string name="pref_sleep_time">Časovač vypnutí</string>
     <string name="pref_root_folder_title">Adresář audioknihy</string>
@@ -83,4 +83,5 @@
     <string name="hide_folder_title">Skrýt adresář</string>
     <string name="hide_folder_content">Chcete skrýt tento adresář před hudebními přehrávači aby nerozpoznávaly tuto audioknihu jako hudební sbírku?</string>
     <string name="hide_confirm">Skrýt</string>
+    <!--license activity-->
 </resources>

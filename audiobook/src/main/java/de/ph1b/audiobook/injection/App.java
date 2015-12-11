@@ -33,9 +33,13 @@ import de.ph1b.audiobook.dialog.prefs.ThemePickerDialogFragment;
 import de.ph1b.audiobook.fragment.BookPlayFragment;
 import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.fragment.SettingsFragment;
+import de.ph1b.audiobook.mediaplayer.MediaPlayerControllerTest;
 import de.ph1b.audiobook.model.BookAdder;
+import de.ph1b.audiobook.persistence.BookShelfTest;
+import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.playback.BookReaderService;
 import de.ph1b.audiobook.playback.WidgetUpdateService;
+import de.ph1b.audiobook.presenter.FolderOverviewPresenter;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import timber.log.Timber;
 
@@ -71,14 +75,21 @@ public class App extends Application {
         Timber.i("onCreate");
         refWatcher = LeakCanary.install(this);
 
+        initNewComponent();
+        component().inject(this);
+
+        bookAdder.scanForFiles(true);
+        startService(new Intent(this, BookReaderService.class));
+    }
+
+    /**
+     * This should be called once in onCreate. This is public only for testing!
+     */
+    public void initNewComponent() {
         applicationComponent = DaggerApp_ApplicationComponent.builder()
                 .baseModule(new BaseModule())
                 .androidModule(new AndroidModule(this))
                 .build();
-        applicationComponent.inject(this);
-
-        bookAdder.scanForFiles(true);
-        startService(new Intent(this, BookReaderService.class));
     }
 
     @Singleton
@@ -86,6 +97,10 @@ public class App extends Application {
     public interface ApplicationComponent {
 
         Context getContext();
+
+        PrefsManager getPrefsManager();
+
+        BookAdder getBookAdder();
 
         void inject(WidgetUpdateService target);
 
@@ -107,6 +122,8 @@ public class App extends Application {
 
         void inject(App target);
 
+        void inject(MediaPlayerControllerTest target);
+
         void inject(BookReaderService target);
 
         void inject(SettingsFragment target);
@@ -121,6 +138,8 @@ public class App extends Application {
 
         void inject(BookmarkDialogFragment target);
 
+        void inject(BookShelfTest target);
+
         void inject(AutoRewindDialogFragment target);
 
         void inject(FolderOverviewActivity target);
@@ -128,5 +147,7 @@ public class App extends Application {
         void inject(BookShelfAdapter target);
 
         void inject(BookShelfFragment target);
+
+        void inject(FolderOverviewPresenter target);
     }
 }

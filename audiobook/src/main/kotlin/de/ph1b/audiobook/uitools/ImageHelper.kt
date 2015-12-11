@@ -49,7 +49,7 @@ constructor(private val context: Context, private val windowManager: WindowManag
             Timber.wtf(e, "Latch was interrupted!")
         }
 
-        return bitmap[0]
+        return bitmap.first()
     }
 
 
