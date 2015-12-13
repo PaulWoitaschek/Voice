@@ -15,6 +15,23 @@
  * /licenses/>.
  */
 
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.dialog
 
 import android.app.Dialog
@@ -25,7 +42,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
-import de.ph1b.audiobook.persistence.BookShelf
+import de.ph1b.audiobook.persistence.BookChest
 import rx.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -36,7 +53,7 @@ import javax.inject.Inject
  */
 class EditBookTitleDialogFragment : DialogFragment() {
 
-    @Inject internal lateinit var bookShelf: BookShelf
+    @Inject internal lateinit var bookChest: BookChest
 
     init {
         App.component().inject(this)
@@ -53,12 +70,12 @@ class EditBookTitleDialogFragment : DialogFragment() {
                 .input(getString(R.string.bookmark_edit_hint), presetName, false) { materialDialog, charSequence ->
                     val newText = charSequence.toString()
                     if (newText != presetName) {
-                        bookShelf.activeBooks
+                        bookChest.activeBooks
                                 .filter { it.id == bookId } // find book
                                 .subscribeOn(Schedulers.io()) // dont block
                                 .subscribe {
                                     val updatedBook = it.copy(name = newText) // update title
-                                    bookShelf.updateBook(updatedBook) // update book
+                                    bookChest.updateBook(updatedBook) // update book
                                 }
                     }
                 }

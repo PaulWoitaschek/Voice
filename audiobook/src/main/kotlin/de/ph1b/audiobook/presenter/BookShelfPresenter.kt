@@ -32,6 +32,23 @@
  * /licenses/>.
  */
 
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.presenter
 
 import android.os.Bundle
@@ -40,7 +57,7 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.model.BookAdder
-import de.ph1b.audiobook.persistence.BookShelf
+import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import nucleus.presenter.RxPresenter
@@ -55,7 +72,7 @@ import javax.inject.Inject
  */
 class BookShelfPresenter : RxPresenter<BookShelfFragment>() {
 
-    @Inject internal lateinit var bookShelf: BookShelf
+    @Inject internal lateinit var bookChest: BookChest
     @Inject internal lateinit var playStateManager: PlayStateManager
     @Inject internal lateinit var bookAdder: BookAdder
     @Inject internal lateinit var prefsManager: PrefsManager
@@ -73,7 +90,7 @@ class BookShelfPresenter : RxPresenter<BookShelfFragment>() {
         super.onCreate(savedState)
 
         // informs the view once a book was removed
-        add(bookShelf.removedObservable()
+        add(bookChest.removedObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -81,7 +98,7 @@ class BookShelfPresenter : RxPresenter<BookShelfFragment>() {
                 })
 
         // Subscription that notifies the adapter when there is a new or updated book.
-        add(Observable.merge(bookShelf.updateObservable(), bookShelf.addedObservable())
+        add(Observable.merge(bookChest.updateObservable(), bookChest.addedObservable())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -94,7 +111,7 @@ class BookShelfPresenter : RxPresenter<BookShelfFragment>() {
         // the item with the old indicator now falsely showing.
         add(prefsManager.currentBookId
                 .flatMap { id ->
-                    bookShelf.activeBooks
+                    bookChest.activeBooks
                             .singleOrDefault(null, { it.id == id })
                 }
                 .compose(deliverLatestCache<Book?>())
@@ -126,7 +143,7 @@ class BookShelfPresenter : RxPresenter<BookShelfFragment>() {
         super.onTakeView(view)
 
         // initially updates the adapter with a new set of items
-        bookShelf.activeBooks
+        bookChest.activeBooks
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .toList()

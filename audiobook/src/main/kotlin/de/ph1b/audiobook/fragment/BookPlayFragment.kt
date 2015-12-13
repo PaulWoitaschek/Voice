@@ -15,6 +15,23 @@
  * /licenses/>.
  */
 
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.fragment
 
 import android.content.Context
@@ -44,7 +61,7 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.BaseModule
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.Book
-import de.ph1b.audiobook.persistence.BookShelf
+import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.CoverReplacement
@@ -70,7 +87,7 @@ class BookPlayFragment : BaseFragment() {
 
     @Inject internal lateinit var mediaPlayerController: MediaPlayerController
     @Inject internal lateinit var prefs: PrefsManager
-    @Inject internal lateinit var db: BookShelf
+    @Inject internal lateinit var db: BookChest
     @Inject internal lateinit var bookVendor: BookVendor
     @Inject internal lateinit var playStateManager: PlayStateManager
 
