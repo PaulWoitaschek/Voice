@@ -1,4 +1,6 @@
 language: android
+jdk:
+  - oraclejdk8
 android:
   components:
     - tools
@@ -10,4 +12,4 @@ android:
 
 before_script:
   - "echo $JAVA_OPTS"
-  - "export JAVA_OPTS='-XX:MaxPermSize=1024m -Xmx=512m'"
+  - "export JAVA_OPTS='-XX:MaxPermSize=1024m -Xms=512m -Xmx=4G'"
