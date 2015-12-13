@@ -7,7 +7,3 @@ android:
     - sys-img-x86-android-tv-l
     - add-on
     - extra
-
-before_script:
-  - "echo $JAVA_OPTS"
-  - "export JAVA_OPTS=-XX:MaxPermSize=1024m"
