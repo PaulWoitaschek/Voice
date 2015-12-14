@@ -32,6 +32,23 @@
  * /licenses/>.
  */
 
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.fragment
 
 import android.content.Context
@@ -126,12 +143,36 @@ class BookPlayFragment : BaseFragment() {
         val rewindButton = view.findViewById(R.id.rewind)
         val previousButton = view.findViewById(R.id.previous)
 
-        playButton.clicks().subscribe { mediaPlayerController.playPause() }
-        rewindButton.clicks().subscribe { mediaPlayerController.skip(MediaPlayerController.Direction.BACKWARD) }
-        fastForwardButton.clicks().subscribe { mediaPlayerController.skip(MediaPlayerController.Direction.FORWARD) }
-        nextButton.clicks().subscribe { mediaPlayerController.next() }
-        previousButton.clicks().subscribe { mediaPlayerController.previous(true) }
-        playedTimeView.clicks().subscribe { launchJumpToPositionDialog() }
+        playButton.clicks()
+                .onBackpressureLatest()
+                .subscribe { mediaPlayerController.playPause() }
+        rewindButton.clicks()
+                .onBackpressureLatest()
+                .subscribe { mediaPlayerController.skip(MediaPlayerController.Direction.BACKWARD) }
+        fastForwardButton.clicks()
+                .onBackpressureLatest()
+                .subscribe { mediaPlayerController.skip(MediaPlayerController.Direction.FORWARD) }
+        nextButton.clicks()
+                .onBackpressureLatest()
+                .subscribe { mediaPlayerController.next() }
+        previousButton.clicks()
+                .onBackpressureLatest()
+                .subscribe { mediaPlayerController.previous(true) }
+        playedTimeView.clicks()
+                .subscribe { launchJumpToPositionDialog() }
+
+        // double click (=more than one click in a 200ms frame)
+        var lastClick = 0L
+        coverFrame.clicks()
+                .filter {
+                    val currentTime = System.currentTimeMillis()
+                    val doubleClick = currentTime - lastClick < 200
+                    lastClick = currentTime
+                    doubleClick
+                }
+                .doOnNext { lastClick = 0 } // resets so triple clicks won't cause another invoke
+                .onBackpressureLatest()
+                .subscribe { mediaPlayerController.playPause() }
 
         book = bookVendor.byId(bookId)
 
@@ -316,19 +357,6 @@ class BookPlayFragment : BaseFragment() {
 
         subscriptions = CompositeSubscription()
         subscriptions!!.apply {
-
-            // double click (=more than one click in a 200ms frame)
-            var lastClick = 0L
-            add(coverFrame.clicks()
-                    .filter {
-                        val currentTime = System.currentTimeMillis()
-                        val doubleClick = currentTime - lastClick < 200
-                        lastClick = currentTime
-                        doubleClick
-                    }
-                    .doOnNext { lastClick = 0 } // resets so triple clicks won't cause another invoke
-                    .subscribe { mediaPlayerController.playPause() })
-
             add(playStateManager.playState
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(object : Action1<PlayStateManager.PlayState> {
