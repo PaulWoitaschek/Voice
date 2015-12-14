@@ -49,6 +49,23 @@
  * /licenses/>.
  */
 
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.presenter
 
 import android.os.Bundle
@@ -65,6 +82,7 @@ import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -93,8 +111,9 @@ class BookShelfPresenter : RxPresenter<BookShelfFragment>() {
         add(bookChest.removedObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .buffer(100, TimeUnit.MILLISECONDS)
                 .subscribe {
-                    view?.bookRemoved(it)
+                    view?.booksRemoved(it)
                 })
 
         // Subscription that notifies the adapter when there is a new or updated book.
