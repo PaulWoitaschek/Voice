@@ -32,6 +32,23 @@
  * /licenses/>.
  */
 
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.fragment
 
 import android.content.Context
@@ -133,6 +150,7 @@ class BookShelfFragment : NucleusBaseFragment<BookShelfPresenter>(), BookShelfAd
 
         // init RecyclerView
         recyclerView.setHasFixedSize(true)
+        recyclerView.adapter = adapter
         // without this the item would blink on every change
         val anim = recyclerView.itemAnimator as SimpleItemAnimator
         anim.supportsChangeAnimations = false
@@ -228,15 +246,14 @@ class BookShelfFragment : NucleusBaseFragment<BookShelfPresenter>(), BookShelfAd
 
     private fun initRecyclerView() {
         val defaultDisplayMode = prefs.displayMode
-        recyclerView.removeItemDecoration(listDecoration)
         if (defaultDisplayMode == BookShelfFragment.DisplayMode.GRID) {
+            recyclerView.removeItemDecoration(listDecoration)
             recyclerView.layoutManager = gridLayoutManager
         } else {
             recyclerView.layoutManager = linearLayoutManager
-            recyclerView.addItemDecoration(listDecoration)
+            recyclerView.addItemDecoration(listDecoration, 0)
         }
         adapter.displayMode = defaultDisplayMode
-        recyclerView.adapter = adapter
         hostingActivity.invalidateOptionsMenu()
     }
 
