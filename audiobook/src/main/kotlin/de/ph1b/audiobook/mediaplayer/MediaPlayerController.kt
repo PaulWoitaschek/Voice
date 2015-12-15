@@ -32,11 +32,27 @@
  * /licenses/>.
  */
 
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.mediaplayer
 
 import android.content.Context
 import android.content.Intent
-import android.os.PowerManager
 import de.ph1b.audiobook.activity.BookActivity
 import de.ph1b.audiobook.fragment.BookShelfFragment
 import de.ph1b.audiobook.model.Book
@@ -59,13 +75,12 @@ import kotlin.concurrent.withLock
 class MediaPlayerController
 @Inject
 constructor(private val c: Context, private val prefs: PrefsManager, private val db: BookChest,
-            private val player: MediaPlayerInterface, private val playStateManager: PlayStateManager) {
+            private val player: ExoMediaPlayer, private val playStateManager: PlayStateManager) {
 
     private val lock = ReentrantLock()
     var book: Book? = null
         private set
-    @Volatile private var state: State = State.IDLE
-    @Volatile private var prepareTries = 0
+    @Volatile private var state: State = State.STOPPED
 
     private val subscriptions = CompositeSubscription()
 
@@ -88,7 +103,44 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         // stops the player when the timer reaches 0
         internalSleepSand.filter { it == 0L } // when this reaches 0
                 .subscribe { stop() } // stop the player
+        player.completionObservable
+                .subscribe {
+                    // After the current song has ended, prepare the next one if there is one. Else stop the
+                    // resources.
+                    lock.withLock {
+                        if (book != null) {
+                            Timber.v("onCompletion called, nextChapter=%s", book!!.nextChapter())
+                            if (book!!.nextChapter() != null) {
+                                next()
+                            } else {
+                                Timber.v("Reached last track. Stopping player")
+                                stopUpdating()
+                                playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
+
+                                state = State.COMPLETED
+                            }
+                        }
+                    }
+                }
+
+        player.errorObservable
+                .subscribe {
+                    // inform user on errors
+                    lock.withLock {
+                        Timber.e("onError")
+                        if (book != null) {
+                            c.startActivity(BookActivity.malformedFileIntent(c, book!!.currentFile))
+                        } else {
+                            val intent = Intent(c, BookShelfFragment::class.java)
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            c.startActivity(intent)
+                        }
+
+                        state = State.STOPPED
+                    }
+                }
     }
+
 
     /**
      * Initializes a new book. After this, a call to play can be made.
@@ -108,60 +160,20 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
     private fun prepare() {
         lock.withLock {
             if (book != null) {
-                player.reset()
-
-                player.completionObservable
-                        .subscribe {
-                            // After the current song has ended, prepare the next one if there is one. Else stop the
-                            // resources.
-                            lock.withLock {
-                                if (book != null) {
-                                    Timber.v("onCompletion called, nextChapter=%s", book!!.nextChapter())
-                                    if (book!!.nextChapter() != null) {
-                                        next()
-                                    } else {
-                                        Timber.v("Reached last track. Stopping player")
-                                        stopUpdating()
-                                        playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
-
-                                        state = State.PLAYBACK_COMPLETED
-                                    }
-                                }
-                            }
-                        }
-
-                player.errorObservable
-                        .subscribe {
-                            // inform user on errors
-                            lock.withLock {
-                                Timber.e("onError")
-                                if (book != null) {
-                                    c.startActivity(BookActivity.malformedFileIntent(c, book!!.currentFile))
-                                } else {
-                                    val intent = Intent(c, BookShelfFragment::class.java)
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                                    c.startActivity(intent)
-                                }
-
-                                state = State.DEAD
-                            }
-                        }
-
-                player.setWakeMode(c, PowerManager.PARTIAL_WAKE_LOCK or PowerManager.ON_AFTER_RELEASE)
 
                 try {
-                    player.setDataSource(book!!.currentChapter().file.absolutePath)
-                    player.prepare()
+                    player.prepare(book!!.currentChapter().file)
                     player.currentPosition = book!!.time
                     player.playbackSpeed = book!!.playbackSpeed
-                    state = State.PREPARED
+                    state = State.PAUSED
                 } catch (e: IOException) {
                     Timber.e(e, "Error when preparing the player.")
-                    state = State.DEAD
+                    state = State.STOPPED
                 }
             }
         }
     }
+
 
     /**
      * Plays the prepared file.
@@ -169,32 +181,28 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
     fun play() {
         lock.withLock {
             when (state) {
-                MediaPlayerController.State.PLAYBACK_COMPLETED -> {
+                MediaPlayerController.State.COMPLETED -> {
                     player.currentPosition = 0
-                    player.start()
+                    player.autoPlay = true
                     startUpdating()
                     playStateManager.playState.onNext(PlayStateManager.PlayState.PLAYING)
                     state = State.STARTED
-                    prepareTries = 0
                 }
-                MediaPlayerController.State.PREPARED, MediaPlayerController.State.PAUSED -> {
-                    player.start()
+                MediaPlayerController.State.PAUSED -> {
+                    player.autoPlay = true
                     startUpdating()
                     playStateManager.playState.onNext(PlayStateManager.PlayState.PLAYING)
                     state = State.STARTED
-                    prepareTries = 0
                 }
-                MediaPlayerController.State.DEAD, MediaPlayerController.State.IDLE -> {
-                    if (prepareTries > 5) {
-                        prepareTries = 0
-                        state = State.DEAD
-                    } else {
-                        prepare()
-                        prepareTries++
+                MediaPlayerController.State.STOPPED -> {
+                    prepare()
+                    if (state == State.PAUSED) {
                         play()
                     }
                 }
-                else -> Timber.e("play called in illegal state=%s", state)
+                MediaPlayerController.State.STARTED -> {
+
+                }
             }
         }
     }
@@ -281,14 +289,14 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      */
     fun stop() {
         lock.withLock {
+            player.autoPlay = false
             stopUpdating()
-            player.reset()
             playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
             if (sleepTimerActive()) {
                 // if its active use toggle to stop the sleep timer
                 toggleSleepSand()
             }
-            state = State.IDLE
+            state = State.STOPPED
         }
     }
 
@@ -330,7 +338,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
             if (book != null) {
                 when (state) {
                     MediaPlayerController.State.STARTED -> {
-                        player.pause()
+                        player.autoPlay = false
                         stopUpdating()
 
                         if (rewind) {
@@ -398,16 +406,16 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                     db.updateBook(book!!)
                     prepare()
                     if (wasPlaying) {
-                        player.start()
+                        player.autoPlay = true
                         state = State.STARTED
                         playStateManager.playState.onNext(PlayStateManager.PlayState.PLAYING)
                     } else {
-                        state = State.PREPARED
+                        state = State.PAUSED
                         playStateManager.playState.onNext(PlayStateManager.PlayState.PAUSED)
                     }
                 } else {
                     when (state) {
-                        MediaPlayerController.State.PREPARED, MediaPlayerController.State.STARTED, MediaPlayerController.State.PAUSED, MediaPlayerController.State.PLAYBACK_COMPLETED -> {
+                        MediaPlayerController.State.STARTED, MediaPlayerController.State.PAUSED, State.COMPLETED -> {
                             player.currentPosition = time
                             book = book!!.copy(time = time)
                             db.updateBook(book!!)
@@ -433,11 +441,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                 if (book != null) {
                     book = book!!.copy(playbackSpeed = speed)
                     db.updateBook(book!!)
-                    if (state != State.DEAD) {
-                        player.playbackSpeed = speed
-                    } else {
-                        Timber.e("setPlaybackSpeed called in illegal state=%s", state)
-                    }
+                    player.playbackSpeed = speed
                 }
             }
         }
@@ -454,10 +458,8 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      */
     private enum class State {
         PAUSED,
-        DEAD,
-        PREPARED,
         STARTED,
-        PLAYBACK_COMPLETED,
-        IDLE
+        STOPPED,
+        COMPLETED
     }
 }
