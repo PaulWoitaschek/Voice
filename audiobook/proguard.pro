@@ -40,3 +40,4 @@
 
 # Kotlin exceptions. TODO: Remove this once Kotlin bug https://youtrack.jetbrains.com/issue/KT-10259 is fixed
 -dontwarn de.ph1b.audiobook.playback.BookReaderService$onCreate$$inlined$apply$lambda$1
+-dontwarn de.ph1b.audiobook.mediaplayer.MediaPlayerController$prepare$$inlined$withLock$lambda$1

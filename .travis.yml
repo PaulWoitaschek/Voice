@@ -12,4 +12,4 @@ android:
 
 before_script:
   - "echo $JAVA_OPTS"
-  - "export JAVA_OPTS='-XX:MaxPermSize=1024m -Xms=512m -Xmx=4G'"
+  - "export JAVA_OPTS='-XX:MaxPermSize=1024m'"
