@@ -1,7 +1,7 @@
 # [Support Library](https://developer.android.com/tools/support-library/index.html)
 [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
-# [OkHTTP](https://github.com/square/okhttp)
+# [OkHttp](https://github.com/square/okhttp)
 [Apache License 2.0](https://github.com/square/okhttp/blob/master/LICENSE.txt)
 
 # [Picasso](https://github.com/square/picasso)
@@ -40,5 +40,5 @@
 # [Retrofit](https://github.com/square/retrofit)
 [Apache License 2.0](https://github.com/square/retrofit/blob/master/LICENSE.txt)
 
-# [AntennaPod AudioPlayer](https://github.com/AntennaPod/AntennaPod-AudioPlayer)
-[Apache License 2.0](https://github.com/AntennaPod/AntennaPod-AudioPlayer/blob/master/LICENSE)
+# [ExoPlayer](https://github.com/google/ExoPlayer)
+[Apache License 2.0](https://github.com/google/ExoPlayer/blob/master/LICENSE)
