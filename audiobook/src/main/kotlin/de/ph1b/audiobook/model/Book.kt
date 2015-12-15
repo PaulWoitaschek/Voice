@@ -1,3 +1,20 @@
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.model
 
 
@@ -46,15 +63,15 @@ data class Book(val id: Long,
         for (c in chapters) {
             chapterFiles.add(c.file)
         }
-        check(playbackSpeed >= SPEED_MIN)
-        check(playbackSpeed <= SPEED_MAX)
+        check(playbackSpeed >= SPEED_MIN, { "speed $playbackSpeed must be >= $SPEED_MIN" })
+        check(playbackSpeed <= SPEED_MAX) { "speed $playbackSpeed must be <= $SPEED_MAX" }
         for (b in bookmarks) {
-            check(chapterFiles.contains(b.mediaFile))
+            check(chapterFiles.contains(b.mediaFile)) { "$chapterFiles does not contain the media file for $b" }
         }
-        check(chapters.isNotEmpty())
-        check(chapterFiles.contains(currentFile))
-        check(name.isNotEmpty())
-        check(root.isNotEmpty())
+        check(chapters.isNotEmpty(), { "chapters must not be empty" })
+        check(chapterFiles.contains(currentFile), { "$chapterFiles must contain current file $currentFile" })
+        check(name.isNotEmpty(), { "name must not be empty" })
+        check(root.isNotEmpty(), { "root must not be empty" })
     }
 
     /**

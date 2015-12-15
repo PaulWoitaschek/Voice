@@ -1,3 +1,37 @@
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.adapter
 
 import android.content.Context
@@ -38,16 +72,16 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
 
     private val sortedList = SortedList(Book::class.java, object : SortedListAdapterCallback<Book>(this) {
 
-        override fun compare(o1: Book, o2: Book): Int {
-            return NaturalOrderComparator.STRING_COMPARATOR.compare(o1.name, o2.name)
+        override fun compare(o1: Book?, o2: Book?): Int {
+            return NaturalOrderComparator.STRING_COMPARATOR.compare(o1?.name, o2?.name)
         }
 
-        override fun areContentsTheSame(oldItem: Book, newItem: Book): Boolean {
-            return oldItem.globalPosition() == newItem.globalPosition() && oldItem.name == newItem.name && oldItem.useCoverReplacement == newItem.useCoverReplacement
+        override fun areContentsTheSame(oldItem: Book?, newItem: Book?): Boolean {
+            return oldItem?.globalPosition() == newItem?.globalPosition() && oldItem?.name == newItem?.name && oldItem?.useCoverReplacement == newItem?.useCoverReplacement
         }
 
-        override fun areItemsTheSame(item1: Book, item2: Book): Boolean {
-            return item1.id == item2.id
+        override fun areItemsTheSame(item1: Book?, item2: Book?): Boolean {
+            return item1?.id == item2?.id
         }
     })
 
@@ -65,14 +99,25 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
         return h + ":" + m
     }
 
-    fun removeBook(bookId: Long) {
-        Timber.i("removeBook called with id %d", bookId)
-        for (i in 0..sortedList.size() - 1) {
-            val b = sortedList.get(i)
-            if (b.id == bookId) {
-                Timber.i("Found our book to remove %s", b)
-                sortedList.remove(b)
-                break
+    private fun <T> SortedList<T>.batched(func: SortedList<T>.() -> Unit) {
+        beginBatchedUpdates()
+        try {
+            func()
+        } finally {
+            endBatchedUpdates()
+        }
+    }
+
+    fun removeBooks(books: List<Book>) {
+        Timber.i("removeBooks called with ${books.size} books");
+        sortedList.batched {
+            for (book in books) {
+                for (i in 0..size() - 1) {
+                    if (get(i).id == book.id) {
+                        removeItemAt(i)
+                        break
+                    }
+                }
             }
         }
     }

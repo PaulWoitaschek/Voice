@@ -1,3 +1,54 @@
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.fragment
 
 import android.content.Context
@@ -27,7 +78,7 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.injection.BaseModule
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.Book
-import de.ph1b.audiobook.persistence.BookShelf
+import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.CoverReplacement
@@ -53,7 +104,7 @@ class BookPlayFragment : BaseFragment() {
 
     @Inject internal lateinit var mediaPlayerController: MediaPlayerController
     @Inject internal lateinit var prefs: PrefsManager
-    @Inject internal lateinit var db: BookShelf
+    @Inject internal lateinit var db: BookChest
     @Inject internal lateinit var bookVendor: BookVendor
     @Inject internal lateinit var playStateManager: PlayStateManager
 
@@ -92,12 +143,36 @@ class BookPlayFragment : BaseFragment() {
         val rewindButton = view.findViewById(R.id.rewind)
         val previousButton = view.findViewById(R.id.previous)
 
-        playButton.clicks().subscribe { mediaPlayerController.playPause() }
-        rewindButton.clicks().subscribe { mediaPlayerController.skip(MediaPlayerController.Direction.BACKWARD) }
-        fastForwardButton.clicks().subscribe { mediaPlayerController.skip(MediaPlayerController.Direction.FORWARD) }
-        nextButton.clicks().subscribe { mediaPlayerController.next() }
-        previousButton.clicks().subscribe { mediaPlayerController.previous(true) }
-        playedTimeView.clicks().subscribe { launchJumpToPositionDialog() }
+        playButton.clicks()
+                .onBackpressureLatest()
+                .subscribe { mediaPlayerController.playPause() }
+        rewindButton.clicks()
+                .onBackpressureLatest()
+                .subscribe { mediaPlayerController.skip(MediaPlayerController.Direction.BACKWARD) }
+        fastForwardButton.clicks()
+                .onBackpressureLatest()
+                .subscribe { mediaPlayerController.skip(MediaPlayerController.Direction.FORWARD) }
+        nextButton.clicks()
+                .onBackpressureLatest()
+                .subscribe { mediaPlayerController.next() }
+        previousButton.clicks()
+                .onBackpressureLatest()
+                .subscribe { mediaPlayerController.previous(true) }
+        playedTimeView.clicks()
+                .subscribe { launchJumpToPositionDialog() }
+
+        // double click (=more than one click in a 200ms frame)
+        var lastClick = 0L
+        coverFrame.clicks()
+                .filter {
+                    val currentTime = System.currentTimeMillis()
+                    val doubleClick = currentTime - lastClick < 200
+                    lastClick = currentTime
+                    doubleClick
+                }
+                .doOnNext { lastClick = 0 } // resets so triple clicks won't cause another invoke
+                .onBackpressureLatest()
+                .subscribe { mediaPlayerController.playPause() }
 
         book = bookVendor.byId(bookId)
 
@@ -107,11 +182,11 @@ class BookPlayFragment : BaseFragment() {
         //setup buttons
         playButton.setIconDrawable(playPauseDrawable)
         RxSeekBar.changeEvents(seekBar)
-                .subscribe { eventType ->
-                    when (eventType ) {
+                .subscribe {
+                    when (it ) {
                         is  SeekBarProgressChangeEvent -> {
                             //sets text to adjust while using seekBar
-                            playedTimeView.text = formatTime(eventType.progress().toLong(), seekBar.max.toLong())
+                            playedTimeView.text = formatTime(it.progress().toLong(), seekBar.max.toLong())
                         }
                         is SeekBarStopChangeEvent -> {
                             val progress = seekBar.progress
@@ -282,19 +357,6 @@ class BookPlayFragment : BaseFragment() {
 
         subscriptions = CompositeSubscription()
         subscriptions!!.apply {
-
-            // double click (=more than one click in a 200ms frame)
-            var lastClick = 0L
-            add(coverFrame.clicks()
-                    .filter {
-                        val currentTime = System.currentTimeMillis()
-                        val doubleClick = currentTime - lastClick < 200
-                        lastClick = currentTime
-                        doubleClick
-                    }
-                    .doOnNext { lastClick = 0 } // resets so triple clicks won't cause another invoke
-                    .subscribe { mediaPlayerController.playPause() })
-
             add(playStateManager.playState
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(object : Action1<PlayStateManager.PlayState> {

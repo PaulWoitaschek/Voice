@@ -1,3 +1,20 @@
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.dialog
 
 import android.app.Dialog
@@ -20,7 +37,7 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.model.Bookmark
-import de.ph1b.audiobook.persistence.BookShelf
+import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.utils.BookVendor
@@ -37,7 +54,7 @@ class BookmarkDialogFragment : DialogFragment() {
 
     private lateinit var bookmarkTitle: EditText
     @Inject lateinit internal var prefs: PrefsManager
-    @Inject lateinit internal var db: BookShelf
+    @Inject lateinit internal var db: BookChest
     @Inject lateinit internal var bookVendor: BookVendor
     @Inject internal lateinit var mediaPlayerController: MediaPlayerController
     private lateinit var book: Book
@@ -156,7 +173,7 @@ class BookmarkDialogFragment : DialogFragment() {
             return bookmarkDialogFragment
         }
 
-        fun addBookmark(bookId: Long, title: String, db: BookShelf) {
+        fun addBookmark(bookId: Long, title: String, db: BookChest) {
             var book: Book? = db.activeBooks
                     .toBlocking()
                     .singleOrDefault(null, { it.id == bookId })

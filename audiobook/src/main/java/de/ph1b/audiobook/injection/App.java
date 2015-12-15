@@ -1,3 +1,37 @@
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.injection;
 
 import android.app.Application;
@@ -23,6 +57,7 @@ import de.ph1b.audiobook.activity.FolderOverviewActivity;
 import de.ph1b.audiobook.adapter.BookShelfAdapter;
 import de.ph1b.audiobook.adapter.BookmarkAdapter;
 import de.ph1b.audiobook.dialog.BookmarkDialogFragment;
+import de.ph1b.audiobook.dialog.EditBookTitleDialogFragment;
 import de.ph1b.audiobook.dialog.EditCoverDialogFragment;
 import de.ph1b.audiobook.dialog.JumpToPositionDialogFragment;
 import de.ph1b.audiobook.dialog.SeekDialogFragment;
@@ -35,10 +70,11 @@ import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.fragment.SettingsFragment;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerControllerTest;
 import de.ph1b.audiobook.model.BookAdder;
-import de.ph1b.audiobook.persistence.BookShelfTest;
+import de.ph1b.audiobook.persistence.BookChestTest;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.playback.BookReaderService;
 import de.ph1b.audiobook.playback.WidgetUpdateService;
+import de.ph1b.audiobook.presenter.BookShelfPresenter;
 import de.ph1b.audiobook.presenter.FolderOverviewPresenter;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import timber.log.Timber;
@@ -53,7 +89,8 @@ public class App extends Application {
 
     private static ApplicationComponent applicationComponent;
     private static RefWatcher refWatcher;
-    @Inject BookAdder bookAdder;
+    @Inject
+    BookAdder bookAdder;
 
     public static void leakWatch(Object object) {
         refWatcher.watch(object);
@@ -104,6 +141,8 @@ public class App extends Application {
 
         void inject(WidgetUpdateService target);
 
+        void inject(EditBookTitleDialogFragment target);
+
         void inject(BookmarkAdapter target);
 
         void inject(CoverReplacement target);
@@ -126,6 +165,8 @@ public class App extends Application {
 
         void inject(BookReaderService target);
 
+        void inject(BookShelfPresenter target);
+
         void inject(SettingsFragment target);
 
         void inject(SleepDialogFragment target);
@@ -138,7 +179,7 @@ public class App extends Application {
 
         void inject(BookmarkDialogFragment target);
 
-        void inject(BookShelfTest target);
+        void inject(BookChestTest target);
 
         void inject(AutoRewindDialogFragment target);
 

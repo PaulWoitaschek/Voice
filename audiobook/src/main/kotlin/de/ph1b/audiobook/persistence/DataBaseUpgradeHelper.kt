@@ -1,3 +1,20 @@
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.persistence
 
 import android.content.ContentValues
@@ -50,239 +67,233 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
         val bookCursor = db.query(copyBookTableName,
                 arrayOf("BOOK_ID", "BOOK_ROOT", "BOOK_TYPE"),
                 null, null, null, null, null)
-        try {
-            while (bookCursor.moveToNext()) {
-                val bookId = bookCursor.getLong(0)
-                val root = bookCursor.getString(1)
-                val type = bookCursor.getString(2)
 
-                val mediaCursor = db.query(copyChapterTableName, arrayOf("CHAPTER_PATH", "CHAPTER_DURATION", "CHAPTER_NAME"),
-                        "BOOK_ID" + "=?", arrayOf(bookId.toString()),
-                        null, null, null)
-                val chapterNames = ArrayList<String>(mediaCursor.count)
-                val chapterDurations = ArrayList<Int>(mediaCursor.count)
-                val chapterPaths = ArrayList<String>(mediaCursor.count)
-                try {
-                    while (mediaCursor.moveToNext()) {
-                        chapterPaths.add(mediaCursor.getString(0))
-                        chapterDurations.add(mediaCursor.getInt(1))
-                        chapterNames.add(mediaCursor.getString(2))
-                    }
-                } finally {
-                    mediaCursor.close()
-                }
+        bookCursor.moveToNextLoop {
+            val bookId = bookCursor.getLong(0)
+            val root = bookCursor.getString(1)
+            val type = bookCursor.getString(2)
 
-                val configFile: File
-                when (type) {
-                    "COLLECTION_FILE", "SINGLE_FILE" -> configFile = File(root, "." + chapterNames[0] + "-map.json")
-                    "COLLECTION_FOLDER", "SINGLE_FOLDER" -> configFile = File(root, "." + (File(root).name) + "-map.json")
-                    else -> throw InvalidPropertiesFormatException("Upgrade failed due to unknown type=" + type)
-                }
-                val backupFile = File(configFile.absolutePath + ".backup")
-
-                val configFileValid = configFile.exists() && configFile.canRead() && configFile.length() > 0
-                val backupFileValid = backupFile.exists() && backupFile.canRead() && backupFile.length() > 0
+            val mediaCursor = db.query(copyChapterTableName, arrayOf("CHAPTER_PATH", "CHAPTER_DURATION", "CHAPTER_NAME"),
+                    "BOOK_ID" + "=?", arrayOf(bookId.toString()),
+                    null, null, null)
+            val chapterNames = ArrayList<String>(mediaCursor.count)
+            val chapterDurations = ArrayList<Int>(mediaCursor.count)
+            val chapterPaths = ArrayList<String>(mediaCursor.count)
+            mediaCursor.moveToNextLoop {
+                chapterPaths.add(mediaCursor.getString(0))
+                chapterDurations.add(mediaCursor.getInt(1))
+                chapterNames.add(mediaCursor.getString(2))
+            }
 
 
-                var playingInformation: JSONObject? = null
-                try {
-                    if (configFileValid) {
-                        val retString = Files.toString(configFile, Charsets.UTF_8)
-                        if (!retString.isEmpty()) {
-                            playingInformation = JSONObject(retString)
-                        }
-                    }
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
+            val configFile: File
+            when (type) {
+                "COLLECTION_FILE", "SINGLE_FILE" -> configFile = File(root, "." + chapterNames[0] + "-map.json")
+                "COLLECTION_FOLDER", "SINGLE_FOLDER" -> configFile = File(root, "." + (File(root).name) + "-map.json")
+                else -> throw InvalidPropertiesFormatException("Upgrade failed due to unknown type=" + type)
+            }
+            val backupFile = File(configFile.absolutePath + ".backup")
 
-                try {
-                    if (playingInformation == null && backupFileValid) {
-                        val retString = Files.toString(backupFile, Charsets.UTF_8)
+            val configFileValid = configFile.exists() && configFile.canRead() && configFile.length() > 0
+            val backupFileValid = backupFile.exists() && backupFile.canRead() && backupFile.length() > 0
+
+
+            var playingInformation: JSONObject? = null
+            try {
+                if (configFileValid) {
+                    val retString = Files.toString(configFile, Charsets.UTF_8)
+                    if (!retString.isEmpty()) {
                         playingInformation = JSONObject(retString)
                     }
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                } catch (e: JSONException) {
-                    e.printStackTrace()
                 }
-
-                if (playingInformation == null) {
-                    throw InvalidPropertiesFormatException("Could not fetch information")
-                }
-
-                val JSON_TIME = "time"
-                val JSON_BOOKMARK_TIME = "time"
-                val JSON_BOOKMARK_TITLE = "title"
-                val JSON_SPEED = "speed"
-                val JSON_NAME = "name"
-                val JSON_BOOKMARKS = "bookmarks"
-                val JSON_REL_PATH = "relPath"
-                val JSON_BOOKMARK_REL_PATH = "relPath"
-                val JSON_USE_COVER_REPLACEMENT = "useCoverReplacement"
-
-                var currentTime = 0
-                try {
-                    currentTime = playingInformation.getInt(JSON_TIME)
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }
-
-                val bookmarkRelPathsUnsafe = ArrayList<String>()
-                val bookmarkTitlesUnsafe = ArrayList<String>()
-                val bookmarkTimesUnsafe = ArrayList<Int>()
-                try {
-                    val bookmarksJ = playingInformation.getJSONArray(JSON_BOOKMARKS)
-                    for (i in 0..bookmarksJ.length() - 1) {
-                        val bookmarkJ = bookmarksJ.get(i) as JSONObject
-                        bookmarkTimesUnsafe.add(bookmarkJ.getInt(JSON_BOOKMARK_TIME))
-                        bookmarkTitlesUnsafe.add(bookmarkJ.getString(JSON_BOOKMARK_TITLE))
-                        bookmarkRelPathsUnsafe.add(bookmarkJ.getString(JSON_BOOKMARK_REL_PATH))
-                    }
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                    bookmarkRelPathsUnsafe.clear()
-                    bookmarkTitlesUnsafe.clear()
-                    bookmarkTimesUnsafe.clear()
-                }
-
-                val bookmarkRelPathsSafe = ArrayList<String>()
-                val bookmarkTitlesSafe = ArrayList<String>()
-                val bookmarkTimesSafe = ArrayList<Int>()
-
-                for (i in bookmarkRelPathsUnsafe.indices) {
-                    var bookmarkExists = false
-                    for (chapterPath in chapterPaths) {
-                        if (chapterPath == bookmarkRelPathsUnsafe[i]) {
-                            bookmarkExists = true
-                            break
-                        }
-                    }
-                    if (bookmarkExists) {
-                        bookmarkRelPathsSafe.add(bookmarkRelPathsUnsafe[i])
-                        bookmarkTitlesSafe.add(bookmarkTitlesUnsafe[i])
-                        bookmarkTimesSafe.add(bookmarkTimesUnsafe[i])
-                    }
-                }
-
-                var currentPath = ""
-                try {
-                    currentPath = playingInformation.getString(JSON_REL_PATH)
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }
-
-                var relPathExists = false
-                for (chapterPath in chapterPaths) {
-                    if (chapterPath == currentPath) {
-                        relPathExists = true
-                    }
-                }
-                if (!relPathExists) {
-                    currentPath = chapterPaths.first()
-                    currentTime = 0
-                }
-
-                var speed = 1.0f
-                try {
-                    speed = java.lang.Float.valueOf(playingInformation.getString(JSON_SPEED))
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                } catch (e: NumberFormatException) {
-                    e.printStackTrace()
-                }
-
-                var name = ""
-                try {
-                    name = playingInformation.getString(JSON_NAME)
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }
-
-                if (name.isEmpty()) {
-                    if (chapterPaths.size == 1) {
-                        val chapterPath = chapterPaths.first()
-                        name = chapterPath.substring(0, chapterPath.lastIndexOf("."))
-                    } else {
-                        name = File(root).name
-                    }
-                }
-
-                var useCoverReplacement = false
-                try {
-                    useCoverReplacement = playingInformation.getBoolean(JSON_USE_COVER_REPLACEMENT)
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }
-
-                try {
-                    val chapters = JSONArray()
-                    for (i in chapterPaths.indices) {
-                        val chapter = JSONObject()
-                        chapter.put("path", root + File.separator + chapterPaths[i])
-                        chapter.put("duration", chapterDurations[i])
-                        chapters.put(chapter)
-                    }
-
-                    val bookmarks = JSONArray()
-                    for (i in bookmarkRelPathsSafe.indices) {
-                        val bookmark = JSONObject()
-                        bookmark.put("mediaPath", root + File.separator + bookmarkRelPathsSafe[i])
-                        bookmark.put("title", bookmarkTitlesSafe[i])
-                        bookmark.put("time", bookmarkTimesSafe[i])
-                        bookmarks.put(bookmark)
-                    }
-
-                    val book = JSONObject()
-                    book.put("root", root)
-                    book.put("name", name)
-                    book.put("chapters", chapters)
-                    book.put("currentMediaPath", root + File.separator + currentPath)
-                    book.put("type", type)
-                    book.put("bookmarks", bookmarks)
-                    book.put("useCoverReplacement", useCoverReplacement)
-                    book.put("time", currentTime)
-                    book.put("playbackSpeed", speed.toDouble())
-
-                    Timber.d("upgrade24 restored book=%s", book)
-                    val cv = ContentValues()
-                    cv.put("BOOK_JSON", book.toString())
-                    val newBookId = db.insert(newBookTable, null, cv)
-                    book.put("id", newBookId)
-
-
-                    // move cover file if possible
-                    val coverFile: File
-                    if (chapterPaths.size == 1) {
-                        val fileName = "." + chapterNames.first() + ".jpg"
-                        coverFile = File(root, fileName)
-                    } else {
-                        val fileName = "." + (File(root).name) + ".jpg"
-                        coverFile = File(root, fileName)
-                    }
-                    if (coverFile.exists() && coverFile.canWrite()) {
-                        try {
-                            val newCoverFile = File(Environment.getExternalStorageDirectory().absolutePath + File.separator + "Android" + File.separator + "data" + File.separator + App.component().context.packageName,
-                                    newBookId.toString() + ".jpg")
-                            if (!coverFile.parentFile.exists()) {
-                                //noinspection ResultOfMethodCallIgnored
-                                coverFile.parentFile.mkdirs()
-                            }
-                            Files.move(coverFile, newCoverFile)
-                        } catch (e: IOException) {
-                            e.printStackTrace()
-                        }
-
-                    }
-                } catch (e: JSONException) {
-                    throw InvalidPropertiesFormatException(e)
-                }
-
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            } catch (e: IOException) {
+                e.printStackTrace()
             }
-        } finally {
-            bookCursor.close()
+
+            try {
+                if (playingInformation == null && backupFileValid) {
+                    val retString = Files.toString(backupFile, Charsets.UTF_8)
+                    playingInformation = JSONObject(retString)
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+
+            if (playingInformation == null) {
+                throw InvalidPropertiesFormatException("Could not fetch information")
+            }
+
+            val JSON_TIME = "time"
+            val JSON_BOOKMARK_TIME = "time"
+            val JSON_BOOKMARK_TITLE = "title"
+            val JSON_SPEED = "speed"
+            val JSON_NAME = "name"
+            val JSON_BOOKMARKS = "bookmarks"
+            val JSON_REL_PATH = "relPath"
+            val JSON_BOOKMARK_REL_PATH = "relPath"
+            val JSON_USE_COVER_REPLACEMENT = "useCoverReplacement"
+
+            var currentTime = 0
+            try {
+                currentTime = playingInformation.getInt(JSON_TIME)
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+
+            val bookmarkRelPathsUnsafe = ArrayList<String>()
+            val bookmarkTitlesUnsafe = ArrayList<String>()
+            val bookmarkTimesUnsafe = ArrayList<Int>()
+            try {
+                val bookmarksJ = playingInformation.getJSONArray(JSON_BOOKMARKS)
+                for (i in 0..bookmarksJ.length() - 1) {
+                    val bookmarkJ = bookmarksJ.get(i) as JSONObject
+                    bookmarkTimesUnsafe.add(bookmarkJ.getInt(JSON_BOOKMARK_TIME))
+                    bookmarkTitlesUnsafe.add(bookmarkJ.getString(JSON_BOOKMARK_TITLE))
+                    bookmarkRelPathsUnsafe.add(bookmarkJ.getString(JSON_BOOKMARK_REL_PATH))
+                }
+            } catch (e: JSONException) {
+                e.printStackTrace()
+                bookmarkRelPathsUnsafe.clear()
+                bookmarkTitlesUnsafe.clear()
+                bookmarkTimesUnsafe.clear()
+            }
+
+            val bookmarkRelPathsSafe = ArrayList<String>()
+            val bookmarkTitlesSafe = ArrayList<String>()
+            val bookmarkTimesSafe = ArrayList<Int>()
+
+            for (i in bookmarkRelPathsUnsafe.indices) {
+                var bookmarkExists = false
+                for (chapterPath in chapterPaths) {
+                    if (chapterPath == bookmarkRelPathsUnsafe[i]) {
+                        bookmarkExists = true
+                        break
+                    }
+                }
+                if (bookmarkExists) {
+                    bookmarkRelPathsSafe.add(bookmarkRelPathsUnsafe[i])
+                    bookmarkTitlesSafe.add(bookmarkTitlesUnsafe[i])
+                    bookmarkTimesSafe.add(bookmarkTimesUnsafe[i])
+                }
+            }
+
+            var currentPath = ""
+            try {
+                currentPath = playingInformation.getString(JSON_REL_PATH)
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+
+            var relPathExists = false
+            for (chapterPath in chapterPaths) {
+                if (chapterPath == currentPath) {
+                    relPathExists = true
+                }
+            }
+            if (!relPathExists) {
+                currentPath = chapterPaths.first()
+                currentTime = 0
+            }
+
+            var speed = 1.0f
+            try {
+                speed = java.lang.Float.valueOf(playingInformation.getString(JSON_SPEED))
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            } catch (e: NumberFormatException) {
+                e.printStackTrace()
+            }
+
+            var name = ""
+            try {
+                name = playingInformation.getString(JSON_NAME)
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+
+            if (name.isEmpty()) {
+                if (chapterPaths.size == 1) {
+                    val chapterPath = chapterPaths.first()
+                    name = chapterPath.substring(0, chapterPath.lastIndexOf("."))
+                } else {
+                    name = File(root).name
+                }
+            }
+
+            var useCoverReplacement = false
+            try {
+                useCoverReplacement = playingInformation.getBoolean(JSON_USE_COVER_REPLACEMENT)
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+
+            try {
+                val chapters = JSONArray()
+                for (i in chapterPaths.indices) {
+                    val chapter = JSONObject()
+                    chapter.put("path", root + File.separator + chapterPaths[i])
+                    chapter.put("duration", chapterDurations[i])
+                    chapters.put(chapter)
+                }
+
+                val bookmarks = JSONArray()
+                for (i in bookmarkRelPathsSafe.indices) {
+                    val bookmark = JSONObject()
+                    bookmark.put("mediaPath", root + File.separator + bookmarkRelPathsSafe[i])
+                    bookmark.put("title", bookmarkTitlesSafe[i])
+                    bookmark.put("time", bookmarkTimesSafe[i])
+                    bookmarks.put(bookmark)
+                }
+
+                val book = JSONObject()
+                book.put("root", root)
+                book.put("name", name)
+                book.put("chapters", chapters)
+                book.put("currentMediaPath", root + File.separator + currentPath)
+                book.put("type", type)
+                book.put("bookmarks", bookmarks)
+                book.put("useCoverReplacement", useCoverReplacement)
+                book.put("time", currentTime)
+                book.put("playbackSpeed", speed.toDouble())
+
+                Timber.d("upgrade24 restored book=%s", book)
+                val cv = ContentValues()
+                cv.put("BOOK_JSON", book.toString())
+                val newBookId = db.insert(newBookTable, null, cv)
+                book.put("id", newBookId)
+
+
+                // move cover file if possible
+                val coverFile: File
+                if (chapterPaths.size == 1) {
+                    val fileName = "." + chapterNames.first() + ".jpg"
+                    coverFile = File(root, fileName)
+                } else {
+                    val fileName = "." + (File(root).name) + ".jpg"
+                    coverFile = File(root, fileName)
+                }
+                if (coverFile.exists() && coverFile.canWrite()) {
+                    try {
+                        val newCoverFile = File(Environment.getExternalStorageDirectory().absolutePath + File.separator + "Android" + File.separator + "data" + File.separator + App.component().context.packageName,
+                                newBookId.toString() + ".jpg")
+                        if (!coverFile.parentFile.exists()) {
+                            //noinspection ResultOfMethodCallIgnored
+                            coverFile.parentFile.mkdirs()
+                        }
+                        Files.move(coverFile, newCoverFile)
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+
+                }
+            } catch (e: JSONException) {
+                throw InvalidPropertiesFormatException(e)
+            }
+
         }
     }
 
@@ -336,14 +347,12 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
         db.execSQL("CREATE TABLE " + "TABLE_BOOK" + " ( " + "BOOK_ID" + " INTEGER PRIMARY KEY AUTOINCREMENT, " + "BOOK_JSON" + " TEXT NOT NULL, " + "LAST_TIME_BOOK_WAS_ACTIVE" + " INTEGER NOT NULL, " + "BOOK_ACTIVE" + " INTEGER NOT NULL)")
 
         val cursor = db.query(copyBookTableName, arrayOf("BOOK_JSON"), null, null, null, null, null)
-        cursor.use {
-            while (cursor.moveToNext()) {
-                val cv = ContentValues()
-                cv.put("BOOK_JSON", cursor.getString(0))
-                cv.put("BOOK_ACTIVE", 1)
-                cv.put("LAST_TIME_BOOK_WAS_ACTIVE", System.currentTimeMillis())
-                db.insert("TABLE_BOOK", null, cv)
-            }
+        cursor.moveToNextLoop {
+            val cv = ContentValues()
+            cv.put("BOOK_JSON", cursor.getString(0))
+            cv.put("BOOK_ACTIVE", 1)
+            cv.put("LAST_TIME_BOOK_WAS_ACTIVE", System.currentTimeMillis())
+            db.insert("TABLE_BOOK", null, cv)
         }
     }
 
@@ -401,11 +410,9 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
                 null, null, null, null, null)
         val bookContents = ArrayList<String>(cursor.count)
         val activeMapping = ArrayList<Boolean>(cursor.count)
-        cursor.use {
-            while (cursor.moveToNext()) {
-                bookContents.add(cursor.getString(0))
-                activeMapping.add(cursor.getInt(1) == 1)
-            }
+        cursor.moveToNextLoop {
+            bookContents.add(cursor.getString(0))
+            activeMapping.add(cursor.getInt(1) == 1)
         }
         db.execSQL("DROP TABLE TABLE_BOOK")
 
@@ -531,24 +538,20 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
                 arrayOf(BOOK_ID),
                 null, null, null, null, null)
 
-        bookCursor.use {
-            while (bookCursor.moveToNext()) {
-                val bookId = bookCursor.getLong(0)
+        bookCursor.moveToNextLoop {
+            val bookId = bookCursor.getLong(0)
 
-                var chapterCount = 0
-                val chapterCursor = db.query(TABLE_CHAPTERS,
-                        null,
-                        BOOK_ID + "=?",
-                        arrayOf(bookId.toString()),
-                        null, null, null)
-                chapterCursor.use {
-                    while (chapterCursor.moveToNext()) {
-                        chapterCount++
-                    }
-                }
-                if (chapterCount == 0) {
-                    db.delete(TABLE_BOOK, BOOK_ID + "=?", arrayOf(bookId.toString()))
-                }
+            var chapterCount = 0
+            val chapterCursor = db.query(TABLE_CHAPTERS,
+                    null,
+                    BOOK_ID + "=?",
+                    arrayOf(bookId.toString()),
+                    null, null, null)
+            chapterCursor.moveToNextLoop {
+                chapterCount++
+            }
+            if (chapterCount == 0) {
+                db.delete(TABLE_BOOK, BOOK_ID + "=?", arrayOf(bookId.toString()))
             }
         }
     }
@@ -566,38 +569,34 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
         val bookCursor = db.query(TABLE_BOOK,
                 arrayOf(BOOK_ID, BOOK_CURRENT_MEDIA_PATH),
                 null, null, null, null, null)
-        bookCursor.use {
-            while (bookCursor.moveToNext()) {
-                val bookId = bookCursor.getLong(0)
-                val bookmarkCurrentMediaPath = bookCursor.getString(1)
+        bookCursor.moveToNextLoop {
+            val bookId = bookCursor.getLong(0)
+            val bookmarkCurrentMediaPath = bookCursor.getString(1)
 
-                val chapterCursor = db.query(TABLE_CHAPTERS,
-                        arrayOf(CHAPTER_PATH),
-                        BOOK_ID + "=?",
-                        arrayOf(bookId.toString()),
-                        null, null, null)
-                val chapterPaths = ArrayList<String>(chapterCursor.count)
-                chapterCursor.use {
-                    while (chapterCursor.moveToNext()) {
-                        val chapterPath = chapterCursor.getString(0)
-                        chapterPaths.add(chapterPath)
+            val chapterCursor = db.query(TABLE_CHAPTERS,
+                    arrayOf(CHAPTER_PATH),
+                    BOOK_ID + "=?",
+                    arrayOf(bookId.toString()),
+                    null, null, null)
+            val chapterPaths = ArrayList<String>(chapterCursor.count)
+            chapterCursor.moveToNextLoop {
+                val chapterPath = chapterCursor.getString(0)
+                chapterPaths.add(chapterPath)
+            }
+
+            if (chapterPaths.isEmpty()) {
+                db.delete(TABLE_BOOK, BOOK_ID + "=?", arrayOf(bookId.toString()))
+            } else {
+                var mediaPathValid = false
+                for (s in chapterPaths) {
+                    if (s == bookmarkCurrentMediaPath) {
+                        mediaPathValid = true
                     }
                 }
-
-                if (chapterPaths.isEmpty()) {
-                    db.delete(TABLE_BOOK, BOOK_ID + "=?", arrayOf(bookId.toString()))
-                } else {
-                    var mediaPathValid = false
-                    for (s in chapterPaths) {
-                        if (s == bookmarkCurrentMediaPath) {
-                            mediaPathValid = true
-                        }
-                    }
-                    if (!mediaPathValid) {
-                        val cv = ContentValues()
-                        cv.put(BOOK_CURRENT_MEDIA_PATH, chapterPaths.first())
-                        db.update(TABLE_BOOK, cv, BOOK_ID + "=?", arrayOf(bookId.toString()))
-                    }
+                if (!mediaPathValid) {
+                    val cv = ContentValues()
+                    cv.put(BOOK_CURRENT_MEDIA_PATH, chapterPaths.first())
+                    db.update(TABLE_BOOK, cv, BOOK_ID + "=?", arrayOf(bookId.toString()))
                 }
             }
         }

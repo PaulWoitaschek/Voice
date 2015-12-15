@@ -32,43 +32,39 @@
  * /licenses/>.
  */
 
-package de.ph1b.audiobook.activity
+package de.ph1b.audiobook.dialog
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
+import android.support.v4.app.DialogFragment
+import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.activity.FolderOverviewActivity
 
-class NoExternalStorageActivity : AppCompatActivity() {
+/**
+ * Dialog that shows a warning
+ */
+class NoFolderWarningDialogFragment : DialogFragment() {
 
-
-    public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_no_external)
-
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
-
-        setSupportActionBar(toolbar)
-        supportActionBar.setTitle(R.string.no_external_storage_action_bar_title)
-        supportActionBar.setDisplayHomeAsUpEnabled(false)
+    init {
+        isCancelable = false
     }
 
-    override fun onBackPressed() {
-        if (BaseActivity.storageMounted()) {
-            super.onBackPressed()
-        } else {
-            val i = Intent(Intent.ACTION_MAIN)
-            i.addCategory(Intent.CATEGORY_HOME)
-            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            startActivity(i)
-        }
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog? {
+        return MaterialDialog.Builder(context)
+                .title(R.string.no_audiobook_folders_title)
+                .content(getString(R.string.no_audiobook_folders_summary_start) +
+                        "\n\n" + getString(R.string.no_audiobook_folders_end))
+                .positiveText(R.string.dialog_confirm)
+                .onPositive { materialDialog, dialogAction ->
+                    startActivity(Intent(context, FolderOverviewActivity::class.java))
+                }
+                .cancelable(false)
+                .build()
     }
 
-    public override fun onResume() {
-        super.onResume()
-        if (BaseActivity.storageMounted()) {
-            onBackPressed()
-        }
+    companion object {
+        val TAG = NoFolderWarningDialogFragment::class.java.simpleName
     }
 }

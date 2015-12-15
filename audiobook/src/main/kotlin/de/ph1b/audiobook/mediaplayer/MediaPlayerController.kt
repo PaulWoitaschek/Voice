@@ -1,3 +1,37 @@
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.mediaplayer
 
 import android.content.Context
@@ -6,7 +40,7 @@ import android.os.PowerManager
 import de.ph1b.audiobook.activity.BookActivity
 import de.ph1b.audiobook.fragment.BookShelfFragment
 import de.ph1b.audiobook.model.Book
-import de.ph1b.audiobook.persistence.BookShelf
+import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import rx.Observable
@@ -24,7 +58,7 @@ import kotlin.concurrent.withLock
 @Singleton
 class MediaPlayerController
 @Inject
-constructor(private val c: Context, private val prefs: PrefsManager, private val db: BookShelf,
+constructor(private val c: Context, private val prefs: PrefsManager, private val db: BookChest,
             private val player: MediaPlayerInterface, private val playStateManager: PlayStateManager) {
 
     private val lock = ReentrantLock()
@@ -174,7 +208,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         subscriptions.apply {
             if (!hasSubscriptions()) {
                 // counts down the sleep sand
-                val sleepUpdateInterval = 500L
+                val sleepUpdateInterval = 1000L
                 add(Observable.interval(sleepUpdateInterval, TimeUnit.MILLISECONDS)
                         .filter { internalSleepSand.value > 0 } // only notify if there is still time left
                         .map { internalSleepSand.value - sleepUpdateInterval } // calculate the new time
