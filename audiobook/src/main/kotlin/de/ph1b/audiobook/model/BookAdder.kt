@@ -32,6 +32,23 @@
  * /licenses/>.
  */
 
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.model
 
 import android.Manifest
@@ -287,7 +304,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      * @param interrupting true if a eventually running scanner should be interrupted.
      */
     fun scanForFiles(interrupting: Boolean) {
-        Timber.d("scanForFiles called with scannerActive=%s and interrupting=%b", scannerActive, interrupting)
+        Timber.d("scanForFiles called with scannerActive=${scannerActive.value} and interrupting=$interrupting")
         if (!scannerActive.value || interrupting) {
             stopScanner = true
             executor.execute {
@@ -512,31 +529,32 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
             var currentPathIsGone = true
             val currentFile = bookToUpdate.currentFile
             val currentTime = bookToUpdate.time
-            for (c in newChapters) {
-                if (c.file == currentFile) {
-                    if (c.duration < currentTime) {
-                        bookToUpdate = bookToUpdate.copy(currentFile = c.file, time = 0)
+            newChapters.forEach {
+                if (it.file == currentFile) {
+                    if (it.duration < currentTime) {
+                        bookToUpdate = bookToUpdate.copy(time = 0)
                     }
                     currentPathIsGone = false
                 }
             }
-            if (currentPathIsGone) {
-                bookToUpdate = bookToUpdate.copy(currentFile = bookToUpdate.chapters.first().file,
-                        time = 0)
-            }
 
             // removes the bookmarks that no longer represent an existing file
-            val existingBookmarks = bookToUpdate.bookmarks
-            val filteredBookmarks = ArrayList(Collections2.filter(existingBookmarks) { input ->
+            val filteredBookmarks = ArrayList(Collections2.filter(bookToUpdate.bookmarks) {
                 for (c in newChapters) {
-                    if (c.file == input.mediaFile) {
+                    if (c.file == it.mediaFile) {
                         return@filter true
                     }
                 }
                 false
             })
-            bookToUpdate = bookToUpdate.copy(bookmarks = ImmutableList.copyOf(filteredBookmarks),
-                    chapters = ImmutableList.copyOf(newChapters))
+
+            //set new bookmarks and chapters.
+            // if the current path is gone, reset it correctly.
+            bookToUpdate = bookToUpdate.copy(
+                    bookmarks = ImmutableList.copyOf(filteredBookmarks),
+                    chapters = ImmutableList.copyOf(newChapters),
+                    currentFile = if (currentPathIsGone) newChapters.first().file else bookToUpdate.currentFile,
+                    time = if (currentPathIsGone) 0 else bookToUpdate.time)
 
             db.updateBook(bookToUpdate)
         }
