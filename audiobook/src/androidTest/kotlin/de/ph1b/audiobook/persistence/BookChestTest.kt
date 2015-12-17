@@ -32,14 +32,31 @@
  * /licenses/>.
  */
 
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.persistence
 
 import android.test.ApplicationTestCase
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.model.BookAdder
 import de.ph1b.audiobook.testing.DummyCreator
 import de.ph1b.audiobook.testing.RealFileMocker
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -80,13 +97,9 @@ class BookChestTest : ApplicationTestCase<App> (App::class.java) {
         App.component().inject(this)
 
         // retrieve the book by chapters
-        val allBooks = bookChest.activeBooks.toList().toBlocking().first()
-        var retrievedBook: Book? = null
-        for (book in allBooks) {
-            if (book.chapters == bookIn.chapters) {
-                retrievedBook = book
-            }
-        }
+        val retrievedBook = bookChest.activeBooks
+                .toBlocking()
+                .first { it.chapters == bookIn.chapters }
 
         // make sure a book was retrieved
         checkNotNull(retrievedBook)
@@ -104,8 +117,9 @@ class BookChestTest : ApplicationTestCase<App> (App::class.java) {
 
         // start the book adder
         bookAdder.scanForFiles(true)
-        Thread.sleep(100)
-        check(bookAdder.scannerActive().value)
+        // wait till its active
+        bookAdder.scannerActive()
+                .toBlocking().first { it }
 
         // now we wait for the scanner to complete
         val newActiveState = bookAdder.scannerActive().filter({ it.not() })
@@ -114,7 +128,11 @@ class BookChestTest : ApplicationTestCase<App> (App::class.java) {
         check(newActiveState.not())
 
         // as the we deleted the file now the book adder should have removed the chapter.
-        val bookRetrievedAgain = bookChest.activeBooks.toBlocking().single { it.id == addedBookWithUpdatedId.id }
+        val bookRetrievedAgain = bookChest.activeBooks.toBlocking()
+                .single { it.id == addedBookWithUpdatedId.id }
+        Timber.e(bookRetrievedAgain.toString())
+        Timber.e(addedBookWithUpdatedId.toString())
+        print("HIHI")
         check(bookRetrievedAgain.currentChapter() != addedBookWithUpdatedId.currentChapter())
     }
 
