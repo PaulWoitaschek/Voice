@@ -32,6 +32,23 @@
  * /licenses/>.
  */
 
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.testing
 
 import android.content.Context
@@ -52,8 +69,10 @@ class RealFileMocker {
     public fun create(context: Context): List<File> {
         val externalStorage = Environment.getExternalStorageDirectory()
 
-        file1 = File(externalStorage, "1.mp3")
-        file2 = File(externalStorage, "2.mp3")
+        val parentFolder = File(externalStorage, "testFolder")
+        parentFolder.mkdirs()
+        file1 = File(parentFolder, "1.mp3")
+        file2 = File(parentFolder, "2.mp3")
 
         ByteStreams.copy(context.assets.open("3rdState.mp3"), FileOutputStream(file1))
         ByteStreams.copy(context.assets.open("Crashed.mp3"), FileOutputStream(file2))
