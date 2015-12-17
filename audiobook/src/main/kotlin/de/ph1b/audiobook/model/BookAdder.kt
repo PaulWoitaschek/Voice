@@ -15,6 +15,23 @@
  * /licenses/>.
  */
 
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.model
 
 import android.Manifest
@@ -353,36 +370,36 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         for (book in bookVendor.all()) {
             var bookExists = false
             when (book.type) {
-                Book.Type.COLLECTION_FILE -> for (f in collectionBookFolders) {
-                    if (f.isFile) {
+                Book.Type.COLLECTION_FILE -> collectionBookFolders.forEach {
+                    if (it.isFile) {
                         val chapters = book.chapters
                         val singleBookChapterFile = chapters.first().file
-                        if (singleBookChapterFile == f) {
+                        if (singleBookChapterFile == it) {
                             bookExists = true
                         }
                     }
                 }
-                Book.Type.COLLECTION_FOLDER -> for (f in collectionBookFolders) {
-                    if (f.isDirectory) {
+                Book.Type.COLLECTION_FOLDER -> collectionBookFolders.forEach {
+                    if (it.isDirectory) {
                         // multi file book
-                        if (book.root == f.absolutePath) {
+                        if (book.root == it.absolutePath) {
                             bookExists = true
                         }
                     }
                 }
-                Book.Type.SINGLE_FILE -> for (f in singleBookFiles) {
-                    if (f.isFile) {
+                Book.Type.SINGLE_FILE -> singleBookFiles.forEach {
+                    if (it.isFile) {
                         val chapters = book.chapters
                         val singleBookChapterFile = chapters.first().file
-                        if (singleBookChapterFile == f) {
+                        if (singleBookChapterFile == it) {
                             bookExists = true
                         }
                     }
                 }
-                Book.Type.SINGLE_FOLDER -> for (f in singleBookFiles) {
-                    if (f.isDirectory) {
+                Book.Type.SINGLE_FOLDER -> singleBookFiles.forEach {
+                    if (it.isDirectory) {
                         // multi file book
-                        if (book.root == f.absolutePath) {
+                        if (book.root == it.absolutePath) {
                             bookExists = true
                         }
                     }
