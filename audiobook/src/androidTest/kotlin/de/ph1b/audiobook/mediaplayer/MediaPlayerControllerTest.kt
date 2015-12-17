@@ -1,16 +1,31 @@
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.mediaplayer
 
-import android.os.Environment
-import android.test.AndroidTestCase
+import android.test.ApplicationTestCase
 import android.test.suitebuilder.annotation.MediumTest
 import android.test.suitebuilder.annotation.SmallTest
-import com.google.common.io.ByteStreams
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.testing.DummyCreator
+import de.ph1b.audiobook.testing.RealFileMocker
 import java.io.File
-import java.io.FileOutputStream
 import java.util.*
 import java.util.concurrent.CountDownLatch
 import javax.inject.Inject
@@ -20,29 +35,27 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class MediaPlayerControllerTest : AndroidTestCase () {
+class MediaPlayerControllerTest : ApplicationTestCase<App> (App::class.java) {
 
     @Inject internal lateinit var mediaPlayerController: MediaPlayerController
     @Inject internal lateinit var playStateManager: PlayStateManager
-    lateinit var file1: File
-    lateinit var file2: File
+    private lateinit var realFileMocker: RealFileMocker
+    private lateinit var files: List<File>
+
     lateinit var book: Book
 
     @Throws(Exception::class)
     override fun setUp() {
         super.setUp()
 
+        createApplication()
         App.component().inject(this)
 
-        val externalStorage = Environment.getExternalStorageDirectory()
+        realFileMocker = RealFileMocker()
+        files = realFileMocker.create(context);
 
-        file1 = File(externalStorage, "1.mp3")
-        file2 = File(externalStorage, "2.mp3")
 
-        ByteStreams.copy(context.assets.open("3rdState.mp3"), FileOutputStream(file1))
-        ByteStreams.copy(context.assets.open("Crashed.mp3"), FileOutputStream(file2))
-
-        book = DummyCreator.dummyBook(file1, file2)
+        book = DummyCreator.dummyBook(files[0], files[1])
 
         mediaPlayerController.init(book)
     }
@@ -51,8 +64,9 @@ class MediaPlayerControllerTest : AndroidTestCase () {
         super.testAndroidTestCaseSetupProperly()
 
         checkNotNull(mediaPlayerController)
-        check(file1.exists())
-        check(file2.exists())
+        for (f in files) {
+            check(f.exists())
+        }
     }
 
     /**
@@ -112,9 +126,7 @@ class MediaPlayerControllerTest : AndroidTestCase () {
 
     @Throws(Exception::class)
     override fun tearDown() {
+        realFileMocker.destroy()
         super.tearDown()
-
-        file1.delete()
-        file2.delete()
     }
 }
