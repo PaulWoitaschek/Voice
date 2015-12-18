@@ -32,6 +32,23 @@
  * /licenses/>.
  */
 
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.adapter
 
 import android.content.Context
@@ -150,12 +167,11 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
      */
     fun newDataSet(books: List<Book>) {
         Timber.i("newDataSet was called.")
-        sortedList.beginBatchedUpdates()
-        try {
+        sortedList.batched {
             // remove old books
-            val booksToDelete = ArrayList<Book>(sortedList.size())
-            for (i in 0..sortedList.size() - 1) {
-                val existing = sortedList.get(i)
+            val booksToDelete = ArrayList<Book>(size())
+            for (i in 0..size() - 1) {
+                val existing = get(i)
                 var deleteBook = true
                 for (b in books) {
                     if (existing.id == b.id) {
@@ -168,16 +184,13 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
                 }
             }
             for (b in booksToDelete) {
-                sortedList.remove(b)
+                remove(b)
             }
 
             // add new books
             for (b in books) {
                 updateOrAddBook(b)
             }
-
-        } finally {
-            sortedList.endBatchedUpdates()
         }
     }
 
