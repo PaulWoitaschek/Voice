@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -72,21 +73,17 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
     private boolean isMultiPanel;
     private final Communication.SimpleBookCommunication listener = new Communication.SimpleBookCommunication() {
         @Override
-        public void onBookContentChanged(@NonNull final Book book) {
+        public void onCurrentBookIdChanged(final long oldId) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    adapter.updateOrAddBook(book);
-                }
-            });
-        }
-
-        @Override
-        public void onPlayStateChanged() {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    setPlayState(true);
+                    for (int i = 0; i < adapter.getItemCount(); i++) {
+                        long itemId = adapter.getItemId(i);
+                        if (itemId == oldId || itemId == prefs.getCurrentBookId()) {
+                            adapter.notifyItemChanged(i);
+                        }
+                    }
+                    checkVisibilities();
                 }
             });
         }
@@ -102,6 +99,26 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         }
 
         @Override
+        public void onPlayStateChanged() {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    setPlayState(true);
+                }
+            });
+        }
+
+        @Override
+        public void onBookContentChanged(@NonNull final Book book) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.updateOrAddBook(book);
+                }
+            });
+        }
+
+        @Override
         public void onBookSetChanged(@NonNull final List<Book> activeBooks) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -111,55 +128,7 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                 }
             });
         }
-
-
-        @Override
-        public void onCurrentBookIdChanged(final long oldId) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    for (int i = 0; i < adapter.getItemCount(); i++) {
-                        long itemId = adapter.getItemId(i);
-                        if (itemId == oldId || itemId == prefs.getCurrentBookId()) {
-                            adapter.notifyItemChanged(i);
-                        }
-                    }
-                    checkVisibilities();
-                }
-            });
-        }
     };
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_book_shelf, container, false);
-
-        isMultiPanel = ((MultiPaneInformer) getActivity()).isMultiPanel();
-
-        // find views
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        assert actionBar != null;
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        recyclerReplacementView = (ProgressBar) view.findViewById(R.id.recyclerReplacement);
-        fab = (FloatingActionButton) view.findViewById(R.id.fab);
-
-        // init views
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setTitle(getString(R.string.app_name));
-        fab.setIconDrawable(playPauseDrawable);
-        fab.setOnClickListener(this);
-        recyclerView.setHasFixedSize(true);
-        // without this the item would blink on every change
-        recyclerView.getItemAnimator().setSupportsChangeAnimations(false);
-
-        listDecoration = new DividerItemDecoration(getActivity());
-        gridLayoutManager = new GridLayoutManager(getActivity(), getAmountOfColumns());
-        linearLayoutManager = new LinearLayoutManager(getActivity());
-        initRecyclerView();
-
-        return view;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -187,21 +156,37 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
                 .build();
     }
 
-    private void initRecyclerView() {
-        DisplayMode defaultDisplayMode = prefs.getDisplayMode();
-        recyclerView.removeItemDecoration(listDecoration);
-        if (defaultDisplayMode == BookShelfFragment.DisplayMode.GRID) {
-            recyclerView.setLayoutManager(gridLayoutManager);
-        } else {
-            recyclerView.setLayoutManager(linearLayoutManager);
-            recyclerView.addItemDecoration(listDecoration);
-        }
-        adapter = new BookShelfAdapter(getActivity(), defaultDisplayMode, this);
-        adapter.newDataSet(db.getActiveBooks());
-        recyclerView.setAdapter(adapter);
-        getActivity().invalidateOptionsMenu();
-    }
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_book_shelf, container, false);
 
+        isMultiPanel = ((MultiPaneInformer) getActivity()).isMultiPanel();
+
+        // find views
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        assert actionBar != null;
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        recyclerReplacementView = (ProgressBar) view.findViewById(R.id.recyclerReplacement);
+        fab = (FloatingActionButton) view.findViewById(R.id.fab);
+
+        // init views
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setTitle(getString(R.string.app_name));
+        fab.setIconDrawable(playPauseDrawable);
+        fab.setOnClickListener(this);
+        recyclerView.setHasFixedSize(true);
+        // without this the item would blink on every change
+        DefaultItemAnimator itemAnimator = (DefaultItemAnimator) recyclerView.getItemAnimator();
+        itemAnimator.setSupportsChangeAnimations(false);
+
+        listDecoration = new DividerItemDecoration(getActivity());
+        gridLayoutManager = new GridLayoutManager(getActivity(), getAmountOfColumns());
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+        initRecyclerView();
+
+        return view;
+    }
 
     /**
      * Returns the amount of columns the main-grid will need.
@@ -220,6 +205,20 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         return Math.max(columns, 2);
     }
 
+    private void initRecyclerView() {
+        DisplayMode defaultDisplayMode = prefs.getDisplayMode();
+        recyclerView.removeItemDecoration(listDecoration);
+        if (defaultDisplayMode == BookShelfFragment.DisplayMode.GRID) {
+            recyclerView.setLayoutManager(gridLayoutManager);
+        } else {
+            recyclerView.setLayoutManager(linearLayoutManager);
+            recyclerView.addItemDecoration(listDecoration);
+        }
+        adapter = new BookShelfAdapter(getActivity(), defaultDisplayMode, this);
+        adapter.newDataSet(db.getActiveBooks());
+        recyclerView.setAdapter(adapter);
+        getActivity().invalidateOptionsMenu();
+    }
 
     @Override
     public void onResume() {
@@ -252,31 +251,11 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
 
-    private void checkVisibilities() {
-        final boolean hideRecycler = adapter.getItemCount() == 0 && BookAdder.scannerActive;
-        if (hideRecycler) {
-            recyclerReplacementView.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
-        } else {
-            recyclerReplacementView.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-        }
-
-        boolean currentBookExists = false;
-        long currentBookId = prefs.getCurrentBookId();
-        for (int i = 0; i < adapter.getItemCount(); i++) {
-            if (currentBookId == adapter.getItemId(i)) {
-                currentBookExists = true;
-                break;
-            }
-        }
-
-        if (isMultiPanel || !currentBookExists) {
-            fab.setVisibility(View.GONE);
-        } else {
-            fab.setVisibility(View.VISIBLE);
-        }
+        COMMUNICATION.removeBookCommunicationListener(listener);
     }
 
     @Override
@@ -325,6 +304,32 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
         ((BookSelectionCallback) getActivity()).onBookSelected(bookId, sharedElements);
     }
 
+    private void checkVisibilities() {
+        final boolean hideRecycler = adapter.getItemCount() == 0 && BookAdder.scannerActive;
+        if (hideRecycler) {
+            recyclerReplacementView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            recyclerReplacementView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+
+        boolean currentBookExists = false;
+        long currentBookId = prefs.getCurrentBookId();
+        for (int i = 0; i < adapter.getItemCount(); i++) {
+            if (currentBookId == adapter.getItemId(i)) {
+                currentBookExists = true;
+                break;
+            }
+        }
+
+        if (isMultiPanel || !currentBookExists) {
+            fab.setVisibility(View.GONE);
+        } else {
+            fab.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -334,13 +339,6 @@ public class BookShelfFragment extends Fragment implements View.OnClickListener,
             default:
                 break;
         }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        COMMUNICATION.removeBookCommunicationListener(listener);
     }
 
     @Override
