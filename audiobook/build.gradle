@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 88
-        versionName '2.4.2.1'
+        versionCode 89
+        versionName '2.4.2.2'
     }
 
     signingConfigs {
