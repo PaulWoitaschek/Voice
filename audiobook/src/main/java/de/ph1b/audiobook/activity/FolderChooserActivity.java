@@ -68,92 +68,6 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
     private ImageButton upButton;
     private OperationMode mode;
 
-    private static List<File> getStorageDirectories() {
-        Pattern DIR_SEPARATOR = Pattern.compile("/");
-        // Final set of paths
-        final Set<String> rv = new HashSet<>(5);
-        // Primary physical SD-CARD (not emulated)
-        final String rawExternalStorage = System.getenv("EXTERNAL_STORAGE");
-        // All Secondary SD-CARDs (all exclude primary) separated by ":"
-        final String rawSecondaryStorageStr = System.getenv("SECONDARY_STORAGE");
-        // Primary emulated SD-CARD
-        final String rawEmulatedStorageTarget = System.getenv("EMULATED_STORAGE_TARGET");
-        if (TextUtils.isEmpty(rawEmulatedStorageTarget)) {
-            // Device has physical external storage; use plain paths.
-            if (TextUtils.isEmpty(rawExternalStorage)) {
-                // EXTERNAL_STORAGE undefined; falling back to default.
-                rv.add("/storage/sdcard0");
-            } else {
-                rv.add(rawExternalStorage);
-            }
-        } else {
-            // Device has emulated storage; external storage paths should have
-            // userId burned into them.
-            final String rawUserId;
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                rawUserId = "";
-            } else {
-                final String path = Environment.getExternalStorageDirectory().getAbsolutePath();
-                final String[] folders = DIR_SEPARATOR.split(path);
-                final String lastFolder = folders[folders.length - 1];
-                boolean isDigit = false;
-                try {
-                    //noinspection ResultOfMethodCallIgnored
-                    Integer.valueOf(lastFolder);
-                    isDigit = true;
-                } catch (NumberFormatException ignored) {
-                }
-                rawUserId = isDigit ? lastFolder : "";
-            }
-            // /storage/emulated/0[1,2,...]
-            if (TextUtils.isEmpty(rawUserId)) {
-                rv.add(rawEmulatedStorageTarget);
-            } else {
-                rv.add(rawEmulatedStorageTarget + File.separator + rawUserId);
-            }
-        }
-        // Add all secondary storage
-        if (!TextUtils.isEmpty(rawSecondaryStorageStr)) {
-            // All Secondary SD-CARDs splitted into array
-            final String[] rawSecondaryStorage = rawSecondaryStorageStr.split(File.pathSeparator);
-            Collections.addAll(rv, rawSecondaryStorage);
-        }
-        rv.add("/storage/extSdCard");
-        rv.add(Environment.getExternalStorageDirectory().getAbsolutePath());
-        rv.add("/storage/emulated/0");
-        rv.add("/storage/sdcard1");
-        rv.add("/storage/external_SD");
-        rv.add("/storage/ext_sd");
-
-        List<File> paths = new ArrayList<>(rv.size());
-        for (String s : rv) {
-            File f = new File(s);
-            if (f.exists() && f.isDirectory() && f.canRead() && f.listFiles() != null && f.listFiles().length > 0) {
-                paths.add(f);
-            }
-        }
-        Collections.sort(paths, NaturalOrderComparator.FILE_COMPARATOR);
-        return paths;
-    }
-
-    /**
-     * Gets the containing files of a folder (restricted to music and folders) in a naturally sorted
-     * order.
-     *
-     * @param file The file to look for containing files
-     * @return The containing files
-     */
-    private static List<File> getFilesFromFolder(File file) {
-        File[] containing = file.listFiles(FileRecognition.FOLDER_AND_MUSIC_FILTER);
-        if (containing != null) {
-            List<File> asList = new ArrayList<>(Arrays.asList(containing));
-            Collections.sort(asList, NaturalOrderComparator.FILE_COMPARATOR);
-            return asList;
-        } else {
-            return Collections.emptyList();
-        }
-    }
-
     /**
      * Generates a new intent with the necessary extras
      *
@@ -167,38 +81,10 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         return intent;
     }
 
-    private void changeFolder(File newFolder) {
-        currentFolder = newFolder;
-        currentFolderContent.clear();
-        currentFolderContent.addAll(getFilesFromFolder(currentFolder));
-        adapter.notifyDataSetChanged();
-        setButtonEnabledDisabled();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            boolean permissionGrantingWorked = PermissionHelper.permissionGrantingWorked(requestCode,
-                    PERMISSION_RESULT_READ_EXT_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,
-                    permissions, grantResults);
-            L.i(TAG, "permissionGrantingWorked=" + permissionGrantingWorked);
-            if (permissionGrantingWorked) {
-                refreshRootDirs();
-            } else {
-                PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE);
-                L.e(TAG, "could not get permission");
-            }
-        }
-    }
-
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void askForReadExternalStoragePermission() {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_RESULT_READ_EXT_STORAGE);
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -274,6 +160,42 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         setButtonEnabledDisabled();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (canGoBack()) {
+            up();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (currentFolder != null) {
+            outState.putString(CURRENT_FOLDER_NAME, currentFolder.getAbsolutePath());
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            boolean permissionGrantingWorked = PermissionHelper.permissionGrantingWorked(requestCode,
+                    PERMISSION_RESULT_READ_EXT_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,
+                    permissions, grantResults);
+            L.i(TAG, "permissionGrantingWorked=" + permissionGrantingWorked);
+            if (permissionGrantingWorked) {
+                refreshRootDirs();
+            } else {
+                PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE);
+                L.e(TAG, "could not get permission");
+            }
+        }
+    }
+
     private void refreshRootDirs() {
         rootDirs = getStorageDirectories();
         currentFolderContent.clear();
@@ -287,23 +209,114 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
         } else {
             currentFolderContent.addAll(rootDirs);
         }
+        adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (currentFolder != null) {
-            outState.putString(CURRENT_FOLDER_NAME, currentFolder.getAbsolutePath());
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (canGoBack()) {
-            up();
+    private static List<File> getStorageDirectories() {
+        Pattern DIR_SEPARATOR = Pattern.compile("/");
+        // Final set of paths
+        final Set<String> rv = new HashSet<>(5);
+        // Primary physical SD-CARD (not emulated)
+        final String rawExternalStorage = System.getenv("EXTERNAL_STORAGE");
+        // All Secondary SD-CARDs (all exclude primary) separated by ":"
+        final String rawSecondaryStorageStr = System.getenv("SECONDARY_STORAGE");
+        // Primary emulated SD-CARD
+        final String rawEmulatedStorageTarget = System.getenv("EMULATED_STORAGE_TARGET");
+        if (TextUtils.isEmpty(rawEmulatedStorageTarget)) {
+            // Device has physical external storage; use plain paths.
+            if (TextUtils.isEmpty(rawExternalStorage)) {
+                // EXTERNAL_STORAGE undefined; falling back to default.
+                rv.add("/storage/sdcard0");
+            } else {
+                rv.add(rawExternalStorage);
+            }
         } else {
-            super.onBackPressed();
+            // Device has emulated storage; external storage paths should have
+            // userId burned into them.
+            final String rawUserId;
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                rawUserId = "";
+            } else {
+                final String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+                final String[] folders = DIR_SEPARATOR.split(path);
+                final String lastFolder = folders[folders.length - 1];
+                boolean isDigit = false;
+                try {
+                    //noinspection ResultOfMethodCallIgnored
+                    Integer.valueOf(lastFolder);
+                    isDigit = true;
+                } catch (NumberFormatException ignored) {
+                }
+                rawUserId = isDigit ? lastFolder : "";
+            }
+            // /storage/emulated/0[1,2,...]
+            if (TextUtils.isEmpty(rawUserId)) {
+                rv.add(rawEmulatedStorageTarget);
+            } else {
+                rv.add(rawEmulatedStorageTarget + File.separator + rawUserId);
+            }
         }
+        // Add all secondary storage
+        if (!TextUtils.isEmpty(rawSecondaryStorageStr)) {
+            // All Secondary SD-CARDs splitted into array
+            final String[] rawSecondaryStorage = rawSecondaryStorageStr.split(File.pathSeparator);
+            Collections.addAll(rv, rawSecondaryStorage);
+        }
+        rv.add("/storage/extSdCard");
+        rv.add(Environment.getExternalStorageDirectory().getAbsolutePath());
+        rv.add("/storage/emulated/0");
+        rv.add("/storage/sdcard1");
+        rv.add("/storage/external_SD");
+        rv.add("/storage/ext_sd");
+
+        List<File> paths = new ArrayList<>(rv.size());
+        for (String s : rv) {
+            File f = new File(s);
+            if (f.exists() && f.isDirectory() && f.canRead() && f.listFiles() != null && f.listFiles().length > 0) {
+                paths.add(f);
+            }
+        }
+        Collections.sort(paths, NaturalOrderComparator.FILE_COMPARATOR);
+        return paths;
+    }
+
+    private void changeFolder(File newFolder) {
+        currentFolder = newFolder;
+        currentFolderContent.clear();
+        currentFolderContent.addAll(getFilesFromFolder(currentFolder));
+        adapter.notifyDataSetChanged();
+        setButtonEnabledDisabled();
+    }
+
+    /**
+     * Gets the containing files of a folder (restricted to music and folders) in a naturally sorted
+     * order.
+     *
+     * @param file The file to look for containing files
+     * @return The containing files
+     */
+    private static List<File> getFilesFromFolder(File file) {
+        File[] containing = file.listFiles(FileRecognition.FOLDER_AND_MUSIC_FILTER);
+        if (containing != null) {
+            List<File> asList = new ArrayList<>(Arrays.asList(containing));
+            Collections.sort(asList, NaturalOrderComparator.FILE_COMPARATOR);
+            return asList;
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    /**
+     * Sets the choose button enabled or disabled, depending on where we are in the hierarchy
+     */
+    private void setButtonEnabledDisabled() {
+        boolean upEnabled = canGoBack();
+        boolean chooseEnabled = !multiSd || upEnabled;
+
+        chooseButton.setEnabled(chooseEnabled);
+        upButton.setEnabled(upEnabled);
+        @SuppressWarnings("deprecation") Drawable upIcon = upEnabled ? getResources().getDrawable(R.drawable.ic_arrow_up_white_48dp) : null;
+        upButton.setImageDrawable(upIcon);
     }
 
     private boolean canGoBack() {
@@ -345,19 +358,6 @@ public class FolderChooserActivity extends BaseActivity implements View.OnClickL
             adapter.notifyDataSetChanged();
         }
         setButtonEnabledDisabled();
-    }
-
-    /**
-     * Sets the choose button enabled or disabled, depending on where we are in the hierarchy
-     */
-    private void setButtonEnabledDisabled() {
-        boolean upEnabled = canGoBack();
-        boolean chooseEnabled = !multiSd || upEnabled;
-
-        chooseButton.setEnabled(chooseEnabled);
-        upButton.setEnabled(upEnabled);
-        @SuppressWarnings("deprecation") Drawable upIcon = upEnabled ? getResources().getDrawable(R.drawable.ic_arrow_up_white_48dp) : null;
-        upButton.setImageDrawable(upIcon);
     }
 
     @Override
