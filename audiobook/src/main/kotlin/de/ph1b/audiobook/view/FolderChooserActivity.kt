@@ -11,28 +11,11 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
  * /licenses/>.
  */
 
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
-package de.ph1b.audiobook.activity
+package de.ph1b.audiobook.view
 
 import android.Manifest
 import android.annotation.TargetApi
@@ -52,16 +35,17 @@ import com.jakewharton.rxbinding.view.clicks
 import com.jakewharton.rxbinding.widget.RxAdapterView
 import com.jakewharton.rxbinding.widget.itemClicks
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.activity.BaseActivity
 import de.ph1b.audiobook.adapter.FolderChooserAdapter
 import de.ph1b.audiobook.dialog.HideFolderDialog
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.presenter.FolderChooserPresenter
 import de.ph1b.audiobook.uitools.HighlightedSpinnerAdapter
 import de.ph1b.audiobook.utils.PermissionHelper
-import de.ph1b.audiobook.view.FolderChooserView
-import nucleus.factory.RequiresPresenter
 import timber.log.Timber
 import java.io.File
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Activity for choosing an audiobook folder. If there are multiple SD-Cards, the Activity unifies
@@ -74,8 +58,20 @@ import java.util.*
 
  * @author Paul Woitaschek
  */
-@RequiresPresenter(FolderChooserPresenter::class)
-class FolderChooserActivity : NucleusBaseActivity<FolderChooserPresenter>(), FolderChooserView, HideFolderDialog.OnChosenListener {
+class FolderChooserActivity : BaseActivity(), FolderChooserView, HideFolderDialog.OnChosenListener {
+
+    override fun showSubFolderWarning(first: String, second: String) {
+        val message = "${getString(R.string.adding_failed_subfolder)}\n$first\n$second"
+        Toast.makeText(this, message, Toast.LENGTH_LONG)
+                .show()
+    }
+
+
+    @Inject lateinit var presenter: FolderChooserPresenter
+
+    init {
+        App.component().inject(this)
+    }
 
     private lateinit var upButton: ImageButton
     private lateinit var currentFolderName: TextView
@@ -88,7 +84,6 @@ class FolderChooserActivity : NucleusBaseActivity<FolderChooserPresenter>(), Fol
 
     private lateinit var adapter: FolderChooserAdapter
     private lateinit var spinnerAdapter: HighlightedSpinnerAdapter<File>
-
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private fun askForReadExternalStoragePermission() {
@@ -118,7 +113,7 @@ class FolderChooserActivity : NucleusBaseActivity<FolderChooserPresenter>(), Fol
         }
     }
 
-    fun getMode(): OperationMode = OperationMode.valueOf(intent.getStringExtra(NI_OPERATION_MODE))
+    override fun getMode() = OperationMode.valueOf(intent.getStringExtra(NI_OPERATION_MODE))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -220,6 +215,7 @@ class FolderChooserActivity : NucleusBaseActivity<FolderChooserPresenter>(), Fol
         newFolders.forEach { spinnerList.add(FileSpinnerData(it)) }
         spinnerAdapter.clear()
         spinnerAdapter.addAll(spinnerList)
+        spinnerAdapter.notifyDataSetChanged()
     }
 
 
@@ -232,16 +228,26 @@ class FolderChooserActivity : NucleusBaseActivity<FolderChooserPresenter>(), Fol
         upButton.setImageDrawable(upIcon)
     }
 
-    override fun finishActivityWithSuccess(chosenFile: File) {
-        val data = Intent()
-        data.putExtra(RESULT_CHOSEN_FILE, chosenFile.absolutePath)
-        data.putExtra(RESULT_OPERATION_MODE, getMode().name)
-        setResult(Activity.RESULT_OK, data)
+    override fun finishWithResult() {
+        Timber.i("finishWithResult")
+        setResult(Activity.RESULT_OK, Intent())
         finish()
     }
 
     override fun onChosen() {
         presenter.hideFolderSelectionMade()
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        presenter.bind(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        presenter.unbind()
     }
 
     enum class OperationMode {
@@ -254,9 +260,6 @@ class FolderChooserActivity : NucleusBaseActivity<FolderChooserPresenter>(), Fol
     }
 
     companion object {
-
-        val RESULT_CHOSEN_FILE = "chosenFile"
-        val RESULT_OPERATION_MODE = "operationMode"
 
         private val NI_OPERATION_MODE = "niOperationMode"
         private val PERMISSION_RESULT_READ_EXT_STORAGE = 1

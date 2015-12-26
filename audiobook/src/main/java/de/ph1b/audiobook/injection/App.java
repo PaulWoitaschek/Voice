@@ -36,7 +36,6 @@ import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.activity.BaseActivity;
 import de.ph1b.audiobook.activity.BookActivity;
 import de.ph1b.audiobook.activity.DependencyLicensesActivity;
-import de.ph1b.audiobook.activity.FolderOverviewActivity;
 import de.ph1b.audiobook.adapter.BookShelfAdapter;
 import de.ph1b.audiobook.adapter.BookmarkAdapter;
 import de.ph1b.audiobook.dialog.BookmarkDialogFragment;
@@ -49,7 +48,6 @@ import de.ph1b.audiobook.dialog.prefs.PlaybackSpeedDialogFragment;
 import de.ph1b.audiobook.dialog.prefs.SleepDialogFragment;
 import de.ph1b.audiobook.dialog.prefs.ThemePickerDialogFragment;
 import de.ph1b.audiobook.fragment.BookPlayFragment;
-import de.ph1b.audiobook.fragment.BookShelfFragment;
 import de.ph1b.audiobook.fragment.SettingsFragment;
 import de.ph1b.audiobook.mediaplayer.MediaPlayerControllerTest;
 import de.ph1b.audiobook.model.BookAdder;
@@ -59,6 +57,9 @@ import de.ph1b.audiobook.playback.BookReaderService;
 import de.ph1b.audiobook.playback.WidgetUpdateService;
 import de.ph1b.audiobook.presenter.FolderOverviewPresenter;
 import de.ph1b.audiobook.uitools.CoverReplacement;
+import de.ph1b.audiobook.view.FolderChooserActivity;
+import de.ph1b.audiobook.view.FolderOverviewActivity;
+import de.ph1b.audiobook.view.fragment.BookShelfFragment;
 import timber.log.Timber;
 
 @ReportsCrashes(
@@ -131,6 +132,8 @@ public class App extends Application {
         void inject(CoverReplacement target);
 
         void inject(BaseActivity target);
+
+        void inject(FolderChooserActivity target);
 
         void inject(DependencyLicensesActivity target);
 

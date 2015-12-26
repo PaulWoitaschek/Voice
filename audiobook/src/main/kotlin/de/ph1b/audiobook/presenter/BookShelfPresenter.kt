@@ -17,16 +17,17 @@
 
 package de.ph1b.audiobook.presenter
 
-import de.ph1b.audiobook.fragment.BookShelfFragment
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.BookAdder
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
+import de.ph1b.audiobook.view.fragment.BookShelfFragment
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -38,11 +39,12 @@ import javax.inject.Singleton
 @Singleton
 class BookShelfPresenter
 @Inject
-constructor(private val bookChest: BookChest, private val bookAdder: BookAdder, private val prefsManager: PrefsManager, private val playStateManager: PlayStateManager, private val mediaPlayerController: MediaPlayerController) {
+constructor(private val bookChest: BookChest, private val bookAdder: BookAdder, private val prefsManager: PrefsManager, private val playStateManager: PlayStateManager, private val mediaPlayerController: MediaPlayerController)
+: Presenter<BookShelfFragment>() {
 
-    var subscriptions: CompositeSubscription? = null
+    override fun onBind(view: BookShelfFragment, subscriptions: CompositeSubscription) {
+        Timber.i("onBind Called for $view")
 
-    fun bind(view: BookShelfFragment) {
         // initially updates the adapter with a new set of items
         bookChest.activeBooks
                 .subscribeOn(Schedulers.io())
@@ -59,8 +61,7 @@ constructor(private val bookChest: BookChest, private val bookAdder: BookAdder, 
         // scan for files
         bookAdder.scanForFiles(false)
 
-        subscriptions = CompositeSubscription()
-        subscriptions!!.apply {
+        subscriptions.apply {
             // informs the view once a book was removed
             add(bookChest.removedObservable()
                     .observeOn(AndroidSchedulers.mainThread())
@@ -99,9 +100,5 @@ constructor(private val bookChest: BookChest, private val bookAdder: BookAdder, 
 
     fun playPauseRequested() {
         mediaPlayerController.playPause()
-    }
-
-    fun unbind() {
-        subscriptions?.unsubscribe()
     }
 }

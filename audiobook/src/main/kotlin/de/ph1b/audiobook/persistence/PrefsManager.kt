@@ -1,13 +1,30 @@
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.persistence
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.fragment.BookShelfFragment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.uitools.ThemeUtil
+import de.ph1b.audiobook.view.fragment.BookShelfFragment
 import rx.subjects.BehaviorSubject
 import java.util.*
 import javax.inject.Inject
@@ -152,7 +169,7 @@ constructor(c: Context) {
         @Synchronized set(autoRewindAmount) = sp.edit { setInt(PREF_KEY_AUTO_REWIND to autoRewindAmount) }
 
     /**
-     * @return true if a [de.ph1b.audiobook.model.Bookmark] should be set each time the sleep
+     * @return true if a [Bookmark] should be set each time the sleep
      * * timer is called
      */
     @Synchronized fun setBookmarkOnSleepTimer(): Boolean {
