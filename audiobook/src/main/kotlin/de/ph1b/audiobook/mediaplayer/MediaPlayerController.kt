@@ -11,41 +11,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
  * /licenses/>.
  */
 
@@ -54,11 +20,11 @@ package de.ph1b.audiobook.mediaplayer
 import android.content.Context
 import android.content.Intent
 import de.ph1b.audiobook.activity.BookActivity
-import de.ph1b.audiobook.fragment.BookShelfFragment
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
+import de.ph1b.audiobook.view.fragment.BookShelfFragment
 import rx.Observable
 import rx.subjects.BehaviorSubject
 import rx.subscriptions.CompositeSubscription
@@ -75,7 +41,7 @@ import kotlin.concurrent.withLock
 class MediaPlayerController
 @Inject
 constructor(private val c: Context, private val prefs: PrefsManager, private val db: BookChest,
-            private val player: ExoMediaPlayer, private val playStateManager: PlayStateManager) {
+            private val player: Player, private val playStateManager: PlayStateManager) {
 
     private val lock = ReentrantLock()
     var book: Book? = null
@@ -183,13 +149,13 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
             when (state) {
                 MediaPlayerController.State.COMPLETED -> {
                     player.currentPosition = 0
-                    player.autoPlay = true
+                    player.playing = true
                     startUpdating()
                     playStateManager.playState.onNext(PlayStateManager.PlayState.PLAYING)
                     state = State.STARTED
                 }
                 MediaPlayerController.State.PAUSED -> {
-                    player.autoPlay = true
+                    player.playing = true
                     startUpdating()
                     playStateManager.playState.onNext(PlayStateManager.PlayState.PLAYING)
                     state = State.STARTED
@@ -289,7 +255,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      */
     fun stop() {
         lock.withLock {
-            player.autoPlay = false
+            player.playing = false
             stopUpdating()
             playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
             if (sleepTimerActive()) {
@@ -338,7 +304,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
             if (book != null) {
                 when (state) {
                     MediaPlayerController.State.STARTED -> {
-                        player.autoPlay = false
+                        player.playing = false
                         stopUpdating()
 
                         if (rewind) {
@@ -406,7 +372,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                     db.updateBook(book!!)
                     prepare()
                     if (wasPlaying) {
-                        player.autoPlay = true
+                        player.playing = true
                         state = State.STARTED
                         playStateManager.playState.onNext(PlayStateManager.PlayState.PLAYING)
                     } else {

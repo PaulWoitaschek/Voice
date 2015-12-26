@@ -114,8 +114,8 @@ constructor(c: Context) {
 
     /**
      * Like [PrefsManager.collectionFolders] but with
-     * [de.ph1b.audiobook.model.Book.Type.SINGLE_FILE] or
-     * [de.ph1b.audiobook.model.Book.Type.SINGLE_FOLDER].
+     * [Book.Type.SINGLE_FILE] or
+     * [Book.Type.SINGLE_FOLDER].
      */
     var singleBookFolders: List<String>
         @Synchronized get() {
