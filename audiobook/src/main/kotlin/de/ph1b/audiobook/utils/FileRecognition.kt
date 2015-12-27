@@ -38,7 +38,7 @@ object FileRecognition {
         } else {
             val extension = Files.getFileExtension(it.name)
                     .toLowerCase()
-            return@FileFilter Extensions.AUDIO.contains(extension)
+            return@FileFilter Extensions.AUDIO.contains(".$extension")
         }
     }
     val folderAndImagesFilter = FileFilter {
