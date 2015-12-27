@@ -27,8 +27,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 91
-        versionName '2.5.0.1'
+        versionCode 92
+        versionName '2.5.0.2'
     }
 
     buildTypes {
@@ -126,7 +126,7 @@ dependencies {
     testCompile "junit:junit:4.12"
 
     // rx extensions
-    compile "io.reactivex:rxandroid:1.0.1"
+    compile "io.reactivex:rxandroid:1.1.0"
     compile "io.reactivex:rxjava:1.1.0"
     compile 'com.jakewharton.rxbinding:rxbinding-kotlin:0.3.0'
 
