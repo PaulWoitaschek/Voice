@@ -11,45 +11,11 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
  * /licenses/>.
  */
 
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
-package de.ph1b.audiobook.fragment
+package de.ph1b.audiobook.view.fragment
 
 import android.content.Context
 import android.content.Intent
@@ -72,14 +38,13 @@ import de.ph1b.audiobook.dialog.BookmarkDialogFragment
 import de.ph1b.audiobook.dialog.EditBookTitleDialogFragment
 import de.ph1b.audiobook.dialog.EditCoverDialogFragment
 import de.ph1b.audiobook.dialog.NoFolderWarningDialogFragment
+import de.ph1b.audiobook.fragment.BaseFragment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.presenter.BookShelfPresenter
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
-import nucleus.factory.RequiresPresenter
 import java.util.*
 import javax.inject.Inject
 
@@ -88,15 +53,16 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-@RequiresPresenter(BookShelfPresenter::class)
-class BookShelfFragment : NucleusBaseFragment<BookShelfPresenter>(), BookShelfAdapter.OnItemClickListener, EditCoverDialogFragment.OnEditBookFinished {
+class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, EditCoverDialogFragment.OnEditBookFinished {
 
     init {
         App.component().inject(this)
     }
 
+
     // injection
     @Inject internal lateinit var prefs: PrefsManager
+    @Inject internal lateinit var presenter: BookShelfPresenter
 
     // view
     private lateinit var recyclerView: RecyclerView
@@ -121,6 +87,7 @@ class BookShelfFragment : NucleusBaseFragment<BookShelfPresenter>(), BookShelfAd
         super.onCreate(savedInstanceState)
 
         setHasOptionsMenu(true)
+
 
         adapter = BookShelfAdapter(context, this)
     }
@@ -229,7 +196,6 @@ class BookShelfFragment : NucleusBaseFragment<BookShelfPresenter>(), BookShelfAd
         adapter.notifyItemAtIdChanged(bookId)
     }
 
-
     /**
      * Returns the amount of columns the main-grid will need.
 
@@ -274,8 +240,8 @@ class BookShelfFragment : NucleusBaseFragment<BookShelfPresenter>(), BookShelfAd
      *
      * @param book the removed book
      */
-    fun booksRemoved(books: List<Book>) {
-        adapter.removeBooks(books)
+    fun bookRemoved(book: Book) {
+        adapter.removeBook(book)
     }
 
     /**
@@ -322,8 +288,8 @@ class BookShelfFragment : NucleusBaseFragment<BookShelfPresenter>(), BookShelfAd
     /**
      * Sets the fab icon correctly accordingly to the new play state.
      */
-    fun setPlayState(playState: PlayStateManager.PlayState) {
-        if (playState === PlayStateManager.PlayState.PLAYING) {
+    fun setPlayerPlaying(playing: Boolean) {
+        if (playing) {
             playPauseDrawable.transformToPause(!firstPlayStateUpdate)
         } else {
             playPauseDrawable.transformToPlay(!firstPlayStateUpdate)
@@ -367,6 +333,18 @@ class BookShelfFragment : NucleusBaseFragment<BookShelfPresenter>(), BookShelfAd
          * @param sharedViews A mapping of the shared views and their transition names
          */
         fun onBookSelected(bookId: Long, sharedViews: Map<View, String>)
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        presenter.bind(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        presenter.unbind()
     }
 
     companion object {

@@ -1,38 +1,54 @@
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.presenter
 
 import android.os.Build
-import android.os.Bundle
 import android.os.Environment
 import android.text.TextUtils
 import de.ph1b.audiobook.dialog.HideFolderDialog
 import de.ph1b.audiobook.model.NaturalOrderComparator
+import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.utils.FileRecognition
+import de.ph1b.audiobook.view.FolderChooserActivity
 import de.ph1b.audiobook.view.FolderChooserView
-import nucleus.presenter.Presenter
+import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
 import java.io.File
 import java.util.*
 import java.util.regex.Pattern
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * The Presenter for [FolderChooserView]
  *
  * @author Paul Woitaschek
  */
-class FolderChooserPresenter : Presenter<FolderChooserView>() {
+@Singleton
+class FolderChooserPresenter
+@Inject
+constructor(private val prefsManager: PrefsManager)
+: Presenter<FolderChooserView>() {
 
     private val rootDirs = ArrayList<File>()
     private var chosenFile: File? = null
 
-    override fun onCreate(savedState: Bundle?) {
-        super.onCreate(savedState)
-
-        chosenFile = savedState?.getSerializable(SI_CHOSEN_FILE) as File?
-    }
-
-    override fun onTakeView(view: FolderChooserView) {
-        super.onTakeView(view)
-
+    override fun onBind(view: FolderChooserView, subscriptions: CompositeSubscription) {
         refreshRootDirs()
 
         if (chosenFile != null ) {
@@ -42,12 +58,6 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
         } else {
             fileSelected(null)
         }
-    }
-
-    override fun onSave(state: Bundle) {
-        super.onSave(state)
-
-        state.putSerializable(SI_CHOSEN_FILE, chosenFile)
     }
 
     /**
@@ -60,13 +70,13 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
     /**
      * Call this when choose was clicked.
      *
-     * Asks the user to add a .nomedia file if there is none. Else calls [FolderChooserView.finishActivityWithSuccess]
+     * Asks the user to add a .nomedia file if there is none. Else calls [FolderChooserView.finishWithResult]
      */
     fun chooseClicked() {
         if (chosenFile!!.isDirectory && !HideFolderDialog.getNoMediaFileByFolder(chosenFile!!).exists()) {
-            view.askAddNoMediaFile(chosenFile!!)
+            view!!.askAddNoMediaFile(chosenFile!!)
         } else {
-            view.finishActivityWithSuccess(chosenFile!!)
+            addFileAndTerminate(chosenFile!!)
         }
     }
 
@@ -87,9 +97,11 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
      */
     fun fileSelected(selectedFile: File?) {
         chosenFile = selectedFile
-        view.showNewData(selectedFile?.closestFolder()?.getContentsSorted() ?: emptyList())
-        view.setCurrentFolderText(selectedFile?.name ?: "")
-        view.setUpButtonEnabled(canGoBack())
+        view!!.apply {
+            showNewData(selectedFile?.closestFolder()?.getContentsSorted() ?: emptyList())
+            setCurrentFolderText(selectedFile?.name ?: "")
+            setUpButtonEnabled(canGoBack())
+        }
     }
 
     private fun canGoBack(): Boolean {
@@ -124,14 +136,80 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
      * Call this after the user made a decision on adding a .nomedia file.
      */
     fun hideFolderSelectionMade() {
-        view.finishActivityWithSuccess(chosenFile!!)
+        addFileAndTerminate(chosenFile!!)
+    }
+
+    private fun addFileAndTerminate(chosen: File) {
+        when (view!!.getMode()) {
+            FolderChooserActivity.OperationMode.COLLECTION_BOOK -> {
+                if (canAddNewFolder(chosen.absolutePath)) {
+                    val collections = ArrayList(prefsManager.collectionFolders)
+                    collections.add(chosen.absolutePath)
+                    prefsManager.collectionFolders = collections
+                }
+                Timber.v("chosenCollection = $chosen")
+            }
+            FolderChooserActivity.OperationMode.SINGLE_BOOK -> {
+                if (canAddNewFolder(chosen.absolutePath)) {
+                    val singleBooks = ArrayList(prefsManager.singleBookFolders)
+                    singleBooks.add(chosen.absolutePath)
+                    prefsManager.singleBookFolders = singleBooks
+                }
+                Timber.v("chosenSingleBook = $chosen")
+            }
+        }
+
+        view!!.finishWithResult()
+    }
+
+    /**
+     * @param newFile the new folder file
+     * *
+     * @return true if the new folder is not added yet and is no sub- or parent folder of an existing
+     * * book folder
+     */
+    private fun canAddNewFolder(newFile: String): Boolean {
+        Timber.v("canAddNewFolder called with $newFile")
+        val folders = ArrayList(prefsManager.collectionFolders)
+        folders.addAll(prefsManager.singleBookFolders)
+
+        // if this is the first folder adding is always allowed
+        if (folders.isEmpty()) {
+            return true
+        }
+
+        val newParts = newFile.split(File.separator);
+        for (s in folders) {
+
+            if (newFile == s) {
+                Timber.i("file is already in the list.")
+                // same folder, this should not be added
+                return false
+            }
+
+            val oldParts = s.split(File.separator);
+            val max = Math.min(oldParts.size, newParts.size) - 1
+            var filesAreSubsets = true;
+            for (i in 0..max) {
+                if (oldParts[i] != newParts[i]) {
+                    filesAreSubsets = false
+                }
+            }
+            if (filesAreSubsets) {
+                Timber.i("the files are sub folders of each other.")
+                view!!.showSubFolderWarning(s, newFile)
+                return false
+            }
+        }
+
+        return true
     }
 
     private fun refreshRootDirs() {
         rootDirs.clear()
         rootDirs.addAll(storageDirs())
-        view.newRootFolders(rootDirs)
-        view.setChooseButtonEnabled(rootDirs.isNotEmpty())
+        view!!.newRootFolders(rootDirs)
+        view!!.setChooseButtonEnabled(rootDirs.isNotEmpty())
     }
 
 
@@ -222,9 +300,5 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
         } else {
             return emptyList()
         }
-    }
-
-    companion object {
-        private val SI_CHOSEN_FILE = "siChosenFile"
     }
 }

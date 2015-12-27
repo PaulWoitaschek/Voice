@@ -11,7 +11,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
  * /licenses/>.
  */
 
@@ -21,7 +21,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import de.ph1b.audiobook.receiver.HeadsetPlugReceiver;
+import de.ph1b.audiobook.mediaplayer.Player;
+import de.ph1b.audiobook.mediaplayer.VlcMediaPlayer;
 import de.ph1b.audiobook.uitools.ImageLinkService;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
@@ -48,8 +49,7 @@ public class BaseModule {
     }
 
     @Provides
-    @Singleton
-    HeadsetPlugReceiver provideHeadsetPlugReceiver() {
-        return new HeadsetPlugReceiver();
+    Player providePlayer() {
+        return new VlcMediaPlayer();
     }
 }

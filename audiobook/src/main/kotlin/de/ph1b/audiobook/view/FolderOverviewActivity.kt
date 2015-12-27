@@ -11,28 +11,11 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
  * /licenses/>.
  */
 
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
-package de.ph1b.audiobook.activity
+package de.ph1b.audiobook.view
 
 
 import android.animation.Animator
@@ -47,27 +30,32 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewAnimationUtils
-import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.getbase.floatingactionbutton.FloatingActionButton
 import com.getbase.floatingactionbutton.FloatingActionsMenu
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.activity.BaseActivity
 import de.ph1b.audiobook.adapter.FolderOverviewAdapter
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.presenter.FolderOverviewPresenter
 import de.ph1b.audiobook.uitools.DividerItemDecoration
-import nucleus.factory.RequiresPresenter
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Activity that lets the user add, edit or remove the set audiobook folders.
 
  * @author Paul Woitaschek
  */
-@RequiresPresenter(FolderOverviewPresenter::class)
-class FolderOverviewActivity : NucleusBaseActivity<FolderOverviewPresenter>() {
+class FolderOverviewActivity : BaseActivity () {
+
+    init {
+        App.component().inject(this)
+    }
 
     private val BACKGROUND_OVERLAY_VISIBLE = "backgroundOverlayVisibility"
+
+    @Inject internal lateinit var presenter: FolderOverviewPresenter
 
     private val bookCollections = ArrayList<String>(10)
     private val singleBooks = ArrayList<String>(10)
@@ -153,7 +141,6 @@ class FolderOverviewActivity : NucleusBaseActivity<FolderOverviewPresenter>() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        App.component().inject(this)
 
         setContentView(R.layout.activity_folder_overview)
         val toolbar = findViewById(R.id.toolbar) as Toolbar
@@ -222,11 +209,6 @@ class FolderOverviewActivity : NucleusBaseActivity<FolderOverviewPresenter>() {
         startActivityForResult(intent, PICKER_REQUEST_CODE)
     }
 
-    fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG)
-                .show()
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -236,11 +218,18 @@ class FolderOverviewActivity : NucleusBaseActivity<FolderOverviewPresenter>() {
         fam.setOnFloatingActionsMenuUpdateListener(famMenuListener)
 
         backgroundOverlay.visibility = View.INVISIBLE
+    }
 
-        // this is necessary as we did not reach onResume at this point and thus the presenter
-        // has no view
-        presenter.takeView(this)
-        presenter.onActivityResult(requestCode, resultCode, data)
+    override fun onStart() {
+        super.onStart()
+
+        presenter.bind(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        presenter.unbind()
     }
 
     override fun onBackPressed() {
