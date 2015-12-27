@@ -15,6 +15,8 @@
  * /licenses/>.
  */
 
+import com.google.common.io.Files
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
@@ -25,8 +27,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 87
-        versionName '2.4.4.1'
+        versionCode 90
+        versionName '2.5-beta1'
     }
 
     buildTypes {
@@ -41,6 +43,15 @@ android {
             shrinkResources false
             applicationIdSuffix ".debug"
             resValue "string", "app_name", "[DBG] Material Player"
+        }
+    }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'armeabi-v7a', 'armeabi'
+            universalApk true
         }
     }
 
@@ -65,7 +76,11 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
-            output.outputFile = file("apks/${variant.versionCode}-${variant.versionName}-${variant.name}-${variant.applicationId}.apk")
+            def original = output.outputFile
+            def originalPath = original.absolutePath
+            def originalName = Files.getNameWithoutExtension(originalPath)
+            def newDestination = "apks/${variant.versionCode}-${variant.versionName}-${originalName}.apk"
+            output.outputFile = file(newDestination)
         }
     }
 }
