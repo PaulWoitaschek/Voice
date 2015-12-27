@@ -134,6 +134,7 @@ class SettingsFragment : PreferenceFragment(), DonationDialogFragment.OnDonation
     }
 
     override fun onAttach(activity: Activity) {
+        @Suppress("DEPRECATION")
         super.onAttach(activity)
 
         hostingActivity = activity as BaseActivity

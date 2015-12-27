@@ -11,7 +11,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
  * /licenses/>.
  */
 
@@ -158,7 +158,9 @@ class WidgetUpdateService : Service() {
             val window = getSystemService(Context.WINDOW_SERVICE) as WindowManager
             val display = window.defaultDisplay
 
+            @Suppress("DEPRECATION")
             val displayWidth = display.width
+            @Suppress("DEPRECATION")
             val displayHeight = display.height
 
             return orientation != Configuration.ORIENTATION_LANDSCAPE && (orientation == Configuration.ORIENTATION_PORTRAIT || displayWidth == displayHeight || displayWidth < displayHeight)
