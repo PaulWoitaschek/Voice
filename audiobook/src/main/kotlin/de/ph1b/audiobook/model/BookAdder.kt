@@ -11,41 +11,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
  * /licenses/>.
  */
 
@@ -56,10 +22,8 @@ import android.app.ActivityManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.media.MediaMetadataRetriever
 import android.os.Build
 import android.support.v4.content.ContextCompat
-import android.text.TextUtils
 import com.google.common.collect.Collections2
 import com.google.common.collect.ImmutableList
 import com.google.common.io.Files
@@ -70,6 +34,7 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.utils.BookVendor
 import de.ph1b.audiobook.utils.FileRecognition
+import de.ph1b.audiobook.utils.MediaAnalyzer
 import rx.subjects.BehaviorSubject
 import timber.log.Timber
 import java.io.File
@@ -88,63 +53,11 @@ import javax.inject.Singleton
 @Singleton
 class BookAdder
 @Inject
-constructor(private val c: Context, private val prefs: PrefsManager, private val db: BookChest) {
+constructor(private val c: Context, private val prefs: PrefsManager, private val db: BookChest, private val bookVendor: BookVendor, private val activityManager: ActivityManager, private val imageHelper: ImageHelper, private val mediaAnalyzer: MediaAnalyzer) {
 
     private val executor = Executors.newSingleThreadExecutor()
     private val scannerActive = BehaviorSubject.create(false)
-    @Inject internal lateinit var bookVendor: BookVendor
-    @Inject internal lateinit var activityManager: ActivityManager
-    @Inject internal lateinit var imageHelper: ImageHelper
     @Volatile private var stopScanner = false
-
-    /**
-     * Returns the name of the book we want to add. If there is a tag embedded, use that one. Else
-     * derive the title from the filename.
-
-     * @param firstChapterFile A path to a file
-     * *
-     * @param rootFile         The root of the book to add
-     * *
-     * @return The name of the book we add
-     */
-    private fun getBookName(firstChapterFile: File, rootFile: File, mmr: MediaMetadataRetriever): String {
-        var bookName: String? = null
-        try {
-            mmr.setDataSource(firstChapterFile.absolutePath)
-            bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM)
-        } catch (ignored: RuntimeException) {
-        }
-
-        if (TextUtils.isEmpty(bookName)) {
-            val withoutExtension = Files.getNameWithoutExtension(rootFile.absolutePath)
-            bookName = if (withoutExtension.isEmpty()) rootFile.name else withoutExtension
-        }
-        return bookName!!
-    }
-
-    /**
-     * Returns the author of the book we want to add. If there is a tag embedded, use that one. Else
-     * return null
-
-     * @param firstChapterFile A path to a file
-     * *
-     * @return The name of the book we add
-     */
-    private fun getAuthor(firstChapterFile: File, mmr: MediaMetadataRetriever): String? {
-        try {
-            mmr.setDataSource(firstChapterFile.absolutePath)
-            var bookName: String? = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_COMPOSER)
-            if (TextUtils.isEmpty(bookName)) {
-                bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_AUTHOR)
-            }
-            if (TextUtils.isEmpty(bookName)) {
-                bookName = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
-            }
-            return bookName
-        } catch (ignored: RuntimeException) {
-            return null
-        }
-    }
 
     /**
      * Adds files recursively. First takes all files and adds them sorted to the return list. Then
@@ -325,17 +238,17 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                 Timber.v("stopped")
             }
         }
-        Timber.v("scanforfiles method done (executor should be called")
+        Timber.v("scanForFiles method done (executor should be called")
     }
 
     /**
-     * Gets the saved single book files the User chose in [de.ph1b.audiobook.activity.FolderChooserActivity]
+     * Gets the saved single book files the User chose in [FolderChooserView]
 
      * @return An array of chosen single book folders.
      * *
-     * @see de.ph1b.audiobook.model.Book.Type.SINGLE_FILE
+     * @see Book.Type.SINGLE_FILE
 
-     * @see de.ph1b.audiobook.model.Book.Type.SINGLE_FOLDER
+     * @see Book.Type.SINGLE_FOLDER
      */
     private val singleBookFiles: List<File>
         get() {
@@ -348,7 +261,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         }
 
     /**
-     * Gets the saved collection book files the User chose in [de.ph1b.audiobook.activity.FolderChooserActivity]
+     * Gets the saved collection book files the User chose in [FolderChooserView]
 
      * @return An array of chosen collection book folders.
      * *
@@ -457,13 +370,16 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         val bookRoot = if (rootFile.isDirectory)
             rootFile.absolutePath
         else
-            rootFile.getParent()
+            rootFile.parent
 
         val firstChapterFile = newChapters.first().file
-        val mmr = MediaMetadataRetriever()
-        val bookName = getBookName(firstChapterFile, rootFile, mmr)
-        val author = getAuthor(firstChapterFile, mmr)
-        mmr.release()
+        val result = mediaAnalyzer.compute(firstChapterFile)
+        var bookName = result.bookName
+        if (bookName.isNullOrEmpty()) {
+            val withoutExtension = Files.getNameWithoutExtension(rootFile.absolutePath)
+            bookName = if (withoutExtension.isEmpty()) rootFile.name else withoutExtension
+        }
+        bookName!!
 
         var orphanedBook = getBookFromDb(rootFile, type, true)
         if (orphanedBook == null) {
@@ -472,7 +388,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                     ImmutableList.of<Bookmark>(),
                     type,
                     false,
-                    author,
+                    result.author,
                     firstChapterFile,
                     0,
                     bookName,
@@ -610,42 +526,14 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
     private fun getChaptersByRootFile(rootFile: File): List<Chapter> {
         val containingFiles = getAllContainingFiles(listOf(rootFile), true)
                 .sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
-        // sort the files in a natural way
 
-        // get duration and if there is no cover yet, try to get an embedded dover (up to 5 times)
         val containingMedia = ArrayList<Chapter>(containingFiles.size)
-        val mmr = MediaMetadataRetriever()
-        try {
-            for (f in containingFiles) {
-                try {
-                    mmr.setDataSource(f.absolutePath)
-
-                    // getting chapter-name
-                    var chapterName: String? = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
-                    // checking for dot index because otherwise a file called ".mp3" would have no name.
-                    if (TextUtils.isEmpty(chapterName)) {
-                        val fileName = Files.getNameWithoutExtension(f.absolutePath)!!
-                        chapterName = if (fileName.isEmpty()) f.name!! else fileName
-                    }
-                    chapterName!!
-
-                    val durationString = mmr.extractMetadata(
-                            MediaMetadataRetriever.METADATA_KEY_DURATION)
-                    if (durationString != null) {
-                        val duration = Integer.parseInt(durationString)
-                        if (duration > 0) {
-                            containingMedia.add(Chapter(f, chapterName, duration))
-                        }
-                    }
-
-                    throwIfStopRequested()
-                } catch (e: RuntimeException) {
-                    Timber.e("Error at file=$f")
-                }
-
+        for (f in containingFiles) {
+            val result = mediaAnalyzer.compute(f)
+            if (result.duration > 0) {
+                containingMedia.add(Chapter(f, result.chapterName, result.duration))
             }
-        } finally {
-            mmr.release()
+            throwIfStopRequested()
         }
         return containingMedia
     }
@@ -677,12 +565,12 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      */
     private fun getBookFromDb(rootFile: File, type: Book.Type, orphaned: Boolean): Book? {
         Timber.d("getBookFromDb, rootFile=$rootFile, type=$type, orphaned=$orphaned")
-        val books: List<Book>
-        if (orphaned) {
-            books = db.getOrphanedBooks()
-        } else {
-            books = bookVendor.all()
-        }
+        val books: List<Book> =
+                if (orphaned) {
+                    db.getOrphanedBooks()
+                } else {
+                    bookVendor.all()
+                }
         if (rootFile.isDirectory) {
             for (b in books) {
                 if (rootFile.absolutePath == b.root && type === b.type) {
