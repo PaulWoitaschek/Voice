@@ -362,7 +362,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      */
     fun changePosition(time: Int, file: File) {
         lock.withLock {
-            Timber.v("time=%d, relPath=%s", time, file)
+            Timber.v("changePosition with time $time and file $file")
             if (book != null) {
                 val changeFile = (book!!.currentChapter().file != file)
                 Timber.v("changeFile=%s", changeFile)

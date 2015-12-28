@@ -17,8 +17,9 @@
 
 package de.ph1b.audiobook.utils
 
+import android.os.Build
+import com.google.common.collect.Lists
 import com.google.common.io.Files
-import org.videolan.libvlc.util.Extensions
 import java.io.FileFilter
 import java.util.*
 
@@ -31,6 +32,35 @@ import java.util.*
 object FileRecognition {
 
     private val imageTypes = Arrays.asList("jpg", "jpeg", "png", "bmp")
+    private val audioTypes: List<String>
+
+    init {
+        audioTypes = Lists.newArrayList("3gp",
+                "aac",
+                "awb",
+                "flac",
+                "imy",
+                "m4a",
+                "m4b",
+                "mp4",
+                "mid",
+                "mkv",
+                "mp3",
+                "mp3package",
+                "mxmf",
+                "ogg",
+                "oga",
+                "ota",
+                "rtttl",
+                "rtx",
+                "wav",
+                "wma",
+                "xmf"
+        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            audioTypes.add("opus")
+        }
+    }
 
     val folderAndMusicFilter = FileFilter {
         if (it.isDirectory) {
@@ -38,7 +68,7 @@ object FileRecognition {
         } else {
             val extension = Files.getFileExtension(it.name)
                     .toLowerCase()
-            return@FileFilter Extensions.AUDIO.contains(".$extension")
+            return@FileFilter audioTypes.contains(extension)
         }
     }
     val folderAndImagesFilter = FileFilter {

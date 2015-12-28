@@ -17,12 +17,14 @@
 
 package de.ph1b.audiobook.injection;
 
+import android.content.Context;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import de.ph1b.audiobook.mediaplayer.AntennaPlayer;
 import de.ph1b.audiobook.mediaplayer.Player;
-import de.ph1b.audiobook.mediaplayer.VlcMediaPlayer;
 import de.ph1b.audiobook.uitools.ImageLinkService;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
@@ -49,7 +51,7 @@ public class BaseModule {
     }
 
     @Provides
-    Player providePlayer() {
-        return new VlcMediaPlayer();
+    Player providePlayer(Context context) {
+        return new AntennaPlayer(context);
     }
 }
