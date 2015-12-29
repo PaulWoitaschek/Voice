@@ -46,15 +46,6 @@ android {
         }
     }
 
-    splits {
-        abi {
-            enable true
-            reset()
-            include 'x86', 'armeabi-v7a', 'armeabi'
-            universalApk true
-        }
-    }
-
     testOptions {
         unitTests.returnDefaultValues = true
     }
