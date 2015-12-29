@@ -37,9 +37,7 @@ constructor(context: Context)
     private var state = State.NONE
 
     private val mediaPlayer = object : MediaPlayer(context, false) {
-        override fun useSonic(): Boolean {
-            return true
-        }
+        override fun useSonic() = true
     }
 
     init {
@@ -49,10 +47,17 @@ constructor(context: Context)
             errorSubject.onNext(Unit)
             true
         }
-        mediaPlayer.setOnCompletionListener { completionSubject.onNext(Unit) }
+
+        mediaPlayer.setOnCompletionListener {
+            if (currentFile != null) prepare(currentFile!!)
+            completionSubject.onNext(Unit)
+        }
     }
 
+    private var currentFile: File? = null
+
     override fun prepare(file: File) {
+        currentFile = file
         mediaPlayer.reset()
         mediaPlayer.setDataSource(file.absolutePath)
         mediaPlayer.prepare()
