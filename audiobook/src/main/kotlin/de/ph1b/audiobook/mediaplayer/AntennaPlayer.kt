@@ -18,6 +18,7 @@
 package de.ph1b.audiobook.mediaplayer
 
 import android.content.Context
+import android.os.Build
 import org.antennapod.audio.MediaPlayer
 import rx.subjects.PublishSubject
 import timber.log.Timber
@@ -37,7 +38,7 @@ constructor(context: Context)
     private var state = State.NONE
 
     private val mediaPlayer = object : MediaPlayer(context, false) {
-        override fun useSonic() = true
+        override fun useSonic() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
     }
 
     init {
