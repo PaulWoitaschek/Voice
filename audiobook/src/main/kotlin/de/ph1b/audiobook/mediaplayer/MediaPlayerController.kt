@@ -126,7 +126,6 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
     private fun prepare() {
         lock.withLock {
             if (book != null) {
-
                 try {
                     player.prepare(book!!.currentChapter().file)
                     player.currentPosition = book!!.time
@@ -362,7 +361,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      */
     fun changePosition(time: Int, file: File) {
         lock.withLock {
-            Timber.v("time=%d, relPath=%s", time, file)
+            Timber.v("changePosition with time $time and file $file")
             if (book != null) {
                 val changeFile = (book!!.currentChapter().file != file)
                 Timber.v("changeFile=%s", changeFile)
@@ -380,6 +379,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                         playStateManager.playState.onNext(PlayStateManager.PlayState.PAUSED)
                     }
                 } else {
+                    if (state == State.STOPPED) prepare()
                     when (state) {
                         MediaPlayerController.State.STARTED, MediaPlayerController.State.PAUSED, State.COMPLETED -> {
                             player.currentPosition = time
