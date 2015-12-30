@@ -35,17 +35,16 @@ import com.jakewharton.rxbinding.view.clicks
 import com.jakewharton.rxbinding.widget.RxAdapterView
 import com.jakewharton.rxbinding.widget.itemClicks
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.activity.BaseActivity
 import de.ph1b.audiobook.adapter.FolderChooserAdapter
 import de.ph1b.audiobook.dialog.HideFolderDialog
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.mvp.RxBaseActivity
 import de.ph1b.audiobook.presenter.FolderChooserPresenter
 import de.ph1b.audiobook.uitools.HighlightedSpinnerAdapter
 import de.ph1b.audiobook.utils.PermissionHelper
 import timber.log.Timber
 import java.io.File
 import java.util.*
-import javax.inject.Inject
 
 /**
  * Activity for choosing an audiobook folder. If there are multiple SD-Cards, the Activity unifies
@@ -58,16 +57,17 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class FolderChooserActivity : BaseActivity(), FolderChooserView, HideFolderDialog.OnChosenListener {
+class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPresenter>(), FolderChooserView, HideFolderDialog.OnChosenListener {
+
+    override fun newPresenter() = FolderChooserPresenter()
+
+    override fun provideView() = this
 
     override fun showSubFolderWarning(first: String, second: String) {
         val message = "${getString(R.string.adding_failed_subfolder)}\n$first\n$second"
         Toast.makeText(this, message, Toast.LENGTH_LONG)
                 .show()
     }
-
-
-    @Inject lateinit var presenter: FolderChooserPresenter
 
     init {
         App.component().inject(this)
@@ -236,18 +236,6 @@ class FolderChooserActivity : BaseActivity(), FolderChooserView, HideFolderDialo
 
     override fun onChosen() {
         presenter.hideFolderSelectionMade()
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        presenter.bind(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        presenter.unbind()
     }
 
     enum class OperationMode {

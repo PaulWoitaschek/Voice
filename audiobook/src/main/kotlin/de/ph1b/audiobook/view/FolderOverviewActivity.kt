@@ -34,28 +34,29 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.getbase.floatingactionbutton.FloatingActionButton
 import com.getbase.floatingactionbutton.FloatingActionsMenu
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.activity.BaseActivity
 import de.ph1b.audiobook.adapter.FolderOverviewAdapter
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.mvp.RxBaseActivity
 import de.ph1b.audiobook.presenter.FolderOverviewPresenter
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import java.util.*
-import javax.inject.Inject
 
 /**
  * Activity that lets the user add, edit or remove the set audiobook folders.
 
  * @author Paul Woitaschek
  */
-class FolderOverviewActivity : BaseActivity () {
+class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOverviewPresenter> () {
+
+    override fun newPresenter() = FolderOverviewPresenter()
+
+    override fun provideView() = this
 
     init {
         App.component().inject(this)
     }
 
     private val BACKGROUND_OVERLAY_VISIBLE = "backgroundOverlayVisibility"
-
-    @Inject internal lateinit var presenter: FolderOverviewPresenter
 
     private val bookCollections = ArrayList<String>(10)
     private val singleBooks = ArrayList<String>(10)
@@ -218,18 +219,6 @@ class FolderOverviewActivity : BaseActivity () {
         fam.setOnFloatingActionsMenuUpdateListener(famMenuListener)
 
         backgroundOverlay.visibility = View.INVISIBLE
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        presenter.bind(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        presenter.unbind()
     }
 
     override fun onBackPressed() {

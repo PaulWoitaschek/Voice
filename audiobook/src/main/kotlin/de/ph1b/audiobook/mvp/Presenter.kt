@@ -15,7 +15,7 @@
  * /licenses/>.
  */
 
-package de.ph1b.audiobook.presenter
+package de.ph1b.audiobook.mvp
 
 import rx.subscriptions.CompositeSubscription
 import timber.log.Timber

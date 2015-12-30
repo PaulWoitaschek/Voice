@@ -17,23 +17,26 @@
 
 package de.ph1b.audiobook.presenter
 
+import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.view.FolderOverviewActivity
 import rx.subscriptions.CompositeSubscription
 import java.util.*
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * The presenter for [FolderOverviewActivity]
  *
  * @author Paul Woitaschek
  */
-@Singleton
-class FolderOverviewPresenter
-@Inject
-constructor(private val prefsManager: PrefsManager)
-: Presenter<FolderOverviewActivity>() {
+class FolderOverviewPresenter : Presenter<FolderOverviewActivity>() {
+
+    init {
+        App.component().inject(this)
+    }
+
+    @Inject lateinit var prefsManager: PrefsManager
 
     override fun onBind(view: FolderOverviewActivity, subscriptions: CompositeSubscription) {
         updateFoldersInView()
