@@ -11,58 +11,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
  * /licenses/>.
  */
 
@@ -88,6 +37,7 @@ import com.jakewharton.rxbinding.widget.SeekBarStopChangeEvent
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.activity.SettingsActivity
+import de.ph1b.audiobook.adapter.MultiLineSpinnerAdapter
 import de.ph1b.audiobook.dialog.BookmarkDialogFragment
 import de.ph1b.audiobook.dialog.JumpToPositionDialogFragment
 import de.ph1b.audiobook.dialog.prefs.PlaybackSpeedDialogFragment
@@ -98,7 +48,6 @@ import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.CoverReplacement
-import de.ph1b.audiobook.uitools.HighlightedSpinnerAdapter
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.utils.BookVendor
 import rx.Observable
@@ -217,7 +166,7 @@ class BookPlayFragment : BaseFragment() {
 
             // adapter
             val chapters = book!!.chapters
-            val chapterNames = ArrayList<SpinnerData>(chapters.size)
+            val chapterNames = ArrayList<MultiLineSpinnerAdapter.Data<String>>(chapters.size)
             for (i in chapters.indices) {
                 var chapterName = chapters[i].name
 
@@ -237,12 +186,13 @@ class BookPlayFragment : BaseFragment() {
                     }
                 }
 
-                chapterNames.add(SpinnerData(chapterName))
+                chapterNames.add(MultiLineSpinnerAdapter.Data(chapterName, chapterName))
             }
 
-            val spinnerAdapter = HighlightedSpinnerAdapter<String>(context, bookSpinner)
-            spinnerAdapter.addAll(chapterNames)
-            bookSpinner.adapter = spinnerAdapter
+            val adapter = MultiLineSpinnerAdapter<String>(bookSpinner)
+            adapter.setData(chapterNames)
+            bookSpinner.adapter = adapter
+            //bookSpinner.adapter = spinnerAdapter
             RxAdapterView.itemSelections(bookSpinner).subscribe {
                 // fire event only when that tag has been set (= this is not the first event) and
                 // this is a new value
@@ -284,10 +234,6 @@ class BookPlayFragment : BaseFragment() {
         }
 
         return view
-    }
-
-    private class SpinnerData(data: String) : HighlightedSpinnerAdapter.SpinnerData<String>(data) {
-        override fun getStringRepresentation(toRepresent: String): String = toRepresent
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
