@@ -17,6 +17,7 @@
 
 package de.ph1b.audiobook.mvp
 
+import android.os.Bundle
 import de.ph1b.audiobook.fragment.BaseFragment
 
 /**
@@ -30,17 +31,37 @@ abstract class RxBaseFragment <V, P> : BaseFragment() where P : Presenter<V> {
 
     abstract fun provideView(): V
 
-    public val presenter: P by lazy { newPresenter() }
+    public var presenter: P? = null
+        private set
 
-    override fun onStart() {
-        super.onStart()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-        presenter.bind(provideView())
+        presenter = newPresenter()
+        presenter!!.onRestore(savedInstanceState)
     }
 
-    override fun onStop() {
+    override fun onResume() {
+        super.onStart()
+
+        presenter!!.bind(provideView())
+    }
+
+    override fun onPause() {
         super.onStop()
 
-        presenter.unbind()
+        presenter!!.unbind()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        presenter!!.onSave(outState)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        presenter = null
     }
 }

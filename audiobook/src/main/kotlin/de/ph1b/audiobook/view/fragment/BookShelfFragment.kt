@@ -110,7 +110,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
 
         // init fab
         fab.setIconDrawable(playPauseDrawable)
-        fab.setOnClickListener { presenter.playPauseRequested() }
+        fab.setOnClickListener { presenter!!.playPauseRequested() }
 
         // init ActionBar
         val actionBar = hostingActivity.supportActionBar!!
@@ -335,18 +335,6 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
          * @param sharedViews A mapping of the shared views and their transition names
          */
         fun onBookSelected(bookId: Long, sharedViews: Map<View, String>)
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        presenter.bind(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        presenter.unbind()
     }
 
     companion object {

@@ -105,7 +105,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
                     permissions, grantResults)
             Timber.i("permissionGrantingWorked=%b", permissionGrantingWorked)
             if (permissionGrantingWorked) {
-                presenter.gotPermission()
+                presenter!!.gotPermission()
             } else {
                 PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE)
                 Timber.e("could not get permission")
@@ -150,7 +150,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
 
         // listeners
         chooseButton.clicks()
-                .subscribe() { presenter.chooseClicked() }
+                .subscribe() { presenter!!.chooseClicked() }
         abortButton.clicks()
                 .subscribe { finish() }
         upButton.clicks()
@@ -165,7 +165,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
         listView.itemClicks()
                 .subscribe {
                     val selectedFile = adapter.getItem(it)
-                    presenter.fileSelected(selectedFile)
+                    presenter!!.fileSelected(selectedFile)
                 }
 
         // spinner
@@ -177,12 +177,12 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
                 .subscribe {
                     Timber.i("spinner selected with position $it and adapter.count ${spinnerAdapter.count}")
                     val item = spinnerAdapter.getItem(it)
-                    presenter.fileSelected(item.data)
+                    presenter!!.fileSelected(item.data)
                 }
     }
 
     override fun onBackPressed() {
-        if (!presenter.backConsumed()) {
+        if (!presenter!!.backConsumed()) {
             super.onBackPressed()
         }
     }
@@ -235,7 +235,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     }
 
     override fun onChosen() {
-        presenter.hideFolderSelectionMade()
+        presenter!!.hideFolderSelectionMade()
     }
 
     enum class OperationMode {

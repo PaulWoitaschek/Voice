@@ -17,6 +17,7 @@
 
 package de.ph1b.audiobook.mvp
 
+import android.os.Bundle
 import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
 
@@ -30,6 +31,10 @@ abstract class Presenter<V> {
     protected var view: V? = null
 
     private var compositeSubscription: CompositeSubscription? = null
+
+    open fun onRestore(savedState: Bundle?) {
+
+    }
 
     fun bind(view: V) {
         if (this.view == null) {
@@ -47,6 +52,10 @@ abstract class Presenter<V> {
         Timber.i("Unbinding $view")
         this.view = null
         compositeSubscription?.unsubscribe()
+    }
+
+    open fun onSave(state: Bundle) {
+
     }
 
     abstract fun onBind(view: V, subscriptions: CompositeSubscription)

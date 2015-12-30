@@ -191,7 +191,7 @@ class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOver
                         .negativeText(R.string.dialog_cancel)
                         .onPositive { materialDialog, dialogAction ->
                             val itemToDelete = adapter.getItem(position)
-                            presenter.removeFolder(itemToDelete)
+                            presenter!!.removeFolder(itemToDelete)
                         }
                         .show()
             }
@@ -242,6 +242,7 @@ class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOver
         this.singleBooks.addAll(singleBooks)
         adapter.notifyDataSetChanged()
     }
+
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putBoolean(BACKGROUND_OVERLAY_VISIBLE, backgroundOverlay.visibility == View.VISIBLE)
