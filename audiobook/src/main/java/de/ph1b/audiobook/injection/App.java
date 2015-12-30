@@ -55,6 +55,8 @@ import de.ph1b.audiobook.persistence.BookChestTest;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.playback.BookReaderService;
 import de.ph1b.audiobook.playback.WidgetUpdateService;
+import de.ph1b.audiobook.presenter.BookShelfPresenter;
+import de.ph1b.audiobook.presenter.FolderChooserPresenter;
 import de.ph1b.audiobook.presenter.FolderOverviewPresenter;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.view.FolderChooserActivity;
@@ -159,6 +161,8 @@ public class App extends Application {
 
         void inject(BookActivity target);
 
+        void inject(FolderChooserPresenter target);
+
         void inject(BookPlayFragment target);
 
         void inject(BookmarkDialogFragment target);
@@ -172,6 +176,8 @@ public class App extends Application {
         void inject(BookShelfAdapter target);
 
         void inject(BookShelfFragment target);
+
+        void inject(BookShelfPresenter target);
 
         void inject(FolderOverviewPresenter target);
     }

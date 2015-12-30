@@ -38,9 +38,9 @@ import de.ph1b.audiobook.dialog.BookmarkDialogFragment
 import de.ph1b.audiobook.dialog.EditBookTitleDialogFragment
 import de.ph1b.audiobook.dialog.EditCoverDialogFragment
 import de.ph1b.audiobook.dialog.NoFolderWarningDialogFragment
-import de.ph1b.audiobook.fragment.BaseFragment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
+import de.ph1b.audiobook.mvp.RxBaseFragment
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.presenter.BookShelfPresenter
 import de.ph1b.audiobook.uitools.DividerItemDecoration
@@ -53,16 +53,18 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, EditCoverDialogFragment.OnEditBookFinished {
+class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(), BookShelfAdapter.OnItemClickListener, EditCoverDialogFragment.OnEditBookFinished {
+
+    override fun newPresenter() = BookShelfPresenter()
+
+    override fun provideView() = this
 
     init {
         App.component().inject(this)
     }
 
-
     // injection
     @Inject internal lateinit var prefs: PrefsManager
-    @Inject internal lateinit var presenter: BookShelfPresenter
 
     // view
     private lateinit var recyclerView: RecyclerView
@@ -108,7 +110,7 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
 
         // init fab
         fab.setIconDrawable(playPauseDrawable)
-        fab.setOnClickListener { presenter.playPauseRequested() }
+        fab.setOnClickListener { presenter!!.playPauseRequested() }
 
         // init ActionBar
         val actionBar = hostingActivity.supportActionBar!!
@@ -333,18 +335,6 @@ class BookShelfFragment : BaseFragment(), BookShelfAdapter.OnItemClickListener, 
          * @param sharedViews A mapping of the shared views and their transition names
          */
         fun onBookSelected(bookId: Long, sharedViews: Map<View, String>)
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        presenter.bind(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        presenter.unbind()
     }
 
     companion object {

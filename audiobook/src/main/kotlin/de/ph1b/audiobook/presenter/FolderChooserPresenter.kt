@@ -18,10 +18,13 @@
 package de.ph1b.audiobook.presenter
 
 import android.os.Build
+import android.os.Bundle
 import android.os.Environment
 import android.text.TextUtils
 import de.ph1b.audiobook.dialog.HideFolderDialog
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.NaturalOrderComparator
+import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.utils.FileRecognition
 import de.ph1b.audiobook.view.FolderChooserActivity
@@ -32,20 +35,22 @@ import java.io.File
 import java.util.*
 import java.util.regex.Pattern
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * The Presenter for [FolderChooserView]
  *
  * @author Paul Woitaschek
  */
-@Singleton
-class FolderChooserPresenter
-@Inject
-constructor(private val prefsManager: PrefsManager)
-: Presenter<FolderChooserView>() {
+class FolderChooserPresenter : Presenter<FolderChooserView>() {
+
+    init {
+        App.component().inject(this)
+    }
+
+    @Inject lateinit var prefsManager: PrefsManager
 
     private val rootDirs = ArrayList<File>()
+    private val SI_CHOSEN_FILE = "siChosenFile"
     private var chosenFile: File? = null
 
     override fun onBind(view: FolderChooserView, subscriptions: CompositeSubscription) {
@@ -299,6 +304,20 @@ constructor(private val prefsManager: PrefsManager)
             return asList.sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
         } else {
             return emptyList()
+        }
+    }
+
+    override fun onRestore(savedState: Bundle?) {
+        super.onRestore(savedState)
+
+        chosenFile = savedState?.getSerializable(SI_CHOSEN_FILE) as File?
+    }
+
+    override fun onSave(state: Bundle) {
+        super.onSave(state)
+
+        if (chosenFile != null) {
+            state.putSerializable(SI_CHOSEN_FILE, chosenFile!!)
         }
     }
 }
