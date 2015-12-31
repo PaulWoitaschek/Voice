@@ -213,7 +213,14 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
         Timber.i("newRootFolders called with $newFolders")
         spinnerGroup.visibility = if (newFolders.size <= 1) View.INVISIBLE else View.VISIBLE
         val spinnerList = ArrayList<MultiLineSpinnerAdapter.Data<File>>()
-        newFolders.forEach { spinnerList.add(MultiLineSpinnerAdapter.Data(it, it.name)) }
+        newFolders.forEach {
+            val name = if (it.absolutePath == FolderChooserPresenter.MARSHMALLOW_SD_FALLBACK) {
+                getString(R.string.storage_all)
+            } else {
+                it.name
+            }
+            spinnerList.add(MultiLineSpinnerAdapter.Data(it, name))
+        }
         spinnerAdapter.setData(spinnerList)
     }
 
