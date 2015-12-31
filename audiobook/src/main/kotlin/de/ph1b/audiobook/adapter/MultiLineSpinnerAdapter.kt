@@ -17,6 +17,10 @@
 
 package de.ph1b.audiobook.adapter
 
+import android.content.Context
+import android.graphics.Color
+import android.support.annotation.ColorInt
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,24 +29,41 @@ import android.widget.Spinner
 import android.widget.SpinnerAdapter
 import android.widget.TextView
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.uitools.ThemeUtil
 import timber.log.Timber
 import java.util.*
 
 /**
- * Spinneradapter that highlights the current selection and shows multiple lines of text.
+ * Adapter fror [Spinner] that highlights the current selection and shows multiple lines of text.
  *
  * @author Paul Woitaschek
  */
-class MultiLineSpinnerAdapter<Type>(private val spinner: Spinner) : BaseAdapter(), SpinnerAdapter {
+class MultiLineSpinnerAdapter<Type>(private val spinner: Spinner, private val context: Context, @ColorInt private val unselectedTextColor: Int) : BaseAdapter(), SpinnerAdapter {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
-        val textView = LayoutInflater.from(parent.context).inflate(R.layout.fragment_book_play_spinner, parent, false) as TextView
+        // no need for view holder pattern, we can just reuse the view as its a single TextView
+        val textView =
+                if (convertView == null) {
+                    LayoutInflater.from(context).inflate(R.layout.fragment_book_play_spinner, parent, false) as TextView
+                } else {
+                    convertView as TextView
+                }
+
         Timber.i("parent is $parent")
         val selected = position == spinner.selectedItemPosition
         textView.text = getItem(position).shown
-        if (selected && parent != spinner) {
+
+        if (parent == spinner) {
+            textView.setBackgroundResource(0)
+            textView.setTextColor(unselectedTextColor)
+        } else if (selected) {
             textView.setBackgroundResource(R.drawable.spinner_selected_background)
+            textView.setTextColor(Color.WHITE)
+        } else {
+            textView.setBackgroundResource(ThemeUtil.getResourceId(context, android.R.attr.windowBackground))
+            textView.setTextColor(ContextCompat.getColor(context, ThemeUtil.getResourceId(context, android.R.attr.textColorPrimary)))
         }
+
         return textView
     }
 

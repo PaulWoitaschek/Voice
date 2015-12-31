@@ -20,6 +20,7 @@ package de.ph1b.audiobook.fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
 import android.text.format.DateUtils
@@ -49,6 +50,7 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
+import de.ph1b.audiobook.uitools.ThemeUtil
 import de.ph1b.audiobook.utils.BookVendor
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
@@ -189,7 +191,7 @@ class BookPlayFragment : BaseFragment() {
                 chapterNames.add(MultiLineSpinnerAdapter.Data(chapterName, chapterName))
             }
 
-            val adapter = MultiLineSpinnerAdapter<String>(bookSpinner)
+            val adapter = MultiLineSpinnerAdapter<String>(bookSpinner, context, ContextCompat.getColor(context, ThemeUtil.getResourceId(context, android.R.attr.textColorPrimary)))
             adapter.setData(chapterNames)
             bookSpinner.adapter = adapter
             //bookSpinner.adapter = spinnerAdapter

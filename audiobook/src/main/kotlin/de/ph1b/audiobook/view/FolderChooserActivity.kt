@@ -23,6 +23,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -169,7 +170,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
                 }
 
         // spinner
-        spinnerAdapter = MultiLineSpinnerAdapter(spinner)
+        spinnerAdapter = MultiLineSpinnerAdapter(spinner, this, Color.WHITE)
         spinner.adapter = spinnerAdapter
         RxAdapterView.itemSelections(spinner)
                 .filter { it != AdapterView.INVALID_POSITION } // filter invalid entries
