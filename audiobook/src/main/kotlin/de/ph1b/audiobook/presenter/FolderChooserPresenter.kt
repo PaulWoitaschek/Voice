@@ -281,18 +281,35 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
         rv.add("/storage/ext_sd")
 
         // this is a workaround for marshmallow as we can't know the paths of the sd cards any more.
+        // if one of the files in the fallback dir has contents we add it to the list.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            rv.add("/storage")
+            val fallbackFile = File(MARSHMALLOW_SD_FALLBACK)
+            val contents = fallbackFile.listFilesSafely()
+            for (content in contents) {
+                if (content.listFilesSafely().isNotEmpty()) {
+                    rv.add(MARSHMALLOW_SD_FALLBACK)
+                    break
+                }
+            }
         }
 
         val paths = ArrayList<File>(rv.size)
         for (item  in rv) {
             val f = File(item)
-            if (f.exists() && f.isDirectory && f.canRead() && f.listFiles() != null && f.listFiles().size > 0) {
+            if (f.listFilesSafely().isNotEmpty()) {
                 paths.add(f)
             }
         }
         return paths.sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
+    }
+
+    /**
+     * As there are cases where [File.listFiles] returns null even though it is a directory, we return
+     * an empty list instead.
+     */
+    private fun File.listFilesSafely(): List<File> {
+        val list: Array<File>? = listFiles()
+        return list?.toList() ?: emptyList()
     }
 
 
@@ -324,5 +341,9 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
         if (chosenFile != null) {
             state.putSerializable(SI_CHOSEN_FILE, chosenFile!!)
         }
+    }
+
+    companion object {
+        val MARSHMALLOW_SD_FALLBACK = "/storage"
     }
 }
