@@ -17,8 +17,10 @@
 
 package de.ph1b.audiobook.presenter
 
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.BookAdder
+import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
@@ -29,18 +31,23 @@ import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Presenter for [BookShelfFragment].
  *
  * @author Paul Woitaschek
  */
-@Singleton
-class BookShelfPresenter
-@Inject
-constructor(private val bookChest: BookChest, private val bookAdder: BookAdder, private val prefsManager: PrefsManager, private val playStateManager: PlayStateManager, private val mediaPlayerController: MediaPlayerController)
-: Presenter<BookShelfFragment>() {
+class BookShelfPresenter : Presenter<BookShelfFragment>() {
+
+    init {
+        App.component().inject(this)
+    }
+
+    @Inject lateinit var bookChest: BookChest
+    @Inject lateinit var bookAdder: BookAdder
+    @Inject lateinit var prefsManager: PrefsManager
+    @Inject lateinit var playStateManager: PlayStateManager
+    @Inject lateinit var mediaPlayerController: MediaPlayerController
 
     override fun onBind(view: BookShelfFragment, subscriptions: CompositeSubscription) {
         Timber.i("onBind Called for $view")

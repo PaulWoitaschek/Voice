@@ -15,32 +15,38 @@
  * /licenses/>.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package de.ph1b.audiobook.mvp
 
-buildscript {
+import android.os.Bundle
 
-    ext.kotlinVersion = '1.0.0-beta-4584'
+/**
+ * Delegates lifecycle methods to the presenter.
+ *
+ * @author Paul Woitaschek
+ */
+class PresenterDelegate <V, P>(private val newPresenter: () -> P, private val getView: () -> V)  where P : Presenter<V> {
 
-    repositories {
-        jcenter()
+    public var presenter: P? = null
+        private set
+
+    fun onCreate(savedInstanceState: Bundle?) {
+        presenter = newPresenter.invoke()
+        presenter!!.onRestore(savedInstanceState)
     }
 
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0-alpha3'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    fun onResume() {
+        presenter!!.bind(getView.invoke())
     }
-}
 
-allprojects {
-    repositories {
-        jcenter()
-        maven { url "https://jitpack.io" }
-        mavenCentral()
+    fun onPause() {
+        presenter!!.unbind()
     }
-}
 
-task updateTranslations(type: Exec) {
-    executable 'sh'
-    args "-c", "tx pull -f --minimum-perc=5"
+    fun onSaveInstanceState(outState: Bundle) {
+        presenter!!.onSave(outState)
+    }
+
+    fun onDestroy() {
+        presenter = null
+    }
 }

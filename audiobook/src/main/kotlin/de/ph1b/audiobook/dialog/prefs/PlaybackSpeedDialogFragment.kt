@@ -11,7 +11,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
  * /licenses/>.
  */
 
@@ -24,6 +24,7 @@ import android.view.LayoutInflater
 import android.widget.SeekBar
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.jakewharton.rxbinding.widget.RxSeekBar
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController
@@ -32,6 +33,7 @@ import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.utils.BookVendor
 import java.text.DecimalFormat
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -50,9 +52,6 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
     private val MAX_STEPS = Math.round((Book.SPEED_MAX - Book.SPEED_MIN) / SPEED_DELTA)
     private val df = DecimalFormat("0.00")
 
-    private fun speedStepValueToSpeed(step: Int): Float =
-            (Book.SPEED_MIN + (step * SPEED_DELTA))
-
     private fun speedValueToSteps(speed: Float): Int =
             Math.round((speed - Book.SPEED_MIN) * (MAX_STEPS + 1) / (Book.SPEED_MAX - Book.SPEED_MIN))
 
@@ -69,24 +68,22 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
         // setting current speed
         val book = bookVendor.byId(prefs.currentBookId.value) ?: throw AssertionError("Cannot instantiate $TAG without a current book")
         val speed = book.playbackSpeed
-        textView.text = formatTime(speed)
         seekBar.max = MAX_STEPS
         seekBar.progress = speedValueToSteps(speed)
 
-        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        // observable of seek bar, mapped to speed
+        val seekObservable = RxSeekBar.userChanges(seekBar)
+                .map { Book.SPEED_MIN + it * SPEED_DELTA }
+                .share()
 
-            override fun onProgressChanged(seekBar: SeekBar, step: Int, fromUser: Boolean) {
-                val newSpeed = speedStepValueToSpeed(step)
-                textView.text = formatTime(newSpeed)
-                mediaPlayerController.playbackSpeed = newSpeed
-            }
+        // update speed text
+        seekObservable
+                .map { formatTime(it) } // to text
+                .subscribe { textView.text = it }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-            }
-        })
+        // set new speed
+        seekObservable.debounce(50, TimeUnit.MILLISECONDS) // debounce so we don't flood the player
+                .subscribe { mediaPlayerController.playbackSpeed = it }
 
         return MaterialDialog.Builder(activity)
                 .title(R.string.playback_speed)

@@ -1,114 +1,132 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ This file is part of Material Audiobook Player.
+  ~
+  ~ Material Audiobook Player is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or any later version.
+  ~
+  ~ Material Audiobook Player is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
+  ~ /licenses/>.
+  -->
+
 <resources>
-  <!--BookShelf-->
-  <string name="mal_file_message">O seguinte arquivo pode estar corrompido:</string>
-  <string name="mal_file_title">Arquivo corrompido</string>
-  <string name="content_current_book">Este é o livro atual</string>
-  <string name="current_book">Livro atual</string>
-  <string name="change_layout_type">Trocar layout</string>
-  <!--BookPlayFragment-->
-  <string name="cover">Capa</string>
-  <string name="play_pause">Tocar / Pausar</string>
-  <string name="action_sleep">Desligamento automático</string>
-  <plurals name="pauses_after">
-    <item quantity="one">Pausa após %d minuto.</item>
-    <item quantity="other">Pausa após %d minutos.</item>
-  </plurals>
-  <string name="rewind">Retroceder</string>
-  <string name="fast_forward">Avanço rápido</string>
-  <string name="previous_track">Capitulo anterior</string>
-  <string name="next_track">Próximo capitulo</string>
-  <string name="play">Tocar</string>
-  <string name="pause">Pausar</string>
-  <!--NoExternalStorage-->
-  <string name="no_external_storage">Memória Externa não está disponível. Por favor verifique se está conectado e montado em seu computador.</string>
-  <string name="no_external_storage_action_bar_title">Memória Externa</string>
-  <!--Dialogs-->
-  <string name="dialog_confirm">Definir</string>
-  <string name="dialog_cancel">Cancelar</string>
-  <!--EditBookDialog-->
-  <string name="content_previous_cover">Escolher capa anterior</string>
-  <string name="content_next_cover">Escolher próxima capa</string>
-  <string name="content_cover">Mostrar capa para escolher</string>
-  <string name="edit_book_name">Editar nome</string>
-  <string name="edit_book_cover">Editar capa</string>
-  <string name="edit_book_title">Editar livro</string>
-  <!--JumpToPosition-->
-  <string name="action_time_change">Pular para</string>
-  <!--BookAdding-->
-  <string name="adding_failed_subfolder">As pastas não devem estar em uma subpasta de outra:</string>
-  <string name="audiobook_folders_title">Pastas de Audiolivros</string>
-  <string name="no_audiobook_folders_title">Escolha pasta agora</string>
-  <string name="no_audiobook_folders_summary_start">Por favor escolha a sua pasta(s) de audiolivros agora.</string>
-  <string name="no_audiobook_folders_end">Você pode escolher sua pasta principal contendo diferentes livros. Ou você pode escolher apenas um único livro.</string>
-  <string name="chosen_folder_description">Pasta escolhida:</string>
-  <string name="delete_folder">Remover da Biblioteca?</string>
-  <string name="delete_folder_content">Você quer remover a seguinte pasta da biblioteca?</string>
-  <string name="folder_add_single_book">Livro único</string>
-  <string name="folder_add_collection">Pasta com múltiplos livros</string>
-  <string name="for_example">Ex.</string>
-  <string name="content_add_book">Adicionar livro</string>
-  <string name="content_is_folder">Pasta</string>
-  <string name="content_is_file">Arquivo</string>
-  <string name="content_navigate_up">Vá para a pasta superior</string>
-  <string name="permission_read_ext_explanation">Esse aplicativo precisa ler seu armazenamento para poder encontrar e tocar os áudio livros.</string>
-  <string name="permission_read_ext_request">Devemos pedir permissão novamente?</string>
-  <string name="permission_rescan">Solicitar novamente</string>
-  <!--PlaybackSpeed-->
-  <string name="playback_speed">Velocidade de reprodução</string>
-  <!--Bookmarks-->
-  <string name="bookmark">Marcador</string>
-  <string name="bookmark_edit_title">Editar marcador</string>
-  <string name="acc_button_add_bookmark">Adicionar um marcador na posição atual</string>
-  <string name="bookmark_edit_hint">Nome do marcador</string>
-  <string name="bookmark_added">Marcador adicionado</string>
-  <string name="bookmark_delete_title">Apagar esse marcador?</string>
-  <!--Settings-->
-  <string name="pref_category_general">Configurações gerais</string>
-  <string name="pref_category_playback">Comportamento de reprodução</string>
-  <string name="action_settings">Preferências</string>
-  <string name="pref_resume_on_replug">Retomar reprodução</string>
-  <string name="pref_resume_on_replug_hint">Se você pausou removendo os fones, a reprodução será retomada ao reconectar.</string>
-  <plurals name="minutes">
-    <item quantity="one">%d minuto</item>
-    <item quantity="other">%d minutos</item>
-  </plurals>
-  <plurals name="seconds">
-    <item quantity="one">%d segundo</item>
-    <item quantity="other">%d segundos</item>
-  </plurals>
-  <string name="pref_seek_time">Pular para</string>
-  <string name="pref_sleep_time">Desligamento automático</string>
-  <string name="pref_root_folder_title">Pasta de Audiolivros</string>
-  <string name="pref_root_folder_summary">As pastas de audiolivro selecionadas</string>
-  <string name="pref_theme_title">Tema</string>
-  <string name="pref_theme_light">Claro</string>
-  <string name="pref_theme_dark">Escuro</string>
-  <string name="pref_pause_on_can_duck_title">Pausa na Interrupção</string>
-  <string name="pref_pause_on_can_duck_summary">Pausar quando interromper ao invés de diminuir o volume durante a interrupção.</string>
-  <string name="pref_send_bugs_title">Reportar falhas</string>
-  <string name="pref_send_bugs_summary">Automaticamente enviar relatórios anônimos sobre falhas para ajudar o desenvolvedor.</string>
-  <string name="pref_auto_rewind_title">Retornar automaticamente</string>
-  <plurals name="pref_auto_rewind_summary">
-    <item quantity="one">Volta automaticamente %d segundo após pausar manualmente.</item>
-    <item quantity="other">Volta automaticamente %d segundos após pausar manualmente.</item>
-  </plurals>
-  <string name="pref_bookmark_on_sleep_title">Marcador ao desligar automaticamente</string>
-  <string name="pref_bookmark_on_sleep_summary">Define automaticamente um marcador cada vez que o desligamento automático estiver ajustado.</string>
-  <string name="pref_support_title">Suporte</string>
-  <string name="pref_support_translations">Traduções</string>
-  <string name="pref_support_contribute">Suporte e sugestões</string>
-  <string name="pref_support_donation">Doação</string>
-  <string name="donation_worked_thanks">Muito obrigado! Isso realmente nos ajuda. :)</string>
-  <string name="donation_not_worked">Oops… alguma coisa deu errado</string>
-  <!--Misc-->
-  <string name="popup_edit">Editar</string>
-  <string name="remove">Remover</string>
-  <!--hide folder dialog-->
-  <string name="hide_folder_title">Esconder pasta</string>
-  <string name="hide_folder_content">Você gostaria de esconder a pasta dos players de música, para que eles não reconheçam seu livro como música?</string>
-  <string name="hide_confirm">Esconder</string>
-  <!--license activity-->
-  <string name="license_activity_title">Licenças usadas</string>
-  <string name="licenses">Licenças</string>
+    <!--BookShelf-->
+    <string name="mal_file_message">O seguinte arquivo pode estar corrompido:</string>
+    <string name="mal_file_title">Arquivo corrompido</string>
+    <string name="content_current_book">Este é o livro atual</string>
+    <string name="current_book">Livro atual</string>
+    <string name="change_layout_type">Trocar layout</string>
+    <!--BookPlayFragment-->
+    <string name="cover">Capa</string>
+    <string name="play_pause">Tocar / Pausar</string>
+    <string name="action_sleep">Desligamento automático</string>
+    <plurals name="pauses_after">
+        <item quantity="one">Pausa após %d minuto.</item>
+        <item quantity="other">Pausa após %d minutos.</item>
+    </plurals>
+    <string name="rewind">Retroceder</string>
+    <string name="fast_forward">Avanço rápido</string>
+    <string name="previous_track">Capitulo anterior</string>
+    <string name="next_track">Próximo capitulo</string>
+    <string name="play">Tocar</string>
+    <string name="pause">Pausar</string>
+    <!--NoExternalStorage-->
+    <string name="no_external_storage">Memória Externa não está disponível. Por favor verifique se está conectado e montado em seu computador.</string>
+    <string name="no_external_storage_action_bar_title">Memória Externa</string>
+    <!--Dialogs-->
+    <string name="dialog_confirm">Definir</string>
+    <string name="dialog_cancel">Cancelar</string>
+    <!--EditBookDialog-->
+    <string name="content_previous_cover">Escolher capa anterior</string>
+    <string name="content_next_cover">Escolher próxima capa</string>
+    <string name="content_cover">Mostrar capa para escolher</string>
+    <string name="edit_book_name">Editar nome</string>
+    <string name="edit_book_cover">Editar capa</string>
+    <string name="edit_book_title">Editar livro</string>
+    <!--JumpToPosition-->
+    <string name="action_time_change">Pular para</string>
+    <!--BookAdding-->
+    <string name="adding_failed_subfolder">As pastas não devem estar em uma subpasta de outra:</string>
+    <string name="audiobook_folders_title">Pastas de Audiolivros</string>
+    <string name="no_audiobook_folders_title">Escolha pasta agora</string>
+    <string name="no_audiobook_folders_summary_start">Por favor escolha a sua pasta(s) de audiolivros agora.</string>
+    <string name="no_audiobook_folders_end">Você pode escolher sua pasta principal contendo diferentes livros. Ou você pode escolher apenas um único livro.</string>
+    <string name="chosen_folder_description">Pasta escolhida:</string>
+    <string name="delete_folder">Remover da Biblioteca?</string>
+    <string name="delete_folder_content">Você quer remover a seguinte pasta da biblioteca?</string>
+    <string name="folder_add_single_book">Livro único</string>
+    <string name="folder_add_collection">Pasta com múltiplos livros</string>
+    <string name="for_example">Ex.</string>
+    <string name="content_add_book">Adicionar livro</string>
+    <string name="content_is_folder">Pasta</string>
+    <string name="content_is_file">Arquivo</string>
+    <string name="content_navigate_up">Vá para a pasta superior</string>
+    <string name="permission_read_ext_explanation">Esse aplicativo precisa ler seu armazenamento para poder encontrar e tocar os áudio livros.</string>
+    <string name="permission_read_ext_request">Devemos pedir permissão novamente?</string>
+    <string name="permission_rescan">Solicitar novamente</string>
+    <string name="storage_pre_device">Armazenamento:</string>
+    <!--PlaybackSpeed-->
+    <string name="playback_speed">Velocidade de reprodução</string>
+    <!--Bookmarks-->
+    <string name="bookmark">Marcador</string>
+    <string name="bookmark_edit_title">Editar marcador</string>
+    <string name="acc_button_add_bookmark">Adicionar um marcador na posição atual</string>
+    <string name="bookmark_edit_hint">Nome do marcador</string>
+    <string name="bookmark_added">Marcador adicionado</string>
+    <string name="bookmark_delete_title">Apagar esse marcador?</string>
+    <!--Settings-->
+    <string name="pref_category_general">Configurações gerais</string>
+    <string name="pref_category_playback">Comportamento de reprodução</string>
+    <string name="action_settings">Preferências</string>
+    <string name="pref_resume_on_replug">Retomar reprodução</string>
+    <string name="pref_resume_on_replug_hint">Se você pausou removendo os fones, a reprodução será retomada ao reconectar.</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minuto</item>
+        <item quantity="other">%d minutos</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%d segundo</item>
+        <item quantity="other">%d segundos</item>
+    </plurals>
+    <string name="pref_seek_time">Pular para</string>
+    <string name="pref_sleep_time">Desligamento automático</string>
+    <string name="pref_root_folder_title">Pasta de Audiolivros</string>
+    <string name="pref_root_folder_summary">As pastas de audiolivro selecionadas</string>
+    <string name="pref_theme_title">Tema</string>
+    <string name="pref_theme_light">Claro</string>
+    <string name="pref_theme_dark">Escuro</string>
+    <string name="pref_pause_on_can_duck_title">Pausa na Interrupção</string>
+    <string name="pref_pause_on_can_duck_summary">Pausar quando interromper ao invés de diminuir o volume durante a interrupção.</string>
+    <string name="pref_send_bugs_title">Reportar falhas</string>
+    <string name="pref_send_bugs_summary">Automaticamente enviar relatórios anônimos sobre falhas para ajudar o desenvolvedor.</string>
+    <string name="pref_auto_rewind_title">Retornar automaticamente</string>
+    <plurals name="pref_auto_rewind_summary">
+        <item quantity="one">Volta automaticamente %d segundo após pausar manualmente.</item>
+        <item quantity="other">Volta automaticamente %d segundos após pausar manualmente.</item>
+    </plurals>
+    <string name="pref_bookmark_on_sleep_title">Marcador ao desligar automaticamente</string>
+    <string name="pref_bookmark_on_sleep_summary">Define automaticamente um marcador cada vez que o desligamento automático estiver ajustado.</string>
+    <string name="pref_support_title">Suporte</string>
+    <string name="pref_support_translations">Traduções</string>
+    <string name="pref_support_contribute">Suporte e sugestões</string>
+    <string name="pref_support_donation">Doação</string>
+    <string name="donation_worked_thanks">Muito obrigado! Isso realmente nos ajuda. :)</string>
+    <string name="donation_not_worked">Oops… alguma coisa deu errado</string>
+    <!--Misc-->
+    <string name="popup_edit">Editar</string>
+    <string name="remove">Remover</string>
+    <!--hide folder dialog-->
+    <string name="hide_folder_title">Esconder pasta</string>
+    <string name="hide_folder_content">Você gostaria de esconder a pasta dos players de música, para que eles não reconheçam seu livro como música?</string>
+    <string name="hide_confirm">Esconder</string>
+    <!--license activity-->
+    <string name="license_activity_title">Licenças usadas</string>
+    <string name="licenses">Licenças</string>
 </resources>

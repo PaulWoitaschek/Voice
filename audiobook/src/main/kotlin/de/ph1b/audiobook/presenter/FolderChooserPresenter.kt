@@ -18,10 +18,13 @@
 package de.ph1b.audiobook.presenter
 
 import android.os.Build
+import android.os.Bundle
 import android.os.Environment
 import android.text.TextUtils
 import de.ph1b.audiobook.dialog.HideFolderDialog
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.NaturalOrderComparator
+import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.utils.FileRecognition
 import de.ph1b.audiobook.view.FolderChooserActivity
@@ -32,20 +35,22 @@ import java.io.File
 import java.util.*
 import java.util.regex.Pattern
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * The Presenter for [FolderChooserView]
  *
  * @author Paul Woitaschek
  */
-@Singleton
-class FolderChooserPresenter
-@Inject
-constructor(private val prefsManager: PrefsManager)
-: Presenter<FolderChooserView>() {
+class FolderChooserPresenter : Presenter<FolderChooserView>() {
+
+    init {
+        App.component().inject(this)
+    }
+
+    @Inject lateinit var prefsManager: PrefsManager
 
     private val rootDirs = ArrayList<File>()
+    private val SI_CHOSEN_FILE = "siChosenFile"
     private var chosenFile: File? = null
 
     override fun onBind(view: FolderChooserView, subscriptions: CompositeSubscription) {
@@ -275,14 +280,36 @@ constructor(private val prefsManager: PrefsManager)
         rv.add("/storage/external_SD")
         rv.add("/storage/ext_sd")
 
+        // this is a workaround for marshmallow as we can't know the paths of the sd cards any more.
+        // if one of the files in the fallback dir has contents we add it to the list.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val fallbackFile = File(MARSHMALLOW_SD_FALLBACK)
+            val contents = fallbackFile.listFilesSafely()
+            for (content in contents) {
+                if (content.listFilesSafely().isNotEmpty()) {
+                    rv.add(MARSHMALLOW_SD_FALLBACK)
+                    break
+                }
+            }
+        }
+
         val paths = ArrayList<File>(rv.size)
         for (item  in rv) {
             val f = File(item)
-            if (f.exists() && f.isDirectory && f.canRead() && f.listFiles() != null && f.listFiles().size > 0) {
+            if (f.listFilesSafely().isNotEmpty()) {
                 paths.add(f)
             }
         }
         return paths.sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
+    }
+
+    /**
+     * As there are cases where [File.listFiles] returns null even though it is a directory, we return
+     * an empty list instead.
+     */
+    private fun File.listFilesSafely(): List<File> {
+        val list: Array<File>? = listFiles()
+        return list?.toList() ?: emptyList()
     }
 
 
@@ -300,5 +327,23 @@ constructor(private val prefsManager: PrefsManager)
         } else {
             return emptyList()
         }
+    }
+
+    override fun onRestore(savedState: Bundle?) {
+        super.onRestore(savedState)
+
+        chosenFile = savedState?.getSerializable(SI_CHOSEN_FILE) as File?
+    }
+
+    override fun onSave(state: Bundle) {
+        super.onSave(state)
+
+        if (chosenFile != null) {
+            state.putSerializable(SI_CHOSEN_FILE, chosenFile!!)
+        }
+    }
+
+    companion object {
+        val MARSHMALLOW_SD_FALLBACK = "/storage"
     }
 }

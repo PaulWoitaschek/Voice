@@ -1,108 +1,125 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ This file is part of Material Audiobook Player.
+  ~
+  ~ Material Audiobook Player is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or any later version.
+  ~
+  ~ Material Audiobook Player is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
+  ~ /licenses/>.
+  -->
+
 <resources>
-  <!--BookShelf-->
-  <string name="mal_file_message">以下文件可能已经损坏</string>
-  <string name="mal_file_title">损坏文件</string>
-  <string name="content_current_book">这是当前书籍</string>
-  <string name="current_book">当前书籍</string>
-  <string name="change_layout_type">改变布局</string>
-  <!--BookPlayFragment-->
-  <string name="cover">封面</string>
-  <string name="play_pause">播放 / 暂停</string>
-  <string name="action_sleep">睡眠定时器</string>
-  <plurals name="pauses_after">
-    <item quantity="other">%d 分钟后暂停</item>
-  </plurals>
-  <string name="rewind">倒回</string>
-  <string name="fast_forward">快进</string>
-  <string name="previous_track">上一曲目</string>
-  <string name="next_track">下一曲目</string>
-  <string name="play">播放</string>
-  <string name="pause">暂停</string>
-  <!--NoExternalStorage-->
-  <string name="no_external_storage">外部存储不可用。请保证外部存储已连接而且没有被电脑占用。</string>
-  <string name="no_external_storage_action_bar_title">外部存储</string>
-  <!--Dialogs-->
-  <string name="dialog_confirm">设置</string>
-  <string name="dialog_cancel">取消</string>
-  <!--EditBookDialog-->
-  <string name="content_previous_cover">选择上一个封面</string>
-  <string name="content_next_cover">选择下一个封面</string>
-  <string name="content_cover">显示可选封面</string>
-  <string name="edit_book_name">编辑书名</string>
-  <string name="edit_book_cover">编辑封面</string>
-  <string name="edit_book_title">编辑书名</string>
-  <!--JumpToPosition-->
-  <string name="action_time_change">跳转到</string>
-  <!--BookAdding-->
-  <string name="adding_failed_subfolder">目录不应该互为子目录：</string>
-  <string name="audiobook_folders_title">有声书目录</string>
-  <string name="no_audiobook_folders_title">现在选择目录</string>
-  <string name="no_audiobook_folders_summary_start">请现在选择你的有声书目录</string>
-  <string name="no_audiobook_folders_end">你可以选择包含多本书籍的主目录。或者只选择单本书。</string>
-  <string name="chosen_folder_description">选择目录</string>
-  <string name="delete_folder">从书库中删除吗？</string>
-  <string name="delete_folder_content">你想将一下目录从书库中删除吗？</string>
-  <string name="folder_add_single_book">单本书</string>
-  <string name="folder_add_collection">包含多本书的目录</string>
-  <string name="for_example">例如</string>
-  <string name="content_add_book">添加书籍</string>
-  <string name="content_is_folder">目录</string>
-  <string name="content_is_file">文件</string>
-  <string name="content_navigate_up">跳转到上级目录</string>
-  <string name="permission_read_ext_explanation">本应用需要读取你的设备的存储空间以发现和播放有声书。</string>
-  <string name="permission_read_ext_request">要再次请求权限吗？</string>
-  <string name="permission_rescan">再次请求</string>
-  <!--PlaybackSpeed-->
-  <string name="playback_speed">播放速度</string>
-  <!--Bookmarks-->
-  <string name="bookmark">书签</string>
-  <string name="bookmark_edit_title">编辑书签</string>
-  <string name="acc_button_add_bookmark">在当前位置添加书签</string>
-  <string name="bookmark_edit_hint">书签名</string>
-  <string name="bookmark_added">书签已添加</string>
-  <string name="bookmark_delete_title">删除书签吗？</string>
-  <!--Settings-->
-  <string name="pref_category_general">通用设置</string>
-  <string name="pref_category_playback">播放行为</string>
-  <string name="action_settings">设置</string>
-  <string name="pref_resume_on_replug">继续播放</string>
-  <string name="pref_resume_on_replug_hint">如果因为耳机拔出而暂停，插入耳机将继续播放。</string>
-  <plurals name="minutes">
-    <item quantity="other">%d 分钟</item>
-  </plurals>
-  <plurals name="seconds">
-    <item quantity="other">%d 秒</item>
-  </plurals>
-  <string name="pref_seek_time">跳过时间</string>
-  <string name="pref_sleep_time">睡眠定时</string>
-  <string name="pref_root_folder_title">有声书目录</string>
-  <string name="pref_root_folder_summary">已选中的有声书目录。</string>
-  <string name="pref_theme_title">主题</string>
-  <string name="pref_theme_light">浅色</string>
-  <string name="pref_theme_dark">深色</string>
-  <string name="pref_pause_on_can_duck_title">打扰暂停</string>
-  <string name="pref_pause_on_can_duck_summary">有打扰时暂停，而不是降低音量。</string>
-  <string name="pref_send_bugs_title">报告Bug</string>
-  <string name="pref_send_bugs_summary">自动发送匿名崩溃报告以帮助开发。</string>
-  <string name="pref_auto_rewind_title">自动倒回</string>
-  <plurals name="pref_auto_rewind_summary">
-    <item quantity="other">手动暂停%d秒后自动倒回。</item>
-  </plurals>
-  <string name="pref_bookmark_on_sleep_title">睡眠书签</string>
-  <string name="pref_bookmark_on_sleep_summary">每次睡眠定时器设置以后自动加入书签。</string>
-  <string name="pref_support_title">支持</string>
-  <string name="pref_support_translations">翻译</string>
-  <string name="pref_support_contribute">支持和建议</string>
-  <string name="pref_support_donation">捐赠</string>
-  <string name="donation_worked_thanks">非常感谢。这真的帮了不少忙 :)</string>
-  <string name="donation_not_worked">哎呦… 出了一些问题</string>
-  <!--Misc-->
-  <string name="popup_edit">编辑</string>
-  <string name="remove">删除</string>
-  <!--hide folder dialog-->
-  <string name="hide_folder_title">隐藏目录</string>
-  <string name="hide_folder_content">为避免有声书被识别为音乐， 针对音乐播放器隐藏目录？</string>
-  <string name="hide_confirm">隐藏</string>
-  <!--license activity-->
+    <!--BookShelf-->
+    <string name="mal_file_message">以下文件可能已经损坏</string>
+    <string name="mal_file_title">损坏文件</string>
+    <string name="content_current_book">这是当前书籍</string>
+    <string name="current_book">当前书籍</string>
+    <string name="change_layout_type">改变布局</string>
+    <!--BookPlayFragment-->
+    <string name="cover">封面</string>
+    <string name="play_pause">播放 / 暂停</string>
+    <string name="action_sleep">睡眠定时器</string>
+    <plurals name="pauses_after">
+        <item quantity="other">%d 分钟后暂停</item>
+    </plurals>
+    <string name="rewind">倒回</string>
+    <string name="fast_forward">快进</string>
+    <string name="previous_track">上一曲目</string>
+    <string name="next_track">下一曲目</string>
+    <string name="play">播放</string>
+    <string name="pause">暂停</string>
+    <!--NoExternalStorage-->
+    <string name="no_external_storage">外部存储不可用。请保证外部存储已连接而且没有被电脑占用。</string>
+    <string name="no_external_storage_action_bar_title">外部存储</string>
+    <!--Dialogs-->
+    <string name="dialog_confirm">设置</string>
+    <string name="dialog_cancel">取消</string>
+    <!--EditBookDialog-->
+    <string name="content_previous_cover">选择上一个封面</string>
+    <string name="content_next_cover">选择下一个封面</string>
+    <string name="content_cover">显示可选封面</string>
+    <string name="edit_book_name">编辑书名</string>
+    <string name="edit_book_cover">编辑封面</string>
+    <string name="edit_book_title">编辑书名</string>
+    <!--JumpToPosition-->
+    <string name="action_time_change">跳转到</string>
+    <!--BookAdding-->
+    <string name="adding_failed_subfolder">目录不应该互为子目录：</string>
+    <string name="audiobook_folders_title">有声书目录</string>
+    <string name="no_audiobook_folders_title">现在选择目录</string>
+    <string name="no_audiobook_folders_summary_start">请现在选择你的有声书目录</string>
+    <string name="no_audiobook_folders_end">你可以选择包含多本书籍的主目录。或者只选择单本书。</string>
+    <string name="chosen_folder_description">选择目录</string>
+    <string name="delete_folder">从书库中删除吗？</string>
+    <string name="delete_folder_content">你想将一下目录从书库中删除吗？</string>
+    <string name="folder_add_single_book">单本书</string>
+    <string name="folder_add_collection">包含多本书的目录</string>
+    <string name="for_example">例如</string>
+    <string name="content_add_book">添加书籍</string>
+    <string name="content_is_folder">目录</string>
+    <string name="content_is_file">文件</string>
+    <string name="content_navigate_up">跳转到上级目录</string>
+    <string name="permission_read_ext_explanation">本应用需要读取你的设备的存储空间以发现和播放有声书。</string>
+    <string name="permission_read_ext_request">要再次请求权限吗？</string>
+    <string name="permission_rescan">再次请求</string>
+    <!--PlaybackSpeed-->
+    <string name="playback_speed">播放速度</string>
+    <!--Bookmarks-->
+    <string name="bookmark">书签</string>
+    <string name="bookmark_edit_title">编辑书签</string>
+    <string name="acc_button_add_bookmark">在当前位置添加书签</string>
+    <string name="bookmark_edit_hint">书签名</string>
+    <string name="bookmark_added">书签已添加</string>
+    <string name="bookmark_delete_title">删除书签吗？</string>
+    <!--Settings-->
+    <string name="pref_category_general">通用设置</string>
+    <string name="pref_category_playback">播放行为</string>
+    <string name="action_settings">设置</string>
+    <string name="pref_resume_on_replug">继续播放</string>
+    <string name="pref_resume_on_replug_hint">如果因为耳机拔出而暂停，插入耳机将继续播放。</string>
+    <plurals name="minutes">
+        <item quantity="other">%d 分钟</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="other">%d 秒</item>
+    </plurals>
+    <string name="pref_seek_time">跳过时间</string>
+    <string name="pref_sleep_time">睡眠定时</string>
+    <string name="pref_root_folder_title">有声书目录</string>
+    <string name="pref_root_folder_summary">已选中的有声书目录。</string>
+    <string name="pref_theme_title">主题</string>
+    <string name="pref_theme_light">浅色</string>
+    <string name="pref_theme_dark">深色</string>
+    <string name="pref_pause_on_can_duck_title">打扰暂停</string>
+    <string name="pref_pause_on_can_duck_summary">有打扰时暂停，而不是降低音量。</string>
+    <string name="pref_send_bugs_title">报告Bug</string>
+    <string name="pref_send_bugs_summary">自动发送匿名崩溃报告以帮助开发。</string>
+    <string name="pref_auto_rewind_title">自动倒回</string>
+    <plurals name="pref_auto_rewind_summary">
+        <item quantity="other">手动暂停%d秒后自动倒回。</item>
+    </plurals>
+    <string name="pref_bookmark_on_sleep_title">睡眠书签</string>
+    <string name="pref_bookmark_on_sleep_summary">每次睡眠定时器设置以后自动加入书签。</string>
+    <string name="pref_support_title">支持</string>
+    <string name="pref_support_translations">翻译</string>
+    <string name="pref_support_contribute">支持和建议</string>
+    <string name="pref_support_donation">捐赠</string>
+    <string name="donation_worked_thanks">非常感谢。这真的帮了不少忙 :)</string>
+    <string name="donation_not_worked">哎呦… 出了一些问题</string>
+    <!--Misc-->
+    <string name="popup_edit">编辑</string>
+    <string name="remove">删除</string>
+    <!--hide folder dialog-->
+    <string name="hide_folder_title">隐藏目录</string>
+    <string name="hide_folder_content">为避免有声书被识别为音乐， 针对音乐播放器隐藏目录？</string>
+    <string name="hide_confirm">隐藏</string>
+    <!--license activity-->
 </resources>
