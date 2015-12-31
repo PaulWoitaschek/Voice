@@ -1,14 +1,36 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ This file is part of Material Audiobook Player.
+  ~
+  ~ Material Audiobook Player is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or any later version.
+  ~
+  ~ Material Audiobook Player is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
+  ~ /licenses/>.
+  -->
+
 <resources>
     <!--BookShelf-->
     <string name="mal_file_message">Le fichier suivant est peut-être corrompu:</string>
     <string name="mal_file_title">Fichier défectueux</string>
     <string name="content_current_book">Ceci est le livre en cours</string>
     <string name="current_book">Livre en cours</string>
+    <string name="change_layout_type">Modifier la disposition</string>
     <!--BookPlayFragment-->
     <string name="cover">Couverture</string>
     <string name="play_pause">Lire / Pause</string>
     <string name="action_sleep">Minuteur</string>
+    <plurals name="pauses_after">
+        <item quantity="one">Met en pause après %d minute.</item>
+        <item quantity="other">Met en pause après %d minutes.</item>
+    </plurals>
     <string name="rewind">Rembobiner</string>
     <string name="fast_forward">Avance rapide</string>
     <string name="previous_track">Piste précédente</string>
@@ -25,36 +47,55 @@
     <string name="content_previous_cover">Choisis la couverture précédente</string>
     <string name="content_next_cover">Choisis la couverture suivante</string>
     <string name="content_cover">Montre la couverture à choisir</string>
+    <string name="edit_book_name">Modifier le nom</string>
+    <string name="edit_book_cover">Modifier la couverture</string>
     <string name="edit_book_title">Modifier le livre</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Aller à</string>
     <!--BookAdding-->
-    <string name="adding_failed_subfolder">Les dossiers ne doivent pas être des sous-dossiers l\'un de l\'autre:</string>
+    <string name="adding_failed_subfolder">Les dossiers ne doivent pas être des sous-dossiers l\'un de l\'autre :</string>
     <string name="audiobook_folders_title">Dossiers de livres audio</string>
     <string name="no_audiobook_folders_title">Choisissez un dossier maintenant</string>
     <string name="no_audiobook_folders_summary_start">Veuillez choisir le(s) dossier(s) des livres audio maintenant.</string>
     <string name="no_audiobook_folders_end">Vous pouvez choisir un dossier principal contenant des livres différents. Ou vous pouvez ne choisir qu\'un seul livre.</string>
-    <string name="chosen_folder_description">Dossier choisi:</string>
-    <string name="delete_folder">Enlever de la bibliothèque?</string>
-    <string name="delete_folder_content">Voulez vous enlever le dossier suivant de la bibliothèque?</string>
+    <string name="chosen_folder_description">Dossier choisi :</string>
+    <string name="delete_folder">Enlever de la bibliothèque ?</string>
+    <string name="delete_folder_content">Voulez vous enlever le dossier suivant de la bibliothèque ?</string>
+    <string name="folder_add_single_book">Livre simple</string>
     <string name="folder_add_collection">Dossier de plusieurs livres</string>
-    <string name="for_example">Par ex.</string>
+    <string name="for_example">par ex.</string>
+    <string name="content_add_book">Ajouter un livre</string>
+    <string name="content_is_folder">Dossier</string>
+    <string name="content_is_file">Fichier</string>
+    <string name="content_navigate_up">Aller au dossier parent</string>
+    <string name="permission_read_ext_explanation">L\'application a besoin de pouvoir parcourir vos fichiers pour trouver et lire les livres audio.</string>
+    <string name="permission_read_ext_request">Devons nous redemander la permission plus tard ?</string>
+    <string name="permission_rescan">Redemander plus tard</string>
+    <string name="storage_pre_device">Stockage :</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Vitesse de lecture</string>
     <!--Bookmarks-->
     <string name="bookmark">Marque-page</string>
     <string name="bookmark_edit_title">Modifier le marque-page</string>
-    <string name="acc_button_add_bookmark">Ajouter un marque-page</string>
+    <string name="acc_button_add_bookmark">Ajouter un marque-page à la position actuelle</string>
     <string name="bookmark_edit_hint">Nom du marque-page</string>
     <string name="bookmark_added">Marque-page ajouté</string>
-    <string name="bookmark_delete_title">Effacer ce marque-page ?</string>
+    <string name="bookmark_delete_title">Supprimer ce marque-page ?</string>
     <!--Settings-->
     <string name="pref_category_general">Réglages généraux</string>
     <string name="pref_category_playback">Comportement de lecture</string>
     <string name="action_settings">Préférences</string>
     <string name="pref_resume_on_replug">Reprendre la lecture</string>
     <string name="pref_resume_on_replug_hint">Si vous avez mis en pause en débranchant le casque, la lecture reprendra en le rebranchant.</string>
-    <string name="pref_seek_time">Sauter par</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%d seconde</item>
+        <item quantity="other">%d secondes</item>
+    </plurals>
+    <string name="pref_seek_time">Sauter de</string>
     <string name="pref_sleep_time">Temps avant la pause</string>
     <string name="pref_root_folder_title">Dossier de livre audio</string>
     <string name="pref_root_folder_summary">Les dossiers de livres audio sélectionnés.</string>
@@ -66,6 +107,10 @@
     <string name="pref_send_bugs_title">Signaler des bugs</string>
     <string name="pref_send_bugs_summary">Envoie automatiquement des rapports anonymes sur les plantage pour aider au développement.</string>
     <string name="pref_auto_rewind_title">Rembobinage automatique</string>
+    <plurals name="pref_auto_rewind_summary">
+        <item quantity="one">Rembobine automatiquement de %d seconde après une pause manuelle.</item>
+        <item quantity="other">Rembobine automatiquement de %d secondes après une pause manuelle.</item>
+    </plurals>
     <string name="pref_bookmark_on_sleep_title">Marque-page à la mise en veille</string>
     <string name="pref_bookmark_on_sleep_summary">Place un marque-page automatiquement à chaque fois que le minuteur est réglé.</string>
     <string name="pref_support_title">Assistance</string>
@@ -78,5 +123,10 @@
     <string name="popup_edit">Modifer</string>
     <string name="remove">Enlever</string>
     <!--hide folder dialog-->
+    <string name="hide_folder_title">Masquer le dossier</string>
+    <string name="hide_folder_content">Voulez vous masquer le dossier aux lecteurs audio afin qu\'ils ne considèrent pas vos livre comme de la musique ?</string>
+    <string name="hide_confirm">Masquer</string>
     <!--license activity-->
+    <string name="license_activity_title">Licences utilisées</string>
+    <string name="licenses">Licences</string>
 </resources>

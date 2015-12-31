@@ -1,116 +1,133 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ This file is part of Material Audiobook Player.
+  ~
+  ~ Material Audiobook Player is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or any later version.
+  ~
+  ~ Material Audiobook Player is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
+  ~ /licenses/>.
+  -->
+
 <resources>
-  <!--BookShelf-->
-  <string name="mal_file_message">Цей файл може бути зіпсований:</string>
-  <string name="mal_file_title">Зіпсований файл</string>
-  <string name="content_current_book">Книга, яку ви прослуховуєте</string>
-  <string name="current_book">Поточна книга</string>
-  <string name="change_layout_type">Змінити відображення</string>
-  <!--BookPlayFragment-->
-  <string name="cover">Обкладинка</string>
-  <string name="play_pause">Програвати / Призупинити</string>
-  <string name="action_sleep">Таймер сну</string>
-  <plurals name="pauses_after">
-    <item quantity="one">Призупинити через %d хвилину.</item>
-    <item quantity="few">Призупинити через %d хвилин.</item>
-    <item quantity="other">Призупинити через %d хвилин.</item>
-  </plurals>
-  <string name="rewind">Прокрутити назад</string>
-  <string name="fast_forward">Прокрутити вперед</string>
-  <string name="previous_track">Попередній файл</string>
-  <string name="next_track">Наступний файл</string>
-  <string name="play">Програвати</string>
-  <string name="pause">Призупинити</string>
-  <!--NoExternalStorage-->
-  <string name="no_external_storage">Картка пам’яті не знайдена. Будь ласка, переконайтеся, що вона встановлена та ваш пристрій не з’єднаний із комп’ютером кабелем.</string>
-  <string name="no_external_storage_action_bar_title">Картка пам’яті</string>
-  <!--Dialogs-->
-  <string name="dialog_confirm">Встановити</string>
-  <string name="dialog_cancel">Відмінити</string>
-  <!--EditBookDialog-->
-  <string name="content_previous_cover">Обрати попередню обкладинку</string>
-  <string name="content_next_cover">Обрати наступну обкладинку</string>
-  <string name="content_cover">Показати обрану обкладинку</string>
-  <string name="edit_book_name">Змінити назву</string>
-  <string name="edit_book_cover">Змінити обкладинку</string>
-  <string name="edit_book_title">Редагувати книгу</string>
-  <!--JumpToPosition-->
-  <string name="action_time_change">Перейти до</string>
-  <!--BookAdding-->
-  <string name="adding_failed_subfolder">Папки не повинні бути підпапками одна одної:</string>
-  <string name="audiobook_folders_title">Папки з аудіокнигами</string>
-  <string name="no_audiobook_folders_title">Обрати папку</string>
-  <string name="no_audiobook_folders_summary_start">Будь ласка, оберіть папку(и) з аудіокнигами.</string>
-  <string name="no_audiobook_folders_end">Ви можете обрати основну папку з різними книгами. Або ж ви можете обрати тільки одну книгу.</string>
-  <string name="chosen_folder_description">Обрати папку:</string>
-  <string name="delete_folder">Видалити із бібліотеки?</string>
-  <string name="delete_folder_content">Ви хочете видалити наступну папку із бібліотеки?</string>
-  <string name="folder_add_single_book">Книга</string>
-  <string name="folder_add_collection">Папка з декількома книгами</string>
-  <string name="for_example">наприклад</string>
-  <string name="content_add_book">Додати книгу</string>
-  <string name="content_is_folder">Папка</string>
-  <string name="content_is_file">Файл</string>
-  <string name="content_navigate_up">Перейти вверх</string>
-  <string name="permission_read_ext_explanation">Додатку необхідний дозвіл на читання вашого сховища даних для того, щоб шукати і відтворювати аудіокниги.</string>
-  <string name="permission_read_ext_request">Запитувати про дозволи знову?</string>
-  <string name="permission_rescan">Запитати знову</string>
-  <!--PlaybackSpeed-->
-  <string name="playback_speed">Швидкість програвання</string>
-  <!--Bookmarks-->
-  <string name="bookmark">Закладка</string>
-  <string name="bookmark_edit_title">Редагувати закладку</string>
-  <string name="acc_button_add_bookmark">Додати закладку на поточній позиції</string>
-  <string name="bookmark_edit_hint">Назва закладки</string>
-  <string name="bookmark_added">Закладка додана</string>
-  <string name="bookmark_delete_title">Видалити цю закладку?</string>
-  <!--Settings-->
-  <string name="pref_category_general">Загальні налаштування</string>
-  <string name="pref_category_playback">Налаштування програвання</string>
-  <string name="action_settings">Параметри</string>
-  <string name="pref_resume_on_replug">Відновити програвання</string>
-  <string name="pref_resume_on_replug_hint">Якщо програвання було припинено витяганням навушників, воно буде подовжено після підключення їх знову.</string>
-  <plurals name="minutes">
-    <item quantity="one">%d хвилина</item>
-    <item quantity="few">%d хвилин</item>
-    <item quantity="other">%d хвилин</item>
-  </plurals>
-  <plurals name="seconds">
-    <item quantity="one">%d секунда</item>
-    <item quantity="few">%d секунд</item>
-    <item quantity="other">%d секунд</item>
-  </plurals>
-  <string name="pref_seek_time">Пропустити</string>
-  <string name="pref_sleep_time">Час засинання</string>
-  <string name="pref_root_folder_title">Папка аудіокниги</string>
-  <string name="pref_root_folder_summary">Обрані папки за аудіокнигами.</string>
-  <string name="pref_theme_title">Тема</string>
-  <string name="pref_theme_light">Світла</string>
-  <string name="pref_theme_dark">Темна</string>
-  <string name="pref_pause_on_can_duck_title">Призупинити при перериванні</string>
-  <string name="pref_pause_on_can_duck_summary">Призупинити, коли перервано програвання замість зменшення гучності на час переривання.</string>
-  <string name="pref_send_bugs_title">Відправити звіт про помилки</string>
-  <string name="pref_send_bugs_summary">Автоматично відсилати звіти про помилки під час збою для допомоги розробки проекту.</string>
-  <string name="pref_auto_rewind_title">Автоматична перекрутка назад</string>
-  <plurals name="pref_auto_rewind_summary">
-    <item quantity="one">Автоматично перекрутити назад на %d секунду після ручного призупинення.</item>
-    <item quantity="few">Автоматично перекрутити назад на %d секунд після ручного призупинення.</item>
-    <item quantity="other">Автоматично перекрутити назад на %d секунд після ручного призупинення.</item>
-  </plurals>
-  <string name="pref_bookmark_on_sleep_title">Автоматично додавати закладку, коли спрацьовує таймер сну</string>
-  <string name="pref_bookmark_on_sleep_summary">Автоматично додавати закладку, коли таймер сну включається.</string>
-  <string name="pref_support_title">Підтримка</string>
-  <string name="pref_support_translations">Переклади</string>
-  <string name="pref_support_contribute">Підтримка та пропозиції</string>
-  <string name="pref_support_donation">Зробити внесок</string>
-  <string name="donation_worked_thanks">Щиро дякуємо. Це велика підтримка :)</string>
-  <string name="donation_not_worked">Ой… на жаль, щось не спрацювало</string>
-  <!--Misc-->
-  <string name="popup_edit">Редагувати</string>
-  <string name="remove">Видалити</string>
-  <!--hide folder dialog-->
-  <string name="hide_folder_title">Приховати папку</string>
-  <string name="hide_folder_content">Чи хочете ви приховати папку від музичних програвачів, щоб вони не розпізнавали вашу книгу як музику?</string>
-  <string name="hide_confirm">Приховати</string>
-  <!--license activity-->
+    <!--BookShelf-->
+    <string name="mal_file_message">Цей файл може бути зіпсований:</string>
+    <string name="mal_file_title">Зіпсований файл</string>
+    <string name="content_current_book">Книга, яку ви прослуховуєте</string>
+    <string name="current_book">Поточна книга</string>
+    <string name="change_layout_type">Змінити відображення</string>
+    <!--BookPlayFragment-->
+    <string name="cover">Обкладинка</string>
+    <string name="play_pause">Програвати / Призупинити</string>
+    <string name="action_sleep">Таймер сну</string>
+    <plurals name="pauses_after">
+        <item quantity="one">Призупинити через %d хвилину.</item>
+        <item quantity="few">Призупинити через %d хвилин.</item>
+        <item quantity="other">Призупинити через %d хвилин.</item>
+    </plurals>
+    <string name="rewind">Прокрутити назад</string>
+    <string name="fast_forward">Прокрутити вперед</string>
+    <string name="previous_track">Попередній файл</string>
+    <string name="next_track">Наступний файл</string>
+    <string name="play">Програвати</string>
+    <string name="pause">Призупинити</string>
+    <!--NoExternalStorage-->
+    <string name="no_external_storage">Картка пам’яті не знайдена. Будь ласка, переконайтеся, що вона встановлена та ваш пристрій не з’єднаний із комп’ютером кабелем.</string>
+    <string name="no_external_storage_action_bar_title">Картка пам’яті</string>
+    <!--Dialogs-->
+    <string name="dialog_confirm">Встановити</string>
+    <string name="dialog_cancel">Відмінити</string>
+    <!--EditBookDialog-->
+    <string name="content_previous_cover">Обрати попередню обкладинку</string>
+    <string name="content_next_cover">Обрати наступну обкладинку</string>
+    <string name="content_cover">Показати обрану обкладинку</string>
+    <string name="edit_book_name">Змінити назву</string>
+    <string name="edit_book_cover">Змінити обкладинку</string>
+    <string name="edit_book_title">Редагувати книгу</string>
+    <!--JumpToPosition-->
+    <string name="action_time_change">Перейти до</string>
+    <!--BookAdding-->
+    <string name="adding_failed_subfolder">Папки не повинні бути підпапками одна одної:</string>
+    <string name="audiobook_folders_title">Папки з аудіокнигами</string>
+    <string name="no_audiobook_folders_title">Обрати папку</string>
+    <string name="no_audiobook_folders_summary_start">Будь ласка, оберіть папку(и) з аудіокнигами.</string>
+    <string name="no_audiobook_folders_end">Ви можете обрати основну папку з різними книгами. Або ж ви можете обрати тільки одну книгу.</string>
+    <string name="chosen_folder_description">Обрати папку:</string>
+    <string name="delete_folder">Видалити із бібліотеки?</string>
+    <string name="delete_folder_content">Ви хочете видалити наступну папку із бібліотеки?</string>
+    <string name="folder_add_single_book">Книга</string>
+    <string name="folder_add_collection">Папка з декількома книгами</string>
+    <string name="for_example">наприклад</string>
+    <string name="content_add_book">Додати книгу</string>
+    <string name="content_is_folder">Папка</string>
+    <string name="content_is_file">Файл</string>
+    <string name="content_navigate_up">Перейти вверх</string>
+    <string name="permission_read_ext_explanation">Додатку необхідний дозвіл на читання вашого сховища даних для того, щоб шукати і відтворювати аудіокниги.</string>
+    <string name="permission_read_ext_request">Запитувати про дозволи знову?</string>
+    <string name="permission_rescan">Запитати знову</string>
+    <!--PlaybackSpeed-->
+    <string name="playback_speed">Швидкість програвання</string>
+    <!--Bookmarks-->
+    <string name="bookmark">Закладка</string>
+    <string name="bookmark_edit_title">Редагувати закладку</string>
+    <string name="acc_button_add_bookmark">Додати закладку на поточній позиції</string>
+    <string name="bookmark_edit_hint">Назва закладки</string>
+    <string name="bookmark_added">Закладка додана</string>
+    <string name="bookmark_delete_title">Видалити цю закладку?</string>
+    <!--Settings-->
+    <string name="pref_category_general">Загальні налаштування</string>
+    <string name="pref_category_playback">Налаштування програвання</string>
+    <string name="action_settings">Параметри</string>
+    <string name="pref_resume_on_replug">Відновити програвання</string>
+    <string name="pref_resume_on_replug_hint">Якщо програвання було припинено витяганням навушників, воно буде подовжено після підключення їх знову.</string>
+    <plurals name="minutes">
+        <item quantity="one">%d хвилина</item>
+        <item quantity="few">%d хвилин</item>
+        <item quantity="other">%d хвилин</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%d секунда</item>
+        <item quantity="few">%d секунд</item>
+        <item quantity="other">%d секунд</item>
+    </plurals>
+    <string name="pref_seek_time">Пропустити</string>
+    <string name="pref_sleep_time">Час засинання</string>
+    <string name="pref_root_folder_title">Папка аудіокниги</string>
+    <string name="pref_root_folder_summary">Обрані папки за аудіокнигами.</string>
+    <string name="pref_theme_title">Тема</string>
+    <string name="pref_theme_light">Світла</string>
+    <string name="pref_theme_dark">Темна</string>
+    <string name="pref_pause_on_can_duck_title">Призупинити при перериванні</string>
+    <string name="pref_pause_on_can_duck_summary">Призупинити, коли перервано програвання замість зменшення гучності на час переривання.</string>
+    <string name="pref_send_bugs_title">Відправити звіт про помилки</string>
+    <string name="pref_send_bugs_summary">Автоматично відсилати звіти про помилки під час збою для допомоги розробки проекту.</string>
+    <string name="pref_auto_rewind_title">Автоматична перекрутка назад</string>
+    <plurals name="pref_auto_rewind_summary">
+        <item quantity="one">Автоматично перекрутити назад на %d секунду після ручного призупинення.</item>
+        <item quantity="few">Автоматично перекрутити назад на %d секунд після ручного призупинення.</item>
+        <item quantity="other">Автоматично перекрутити назад на %d секунд після ручного призупинення.</item>
+    </plurals>
+    <string name="pref_bookmark_on_sleep_title">Автоматично додавати закладку, коли спрацьовує таймер сну</string>
+    <string name="pref_bookmark_on_sleep_summary">Автоматично додавати закладку, коли таймер сну включається.</string>
+    <string name="pref_support_title">Підтримка</string>
+    <string name="pref_support_translations">Переклади</string>
+    <string name="pref_support_contribute">Підтримка та пропозиції</string>
+    <string name="pref_support_donation">Зробити внесок</string>
+    <string name="donation_worked_thanks">Щиро дякуємо. Це велика підтримка :)</string>
+    <string name="donation_not_worked">Ой… на жаль, щось не спрацювало</string>
+    <!--Misc-->
+    <string name="popup_edit">Редагувати</string>
+    <string name="remove">Видалити</string>
+    <!--hide folder dialog-->
+    <string name="hide_folder_title">Приховати папку</string>
+    <string name="hide_folder_content">Чи хочете ви приховати папку від музичних програвачів, щоб вони не розпізнавали вашу книгу як музику?</string>
+    <string name="hide_confirm">Приховати</string>
+    <!--license activity-->
 </resources>
