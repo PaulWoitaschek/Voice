@@ -42,5 +42,5 @@ allprojects {
 
 task updateTranslations(type: Exec) {
     executable 'sh'
-    args "-c", "tx pull", "--all", "--min-perc=5"
+    args "-c", "tx pull -f --minimum-perc=5"
 }
