@@ -19,6 +19,7 @@ package de.ph1b.audiobook.fragment
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
@@ -259,6 +260,10 @@ class BookPlayFragment : BaseFragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.book_play, menu)
+
+        val speedItem = menu.findItem(R.id.action_time_lapse)
+        val canSetSpeed = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
+        speedItem.setEnabled(canSetSpeed)
 
         // sets the correct sleep timer icon
         val sleepTimerItem = menu.findItem(R.id.action_sleep)
