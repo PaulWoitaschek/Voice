@@ -191,7 +191,7 @@ class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOver
                         .negativeText(R.string.dialog_cancel)
                         .onPositive { materialDialog, dialogAction ->
                             val itemToDelete = adapter.getItem(position)
-                            presenter!!.removeFolder(itemToDelete)
+                            presenter()!!.removeFolder(itemToDelete)
                         }
                         .show()
             }

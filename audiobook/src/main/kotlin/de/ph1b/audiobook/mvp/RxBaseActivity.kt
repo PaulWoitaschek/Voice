@@ -27,41 +27,41 @@ import de.ph1b.audiobook.activity.BaseActivity
  */
 abstract class RxBaseActivity<V, P> : BaseActivity() where P : Presenter<V> {
 
+    private val presenterDelegate = PresenterDelegate<V, P>({ newPresenter() }, { provideView() })
+
     abstract fun newPresenter(): P
 
     abstract fun provideView(): V
 
-    public var presenter: P? = null
-        private set
+    fun presenter() = presenterDelegate.presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        presenter = newPresenter()
-        presenter!!.onRestore(savedInstanceState)
+        presenterDelegate.onCreate(savedInstanceState)
     }
 
     override fun onResume() {
-        super.onStart()
+        super.onResume()
 
-        presenter!!.bind(provideView())
+        presenterDelegate.onResume()
     }
 
     override fun onPause() {
-        super.onStop()
+        super.onPause()
 
-        presenter!!.unbind()
+        presenterDelegate.onPause()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        presenter!!.onSave(outState)
+        presenterDelegate.onSaveInstanceState(outState)
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
-        presenter = null
+        presenterDelegate.onDestroy()
     }
 }

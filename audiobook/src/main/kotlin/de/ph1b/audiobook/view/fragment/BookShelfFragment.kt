@@ -110,7 +110,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
 
         // init fab
         fab.setIconDrawable(playPauseDrawable)
-        fab.setOnClickListener { presenter!!.playPauseRequested() }
+        fab.setOnClickListener { presenter()!!.playPauseRequested() }
 
         // init ActionBar
         val actionBar = hostingActivity.supportActionBar!!
