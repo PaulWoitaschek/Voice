@@ -280,6 +280,11 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
         rv.add("/storage/external_SD")
         rv.add("/storage/ext_sd")
 
+        // this is a workaround for marshmallow as we can't know the paths of the sd cards any more.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            rv.add("/storage")
+        }
+
         val paths = ArrayList<File>(rv.size)
         for (item  in rv) {
             val f = File(item)
