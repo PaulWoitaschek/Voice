@@ -23,6 +23,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -36,11 +37,11 @@ import com.jakewharton.rxbinding.widget.RxAdapterView
 import com.jakewharton.rxbinding.widget.itemClicks
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.adapter.FolderChooserAdapter
+import de.ph1b.audiobook.adapter.MultiLineSpinnerAdapter
 import de.ph1b.audiobook.dialog.HideFolderDialog
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.mvp.RxBaseActivity
 import de.ph1b.audiobook.presenter.FolderChooserPresenter
-import de.ph1b.audiobook.uitools.HighlightedSpinnerAdapter
 import de.ph1b.audiobook.utils.PermissionHelper
 import timber.log.Timber
 import java.io.File
@@ -83,7 +84,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     private lateinit var spinnerGroup: View
 
     private lateinit var adapter: FolderChooserAdapter
-    private lateinit var spinnerAdapter: HighlightedSpinnerAdapter<File>
+    private lateinit var spinnerAdapter: MultiLineSpinnerAdapter<File>
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private fun askForReadExternalStoragePermission() {
@@ -169,7 +170,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
                 }
 
         // spinner
-        spinnerAdapter = HighlightedSpinnerAdapter(this, spinner)
+        spinnerAdapter = MultiLineSpinnerAdapter(spinner, this, Color.WHITE)
         spinner.adapter = spinnerAdapter
         RxAdapterView.itemSelections(spinner)
                 .filter { it != AdapterView.INVALID_POSITION } // filter invalid entries
@@ -211,11 +212,9 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     override fun newRootFolders(newFolders: List<File>) {
         Timber.i("newRootFolders called with $newFolders")
         spinnerGroup.visibility = if (newFolders.size <= 1) View.INVISIBLE else View.VISIBLE
-        val spinnerList = ArrayList<FileSpinnerData>()
-        newFolders.forEach { spinnerList.add(FileSpinnerData(it)) }
-        spinnerAdapter.clear()
-        spinnerAdapter.addAll(spinnerList)
-        spinnerAdapter.notifyDataSetChanged()
+        val spinnerList = ArrayList<MultiLineSpinnerAdapter.Data<File>>()
+        newFolders.forEach { spinnerList.add(MultiLineSpinnerAdapter.Data(it, it.name)) }
+        spinnerAdapter.setData(spinnerList)
     }
 
 
@@ -241,10 +240,6 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     enum class OperationMode {
         COLLECTION_BOOK,
         SINGLE_BOOK
-    }
-
-    class FileSpinnerData(data: File) : HighlightedSpinnerAdapter.SpinnerData<File>(data) {
-        override fun getStringRepresentation(toRepresent: File): String = data.name
     }
 
     companion object {
