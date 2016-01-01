@@ -67,10 +67,10 @@ import timber.log.Timber;
 @ReportsCrashes(
         httpMethod = HttpSender.Method.PUT,
         reportType = HttpSender.Type.JSON,
-        formUri = "http://acra-63e870.smileupps.com/acra-material/_design/acra-storage/_update/report",
-        formUriBasicAuthLogin = "defaultreporter",
-        formUriBasicAuthPassword = "KA0Kc8h4dV4lCZBz",
-        sendReportsAtShutdown = false) // TODO: Remove this once acra issue #332 is fixed
+        formUri = "http://193.164.131.231:5984/acra-map/_design/acra-storage/_update/report",
+        formUriBasicAuthLogin = "reporter",
+        formUriBasicAuthPassword = "Sl5YQ0c6IQCmbV0X",
+        sendReportsAtShutdown = false) // TODO: Remove this once ACRA issue #332 is fixed
 public class App extends Application {
 
     private static ApplicationComponent applicationComponent;
