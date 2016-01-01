@@ -55,6 +55,7 @@ import de.ph1b.audiobook.persistence.BookChestTest;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.playback.BookReaderService;
 import de.ph1b.audiobook.playback.WidgetUpdateService;
+import de.ph1b.audiobook.presenter.BookShelfBasePresenter;
 import de.ph1b.audiobook.presenter.BookShelfPresenter;
 import de.ph1b.audiobook.presenter.FolderChooserPresenter;
 import de.ph1b.audiobook.presenter.FolderOverviewPresenter;
@@ -116,8 +117,10 @@ public class App extends Application {
     }
 
     @Singleton
-    @Component(modules = {BaseModule.class, AndroidModule.class})
+    @Component(modules = {BaseModule.class, AndroidModule.class, PresenterModule.class})
     public interface ApplicationComponent {
+
+        BookShelfBasePresenter getBookShelfBasePresenter();
 
         Context getContext();
 

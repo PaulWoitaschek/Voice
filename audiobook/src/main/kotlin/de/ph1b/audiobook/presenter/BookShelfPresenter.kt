@@ -17,10 +17,8 @@
 
 package de.ph1b.audiobook.presenter
 
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.BookAdder
-import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
@@ -37,17 +35,14 @@ import javax.inject.Inject
  *
  * @author Paul Woitaschek
  */
-class BookShelfPresenter : Presenter<BookShelfFragment>() {
-
-    init {
-        App.component().inject(this)
-    }
-
-    @Inject lateinit var bookChest: BookChest
-    @Inject lateinit var bookAdder: BookAdder
-    @Inject lateinit var prefsManager: PrefsManager
-    @Inject lateinit var playStateManager: PlayStateManager
-    @Inject lateinit var mediaPlayerController: MediaPlayerController
+class BookShelfPresenter
+@Inject
+constructor(private val bookChest: BookChest,
+            private val bookAdder: BookAdder,
+            private val prefsManager: PrefsManager,
+            private val playStateManager: PlayStateManager,
+            private val mediaPlayerController: MediaPlayerController)
+: BookShelfBasePresenter() {
 
     override fun onBind(view: BookShelfFragment, subscriptions: CompositeSubscription) {
         Timber.i("onBind Called for $view")
@@ -105,7 +100,7 @@ class BookShelfPresenter : Presenter<BookShelfFragment>() {
         }
     }
 
-    fun playPauseRequested() {
+    override fun playPauseRequested() {
         mediaPlayerController.playPause()
     }
 }
