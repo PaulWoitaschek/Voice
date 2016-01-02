@@ -11,41 +11,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
  * /licenses/>.
  */
 
@@ -58,7 +24,6 @@ import de.ph1b.audiobook.testing.DummyCreator
 import de.ph1b.audiobook.testing.RealFileMocker
 import timber.log.Timber
 import java.util.*
-import javax.inject.Inject
 
 /**
  * Tests the book storage.
@@ -67,17 +32,24 @@ import javax.inject.Inject
  */
 class BookChestTest : ApplicationTestCase<App> (App::class.java) {
 
+    fun reinitInjects(component: App.ApplicationComponent) {
+        bookChest = component.bookChest();
+        bookAdder = component.bookAdder
+        prefsManager = component.prefsManager
+    }
+
     override fun setUp() {
         super.setUp()
 
         createApplication()
-        App.component().inject(this)
+        reinitInjects(App.component())
+
         realFileMocker.create(context)
     }
 
-    @Inject lateinit var bookChest: BookChest
-    @Inject lateinit var bookAdder: BookAdder
-    @Inject lateinit var prefsManager: PrefsManager
+    private lateinit var bookChest: BookChest
+    private lateinit var bookAdder: BookAdder
+    private lateinit var prefsManager: PrefsManager
 
     private val realFileMocker = RealFileMocker()
 
@@ -94,7 +66,7 @@ class BookChestTest : ApplicationTestCase<App> (App::class.java) {
 
         // recall inject so we have a new instance of book-shelf
         (context.applicationContext as App).initNewComponent()
-        App.component().inject(this)
+        reinitInjects(App.component())
 
         // retrieve the book by chapters
         val retrievedBook = bookChest.activeBooks

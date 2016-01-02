@@ -49,11 +49,12 @@ import de.ph1b.audiobook.dialog.prefs.SleepDialogFragment;
 import de.ph1b.audiobook.dialog.prefs.ThemePickerDialogFragment;
 import de.ph1b.audiobook.fragment.BookPlayFragment;
 import de.ph1b.audiobook.fragment.SettingsFragment;
-import de.ph1b.audiobook.mediaplayer.MediaPlayerControllerTest;
+import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.BookAdder;
-import de.ph1b.audiobook.persistence.BookChestTest;
+import de.ph1b.audiobook.persistence.BookChest;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.playback.BookReaderService;
+import de.ph1b.audiobook.playback.PlayStateManager;
 import de.ph1b.audiobook.playback.WidgetUpdateService;
 import de.ph1b.audiobook.presenter.BookShelfBasePresenter;
 import de.ph1b.audiobook.presenter.BookShelfPresenter;
@@ -122,11 +123,17 @@ public class App extends Application {
 
         BookShelfBasePresenter getBookShelfBasePresenter();
 
+        BookChest bookChest();
+
         Context getContext();
 
         PrefsManager getPrefsManager();
 
         BookAdder getBookAdder();
+
+        MediaPlayerController mediaPlayerController();
+
+        PlayStateManager playStateManager();
 
         void inject(WidgetUpdateService target);
 
@@ -152,8 +159,6 @@ public class App extends Application {
 
         void inject(App target);
 
-        void inject(MediaPlayerControllerTest target);
-
         void inject(BookReaderService target);
 
         void inject(SettingsFragment target);
@@ -169,8 +174,6 @@ public class App extends Application {
         void inject(BookPlayFragment target);
 
         void inject(BookmarkDialogFragment target);
-
-        void inject(BookChestTest target);
 
         void inject(AutoRewindDialogFragment target);
 
