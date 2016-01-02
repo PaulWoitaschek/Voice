@@ -30,6 +30,8 @@ android {
         targetSdkVersion 23
         versionCode 95
         versionName '2.5.0.5'
+
+        testInstrumentationRunner "de.ph1b.audiobook.testing.MockAppRunner"
     }
 
     buildTypes {
@@ -108,7 +110,9 @@ dependencies {
     // dependency injection
     def daggerVersion = "2.0.2"
     compile "com.google.dagger:dagger:$daggerVersion"
+    androidTestCompile "com.google.dagger:dagger:$daggerVersion"
     apt "com.google.dagger:dagger-compiler:$daggerVersion"
+    androidTestApt "com.google.dagger:dagger-compiler:$daggerVersion"
     provided "javax.annotation:jsr250-api:1.0"
 
     // logging

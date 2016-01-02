@@ -65,7 +65,7 @@ class BookChestTest : ApplicationTestCase<App> (App::class.java) {
         bookChest.addBook(bookIn)
 
         // recall inject so we have a new instance of book-shelf
-        (context.applicationContext as App).initNewComponent()
+        // TODO RECAP THIS (context.applicationContext as App).initNewComponent()
         reinitInjects(App.component())
 
         // retrieve the book by chapters

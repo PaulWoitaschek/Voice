@@ -96,19 +96,15 @@ public class App extends Application {
         Timber.i("onCreate");
         refWatcher = LeakCanary.install(this);
 
-        initNewComponent();
+        applicationComponent = newComponent();
         component().inject(this);
 
         bookAdder.scanForFiles(true);
         startService(new Intent(this, BookReaderService.class));
     }
 
-    /**
-     * This should be called once in onCreate. This is public only for testing!
-     */
-    public void initNewComponent() {
-        applicationComponent = DaggerApp_ApplicationComponent.builder()
-                .baseModule(new BaseModule())
+    protected ApplicationComponent newComponent() {
+        return DaggerApp_ApplicationComponent.builder()
                 .androidModule(new AndroidModule(this))
                 .build();
     }
