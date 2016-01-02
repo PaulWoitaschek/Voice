@@ -63,7 +63,7 @@ public class BookShelfFragmentTest extends ActivityInstrumentationTestCase2<Book
         }
         bookShelfMockPresenter.newSet(books);
 
-        Observable.range(1, COUNT)
+        Observable.range(1000, COUNT)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Action1<Integer>() {
@@ -86,7 +86,7 @@ public class BookShelfFragmentTest extends ActivityInstrumentationTestCase2<Book
                 .subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer integer) {
-                        bookShelfMockPresenter.addBook(DummyCreator.dummyBook(integer));
+                        bookShelfMockPresenter.removed(DummyCreator.dummyBook(integer));
                         countDownLatch.countDown();
                     }
                 });
