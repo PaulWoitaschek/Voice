@@ -18,6 +18,7 @@
 package de.ph1b.audiobook.view.fragment;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.suitebuilder.annotation.MediumTest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,8 @@ public class BookShelfFragmentTest extends ActivityInstrumentationTestCase2<Book
         bookShelfMockPresenter = ((TestApp) getActivity().getApplicationContext()).getBookShelfMockPresenter();
     }
 
-    public void testBla() throws InterruptedException {
+    @MediumTest
+    public void testAddingRemoving() throws InterruptedException {
         final int COUNT = 1000;
         final CountDownLatch countDownLatch = new CountDownLatch(2 * COUNT);
 
