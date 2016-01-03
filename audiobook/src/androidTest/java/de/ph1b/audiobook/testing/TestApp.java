@@ -32,6 +32,7 @@ import de.ph1b.audiobook.injection.BaseModule;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.presenter.BookShelfBasePresenter;
 import de.ph1b.audiobook.view.fragment.BookShelfFragment;
+import rx.subjects.PublishSubject;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -78,19 +79,18 @@ public class TestApp extends App {
 
     public static class BookShelfMockPresenter extends BookShelfBasePresenter {
 
+        public PublishSubject<Void> onBindSubject = PublishSubject.create();
+
         public void addBook(Book book) {
-            assert getView() != null;
-            getView().bookAddedOrUpdated(book);
+            if (getView() != null) getView().bookAddedOrUpdated(book);
         }
 
         public void newSet(List<Book> newBooks) {
-            assert getView() != null;
-            getView().newBooks(newBooks);
+            if (getView() != null) getView().newBooks(newBooks);
         }
 
         public void removed(Book book) {
-            assert getView() != null;
-            getView().bookRemoved(book);
+            if (getView() != null) getView().bookRemoved(book);
         }
 
         @Override
@@ -100,7 +100,7 @@ public class TestApp extends App {
 
         @Override
         public void onBind(BookShelfFragment view, @NotNull CompositeSubscription subscriptions) {
-
+            onBindSubject.onNext(null);
         }
     }
 }
