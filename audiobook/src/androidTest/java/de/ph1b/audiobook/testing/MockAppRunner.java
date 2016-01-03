@@ -15,33 +15,25 @@
  * /licenses/>.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package de.ph1b.audiobook.testing;
 
-buildscript {
+import android.app.Application;
+import android.app.Instrumentation;
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.test.runner.AndroidJUnitRunner;
 
-    ext.kotlinVersion = '1.0.0-beta-4584'
+/**
+ * Custom TestRunner that replaces the Application with the mocked Application when testing.
+ *
+ * @author Paul Woitaschek
+ */
+public class MockAppRunner extends AndroidJUnitRunner {
 
-    repositories {
-        jcenter()
+    @Override
+    @NonNull
+    public Application newApplication(@NonNull ClassLoader cl, @NonNull String className, @NonNull Context context)
+            throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+        return Instrumentation.newApplication(TestApp.class, context);
     }
-
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0-alpha3'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-    }
-}
-
-allprojects {
-    repositories {
-        jcenter()
-        maven { url "https://jitpack.io" }
-        mavenCentral()
-    }
-}
-
-task updateTranslations(type: Exec) {
-    executable 'sh'
-    args "-c", "tx pull -f --minimum-perc=5"
 }

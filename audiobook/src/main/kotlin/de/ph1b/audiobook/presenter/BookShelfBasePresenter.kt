@@ -15,33 +15,16 @@
  * /licenses/>.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package de.ph1b.audiobook.presenter
 
-buildscript {
+import de.ph1b.audiobook.mvp.Presenter
+import de.ph1b.audiobook.view.fragment.BookShelfFragment
 
-    ext.kotlinVersion = '1.0.0-beta-4584'
+/**
+ * Base class for presenter for [BookShelfFragment]
+ */
+abstract class BookShelfBasePresenter : Presenter<BookShelfFragment>() {
 
-    repositories {
-        jcenter()
-    }
+    abstract fun playPauseRequested()
 
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0-alpha3'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-    }
-}
-
-allprojects {
-    repositories {
-        jcenter()
-        maven { url "https://jitpack.io" }
-        mavenCentral()
-    }
-}
-
-task updateTranslations(type: Exec) {
-    executable 'sh'
-    args "-c", "tx pull -f --minimum-perc=5"
 }

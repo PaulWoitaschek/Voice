@@ -42,7 +42,7 @@ abstract class RxBaseFragment <V, P> : BaseFragment() where P : Presenter<V> {
     }
 
     override fun onResume() {
-        super.onStart()
+        super.onResume()
 
         presenterDelegate.onResume()
     }

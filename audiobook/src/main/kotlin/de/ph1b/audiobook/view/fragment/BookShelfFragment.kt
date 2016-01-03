@@ -42,7 +42,7 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.mvp.RxBaseFragment
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.presenter.BookShelfPresenter
+import de.ph1b.audiobook.presenter.BookShelfBasePresenter
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import java.util.*
@@ -53,9 +53,9 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(), BookShelfAdapter.OnItemClickListener, EditCoverDialogFragment.OnEditBookFinished {
+class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresenter>(), BookShelfAdapter.OnItemClickListener, EditCoverDialogFragment.OnEditBookFinished {
 
-    override fun newPresenter() = BookShelfPresenter()
+    override fun newPresenter() = App.component().bookShelfBasePresenter
 
     override fun provideView() = this
 

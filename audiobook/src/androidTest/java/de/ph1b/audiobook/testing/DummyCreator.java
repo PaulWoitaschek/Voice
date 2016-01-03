@@ -11,7 +11,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
  * /licenses/>.
  */
 
@@ -38,8 +38,11 @@ public class DummyCreator {
 
     private static final Random rnd = new Random();
 
-    public static Book dummyBook(File file1, File file2) {
-        long id = 1L;
+    public static Book dummyBook(long id) {
+        return dummyBook(new File("First.mp3"), new File("second.mp3"), id);
+    }
+
+    public static Book dummyBook(File file1, File file2, long id) {
         List<Bookmark> bookmarks = new ArrayList<>();
         Book.Type type = Book.Type.SINGLE_FOLDER;
         String author = "TestAuthor";
@@ -50,6 +53,9 @@ public class DummyCreator {
         List<Chapter> chapters = Lists.newArrayList(chapter1, chapter2);
         float playbackSpeed = 1F;
         String root = file1.getParent();
+        if (root == null) {
+            root = "fakeRoot";
+        }
         return new Book(id,
                 ImmutableList.copyOf(bookmarks),
                 type,
@@ -61,5 +67,9 @@ public class DummyCreator {
                 ImmutableList.copyOf(chapters),
                 playbackSpeed,
                 root);
+    }
+
+    public static Book dummyBook(File file1, File file2) {
+        return dummyBook(file1, file2, -1);
     }
 }
