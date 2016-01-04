@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.google.common.io.Files;
 import com.squareup.leakcanary.LeakCanary;
@@ -223,9 +224,9 @@ public class App extends Application {
         @Override
         protected void log(int priority, String tag, String message, Throwable t) {
             ensureFileExists();
-
             try {
-                Files.append(tag + "\t" + message + "\n", LOG_FILE, Charset.forName("UTF-8"));
+                String text = priorityToPrefix(priority) + "/[" + tag + "]\t" + message + "\n";
+                Files.append(text, LOG_FILE, Charset.forName("UTF-8"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -240,6 +241,31 @@ public class App extends Application {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+        }
+
+        /**
+         * Maps Log priority to Strings
+         *
+         * @param priority priority
+         * @return the mapped string or the priority as a string if no mapping could be made.
+         */
+        private static String priorityToPrefix(int priority) {
+            switch (priority) {
+                case Log.VERBOSE:
+                    return "V";
+                case Log.DEBUG:
+                    return "D";
+                case Log.INFO:
+                    return "I";
+                case Log.WARN:
+                    return "W";
+                case Log.ERROR:
+                    return "E";
+                case Log.ASSERT:
+                    return "A";
+                default:
+                    return String.valueOf(priority);
             }
         }
     }
