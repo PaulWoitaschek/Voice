@@ -20,13 +20,18 @@ package de.ph1b.audiobook.injection;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.preference.PreferenceManager;
 
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
+import org.acra.collector.CrashReportData;
 import org.acra.sender.HttpSender;
+import org.acra.sender.ReportSender;
+import org.acra.sender.ReportSenderException;
+import org.acra.util.JSONReportBuilder;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -89,8 +94,28 @@ public class App extends Application {
         super.onCreate();
 
         if (BuildConfig.DEBUG) {
+            // init timber
             Timber.plant(new Timber.DebugTree());
+
+            // enable acra and forward exceptions to timber
+            ACRA.init(this);
+            PreferenceManager.getDefaultSharedPreferences(this)
+                    .edit()
+                    .putBoolean("acra.enable", true)
+                    .apply();
+            ACRA.getErrorReporter().removeAllReportSenders();
+            ACRA.getErrorReporter().addReportSender(new ReportSender() {
+                @Override
+                public void send(Context context, CrashReportData errorContent) throws ReportSenderException {
+                    try {
+                        Timber.e("Timber caught: " + errorContent.toJSON().toString());
+                    } catch (JSONReportBuilder.JSONReportException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } else {
+            // don't init timber, but init ACRA
             ACRA.init(this);
         }
         Timber.i("onCreate");
