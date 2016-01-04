@@ -96,6 +96,7 @@ public class App extends Application {
         if (BuildConfig.DEBUG) {
             // init timber
             Timber.plant(new Timber.DebugTree());
+            Timber.plant(new WriteToDiscTree());
 
             // enable acra and forward exceptions to timber
             ACRA.init(this);
@@ -207,5 +208,13 @@ public class App extends Application {
         void inject(BookShelfPresenter target);
 
         void inject(FolderOverviewPresenter target);
+    }
+
+    private static class WriteToDiscTree extends Timber.Tree {
+
+        @Override
+        protected void log(int priority, String tag, String message, Throwable t) {
+
+        }
     }
 }
