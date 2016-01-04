@@ -20,13 +20,25 @@ package de.ph1b.audiobook.injection;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
+import com.google.common.io.Files;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
+import org.acra.collector.CrashReportData;
 import org.acra.sender.HttpSender;
+import org.acra.sender.ReportSender;
+import org.acra.sender.ReportSenderException;
+import org.acra.util.JSONReportBuilder;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -49,12 +61,14 @@ import de.ph1b.audiobook.dialog.prefs.SleepDialogFragment;
 import de.ph1b.audiobook.dialog.prefs.ThemePickerDialogFragment;
 import de.ph1b.audiobook.fragment.BookPlayFragment;
 import de.ph1b.audiobook.fragment.SettingsFragment;
-import de.ph1b.audiobook.mediaplayer.MediaPlayerControllerTest;
+import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.BookAdder;
-import de.ph1b.audiobook.persistence.BookChestTest;
+import de.ph1b.audiobook.persistence.BookChest;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.playback.BookReaderService;
+import de.ph1b.audiobook.playback.PlayStateManager;
 import de.ph1b.audiobook.playback.WidgetUpdateService;
+import de.ph1b.audiobook.presenter.BookShelfBasePresenter;
 import de.ph1b.audiobook.presenter.BookShelfPresenter;
 import de.ph1b.audiobook.presenter.FolderChooserPresenter;
 import de.ph1b.audiobook.presenter.FolderOverviewPresenter;
@@ -67,10 +81,10 @@ import timber.log.Timber;
 @ReportsCrashes(
         httpMethod = HttpSender.Method.PUT,
         reportType = HttpSender.Type.JSON,
-        formUri = "http://acra-63e870.smileupps.com/acra-material/_design/acra-storage/_update/report",
-        formUriBasicAuthLogin = "defaultreporter",
-        formUriBasicAuthPassword = "KA0Kc8h4dV4lCZBz",
-        sendReportsAtShutdown = false) // TODO: Remove this once acra issue #332 is fixed
+        formUri = "http://193.164.131.231:5984/acra-map/_design/acra-storage/_update/report",
+        formUriBasicAuthLogin = "reporter",
+        formUriBasicAuthPassword = "Sl5YQ0c6IQCmbV0X",
+        sendReportsAtShutdown = false) // TODO: Remove this once ACRA issue #332 is fixed
 public class App extends Application {
 
     private static ApplicationComponent applicationComponent;
@@ -87,26 +101,44 @@ public class App extends Application {
         super.onCreate();
 
         if (BuildConfig.DEBUG) {
+            // init timber
             Timber.plant(new Timber.DebugTree());
+            // also write to disc here.
+            Timber.plant(new WriteToDiscTree());
+
+            // enable acra and forward exceptions to timber
+            ACRA.init(this);
+            PreferenceManager.getDefaultSharedPreferences(this)
+                    .edit()
+                    .putBoolean("acra.enable", true)
+                    .apply();
+            ACRA.getErrorReporter().removeAllReportSenders();
+            ACRA.getErrorReporter().addReportSender(new ReportSender() {
+                @Override
+                public void send(Context context, CrashReportData errorContent) throws ReportSenderException {
+                    try {
+                        Timber.e("Timber caught: " + errorContent.toJSON().toString());
+                    } catch (JSONReportBuilder.JSONReportException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } else {
+            // don't init timber, but init ACRA
             ACRA.init(this);
         }
         Timber.i("onCreate");
         refWatcher = LeakCanary.install(this);
 
-        initNewComponent();
+        applicationComponent = newComponent();
         component().inject(this);
 
         bookAdder.scanForFiles(true);
         startService(new Intent(this, BookReaderService.class));
     }
 
-    /**
-     * This should be called once in onCreate. This is public only for testing!
-     */
-    public void initNewComponent() {
-        applicationComponent = DaggerApp_ApplicationComponent.builder()
-                .baseModule(new BaseModule())
+    protected ApplicationComponent newComponent() {
+        return DaggerApp_ApplicationComponent.builder()
                 .androidModule(new AndroidModule(this))
                 .build();
     }
@@ -116,14 +148,22 @@ public class App extends Application {
     }
 
     @Singleton
-    @Component(modules = {BaseModule.class, AndroidModule.class})
+    @Component(modules = {BaseModule.class, AndroidModule.class, PresenterModule.class})
     public interface ApplicationComponent {
+
+        BookShelfBasePresenter getBookShelfBasePresenter();
+
+        BookChest bookChest();
 
         Context getContext();
 
         PrefsManager getPrefsManager();
 
         BookAdder getBookAdder();
+
+        MediaPlayerController mediaPlayerController();
+
+        PlayStateManager playStateManager();
 
         void inject(WidgetUpdateService target);
 
@@ -149,8 +189,6 @@ public class App extends Application {
 
         void inject(App target);
 
-        void inject(MediaPlayerControllerTest target);
-
         void inject(BookReaderService target);
 
         void inject(SettingsFragment target);
@@ -167,8 +205,6 @@ public class App extends Application {
 
         void inject(BookmarkDialogFragment target);
 
-        void inject(BookChestTest target);
-
         void inject(AutoRewindDialogFragment target);
 
         void inject(FolderOverviewActivity target);
@@ -180,5 +216,64 @@ public class App extends Application {
         void inject(BookShelfPresenter target);
 
         void inject(FolderOverviewPresenter target);
+    }
+
+    /**
+     * Custom tree that logs to storage.
+     */
+    private static class WriteToDiscTree extends Timber.DebugTree {
+
+        private final File LOG_FILE = new File(Environment.getExternalStorageDirectory(), "materialaudiobookplayer.log");
+
+        @Override
+        protected void log(int priority, String tag, String message, Throwable t) {
+            ensureFileExists();
+            try {
+                String text = priorityToPrefix(priority) + "/[" + tag + "]\t" + message + "\n";
+                Files.append(text, LOG_FILE, Charset.forName("UTF-8"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        /**
+         * Makes sure that the log file exists
+         */
+        private void ensureFileExists() {
+            if (!LOG_FILE.exists()) {
+                try {
+                    Files.createParentDirs(LOG_FILE);
+                    //noinspection ResultOfMethodCallIgnored
+                    LOG_FILE.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        /**
+         * Maps Log priority to Strings
+         *
+         * @param priority priority
+         * @return the mapped string or the priority as a string if no mapping could be made.
+         */
+        private static String priorityToPrefix(int priority) {
+            switch (priority) {
+                case Log.VERBOSE:
+                    return "V";
+                case Log.DEBUG:
+                    return "D";
+                case Log.INFO:
+                    return "I";
+                case Log.WARN:
+                    return "W";
+                case Log.ERROR:
+                    return "E";
+                case Log.ASSERT:
+                    return "A";
+                default:
+                    return String.valueOf(priority);
+            }
+        }
     }
 }

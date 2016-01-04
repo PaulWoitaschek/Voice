@@ -27,8 +27,10 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 95
-        versionName '2.5.0.5'
+        versionCode 96
+        versionName '2.5.0.6'
+
+        testInstrumentationRunner "de.ph1b.audiobook.testing.MockAppRunner"
     }
 
     buildTypes {
@@ -56,7 +58,7 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
-        main.java.srcDirs += 'src/androidTest/kotlin'
+        androidTest.java.srcDirs += 'src/androidTest/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
     }
 
@@ -107,7 +109,9 @@ dependencies {
     // dependency injection
     def daggerVersion = "2.0.2"
     compile "com.google.dagger:dagger:$daggerVersion"
+    androidTestCompile "com.google.dagger:dagger:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
     provided "javax.annotation:jsr250-api:1.0"
 
     // logging
@@ -115,6 +119,13 @@ dependencies {
 
     //testing
     testCompile "junit:junit:4.12"
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.1') {
+        exclude module: 'support-annotations'
+    }
+    androidTestCompile('com.android.support.test:runner:0.4.1') {
+        exclude module: 'support-annotations'
+    }
+    androidTestCompile "com.jayway.android.robotium:robotium-solo:5.5.3"
 
     // rx extensions
     compile "io.reactivex:rxandroid:1.1.0"
@@ -136,5 +147,5 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     // player
-    compile 'com.github.AntennaPod:AntennaPod-AudioPlayer:v1.0.6'
+    compile 'com.github.AntennaPod:AntennaPod-AudioPlayer:v1.0.7'
 }

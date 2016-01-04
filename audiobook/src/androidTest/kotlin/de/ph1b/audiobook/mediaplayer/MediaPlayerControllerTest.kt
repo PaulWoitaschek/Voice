@@ -11,7 +11,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
  * /licenses/>.
  */
 
@@ -28,7 +28,6 @@ import de.ph1b.audiobook.testing.RealFileMocker
 import java.io.File
 import java.util.*
 import java.util.concurrent.CountDownLatch
-import javax.inject.Inject
 
 /**
  * Simple test for our MediaPlayer.
@@ -37,8 +36,8 @@ import javax.inject.Inject
  */
 class MediaPlayerControllerTest : ApplicationTestCase<App> (App::class.java) {
 
-    @Inject internal lateinit var mediaPlayerController: MediaPlayerController
-    @Inject internal lateinit var playStateManager: PlayStateManager
+    private lateinit var mediaPlayerController: MediaPlayerController
+    private lateinit var playStateManager: PlayStateManager
     private lateinit var realFileMocker: RealFileMocker
     private lateinit var files: List<File>
 
@@ -49,7 +48,9 @@ class MediaPlayerControllerTest : ApplicationTestCase<App> (App::class.java) {
         super.setUp()
 
         createApplication()
-        App.component().inject(this)
+        mediaPlayerController = App.component().mediaPlayerController()
+        playStateManager = App.component().playStateManager()
+
 
         realFileMocker = RealFileMocker()
         files = realFileMocker.create(context);

@@ -107,6 +107,7 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
      * @param book The new book
      */
     fun updateOrAddBook(book: Book) {
+        Timber.i("updateOrAddBook ${book.name}")
         var index = -1
         for (i in 0..sortedList.size() - 1) {
             if (sortedList.get(i).id == book.id) {
@@ -128,7 +129,7 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
      * @param books The new set of books
      */
     fun newDataSet(books: List<Book>) {
-        Timber.i("newDataSet was called.")
+        Timber.i("newDataSet was called with ${books.size} books")
         sortedList.batched {
             // remove old books
             val booksToDelete = ArrayList<Book>(size())
@@ -175,6 +176,7 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
         set(value) {
             if (value != field) {
                 field = value
+                Timber.i("displaymode changed to $field")
                 notifyDataSetChanged()
             }
         }
@@ -193,6 +195,7 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
      * @param id the id of the item
      */
     fun notifyItemAtIdChanged(id: Long) {
+        Timber.i("notifyItemAtIdChanged: $id")
         for (i in 0..sortedList.size() - 1) {
             if (sortedList.get(i).id == id) {
                 notifyItemChanged(i)

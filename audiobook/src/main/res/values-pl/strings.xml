@@ -73,6 +73,7 @@
     <string name="permission_read_ext_request">Czy powinniśmy pytać ponownie o nadanie uprawnień?</string>
     <string name="permission_rescan">Zarządaj ponownie</string>
     <string name="storage_pre_device">Przestrzeń dyskowa:</string>
+    <string name="storage_all">Wszystko</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Szybkość odtwarzania</string>
     <!--Bookmarks-->

@@ -42,9 +42,10 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.mvp.RxBaseFragment
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.presenter.BookShelfPresenter
+import de.ph1b.audiobook.presenter.BookShelfBasePresenter
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -53,9 +54,9 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(), BookShelfAdapter.OnItemClickListener, EditCoverDialogFragment.OnEditBookFinished {
+class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresenter>(), BookShelfAdapter.OnItemClickListener, EditCoverDialogFragment.OnEditBookFinished {
 
-    override fun newPresenter() = BookShelfPresenter()
+    override fun newPresenter() = App.component().bookShelfBasePresenter
 
     override fun provideView() = this
 
@@ -87,6 +88,8 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Timber.i("onCreate");
 
         setHasOptionsMenu(true)
 
@@ -243,6 +246,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
      * @param book the removed book
      */
     fun bookRemoved(book: Book) {
+        Timber.i("bookRemoved ${book.name}")
         adapter.removeBook(book)
     }
 
@@ -252,6 +256,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
      * @param book the changed book
      */
     fun bookAddedOrUpdated(book: Book) {
+        Timber.i("bookAddedOrUpdated: ${book.name}")
         adapter.updateOrAddBook(book)
     }
 
@@ -261,6 +266,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
      *@param books the new books
      */
     fun newBooks(books: List<Book>) {
+        Timber.i("${books.size} newBooks")
         adapter.newDataSet(books)
     }
 
@@ -269,6 +275,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
      * The book marked as current was changed. Updates the adapter and fab accordingly.
      */
     fun currentBookChanged(currentBook: Book?) {
+        Timber.i("currentBookChanged: ${currentBook?.name}")
         this.currentBook = currentBook
 
         for (i in 0..adapter.itemCount - 1) {
@@ -312,6 +319,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
     }
 
     fun showSpinnerIfNoData(showSpinnerIfNoData: Boolean) {
+        Timber.i("showSpinnerIfNoData $showSpinnerIfNoData")
         val shouldShowSpinner = adapter.itemCount == 0 && showSpinnerIfNoData
 
         recyclerView.visibility = if (shouldShowSpinner) View.GONE else View.VISIBLE
