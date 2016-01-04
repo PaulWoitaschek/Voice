@@ -246,6 +246,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
      * @param book the removed book
      */
     fun bookRemoved(book: Book) {
+        Timber.i("bookRemoved ${book.name}")
         adapter.removeBook(book)
     }
 
@@ -255,6 +256,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
      * @param book the changed book
      */
     fun bookAddedOrUpdated(book: Book) {
+        Timber.i("bookAddedOrUpdated: ${book.name}")
         adapter.updateOrAddBook(book)
     }
 
@@ -264,6 +266,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
      *@param books the new books
      */
     fun newBooks(books: List<Book>) {
+        Timber.i("${books.size} newBooks")
         adapter.newDataSet(books)
     }
 
@@ -272,6 +275,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
      * The book marked as current was changed. Updates the adapter and fab accordingly.
      */
     fun currentBookChanged(currentBook: Book?) {
+        Timber.i("currentBookChanged: ${currentBook?.name}")
         this.currentBook = currentBook
 
         for (i in 0..adapter.itemCount - 1) {
@@ -315,6 +319,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
     }
 
     fun showSpinnerIfNoData(showSpinnerIfNoData: Boolean) {
+        Timber.i("showSpinnerIfNoData $showSpinnerIfNoData")
         val shouldShowSpinner = adapter.itemCount == 0 && showSpinnerIfNoData
 
         recyclerView.visibility = if (shouldShowSpinner) View.GONE else View.VISIBLE
