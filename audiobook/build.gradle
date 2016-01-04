@@ -28,7 +28,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 96
-        versionName 'snapshot-96'
+        versionName '2.5.0.6'
 
         testInstrumentationRunner "de.ph1b.audiobook.testing.MockAppRunner"
     }
