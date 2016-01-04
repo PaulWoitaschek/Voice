@@ -20,8 +20,10 @@ package de.ph1b.audiobook.injection;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 
+import com.google.common.io.Files;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -32,6 +34,10 @@ import org.acra.sender.HttpSender;
 import org.acra.sender.ReportSender;
 import org.acra.sender.ReportSenderException;
 import org.acra.util.JSONReportBuilder;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -210,11 +216,31 @@ public class App extends Application {
         void inject(FolderOverviewPresenter target);
     }
 
-    private static class WriteToDiscTree extends Timber.Tree {
+    private static class WriteToDiscTree extends Timber.DebugTree {
+
+        private final File LOG_FILE = new File(Environment.getExternalStorageDirectory(), "materialaudiobookplayer.log");
 
         @Override
         protected void log(int priority, String tag, String message, Throwable t) {
+            ensureFileExists();
 
+            try {
+                Files.append(tag + "\t" + message + "\n", LOG_FILE, Charset.forName("UTF-8"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private void ensureFileExists() {
+            if (!LOG_FILE.exists()) {
+                try {
+                    Files.createParentDirs(LOG_FILE);
+                    //noinspection ResultOfMethodCallIgnored
+                    LOG_FILE.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }
