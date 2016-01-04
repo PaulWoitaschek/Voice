@@ -103,6 +103,7 @@ public class App extends Application {
         if (BuildConfig.DEBUG) {
             // init timber
             Timber.plant(new Timber.DebugTree());
+            // also write to disc here.
             Timber.plant(new WriteToDiscTree());
 
             // enable acra and forward exceptions to timber
@@ -217,6 +218,9 @@ public class App extends Application {
         void inject(FolderOverviewPresenter target);
     }
 
+    /**
+     * Custom tree that logs to storage.
+     */
     private static class WriteToDiscTree extends Timber.DebugTree {
 
         private final File LOG_FILE = new File(Environment.getExternalStorageDirectory(), "materialaudiobookplayer.log");
@@ -232,6 +236,9 @@ public class App extends Application {
             }
         }
 
+        /**
+         * Makes sure that the log file exists
+         */
         private void ensureFileExists() {
             if (!LOG_FILE.exists()) {
                 try {
