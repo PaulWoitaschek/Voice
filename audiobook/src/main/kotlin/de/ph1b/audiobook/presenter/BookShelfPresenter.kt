@@ -67,6 +67,7 @@ constructor(private val bookChest: BookChest,
             // informs the view once a book was removed
             add(bookChest.removedObservable()
                     .observeOn(AndroidSchedulers.mainThread())
+                    .onBackpressureBuffer()
                     .subscribe { view.bookRemoved(it) })
 
             // Subscription that notifies the adapter when there is a new or updated book.
