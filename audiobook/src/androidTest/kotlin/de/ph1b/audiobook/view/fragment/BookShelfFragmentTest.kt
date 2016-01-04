@@ -27,6 +27,7 @@ import de.ph1b.audiobook.testing.TestApp
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
+import timber.log.Timber
 import java.util.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -64,12 +65,13 @@ class BookShelfFragmentTest : ActivityInstrumentationTestCase2<BookActivity>(Boo
     fun testRestart() {
         solo.waitForActivity(BookActivity::class.java)
 
-        val AMOUNT_OF_BOOKS = 50
+        val AMOUNT_OF_BOOKS = 10
 
         bookShelfMockPresenter
                 .onBindSubject
                 .map { random.nextInt(AMOUNT_OF_BOOKS) }
                 .map { randomBooks(it) }
+                .doOnNext { Timber.i("${it.size} books in new set") }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { bookShelfMockPresenter.newSet(it) }
@@ -90,6 +92,24 @@ class BookShelfFragmentTest : ActivityInstrumentationTestCase2<BookActivity>(Boo
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe { bookShelfMockPresenter.removed(it) }
+
+        bookShelfMockPresenter
+                .onBindSubject
+                .map { random.nextInt(AMOUNT_OF_BOOKS) }
+                .map { DummyCreator.dummyBook(it.toLong()) }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe { bookShelfMockPresenter.onCurrentBookChanged(it) }
+
+        // trigger spinner showing
+        var lastBool = false
+        bookShelfMockPresenter
+                .onBindSubject
+                .flatMap { Observable.from((1..3)) }
+                .doOnNext { lastBool = lastBool.not() }
+                .map { lastBool }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { bookShelfMockPresenter.showSpinnerIfNoData(it) }
 
         val times = 100
         val latch = CountDownLatch(times)

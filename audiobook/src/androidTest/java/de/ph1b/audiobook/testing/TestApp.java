@@ -89,6 +89,14 @@ public class TestApp extends App {
             if (getView() != null) getView().newBooks(newBooks);
         }
 
+        public void showSpinnerIfNoData(boolean visible) {
+            if (getView() != null) getView().showSpinnerIfNoData(visible);
+        }
+
+        public void onCurrentBookChanged(Book book) {
+            if (getView() != null) getView().currentBookChanged(book);
+        }
+
         public void removed(Book book) {
             if (getView() != null) getView().bookRemoved(book);
         }

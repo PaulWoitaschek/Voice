@@ -45,6 +45,7 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.presenter.BookShelfBasePresenter
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -87,6 +88,8 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Timber.i("onCreate");
 
         setHasOptionsMenu(true)
 
