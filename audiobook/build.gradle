@@ -18,7 +18,6 @@
 import com.google.common.io.Files
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'kotlin-android'
 
 android {
@@ -111,8 +110,8 @@ dependencies {
     def daggerVersion = "2.0.2"
     compile "com.google.dagger:dagger:$daggerVersion"
     androidTestCompile "com.google.dagger:dagger:$daggerVersion"
-    apt "com.google.dagger:dagger-compiler:$daggerVersion"
-    androidTestApt "com.google.dagger:dagger-compiler:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
     provided "javax.annotation:jsr250-api:1.0"
 
     // logging
