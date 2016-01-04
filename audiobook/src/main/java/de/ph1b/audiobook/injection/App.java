@@ -20,13 +20,25 @@ package de.ph1b.audiobook.injection;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
+import com.google.common.io.Files;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
+import org.acra.collector.CrashReportData;
 import org.acra.sender.HttpSender;
+import org.acra.sender.ReportSender;
+import org.acra.sender.ReportSenderException;
+import org.acra.util.JSONReportBuilder;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -89,8 +101,30 @@ public class App extends Application {
         super.onCreate();
 
         if (BuildConfig.DEBUG) {
+            // init timber
             Timber.plant(new Timber.DebugTree());
+            // also write to disc here.
+            Timber.plant(new WriteToDiscTree());
+
+            // enable acra and forward exceptions to timber
+            ACRA.init(this);
+            PreferenceManager.getDefaultSharedPreferences(this)
+                    .edit()
+                    .putBoolean("acra.enable", true)
+                    .apply();
+            ACRA.getErrorReporter().removeAllReportSenders();
+            ACRA.getErrorReporter().addReportSender(new ReportSender() {
+                @Override
+                public void send(Context context, CrashReportData errorContent) throws ReportSenderException {
+                    try {
+                        Timber.e("Timber caught: " + errorContent.toJSON().toString());
+                    } catch (JSONReportBuilder.JSONReportException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } else {
+            // don't init timber, but init ACRA
             ACRA.init(this);
         }
         Timber.i("onCreate");
@@ -182,5 +216,64 @@ public class App extends Application {
         void inject(BookShelfPresenter target);
 
         void inject(FolderOverviewPresenter target);
+    }
+
+    /**
+     * Custom tree that logs to storage.
+     */
+    private static class WriteToDiscTree extends Timber.DebugTree {
+
+        private final File LOG_FILE = new File(Environment.getExternalStorageDirectory(), "materialaudiobookplayer.log");
+
+        @Override
+        protected void log(int priority, String tag, String message, Throwable t) {
+            ensureFileExists();
+            try {
+                String text = priorityToPrefix(priority) + "/[" + tag + "]\t" + message + "\n";
+                Files.append(text, LOG_FILE, Charset.forName("UTF-8"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        /**
+         * Makes sure that the log file exists
+         */
+        private void ensureFileExists() {
+            if (!LOG_FILE.exists()) {
+                try {
+                    Files.createParentDirs(LOG_FILE);
+                    //noinspection ResultOfMethodCallIgnored
+                    LOG_FILE.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        /**
+         * Maps Log priority to Strings
+         *
+         * @param priority priority
+         * @return the mapped string or the priority as a string if no mapping could be made.
+         */
+        private static String priorityToPrefix(int priority) {
+            switch (priority) {
+                case Log.VERBOSE:
+                    return "V";
+                case Log.DEBUG:
+                    return "D";
+                case Log.INFO:
+                    return "I";
+                case Log.WARN:
+                    return "W";
+                case Log.ERROR:
+                    return "E";
+                case Log.ASSERT:
+                    return "A";
+                default:
+                    return String.valueOf(priority);
+            }
+        }
     }
 }
