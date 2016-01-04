@@ -66,6 +66,7 @@ import de.ph1b.audiobook.model.BookAdder;
 import de.ph1b.audiobook.persistence.BookChest;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.playback.BookReaderService;
+import de.ph1b.audiobook.playback.FalseChannelDetector;
 import de.ph1b.audiobook.playback.PlayStateManager;
 import de.ph1b.audiobook.playback.WidgetUpdateService;
 import de.ph1b.audiobook.presenter.BookShelfBasePresenter;
@@ -91,6 +92,9 @@ public class App extends Application {
     private static RefWatcher refWatcher;
     @Inject
     BookAdder bookAdder;
+
+    @Inject
+    FalseChannelDetector falseChannelDetector;
 
     public static void leakWatch(Object object) {
         refWatcher.watch(object);
@@ -132,6 +136,8 @@ public class App extends Application {
 
         applicationComponent = newComponent();
         component().inject(this);
+
+        Timber.i("can set custom mediaplayer: " + falseChannelDetector.channelCountMatches());
 
         bookAdder.scanForFiles(true);
         startService(new Intent(this, BookReaderService.class));
