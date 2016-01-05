@@ -81,9 +81,9 @@ import timber.log.Timber;
 @ReportsCrashes(
         httpMethod = HttpSender.Method.PUT,
         reportType = HttpSender.Type.JSON,
-        formUri = "http://193.164.131.231:5984/acra-map/_design/acra-storage/_update/report",
-        formUriBasicAuthLogin = "reporter",
-        formUriBasicAuthPassword = "Sl5YQ0c6IQCmbV0X",
+        formUri = "http://acra-63e870.smileupps.com/acra-material/_design/acra-storage/_update/report",
+        formUriBasicAuthLogin = "97user",
+        formUriBasicAuthPassword = "sUjg9VkOgxTZbzVL",
         sendReportsAtShutdown = false) // TODO: Remove this once ACRA issue #332 is fixed
 public class App extends Application {
 
