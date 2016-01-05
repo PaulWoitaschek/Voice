@@ -62,14 +62,90 @@ constructor(private val context: Context) {
                     val containsChannelCount = format.containsKey(MediaFormat.KEY_CHANNEL_COUNT)
                     val containsSampleRate = format.containsKey(MediaFormat.KEY_SAMPLE_RATE)
                     val containsMime = format.containsKey(MediaFormat.KEY_MIME)
-                    if (!containsChannelCount || !containsSampleRate || !containsMime) {
-                        Timber.d("containsChannelCount=$containsChannelCount and containsSampelRate=$containsSampleRate and containsMime=$containsMime. Returning false now")
+                    val containsDuration = format.containsKey(MediaFormat.KEY_DURATION)
+                    if (!containsChannelCount || !containsSampleRate || !containsMime || !containsDuration) {
+                        Timber.d("containsChannelCount=$containsChannelCount and containsSampelRate=$containsSampleRate and containsMime=$containsMime and containsDuration=$containsDuration. Returning false now")
                         return false
                     }
                     val extractorChannelCount = format.getInteger(MediaFormat.KEY_CHANNEL_COUNT)
                     val sampleRate = format.getInteger(MediaFormat.KEY_SAMPLE_RATE)
                     val mime = format.getString(MediaFormat.KEY_MIME)
+                    val duration = format.getLong(MediaFormat.KEY_DURATION)
                     Timber.d("extractorChannelCount=$extractorChannelCount, sampelRate=$sampleRate, mime=$mime")
+
+                    val codec = MediaCodec.createDecoderByType(mime)
+                    codec.configure(format, null, null, 0)
+
+                    codec.start()
+                    val inputBuffers = codec.inputBuffers
+                    var outputBuffers = codec.outputBuffers
+                    var sawInputEOS = false
+                    var sawOutputEOS = false
+                    var codecSampleRate = 0
+                    var codecChannelCount = 0
+                    var bytesCount = 0
+                    while (!sawInputEOS && !sawOutputEOS) {
+                        val inputBufIndex = codec.dequeueInputBuffer(200)
+                        if (inputBufIndex >= 0) {
+                            val dstBuf = inputBuffers[inputBufIndex]
+                            var sampleSize = extractor.readSampleData(dstBuf, 0)
+                            val presentationTimeUs =
+                                    if (sampleSize < 0) {
+                                        sawInputEOS = true
+                                        sampleSize = 0
+                                        0
+                                    } else {
+                                        extractor.sampleTime
+                                    }
+                            val flags = if (sawInputEOS) MediaCodec.BUFFER_FLAG_END_OF_STREAM else 0
+                            codec.queueInputBuffer(
+                                    inputBufIndex,
+                                    0,
+                                    sampleSize,
+                                    presentationTimeUs,
+                                    flags);
+                            if (!sawInputEOS) {
+                                extractor.advance()
+                            }
+                        }
+
+                        var info = MediaCodec.BufferInfo()
+                        var res: Int
+                        do {
+                            res = codec.dequeueOutputBuffer(info, 200);
+                            if (res >= 0) {
+                                val chunk = ByteArray(info.size)
+                                outputBuffers[res].get(chunk);
+                                outputBuffers[res].clear();
+                                if (chunk.size > 0) {
+                                    bytesCount += chunk.size;
+                                }
+                                codec.releaseOutputBuffer(res, false);
+                                if ((info.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
+                                    sawOutputEOS = true;
+                                }
+                            } else //noinspection deprecation
+                                if (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED) {
+                                    //noinspection deprecation
+                                    outputBuffers = codec.outputBuffers;
+                                } else if (res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
+
+                                    val oFormat = codec
+                                            .outputFormat;
+                                    codecSampleRate = oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
+                                    codecChannelCount = oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
+                                    Timber.d("Codec output format changed");
+                                    Timber.d("FalseChannelDetector", "Codec output sample rate = " + codecSampleRate);
+                                    Timber.d("FalseChannelDetector", "Codec output channel count = " + codecChannelCount);
+                                    //noinspection deprecation
+                                    outputBuffers = codec.outputBuffers;
+
+                                }
+                        } while (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED || res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED);
+                    }
+
+                    val calculatedCount = (duration * codecSampleRate * codecChannelCount * 2)
+                    Timber.i("calculatedCount =$calculatedCount, measuredCount=$bytesCount")
 
                     val track = track(extractorChannelCount, sampleRate)
                     if (track == null) {
