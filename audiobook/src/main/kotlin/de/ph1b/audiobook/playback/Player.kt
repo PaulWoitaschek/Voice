@@ -47,6 +47,7 @@ constructor(context: Context) {
     init {
         mediaPlayer.onError
                 .subscribe {
+                    Timber.d("onError at $currentFile")
                     mediaPlayer.reset()
                     state = State.NONE
                     errorSubject.onNext(Unit)
@@ -158,8 +159,7 @@ constructor(context: Context) {
 
     companion object {
 
-        val useCustomMediaPlayer = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN &&
-                Build.VERSION.SDK_INT < Build.VERSION_CODES.M
+        val useCustomMediaPlayer = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
 
         val canSetSpeed = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
     }
