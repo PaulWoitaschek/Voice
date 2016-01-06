@@ -117,7 +117,7 @@ public class App extends Application {
                 @Override
                 public void send(Context context, CrashReportData errorContent) throws ReportSenderException {
                     try {
-                        Timber.e("Timber caught: " + errorContent.toJSON().toString());
+                        Timber.e("Timber caught %s", errorContent.toJSON().toString());
                     } catch (JSONReportBuilder.JSONReportException e) {
                         e.printStackTrace();
                     }
