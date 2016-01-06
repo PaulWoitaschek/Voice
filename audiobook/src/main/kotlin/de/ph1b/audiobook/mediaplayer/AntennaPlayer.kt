@@ -18,7 +18,9 @@
 package de.ph1b.audiobook.mediaplayer
 
 import android.content.Context
+import android.media.AudioManager
 import android.os.Build
+import android.os.PowerManager
 import org.antennapod.audio.MediaPlayer
 import rx.subjects.PublishSubject
 import timber.log.Timber
@@ -53,6 +55,9 @@ constructor(context: Context)
             if (currentFile != null) prepare(currentFile!!)
             completionSubject.onNext(Unit)
         }
+
+        mediaPlayer.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK or PowerManager.ON_AFTER_RELEASE)
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
     }
 
     private var currentFile: File? = null
