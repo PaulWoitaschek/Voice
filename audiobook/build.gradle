@@ -27,8 +27,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 98
-        versionName '2.5.0.7.1'
+        versionCode 99
+        versionName '2.5.0.8'
 
         testInstrumentationRunner "de.ph1b.audiobook.testing.MockAppRunner"
     }
@@ -147,5 +147,5 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     // player
-    compile 'com.github.AntennaPod:AntennaPod-AudioPlayer:v1.0.7'
+    compile 'com.github.AntennaPod:AntennaPod-AudioPlayer:v1.0.8'
 }

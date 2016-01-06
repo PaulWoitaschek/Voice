@@ -15,7 +15,7 @@
  * /licenses/>.
  */
 
-package de.ph1b.audiobook.mediaplayer
+package de.ph1b.audiobook.playback
 
 import android.content.Context
 import android.content.Intent
@@ -23,7 +23,6 @@ import de.ph1b.audiobook.activity.BookActivity
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.view.fragment.BookShelfFragment
 import rx.Observable
 import rx.subjects.BehaviorSubject
@@ -146,26 +145,26 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
     fun play() {
         lock.withLock {
             when (state) {
-                MediaPlayerController.State.COMPLETED -> {
+                State.COMPLETED -> {
                     player.currentPosition = 0
                     player.playing = true
                     startUpdating()
                     playStateManager.playState.onNext(PlayStateManager.PlayState.PLAYING)
                     state = State.STARTED
                 }
-                MediaPlayerController.State.PAUSED -> {
+                State.PAUSED -> {
                     player.playing = true
                     startUpdating()
                     playStateManager.playState.onNext(PlayStateManager.PlayState.PLAYING)
                     state = State.STARTED
                 }
-                MediaPlayerController.State.STOPPED -> {
+                State.STOPPED -> {
                     prepare()
                     if (state == State.PAUSED) {
                         play()
                     }
                 }
-                MediaPlayerController.State.STARTED -> {
+                State.STARTED -> {
 
                 }
             }
@@ -302,7 +301,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
             Timber.v("pause acquired lock. state is=%s", state)
             if (book != null) {
                 when (state) {
-                    MediaPlayerController.State.STARTED -> {
+                    State.STARTED -> {
                         player.playing = false
                         stopUpdating()
 
@@ -381,7 +380,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                 } else {
                     if (state == State.STOPPED) prepare()
                     when (state) {
-                        MediaPlayerController.State.STARTED, MediaPlayerController.State.PAUSED, State.COMPLETED -> {
+                        State.STARTED, State.PAUSED, State.COMPLETED -> {
                             player.currentPosition = time
                             book = book!!.copy(time = time)
                             db.updateBook(book!!)

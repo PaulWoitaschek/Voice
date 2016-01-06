@@ -79,7 +79,7 @@ public class TestApp extends App {
 
     public static class BookShelfMockPresenter extends BookShelfBasePresenter {
 
-        public PublishSubject<Void> onBindSubject = PublishSubject.create();
+        public final PublishSubject<Void> onBindSubject = PublishSubject.create();
 
         public void addBook(Book book) {
             if (getView() != null) getView().bookAddedOrUpdated(book);

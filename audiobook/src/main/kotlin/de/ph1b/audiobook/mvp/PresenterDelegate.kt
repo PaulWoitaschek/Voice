@@ -34,11 +34,11 @@ class PresenterDelegate <V, P>(private val newPresenter: () -> P, private val ge
         presenter!!.onRestore(savedInstanceState)
     }
 
-    fun onResume() {
+    fun onStart() {
         presenter!!.bind(getView.invoke())
     }
 
-    fun onPause() {
+    fun onStop() {
         presenter!!.unbind()
     }
 

@@ -19,7 +19,6 @@ package de.ph1b.audiobook.fragment
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
@@ -44,11 +43,12 @@ import de.ph1b.audiobook.dialog.BookmarkDialogFragment
 import de.ph1b.audiobook.dialog.JumpToPositionDialogFragment
 import de.ph1b.audiobook.dialog.prefs.PlaybackSpeedDialogFragment
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.playback.MediaPlayerController
 import de.ph1b.audiobook.playback.PlayStateManager
+import de.ph1b.audiobook.playback.Player
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
@@ -262,8 +262,7 @@ class BookPlayFragment : BaseFragment() {
         inflater.inflate(R.menu.book_play, menu)
 
         val speedItem = menu.findItem(R.id.action_time_lapse)
-        val canSetSpeed = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
-        speedItem.setEnabled(canSetSpeed)
+        speedItem.setEnabled(Player.canSetSpeed)
 
         // sets the correct sleep timer icon
         val sleepTimerItem = menu.findItem(R.id.action_sleep)

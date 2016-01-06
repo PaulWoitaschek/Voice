@@ -15,49 +15,58 @@
  * /licenses/>.
  */
 
-package de.ph1b.audiobook.mediaplayer
+package de.ph1b.audiobook.playback
 
 import android.content.Context
+import android.media.AudioManager
 import android.os.Build
-import org.antennapod.audio.MediaPlayer
+import android.os.PowerManager
 import rx.subjects.PublishSubject
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
 /**
- * Wrapper around AntennaPods player.
+ * The media player.
  *
  * @author Paul Woitaschek
  */
-class AntennaPlayer
+class Player
 @Inject
-constructor(context: Context)
-: Player {
+constructor(context: Context) {
+
+    private val mediaPlayer = if (useCustomMediaPlayer) {
+        AntennaPlayerDelegate(context)
+    } else {
+        AndroidPlayerDelegate()
+    }
 
     private var state = State.NONE
-
-    private val mediaPlayer = object : MediaPlayer(context, false) {
-        override fun useSonic() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
-    }
-
-    init {
-        mediaPlayer.setOnErrorListener { mediaPlayer, i, j ->
-            mediaPlayer.reset()
-            state = State.NONE
-            errorSubject.onNext(Unit)
-            true
-        }
-
-        mediaPlayer.setOnCompletionListener {
-            if (currentFile != null) prepare(currentFile!!)
-            completionSubject.onNext(Unit)
-        }
-    }
-
     private var currentFile: File? = null
 
-    override fun prepare(file: File) {
+    init {
+        mediaPlayer.onError
+                .subscribe {
+                    mediaPlayer.reset()
+                    state = State.NONE
+                    errorSubject.onNext(Unit)
+                }
+
+        mediaPlayer.onCompletion
+                .subscribe {
+                    if (currentFile != null) prepare(currentFile!!)
+                    completionSubject.onNext(Unit)
+                }
+
+        mediaPlayer.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK or PowerManager.ON_AFTER_RELEASE)
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
+    }
+
+
+    /**
+     * Prepares an audio file.
+     */
+    fun prepare(file: File) {
         currentFile = file
         mediaPlayer.reset()
         mediaPlayer.setDataSource(file.absolutePath)
@@ -65,7 +74,10 @@ constructor(context: Context)
         state = State.PREPARED
     }
 
-    override var currentPosition: Int
+    /**
+     * The current position in the track.
+     */
+    var currentPosition: Int
         get() = when (state) {
             State.PREPARED, State.PLAYING -> mediaPlayer.currentPosition
             else -> 0
@@ -79,8 +91,11 @@ constructor(context: Context)
             }
         }
 
-    override var playing: Boolean
-        get() = mediaPlayer.isPlaying
+    /**
+     * If true the player will start as soon as he is prepared
+     */
+    var playing: Boolean
+        get() = mediaPlayer.isPlaying()
         set(value) {
             if (value) {
                 when (state) {
@@ -101,21 +116,34 @@ constructor(context: Context)
             }
         }
 
-    override var playbackSpeed: Float
-        get() = mediaPlayer.currentSpeedMultiplier
+    /**
+     * The playback rate. 1.0 is normal
+     */
+    var playbackSpeed: Float
+        get() = mediaPlayer.playbackSpeed
         set(value) {
-            mediaPlayer.setPlaybackSpeed(value)
+            mediaPlayer.playbackSpeed = value
         }
 
     private val errorSubject = PublishSubject.create<Unit>()
 
     private val completionSubject = PublishSubject.create<Unit>()
 
-    override val errorObservable = errorSubject.asObservable()
+    /**
+     * An observable that emits when an error is detected
+     */
+    val errorObservable = errorSubject.asObservable()
 
-    override val completionObservable = completionSubject.asObservable()
+    /**
+     * An observable that emits once a track is finished.
+     */
+    val completionObservable = completionSubject.asObservable()
 
-    override val duration: Int
+
+    /**
+     * The duration of the current track
+     */
+    val duration: Int
         get() = when (state) {
             State.PREPARED, State.PLAYING -> mediaPlayer.duration
             else -> 0
@@ -125,5 +153,14 @@ constructor(context: Context)
         NONE,
         PREPARED,
         PLAYING
+    }
+
+
+    companion object {
+
+        val useCustomMediaPlayer = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN &&
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.M
+
+        val canSetSpeed = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
     }
 }

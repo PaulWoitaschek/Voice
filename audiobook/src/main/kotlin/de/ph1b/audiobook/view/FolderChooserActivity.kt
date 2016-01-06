@@ -43,9 +43,9 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.mvp.RxBaseActivity
 import de.ph1b.audiobook.presenter.FolderChooserPresenter
 import de.ph1b.audiobook.utils.PermissionHelper
+import rx.Observable
 import timber.log.Timber
 import java.io.File
-import java.util.*
 
 /**
  * Activity for choosing an audiobook folder. If there are multiple SD-Cards, the Activity unifies
@@ -99,6 +99,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
                                             grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        Timber.i("onRequestPermissionsResult called")
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             val permissionGrantingWorked = PermissionHelper.permissionGrantingWorked(requestCode,
@@ -212,16 +213,18 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     override fun newRootFolders(newFolders: List<File>) {
         Timber.i("newRootFolders called with $newFolders")
         spinnerGroup.visibility = if (newFolders.size <= 1) View.INVISIBLE else View.VISIBLE
-        val spinnerList = ArrayList<MultiLineSpinnerAdapter.Data<File>>()
-        newFolders.forEach {
-            val name = if (it.absolutePath == FolderChooserPresenter.MARSHMALLOW_SD_FALLBACK) {
-                getString(R.string.storage_all)
-            } else {
-                it.name
-            }
-            spinnerList.add(MultiLineSpinnerAdapter.Data(it, name))
-        }
-        spinnerAdapter.setData(spinnerList)
+
+        Observable.from(newFolders)
+                .map {
+                    val name = if (it.absolutePath == FolderChooserPresenter.MARSHMALLOW_SD_FALLBACK) {
+                        getString(R.string.storage_all)
+                    } else {
+                        it.name
+                    }
+                    MultiLineSpinnerAdapter.Data(it, name)
+                }
+                .toList()
+                .subscribe { spinnerAdapter.setData(it) }
     }
 
 

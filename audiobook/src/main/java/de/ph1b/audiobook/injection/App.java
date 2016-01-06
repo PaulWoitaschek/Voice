@@ -61,11 +61,11 @@ import de.ph1b.audiobook.dialog.prefs.SleepDialogFragment;
 import de.ph1b.audiobook.dialog.prefs.ThemePickerDialogFragment;
 import de.ph1b.audiobook.fragment.BookPlayFragment;
 import de.ph1b.audiobook.fragment.SettingsFragment;
-import de.ph1b.audiobook.mediaplayer.MediaPlayerController;
 import de.ph1b.audiobook.model.BookAdder;
 import de.ph1b.audiobook.persistence.BookChest;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.playback.BookReaderService;
+import de.ph1b.audiobook.playback.MediaPlayerController;
 import de.ph1b.audiobook.playback.PlayStateManager;
 import de.ph1b.audiobook.playback.WidgetUpdateService;
 import de.ph1b.audiobook.presenter.BookShelfBasePresenter;
@@ -117,7 +117,7 @@ public class App extends Application {
                 @Override
                 public void send(Context context, CrashReportData errorContent) throws ReportSenderException {
                     try {
-                        Timber.e("Timber caught: " + errorContent.toJSON().toString());
+                        Timber.e("Timber caught %s", errorContent.toJSON().toString());
                     } catch (JSONReportBuilder.JSONReportException e) {
                         e.printStackTrace();
                     }
@@ -231,8 +231,7 @@ public class App extends Application {
             try {
                 String text = priorityToPrefix(priority) + "/[" + tag + "]\t" + message + "\n";
                 Files.append(text, LOG_FILE, Charset.forName("UTF-8"));
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ignored) {
             }
         }
 
@@ -245,8 +244,7 @@ public class App extends Application {
                     Files.createParentDirs(LOG_FILE);
                     //noinspection ResultOfMethodCallIgnored
                     LOG_FILE.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException ignored) {
                 }
             }
         }

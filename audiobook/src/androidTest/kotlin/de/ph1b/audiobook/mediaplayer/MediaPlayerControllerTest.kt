@@ -22,6 +22,7 @@ import android.test.suitebuilder.annotation.MediumTest
 import android.test.suitebuilder.annotation.SmallTest
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
+import de.ph1b.audiobook.playback.MediaPlayerController
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.testing.DummyCreator
 import de.ph1b.audiobook.testing.RealFileMocker
