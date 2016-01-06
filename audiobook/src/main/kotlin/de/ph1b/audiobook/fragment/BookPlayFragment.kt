@@ -44,10 +44,10 @@ import de.ph1b.audiobook.dialog.BookmarkDialogFragment
 import de.ph1b.audiobook.dialog.JumpToPositionDialogFragment
 import de.ph1b.audiobook.dialog.prefs.PlaybackSpeedDialogFragment
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.playback.MediaPlayerController
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
