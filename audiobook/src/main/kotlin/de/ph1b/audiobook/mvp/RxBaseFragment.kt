@@ -41,16 +41,16 @@ abstract class RxBaseFragment <V, P> : BaseFragment() where P : Presenter<V> {
         presenterDelegate.onCreate(savedInstanceState)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
 
-        presenterDelegate.onResume()
+        presenterDelegate.onStart()
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
 
-        presenterDelegate.onPause()
+        presenterDelegate.onStop()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
