@@ -18,8 +18,6 @@
 package de.ph1b.audiobook.playback
 
 import android.content.Context
-import android.media.PlaybackParams
-import android.os.Build
 import rx.subjects.PublishSubject
 
 /**
@@ -28,8 +26,6 @@ import rx.subjects.PublishSubject
  * @author Paul Woitaschek
  */
 class AndroidPlayerDelegate : MediaPlayer {
-
-    private val shouldTouchPlaybackParams = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
 
     private val player = android.media.MediaPlayer()
 
@@ -69,12 +65,6 @@ class AndroidPlayerDelegate : MediaPlayer {
         get() = player.duration
 
     override var playbackSpeed: Float = 1F
-        set(value) {
-            if (shouldTouchPlaybackParams) {
-                player.playbackParams = PlaybackParams().setSpeed(value)
-            }
-            field = value
-        }
 
     override fun setDataSource(path: String) {
         player.setDataSource(path)

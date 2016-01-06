@@ -100,19 +100,26 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
+        // init acra and send breadcrumbs
+        ACRA.init(this);
+        Timber.plant(new BreadcrumbTree());
+
         if (BuildConfig.DEBUG) {
             // init timber
             Timber.plant(new Timber.DebugTree());
             // also write to disc here.
             Timber.plant(new WriteToDiscTree());
 
-            // enable acra and forward exceptions to timber
-            ACRA.init(this);
+            // force enable acra in debug mode
             PreferenceManager.getDefaultSharedPreferences(this)
                     .edit()
                     .putBoolean("acra.enable", true)
                     .apply();
+
+            // remove default senders
             ACRA.getErrorReporter().removeAllReportSenders();
+
+            // forward crashes to timber
             ACRA.getErrorReporter().addReportSender(new ReportSender() {
                 @Override
                 public void send(Context context, CrashReportData errorContent) throws ReportSenderException {
@@ -123,9 +130,6 @@ public class App extends Application {
                     }
                 }
             });
-        } else {
-            // don't init timber, but init ACRA
-            ACRA.init(this);
         }
         Timber.i("onCreate");
         refWatcher = LeakCanary.install(this);
@@ -218,36 +222,14 @@ public class App extends Application {
         void inject(FolderOverviewPresenter target);
     }
 
-    /**
-     * Custom tree that logs to storage.
-     */
-    private static class WriteToDiscTree extends Timber.DebugTree {
-
-        private final File LOG_FILE = new File(Environment.getExternalStorageDirectory(), "materialaudiobookplayer.log");
-
+    private abstract static class FormattedTree extends Timber.DebugTree {
         @Override
         protected void log(int priority, String tag, String message, Throwable t) {
-            ensureFileExists();
-            try {
-                String text = priorityToPrefix(priority) + "/[" + tag + "]\t" + message + "\n";
-                Files.append(text, LOG_FILE, Charset.forName("UTF-8"));
-            } catch (IOException ignored) {
-            }
+            onLogGathered(priorityToPrefix(priority) + "/[" + tag + "]\t" + message + "\n");
         }
 
-        /**
-         * Makes sure that the log file exists
-         */
-        private void ensureFileExists() {
-            if (!LOG_FILE.exists()) {
-                try {
-                    Files.createParentDirs(LOG_FILE);
-                    //noinspection ResultOfMethodCallIgnored
-                    LOG_FILE.createNewFile();
-                } catch (IOException ignored) {
-                }
-            }
-        }
+        abstract void onLogGathered(String message);
+
 
         /**
          * Maps Log priority to Strings
@@ -271,6 +253,71 @@ public class App extends Application {
                     return "A";
                 default:
                     return String.valueOf(priority);
+            }
+        }
+    }
+
+    /**
+     * Curtom tree that adds regular logs as custom data to acra.
+     */
+    private static class BreadcrumbTree extends FormattedTree {
+
+        private static final int CRUMBS_AMOUNT = 200;
+        private int crumbCount = 0;
+
+        public BreadcrumbTree() {
+            ACRA.getErrorReporter().clearCustomData();
+        }
+
+        @Override
+        void onLogGathered(String message) {
+            ACRA.getErrorReporter().putCustomData(String.valueOf(getNextCrumbNumber()), message);
+        }
+
+        /**
+         * Returns the number of the next breadcrumb.
+         *
+         * @return the next crumb number.
+         */
+        private int getNextCrumbNumber() {
+            // returns current value and increases the next one by 1. When the limit is reached it will
+            // reset the crumb.
+            int nextCrumb = crumbCount;
+            crumbCount++;
+            if (crumbCount >= CRUMBS_AMOUNT) {
+                crumbCount = 0;
+            }
+            return nextCrumb;
+        }
+    }
+
+    /**
+     * Custom tree that logs to storage.
+     */
+    private static class WriteToDiscTree extends FormattedTree {
+
+        private final File LOG_FILE = new File(Environment.getExternalStorageDirectory(), "materialaudiobookplayer.log");
+
+        /**
+         * Makes sure that the log file exists
+         */
+        private void ensureFileExists() {
+            if (!LOG_FILE.exists()) {
+                try {
+                    Files.createParentDirs(LOG_FILE);
+                    //noinspection ResultOfMethodCallIgnored
+                    LOG_FILE.createNewFile();
+                } catch (IOException ignored) {
+                }
+            }
+        }
+
+        @Override
+        void onLogGathered(String message) {
+            ensureFileExists();
+            try {
+                Files.append(message, LOG_FILE, Charset.forName("UTF-8"));
+            } catch (IOException ignored) {
             }
         }
     }
