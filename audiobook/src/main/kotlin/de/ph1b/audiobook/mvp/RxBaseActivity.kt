@@ -28,7 +28,7 @@ import timber.log.Timber
  */
 abstract class RxBaseActivity<V, P> : BaseActivity() where P : Presenter<V> {
 
-    private val presenterDelegate = PresenterDelegate<V, P>({ newPresenter() }, { provideView() })
+    private val presenterDelegate = PresenterDelegate({ newPresenter() }, { provideView() })
 
     abstract fun newPresenter(): P
 

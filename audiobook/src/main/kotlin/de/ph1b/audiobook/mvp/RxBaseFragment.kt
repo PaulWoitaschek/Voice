@@ -27,7 +27,7 @@ import de.ph1b.audiobook.fragment.BaseFragment
  */
 abstract class RxBaseFragment <V, P> : BaseFragment() where P : Presenter<V> {
 
-    private val presenterDelegate = PresenterDelegate<V, P>({ newPresenter() }, { provideView() })
+    private val presenterDelegate = PresenterDelegate({ newPresenter() }, { provideView() })
 
     abstract fun newPresenter(): P
 
