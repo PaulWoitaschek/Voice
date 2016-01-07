@@ -24,6 +24,7 @@ import android.os.PowerManager
 import rx.subjects.PublishSubject
 import timber.log.Timber
 import java.io.File
+import java.io.IOException
 import javax.inject.Inject
 
 /**
@@ -55,7 +56,13 @@ constructor(context: Context) {
 
         mediaPlayer.onCompletion
                 .subscribe {
-                    if (currentFile != null) prepare(currentFile!!)
+                    if (currentFile != null) {
+                        try {
+                            prepare(currentFile!!)
+                        } catch(e: IOException) {
+                            Timber.e(e, "Error at re-preparing $currentFile in onCompletion.")
+                        }
+                    }
                     completionSubject.onNext(Unit)
                 }
 
