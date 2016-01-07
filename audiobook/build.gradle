@@ -27,8 +27,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 101
-        versionName '2.5.0.9.1'
+        versionCode 102
+        versionName '2.5.0.10'
 
         testInstrumentationRunner "de.ph1b.audiobook.testing.MockAppRunner"
     }
