@@ -19,7 +19,7 @@
 
 buildscript {
 
-    ext.kotlinVersion = '1.0.0-beta-4584'
+    ext.kotlinVersion = '1.0.0-beta-4589'
 
     repositories {
         jcenter()
@@ -27,7 +27,7 @@ buildscript {
 
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0-alpha3'
+        classpath 'com.android.tools.build:gradle:2.0.0-alpha6'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }

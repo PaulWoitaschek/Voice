@@ -85,15 +85,15 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$supportVersion"
 
     // http library
-    def okHttpVersion = "2.5.0"
-    compile "com.squareup.okhttp:okhttp:$okHttpVersion"
-    compile "com.squareup.okhttp:okhttp-urlconnection:$okHttpVersion"
+    def okHttpVersion = "3.0.1"
+    compile "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    compile "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
 
     // image loading
     compile "com.squareup.picasso:picasso:2.5.2"
 
     // material styled dialogs
-    compile("com.afollestad.material-dialogs:core:0.8.5.1@aar") {
+    compile("com.afollestad.material-dialogs:core:0.8.5.3@aar") {
         transitive = true
     }
 
@@ -138,14 +138,14 @@ dependencies {
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
 
     // rest
-    def retroFitVersion = "2.0.0-beta2"
-    compile "com.squareup.retrofit:retrofit:$retroFitVersion"
-    compile "com.squareup.retrofit:converter-gson:$retroFitVersion"
-    compile "com.squareup.retrofit:adapter-rxjava:$retroFitVersion"
+    def retroFitVersion = "2.0.0-beta3"
+    compile "com.squareup.retrofit2:retrofit:$retroFitVersion"
+    compile "com.squareup.retrofit2:converter-gson:$retroFitVersion"
+    compile "com.squareup.retrofit2:adapter-rxjava:$retroFitVersion"
 
     // kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     // player
-    compile 'com.github.AntennaPod:AntennaPod-AudioPlayer:v1.0.8'
+    compile 'com.github.AntennaPod:AntennaPod-AudioPlayer:v1.0.9'
 }
