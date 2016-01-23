@@ -56,7 +56,6 @@ public class DummyCreator {
             root = "fakeRoot";
         }
         return new Book(id,
-                bookmarks,
                 type,
                 false,
                 author,
