@@ -31,6 +31,7 @@ class FalseChannelDetector
 @Inject
 constructor(private val context: Context) {
 
+    @Suppress("DEPRECATION")
     fun channelCountMatches(): Boolean {
         var monoOutputChunkSize = 0
         var stereoOutputChunkSize = 0
