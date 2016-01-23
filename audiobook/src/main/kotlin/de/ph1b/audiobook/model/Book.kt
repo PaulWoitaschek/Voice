@@ -33,7 +33,6 @@ import java.util.*
  * @author Paul Woitaschek
  */
 data class Book(val id: Long,
-                val bookmarks: List<Bookmark>,
                 val type: Book.Type,
                 val useCoverReplacement: Boolean,
                 val author: String?,
@@ -64,9 +63,6 @@ data class Book(val id: Long,
         }
         check(playbackSpeed >= SPEED_MIN, { "speed $playbackSpeed must be >= $SPEED_MIN" })
         check(playbackSpeed <= SPEED_MAX) { "speed $playbackSpeed must be <= $SPEED_MAX" }
-        for (b in bookmarks) {
-            check(chapterFiles.contains(b.mediaFile)) { "$chapterFiles does not contain the media file for $b" }
-        }
         check(chapters.isNotEmpty(), { "chapters must not be empty" })
         check(chapterFiles.contains(currentFile), { "$chapterFiles must contain current file $currentFile" })
         check(name.isNotEmpty(), { "name must not be empty" })

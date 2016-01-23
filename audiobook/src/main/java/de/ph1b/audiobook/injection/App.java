@@ -47,7 +47,6 @@ import de.ph1b.audiobook.activity.BaseActivity;
 import de.ph1b.audiobook.activity.BookActivity;
 import de.ph1b.audiobook.activity.DependencyLicensesActivity;
 import de.ph1b.audiobook.adapter.BookShelfAdapter;
-import de.ph1b.audiobook.adapter.BookmarkAdapter;
 import de.ph1b.audiobook.dialog.BookmarkDialogFragment;
 import de.ph1b.audiobook.dialog.EditBookTitleDialogFragment;
 import de.ph1b.audiobook.dialog.EditCoverDialogFragment;
@@ -103,7 +102,7 @@ public class App extends Application {
         ACRA.init(this);
         Timber.plant(new BreadcrumbTree());
 
-        if(BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             // init timber
             Timber.plant(new Timber.DebugTree());
             // also write to disc here.
@@ -171,8 +170,6 @@ public class App extends Application {
         void inject(WidgetUpdateService target);
 
         void inject(EditBookTitleDialogFragment target);
-
-        void inject(BookmarkAdapter target);
 
         void inject(CoverReplacement target);
 
@@ -283,7 +280,7 @@ public class App extends Application {
             // reset the crumb.
             int nextCrumb = crumbCount;
             crumbCount++;
-            if(crumbCount >= CRUMBS_AMOUNT) {
+            if (crumbCount >= CRUMBS_AMOUNT) {
                 crumbCount = 0;
             }
             return nextCrumb;

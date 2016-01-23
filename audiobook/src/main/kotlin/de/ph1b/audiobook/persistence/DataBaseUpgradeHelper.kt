@@ -20,6 +20,7 @@ package de.ph1b.audiobook.persistence
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import android.os.Environment
+import android.provider.BaseColumns
 import de.ph1b.audiobook.injection.App
 import org.json.JSONArray
 import org.json.JSONException
@@ -602,8 +603,55 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
         }
     }
 
+    private fun upgrade32() {
+        val BOOKMARK_TABLE_NAME = "tableBookmarks"
+        val BM_PATH = "bookmarkPath"
+        val BM_TITLE = "bookmarkTitle"
+        val BM_TIME = "bookmarkTime"
+
+        // retrieve old bookmarks
+        data class Holder(val path: String, val title: String, val time: Long)
+
+        val cursor = db.query(BOOKMARK_TABLE_NAME, null, null, null, null, null, null)
+        val entries = ArrayList<Holder>()
+        cursor.moveToNextLoop {
+            val path = string(BM_PATH)
+            val title = string(BM_TITLE)
+            val time = long(BM_TIME)
+            entries.add(Holder(path, title, time))
+        }
+        Timber.i("Restored bookmarks=$entries")
+
+        // delete table
+        db.execSQL("DROP TABLE $BOOKMARK_TABLE_NAME")
+
+        // create new bookmark scheme
+        val PATH = "bookmarkPath"
+        val TITLE = "bookmarkTitle"
+        val TABLE_NAME = "tableBookmarks"
+        val TIME = "bookmarkTime"
+        val ID = BaseColumns._ID
+        val CREATE_TABLE = "CREATE TABLE $TABLE_NAME ( $ID INTEGER PRIMARY KEY AUTOINCREMENT, $PATH TEXT NOT NULL, $TITLE TEXT NOT NULL, $TIME INTEGER NOT NULL)"
+        db.execSQL(CREATE_TABLE)
+        Timber.i("Created $CREATE_TABLE")
+
+        // add old bookmarks to new bookmark scheme
+        db.asTransaction {
+            entries.forEach {
+                val cv = ContentValues().apply {
+                    put(PATH, it.path)
+                    put(TITLE, it.title)
+                    put(TIME, it.time)
+                }
+                db.insertOrThrow(TABLE_NAME, null, cv)
+                Timber.i("Inserted $cv to $TABLE_NAME")
+            }
+        }
+    }
+
     @Throws(InvalidPropertiesFormatException::class)
     fun upgrade(fromVersion: Int) {
+        Timber.i("upgrade fromVersion=$fromVersion")
         if (fromVersion <= 23) upgrade23()
         if (fromVersion <= 24) upgrade24()
         if (fromVersion <= 25) upgrade25()
@@ -613,5 +661,6 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
         if (fromVersion <= 29) upgrade29()
         if (fromVersion <= 30) upgrade30()
         if (fromVersion <= 31) upgrade31()
+        if (fromVersion <= 32) upgrade32()
     }
 }
