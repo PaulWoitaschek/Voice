@@ -18,10 +18,8 @@
 package de.ph1b.audiobook.persistence
 
 import android.content.ContentValues
-import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteOpenHelper
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.model.Bookmark
 import de.ph1b.audiobook.model.Chapter
@@ -42,7 +40,7 @@ import javax.inject.Singleton
 @Singleton
 class BookChest
 @Inject
-constructor(c: Context) {
+constructor(internalDb: InternalDb) {
     private val active: MutableList<Book> by lazy {
         synchronized(this) {
             val cursor = db.rawQuery("$FULL_PROJECTION $APPEND_WHERE_ACTIVE", arrayOf(BOOLEAN_TRUE.toString()))
@@ -68,7 +66,7 @@ constructor(c: Context) {
     }
     private val db: SQLiteDatabase by lazy {
         synchronized(this) {
-            InternalDb(c).writableDatabase
+            internalDb.writableDatabase
         }
     }
     private val added = PublishSubject.create<Book>()
@@ -225,34 +223,6 @@ constructor(c: Context) {
         }
         active.add(book)
         added.onNext(book)
-    }
-
-    private class InternalDb(context: Context) : SQLiteOpenHelper(context, BookChest.InternalDb.DATABASE_NAME, null, BookChest.InternalDb.DATABASE_VERSION) {
-
-        override fun onCreate(db: SQLiteDatabase) {
-            BookTable.onCreate(db)
-            ChapterTable.onCreate(db)
-            BookmarkTable.onCreate(db)
-        }
-
-        override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-            try {
-                val upgradeHelper = DataBaseUpgradeHelper(db)
-                upgradeHelper.upgrade(oldVersion)
-            } catch (e: InvalidPropertiesFormatException) {
-                Timber.e(e, "Error at upgrade")
-                BookTable.dropTableIfExists(db)
-                ChapterTable.dropTableIfExists(db)
-                BookmarkTable.dropTableIfExists(db)
-                onCreate(db)
-            }
-        }
-
-        companion object {
-
-            private val DATABASE_VERSION = 32
-            private val DATABASE_NAME = "autoBookDB"
-        }
     }
 
 
