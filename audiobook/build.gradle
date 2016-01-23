@@ -15,8 +15,6 @@
  * /licenses/>.
  */
 
-import com.google.common.io.Files
-
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
@@ -70,8 +68,7 @@ android {
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
             def original = output.outputFile
-            def originalPath = original.absolutePath
-            def originalName = Files.getNameWithoutExtension(originalPath)
+            def originalName = original.name.replaceFirst(~/\.[^\.]+$/, '')
             def newDestination = "apks/${variant.versionCode}-${variant.versionName}-${originalName}.apk"
             output.outputFile = file(newDestination)
         }

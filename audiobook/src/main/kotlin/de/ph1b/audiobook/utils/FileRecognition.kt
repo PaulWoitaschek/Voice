@@ -18,7 +18,6 @@
 package de.ph1b.audiobook.utils
 
 import android.os.Build
-import com.google.common.io.Files
 import java.io.FileFilter
 import java.util.*
 
@@ -65,7 +64,8 @@ object FileRecognition {
         if (it.isDirectory) {
             return@FileFilter true
         } else {
-            val extension = Files.getFileExtension(it.name)
+            it.appendText()
+            val extension = it.extension
                     .toLowerCase()
             return@FileFilter audioTypes.contains(extension)
         }
@@ -74,7 +74,7 @@ object FileRecognition {
         if (it.isDirectory) {
             return@FileFilter true
         } else {
-            val extension = Files.getFileExtension(it.name)
+            val extension = it.extension
                     .toLowerCase()
             return@FileFilter imageTypes.contains(extension)
         }

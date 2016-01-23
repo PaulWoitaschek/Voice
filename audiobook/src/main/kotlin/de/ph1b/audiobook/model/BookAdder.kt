@@ -24,7 +24,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.support.v4.content.ContextCompat
-import com.google.common.io.Files
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.activity.BaseActivity
 import de.ph1b.audiobook.persistence.BookChest
@@ -374,7 +373,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         val result = mediaAnalyzer.compute(firstChapterFile)
         var bookName = result.bookName
         if (bookName.isNullOrEmpty()) {
-            val withoutExtension = Files.getNameWithoutExtension(rootFile.absolutePath)
+            val withoutExtension = rootFile.nameWithoutExtension
             bookName = if (withoutExtension.isEmpty()) rootFile.name else withoutExtension
         }
         bookName!!
