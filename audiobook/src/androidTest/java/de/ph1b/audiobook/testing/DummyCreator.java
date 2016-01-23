@@ -17,7 +17,6 @@
 
 package de.ph1b.audiobook.testing;
 
-import com.google.common.collect.Lists;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,6 +26,7 @@ import java.util.Random;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
+import kotlin.collections.CollectionsKt;
 
 /**
  * Mock provider for mocking objects and injecting them.
@@ -49,7 +49,7 @@ public class DummyCreator {
         String name = "TestBook";
         Chapter chapter1 = new Chapter(file1, file1.getName(), 1 + rnd.nextInt(100000));
         Chapter chapter2 = new Chapter(file2, file2.getName(), 1 + rnd.nextInt(200000));
-        List<Chapter> chapters = Lists.newArrayList(chapter1, chapter2);
+        List<Chapter> chapters = CollectionsKt.listOf(chapter1, chapter2);
         float playbackSpeed = 1F;
         String root = file1.getParent();
         if (root == null) {

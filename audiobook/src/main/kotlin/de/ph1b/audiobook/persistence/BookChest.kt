@@ -260,6 +260,7 @@ constructor(c: Context) {
         check(position.size == path.size && path.size == title.size,
                 { "Positions, path and title must have the same length but they are ${position.size} ${path.size} and ${title.size}" })
         val length = position.size
+        listOf("abc", "abc")
         val bookmarks = ArrayList<Bookmark>(length)
         for (i in 0..length - 1) {
             bookmarks.add(Bookmark(File(path[i]), title[i], position[i]))
