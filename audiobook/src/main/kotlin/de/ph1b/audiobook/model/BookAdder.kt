@@ -24,7 +24,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.support.v4.content.ContextCompat
-import com.google.common.collect.Collections2
 import com.google.common.io.Files
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.activity.BaseActivity
@@ -454,14 +453,14 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
             }
 
             // removes the bookmarks that no longer represent an existing file
-            val filteredBookmarks = ArrayList(Collections2.filter(bookToUpdate.bookmarks) {
+            val filteredBookmarks = bookToUpdate.bookmarks.filter {
                 for (c in newChapters) {
                     if (c.file == it.mediaFile) {
                         return@filter true
                     }
                 }
                 false
-            })
+            }
 
             //set new bookmarks and chapters.
             // if the current path is gone, reset it correctly.
