@@ -22,7 +22,6 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.google.common.base.Preconditions
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.model.Bookmark
 import de.ph1b.audiobook.model.Chapter
@@ -258,9 +257,8 @@ constructor(c: Context) {
 
 
     private fun generateBookmarks(position: IntArray, path: Array<String>, title: Array<String>): List<Bookmark> {
-        Preconditions.checkArgument(position.size == path.size && path.size == title.size,
-                "Positions, path and title must have the same length but they are %d %d and %d",
-                position.size, path.size, title.size)
+        check(position.size == path.size && path.size == title.size,
+                { "Positions, path and title must have the same length but they are ${position.size} ${path.size} and ${title.size}" })
         val length = position.size
         val bookmarks = ArrayList<Bookmark>(length)
         for (i in 0..length - 1) {
@@ -270,9 +268,8 @@ constructor(c: Context) {
     }
 
     private fun generateChapters(position: IntArray, path: Array<String>, title: Array<String>): List<Chapter> {
-        Preconditions.checkArgument(position.size == path.size && path.size == title.size,
-                "Positions, path and title must have the same length but they are %d %d and %d",
-                position.size, path.size, title.size)
+        check(position.size == path.size && path.size == title.size,
+                { "Positions, path and title must have the same length but they are ${position.size} ${path.size} and ${title.size}" })
         val length = position.size
         val bookmarks = ArrayList<Chapter>(length)
         for (i in 0..length - 1) {

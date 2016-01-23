@@ -11,7 +11,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
  * /licenses/>.
  */
 
@@ -25,7 +25,6 @@ import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
-import com.google.common.base.Preconditions
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
@@ -272,8 +271,8 @@ class EditCoverDialogFragment : DialogFragment() {
         private val NI_BOOK = "niBook"
 
         fun <T> newInstance(target: T, book: Book): EditCoverDialogFragment where T : Fragment, T : OnEditBookFinished {
-            Preconditions.checkNotNull(target)
-            Preconditions.checkNotNull(book)
+            checkNotNull(target)
+            checkNotNull(book)
 
             val bundle = Bundle()
             bundle.putLong(NI_BOOK, book.id)
