@@ -29,7 +29,6 @@ import android.widget.EditText
 import android.widget.PopupMenu
 import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
-import com.google.common.collect.Ordering
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.adapter.BookmarkAdapter
 import de.ph1b.audiobook.injection.App
@@ -180,7 +179,8 @@ class BookmarkDialogFragment : DialogFragment() {
                 val addedBookmark = Bookmark(book.currentChapter().file, title, book.time)
                 val newBookmarks = ArrayList(book.bookmarks)
                 newBookmarks.add(addedBookmark)
-                book = book.copy(bookmarks = Ordering.natural<Bookmark>().immutableSortedCopy(newBookmarks))
+                val bookmarksSorted = newBookmarks.sorted()
+                book = book.copy(bookmarks = bookmarksSorted)
                 db.updateBook(book)
                 Timber.v("Added bookmark=%s", addedBookmark)
             } else {
