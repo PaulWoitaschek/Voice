@@ -100,9 +100,6 @@ dependencies {
     // crash reporting
     compile "ch.acra:acra:4.7.0"
 
-    // common tools
-    compile "com.google.guava:guava:18.0"
-
     // dependency injection
     def daggerVersion = "2.0.2"
     compile "com.google.dagger:dagger:$daggerVersion"
