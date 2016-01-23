@@ -1,6 +1,7 @@
 # Next Version
 * Updated dependencies
 * Removed guava and decreased app size
+* Safe Bookmarks unrelated to books. This way they will survive a book deletion etc.
 
 # till v2.5.0.10
 No changelog
