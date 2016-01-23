@@ -20,7 +20,6 @@ package de.ph1b.audiobook.persistence
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import android.os.Environment
-import com.google.common.base.Charsets
 import de.ph1b.audiobook.injection.App
 import org.json.JSONArray
 import org.json.JSONException

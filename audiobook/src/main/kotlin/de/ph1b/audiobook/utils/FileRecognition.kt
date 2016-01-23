@@ -64,7 +64,6 @@ object FileRecognition {
         if (it.isDirectory) {
             return@FileFilter true
         } else {
-            it.appendText()
             val extension = it.extension
                     .toLowerCase()
             return@FileFilter audioTypes.contains(extension)
