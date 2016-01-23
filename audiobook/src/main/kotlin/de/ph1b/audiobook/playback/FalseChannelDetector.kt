@@ -25,7 +25,12 @@ import timber.log.Timber
 import javax.inject.Inject
 
 /**
- * Created by ph1b on 04/01/16.
+ * Detects if there is a bug on the device that leads to a playback bug.
+ *
+ * @see [https://github.com/PaulWoitaschek/MaterialAudiobookPlayer/issues/129]
+ *
+ * @author igormisha
+ * @author Paul Woitaschek
  */
 class FalseChannelDetector
 @Inject
@@ -33,11 +38,14 @@ constructor(private val context: Context) {
 
     @Suppress("DEPRECATION")
     fun channelCountMatches(): Boolean {
+        val monoFile = "mono.mp3"
+        val stereoFile = "stereo.mp3"
+
         var monoOutputChunkSize = 0
         var stereoOutputChunkSize = 0
         var monoChannelCount = 1
         var stereoChannelCount = 2
-        listOf("mono.mp3", "stereo.mp3")
+        listOf(monoFile, stereoFile)
                 .forEach foreachMark@ {
                     Timber.i("Checking $it")
                     val extractor = MediaExtractor()
@@ -107,7 +115,7 @@ constructor(private val context: Context) {
                                 if (chunk.size > 0) {
                                     // first not empty chunk's size is not stable, so save the second chunk size
                                     if (firstNotEmptyChunk) {
-                                        if (it == "mono.mp3") {
+                                        if (it == monoFile) {
                                             monoOutputChunkSize = chunk.size
                                         } else {
                                             stereoOutputChunkSize = chunk.size
@@ -121,26 +129,24 @@ constructor(private val context: Context) {
                                 if ((info.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
                                     sawOutputEOS = true;
                                 }
-                            } else //noinspection deprecation
-                                if (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED) {
-                                    //noinspection deprecation
-                                    outputBuffers = codec.outputBuffers;
-                                } else if (res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
-                                    val oFormat = codec
-                                            .outputFormat;
-                                    codecSampleRate = oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
-                                    codecChannelCount = oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
-                                    Timber.d("Codec output format changed");
-                                    Timber.d("Codec output sample rate = " + codecSampleRate);
-                                    Timber.d("Codec output channel count = " + codecChannelCount);
-                                    //noinspection deprecation
-                                    outputBuffers = codec.outputBuffers;
-                                    if (it == "mono.mp3") {
-                                        monoChannelCount = codecChannelCount;
-                                    } else {
-                                        stereoChannelCount = codecChannelCount;
-                                    }
+                            } else if (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED) {
+                                outputBuffers = codec.outputBuffers;
+                            } else if (res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
+                                val oFormat = codec
+                                        .outputFormat;
+                                codecSampleRate = oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
+                                codecChannelCount = oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
+                                Timber.d("Codec output format changed");
+                                Timber.d("Codec output sample rate = " + codecSampleRate);
+                                Timber.d("Codec output channel count = " + codecChannelCount);
+
+                                outputBuffers = codec.outputBuffers;
+                                if (it == monoFile) {
+                                    monoChannelCount = codecChannelCount;
+                                } else {
+                                    stereoChannelCount = codecChannelCount;
                                 }
+                            }
                         } while (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED || res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED);
                     }
                 }
