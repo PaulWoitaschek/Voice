@@ -16,9 +16,6 @@
 # [ACRA](https://github.com/ACRA/acra)
 [Apache License 2.0](https://github.com/ACRA/acra/blob/master/LICENSE)
 
-# [Guava](https://github.com/google/guava)
-[Apache License 2.0](https://github.com/google/guava/blob/master/COPYING)
-
 # [Dagger 2](https://github.com/google/dagger)
 [Apache License 2.0](https://github.com/google/dagger/blob/master/LICENSE.txt)
 
