@@ -54,7 +54,7 @@ class InternalDb
 
     companion object {
 
-        private val DATABASE_VERSION = 32
+        private val DATABASE_VERSION = 33
         private val DATABASE_NAME = "autoBookDB"
     }
 }

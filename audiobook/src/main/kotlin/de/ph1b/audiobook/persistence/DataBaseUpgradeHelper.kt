@@ -602,6 +602,10 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
         }
     }
 
+    private fun upgrade32() {
+
+    }
+
     @Throws(InvalidPropertiesFormatException::class)
     fun upgrade(fromVersion: Int) {
         if (fromVersion <= 23) upgrade23()
@@ -613,5 +617,6 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
         if (fromVersion <= 29) upgrade29()
         if (fromVersion <= 30) upgrade30()
         if (fromVersion <= 31) upgrade31()
+        if (fromVersion <= 32) upgrade32()
     }
 }
