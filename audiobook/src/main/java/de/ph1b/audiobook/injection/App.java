@@ -24,7 +24,6 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.google.common.io.Files;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -37,7 +36,6 @@ import org.acra.sender.ReportSenderException;
 import org.acra.util.JSONReportBuilder;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.Charset;
 
 import javax.inject.Inject;
@@ -76,6 +74,7 @@ import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.view.FolderChooserActivity;
 import de.ph1b.audiobook.view.FolderOverviewActivity;
 import de.ph1b.audiobook.view.fragment.BookShelfFragment;
+import kotlin.io.FilesKt;
 import timber.log.Timber;
 
 @ReportsCrashes(
@@ -104,7 +103,7 @@ public class App extends Application {
         ACRA.init(this);
         Timber.plant(new BreadcrumbTree());
 
-        if (BuildConfig.DEBUG) {
+        if(BuildConfig.DEBUG) {
             // init timber
             Timber.plant(new Timber.DebugTree());
             // also write to disc here.
@@ -284,7 +283,7 @@ public class App extends Application {
             // reset the crumb.
             int nextCrumb = crumbCount;
             crumbCount++;
-            if (crumbCount >= CRUMBS_AMOUNT) {
+            if(crumbCount >= CRUMBS_AMOUNT) {
                 crumbCount = 0;
             }
             return nextCrumb;
@@ -298,27 +297,9 @@ public class App extends Application {
 
         private final File LOG_FILE = new File(Environment.getExternalStorageDirectory(), "materialaudiobookplayer.log");
 
-        /**
-         * Makes sure that the log file exists
-         */
-        private void ensureFileExists() {
-            if (!LOG_FILE.exists()) {
-                try {
-                    Files.createParentDirs(LOG_FILE);
-                    //noinspection ResultOfMethodCallIgnored
-                    LOG_FILE.createNewFile();
-                } catch (IOException ignored) {
-                }
-            }
-        }
-
         @Override
         void onLogGathered(String message) {
-            ensureFileExists();
-            try {
-                Files.append(message, LOG_FILE, Charset.forName("UTF-8"));
-            } catch (IOException ignored) {
-            }
+            FilesKt.appendText(LOG_FILE, message, Charset.forName("UTF-8"));
         }
     }
 }

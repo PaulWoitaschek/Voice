@@ -24,9 +24,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.support.v4.content.ContextCompat
-import com.google.common.collect.Collections2
-import com.google.common.collect.ImmutableList
-import com.google.common.io.Files
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.activity.BaseActivity
 import de.ph1b.audiobook.persistence.BookChest
@@ -376,7 +373,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         val result = mediaAnalyzer.compute(firstChapterFile)
         var bookName = result.bookName
         if (bookName.isNullOrEmpty()) {
-            val withoutExtension = Files.getNameWithoutExtension(rootFile.absolutePath)
+            val withoutExtension = rootFile.nameWithoutExtension
             bookName = if (withoutExtension.isEmpty()) rootFile.name else withoutExtension
         }
         bookName!!
@@ -385,14 +382,14 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         if (orphanedBook == null) {
             val newBook = Book(
                     Book.ID_UNKNOWN.toLong(),
-                    ImmutableList.of<Bookmark>(),
+                    emptyList(),
                     type,
                     false,
                     result.author,
                     firstChapterFile,
                     0,
                     bookName,
-                    ImmutableList.copyOf(newChapters),
+                    newChapters,
                     1.0f,
                     bookRoot)
             Timber.d("adding newBook=${newBook.name}")
@@ -408,8 +405,8 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                 }
                 false
             })
-            orphanedBook = orphanedBook.copy(bookmarks = ImmutableList.copyOf(filteredBookmarks),
-                    chapters = ImmutableList.copyOf(newChapters))
+            orphanedBook = orphanedBook.copy(bookmarks = filteredBookmarks,
+                    chapters = newChapters)
 
             // checks if current path is still valid. if not, reset position.
             var pathValid = false
@@ -455,20 +452,20 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
             }
 
             // removes the bookmarks that no longer represent an existing file
-            val filteredBookmarks = ArrayList(Collections2.filter(bookToUpdate.bookmarks) {
+            val filteredBookmarks = bookToUpdate.bookmarks.filter {
                 for (c in newChapters) {
                     if (c.file == it.mediaFile) {
                         return@filter true
                     }
                 }
                 false
-            })
+            }
 
             //set new bookmarks and chapters.
             // if the current path is gone, reset it correctly.
             bookToUpdate = bookToUpdate.copy(
-                    bookmarks = ImmutableList.copyOf(filteredBookmarks),
-                    chapters = ImmutableList.copyOf(newChapters),
+                    bookmarks = filteredBookmarks,
+                    chapters = newChapters,
                     currentFile = if (currentPathIsGone) newChapters.first().file else bookToUpdate.currentFile,
                     time = if (currentPathIsGone) 0 else bookToUpdate.time)
 

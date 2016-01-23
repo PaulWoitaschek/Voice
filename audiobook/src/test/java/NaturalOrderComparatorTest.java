@@ -1,4 +1,21 @@
-import com.google.common.collect.Lists;
+
+
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
 
 import org.junit.Assert;
 import org.junit.Rule;
@@ -12,6 +29,7 @@ import java.util.Collections;
 import java.util.List;
 
 import de.ph1b.audiobook.model.NaturalOrderComparator;
+import kotlin.collections.CollectionsKt;
 
 /**
  * A simple test for the file comparator that sorts in a 'natural' way.
@@ -30,7 +48,7 @@ public class NaturalOrderComparatorTest {
         testFolder.newFolder("xFolder");
 
         File alarmsFolder = testFolder.newFolder("storage", "emulated", "0", "Alarms");
-        List<File> desiredOrder = Lists.newArrayList(
+        List<File> desiredOrder = CollectionsKt.listOf(
                 alarmsFolder,
                 testFolder.newFile("folder/subfolder/subsubfolder/test2.mp3"),
                 testFolder.newFile("folder/subfolder/test.mp3"),
@@ -50,7 +68,7 @@ public class NaturalOrderComparatorTest {
 
     @Test
     public void testSimpleComparison() {
-        List<String> desiredOrder = Lists.newArrayList(
+        List<String> desiredOrder = CollectionsKt.listOf(
                 "00 I",
                 "00 Introduction",
                 "1",

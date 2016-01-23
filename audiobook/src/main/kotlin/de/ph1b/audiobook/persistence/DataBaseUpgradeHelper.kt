@@ -11,7 +11,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
  * /licenses/>.
  */
 
@@ -20,8 +20,6 @@ package de.ph1b.audiobook.persistence
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import android.os.Environment
-import com.google.common.base.Charsets
-import com.google.common.io.Files
 import de.ph1b.audiobook.injection.App
 import org.json.JSONArray
 import org.json.JSONException
@@ -101,7 +99,8 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
             var playingInformation: JSONObject? = null
             try {
                 if (configFileValid) {
-                    val retString = Files.toString(configFile, Charsets.UTF_8)
+                    configFile.readText(Charsets.UTF_8)
+                    val retString = configFile.readText(Charsets.UTF_8)
                     if (!retString.isEmpty()) {
                         playingInformation = JSONObject(retString)
                     }
@@ -114,7 +113,7 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
 
             try {
                 if (playingInformation == null && backupFileValid) {
-                    val retString = Files.toString(backupFile, Charsets.UTF_8)
+                    val retString = backupFile.readText(Charsets.UTF_8)
                     playingInformation = JSONObject(retString)
                 }
             } catch (e: IOException) {
@@ -284,7 +283,8 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
                             //noinspection ResultOfMethodCallIgnored
                             coverFile.parentFile.mkdirs()
                         }
-                        Files.move(coverFile, newCoverFile)
+                        coverFile.copyTo(newCoverFile)
+                        coverFile.delete()
                     } catch (e: IOException) {
                         e.printStackTrace()
                     }

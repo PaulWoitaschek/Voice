@@ -11,41 +11,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
  * /licenses/>.
  */
 
@@ -56,8 +22,6 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.google.common.base.Preconditions
-import com.google.common.collect.ImmutableList
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.model.Bookmark
 import de.ph1b.audiobook.model.Chapter
@@ -293,10 +257,10 @@ constructor(c: Context) {
 
 
     private fun generateBookmarks(position: IntArray, path: Array<String>, title: Array<String>): List<Bookmark> {
-        Preconditions.checkArgument(position.size == path.size && path.size == title.size,
-                "Positions, path and title must have the same length but they are %d %d and %d",
-                position.size, path.size, title.size)
+        check(position.size == path.size && path.size == title.size,
+                { "Positions, path and title must have the same length but they are ${position.size} ${path.size} and ${title.size}" })
         val length = position.size
+        listOf("abc", "abc")
         val bookmarks = ArrayList<Bookmark>(length)
         for (i in 0..length - 1) {
             bookmarks.add(Bookmark(File(path[i]), title[i], position[i]))
@@ -305,9 +269,8 @@ constructor(c: Context) {
     }
 
     private fun generateChapters(position: IntArray, path: Array<String>, title: Array<String>): List<Chapter> {
-        Preconditions.checkArgument(position.size == path.size && path.size == title.size,
-                "Positions, path and title must have the same length but they are %d %d and %d",
-                position.size, path.size, title.size)
+        check(position.size == path.size && path.size == title.size,
+                { "Positions, path and title must have the same length but they are ${position.size} ${path.size} and ${title.size}" })
         val length = position.size
         val bookmarks = ArrayList<Chapter>(length)
         for (i in 0..length - 1) {
@@ -334,8 +297,8 @@ constructor(c: Context) {
         val chapterNames = rawChapterNames.split(stringSeparator.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val chapterPaths = rawChapterPaths.split(stringSeparator.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
-        val chapters = ImmutableList.copyOf(generateChapters(chapterDurations, chapterPaths, chapterNames)
-                .sorted())
+        val chapters = generateChapters(chapterDurations, chapterPaths, chapterNames)
+                .sorted()
 
         val rawBookmarkPositions = cursor.stringNullable(KEY_BOOKMARK_POSITIONS)
         val rawBookmarkPaths = cursor.stringNullable(KEY_BOOKMARK_PATHS)
@@ -345,8 +308,8 @@ constructor(c: Context) {
         val bookmarkPaths = if (rawBookmarkPaths == null) arrayOf<String>() else rawBookmarkPaths.split(stringSeparator.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val bookmarkTitles = if (rawBookmarkTitles == null) arrayOf<String>() else rawBookmarkTitles.split(stringSeparator.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
-        val bookmarks = ImmutableList.copyOf(generateBookmarks(bookmarkPositions, bookmarkPaths, bookmarkTitles)
-                .sorted())
+        val bookmarks = generateBookmarks(bookmarkPositions, bookmarkPaths, bookmarkTitles)
+                .sorted()
 
         val bookId = cursor.long(BookTable.ID)
         val bookName = cursor.string(BookTable.NAME)
