@@ -382,7 +382,6 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         if (orphanedBook == null) {
             val newBook = Book(
                     Book.ID_UNKNOWN.toLong(),
-                    emptyList(),
                     type,
                     false,
                     result.author,
@@ -395,26 +394,11 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
             Timber.d("adding newBook=${newBook.name}")
             db.addBook(newBook)
         } else {
-            // restore old books
-            // now removes invalid bookmarks
-            val filteredBookmarks = ArrayList(orphanedBook.bookmarks.filter {
-                for (c in newChapters) {
-                    if (c.file == it.mediaFile) {
-                        return@filter true
-                    }
-                }
-                false
-            })
-            orphanedBook = orphanedBook.copy(bookmarks = filteredBookmarks,
-                    chapters = newChapters)
+            orphanedBook = orphanedBook.copy(chapters = newChapters)
 
             // checks if current path is still valid. if not, reset position.
-            var pathValid = false
-            for (c in orphanedBook.chapters) {
-                if (c.file == orphanedBook.currentFile) {
-                    pathValid = true
-                }
-            }
+            val currentFile = orphanedBook.currentFile
+            val pathValid = orphanedBook.chapters.any { it.file == currentFile }
             if (!pathValid) {
                 orphanedBook = orphanedBook.copy(currentFile = orphanedBook.chapters.first().file,
                         time = 0)
@@ -451,20 +435,9 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                 }
             }
 
-            // removes the bookmarks that no longer represent an existing file
-            val filteredBookmarks = bookToUpdate.bookmarks.filter {
-                for (c in newChapters) {
-                    if (c.file == it.mediaFile) {
-                        return@filter true
-                    }
-                }
-                false
-            }
-
             //set new bookmarks and chapters.
             // if the current path is gone, reset it correctly.
             bookToUpdate = bookToUpdate.copy(
-                    bookmarks = filteredBookmarks,
                     chapters = newChapters,
                     currentFile = if (currentPathIsGone) newChapters.first().file else bookToUpdate.currentFile,
                     time = if (currentPathIsGone) 0 else bookToUpdate.time)

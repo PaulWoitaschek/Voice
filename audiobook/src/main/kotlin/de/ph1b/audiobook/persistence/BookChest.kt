@@ -24,6 +24,7 @@ import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.model.Bookmark
 import de.ph1b.audiobook.model.Chapter
 import rx.Observable
+import rx.Subscriber
 import rx.subjects.PublishSubject
 import timber.log.Timber
 import java.io.File
@@ -64,6 +65,56 @@ constructor(internalDb: InternalDb) {
             active
         }
     }
+
+    inline fun <T> Subscriber<T>.onNextIfSubscribed(function: () -> T) {
+        if (!isUnsubscribed) onNext(function.invoke())
+    }
+
+    fun <T> Subscriber<T>.onCompletedIfSubscribed() {
+        if (!isUnsubscribed) onCompleted()
+    }
+
+    fun deleteBookmark(id: Long) {
+        db.delete(BookmarkTable.TABLE_NAME, "${BookmarkTable.ID} =?", arrayOf(id.toString()))
+    }
+
+    fun addBookmark(bookmark: Bookmark): Bookmark {
+        val cv = bookmark.toContentValues()
+        val insertedId = db.insertOrThrow(BookmarkTable.TABLE_NAME, null, cv)
+        return bookmark.copy(id = insertedId)
+    }
+
+    fun addBookmarkAtBookPosition(book: Book, title: String) {
+        val addedBookmark = Bookmark(book.currentChapter().file, title, book.time)
+        addBookmark(addedBookmark)
+        Timber.v("Added bookmark=$addedBookmark")
+    }
+
+    fun bookmarks(book: Book) = Observable.just(db)
+            .map {
+                val whereBuilder = StringBuilder()
+                val pathAlike = "${BookmarkTable.PATH} =?"
+                for (i in 0..book.chapters.size - 1) {
+                    if (i > 0) whereBuilder.append(" OR ")
+                    whereBuilder.append(pathAlike)
+                }
+                it.query(BookmarkTable.TABLE_NAME,
+                        arrayOf(BookmarkTable.PATH, BookmarkTable.TIME, BookmarkTable.TITLE, BookmarkTable.ID),
+                        whereBuilder.toString(),
+                        book.chapters.map { it.file.absolutePath }.toTypedArray(),
+                        null, null, null)
+            }
+            .flatMap { cursor ->
+                Observable.create<Bookmark> {
+                    cursor.moveToNextLoop {
+                        it.onNextIfSubscribed {
+                            cursor.toBookmark()
+                        }
+                    }
+                    it.onCompletedIfSubscribed()
+                }
+            }
+
     private val db: SQLiteDatabase by lazy {
         synchronized(this) {
             internalDb.writableDatabase
@@ -78,9 +129,6 @@ constructor(internalDb: InternalDb) {
     private val KEY_CHAPTER_DURATIONS = "chapterDurations"
     private val KEY_CHAPTER_NAMES = "chapterNames"
     private val KEY_CHAPTER_PATHS = "chapterPaths"
-    private val KEY_BOOKMARK_POSITIONS = "keyBookmarkPosition"
-    private val KEY_BOOKMARK_TITLES = "keyBookmarkTitle"
-    private val KEY_BOOKMARK_PATHS = "keyBookmarkPath"
     private val stringSeparator = "-~_"
     private val FULL_PROJECTION = "SELECT" +
             " bt." + BookTable.ID +
@@ -96,9 +144,6 @@ constructor(internalDb: InternalDb) {
             ", ct." + KEY_CHAPTER_PATHS +
             ", ct." + KEY_CHAPTER_NAMES +
             ", ct." + KEY_CHAPTER_DURATIONS +
-            ", bmt." + KEY_BOOKMARK_TITLES +
-            ", bmt." + KEY_BOOKMARK_PATHS +
-            ", bmt." + KEY_BOOKMARK_POSITIONS +
             " FROM " +
             BookTable.TABLE_NAME + " AS bt " +
             " left join" +
@@ -107,14 +152,7 @@ constructor(internalDb: InternalDb) {
             "           group_concat(" + ChapterTable.DURATION + ") as " + KEY_CHAPTER_DURATIONS + "," +
             "           group_concat(" + ChapterTable.NAME + ", '" + stringSeparator + "') as " + KEY_CHAPTER_NAMES +
             "    from " + ChapterTable.TABLE_NAME +
-            "    group by " + ChapterTable.BOOK_ID + ") AS ct on ct." + ChapterTable.BOOK_ID + " = bt." + BookTable.ID +
-            " left join" +
-            "    (select " + BookmarkTable.BOOK_ID + "," + "" +
-            "            group_concat(" + BookmarkTable.TITLE + ", '" + stringSeparator + "') as " + KEY_BOOKMARK_TITLES + "," +
-            "            group_concat(" + BookmarkTable.PATH + ", '" + stringSeparator + "') as " + KEY_BOOKMARK_PATHS + "," +
-            "            group_concat(" + BookmarkTable.TIME + ") as " + KEY_BOOKMARK_POSITIONS +
-            "     FROM " + BookmarkTable.TABLE_NAME +
-            "     group by " + BookmarkTable.BOOK_ID + ") AS bmt on bmt." + BookmarkTable.BOOK_ID + " = bt." + BookTable.ID
+            "    group by " + ChapterTable.BOOK_ID + ") AS ct on ct." + ChapterTable.BOOK_ID + " = bt." + BookTable.ID
 
     @Synchronized fun removedObservable(): Observable<Book> = removed.asObservable()
 
@@ -135,11 +173,6 @@ constructor(internalDb: InternalDb) {
             for (c in newBook.chapters) {
                 val chapterCv = ChapterTable.getContentValues(c, newBook.id)
                 insert(ChapterTable.TABLE_NAME, null, chapterCv)
-            }
-
-            for (b in newBook.bookmarks) {
-                val bookmarkCv = BookmarkTable.getContentValues(b, newBook.id)
-                insert(BookmarkTable.TABLE_NAME, null, bookmarkCv)
             }
         }
 
@@ -175,13 +208,6 @@ constructor(internalDb: InternalDb) {
                     for (c in book.chapters) {
                         val chapterCv = ChapterTable.getContentValues(c, book.id)
                         insert(ChapterTable.TABLE_NAME, null, chapterCv)
-                    }
-
-                    // replace old bookmarks and replace them with new ones
-                    delete(BookmarkTable.TABLE_NAME, "${BookTable.ID}=?", arrayOf(book.id.toString()))
-                    for (b in book.bookmarks) {
-                        val bookmarkCV = BookmarkTable.getContentValues(b, book.id)
-                        insert(BookmarkTable.TABLE_NAME, null, bookmarkCV)
                     }
                 }
 
@@ -225,19 +251,6 @@ constructor(internalDb: InternalDb) {
         added.onNext(book)
     }
 
-
-    private fun generateBookmarks(position: IntArray, path: Array<String>, title: Array<String>): List<Bookmark> {
-        check(position.size == path.size && path.size == title.size,
-                { "Positions, path and title must have the same length but they are ${position.size} ${path.size} and ${title.size}" })
-        val length = position.size
-        listOf("abc", "abc")
-        val bookmarks = ArrayList<Bookmark>(length)
-        for (i in 0..length - 1) {
-            bookmarks.add(Bookmark(File(path[i]), title[i], position[i]))
-        }
-        return bookmarks
-    }
-
     private fun generateChapters(position: IntArray, path: Array<String>, title: Array<String>): List<Chapter> {
         check(position.size == path.size && path.size == title.size,
                 { "Positions, path and title must have the same length but they are ${position.size} ${path.size} and ${title.size}" })
@@ -270,17 +283,6 @@ constructor(internalDb: InternalDb) {
         val chapters = generateChapters(chapterDurations, chapterPaths, chapterNames)
                 .sorted()
 
-        val rawBookmarkPositions = cursor.stringNullable(KEY_BOOKMARK_POSITIONS)
-        val rawBookmarkPaths = cursor.stringNullable(KEY_BOOKMARK_PATHS)
-        val rawBookmarkTitles = cursor.stringNullable(KEY_BOOKMARK_TITLES)
-
-        val bookmarkPositions = if (rawBookmarkPositions == null) IntArray(0) else convertToStringArray(rawBookmarkPositions.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
-        val bookmarkPaths = if (rawBookmarkPaths == null) arrayOf<String>() else rawBookmarkPaths.split(stringSeparator.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val bookmarkTitles = if (rawBookmarkTitles == null) arrayOf<String>() else rawBookmarkTitles.split(stringSeparator.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-
-        val bookmarks = generateBookmarks(bookmarkPositions, bookmarkPaths, bookmarkTitles)
-                .sorted()
-
         val bookId = cursor.long(BookTable.ID)
         val bookName = cursor.string(BookTable.NAME)
         val bookAuthor = cursor.stringNullable(BookTable.AUTHOR)
@@ -292,7 +294,6 @@ constructor(internalDb: InternalDb) {
         val bookUseCoverReplacement = cursor.int(BookTable.USE_COVER_REPLACEMENT) == BOOLEAN_TRUE
 
         return Book(bookId,
-                bookmarks,
                 bookType,
                 bookUseCoverReplacement,
                 bookAuthor,
