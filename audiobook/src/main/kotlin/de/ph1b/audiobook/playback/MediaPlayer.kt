@@ -15,53 +15,43 @@
  * /licenses/>.
  */
 
-package de.ph1b.audiobook.mediaplayer
+package de.ph1b.audiobook.playback
 
+import android.content.Context
 import rx.Observable
-import java.io.File
 
 /**
- * Interface defining a media player.
+ * Abstraction of android.media.MediaPlayer.
  *
  * @author Paul Woitaschek
  */
-interface Player {
+interface MediaPlayer {
 
+    fun setDataSource(path: String)
 
-    /**
-     * Prepares an audio file.
-     */
-    fun prepare(file: File)
+    fun seekTo(to: Int)
 
-    /**
-     * The current position in the track.
-     */
-    var currentPosition: Int
+    fun isPlaying(): Boolean
 
-    /**
-     * If true the player will start as soon as he is prepared
-     */
-    var playing: Boolean
+    fun prepare()
 
-    /**
-     * The playback rate. 1.0 is normal
-     */
+    fun start()
+
+    fun pause()
+
+    fun reset()
+
+    fun setWakeMode(context: Context, mode: Int)
+
+    fun setAudioStreamType(streamType: Int)
+
+    val currentPosition: Int
+
+    val duration: Int
+
     var playbackSpeed: Float
 
+    val onError: Observable<Unit>
 
-    /**
-     * An observable that emits when an error is detected
-     */
-    val errorObservable: Observable<Unit>
-
-
-    /**
-     * An observable that emits once a track is finished.
-     */
-    val completionObservable: Observable<Unit>
-
-    /**
-     * The duration of the current track
-     */
-    val duration: Int
+    val onCompletion: Observable<Unit>
 }

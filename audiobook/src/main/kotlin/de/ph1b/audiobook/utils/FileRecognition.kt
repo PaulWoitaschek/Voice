@@ -18,8 +18,6 @@
 package de.ph1b.audiobook.utils
 
 import android.os.Build
-import com.google.common.collect.Lists
-import com.google.common.io.Files
 import java.io.FileFilter
 import java.util.*
 
@@ -35,7 +33,7 @@ object FileRecognition {
     private val audioTypes: List<String>
 
     init {
-        audioTypes = Lists.newArrayList("3gp",
+        audioTypes = arrayListOf("3gp",
                 "aac",
                 "awb",
                 "flac",
@@ -66,7 +64,7 @@ object FileRecognition {
         if (it.isDirectory) {
             return@FileFilter true
         } else {
-            val extension = Files.getFileExtension(it.name)
+            val extension = it.extension
                     .toLowerCase()
             return@FileFilter audioTypes.contains(extension)
         }
@@ -75,7 +73,7 @@ object FileRecognition {
         if (it.isDirectory) {
             return@FileFilter true
         } else {
-            val extension = Files.getFileExtension(it.name)
+            val extension = it.extension
                     .toLowerCase()
             return@FileFilter imageTypes.contains(extension)
         }

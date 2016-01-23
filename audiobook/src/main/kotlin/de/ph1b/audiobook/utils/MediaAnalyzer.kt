@@ -18,7 +18,6 @@
 package de.ph1b.audiobook.utils
 
 import android.media.MediaMetadataRetriever
-import com.google.common.io.Files
 import java.io.File
 import javax.inject.Inject
 
@@ -64,7 +63,7 @@ class MediaAnalyzer
             var chapterName = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_TITLE)
             // checking for dot index because otherwise a file called ".mp3" would have no name.
             if (chapterName.isNullOrEmpty()) {
-                val fileName = Files.getNameWithoutExtension(input.absolutePath)!!
+                val fileName = input.nameWithoutExtension
                 chapterName = if (fileName.isEmpty()) input.name else fileName
             }
 

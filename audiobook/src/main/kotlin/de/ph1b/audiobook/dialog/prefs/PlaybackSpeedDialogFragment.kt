@@ -27,10 +27,10 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.jakewharton.rxbinding.widget.RxSeekBar
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.playback.MediaPlayerController
 import de.ph1b.audiobook.utils.BookVendor
 import java.text.DecimalFormat
 import java.util.concurrent.TimeUnit

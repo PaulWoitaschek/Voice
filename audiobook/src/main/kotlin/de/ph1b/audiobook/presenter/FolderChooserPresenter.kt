@@ -55,14 +55,6 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
 
     override fun onBind(view: FolderChooserView, subscriptions: CompositeSubscription) {
         refreshRootDirs()
-
-        if (chosenFile != null ) {
-            fileSelected(chosenFile)
-        } else if (rootDirs.isNotEmpty()) {
-            fileSelected(rootDirs.first())
-        } else {
-            fileSelected(null)
-        }
     }
 
     /**
@@ -215,6 +207,14 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
         rootDirs.addAll(storageDirs())
         view!!.newRootFolders(rootDirs)
         view!!.setChooseButtonEnabled(rootDirs.isNotEmpty())
+
+        if (chosenFile != null ) {
+            fileSelected(chosenFile)
+        } else if (rootDirs.isNotEmpty()) {
+            fileSelected(rootDirs.first())
+        } else {
+            fileSelected(null)
+        }
     }
 
 

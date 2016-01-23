@@ -321,9 +321,10 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
     fun showSpinnerIfNoData(showSpinnerIfNoData: Boolean) {
         Timber.i("showSpinnerIfNoData $showSpinnerIfNoData")
         val shouldShowSpinner = adapter.itemCount == 0 && showSpinnerIfNoData
-
-        recyclerView.visibility = if (shouldShowSpinner) View.GONE else View.VISIBLE
-        recyclerReplacementView.visibility = if (shouldShowSpinner) View.VISIBLE else View.GONE
+        Timber.i("ShouldShowSpinner=$shouldShowSpinner")
+        recyclerView.visibility = if (shouldShowSpinner) View.INVISIBLE else View.VISIBLE
+        recyclerReplacementView.visibility = if (shouldShowSpinner) View.VISIBLE else View.INVISIBLE
+        Timber.i("ShowSpinnerIfNoData finished.")
     }
 
 

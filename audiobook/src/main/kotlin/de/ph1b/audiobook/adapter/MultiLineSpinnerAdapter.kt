@@ -76,9 +76,11 @@ class MultiLineSpinnerAdapter<Type>(private val spinner: Spinner, private val co
     private val data = ArrayList<Data<Type>>()
 
     fun setData(data: List<Data<Type>>) {
-        this.data.clear()
-        this.data.addAll(data)
-        notifyDataSetChanged()
+        if (this.data != data) {
+            this.data.clear()
+            this.data.addAll(data)
+            notifyDataSetChanged()
+        }
     }
 
     data class Data<E>(val data: E, val shown: String)

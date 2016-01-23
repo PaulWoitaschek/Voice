@@ -17,10 +17,10 @@
 
 package de.ph1b.audiobook.presenter
 
-import de.ph1b.audiobook.mediaplayer.MediaPlayerController
 import de.ph1b.audiobook.model.BookAdder
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.playback.MediaPlayerController
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.view.fragment.BookShelfFragment
 import rx.Observable

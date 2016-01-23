@@ -1,5 +1,13 @@
+# Next Version
+* Updated dependencies
+* Removed guava and decreased app size
+* Safe Bookmarks unrelated to books. This way they will survive a book deletion etc.
+
+# till v2.5.0.10
+No changelog
+
 # v2.4.3 Oh sweet sweet kotlin
-* Everythign rewritten in Kotlin
+* Everything rewritten in Kotlin
 * Reactive Programming (rxJava)
 * External storage on MarshMallow fixed
 * Software architecture rethought and many components decoupled
