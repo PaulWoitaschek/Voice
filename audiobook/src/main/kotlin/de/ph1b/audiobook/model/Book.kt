@@ -11,7 +11,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
  * /licenses/>.
  */
 
@@ -19,7 +19,6 @@ package de.ph1b.audiobook.model
 
 
 import android.os.Environment
-import com.google.common.collect.ImmutableList
 import de.ph1b.audiobook.injection.App
 import java.io.File
 import java.util.*
@@ -34,14 +33,14 @@ import java.util.*
  * @author Paul Woitaschek
  */
 data class Book(val id: Long,
-                val bookmarks: ImmutableList<Bookmark>,
+                val bookmarks: List<Bookmark>,
                 val type: Book.Type,
                 val useCoverReplacement: Boolean,
                 val author: String?,
                 val currentFile: File,
                 val time: Int,
                 val name: String,
-                val chapters: ImmutableList<Chapter>,
+                val chapters: List<Chapter>,
                 val playbackSpeed: Float,
                 val root: String) : Comparable<Book> {
 

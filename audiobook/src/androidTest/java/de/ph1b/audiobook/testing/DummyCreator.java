@@ -17,7 +17,6 @@
 
 package de.ph1b.audiobook.testing;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 import java.io.File;
@@ -57,14 +56,14 @@ public class DummyCreator {
             root = "fakeRoot";
         }
         return new Book(id,
-                ImmutableList.copyOf(bookmarks),
+                bookmarks,
                 type,
                 false,
                 author,
                 file1,
                 time,
                 name,
-                ImmutableList.copyOf(chapters),
+                chapters,
                 playbackSpeed,
                 root);
     }

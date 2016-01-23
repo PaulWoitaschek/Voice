@@ -29,7 +29,6 @@ import android.widget.EditText
 import android.widget.PopupMenu
 import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
-import com.google.common.collect.ImmutableList
 import com.google.common.collect.Ordering
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.adapter.BookmarkAdapter
@@ -101,9 +100,9 @@ class BookmarkDialogFragment : DialogFragment() {
                                         adapter!!.bookmarkUpdated(bookmark, newBookmark)
 
                                         // replaces the bookmark in the book
-                                        val mutableBookmarks = ArrayList(book.bookmarks)
-                                        mutableBookmarks[mutableBookmarks.indexOf(bookmark)] = newBookmark
-                                        book = book.copy(bookmarks = ImmutableList.copyOf(mutableBookmarks))
+                                        val newBookmarks = ArrayList(book.bookmarks)
+                                        newBookmarks[newBookmarks.indexOf(bookmark)] = newBookmark
+                                        book = book.copy(bookmarks = newBookmarks)
                                         db.updateBook(book)
                                     }.positiveText(R.string.dialog_confirm).show()
                             return@setOnMenuItemClickListener true
@@ -115,9 +114,9 @@ class BookmarkDialogFragment : DialogFragment() {
                                     .negativeText(R.string.dialog_cancel)
                                     .onPositive {
                                         materialDialog, dialogAction ->
-                                        val mutableBookmarks = ArrayList(book.bookmarks)
-                                        mutableBookmarks.remove(bookmark)
-                                        book = book.copy(bookmarks = ImmutableList.copyOf(mutableBookmarks))
+                                        val newBookmarks = ArrayList(book.bookmarks)
+                                        newBookmarks.remove(bookmark)
+                                        book = book.copy(bookmarks = newBookmarks)
                                         adapter!!.removeItem(bookmark)
                                         db.updateBook(book)
                                     }.show()
