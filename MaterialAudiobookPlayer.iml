@@ -10,10 +10,10 @@
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/.gradle" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="MaterialAudiobookPlayer (Compile)" level="project" />
-    <orderEntry type="library" scope="TEST" name="MaterialAudiobookPlayer (Test)" level="project" />
   </component>
 </module>
