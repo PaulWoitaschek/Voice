@@ -72,6 +72,7 @@
     <string name="permission_read_ext_request">Ska vi fråga efter rättigheter igen?</string>
     <string name="permission_rescan">Fråga igen</string>
     <string name="storage_pre_device">Lagring:</string>
+    <string name="storage_all">Alla</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Uppspelningshastighet</string>
     <!--Bookmarks-->
