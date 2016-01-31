@@ -20,6 +20,7 @@ package de.ph1b.audiobook.playback
 import android.annotation.TargetApi
 import android.content.Context
 import android.media.*
+import android.os.Build
 import android.os.PowerManager
 import rx.subjects.PublishSubject
 import sonic.Sonic
@@ -27,6 +28,35 @@ import timber.log.Timber
 import java.io.IOException
 import java.util.concurrent.Executors
 import java.util.concurrent.locks.ReentrantLock
+
+private fun MediaFormat.containsKeys(vararg keys: String): Boolean {
+    for (key in keys) {
+        if (!containsKey(key)) return false
+    }
+    return true
+}
+
+private fun Sonic.availableBytes(): Int {
+    return numChannels * samplesAvailable() * 2
+}
+
+private fun findFormatFromChannels(numChannels: Int): Int {
+    return when (numChannels) {
+        1 -> AudioFormat.CHANNEL_OUT_MONO
+        2 -> AudioFormat.CHANNEL_OUT_STEREO
+        3 -> AudioFormat.CHANNEL_OUT_STEREO or AudioFormat.CHANNEL_OUT_FRONT_CENTER
+        4 -> AudioFormat.CHANNEL_OUT_QUAD
+        5 -> AudioFormat.CHANNEL_OUT_QUAD or AudioFormat.CHANNEL_OUT_FRONT_CENTER
+        6 -> AudioFormat.CHANNEL_OUT_5POINT1
+        7 -> AudioFormat.CHANNEL_OUT_5POINT1 or AudioFormat.CHANNEL_OUT_BACK_CENTER
+        8 -> if (Build.VERSION.SDK_INT >= 23) {
+            AudioFormat.CHANNEL_OUT_7POINT1_SURROUND;
+        } else {
+            -1;
+        }
+        else -> -1 // Error
+    }
+}
 
 /**
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -81,8 +111,8 @@ class CustomMediaPlayer : MediaPlayer {
     private val decoderRunnable = Runnable {
         isDecoding = true
         codec!!.start()
-        @SuppressWarnings("deprecation") val inputBuffers = codec!!.inputBuffers
-        @SuppressWarnings("deprecation") var outputBuffers = codec!!.outputBuffers
+        val inputBuffers = codec!!.inputBuffers
+        var outputBuffers = codec!!.outputBuffers
         var sawInputEOS = false
         var sawOutputEOS = false
         while (!sawInputEOS && !sawOutputEOS && continuing) {
@@ -165,7 +195,6 @@ class CustomMediaPlayer : MediaPlayer {
                         initDevice(
                                 oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE),
                                 oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT))
-                        //noinspection deprecation
                         outputBuffers = codec!!.outputBuffers
                         track!!.play()
                     } catch (e: IOException) {
@@ -361,7 +390,7 @@ class CustomMediaPlayer : MediaPlayer {
 
     override fun setWakeMode(context: Context, mode: Int) {
         val pm = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-        wakeLock = pm.newWakeLock(mode, TAG)
+        wakeLock = pm.newWakeLock(mode, "CustomPlayer")
         wakeLock!!.setReferenceCounted(false)
     }
 
@@ -375,33 +404,18 @@ class CustomMediaPlayer : MediaPlayer {
                 extractor!!.setDataSource(path)
             } else {
                 error("initStream")
-                throw IOException()
+                throw IOException("Error at initializing stream")
             }
             val trackNum = 0
             val oFormat = extractor!!.getTrackFormat(trackNum)
 
-            if (!oFormat.containsKey(MediaFormat.KEY_SAMPLE_RATE)) {
-                error("initStream")
-                throw IOException("No KEY_SAMPLE_RATE")
+            if (!oFormat.containsKeys(MediaFormat.KEY_SAMPLE_RATE, MediaFormat.KEY_CHANNEL_COUNT, MediaFormat.KEY_MIME, MediaFormat.KEY_DURATION)) {
+                throw IllegalArgumentException("MediaFormat misses keys.")
             }
+
             val sampleRate = oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE)
-
-            if (!oFormat.containsKey(MediaFormat.KEY_CHANNEL_COUNT)) {
-                error("initStream")
-                throw IOException("No KEY_CHANNEL_COUNT")
-            }
             val channelCount = oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT)
-
-            if (!oFormat.containsKey(MediaFormat.KEY_MIME)) {
-                error("initStream")
-                throw IOException("No KEY_MIME")
-            }
             val mime = oFormat.getString(MediaFormat.KEY_MIME)
-
-            if (!oFormat.containsKey(MediaFormat.KEY_DURATION)) {
-                error("initStream")
-                throw IOException("No KEY_DURATION")
-            }
             duration = (oFormat.getLong(MediaFormat.KEY_DURATION) / 1000).toInt();
 
             Timber.v("Sample rate: " + sampleRate)
@@ -475,21 +489,5 @@ class CustomMediaPlayer : MediaPlayer {
         PREPARED,
         STOPPED,
         PLAYBACK_COMPLETED,
-    }
-
-    companion object {
-        private val TAG = CustomMediaPlayer::class.java.simpleName
-
-        private fun Sonic.availableBytes(): Int {
-            return numChannels * samplesAvailable() * 2
-        }
-
-        private fun findFormatFromChannels(numChannels: Int): Int {
-            when (numChannels) {
-                1 -> return AudioFormat.CHANNEL_OUT_MONO
-                2 -> return AudioFormat.CHANNEL_OUT_STEREO
-                else -> return -1 // Error
-            }
-        }
     }
 }
