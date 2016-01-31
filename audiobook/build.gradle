@@ -80,6 +80,7 @@ dependencies {
     def supportVersion = "23.1.1"
     compile "com.android.support:appcompat-v7:$supportVersion"
     compile "com.android.support:recyclerview-v7:$supportVersion"
+    compile "com.android.support:support-v4:$supportVersion"
 
     // http library
     def okHttpVersion = "3.0.1"
@@ -141,5 +142,5 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     // player
-    compile 'com.github.AntennaPod:AntennaPod-AudioPlayer:v1.0.9'
+    compile 'com.github.AntennaPod:AntennaPod-AudioPlayer:v1.0.11'
 }
