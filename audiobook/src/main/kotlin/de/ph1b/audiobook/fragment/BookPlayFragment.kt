@@ -294,7 +294,7 @@ class BookPlayFragment : BaseFragment() {
                 mediaPlayerController.toggleSleepSand()
                 if (prefs.setBookmarkOnSleepTimer() && mediaPlayerController.sleepTimerActive()) {
                     val date = DateUtils.formatDateTime(context, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE)
-                    BookmarkDialogFragment.addBookmark(bookId, date + ": " + getString(R.string.action_sleep), db)
+                    db.addBookmarkAtBookPosition(book!!, date + ": " + getString(R.string.action_sleep))
                 }
                 return true
             }
@@ -319,8 +319,7 @@ class BookPlayFragment : BaseFragment() {
     override fun onStart() {
         super.onStart()
 
-        subscriptions = CompositeSubscription()
-        subscriptions!!.apply {
+        subscriptions = CompositeSubscription().apply {
             add(playStateManager.playState
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(object : Action1<PlayStateManager.PlayState> {

@@ -25,32 +25,19 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Bookmark
 import de.ph1b.audiobook.model.Chapter
 import java.util.*
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 /**
  * Adapter for displaying a list of bookmarks.
 
  * @author Paul Woitaschek
  */
-class BookmarkAdapter(bookmarks: List<Bookmark>, chapters: List<Chapter>, private val listener: BookmarkAdapter.OnOptionsMenuClickedListener) : RecyclerView.Adapter<BookmarkAdapter.ViewHolder>() {
+class BookmarkAdapter(private val chapters: List<Chapter>, private val listener: BookmarkAdapter.OnOptionsMenuClickedListener, private val context: Context) : RecyclerView.Adapter<BookmarkAdapter.ViewHolder>() {
 
-    private val bookmarks: MutableList<Bookmark>
-    private val chapters: List<Chapter>
-
-    @Inject
-    internal lateinit var c: Context
-
-
-    init {
-        App.component().inject(this)
-        this.bookmarks = ArrayList(bookmarks)
-        this.chapters = ArrayList(chapters)
-    }
+    private val bookmarks = ArrayList<Bookmark>()
 
     private fun formatTime(ms: Int): String {
         val h = TimeUnit.MILLISECONDS.toHours(ms.toLong()).toString()
@@ -64,10 +51,17 @@ class BookmarkAdapter(bookmarks: List<Bookmark>, chapters: List<Chapter>, privat
         return returnString
     }
 
-    fun removeItem(bookmark: Bookmark) {
+    fun remove(bookmark: Bookmark) {
         val index = bookmarks.indexOf(bookmark)
         bookmarks.remove(bookmark)
         notifyItemRemoved(index)
+    }
+
+    fun add(bookmark: Bookmark) {
+        bookmarks.add(bookmark)
+        bookmarks.sort()
+        val index = bookmarks.indexOf(bookmark)
+        notifyItemInserted(index)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -75,14 +69,13 @@ class BookmarkAdapter(bookmarks: List<Bookmark>, chapters: List<Chapter>, privat
         return ViewHolder(v, listener)
     }
 
-    fun bookmarkUpdated(oldBookmark: Bookmark, newBookmark: Bookmark) {
+    fun replace(oldBookmark: Bookmark, newBookmark: Bookmark) {
         val oldIndex = bookmarks.indexOf(oldBookmark)
         bookmarks[oldIndex] = newBookmark
         notifyItemChanged(oldIndex)
         bookmarks.sort()
         notifyItemMoved(oldIndex, bookmarks.indexOf(newBookmark))
     }
-
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val bookmark = bookmarks[position]
@@ -92,8 +85,8 @@ class BookmarkAdapter(bookmarks: List<Bookmark>, chapters: List<Chapter>, privat
         var currentChapter = chapters.single { it.file == bookmark.mediaFile }
         val index = chapters.indexOf(currentChapter)
 
-        holder.summary.text = c.getString(R.string.format_bookmarks_n_of, index + 1, size)
-        holder.time.text = c.getString(R.string.format_bookmarks_time, formatTime(bookmark.time),
+        holder.summary.text = context.getString(R.string.format_bookmarks_n_of, index + 1, size)
+        holder.time.text = context.getString(R.string.format_bookmarks_time, formatTime(bookmark.time),
                 formatTime(currentChapter.duration))
     }
 

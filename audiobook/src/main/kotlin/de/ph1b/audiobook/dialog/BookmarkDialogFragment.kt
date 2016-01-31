@@ -29,8 +29,6 @@ import android.widget.EditText
 import android.widget.PopupMenu
 import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
-import com.google.common.collect.ImmutableList
-import com.google.common.collect.Ordering
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.adapter.BookmarkAdapter
 import de.ph1b.audiobook.injection.App
@@ -41,8 +39,9 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.MediaPlayerController
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.utils.BookVendor
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -50,7 +49,51 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class BookmarkDialogFragment : DialogFragment() {
+class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuClickedListener {
+
+    override fun onOptionsMenuClicked(bookmark: Bookmark, v: View) {
+        val popup = PopupMenu(activity, v)
+        popup.menuInflater.inflate(R.menu.bookmark_popup, popup.menu)
+        popup.setOnMenuItemClickListener {
+            val builder = MaterialDialog.Builder(activity)
+            when (it.itemId) {
+                R.id.edit -> {
+                    MaterialDialog.Builder(context)
+                            .title(R.string.bookmark_edit_title)
+                            .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
+                            .input(getString(R.string.bookmark_edit_hint), bookmark.title, false) { materialDialog, charSequence ->
+                                val newBookmark = Bookmark(bookmark.mediaFile, charSequence.toString(), bookmark.time)
+                                adapter.replace(bookmark, newBookmark)
+                                db.deleteBookmark(bookmark.id)
+                                db.addBookmark(newBookmark)
+                            }
+                            .positiveText(R.string.dialog_confirm).show()
+                    return@setOnMenuItemClickListener true
+                }
+                R.id.delete -> {
+                    builder.title(R.string.bookmark_delete_title)
+                            .content(bookmark.title)
+                            .positiveText(R.string.remove)
+                            .negativeText(R.string.dialog_cancel)
+                            .onPositive { materialDialog, dialogAction ->
+                                adapter.remove(bookmark)
+                                db.deleteBookmark(bookmark.id)
+                            }
+                            .show()
+                    return@setOnMenuItemClickListener true
+                }
+                else -> return@setOnMenuItemClickListener false
+            }
+        }
+        popup.show()
+    }
+
+    override fun onBookmarkClicked(bookmark: Bookmark) {
+        prefs.setCurrentBookId(bookId())
+        mediaPlayerController.changePosition(bookmark.time, bookmark.mediaFile)
+
+        dialog.cancel()
+    }
 
     private lateinit var bookmarkTitle: EditText
     @Inject lateinit internal var prefs: PrefsManager
@@ -58,6 +101,7 @@ class BookmarkDialogFragment : DialogFragment() {
     @Inject lateinit internal var bookVendor: BookVendor
     @Inject internal lateinit var mediaPlayerController: MediaPlayerController
     private lateinit var book: Book
+    private lateinit var adapter: BookmarkAdapter
 
     fun addClicked() {
         Timber.i("Add bookmark clicked.")
@@ -66,11 +110,13 @@ class BookmarkDialogFragment : DialogFragment() {
             title = book.currentChapter().name
         }
 
-        addBookmark(book.id, title, db)
+        db.addBookmarkAtBookPosition(book, title)
         Toast.makeText(activity, R.string.bookmark_added, Toast.LENGTH_SHORT).show()
         bookmarkTitle.setText("")
         dismiss()
     }
+
+    private fun bookId() = arguments.getLong(BOOK_ID)
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         App.component().inject(this)
@@ -79,70 +125,18 @@ class BookmarkDialogFragment : DialogFragment() {
         val customView = inflater.inflate(R.layout.dialog_bookmark, null)
         bookmarkTitle = customView.findViewById(R.id.bookmarkEdit) as EditText
 
-        val bookId = arguments.getLong(BOOK_ID)
-        book = bookVendor.byId(bookId)!!
-
-        // init later. Cyclic dependency here between adapter and listener.
-        var adapter: BookmarkAdapter? = null
-        val listener = object : BookmarkAdapter.OnOptionsMenuClickedListener {
-            override fun onOptionsMenuClicked(bookmark: Bookmark, v: View) {
-                val popup = PopupMenu(activity, v)
-                popup.menuInflater.inflate(R.menu.bookmark_popup, popup.menu)
-                popup.setOnMenuItemClickListener {
-                    val builder = MaterialDialog.Builder(activity)
-                    when (it.itemId) {
-                        R.id.edit -> {
-                            MaterialDialog.Builder(context)
-                                    .title(R.string.bookmark_edit_title)
-                                    .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
-                                    .input(getString(R.string.bookmark_edit_hint), bookmark.title, false) {
-                                        materialDialog, charSequence ->
-                                        val newBookmark = Bookmark(bookmark.mediaFile, charSequence.toString(), bookmark.time)
-                                        adapter!!.bookmarkUpdated(bookmark, newBookmark)
-
-                                        // replaces the bookmark in the book
-                                        val mutableBookmarks = ArrayList(book.bookmarks)
-                                        mutableBookmarks[mutableBookmarks.indexOf(bookmark)] = newBookmark
-                                        book = book.copy(bookmarks = ImmutableList.copyOf(mutableBookmarks))
-                                        db.updateBook(book)
-                                    }.positiveText(R.string.dialog_confirm).show()
-                            return@setOnMenuItemClickListener true
-                        }
-                        R.id.delete -> {
-                            builder.title(R.string.bookmark_delete_title)
-                                    .content(bookmark.title)
-                                    .positiveText(R.string.remove)
-                                    .negativeText(R.string.dialog_cancel)
-                                    .onPositive {
-                                        materialDialog, dialogAction ->
-                                        val mutableBookmarks = ArrayList(book.bookmarks)
-                                        mutableBookmarks.remove(bookmark)
-                                        book = book.copy(bookmarks = ImmutableList.copyOf(mutableBookmarks))
-                                        adapter!!.removeItem(bookmark)
-                                        db.updateBook(book)
-                                    }.show()
-                            return@setOnMenuItemClickListener true
-                        }
-                        else -> return@setOnMenuItemClickListener false
-                    }
-                }
-                popup.show()
-            }
-
-            override fun onBookmarkClicked(bookmark: Bookmark) {
-                prefs.setCurrentBookId(bookId)
-                mediaPlayerController.changePosition(bookmark.time, bookmark.mediaFile)
-
-                dialog.cancel()
-            }
-        }
-
-        adapter = BookmarkAdapter(book.bookmarks, book.chapters, listener)
+        book = bookVendor.byId(bookId())!!
+        adapter = BookmarkAdapter(book.chapters, this, context)
         val recyclerView = customView.findViewById(R.id.recycler) as RecyclerView
         recyclerView.adapter = adapter
         val layoutManager = LinearLayoutManager(activity)
         recyclerView.addItemDecoration(DividerItemDecoration(activity))
         recyclerView.layoutManager = layoutManager
+
+        db.bookmarks(book)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { adapter.add(it) }
 
         customView.findViewById(R.id.add).setOnClickListener { addClicked() }
         bookmarkTitle.setOnEditorActionListener { v1, actionId, event ->
@@ -171,22 +165,6 @@ class BookmarkDialogFragment : DialogFragment() {
             args.putLong(BookmarkDialogFragment.BOOK_ID, bookId)
             bookmarkDialogFragment.arguments = args
             return bookmarkDialogFragment
-        }
-
-        fun addBookmark(bookId: Long, title: String, db: BookChest) {
-            var book: Book? = db.activeBooks
-                    .toBlocking()
-                    .singleOrDefault(null, { it.id == bookId })
-            if (book != null) {
-                val addedBookmark = Bookmark(book.currentChapter().file, title, book.time)
-                val newBookmarks = ArrayList(book.bookmarks)
-                newBookmarks.add(addedBookmark)
-                book = book.copy(bookmarks = Ordering.natural<Bookmark>().immutableSortedCopy(newBookmarks))
-                db.updateBook(book)
-                Timber.v("Added bookmark=%s", addedBookmark)
-            } else {
-                Timber.e("Book does not exist")
-            }
         }
     }
 }

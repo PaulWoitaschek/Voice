@@ -18,14 +18,14 @@
 
 <resources>
     <!--BookShelf-->
-    <string name="mal_file_message">Le fichier suivant est peut-être corrompu:</string>
+    <string name="mal_file_message">Le fichier suivant est probablement corrompu :</string>
     <string name="mal_file_title">Fichier défectueux</string>
     <string name="content_current_book">Ceci est le livre en cours</string>
     <string name="current_book">Livre en cours</string>
     <string name="change_layout_type">Modifier la disposition</string>
     <!--BookPlayFragment-->
     <string name="cover">Couverture</string>
-    <string name="play_pause">Lire / Pause</string>
+    <string name="play_pause">Lecture / Pause</string>
     <string name="action_sleep">Minuteur</string>
     <plurals name="pauses_after">
         <item quantity="one">Met en pause après %d minute.</item>
@@ -35,10 +35,10 @@
     <string name="fast_forward">Avance rapide</string>
     <string name="previous_track">Piste précédente</string>
     <string name="next_track">Piste suivante</string>
-    <string name="play">Lire</string>
+    <string name="play">Lecture</string>
     <string name="pause">Pause</string>
     <!--NoExternalStorage-->
-    <string name="no_external_storage">Le stockage externe n\'est pas disponible. Veuillez vous assurez qu\'il est connecté et n\'est pas monté sur votre ordinateur.</string>
+    <string name="no_external_storage">Le stockage externe n\'est pas disponible. Assurez vous qu\'il est connecté et n\'est pas monté sur votre ordinateur.</string>
     <string name="no_external_storage_action_bar_title">Stockage externe</string>
     <!--Dialogs-->
     <string name="dialog_confirm">Définir</string>
@@ -72,6 +72,7 @@
     <string name="permission_read_ext_request">Devons nous redemander la permission plus tard ?</string>
     <string name="permission_rescan">Redemander plus tard</string>
     <string name="storage_pre_device">Stockage :</string>
+    <string name="storage_all">Tous</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Vitesse de lecture</string>
     <!--Bookmarks-->
@@ -124,7 +125,7 @@
     <string name="remove">Enlever</string>
     <!--hide folder dialog-->
     <string name="hide_folder_title">Masquer le dossier</string>
-    <string name="hide_folder_content">Voulez vous masquer le dossier aux lecteurs audio afin qu\'ils ne considèrent pas vos livre comme de la musique ?</string>
+    <string name="hide_folder_content">Voulez vous masquer le dossier aux lecteurs audio afin qu\'ils ne considèrent pas vos livres comme de la musique ?</string>
     <string name="hide_confirm">Masquer</string>
     <!--license activity-->
     <string name="license_activity_title">Licences utilisées</string>
