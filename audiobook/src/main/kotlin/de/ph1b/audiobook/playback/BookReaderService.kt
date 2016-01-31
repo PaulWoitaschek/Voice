@@ -307,19 +307,16 @@ class BookReaderService : Service() {
                             bookName: String,
                             chapterName: String,
                             playState: PlayState,
-                            time: Int): Intent {
-            val i = Intent(intentUrl)
-            i.apply {
-                putExtra("id", 1)
-                if (author != null) {
-                    putExtra("artist", author)
+                            time: Int) =
+                Intent(intentUrl).apply {
+                    putExtra("id", 1)
+                    if (author != null) {
+                        putExtra("artist", author)
+                    }
+                    putExtra("album", bookName)
+                    putExtra("track", chapterName)
+                    putExtra("playing", playState === PlayState.PLAYING)
+                    putExtra("position", time)
                 }
-                putExtra("album", bookName)
-                putExtra("track", chapterName)
-                putExtra("playing", playState === PlayState.PLAYING)
-                putExtra("position", time)
-            }
-            return i
-        }
     }
 }
