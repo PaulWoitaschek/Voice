@@ -18,7 +18,6 @@
 package de.ph1b.audiobook.playback
 
 import android.content.Context
-import android.media.AudioManager
 import android.os.Build
 import android.os.PowerManager
 import rx.subjects.PublishSubject
@@ -37,7 +36,7 @@ class Player
 constructor(context: Context) {
 
     private val mediaPlayer = if (useCustomMediaPlayer) {
-        AntennaPlayerDelegate(context)
+        CustomMediaPlayer()
     } else {
         AndroidPlayerDelegate()
     }
@@ -67,7 +66,6 @@ constructor(context: Context) {
                 }
 
         mediaPlayer.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK or PowerManager.ON_AFTER_RELEASE)
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
     }
 
 
