@@ -36,7 +36,7 @@ import de.ph1b.audiobook.presenter.BookShelfPresenter;
 public class PresenterModule {
 
     @Provides
-    BookShelfBasePresenter provideBookShelfBasePresenter(
+    static BookShelfBasePresenter provideBookShelfBasePresenter(
             BookChest bookChest, BookAdder bookAdder, PrefsManager prefsManager,
             PlayStateManager playStateManager, MediaPlayerController mediaPlayerController) {
         return new BookShelfPresenter(bookChest, bookAdder, prefsManager, playStateManager, mediaPlayerController);
