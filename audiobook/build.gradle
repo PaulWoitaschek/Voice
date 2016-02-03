@@ -25,8 +25,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 103
-        versionName 'snapshot'
+        versionCode 104
+        versionName '2.5.1'
 
         testInstrumentationRunner "de.ph1b.audiobook.testing.MockAppRunner"
     }
@@ -80,6 +80,7 @@ dependencies {
     def supportVersion = "23.1.1"
     compile "com.android.support:appcompat-v7:$supportVersion"
     compile "com.android.support:recyclerview-v7:$supportVersion"
+    compile "com.android.support:support-v4:$supportVersion"
 
     // http library
     def okHttpVersion = "3.0.1"

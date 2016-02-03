@@ -43,8 +43,6 @@ interface MediaPlayer {
 
     fun setWakeMode(context: Context, mode: Int)
 
-    fun setAudioStreamType(streamType: Int)
-
     val currentPosition: Int
 
     val duration: Int
