@@ -49,16 +49,17 @@
  * /licenses/>.
  */
 
-import com.beust.kobalt.plugin.java.javaProject
+import com.beust.kobalt.plugin.kotlin.kotlinProject
 import com.beust.kobalt.plugin.packaging.assemble
+import com.beust.kobalt.plugin.android.*
 import com.beust.kobalt.plugins
 import com.beust.kobalt.repos
 
 val pl = plugins("com.beust:kobalt-android:")
 
-val repos = repos("https://jitpack.io")
+val rep = repos("https://jitpack.io")
 
-val p = javaProject {
+val p = kotlinProject {
 
     name = "MaterialAudiobookPlayer"
     group = "com.example"
@@ -66,7 +67,8 @@ val p = javaProject {
     version = "0.1"
 
     sourceDirectories {
-        path("src/main/java")
+        path("audiobook/src/main/java")
+        path("src/main/kotlin")
         path("src/main/resources")
         path("src/main/res")
     }
@@ -76,6 +78,12 @@ val p = javaProject {
         path("src/test/resources")
         path("src/test/res")
     }
+
+    android {
+        applicationId = name
+        buildToolsVersion = "23.0.2"
+    }
+
 
 
     dependencies {

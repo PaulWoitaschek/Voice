@@ -10,3 +10,5 @@ build
 *.log
 local.properties
 MaterialAudiobookPlayer.iml
+kobaltBuild
+.kobalt

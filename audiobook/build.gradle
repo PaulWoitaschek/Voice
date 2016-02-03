@@ -78,69 +78,46 @@ android {
 dependencies {
     // support library
     def supportVersion = "23.1.1"
-    compile "com.android.support:appcompat-v7:$supportVersion"
-    compile "com.android.support:recyclerview-v7:$supportVersion"
-    compile "com.android.support:support-v4:$supportVersion"
-
+    compile "com.android.support:appcompat-v7:$supportVersion" compile "com.android.support:recyclerview-v7:$supportVersion" compile "com.android.support:support-v4:$supportVersion"
     // http library
     def okHttpVersion = "3.0.1"
-    compile "com.squareup.okhttp3:okhttp:$okHttpVersion"
-    compile "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
-
+    compile "com.squareup.okhttp3:okhttp:$okHttpVersion" compile "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
     // image loading
-    compile "com.squareup.picasso:picasso:2.5.2"
-
+    compile 'com.squareup.picasso:picasso:2.5.2'
     // material styled dialogs
-    compile("com.afollestad.material-dialogs:core:0.8.5.3@aar") {
+    compile('com.afollestad.material-dialogs:core:0.8.5.3@aar') {
         transitive = true
     }
-
     // fab
-    compile "com.getbase:floatingactionbutton:1.10.1"
-
+    compile 'com.getbase:floatingactionbutton:1.10.1'
     // crash reporting
-    compile "ch.acra:acra:4.7.0"
-
+    compile 'ch.acra:acra:4.7.0'
     // dependency injection
     def daggerVersion = "2.0.2"
-    compile "com.google.dagger:dagger:$daggerVersion"
-    androidTestCompile "com.google.dagger:dagger:$daggerVersion"
-    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
-    kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
-    provided "javax.annotation:jsr250-api:1.0"
-
+    compile "com.google.dagger:dagger:$daggerVersion" androidTestCompile "com.google.dagger:dagger:$daggerVersion" kapt "com.google.dagger:dagger-compiler:$daggerVersion" kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion" provided 'javax.annotation:jsr250-api:1.0'
     // logging
-    compile "com.jakewharton.timber:timber:4.1.0"
-
+    compile 'com.jakewharton.timber:timber:4.1.0'
     //testing
-    testCompile "junit:junit:4.12"
+    testCompile 'junit:junit:4.12'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.1') {
         exclude module: 'support-annotations'
     }
     androidTestCompile('com.android.support.test:runner:0.4.1') {
         exclude module: 'support-annotations'
     }
-    androidTestCompile "com.jayway.android.robotium:robotium-solo:5.5.3"
-
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.5.3'
     // rx extensions
-    compile "io.reactivex:rxandroid:1.1.0"
-    compile "io.reactivex:rxjava:1.1.0"
+    compile 'io.reactivex:rxandroid:1.1.0'
+    compile 'io.reactivex:rxjava:1.1.0'
     compile 'com.jakewharton.rxbinding:rxbinding-kotlin:0.3.0'
-
     // detecting memory leaks
     def leakCanaryVersion = "1.4-beta1"
-    debugCompile "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
-    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
-
+    debugCompile "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion" releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
     // rest
     def retroFitVersion = "2.0.0-beta3"
-    compile "com.squareup.retrofit2:retrofit:$retroFitVersion"
-    compile "com.squareup.retrofit2:converter-gson:$retroFitVersion"
-    compile "com.squareup.retrofit2:adapter-rxjava:$retroFitVersion"
-
+    compile "com.squareup.retrofit2:retrofit:$retroFitVersion" compile "com.squareup.retrofit2:converter-gson:$retroFitVersion" compile "com.squareup.retrofit2:adapter-rxjava:$retroFitVersion"
     // kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-
     // player
     compile 'com.github.AntennaPod:AntennaPod-AudioPlayer:v1.0.10'
 }
