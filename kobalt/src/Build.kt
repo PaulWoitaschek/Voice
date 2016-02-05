@@ -49,17 +49,16 @@
  * /licenses/>.
  */
 
-import com.beust.kobalt.plugin.kotlin.kotlinProject
 import com.beust.kobalt.plugin.packaging.assemble
 import com.beust.kobalt.plugin.android.*
 import com.beust.kobalt.plugins
-import com.beust.kobalt.repos
+import com.beust.kobalt.*
 
 val pl = plugins("com.beust:kobalt-android:")
 
 val rep = repos("https://jitpack.io")
 
-val p = kotlinProject {
+val p = project {
 
     name = "MaterialAudiobookPlayer"
     group = "com.example"
