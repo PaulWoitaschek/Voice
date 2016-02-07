@@ -57,10 +57,6 @@ class AndroidPlayerDelegate : MediaPlayer {
         player.setWakeMode(context, mode)
     }
 
-    override fun setAudioStreamType(streamType: Int) {
-        player.setAudioStreamType(streamType)
-    }
-
     override val duration: Int
         get() = player.duration
 

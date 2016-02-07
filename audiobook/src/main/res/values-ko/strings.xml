@@ -71,6 +71,7 @@
     <string name="permission_read_ext_request">나중에 또 물어볼까요?</string>
     <string name="permission_rescan"> 물어봐</string>
     <string name="storage_pre_device">저장공간</string>
+    <string name="storage_all">전부다</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">재생 속도</string>
     <!--Bookmarks-->

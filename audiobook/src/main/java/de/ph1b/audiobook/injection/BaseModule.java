@@ -36,7 +36,7 @@ public class BaseModule {
 
     @Provides
     @Singleton
-    ImageLinkService provideImageLinkService() {
+    static ImageLinkService provideImageLinkService() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://ajax.googleapis.com/ajax/services/search/")
                 .addConverterFactory(GsonConverterFactory.create())

@@ -147,8 +147,8 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
 
         // toolbar
         setSupportActionBar(toolbar)
-        supportActionBar.setDisplayShowTitleEnabled(false)
-        supportActionBar.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         // listeners
         chooseButton.clicks()
