@@ -145,7 +145,7 @@ class BookPlayFragment : BaseFragment() {
         book = bookVendor.byId(bookId)
 
         //init views
-        hostingActivity.supportActionBar.setDisplayHomeAsUpEnabled(true)
+        hostingActivity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         //setup buttons
         playButton.setIconDrawable(playPauseDrawable)
@@ -165,7 +165,7 @@ class BookPlayFragment : BaseFragment() {
                 }
 
         if (book != null) {
-            hostingActivity.supportActionBar.title = book!!.name
+            hostingActivity.supportActionBar!!.title = book!!.name
 
             // adapter
             val chapters = book!!.chapters
@@ -262,7 +262,7 @@ class BookPlayFragment : BaseFragment() {
         inflater.inflate(R.menu.book_play, menu)
 
         val speedItem = menu.findItem(R.id.action_time_lapse)
-        speedItem.setEnabled(Player.canSetSpeed)
+        speedItem.isEnabled = Player.canSetSpeed
 
         // sets the correct sleep timer icon
         val sleepTimerItem = menu.findItem(R.id.action_sleep)
@@ -276,8 +276,8 @@ class BookPlayFragment : BaseFragment() {
         val currentBookExists = book != null
         val bookmarkItem = menu.findItem(R.id.action_bookmark)
         val timeChangeItem = menu.findItem(R.id.action_time_change)
-        bookmarkItem.setVisible(currentBookExists)
-        timeChangeItem.setVisible(currentBookExists)
+        bookmarkItem.isVisible = currentBookExists
+        timeChangeItem.isVisible = currentBookExists
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

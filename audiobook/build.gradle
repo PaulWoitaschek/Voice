@@ -56,6 +56,7 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        main.java.srcDirs += 'src/main/java'
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
     }
@@ -125,7 +126,7 @@ dependencies {
     // rx extensions
     compile "io.reactivex:rxandroid:1.1.0"
     compile "io.reactivex:rxjava:1.1.0"
-    compile 'com.jakewharton.rxbinding:rxbinding-kotlin:0.3.0'
+    compile 'com.github.JakeWharton.RxBinding:rxbinding-kotlin:542cd7e8a4'
 
     // detecting memory leaks
     def leakCanaryVersion = "1.4-beta1"
