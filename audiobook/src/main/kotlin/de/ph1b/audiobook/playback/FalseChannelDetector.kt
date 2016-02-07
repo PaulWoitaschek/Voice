@@ -45,11 +45,11 @@ constructor(private val context: Context) {
         var stereoOutputChunkSize = 0
         var monoChannelCount = 1
         var stereoChannelCount = 2
+        val extractor = MediaExtractor()
         listOf(monoFile, stereoFile)
-                .forEach foreachMark@ {
-                    Timber.i("Checking $it")
-                    val extractor = MediaExtractor()
-                    val fd = context.assets.openFd(it)
+                .forEach foreachMark@ { file ->
+                    Timber.i("Checking $file")
+                    val fd = context.assets.openFd(file)
                     extractor.setDataSource(fd.fileDescriptor, fd.startOffset, fd.length)
                     val format = extractor.getTrackFormat(0)
                     extractor.selectTrack(0)
@@ -68,89 +68,92 @@ constructor(private val context: Context) {
                     val duration = format.getLong(MediaFormat.KEY_DURATION)
                     Timber.d("extractorChannelCount=$extractorChannelCount, sampleRate=$sampleRate, mime=$mime, duration=$duration")
 
-                    val codec = MediaCodec.createDecoderByType(mime)
-                    codec.configure(format, null, null, 0)
-                    codec.start()
+                    MediaCodec.createDecoderByType(mime).let { codec ->
+                        codec.configure(format, null, null, 0)
+                        codec.start()
 
-                    val inputBuffers = codec.inputBuffers
-                    var outputBuffers = codec.outputBuffers
-                    var sawInputEOS = false
-                    var sawOutputEOS = false
-                    var codecSampleRate = 0
-                    var codecChannelCount = 0
-                    var firstNotEmptyChunk = false
-                    while (!sawInputEOS && !sawOutputEOS) {
-                        val inputBufIndex = codec.dequeueInputBuffer(200)
-                        if (inputBufIndex >= 0) {
-                            val dstBuf = inputBuffers[inputBufIndex]
-                            var sampleSize = extractor.readSampleData(dstBuf, 0)
-                            val presentationTimeUs =
-                                    if (sampleSize < 0) {
-                                        sawInputEOS = true
-                                        sampleSize = 0
-                                        0
-                                    } else {
-                                        extractor.sampleTime
-                                    }
-                            val flags = if (sawInputEOS) MediaCodec.BUFFER_FLAG_END_OF_STREAM else 0
-                            codec.queueInputBuffer(
-                                    inputBufIndex,
-                                    0,
-                                    sampleSize,
-                                    presentationTimeUs,
-                                    flags);
-                            if (!sawInputEOS) {
-                                extractor.advance()
-                            }
-                        }
-
-                        var info = MediaCodec.BufferInfo()
-                        var res: Int
-                        do {
-                            res = codec.dequeueOutputBuffer(info, 200);
-                            if (res >= 0) {
-                                val chunk = ByteArray(info.size)
-                                outputBuffers[res].get(chunk);
-                                outputBuffers[res].clear();
-                                if (chunk.size > 0) {
-                                    // first not empty chunk's size is not stable, so save the second chunk size
-                                    if (firstNotEmptyChunk) {
-                                        if (it == monoFile) {
-                                            monoOutputChunkSize = chunk.size
+                        val inputBuffers = codec.inputBuffers
+                        var outputBuffers = codec.outputBuffers
+                        var sawInputEOS = false
+                        var sawOutputEOS = false
+                        var codecSampleRate: Int
+                        var codecChannelCount: Int
+                        var firstNotEmptyChunk = false
+                        while (!sawInputEOS && !sawOutputEOS) {
+                            val inputBufIndex = codec.dequeueInputBuffer(200)
+                            if (inputBufIndex >= 0) {
+                                val dstBuf = inputBuffers[inputBufIndex]
+                                var sampleSize = extractor.readSampleData(dstBuf, 0)
+                                val presentationTimeUs =
+                                        if (sampleSize < 0) {
+                                            sawInputEOS = true
+                                            sampleSize = 0
+                                            0
                                         } else {
-                                            stereoOutputChunkSize = chunk.size
+                                            extractor.sampleTime
                                         }
-                                        return@foreachMark
-                                    } else {
-                                        firstNotEmptyChunk = true
-                                    }
-                                }
-                                codec.releaseOutputBuffer(res, false);
-                                if ((info.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
-                                    sawOutputEOS = true;
-                                }
-                            } else if (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED) {
-                                outputBuffers = codec.outputBuffers;
-                            } else if (res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
-                                val oFormat = codec
-                                        .outputFormat;
-                                codecSampleRate = oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
-                                codecChannelCount = oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
-                                Timber.d("Codec output format changed");
-                                Timber.d("Codec output sample rate = " + codecSampleRate);
-                                Timber.d("Codec output channel count = " + codecChannelCount);
-
-                                outputBuffers = codec.outputBuffers;
-                                if (it == monoFile) {
-                                    monoChannelCount = codecChannelCount;
-                                } else {
-                                    stereoChannelCount = codecChannelCount;
+                                val flags = if (sawInputEOS) MediaCodec.BUFFER_FLAG_END_OF_STREAM else 0
+                                codec.queueInputBuffer(
+                                        inputBufIndex,
+                                        0,
+                                        sampleSize,
+                                        presentationTimeUs,
+                                        flags);
+                                if (!sawInputEOS) {
+                                    extractor.advance()
                                 }
                             }
-                        } while (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED || res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED);
+
+                            var info = MediaCodec.BufferInfo()
+                            var res: Int
+                            do {
+                                res = codec.dequeueOutputBuffer(info, 200);
+                                if (res >= 0) {
+                                    val chunk = ByteArray(info.size)
+                                    outputBuffers[res].get(chunk);
+                                    outputBuffers[res].clear();
+                                    if (chunk.size > 0) {
+                                        // first not empty chunk's size is not stable, so save the second chunk size
+                                        if (firstNotEmptyChunk) {
+                                            if (file == monoFile) {
+                                                monoOutputChunkSize = chunk.size
+                                            } else {
+                                                stereoOutputChunkSize = chunk.size
+                                            }
+                                            return@foreachMark
+                                        } else {
+                                            firstNotEmptyChunk = true
+                                        }
+                                    }
+                                    codec.releaseOutputBuffer(res, false);
+                                    if ((info.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
+                                        sawOutputEOS = true;
+                                    }
+                                } else if (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED) {
+                                    outputBuffers = codec.outputBuffers;
+                                } else if (res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
+                                    val oFormat = codec
+                                            .outputFormat;
+                                    codecSampleRate = oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
+                                    codecChannelCount = oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
+                                    Timber.d("Codec output format changed");
+                                    Timber.d("Codec output sample rate = " + codecSampleRate);
+                                    Timber.d("Codec output channel count = " + codecChannelCount);
+
+                                    outputBuffers = codec.outputBuffers;
+                                    if (file == monoFile) {
+                                        monoChannelCount = codecChannelCount;
+                                    } else {
+                                        stereoChannelCount = codecChannelCount;
+                                    }
+                                }
+                            } while (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED || res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED);
+                        }
+                        codec.release()
                     }
                 }
         Timber.d("monoOutputChunkSize=$monoOutputChunkSize, stereoOutputChunkSize=$stereoOutputChunkSize")
+        extractor.release()
         if (monoChannelCount == stereoChannelCount && monoOutputChunkSize != stereoOutputChunkSize) {
             Timber.d("Device channel count is false")
             return false
