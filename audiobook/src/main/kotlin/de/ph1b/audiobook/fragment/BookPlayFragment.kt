@@ -321,7 +321,6 @@ class BookPlayFragment : BaseFragment() {
 
         subscriptions = CompositeSubscription().apply {
             add(playStateManager.playState
-                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(object : Action1<PlayStateManager.PlayState> {
                         private var firstRun = true
 

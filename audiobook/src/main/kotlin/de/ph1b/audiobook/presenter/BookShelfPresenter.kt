@@ -95,7 +95,6 @@ constructor(private val bookChest: BookChest,
 
             // Subscription that updates the UI based on the play state.
             add(playStateManager.playState
-                    .observeOn(AndroidSchedulers.mainThread())
                     .map { it == PlayStateManager.PlayState.PLAYING }
                     .subscribe { view.setPlayerPlaying(it) })
         }
