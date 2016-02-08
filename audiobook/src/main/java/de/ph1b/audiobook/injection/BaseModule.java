@@ -17,10 +17,17 @@
 
 package de.ph1b.audiobook.injection;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import de.ph1b.audiobook.persistence.PrefsManager;
+import de.ph1b.audiobook.playback.MediaPlayerCapabilities;
 import de.ph1b.audiobook.uitools.ImageLinkService;
 import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;
@@ -44,5 +51,18 @@ public class BaseModule {
                 .build();
 
         return retrofit.create(ImageLinkService.class);
+    }
+
+    @Provides
+    @Named(PrefsManager.FOR)
+    static SharedPreferences providePrefsForManager(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    @Provides
+    @Named(MediaPlayerCapabilities.FOR)
+    static SharedPreferences provideForMediaPlayerCapabilities(Context context) {
+        String name = "forMediaPlayerCapabilities";
+        return context.getSharedPreferences(name, Context.MODE_PRIVATE);
     }
 }

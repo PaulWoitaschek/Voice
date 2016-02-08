@@ -21,8 +21,9 @@ import android.content.SharedPreferences
 import android.os.Build
 import de.ph1b.audiobook.persistence.edit
 import de.ph1b.audiobook.persistence.setBoolean
+import timber.log.Timber
 import javax.inject.Inject
-import javax.inject.Singleton
+import javax.inject.Named
 
 /**
  * Provides information about if the custom media player can be used, or if there is a bug on the device.
@@ -31,34 +32,42 @@ import javax.inject.Singleton
  */
 class MediaPlayerCapabilities
 @Inject
-constructor(private val prefs: SharedPreferences, private val channelDetector: FalseChannelDetector) {
+constructor(@Named(FOR) private val prefs: SharedPreferences, private val channelDetector: FalseChannelDetector) {
 
-    fun useCustomMediaPlayer(): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-            return false
-        }
 
-        // get key
-        val contents = listOf<String?>(Build.VERSION.SDK_INT.toString(),
-                Build.DEVICE,
-                Build.MODEL,
-                Build.PRODUCT,
-                Build.MANUFACTURER,
-                System.getProperty("os.version"),
-                Build.BRAND)
-        val builder = StringBuilder()
-        contents.filter { it != null }
-                .forEach { builder.append(it) }
-        val key = builder.toString()
+    val useCustomMediaPlayer: Boolean =
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                Timber.i("sdk is below jelly bean. cant set media player")
+                false
+            } else {
+                // get key
+                val contents = listOf<String?>(Build.VERSION.SDK_INT.toString(),
+                        Build.DEVICE,
+                        Build.MODEL,
+                        Build.PRODUCT,
+                        Build.MANUFACTURER,
+                        System.getProperty("os.version"),
+                        Build.BRAND)
+                val builder = StringBuilder()
+                contents.filter { it != null }
+                        .forEach { builder.append(it) }
+                val key = builder.toString()
 
-        if (prefs.contains(key)) {
-            return prefs.getBoolean(key, false)
-        } else {
-            val canSetCustom = channelDetector.channelCountMatches()
-            prefs.edit {
-                setBoolean(key to canSetCustom)
+                if (prefs.contains(key)) {
+                    val canSet = prefs.getBoolean(key, false)
+                    Timber.i("prefs already has the key. CanSet $canSet")
+                    canSet
+                } else {
+                    val canSetCustom = channelDetector.channelCountMatches()
+                    prefs.edit {
+                        setBoolean(key to canSetCustom)
+                    }
+                    Timber.i("Channel count matches returned = $canSetCustom")
+                    canSetCustom
+                }
             }
-            return canSetCustom
-        }
+
+    companion object {
+        const val FOR = "forPlayerCapabilities"
     }
 }
