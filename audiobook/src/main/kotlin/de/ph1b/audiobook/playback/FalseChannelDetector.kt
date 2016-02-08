@@ -45,11 +45,11 @@ constructor(private val context: Context) {
         var stereoOutputChunkSize = 0
         var monoChannelCount = 1
         var stereoChannelCount = 2
-        val extractor = MediaExtractor()
         listOf(monoFile, stereoFile)
                 .forEach foreachMark@ { file ->
                     Timber.i("Checking $file")
                     val fd = context.assets.openFd(file)
+                    val extractor = MediaExtractor()
                     extractor.setDataSource(fd.fileDescriptor, fd.startOffset, fd.length)
                     val format = extractor.getTrackFormat(0)
                     extractor.selectTrack(0)
@@ -151,9 +151,9 @@ constructor(private val context: Context) {
                         }
                         codec.release()
                     }
+                    extractor.release()
                 }
         Timber.d("monoOutputChunkSize=$monoOutputChunkSize, stereoOutputChunkSize=$stereoOutputChunkSize")
-        extractor.release()
         if (monoChannelCount == stereoChannelCount && monoOutputChunkSize != stereoOutputChunkSize) {
             Timber.d("Device channel count is false")
             return false
