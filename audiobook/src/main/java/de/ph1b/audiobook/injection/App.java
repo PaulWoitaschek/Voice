@@ -20,7 +20,6 @@ package de.ph1b.audiobook.injection;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -34,9 +33,6 @@ import org.acra.sender.HttpSender;
 import org.acra.sender.ReportSender;
 import org.acra.sender.ReportSenderException;
 import org.acra.util.JSONReportBuilder;
-
-import java.io.File;
-import java.nio.charset.Charset;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -73,7 +69,6 @@ import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.view.FolderChooserActivity;
 import de.ph1b.audiobook.view.FolderOverviewActivity;
 import de.ph1b.audiobook.view.fragment.BookShelfFragment;
-import kotlin.io.FilesKt;
 import timber.log.Timber;
 
 @ReportsCrashes(
@@ -105,8 +100,6 @@ public class App extends Application {
         if (BuildConfig.DEBUG) {
             // init timber
             Timber.plant(new Timber.DebugTree());
-            // also write to disc here.
-            Timber.plant(new WriteToDiscTree());
 
             // force enable acra in debug mode
             PreferenceManager.getDefaultSharedPreferences(this)
@@ -284,19 +277,6 @@ public class App extends Application {
                 crumbCount = 0;
             }
             return nextCrumb;
-        }
-    }
-
-    /**
-     * Custom tree that logs to storage.
-     */
-    private static class WriteToDiscTree extends FormattedTree {
-
-        private final File LOG_FILE = new File(Environment.getExternalStorageDirectory(), "materialaudiobookplayer.log");
-
-        @Override
-        void onLogGathered(String message) {
-            FilesKt.appendText(LOG_FILE, message, Charset.forName("UTF-8"));
         }
     }
 }

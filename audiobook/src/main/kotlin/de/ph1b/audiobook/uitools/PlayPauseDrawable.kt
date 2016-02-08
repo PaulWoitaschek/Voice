@@ -1,3 +1,20 @@
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 package de.ph1b.audiobook.uitools
 
 import android.animation.Animator
@@ -48,10 +65,13 @@ import timber.log.Timber
  */
 class PlayPauseDrawable : Drawable() {
 
+    private var pauseBarHeight = 0F
+    private var pauseBarWidth = 0F
+    private var pauseBarDistance = 0F
     private val leftPauseBar = Path()
     private val rightPauseBar = Path()
     private val paint: Paint
-    private var progress: Float = 0.toFloat()
+    private var progress: Float = 0F
         set(progress) {
             field = progress
             invalidateSelf()
@@ -81,16 +101,20 @@ class PlayPauseDrawable : Drawable() {
         return a + (b - a) * t
     }
 
+    override fun onBoundsChange(bounds: Rect) {
+        super.onBoundsChange(bounds)
+
+        pauseBarHeight = 7.0f / 12.0f * (bounds.height().toFloat())
+        pauseBarWidth = pauseBarHeight / 3.0f
+        pauseBarDistance = pauseBarHeight / 3.6f
+    }
+
     override fun draw(canvas: Canvas) {
         leftPauseBar.rewind()
         rightPauseBar.rewind()
 
         // move to center of canvas
         canvas.translate(bounds.left.toFloat(), bounds.top.toFloat())
-
-        val pauseBarHeight = 7.0f / 12.0f * (bounds.height().toFloat())
-        val pauseBarWidth = pauseBarHeight / 3.0f
-        val pauseBarDistance = pauseBarHeight / 3.6f
 
         // The current distance between the two pause bars.
         val barDist = interpolate(pauseBarDistance, 0.0f, progress)
@@ -184,7 +208,7 @@ class PlayPauseDrawable : Drawable() {
                 }
             })
             interpolator = DecelerateInterpolator()
-            setDuration(275)
+            duration = 275
             start()
         }
     }
@@ -195,7 +219,7 @@ class PlayPauseDrawable : Drawable() {
     }
 
     override fun setColorFilter(cf: ColorFilter?) {
-        paint.setColorFilter(cf)
+        paint.colorFilter = cf
         invalidateSelf()
     }
 

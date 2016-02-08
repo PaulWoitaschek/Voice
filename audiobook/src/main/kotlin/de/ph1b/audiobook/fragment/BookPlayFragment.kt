@@ -46,9 +46,9 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.playback.MediaPlayerCapabilities
 import de.ph1b.audiobook.playback.MediaPlayerController
 import de.ph1b.audiobook.playback.PlayStateManager
-import de.ph1b.audiobook.playback.Player
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
@@ -75,6 +75,7 @@ class BookPlayFragment : BaseFragment() {
     @Inject internal lateinit var db: BookChest
     @Inject internal lateinit var bookVendor: BookVendor
     @Inject internal lateinit var playStateManager: PlayStateManager
+    @Inject internal lateinit var playerCapabilities: MediaPlayerCapabilities
 
     private val playPauseDrawable = PlayPauseDrawable()
     private var subscriptions: CompositeSubscription? = null
@@ -145,7 +146,7 @@ class BookPlayFragment : BaseFragment() {
         book = bookVendor.byId(bookId)
 
         //init views
-        hostingActivity.supportActionBar.setDisplayHomeAsUpEnabled(true)
+        hostingActivity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         //setup buttons
         playButton.setIconDrawable(playPauseDrawable)
@@ -165,7 +166,7 @@ class BookPlayFragment : BaseFragment() {
                 }
 
         if (book != null) {
-            hostingActivity.supportActionBar.title = book!!.name
+            hostingActivity.supportActionBar!!.title = book!!.name
 
             // adapter
             val chapters = book!!.chapters
@@ -262,7 +263,7 @@ class BookPlayFragment : BaseFragment() {
         inflater.inflate(R.menu.book_play, menu)
 
         val speedItem = menu.findItem(R.id.action_time_lapse)
-        speedItem.setEnabled(Player.canSetSpeed)
+        speedItem.isEnabled = playerCapabilities.useCustomMediaPlayer
 
         // sets the correct sleep timer icon
         val sleepTimerItem = menu.findItem(R.id.action_sleep)
@@ -276,8 +277,8 @@ class BookPlayFragment : BaseFragment() {
         val currentBookExists = book != null
         val bookmarkItem = menu.findItem(R.id.action_bookmark)
         val timeChangeItem = menu.findItem(R.id.action_time_change)
-        bookmarkItem.setVisible(currentBookExists)
-        timeChangeItem.setVisible(currentBookExists)
+        bookmarkItem.isVisible = currentBookExists
+        timeChangeItem.isVisible = currentBookExists
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -321,7 +322,6 @@ class BookPlayFragment : BaseFragment() {
 
         subscriptions = CompositeSubscription().apply {
             add(playStateManager.playState
-                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(object : Action1<PlayStateManager.PlayState> {
                         private var firstRun = true
 

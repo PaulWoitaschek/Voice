@@ -37,12 +37,12 @@ final class ImageLink {
     public ResponseData responseData;
 
     public List<String> urls() {
-        if(responseData == null || responseData.results == null) {
+        if (responseData == null || responseData.results == null) {
             return Collections.emptyList();
         } else {
             List<String> urls = new ArrayList<>(responseData.results.size());
             for (ResponseData.Result r : responseData.results) {
-                if(r != null) {
+                if (r != null) {
                     urls.add(r.url);
                 }
             }

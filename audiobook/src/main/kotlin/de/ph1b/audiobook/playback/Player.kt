@@ -18,7 +18,6 @@
 package de.ph1b.audiobook.playback
 
 import android.content.Context
-import android.os.Build
 import android.os.PowerManager
 import rx.subjects.PublishSubject
 import timber.log.Timber
@@ -33,9 +32,9 @@ import javax.inject.Inject
  */
 class Player
 @Inject
-constructor(context: Context) {
+constructor(context: Context, private val mediaPlayerCapabilities: MediaPlayerCapabilities) {
 
-    private val mediaPlayer = if (useCustomMediaPlayer) {
+    private val mediaPlayer = if (mediaPlayerCapabilities.useCustomMediaPlayer) {
         CustomMediaPlayer()
     } else {
         AndroidPlayerDelegate()
@@ -159,13 +158,5 @@ constructor(context: Context) {
         NONE,
         PREPARED,
         PLAYING
-    }
-
-
-    companion object {
-
-        val useCustomMediaPlayer = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
-
-        val canSetSpeed = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
     }
 }

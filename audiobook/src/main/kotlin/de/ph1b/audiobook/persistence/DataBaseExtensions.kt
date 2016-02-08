@@ -11,7 +11,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
  * /licenses/>.
  */
 
@@ -75,6 +75,9 @@ fun SharedPreferences.Editor.setLong(pair: Pair<String, Long>) =
 
 fun SharedPreferences.Editor.setInt(pair: Pair<String, Int>) =
         putInt(pair.first, pair.second)
+
+fun SharedPreferences.Editor.setBoolean(pair: Pair<String, Boolean>) =
+        putBoolean(pair.first, pair.second)
 
 fun SharedPreferences.Editor.setStringSet(pair: Pair<String, Set<String>>) =
         putStringSet(pair.first, pair.second)
