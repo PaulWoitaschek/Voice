@@ -1,15 +1,24 @@
 language: android
-jdk:
-  - oraclejdk8
+
 android:
   components:
     - tools
     - build-tools-23.0.2
     - android-23
-    - sys-img-x86-android-tv-l
+    - sys-img-x86-android-23
+    - sys-img-x86-android-15
     - add-on
     - extra
 
-before_script:
-  - "echo $JAVA_OPTS"
-  - "export JAVA_OPTS='-XX:MaxPermSize=1024m'"
+jdk:
+  - oraclejdk7
+  - oraclejdk8
+
+notifications:
+  email: false
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.m2
