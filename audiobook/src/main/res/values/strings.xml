@@ -131,4 +131,6 @@
     <!-- license activity -->
     <string name="license_activity_title">Used Licenses</string>
     <string name="licenses">Licenses</string>
+
+    <string name="app_name">Material APP_NAME</string>
 </resources>
