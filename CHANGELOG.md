@@ -1,4 +1,5 @@
 # Next Version
+* Detect if there is a bug in your firmware and use a fallback player then
 
 # v2.5.1
 * Updated dependencies
