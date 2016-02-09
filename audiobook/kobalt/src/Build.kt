@@ -1,9 +1,27 @@
+/*
+ * This file is part of Material Audiobook Player.
+ *
+ * Material Audiobook Player is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * Material Audiobook Player is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
+ * /licenses/>.
+ */
+
 import com.beust.kobalt.plugin.packaging.assemble
 import com.beust.kobalt.plugin.android.*
+import com.beust.kobalt.plugin.java.*
 import com.beust.kobalt.plugins
 import com.beust.kobalt.*
 
-val pl = plugins("com.beust:kobalt-android:0.10")
+val pl = plugins("com.beust:kobalt-android:0.16")
 
 val rep = repos("https://jitpack.io")
 
@@ -14,28 +32,14 @@ val p = project {
     artifactId = name
     version = "0.1"
 
-    sourceDirectories {
-        path("src/main/java")
-        path("src/main/kotlin")
-        path("src/main/resources")
-        path("src/main/res")
-    }
-
-    sourceDirectoriesTest {
-        path("src/test/java")
-        path("src/test/resources")
-        path("src/test/res")
-    }
-
     android {
-        defaultConfig {
-            minSdkVersion = 15
-            versionCode = 100
-            versionName = "1.0"
-            compileSdkVersion = "23"
-            buildToolsVersion = "23.0.2"
-            applicationId = "de.ph1b.audiobook"
-        }
+        compileSdkVersion = "23"
+        applicationId = name
+        buildToolsVersion = "23.0.2"
+    }
+
+    javaCompiler {
+        args("-source" ,"1.7", "-target", "1.7")
     }
 
     dependencies {
@@ -79,7 +83,7 @@ val p = project {
                 // rx extensions
                 "io.reactivex:rxandroid:1.1.0",
                 "io.reactivex:rxjava:1.1.0",
-                "com.jakewharton.rxbinding:rxbinding-kotlin:0.3.0",
+                "com.github.JakeWharton.RxBinding:rxbinding-kotlin:542cd7e8a4@aar",
                 // detecting memory leaks
                 //   debugCompile "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
                 //    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
