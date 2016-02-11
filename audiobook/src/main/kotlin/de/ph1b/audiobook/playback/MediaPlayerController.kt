@@ -19,6 +19,7 @@ package de.ph1b.audiobook.playback
 
 import android.content.Context
 import android.content.Intent
+import de.paul_woitaschek.mediaplayer.Player
 import de.ph1b.audiobook.activity.BookActivity
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookChest
@@ -96,8 +97,9 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                         if (book != null) {
                             c.startActivity(BookActivity.malformedFileIntent(c, book!!.currentFile))
                         } else {
-                            val intent = Intent(c, BookShelfFragment::class.java)
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            val intent = Intent(c, BookShelfFragment::class.java).apply {
+                                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                            }
                             c.startActivity(intent)
                         }
 
