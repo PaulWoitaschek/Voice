@@ -21,7 +21,7 @@ import com.beust.kobalt.plugin.java.*
 import com.beust.kobalt.plugins
 import com.beust.kobalt.*
 
-val pl = plugins("com.beust:kobalt-android:0.16")
+val pl = plugins("com.beust:kobalt-android:")
 
 val rep = repos("https://jitpack.io")
 
