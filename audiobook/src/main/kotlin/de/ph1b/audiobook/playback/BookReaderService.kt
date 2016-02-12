@@ -41,6 +41,7 @@ import de.ph1b.audiobook.receiver.AudioFocusReceiver
 import de.ph1b.audiobook.receiver.HeadsetPlugReceiver
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
+import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
@@ -143,7 +144,7 @@ class BookReaderService : Service() {
                         db.activeBooks.singleOrDefault(null) { it.id == updatedId }
                     })
                     .filter { it != null && (controller.book?.id != it.id) }
-                    .observeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe {
                         controller.stop()
                         controller.init(it)

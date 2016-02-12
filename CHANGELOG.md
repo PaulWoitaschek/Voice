@@ -1,4 +1,7 @@
 # Next Version
+* Fixed an issue wheren theming a dialog on Android 4.0.4
+* Fixes to the internal player
+* Fallback to the Android player when there is a bug on the device preventing proper playback.
 
 # v2.5.1
 * Updated dependencies
