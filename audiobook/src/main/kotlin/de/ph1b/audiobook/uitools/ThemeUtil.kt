@@ -7,6 +7,7 @@ import android.os.Build
 import android.support.annotation.*
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
+import android.view.View
 import android.widget.EditText
 import android.widget.NumberPicker
 import de.ph1b.audiobook.R
@@ -45,6 +46,18 @@ fun NumberPicker.theme() {
         }
         invalidate()
     }
+}
+
+fun View.setVisible() {
+    visibility = View.VISIBLE
+}
+
+fun View.setInvisible() {
+    visibility = View.INVISIBLE
+}
+
+fun View.setGone() {
+    visibility = View.GONE
 }
 
 object ThemeUtil {

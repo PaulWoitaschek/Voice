@@ -53,6 +53,7 @@ import de.ph1b.audiobook.dialog.prefs.PlaybackSpeedDialogFragment;
 import de.ph1b.audiobook.dialog.prefs.SleepDialogFragment;
 import de.ph1b.audiobook.dialog.prefs.ThemePickerDialogFragment;
 import de.ph1b.audiobook.fragment.BookPlayFragment;
+import de.ph1b.audiobook.fragment.ImagePickerFragment;
 import de.ph1b.audiobook.fragment.SettingsFragment;
 import de.ph1b.audiobook.model.BookAdder;
 import de.ph1b.audiobook.persistence.BookChest;
@@ -177,6 +178,8 @@ public class App extends Application {
         void inject(SeekDialogFragment target);
 
         void inject(EditCoverDialogFragment target);
+
+        void inject(ImagePickerFragment target);
 
         void inject(JumpToPositionDialogFragment target);
 

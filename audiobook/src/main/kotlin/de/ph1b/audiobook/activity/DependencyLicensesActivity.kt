@@ -22,11 +22,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.uitools.setGone
+import de.ph1b.audiobook.uitools.setVisible
 import de.ph1b.audiobook.utils.ResourceTypeWriter
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -70,8 +71,8 @@ class DependencyLicensesActivity : BaseActivity() {
                 super.onPageFinished(view, url)
 
                 // sets progressbar and webviews visibilities correctly once the page is loaded
-                progressBar.visibility = View.GONE
-                webView.visibility = View.VISIBLE
+                progressBar.setGone()
+                webView.setVisible()
             }
         })
 

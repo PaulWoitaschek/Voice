@@ -66,6 +66,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
 
+    dexOptions {
+        incremental false
+    }
+
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
             def original = output.outputFile
