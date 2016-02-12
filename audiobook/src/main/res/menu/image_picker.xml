@@ -16,6 +16,11 @@
   ~ /licenses/>.
   -->
 
-<menu>
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/refresh"
+        android:icon="@drawable/refresh"
+        android:title="@string/refresh"
+        app:showAsAction="ifRoom"/>
 </menu>

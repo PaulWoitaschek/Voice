@@ -110,6 +110,10 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
             callback.editDone()
             true
         }
+        R.id.refresh -> {
+            webView.reload()
+            true
+        }
         else -> false
     }
 

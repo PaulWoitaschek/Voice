@@ -132,4 +132,5 @@
     <!-- license activity -->
     <string name="license_activity_title">Used Licenses</string>
     <string name="licenses">Licenses</string>
+    <string name="refresh">Refresh</string>
 </resources>
