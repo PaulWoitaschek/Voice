@@ -17,7 +17,6 @@
 
 package de.ph1b.audiobook.fragment
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -29,6 +28,7 @@ import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.Spinner
 import android.widget.TextView
+import butterknife.bindView
 import com.getbase.floatingactionbutton.FloatingActionButton
 import com.jakewharton.rxbinding.view.clicks
 import com.jakewharton.rxbinding.widget.RxAdapterView
@@ -70,6 +70,10 @@ import javax.inject.Inject
  */
 class BookPlayFragment : BaseFragment() {
 
+    init {
+        App.component().inject(this)
+    }
+
     @Inject internal lateinit var mediaPlayerController: MediaPlayerController
     @Inject internal lateinit var prefs: PrefsManager
     @Inject internal lateinit var db: BookChest
@@ -81,13 +85,20 @@ class BookPlayFragment : BaseFragment() {
     private var subscriptions: CompositeSubscription? = null
     private var book: Book? = null
 
-    private lateinit var hostingActivity: AppCompatActivity
+    private val hostingActivity: AppCompatActivity by lazy { context as AppCompatActivity }
 
-    private lateinit var timerCountdownView: TextView
-    private lateinit var playedTimeView: TextView
-    private lateinit var seekBar: SeekBar
-    private lateinit var bookSpinner: Spinner
-    private lateinit var maxTimeView: TextView
+    private val timerCountdownView: TextView by bindView(R.id.timerView)
+    private val playedTimeView: TextView by bindView(R.id.played)
+    private val seekBar: SeekBar by bindView(R.id.seekBar)
+    private val bookSpinner: Spinner by bindView(R.id.book_spinner)
+    private val maxTimeView: TextView by bindView(R.id.maxTime)
+    private val coverFrame: View by bindView(R.id.cover_frame)
+    private val coverView: ImageView by bindView(R.id.book_cover)
+    private val nextButton: View  by bindView(R.id.next)
+    private val fastForwardButton: View by bindView(R.id.fastForward)
+    private val playButton: FloatingActionButton by bindView(R.id.play)
+    private val rewindButton: View by bindView(R.id.rewind)
+    private val previousButton: View by bindView(R.id.previous)
 
     /**
      * @return the book id this fragment was instantiated with.
@@ -95,22 +106,8 @@ class BookPlayFragment : BaseFragment() {
     val bookId: Long
         get() = arguments.getLong(NI_BOOK_ID)
 
-    private lateinit var coverFrame: View
-
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.fragment_book_play, container, false)
-        timerCountdownView = view.findViewById(R.id.timerView) as TextView
-        maxTimeView = view.findViewById(R.id.maxTime) as TextView
-        bookSpinner = view.findViewById(R.id.book_spinner) as Spinner
-        seekBar = view.findViewById(R.id.seekBar) as SeekBar
-        playedTimeView = view.findViewById(R.id.played) as TextView
-        coverFrame = view.findViewById(R.id.cover_frame)
-        val coverView = view.findViewById(R.id.book_cover) as ImageView
-        val nextButton = view.findViewById(R.id.next)
-        val fastForwardButton = view.findViewById(R.id.fastForward)
-        val playButton = view.findViewById(R.id.play) as FloatingActionButton
-        val rewindButton = view.findViewById(R.id.rewind)
-        val previousButton = view.findViewById(R.id.previous)
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         playButton.clicks()
                 .onBackpressureLatest()
@@ -236,14 +233,13 @@ class BookPlayFragment : BaseFragment() {
                 }
             })
         }
-
-        return view
     }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+            inflater.inflate(R.layout.fragment_book_play, container, false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        App.component().inject(this)
 
         setHasOptionsMenu(true)
     }
@@ -251,12 +247,6 @@ class BookPlayFragment : BaseFragment() {
 
     private fun launchJumpToPositionDialog() {
         JumpToPositionDialogFragment().show(fragmentManager, JumpToPositionDialogFragment.TAG)
-    }
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-        hostingActivity = context as AppCompatActivity
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -281,8 +271,8 @@ class BookPlayFragment : BaseFragment() {
         timeChangeItem.isVisible = currentBookExists
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item!!.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.action_settings -> {
                 startActivity(Intent(context, SettingsActivity::class.java))
                 return true
@@ -425,14 +415,10 @@ class BookPlayFragment : BaseFragment() {
          * *
          * @return The new instance
          */
-        fun newInstance(bookId: Long): BookPlayFragment {
-            val bookPlayFragment = BookPlayFragment()
-
-            val args = Bundle()
-            args.putLong(NI_BOOK_ID, bookId)
-            bookPlayFragment.arguments = args
-
-            return bookPlayFragment
+        fun newInstance(bookId: Long) = BookPlayFragment().apply {
+            arguments = Bundle().apply {
+                putLong(NI_BOOK_ID, bookId)
+            }
         }
     }
 }

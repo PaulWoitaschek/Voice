@@ -34,13 +34,15 @@ import javax.inject.Inject
 
 class JumpToPositionDialogFragment : DialogFragment() {
 
+    init {
+        App.component().inject(this)
+    }
+
     @Inject internal lateinit var prefs: PrefsManager
     @Inject internal lateinit var bookVendor: BookVendor
     @Inject internal lateinit var mediaPlayerController: MediaPlayerController
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        App.component().inject(this)
-
         // find views
         val v = activity.layoutInflater.inflate(R.layout.dialog_time_picker, null)
         val mPicker = v.findViewById(R.id.number_minute) as NumberPicker
