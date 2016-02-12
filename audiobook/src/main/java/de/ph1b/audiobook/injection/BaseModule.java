@@ -77,6 +77,7 @@ public class BaseModule {
         } else {
             type = Player.Type.ANDROID;
         }
-        return new Player(type, context, BuildConfig.DEBUG);
+        Player.Logging logging = BuildConfig.DEBUG ? Player.Logging.ENABLED : Player.Logging.DISABLED;
+        return new Player(context, type, logging);
     }
 }

@@ -143,5 +143,5 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     // player
-    compile 'com.github.PaulWoitaschek:AndroidPlayer:0.003'
+    compile 'com.github.PaulWoitaschek:AndroidPlayer:0.004'
 }
