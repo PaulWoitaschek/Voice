@@ -35,7 +35,7 @@ object ThemeUtil {
                     val selectorWheelPaintField = numberPicker.javaClass.getDeclaredField("mSelectorWheelPaint")
                     selectorWheelPaintField.isAccessible = true
                     (selectorWheelPaintField.get(numberPicker) as Paint).color = colorAccent
-                    (child as EditText).setTextColor(colorAccent)
+                    (child as EditText?)?.setTextColor(colorAccent)
                     numberPicker.invalidate()
                 } catch (e: NoSuchFieldException) {
                     e.printStackTrace()
