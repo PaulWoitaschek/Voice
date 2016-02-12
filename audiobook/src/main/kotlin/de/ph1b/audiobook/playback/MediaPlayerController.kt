@@ -26,6 +26,7 @@ import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.view.fragment.BookShelfFragment
 import rx.Observable
+import rx.android.schedulers.AndroidSchedulers
 import rx.subjects.BehaviorSubject
 import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
@@ -50,7 +51,6 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
 
     private val subscriptions = CompositeSubscription()
 
-
     /**
      * The time left till the playback stops in ms. If this is -1 the timer was stopped manually.
      * If this is 0 the timer simple counted down.
@@ -70,6 +70,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         internalSleepSand.filter { it == 0L } // when this reaches 0
                 .subscribe { stop() } // stop the player
         player.completionObservable
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     // After the current song has ended, prepare the next one if there is one. Else stop the
                     // resources.
@@ -90,6 +91,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                 }
 
         player.errorObservable
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     // inform user on errors
                     lock.withLock {
