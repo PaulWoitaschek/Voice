@@ -26,6 +26,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import de.paul_woitaschek.mediaplayer.Player;
+import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.playback.MediaPlayerCapabilities;
 import de.ph1b.audiobook.uitools.ImageLinkService;
@@ -64,5 +66,18 @@ public class BaseModule {
     static SharedPreferences provideForMediaPlayerCapabilities(Context context) {
         String name = "forMediaPlayerCapabilities";
         return context.getSharedPreferences(name, Context.MODE_PRIVATE);
+    }
+
+    @Provides
+    @Singleton
+    static Player providePlayer(MediaPlayerCapabilities capabilities, Context context) {
+        Player.Type type;
+        if (capabilities.getUseCustomMediaPlayer()) {
+            type = Player.Type.CUSTOM;
+        } else {
+            type = Player.Type.ANDROID;
+        }
+        Player.Logging logging = BuildConfig.DEBUG ? Player.Logging.ENABLED : Player.Logging.DISABLED;
+        return new Player(context, type, logging);
     }
 }

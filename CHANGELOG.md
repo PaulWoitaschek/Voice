@@ -1,5 +1,7 @@
 # Next Version
-* Detect if there is a bug in your firmware and use a fallback player then
+* Fixed a crash when theming a dialog on Android 4.0.4
+* Fixes to the internal player
+* Fallback to the Android player when there is a bug on the device preventing proper playback.
 
 # v2.5.1
 * Updated dependencies

@@ -30,7 +30,6 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.view.KeyEvent
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
@@ -42,6 +41,7 @@ import de.ph1b.audiobook.receiver.AudioFocusReceiver
 import de.ph1b.audiobook.receiver.HeadsetPlugReceiver
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
+import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 import timber.log.Timber
@@ -100,33 +100,33 @@ class BookReaderService : Service() {
 
         mediaSession = MediaSessionCompat(this, TAG)
         mediaSession.setCallback(object : MediaSessionCompat.Callback() {
-            override fun onMediaButtonEvent(mediaButtonEvent: Intent?): Boolean {
-                val keyEvent = mediaButtonEvent!!.getParcelableExtra<KeyEvent>(Intent.EXTRA_KEY_EVENT)
-                if (keyEvent != null && keyEvent.action == KeyEvent.ACTION_DOWN && keyEvent.repeatCount == 0) {
-                    val keyCode = keyEvent.keyCode
-                    Timber.v("handling keyCode: %s", keyCode)
-                    when (keyCode) {
-                        KeyEvent.KEYCODE_MEDIA_PLAY, KeyEvent.KEYCODE_MEDIA_PAUSE, KeyEvent.KEYCODE_HEADSETHOOK, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
-                            controller.playPause()
-                            return true
-                        }
-                        KeyEvent.KEYCODE_MEDIA_STOP -> {
-                            controller.stop()
-                            return true
-                        }
-                        KeyEvent.KEYCODE_MEDIA_NEXT, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> {
-                            controller.skip(MediaPlayerController.Direction.FORWARD)
-                            return true
-                        }
-                        KeyEvent.KEYCODE_MEDIA_PREVIOUS, KeyEvent.KEYCODE_MEDIA_REWIND -> {
-                            controller.skip(MediaPlayerController.Direction.BACKWARD)
-                            return true
-                        }
-                    }
-                }
 
-                return super.onMediaButtonEvent(mediaButtonEvent)
+            override fun onSkipToNext() {
+                onFastForward()
+            }
 
+            override fun onRewind() {
+                controller.skip(MediaPlayerController.Direction.BACKWARD)
+            }
+
+            override fun onSkipToPrevious() {
+                onRewind()
+            }
+
+            override fun onFastForward() {
+                controller.skip(MediaPlayerController.Direction.FORWARD)
+            }
+
+            override fun onStop() {
+                controller.stop()
+            }
+
+            override fun onPause() {
+                controller.playPause()
+            }
+
+            override fun onPlay() {
+                controller.playPause()
             }
         })
         mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
@@ -144,7 +144,7 @@ class BookReaderService : Service() {
                         db.activeBooks.singleOrDefault(null) { it.id == updatedId }
                     })
                     .filter { it != null && (controller.book?.id != it.id) }
-                    .observeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe {
                         controller.stop()
                         controller.init(it)
