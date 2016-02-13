@@ -51,6 +51,7 @@
     <string name="edit_book_name">Edit name</string>
     <string name="edit_book_cover">Edit cover</string>
     <string name="edit_book_title">Edit book</string>
+    <string name="use_cover">Use cover</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Jump to</string>
     <!--BookAdding-->
@@ -131,4 +132,8 @@
     <!-- license activity -->
     <string name="license_activity_title">Used Licenses</string>
     <string name="licenses">Licenses</string>
+    <string name="refresh">Refresh</string>
+    <string name="reset">Reset</string>
+    <string name="no_network">No network?</string>
+    <string name="network_top">This didn\'t work too well…"</string>
 </resources>

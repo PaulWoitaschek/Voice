@@ -30,10 +30,6 @@ import de.paul_woitaschek.mediaplayer.Player;
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.playback.MediaPlayerCapabilities;
-import de.ph1b.audiobook.uitools.ImageLinkService;
-import retrofit2.GsonConverterFactory;
-import retrofit2.Retrofit;
-import retrofit2.RxJavaCallAdapterFactory;
 
 /**
  * Basic providing module.
@@ -42,18 +38,6 @@ import retrofit2.RxJavaCallAdapterFactory;
  */
 @Module
 public class BaseModule {
-
-    @Provides
-    @Singleton
-    static ImageLinkService provideImageLinkService() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://ajax.googleapis.com/ajax/services/search/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-
-        return retrofit.create(ImageLinkService.class);
-    }
 
     @Provides
     @Named(PrefsManager.FOR)

@@ -19,6 +19,7 @@ package de.ph1b.audiobook.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
@@ -37,6 +38,7 @@ import com.jakewharton.rxbinding.widget.SeekBarProgressChangeEvent
 import com.jakewharton.rxbinding.widget.SeekBarStopChangeEvent
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.actionBar
 import de.ph1b.audiobook.activity.SettingsActivity
 import de.ph1b.audiobook.adapter.MultiLineSpinnerAdapter
 import de.ph1b.audiobook.dialog.BookmarkDialogFragment
@@ -68,7 +70,7 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class BookPlayFragment : BaseFragment() {
+class BookPlayFragment : Fragment() {
 
     init {
         App.component().inject(this)
@@ -143,7 +145,10 @@ class BookPlayFragment : BaseFragment() {
         book = bookVendor.byId(bookId)
 
         //init views
-        hostingActivity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        val actionBar = actionBar().apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.abc_ic_ab_back_mtrl_am_alpha)
+        }
 
         //setup buttons
         playButton.setIconDrawable(playPauseDrawable)
@@ -163,7 +168,7 @@ class BookPlayFragment : BaseFragment() {
                 }
 
         if (book != null) {
-            hostingActivity.supportActionBar!!.title = book!!.name
+            actionBar.title = book!!.name
 
             // adapter
             val chapters = book!!.chapters

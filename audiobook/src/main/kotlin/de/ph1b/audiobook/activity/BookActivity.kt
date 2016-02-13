@@ -32,7 +32,9 @@ import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.fragment.BookPlayFragment
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.startActivity
 import de.ph1b.audiobook.utils.PermissionHelper
 import de.ph1b.audiobook.view.fragment.BookShelfFragment
 import timber.log.Timber
@@ -45,7 +47,7 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class BookActivity : BaseActivity(), BookShelfFragment.BookSelectionCallback {
+class BookActivity : BaseActivity(), BookShelfFragment.Callback {
 
     private val TAG = BookActivity::class.java.simpleName
     private val FM_BOOK_SHELF = TAG + BookShelfFragment.TAG
@@ -97,21 +99,21 @@ class BookActivity : BaseActivity(), BookShelfFragment.BookSelectionCallback {
             }
             if (intent.hasExtra(NI_GO_TO_BOOK)) {
                 val bookId = intent.getLongExtra(NI_GO_TO_BOOK, -1)
-                onBookSelected(bookId, HashMap<View, String>(0))
+                onBookSelected(bookId, HashMap())
             }
         }
     }
 
     override fun onBookSelected(bookId: Long, sharedViews: Map<View, String>) {
-        Timber.i("onBookSelected with bookId=%d", bookId)
+        Timber.i("onBookSelected with $bookId")
 
         val ft = supportFragmentManager.beginTransaction()
         val bookPlayFragment = BookPlayFragment.newInstance(bookId)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
-            val move = TransitionInflater.from(this).inflateTransition(android.R.transition.move)
+            val move = TransitionInflater.from(this@BookActivity).inflateTransition(android.R.transition.move)
             bookPlayFragment.sharedElementEnterTransition = move
             for (entry in sharedViews.entries) {
-                Timber.v("Added sharedElement=%s", entry)
+                Timber.v("Added sharedElement=$entry")
                 ft.addSharedElement(entry.key, entry.value)
             }
         }
@@ -119,6 +121,12 @@ class BookActivity : BaseActivity(), BookShelfFragment.BookSelectionCallback {
         ft.replace(FRAME_CONTAINER, bookPlayFragment, FM_BOOK_PLAY)
                 .addToBackStack(null)
                 .commit()
+    }
+
+    override fun onCoverChanged(book: Book) {
+        val initializer = ImagePickerActivity.Companion.Initializer(book.id)
+        val args = ImagePickerActivity.arguments(initializer)
+        startActivity<ImagePickerActivity>(args)
     }
 
     override fun onBackPressed() {
@@ -146,11 +154,9 @@ class BookActivity : BaseActivity(), BookShelfFragment.BookSelectionCallback {
          * *
          * @return The intent to start the activity with.
          */
-        fun malformedFileIntent(c: Context, malformedFile: File): Intent {
-            val intent = Intent(c, BookActivity::class.java)
-            intent.putExtra(NI_MALFORMED_FILE, malformedFile)
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-            return intent
+        fun malformedFileIntent(c: Context, malformedFile: File) = Intent(c, BookActivity::class.java).apply {
+            putExtra(NI_MALFORMED_FILE, malformedFile)
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         }
 
         /**
@@ -162,11 +168,9 @@ class BookActivity : BaseActivity(), BookShelfFragment.BookSelectionCallback {
          * *
          * @return The intent
          */
-        fun goToBookIntent(c: Context, bookId: Long): Intent {
-            val intent = Intent(c, BookActivity::class.java)
-            intent.putExtra(NI_GO_TO_BOOK, bookId)
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-            return intent
+        fun goToBookIntent(c: Context, bookId: Long) = Intent(c, BookActivity::class.java).apply {
+            putExtra(NI_GO_TO_BOOK, bookId)
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         }
     }
 }

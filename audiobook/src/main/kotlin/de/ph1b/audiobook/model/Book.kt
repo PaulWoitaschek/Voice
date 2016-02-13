@@ -43,6 +43,7 @@ data class Book(val id: Long,
                 val playbackSpeed: Float,
                 val root: String) : Comparable<Book> {
 
+
     override fun compareTo(other: Book): Int {
         return NaturalOrderComparator.STRING_COMPARATOR.compare(name, other.name)
     }

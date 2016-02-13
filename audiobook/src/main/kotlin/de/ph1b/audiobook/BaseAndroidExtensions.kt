@@ -15,20 +15,25 @@
  * /licenses/>.
  */
 
-package de.ph1b.audiobook.uitools;
+package de.ph1b.audiobook
 
-import retrofit2.http.GET;
-import retrofit2.http.Query;
-import rx.Observable;
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
+import android.view.LayoutInflater
 
-/**
- * Service for retrofit for receiving an observable on new image links.
- *
- * @author Paul Woitaschek
- */
-public interface ImageLinkService {
-    @GET("images?v=1.0&imgsz=large%7Cxlarge&rsz=8")
-    Observable<ImageLink> imageLinks(@Query("q") String bookName,
-                                     @Query("start") int startPage,
-                                     @Query("userip") String ip);
+
+fun Fragment.actionBar() = (activity as AppCompatActivity).supportActionBar!!
+
+inline fun<reified T : Activity> Activity.startActivity(args: Bundle? = null, flags: Int? = null) {
+    val intent = Intent(this, T::class.java)
+    args?.let { intent.putExtras(args) }
+    flags?.let { intent.flags = flags }
+    startActivity(intent)
 }
+
+fun Context.layoutInflater() = LayoutInflater.from(this)
+fun Fragment.layoutInflater() = LayoutInflater.from(this.context)
