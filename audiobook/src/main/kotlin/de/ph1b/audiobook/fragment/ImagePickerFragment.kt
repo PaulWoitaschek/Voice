@@ -32,7 +32,7 @@ import de.ph1b.audiobook.actionBar
 import de.ph1b.audiobook.dialog.EditCoverDialogFragment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.layoutInflater
-import de.ph1b.audiobook.uitools.setGone
+import de.ph1b.audiobook.uitools.setInvisible
 import de.ph1b.audiobook.uitools.setVisible
 import de.ph1b.audiobook.utils.BookVendor
 import okhttp3.HttpUrl
@@ -55,6 +55,7 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
 
     private val webView: WebView by  bindView(R.id.webView)
     private val progressBar: View by  bindView(R.id.progressBar)
+    private val noNetwork: View by bindView(R.id.noNetwork)
     private val callback by lazy { context as Callback }
     private var webViewIsLoading = BehaviorSubject.create(false)
     private val book by lazy {
@@ -117,20 +118,32 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
                 Timber.i("page stopped with $url")
                 webViewIsLoading.onNext(false)
             }
+
+            @Suppress("OverridingDeprecatedMember")
+            override fun onReceivedError(view: WebView, errorCode: Int, description: String?, failingUrl: String?) {
+                view.loadUrl(ABOUT_BLANK)
+                progressBar.setInvisible()
+                noNetwork.setVisible()
+                webView.setInvisible()
+            }
         });
 
         // after first successful load set visibilities
-        webViewIsLoading.filter { it == true }
-                .first()
+        webViewIsLoading
+                .distinctUntilChanged()
+                .filter { it == true }
                 .subscribe {
                     // sets progressbar and webviews visibilities correctly once the page is loaded
-                    progressBar.setGone()
+                    progressBar.setInvisible()
+                    noNetwork.setInvisible()
                     webView.setVisible()
                 }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putString(SI_URL, webView.url)
+        if (webView.url != ABOUT_BLANK) {
+            outState.putString(SI_URL, webView.url)
+        }
 
         super.onSaveInstanceState(outState)
     }
@@ -209,8 +222,10 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
 
     companion object {
 
-        private val NI = "ni"
         val TAG = ImagePickerFragment::class.java.simpleName
+
+        private val NI = "ni"
+        private val ABOUT_BLANK = "about:blank"
         private val SI_URL = "savedUrl"
         private val FM_EDIT_COVER = TAG + EditCoverDialogFragment.TAG
 

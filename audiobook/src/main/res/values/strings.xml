@@ -134,4 +134,6 @@
     <string name="licenses">Licenses</string>
     <string name="refresh">Refresh</string>
     <string name="reset">Reset</string>
+    <string name="no_network">No network?</string>
+    <string name="network_top">This didn\'t work too well…"</string>
 </resources>
