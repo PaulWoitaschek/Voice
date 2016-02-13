@@ -86,6 +86,14 @@
                 android:value=".activity.BookActivity"/>
         </activity>
 
+        <activity
+            android:name=".activity.ImagePickerActivity"
+            android:parentActivityName=".activity.BookActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.BookActivity"/>
+        </activity>
+
         <service
             android:name=".playback.BookReaderService"
             android:exported="false">

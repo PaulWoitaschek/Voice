@@ -17,14 +17,19 @@
 
 package de.ph1b.audiobook.injection;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import de.ph1b.audiobook.uitools.ImageLinkService;
-import retrofit2.GsonConverterFactory;
-import retrofit2.Retrofit;
-import retrofit2.RxJavaCallAdapterFactory;
+import de.paul_woitaschek.mediaplayer.Player;
+import de.ph1b.audiobook.BuildConfig;
+import de.ph1b.audiobook.persistence.PrefsManager;
+import de.ph1b.audiobook.playback.MediaPlayerCapabilities;
 
 /**
  * Basic providing module.
@@ -35,14 +40,28 @@ import retrofit2.RxJavaCallAdapterFactory;
 public class BaseModule {
 
     @Provides
-    @Singleton
-    ImageLinkService provideImageLinkService() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://ajax.googleapis.com/ajax/services/search/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
+    @Named(PrefsManager.FOR)
+    static SharedPreferences providePrefsForManager(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context);
+    }
 
-        return retrofit.create(ImageLinkService.class);
+    @Provides
+    @Named(MediaPlayerCapabilities.FOR)
+    static SharedPreferences provideForMediaPlayerCapabilities(Context context) {
+        String name = "forMediaPlayerCapabilities";
+        return context.getSharedPreferences(name, Context.MODE_PRIVATE);
+    }
+
+    @Provides
+    @Singleton
+    static Player providePlayer(MediaPlayerCapabilities capabilities, Context context) {
+        Player.Type type;
+        if (capabilities.getUseCustomMediaPlayer()) {
+            type = Player.Type.CUSTOM;
+        } else {
+            type = Player.Type.ANDROID;
+        }
+        Player.Logging logging = BuildConfig.DEBUG ? Player.Logging.ENABLED : Player.Logging.DISABLED;
+        return new Player(context, type, logging);
     }
 }

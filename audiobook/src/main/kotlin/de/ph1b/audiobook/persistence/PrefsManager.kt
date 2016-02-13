@@ -28,6 +28,7 @@ import de.ph1b.audiobook.view.fragment.BookShelfFragment
 import rx.subjects.BehaviorSubject
 import java.util.*
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 
 /**
@@ -38,10 +39,10 @@ import javax.inject.Singleton
 @Singleton
 class PrefsManager
 @Inject
-constructor(c: Context) {
+constructor(c: Context, @Named(FOR) private val sp: SharedPreferences) {
+
     private val PREF_KEY_RESUME_ON_REPLUG: String
     private val PREF_KEY_THEME: String
-    private val sp: SharedPreferences
     private val PREF_KEY_BOOKMARK_ON_SLEEP: String
     private val PREF_KEY_SEEK_TIME: String
     private val PREF_KEY_SLEEP_TIME: String
@@ -52,7 +53,6 @@ constructor(c: Context) {
     private val PREF_KEY_SINGLE_BOOK_FOLDERS = "singleBookFolders"
     private val PREF_KEY_DISPLAY_MODE = "displayMode"
 
-
     /**
      * an observable with the id of the current book, or [Book.ID_UNKNOWN] if there is none.
      */
@@ -60,7 +60,6 @@ constructor(c: Context) {
 
     init {
         PreferenceManager.setDefaultValues(c, R.xml.preferences, false)
-        sp = PreferenceManager.getDefaultSharedPreferences(c)
 
         PREF_KEY_THEME = c.getString(R.string.pref_key_theme)
         PREF_KEY_SLEEP_TIME = c.getString(R.string.pref_key_sleep_time)
@@ -183,5 +182,9 @@ constructor(c: Context) {
     var displayMode: BookShelfFragment.DisplayMode
         @Synchronized get() = BookShelfFragment.DisplayMode.valueOf(sp.getString(PREF_KEY_DISPLAY_MODE, BookShelfFragment.DisplayMode.GRID.name))
         @Synchronized set(displayMode) = sp.edit { setString(PREF_KEY_DISPLAY_MODE to displayMode.name) }
+
+    companion object {
+        const val FOR = "forPrefsManager"
+    }
 
 }

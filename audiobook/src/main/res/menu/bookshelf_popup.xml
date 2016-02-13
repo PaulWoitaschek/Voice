@@ -4,11 +4,10 @@
         android:id="@+id/edit_title"
         android:title="@string/edit_book_name"/>
 
-    <!-- TODO Visibility temporary false as we have no api any more /> -->
     <item
         android:id="@+id/edit_cover"
         android:title="@string/edit_book_cover"
-        android:visible="false"/>
+        android:visible="true"/>
 
     <item
         android:id="@+id/bookmark"

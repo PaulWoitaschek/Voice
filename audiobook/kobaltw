@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+java -jar $(dirname $0)/kobalt/wrapper/kobalt-wrapper.jar $*

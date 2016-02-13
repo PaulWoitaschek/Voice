@@ -1,4 +1,5 @@
 -dontobfuscate
+-dontwarn com.squareup.okhttp3.**
 -dontwarn com.squareup.okhttp.**
 -dontwarn okio.**
 -dontwarn javax.annotation.**
@@ -8,9 +9,16 @@
 # Retrolambda
 -dontwarn java.lang.invoke.*
 
+# OkHttp
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+-dontwarn okhttp3.**
+
 # retrofit
--dontwarn retrofit.**
--keep class retrofit.** { *; }
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
 -keepattributes Signature
 -keepattributes Exceptions
 

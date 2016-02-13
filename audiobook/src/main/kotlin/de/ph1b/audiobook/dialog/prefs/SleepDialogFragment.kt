@@ -12,7 +12,7 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.interfaces.SettingsSetListener
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.uitools.ThemeUtil
+import de.ph1b.audiobook.uitools.theme
 import javax.inject.Inject
 
 /**
@@ -41,7 +41,7 @@ class SleepDialogFragment : DialogFragment() {
         val view = LayoutInflater.from(context).inflate(R.layout.dialog_sleep_timer, null)
         timeView = view.findViewById(R.id.minute_text) as TextView
         val numberPicker = view.findViewById(R.id.minute) as NumberPicker
-        ThemeUtil.theme(numberPicker)
+        numberPicker.theme()
 
         //init number picker
         val oldValue = prefs.sleepTime

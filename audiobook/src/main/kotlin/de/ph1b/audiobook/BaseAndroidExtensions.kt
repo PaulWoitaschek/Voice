@@ -15,41 +15,25 @@
  * /licenses/>.
  */
 
-package de.ph1b.audiobook.playback
+package de.ph1b.audiobook
 
+import android.app.Activity
 import android.content.Context
-import rx.Observable
+import android.content.Intent
+import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
+import android.view.LayoutInflater
 
-/**
- * Abstraction of android.media.MediaPlayer.
- *
- * @author Paul Woitaschek
- */
-interface MediaPlayer {
 
-    fun setDataSource(path: String)
+fun Fragment.actionBar() = (activity as AppCompatActivity).supportActionBar!!
 
-    fun seekTo(to: Int)
-
-    fun isPlaying(): Boolean
-
-    fun prepare()
-
-    fun start()
-
-    fun pause()
-
-    fun reset()
-
-    fun setWakeMode(context: Context, mode: Int)
-
-    val currentPosition: Int
-
-    val duration: Int
-
-    var playbackSpeed: Float
-
-    val onError: Observable<Unit>
-
-    val onCompletion: Observable<Unit>
+inline fun<reified T : Activity> Activity.startActivity(args: Bundle? = null, flags: Int? = null) {
+    val intent = Intent(this, T::class.java)
+    args?.let { intent.putExtras(args) }
+    flags?.let { intent.flags = flags }
+    startActivity(intent)
 }
+
+fun Context.layoutInflater() = LayoutInflater.from(this)
+fun Fragment.layoutInflater() = LayoutInflater.from(this.context)

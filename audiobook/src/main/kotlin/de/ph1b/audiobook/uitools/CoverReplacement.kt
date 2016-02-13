@@ -32,7 +32,10 @@ import javax.inject.Inject
 
 
 class CoverReplacement(private val text: String, c: Context) : Drawable() {
-    private val textPaint: Paint
+    private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.WHITE
+        textAlign = Align.CENTER
+    }
     private val backgroundColor: Int
 
     @Inject internal lateinit var prefsManager: PrefsManager
@@ -42,19 +45,13 @@ class CoverReplacement(private val text: String, c: Context) : Drawable() {
 
         check(text.isNotEmpty())
 
-        // text
-        textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
-        textPaint.color = Color.WHITE
-        textPaint.textAlign = Align.CENTER
-
         // background
         backgroundColor = ContextCompat.getColor(c, prefsManager.theme.colorId)
     }
 
     override fun draw(canvas: Canvas) {
-        val rect = bounds
-        val height = rect.height()
-        val width = rect.width()
+        val height = bounds.height()
+        val width = bounds.width()
 
         textPaint.textSize = 2f * width / 3f
 

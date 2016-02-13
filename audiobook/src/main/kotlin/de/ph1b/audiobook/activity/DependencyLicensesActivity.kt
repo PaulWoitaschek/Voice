@@ -11,24 +11,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
  * /licenses/>.
  */
 
@@ -39,11 +22,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.uitools.setGone
+import de.ph1b.audiobook.uitools.setVisible
 import de.ph1b.audiobook.utils.ResourceTypeWriter
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -70,7 +54,7 @@ class DependencyLicensesActivity : BaseActivity() {
         // set home enabled for toolbar
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
-        supportActionBar.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         val webView = findViewById(R.id.webView) as WebView
         webView.setWebViewClient(object : WebViewClient() {
@@ -87,8 +71,8 @@ class DependencyLicensesActivity : BaseActivity() {
                 super.onPageFinished(view, url)
 
                 // sets progressbar and webviews visibilities correctly once the page is loaded
-                progressBar.visibility = View.GONE
-                webView.visibility = View.VISIBLE
+                progressBar.setGone()
+                webView.setVisible()
             }
         })
 

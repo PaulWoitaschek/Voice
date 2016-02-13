@@ -100,7 +100,6 @@ interface IInAppBillingService {
      *                "developerPayload":"example developer payload" }'
      *         "INAPP_DATA_SIGNATURE" - String containing the signature of the purchase data that
      *                                  was signed with the private key of the developer
-     *                                  TODO: change this to app-specific keys.
      */
     Bundle getBuyIntent(int apiVersion, String packageName, String sku, String type,
         String developerPayload);

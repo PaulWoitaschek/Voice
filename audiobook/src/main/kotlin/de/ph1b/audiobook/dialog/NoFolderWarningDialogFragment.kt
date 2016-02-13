@@ -34,7 +34,7 @@ class NoFolderWarningDialogFragment : DialogFragment() {
         isCancelable = false
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog? {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialDialog.Builder(context)
                 .title(R.string.no_audiobook_folders_title)
                 .content(getString(R.string.no_audiobook_folders_summary_start) +

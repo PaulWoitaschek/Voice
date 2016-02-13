@@ -17,7 +17,6 @@
 
 package de.ph1b.audiobook.view.fragment
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.DrawableRes
@@ -32,11 +31,11 @@ import android.view.*
 import android.widget.PopupMenu
 import com.getbase.floatingactionbutton.FloatingActionButton
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.actionBar
 import de.ph1b.audiobook.activity.SettingsActivity
 import de.ph1b.audiobook.adapter.BookShelfAdapter
 import de.ph1b.audiobook.dialog.BookmarkDialogFragment
 import de.ph1b.audiobook.dialog.EditBookTitleDialogFragment
-import de.ph1b.audiobook.dialog.EditCoverDialogFragment
 import de.ph1b.audiobook.dialog.NoFolderWarningDialogFragment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
@@ -51,10 +50,8 @@ import javax.inject.Inject
 
 /**
  * Showing the shelf of all the available books and provide a navigation to each book
-
- * @author Paul Woitaschek
  */
-class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresenter>(), BookShelfAdapter.OnItemClickListener, EditCoverDialogFragment.OnEditBookFinished {
+class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresenter>(), BookShelfAdapter.OnItemClickListener {
 
     override fun newPresenter() = App.component().bookShelfBasePresenter
 
@@ -67,19 +64,19 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
     // injection
     @Inject internal lateinit var prefs: PrefsManager
 
-    // view
+    // viewAdded
     private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerReplacementView: View
     private lateinit var fab: FloatingActionButton
     private val playPauseDrawable = PlayPauseDrawable()
-    private lateinit var adapter: BookShelfAdapter
+    private val adapter by lazy { BookShelfAdapter(context, this) }
     private lateinit var listDecoration: RecyclerView.ItemDecoration
     private lateinit var gridLayoutManager: GridLayoutManager
     private lateinit var linearLayoutManager: RecyclerView.LayoutManager
 
     // callbacks
-    private lateinit var bookSelectionCallback: BookSelectionCallback
-    private lateinit var hostingActivity: AppCompatActivity
+    private val hostingActivity: AppCompatActivity by lazy { activity as AppCompatActivity }
+    private val callBack: Callback by lazy { activity as Callback }
 
     // vars
     private var firstPlayStateUpdate = true
@@ -92,17 +89,8 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
         Timber.i("onCreate");
 
         setHasOptionsMenu(true)
-
-
-        adapter = BookShelfAdapter(context, this)
     }
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-        bookSelectionCallback = context as BookSelectionCallback
-        hostingActivity = context as AppCompatActivity
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // find views
@@ -116,9 +104,11 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
         fab.setOnClickListener { presenter()!!.playPauseRequested() }
 
         // init ActionBar
-        val actionBar = hostingActivity.supportActionBar!!
-        actionBar.setDisplayHomeAsUpEnabled(false)
-        actionBar.title = getString(R.string.app_name)
+        actionBar().apply {
+            setDisplayHomeAsUpEnabled(false)
+            setHomeAsUpIndicator(R.drawable.abc_ic_ab_back_mtrl_am_alpha)
+            title = getString(R.string.app_name)
+        }
 
         // init RecyclerView
         recyclerView.setHasFixedSize(true)
@@ -134,20 +124,20 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
         return view
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.book_shelf, menu)
 
         // sets menu item visible if there is a current book
-        val currentPlaying = menu!!.findItem(R.id.action_current)
-        currentPlaying.setVisible(currentBook != null)
+        val currentPlaying = menu.findItem(R.id.action_current)
+        currentPlaying.isVisible = currentBook != null
 
         // sets the grid / list toggle icon
         val displayModeItem = menu.findItem(R.id.action_change_layout)
         displayModeItem.setIcon(prefs.displayMode.inverted().icon)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.action_settings -> {
                 startActivity(Intent(context, SettingsActivity::class.java))
                 return true
@@ -177,7 +167,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
             val book = adapter.getItem(position)
             when (it.itemId) {
                 R.id.edit_cover -> {
-                    EditCoverDialogFragment.newInstance(this, book).show(fragmentManager, EditCoverDialogFragment.TAG)
+                    callBack.onCoverChanged(book)
                     return@setOnMenuItemClickListener true
                 }
                 R.id.edit_title -> {
@@ -193,12 +183,6 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
             }
         }
         popupMenu.show()
-    }
-
-
-    override fun onEditBookFinished(bookId: Long) {
-        // this is necessary for the cover update
-        adapter.notifyItemAtIdChanged(bookId)
     }
 
     /**
@@ -221,8 +205,8 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
             recyclerView.removeItemDecoration(listDecoration)
             recyclerView.layoutManager = gridLayoutManager
         } else {
-            recyclerView.layoutManager = linearLayoutManager
             recyclerView.addItemDecoration(listDecoration, 0)
+            recyclerView.layoutManager = linearLayoutManager
         }
         adapter.displayMode = defaultDisplayMode
         hostingActivity.invalidateOptionsMenu()
@@ -237,7 +221,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
             sharedElements.put(viewHolder.coverView, ViewCompat.getTransitionName(viewHolder.coverView))
         }
         sharedElements.put(fab, ViewCompat.getTransitionName(fab))
-        bookSelectionCallback.onBookSelected(bookId, sharedElements)
+        callBack.onBookSelected(bookId, sharedElements)
     }
 
     /**
@@ -335,15 +319,9 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
         fun inverted(): DisplayMode = if (this == GRID) LIST else GRID
     }
 
-    interface BookSelectionCallback {
-        /**
-         * This is called when a selection has been made
-
-         * @param bookId      the id of the selected book
-         * *
-         * @param sharedViews A mapping of the shared views and their transition names
-         */
+    interface Callback {
         fun onBookSelected(bookId: Long, sharedViews: Map<View, String>)
+        fun onCoverChanged(book: Book)
     }
 
     companion object {

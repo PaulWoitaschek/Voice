@@ -59,11 +59,10 @@ class SettingsFragment : PreferenceFragment(), DonationDialogFragment.OnDonation
         super.onDestroy()
 
         iabHelper.dispose()
-        App.leakWatch(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        hostingActivity.supportActionBar.setDisplayHomeAsUpEnabled(true)
+        hostingActivity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         updateValues()
 

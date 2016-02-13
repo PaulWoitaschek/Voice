@@ -1,47 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:minHeight="250dp"
-    android:orientation="horizontal">
+    android:layout_weight="1">
 
-    <ImageButton
-        android:id="@+id/previous_cover"
+    <ProgressBar
+        android:id="@+id/cover_replacement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/content_previous_cover"
-        android:padding="8dp"
-        android:src="@drawable/ic_navigate_before_white_36dp" />
+        android:layout_gravity="center"
+        android:visibility="gone"/>
 
-    <FrameLayout
-        android:layout_width="0dp"
+    <de.ph1b.audiobook.uitools.DraggableBoxImageView
+        android:id="@+id/edit_book"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/content_cover"
+        android:scaleType="fitCenter"/>
 
-        <ProgressBar
-            android:id="@+id/cover_replacement"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
-
-        <de.ph1b.audiobook.uitools.DraggableBoxImageView
-            android:id="@+id/edit_book"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/content_cover"
-            android:scaleType="fitCenter" />
-    </FrameLayout>
-
-    <ImageButton
-        android:id="@+id/next_cover"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/content_next_cover"
-        android:padding="8dp"
-        android:src="@drawable/ic_navigate_next_white_36dp" />
-
-</LinearLayout>
+</FrameLayout>

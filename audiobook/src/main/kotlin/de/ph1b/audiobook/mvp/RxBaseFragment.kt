@@ -18,14 +18,14 @@
 package de.ph1b.audiobook.mvp
 
 import android.os.Bundle
-import de.ph1b.audiobook.fragment.BaseFragment
+import android.support.v4.app.Fragment
 
 /**
  * Base fragment that provides a convenient way for binding a view to a presenter
  *
  * @author Paul Woitaschek
  */
-abstract class RxBaseFragment <V, P> : BaseFragment() where P : Presenter<V> {
+abstract class RxBaseFragment <V, P> : Fragment() where P : Presenter<V> {
 
     private val presenterDelegate = PresenterDelegate({ newPresenter() }, { provideView() })
 

@@ -20,23 +20,19 @@ package de.ph1b.audiobook.injection;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
-import com.squareup.leakcanary.LeakCanary;
-import com.squareup.leakcanary.RefWatcher;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 import org.acra.collector.CrashReportData;
+import org.acra.config.ACRAConfiguration;
+import org.acra.config.ConfigurationBuilder;
 import org.acra.sender.HttpSender;
 import org.acra.sender.ReportSender;
 import org.acra.sender.ReportSenderException;
+import org.acra.sender.ReportSenderFactory;
 import org.acra.util.JSONReportBuilder;
-
-import java.io.File;
-import java.nio.charset.Charset;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -57,6 +53,7 @@ import de.ph1b.audiobook.dialog.prefs.PlaybackSpeedDialogFragment;
 import de.ph1b.audiobook.dialog.prefs.SleepDialogFragment;
 import de.ph1b.audiobook.dialog.prefs.ThemePickerDialogFragment;
 import de.ph1b.audiobook.fragment.BookPlayFragment;
+import de.ph1b.audiobook.fragment.ImagePickerFragment;
 import de.ph1b.audiobook.fragment.SettingsFragment;
 import de.ph1b.audiobook.model.BookAdder;
 import de.ph1b.audiobook.persistence.BookChest;
@@ -73,7 +70,6 @@ import de.ph1b.audiobook.uitools.CoverReplacement;
 import de.ph1b.audiobook.view.FolderChooserActivity;
 import de.ph1b.audiobook.view.FolderOverviewActivity;
 import de.ph1b.audiobook.view.fragment.BookShelfFragment;
-import kotlin.io.FilesKt;
 import timber.log.Timber;
 
 @ReportsCrashes(
@@ -81,32 +77,20 @@ import timber.log.Timber;
         reportType = HttpSender.Type.JSON,
         formUri = "http://acra-63e870.smileupps.com/acra-material/_design/acra-storage/_update/report",
         formUriBasicAuthLogin = "97user",
-        formUriBasicAuthPassword = "sUjg9VkOgxTZbzVL",
-        sendReportsAtShutdown = false) // TODO: Remove this once ACRA issue #332 is fixed
+        formUriBasicAuthPassword = "sUjg9VkOgxTZbzVL")
 public class App extends Application {
 
     private static ApplicationComponent applicationComponent;
-    private static RefWatcher refWatcher;
-    @Inject
-    BookAdder bookAdder;
-
-    public static void leakWatch(Object object) {
-        refWatcher.watch(object);
-    }
+    @Inject BookAdder bookAdder;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        // init acra and send breadcrumbs
-        ACRA.init(this);
-        Timber.plant(new BreadcrumbTree());
-
+        ConfigurationBuilder acraBuilder = new ConfigurationBuilder(this);
         if (BuildConfig.DEBUG) {
             // init timber
             Timber.plant(new Timber.DebugTree());
-            // also write to disc here.
-            Timber.plant(new WriteToDiscTree());
 
             // force enable acra in debug mode
             PreferenceManager.getDefaultSharedPreferences(this)
@@ -114,23 +98,16 @@ public class App extends Application {
                     .putBoolean("acra.enable", true)
                     .apply();
 
-            // remove default senders
-            ACRA.getErrorReporter().removeAllReportSenders();
-
             // forward crashes to timber
-            ACRA.getErrorReporter().addReportSender(new ReportSender() {
-                @Override
-                public void send(Context context, CrashReportData errorContent) throws ReportSenderException {
-                    try {
-                        Timber.e("Timber caught %s", errorContent.toJSON().toString());
-                    } catch (JSONReportBuilder.JSONReportException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
+            //noinspection unchecked
+            acraBuilder.setReportSenderFactoryClasses(new Class[]{BreadCrumbSenderFactory.class});
         }
+
+        // init acra and send breadcrumbs
+        ACRA.init(this, acraBuilder.build());
+        Timber.plant(new BreadcrumbTree());
+
         Timber.i("onCreate");
-        refWatcher = LeakCanary.install(this);
 
         applicationComponent = newComponent();
         component().inject(this);
@@ -184,6 +161,8 @@ public class App extends Application {
         void inject(SeekDialogFragment target);
 
         void inject(EditCoverDialogFragment target);
+
+        void inject(ImagePickerFragment target);
 
         void inject(JumpToPositionDialogFragment target);
 
@@ -287,16 +266,20 @@ public class App extends Application {
         }
     }
 
-    /**
-     * Custom tree that logs to storage.
-     */
-    private static class WriteToDiscTree extends FormattedTree {
-
-        private final File LOG_FILE = new File(Environment.getExternalStorageDirectory(), "materialaudiobookplayer.log");
+    private static class BreadCrumbSenderFactory implements ReportSenderFactory {
 
         @Override
-        void onLogGathered(String message) {
-            FilesKt.appendText(LOG_FILE, message, Charset.forName("UTF-8"));
+        public ReportSender create(Context context, ACRAConfiguration config) {
+            return new ReportSender() {
+                @Override
+                public void send(Context context, CrashReportData errorContent) throws ReportSenderException {
+                    try {
+                        Timber.e("Timber caught %s", errorContent.toJSON().toString());
+                    } catch (JSONReportBuilder.JSONReportException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
         }
     }
 }
