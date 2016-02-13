@@ -27,12 +27,12 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.actionBar
 import de.ph1b.audiobook.dialog.EditCoverDialogFragment
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.uitools.setGone
 import de.ph1b.audiobook.uitools.setVisible
 import de.ph1b.audiobook.utils.BookVendor
 import okhttp3.HttpUrl
 import timber.log.Timber
+import java.io.Serializable
 import java.net.URLEncoder
 import javax.inject.Inject
 
@@ -46,7 +46,6 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
     }
 
     @Inject internal lateinit var bookVendor: BookVendor
-
 
     private val webView: WebView by  bindView(R.id.webView)
     private val progressBar: View by  bindView(R.id.progressBar)
@@ -71,10 +70,12 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
             title = ""
         }
 
-        val id = arguments.getLong(NI_ID)
-        val book = bookVendor.byId(id)!!
+        val args = arguments.getSerializable(NI) as Args
+        val book = bookVendor.byId(args.bookId)!!
 
         val encodedSearch = URLEncoder.encode("${book.name} cover", Charsets.UTF_8.name())
+        webView.apply {
+        }
         webView.loadUrl("https://www.google.com/search?safe=on&site=imghp&tbm=isch&q=$encodedSearch")
         webView.settings.javaScriptEnabled = true
         webView.setWebViewClient(object : WebViewClient() {
@@ -87,8 +88,9 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
                     val editCover = EditCoverDialogFragment.newInstance(this@ImagePickerFragment, book, first)
                     editCover.show(fragmentManager, FM_EDIT_COVER)
                     return true
+                } else {
+                    return super.shouldOverrideUrlLoading(view, url)
                 }
-                return super.shouldOverrideUrlLoading(view, url)
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
@@ -135,12 +137,14 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
     }
 
     companion object {
+        val NI = "ni"
         val TAG = ImagePickerFragment::class.java.simpleName
         private val FM_EDIT_COVER = TAG + EditCoverDialogFragment.TAG
-        const val NI_ID = "niName"
 
-        fun newInstance(book: Book) = ImagePickerFragment().apply {
-            arguments = Bundle().apply { putLong(NI_ID, book.id) }
+        fun newInstance(args: Args) = ImagePickerFragment().apply {
+            arguments = Bundle().apply { putSerializable(NI, args) }
         }
+
+        data class Args(val bookId: Long) : Serializable
     }
 }

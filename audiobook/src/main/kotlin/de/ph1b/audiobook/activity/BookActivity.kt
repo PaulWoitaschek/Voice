@@ -31,10 +31,10 @@ import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.fragment.BookPlayFragment
-import de.ph1b.audiobook.fragment.ImagePickerFragment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.startActivity
 import de.ph1b.audiobook.utils.PermissionHelper
 import de.ph1b.audiobook.view.fragment.BookShelfFragment
 import timber.log.Timber
@@ -47,12 +47,11 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class BookActivity : BaseActivity(), BookShelfFragment.Callback, ImagePickerFragment.Callback {
+class BookActivity : BaseActivity(), BookShelfFragment.Callback {
 
     private val TAG = BookActivity::class.java.simpleName
     private val FM_BOOK_SHELF = TAG + BookShelfFragment.TAG
     private val FM_BOOK_PLAY = TAG + BookPlayFragment.TAG
-    private val FM_IMAGE_PICKER = TAG + ImagePickerFragment.TAG
     @IdRes private val FRAME_CONTAINER = R.id.play_container
 
     @Inject internal lateinit var prefs: PrefsManager
@@ -125,30 +124,17 @@ class BookActivity : BaseActivity(), BookShelfFragment.Callback, ImagePickerFrag
     }
 
     override fun onCoverChanged(book: Book) {
-        supportFragmentManager.beginTransaction()
-                .replace(FRAME_CONTAINER, ImagePickerFragment.newInstance(book))
-                .addToBackStack(null)
-                .commit()
+        val initializer = ImagePickerActivity.Companion.Initializer(book.id)
+        val args = ImagePickerActivity.arguments(initializer)
+        startActivity<ImagePickerActivity>(args)
     }
-
-    override fun editDone() {
-        supportFragmentManager.popBackStackImmediate()
-    }
-
 
     override fun onBackPressed() {
         val bookShelfFragment = supportFragmentManager.findFragmentByTag(FM_BOOK_SHELF)
         if (bookShelfFragment != null && bookShelfFragment.isVisible) {
             finish()
         } else {
-            val imagePickerFragment = supportFragmentManager.findFragmentByTag(FM_IMAGE_PICKER) as ImagePickerFragment?
-
-            val backHandled = if (imagePickerFragment != null && imagePickerFragment.isVisible) {
-                imagePickerFragment.backPressed()
-            } else {
-                false
-            }
-            if (!backHandled) super.onBackPressed()
+            super.onBackPressed()
         }
     }
 
