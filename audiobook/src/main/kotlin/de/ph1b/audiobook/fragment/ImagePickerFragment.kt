@@ -17,9 +17,13 @@
 
 package de.ph1b.audiobook.fragment
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.MenuItemCompat
 import android.view.*
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import butterknife.bindView
@@ -27,10 +31,12 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.actionBar
 import de.ph1b.audiobook.dialog.EditCoverDialogFragment
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.layoutInflater
 import de.ph1b.audiobook.uitools.setGone
 import de.ph1b.audiobook.uitools.setVisible
 import de.ph1b.audiobook.utils.BookVendor
 import okhttp3.HttpUrl
+import rx.subjects.BehaviorSubject
 import timber.log.Timber
 import java.io.Serializable
 import java.net.URLEncoder
@@ -50,6 +56,7 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
     private val webView: WebView by  bindView(R.id.webView)
     private val progressBar: View by  bindView(R.id.progressBar)
     private val callback by lazy { context as Callback }
+    private var webViewIsLoading = BehaviorSubject.create(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,8 +81,6 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
         val book = bookVendor.byId(args.bookId)!!
 
         val encodedSearch = URLEncoder.encode("${book.name} cover", Charsets.UTF_8.name())
-        webView.apply {
-        }
         webView.loadUrl("https://www.google.com/search?safe=on&site=imghp&tbm=isch&q=$encodedSearch")
         webView.settings.javaScriptEnabled = true
         webView.setWebViewClient(object : WebViewClient() {
@@ -93,18 +98,67 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
                 }
             }
 
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                super.onPageStarted(view, url, favicon)
+
+                Timber.i("page started with $url")
+                webViewIsLoading.onNext(true)
+            }
+
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
 
-                // sets progressbar and webviews visibilities correctly once the page is loaded
-                progressBar.setGone()
-                webView.setVisible()
+                Timber.i("page stopped with $url")
+                webViewIsLoading.onNext(false)
             }
         });
+
+        // after first successful load set visibilities
+        webViewIsLoading.filter { it == true }
+                .first()
+                .subscribe {
+                    // sets progressbar and webviews visibilities correctly once the page is loaded
+                    progressBar.setGone()
+                    webView.setVisible()
+                }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.image_picker, menu)
+
+        // set the rotating icon
+        val refreshItem = menu.findItem(R.id.refresh)
+        val rotation = AnimationUtils.loadAnimation(context, R.anim.rotate).apply {
+            repeatCount = Animation.INFINITE
+        }
+        val rotateView = layoutInflater().inflate(R.layout.rotate_view, null).apply {
+            animation = rotation
+        }
+        MenuItemCompat.setActionView(refreshItem, rotateView)
+
+        webViewIsLoading
+                .filter { it == true }
+                .filter { !rotation.hasStarted() }
+                .doOnNext { Timber.i("is loading. Start animation") }
+                .subscribe {
+                    rotation.start()
+                }
+
+        rotation.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(p0: Animation?) {
+                if (webViewIsLoading.value == false ) {
+                    Timber.i("we are in the refresh round. cancel now.")
+                    rotation.cancel()
+                    rotation.reset()
+                }
+            }
+
+            override fun onAnimationEnd(p0: Animation?) {
+            }
+
+            override fun onAnimationStart(p0: Animation?) {
+            }
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -137,6 +191,7 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
     }
 
     companion object {
+
         val NI = "ni"
         val TAG = ImagePickerFragment::class.java.simpleName
         private val FM_EDIT_COVER = TAG + EditCoverDialogFragment.TAG

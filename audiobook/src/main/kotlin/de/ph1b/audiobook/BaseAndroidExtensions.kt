@@ -18,10 +18,12 @@
 package de.ph1b.audiobook
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.view.LayoutInflater
 
 
 fun Fragment.actionBar() = (activity as AppCompatActivity).supportActionBar!!
@@ -32,3 +34,6 @@ inline fun<reified T : Activity> Activity.startActivity(args: Bundle? = null, fl
     flags?.let { intent.flags = flags }
     startActivity(intent)
 }
+
+fun Context.layoutInflater() = LayoutInflater.from(this)
+fun Fragment.layoutInflater() = LayoutInflater.from(this.context)
