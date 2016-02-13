@@ -57,6 +57,14 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
     private val progressBar: View by  bindView(R.id.progressBar)
     private val callback by lazy { context as Callback }
     private var webViewIsLoading = BehaviorSubject.create(false)
+    private val book by lazy {
+        val args = arguments.getSerializable(NI) as Args
+        bookVendor.byId(args.bookId)!!
+    }
+    private val originalUrl by lazy {
+        val encodedSearch = URLEncoder.encode("${book.name} cover", Charsets.UTF_8.name())
+        "https://www.google.com/search?safe=on&site=imghp&tbm=isch&q=$encodedSearch"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,11 +85,7 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
             title = ""
         }
 
-        val args = arguments.getSerializable(NI) as Args
-        val book = bookVendor.byId(args.bookId)!!
-
-        val encodedSearch = URLEncoder.encode("${book.name} cover", Charsets.UTF_8.name())
-        webView.loadUrl("https://www.google.com/search?safe=on&site=imghp&tbm=isch&q=$encodedSearch")
+        webView.loadUrl(originalUrl)
         webView.settings.javaScriptEnabled = true
         webView.setWebViewClient(object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
@@ -133,6 +137,7 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
         }
         val rotateView = layoutInflater().inflate(R.layout.rotate_view, null).apply {
             animation = rotation
+            setOnClickListener { webView.reload() }
         }
         MenuItemCompat.setActionView(refreshItem, rotateView)
 
@@ -168,6 +173,10 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
         }
         R.id.refresh -> {
             webView.reload()
+            true
+        }
+        R.id.home -> {
+            webView.loadUrl(originalUrl)
             true
         }
         else -> false
