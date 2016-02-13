@@ -26,7 +26,7 @@ import java.io.Serializable
 import de.ph1b.audiobook.fragment.ImagePickerFragment.Companion.Args as FragmentArgs
 
 /**
- * Created by ph1b on 13/02/16.
+ * Hosts the image picker.
  */
 class ImagePickerActivity : BaseActivity(), ImagePickerFragment.Callback {
 

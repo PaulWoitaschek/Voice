@@ -50,8 +50,6 @@ import javax.inject.Inject
 
 /**
  * Showing the shelf of all the available books and provide a navigation to each book
-
- * @author Paul Woitaschek
  */
 class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresenter>(), BookShelfAdapter.OnItemClickListener {
 
@@ -66,7 +64,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
     // injection
     @Inject internal lateinit var prefs: PrefsManager
 
-    // view
+    // viewAdded
     private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerReplacementView: View
     private lateinit var fab: FloatingActionButton
@@ -187,13 +185,6 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
         popupMenu.show()
     }
 
-
-    fun onEditBookFinished(bookId: Long) {
-        //TOdo
-        // this is necessary for the cover update
-        adapter.notifyItemAtIdChanged(bookId)
-    }
-
     /**
      * Returns the amount of columns the main-grid will need.
 
@@ -214,8 +205,8 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
             recyclerView.removeItemDecoration(listDecoration)
             recyclerView.layoutManager = gridLayoutManager
         } else {
-            recyclerView.layoutManager = linearLayoutManager
             recyclerView.addItemDecoration(listDecoration, 0)
+            recyclerView.layoutManager = linearLayoutManager
         }
         adapter.displayMode = defaultDisplayMode
         hostingActivity.invalidateOptionsMenu()

@@ -43,7 +43,7 @@ import java.net.URLEncoder
 import javax.inject.Inject
 
 /**
- * todo
+ * Shows a web view with covers and lets the user pick one.
  */
 class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
 
@@ -94,6 +94,7 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 val httpUrl = HttpUrl.parse(url);
                 val values = httpUrl.queryParameterValues("imgurl")
+                // intercept images
                 if (values.isNotEmpty()) {
                     Timber.i("img url values are $values")
                     val first = values.first()
