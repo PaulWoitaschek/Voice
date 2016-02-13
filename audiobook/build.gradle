@@ -88,7 +88,7 @@ dependencies {
     compile "com.android.support:support-v4:$supportVersion"
 
     // http library
-    def okHttpVersion = "3.0.1"
+    def okHttpVersion = "3.1.2"
     compile "com.squareup.okhttp3:okhttp:$okHttpVersion"
     compile "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
 
@@ -96,7 +96,7 @@ dependencies {
     compile "com.squareup.picasso:picasso:2.5.2"
 
     // material styled dialogs
-    compile("com.afollestad.material-dialogs:core:0.8.5.3@aar") {
+    compile("com.afollestad.material-dialogs:core:0.8.5.4@aar") {
         transitive = true
     }
 
@@ -104,7 +104,7 @@ dependencies {
     compile "com.getbase:floatingactionbutton:1.10.1"
 
     // crash reporting
-    compile "ch.acra:acra:4.7.0"
+    compile "ch.acra:acra:4.8.1"
 
     // dependency injection
     def daggerVersion = "2.0.2"
@@ -131,17 +131,6 @@ dependencies {
     compile "io.reactivex:rxandroid:1.1.0"
     compile "io.reactivex:rxjava:1.1.0"
     compile 'com.github.JakeWharton.RxBinding:rxbinding-kotlin:542cd7e8a4'
-
-    // detecting memory leaks
-    def leakCanaryVersion = "1.4-beta1"
-    debugCompile "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
-    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
-
-    // rest
-    def retroFitVersion = "2.0.0-beta3"
-    compile "com.squareup.retrofit2:retrofit:$retroFitVersion"
-    compile "com.squareup.retrofit2:converter-gson:$retroFitVersion"
-    compile "com.squareup.retrofit2:adapter-rxjava:$retroFitVersion"
 
     // kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"

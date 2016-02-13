@@ -23,15 +23,15 @@ import android.content.Intent;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.squareup.leakcanary.LeakCanary;
-import com.squareup.leakcanary.RefWatcher;
-
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 import org.acra.collector.CrashReportData;
+import org.acra.config.ACRAConfiguration;
+import org.acra.config.ConfigurationBuilder;
 import org.acra.sender.HttpSender;
 import org.acra.sender.ReportSender;
 import org.acra.sender.ReportSenderException;
+import org.acra.sender.ReportSenderFactory;
 import org.acra.util.JSONReportBuilder;
 
 import javax.inject.Inject;
@@ -82,22 +82,13 @@ import timber.log.Timber;
 public class App extends Application {
 
     private static ApplicationComponent applicationComponent;
-    private static RefWatcher refWatcher;
-    @Inject
-    BookAdder bookAdder;
-
-    public static void leakWatch(Object object) {
-        refWatcher.watch(object);
-    }
+    @Inject BookAdder bookAdder;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        // init acra and send breadcrumbs
-        ACRA.init(this);
-        Timber.plant(new BreadcrumbTree());
-
+        ConfigurationBuilder acraBuilder = new ConfigurationBuilder(this);
         if (BuildConfig.DEBUG) {
             // init timber
             Timber.plant(new Timber.DebugTree());
@@ -108,23 +99,16 @@ public class App extends Application {
                     .putBoolean("acra.enable", true)
                     .apply();
 
-            // remove default senders
-            ACRA.getErrorReporter().removeAllReportSenders();
-
             // forward crashes to timber
-            ACRA.getErrorReporter().addReportSender(new ReportSender() {
-                @Override
-                public void send(Context context, CrashReportData errorContent) throws ReportSenderException {
-                    try {
-                        Timber.e("Timber caught %s", errorContent.toJSON().toString());
-                    } catch (JSONReportBuilder.JSONReportException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
+            //noinspection unchecked
+            acraBuilder.setReportSenderFactoryClasses(new Class[]{BreadCrumbSenderFactory.class});
         }
+
+        // init acra and send breadcrumbs
+        ACRA.init(this, acraBuilder.build());
+        Timber.plant(new BreadcrumbTree());
+
         Timber.i("onCreate");
-        refWatcher = LeakCanary.install(this);
 
         applicationComponent = newComponent();
         component().inject(this);
@@ -280,6 +264,23 @@ public class App extends Application {
                 crumbCount = 0;
             }
             return nextCrumb;
+        }
+    }
+
+    private static class BreadCrumbSenderFactory implements ReportSenderFactory {
+
+        @Override
+        public ReportSender create(Context context, ACRAConfiguration config) {
+            return new ReportSender() {
+                @Override
+                public void send(Context context, CrashReportData errorContent) throws ReportSenderException {
+                    try {
+                        Timber.e("Timber caught %s", errorContent.toJSON().toString());
+                    } catch (JSONReportBuilder.JSONReportException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
         }
     }
 }

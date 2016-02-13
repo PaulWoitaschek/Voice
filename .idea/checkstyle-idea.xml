@@ -4,6 +4,7 @@
     <option name="configuration">
       <map>
         <entry key="location-0" value="CLASSPATH:/sun_checks.xml:The default Checkstyle rules" />
+        <entry key="scan-before-checkin" value="false" />
       </map>
     </option>
   </component>
