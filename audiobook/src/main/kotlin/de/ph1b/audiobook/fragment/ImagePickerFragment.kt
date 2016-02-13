@@ -85,7 +85,9 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
             title = ""
         }
 
-        webView.loadUrl(originalUrl)
+        // load the last page loaded or the original one of there is none
+        val toLoad = savedInstanceState?.getString(SI_URL) ?: originalUrl
+        webView.loadUrl(toLoad)
         webView.settings.javaScriptEnabled = true
         webView.setWebViewClient(object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
@@ -125,6 +127,12 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
                     progressBar.setGone()
                     webView.setVisible()
                 }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString(SI_URL, webView.url)
+
+        super.onSaveInstanceState(outState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -201,8 +209,9 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
 
     companion object {
 
-        val NI = "ni"
+        private val NI = "ni"
         val TAG = ImagePickerFragment::class.java.simpleName
+        private val SI_URL = "savedUrl"
         private val FM_EDIT_COVER = TAG + EditCoverDialogFragment.TAG
 
         fun newInstance(args: Args) = ImagePickerFragment().apply {
