@@ -77,8 +77,7 @@ import timber.log.Timber;
         reportType = HttpSender.Type.JSON,
         formUri = "http://acra-63e870.smileupps.com/acra-material/_design/acra-storage/_update/report",
         formUriBasicAuthLogin = "97user",
-        formUriBasicAuthPassword = "sUjg9VkOgxTZbzVL",
-        sendReportsAtShutdown = false) // TODO: Remove this once ACRA issue #332 is fixed
+        formUriBasicAuthPassword = "sUjg9VkOgxTZbzVL")
 public class App extends Application {
 
     private static ApplicationComponent applicationComponent;
