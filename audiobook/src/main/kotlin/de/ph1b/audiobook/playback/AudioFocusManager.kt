@@ -38,6 +38,7 @@ constructor(private val mediaPlayerController: MediaPlayerController, private va
 
     fun handleAudioFocus(audioFocusObservable: Observable<AudioFocus>): Subscription =
             audioFocusObservable.subscribe { audioFocus: AudioFocus ->
+                Timber.i("handleAudioFocu changed to $audioFocus")
                 when (audioFocus) {
                     AudioFocus.GAIN -> {
                         Timber.d("started by audioFocus gained")

@@ -15,7 +15,8 @@ import javax.inject.Inject
 class AudioFocusReceiver
 @Inject constructor(private val telephonyManager: TelephonyManager) {
 
-    public val audioFocusListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
+    val audioFocusListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
+        Timber.i("audio focus listener got focus $focusChange")
         if (telephonyManager.callState != TelephonyManager.CALL_STATE_IDLE) {
             Timber.d("Call state is: ${telephonyManager.callState}")
             subject.onNext(AudioFocus.LOSS_INCOMING_CALL)
@@ -33,5 +34,4 @@ class AudioFocusReceiver
     fun focusObservable() = subject.asObservable()
 
     private val subject = PublishSubject.create<AudioFocus>()
-
 }
