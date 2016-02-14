@@ -91,7 +91,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        i { "onCreate" };
+        i { "onCreate" }
 
         setHasOptionsMenu(true)
     }

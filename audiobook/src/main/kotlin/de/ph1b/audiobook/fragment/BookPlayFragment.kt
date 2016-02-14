@@ -130,12 +130,12 @@ class BookPlayFragment : Fragment() {
         playedTimeView.clicks()
                 .subscribe { launchJumpToPositionDialog() }
 
-        // double click (=more than one click in a 200ms frame)
         var lastClick = 0L
+        val doubleClickTime = ViewConfiguration.getDoubleTapTimeout()
         coverFrame.clicks()
                 .filter {
                     val currentTime = System.currentTimeMillis()
-                    val doubleClick = currentTime - lastClick < 200
+                    val doubleClick = currentTime - lastClick < doubleClickTime
                     lastClick = currentTime
                     doubleClick
                 }
