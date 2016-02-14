@@ -92,6 +92,17 @@ fun <T> JSONArray.toMutableList(): MutableList<T> {
     return list
 }
 
+fun SQLiteDatabase.simpleQuery(table: String,
+                               columns: Array<String>? = null,
+                               selection: String? = null,
+                               selectionArgs: Array<String>? = null,
+                               groupBy: String? = null,
+                               having: String ? = null,
+                               orderBy: String? = null,
+                               limit: String? = null,
+                               distinct: Boolean = false): Cursor {
+    return query(distinct, table, columns, selection, selectionArgs, groupBy, having, orderBy, limit)
+}
 
 inline fun <T> JSONArray.forEach(action: (T) -> Unit): Unit {
     for (i in 0..length() - 1) {
