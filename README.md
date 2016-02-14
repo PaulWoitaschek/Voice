@@ -1,4 +1,4 @@
-MaterialAudiobookPlayer [![Build Status](http://193.164.131.231:8080/buildStatus/icon?job=MaterialAudiobookPlayer&build=16)](http://193.164.131.231:8080/job/MaterialAudiobookPlayer/)
+MaterialAudiobookPlayer
 =======================
 
 This is my digital playground where I am learning. I'm integrating and validating new technologies and ideas here, playing around with new UI / UX components and developing with the best coding standard I come up with.
