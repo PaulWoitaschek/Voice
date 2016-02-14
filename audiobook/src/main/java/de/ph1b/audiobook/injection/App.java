@@ -286,7 +286,7 @@ public class App extends Application {
         }
     }
 
-    private static class BreadCrumbSenderFactory implements ReportSenderFactory {
+    public static class BreadCrumbSenderFactory implements ReportSenderFactory {
 
         @Override
         public ReportSender create(Context context, ACRAConfiguration config) {
