@@ -21,6 +21,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import org.acra.ACRA;
@@ -38,6 +39,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import dagger.Lazy;
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.activity.BaseActivity;
 import de.ph1b.audiobook.activity.BookActivity;
@@ -57,6 +59,7 @@ import de.ph1b.audiobook.fragment.ImagePickerFragment;
 import de.ph1b.audiobook.fragment.SettingsFragment;
 import de.ph1b.audiobook.model.BookAdder;
 import de.ph1b.audiobook.persistence.BookChest;
+import de.ph1b.audiobook.persistence.LogStorage;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.playback.BookReaderService;
 import de.ph1b.audiobook.playback.MediaPlayerController;
@@ -81,16 +84,21 @@ import timber.log.Timber;
 public class App extends Application {
 
     private static ApplicationComponent applicationComponent;
+    @Inject Lazy<LogToStorageTree> toStorageTree;
     @Inject BookAdder bookAdder;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
+        applicationComponent = newComponent();
+        component().inject(this);
+
         ConfigurationBuilder acraBuilder = new ConfigurationBuilder(this);
         if (BuildConfig.DEBUG) {
             // init timber
             Timber.plant(new Timber.DebugTree());
+            Timber.plant(toStorageTree.get());
 
             // force enable acra in debug mode
             PreferenceManager.getDefaultSharedPreferences(this)
@@ -108,9 +116,6 @@ public class App extends Application {
         Timber.plant(new BreadcrumbTree());
 
         Timber.i("onCreate");
-
-        applicationComponent = newComponent();
-        component().inject(this);
 
         bookAdder.scanForFiles(true);
         startService(new Intent(this, BookReaderService.class));
@@ -203,7 +208,7 @@ public class App extends Application {
             onLogGathered(priorityToPrefix(priority) + "/[" + tag + "]\t" + message + "\n");
         }
 
-        abstract void onLogGathered(String message);
+        abstract void onLogGathered(@NonNull String message);
 
 
         /**
@@ -232,6 +237,21 @@ public class App extends Application {
         }
     }
 
+    public static class LogToStorageTree extends FormattedTree {
+
+        private final LogStorage logStorage;
+
+        @Inject
+        public LogToStorageTree(@NonNull LogStorage logStorage) {
+            this.logStorage = logStorage;
+        }
+
+        @Override
+        void onLogGathered(@NonNull String message) {
+            logStorage.put(message);
+        }
+    }
+
     /**
      * Curtom tree that adds regular logs as custom data to acra.
      */
@@ -245,7 +265,7 @@ public class App extends Application {
         }
 
         @Override
-        void onLogGathered(String message) {
+        void onLogGathered(@NonNull String message) {
             ACRA.getErrorReporter().putCustomData(String.valueOf(getNextCrumbNumber()), message);
         }
 
