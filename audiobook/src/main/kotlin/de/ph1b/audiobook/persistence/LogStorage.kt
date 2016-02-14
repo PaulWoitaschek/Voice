@@ -17,66 +17,34 @@
 
 package de.ph1b.audiobook.persistence
 
-import android.content.SharedPreferences
-import org.json.JSONArray
-import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
-import javax.inject.Named
 import javax.inject.Singleton
 import java.util.Date as DateWithTime
 
-/** Storage for logs. Stores up to [AMOUNT_OF_ENTRIES] logs for each day. */
+/** Storage for logs. Stores up to [AMOUNT_OF_ENTRIES] logs for each day. After that removes the first */
 @Singleton class LogStorage
-@Inject constructor(@Named(FOR) val storage: SharedPreferences) {
+@Inject constructor() {
 
-    private val logCache = HashMap<Date, MutableList<String>>()
+    private val logs = ArrayList<String>(AMOUNT_OF_ENTRIES)
     private val dateField = DateWithTime()
     private val format = SimpleDateFormat("HH:mm:ss")
 
     fun put(message: String) {
-        val timestamp = System.currentTimeMillis()
-        val key = Date(timestamp)
-        // get list from cache. If there is none, retrieve it from storage
-        val cached = logCache[key]
-        val listToUse: MutableList<String> = if (cached != null) {
-            cached
-        } else {
-            val inStorage = storage.getString(key.toString(), null)
-            val fromStorage: MutableList<String> = if (inStorage == null) {
-                ArrayList()
-            } else {
-                JSONArray(inStorage).toMutableList()
-            }
-            logCache.put(key, fromStorage)
-            fromStorage
-        }
-
         // remove items if there are too many
-        if (listToUse.size > AMOUNT_OF_ENTRIES) {
-            listToUse.removeAt(0)
+        if (logs.size > AMOUNT_OF_ENTRIES) {
+            logs.removeAt(0)
         }
         // add a timestamp
-        dateField.time = timestamp
+        dateField.time = System.currentTimeMillis()
         val stampMessage = "${format.format(dateField)}\t$message"
-        listToUse.add(stampMessage)
-
-        // update storage
-        storage.edit() {
-            val content = JSONArray(listToUse)
-            setString(key.toString() to content.toString())
-        }
+        logs.add(stampMessage)
     }
 
-    fun get(date: Date): List<String> {
-        val key = date.toString()
-        val value: String? = storage.getString(key, null)
-        return if (value == null) emptyList() else JSONArray(value).toList()
-    }
+    fun get(): List<String> = logs
 
     companion object {
-        const val FOR = "forLogStorage"
         private const val AMOUNT_OF_ENTRIES = 1000
     }
 }
