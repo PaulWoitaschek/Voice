@@ -28,6 +28,7 @@ import dagger.Module;
 import dagger.Provides;
 import de.paul_woitaschek.mediaplayer.Player;
 import de.ph1b.audiobook.BuildConfig;
+import de.ph1b.audiobook.persistence.LogStorage;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.playback.MediaPlayerCapabilities;
 
@@ -49,6 +50,13 @@ public class BaseModule {
     @Named(MediaPlayerCapabilities.FOR)
     static SharedPreferences provideForMediaPlayerCapabilities(Context context) {
         String name = "forMediaPlayerCapabilities";
+        return context.getSharedPreferences(name, Context.MODE_PRIVATE);
+    }
+
+    @Provides
+    @Named(LogStorage.FOR)
+    static SharedPreferences provideForLogStorage(Context context) {
+        String name = "forLogStorage";
         return context.getSharedPreferences(name, Context.MODE_PRIVATE);
     }
 
