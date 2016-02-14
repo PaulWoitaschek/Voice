@@ -166,6 +166,7 @@ class PlayPauseDrawable : Drawable() {
     }
 
     fun transformToPause(animated: Boolean) {
+        jumpToCurrentState()
         if (isPlay) {
             if (animated) {
                 toggle()
@@ -178,13 +179,12 @@ class PlayPauseDrawable : Drawable() {
 
     override fun jumpToCurrentState() {
         v { "jumpToCurrentState(}" }
-        if (animator != null) {
-            animator!!.cancel()
-        }
+        animator?.cancel()
         progress = if (isPlay) 1.0f else 0.0f
     }
 
     fun transformToPlay(animated: Boolean) {
+        jumpToCurrentState()
         if (!isPlay) {
             if (animated) {
                 toggle()

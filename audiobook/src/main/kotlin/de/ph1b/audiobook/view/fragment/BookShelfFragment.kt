@@ -305,6 +305,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
      * Sets the fab icon correctly accordingly to the new play state.
      */
     fun setPlayerPlaying(playing: Boolean) {
+        i { "Called setPlayerPlaying $playing" }
         if (playing) {
             playPauseDrawable.transformToPause(!firstPlayStateUpdate)
         } else {
