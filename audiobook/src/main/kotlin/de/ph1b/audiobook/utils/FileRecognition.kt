@@ -60,6 +60,11 @@ object FileRecognition {
         }
     }
 
+    val imageFilter = FileFilter {
+        val extension = it.extension.toLowerCase()
+        return@FileFilter imageTypes.contains(extension)
+    }
+
     val folderAndMusicFilter = FileFilter {
         if (it.isDirectory) {
             return@FileFilter true
@@ -73,9 +78,7 @@ object FileRecognition {
         if (it.isDirectory) {
             return@FileFilter true
         } else {
-            val extension = it.extension
-                    .toLowerCase()
-            return@FileFilter imageTypes.contains(extension)
+            return@FileFilter imageFilter.accept(it)
         }
     }
 }

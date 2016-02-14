@@ -18,27 +18,21 @@
 package de.ph1b.audiobook.model
 
 import android.Manifest
-import android.app.ActivityManager
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.os.Build
 import android.support.v4.content.ContextCompat
-import com.squareup.picasso.Picasso
 import d
 import de.ph1b.audiobook.activity.BaseActivity
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.uitools.ImageHelper
+import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import de.ph1b.audiobook.utils.BookVendor
 import de.ph1b.audiobook.utils.FileRecognition
 import de.ph1b.audiobook.utils.MediaAnalyzer
-import e
 import rx.subjects.BehaviorSubject
 import v
-
 import java.io.File
-import java.io.IOException
 import java.util.*
 import java.util.concurrent.Executors
 import javax.inject.Inject
@@ -53,7 +47,7 @@ import javax.inject.Singleton
 @Singleton
 class BookAdder
 @Inject
-constructor(private val c: Context, private val prefs: PrefsManager, private val db: BookChest, private val bookVendor: BookVendor, private val activityManager: ActivityManager, private val imageHelper: ImageHelper, private val mediaAnalyzer: MediaAnalyzer) {
+constructor(private val context: Context, private val prefs: PrefsManager, private val db: BookChest, private val bookVendor: BookVendor, private val mediaAnalyzer: MediaAnalyzer, private val coverCollector: CoverFromDiscCollector) {
 
     private val executor = Executors.newSingleThreadExecutor()
     private val scannerActive = BehaviorSubject.create(false)
@@ -121,95 +115,6 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         }
     }
 
-    /**
-     * Returns a Bitmap from an array of [File] that should be images
-
-     * @param coverFiles The image files to check
-     * *
-     * @return A bitmap or `null` if there is none.
-     * *
-     * @throws InterruptedException If the scanner has been requested to reset.
-     */
-    @Throws(InterruptedException::class)
-    private fun getCoverFromDisk(coverFiles: List<File>): Bitmap? {
-        // if there are images, get the first one.
-        val mi = ActivityManager.MemoryInfo()
-        activityManager.getMemoryInfo(mi)
-        val dimen = imageHelper.smallerScreenSize
-        for (f in coverFiles) {
-            throwIfStopRequested()
-            // only read cover if its size is less than a third of the available memory
-            if (f.length() < (mi.availMem / 3L)) {
-                try {
-                    return Picasso.with(c).load(f).resize(dimen, dimen).get()
-                } catch (ex: IOException) {
-                    e(ex) { "Error when saving cover $f" }
-                }
-            }
-        }
-        return null
-    }
-
-    /**
-     * Finds an embedded cover within a [Chapter]
-
-     * @param chapters The chapters to search trough
-     * *
-     * @return An embedded cover if there is one. Else return `null`
-     * *
-     * @throws InterruptedException If the scanner has been requested to reset.
-     */
-    @Throws(InterruptedException::class)
-    private fun getEmbeddedCover(chapters: List<Chapter>): Bitmap? {
-        var tries = 0
-        val maxTries = 5
-        for (c in chapters) {
-            if (++tries < maxTries) {
-                throwIfStopRequested()
-                val cover = imageHelper.getEmbeddedCover(c.file)
-                if (cover != null) {
-                    return cover
-                }
-            } else {
-                return null
-            }
-        }
-        return null
-    }
-
-    /**
-     * Trys to find covers and saves them to storage if found.
-
-     * @throws InterruptedException
-     */
-    @Throws(InterruptedException::class)
-    private fun findCovers() {
-        for (b in bookVendor.all()) {
-            throwIfStopRequested()
-            val coverFile = b.coverFile()
-            if (!coverFile.exists()) {
-                if (b.type === Book.Type.COLLECTION_FOLDER || b.type === Book.Type.SINGLE_FOLDER) {
-                    val root = File(b.root)
-                    if (root.exists()) {
-                        val images = getAllContainingFiles(listOf(root), false)
-                        val cover = getCoverFromDisk(images)
-                        if (cover != null) {
-                            imageHelper.saveCover(cover, coverFile)
-                            Picasso.with(c).invalidate(coverFile)
-                            db.updateBook(b)
-                            continue
-                        }
-                    }
-                }
-                val cover = getEmbeddedCover(b.chapters)
-                if (cover != null) {
-                    imageHelper.saveCover(cover, coverFile)
-                    Picasso.with(c).invalidate(coverFile)
-                    db.updateBook(b)
-                }
-            }
-        }
-    }
 
     /**
      * Starts scanning for new [Book] or changes within.
@@ -228,7 +133,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                 try {
                     deleteOldBooks()
                     checkForBooks()
-                    findCovers()
+                    coverCollector.findCovers(bookVendor.all())
                 } catch (ex: InterruptedException) {
                     d(ex) { "We were interrupted at adding a book" }
                 }
@@ -346,7 +251,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
             throw InterruptedException("Storage is not mounted")
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            if (ContextCompat.checkSelfPermission(c, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 throw InterruptedException("Does not have external storage permission")
             }
         }
