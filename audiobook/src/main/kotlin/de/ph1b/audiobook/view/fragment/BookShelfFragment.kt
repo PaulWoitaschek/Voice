@@ -30,6 +30,7 @@ import android.support.v7.widget.SimpleItemAnimator
 import android.view.*
 import android.widget.PopupMenu
 import com.getbase.floatingactionbutton.FloatingActionButton
+import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.actionBar
 import de.ph1b.audiobook.activity.SettingsActivity
@@ -40,13 +41,16 @@ import de.ph1b.audiobook.dialog.NoFolderWarningDialogFragment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.mvp.RxBaseFragment
+import de.ph1b.audiobook.persistence.LogStorage
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.presenter.BookShelfBasePresenter
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import timber.log.Timber
+import java.sql.Date
 import java.util.*
 import javax.inject.Inject
+import dagger.Lazy as DaggerLazy
 
 /**
  * Showing the shelf of all the available books and provide a navigation to each book
@@ -63,6 +67,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
 
     // injection
     @Inject internal lateinit var prefs: PrefsManager
+    @Inject internal lateinit var logStorage: DaggerLazy<LogStorage>
 
     // viewAdded
     private lateinit var recyclerView: RecyclerView
@@ -131,27 +136,45 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
         val currentPlaying = menu.findItem(R.id.action_current)
         currentPlaying.isVisible = currentBook != null
 
+        if (BuildConfig.DEBUG) {
+            val sendLogs = menu.findItem(R.id.sendLogs)
+            sendLogs.isVisible = true
+        }
+
         // sets the grid / list toggle icon
         val displayModeItem = menu.findItem(R.id.action_change_layout)
         displayModeItem.setIcon(prefs.displayMode.inverted().icon)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        return when (item.itemId) {
             R.id.action_settings -> {
                 startActivity(Intent(context, SettingsActivity::class.java))
-                return true
+                true
             }
             R.id.action_current -> {
                 invokeBookSelectionCallback(prefs.currentBookId.value)
-                return true
+                true
             }
             R.id.action_change_layout -> {
                 prefs.displayMode = prefs.displayMode.inverted()
                 initRecyclerView()
-                return true
+                true
             }
-            else -> return super.onOptionsItemSelected(item)
+            R.id.sendLogs -> {
+                val intent = Intent(Intent.ACTION_SEND).apply {
+                    type = "message/rfc822";
+                    putExtra(Intent.EXTRA_EMAIL, arrayOf("woitaschek@gmail.com"));
+                    putExtra(Intent.EXTRA_SUBJECT, "MAP Logs");
+                    val logs = logStorage.get().get(Date(System.currentTimeMillis()))
+                    val logsBuilder = StringBuilder()
+                    logs.forEach { logsBuilder.append(it).append("\n") }
+                    putExtra(Intent.EXTRA_TEXT, logsBuilder.toString());
+                }
+                startActivity(Intent.createChooser(intent, "Send mail..."));
+                return true;
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

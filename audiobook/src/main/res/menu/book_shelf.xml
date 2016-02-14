@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools">
 
     <item
         android:id="@+id/action_current"
         android:icon="@drawable/ic_play_circle_outline"
         android:orderInCategory="90"
         android:title="@string/current_book"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_change_layout"
         android:icon="@drawable/ic_view_grid_white_24dp"
         android:orderInCategory="95"
         android:title="@string/change_layout_type"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/sendLogs"
+        android:title="Send logs"
+        android:visible="false"
+        app:showAsAction="never"
+        tools:ignore="HardcodedText"/>
 
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
 </menu>
