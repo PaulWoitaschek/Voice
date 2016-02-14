@@ -20,26 +20,47 @@ package de.ph1b.audiobook.persistence
 import android.content.SharedPreferences
 import org.json.JSONArray
 import java.sql.Date
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
 
-/**
- * Created by ph1b on 14/02/16.
- */
+/** Storage for logs. Stores up to [AMOUNT_OF_ENTRIES] logs for each day. */
 @Singleton
 class LogStorage
 @Inject
 constructor(@Named(FOR) val storage: SharedPreferences) {
 
-    fun put(message: String) {
-        val key = Date(System.currentTimeMillis()).toString()
-        val value: String? = storage.getString(key, null)
-        val content = if (value != null) JSONArray(value) else JSONArray()
+    private val logCache = HashMap<Date, MutableList<String>>()
 
-        content.put(message)
+    fun put(message: String) {
+
+        val key = Date(System.currentTimeMillis())
+        // get list from cache. If there is none, retrieve it from storage
+        val cached = logCache[key]
+        val listToUse: MutableList<String> = if (cached != null) {
+            cached
+        } else {
+            val inStorage = storage.getString(key.toString(), null)
+            val fromStorage: MutableList<String> = if (inStorage == null) {
+                ArrayList()
+            } else {
+                JSONArray(inStorage).toMutableList()
+            }
+            logCache.put(key, fromStorage)
+            fromStorage
+        }
+
+        // remove items if there are too many
+        if (listToUse.size > AMOUNT_OF_ENTRIES) {
+            listToUse.removeAt(0)
+        }
+        listToUse.add(message)
+
+        // update storage
         storage.edit() {
-            setString(key to content.toString())
+            val content = JSONArray(listToUse)
+            setString(key.toString() to content.toString())
         }
     }
 
@@ -51,5 +72,6 @@ constructor(@Named(FOR) val storage: SharedPreferences) {
 
     companion object {
         const val FOR = "forLogStorage"
+        private const val AMOUNT_OF_ENTRIES = 1000
     }
 }

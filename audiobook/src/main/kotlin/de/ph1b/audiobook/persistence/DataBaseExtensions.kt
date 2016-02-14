@@ -84,11 +84,14 @@ fun SharedPreferences.Editor.setBoolean(pair: Pair<String, Boolean>) =
 fun SharedPreferences.Editor.setStringSet(pair: Pair<String, Set<String>>) =
         putStringSet(pair.first, pair.second)
 
-fun <T> JSONArray.toList(): List<T> {
+fun <T> JSONArray.toList(): List<T> = toMutableList()
+
+fun <T> JSONArray.toMutableList(): MutableList<T> {
     val list = ArrayList<T>(length())
     forEach<T> { list.add(it) }
     return list
 }
+
 
 inline fun <T> JSONArray.forEach(action: (T) -> Unit): Unit {
     for (i in 0..length() - 1) {
