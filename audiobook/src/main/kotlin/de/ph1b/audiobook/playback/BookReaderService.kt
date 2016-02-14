@@ -91,8 +91,16 @@ class BookReaderService : Service() {
             }
         }
     }
-    private val mediaSession by lazy {
-        MediaSessionCompat(this, TAG).apply {
+    private lateinit var mediaSession: MediaSessionCompat
+    /**
+     * The last file the [.notifyChange] has used to update the metadata.
+     */
+    @Volatile private var lastFileForMetaData = File("")
+
+    override fun onCreate() {
+        super.onCreate()
+
+        mediaSession = MediaSessionCompat(this, TAG).apply {
             setCallback(object : MediaSessionCompat.Callback() {
                 override fun onSkipToNext() {
                     onFastForward()
@@ -124,14 +132,6 @@ class BookReaderService : Service() {
             })
             setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
         }
-    }
-    /**
-     * The last file the [.notifyChange] has used to update the metadata.
-     */
-    @Volatile private var lastFileForMetaData = File("")
-
-    override fun onCreate() {
-        super.onCreate()
 
         registerReceiver(audioBecomingNoisyReceiver, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
         registerReceiver(headsetPlugReceiver.broadcastReceiver, IntentFilter(Intent.ACTION_HEADSET_PLUG))
