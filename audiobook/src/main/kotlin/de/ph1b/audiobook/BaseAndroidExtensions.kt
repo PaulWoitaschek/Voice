@@ -21,6 +21,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Looper
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
@@ -36,4 +37,13 @@ inline fun<reified T : Activity> Activity.startActivity(args: Bundle? = null, fl
 }
 
 fun Context.layoutInflater() = LayoutInflater.from(this)
+
 fun Fragment.layoutInflater() = LayoutInflater.from(this.context)
+
+fun assertMain() {
+    if (BuildConfig.DEBUG) {
+        if (Looper.getMainLooper().thread != Thread.currentThread()) {
+            throw IllegalArgumentException("Must call on main thread")
+        }
+    }
+}

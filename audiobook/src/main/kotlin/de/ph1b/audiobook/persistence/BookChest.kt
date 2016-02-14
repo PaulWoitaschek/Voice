@@ -183,7 +183,8 @@ constructor(internalDb: InternalDb) {
     /**
      * All active books. We
      */
-    val activeBooks = Observable.defer { Observable.from(synchronized(this) { ArrayList(active) }) }
+    val activeBooks = Observable.fromCallable { synchronized(this) { ArrayList(active) } }
+            .flatMapIterable { list -> list }
 
     @Synchronized fun getOrphanedBooks(): List<Book> {
         return ArrayList(orphaned)

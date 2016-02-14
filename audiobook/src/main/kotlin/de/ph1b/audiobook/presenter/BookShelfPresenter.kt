@@ -85,7 +85,6 @@ constructor(private val bookChest: BookChest,
                         bookChest.activeBooks
                                 .singleOrDefault(null, { it.id == id })
                     }
-                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { view.currentBookChanged(it) })
 
             // observe if the scanner is active and there are books and show spinner accordingly.
