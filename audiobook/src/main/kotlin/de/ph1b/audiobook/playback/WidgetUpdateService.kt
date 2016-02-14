@@ -44,9 +44,10 @@ import de.ph1b.audiobook.receiver.BaseWidgetProvider
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.utils.BookVendor
+import e
 import rx.Observable
 import rx.subscriptions.CompositeSubscription
-import timber.log.Timber
+
 import java.io.IOException
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
@@ -130,7 +131,7 @@ class WidgetUpdateService : Service() {
                 } else {
                     // directly going back to bookChoose
                     val wholeWidgetClickI = Intent(this@WidgetUpdateService, BookActivity::class.java)
-                    wholeWidgetClickI.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    wholeWidgetClickI.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                     val wholeWidgetClickPI = PendingIntent.getActivity(this@WidgetUpdateService, System.currentTimeMillis().toInt(),
                             wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT)
                     remoteViews.setImageViewBitmap(R.id.imageView,
@@ -213,8 +214,8 @@ class WidgetUpdateService : Service() {
             if (!book.useCoverReplacement && coverFile.exists() && coverFile.canRead()) {
                 cover = Picasso.with(this@WidgetUpdateService).load(coverFile).get()
             }
-        } catch (e: IOException) {
-            Timber.e(e, "Error when retrieving cover for book %s", book)
+        } catch (ex: IOException) {
+            e(ex) { "Error when retrieving cover for book $book" }
         }
 
         if (cover == null) {

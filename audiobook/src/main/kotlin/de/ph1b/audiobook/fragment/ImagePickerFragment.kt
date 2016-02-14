@@ -35,9 +35,10 @@ import de.ph1b.audiobook.layoutInflater
 import de.ph1b.audiobook.uitools.setInvisible
 import de.ph1b.audiobook.uitools.setVisible
 import de.ph1b.audiobook.utils.BookVendor
+import i
 import okhttp3.HttpUrl
 import rx.subjects.BehaviorSubject
-import timber.log.Timber
+
 import java.io.Serializable
 import java.net.URLEncoder
 import javax.inject.Inject
@@ -96,7 +97,7 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
                 val values = httpUrl.queryParameterValues("imgurl")
                 // intercept images
                 if (values.isNotEmpty()) {
-                    Timber.i("img url values are $values")
+                    i { "img url values are $values" }
                     val first = values.first()
                     val editCover = EditCoverDialogFragment.newInstance(this@ImagePickerFragment, book, first)
                     editCover.show(fragmentManager, FM_EDIT_COVER)
@@ -109,14 +110,14 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
 
-                Timber.i("page started with $url")
+                i { "page started with $url" }
                 webViewIsLoading.onNext(true)
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
 
-                Timber.i("page stopped with $url")
+                i { "page stopped with $url" }
                 webViewIsLoading.onNext(false)
             }
 
@@ -166,7 +167,7 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
         webViewIsLoading
                 .filter { it == true }
                 .filter { !rotation.hasStarted() }
-                .doOnNext { Timber.i("is loading. Start animation") }
+                .doOnNext { i { "is loading. Start animation" } }
                 .subscribe {
                     rotation.start()
                 }
@@ -174,7 +175,7 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
         rotation.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationRepeat(p0: Animation?) {
                 if (webViewIsLoading.value == false ) {
-                    Timber.i("we are in the refresh round. cancel now.")
+                    i { "we are in the refresh round. cancel now." }
                     rotation.cancel()
                     rotation.reset()
                 }

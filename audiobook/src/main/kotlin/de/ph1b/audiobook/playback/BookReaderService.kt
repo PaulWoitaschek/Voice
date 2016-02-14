@@ -31,6 +31,7 @@ import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import com.squareup.picasso.Picasso
+import d
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookChest
@@ -42,9 +43,11 @@ import de.ph1b.audiobook.receiver.AudioFocusReceiver
 import de.ph1b.audiobook.receiver.HeadsetPlugReceiver
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
+import e
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
-import timber.log.Timber
+import v
+
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject
@@ -168,7 +171,7 @@ class BookReaderService : Service() {
             add(playStateManager.playState
                     .observeOn(Schedulers.io())
                     .subscribe {
-                        Timber.d("onPlayStateManager.PlayStateChanged:%s", it)
+                        d { "onPlayStateManager.PlayStateChanged:$it" }
                         val controllerBook = playerController.book
                         if (controllerBook != null) {
                             when (it!!) {
@@ -218,7 +221,7 @@ class BookReaderService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Timber.v("onStartCommand, intent=%s, flags=%d, startId=%d", intent, flags, startId)
+        v { "onStartCommand, intent=$intent, flags=$flags, startId=$startId" }
 
         if (intent?.action == Intent.ACTION_MEDIA_BUTTON ) {
             MediaButtonReceiver.handleIntent(mediaSession, intent)
@@ -228,7 +231,7 @@ class BookReaderService : Service() {
     }
 
     override fun onDestroy() {
-        Timber.v("onDestroy called")
+        v { "onDestroy called" }
         playerController.stop()
 
         try {
@@ -248,7 +251,7 @@ class BookReaderService : Service() {
     }
 
     private fun notifyChange(what: ChangeType, book: Book) {
-        Timber.d("updateRemoteControlClient called")
+        d { "updateRemoteControlClient called" }
 
         val c = book.currentChapter()
         val playState = playStateManager.playState.value
@@ -272,13 +275,13 @@ class BookReaderService : Service() {
             if (!book.useCoverReplacement && coverFile.exists() && coverFile.canRead()) {
                 try {
                     bitmap = Picasso.with(this@BookReaderService).load(coverFile).get()
-                } catch (e: IOException) {
-                    Timber.e(e, "Error when retrieving cover for book %s", book)
+                } catch (ex: IOException) {
+                    e(ex) { "Error when retrieving cover for book $book" }
                 }
             }
             if (bitmap == null) {
                 val replacement = CoverReplacement(book.name, this@BookReaderService)
-                Timber.d("replacement dimen: %d:%d", replacement.intrinsicWidth, replacement.intrinsicHeight)
+                d { "replacement dimen: ${replacement.intrinsicWidth}:${replacement.intrinsicHeight}" }
                 bitmap = imageHelper.drawableToBitmap(replacement, imageHelper.smallerScreenSize, imageHelper.smallerScreenSize)
             }
             // we make a copy because we do not want to use picassos bitmap, since

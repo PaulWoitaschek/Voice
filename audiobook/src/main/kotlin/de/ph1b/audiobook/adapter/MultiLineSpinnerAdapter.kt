@@ -30,7 +30,8 @@ import android.widget.SpinnerAdapter
 import android.widget.TextView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.uitools.ThemeUtil
-import timber.log.Timber
+import i
+
 import java.util.*
 
 /**
@@ -49,7 +50,7 @@ class MultiLineSpinnerAdapter<Type>(private val spinner: Spinner, private val co
                     convertView as TextView
                 }
 
-        Timber.i("parent is $parent")
+        i { "parent is $parent" }
         val selected = position == spinner.selectedItemPosition
         textView.text = getItem(position).shown
 

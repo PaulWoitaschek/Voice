@@ -21,6 +21,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.text.TextUtils
+import d
 import de.ph1b.audiobook.dialog.HideFolderDialog
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.NaturalOrderComparator
@@ -29,8 +30,10 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.utils.FileRecognition
 import de.ph1b.audiobook.view.FolderChooserActivity
 import de.ph1b.audiobook.view.FolderChooserView
+import i
 import rx.subscriptions.CompositeSubscription
-import timber.log.Timber
+import v
+
 import java.io.File
 import java.util.*
 import java.util.regex.Pattern
@@ -120,7 +123,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
      * @return true if the presenter handled the back command.
      */
     fun backConsumed(): Boolean {
-        Timber.d("up called. currentFolder=$chosenFile")
+        d { "up called. currentFolder=$chosenFile" }
         if (canGoBack()) {
             fileSelected(chosenFile!!.closestFolder().parentFile)
             return true
@@ -144,7 +147,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
                     collections.add(chosen.absolutePath)
                     prefsManager.collectionFolders = collections
                 }
-                Timber.v("chosenCollection = $chosen")
+                v { "chosenCollection = $chosen" }
             }
             FolderChooserActivity.OperationMode.SINGLE_BOOK -> {
                 if (canAddNewFolder(chosen.absolutePath)) {
@@ -152,7 +155,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
                     singleBooks.add(chosen.absolutePath)
                     prefsManager.singleBookFolders = singleBooks
                 }
-                Timber.v("chosenSingleBook = $chosen")
+                v { "chosenSingleBook = $chosen" }
             }
         }
 
@@ -166,7 +169,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
      * * book folder
      */
     private fun canAddNewFolder(newFile: String): Boolean {
-        Timber.v("canAddNewFolder called with $newFile")
+        v { "canAddNewFolder called with $newFile" }
         val folders = ArrayList(prefsManager.collectionFolders)
         folders.addAll(prefsManager.singleBookFolders)
 
@@ -179,7 +182,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
         for (s in folders) {
 
             if (newFile == s) {
-                Timber.i("file is already in the list.")
+                i { "file is already in the list." }
                 // same folder, this should not be added
                 return false
             }
@@ -193,7 +196,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
                 }
             }
             if (filesAreSubsets) {
-                Timber.i("the files are sub folders of each other.")
+                i { "the files are sub folders of each other." }
                 view!!.showSubFolderWarning(s, newFile)
                 return false
             }

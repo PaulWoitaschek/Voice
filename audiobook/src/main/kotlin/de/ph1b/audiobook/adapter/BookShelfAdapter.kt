@@ -40,7 +40,8 @@ import de.ph1b.audiobook.model.NaturalOrderComparator
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.view.fragment.BookShelfFragment
-import timber.log.Timber
+import i
+
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -71,7 +72,7 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
     @Inject internal lateinit var prefs: PrefsManager
 
     init {
-        Timber.i("A new adapter was created.")
+        i { "A new adapter was created." }
         App.component().inject(this)
         setHasStableIds(true)
     }
@@ -92,7 +93,7 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
     }
 
     fun removeBook(book: Book) {
-        Timber.i("removeBooks called with $book");
+        i { "removeBooks called with $book" };
         for (i in 0..sortedList.size() - 1) {
             if (sortedList.get(i).id == book.id) {
                 sortedList.removeItemAt(i)
@@ -107,7 +108,7 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
      * @param book The new book
      */
     fun updateOrAddBook(book: Book) {
-        Timber.i("updateOrAddBook ${book.name}")
+        i { "updateOrAddBook ${book.name}" }
         var index = -1
         for (i in 0..sortedList.size() - 1) {
             if (sortedList.get(i).id == book.id) {
@@ -129,7 +130,7 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
      * @param books The new set of books
      */
     fun newDataSet(books: List<Book>) {
-        Timber.i("newDataSet was called with ${books.size} books")
+        i { "newDataSet was called with ${books.size} books" }
         sortedList.batched {
             // remove old books
             val booksToDelete = ArrayList<Book>(size())
@@ -176,7 +177,7 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
         set(value) {
             if (value != field) {
                 field = value
-                Timber.i("displaymode changed to $field")
+                i { "displaymode changed to $field" }
                 notifyDataSetChanged()
             }
         }
@@ -195,7 +196,7 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
      * @param id the id of the item
      */
     fun notifyItemAtIdChanged(id: Long) {
-        Timber.i("notifyItemAtIdChanged: $id")
+        i { "notifyItemAtIdChanged: $id" }
         for (i in 0..sortedList.size() - 1) {
             if (sortedList.get(i).id == id) {
                 notifyItemChanged(i)

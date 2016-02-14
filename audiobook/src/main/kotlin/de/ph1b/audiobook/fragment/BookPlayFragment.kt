@@ -55,11 +55,12 @@ import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
 import de.ph1b.audiobook.utils.BookVendor
+import i
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.functions.Action1
 import rx.subscriptions.CompositeSubscription
-import timber.log.Timber
+
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -204,7 +205,7 @@ class BookPlayFragment : Fragment() {
                 // this is a new value
                 val realInput = bookSpinner.tag != null && bookSpinner.tag != it
                 if (realInput) {
-                    Timber.i("spinner: onItemSelected. firing: %d", it)
+                    i { "spinner: onItemSelected. firing: $it" }
                     mediaPlayerController.changePosition(0, book!!.chapters[it].file)
                     bookSpinner.tag = it
                 }
@@ -322,7 +323,7 @@ class BookPlayFragment : Fragment() {
 
                         override fun call(playState: PlayStateManager.PlayState) {
                             // animate only if this is not the first run
-                            Timber.i("onNext with playState %s", playState)
+                            i { "onNext with playState $playState" }
                             if (playState === PlayStateManager.PlayState.PLAYING) {
                                 playPauseDrawable.transformToPause(!firstRun)
                             } else {

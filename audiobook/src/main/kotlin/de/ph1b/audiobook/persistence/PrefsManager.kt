@@ -189,5 +189,4 @@ constructor(c: Context, @Named(FOR) private val sp: SharedPreferences) {
     companion object {
         const val FOR = "forPrefsManager"
     }
-
 }

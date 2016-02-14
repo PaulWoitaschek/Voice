@@ -25,6 +25,7 @@ import android.preference.Preference
 import android.preference.PreferenceFragment
 import android.view.*
 import android.widget.Toast
+import d
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.activity.BaseActivity
 import de.ph1b.audiobook.dialog.DonationDialogFragment
@@ -38,7 +39,7 @@ import de.ph1b.audiobook.interfaces.SettingsSetListener
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.vendinghelper.IabHelper
 import de.ph1b.audiobook.view.FolderOverviewActivity
-import timber.log.Timber
+
 import javax.inject.Inject
 
 class SettingsFragment : PreferenceFragment(), DonationDialogFragment.OnDonationClickedListener, SettingsSetListener {
@@ -132,6 +133,7 @@ class SettingsFragment : PreferenceFragment(), DonationDialogFragment.OnDonation
         seekPreference.summary = resources.getQuantityString(R.plurals.seconds, seekAmount, seekAmount)
     }
 
+    @Suppress("OverridingDeprecatedMember")
     override fun onAttach(activity: Activity) {
         @Suppress("DEPRECATION")
         super.onAttach(activity)
@@ -154,7 +156,7 @@ class SettingsFragment : PreferenceFragment(), DonationDialogFragment.OnDonation
     }
 
     override fun onDonationClicked(item: String) {
-        Timber.d("onDonationClicked with item=%s and donationAvailable=%b", item, donationAvailable)
+        d { "onDonationClicked with item=$item and donationAvailable=$donationAvailable" }
         if (donationAvailable) {
             iabHelper.launchPurchaseFlow(hostingActivity, item
             ) { result ->

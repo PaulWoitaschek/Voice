@@ -39,9 +39,10 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.MediaPlayerController
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.utils.BookVendor
+import i
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import timber.log.Timber
+
 import javax.inject.Inject
 
 /**
@@ -103,7 +104,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
     private lateinit var adapter: BookmarkAdapter
 
     fun addClicked() {
-        Timber.i("Add bookmark clicked.")
+        i { "Add bookmark clicked." }
         var title = bookmarkTitle.text.toString()
         if (title.isEmpty()) {
             title = book.currentChapter().name

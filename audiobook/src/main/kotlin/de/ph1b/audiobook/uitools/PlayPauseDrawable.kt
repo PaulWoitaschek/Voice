@@ -24,7 +24,8 @@ import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.util.Property
 import android.view.animation.DecelerateInterpolator
-import timber.log.Timber
+import v
+
 
 /**
  * This code was modified by me, Paul Woitaschek. All these changes are licensed under GPLv3. The
@@ -176,7 +177,7 @@ class PlayPauseDrawable : Drawable() {
     }
 
     override fun jumpToCurrentState() {
-        Timber.v("jumpToCurrentState()")
+        v { "jumpToCurrentState(}" }
         if (animator != null) {
             animator!!.cancel()
         }

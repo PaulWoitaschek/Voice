@@ -21,7 +21,9 @@ import android.content.Context
 import android.media.MediaCodec
 import android.media.MediaExtractor
 import android.media.MediaFormat
-import timber.log.Timber
+import d
+import i
+
 import javax.inject.Inject
 
 /**
@@ -47,7 +49,7 @@ constructor(private val context: Context) {
         var stereoChannelCount = 2
         listOf(monoFile, stereoFile)
                 .forEach foreachMark@ { file ->
-                    Timber.i("Checking $file")
+                    i { "Checking $file" }
                     val fd = context.assets.openFd(file)
                     val extractor = MediaExtractor()
                     extractor.setDataSource(fd.fileDescriptor, fd.startOffset, fd.length)
@@ -59,14 +61,14 @@ constructor(private val context: Context) {
                     val containsMime = format.containsKey(MediaFormat.KEY_MIME)
                     val containsDuration = format.containsKey(MediaFormat.KEY_DURATION)
                     if (!containsChannelCount || !containsSampleRate || !containsMime || !containsDuration) {
-                        Timber.d("containsChannelCount=$containsChannelCount and containsSampleRate=$containsSampleRate and containsMime=$containsMime and containsDuration=$containsDuration")
+                        d { "containsChannelCount=$containsChannelCount and containsSampleRate=$containsSampleRate and containsMime=$containsMime and containsDuration=$containsDuration" }
                         return false
                     }
                     val extractorChannelCount = format.getInteger(MediaFormat.KEY_CHANNEL_COUNT)
                     val sampleRate = format.getInteger(MediaFormat.KEY_SAMPLE_RATE)
                     val mime = format.getString(MediaFormat.KEY_MIME)
                     val duration = format.getLong(MediaFormat.KEY_DURATION)
-                    Timber.d("extractorChannelCount=$extractorChannelCount, sampleRate=$sampleRate, mime=$mime, duration=$duration")
+                    d { "extractorChannelCount=$extractorChannelCount, sampleRate=$sampleRate, mime=$mime, duration=$duration" }
 
                     MediaCodec.createDecoderByType(mime).let { codec ->
                         codec.configure(format, null, null, 0)
@@ -136,9 +138,9 @@ constructor(private val context: Context) {
                                             .outputFormat;
                                     codecSampleRate = oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
                                     codecChannelCount = oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
-                                    Timber.d("Codec output format changed");
-                                    Timber.d("Codec output sample rate = " + codecSampleRate);
-                                    Timber.d("Codec output channel count = " + codecChannelCount);
+                                    d { "Codec output format changed" };
+                                    d { "Codec output sample rate = " + codecSampleRate };
+                                    d { "Codec output channel count = " + codecChannelCount };
 
                                     outputBuffers = codec.outputBuffers;
                                     if (file == monoFile) {
@@ -153,9 +155,9 @@ constructor(private val context: Context) {
                     }
                     extractor.release()
                 }
-        Timber.d("monoOutputChunkSize=$monoOutputChunkSize, stereoOutputChunkSize=$stereoOutputChunkSize")
+        d { "monoOutputChunkSize=$monoOutputChunkSize, stereoOutputChunkSize=$stereoOutputChunkSize" }
         if (monoChannelCount == stereoChannelCount && monoOutputChunkSize != stereoOutputChunkSize) {
-            Timber.d("Device channel count is false")
+            d { "Device channel count is false" }
             return false
         }
         return true

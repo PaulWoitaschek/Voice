@@ -26,7 +26,8 @@ import de.ph1b.audiobook.model.Chapter
 import rx.Observable
 import rx.Subscriber
 import rx.subjects.PublishSubject
-import timber.log.Timber
+import v
+
 import java.io.File
 import java.util.*
 import javax.inject.Inject
@@ -87,7 +88,7 @@ constructor(internalDb: InternalDb) {
     fun addBookmarkAtBookPosition(book: Book, title: String) {
         val addedBookmark = Bookmark(book.currentChapter().file, title, book.time)
         addBookmark(addedBookmark)
-        Timber.v("Added bookmark=$addedBookmark")
+        v { "Added bookmark=$addedBookmark" }
     }
 
     fun bookmarks(book: Book) = Observable.just(db)
@@ -162,7 +163,7 @@ constructor(internalDb: InternalDb) {
 
     @Synchronized fun addBook(book: Book) {
         var newBook = book
-        Timber.v("addBook=%s", newBook.name)
+        v { "addBook=${newBook.name}" }
 
         db.asTransaction {
             val bookCv = BookTable.getContentValues(newBook)
@@ -191,7 +192,7 @@ constructor(internalDb: InternalDb) {
     }
 
     @Synchronized fun updateBook(book: Book) {
-        Timber.v("updateBook=%s with time %d", book.name, book.time)
+        v { "updateBook=${book.name} with time ${book.time}" }
 
         val bookIterator = active.listIterator()
         while (bookIterator.hasNext()) {
@@ -220,7 +221,7 @@ constructor(internalDb: InternalDb) {
     }
 
     @Synchronized fun hideBook(book: Book) {
-        Timber.v("hideBook=%s", book.name)
+        v { "hideBook=${book.name}" }
 
         val iterator = active.listIterator()
         while (iterator.hasNext()) {

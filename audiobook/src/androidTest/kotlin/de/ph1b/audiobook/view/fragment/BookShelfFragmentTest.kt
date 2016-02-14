@@ -24,10 +24,11 @@ import de.ph1b.audiobook.activity.BookActivity
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.testing.DummyCreator
 import de.ph1b.audiobook.testing.TestApp
+import i
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import timber.log.Timber
+
 import java.util.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -71,7 +72,7 @@ class BookShelfFragmentTest : ActivityInstrumentationTestCase2<BookActivity>(Boo
                 .onBindSubject
                 .map { random.nextInt(AMOUNT_OF_BOOKS) }
                 .map { randomBooks(it) }
-                .doOnNext { Timber.i("${it.size} books in new set") }
+                .doOnNext { i { "${it.size} books in new set" } }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { bookShelfMockPresenter.newSet(it) }

@@ -25,11 +25,14 @@ import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.view.fragment.BookShelfFragment
+import e
+import i
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.subjects.BehaviorSubject
 import rx.subscriptions.CompositeSubscription
-import timber.log.Timber
+import v
+
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
@@ -76,11 +79,11 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                     // resources.
                     lock.withLock {
                         if (book != null) {
-                            Timber.v("onCompletion called, nextChapter=%s", book!!.nextChapter())
+                            v { "onCompletion called, nextChapter=${book!!.nextChapter()}" }
                             if (book!!.nextChapter() != null) {
                                 next()
                             } else {
-                                Timber.v("Reached last track. Stopping player")
+                                v { "Reached last track. Stopping player" }
                                 stopUpdating()
                                 playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
 
@@ -95,7 +98,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                 .subscribe {
                     // inform user on errors
                     lock.withLock {
-                        Timber.e("onError")
+                        e { "onError" }
                         if (book != null) {
                             c.startActivity(BookActivity.malformedFileIntent(c, book!!.currentFile))
                         } else {
@@ -118,7 +121,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      */
     fun init(book: Book) {
         lock.withLock {
-            Timber.i("constructor called with ${book.name}")
+            i { "constructor called with ${book.name}" }
             this.book = book
         }
     }
@@ -134,8 +137,8 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                     player.currentPosition = book!!.time
                     player.playbackSpeed = book!!.playbackSpeed
                     state = State.PAUSED
-                } catch (e: IOException) {
-                    Timber.e(e, "Error when preparing the player.")
+                } catch (ex: IOException) {
+                    e(ex) { "Error when preparing the player." }
                     state = State.STOPPED
                 }
             }
@@ -180,7 +183,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      * updates to the GUI.
      */
     private fun startUpdating() {
-        Timber.v("startUpdating")
+        v { "startUpdating" }
         subscriptions.apply {
             if (!hasSubscriptions()) {
                 // counts down the sleep sand
@@ -209,7 +212,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      * @param direction The direction to skip
      */
     fun skip(direction: Direction) {
-        Timber.v("direction=%s", direction)
+        v { "direction=$direction" }
         lock.withLock {
             if (book != null) {
                 val currentPos = player.currentPosition
@@ -217,7 +220,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                 val delta = prefs.seekTime * 1000
 
                 val seekTo = if ((direction == Direction.FORWARD)) currentPos + delta else currentPos - delta
-                Timber.v("currentPos=%d, seekTo=%d, duration=%d", currentPos, seekTo, duration)
+                v { "currentPos=$currentPos, seekTo=$seekTo, duration=$duration" }
 
                 if (seekTo < 0) {
                     previous(false)
@@ -281,13 +284,13 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      * @return true if the timer is now active, false if it now inactive
      */
     fun toggleSleepSand() {
-        Timber.i("toggleSleepSand. Left sleepTime is ${internalSleepSand.value}")
+        i { "toggleSleepSand. Left sleepTime is ${internalSleepSand.value}" }
         lock.withLock {
             if (internalSleepSand.value > 0L) {
-                Timber.i("sleepSand is active. cancelling now")
+                i { "sleepSand is active. cancelling now" }
                 internalSleepSand.onNext(-1L)
             } else {
-                Timber.i("preparing new sleep sand")
+                i { "preparing new sleep sand" }
                 val minutes = prefs.sleepTime
                 internalSleepSand.onNext(TimeUnit.MINUTES.toMillis(minutes.toLong()))
             }
@@ -302,7 +305,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      */
     fun pause(rewind: Boolean) {
         lock.withLock {
-            Timber.v("pause acquired lock. state is=%s", state)
+            v { "pause acquired lock. state is=$state" }
             if (book != null) {
                 when (state) {
                     State.STARTED -> {
@@ -325,7 +328,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
 
                         state = State.PAUSED
                     }
-                    else -> Timber.e("pause called in illegal state=%s", state)
+                    else -> e { "pause called in illegal state=$state" }
                 }
             }
         }
@@ -364,10 +367,10 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      */
     fun changePosition(time: Int, file: File) {
         lock.withLock {
-            Timber.v("changePosition with time $time and file $file")
+            v { "changePosition with time $time and file $file" }
             if (book != null) {
                 val changeFile = (book!!.currentChapter().file != file)
-                Timber.v("changeFile=%s", changeFile)
+                v { "changeFile=$changeFile" }
                 if (changeFile) {
                     val wasPlaying = (state == State.STARTED)
                     book = book!!.copy(currentFile = file, time = time)
@@ -389,7 +392,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                             book = book!!.copy(time = time)
                             db.updateBook(book!!)
                         }
-                        else -> Timber.e("changePosition called in illegal state=%s", state)
+                        else -> e { "changePosition called in illegal state=$state" }
                     }
                 }
             }

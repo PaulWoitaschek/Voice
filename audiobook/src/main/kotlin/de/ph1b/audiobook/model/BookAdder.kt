@@ -25,6 +25,7 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.support.v4.content.ContextCompat
 import com.squareup.picasso.Picasso
+import d
 import de.ph1b.audiobook.activity.BaseActivity
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -32,8 +33,10 @@ import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.utils.BookVendor
 import de.ph1b.audiobook.utils.FileRecognition
 import de.ph1b.audiobook.utils.MediaAnalyzer
+import e
 import rx.subjects.BehaviorSubject
-import timber.log.Timber
+import v
+
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -99,7 +102,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
     private fun checkForBooks() {
         val singleBooks = singleBookFiles
         for (f in singleBooks) {
-            Timber.d("checkForBooks with singleBookFile=%s", f)
+            d { "checkForBooks with singleBookFile=$f" }
             if (f.isFile && f.canRead()) {
                 checkBook(f, Book.Type.SINGLE_FILE)
             } else if (f.isDirectory && f.canRead()) {
@@ -109,7 +112,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
 
         val collectionBooks = collectionBookFiles
         for (f in collectionBooks) {
-            Timber.d("checking collectionBook=%s", f)
+            d { "checking collectionBook=$f" }
             if (f.isFile && f.canRead()) {
                 checkBook(f, Book.Type.COLLECTION_FILE)
             } else if (f.isDirectory && f.canRead()) {
@@ -139,8 +142,8 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
             if (f.length() < (mi.availMem / 3L)) {
                 try {
                     return Picasso.with(c).load(f).resize(dimen, dimen).get()
-                } catch (e: IOException) {
-                    Timber.e(e, "Error when saving cover %s", f)
+                } catch (ex: IOException) {
+                    e(ex) { "Error when saving cover $f" }
                 }
             }
         }
@@ -214,11 +217,11 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      * @param interrupting true if a eventually running scanner should be interrupted.
      */
     fun scanForFiles(interrupting: Boolean) {
-        Timber.d("scanForFiles called with scannerActive=${scannerActive.value} and interrupting=$interrupting")
+        d { "scanForFiles called with scannerActive=${scannerActive.value} and interrupting=$interrupting" }
         if (!scannerActive.value || interrupting) {
             stopScanner = true
             executor.execute {
-                Timber.v("started")
+                v { "started" }
                 scannerActive.onNext(true)
                 stopScanner = false
 
@@ -226,16 +229,16 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                     deleteOldBooks()
                     checkForBooks()
                     findCovers()
-                } catch (e: InterruptedException) {
-                    Timber.d(e, "We were interrupted at adding a book")
+                } catch (ex: InterruptedException) {
+                    d(ex) { "We were interrupted at adding a book" }
                 }
 
                 stopScanner = false
                 scannerActive.onNext(false)
-                Timber.v("stopped")
+                v { "stopped" }
             }
         }
-        Timber.v("scanForFiles method done (executor should be called")
+        v { "scanForFiles method done (executor should be called" }
     }
 
     /**
@@ -288,7 +291,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      */
     @Throws(InterruptedException::class)
     private fun deleteOldBooks() {
-        Timber.d("deleteOldBooks started")
+        d { "deleteOldBooks started" }
         val singleBookFiles = singleBookFiles
         val collectionBookFolders = collectionBookFiles
 
@@ -349,7 +352,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         }
 
         for (b in booksToRemove) {
-            Timber.d("deleting book=${b.name}");
+            d { "deleting book=${b.name}" };
             db.hideBook(b)
         }
     }
@@ -391,7 +394,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                     newChapters,
                     1.0f,
                     bookRoot)
-            Timber.d("adding newBook=${newBook.name}")
+            d { "adding newBook=${newBook.name}" }
             db.addBook(newBook)
         } else {
             orphanedBook = orphanedBook.copy(chapters = newChapters)
@@ -534,7 +537,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      * @return The Book if available, or `null`
      */
     private fun getBookFromDb(rootFile: File, type: Book.Type, orphaned: Boolean): Book? {
-        Timber.d("getBookFromDb, rootFile=$rootFile, type=$type, orphaned=$orphaned")
+        d { "getBookFromDb, rootFile=$rootFile, type=$type, orphaned=$orphaned" }
         val books: List<Book> =
                 if (orphaned) {
                     db.getOrphanedBooks()
@@ -548,12 +551,12 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                 }
             }
         } else if (rootFile.isFile) {
-            Timber.d("getBookFromDb, its a file")
+            d { "getBookFromDb, its a file" }
             for (b in books) {
-                Timber.v("Comparing bookRoot=${b.root} with ${rootFile.parentFile.absoluteFile}")
+                v { "Comparing bookRoot=${b.root} with ${rootFile.parentFile.absoluteFile}" }
                 if (rootFile.parentFile.absolutePath == b.root && type === b.type) {
                     val singleChapter = b.chapters.first()
-                    Timber.d("getBookFromDb, singleChapterPath=%s compared with=%s", singleChapter.file, rootFile.absoluteFile)
+                    d { "getBookFromDb, singleChapterPath=${singleChapter.file} compared with=${rootFile.absoluteFile}" }
                     if (singleChapter.file == rootFile) {
                         return b
                     }

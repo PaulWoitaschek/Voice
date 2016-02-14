@@ -43,8 +43,10 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.mvp.RxBaseActivity
 import de.ph1b.audiobook.presenter.FolderChooserPresenter
 import de.ph1b.audiobook.utils.PermissionHelper
+import e
+import i
 import rx.Observable
-import timber.log.Timber
+
 import java.io.File
 
 /**
@@ -99,18 +101,18 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
                                             grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Timber.i("onRequestPermissionsResult called")
+        i { "onRequestPermissionsResult called" }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             val permissionGrantingWorked = PermissionHelper.permissionGrantingWorked(requestCode,
                     PERMISSION_RESULT_READ_EXT_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,
                     permissions, grantResults)
-            Timber.i("permissionGrantingWorked=%b", permissionGrantingWorked)
+            i { "permissionGrantingWorked=$permissionGrantingWorked" }
             if (permissionGrantingWorked) {
                 presenter()!!.gotPermission()
             } else {
                 PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE)
-                Timber.e("could not get permission")
+                e { "could not get permission" }
             }
         }
     }
@@ -123,7 +125,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
         // permissions
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             val hasExternalStoragePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-            Timber.i("hasExternalStoragePermission=$hasExternalStoragePermission")
+            i { "hasExternalStoragePermission=$hasExternalStoragePermission" }
             if (!hasExternalStoragePermission) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                     PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE)
@@ -177,7 +179,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
                 .filter { it != AdapterView.INVALID_POSITION } // filter invalid entries
                 .skip(1) // skip the first that passed as its no real user input
                 .subscribe {
-                    Timber.i("spinner selected with position $it and adapter.count ${spinnerAdapter.count}")
+                    i { "spinner selected with position $it and adapter.count ${spinnerAdapter.count}" }
                     val item = spinnerAdapter.getItem(it)
                     presenter()!!.fileSelected(item.data)
                 }
@@ -211,7 +213,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     }
 
     override fun newRootFolders(newFolders: List<File>) {
-        Timber.i("newRootFolders called with $newFolders")
+        i { "newRootFolders called with $newFolders" }
         spinnerGroup.visibility = if (newFolders.size <= 1) View.INVISIBLE else View.VISIBLE
 
         Observable.from(newFolders)
@@ -238,7 +240,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     }
 
     override fun finishWithResult() {
-        Timber.i("finishWithResult")
+        i { "finishWithResult" }
         setResult(Activity.RESULT_OK, Intent())
         finish()
     }

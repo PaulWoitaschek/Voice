@@ -115,7 +115,7 @@ dependencies {
     provided "javax.annotation:jsr250-api:1.0"
 
     // logging
-    compile "com.jakewharton.timber:timber:4.1.0"
+    compile 'com.github.JakeWharton:Timber:10bbf33db8'
 
     //testing
     testCompile "junit:junit:4.12"
