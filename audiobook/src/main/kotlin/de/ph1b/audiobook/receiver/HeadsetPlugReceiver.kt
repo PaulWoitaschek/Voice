@@ -20,9 +20,10 @@ package de.ph1b.audiobook.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import i
 import rx.Observable
 import rx.subjects.PublishSubject
-import timber.log.Timber
+
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -45,7 +46,7 @@ constructor() {
         private val UNPLUGGED = 0
 
         override fun onReceive(context: Context?, intent: Intent?) {
-            Timber.i("onReceive with context=$context and intent=$intent")
+            i { "onReceive with context=$context and intent=$intent" }
             if (intent?.action == Intent.ACTION_HEADSET_PLUG) {
                 val intState = intent?.getIntExtra("state", UNPLUGGED)
                 if (intState == UNPLUGGED) {
@@ -53,7 +54,7 @@ constructor() {
                 } else if (intState == PLUGGED) {
                     publishSubject.onNext(HeadsetState.PLUGGED)
                 } else {
-                    Timber.i("Unknown headsetState $intState")
+                    i { "Unknown headsetState $intState" }
                 }
             }
         }

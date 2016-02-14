@@ -20,6 +20,8 @@ package de.ph1b.audiobook.persistence
 import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import org.json.JSONArray
+import java.util.*
 
 fun Cursor.string(columnName: String): String {
     return stringNullable(columnName)!!
@@ -81,3 +83,30 @@ fun SharedPreferences.Editor.setBoolean(pair: Pair<String, Boolean>) =
 
 fun SharedPreferences.Editor.setStringSet(pair: Pair<String, Set<String>>) =
         putStringSet(pair.first, pair.second)
+
+fun <T> JSONArray.toList(): List<T> = toMutableList()
+
+fun <T> JSONArray.toMutableList(): MutableList<T> {
+    val list = ArrayList<T>(length())
+    forEach<T> { list.add(it) }
+    return list
+}
+
+fun SQLiteDatabase.simpleQuery(table: String,
+                               columns: Array<String>? = null,
+                               selection: String? = null,
+                               selectionArgs: Array<String>? = null,
+                               groupBy: String? = null,
+                               having: String ? = null,
+                               orderBy: String? = null,
+                               limit: String? = null,
+                               distinct: Boolean = false): Cursor {
+    return query(distinct, table, columns, selection, selectionArgs, groupBy, having, orderBy, limit)
+}
+
+inline fun <T> JSONArray.forEach(action: (T) -> Unit): Unit {
+    for (i in 0..length() - 1) {
+        @Suppress("UNCHECKED_CAST")
+        action(get(i) as T)
+    }
+}

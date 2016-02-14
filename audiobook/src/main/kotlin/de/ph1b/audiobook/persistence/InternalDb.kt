@@ -20,7 +20,8 @@ package de.ph1b.audiobook.persistence
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import timber.log.Timber
+import e
+
 import java.util.*
 import javax.inject.Inject
 
@@ -43,8 +44,8 @@ class InternalDb
         try {
             val upgradeHelper = DataBaseUpgradeHelper(db)
             upgradeHelper.upgrade(oldVersion)
-        } catch (e: InvalidPropertiesFormatException) {
-            Timber.e(e, "Error at upgrade")
+        } catch (ex: InvalidPropertiesFormatException) {
+            e(ex) { "Error at upgrade" }
             BookTable.dropTableIfExists(db)
             ChapterTable.dropTableIfExists(db)
             BookmarkTable.dropTableIfExists(db)

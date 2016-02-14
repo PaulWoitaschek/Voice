@@ -26,7 +26,8 @@ import android.media.MediaMetadataRetriever
 import android.net.ConnectivityManager
 import android.view.WindowManager
 import com.squareup.picasso.Picasso
-import timber.log.Timber
+import e
+
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -53,19 +54,14 @@ constructor(private val context: Context, private val windowManager: WindowManag
         Thread(Runnable {
             try {
                 bitmap[0] = Picasso.with(context).load(path).get()
-            } catch (e: IOException) {
-                Timber.e(e, "Exception at file retrieving for %s", path)
+            } catch (ex: IOException) {
+                e(ex) { "Exception at file retrieving for $path" }
             } finally {
                 latch.countDown()
             }
         }).start()
 
-        try {
-            latch.await()
-        } catch (e: InterruptedException) {
-            Timber.wtf(e, "Latch was interrupted!")
-        }
-
+        latch.await()
         return bitmap.first()
     }
 
@@ -101,7 +97,7 @@ constructor(private val context: Context, private val windowManager: WindowManag
                 coverOut.close()
             }
         } catch (e: IOException) {
-            Timber.e(e, "Error at saving image with destination=%s", destination)
+            e(e) { "Error at saving image with destination=$destination" }
         }
 
     }

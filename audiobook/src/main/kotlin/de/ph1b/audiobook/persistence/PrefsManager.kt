@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.assertMain
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.uitools.ThemeUtil
@@ -55,6 +56,7 @@ constructor(c: Context, @Named(FOR) private val sp: SharedPreferences) {
 
     /**
      * an observable with the id of the current book, or [Book.ID_UNKNOWN] if there is none.
+     * Always operates on the UI thread.
      */
     val currentBookId: BehaviorSubject<Long>
 
@@ -88,6 +90,7 @@ constructor(c: Context, @Named(FOR) private val sp: SharedPreferences) {
      * @param bookId the book Id to set
      */
     @Synchronized fun setCurrentBookId(bookId: Long) {
+        assertMain()
         sp.edit { setLong(PREF_KEY_CURRENT_BOOK to bookId) }
         currentBookId.onNext(bookId)
     }
@@ -186,5 +189,4 @@ constructor(c: Context, @Named(FOR) private val sp: SharedPreferences) {
     companion object {
         const val FOR = "forPrefsManager"
     }
-
 }

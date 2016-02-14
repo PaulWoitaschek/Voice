@@ -37,7 +37,10 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.startActivity
 import de.ph1b.audiobook.utils.PermissionHelper
 import de.ph1b.audiobook.view.fragment.BookShelfFragment
-import timber.log.Timber
+import e
+import i
+
+import v
 import java.io.File
 import java.util.*
 import javax.inject.Inject
@@ -64,10 +67,10 @@ class BookActivity : BaseActivity(), BookShelfFragment.Callback {
             val permissionGrantingWorked = PermissionHelper.permissionGrantingWorked(requestCode,
                     PERMISSION_RESULT_READ_EXT_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,
                     permissions, grantResults)
-            Timber.i("permissionGrantingWorked=%b", permissionGrantingWorked)
+            i { "permissionGrantingWorked=$permissionGrantingWorked" }
             if (!permissionGrantingWorked) {
                 PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE)
-                Timber.e("could not get permission")
+                e { "could not get permission" }
             }
         }
     }
@@ -105,7 +108,7 @@ class BookActivity : BaseActivity(), BookShelfFragment.Callback {
     }
 
     override fun onBookSelected(bookId: Long, sharedViews: Map<View, String>) {
-        Timber.i("onBookSelected with $bookId")
+        i { "onBookSelected with $bookId" }
 
         val ft = supportFragmentManager.beginTransaction()
         val bookPlayFragment = BookPlayFragment.newInstance(bookId)
@@ -113,7 +116,7 @@ class BookActivity : BaseActivity(), BookShelfFragment.Callback {
             val move = TransitionInflater.from(this@BookActivity).inflateTransition(android.R.transition.move)
             bookPlayFragment.sharedElementEnterTransition = move
             for (entry in sharedViews.entries) {
-                Timber.v("Added sharedElement=$entry")
+                v { "Added sharedElement=$entry" }
                 ft.addSharedElement(entry.key, entry.value)
             }
         }

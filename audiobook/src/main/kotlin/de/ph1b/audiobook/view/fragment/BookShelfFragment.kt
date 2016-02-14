@@ -30,6 +30,7 @@ import android.support.v7.widget.SimpleItemAnimator
 import android.view.*
 import android.widget.PopupMenu
 import com.getbase.floatingactionbutton.FloatingActionButton
+import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.actionBar
 import de.ph1b.audiobook.activity.SettingsActivity
@@ -40,13 +41,16 @@ import de.ph1b.audiobook.dialog.NoFolderWarningDialogFragment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.mvp.RxBaseFragment
+import de.ph1b.audiobook.persistence.LogStorage
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.presenter.BookShelfBasePresenter
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
-import timber.log.Timber
+import i
+
 import java.util.*
 import javax.inject.Inject
+import dagger.Lazy as DaggerLazy
 
 /**
  * Showing the shelf of all the available books and provide a navigation to each book
@@ -63,6 +67,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
 
     // injection
     @Inject internal lateinit var prefs: PrefsManager
+    @Inject internal lateinit var logStorage: DaggerLazy<LogStorage>
 
     // viewAdded
     private lateinit var recyclerView: RecyclerView
@@ -86,7 +91,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Timber.i("onCreate");
+        i { "onCreate" }
 
         setHasOptionsMenu(true)
     }
@@ -131,27 +136,45 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
         val currentPlaying = menu.findItem(R.id.action_current)
         currentPlaying.isVisible = currentBook != null
 
+        if (BuildConfig.DEBUG) {
+            val sendLogs = menu.findItem(R.id.sendLogs)
+            sendLogs.isVisible = true
+        }
+
         // sets the grid / list toggle icon
         val displayModeItem = menu.findItem(R.id.action_change_layout)
         displayModeItem.setIcon(prefs.displayMode.inverted().icon)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        return when (item.itemId) {
             R.id.action_settings -> {
                 startActivity(Intent(context, SettingsActivity::class.java))
-                return true
+                true
             }
             R.id.action_current -> {
                 invokeBookSelectionCallback(prefs.currentBookId.value)
-                return true
+                true
             }
             R.id.action_change_layout -> {
                 prefs.displayMode = prefs.displayMode.inverted()
                 initRecyclerView()
-                return true
+                true
             }
-            else -> return super.onOptionsItemSelected(item)
+            R.id.sendLogs -> {
+                val intent = Intent(Intent.ACTION_SEND).apply {
+                    type = "message/rfc822";
+                    putExtra(Intent.EXTRA_EMAIL, arrayOf("woitaschek@gmail.com"));
+                    putExtra(Intent.EXTRA_SUBJECT, "MAP Logs");
+                    val logs = logStorage.get().get()
+                    val logsBuilder = StringBuilder()
+                    logs.forEach { logsBuilder.append(it).append("\n") }
+                    putExtra(Intent.EXTRA_TEXT, logsBuilder.toString());
+                }
+                startActivity(Intent.createChooser(intent, "Send mail..."));
+                return true;
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -230,7 +253,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
      * @param book the removed book
      */
     fun bookRemoved(book: Book) {
-        Timber.i("bookRemoved ${book.name}")
+        i { "bookRemoved ${book.name}" }
         adapter.removeBook(book)
     }
 
@@ -240,7 +263,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
      * @param book the changed book
      */
     fun bookAddedOrUpdated(book: Book) {
-        Timber.i("bookAddedOrUpdated: ${book.name}")
+        i { "bookAddedOrUpdated: ${book.name}" }
         adapter.updateOrAddBook(book)
     }
 
@@ -250,7 +273,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
      *@param books the new books
      */
     fun newBooks(books: List<Book>) {
-        Timber.i("${books.size} newBooks")
+        i { "${books.size} newBooks" }
         adapter.newDataSet(books)
     }
 
@@ -259,7 +282,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
      * The book marked as current was changed. Updates the adapter and fab accordingly.
      */
     fun currentBookChanged(currentBook: Book?) {
-        Timber.i("currentBookChanged: ${currentBook?.name}")
+        i { "currentBookChanged: ${currentBook?.name}" }
         this.currentBook = currentBook
 
         for (i in 0..adapter.itemCount - 1) {
@@ -282,6 +305,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
      * Sets the fab icon correctly accordingly to the new play state.
      */
     fun setPlayerPlaying(playing: Boolean) {
+        i { "Called setPlayerPlaying $playing" }
         if (playing) {
             playPauseDrawable.transformToPause(!firstPlayStateUpdate)
         } else {
@@ -303,12 +327,12 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
     }
 
     fun showSpinnerIfNoData(showSpinnerIfNoData: Boolean) {
-        Timber.i("showSpinnerIfNoData $showSpinnerIfNoData")
+        i { "showSpinnerIfNoData $showSpinnerIfNoData" }
         val shouldShowSpinner = adapter.itemCount == 0 && showSpinnerIfNoData
-        Timber.i("ShouldShowSpinner=$shouldShowSpinner")
+        i { "ShouldShowSpinner=$shouldShowSpinner" }
         recyclerView.visibility = if (shouldShowSpinner) View.INVISIBLE else View.VISIBLE
         recyclerReplacementView.visibility = if (shouldShowSpinner) View.VISIBLE else View.INVISIBLE
-        Timber.i("ShowSpinnerIfNoData finished.")
+        i { "ShowSpinnerIfNoData finished." }
     }
 
 

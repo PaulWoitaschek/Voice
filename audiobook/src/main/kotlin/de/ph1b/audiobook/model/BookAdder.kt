@@ -18,24 +18,21 @@
 package de.ph1b.audiobook.model
 
 import android.Manifest
-import android.app.ActivityManager
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.os.Build
 import android.support.v4.content.ContextCompat
-import com.squareup.picasso.Picasso
+import d
 import de.ph1b.audiobook.activity.BaseActivity
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.uitools.ImageHelper
+import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import de.ph1b.audiobook.utils.BookVendor
 import de.ph1b.audiobook.utils.FileRecognition
 import de.ph1b.audiobook.utils.MediaAnalyzer
 import rx.subjects.BehaviorSubject
-import timber.log.Timber
+import v
 import java.io.File
-import java.io.IOException
 import java.util.*
 import java.util.concurrent.Executors
 import javax.inject.Inject
@@ -50,41 +47,11 @@ import javax.inject.Singleton
 @Singleton
 class BookAdder
 @Inject
-constructor(private val c: Context, private val prefs: PrefsManager, private val db: BookChest, private val bookVendor: BookVendor, private val activityManager: ActivityManager, private val imageHelper: ImageHelper, private val mediaAnalyzer: MediaAnalyzer) {
+constructor(private val context: Context, private val prefs: PrefsManager, private val db: BookChest, private val bookVendor: BookVendor, private val mediaAnalyzer: MediaAnalyzer, private val coverCollector: CoverFromDiscCollector) {
 
     private val executor = Executors.newSingleThreadExecutor()
     private val scannerActive = BehaviorSubject.create(false)
     @Volatile private var stopScanner = false
-
-    /**
-     * Adds files recursively. First takes all files and adds them sorted to the return list. Then
-     * sorts the folders, and then adds their content sorted to the return list.
-
-     * @param source The dirs and files to be added
-     * *
-     * @param audio  True if audio should be filtered. Else images will be filtered
-     * *
-     * @return All the files containing in a natural sorted order.
-     */
-    private fun getAllContainingFiles(source: List<File>, audio: Boolean): List<File> {
-        // split the files in dirs and files
-        val fileList = ArrayList<File>(source.size)
-        for (f in source) {
-            if (f.isFile) {
-                fileList.add(f)
-            } else if (f.isDirectory) {
-                // recursively add the content of the directory
-                val containing = f.listFiles(if (audio) FileRecognition.folderAndMusicFilter else FileRecognition.folderAndImagesFilter)
-                if (containing != null) {
-                    val content = ArrayList(Arrays.asList(*containing))
-                    fileList.addAll(getAllContainingFiles(content, audio))
-                }
-            }
-        }
-
-        // return all the files only^
-        return fileList
-    }
 
     fun scannerActive(): BehaviorSubject<Boolean> {
         return scannerActive
@@ -99,7 +66,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
     private fun checkForBooks() {
         val singleBooks = singleBookFiles
         for (f in singleBooks) {
-            Timber.d("checkForBooks with singleBookFile=%s", f)
+            d { "checkForBooks with singleBookFile=$f" }
             if (f.isFile && f.canRead()) {
                 checkBook(f, Book.Type.SINGLE_FILE)
             } else if (f.isDirectory && f.canRead()) {
@@ -109,7 +76,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
 
         val collectionBooks = collectionBookFiles
         for (f in collectionBooks) {
-            Timber.d("checking collectionBook=%s", f)
+            d { "checking collectionBook=$f" }
             if (f.isFile && f.canRead()) {
                 checkBook(f, Book.Type.COLLECTION_FILE)
             } else if (f.isDirectory && f.canRead()) {
@@ -118,95 +85,6 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         }
     }
 
-    /**
-     * Returns a Bitmap from an array of [File] that should be images
-
-     * @param coverFiles The image files to check
-     * *
-     * @return A bitmap or `null` if there is none.
-     * *
-     * @throws InterruptedException If the scanner has been requested to reset.
-     */
-    @Throws(InterruptedException::class)
-    private fun getCoverFromDisk(coverFiles: List<File>): Bitmap? {
-        // if there are images, get the first one.
-        val mi = ActivityManager.MemoryInfo()
-        activityManager.getMemoryInfo(mi)
-        val dimen = imageHelper.smallerScreenSize
-        for (f in coverFiles) {
-            throwIfStopRequested()
-            // only read cover if its size is less than a third of the available memory
-            if (f.length() < (mi.availMem / 3L)) {
-                try {
-                    return Picasso.with(c).load(f).resize(dimen, dimen).get()
-                } catch (e: IOException) {
-                    Timber.e(e, "Error when saving cover %s", f)
-                }
-            }
-        }
-        return null
-    }
-
-    /**
-     * Finds an embedded cover within a [Chapter]
-
-     * @param chapters The chapters to search trough
-     * *
-     * @return An embedded cover if there is one. Else return `null`
-     * *
-     * @throws InterruptedException If the scanner has been requested to reset.
-     */
-    @Throws(InterruptedException::class)
-    private fun getEmbeddedCover(chapters: List<Chapter>): Bitmap? {
-        var tries = 0
-        val maxTries = 5
-        for (c in chapters) {
-            if (++tries < maxTries) {
-                throwIfStopRequested()
-                val cover = imageHelper.getEmbeddedCover(c.file)
-                if (cover != null) {
-                    return cover
-                }
-            } else {
-                return null
-            }
-        }
-        return null
-    }
-
-    /**
-     * Trys to find covers and saves them to storage if found.
-
-     * @throws InterruptedException
-     */
-    @Throws(InterruptedException::class)
-    private fun findCovers() {
-        for (b in bookVendor.all()) {
-            throwIfStopRequested()
-            val coverFile = b.coverFile()
-            if (!coverFile.exists()) {
-                if (b.type === Book.Type.COLLECTION_FOLDER || b.type === Book.Type.SINGLE_FOLDER) {
-                    val root = File(b.root)
-                    if (root.exists()) {
-                        val images = getAllContainingFiles(listOf(root), false)
-                        val cover = getCoverFromDisk(images)
-                        if (cover != null) {
-                            imageHelper.saveCover(cover, coverFile)
-                            Picasso.with(c).invalidate(coverFile)
-                            db.updateBook(b)
-                            continue
-                        }
-                    }
-                }
-                val cover = getEmbeddedCover(b.chapters)
-                if (cover != null) {
-                    imageHelper.saveCover(cover, coverFile)
-                    Picasso.with(c).invalidate(coverFile)
-                    db.updateBook(b)
-                }
-            }
-        }
-    }
 
     /**
      * Starts scanning for new [Book] or changes within.
@@ -214,28 +92,28 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      * @param interrupting true if a eventually running scanner should be interrupted.
      */
     fun scanForFiles(interrupting: Boolean) {
-        Timber.d("scanForFiles called with scannerActive=${scannerActive.value} and interrupting=$interrupting")
+        d { "scanForFiles called with scannerActive=${scannerActive.value} and interrupting=$interrupting" }
         if (!scannerActive.value || interrupting) {
             stopScanner = true
             executor.execute {
-                Timber.v("started")
+                v { "started" }
                 scannerActive.onNext(true)
                 stopScanner = false
 
                 try {
                     deleteOldBooks()
                     checkForBooks()
-                    findCovers()
-                } catch (e: InterruptedException) {
-                    Timber.d(e, "We were interrupted at adding a book")
+                    coverCollector.findCovers(bookVendor.all())
+                } catch (ex: InterruptedException) {
+                    d(ex) { "We were interrupted at adding a book" }
                 }
 
                 stopScanner = false
                 scannerActive.onNext(false)
-                Timber.v("stopped")
+                v { "stopped" }
             }
         }
-        Timber.v("scanForFiles method done (executor should be called")
+        v { "scanForFiles method done (executor should be called" }
     }
 
     /**
@@ -288,7 +166,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      */
     @Throws(InterruptedException::class)
     private fun deleteOldBooks() {
-        Timber.d("deleteOldBooks started")
+        d { "deleteOldBooks started" }
         val singleBookFiles = singleBookFiles
         val collectionBookFolders = collectionBookFiles
 
@@ -343,13 +221,13 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
             throw InterruptedException("Storage is not mounted")
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            if (ContextCompat.checkSelfPermission(c, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 throw InterruptedException("Does not have external storage permission")
             }
         }
 
         for (b in booksToRemove) {
-            Timber.d("deleting book=${b.name}");
+            d { "deleting book=${b.name}" };
             db.hideBook(b)
         }
     }
@@ -391,7 +269,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                     newChapters,
                     1.0f,
                     bookRoot)
-            Timber.d("adding newBook=${newBook.name}")
+            d { "adding newBook=${newBook.name}" }
             db.addBook(newBook)
         } else {
             orphanedBook = orphanedBook.copy(chapters = newChapters)
@@ -494,7 +372,9 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      */
     @Throws(InterruptedException::class)
     private fun getChaptersByRootFile(rootFile: File): List<Chapter> {
-        val containingFiles = getAllContainingFiles(listOf(rootFile), true)
+        val containingFiles = rootFile.walk()
+                .filter { FileRecognition.musicFilter.accept(it) }
+                .toMutableList()
                 .sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
 
         val containingMedia = ArrayList<Chapter>(containingFiles.size)
@@ -534,7 +414,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      * @return The Book if available, or `null`
      */
     private fun getBookFromDb(rootFile: File, type: Book.Type, orphaned: Boolean): Book? {
-        Timber.d("getBookFromDb, rootFile=$rootFile, type=$type, orphaned=$orphaned")
+        d { "getBookFromDb, rootFile=$rootFile, type=$type, orphaned=$orphaned" }
         val books: List<Book> =
                 if (orphaned) {
                     db.getOrphanedBooks()
@@ -548,12 +428,12 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                 }
             }
         } else if (rootFile.isFile) {
-            Timber.d("getBookFromDb, its a file")
+            d { "getBookFromDb, its a file" }
             for (b in books) {
-                Timber.v("Comparing bookRoot=${b.root} with ${rootFile.parentFile.absoluteFile}")
+                v { "Comparing bookRoot=${b.root} with ${rootFile.parentFile.absoluteFile}" }
                 if (rootFile.parentFile.absolutePath == b.root && type === b.type) {
                     val singleChapter = b.chapters.first()
-                    Timber.d("getBookFromDb, singleChapterPath=%s compared with=%s", singleChapter.file, rootFile.absoluteFile)
+                    d { "getBookFromDb, singleChapterPath=${singleChapter.file} compared with=${rootFile.absoluteFile}" }
                     if (singleChapter.file == rootFile) {
                         return b
                     }

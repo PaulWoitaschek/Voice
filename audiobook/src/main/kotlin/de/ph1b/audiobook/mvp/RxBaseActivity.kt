@@ -19,7 +19,8 @@ package de.ph1b.audiobook.mvp
 
 import android.os.Bundle
 import de.ph1b.audiobook.activity.BaseActivity
-import timber.log.Timber
+import i
+
 
 /**
  * Base activity that provides a convenient way for binding a view to a presenter
@@ -44,14 +45,14 @@ abstract class RxBaseActivity<V, P> : BaseActivity() where P : Presenter<V> {
 
     override fun onStart() {
         super.onStart()
-        Timber.i("onResume")
+        i { "onResume" }
 
         presenterDelegate.onStart()
     }
 
     override fun onStop() {
         super.onStop()
-        Timber.i("onPause")
+        i { "onPause" }
 
         presenterDelegate.onStop()
     }

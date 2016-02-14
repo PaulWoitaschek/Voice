@@ -23,11 +23,12 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.MediaPlayerController
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.view.fragment.BookShelfFragment
+import i
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
-import timber.log.Timber
+
 import javax.inject.Inject
 
 /**
@@ -45,7 +46,7 @@ constructor(private val bookChest: BookChest,
 : BookShelfBasePresenter() {
 
     override fun onBind(view: BookShelfFragment, subscriptions: CompositeSubscription) {
-        Timber.i("onBind Called for $view")
+        i { "onBind Called for $view" }
 
         // initially updates the adapter with a new set of items
         bookChest.activeBooks
@@ -85,7 +86,6 @@ constructor(private val bookChest: BookChest,
                         bookChest.activeBooks
                                 .singleOrDefault(null, { it.id == id })
                     }
-                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { view.currentBookChanged(it) })
 
             // observe if the scanner is active and there are books and show spinner accordingly.

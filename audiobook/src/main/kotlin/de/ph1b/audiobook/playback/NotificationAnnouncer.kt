@@ -13,7 +13,8 @@ import de.ph1b.audiobook.activity.BookActivity
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
-import timber.log.Timber
+import e
+
 import java.io.IOException
 import javax.inject.Inject
 
@@ -38,8 +39,8 @@ class NotificationAnnouncer
                         .resize(width, height)
                         .get()
             }
-        } catch (e: IOException) {
-            Timber.e(e, "Error when retrieving cover from %s", book)
+        } catch (ex: IOException) {
+            e(ex) { "Error when retrieving cover from $book" }
         }
 
         if (cover == null) {

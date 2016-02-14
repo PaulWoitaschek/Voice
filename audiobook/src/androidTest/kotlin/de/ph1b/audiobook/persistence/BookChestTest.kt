@@ -22,7 +22,7 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.BookAdder
 import de.ph1b.audiobook.testing.DummyCreator
 import de.ph1b.audiobook.testing.RealFileMocker
-import timber.log.Timber
+import e
 import java.util.*
 
 /**
@@ -102,8 +102,8 @@ class BookChestTest : ApplicationTestCase<App> (App::class.java) {
         // as the we deleted the file now the book adder should have removed the chapter.
         val bookRetrievedAgain = bookChest.activeBooks.toBlocking()
                 .single { it.id == addedBookWithUpdatedId.id }
-        Timber.e(bookRetrievedAgain.toString())
-        Timber.e(addedBookWithUpdatedId.toString())
+        e { bookRetrievedAgain.toString() }
+        e { addedBookWithUpdatedId.toString() }
         print("HIHI")
         check(bookRetrievedAgain.currentChapter() != addedBookWithUpdatedId.currentChapter())
     }

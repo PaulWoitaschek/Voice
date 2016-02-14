@@ -18,8 +18,10 @@
 package de.ph1b.audiobook.mvp
 
 import android.os.Bundle
+import d
+import i
 import rx.subscriptions.CompositeSubscription
-import timber.log.Timber
+
 
 /**
  * Basic class for presenters that enables clients to control views offers handy ways for subscriptions.
@@ -38,18 +40,18 @@ abstract class Presenter<V> {
 
     fun bind(view: V) {
         if (this.view == null) {
-            Timber.i("binding $view")
+            i { "binding $view" }
             this.view = view
 
             compositeSubscription = CompositeSubscription()
             onBind(view, compositeSubscription!!)
         } else {
-            Timber.d("$view already bound")
+            d { "$view already bound" }
         }
     }
 
     fun unbind() {
-        Timber.i("Unbinding $view")
+        i { "Unbinding $view" }
         this.view = null
         compositeSubscription?.unsubscribe()
     }

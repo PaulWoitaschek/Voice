@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
-import timber.log.Timber
+import e
+import i
+
 import java.io.File
 import java.io.IOException
 
@@ -26,8 +28,7 @@ class HideFolderDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val pathToHide = arguments.getString(PATH_TO_HIDE)
-        assert(pathToHide != null)
+        val pathToHide = arguments.getString(PATH_TO_HIDE)!!
         val hideFile = getNoMediaFileByFolder(File(pathToHide))
         return MaterialDialog.Builder(activity)
                 .title(R.string.hide_folder_title)
@@ -36,11 +37,11 @@ class HideFolderDialog : DialogFragment() {
                 .negativeText(R.string.dialog_cancel)
                 .onPositive { materialDialog, dialogAction ->
                     try {
-                        Timber.i("Create new File will be called.")
+                        i { "Create new File will be called." }
                         //noinspection ResultOfMethodCallIgnored
                         hideFile.createNewFile()
-                    } catch (e: IOException) {
-                        Timber.e(e, "Error at creating the hide-file")
+                    } catch (ex: IOException) {
+                        e(ex) { "Error at creating the hide-file" }
                     }
                 }
                 .onAny { materialDialog, dialogAction -> callback.onChosen() }

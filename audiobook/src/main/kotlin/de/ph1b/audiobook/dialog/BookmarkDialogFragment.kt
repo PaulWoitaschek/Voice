@@ -37,11 +37,13 @@ import de.ph1b.audiobook.model.Bookmark
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.MediaPlayerController
+import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.utils.BookVendor
+import i
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import timber.log.Timber
+
 import javax.inject.Inject
 
 /**
@@ -50,6 +52,10 @@ import javax.inject.Inject
  * @author Paul Woitaschek
  */
 class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuClickedListener {
+
+    init {
+        App.component().inject(this)
+    }
 
     override fun onOptionsMenuClicked(bookmark: Bookmark, v: View) {
         val popup = PopupMenu(activity, v)
@@ -89,22 +95,29 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
     }
 
     override fun onBookmarkClicked(bookmark: Bookmark) {
+        val wasPlaying = playStateManager.playState.value == PlayStateManager.PlayState.PLAYING
+
         prefs.setCurrentBookId(bookId())
         mediaPlayerController.changePosition(bookmark.time, bookmark.mediaFile)
+
+        if (wasPlaying) {
+            mediaPlayerController.play()
+        }
 
         dialog.cancel()
     }
 
     private lateinit var bookmarkTitle: EditText
     @Inject lateinit internal var prefs: PrefsManager
-    @Inject lateinit internal var db: BookChest
+    @Inject internal lateinit var db: BookChest
+    @Inject internal lateinit var playStateManager: PlayStateManager
     @Inject lateinit internal var bookVendor: BookVendor
     @Inject internal lateinit var mediaPlayerController: MediaPlayerController
     private lateinit var book: Book
     private lateinit var adapter: BookmarkAdapter
 
     fun addClicked() {
-        Timber.i("Add bookmark clicked.")
+        i { "Add bookmark clicked." }
         var title = bookmarkTitle.text.toString()
         if (title.isEmpty()) {
             title = book.currentChapter().name
@@ -119,8 +132,6 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
     private fun bookId() = arguments.getLong(BOOK_ID)
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        App.component().inject(this)
-
         val inflater = activity.layoutInflater
         val customView = inflater.inflate(R.layout.dialog_bookmark, null)
         bookmarkTitle = customView.findViewById(R.id.bookmarkEdit) as EditText
@@ -147,7 +158,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
             false
         }
 
-        return MaterialDialog.Builder(activity)
+        return MaterialDialog.Builder(context)
                 .customView(customView, false)
                 .title(R.string.bookmark)
                 .negativeText(R.string.dialog_cancel)

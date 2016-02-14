@@ -3,6 +3,8 @@
 * Fixed a crash when theming a dialog on Android 4.0.4
 * Fixes to the internal player
 * Fixed an issue with remote commands not working for some devices (like pebble)
+* Improved overall performance
+* Fixed an issue with volume increasing
 * Fallback to the Android player when there is a bug on the device preventing proper playback.
 
 # v2.5.1

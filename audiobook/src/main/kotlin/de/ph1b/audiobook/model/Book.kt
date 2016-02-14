@@ -20,6 +20,7 @@ package de.ph1b.audiobook.model
 
 import android.os.Environment
 import de.ph1b.audiobook.injection.App
+import i
 import java.io.File
 import java.util.*
 
@@ -133,8 +134,19 @@ data class Book(val id: Long,
 
 
     fun coverFile(): File {
-        val coverFile = File(Environment.getExternalStorageDirectory().absolutePath + File.separator + "Android" + File.separator + "data" + File.separator + App.component().context.packageName,
-                id.toString() + ".jpg")
+        val separator = File.separator
+
+        val name = type.name + if (type == Type.COLLECTION_FILE || type == Type.COLLECTION_FOLDER) {
+            // if its part of a collection, take the first file
+            chapters.first().file.absolutePath.replace(separator, "")
+        } else {
+            // if its a single, just take the root
+            root.replace(separator, "")
+        } + ".jpg"
+
+        val coverFile = File("${Environment.getExternalStorageDirectory().absolutePath}${separator}Android${separator}data$separator${App.component().context.packageName}",
+                name)
+        i { "CoverFile is $coverFile" }
         if (!coverFile.parentFile.exists()) {
             //noinspection ResultOfMethodCallIgnored
             coverFile.parentFile.mkdirs()
