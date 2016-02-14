@@ -91,7 +91,6 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
     override fun onBookmarkClicked(bookmark: Bookmark) {
         prefs.setCurrentBookId(bookId())
         mediaPlayerController.changePosition(bookmark.time, bookmark.mediaFile)
-
         dialog.cancel()
     }
 
