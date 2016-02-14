@@ -53,36 +53,6 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
     private val scannerActive = BehaviorSubject.create(false)
     @Volatile private var stopScanner = false
 
-    /**
-     * Adds files recursively. First takes all files and adds them sorted to the return list. Then
-     * sorts the folders, and then adds their content sorted to the return list.
-
-     * @param source The dirs and files to be added
-     * *
-     * @param audio  True if audio should be filtered. Else images will be filtered
-     * *
-     * @return All the files containing in a natural sorted order.
-     */
-    private fun getAllContainingFiles(source: List<File>, audio: Boolean): List<File> {
-        // split the files in dirs and files
-        val fileList = ArrayList<File>(source.size)
-        for (f in source) {
-            if (f.isFile) {
-                fileList.add(f)
-            } else if (f.isDirectory) {
-                // recursively add the content of the directory
-                val containing = f.listFiles(if (audio) FileRecognition.folderAndMusicFilter else FileRecognition.folderAndImagesFilter)
-                if (containing != null) {
-                    val content = ArrayList(Arrays.asList(*containing))
-                    fileList.addAll(getAllContainingFiles(content, audio))
-                }
-            }
-        }
-
-        // return all the files only^
-        return fileList
-    }
-
     fun scannerActive(): BehaviorSubject<Boolean> {
         return scannerActive
     }
@@ -402,7 +372,9 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
      */
     @Throws(InterruptedException::class)
     private fun getChaptersByRootFile(rootFile: File): List<Chapter> {
-        val containingFiles = getAllContainingFiles(listOf(rootFile), true)
+        val containingFiles = rootFile.walk()
+                .filter { FileRecognition.musicFilter.accept(it) }
+                .toMutableList()
                 .sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
 
         val containingMedia = ArrayList<Chapter>(containingFiles.size)

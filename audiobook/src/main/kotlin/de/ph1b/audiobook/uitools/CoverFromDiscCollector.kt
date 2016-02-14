@@ -49,7 +49,7 @@ class CoverFromDiscCollector
                 if (b.type === Book.Type.COLLECTION_FOLDER || b.type === Book.Type.SINGLE_FOLDER) {
                     val root = File(b.root)
                     if (root.exists()) {
-                        val images = root.walkTopDown().filter { FileRecognition.imageFilter.accept(it) }
+                        val images = root.walk().filter { FileRecognition.imageFilter.accept(it) }
                         val cover = getCoverFromDisk(images.toList())
                         if (cover != null) {
                             imageHelper.saveCover(cover, coverFile)
