@@ -91,7 +91,7 @@ fun <T> JSONArray.toList(): List<T> {
 }
 
 inline fun <T> JSONArray.forEach(action: (T) -> Unit): Unit {
-    for (i in 0..length()) {
+    for (i in 0..length() - 1) {
         @Suppress("UNCHECKED_CAST")
         action(get(i) as T)
     }
