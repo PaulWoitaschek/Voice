@@ -37,6 +37,7 @@ import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager.PauseReason
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
+import de.ph1b.audiobook.receiver.AudioFocus
 import de.ph1b.audiobook.receiver.AudioFocusReceiver
 import de.ph1b.audiobook.receiver.HeadsetPlugReceiver
 import de.ph1b.audiobook.uitools.CoverReplacement
@@ -160,6 +161,11 @@ class BookReaderService : Service() {
                         notifyChange(ChangeType.METADATA, it)
                     })
 
+            var currentlyHasFocus = false
+            add(audioFocusReceiver.focusObservable()
+                    .map { it == AudioFocus.GAIN }
+                    .subscribe { currentlyHasFocus = it })
+
             // handle changes on the play state
             add(playStateManager.playState
                     .observeOn(Schedulers.io())
@@ -169,7 +175,9 @@ class BookReaderService : Service() {
                         if (controllerBook != null) {
                             when (it!!) {
                                 PlayState.PLAYING -> {
-                                    audioManager.requestAudioFocus(audioFocusReceiver.audioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
+                                    if (!currentlyHasFocus) {
+                                        audioManager.requestAudioFocus(audioFocusReceiver.audioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
+                                    }
 
                                     mediaSession.isActive = true
                                     val notification = notificationAnnouncer.getNotification(controllerBook, it, mediaSession.sessionToken)
