@@ -20,22 +20,24 @@ package de.ph1b.audiobook.persistence
 import android.content.SharedPreferences
 import org.json.JSONArray
 import java.sql.Date
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
+import java.util.Date as DateWithTime
 
 /** Storage for logs. Stores up to [AMOUNT_OF_ENTRIES] logs for each day. */
-@Singleton
-class LogStorage
-@Inject
-constructor(@Named(FOR) val storage: SharedPreferences) {
+@Singleton class LogStorage
+@Inject constructor(@Named(FOR) val storage: SharedPreferences) {
 
     private val logCache = HashMap<Date, MutableList<String>>()
+    private val dateField = DateWithTime()
+    private val format = SimpleDateFormat("HH:mm:ss")
 
     fun put(message: String) {
-
-        val key = Date(System.currentTimeMillis())
+        val timestamp = System.currentTimeMillis()
+        val key = Date(timestamp)
         // get list from cache. If there is none, retrieve it from storage
         val cached = logCache[key]
         val listToUse: MutableList<String> = if (cached != null) {
@@ -55,7 +57,10 @@ constructor(@Named(FOR) val storage: SharedPreferences) {
         if (listToUse.size > AMOUNT_OF_ENTRIES) {
             listToUse.removeAt(0)
         }
-        listToUse.add(message)
+        // add a timestamp
+        dateField.time = timestamp
+        val stampMessage = "${format.format(dateField)}\t$message"
+        listToUse.add(stampMessage)
 
         // update storage
         storage.edit() {
