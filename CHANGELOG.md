@@ -1,4 +1,6 @@
 # Next Version
+
+# v2.6.0
 * Added a new cover picker
 * Fixed a crash when theming a dialog on Android 4.0.4
 * Fixes to the internal player
