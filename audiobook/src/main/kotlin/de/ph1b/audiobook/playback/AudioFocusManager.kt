@@ -36,7 +36,7 @@ import javax.inject.Singleton
 @Singleton
 class AudioFocusManager
 @Inject
-constructor(private val mediaPlayerController: MediaPlayerController, private val playStateManager: PlayStateManager, private val audioManager: AudioManager, private val prefsManager: PrefsManager) {
+constructor(private val mediaPlayer: PlayerController, private val playStateManager: PlayStateManager, private val audioManager: AudioManager, private val prefsManager: PrefsManager) {
 
     fun handleAudioFocus(audioFocusObservable: Observable<AudioFocus>): Subscription =
             audioFocusObservable.subscribe { audioFocus: AudioFocus ->
@@ -45,7 +45,7 @@ constructor(private val mediaPlayerController: MediaPlayerController, private va
                     AudioFocus.GAIN -> {
                         d { "started by audioFocus gained" }
                         if (playStateManager.pauseReason == PlayStateManager.PauseReason.LOSS_TRANSIENT) {
-                            mediaPlayerController.play()
+                            mediaPlayer.play()
                         } else if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
                             d { "increasing volume" }
                             audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0)
@@ -54,14 +54,14 @@ constructor(private val mediaPlayerController: MediaPlayerController, private va
                     AudioFocus.LOSS,
                     AudioFocus.LOSS_INCOMING_CALL -> {
                         d { "paused by audioFocus loss" }
-                        mediaPlayerController.stop()
+                        mediaPlayer.stop()
                     }
                     AudioFocus.LOSS_TRANSIENT_CAN_DUCK -> {
                         if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
                             if (prefsManager.pauseOnTempFocusLoss()) {
                                 d { "Paused by audio-focus loss transient." }
                                 // Pause is temporary, don't rewind
-                                mediaPlayerController.pause(false)
+                                mediaPlayer.pauseNonRewinding()
                                 playStateManager.pauseReason = PlayStateManager.PauseReason.LOSS_TRANSIENT
                             } else {
                                 d { "lowering volume" }
@@ -72,7 +72,7 @@ constructor(private val mediaPlayerController: MediaPlayerController, private va
                     AudioFocus.LOSS_TRANSIENT -> {
                         if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
                             d { "Paused by audio-focus loss transient." }
-                            mediaPlayerController.pause(true) // auto pause
+                            mediaPlayer.pause() // auto pause
                             playStateManager.pauseReason = PlayStateManager.PauseReason.LOSS_TRANSIENT
                         }
                     }

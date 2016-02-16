@@ -22,7 +22,7 @@ import android.test.suitebuilder.annotation.MediumTest
 import android.test.suitebuilder.annotation.SmallTest
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
-import de.ph1b.audiobook.playback.MediaPlayerController
+import de.ph1b.audiobook.playback.MediaPlayer
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.testing.DummyCreator
 import de.ph1b.audiobook.testing.RealFileMocker
@@ -37,7 +37,7 @@ import java.util.concurrent.CountDownLatch
  */
 class MediaPlayerControllerTest : ApplicationTestCase<App> (App::class.java) {
 
-    private lateinit var mediaPlayerController: MediaPlayerController
+    private lateinit var mediaPlayer: MediaPlayer
     private lateinit var playStateManager: PlayStateManager
     private lateinit var realFileMocker: RealFileMocker
     private lateinit var files: List<File>
@@ -49,7 +49,7 @@ class MediaPlayerControllerTest : ApplicationTestCase<App> (App::class.java) {
         super.setUp()
 
         createApplication()
-        mediaPlayerController = App.component().mediaPlayerController()
+        mediaPlayer = App.component().mediaPlayerController()
         playStateManager = App.component().playStateManager()
 
 
@@ -59,13 +59,13 @@ class MediaPlayerControllerTest : ApplicationTestCase<App> (App::class.java) {
 
         book = DummyCreator.dummyBook(files[0], files[1])
 
-        mediaPlayerController.init(book)
+        mediaPlayer.init(book)
     }
 
     override fun testAndroidTestCaseSetupProperly() {
         super.testAndroidTestCaseSetupProperly()
 
-        checkNotNull(mediaPlayerController)
+        checkNotNull(mediaPlayer)
         for (f in files) {
             check(f.exists())
         }
@@ -76,22 +76,22 @@ class MediaPlayerControllerTest : ApplicationTestCase<App> (App::class.java) {
      */
     @SmallTest
     fun testSimplePlayback() {
-        mediaPlayerController.play()
+        mediaPlayer.play()
         check(playStateManager.playState.value == PlayStateManager.PlayState.PLAYING)
         Thread.sleep(1000)
-        mediaPlayerController.pause(false)
+        mediaPlayer.pause(false)
         check(playStateManager.playState.value == PlayStateManager.PlayState.PAUSED)
     }
 
     private val rnd = Random()
 
     private fun playPauseRandom() {
-        synchronized(mediaPlayerController, {
+        synchronized(mediaPlayer, {
             if (rnd.nextBoolean()) {
-                mediaPlayerController.play()
+                mediaPlayer.play()
                 check(playStateManager.playState.value == PlayStateManager.PlayState.PLAYING)
             } else {
-                mediaPlayerController.pause(false)
+                mediaPlayer.pause(false)
                 check(playStateManager.playState.value == PlayStateManager.PlayState.PAUSED)
             }
         })

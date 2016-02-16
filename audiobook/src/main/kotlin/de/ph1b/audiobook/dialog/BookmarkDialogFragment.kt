@@ -36,14 +36,13 @@ import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.model.Bookmark
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.playback.MediaPlayerController
 import de.ph1b.audiobook.playback.PlayStateManager
+import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.utils.BookVendor
 import i
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-
 import javax.inject.Inject
 
 /**
@@ -98,10 +97,10 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
         val wasPlaying = playStateManager.playState.value == PlayStateManager.PlayState.PLAYING
 
         prefs.setCurrentBookId(bookId())
-        mediaPlayerController.changePosition(bookmark.time, bookmark.mediaFile)
+        playerController.changePosition(bookmark.time, bookmark.mediaFile)
 
         if (wasPlaying) {
-            mediaPlayerController.play()
+            playerController.play()
         }
 
         dialog.cancel()
@@ -112,7 +111,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
     @Inject internal lateinit var db: BookChest
     @Inject internal lateinit var playStateManager: PlayStateManager
     @Inject lateinit internal var bookVendor: BookVendor
-    @Inject internal lateinit var mediaPlayerController: MediaPlayerController
+    @Inject internal lateinit var playerController: PlayerController
     private lateinit var book: Book
     private lateinit var adapter: BookmarkAdapter
 

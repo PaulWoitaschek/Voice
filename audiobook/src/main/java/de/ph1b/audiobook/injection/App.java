@@ -62,7 +62,7 @@ import de.ph1b.audiobook.persistence.BookChest;
 import de.ph1b.audiobook.persistence.LogStorage;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.playback.BookReaderService;
-import de.ph1b.audiobook.playback.MediaPlayerController;
+import de.ph1b.audiobook.playback.MediaPlayer;
 import de.ph1b.audiobook.playback.PlayStateManager;
 import de.ph1b.audiobook.playback.WidgetUpdateService;
 import de.ph1b.audiobook.presenter.BookShelfBasePresenter;
@@ -146,7 +146,7 @@ public class App extends Application {
 
         BookAdder getBookAdder();
 
-        MediaPlayerController mediaPlayerController();
+        MediaPlayer mediaPlayerController();
 
         PlayStateManager playStateManager();
 

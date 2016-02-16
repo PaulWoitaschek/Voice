@@ -22,8 +22,8 @@ import dagger.Provides;
 import de.ph1b.audiobook.model.BookAdder;
 import de.ph1b.audiobook.persistence.BookChest;
 import de.ph1b.audiobook.persistence.PrefsManager;
-import de.ph1b.audiobook.playback.MediaPlayerController;
 import de.ph1b.audiobook.playback.PlayStateManager;
+import de.ph1b.audiobook.playback.PlayerController;
 import de.ph1b.audiobook.presenter.BookShelfBasePresenter;
 import de.ph1b.audiobook.presenter.BookShelfPresenter;
 
@@ -38,7 +38,7 @@ public class PresenterModule {
     @Provides
     static BookShelfBasePresenter provideBookShelfBasePresenter(
             BookChest bookChest, BookAdder bookAdder, PrefsManager prefsManager,
-            PlayStateManager playStateManager, MediaPlayerController mediaPlayerController) {
-        return new BookShelfPresenter(bookChest, bookAdder, prefsManager, playStateManager, mediaPlayerController);
+            PlayStateManager playStateManager, PlayerController mediaPlayer) {
+        return new BookShelfPresenter(bookChest, bookAdder, prefsManager, playStateManager, mediaPlayer);
     }
 }

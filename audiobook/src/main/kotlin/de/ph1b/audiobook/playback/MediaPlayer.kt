@@ -29,10 +29,8 @@ import e
 import i
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
-import rx.subjects.BehaviorSubject
 import rx.subscriptions.CompositeSubscription
 import v
-
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
@@ -42,7 +40,7 @@ import javax.inject.Singleton
 import kotlin.concurrent.withLock
 
 @Singleton
-class MediaPlayerController
+class MediaPlayer
 @Inject
 constructor(private val c: Context, private val prefs: PrefsManager, private val db: BookChest, private val player: Player, private val playStateManager: PlayStateManager) {
 
@@ -53,24 +51,8 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
 
     private val subscriptions = CompositeSubscription()
 
-    /**
-     * The time left till the playback stops in ms. If this is -1 the timer was stopped manually.
-     * If this is 0 the timer simple counted down.
-     */
-    private val internalSleepSand = BehaviorSubject.create<Long>(-1L)
-
-    /**
-     * This observable holds the time in ms left that the sleep timer has left. This is updated
-     * periodically
-     */
-    val sleepSand = internalSleepSand.asObservable()
-
-    fun sleepTimerActive(): Boolean = lock.withLock { internalSleepSand.value > 0 }
 
     init {
-        // stops the player when the timer reaches 0
-        internalSleepSand.filter { it == 0L } // when this reaches 0
-                .subscribe { stop() } // stop the player
         player.completionObservable
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -185,14 +167,6 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         v { "startUpdating" }
         subscriptions.apply {
             if (!hasSubscriptions()) {
-                // counts down the sleep sand
-                val sleepUpdateInterval = 1000L
-                add(Observable.interval(sleepUpdateInterval, TimeUnit.MILLISECONDS)
-                        .filter { internalSleepSand.value > 0 } // only notify if there is still time left
-                        .map { internalSleepSand.value - sleepUpdateInterval } // calculate the new time
-                        .map { it.coerceAtLeast(0) } // but keep at least 0
-                        .subscribe { internalSleepSand.onNext(it) })
-
                 // updates the book automatically with the current position
                 add(Observable.interval(1, TimeUnit.SECONDS)
                         .map { lock.withLock { player.currentPosition } } // pass the current position
@@ -263,10 +237,6 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
             player.playing = false
             stopUpdating()
             playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
-            if (sleepTimerActive()) {
-                // if its active use toggle to stop the sleep timer
-                toggleSleepSand()
-            }
             state = State.STOPPED
         }
     }
@@ -278,24 +248,6 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         subscriptions.clear()
     }
 
-    /**
-     * Turns the sleep timer on or off.
-     *
-     * @return true if the timer is now active, false if it now inactive
-     */
-    fun toggleSleepSand() {
-        i { "toggleSleepSand. Left sleepTime is ${internalSleepSand.value}" }
-        lock.withLock {
-            if (internalSleepSand.value > 0L) {
-                i { "sleepSand is active. cancelling now" }
-                internalSleepSand.onNext(-1L)
-            } else {
-                i { "preparing new sleep sand" }
-                val minutes = prefs.sleepTime
-                internalSleepSand.onNext(TimeUnit.MINUTES.toMillis(minutes.toLong()))
-            }
-        }
-    }
 
     /**
      * Pauses the player. Also stops the updating mechanism which constantly updates the book to the

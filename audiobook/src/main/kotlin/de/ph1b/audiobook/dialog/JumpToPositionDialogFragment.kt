@@ -26,7 +26,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.playback.MediaPlayerController
+import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.theme
 import de.ph1b.audiobook.utils.BookVendor
 import java.util.concurrent.TimeUnit
@@ -40,7 +40,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
 
     @Inject internal lateinit var prefs: PrefsManager
     @Inject internal lateinit var bookVendor: BookVendor
-    @Inject internal lateinit var mediaPlayerController: MediaPlayerController
+    @Inject internal lateinit var playerController: PlayerController
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         // find views
@@ -106,7 +106,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
                     val h = hPicker.value
                     val m = mPicker.value
                     val newPosition = (m + 60 * h) * 60 * 1000
-                    mediaPlayerController.changePosition(newPosition, book.currentChapter().file)
+                    playerController.changePosition(newPosition, book.currentChapter().file)
                 }
                 .positiveText(R.string.dialog_confirm)
                 .negativeText(R.string.dialog_cancel)
