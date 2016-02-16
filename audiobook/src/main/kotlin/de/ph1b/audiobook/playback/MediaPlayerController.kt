@@ -44,8 +44,7 @@ import kotlin.concurrent.withLock
 @Singleton
 class MediaPlayerController
 @Inject
-constructor(private val c: Context, private val prefs: PrefsManager, private val db: BookChest,
-            private val player: Player, private val playStateManager: PlayStateManager) {
+constructor(private val c: Context, private val prefs: PrefsManager, private val db: BookChest, private val player: Player, private val playStateManager: PlayStateManager) {
 
     private val lock = ReentrantLock()
     var book: Book? = null
@@ -78,9 +77,9 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                     // After the current song has ended, prepare the next one if there is one. Else stop the
                     // resources.
                     lock.withLock {
-                        if (book != null) {
-                            v { "onCompletion called, nextChapter=${book!!.nextChapter()}" }
-                            if (book!!.nextChapter() != null) {
+                        book?.let {
+                            v { "onCompletion called, nextChapter=${it.nextChapter()}" }
+                            if (it.nextChapter() != null) {
                                 next()
                             } else {
                                 v { "Reached last track. Stopping player" }
@@ -131,11 +130,11 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      */
     private fun prepare() {
         lock.withLock {
-            if (book != null) {
+            book?.let {
                 try {
-                    player.prepare(book!!.currentChapter().file)
-                    player.currentPosition = book!!.time
-                    player.playbackSpeed = book!!.playbackSpeed
+                    player.prepare(it.currentChapter().file)
+                    player.currentPosition = it.time
+                    player.playbackSpeed = it.playbackSpeed
                     state = State.PAUSED
                 } catch (ex: IOException) {
                     e(ex) { "Error when preparing the player." }
@@ -214,7 +213,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
     fun skip(direction: Direction) {
         v { "direction=$direction" }
         lock.withLock {
-            if (book != null) {
+            book?.let {
                 val currentPos = player.currentPosition
                 val duration = player.duration
                 val delta = prefs.seekTime * 1000
@@ -227,7 +226,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                 } else if (seekTo > duration) {
                     next()
                 } else {
-                    changePosition(seekTo, book!!.currentFile)
+                    changePosition(seekTo, it.currentFile)
                 }
             }
         }
@@ -238,12 +237,13 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      */
     fun previous(toNullOfNewTrack: Boolean) {
         lock.withLock {
-            if (book != null) {
-                val previousChapter = book!!.previousChapter()
+            book?.let {
+                val previousChapter = it.previousChapter()
                 if (player.currentPosition > 2000 || previousChapter == null) {
                     player.currentPosition = 0
-                    book = book!!.copy(time = 0)
-                    db.updateBook(book!!)
+                    val copy = it.copy(time = 0)
+                    book = copy
+                    db.updateBook(copy)
                 } else {
                     if (toNullOfNewTrack) {
                         changePosition(0, previousChapter.file)
@@ -306,7 +306,7 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
     fun pause(rewind: Boolean) {
         lock.withLock {
             v { "pause acquired lock. state is=$state" }
-            if (book != null) {
+            book?.let {
                 when (state) {
                     State.STARTED -> {
                         player.playing = false
@@ -319,10 +319,11 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                                 var seekTo = originalPosition - autoRewind
                                 seekTo = Math.max(seekTo, 0)
                                 player.currentPosition = seekTo
-                                book = book!!.copy(time = seekTo)
+                                val copy = it.copy(time = seekTo)
+                                db.updateBook(copy)
+                                book = copy
                             }
                         }
-                        db.updateBook(book!!)
 
                         playStateManager.playState.onNext(PlayStateManager.PlayState.PAUSED)
 
@@ -350,9 +351,8 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
      */
     operator fun next() {
         lock.withLock {
-            val nextChapter = book?.nextChapter()
-            if (nextChapter != null) {
-                changePosition(0, nextChapter.file)
+            book?.nextChapter()?.let {
+                changePosition(0, it.file)
             }
         }
     }
@@ -368,13 +368,17 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
     fun changePosition(time: Int, file: File) {
         lock.withLock {
             v { "changePosition with time $time and file $file" }
-            if (book != null) {
-                val changeFile = (book!!.currentChapter().file != file)
+            book?.let {
+
+                val changeFile = (it.currentChapter().file != file)
                 v { "changeFile=$changeFile" }
                 if (changeFile) {
                     val wasPlaying = (state == State.STARTED)
-                    book = book!!.copy(currentFile = file, time = time)
-                    db.updateBook(book!!)
+
+                    val copy = it.copy(currentFile = file, time = time)
+                    db.updateBook(copy)
+                    book = copy
+
                     prepare()
                     if (wasPlaying) {
                         player.playing = true
@@ -389,8 +393,10 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                     when (state) {
                         State.STARTED, State.PAUSED, State.COMPLETED -> {
                             player.currentPosition = time
-                            book = book!!.copy(time = time)
-                            db.updateBook(book!!)
+
+                            val copy = it.copy(time = time)
+                            db.updateBook(copy)
+                            book = copy
                         }
                         else -> e { "changePosition called in illegal state=$state" }
                     }
@@ -410,9 +416,11 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
         }
         set(speed) {
             lock.withLock {
-                if (book != null) {
-                    book = book!!.copy(playbackSpeed = speed)
-                    db.updateBook(book!!)
+                book?.let {
+                    val copy = it.copy(playbackSpeed = speed)
+                    db.updateBook(copy)
+                    book = copy
+
                     player.playbackSpeed = speed
                 }
             }
