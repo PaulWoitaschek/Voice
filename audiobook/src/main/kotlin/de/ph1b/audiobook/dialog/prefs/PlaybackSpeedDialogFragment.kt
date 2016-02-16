@@ -83,7 +83,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
 
         // set new speed
         seekObservable.debounce(50, TimeUnit.MILLISECONDS) // debounce so we don't flood the player
-                .subscribe { mediaPlayerController.playbackSpeed = it }
+                .subscribe { mediaPlayerController.setPlaybackSpeed(it) }
 
         return MaterialDialog.Builder(activity)
                 .title(R.string.playback_speed)

@@ -408,23 +408,17 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
     /**
      * The current playback speed. 1.0 for normal playback, 2.0 for twice the speed, etc.
      */
-    var playbackSpeed: Float
-        get() {
-            lock.withLock {
-                return player.playbackSpeed
-            }
-        }
-        set(speed) {
-            lock.withLock {
-                book?.let {
-                    val copy = it.copy(playbackSpeed = speed)
-                    db.updateBook(copy)
-                    book = copy
+    fun setPlaybackSpeed(speed: Float) {
+        lock.withLock {
+            book?.let {
+                val copy = it.copy(playbackSpeed = speed)
+                db.updateBook(copy)
+                book = copy
 
-                    player.playbackSpeed = speed
-                }
+                player.playbackSpeed = speed
             }
         }
+    }
 
     /**
      * The direction to skip.

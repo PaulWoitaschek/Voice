@@ -264,7 +264,7 @@ class BookReaderService : Service() {
         sendBroadcast(what.broadcastIntent(author, bookName, chapterName, playState, position))
 
         //noinspection ResourceType
-        playbackStateBuilder.setState(playState.playbackStateCompat, position.toLong(), playerController.playbackSpeed)
+        playbackStateBuilder.setState(playState.playbackStateCompat, position.toLong(), book.playbackSpeed)
         mediaSession.setPlaybackState(playbackStateBuilder.build())
 
         if (what == ChangeType.METADATA && lastFileForMetaData != book.currentFile) {
