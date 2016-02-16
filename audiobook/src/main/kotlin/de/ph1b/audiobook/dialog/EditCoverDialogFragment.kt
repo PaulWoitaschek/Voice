@@ -110,7 +110,7 @@ class EditCoverDialogFragment : DialogFragment() {
 
         return MaterialDialog.Builder(context)
                 .customView(customView, true)
-                .title(R.string.use_cover)
+                .title(R.string.cover)
                 .positiveText(R.string.dialog_confirm)
                 .onPositive(positiveCallback)
                 .build()

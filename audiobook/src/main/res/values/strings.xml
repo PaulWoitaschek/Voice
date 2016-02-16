@@ -51,7 +51,6 @@
     <string name="edit_book_name">Edit name</string>
     <string name="edit_book_cover">Edit cover</string>
     <string name="edit_book_title">Edit book</string>
-    <string name="use_cover">Use cover</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Jump to</string>
     <!--BookAdding-->
