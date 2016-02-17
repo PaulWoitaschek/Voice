@@ -18,11 +18,9 @@
 package de.ph1b.audiobook.playback
 
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.graphics.Bitmap
 import android.media.AudioManager
 import android.os.IBinder
@@ -44,6 +42,7 @@ import de.ph1b.audiobook.receiver.HeadsetPlugReceiver
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import e
+import i
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 import v
@@ -103,7 +102,13 @@ class BookReaderService : Service() {
     override fun onCreate() {
         super.onCreate()
 
-        mediaSession = MediaSessionCompat(this, TAG).apply {
+        val eventReceiver = ComponentName(packageName, MediaButtonReceiver::class.java.name);
+        val mediaButtonIntent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
+            component = eventReceiver
+        }
+        val buttonReceiverIntent = PendingIntent.getBroadcast(this, 0, mediaButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mediaSession = MediaSessionCompat(this, TAG, eventReceiver, buttonReceiverIntent).apply {
+
             setCallback(object : MediaSessionCompat.Callback() {
                 override fun onSkipToNext() {
                     onFastForward()
@@ -135,6 +140,8 @@ class BookReaderService : Service() {
             })
             setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
         }
+
+        mediaSession.addOnActiveChangeListener { i { "active changed to ${mediaSession.isActive}" } }
 
         registerReceiver(audioBecomingNoisyReceiver, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
         registerReceiver(headsetPlugReceiver.broadcastReceiver, IntentFilter(Intent.ACTION_HEADSET_PLUG))
@@ -181,6 +188,7 @@ class BookReaderService : Service() {
                                     }
 
                                     mediaSession.isActive = true
+                                    d { "set mediaSession to active" }
                                     val notification = notificationAnnouncer.getNotification(controllerBook, it, mediaSession.sessionToken)
                                     startForeground(NOTIFICATION_ID, notification)
                                 }
@@ -191,6 +199,7 @@ class BookReaderService : Service() {
                                 }
                                 PlayState.STOPPED -> {
                                     mediaSession.isActive = false
+                                    d { "Set mediaSession to inactive" }
 
                                     audioManager.abandonAudioFocus(audioFocusReceiver.audioFocusListener)
                                     notificationManager.cancel(NOTIFICATION_ID)
