@@ -18,11 +18,9 @@
 package de.ph1b.audiobook.playback
 
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.graphics.Bitmap
 import android.media.AudioManager
 import android.os.IBinder
@@ -44,6 +42,7 @@ import de.ph1b.audiobook.receiver.HeadsetPlugReceiver
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import e
+import i
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 import v
@@ -76,7 +75,7 @@ class BookReaderService : Service() {
     private val mediaMetaDataBuilder = MediaMetadataCompat.Builder()
     private val subscriptions = CompositeSubscription()
     @Inject internal lateinit var prefs: PrefsManager
-    @Inject internal lateinit var playerController: MediaPlayerController
+    @Inject internal lateinit var player: MediaPlayer
     @Inject internal lateinit var db: BookChest
     @Inject internal lateinit var notificationManager: NotificationManager
     @Inject internal lateinit var audioManager: AudioManager
@@ -90,7 +89,7 @@ class BookReaderService : Service() {
         override fun onReceive(context: Context, intent: Intent) {
             if (playStateManager.playState.value === PlayState.PLAYING) {
                 playStateManager.pauseReason = PauseReason.BECAUSE_HEADSET
-                playerController.pause(true)
+                player.pause(true)
             }
         }
     }
@@ -103,14 +102,20 @@ class BookReaderService : Service() {
     override fun onCreate() {
         super.onCreate()
 
-        mediaSession = MediaSessionCompat(this, TAG).apply {
+        val eventReceiver = ComponentName(packageName, MediaButtonReceiver::class.java.name);
+        val mediaButtonIntent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
+            component = eventReceiver
+        }
+        val buttonReceiverIntent = PendingIntent.getBroadcast(this, 0, mediaButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mediaSession = MediaSessionCompat(this, TAG, eventReceiver, buttonReceiverIntent).apply {
+
             setCallback(object : MediaSessionCompat.Callback() {
                 override fun onSkipToNext() {
                     onFastForward()
                 }
 
                 override fun onRewind() {
-                    playerController.skip(MediaPlayerController.Direction.BACKWARD)
+                    player.skip(MediaPlayer.Direction.BACKWARD)
                 }
 
                 override fun onSkipToPrevious() {
@@ -118,23 +123,25 @@ class BookReaderService : Service() {
                 }
 
                 override fun onFastForward() {
-                    playerController.skip(MediaPlayerController.Direction.FORWARD)
+                    player.skip(MediaPlayer.Direction.FORWARD)
                 }
 
                 override fun onStop() {
-                    playerController.stop()
+                    player.stop()
                 }
 
                 override fun onPause() {
-                    playerController.playPause()
+                    player.playPause()
                 }
 
                 override fun onPlay() {
-                    playerController.playPause()
+                    player.playPause()
                 }
             })
             setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
         }
+
+        mediaSession.addOnActiveChangeListener { i { "active changed to ${mediaSession.isActive}" } }
 
         registerReceiver(audioBecomingNoisyReceiver, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
         registerReceiver(headsetPlugReceiver.broadcastReceiver, IntentFilter(Intent.ACTION_HEADSET_PLUG))
@@ -147,10 +154,10 @@ class BookReaderService : Service() {
                     .flatMap({ updatedId ->
                         db.activeBooks.singleOrDefault(null) { it.id == updatedId }
                     })
-                    .filter { it != null && (playerController.book?.id != it.id) }
+                    .filter { it != null && (player.book?.id != it.id) }
                     .subscribe {
-                        playerController.stop()
-                        playerController.init(it)
+                        player.stop()
+                        player.init(it)
                     })
 
             // notify player about changes in the current book
@@ -158,7 +165,7 @@ class BookReaderService : Service() {
                     .filter { it.id == prefs.currentBookId.value }
                     .observeOn(Schedulers.io())
                     .subscribe {
-                        playerController.init(it)
+                        player.init(it)
                         notifyChange(ChangeType.METADATA, it)
                     })
 
@@ -172,7 +179,7 @@ class BookReaderService : Service() {
                     .observeOn(Schedulers.io())
                     .subscribe {
                         d { "onPlayStateManager.PlayStateChanged:$it" }
-                        val controllerBook = playerController.book
+                        val controllerBook = player.book
                         if (controllerBook != null) {
                             when (it!!) {
                                 PlayState.PLAYING -> {
@@ -181,6 +188,7 @@ class BookReaderService : Service() {
                                     }
 
                                     mediaSession.isActive = true
+                                    d { "set mediaSession to active" }
                                     val notification = notificationAnnouncer.getNotification(controllerBook, it, mediaSession.sessionToken)
                                     startForeground(NOTIFICATION_ID, notification)
                                 }
@@ -191,6 +199,7 @@ class BookReaderService : Service() {
                                 }
                                 PlayState.STOPPED -> {
                                     mediaSession.isActive = false
+                                    d { "Set mediaSession to inactive" }
 
                                     audioManager.abandonAudioFocus(audioFocusReceiver.audioFocusListener)
                                     notificationManager.cancel(NOTIFICATION_ID)
@@ -208,7 +217,7 @@ class BookReaderService : Service() {
                         if (headsetState == HeadsetPlugReceiver.HeadsetState.PLUGGED) {
                             if (playStateManager.pauseReason == PauseReason.BECAUSE_HEADSET) {
                                 if (prefs.resumeOnReplug()) {
-                                    playerController.play()
+                                    player.play()
                                 }
                             }
                         }
@@ -223,8 +232,17 @@ class BookReaderService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         v { "onStartCommand, intent=$intent, flags=$flags, startId=$startId" }
 
-        if (intent?.action == Intent.ACTION_MEDIA_BUTTON ) {
-            MediaButtonReceiver.handleIntent(mediaSession, intent)
+        when (intent?.action) {
+            Intent.ACTION_MEDIA_BUTTON -> MediaButtonReceiver.handleIntent(mediaSession, intent)
+            PlayerController.ACTION_SPEED -> player.setPlaybackSpeed(intent!!.getFloatExtra(PlayerController.EXTRA_SPEED, 1F))
+            PlayerController.ACTION_CHANGE -> {
+                val time = intent!!.getIntExtra(PlayerController.CHANGE_TIME, 0)
+                val file = File(intent.getStringExtra(PlayerController.CHANGE_FILE))
+                player.changePosition(time, file)
+            }
+            PlayerController.ACTION_PAUSE_NON_REWINDING -> {
+                player.pause(false)
+            }
         }
 
         return Service.START_STICKY
@@ -232,7 +250,7 @@ class BookReaderService : Service() {
 
     override fun onDestroy() {
         v { "onDestroy called" }
-        playerController.stop()
+        player.stop()
 
         try {
             unregisterReceiver(audioBecomingNoisyReceiver)
@@ -264,7 +282,7 @@ class BookReaderService : Service() {
         sendBroadcast(what.broadcastIntent(author, bookName, chapterName, playState, position))
 
         //noinspection ResourceType
-        playbackStateBuilder.setState(playState.playbackStateCompat, position.toLong(), playerController.playbackSpeed)
+        playbackStateBuilder.setState(playState.playbackStateCompat, position.toLong(), book.playbackSpeed)
         mediaSession.setPlaybackState(playbackStateBuilder.build())
 
         if (what == ChangeType.METADATA && lastFileForMetaData != book.currentFile) {

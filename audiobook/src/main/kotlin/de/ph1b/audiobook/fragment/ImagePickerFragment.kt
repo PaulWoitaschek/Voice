@@ -103,6 +103,7 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
                     editCover.show(fragmentManager, FM_EDIT_COVER)
                     return true
                 } else {
+                    i { "img url $url did not contain the imgurl parameter." }
                     return super.shouldOverrideUrlLoading(view, url)
                 }
             }

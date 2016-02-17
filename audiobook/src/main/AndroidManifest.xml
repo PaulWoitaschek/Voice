@@ -96,15 +96,11 @@
 
         <service
             android:name=".playback.BookReaderService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.MEDIA_BUTTON"/>
-            </intent-filter>
-        </service>
+            android:exported="false"/>
 
         <service android:name=".playback.WidgetUpdateService"/>
 
-        <receiver android:name="android.support.v4.media.session.MediaButtonReceiver">
+        <receiver android:name=".receiver.MediaEventReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON"/>
             </intent-filter>

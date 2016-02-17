@@ -49,8 +49,9 @@ import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.MediaPlayerCapabilities
-import de.ph1b.audiobook.playback.MediaPlayerController
 import de.ph1b.audiobook.playback.PlayStateManager
+import de.ph1b.audiobook.playback.PlayerController
+import de.ph1b.audiobook.playback.Sandman
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
@@ -60,7 +61,6 @@ import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.functions.Action1
 import rx.subscriptions.CompositeSubscription
-
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -77,7 +77,8 @@ class BookPlayFragment : Fragment() {
         App.component().inject(this)
     }
 
-    @Inject internal lateinit var mediaPlayerController: MediaPlayerController
+    @Inject internal lateinit var mediaPlayer: PlayerController
+    @Inject internal lateinit var sandMan: Sandman
     @Inject internal lateinit var prefs: PrefsManager
     @Inject internal lateinit var db: BookChest
     @Inject internal lateinit var bookVendor: BookVendor
@@ -114,19 +115,19 @@ class BookPlayFragment : Fragment() {
 
         playButton.clicks()
                 .onBackpressureLatest()
-                .subscribe { mediaPlayerController.playPause() }
+                .subscribe { mediaPlayer.playPause() }
         rewindButton.clicks()
                 .onBackpressureLatest()
-                .subscribe { mediaPlayerController.skip(MediaPlayerController.Direction.BACKWARD) }
+                .subscribe { mediaPlayer.rewind() }
         fastForwardButton.clicks()
                 .onBackpressureLatest()
-                .subscribe { mediaPlayerController.skip(MediaPlayerController.Direction.FORWARD) }
+                .subscribe { mediaPlayer.fastForward() }
         nextButton.clicks()
                 .onBackpressureLatest()
-                .subscribe { mediaPlayerController.next() }
+                .subscribe { mediaPlayer.next() }
         previousButton.clicks()
                 .onBackpressureLatest()
-                .subscribe { mediaPlayerController.previous(true) }
+                .subscribe { mediaPlayer.previous() }
         playedTimeView.clicks()
                 .subscribe { launchJumpToPositionDialog() }
 
@@ -141,7 +142,7 @@ class BookPlayFragment : Fragment() {
                 }
                 .doOnNext { lastClick = 0 } // resets so triple clicks won't cause another invoke
                 .onBackpressureLatest()
-                .subscribe { mediaPlayerController.playPause() }
+                .subscribe { mediaPlayer.playPause() }
 
         book = bookVendor.byId(bookId)
 
@@ -162,7 +163,7 @@ class BookPlayFragment : Fragment() {
                         }
                         is SeekBarStopChangeEvent -> {
                             val progress = seekBar.progress
-                            mediaPlayerController.changePosition(progress, book!!.currentChapter().file)
+                            mediaPlayer.changePosition(progress, book!!.currentChapter().file)
                             playedTimeView.text = formatTime(progress.toLong(), seekBar.max.toLong())
                         }
                     }
@@ -206,7 +207,7 @@ class BookPlayFragment : Fragment() {
                 val realInput = bookSpinner.tag != null && bookSpinner.tag != it
                 if (realInput) {
                     i { "spinner: onItemSelected. firing: $it" }
-                    mediaPlayerController.changePosition(0, book!!.chapters[it].file)
+                    mediaPlayer.changePosition(0, book!!.chapters[it].file)
                     bookSpinner.tag = it
                 }
             }
@@ -263,7 +264,7 @@ class BookPlayFragment : Fragment() {
 
         // sets the correct sleep timer icon
         val sleepTimerItem = menu.findItem(R.id.action_sleep)
-        if (mediaPlayerController.sleepTimerActive()) {
+        if (sandMan.sleepTimerActive()) {
             sleepTimerItem.setIcon(R.drawable.ic_alarm_on_white_24dp)
         } else {
             sleepTimerItem.setIcon(R.drawable.ic_snooze_white_24dp)
@@ -288,8 +289,8 @@ class BookPlayFragment : Fragment() {
                 return true
             }
             R.id.action_sleep -> {
-                mediaPlayerController.toggleSleepSand()
-                if (prefs.setBookmarkOnSleepTimer() && mediaPlayerController.sleepTimerActive()) {
+                sandMan.toggleSleepSand()
+                if (prefs.setBookmarkOnSleepTimer() && sandMan.sleepTimerActive()) {
                     val date = DateUtils.formatDateTime(context, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE)
                     db.addBookmarkAtBookPosition(book!!, date + ": " + getString(R.string.action_sleep))
                 }
@@ -360,7 +361,7 @@ class BookPlayFragment : Fragment() {
                     })
 
             // hide / show left time view
-            add(mediaPlayerController.sleepSand
+            add(sandMan.sleepSand
                     .observeOn(AndroidSchedulers.mainThread())
                     .map { it > 0 }
                     .map { active ->
@@ -372,7 +373,7 @@ class BookPlayFragment : Fragment() {
                     })
 
             // invalidates the actionbar items
-            add(mediaPlayerController.sleepSand
+            add(sandMan.sleepSand
                     .map { it > 0 } // sleep timer is active
                     .distinctUntilChanged() // only notify when event has changed
                     .observeOn(AndroidSchedulers.mainThread())
@@ -380,7 +381,7 @@ class BookPlayFragment : Fragment() {
             )
 
             // set the correct time to the sleep time view
-            add(mediaPlayerController.sleepSand
+            add(sandMan.sleepSand
                     .distinctUntilChanged()
                     .filter { it > 0 }
                     .map { formatTime(it, it) }

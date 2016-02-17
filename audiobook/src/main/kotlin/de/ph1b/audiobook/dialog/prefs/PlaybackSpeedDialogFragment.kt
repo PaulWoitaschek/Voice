@@ -30,7 +30,7 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.playback.MediaPlayerController
+import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.utils.BookVendor
 import java.text.DecimalFormat
 import java.util.concurrent.TimeUnit
@@ -46,7 +46,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
     @Inject internal lateinit var prefs: PrefsManager
     @Inject internal lateinit var db: BookChest
     @Inject internal lateinit var bookVendor: BookVendor
-    @Inject internal lateinit var mediaPlayerController: MediaPlayerController
+    @Inject internal lateinit var playerController: PlayerController
 
     private val SPEED_DELTA = 0.02f
     private val MAX_STEPS = Math.round((Book.SPEED_MAX - Book.SPEED_MIN) / SPEED_DELTA)
@@ -83,7 +83,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
 
         // set new speed
         seekObservable.debounce(50, TimeUnit.MILLISECONDS) // debounce so we don't flood the player
-                .subscribe { mediaPlayerController.playbackSpeed = it }
+                .subscribe { playerController.setSpeed(it) }
 
         return MaterialDialog.Builder(activity)
                 .title(R.string.playback_speed)
