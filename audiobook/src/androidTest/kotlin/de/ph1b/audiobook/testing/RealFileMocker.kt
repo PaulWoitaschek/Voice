@@ -20,18 +20,18 @@ package de.ph1b.audiobook.testing
 import android.content.Context
 import android.os.Environment
 import android.support.test.espresso.core.deps.guava.io.ByteStreams
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import java.io.File
 import java.io.FileOutputStream
 
-/**
- * Created by ph1b on 17.12.15.
- */
+
 class RealFileMocker {
 
     lateinit var file1: File
     lateinit var file2: File
 
-    public fun create(context: Context): List<File> {
+    fun create(context: Context): List<File> {
         val externalStorage = Environment.getExternalStorageDirectory()
 
         val parentFolder = File(externalStorage, "testFolder")
@@ -39,13 +39,21 @@ class RealFileMocker {
         file1 = File(parentFolder, "1.mp3")
         file2 = File(parentFolder, "2.mp3")
 
-        ByteStreams.copy(context.assets.open("3rdState.mp3"), FileOutputStream(file1))
-        ByteStreams.copy(context.assets.open("Crashed.mp3"), FileOutputStream(file2))
+        val request = Request.Builder().url("http://sampleswap.org/mp3/artist/5101/Peppy--The-Firing-Squad_YMXB-160.mp3")
+                .build();
+        val response = OkHttpClient().newCall(request).execute();
+
+        val inStream = response.body().byteStream()
+        ByteStreams.copy(inStream, FileOutputStream(file1))
+        file1.copyTo(file2)
+
+        check(file1.exists())
+        check(file2.exists())
 
         return listOf(file1, file2);
     }
 
-    public fun destroy() {
+    fun destroy() {
         file1.delete();
         file2.delete();
     }
