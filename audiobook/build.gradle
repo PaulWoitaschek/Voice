@@ -138,3 +138,7 @@ dependencies {
     // player
     compile 'com.github.PaulWoitaschek:AndroidPlayer:0.004'
 }
+
+kapt {
+    generateStubs = true
+}

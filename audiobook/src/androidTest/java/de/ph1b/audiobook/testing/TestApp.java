@@ -21,14 +21,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import javax.inject.Singleton;
-
-import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
 import de.ph1b.audiobook.injection.AndroidModule;
 import de.ph1b.audiobook.injection.App;
-import de.ph1b.audiobook.injection.BaseModule;
 import de.ph1b.audiobook.model.Book;
 import de.ph1b.audiobook.presenter.BookShelfBasePresenter;
 import de.ph1b.audiobook.view.fragment.BookShelfFragment;
@@ -54,12 +50,6 @@ public class TestApp extends App {
                 .androidModule(new AndroidModule(this))
                 .mockPresenterModule(new MockPresenterModule(bookShelfPresenter))
                 .build();
-    }
-
-    @Singleton
-    @Component(modules = {BaseModule.class, AndroidModule.class, MockPresenterModule.class})
-    public interface MockComponent extends App.ApplicationComponent {
-
     }
 
     @Module
