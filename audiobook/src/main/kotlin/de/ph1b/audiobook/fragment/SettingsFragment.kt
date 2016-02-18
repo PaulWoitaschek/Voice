@@ -39,6 +39,7 @@ import de.ph1b.audiobook.interfaces.SettingsSetListener
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.vendinghelper.IabHelper
 import de.ph1b.audiobook.view.FolderOverviewActivity
+import rx.subscriptions.CompositeSubscription
 
 import javax.inject.Inject
 
@@ -52,6 +53,7 @@ class SettingsFragment : PreferenceFragment(), DonationDialogFragment.OnDonation
     private lateinit var sleepPreference: Preference
     private lateinit var seekPreference: Preference
     private lateinit var autoRewindPreference: Preference
+    private var onStartSubscriptions: CompositeSubscription? = null
     private var donationAvailable = false
     private lateinit var iabHelper: IabHelper
     private lateinit var hostingActivity: BaseActivity
@@ -117,6 +119,27 @@ class SettingsFragment : PreferenceFragment(), DonationDialogFragment.OnDonation
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        onStartSubscriptions = CompositeSubscription().apply {
+
+            add(prefs.autoRewindAmount
+                    .map { resources.getQuantityString(R.plurals.seconds, it, it) }
+                    .subscribe { autoRewindPreference.summary = it })
+
+            add(prefs.seekTime
+                    .map { resources.getQuantityString(R.plurals.seconds, it, it) }
+                    .subscribe { seekPreference.summary = it })
+        }
+    }
+
+    override fun onStop() {
+        onStartSubscriptions!!.unsubscribe()
+
+        super.onStop()
+    }
+
     private fun updateValues() {
         val theme = prefs.theme
         themePreference.setSummary(theme.nameId)
@@ -124,13 +147,6 @@ class SettingsFragment : PreferenceFragment(), DonationDialogFragment.OnDonation
         val sleepAmount = prefs.sleepTime
         val sleepSummary = resources.getQuantityString(R.plurals.minutes, sleepAmount, sleepAmount)
         sleepPreference.summary = sleepSummary
-
-        val autoRewindAmount = prefs.autoRewindAmount
-        val autoRewindSummary = resources.getQuantityString(R.plurals.seconds, autoRewindAmount, autoRewindAmount)
-        autoRewindPreference.summary = autoRewindSummary
-
-        val seekAmount = prefs.seekTime.toBlocking().first()
-        seekPreference.summary = resources.getQuantityString(R.plurals.seconds, seekAmount, seekAmount)
     }
 
     @Suppress("OverridingDeprecatedMember")

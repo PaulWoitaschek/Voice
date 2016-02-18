@@ -254,7 +254,7 @@ constructor(private val prefs: PrefsManager, private val db: BookChest, private 
                         stopUpdating()
 
                         if (rewind) {
-                            val autoRewind = prefs.autoRewindAmount * 1000
+                            val autoRewind = prefs.autoRewindAmount.toBlocking().first() * 1000
                             if (autoRewind != 0) {
                                 val originalPosition = player.currentPosition
                                 var seekTo = originalPosition - autoRewind

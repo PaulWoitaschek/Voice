@@ -55,6 +55,7 @@ constructor(c: Context, @Named(FOR) private val sp: SharedPreferences) {
     private val PREF_KEY_DISPLAY_MODE = "displayMode"
 
     private val seekTimeSubject: BehaviorSubject<Int>
+    private val autoRewindAmountSubject: BehaviorSubject<Int>
 
     /**
      * an observable with the id of the current book, or [Book.ID_UNKNOWN] if there is none.
@@ -75,6 +76,9 @@ constructor(c: Context, @Named(FOR) private val sp: SharedPreferences) {
 
         seekTimeSubject = BehaviorSubject.create<Int>(sp.getInt(PREF_KEY_SEEK_TIME, 20))
         seekTimeSubject.skip(1).subscribe { sp.edit { setInt(PREF_KEY_SEEK_TIME to it) } }
+
+        autoRewindAmountSubject = BehaviorSubject.create<Int>(sp.getInt(PREF_KEY_AUTO_REWIND, 2))
+        autoRewindAmountSubject.skip(1).subscribe { sp.edit { setInt(PREF_KEY_AUTO_REWIND to it) } }
 
         currentBookId = BehaviorSubject.create(sp.getLong(PREF_KEY_CURRENT_BOOK, Book.ID_UNKNOWN.toLong()))
     }
@@ -157,6 +161,15 @@ constructor(c: Context, @Named(FOR) private val sp: SharedPreferences) {
     }
 
     /**
+     * The time to seek when pressing a skip button. (in seconds.)
+     */
+    var autoRewindAmount = autoRewindAmountSubject.asObservable()
+
+    fun setAutoRewindAmount(autoRewindAmount: Int) {
+        autoRewindAmountSubject.onNext(autoRewindAmount)
+    }
+
+    /**
      * @return true if the player should resume after the headset has been replugged. (If previously
      * paused by unplugging).
      */
@@ -170,13 +183,6 @@ constructor(c: Context, @Named(FOR) private val sp: SharedPreferences) {
     @Synchronized fun pauseOnTempFocusLoss(): Boolean {
         return sp.getBoolean(PREF_KEY_PAUSE_ON_CAN_DUCK, false)
     }
-
-    /**
-     * The amount to rewind after the player was paused manually.
-     */
-    var autoRewindAmount: Int
-        @Synchronized get() = sp.getInt(PREF_KEY_AUTO_REWIND, 2)
-        @Synchronized set(autoRewindAmount) = sp.edit { setInt(PREF_KEY_AUTO_REWIND to autoRewindAmount) }
 
     /**
      * @return true if a [Bookmark] should be set each time the sleep

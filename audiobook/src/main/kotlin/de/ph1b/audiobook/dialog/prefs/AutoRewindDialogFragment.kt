@@ -45,7 +45,7 @@ class AutoRewindDialogFragment : DialogFragment() {
         textView = customView.findViewById(R.id.textView) as TextView
         seekBar = customView.findViewById(R.id.seekBar) as SeekBar
 
-        val oldRewindAmount = prefs.autoRewindAmount
+        val oldRewindAmount = prefs.autoRewindAmount.toBlocking().first()
         seekBar.max = SEEK_BAR_MAX - SEEK_BAR_MIN
         seekBar.progress = oldRewindAmount - SEEK_BAR_MIN
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -70,7 +70,7 @@ class AutoRewindDialogFragment : DialogFragment() {
                 .negativeText(R.string.dialog_cancel)
                 .onPositive { materialDialog, dialogAction ->
                     val newRewindAmount = seekBar.progress + SEEK_BAR_MIN
-                    prefs.autoRewindAmount = newRewindAmount
+                    prefs.setAutoRewindAmount(newRewindAmount)
                     settingsSetListener.onSettingsSet(oldRewindAmount != newRewindAmount)
                 }
                 .build()
