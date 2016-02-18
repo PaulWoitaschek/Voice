@@ -25,6 +25,7 @@ import e
 import i
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
+import rx.subjects.BehaviorSubject
 import rx.subjects.PublishSubject
 import rx.subscriptions.CompositeSubscription
 import v
@@ -42,8 +43,7 @@ class MediaPlayer
 constructor(private val prefs: PrefsManager, private val db: BookChest, private val player: Player, private val playStateManager: PlayStateManager) {
 
     private val lock = ReentrantLock()
-    var book: Book? = null
-        private set
+    private var book = BehaviorSubject.create<Book>()
     @Volatile private var state: State = State.STOPPED
 
     private val subscriptions = CompositeSubscription()
@@ -57,7 +57,7 @@ constructor(private val prefs: PrefsManager, private val db: BookChest, private 
                     // After the current song has ended, prepare the next one if there is one. Else stop the
                     // resources.
                     lock.withLock {
-                        book?.let {
+                        book.value?.let {
                             v { "onCompletion called, nextChapter=${it.nextChapter()}" }
                             if (it.nextChapter() != null) {
                                 next()
@@ -87,17 +87,21 @@ constructor(private val prefs: PrefsManager, private val db: BookChest, private 
      */
     fun init(book: Book) {
         lock.withLock {
-            i { "constructor called with ${book.name}" }
-            this.book = book
+            if (this.book.value != book) {
+                i { "constructor called with ${book.name}" }
+                this.book.onNext(book)
+            }
         }
     }
+
+    fun book(): Book? = book.value
 
     /**
      * Prepares the current chapter set in book.
      */
     private fun prepare() {
         lock.withLock {
-            book?.let {
+            book.value?.let {
                 try {
                     player.prepare(it.currentChapter().file)
                     player.currentPosition = it.time
@@ -155,9 +159,9 @@ constructor(private val prefs: PrefsManager, private val db: BookChest, private 
                 // updates the book automatically with the current position
                 add(Observable.interval(1, TimeUnit.SECONDS)
                         .map { lock.withLock { player.currentPosition } } // pass the current position
-                        .map { lock.withLock { book?.copy(time = it) } } // create a copy with new position
+                        .map { lock.withLock { book.value?.copy(time = it) } } // create a copy with new position
                         .filter { it != null } // let it pass when it exists
-                        .doOnNext { lock.withLock { book = it } } // update local var
+                        .doOnNext { lock.withLock { book.onNext(it) } } // update local var
                         .subscribe { lock.withLock { db.updateBook(it!!) } } // update the book
                 )
             }
@@ -172,7 +176,7 @@ constructor(private val prefs: PrefsManager, private val db: BookChest, private 
     fun skip(direction: Direction) {
         v { "direction=$direction" }
         lock.withLock {
-            book?.let {
+            book.value?.let {
                 val currentPos = player.currentPosition
                 val duration = player.duration
                 val delta = prefs.seekTime * 1000
@@ -196,12 +200,12 @@ constructor(private val prefs: PrefsManager, private val db: BookChest, private 
      */
     fun previous(toNullOfNewTrack: Boolean) {
         lock.withLock {
-            book?.let {
+            book.value?.let {
                 val previousChapter = it.previousChapter()
                 if (player.currentPosition > 2000 || previousChapter == null) {
                     player.currentPosition = 0
                     val copy = it.copy(time = 0)
-                    book = copy
+                    book.onNext(copy)
                     db.updateBook(copy)
                 } else {
                     if (toNullOfNewTrack) {
@@ -243,7 +247,7 @@ constructor(private val prefs: PrefsManager, private val db: BookChest, private 
     fun pause(rewind: Boolean) {
         lock.withLock {
             v { "pause acquired lock. state is=$state" }
-            book?.let {
+            book.value?.let {
                 when (state) {
                     State.STARTED -> {
                         player.playing = false
@@ -258,7 +262,7 @@ constructor(private val prefs: PrefsManager, private val db: BookChest, private 
                                 player.currentPosition = seekTo
                                 val copy = it.copy(time = seekTo)
                                 db.updateBook(copy)
-                                book = copy
+                                book.onNext(copy)
                             }
                         }
 
@@ -288,7 +292,7 @@ constructor(private val prefs: PrefsManager, private val db: BookChest, private 
      */
     operator fun next() {
         lock.withLock {
-            book?.nextChapter()?.let {
+            book.value?.nextChapter()?.let {
                 changePosition(0, it.file)
             }
         }
@@ -305,7 +309,7 @@ constructor(private val prefs: PrefsManager, private val db: BookChest, private 
     fun changePosition(time: Int, file: File) {
         lock.withLock {
             v { "changePosition with time $time and file $file" }
-            book?.let {
+            book.value?.let {
 
                 val changeFile = (it.currentChapter().file != file)
                 v { "changeFile=$changeFile" }
@@ -314,7 +318,7 @@ constructor(private val prefs: PrefsManager, private val db: BookChest, private 
 
                     val copy = it.copy(currentFile = file, time = time)
                     db.updateBook(copy)
-                    book = copy
+                    book.onNext(copy)
 
                     prepare()
                     if (wasPlaying) {
@@ -333,7 +337,7 @@ constructor(private val prefs: PrefsManager, private val db: BookChest, private 
 
                             val copy = it.copy(time = time)
                             db.updateBook(copy)
-                            book = copy
+                            book.onNext(copy)
                         }
                         else -> e { "changePosition called in illegal state=$state" }
                     }
@@ -347,10 +351,10 @@ constructor(private val prefs: PrefsManager, private val db: BookChest, private 
      */
     fun setPlaybackSpeed(speed: Float) {
         lock.withLock {
-            book?.let {
+            book.value?.let {
                 val copy = it.copy(playbackSpeed = speed)
                 db.updateBook(copy)
-                book = copy
+                book.onNext(copy)
 
                 player.playbackSpeed = speed
             }

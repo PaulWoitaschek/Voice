@@ -153,7 +153,7 @@ class BookReaderService : Service() {
                 .subscribe {
                     // inform user on errors
                     e { "onError" }
-                    val book = player.book
+                    val book = player.book()
                     if (book != null) {
                         startActivity(BookActivity.malformedFileIntent(this, book.currentFile))
                     } else {
@@ -172,7 +172,7 @@ class BookReaderService : Service() {
                     .flatMap({ updatedId ->
                         db.activeBooks.singleOrDefault(null) { it.id == updatedId }
                     })
-                    .filter { it != null && (player.book?.id != it.id) }
+                    .filter { it != null && (player.book()?.id != it.id) }
                     .subscribe {
                         player.stop()
                         player.init(it)
@@ -197,7 +197,7 @@ class BookReaderService : Service() {
                     .observeOn(Schedulers.io())
                     .subscribe {
                         d { "onPlayStateManager.PlayStateChanged:$it" }
-                        val controllerBook = player.book
+                        val controllerBook = player.book()
                         if (controllerBook != null) {
                             when (it!!) {
                                 PlayState.PLAYING -> {
