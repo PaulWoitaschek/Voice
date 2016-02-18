@@ -179,7 +179,7 @@ constructor(private val prefs: PrefsManager, private val db: BookChest, private 
             book.value?.let {
                 val currentPos = player.currentPosition
                 val duration = player.duration
-                val delta = prefs.seekTime * 1000
+                val delta = prefs.seekTime.toBlocking().first() * 1000
 
                 val seekTo = if ((direction == Direction.FORWARD)) currentPos + delta else currentPos - delta
                 v { "currentPos=$currentPos, seekTo=$seekTo, duration=$duration" }
@@ -211,7 +211,7 @@ constructor(private val prefs: PrefsManager, private val db: BookChest, private 
                     if (toNullOfNewTrack) {
                         changePosition(0, previousChapter.file)
                     } else {
-                        changePosition(previousChapter.duration - (prefs.seekTime * 1000), previousChapter.file)
+                        changePosition(previousChapter.duration - (prefs.seekTime.toBlocking().first() * 1000), previousChapter.file)
                     }
                 }
             }

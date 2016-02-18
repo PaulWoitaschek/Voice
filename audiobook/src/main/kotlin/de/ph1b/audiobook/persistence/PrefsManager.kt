@@ -54,6 +54,8 @@ constructor(c: Context, @Named(FOR) private val sp: SharedPreferences) {
     private val PREF_KEY_SINGLE_BOOK_FOLDERS = "singleBookFolders"
     private val PREF_KEY_DISPLAY_MODE = "displayMode"
 
+    private val seekTimeSubject: BehaviorSubject<Int>
+
     /**
      * an observable with the id of the current book, or [Book.ID_UNKNOWN] if there is none.
      * Always operates on the UI thread.
@@ -70,6 +72,10 @@ constructor(c: Context, @Named(FOR) private val sp: SharedPreferences) {
         PREF_KEY_BOOKMARK_ON_SLEEP = c.getString(R.string.pref_key_bookmark_on_sleep)
         PREF_KEY_AUTO_REWIND = c.getString(R.string.pref_key_auto_rewind)
         PREF_KEY_PAUSE_ON_CAN_DUCK = c.getString(R.string.pref_key_pause_on_can_duck)
+
+        seekTimeSubject = BehaviorSubject.create<Int>(sp.getInt(PREF_KEY_SEEK_TIME, 20))
+        seekTimeSubject.skip(1).subscribe { sp.edit { setInt(PREF_KEY_SEEK_TIME to it) } }
+
         currentBookId = BehaviorSubject.create(sp.getLong(PREF_KEY_CURRENT_BOOK, Book.ID_UNKNOWN.toLong()))
     }
 
@@ -144,9 +150,11 @@ constructor(c: Context, @Named(FOR) private val sp: SharedPreferences) {
     /**
      * The time to seek when pressing a skip button. (in seconds.)
      */
-    var seekTime: Int
-        @Synchronized get() = sp.getInt(PREF_KEY_SEEK_TIME, 20)
-        @Synchronized set(time) = sp.edit { setInt(PREF_KEY_SEEK_TIME to time) }
+    var seekTime = seekTimeSubject.asObservable()
+
+    fun setSeekTime(seekTime: Int) {
+        seekTimeSubject.onNext(seekTime)
+    }
 
     /**
      * @return true if the player should resume after the headset has been replugged. (If previously

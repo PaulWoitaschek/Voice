@@ -41,7 +41,7 @@ class SeekDialogFragment : DialogFragment() {
         textView = customView.findViewById(R.id.textView) as TextView
 
         // init
-        val oldSeekTime = prefs.seekTime
+        val oldSeekTime = prefs.seekTime.toBlocking().first()
         seekBar.max = SEEK_BAR_MAX - SEEK_BAR_MIN
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -64,7 +64,7 @@ class SeekDialogFragment : DialogFragment() {
                 .negativeText(R.string.dialog_cancel)
                 .onPositive { materialDialog, dialogAction ->
                     val newSeekTime = seekBar.progress + SEEK_BAR_MIN
-                    prefs.seekTime = newSeekTime
+                    prefs.setSeekTime(newSeekTime)
                     settingsSetListener.onSettingsSet(oldSeekTime != newSeekTime)
                 }.build()
     }

@@ -129,7 +129,7 @@ class SettingsFragment : PreferenceFragment(), DonationDialogFragment.OnDonation
         val autoRewindSummary = resources.getQuantityString(R.plurals.seconds, autoRewindAmount, autoRewindAmount)
         autoRewindPreference.summary = autoRewindSummary
 
-        val seekAmount = prefs.seekTime
+        val seekAmount = prefs.seekTime.toBlocking().first()
         seekPreference.summary = resources.getQuantityString(R.plurals.seconds, seekAmount, seekAmount)
     }
 
