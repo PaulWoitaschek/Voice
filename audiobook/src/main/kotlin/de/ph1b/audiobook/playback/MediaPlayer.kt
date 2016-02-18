@@ -20,7 +20,6 @@ package de.ph1b.audiobook.playback
 import de.paul_woitaschek.mediaplayer.Player
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookChest
-import de.ph1b.audiobook.persistence.PrefsManager
 import e
 import i
 import rx.Observable
@@ -40,7 +39,7 @@ import kotlin.concurrent.withLock
 @Singleton
 class MediaPlayer
 @Inject
-constructor(private val prefs: PrefsManager, private val db: BookChest, private val player: Player, private val playStateManager: PlayStateManager) {
+constructor(private val db: BookChest, private val player: Player, private val playStateManager: PlayStateManager) {
 
     private val lock = ReentrantLock()
     private var book = BehaviorSubject.create<Book>()
@@ -168,6 +167,9 @@ constructor(private val prefs: PrefsManager, private val db: BookChest, private 
         }
     }
 
+    var seekTime = 0
+    var autoRewindAmount = 0
+
     /**
      * Skips by the amount, specified in the settings.
 
@@ -179,7 +181,7 @@ constructor(private val prefs: PrefsManager, private val db: BookChest, private 
             book.value?.let {
                 val currentPos = player.currentPosition
                 val duration = player.duration
-                val delta = prefs.seekTime.toBlocking().first() * 1000
+                val delta = seekTime * 1000
 
                 val seekTo = if ((direction == Direction.FORWARD)) currentPos + delta else currentPos - delta
                 v { "currentPos=$currentPos, seekTo=$seekTo, duration=$duration" }
@@ -211,7 +213,7 @@ constructor(private val prefs: PrefsManager, private val db: BookChest, private 
                     if (toNullOfNewTrack) {
                         changePosition(0, previousChapter.file)
                     } else {
-                        changePosition(previousChapter.duration - (prefs.seekTime.toBlocking().first() * 1000), previousChapter.file)
+                        changePosition(previousChapter.duration - (seekTime * 1000), previousChapter.file)
                     }
                 }
             }
@@ -254,7 +256,7 @@ constructor(private val prefs: PrefsManager, private val db: BookChest, private 
                         stopUpdating()
 
                         if (rewind) {
-                            val autoRewind = prefs.autoRewindAmount.toBlocking().first() * 1000
+                            val autoRewind = autoRewindAmount * 1000
                             if (autoRewind != 0) {
                                 val originalPosition = player.currentPosition
                                 var seekTo = originalPosition - autoRewind

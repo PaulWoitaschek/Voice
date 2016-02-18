@@ -167,6 +167,15 @@ class BookReaderService : Service() {
         playStateManager.playState.onNext(PlayState.STOPPED)
 
         subscriptions.apply {
+
+            // set seek time to the player
+            add(prefs.seekTime
+                    .subscribe { player.seekTime = it })
+
+            // set auto rewind amount to the player
+            add(prefs.autoRewindAmount
+                    .subscribe { player.autoRewindAmount = it })
+
             // re-init controller when there is a new book set as the current book
             add(prefs.currentBookId
                     .flatMap({ updatedId ->
