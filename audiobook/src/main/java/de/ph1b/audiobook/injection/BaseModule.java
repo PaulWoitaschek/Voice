@@ -28,6 +28,7 @@ import dagger.Module;
 import dagger.Provides;
 import de.paul_woitaschek.mediaplayer.Player;
 import de.ph1b.audiobook.BuildConfig;
+import de.ph1b.audiobook.persistence.InternalDb;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.playback.MediaPlayerCapabilities;
 
@@ -63,5 +64,11 @@ public class BaseModule {
         }
         Player.Logging logging = BuildConfig.DEBUG ? Player.Logging.ENABLED : Player.Logging.DISABLED;
         return new Player(context, type, logging);
+    }
+
+    @Provides
+    @Singleton
+    static InternalDb provideInternalDb(Context context){
+        return new InternalDb(context, InternalDb.Companion.getDATABASE_NAME());
     }
 }

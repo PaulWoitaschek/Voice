@@ -31,8 +31,8 @@ import javax.inject.Inject
  * @author Paul Woitaschek
  */
 class InternalDb
-@Inject constructor(context: Context)
-: SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+@Inject constructor(context: Context, dbName: String)
+: SQLiteOpenHelper(context, dbName, null, DATABASE_VERSION) {
 
     override fun onCreate(db: SQLiteDatabase) {
         BookTable.onCreate(db)
@@ -56,6 +56,6 @@ class InternalDb
     companion object {
 
         private val DATABASE_VERSION = 33
-        private val DATABASE_NAME = "autoBookDB"
+        val DATABASE_NAME = "autoBookDB"
     }
 }
