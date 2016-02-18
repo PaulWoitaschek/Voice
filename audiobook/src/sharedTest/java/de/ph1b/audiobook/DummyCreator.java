@@ -1,3 +1,4 @@
+package de.ph1b.audiobook;
 /*
  * This file is part of Material Audiobook Player.
  *
@@ -14,8 +15,6 @@
  * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
  * /licenses/>.
  */
-
-package de.ph1b.audiobook.persistence;
 
 
 import java.io.File;

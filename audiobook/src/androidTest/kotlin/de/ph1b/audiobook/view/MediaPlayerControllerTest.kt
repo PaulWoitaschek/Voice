@@ -15,15 +15,17 @@
  * /licenses/>.
  */
 
-package de.ph1b.audiobook.persistence
+package de.ph1b.audiobook.view
 
-import android.test.suitebuilder.annotation.MediumTest
+import android.test.AndroidTestCase
 import android.test.suitebuilder.annotation.SmallTest
-import de.ph1b.audiobook.injection.App
+import de.paul_woitaschek.mediaplayer.Player
+import de.ph1b.audiobook.DummyCreator
+import de.ph1b.audiobook.RealFileMocker
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.playback.MediaPlayer
 import de.ph1b.audiobook.playback.PlayStateManager
-import org.junit.Before
+import org.fest.assertions.api.Assertions.assertThat
 import java.io.File
 import java.util.*
 import java.util.concurrent.CountDownLatch
@@ -33,7 +35,7 @@ import java.util.concurrent.CountDownLatch
 
  * @author Paul Woitaschek
  */
-class MediaPlayerControllerTest {
+class MediaPlayerControllerTest : AndroidTestCase() {
 
     private lateinit var mediaPlayer: MediaPlayer
     private lateinit var playStateManager: PlayStateManager
@@ -42,29 +44,18 @@ class MediaPlayerControllerTest {
 
     lateinit var book: Book
 
-    @Before
-    fun setUp() {
-
-        mediaPlayer = MediaPlayer()
-        playStateManager = App.component().playStateManager()
-
+    override fun setUp() {
+        val player = Player(context, Player.Type.ANDROID, Player.Logging.ENABLED)
+        playStateManager = PlayStateManager()
+        mediaPlayer = MediaPlayer(player, playStateManager)
 
         realFileMocker = RealFileMocker()
-        files = realFileMocker.create(context);
-
-
+        files = realFileMocker.create();
         book = DummyCreator.dummyBook(files[0], files[1])
 
         mediaPlayer.init(book)
-    }
 
-    override fun testAndroidTestCaseSetupProperly() {
-        super.testAndroidTestCaseSetupProperly()
-
-        checkNotNull(mediaPlayer)
-        for (f in files) {
-            check(f.exists())
-        }
+        for (f in files) assertThat(f).exists()
     }
 
     /**
@@ -96,7 +87,7 @@ class MediaPlayerControllerTest {
     /**
      * Tests for threading issues by letting two threads against each other
      */
-    @MediumTest
+    @SmallTest
     fun testThreading() {
         val commandsToExecute = 1..1000
         val readyLatch = CountDownLatch(2)
@@ -122,9 +113,9 @@ class MediaPlayerControllerTest {
     }
 
 
-    @Throws(Exception::class)
     override fun tearDown() {
         realFileMocker.destroy()
+
         super.tearDown()
     }
 }
