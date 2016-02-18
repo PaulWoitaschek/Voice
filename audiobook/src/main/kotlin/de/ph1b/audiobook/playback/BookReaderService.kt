@@ -162,12 +162,16 @@ class BookReaderService : Service() {
                         }
                         startActivity(intent)
                     }
-
                 }
+
+        // update book when changed by player
+        player.bookObservable()
+                .filter { it != null }
+                .subscribe { db.updateBook(it) }
+
         playStateManager.playState.onNext(PlayState.STOPPED)
 
         subscriptions.apply {
-
             // set seek time to the player
             add(prefs.seekTime
                     .subscribe { player.seekTime = it })

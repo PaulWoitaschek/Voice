@@ -19,7 +19,6 @@ package de.ph1b.audiobook.playback
 
 import de.paul_woitaschek.mediaplayer.Player
 import de.ph1b.audiobook.model.Book
-import de.ph1b.audiobook.persistence.BookChest
 import e
 import i
 import rx.Observable
@@ -39,7 +38,7 @@ import kotlin.concurrent.withLock
 @Singleton
 class MediaPlayer
 @Inject
-constructor(private val db: BookChest, private val player: Player, private val playStateManager: PlayStateManager) {
+constructor(private val player: Player, private val playStateManager: PlayStateManager) {
 
     private val lock = ReentrantLock()
     private var book = BehaviorSubject.create<Book>()
@@ -93,7 +92,9 @@ constructor(private val db: BookChest, private val player: Player, private val p
         }
     }
 
-    fun book(): Book? = book.value
+    fun book() = book.value
+
+    fun bookObservable() = book.asObservable()
 
     /**
      * Prepares the current chapter set in book.
@@ -160,8 +161,7 @@ constructor(private val db: BookChest, private val player: Player, private val p
                         .map { lock.withLock { player.currentPosition } } // pass the current position
                         .map { lock.withLock { book.value?.copy(time = it) } } // create a copy with new position
                         .filter { it != null } // let it pass when it exists
-                        .doOnNext { lock.withLock { book.onNext(it) } } // update local var
-                        .subscribe { lock.withLock { db.updateBook(it!!) } } // update the book
+                        .subscribe { lock.withLock { book.onNext(it) } } // update the book
                 )
             }
         }
@@ -208,7 +208,6 @@ constructor(private val db: BookChest, private val player: Player, private val p
                     player.currentPosition = 0
                     val copy = it.copy(time = 0)
                     book.onNext(copy)
-                    db.updateBook(copy)
                 } else {
                     if (toNullOfNewTrack) {
                         changePosition(0, previousChapter.file)
@@ -263,7 +262,6 @@ constructor(private val db: BookChest, private val player: Player, private val p
                                 seekTo = Math.max(seekTo, 0)
                                 player.currentPosition = seekTo
                                 val copy = it.copy(time = seekTo)
-                                db.updateBook(copy)
                                 book.onNext(copy)
                             }
                         }
@@ -319,7 +317,6 @@ constructor(private val db: BookChest, private val player: Player, private val p
                     val wasPlaying = (state == State.STARTED)
 
                     val copy = it.copy(currentFile = file, time = time)
-                    db.updateBook(copy)
                     book.onNext(copy)
 
                     prepare()
@@ -338,7 +335,6 @@ constructor(private val db: BookChest, private val player: Player, private val p
                             player.currentPosition = time
 
                             val copy = it.copy(time = time)
-                            db.updateBook(copy)
                             book.onNext(copy)
                         }
                         else -> e { "changePosition called in illegal state=$state" }
@@ -355,7 +351,6 @@ constructor(private val db: BookChest, private val player: Player, private val p
         lock.withLock {
             book.value?.let {
                 val copy = it.copy(playbackSpeed = speed)
-                db.updateBook(copy)
                 book.onNext(copy)
 
                 player.playbackSpeed = speed
