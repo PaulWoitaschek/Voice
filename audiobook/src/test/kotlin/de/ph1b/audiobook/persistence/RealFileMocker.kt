@@ -15,7 +15,7 @@
  * /licenses/>.
  */
 
-package de.ph1b.audiobook.testing
+package de.ph1b.audiobook.persistence
 
 import android.content.Context
 import android.os.Environment

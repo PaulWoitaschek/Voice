@@ -15,17 +15,15 @@
  * /licenses/>.
  */
 
-package de.ph1b.audiobook.mediaplayer
+package de.ph1b.audiobook.persistence
 
-import android.test.ApplicationTestCase
 import android.test.suitebuilder.annotation.MediumTest
 import android.test.suitebuilder.annotation.SmallTest
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.playback.MediaPlayer
 import de.ph1b.audiobook.playback.PlayStateManager
-import de.ph1b.audiobook.testing.DummyCreator
-import de.ph1b.audiobook.testing.RealFileMocker
+import org.junit.Before
 import java.io.File
 import java.util.*
 import java.util.concurrent.CountDownLatch
@@ -35,7 +33,7 @@ import java.util.concurrent.CountDownLatch
 
  * @author Paul Woitaschek
  */
-class MediaPlayerControllerTest : ApplicationTestCase<App> (App::class.java) {
+class MediaPlayerControllerTest {
 
     private lateinit var mediaPlayer: MediaPlayer
     private lateinit var playStateManager: PlayStateManager
@@ -44,12 +42,10 @@ class MediaPlayerControllerTest : ApplicationTestCase<App> (App::class.java) {
 
     lateinit var book: Book
 
-    @Throws(Exception::class)
-    override fun setUp() {
-        super.setUp()
+    @Before
+    fun setUp() {
 
-        createApplication()
-        mediaPlayer = App.component().mediaPlayerController()
+        mediaPlayer = MediaPlayer()
         playStateManager = App.component().playStateManager()
 
 

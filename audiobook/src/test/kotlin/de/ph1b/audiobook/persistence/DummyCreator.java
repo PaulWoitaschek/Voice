@@ -15,7 +15,7 @@
  * /licenses/>.
  */
 
-package de.ph1b.audiobook.testing;
+package de.ph1b.audiobook.persistence;
 
 
 import java.io.File;
@@ -38,7 +38,8 @@ public class DummyCreator {
     private static final Random rnd = new Random();
 
     public static Book dummyBook(long id) {
-        return dummyBook(new File("First.mp3"), new File("second.mp3"), id);
+        String root = "/root/";
+        return dummyBook(new File(root, "First.mp3"), new File(root, "/second.mp3"), id);
     }
 
     public static Book dummyBook(File file1, File file2, long id) {
