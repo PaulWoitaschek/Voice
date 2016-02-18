@@ -17,18 +17,15 @@
 
 package de.ph1b.audiobook.playback
 
-import android.content.Context
-import android.content.Intent
 import de.paul_woitaschek.mediaplayer.Player
-import de.ph1b.audiobook.activity.BookActivity
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.view.fragment.BookShelfFragment
 import e
 import i
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
+import rx.subjects.PublishSubject
 import rx.subscriptions.CompositeSubscription
 import v
 import java.io.File
@@ -42,7 +39,7 @@ import kotlin.concurrent.withLock
 @Singleton
 class MediaPlayer
 @Inject
-constructor(private val c: Context, private val prefs: PrefsManager, private val db: BookChest, private val player: Player, private val playStateManager: PlayStateManager) {
+constructor(private val prefs: PrefsManager, private val db: BookChest, private val player: Player, private val playStateManager: PlayStateManager) {
 
     private val lock = ReentrantLock()
     var book: Book? = null
@@ -50,7 +47,8 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
     @Volatile private var state: State = State.STOPPED
 
     private val subscriptions = CompositeSubscription()
-
+    private val errorSubject = PublishSubject.create<Unit>()
+    fun onError() = errorSubject.asObservable()
 
     init {
         player.completionObservable
@@ -75,22 +73,9 @@ constructor(private val c: Context, private val prefs: PrefsManager, private val
                 }
 
         player.errorObservable
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    // inform user on errors
-                    lock.withLock {
-                        e { "onError" }
-                        if (book != null) {
-                            c.startActivity(BookActivity.malformedFileIntent(c, book!!.currentFile))
-                        } else {
-                            val intent = Intent(c, BookShelfFragment::class.java).apply {
-                                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                            }
-                            c.startActivity(intent)
-                        }
-
-                        state = State.STOPPED
-                    }
+                    state = MediaPlayer.State.STOPPED
+                    errorSubject.onNext(Unit)
                 }
     }
 

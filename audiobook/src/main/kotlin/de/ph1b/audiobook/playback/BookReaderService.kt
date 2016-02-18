@@ -30,6 +30,7 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import com.squareup.picasso.Picasso
 import d
+import de.ph1b.audiobook.activity.BookActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookChest
@@ -41,12 +42,13 @@ import de.ph1b.audiobook.receiver.AudioFocusReceiver
 import de.ph1b.audiobook.receiver.HeadsetPlugReceiver
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
+import de.ph1b.audiobook.view.fragment.BookShelfFragment
 import e
 import i
+import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 import v
-
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject
@@ -146,6 +148,22 @@ class BookReaderService : Service() {
         registerReceiver(audioBecomingNoisyReceiver, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
         registerReceiver(headsetPlugReceiver.broadcastReceiver, IntentFilter(Intent.ACTION_HEADSET_PLUG))
 
+        player.onError()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    // inform user on errors
+                    e { "onError" }
+                    val book = player.book
+                    if (book != null) {
+                        startActivity(BookActivity.malformedFileIntent(this, book.currentFile))
+                    } else {
+                        val intent = Intent(this, BookShelfFragment::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                        }
+                        startActivity(intent)
+                    }
+
+                }
         playStateManager.playState.onNext(PlayState.STOPPED)
 
         subscriptions.apply {
