@@ -15,13 +15,11 @@
  * /licenses/>.
  */
 
-package de.ph1b.audiobook.view
+package de.ph1b.audiobook
 
 import android.test.AndroidTestCase
 import android.test.suitebuilder.annotation.SmallTest
 import de.paul_woitaschek.mediaplayer.Player
-import de.ph1b.audiobook.DummyCreator
-import de.ph1b.audiobook.RealFileMocker
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.playback.MediaPlayer
 import de.ph1b.audiobook.playback.PlayStateManager
