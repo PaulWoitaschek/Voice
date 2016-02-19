@@ -33,3 +33,8 @@ script:
   - adb shell input keyevent 82 &
   - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
   - ./gradlew connectedCheck --stacktrace
+
+before_install:
+  - ./gradlew createDebugCoverageReport
+  - pip install --user codecov
+  - codecov

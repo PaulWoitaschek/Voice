@@ -43,6 +43,7 @@ android {
             shrinkResources false
             applicationIdSuffix ".debug"
             resValue "string", "app_name", "[DBG] Material Player"
+            testCoverageEnabled = true
         }
     }
 
