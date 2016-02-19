@@ -17,6 +17,7 @@ package de.ph1b.audiobook
  */
 
 
+import android.content.Context
 import android.os.Environment
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -29,10 +30,10 @@ class RealFileMocker {
     lateinit var file1: File
     lateinit var file2: File
 
-    fun create(): List<File> {
-        val externalStorage = Environment.getExternalStorageDirectory()
+    fun create(context: Context): List<File> {
+        val storage = context.filesDir
 
-        val parentFolder = File(externalStorage, "testFolder")
+        val parentFolder = File(storage, "testFolder")
         parentFolder.mkdirs()
         file1 = File(parentFolder, "1.mp3")
         file2 = File(parentFolder, "2.mp3")

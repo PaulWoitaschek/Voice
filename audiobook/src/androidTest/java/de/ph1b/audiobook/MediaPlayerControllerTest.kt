@@ -50,7 +50,7 @@ class MediaPlayerControllerTest : AndroidTestCase() {
         mediaPlayer = MediaPlayer(player, playStateManager)
 
         realFileMocker = RealFileMocker()
-        files = realFileMocker.create();
+        files = realFileMocker.create(context);
         book = DummyCreator.dummyBook(files[0], files[1])
 
         mediaPlayer.init(book)
