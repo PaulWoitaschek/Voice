@@ -34,7 +34,7 @@ script:
   - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
   - ./gradlew connectedCheck --stacktrace
 
-before_install:
+after_success:
   - ./gradlew createDebugCoverageReport
   - pip install --user codecov
   - codecov
