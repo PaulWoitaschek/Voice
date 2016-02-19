@@ -27,8 +27,6 @@ android {
         targetSdkVersion 23
         versionCode 111
         versionName '2016-02-07-nightly2'
-
-        testInstrumentationRunner "de.ph1b.audiobook.testing.MockAppRunner"
     }
 
     buildTypes {
@@ -56,21 +54,14 @@ android {
 
     sourceSets {
 
-
-        main {
-            java.srcDirs += 'src/main/kotlin'
-        }
-
         String sharedTestDir = 'src/sharedTest/java'
 
         test {
             java.srcDirs += sharedTestDir
-            java.srcDirs += 'src/test/kotlin'
         }
 
         androidTest {
             java.srcDirs += sharedTestDir
-            java.srcDirs += 'src/androidTest/kotlin'
         }
     }
 
