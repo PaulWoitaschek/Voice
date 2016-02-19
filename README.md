@@ -1,4 +1,4 @@
-MaterialAudiobookPlayer
+MaterialAudiobookPlayer [![Build Status](https://travis-ci.org/PaulWoitaschek/MaterialAudiobookPlayer.svg?branch=master)](https://travis-ci.org/PaulWoitaschek/MaterialAudiobookPlayer)
 =======================
 
 This is my digital playground where I am learning. I'm integrating and validating new technologies and ideas here, playing around with new UI / UX components and developing with the best coding standard I come up with.
