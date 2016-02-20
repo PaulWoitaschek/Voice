@@ -12,6 +12,7 @@ android:
     - build-tools-23.0.2
     - android-23
     - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
+    - extra
 
 
 notifications:
