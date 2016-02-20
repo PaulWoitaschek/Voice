@@ -17,12 +17,12 @@
 
 package de.ph1b.audiobook.model
 
+import Slimber
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.support.v4.content.ContextCompat
-import d
 import de.ph1b.audiobook.activity.BaseActivity
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -31,7 +31,6 @@ import de.ph1b.audiobook.utils.BookVendor
 import de.ph1b.audiobook.utils.FileRecognition
 import de.ph1b.audiobook.utils.MediaAnalyzer
 import rx.subjects.BehaviorSubject
-import v
 import java.io.File
 import java.util.*
 import java.util.concurrent.Executors
@@ -66,7 +65,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
     private fun checkForBooks() {
         val singleBooks = singleBookFiles
         for (f in singleBooks) {
-            d { "checkForBooks with singleBookFile=$f" }
+            Slimber.d { "checkForBooks with singleBookFile=$f" }
             if (f.isFile && f.canRead()) {
                 checkBook(f, Book.Type.SINGLE_FILE)
             } else if (f.isDirectory && f.canRead()) {
@@ -76,7 +75,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
 
         val collectionBooks = collectionBookFiles
         for (f in collectionBooks) {
-            d { "checking collectionBook=$f" }
+            Slimber.d { "checking collectionBook=$f" }
             if (f.isFile && f.canRead()) {
                 checkBook(f, Book.Type.COLLECTION_FILE)
             } else if (f.isDirectory && f.canRead()) {
@@ -92,11 +91,11 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
      * @param interrupting true if a eventually running scanner should be interrupted.
      */
     fun scanForFiles(interrupting: Boolean) {
-        d { "scanForFiles called with scannerActive=${scannerActive.value} and interrupting=$interrupting" }
+        Slimber.d { "scanForFiles called with scannerActive=${scannerActive.value} and interrupting=$interrupting" }
         if (!scannerActive.value || interrupting) {
             stopScanner = true
             executor.execute {
-                v { "started" }
+                Slimber.v { "started" }
                 scannerActive.onNext(true)
                 stopScanner = false
 
@@ -105,15 +104,15 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
                     checkForBooks()
                     coverCollector.findCovers(bookVendor.all())
                 } catch (ex: InterruptedException) {
-                    d(ex) { "We were interrupted at adding a book" }
+                    Slimber.d(ex) { "We were interrupted at adding a book" }
                 }
 
                 stopScanner = false
                 scannerActive.onNext(false)
-                v { "stopped" }
+                Slimber.v { "stopped" }
             }
         }
-        v { "scanForFiles method done (executor should be called" }
+        Slimber.v { "scanForFiles method done (executor should be called" }
     }
 
     /**
@@ -166,7 +165,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
      */
     @Throws(InterruptedException::class)
     private fun deleteOldBooks() {
-        d { "deleteOldBooks started" }
+        Slimber.d { "deleteOldBooks started" }
         val singleBookFiles = singleBookFiles
         val collectionBookFolders = collectionBookFiles
 
@@ -227,7 +226,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
         }
 
         for (b in booksToRemove) {
-            d { "deleting book=${b.name}" };
+            Slimber.d { "deleting book=${b.name}" };
             db.hideBook(b)
         }
     }
@@ -269,7 +268,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
                     newChapters,
                     1.0f,
                     bookRoot)
-            d { "adding newBook=${newBook.name}" }
+            Slimber.d { "adding newBook=${newBook.name}" }
             db.addBook(newBook)
         } else {
             orphanedBook = orphanedBook.copy(chapters = newChapters)
@@ -414,7 +413,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
      * @return The Book if available, or `null`
      */
     private fun getBookFromDb(rootFile: File, type: Book.Type, orphaned: Boolean): Book? {
-        d { "getBookFromDb, rootFile=$rootFile, type=$type, orphaned=$orphaned" }
+        Slimber.d { "getBookFromDb, rootFile=$rootFile, type=$type, orphaned=$orphaned" }
         val books: List<Book> =
                 if (orphaned) {
                     db.getOrphanedBooks()
@@ -428,12 +427,12 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
                 }
             }
         } else if (rootFile.isFile) {
-            d { "getBookFromDb, its a file" }
+            Slimber.d { "getBookFromDb, its a file" }
             for (b in books) {
-                v { "Comparing bookRoot=${b.root} with ${rootFile.parentFile.absoluteFile}" }
+                Slimber.v { "Comparing bookRoot=${b.root} with ${rootFile.parentFile.absoluteFile}" }
                 if (rootFile.parentFile.absolutePath == b.root && type === b.type) {
                     val singleChapter = b.chapters.first()
-                    d { "getBookFromDb, singleChapterPath=${singleChapter.file} compared with=${rootFile.absoluteFile}" }
+                    Slimber.d { "getBookFromDb, singleChapterPath=${singleChapter.file} compared with=${rootFile.absoluteFile}" }
                     if (singleChapter.file == rootFile) {
                         return b
                     }

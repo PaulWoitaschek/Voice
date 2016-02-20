@@ -17,11 +17,10 @@
 
 package de.ph1b.audiobook.persistence
 
+import Slimber.e
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import e
-
 import java.util.*
 import javax.inject.Inject
 

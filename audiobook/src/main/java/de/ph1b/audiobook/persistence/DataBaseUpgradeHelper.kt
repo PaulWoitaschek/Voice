@@ -17,13 +17,12 @@
 
 package de.ph1b.audiobook.persistence
 
+import Slimber
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import android.os.Environment
 import android.provider.BaseColumns
-import d
 import de.ph1b.audiobook.injection.App
-import i
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -261,7 +260,7 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
                 book.put("time", currentTime)
                 book.put("playbackSpeed", speed.toDouble())
 
-                d { "upgrade24 restored book=$book" }
+                Slimber.d { "upgrade24 restored book=$book" }
                 val cv = ContentValues()
                 cv.put("BOOK_JSON", book.toString())
                 val newBookId = db.insert(newBookTable, null, cv)
@@ -374,7 +373,7 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
      */
     @Throws(InvalidPropertiesFormatException::class)
     private fun upgrade28() {
-        d { "upgrade28" }
+        Slimber.d { "upgrade28" }
         val cursor = db.query("TABLE_BOOK", arrayOf("BOOK_JSON", "BOOK_ID"), null, null, null, null, null)
         try {
             while (cursor.moveToNext()) {
@@ -393,7 +392,7 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
                     chapter.put("name", chapterName)
                 }
                 val cv = ContentValues()
-                d { "so saving book=$book" }
+                Slimber.d { "so saving book=$book" }
                 cv.put("BOOK_JSON", book.toString())
                 db.update("TABLE_BOOK", cv, "BOOK_ID" + "=?", arrayOf(cursor.getLong(1).toString()))
             }
@@ -405,7 +404,7 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
     }
 
     private fun upgrade29() {
-        d { "upgrade29" }
+        Slimber.d { "upgrade29" }
 
         // fetching old contents
         val cursor = db.query("TABLE_BOOK", arrayOf("BOOK_JSON", "BOOK_ACTIVE"),
@@ -621,7 +620,7 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
             val time = long(BM_TIME)
             entries.add(Holder(path, title, time))
         }
-        i { "Restored bookmarks=$entries" }
+        Slimber.i { "Restored bookmarks=$entries" }
 
         // delete table
         db.execSQL("DROP TABLE $BOOKMARK_TABLE_NAME")
@@ -634,7 +633,7 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
         val ID = BaseColumns._ID
         val CREATE_TABLE = "CREATE TABLE $TABLE_NAME ( $ID INTEGER PRIMARY KEY AUTOINCREMENT, $PATH TEXT NOT NULL, $TITLE TEXT NOT NULL, $TIME INTEGER NOT NULL)"
         db.execSQL(CREATE_TABLE)
-        i { "Created $CREATE_TABLE" }
+        Slimber.i { "Created $CREATE_TABLE" }
 
         // add old bookmarks to new bookmark scheme
         db.asTransaction {
@@ -645,14 +644,14 @@ internal class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
                     put(TIME, it.time)
                 }
                 db.insertOrThrow(TABLE_NAME, null, cv)
-                i { "Inserted $cv to $TABLE_NAME" }
+                Slimber.i { "Inserted $cv to $TABLE_NAME" }
             }
         }
     }
 
     @Throws(InvalidPropertiesFormatException::class)
     fun upgrade(fromVersion: Int) {
-        i { "upgrade fromVersion=$fromVersion" }
+        Slimber.i { "upgrade fromVersion=$fromVersion" }
         if (fromVersion <= 23) upgrade23()
         if (fromVersion <= 24) upgrade24()
         if (fromVersion <= 25) upgrade25()

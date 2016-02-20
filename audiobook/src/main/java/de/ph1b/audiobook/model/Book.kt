@@ -18,9 +18,9 @@
 package de.ph1b.audiobook.model
 
 
+import Slimber
 import android.os.Environment
 import de.ph1b.audiobook.injection.App
-import i
 import java.io.File
 import java.util.*
 
@@ -146,7 +146,7 @@ data class Book(val id: Long,
 
         val coverFile = File("${Environment.getExternalStorageDirectory().absolutePath}${separator}Android${separator}data$separator${App.component().context.packageName}",
                 name)
-        i { "CoverFile is $coverFile" }
+        Slimber.i { "CoverFile is $coverFile" }
         if (!coverFile.parentFile.exists()) {
             //noinspection ResultOfMethodCallIgnored
             coverFile.parentFile.mkdirs()

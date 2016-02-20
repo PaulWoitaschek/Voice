@@ -17,6 +17,7 @@
 
 package de.ph1b.audiobook.adapter
 
+import Slimber
 import android.content.Context
 import android.graphics.Color
 import android.support.annotation.ColorInt
@@ -30,8 +31,6 @@ import android.widget.SpinnerAdapter
 import android.widget.TextView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.uitools.ThemeUtil
-import i
-
 import java.util.*
 
 /**
@@ -50,7 +49,7 @@ class MultiLineSpinnerAdapter<Type>(private val spinner: Spinner, private val co
                     convertView as TextView
                 }
 
-        i { "parent is $parent" }
+        Slimber.i { "parent is $parent" }
         val selected = position == spinner.selectedItemPosition
         textView.text = getItem(position).shown
 

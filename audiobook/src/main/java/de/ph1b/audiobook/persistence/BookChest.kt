@@ -17,6 +17,7 @@
 
 package de.ph1b.audiobook.persistence
 
+import Slimber
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
@@ -26,8 +27,6 @@ import de.ph1b.audiobook.model.Chapter
 import rx.Observable
 import rx.Subscriber
 import rx.subjects.PublishSubject
-import v
-
 import java.io.File
 import java.util.*
 import javax.inject.Inject
@@ -79,7 +78,20 @@ constructor(internalDb: InternalDb) {
         db.delete(BookmarkTable.TABLE_NAME, "${BookmarkTable.ID} =?", arrayOf(id.toString()))
     }
 
+    inline fun <T> Iterable<T>.mapIf(condition: (T) -> Boolean, transform: (T) -> T): List<T> {
+        val array = ArrayList<T>()
+        for (t in this) {
+            array.add(if (condition(t)) transform(t) else t)
+        }
+        return array
+    }
+
+
     fun addBookmark(bookmark: Bookmark): Bookmark {
+        val mutalbeList = ArrayList<String>()
+        val new = mutalbeList.map { it.toInt() }
+
+
         val cv = bookmark.toContentValues()
         val insertedId = db.insertOrThrow(BookmarkTable.TABLE_NAME, null, cv)
         return bookmark.copy(id = insertedId)
@@ -88,7 +100,7 @@ constructor(internalDb: InternalDb) {
     fun addBookmarkAtBookPosition(book: Book, title: String) {
         val addedBookmark = Bookmark(book.currentChapter().file, title, book.time)
         addBookmark(addedBookmark)
-        v { "Added bookmark=$addedBookmark" }
+        Slimber.v { "Added bookmark=$addedBookmark" }
     }
 
     fun bookmarks(book: Book) = Observable.just(db)
@@ -163,7 +175,7 @@ constructor(internalDb: InternalDb) {
 
     @Synchronized fun addBook(book: Book) {
         var newBook = book
-        v { "addBook=${newBook.name}" }
+        Slimber.v { "addBook=${newBook.name}" }
 
         db.asTransaction {
             val bookCv = BookTable.getContentValues(newBook)
@@ -192,7 +204,7 @@ constructor(internalDb: InternalDb) {
     }
 
     @Synchronized fun updateBook(book: Book) {
-        v { "updateBook=${book.name} with time ${book.time}" }
+        Slimber.v { "updateBook=${book.name} with time ${book.time}" }
 
         val bookIterator = active.listIterator()
         while (bookIterator.hasNext()) {
@@ -221,7 +233,7 @@ constructor(internalDb: InternalDb) {
     }
 
     @Synchronized fun hideBook(book: Book) {
-        v { "hideBook=${book.name}" }
+        Slimber.v { "hideBook=${book.name}" }
 
         val iterator = active.listIterator()
         while (iterator.hasNext()) {

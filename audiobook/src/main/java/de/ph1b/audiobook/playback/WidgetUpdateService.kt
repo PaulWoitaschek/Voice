@@ -17,6 +17,7 @@
 
 package de.ph1b.audiobook.playback
 
+import Slimber.e
 import android.app.PendingIntent
 import android.app.Service
 import android.appwidget.AppWidgetManager
@@ -44,10 +45,8 @@ import de.ph1b.audiobook.receiver.BaseWidgetProvider
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.utils.BookVendor
-import e
 import rx.Observable
 import rx.subscriptions.CompositeSubscription
-
 import java.io.IOException
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor

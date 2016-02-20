@@ -17,6 +17,7 @@
 
 package de.ph1b.audiobook.fragment
 
+import Slimber
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -35,10 +36,8 @@ import de.ph1b.audiobook.layoutInflater
 import de.ph1b.audiobook.uitools.setInvisible
 import de.ph1b.audiobook.uitools.setVisible
 import de.ph1b.audiobook.utils.BookVendor
-import i
 import okhttp3.HttpUrl
 import rx.subjects.BehaviorSubject
-
 import java.io.Serializable
 import java.net.URLEncoder
 import javax.inject.Inject
@@ -97,13 +96,13 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
                 val values = httpUrl.queryParameterValues("imgurl")
                 // intercept images
                 if (values.isNotEmpty()) {
-                    i { "img url values are $values" }
+                    Slimber.i { "img url values are $values" }
                     val first = values.first()
                     val editCover = EditCoverDialogFragment.newInstance(this@ImagePickerFragment, book, first)
                     editCover.show(fragmentManager, FM_EDIT_COVER)
                     return true
                 } else {
-                    i { "img url $url did not contain the imgurl parameter." }
+                    Slimber.i { "img url $url did not contain the imgurl parameter." }
                     return super.shouldOverrideUrlLoading(view, url)
                 }
             }
@@ -111,14 +110,14 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
 
-                i { "page started with $url" }
+                Slimber.i { "page started with $url" }
                 webViewIsLoading.onNext(true)
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
 
-                i { "page stopped with $url" }
+                Slimber.i { "page stopped with $url" }
                 webViewIsLoading.onNext(false)
             }
 
@@ -168,7 +167,7 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
         webViewIsLoading
                 .filter { it == true }
                 .filter { !rotation.hasStarted() }
-                .doOnNext { i { "is loading. Start animation" } }
+                .doOnNext { Slimber.i { "is loading. Start animation" } }
                 .subscribe {
                     rotation.start()
                 }
@@ -176,7 +175,7 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
         rotation.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationRepeat(p0: Animation?) {
                 if (webViewIsLoading.value == false ) {
-                    i { "we are in the refresh round. cancel now." }
+                    Slimber.i { "we are in the refresh round. cancel now." }
                     rotation.cancel()
                     rotation.reset()
                 }

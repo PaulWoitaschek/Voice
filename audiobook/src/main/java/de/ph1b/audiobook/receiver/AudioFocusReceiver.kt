@@ -1,11 +1,9 @@
 package de.ph1b.audiobook.receiver
 
+import Slimber
 import android.media.AudioManager
 import android.telephony.TelephonyManager
-import d
-import i
 import rx.subjects.PublishSubject
-
 import javax.inject.Inject
 
 /**
@@ -18,12 +16,12 @@ class AudioFocusReceiver
 @Inject constructor(private val telephonyManager: TelephonyManager) {
 
     val audioFocusListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
-        i { "audio focus listener got focus $focusChange" }
+        Slimber.i { "audio focus listener got focus $focusChange" }
         if (telephonyManager.callState != TelephonyManager.CALL_STATE_IDLE) {
-            d { "Call state is: ${telephonyManager.callState}" }
+            Slimber.d { "Call state is: ${telephonyManager.callState}" }
             subject.onNext(AudioFocus.LOSS_INCOMING_CALL)
         } else {
-            i { "FocusChange is $focusChange" }
+            Slimber.i { "FocusChange is $focusChange" }
             when (focusChange) {
                 AudioManager.AUDIOFOCUS_GAIN -> subject.onNext(AudioFocus.GAIN)
                 AudioManager.AUDIOFOCUS_LOSS -> subject.onNext(AudioFocus.LOSS)

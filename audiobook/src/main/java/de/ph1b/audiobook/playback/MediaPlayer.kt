@@ -17,16 +17,15 @@
 
 package de.ph1b.audiobook.playback
 
+import Slimber
+import Slimber.e
 import de.paul_woitaschek.mediaplayer.Player
 import de.ph1b.audiobook.model.Book
-import e
-import i
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.subjects.BehaviorSubject
 import rx.subjects.PublishSubject
 import rx.subscriptions.CompositeSubscription
-import v
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
@@ -56,11 +55,11 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
                     // resources.
                     lock.withLock {
                         book.value?.let {
-                            v { "onCompletion called, nextChapter=${it.nextChapter()}" }
+                            Slimber.v { "onCompletion called, nextChapter=${it.nextChapter()}" }
                             if (it.nextChapter() != null) {
                                 next()
                             } else {
-                                v { "Reached last track. Stopping player" }
+                                Slimber.v { "Reached last track. Stopping player" }
                                 stopUpdating()
                                 playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
 
@@ -86,7 +85,7 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
     fun init(book: Book) {
         lock.withLock {
             if (this.book.value != book) {
-                i { "constructor called with ${book.name}" }
+                Slimber.i { "constructor called with ${book.name}" }
                 this.book.onNext(book)
             }
         }
@@ -153,7 +152,7 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
      * updates to the GUI.
      */
     private fun startUpdating() {
-        v { "startUpdating" }
+        Slimber.v { "startUpdating" }
         subscriptions.apply {
             if (!hasSubscriptions()) {
                 // updates the book automatically with the current position
@@ -176,7 +175,7 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
      * @param direction The direction to skip
      */
     fun skip(direction: Direction) {
-        v { "direction=$direction" }
+        Slimber.v { "direction=$direction" }
         lock.withLock {
             book.value?.let {
                 val currentPos = player.currentPosition
@@ -184,7 +183,7 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
                 val delta = seekTime * 1000
 
                 val seekTo = if ((direction == Direction.FORWARD)) currentPos + delta else currentPos - delta
-                v { "currentPos=$currentPos, seekTo=$seekTo, duration=$duration" }
+                Slimber.v { "currentPos=$currentPos, seekTo=$seekTo, duration=$duration" }
 
                 if (seekTo < 0) {
                     previous(false)
@@ -247,7 +246,7 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
      */
     fun pause(rewind: Boolean) {
         lock.withLock {
-            v { "pause acquired lock. state is=$state" }
+            Slimber.v { "pause acquired lock. state is=$state" }
             book.value?.let {
                 when (state) {
                     State.STARTED -> {
@@ -270,7 +269,7 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
 
                         state = State.PAUSED
                     }
-                    else -> e { "pause called in illegal state=$state" }
+                    else -> Slimber.e { "pause called in illegal state=$state" }
                 }
             }
         }
@@ -308,11 +307,11 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
      */
     fun changePosition(time: Int, file: File) {
         lock.withLock {
-            v { "changePosition with time $time and file $file" }
+            Slimber.v { "changePosition with time $time and file $file" }
             book.value?.let {
 
                 val changeFile = (it.currentChapter().file != file)
-                v { "changeFile=$changeFile" }
+                Slimber.v { "changeFile=$changeFile" }
                 if (changeFile) {
                     val wasPlaying = (state == State.STARTED)
 
@@ -337,7 +336,7 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
                             val copy = it.copy(time = time)
                             book.onNext(copy)
                         }
-                        else -> e { "changePosition called in illegal state=$state" }
+                        else -> Slimber.e { "changePosition called in illegal state=$state" }
                     }
                 }
             }

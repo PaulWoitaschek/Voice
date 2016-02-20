@@ -68,7 +68,7 @@ public class BaseModule {
 
     @Provides
     @Singleton
-    static InternalDb provideInternalDb(Context context){
+    static InternalDb provideInternalDb(Context context) {
         return new InternalDb(context, InternalDb.Companion.getDATABASE_NAME());
     }
 }

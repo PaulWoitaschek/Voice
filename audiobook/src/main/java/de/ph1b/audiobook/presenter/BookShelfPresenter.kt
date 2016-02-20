@@ -17,18 +17,17 @@
 
 package de.ph1b.audiobook.presenter
 
+import Slimber
 import de.ph1b.audiobook.model.BookAdder
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.view.fragment.BookShelfFragment
-import i
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
-
 import javax.inject.Inject
 
 /**
@@ -46,7 +45,7 @@ constructor(private val bookChest: BookChest,
 : BookShelfBasePresenter() {
 
     override fun onBind(view: BookShelfFragment, subscriptions: CompositeSubscription) {
-        i { "onBind Called for $view" }
+        Slimber.i { "onBind Called for $view" }
 
         // initially updates the adapter with a new set of items
         bookChest.activeBooks

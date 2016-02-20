@@ -185,70 +185,6 @@ public class Base64 {
     /* ********  E N C O D I N G   M E T H O D S  ******** */
 
     /**
-     * Encodes up to three bytes of the array <var>source</var>
-     * and writes the resulting four Base64 bytes to <var>destination</var>.
-     * The source and destination arrays can be manipulated
-     * anywhere along their length by specifying
-     * <var>srcOffset</var> and <var>destOffset</var>.
-     * This method does not check to make sure your arrays
-     * are large enough to accommodate <var>srcOffset</var> + 3 for
-     * the <var>source</var> array or <var>destOffset</var> + 4 for
-     * the <var>destination</var> array.
-     * The actual number of significant bytes in your array is
-     * given by <var>numSigBytes</var>.
-     *
-     * @param source      the array to convert
-     * @param srcOffset   the index where conversion begins
-     * @param numSigBytes the number of significant bytes in your array
-     * @param destination the array to hold the conversion
-     * @param destOffset  the index where output will be put
-     * @param alphabet    is the encoding alphabet
-     * @return the <var>destination</var> array
-     * @since 1.3
-     */
-    private static byte[] encode3to4(byte[] source, int srcOffset,
-                                     int numSigBytes, byte[] destination, int destOffset, byte[] alphabet) {
-        //           1         2         3
-        // 01234567890123456789012345678901 Bit position
-        // --------000000001111111122222222 Array position from threeBytes
-        // --------|    ||    ||    ||    | Six bit groups to index alphabet
-        //          >>18  >>12  >> 6  >> 0  Right shift necessary
-        //                0x3f  0x3f  0x3f  Additional AND
-
-        // Create buffer with zero-padding if there are only one or two
-        // significant bytes passed in the array.
-        // We have to shift left 24 in order to flush out the 1's that appear
-        // when Java treats a value as negative that is cast from a byte to an int.
-        int inBuff =
-                (numSigBytes > 0 ? ((source[srcOffset] << 24) >>> 8) : 0)
-                        | (numSigBytes > 1 ? ((source[srcOffset + 1] << 24) >>> 16) : 0)
-                        | (numSigBytes > 2 ? ((source[srcOffset + 2] << 24) >>> 24) : 0);
-
-        switch (numSigBytes) {
-            case 3:
-                destination[destOffset] = alphabet[(inBuff >>> 18)];
-                destination[destOffset + 1] = alphabet[(inBuff >>> 12) & 0x3f];
-                destination[destOffset + 2] = alphabet[(inBuff >>> 6) & 0x3f];
-                destination[destOffset + 3] = alphabet[(inBuff) & 0x3f];
-                return destination;
-            case 2:
-                destination[destOffset] = alphabet[(inBuff >>> 18)];
-                destination[destOffset + 1] = alphabet[(inBuff >>> 12) & 0x3f];
-                destination[destOffset + 2] = alphabet[(inBuff >>> 6) & 0x3f];
-                destination[destOffset + 3] = EQUALS_SIGN;
-                return destination;
-            case 1:
-                destination[destOffset] = alphabet[(inBuff >>> 18)];
-                destination[destOffset + 1] = alphabet[(inBuff >>> 12) & 0x3f];
-                destination[destOffset + 2] = EQUALS_SIGN;
-                destination[destOffset + 3] = EQUALS_SIGN;
-                return destination;
-            default:
-                return destination;
-        } // end switch
-    } // end encode3to4
-
-    /**
      * Encodes a byte array into Base64 notation.
      * Equivalent to calling
      * {@code encodeBytes(source, 0, source.length)}
@@ -258,17 +194,6 @@ public class Base64 {
      */
     public static String encode(byte[] source) {
         return encode(source, 0, source.length, ALPHABET, true);
-    }
-
-    /**
-     * Encodes a byte array into web safe Base64 notation.
-     *
-     * @param source    The data to convert
-     * @param doPadding is {@code true} to pad result with '=' chars
-     *                  if it does not fall on 3 byte boundaries
-     */
-    public static String encodeWebSafe(byte[] source, boolean doPadding) {
-        return encode(source, 0, source.length, WEBSAFE_ALPHABET, doPadding);
     }
 
     /**
@@ -358,66 +283,83 @@ public class Base64 {
         return outBuff;
     }
 
-
-    /* ********  D E C O D I N G   M E T H O D S  ******** */
-
-
     /**
-     * Decodes four bytes from array <var>source</var>
-     * and writes the resulting bytes (up to three of them)
-     * to <var>destination</var>.
+     * Encodes up to three bytes of the array <var>source</var>
+     * and writes the resulting four Base64 bytes to <var>destination</var>.
      * The source and destination arrays can be manipulated
      * anywhere along their length by specifying
      * <var>srcOffset</var> and <var>destOffset</var>.
      * This method does not check to make sure your arrays
-     * are large enough to accommodate <var>srcOffset</var> + 4 for
-     * the <var>source</var> array or <var>destOffset</var> + 3 for
+     * are large enough to accommodate <var>srcOffset</var> + 3 for
+     * the <var>source</var> array or <var>destOffset</var> + 4 for
      * the <var>destination</var> array.
-     * This method returns the actual number of bytes that
-     * were converted from the Base64 encoding.
+     * The actual number of significant bytes in your array is
+     * given by <var>numSigBytes</var>.
      *
      * @param source      the array to convert
      * @param srcOffset   the index where conversion begins
+     * @param numSigBytes the number of significant bytes in your array
      * @param destination the array to hold the conversion
      * @param destOffset  the index where output will be put
-     * @param decodabet   the decodabet for decoding Base64 content
-     * @return the number of decoded bytes converted
+     * @param alphabet    is the encoding alphabet
+     * @return the <var>destination</var> array
      * @since 1.3
      */
-    private static int decode4to3(byte[] source, int srcOffset,
-                                  byte[] destination, int destOffset, byte[] decodabet) {
-        // Example: Dk==
-        if (source[srcOffset + 2] == EQUALS_SIGN) {
-            int outBuff =
-                    ((decodabet[source[srcOffset]] << 24) >>> 6) | ((decodabet[source[srcOffset + 1]] << 24) >>> 12);
+    private static byte[] encode3to4(byte[] source, int srcOffset,
+                                     int numSigBytes, byte[] destination, int destOffset, byte[] alphabet) {
+        //           1         2         3
+        // 01234567890123456789012345678901 Bit position
+        // --------000000001111111122222222 Array position from threeBytes
+        // --------|    ||    ||    ||    | Six bit groups to index alphabet
+        //          >>18  >>12  >> 6  >> 0  Right shift necessary
+        //                0x3f  0x3f  0x3f  Additional AND
 
-            destination[destOffset] = (byte) (outBuff >>> 16);
-            return 1;
-        } else if (source[srcOffset + 3] == EQUALS_SIGN) {
-            // Example: DkL=
-            int outBuff =
-                    ((decodabet[source[srcOffset]] << 24) >>> 6)
-                            | ((decodabet[source[srcOffset + 1]] << 24) >>> 12)
-                            | ((decodabet[source[srcOffset + 2]] << 24) >>> 18);
+        // Create buffer with zero-padding if there are only one or two
+        // significant bytes passed in the array.
+        // We have to shift left 24 in order to flush out the 1's that appear
+        // when Java treats a value as negative that is cast from a byte to an int.
+        int inBuff =
+                (numSigBytes > 0 ? ((source[srcOffset] << 24) >>> 8) : 0)
+                        | (numSigBytes > 1 ? ((source[srcOffset + 1] << 24) >>> 16) : 0)
+                        | (numSigBytes > 2 ? ((source[srcOffset + 2] << 24) >>> 24) : 0);
 
-            destination[destOffset] = (byte) (outBuff >>> 16);
-            destination[destOffset + 1] = (byte) (outBuff >>> 8);
-            return 2;
-        } else {
-            // Example: DkLE
-            int outBuff =
-                    ((decodabet[source[srcOffset]] << 24) >>> 6)
-                            | ((decodabet[source[srcOffset + 1]] << 24) >>> 12)
-                            | ((decodabet[source[srcOffset + 2]] << 24) >>> 18)
-                            | ((decodabet[source[srcOffset + 3]] << 24) >>> 24);
+        switch (numSigBytes) {
+            case 3:
+                destination[destOffset] = alphabet[(inBuff >>> 18)];
+                destination[destOffset + 1] = alphabet[(inBuff >>> 12) & 0x3f];
+                destination[destOffset + 2] = alphabet[(inBuff >>> 6) & 0x3f];
+                destination[destOffset + 3] = alphabet[(inBuff) & 0x3f];
+                return destination;
+            case 2:
+                destination[destOffset] = alphabet[(inBuff >>> 18)];
+                destination[destOffset + 1] = alphabet[(inBuff >>> 12) & 0x3f];
+                destination[destOffset + 2] = alphabet[(inBuff >>> 6) & 0x3f];
+                destination[destOffset + 3] = EQUALS_SIGN;
+                return destination;
+            case 1:
+                destination[destOffset] = alphabet[(inBuff >>> 18)];
+                destination[destOffset + 1] = alphabet[(inBuff >>> 12) & 0x3f];
+                destination[destOffset + 2] = EQUALS_SIGN;
+                destination[destOffset + 3] = EQUALS_SIGN;
+                return destination;
+            default:
+                return destination;
+        } // end switch
+    } // end encode3to4
 
-            destination[destOffset] = (byte) (outBuff >> 16);
-            destination[destOffset + 1] = (byte) (outBuff >> 8);
-            destination[destOffset + 2] = (byte) (outBuff);
-            return 3;
-        }
-    } // end decodeToBytes
+    /**
+     * Encodes a byte array into web safe Base64 notation.
+     *
+     * @param source    The data to convert
+     * @param doPadding is {@code true} to pad result with '=' chars
+     *                  if it does not fall on 3 byte boundaries
+     */
+    public static String encodeWebSafe(byte[] source, boolean doPadding) {
+        return encode(source, 0, source.length, WEBSAFE_ALPHABET, doPadding);
+    }
 
+
+    /* ********  D E C O D I N G   M E T H O D S  ******** */
 
     /**
      * Decodes data from Base64 notation.
@@ -429,44 +371,6 @@ public class Base64 {
     public static byte[] decode(String s) throws Base64DecoderException {
         byte[] bytes = s.getBytes();
         return decode(bytes, 0, bytes.length);
-    }
-
-    /**
-     * Decodes data from web safe Base64 notation.
-     * Web safe encoding uses '-' instead of '+', '_' instead of '/'
-     *
-     * @param s the string to decode (decoded in default encoding)
-     * @return the decoded data
-     */
-    public static byte[] decodeWebSafe(String s) throws Base64DecoderException {
-        byte[] bytes = s.getBytes();
-        return decodeWebSafe(bytes, 0, bytes.length);
-    }
-
-    /**
-     * Decodes Base64 content in byte array format and returns
-     * the decoded byte array.
-     *
-     * @param source The Base64 encoded data
-     * @return decoded data
-     * @throws Base64DecoderException
-     * @since 1.3
-     */
-    public static byte[] decode(byte[] source) throws Base64DecoderException {
-        return decode(source, 0, source.length);
-    }
-
-    /**
-     * Decodes web safe Base64 content in byte array format and returns
-     * the decoded data.
-     * Web safe encoding uses '-' instead of '+', '_' instead of '/'
-     *
-     * @param source the string to decode (decoded in default encoding)
-     * @return the decoded data
-     */
-    public static byte[] decodeWebSafe(byte[] source)
-            throws Base64DecoderException {
-        return decodeWebSafe(source, 0, source.length);
     }
 
     /**
@@ -483,21 +387,6 @@ public class Base64 {
     public static byte[] decode(byte[] source, int off, int len)
             throws Base64DecoderException {
         return decode(source, off, len, DECODABET);
-    }
-
-    /**
-     * Decodes web safe Base64 content in byte array format and returns
-     * the decoded byte array.
-     * Web safe encoding uses '-' instead of '+', '_' instead of '/'
-     *
-     * @param source the Base64 encoded data
-     * @param off    the offset of where to begin decoding
-     * @param len    the length of characters to decode
-     * @return decoded data
-     */
-    public static byte[] decodeWebSafe(byte[] source, int off, int len)
-            throws Base64DecoderException {
-        return decode(source, off, len, WEBSAFE_DECODABET);
     }
 
     /**
@@ -576,5 +465,114 @@ public class Base64 {
         byte[] out = new byte[outBuffPosn];
         System.arraycopy(outBuff, 0, out, 0, outBuffPosn);
         return out;
+    }
+
+    /**
+     * Decodes four bytes from array <var>source</var>
+     * and writes the resulting bytes (up to three of them)
+     * to <var>destination</var>.
+     * The source and destination arrays can be manipulated
+     * anywhere along their length by specifying
+     * <var>srcOffset</var> and <var>destOffset</var>.
+     * This method does not check to make sure your arrays
+     * are large enough to accommodate <var>srcOffset</var> + 4 for
+     * the <var>source</var> array or <var>destOffset</var> + 3 for
+     * the <var>destination</var> array.
+     * This method returns the actual number of bytes that
+     * were converted from the Base64 encoding.
+     *
+     * @param source      the array to convert
+     * @param srcOffset   the index where conversion begins
+     * @param destination the array to hold the conversion
+     * @param destOffset  the index where output will be put
+     * @param decodabet   the decodabet for decoding Base64 content
+     * @return the number of decoded bytes converted
+     * @since 1.3
+     */
+    private static int decode4to3(byte[] source, int srcOffset,
+                                  byte[] destination, int destOffset, byte[] decodabet) {
+        // Example: Dk==
+        if (source[srcOffset + 2] == EQUALS_SIGN) {
+            int outBuff =
+                    ((decodabet[source[srcOffset]] << 24) >>> 6) | ((decodabet[source[srcOffset + 1]] << 24) >>> 12);
+
+            destination[destOffset] = (byte) (outBuff >>> 16);
+            return 1;
+        } else if (source[srcOffset + 3] == EQUALS_SIGN) {
+            // Example: DkL=
+            int outBuff =
+                    ((decodabet[source[srcOffset]] << 24) >>> 6)
+                            | ((decodabet[source[srcOffset + 1]] << 24) >>> 12)
+                            | ((decodabet[source[srcOffset + 2]] << 24) >>> 18);
+
+            destination[destOffset] = (byte) (outBuff >>> 16);
+            destination[destOffset + 1] = (byte) (outBuff >>> 8);
+            return 2;
+        } else {
+            // Example: DkLE
+            int outBuff =
+                    ((decodabet[source[srcOffset]] << 24) >>> 6)
+                            | ((decodabet[source[srcOffset + 1]] << 24) >>> 12)
+                            | ((decodabet[source[srcOffset + 2]] << 24) >>> 18)
+                            | ((decodabet[source[srcOffset + 3]] << 24) >>> 24);
+
+            destination[destOffset] = (byte) (outBuff >> 16);
+            destination[destOffset + 1] = (byte) (outBuff >> 8);
+            destination[destOffset + 2] = (byte) (outBuff);
+            return 3;
+        }
+    } // end decodeToBytes
+
+    /**
+     * Decodes data from web safe Base64 notation.
+     * Web safe encoding uses '-' instead of '+', '_' instead of '/'
+     *
+     * @param s the string to decode (decoded in default encoding)
+     * @return the decoded data
+     */
+    public static byte[] decodeWebSafe(String s) throws Base64DecoderException {
+        byte[] bytes = s.getBytes();
+        return decodeWebSafe(bytes, 0, bytes.length);
+    }
+
+    /**
+     * Decodes web safe Base64 content in byte array format and returns
+     * the decoded byte array.
+     * Web safe encoding uses '-' instead of '+', '_' instead of '/'
+     *
+     * @param source the Base64 encoded data
+     * @param off    the offset of where to begin decoding
+     * @param len    the length of characters to decode
+     * @return decoded data
+     */
+    public static byte[] decodeWebSafe(byte[] source, int off, int len)
+            throws Base64DecoderException {
+        return decode(source, off, len, WEBSAFE_DECODABET);
+    }
+
+    /**
+     * Decodes Base64 content in byte array format and returns
+     * the decoded byte array.
+     *
+     * @param source The Base64 encoded data
+     * @return decoded data
+     * @throws Base64DecoderException
+     * @since 1.3
+     */
+    public static byte[] decode(byte[] source) throws Base64DecoderException {
+        return decode(source, 0, source.length);
+    }
+
+    /**
+     * Decodes web safe Base64 content in byte array format and returns
+     * the decoded data.
+     * Web safe encoding uses '-' instead of '+', '_' instead of '/'
+     *
+     * @param source the string to decode (decoded in default encoding)
+     * @return the decoded data
+     */
+    public static byte[] decodeWebSafe(byte[] source)
+            throws Base64DecoderException {
+        return decodeWebSafe(source, 0, source.length);
     }
 }

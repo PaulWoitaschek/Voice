@@ -17,6 +17,7 @@
 
 package de.ph1b.audiobook.fragment
 
+import Slimber
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -25,7 +26,6 @@ import android.preference.Preference
 import android.preference.PreferenceFragment
 import android.view.*
 import android.widget.Toast
-import d
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.activity.BaseActivity
 import de.ph1b.audiobook.dialog.DonationDialogFragment
@@ -40,7 +40,6 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.vendinghelper.IabHelper
 import de.ph1b.audiobook.view.FolderOverviewActivity
 import rx.subscriptions.CompositeSubscription
-
 import javax.inject.Inject
 
 class SettingsFragment : PreferenceFragment(), DonationDialogFragment.OnDonationClickedListener, SettingsSetListener {
@@ -172,7 +171,7 @@ class SettingsFragment : PreferenceFragment(), DonationDialogFragment.OnDonation
     }
 
     override fun onDonationClicked(item: String) {
-        d { "onDonationClicked with item=$item and donationAvailable=$donationAvailable" }
+        Slimber.d { "onDonationClicked with item=$item and donationAvailable=$donationAvailable" }
         if (donationAvailable) {
             iabHelper.launchPurchaseFlow(hostingActivity, item
             ) { result ->

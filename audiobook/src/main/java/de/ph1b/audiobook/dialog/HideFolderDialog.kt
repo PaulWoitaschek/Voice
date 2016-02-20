@@ -1,14 +1,13 @@
 package de.ph1b.audiobook.dialog
 
+import Slimber
+import Slimber.e
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
-import e
-import i
-
 import java.io.File
 import java.io.IOException
 
@@ -37,7 +36,7 @@ class HideFolderDialog : DialogFragment() {
                 .negativeText(R.string.dialog_cancel)
                 .onPositive { materialDialog, dialogAction ->
                     try {
-                        i { "Create new File will be called." }
+                        Slimber.i { "Create new File will be called." }
                         //noinspection ResultOfMethodCallIgnored
                         hideFile.createNewFile()
                     } catch (ex: IOException) {

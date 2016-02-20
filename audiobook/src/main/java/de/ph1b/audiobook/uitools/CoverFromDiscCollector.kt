@@ -17,6 +17,7 @@
 
 package de.ph1b.audiobook.uitools
 
+import Slimber.e
 import android.app.ActivityManager
 import android.content.Context
 import android.graphics.Bitmap
@@ -24,7 +25,6 @@ import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.model.Chapter
 import de.ph1b.audiobook.utils.FileRecognition
-import e
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject

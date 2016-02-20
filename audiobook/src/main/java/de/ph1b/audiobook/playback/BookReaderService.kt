@@ -17,6 +17,8 @@
 
 package de.ph1b.audiobook.playback
 
+import Slimber
+import Slimber.e
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
@@ -29,7 +31,6 @@ import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import com.squareup.picasso.Picasso
-import d
 import de.ph1b.audiobook.activity.BookActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
@@ -43,12 +44,9 @@ import de.ph1b.audiobook.receiver.HeadsetPlugReceiver
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.view.fragment.BookShelfFragment
-import e
-import i
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
-import v
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject
@@ -143,7 +141,7 @@ class BookReaderService : Service() {
             setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
         }
 
-        mediaSession.addOnActiveChangeListener { i { "active changed to ${mediaSession.isActive}" } }
+        mediaSession.addOnActiveChangeListener { Slimber.i { "active changed to ${mediaSession.isActive}" } }
 
         registerReceiver(audioBecomingNoisyReceiver, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
         registerReceiver(headsetPlugReceiver.broadcastReceiver, IntentFilter(Intent.ACTION_HEADSET_PLUG))
@@ -152,7 +150,7 @@ class BookReaderService : Service() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     // inform user on errors
-                    e { "onError" }
+                    Slimber.e { "onError" }
                     val book = player.book()
                     if (book != null) {
                         startActivity(BookActivity.malformedFileIntent(this, book.currentFile))
@@ -209,7 +207,7 @@ class BookReaderService : Service() {
             add(playStateManager.playState
                     .observeOn(Schedulers.io())
                     .subscribe {
-                        d { "onPlayStateManager.PlayStateChanged:$it" }
+                        Slimber.d { "onPlayStateManager.PlayStateChanged:$it" }
                         val controllerBook = player.book()
                         if (controllerBook != null) {
                             when (it!!) {
@@ -219,7 +217,7 @@ class BookReaderService : Service() {
                                     }
 
                                     mediaSession.isActive = true
-                                    d { "set mediaSession to active" }
+                                    Slimber.d { "set mediaSession to active" }
                                     val notification = notificationAnnouncer.getNotification(controllerBook, it, mediaSession.sessionToken)
                                     startForeground(NOTIFICATION_ID, notification)
                                 }
@@ -230,7 +228,7 @@ class BookReaderService : Service() {
                                 }
                                 PlayState.STOPPED -> {
                                     mediaSession.isActive = false
-                                    d { "Set mediaSession to inactive" }
+                                    Slimber.d { "Set mediaSession to inactive" }
 
                                     audioManager.abandonAudioFocus(audioFocusReceiver.audioFocusListener)
                                     notificationManager.cancel(NOTIFICATION_ID)
@@ -261,7 +259,7 @@ class BookReaderService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        v { "onStartCommand, intent=$intent, flags=$flags, startId=$startId" }
+        Slimber.v { "onStartCommand, intent=$intent, flags=$flags, startId=$startId" }
 
         when (intent?.action) {
             Intent.ACTION_MEDIA_BUTTON -> MediaButtonReceiver.handleIntent(mediaSession, intent)
@@ -280,7 +278,7 @@ class BookReaderService : Service() {
     }
 
     override fun onDestroy() {
-        v { "onDestroy called" }
+        Slimber.v { "onDestroy called" }
         player.stop()
 
         try {
@@ -300,7 +298,7 @@ class BookReaderService : Service() {
     }
 
     private fun notifyChange(what: ChangeType, book: Book) {
-        d { "updateRemoteControlClient called" }
+        Slimber.d { "updateRemoteControlClient called" }
 
         val c = book.currentChapter()
         val playState = playStateManager.playState.value
@@ -330,7 +328,7 @@ class BookReaderService : Service() {
             }
             if (bitmap == null) {
                 val replacement = CoverReplacement(book.name, this@BookReaderService)
-                d { "replacement dimen: ${replacement.intrinsicWidth}:${replacement.intrinsicHeight}" }
+                Slimber.d { "replacement dimen: ${replacement.intrinsicWidth}:${replacement.intrinsicHeight}" }
                 bitmap = imageHelper.drawableToBitmap(replacement, imageHelper.smallerScreenSize, imageHelper.smallerScreenSize)
             }
             // we make a copy because we do not want to use picassos bitmap, since
