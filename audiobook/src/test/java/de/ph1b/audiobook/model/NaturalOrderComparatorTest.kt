@@ -31,8 +31,8 @@ import java.util.*
  */
 class NaturalOrderComparatorTest {
 
-    @Rule
     val testFolder = TemporaryFolder()
+    @Rule fun testFolder() = testFolder
 
     @Test
     fun testFileComparator() {
