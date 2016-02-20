@@ -15,40 +15,33 @@
  * /licenses/>.
  */
 
-package de.ph1b.audiobook.model;
+package de.ph1b.audiobook.model
 
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import de.ph1b.audiobook.model.NaturalOrderComparator;
-import kotlin.collections.CollectionsKt;
+import org.fest.assertions.api.Assertions.assertThat
+import org.junit.Rule
+import org.junit.Test
+import org.junit.rules.TemporaryFolder
+import java.util.*
 
 /**
  * A simple test for the file comparator that sorts in a 'natural' way.
- *
+
  * @author Paul Woitaschek
  */
-public class NaturalOrderComparatorTest {
+class NaturalOrderComparatorTest {
 
     @Rule
-    public final TemporaryFolder testFolder = new TemporaryFolder();
+    val testFolder = TemporaryFolder()
 
     @Test
-    public void testWhatEver() throws IOException {
-        testFolder.newFolder("folder", "subfolder", "subsubfolder");
-        testFolder.newFolder("storage", "emulated", "0");
-        testFolder.newFolder("xFolder");
+    fun testFileComparator() {
+        testFolder.newFolder("folder", "subfolder", "subsubfolder")
+        testFolder.newFolder("storage", "emulated", "0")
+        testFolder.newFolder("xFolder")
 
-        File alarmsFolder = testFolder.newFolder("storage", "emulated", "0", "Alarms");
-        List<File> desiredOrder = CollectionsKt.listOf(
+        val alarmsFolder = testFolder.newFolder("storage", "emulated", "0", "Alarms")
+        val desiredOrder = listOf(
                 alarmsFolder,
                 testFolder.newFile("folder/subfolder/subsubfolder/test2.mp3"),
                 testFolder.newFile("folder/subfolder/test.mp3"),
@@ -59,16 +52,16 @@ public class NaturalOrderComparatorTest {
                 testFolder.newFile("storage/emulated/0/2.ogg"),
                 testFolder.newFile("xFolder/d.jpg"),
                 testFolder.newFile("1.mp3"),
-                testFolder.newFile("a.jpg"));
+                testFolder.newFile("a.jpg"))
 
-        List<File> sorted = new ArrayList<>(desiredOrder);
-        Collections.sort(sorted, NaturalOrderComparator.INSTANCE.getFILE_COMPARATOR());
-        Assert.assertEquals(desiredOrder, sorted);
+        val sorted = ArrayList(desiredOrder)
+        Collections.sort(sorted, NaturalOrderComparator.FILE_COMPARATOR)
+        assertThat(desiredOrder).isEqualTo(sorted)
     }
 
     @Test
-    public void testSimpleComparison() {
-        List<String> desiredOrder = CollectionsKt.listOf(
+    fun testStringComparator() {
+        val desiredOrder = listOf(
                 "00 I",
                 "00 Introduction",
                 "1",
@@ -83,10 +76,10 @@ public class NaturalOrderComparatorTest {
                 "Ba",
                 "cA",
                 "D",
-                "e");
+                "e")
 
-        List<String> sorted = new ArrayList<>(desiredOrder);
-        Collections.sort(sorted, NaturalOrderComparator.INSTANCE.getSTRING_COMPARATOR());
-        Assert.assertEquals(desiredOrder, sorted);
+        val sorted = ArrayList(desiredOrder)
+        Collections.sort(sorted, NaturalOrderComparator.STRING_COMPARATOR)
+        assertThat(desiredOrder).isEqualTo(sorted)
     }
 }
