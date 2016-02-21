@@ -21,6 +21,7 @@ import Slimber
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import de.ph1b.audiobook.assertMain
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.model.Bookmark
 import de.ph1b.audiobook.model.Chapter
@@ -176,6 +177,7 @@ constructor(internalDb: InternalDb) {
     @Synchronized fun addBook(book: Book) {
         var newBook = book
         Slimber.v { "addBook=${newBook.name}" }
+        assertMain()
 
         db.asTransaction {
             val bookCv = BookTable.getContentValues(newBook)
@@ -205,6 +207,7 @@ constructor(internalDb: InternalDb) {
 
     @Synchronized fun updateBook(book: Book) {
         Slimber.v { "updateBook=${book.name} with time ${book.time}" }
+        assertMain()
 
         val bookIterator = active.listIterator()
         while (bookIterator.hasNext()) {
@@ -234,6 +237,7 @@ constructor(internalDb: InternalDb) {
 
     @Synchronized fun hideBook(book: Book) {
         Slimber.v { "hideBook=${book.name}" }
+        assertMain()
 
         val iterator = active.listIterator()
         while (iterator.hasNext()) {
@@ -251,6 +255,8 @@ constructor(internalDb: InternalDb) {
     }
 
     @Synchronized fun revealBook(book: Book) {
+        assertMain()
+
         val orphanedBookIterator = orphaned.iterator()
         while (orphanedBookIterator.hasNext()) {
             if (orphanedBookIterator.next().id == book.id) {

@@ -18,13 +18,11 @@
 package de.ph1b.audiobook.uitools
 
 import Slimber.e
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.media.MediaMetadataRetriever
-import android.net.ConnectivityManager
 import android.view.WindowManager
 import com.squareup.picasso.Picasso
 import java.io.File
@@ -34,10 +32,27 @@ import java.util.concurrent.CountDownLatch
 import javax.inject.Inject
 import javax.inject.Singleton
 
+fun Picasso.blocking(getter: Picasso.() -> Bitmap?): Bitmap? {
+    val latch = CountDownLatch(1)
+    val bitmap = arrayOfNulls<Bitmap>(1)
+    Thread(Runnable {
+        try {
+            bitmap[0] = this.getter()
+        } catch (ex: IOException) {
+            e(ex) { "Exception at retrieving." }
+        } finally {
+            latch.countDown()
+        }
+    }).start()
+
+    latch.await()
+    return bitmap.first()
+}
+
 @Singleton
 class ImageHelper
 @Inject
-constructor(private val context: Context, private val windowManager: WindowManager, private val connectivityManager: ConnectivityManager) {
+constructor(private val windowManager: WindowManager) {
 
     fun drawableToBitmap(drawable: Drawable, width: Int, height: Int): Bitmap {
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
@@ -45,23 +60,6 @@ constructor(private val context: Context, private val windowManager: WindowManag
         drawable.setBounds(0, 0, canvas.width, canvas.height)
         drawable.draw(canvas)
         return bitmap
-    }
-
-    fun picassoGetBlocking(path: String): Bitmap? {
-        val latch = CountDownLatch(1)
-        val bitmap = arrayOfNulls<Bitmap>(1)
-        Thread(Runnable {
-            try {
-                bitmap[0] = Picasso.with(context).load(path).get()
-            } catch (ex: IOException) {
-                e(ex) { "Exception at file retrieving for $path" }
-            } finally {
-                latch.countDown()
-            }
-        }).start()
-
-        latch.await()
-        return bitmap.first()
     }
 
 
@@ -109,9 +107,6 @@ constructor(private val context: Context, private val windowManager: WindowManag
             val displayHeight = display.height
             return if (displayWidth < displayHeight) displayWidth else displayHeight
         }
-
-    val isOnline: Boolean
-        get() = connectivityManager.activeNetworkInfo?.isConnected ?: false
 
     fun getEmbeddedCover(f: File): Bitmap? {
         val mmr = MediaMetadataRetriever()

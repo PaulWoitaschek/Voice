@@ -43,7 +43,6 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookChest
-import rx.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
@@ -72,10 +71,9 @@ class EditBookTitleDialogFragment : DialogFragment() {
                     if (newText != presetName) {
                         bookChest.activeBooks
                                 .filter { it.id == bookId } // find book
-                                .subscribeOn(Schedulers.io()) // dont block
+                                .map { it.copy(name = newText) }
                                 .subscribe {
-                                    val updatedBook = it.copy(name = newText) // update title
-                                    bookChest.updateBook(updatedBook) // update book
+                                    bookChest.updateBook(it) // update book
                                 }
                     }
                 }

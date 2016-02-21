@@ -76,7 +76,8 @@ class WidgetUpdateService : Service() {
                 Observable.merge(
                         db.updateObservable().filter { it.id == prefs.currentBookId.value },
                         playStateManager.playState,
-                        prefs.currentBookId).subscribe { updateWidget() })
+                        prefs.currentBookId)
+                        .subscribe { updateWidget() })
 
     }
 

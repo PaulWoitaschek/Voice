@@ -26,7 +26,6 @@ import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.view.fragment.BookShelfFragment
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
@@ -49,8 +48,6 @@ constructor(private val bookChest: BookChest,
 
         // initially updates the adapter with a new set of items
         bookChest.activeBooks
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .toList()
                 .subscribe {
                     view.newBooks(it)
@@ -66,13 +63,10 @@ constructor(private val bookChest: BookChest,
         subscriptions.apply {
             // informs the view once a book was removed
             add(bookChest.removedObservable()
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .onBackpressureBuffer()
                     .subscribe { view.bookRemoved(it) })
 
             // Subscription that notifies the adapter when there is a new or updated book.
             add(Observable.merge(bookChest.updateObservable(), bookChest.addedObservable())
-                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe {
                         view.bookAddedOrUpdated(it)
                         view.showSpinnerIfNoData(bookAdder.scannerActive().value)

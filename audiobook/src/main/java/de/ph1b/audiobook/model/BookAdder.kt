@@ -22,6 +22,7 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.Handler
 import android.support.v4.content.ContextCompat
 import de.ph1b.audiobook.activity.BaseActivity
 import de.ph1b.audiobook.persistence.BookChest
@@ -50,6 +51,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
 
     private val executor = Executors.newSingleThreadExecutor()
     private val scannerActive = BehaviorSubject.create(false)
+    private val handler = Handler(context.mainLooper)
     @Volatile private var stopScanner = false
 
     fun scannerActive(): BehaviorSubject<Boolean> {
@@ -174,7 +176,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
         for (book in bookVendor.all()) {
             var bookExists = false
             when (book.type) {
-                Book.Type.COLLECTION_FILE -> collectionBookFolders.forEach {
+                Book.Type.COLLECTION_FILE   -> collectionBookFolders.forEach {
                     if (it.isFile) {
                         val chapters = book.chapters
                         val singleBookChapterFile = chapters.first().file
@@ -191,7 +193,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
                         }
                     }
                 }
-                Book.Type.SINGLE_FILE -> singleBookFiles.forEach {
+                Book.Type.SINGLE_FILE       -> singleBookFiles.forEach {
                     if (it.isFile) {
                         val chapters = book.chapters
                         val singleBookChapterFile = chapters.first().file
@@ -200,7 +202,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
                         }
                     }
                 }
-                Book.Type.SINGLE_FOLDER -> singleBookFiles.forEach {
+                Book.Type.SINGLE_FOLDER     -> singleBookFiles.forEach {
                     if (it.isDirectory) {
                         // multi file book
                         if (book.root == it.absolutePath) {
@@ -208,7 +210,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
                         }
                     }
                 }
-                else -> throw AssertionError("We added somewhere a non valid type=" + book.type)
+                else                        -> throw AssertionError("We added somewhere a non valid type=" + book.type)
             }
 
             if (!bookExists) {
@@ -227,7 +229,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
 
         for (b in booksToRemove) {
             Slimber.d { "deleting book=${b.name}" };
-            db.hideBook(b)
+            handler.post { db.hideBook(b) }
         }
     }
 
@@ -269,7 +271,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
                     1.0f,
                     bookRoot)
             Slimber.d { "adding newBook=${newBook.name}" }
-            db.addBook(newBook)
+            handler.post { db.addBook(newBook) }
         } else {
             orphanedBook = orphanedBook.copy(chapters = newChapters)
 
@@ -282,7 +284,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
             }
 
             // now finally un-hide this book
-            db.revealBook(orphanedBook)
+            handler.post { db.revealBook(orphanedBook as Book) }
         }
     }
 
@@ -319,7 +321,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
                     currentFile = if (currentPathIsGone) newChapters.first().file else bookToUpdate.currentFile,
                     time = if (currentPathIsGone) 0 else bookToUpdate.time)
 
-            db.updateBook(bookToUpdate)
+            handler.post { db.updateBook(bookToUpdate) }
         }
     }
 
@@ -346,7 +348,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
             // there are no chapters
             if (bookExisting != null) {
                 //so delete book if available
-                db.hideBook(bookExisting)
+                handler.post { db.hideBook(bookExisting) }
             }
         } else {
             // there are chapters

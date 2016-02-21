@@ -18,7 +18,6 @@
 package de.ph1b.audiobook.playback
 
 import Slimber
-import Slimber.e
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
@@ -43,12 +42,12 @@ import de.ph1b.audiobook.receiver.AudioFocusReceiver
 import de.ph1b.audiobook.receiver.HeadsetPlugReceiver
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
+import de.ph1b.audiobook.uitools.blocking
 import de.ph1b.audiobook.view.fragment.BookShelfFragment
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 import java.io.File
-import java.io.IOException
 import javax.inject.Inject
 
 
@@ -165,6 +164,7 @@ class BookReaderService : Service() {
         // update book when changed by player
         player.bookObservable()
                 .filter { it != null }
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { db.updateBook(it) }
 
         playStateManager.playState.onNext(PlayState.STOPPED)
@@ -192,7 +192,6 @@ class BookReaderService : Service() {
             // notify player about changes in the current book
             add(db.updateObservable()
                     .filter { it.id == prefs.currentBookId.value }
-                    .observeOn(Schedulers.io())
                     .subscribe {
                         player.init(it)
                         notifyChange(ChangeType.METADATA, it)
@@ -221,7 +220,7 @@ class BookReaderService : Service() {
                                     val notification = notificationAnnouncer.getNotification(controllerBook, it, mediaSession.sessionToken)
                                     startForeground(NOTIFICATION_ID, notification)
                                 }
-                                PlayState.PAUSED -> {
+                                PlayState.PAUSED  -> {
                                     stopForeground(false)
                                     val notification = notificationAnnouncer.getNotification(controllerBook, it, mediaSession.sessionToken)
                                     notificationManager.notify(NOTIFICATION_ID, notification)
@@ -262,9 +261,9 @@ class BookReaderService : Service() {
         Slimber.v { "onStartCommand, intent=$intent, flags=$flags, startId=$startId" }
 
         when (intent?.action) {
-            Intent.ACTION_MEDIA_BUTTON -> MediaButtonReceiver.handleIntent(mediaSession, intent)
-            PlayerController.ACTION_SPEED -> player.setPlaybackSpeed(intent!!.getFloatExtra(PlayerController.EXTRA_SPEED, 1F))
-            PlayerController.ACTION_CHANGE -> {
+            Intent.ACTION_MEDIA_BUTTON                  -> MediaButtonReceiver.handleIntent(mediaSession, intent)
+            PlayerController.ACTION_SPEED               -> player.setPlaybackSpeed(intent!!.getFloatExtra(PlayerController.EXTRA_SPEED, 1F))
+            PlayerController.ACTION_CHANGE              -> {
                 val time = intent!!.getIntExtra(PlayerController.CHANGE_TIME, 0)
                 val file = File(intent.getStringExtra(PlayerController.CHANGE_FILE))
                 player.changePosition(time, file)
@@ -320,11 +319,7 @@ class BookReaderService : Service() {
             var bitmap: Bitmap? = null
             val coverFile = book.coverFile()
             if (!book.useCoverReplacement && coverFile.exists() && coverFile.canRead()) {
-                try {
-                    bitmap = Picasso.with(this@BookReaderService).load(coverFile).get()
-                } catch (ex: IOException) {
-                    e(ex) { "Error when retrieving cover for book $book" }
-                }
+                bitmap = Picasso.with(this@BookReaderService).blocking { load(coverFile).get() }
             }
             if (bitmap == null) {
                 val replacement = CoverReplacement(book.name, this@BookReaderService)
