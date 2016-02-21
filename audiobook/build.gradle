@@ -81,8 +81,9 @@ android {
         variant.outputs.each { output ->
             def original = output.outputFile
             def originalName = original.name.replaceFirst(~/\.[^\.]+$/, '')
+            def parent = output.outputFile.parentFile
             def newDestination = "apks/${variant.versionCode}-${variant.versionName}-${originalName}.apk"
-            output.outputFile = file(newDestination)
+            output.outputFile = file(parent, )
         }
     }
 }
