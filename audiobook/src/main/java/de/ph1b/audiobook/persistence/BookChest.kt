@@ -79,20 +79,7 @@ constructor(internalDb: InternalDb) {
         db.delete(BookmarkTable.TABLE_NAME, "${BookmarkTable.ID} =?", arrayOf(id.toString()))
     }
 
-    inline fun <T> Iterable<T>.mapIf(condition: (T) -> Boolean, transform: (T) -> T): List<T> {
-        val array = ArrayList<T>()
-        for (t in this) {
-            array.add(if (condition(t)) transform(t) else t)
-        }
-        return array
-    }
-
-
     fun addBookmark(bookmark: Bookmark): Bookmark {
-        val mutalbeList = ArrayList<String>()
-        val new = mutalbeList.map { it.toInt() }
-
-
         val cv = bookmark.toContentValues()
         val insertedId = db.insertOrThrow(BookmarkTable.TABLE_NAME, null, cv)
         return bookmark.copy(id = insertedId)
