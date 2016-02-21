@@ -47,22 +47,19 @@ import de.ph1b.audiobook.activity.DependencyLicensesActivity;
 import de.ph1b.audiobook.adapter.BookShelfAdapter;
 import de.ph1b.audiobook.dialog.BookmarkDialogFragment;
 import de.ph1b.audiobook.dialog.EditBookTitleDialogFragment;
-import de.ph1b.audiobook.dialog.EditCoverDialogFragment;
 import de.ph1b.audiobook.dialog.JumpToPositionDialogFragment;
 import de.ph1b.audiobook.dialog.SeekDialogFragment;
 import de.ph1b.audiobook.dialog.prefs.AutoRewindDialogFragment;
 import de.ph1b.audiobook.dialog.prefs.PlaybackSpeedDialogFragment;
 import de.ph1b.audiobook.dialog.prefs.SleepDialogFragment;
 import de.ph1b.audiobook.dialog.prefs.ThemePickerDialogFragment;
+import de.ph1b.audiobook.features.imagepicker.ImagePickerActivity;
 import de.ph1b.audiobook.fragment.BookPlayFragment;
-import de.ph1b.audiobook.fragment.ImagePickerFragment;
 import de.ph1b.audiobook.fragment.SettingsFragment;
 import de.ph1b.audiobook.model.BookAdder;
-import de.ph1b.audiobook.persistence.BookChest;
 import de.ph1b.audiobook.persistence.LogStorage;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.playback.BookReaderService;
-import de.ph1b.audiobook.playback.MediaPlayer;
 import de.ph1b.audiobook.playback.PlayStateManager;
 import de.ph1b.audiobook.playback.WidgetUpdateService;
 import de.ph1b.audiobook.presenter.BookShelfBasePresenter;
@@ -85,8 +82,14 @@ import timber.log.Timber;
 public class App extends Application {
 
     private static ApplicationComponent applicationComponent;
-    @Inject Lazy<LogToStorageTree> toStorageTree;
-    @Inject BookAdder bookAdder;
+    @Inject
+    Lazy<LogToStorageTree> toStorageTree;
+    @Inject
+    BookAdder bookAdder;
+
+    public static ApplicationComponent component() {
+        return applicationComponent;
+    }
 
     @Override
     public void onCreate() {
@@ -128,25 +131,17 @@ public class App extends Application {
                 .build();
     }
 
-    public static ApplicationComponent component() {
-        return applicationComponent;
-    }
-
     @Singleton
     @Component(modules = {BaseModule.class, AndroidModule.class, PresenterModule.class})
     public interface ApplicationComponent {
 
         BookShelfBasePresenter getBookShelfBasePresenter();
 
-        BookChest bookChest();
-
         Context getContext();
 
         PrefsManager getPrefsManager();
 
         BookAdder getBookAdder();
-
-        MediaPlayer mediaPlayerController();
 
         PlayStateManager playStateManager();
 
@@ -166,9 +161,7 @@ public class App extends Application {
 
         void inject(SeekDialogFragment target);
 
-        void inject(EditCoverDialogFragment target);
-
-        void inject(ImagePickerFragment target);
+        void inject(ImagePickerActivity target);
 
         void inject(JumpToPositionDialogFragment target);
 
@@ -204,14 +197,6 @@ public class App extends Application {
     }
 
     private abstract static class FormattedTree extends Timber.DebugTree {
-        @Override
-        protected void log(int priority, String tag, String message, Throwable t) {
-            onLogGathered(priorityToPrefix(priority) + "/[" + tag + "]\t" + message + "\n");
-        }
-
-        abstract void onLogGathered(@NonNull String message);
-
-
         /**
          * Maps Log priority to Strings
          *
@@ -236,6 +221,13 @@ public class App extends Application {
                     return String.valueOf(priority);
             }
         }
+
+        @Override
+        protected void log(int priority, String tag, String message, Throwable t) {
+            onLogGathered(priorityToPrefix(priority) + "/[" + tag + "]\t" + message + "\n");
+        }
+
+        abstract void onLogGathered(@NonNull String message);
     }
 
     public static class LogToStorageTree extends FormattedTree {

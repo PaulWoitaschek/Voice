@@ -31,6 +31,7 @@ import android.transition.TransitionInflater
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.features.imagepicker.ImagePickerActivity
 import de.ph1b.audiobook.fragment.BookPlayFragment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
@@ -84,6 +85,7 @@ class BookActivity : BaseActivity(), BookShelfFragment.Callback {
                 PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE)
             }
         }
+
         setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
 
         if (savedInstanceState == null) {
@@ -124,7 +126,7 @@ class BookActivity : BaseActivity(), BookShelfFragment.Callback {
     }
 
     override fun onCoverChanged(book: Book) {
-        val initializer = ImagePickerActivity.Companion.Initializer(book.id)
+        val initializer = ImagePickerActivity.Args(book.id)
         val args = ImagePickerActivity.arguments(initializer)
         startActivity<ImagePickerActivity>(args)
     }

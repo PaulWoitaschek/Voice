@@ -15,97 +15,121 @@
  * /licenses/>.
  */
 
-package de.ph1b.audiobook.fragment
+package de.ph1b.audiobook.features.imagepicker
 
 import Slimber
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.view.MenuItemCompat
-import android.view.*
+import android.support.v7.view.ActionMode
+import android.support.v7.widget.Toolbar
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import butterknife.bindView
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.actionBar
-import de.ph1b.audiobook.dialog.EditCoverDialogFragment
+import de.ph1b.audiobook.activity.BaseActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.layoutInflater
+import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.setInvisible
 import de.ph1b.audiobook.uitools.setVisible
 import de.ph1b.audiobook.utils.BookVendor
-import okhttp3.HttpUrl
 import rx.subjects.BehaviorSubject
 import java.io.Serializable
 import java.net.URLEncoder
 import javax.inject.Inject
 
 /**
- * Shows a web view with covers and lets the user pick one.
+ * Hosts the image picker.
  */
-class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
+class ImagePickerActivity : BaseActivity() {
 
     init {
         App.component().inject(this)
     }
 
     @Inject internal lateinit var bookVendor: BookVendor
+    @Inject internal lateinit var imageHelper: ImageHelper
 
     private val webView: WebView by  bindView(R.id.webView)
     private val progressBar: View by  bindView(R.id.progressBar)
     private val noNetwork: View by bindView(R.id.noNetwork)
-    private val callback by lazy { context as Callback }
+    private val webViewContainer: View by bindView(R.id.webViewContainer)
+    private val cropView: CropOverlay by bindView(R.id.cropOverlay)
+    private val fab: FloatingActionButton by bindView(R.id.fab)
+
+    private var actionMode: ActionMode ? = null
+
+    private val actionModeCallback = object : ActionMode.Callback {
+        override fun onPrepareActionMode(p0: ActionMode?, menu: Menu?): Boolean {
+            return false
+        }
+
+        override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
+            if (p1?.itemId == R.id.confirm) {
+                val b = Bitmap.createBitmap(webView.width, webView.height, Bitmap.Config.ARGB_8888);
+                val c = Canvas(b);
+                webView.layout(webView.left, webView.top, webView.right, webView.bottom);
+                webView.draw(c);
+
+                val cropRect = cropView.selectedRect
+                val cropped = Bitmap.createBitmap(b, cropRect.left, cropRect.top, cropRect.width(), cropRect.height())
+
+                imageHelper.saveCover(cropped, book.coverFile())
+                finish()
+                return true
+            }
+            return false
+        }
+
+        override fun onCreateActionMode(p0: ActionMode?, menu: Menu?): Boolean {
+            menuInflater.inflate(R.menu.crop_menu, menu)
+            return true
+        }
+
+        override fun onDestroyActionMode(p0: ActionMode?) {
+            cropView.selectionOn = false
+            fab.show()
+        }
+    }
+
     private var webViewIsLoading = BehaviorSubject.create(false)
     private val book by lazy {
-        val args = arguments.getSerializable(NI) as Args
+        val args = intent.getSerializableExtra(NI) as Args
         bookVendor.byId(args.bookId)!!
     }
     private val originalUrl by lazy {
         val encodedSearch = URLEncoder.encode("${book.name} cover", Charsets.UTF_8.name())
-        "https://www.google.com/search?safe=on&site=imghp&tbm=isch&q=$encodedSearch"
+        "https://www.google.com/search?safe=on&site=imghp&tbm=isch&tbs=isz:lt,islt:qsvga&q=$encodedSearch"
     }
+
+    private val toolBar: Toolbar by bindView(R.id.toolbar)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setHasOptionsMenu(true)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.image_picker, container, false);
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        actionBar().apply {
-            setHomeAsUpIndicator(R.drawable.close)
+        setContentView(R.layout.activity_image_picker)
+        setSupportActionBar(toolBar)
+        supportActionBar!!.apply {
             setDisplayHomeAsUpEnabled(true)
             title = ""
         }
 
-        // load the last page loaded or the original one of there is none
-        val toLoad = savedInstanceState?.getString(SI_URL) ?: originalUrl
-        webView.loadUrl(toLoad)
-        webView.settings.javaScriptEnabled = true
+        with(webView.settings) {
+            setSupportZoom(true);
+            builtInZoomControls = true;
+            displayZoomControls = false;
+            javaScriptEnabled = true
+            userAgentString = "Mozilla/5.0 (Linux; U; Android 4.4; en-us; Nexus 4 Build/JOP24G) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30";
+        }
         webView.setWebViewClient(object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-                val httpUrl = HttpUrl.parse(url);
-                val values = httpUrl.queryParameterValues("imgurl")
-                // intercept images
-                if (values.isNotEmpty()) {
-                    Slimber.i { "img url values are $values" }
-                    val first = values.first()
-                    val editCover = EditCoverDialogFragment.newInstance(this@ImagePickerFragment, book, first)
-                    editCover.show(fragmentManager, FM_EDIT_COVER)
-                    return true
-                } else {
-                    Slimber.i { "img url $url did not contain the imgurl parameter." }
-                    return super.shouldOverrideUrlLoading(view, url)
-                }
-            }
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
@@ -123,10 +147,11 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
 
             @Suppress("OverridingDeprecatedMember")
             override fun onReceivedError(view: WebView, errorCode: Int, description: String?, failingUrl: String?) {
+                Slimber.d { "received webViewError. Set webVeiw invisible" }
                 view.loadUrl(ABOUT_BLANK)
                 progressBar.setInvisible()
                 noNetwork.setVisible()
-                webView.setInvisible()
+                webViewContainer.setInvisible()
             }
         });
 
@@ -136,10 +161,29 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
                 .filter { it == true }
                 .subscribe {
                     // sets progressbar and webviews visibilities correctly once the page is loaded
+                    Slimber.i { "WebView is now loading. Set webView visible" }
                     progressBar.setInvisible()
                     noNetwork.setInvisible()
-                    webView.setVisible()
+                    webViewContainer.setVisible()
                 }
+
+        // load the last page loaded or the original one of there is none
+        val toLoad = savedInstanceState?.getString(SI_URL) ?: originalUrl
+        webView.loadUrl(toLoad)
+
+        fab.setOnClickListener {
+            cropView.selectionOn = true
+            actionMode = startSupportActionMode(actionModeCallback)
+            fab.hide()
+        }
+    }
+
+    override fun onBackPressed() {
+        if (webView.canGoBack()) {
+            webView.goBack()
+        } else {
+            super.onBackPressed()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -150,12 +194,12 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
         super.onSaveInstanceState(outState)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.image_picker, menu)
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.image_picker, menu)
 
         // set the rotating icon
         val refreshItem = menu.findItem(R.id.refresh)
-        val rotation = AnimationUtils.loadAnimation(context, R.anim.rotate).apply {
+        val rotation = AnimationUtils.loadAnimation(this, R.anim.rotate).apply {
             repeatCount = Animation.INFINITE
         }
         val rotateView = layoutInflater().inflate(R.layout.rotate_view, null).apply {
@@ -187,54 +231,39 @@ class ImagePickerFragment : Fragment(), EditCoverDialogFragment.Callback {
             override fun onAnimationStart(p0: Animation?) {
             }
         })
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         android.R.id.home -> {
-            callback.editDone()
+            finish()
             true
         }
-        R.id.refresh -> {
+        R.id.refresh      -> {
             webView.reload()
             true
         }
-        R.id.home -> {
+        R.id.home         -> {
             webView.loadUrl(originalUrl)
             true
         }
-        else -> false
-    }
-
-    fun backPressed(): Boolean {
-        if (webView.canGoBack()) {
-            webView.goBack()
-            return true
-        } else {
-            return false
-        }
-    }
-
-    override fun editBookFinished() {
-        callback.editDone()
-    }
-
-    interface Callback {
-        fun editDone()
+        else              -> false
     }
 
     companion object {
 
-        val TAG = ImagePickerFragment::class.java.simpleName
+        // val TAG = ImagePickerActivity::class.java.simpleName
 
         private val NI = "ni"
         private val ABOUT_BLANK = "about:blank"
         private val SI_URL = "savedUrl"
-        private val FM_EDIT_COVER = TAG + EditCoverDialogFragment.TAG
 
-        fun newInstance(args: Args) = ImagePickerFragment().apply {
-            arguments = Bundle().apply { putSerializable(NI, args) }
+
+        fun arguments(args: Args) = Bundle().apply {
+            putSerializable(NI, args)
         }
 
-        data class Args(val bookId: Long) : Serializable
     }
+
+    data class Args(val bookId: Long) : Serializable
 }

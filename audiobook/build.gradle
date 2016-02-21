@@ -93,6 +93,7 @@ dependencies {
     compile "com.android.support:appcompat-v7:$supportVersion"
     compile "com.android.support:recyclerview-v7:$supportVersion"
     compile "com.android.support:support-v4:$supportVersion"
+    compile "com.android.support:design:$supportVersion"
 
     // http library
     def okHttpVersion = "3.1.2"
@@ -121,9 +122,6 @@ dependencies {
     kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
     provided "javax.annotation:jsr250-api:1.0"
 
-    // logging
-    compile 'com.github.JakeWharton:Timber:10bbf33db8'
-
     //testing
     testCompile "junit:junit:4.12"
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.1') {
@@ -147,5 +145,7 @@ dependencies {
 
     // player
     compile 'com.github.PaulWoitaschek:AndroidPlayer:0.004'
+
+    // logs
     compile 'com.github.PaulWoitaschek:Slimber:1.0.1'
 }
