@@ -20,6 +20,7 @@ package de.ph1b.audiobook.persistence
 import android.os.Build
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.DummyCreator
+import junit.framework.TestCase
 import org.fest.assertions.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,7 +35,7 @@ import org.robolectric.annotation.Config
  */
 @RunWith(RobolectricGradleTestRunner::class)
 @Config(constants = BuildConfig::class, sdk = intArrayOf(Build.VERSION_CODES.LOLLIPOP), manifest = "src/main/AndroidManifest.xml")
-class BookChestTest {
+class BookChestTest : TestCase() {
 
     @Test
     fun testBookChest() {

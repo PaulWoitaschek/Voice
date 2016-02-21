@@ -18,6 +18,7 @@
 package de.ph1b.audiobook.model
 
 
+import junit.framework.TestCase
 import org.fest.assertions.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
@@ -29,7 +30,7 @@ import java.util.*
 
  * @author Paul Woitaschek
  */
-class NaturalOrderComparatorTest {
+class NaturalOrderComparatorTest : TestCase() {
 
     val testFolder = TemporaryFolder()
     @Rule fun testFolder() = testFolder
