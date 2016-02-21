@@ -138,13 +138,13 @@ dependencies {
     // rx extensions
     compile "io.reactivex:rxandroid:1.1.0"
     compile "io.reactivex:rxjava:1.1.0"
-    compile 'com.github.JakeWharton.RxBinding:rxbinding-kotlin:542cd7e8a4'
+    compile 'com.jakewharton.rxbinding:rxbinding-kotlin:0.4.0'
 
     // kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     // player
-    compile 'com.github.PaulWoitaschek:AndroidPlayer:0.004'
+    compile 'com.github.PaulWoitaschek:AndroidPlayer:0.005'
 
     // logs
     compile 'com.github.PaulWoitaschek:Slimber:1.0.1'
