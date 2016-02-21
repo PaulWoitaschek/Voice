@@ -96,11 +96,6 @@ dependencies {
     compile "com.android.support:support-v4:$supportVersion"
     compile "com.android.support:design:$supportVersion"
 
-    // http library
-    def okHttpVersion = "3.1.2"
-    compile "com.squareup.okhttp3:okhttp:$okHttpVersion"
-    compile "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
-
     // image loading
     compile "com.squareup.picasso:picasso:2.5.2"
 
@@ -135,6 +130,11 @@ dependencies {
     testCompile "org.robolectric:robolectric:3.1-SNAPSHOT"
     androidTestCompile 'org.easytesting:fest-assert-core:2.0M10'
     testCompile 'org.easytesting:fest-assert-core:2.0M10'
+    def okHttpVersion = "3.1.2"
+    testCompile "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    androidTestCompile "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    testCompile "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
+    androidTestCompile "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
 
     // rx extensions
     compile "io.reactivex:rxandroid:1.1.0"
