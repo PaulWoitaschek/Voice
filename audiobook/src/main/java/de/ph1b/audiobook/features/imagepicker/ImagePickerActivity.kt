@@ -19,7 +19,6 @@ package de.ph1b.audiobook.features.imagepicker
 
 import Slimber
 import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.view.MenuItemCompat
@@ -33,6 +32,7 @@ import android.view.animation.AnimationUtils
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import butterknife.bindView
+import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.activity.BaseActivity
 import de.ph1b.audiobook.injection.App
@@ -41,6 +41,7 @@ import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.setInvisible
 import de.ph1b.audiobook.uitools.setVisible
 import de.ph1b.audiobook.utils.BookVendor
+import de.ph1b.audiobook.utils.ScreenShotWebView
 import rx.subjects.BehaviorSubject
 import java.io.Serializable
 import java.net.URLEncoder
@@ -58,7 +59,7 @@ class ImagePickerActivity : BaseActivity() {
     @Inject internal lateinit var bookVendor: BookVendor
     @Inject internal lateinit var imageHelper: ImageHelper
 
-    private val webView: WebView by  bindView(R.id.webView)
+    private val webView: ScreenShotWebView by  bindView(R.id.webView)
     private val progressBar: View by  bindView(R.id.progressBar)
     private val noNetwork: View by bindView(R.id.noNetwork)
     private val webViewContainer: View by bindView(R.id.webViewContainer)
@@ -74,15 +75,11 @@ class ImagePickerActivity : BaseActivity() {
 
         override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
             if (p1?.itemId == R.id.confirm) {
-                val b = Bitmap.createBitmap(webView.width, webView.height, Bitmap.Config.ARGB_8888);
-                val c = Canvas(b);
-                webView.layout(webView.left, webView.top, webView.right, webView.bottom);
-                webView.draw(c);
-
                 val cropRect = cropView.selectedRect
-                val cropped = Bitmap.createBitmap(b, cropRect.left, cropRect.top, cropRect.width(), cropRect.height())
-
-                imageHelper.saveCover(cropped, book.coverFile())
+                val screenShot = webView.takeScreenshot(cropRect)
+                imageHelper.saveCover(screenShot, book.coverFile())
+                screenShot.recycle()
+                Picasso.with(this@ImagePickerActivity).invalidate(book.coverFile())
                 finish()
                 return true
             }

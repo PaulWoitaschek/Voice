@@ -60,7 +60,7 @@
             android:layout_height="match_parent"
             android:visibility="invisible">
 
-            <WebView
+            <de.ph1b.audiobook.utils.ScreenShotWebView
                 android:id="@+id/webView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
