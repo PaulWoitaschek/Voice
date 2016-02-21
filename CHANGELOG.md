@@ -1,4 +1,6 @@
-# Next Version
+# 2.6.1
+* Fixed previous-song icon
+* Rewritten cover picker
 
 # v2.6.0
 * Added a new cover picker
