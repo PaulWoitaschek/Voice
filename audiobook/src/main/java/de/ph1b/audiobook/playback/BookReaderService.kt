@@ -220,7 +220,7 @@ class BookReaderService : Service() {
                                     val notification = notificationAnnouncer.getNotification(controllerBook, it, mediaSession.sessionToken)
                                     startForeground(NOTIFICATION_ID, notification)
                                 }
-                                PlayState.PAUSED  -> {
+                                PlayState.PAUSED -> {
                                     stopForeground(false)
                                     val notification = notificationAnnouncer.getNotification(controllerBook, it, mediaSession.sessionToken)
                                     notificationManager.notify(NOTIFICATION_ID, notification)
@@ -261,9 +261,9 @@ class BookReaderService : Service() {
         Slimber.v { "onStartCommand, intent=$intent, flags=$flags, startId=$startId" }
 
         when (intent?.action) {
-            Intent.ACTION_MEDIA_BUTTON                  -> MediaButtonReceiver.handleIntent(mediaSession, intent)
-            PlayerController.ACTION_SPEED               -> player.setPlaybackSpeed(intent!!.getFloatExtra(PlayerController.EXTRA_SPEED, 1F))
-            PlayerController.ACTION_CHANGE              -> {
+            Intent.ACTION_MEDIA_BUTTON -> MediaButtonReceiver.handleIntent(mediaSession, intent)
+            PlayerController.ACTION_SPEED -> player.setPlaybackSpeed(intent!!.getFloatExtra(PlayerController.EXTRA_SPEED, 1F))
+            PlayerController.ACTION_CHANGE -> {
                 val time = intent!!.getIntExtra(PlayerController.CHANGE_TIME, 0)
                 val file = File(intent.getStringExtra(PlayerController.CHANGE_FILE))
                 player.changePosition(time, file)
@@ -271,6 +271,8 @@ class BookReaderService : Service() {
             PlayerController.ACTION_PAUSE_NON_REWINDING -> {
                 player.pause(false)
             }
+            PlayerController.ACTION_FORCE_NEXT -> player.next()
+            PlayerController.ACTION_FORCE_PREVIOUS -> player.previous(true)
         }
 
         return Service.START_STICKY

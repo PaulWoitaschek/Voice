@@ -34,8 +34,8 @@ import javax.inject.Singleton
     private val playIntent = keyEventIntent(KeyEvent.KEYCODE_MEDIA_PLAY)
     private val pauseIntent = keyEventIntent(KeyEvent.KEYCODE_MEDIA_PAUSE)
     private val stopIntent = keyEventIntent(KeyEvent.KEYCODE_MEDIA_STOP)
-    private val nextIntent = keyEventIntent(KeyEvent.KEYCODE_MEDIA_NEXT)
-    private val previousIntent = keyEventIntent(KeyEvent.KEYCODE_MEDIA_PREVIOUS)
+    private val nextIntent = intent(ACTION_FORCE_NEXT)
+    private val previousIntent = intent(ACTION_FORCE_PREVIOUS)
     private val rewindIntent = keyEventIntent(KeyEvent.KEYCODE_MEDIA_REWIND)
     private val fastForwardIntent = keyEventIntent(KeyEvent.KEYCODE_MEDIA_FAST_FORWARD)
     private val pauseIntentNonRewinding = intent(ACTION_PAUSE_NON_REWINDING)
@@ -109,6 +109,9 @@ import javax.inject.Singleton
         val ACTION_CHANGE = "actionChange"
         val CHANGE_TIME = "changeTime"
         val CHANGE_FILE = "changeFile"
+
+        val ACTION_FORCE_NEXT = "actionForceNext"
+        val ACTION_FORCE_PREVIOUS = "actionForcePrevious"
 
         val ACTION_PAUSE_NON_REWINDING = "ActionPauseNonRewinding"
     }
