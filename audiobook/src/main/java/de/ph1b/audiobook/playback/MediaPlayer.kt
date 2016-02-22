@@ -23,11 +23,14 @@ import de.paul_woitaschek.mediaplayer.Player
 import de.ph1b.audiobook.model.Book
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 import rx.subjects.BehaviorSubject
 import rx.subjects.PublishSubject
 import rx.subscriptions.CompositeSubscription
 import java.io.File
 import java.io.IOException
+import java.util.concurrent.LinkedBlockingQueue
+import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock
 import javax.inject.Inject
@@ -372,5 +375,15 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
         STARTED,
         STOPPED,
         COMPLETED
+    }
+
+    companion object {
+        val playerExecutor = ThreadPoolExecutor(
+                1, 1, // single thread
+                2, TimeUnit.SECONDS,
+                LinkedBlockingQueue(2), // queue capacity
+                ThreadPoolExecutor.DiscardOldestPolicy()
+        )
+        val playerScheduler = Schedulers.from(playerExecutor)
     }
 }
