@@ -20,8 +20,8 @@ package de.ph1b.audiobook.playback
 import Slimber
 import android.content.SharedPreferences
 import android.os.Build
-import de.ph1b.audiobook.persistence.edit
-import de.ph1b.audiobook.persistence.setBoolean
+import de.ph1b.audiobook.persistence.internals.edit
+import de.ph1b.audiobook.persistence.internals.setBoolean
 import javax.inject.Inject
 import javax.inject.Named
 

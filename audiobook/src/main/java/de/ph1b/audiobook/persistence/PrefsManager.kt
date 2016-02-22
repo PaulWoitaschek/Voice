@@ -24,6 +24,7 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.assertMain
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
+import de.ph1b.audiobook.persistence.internals.*
 import de.ph1b.audiobook.uitools.ThemeUtil
 import de.ph1b.audiobook.view.fragment.BookShelfFragment
 import rx.subjects.BehaviorSubject

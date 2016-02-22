@@ -36,6 +36,7 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.model.Bookmark
 import de.ph1b.audiobook.persistence.BookChest
+import de.ph1b.audiobook.persistence.BookmarkProvider
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
@@ -69,8 +70,8 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
                             .input(getString(R.string.bookmark_edit_hint), bookmark.title, false) { materialDialog, charSequence ->
                                 val newBookmark = Bookmark(bookmark.mediaFile, charSequence.toString(), bookmark.time)
                                 adapter.replace(bookmark, newBookmark)
-                                db.deleteBookmark(bookmark.id)
-                                db.addBookmark(newBookmark)
+                                bookmarkProvider.deleteBookmark(bookmark.id)
+                                bookmarkProvider.addBookmark(newBookmark)
                             }
                             .positiveText(R.string.dialog_confirm).show()
                     return@setOnMenuItemClickListener true
@@ -82,7 +83,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
                             .negativeText(R.string.dialog_cancel)
                             .onPositive { materialDialog, dialogAction ->
                                 adapter.remove(bookmark)
-                                db.deleteBookmark(bookmark.id)
+                                bookmarkProvider.deleteBookmark(bookmark.id)
                             }
                             .show()
                     return@setOnMenuItemClickListener true
@@ -109,6 +110,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
     private lateinit var bookmarkTitle: EditText
     @Inject lateinit internal var prefs: PrefsManager
     @Inject internal lateinit var db: BookChest
+    @Inject internal lateinit var bookmarkProvider: BookmarkProvider
     @Inject internal lateinit var playStateManager: PlayStateManager
     @Inject lateinit internal var bookVendor: BookVendor
     @Inject internal lateinit var playerController: PlayerController
@@ -122,7 +124,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
             title = book.currentChapter().name
         }
 
-        db.addBookmarkAtBookPosition(book, title)
+        bookmarkProvider.addBookmarkAtBookPosition(book, title)
         Toast.makeText(activity, R.string.bookmark_added, Toast.LENGTH_SHORT).show()
         bookmarkTitle.setText("")
         dismiss()
@@ -143,10 +145,10 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
         recyclerView.addItemDecoration(DividerItemDecoration(activity))
         recyclerView.layoutManager = layoutManager
 
-        db.bookmarks(book)
+        bookmarkProvider.bookmarks(book)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { adapter.add(it) }
+                .subscribe { adapter.addAll(it) }
 
         customView.findViewById(R.id.add).setOnClickListener { addClicked() }
         bookmarkTitle.setOnEditorActionListener { v1, actionId, event ->

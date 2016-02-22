@@ -15,7 +15,7 @@
  * /licenses/>.
  */
 
-package de.ph1b.audiobook.persistence
+package de.ph1b.audiobook.persistence.internals
 
 import Slimber
 import android.content.ContentValues

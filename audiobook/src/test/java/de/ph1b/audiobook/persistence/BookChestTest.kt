@@ -20,6 +20,7 @@ package de.ph1b.audiobook.persistence
 import android.os.Build
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.DummyCreator
+import de.ph1b.audiobook.persistence.internals.InternalDb
 import junit.framework.TestCase
 import org.fest.assertions.api.Assertions.assertThat
 import org.junit.Test

@@ -15,7 +15,7 @@
  * /licenses/>.
  */
 
-package de.ph1b.audiobook.persistence
+package de.ph1b.audiobook.persistence.internals
 
 import android.content.SharedPreferences
 import android.database.Cursor
@@ -43,11 +43,12 @@ fun Cursor.int(columnName: String): Int {
     return getInt(getColumnIndexOrThrow(columnName))
 }
 
-inline fun SQLiteDatabase.asTransaction(func: SQLiteDatabase.() -> Unit) {
+inline fun <T> SQLiteDatabase.asTransaction(func: SQLiteDatabase.() -> T): T {
     beginTransaction()
     try {
-        func()
+        val result = func()
         setTransactionSuccessful()
+        return result
     } finally {
         endTransaction()
     }

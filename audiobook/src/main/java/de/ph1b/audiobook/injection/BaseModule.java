@@ -28,8 +28,8 @@ import dagger.Module;
 import dagger.Provides;
 import de.paul_woitaschek.mediaplayer.Player;
 import de.ph1b.audiobook.BuildConfig;
-import de.ph1b.audiobook.persistence.InternalDb;
 import de.ph1b.audiobook.persistence.PrefsManager;
+import de.ph1b.audiobook.persistence.internals.InternalDb;
 import de.ph1b.audiobook.playback.MediaPlayerCapabilities;
 
 /**

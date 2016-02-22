@@ -15,7 +15,7 @@
  * /licenses/>.
  */
 
-package de.ph1b.audiobook.persistence
+package de.ph1b.audiobook.persistence.internals
 
 import android.content.ContentValues
 import android.database.Cursor
@@ -51,17 +51,17 @@ object BookmarkTable {
     const val TABLE_NAME = "tableBookmarks"
     const val TIME = "bookmarkTime"
     const val ID = BaseColumns._ID
-    private val CREATE_TABLE = "CREATE TABLE $TABLE_NAME ( " +
-            " $ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            " $PATH TEXT NOT NULL, " +
-            " $TITLE TEXT NOT NULL, " +
-            " $TIME INTEGER NOT NULL)"
+    private val CREATE_TABLE = "CREATE TABLE ${TABLE_NAME} ( " +
+            " ${ID} INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            " ${PATH} TEXT NOT NULL, " +
+            " ${TITLE} TEXT NOT NULL, " +
+            " ${TIME} INTEGER NOT NULL)"
 
     fun onCreate(db: SQLiteDatabase) {
         db.execSQL(CREATE_TABLE)
     }
 
     fun dropTableIfExists(db: SQLiteDatabase) {
-        db.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
+        db.execSQL("DROP TABLE IF EXISTS ${TABLE_NAME}")
     }
 }

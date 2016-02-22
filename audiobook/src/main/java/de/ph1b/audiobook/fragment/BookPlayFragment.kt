@@ -48,6 +48,7 @@ import de.ph1b.audiobook.dialog.prefs.PlaybackSpeedDialogFragment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookChest
+import de.ph1b.audiobook.persistence.BookmarkProvider
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.MediaPlayerCapabilities
 import de.ph1b.audiobook.playback.PlayStateManager
@@ -80,7 +81,8 @@ class BookPlayFragment : Fragment() {
     @Inject internal lateinit var mediaPlayer: PlayerController
     @Inject internal lateinit var sandMan: Sandman
     @Inject internal lateinit var prefs: PrefsManager
-    @Inject internal lateinit var db: BookChest
+    @Inject internal lateinit var bookProvider: BookChest
+    @Inject internal lateinit var bookmarkProvider: BookmarkProvider
     @Inject internal lateinit var bookVendor: BookVendor
     @Inject internal lateinit var playStateManager: PlayStateManager
     @Inject internal lateinit var playerCapabilities: MediaPlayerCapabilities
@@ -292,7 +294,7 @@ class BookPlayFragment : Fragment() {
                 sandMan.toggleSleepSand()
                 if (prefs.setBookmarkOnSleepTimer() && sandMan.sleepTimerActive()) {
                     val date = DateUtils.formatDateTime(context, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE)
-                    db.addBookmarkAtBookPosition(book!!, date + ": " + getString(R.string.action_sleep))
+                    bookmarkProvider.addBookmarkAtBookPosition(book!!, date + ": " + getString(R.string.action_sleep))
                 }
                 return true
             }
@@ -335,7 +337,7 @@ class BookPlayFragment : Fragment() {
                         }
                     }))
 
-            add(Observable.merge(db.activeBooks, db.updateObservable())
+            add(Observable.merge(bookProvider.activeBooks, bookProvider.updateObservable())
                     .filter { it.id == bookId }
                     .doOnNext { this@BookPlayFragment.book = it }
                     .subscribe { book: Book ->

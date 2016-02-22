@@ -64,6 +64,12 @@ class BookmarkAdapter(private val chapters: List<Chapter>, private val listener:
         notifyItemInserted(index)
     }
 
+    fun addAll(bookmarks:Iterable<Bookmark>){
+        this.bookmarks.addAll(bookmarks)
+        this.bookmarks.sort()
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.dialog_bookmark_row_layout, parent, false)
         return ViewHolder(v, listener)

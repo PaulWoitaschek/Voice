@@ -31,7 +31,7 @@
     <application
         android:name=".injection.App"
         android:allowBackup="true"
-        android:backupAgent=".persistence.CustomBackupAgent"
+        android:backupAgent=".persistence.internals.CustomBackupAgent"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
