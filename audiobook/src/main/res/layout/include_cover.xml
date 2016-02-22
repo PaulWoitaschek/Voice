@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
-    android:id="@+id/cover_frame"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cover_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:foreground="?attr/selectableItemBackground">
@@ -14,11 +14,11 @@
         android:adjustViewBounds="true"
         android:contentDescription="@string/cover"
         android:scaleType="centerCrop"
-        tools:ignore="UnusedAttribute" />
+        tools:ignore="UnusedAttribute"/>
 
     <TextView
         android:id="@+id/timerView"
         style="@style/timer_text_view_style"
-        tools:text="00:34" />
+        tools:text="00:34"/>
 
 </FrameLayout>

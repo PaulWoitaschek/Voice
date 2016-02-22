@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="72dp"
-    android:background="?attr/selectableItemBackground"
-    android:descendantFocusability="blocksDescendants"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    tools:ignore="Overdraw">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:background="?attr/selectableItemBackground"
+                android:descendantFocusability="blocksDescendants"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                tools:ignore="Overdraw">
 
     <ImageButton
         android:id="@+id/edit"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:textSize="@dimen/list_text_primary_size"
-            tools:text="Fictive bookmark title that is possibly too long long long" />
+            tools:text="Fictive bookmark title that is possibly too long long long"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -55,7 +55,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="@dimen/list_text_secondary_size"
-                tools:text="(4/102)" />
+                tools:text="(4/102)"/>
 
             <TextView
                 android:id="@+id/text3"
@@ -65,7 +65,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="@dimen/list_text_secondary_size"
-                tools:text="10:10:10 / 12:12:12" />
+                tools:text="10:10:10 / 12:12:12"/>
 
         </LinearLayout>
 

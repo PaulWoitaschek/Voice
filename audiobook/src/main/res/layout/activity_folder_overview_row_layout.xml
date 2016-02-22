@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="56dp">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="56dp">
 
     <ImageView
         android:id="@+id/icon"
@@ -16,7 +16,7 @@
         android:layout_marginStart="16dp"
         android:scaleType="fitStart"
         android:src="@drawable/ic_folder"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"/>
 
     <TextView
         android:id="@+id/containing"
@@ -34,7 +34,7 @@
         android:ellipsize="marquee"
         android:maxLines="2"
         android:textSize="@dimen/list_text_primary_size"
-        tools:text="/storage/scard1/Audiobooks/subfolder/subsdfer/subfodsdfsdffder/subsbder/subfolder/subfolder" />
+        tools:text="/storage/scard1/Audiobooks/subfolder/subsdfer/subfodsdfsdffder/subsbder/subfolder/subfolder"/>
 
     <ImageButton
         android:id="@+id/remove"
@@ -46,6 +46,6 @@
         android:contentDescription="@string/remove"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:src="@drawable/ic_delete_white_24dp" />
+        android:src="@drawable/ic_delete_white_24dp"/>
 
 </RelativeLayout>

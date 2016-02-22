@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:focusableInTouchMode="true"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/md_content_padding_bottom"
-    android:paddingLeft="@dimen/md_dialog_frame_margin"
-    android:paddingRight="@dimen/md_dialog_frame_margin"
-    android:paddingTop="@dimen/md_content_padding_top">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:focusableInTouchMode="true"
+              android:orientation="vertical"
+              android:paddingBottom="@dimen/md_content_padding_bottom"
+              android:paddingLeft="@dimen/md_dialog_frame_margin"
+              android:paddingRight="@dimen/md_dialog_frame_margin"
+              android:paddingTop="@dimen/md_content_padding_top">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
             android:layout_weight="1"
             android:hint="@string/bookmark_edit_hint"
             android:imeOptions="actionDone"
-            android:inputType="textCapSentences|textAutoCorrect" />
+            android:inputType="textCapSentences|textAutoCorrect"/>
 
         <ImageButton
             android:id="@+id/add"
@@ -40,6 +40,6 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="theme_name" format="reference" />
-    <attr name="colorAccentDark" format="reference" />
-    <attr name="icon_color" format="reference" />
+    <attr name="theme_name" format="reference"/>
+    <attr name="colorAccentDark" format="reference"/>
+    <attr name="icon_color" format="reference"/>
 
     <!-- Toolbar-->
-    <attr name="toolbar_popup_theme" format="reference" />
+    <attr name="toolbar_popup_theme" format="reference"/>
 
-    <attr name="background_overlay" format="reference" />
+    <attr name="background_overlay" format="reference"/>
 </resources>

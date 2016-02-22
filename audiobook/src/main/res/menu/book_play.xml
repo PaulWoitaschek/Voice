@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".activity.MediaPlay">
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context=".activity.MediaPlay">
 
     <item
         android:id="@+id/action_sleep"
         android:icon="@drawable/ic_snooze_white_24dp"
         android:orderInCategory="1"
         android:title="@string/action_sleep"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_bookmark"
         android:icon="@drawable/ic_bookmark_outline_white_24dp"
         android:orderInCategory="2"
         android:title="@string/bookmark"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_time_lapse"
         android:icon="@drawable/ic_clock_fast_white_24dp"
         android:orderInCategory="3"
         android:title="@string/playback_speed"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_time_change"
         android:orderInCategory="4"
         android:title="@string/action_time_change"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="5"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
 </menu>
