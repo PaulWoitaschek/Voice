@@ -39,7 +39,7 @@ class MediaPlayer
 constructor(private val player: InternalPlayer, private val playStateManager: PlayStateManager) {
 
     private var book = BehaviorSubject.create<Book>()
-    @Volatile private var state: State = State.STOPPED
+    private var state = BehaviorSubject.create(State.IDLE)
 
     private val subscriptions = CompositeSubscription()
     private val errorSubject = PublishSubject.create<Unit>()
@@ -59,7 +59,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
                             stopUpdating()
                             playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
 
-                            state = State.PLAYBACK_COMPLETED
+                            state.onNext(State.PLAYBACK_COMPLETED)
                         }
                     }
                 }
@@ -67,7 +67,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
         player.onError
                 .subscribe {
                     player.reset()
-                    state = MediaPlayer.State.IDLE
+                    state.onNext(MediaPlayer.State.IDLE)
                     errorSubject.onNext(Unit)
                 }
     }
@@ -99,15 +99,15 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
 
         book.value?.let {
             try {
-                if (state != State.IDLE) player.reset()
+                if (state.value != State.IDLE) player.reset()
 
                 player.prepare(it.currentChapter().file)
                 player.seekTo(it.time)
                 player.playbackSpeed = it.playbackSpeed
-                state = State.PAUSED
+                state.onNext(State.PAUSED)
             } catch (ex: IOException) {
                 e(ex) { "Error when preparing the player." }
-                state = State.STOPPED
+                state.onNext(State.STOPPED)
             }
         }
     }
@@ -119,23 +119,23 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
     fun play() {
         assertMain()
 
-        when (state) {
+        when (state.value) {
             State.PLAYBACK_COMPLETED -> {
                 player.seekTo(0)
                 player.start()
                 startUpdating()
                 playStateManager.playState.onNext(PlayStateManager.PlayState.PLAYING)
-                state = State.STARTED
+                state.onNext(State.STARTED)
             }
             State.PAUSED -> {
                 player.start()
                 startUpdating()
                 playStateManager.playState.onNext(PlayStateManager.PlayState.PLAYING)
-                state = State.STARTED
+                state.onNext(State.STARTED)
             }
             State.STOPPED -> {
                 prepare()
-                if (state == State.PAUSED) {
+                if (state.value == State.PAUSED) {
                     play()
                 }
             }
@@ -153,7 +153,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
             if (!hasSubscriptions()) {
                 // updates the book automatically with the current position
                 add(Observable.interval(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                        .map { if (state == State.STARTED) player.currentPosition else -1 }
+                        .map { if (state.value == State.STARTED) player.currentPosition else -1 }
                         .filter { it != -1 }
                         .distinctUntilChanged()
                         .map { book.value?.copy(time = it) } // create a copy with new position
@@ -177,9 +177,9 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
 
         Slimber.v { "direction=$direction" }
         book.value?.let {
-            if (state == State.IDLE && state == State.STOPPED) {
+            if (state.value == State.IDLE && state.value == State.STOPPED) {
                 prepare()
-                if (state != State.PREPARED) return
+                if (state.value != State.PREPARED) return
             }
 
             val currentPos = player.currentPosition
@@ -206,9 +206,9 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
         assertMain()
 
         book.value?.let {
-            if (state == State.IDLE || state == State.STOPPED) {
+            if (state.value == State.IDLE || state.value == State.STOPPED) {
                 prepare()
-                if (state != State.PREPARED) return
+                if (state.value != State.PREPARED) return
             }
 
             val previousChapter = it.previousChapter()
@@ -232,10 +232,10 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
     fun stop() {
         assertMain()
 
-        if (state == State.STARTED) player.pause()
+        if (state.value == State.STARTED) player.pause()
         stopUpdating()
         playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
-        state = State.STOPPED
+        state.onNext(State.STOPPED)
     }
 
     /**
@@ -257,7 +257,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
 
         Slimber.v { "pause acquired lock. state is=$state" }
         book.value?.let {
-            when (state) {
+            when (state.value) {
                 State.STARTED -> {
                     player.pause()
                     stopUpdating()
@@ -276,7 +276,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
 
                     playStateManager.playState.onNext(PlayStateManager.PlayState.PAUSED)
 
-                    state = State.PAUSED
+                    state.onNext(State.PAUSED)
                 }
                 else -> Slimber.e { "pause called in illegal state=$state" }
             }
@@ -321,7 +321,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
             val changeFile = (it.currentChapter().file != file)
             Slimber.v { "changeFile=$changeFile" }
             if (changeFile) {
-                val wasPlaying = (state == State.STARTED)
+                val wasPlaying = (state.value == State.STARTED)
 
                 val copy = it.copy(currentFile = file, time = time)
                 book.onNext(copy)
@@ -329,14 +329,14 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
                 prepare()
                 if (wasPlaying) {
                     player.start()
-                    state = State.STARTED
+                    state.onNext(State.STARTED)
                     playStateManager.playState.onNext(PlayStateManager.PlayState.PLAYING)
                 } else {
                     playStateManager.playState.onNext(PlayStateManager.PlayState.PAUSED)
                 }
             } else {
-                if (state == State.STOPPED || state == State.IDLE) prepare()
-                when (state) {
+                if (state.value == State.STOPPED || state.value == State.IDLE) prepare()
+                when (state.value) {
                     State.STARTED, State.PAUSED -> {
                         player.seekTo(time)
 
