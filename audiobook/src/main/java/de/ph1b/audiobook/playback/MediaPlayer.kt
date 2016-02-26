@@ -74,7 +74,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
                 .subscribe { isPlaying ->
                     if (isPlaying) {
                         Slimber.v { "startUpdating" }
-                        if (updatingSubscription == null) {
+                        if (updatingSubscription?.isUnsubscribed ?: true) {
                             // updates the book automatically with the current position
                             updatingSubscription = Observable.interval(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                                     .map { if (state.value == State.STARTED) player.currentPosition else -1 }
@@ -269,17 +269,6 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
             }
         }
     }
-
-    fun playPause() {
-        assertMain()
-
-        if (playStateManager.playState.value != PlayStateManager.PlayState.PLAYING) {
-            play()
-        } else {
-            pause(true)
-        }
-    }
-
 
     /**
      * Plays the next chapter. If there is none, don't do anything.

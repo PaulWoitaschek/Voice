@@ -130,11 +130,11 @@ class BookReaderService : Service() {
                 }
 
                 override fun onPause() {
-                    player.playPause()
+                    player.pause(true)
                 }
 
                 override fun onPlay() {
-                    player.playPause()
+                    player.play()
                 }
             })
             setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
