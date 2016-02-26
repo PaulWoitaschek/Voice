@@ -44,7 +44,6 @@ import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.blocking
 import de.ph1b.audiobook.view.fragment.BookShelfFragment
-import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 import java.io.File
@@ -146,7 +145,6 @@ class BookReaderService : Service() {
         registerReceiver(headsetPlugReceiver.broadcastReceiver, IntentFilter(Intent.ACTION_HEADSET_PLUG))
 
         player.onError()
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     // inform user on errors
                     Slimber.e { "onError" }
@@ -164,7 +162,6 @@ class BookReaderService : Service() {
         // update book when changed by player
         player.bookObservable()
                 .filter { it != null }
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { db.updateBook(it) }
 
         playStateManager.playState.onNext(PlayState.STOPPED)
