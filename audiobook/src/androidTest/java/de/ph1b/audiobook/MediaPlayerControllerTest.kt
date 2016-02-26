@@ -19,7 +19,7 @@ package de.ph1b.audiobook
 
 import android.test.AndroidTestCase
 import android.test.suitebuilder.annotation.SmallTest
-import de.paul_woitaschek.mediaplayer.Player
+import de.paul_woitaschek.mediaplayer.AndroidPlayer
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.playback.MediaPlayer
 import de.ph1b.audiobook.playback.PlayStateManager
@@ -43,7 +43,7 @@ class MediaPlayerControllerTest : AndroidTestCase() {
     lateinit var book: Book
 
     override fun setUp() {
-        val player = Player(context, Player.Type.ANDROID, Player.Logging.ENABLED)
+        val player = AndroidPlayer(context)
         playStateManager = PlayStateManager()
         mediaPlayer = MediaPlayer(player, playStateManager)
 

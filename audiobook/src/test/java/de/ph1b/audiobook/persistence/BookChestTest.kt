@@ -20,6 +20,7 @@ package de.ph1b.audiobook.persistence
 import android.os.Build
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.DummyCreator
+import de.ph1b.audiobook.persistence.internals.InternalBookRegister
 import de.ph1b.audiobook.persistence.internals.InternalDb
 import junit.framework.TestCase
 import org.fest.assertions.api.Assertions.assertThat
@@ -42,7 +43,8 @@ class BookChestTest : TestCase() {
     fun testBookChest() {
         val dbName = System.currentTimeMillis().toString()
         val internalDb = InternalDb(RuntimeEnvironment.application, dbName)
-        val bookChest = BookChest(internalDb)
+        val internalBookRegister = InternalBookRegister(internalDb)
+        val bookChest = BookChest(internalBookRegister)
 
         var dummy = DummyCreator.dummyBook(5)
         bookChest.addBook(dummy)
