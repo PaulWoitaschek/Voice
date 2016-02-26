@@ -19,6 +19,7 @@ package de.ph1b.audiobook.playback
 
 import Slimber
 import Slimber.e
+import de.ph1b.audiobook.assertMain
 import de.ph1b.audiobook.model.Book
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
@@ -46,7 +47,6 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
 
     init {
         player.onCompletion
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     // After the current song has ended, prepare the next one if there is one. Else stop the
                     // resources.
@@ -79,6 +79,8 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
      * @param book The book to be initialized.
      */
     fun init(book: Book) {
+        assertMain()
+
         if (this.book.value != book) {
             Slimber.i { "constructor called with ${book.name}" }
             this.book.onNext(book)
@@ -93,6 +95,8 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
      * Prepares the current chapter set in book.
      */
     private fun prepare() {
+        assertMain()
+
         book.value?.let {
             try {
                 if (state != State.IDLE) player.reset()
@@ -113,6 +117,8 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
      * Plays the prepared file.
      */
     fun play() {
+        assertMain()
+
         when (state) {
             State.PLAYBACK_COMPLETED -> {
                 player.seekTo(0)
@@ -167,6 +173,8 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
      * @param direction The direction to skip
      */
     fun skip(direction: Direction) {
+        assertMain()
+
         Slimber.v { "direction=$direction" }
         book.value?.let {
             if (state == State.IDLE && state == State.STOPPED) {
@@ -195,6 +203,8 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
      * If current time is > 2000ms, seek to 0. Else play previous chapter if there is one.
      */
     fun previous(toNullOfNewTrack: Boolean) {
+        assertMain()
+
         book.value?.let {
             if (state == State.IDLE || state == State.STOPPED) {
                 prepare()
@@ -220,6 +230,8 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
      * Stops the playback and releases some resources.
      */
     fun stop() {
+        assertMain()
+
         if (state == State.STARTED) player.pause()
         stopUpdating()
         playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
@@ -241,6 +253,8 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
      * @param rewind true if the player should automatically rewind a little bit.
      */
     fun pause(rewind: Boolean) {
+        assertMain()
+
         Slimber.v { "pause acquired lock. state is=$state" }
         book.value?.let {
             when (state) {
@@ -270,6 +284,8 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
     }
 
     fun playPause() {
+        assertMain()
+
         if (playStateManager.playState.value != PlayStateManager.PlayState.PLAYING) {
             play()
         } else {
@@ -281,7 +297,9 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
     /**
      * Plays the next chapter. If there is none, don't do anything.
      */
-    operator fun next() {
+    fun next() {
+        assertMain()
+
         book.value?.nextChapter()?.let {
             changePosition(0, it.file)
         }
@@ -296,6 +314,8 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
      * @param file The path of the media to play (relative to the books root path)
      */
     fun changePosition(time: Int, file: File) {
+        assertMain()
+
         Slimber.v { "changePosition with time $time and file $file" }
         book.value?.let {
             val changeFile = (it.currentChapter().file != file)
@@ -333,6 +353,8 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
      * The current playback speed. 1.0 for normal playback, 2.0 for twice the speed, etc.
      */
     fun setPlaybackSpeed(speed: Float) {
+        assertMain()
+
         book.value?.let {
             val copy = it.copy(playbackSpeed = speed)
             book.onNext(copy)
