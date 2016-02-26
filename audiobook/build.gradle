@@ -136,7 +136,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     // player
-    compile 'com.github.PaulWoitaschek:AndroidPlayer:0.007'
+    compile 'com.github.PaulWoitaschek:AndroidPlayer:0.008'
 
     // logs
     compile 'com.github.PaulWoitaschek:Slimber:1.0.1'
