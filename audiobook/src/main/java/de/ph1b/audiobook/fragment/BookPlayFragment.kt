@@ -114,23 +114,12 @@ class BookPlayFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        playButton.clicks()
-                .onBackpressureLatest()
-                .subscribe { mediaPlayer.playPause() }
-        rewindButton.clicks()
-                .onBackpressureLatest()
-                .subscribe { mediaPlayer.rewind() }
-        fastForwardButton.clicks()
-                .onBackpressureLatest()
-                .subscribe { mediaPlayer.fastForward() }
-        nextButton.clicks()
-                .onBackpressureLatest()
-                .subscribe { mediaPlayer.next() }
-        previousButton.clicks()
-                .onBackpressureLatest()
-                .subscribe { mediaPlayer.previous() }
-        playedTimeView.clicks()
-                .subscribe { launchJumpToPositionDialog() }
+        playButton.setOnClickListener { mediaPlayer.playPause() }
+        rewindButton.setOnClickListener { mediaPlayer.rewind() }
+        fastForwardButton.setOnClickListener { mediaPlayer.fastForward() }
+        nextButton.setOnClickListener { mediaPlayer.next() }
+        previousButton.setOnClickListener { mediaPlayer.previous() }
+        playedTimeView.setOnClickListener { launchJumpToPositionDialog() }
 
         var lastClick = 0L
         val doubleClickTime = ViewConfiguration.getDoubleTapTimeout()
