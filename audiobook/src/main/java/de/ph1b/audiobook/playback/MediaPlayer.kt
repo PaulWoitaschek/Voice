@@ -22,10 +22,10 @@ import Slimber.e
 import de.ph1b.audiobook.assertMain
 import de.ph1b.audiobook.model.Book
 import rx.Observable
+import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
 import rx.subjects.BehaviorSubject
 import rx.subjects.PublishSubject
-import rx.subscriptions.CompositeSubscription
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
@@ -41,7 +41,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
     private var book = BehaviorSubject.create<Book>()
     private var state = BehaviorSubject.create(State.IDLE)
 
-    private val subscriptions = CompositeSubscription()
+    private var updatingSubscription: Subscription? = null
     private val errorSubject = PublishSubject.create<Unit>()
     fun onError() = errorSubject.asObservable()
 
@@ -56,7 +56,6 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
                             next()
                         } else {
                             Slimber.v { "Reached last track. Stopping player" }
-                            stopUpdating()
                             playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
 
                             state.onNext(State.PLAYBACK_COMPLETED)
@@ -69,6 +68,26 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
                     player.reset()
                     state.onNext(MediaPlayer.State.IDLE)
                     errorSubject.onNext(Unit)
+                }
+
+        state.map { it == State.STARTED }
+                .subscribe { isPlaying ->
+                    if (isPlaying) {
+                        Slimber.v { "startUpdating" }
+                        if (updatingSubscription == null) {
+                            // updates the book automatically with the current position
+                            updatingSubscription = Observable.interval(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                                    .map { if (state.value == State.STARTED) player.currentPosition else -1 }
+                                    .filter { it != -1 }
+                                    .distinctUntilChanged()
+                                    .map { book.value?.copy(time = it) } // create a copy with new position
+                                    .filter { it != null } // let it pass when it exists
+                                    .subscribe { book.onNext(it) } // update the book
+                        }
+                    } else {
+                        Slimber.v { "stop updating" }
+                        updatingSubscription?.unsubscribe()
+                    }
                 }
     }
 
@@ -123,13 +142,11 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
             State.PLAYBACK_COMPLETED -> {
                 player.seekTo(0)
                 player.start()
-                startUpdating()
                 playStateManager.playState.onNext(PlayStateManager.PlayState.PLAYING)
                 state.onNext(State.STARTED)
             }
             State.PAUSED -> {
                 player.start()
-                startUpdating()
                 playStateManager.playState.onNext(PlayStateManager.PlayState.PLAYING)
                 state.onNext(State.STARTED)
             }
@@ -140,27 +157,6 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
                 }
             }
             else -> Slimber.i { "Play ignores state=$state " }
-        }
-    }
-
-    /**
-     * Updates the current time and position of the book, writes it to the database and sends
-     * updates to the GUI.
-     */
-    private fun startUpdating() {
-        Slimber.v { "startUpdating" }
-        subscriptions.apply {
-            if (!hasSubscriptions()) {
-                // updates the book automatically with the current position
-                add(Observable.interval(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                        .map { if (state.value == State.STARTED) player.currentPosition else -1 }
-                        .filter { it != -1 }
-                        .distinctUntilChanged()
-                        .map { book.value?.copy(time = it) } // create a copy with new position
-                        .filter { it != null } // let it pass when it exists
-                        .subscribe { book.onNext(it) } // update the book
-                )
-            }
         }
     }
 
@@ -233,16 +229,8 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
         assertMain()
 
         if (state.value == State.STARTED) player.pause()
-        stopUpdating()
         playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
         state.onNext(State.STOPPED)
-    }
-
-    /**
-     * Stops updating the book with the current position.
-     */
-    private fun stopUpdating() {
-        subscriptions.clear()
     }
 
 
@@ -260,7 +248,6 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
             when (state.value) {
                 State.STARTED -> {
                     player.pause()
-                    stopUpdating()
 
                     if (rewind) {
                         val autoRewind = autoRewindAmount * 1000
