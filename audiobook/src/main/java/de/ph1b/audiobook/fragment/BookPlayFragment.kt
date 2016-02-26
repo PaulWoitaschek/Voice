@@ -59,7 +59,6 @@ import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
 import de.ph1b.audiobook.utils.BookVendor
 import rx.Observable
-import rx.android.schedulers.AndroidSchedulers
 import rx.functions.Action1
 import rx.subscriptions.CompositeSubscription
 import java.util.*
@@ -363,7 +362,6 @@ class BookPlayFragment : Fragment() {
 
             // hide / show left time view
             add(sandMan.sleepSand
-                    .observeOn(AndroidSchedulers.mainThread())
                     .map { it > 0 }
                     .map { active ->
                         if (active) View.VISIBLE else View.GONE
@@ -377,7 +375,6 @@ class BookPlayFragment : Fragment() {
             add(sandMan.sleepSand
                     .map { it > 0 } // sleep timer is active
                     .distinctUntilChanged() // only notify when event has changed
-                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { hostingActivity.invalidateOptionsMenu() }
             )
 
@@ -386,7 +383,6 @@ class BookPlayFragment : Fragment() {
                     .distinctUntilChanged()
                     .filter { it > 0 }
                     .map { formatTime(it, it) }
-                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { timerCountdownView.text = it })
         }
 

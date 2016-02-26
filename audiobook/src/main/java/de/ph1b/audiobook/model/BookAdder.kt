@@ -98,7 +98,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
             stopScanner = true
             executor.execute {
                 Slimber.v { "started" }
-                scannerActive.onNext(true)
+                handler.post { scannerActive.onNext(true) }
                 stopScanner = false
 
                 try {
@@ -110,7 +110,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
                 }
 
                 stopScanner = false
-                scannerActive.onNext(false)
+                handler.post { scannerActive.onNext(false) }
                 Slimber.v { "stopped" }
             }
         }

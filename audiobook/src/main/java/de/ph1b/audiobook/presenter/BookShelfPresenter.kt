@@ -25,7 +25,6 @@ import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.view.fragment.BookShelfFragment
 import rx.Observable
-import rx.android.schedulers.AndroidSchedulers
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
@@ -83,7 +82,6 @@ constructor(private val bookChest: BookChest,
 
             // observe if the scanner is active and there are books and show spinner accordingly.
             add(bookAdder.scannerActive()
-                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { view.showSpinnerIfNoData(it) })
 
             // Subscription that updates the UI based on the play state.

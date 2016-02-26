@@ -18,9 +18,11 @@
 package de.ph1b.audiobook.playback
 
 import Slimber
+import de.ph1b.audiobook.assertMain
 import de.ph1b.audiobook.persistence.PrefsManager
 import rx.Observable
 import rx.Subscription
+import rx.android.schedulers.AndroidSchedulers
 import rx.subjects.BehaviorSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -51,7 +53,7 @@ import javax.inject.Singleton
                 .distinctUntilChanged()
                 .subscribe { playing ->
                     if (playing) {
-                        sleepSubscription = Observable.interval(sleepUpdateInterval, TimeUnit.MILLISECONDS)
+                        sleepSubscription = Observable.interval(sleepUpdateInterval, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                                 .filter { internalSleepSand.value > 0 } // only notify if there is still time left
                                 .map { internalSleepSand.value - sleepUpdateInterval } // calculate the new time
                                 .map { it.coerceAtLeast(0) } // but keep at least 0
@@ -68,6 +70,8 @@ import javax.inject.Singleton
      * @return true if the timer is now active, false if it now inactive
      */
     fun toggleSleepSand() {
+        assertMain()
+
         Slimber.i { "toggleSleepSand. Left sleepTime is ${internalSleepSand.value}" }
         if (internalSleepSand.value > 0L) {
             Slimber.i { "sleepSand is active. cancelling now" }
