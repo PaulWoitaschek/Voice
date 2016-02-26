@@ -152,8 +152,10 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
         subscriptions.apply {
             if (!hasSubscriptions()) {
                 // updates the book automatically with the current position
-                add(Observable.interval(1, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
-                        .map { player.currentPosition } // pass the current position
+                add(Observable.interval(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                        .map { if (state == State.STARTED) player.currentPosition else -1 }
+                        .filter { it != -1 }
+                        .distinctUntilChanged()
                         .map { book.value?.copy(time = it) } // create a copy with new position
                         .filter { it != null } // let it pass when it exists
                         .subscribe { book.onNext(it) } // update the book
