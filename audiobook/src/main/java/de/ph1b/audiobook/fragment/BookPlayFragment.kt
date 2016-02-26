@@ -151,7 +151,7 @@ class BookPlayFragment : Fragment() {
         //init views
         val actionBar = actionBar().apply {
             setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.abc_ic_ab_back_mtrl_am_alpha)
+            setHomeAsUpIndicator(R.drawable.abc_ic_ab_back_material)
         }
 
         //setup buttons

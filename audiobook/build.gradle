@@ -29,6 +29,7 @@ android {
         targetSdkVersion 23
         versionCode 113
         versionName '2.6.1'
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -76,21 +77,11 @@ android {
     dexOptions {
         incremental false
     }
-
-    applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            def original = output.outputFile
-            def originalName = original.name.replaceFirst(~/\.[^\.]+$/, '')
-            def parent = output.outputFile.parentFile
-            def newName = "${variant.versionCode}-${variant.versionName}-${originalName}.apk"
-            output.outputFile = file(new File(parent, newName))
-        }
-    }
 }
 
 dependencies {
     // support library
-    def supportVersion = "23.1.1"
+    def supportVersion = "23.2.0"
     compile "com.android.support:appcompat-v7:$supportVersion"
     compile "com.android.support:recyclerview-v7:$supportVersion"
     compile "com.android.support:support-v4:$supportVersion"
@@ -100,7 +91,7 @@ dependencies {
     compile "com.squareup.picasso:picasso:2.5.2"
 
     // material styled dialogs
-    compile("com.afollestad.material-dialogs:core:0.8.5.4@aar") {
+    compile("com.afollestad.material-dialogs:core:0.8.5.5@aar") {
         transitive = true
     }
 
@@ -138,14 +129,14 @@ dependencies {
 
     // rx extensions
     compile "io.reactivex:rxandroid:1.1.0"
-    compile "io.reactivex:rxjava:1.1.0"
+    compile "io.reactivex:rxjava:1.1.1"
     compile 'com.jakewharton.rxbinding:rxbinding-kotlin:0.4.0'
 
     // kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     // player
-    compile 'com.github.PaulWoitaschek:AndroidPlayer:0.005'
+    compile 'com.github.PaulWoitaschek:AndroidPlayer:0.007'
 
     // logs
     compile 'com.github.PaulWoitaschek:Slimber:1.0.1'

@@ -351,11 +351,6 @@ class BookReaderService : Service() {
         }
     }
 
-    private inline fun sendPlayerCommand(crossinline command: MediaPlayer.() -> Any) {
-        MediaPlayer.playerExecutor.execute { player.command() }
-    }
-
-
     private enum class ChangeType internal constructor(private val intentUrl: String) {
         METADATA("com.android.music.metachanged"),
         PLAY_STATE("com.android.music.playstatechange");
