@@ -88,4 +88,10 @@ class NaturalOrderComparatorTest : TestCase() {
         Collections.sort(sorted, NaturalOrderComparator.STRING_COMPARATOR)
         assertThat(desiredOrder).isEqualTo(sorted)
     }
+
+    override fun tearDown() {
+        testFolder.delete()
+
+        super.tearDown()
+    }
 }
