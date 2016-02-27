@@ -18,7 +18,6 @@ package de.ph1b.audiobook
 
 
 import android.content.Context
-import android.os.Environment
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.File
@@ -37,6 +36,8 @@ class RealFileMocker {
         parentFolder.mkdirs()
         file1 = File(parentFolder, "1.mp3")
         file2 = File(parentFolder, "2.mp3")
+        file1.delete()
+        file2.delete()
 
         val request = Request.Builder().url("http://mirrors.creativecommons.org/ccmixter/contrib/Wired/Beastie%20Boys%20-%20Now%20Get%20Busy.mp3")
                 .build();
