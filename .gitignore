@@ -11,3 +11,5 @@ build
 local.properties
 MaterialAudiobookPlayer.iml
 .kobalt
+reports
+*.mp3
