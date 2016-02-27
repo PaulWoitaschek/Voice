@@ -35,6 +35,11 @@ class NaturalOrderComparatorTest : TestCase() {
     val testFolder = TemporaryFolder()
     @Rule fun testFolder() = testFolder
 
+    override fun setUp() {
+        super.setUp()
+        testFolder.create()
+    }
+
     @Test
     fun testFileComparator() {
         testFolder.newFolder("folder", "subfolder", "subsubfolder")
