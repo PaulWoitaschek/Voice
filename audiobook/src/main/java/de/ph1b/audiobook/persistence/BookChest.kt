@@ -17,12 +17,12 @@
 
 package de.ph1b.audiobook.persistence
 
-import Slimber
 import de.ph1b.audiobook.assertMain
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.internals.InternalBookRegister
 import rx.Observable
 import rx.subjects.PublishSubject
+import v
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -52,7 +52,7 @@ constructor(private val register: InternalBookRegister) {
     @Synchronized fun updateObservable(): Observable<Book> = updated.asObservable()
 
     @Synchronized fun addBook(book: Book) {
-        Slimber.v { "addBook=${book.name}" }
+        v { "addBook=${book.name}" }
         assertMain()
 
         val bookWithId = register.addBook(book)
@@ -69,7 +69,7 @@ constructor(private val register: InternalBookRegister) {
     @Synchronized fun getOrphanedBooks() = ArrayList(orphaned)
 
     @Synchronized fun updateBook(book: Book) {
-        Slimber.v { "updateBook=${book.name} with time ${book.time}" }
+        v { "updateBook=${book.name} with time ${book.time}" }
         assertMain()
 
         val bookIterator = active.listIterator()
@@ -86,7 +86,7 @@ constructor(private val register: InternalBookRegister) {
     }
 
     @Synchronized fun hideBook(book: Book) {
-        Slimber.v { "hideBook=${book.name}" }
+        v { "hideBook=${book.name}" }
         assertMain()
 
         val iterator = active.listIterator()
@@ -103,7 +103,7 @@ constructor(private val register: InternalBookRegister) {
     }
 
     @Synchronized fun revealBook(book: Book) {
-        Slimber.v { "Called revealBook=$book" }
+        v { "Called revealBook=$book" }
         assertMain()
 
         val orphanedBookIterator = orphaned.iterator()

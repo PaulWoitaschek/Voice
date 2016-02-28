@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.features.imagepicker
 
-import Slimber
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
@@ -12,6 +11,7 @@ import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.FrameLayout
 import de.ph1b.audiobook.R
+import i
 
 /**
  * Layout that enables a crop selection. Put this on top of over another view.
@@ -109,7 +109,7 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
         scaleGestureDetector.onTouchEvent(event)
         val gestureDetectorIsHandling = scaleGestureDetector.isInProgress
-        Slimber.i { "Gesture detector is handling=$gestureDetectorIsHandling" }
+        i { "Gesture detector is handling=$gestureDetectorIsHandling" }
         if (gestureDetectorIsHandling) {
             // pinch handles this
             resizeType = null
@@ -150,7 +150,7 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
                             Resize.BOTTOM -> dragRect.bottom - y
                             Resize.LEFT   -> x - dragRect.left
                         }
-                        Slimber.i { "inset=$inset, resizeType=$resizeType, dragRect=$dragRect, x=$x, y=$y" }
+                        i { "inset=$inset, resizeType=$resizeType, dragRect=$dragRect, x=$x, y=$y" }
                         dragRect.squareInset(inset)
                     }
 
@@ -204,7 +204,7 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
         if (w < minSize) {
             val diff = minSize - w
             dragRect.squareInset(-diff / 2f)
-            Slimber.i { "preserving min size with diff=$diff" }
+            i { "preserving min size with diff=$diff" }
         }
 
         // preserve max size
@@ -213,7 +213,7 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
         val diff = dragW - boundsSize
         if (diff > 0) {
             dragRect.squareInset(diff / 2f)
-            Slimber.i { "preserve max size, insetting with diff=$diff, dragW=$dragW, boundsSize=$boundsSize" }
+            i { "preserve max size, insetting with diff=$diff, dragW=$dragW, boundsSize=$boundsSize" }
         }
     }
 

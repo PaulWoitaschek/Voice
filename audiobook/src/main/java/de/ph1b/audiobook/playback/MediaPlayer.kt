@@ -17,15 +17,16 @@
 
 package de.ph1b.audiobook.playback
 
-import Slimber
-import Slimber.e
 import de.ph1b.audiobook.assertMain
 import de.ph1b.audiobook.model.Book
+import e
+import i
 import rx.Observable
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
 import rx.subjects.BehaviorSubject
 import rx.subjects.PublishSubject
+import v
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
@@ -51,11 +52,11 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
                     // After the current song has ended, prepare the next one if there is one. Else stop the
                     // resources.
                     book.value?.let {
-                        Slimber.v { "onCompletion called, nextChapter=${it.nextChapter()}" }
+                        v { "onCompletion called, nextChapter=${it.nextChapter()}" }
                         if (it.nextChapter() != null) {
                             next()
                         } else {
-                            Slimber.v { "Reached last track. Stopping player" }
+                            v { "Reached last track. Stopping player" }
                             playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
 
                             state.onNext(State.PLAYBACK_COMPLETED)
@@ -73,7 +74,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
         state.map { it == State.STARTED }
                 .subscribe { isPlaying ->
                     if (isPlaying) {
-                        Slimber.v { "startUpdating" }
+                        v { "startUpdating" }
                         if (updatingSubscription?.isUnsubscribed ?: true) {
                             // updates the book automatically with the current position
                             updatingSubscription = Observable.interval(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
@@ -85,7 +86,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
                                     .subscribe { book.onNext(it) } // update the book
                         }
                     } else {
-                        Slimber.v { "stop updating" }
+                        v { "stop updating" }
                         updatingSubscription?.unsubscribe()
                     }
                 }
@@ -101,7 +102,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
         assertMain()
 
         if (this.book.value != book) {
-            Slimber.i { "constructor called with ${book.name}" }
+            i { "constructor called with ${book.name}" }
             this.book.onNext(book)
         }
     }
@@ -156,7 +157,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
                     play()
                 }
             }
-            else -> Slimber.i { "Play ignores state=$state " }
+            else -> i { "Play ignores state=$state " }
         }
     }
 
@@ -171,7 +172,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
     fun skip(direction: Direction) {
         assertMain()
 
-        Slimber.v { "direction=$direction" }
+        v { "direction=$direction" }
         book.value?.let {
             if (state.value == State.IDLE && state.value == State.STOPPED) {
                 prepare()
@@ -183,7 +184,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
             val delta = seekTime * 1000
 
             val seekTo = if ((direction == Direction.FORWARD)) currentPos + delta else currentPos - delta
-            Slimber.v { "currentPos=$currentPos, seekTo=$seekTo, duration=$duration" }
+            v { "currentPos=$currentPos, seekTo=$seekTo, duration=$duration" }
 
             if (seekTo < 0) {
                 previous(false)
@@ -243,7 +244,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
     fun pause(rewind: Boolean) {
         assertMain()
 
-        Slimber.v { "pause acquired lock. state is=$state" }
+        v { "pause acquired lock. state is=$state" }
         book.value?.let {
             when (state.value) {
                 State.STARTED -> {
@@ -265,7 +266,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
 
                     state.onNext(State.PAUSED)
                 }
-                else -> Slimber.e { "pause called in illegal state=$state" }
+                else -> e { "pause called in illegal state=$state" }
             }
         }
     }
@@ -292,10 +293,10 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
     fun changePosition(time: Int, file: File) {
         assertMain()
 
-        Slimber.v { "changePosition with time $time and file $file" }
+        v { "changePosition with time $time and file $file" }
         book.value?.let {
             val changeFile = (it.currentChapter().file != file)
-            Slimber.v { "changeFile=$changeFile" }
+            v { "changeFile=$changeFile" }
             if (changeFile) {
                 val wasPlaying = (state.value == State.STARTED)
 
@@ -319,7 +320,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
                         val copy = it.copy(time = time)
                         book.onNext(copy)
                     }
-                    else -> Slimber.e { "changePosition called in illegal state=$state" }
+                    else -> e { "changePosition called in illegal state=$state" }
                 }
             }
         }

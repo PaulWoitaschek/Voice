@@ -17,7 +17,6 @@
 
 package de.ph1b.audiobook.fragment
 
-import Slimber
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -58,6 +57,7 @@ import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
 import de.ph1b.audiobook.utils.BookVendor
+import i
 import rx.Observable
 import rx.functions.Action1
 import rx.subscriptions.CompositeSubscription
@@ -196,7 +196,7 @@ class BookPlayFragment : Fragment() {
                 // this is a new value
                 val realInput = bookSpinner.tag != null && bookSpinner.tag != it
                 if (realInput) {
-                    Slimber.i { "spinner: onItemSelected. firing: $it" }
+                    i { "spinner: onItemSelected. firing: $it" }
                     mediaPlayer.changePosition(0, book!!.chapters[it].file)
                     bookSpinner.tag = it
                 }
@@ -314,7 +314,7 @@ class BookPlayFragment : Fragment() {
 
                         override fun call(playState: PlayStateManager.PlayState) {
                             // animate only if this is not the first run
-                            Slimber.i { "onNext with playState $playState" }
+                            i { "onNext with playState $playState" }
                             if (playState === PlayStateManager.PlayState.PLAYING) {
                                 playPauseDrawable.transformToPause(!firstRun)
                             } else {

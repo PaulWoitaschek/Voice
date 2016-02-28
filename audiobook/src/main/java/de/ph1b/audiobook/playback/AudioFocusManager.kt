@@ -17,10 +17,11 @@
 
 package de.ph1b.audiobook.playback
 
-import Slimber
 import android.media.AudioManager
+import d
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.receiver.AudioFocus
+import i
 import rx.Observable
 import rx.Subscription
 import javax.inject.Inject
@@ -38,38 +39,38 @@ constructor(private val mediaPlayer: PlayerController, private val playStateMana
 
     fun handleAudioFocus(audioFocusObservable: Observable<AudioFocus>): Subscription =
             audioFocusObservable.subscribe { audioFocus: AudioFocus ->
-                Slimber.i { "handleAudioFocu changed to $audioFocus" }
+                i { "handleAudioFocu changed to $audioFocus" }
                 when (audioFocus) {
                     AudioFocus.GAIN -> {
-                        Slimber.d { "started by audioFocus gained" }
+                        d { "started by audioFocus gained" }
                         if (playStateManager.pauseReason == PlayStateManager.PauseReason.LOSS_TRANSIENT) {
                             mediaPlayer.play()
                         } else if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
-                            Slimber.d { "increasing volume" }
+                            d { "increasing volume" }
                             audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0)
                         }
                     }
                     AudioFocus.LOSS,
                     AudioFocus.LOSS_INCOMING_CALL -> {
-                        Slimber.d { "paused by audioFocus loss" }
+                        d { "paused by audioFocus loss" }
                         mediaPlayer.stop()
                     }
                     AudioFocus.LOSS_TRANSIENT_CAN_DUCK -> {
                         if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
                             if (prefsManager.pauseOnTempFocusLoss()) {
-                                Slimber.d { "Paused by audio-focus loss transient." }
+                                d { "Paused by audio-focus loss transient." }
                                 // Pause is temporary, don't rewind
                                 mediaPlayer.pauseNonRewinding()
                                 playStateManager.pauseReason = PlayStateManager.PauseReason.LOSS_TRANSIENT
                             } else {
-                                Slimber.d { "lowering volume" }
+                                d { "lowering volume" }
                                 audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0)
                             }
                         }
                     }
                     AudioFocus.LOSS_TRANSIENT -> {
                         if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
-                            Slimber.d { "Paused by audio-focus loss transient." }
+                            d { "Paused by audio-focus loss transient." }
                             mediaPlayer.pause() // auto pause
                             playStateManager.pauseReason = PlayStateManager.PauseReason.LOSS_TRANSIENT
                         }
