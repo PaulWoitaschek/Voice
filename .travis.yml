@@ -1,34 +1,42 @@
 language: android
-env:
-  global:
-    - ANDROID_TARGET=android-23
-    - ANDROID_ABI=armeabi-v7a
+jdk: oraclejdk7
+
+#env:
+#  global:
+#    - ANDROID_TARGET=android-23
+#    - ANDROID_ABI=armeabi-v7a
+
 android:
   components:
     - tools
     - build-tools-23.0.2
-    - extra-android-m2repository
     - android-23
-    - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
-    - add-on
+#    - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
     - extra
 
-jdk:
-  - oraclejdk8
 
 notifications:
   email: false
 
 sudo: false
 
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 cache:
   directories:
-    - $HOME/.m2
-    - $HOME/.gradle
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
 script:
-  - ./gradlew build jacocoTestReport assembleAndroidTest
-  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
-  - emulator -avd test -no-skin -no-audio -no-window &
-  - android-wait-for-emulator
-  - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
-  - ./gradlew connectedCheck
+  - ./gradlew build assembleAndroidTest
+#  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
+#  - emulator -avd test -no-skin -no-audio -no-window &
+#  - android-wait-for-emulator
+#  - adb shell input keyevent 82 &
+#  - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
+#  - ./gradlew connectedCheck --stacktrace
+
+after_success:
+  - ./gradlew createRegularMinSdkDebugCoverageReport
+  - pip install --user codecov
+  - codecov

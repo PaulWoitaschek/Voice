@@ -135,4 +135,5 @@
     <string name="reset">Reset</string>
     <string name="no_network">No network?</string>
     <string name="network_top">This didn\'t work too well…</string>
+    <string name="cover_crop">Crop cover</string>
 </resources>

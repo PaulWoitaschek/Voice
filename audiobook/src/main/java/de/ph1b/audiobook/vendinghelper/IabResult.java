@@ -36,16 +36,16 @@ public class IabResult {
         }
     }
 
-    public String getMessage() {
-        return mMessage;
-    }
-
     public boolean isSuccess() {
         return mResponse == IabHelper.BILLING_RESPONSE_RESULT_OK;
     }
 
     public String toString() {
         return "IabResult: " + getMessage();
+    }
+
+    public String getMessage() {
+        return mMessage;
     }
 }
 

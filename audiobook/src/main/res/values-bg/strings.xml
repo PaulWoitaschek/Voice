@@ -54,6 +54,8 @@
     <string name="permission_read_ext_explanation">За да може това приложение да намери и възпроизведе аудио книги му е нужен достъп до хранилището Ви.</string>
     <string name="permission_read_ext_request">Да помолим ли отново за Позволението?</string>
     <string name="permission_rescan">Повторно поискване</string>
+    <string name="storage_pre_device">Хранилище</string>
+    <string name="storage_all">Всички</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Скорост на възпроизвеждане</string>
     <!--Bookmarks-->
@@ -111,4 +113,8 @@
     <!--license activity-->
     <string name="license_activity_title">Използвани Лицензи</string>
     <string name="licenses">Лицензи</string>
+    <string name="refresh">Опресняване</string>
+    <string name="reset">Нулиране</string>
+    <string name="no_network">Няма връзка с интернет?</string>
+    <string name="network_top">Това май не проработи…</string>
 </resources>

@@ -17,23 +17,44 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply from: '../jacoco.gradle'
+
 
 android {
     compileSdkVersion 23
     buildToolsVersion '23.0.2'
 
     defaultConfig {
-        minSdkVersion 15
         targetSdkVersion 23
-        versionCode 110
-        versionName '2016-02-07-nightly1'
+        versionCode 114
+        versionName '2.6.2'
+        vectorDrawables.useSupportLibrary = true
+    }
 
-        testInstrumentationRunner "de.ph1b.audiobook.testing.MockAppRunner"
+    def minSdkDimension = "minSdk"
+    def isSnapshotDimension = "snapshot"
+    flavorDimensions minSdkDimension, isSnapshotDimension
+    productFlavors {
+        regularMinSdk {
+            dimension minSdkDimension
+            minSdkVersion 15
+        }
+        largeMinSdk {
+            dimension minSdkDimension
+            minSdkVersion 21
+        }
+        snapshot {
+            dimension isSnapshotDimension
+            versionName += "-SNAPSHOT"
+        }
+        noSnapshot {
+            dimension isSnapshotDimension
+        }
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.pro'
             resValue "string", "app_name", "Material Player"
@@ -43,6 +64,7 @@ android {
             shrinkResources false
             applicationIdSuffix ".debug"
             resValue "string", "app_name", "[DBG] Material Player"
+            testCoverageEnabled = true
         }
     }
 
@@ -55,10 +77,16 @@ android {
     }
 
     sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-        main.java.srcDirs += 'src/main/java'
-        androidTest.java.srcDirs += 'src/androidTest/kotlin'
-        test.java.srcDirs += 'src/test/kotlin'
+
+        String sharedTestDir = 'src/sharedTest/java'
+
+        test {
+            java.srcDirs += sharedTestDir
+        }
+
+        androidTest {
+            java.srcDirs += sharedTestDir
+        }
     }
 
     compileOptions {
@@ -69,34 +97,21 @@ android {
     dexOptions {
         incremental false
     }
-
-    applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            def original = output.outputFile
-            def originalName = original.name.replaceFirst(~/\.[^\.]+$/, '')
-            def newDestination = "apks/${variant.versionCode}-${variant.versionName}-${originalName}.apk"
-            output.outputFile = file(newDestination)
-        }
-    }
 }
 
 dependencies {
     // support library
-    def supportVersion = "23.1.1"
+    def supportVersion = "23.2.0"
     compile "com.android.support:appcompat-v7:$supportVersion"
     compile "com.android.support:recyclerview-v7:$supportVersion"
     compile "com.android.support:support-v4:$supportVersion"
-
-    // http library
-    def okHttpVersion = "3.1.2"
-    compile "com.squareup.okhttp3:okhttp:$okHttpVersion"
-    compile "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
+    compile "com.android.support:design:$supportVersion"
 
     // image loading
     compile "com.squareup.picasso:picasso:2.5.2"
 
     // material styled dialogs
-    compile("com.afollestad.material-dialogs:core:0.8.5.4@aar") {
+    compile("com.afollestad.material-dialogs:core:0.8.5.5@aar") {
         transitive = true
     }
 
@@ -104,7 +119,7 @@ dependencies {
     compile "com.getbase:floatingactionbutton:1.10.1"
 
     // crash reporting
-    compile "ch.acra:acra:4.8.1"
+    compile "ch.acra:acra:4.8.2"
 
     // dependency injection
     def daggerVersion = "2.0.2"
@@ -113,9 +128,6 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
     provided "javax.annotation:jsr250-api:1.0"
-
-    // logging
-    compile 'com.github.JakeWharton:Timber:10bbf33db8'
 
     //testing
     testCompile "junit:junit:4.12"
@@ -126,19 +138,26 @@ dependencies {
         exclude module: 'support-annotations'
     }
     androidTestCompile "com.jayway.android.robotium:robotium-solo:5.5.3"
+    testCompile "org.robolectric:robolectric:3.1-SNAPSHOT"
+    androidTestCompile 'org.easytesting:fest-assert-core:2.0M10'
+    testCompile 'org.easytesting:fest-assert-core:2.0M10'
+    def okHttpVersion = "3.1.2"
+    testCompile "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    androidTestCompile "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    testCompile "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
+    androidTestCompile "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
 
     // rx extensions
     compile "io.reactivex:rxandroid:1.1.0"
-    compile "io.reactivex:rxjava:1.1.0"
-    compile 'com.github.JakeWharton.RxBinding:rxbinding-kotlin:542cd7e8a4'
+    compile "io.reactivex:rxjava:1.1.1"
+    compile 'com.jakewharton.rxbinding:rxbinding-kotlin:0.4.0'
 
     // kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     // player
-    compile 'com.github.PaulWoitaschek:AndroidPlayer:0.004'
-}
+    compile 'com.github.PaulWoitaschek:AndroidPlayer:0.008'
 
-kapt {
-    generateStubs = true
+    // logs
+    compile 'com.github.PaulWoitaschek:Slimber:1.0.3'
 }

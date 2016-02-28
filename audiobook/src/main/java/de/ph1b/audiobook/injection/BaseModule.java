@@ -26,9 +26,12 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import de.paul_woitaschek.mediaplayer.Player;
+import de.paul_woitaschek.mediaplayer.AndroidPlayer;
+import de.paul_woitaschek.mediaplayer.MediaPlayer;
+import de.paul_woitaschek.mediaplayer.SpeedPlayer;
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.persistence.PrefsManager;
+import de.ph1b.audiobook.persistence.internals.InternalDb;
 import de.ph1b.audiobook.playback.MediaPlayerCapabilities;
 
 /**
@@ -54,14 +57,17 @@ public class BaseModule {
 
     @Provides
     @Singleton
-    static Player providePlayer(MediaPlayerCapabilities capabilities, Context context) {
-        Player.Type type;
+    static MediaPlayer providePlayer(MediaPlayerCapabilities capabilities, Context context) {
         if (capabilities.getUseCustomMediaPlayer()) {
-            type = Player.Type.CUSTOM;
+            return new SpeedPlayer(BuildConfig.DEBUG, context);
         } else {
-            type = Player.Type.ANDROID;
+            return new AndroidPlayer(context);
         }
-        Player.Logging logging = BuildConfig.DEBUG ? Player.Logging.ENABLED : Player.Logging.DISABLED;
-        return new Player(context, type, logging);
+    }
+
+    @Provides
+    @Singleton
+    static InternalDb provideInternalDb(Context context) {
+        return new InternalDb(context, InternalDb.Companion.getDATABASE_NAME());
     }
 }

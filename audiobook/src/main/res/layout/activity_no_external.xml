@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_centerVertical="true"
-    android:gravity="center"
-    android:orientation="vertical"
-    tools:ignore="UseCompoundDrawables">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_centerVertical="true"
+              android:gravity="center"
+              android:orientation="vertical"
+              tools:ignore="UseCompoundDrawables">
 
-    <include layout="@layout/toolbar" />
+    <include layout="@layout/toolbar"/>
 
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:contentDescription="@string/no_external_storage_action_bar_title"
-        android:src="@drawable/ic_usb_black_36dp" />
+        android:src="@drawable/ic_usb_black_36dp"/>
 
     <TextView
         android:id="@+id/textView"
@@ -24,6 +24,6 @@
         android:layout_gravity="center"
         android:layout_margin="30dp"
         android:text="@string/no_external_storage"
-        android:textSize="25sp" />
+        android:textSize="25sp"/>
 
 </LinearLayout>

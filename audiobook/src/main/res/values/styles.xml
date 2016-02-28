@@ -5,6 +5,7 @@
         <item name="android:windowActivityTransitions" tools:ignore="NewApi">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="imageButtonStyle">@style/TintedImageButtonStyle</item>
+        <item name="windowActionModeOverlay">true</item>
 
         <item name="colorPrimary">@color/light_primary</item>
         <item name="colorPrimaryDark">@color/light_primary_dark</item>
@@ -23,6 +24,7 @@
         <item name="android:windowActivityTransitions" tools:ignore="NewApi">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="imageButtonStyle">@style/TintedImageButtonStyle</item>
+        <item name="windowActionModeOverlay">true</item>
 
         <item name="colorPrimary">@color/dark_primary</item>
         <item name="colorPrimaryDark">@color/dark_primary_dark</item>

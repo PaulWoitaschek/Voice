@@ -43,22 +43,22 @@ import timber.log.Timber;
  * It provides synchronous (blocking) and asynchronous (non-blocking) methods for
  * many common in-app billing operations, as well as automatic signature
  * verification.
- * <p>
+ * <p/>
  * After instantiating, you must perform setup in order to start using the object.
  * To perform setup, call the {@link #startSetup} method and provide a listener;
  * that listener will be notified when setup is complete, after which (and not before)
  * you may call other methods.
- * <p>
+ * <p/>
  * After setup is complete, you will typically want to request an inventory of owned
  * items and subscriptions. See queryInventory, queryInventoryAsync
  * and related methods.
- * <p>
+ * <p/>
  * When you are done with this object, don't forget to call {@link #dispose}
  * to ensure proper cleanup. This object holds a binding to the in-app billing
  * service, which will leak unless you dispose of it correctly. If you created
  * the object on an Activity's onCreate method, then the recommended
  * place to dispose of it is the Activity's onDestroy method.
- * <p>
+ * <p/>
  * A note about threading: When using this object from a background thread, you may
  * call the blocking versions of methods; when using from a UI thread, call
  * only the asynchronous versions and handle the results via callbacks.
@@ -137,76 +137,6 @@ public class IabHelper {
     }
 
     /**
-     * Returns a human-readable description for the given response code.
-     *
-     * @param code The response code
-     * @return A human-readable string explaining the result code.
-     * It also includes the result code numerically.
-     */
-    public static String getResponseDesc(int code) {
-        String[] iab_msgs = ("0:OK/1:User Canceled/2:Unknown/" +
-                "3:Billing Unavailable/4:Item unavailable/" +
-                "5:Developer Error/6:Error/7:Item Already Owned/" +
-                "8:Item not owned").split("/");
-        String[] iabhelper_msgs = ("0:OK/-1001:Remote exception during initialization/" +
-                "-1002:Bad response received/" +
-                "-1003:Purchase signature verification failed/" +
-                "-1004:Send intent failed/" +
-                "-1005:User cancelled/" +
-                "-1006:Unknown purchase response/" +
-                "-1007:Missing token/" +
-                "-1008:Unknown error/" +
-                "-1009:Subscriptions not available/" +
-                "-1010:Invalid consumption attempt").split("/");
-
-        if (code <= IABHELPER_ERROR_BASE) {
-            int index = IABHELPER_ERROR_BASE - code;
-            if (index >= 0 && index < iabhelper_msgs.length) return iabhelper_msgs[index];
-            else return String.valueOf(code) + ":Unknown IAB Helper Error";
-        } else if (code < 0 || code >= iab_msgs.length) {
-            return String.valueOf(code) + ":Unknown";
-        } else
-            return iab_msgs[code];
-    }
-
-    // Workaround to bug where sometimes response codes come as Long instead of Integer
-    private static int getResponseCodeFromBundle(Bundle b) {
-        Object o = b.get(RESPONSE_CODE);
-        if (o == null) {
-            Timber.d("Bundle with null response code, assuming OK (known issue)");
-            return BILLING_RESPONSE_RESULT_OK;
-        } else if (o instanceof Integer) {
-            return (Integer) o;
-        } else if (o instanceof Long) return (int) ((Long) o).longValue();
-        else {
-            logError("Unexpected type for bundle response code.");
-            logError(o.getClass().getName());
-            throw new RuntimeException("Unexpected type for bundle response code: " + o.getClass().getName());
-        }
-    }
-
-    // Workaround to bug where sometimes response codes come as Long instead of Integer
-    private static int getResponseCodeFromIntent(Intent i) {
-        Object o = i.getExtras().get(RESPONSE_CODE);
-        if (o == null) {
-            logError("Intent with no response code, assuming OK (known issue)");
-            return BILLING_RESPONSE_RESULT_OK;
-        } else if (o instanceof Integer) {
-            return (Integer) o;
-        } else if (o instanceof Long) return (int) ((Long) o).longValue();
-        else {
-            logError("Unexpected type for intent response code.");
-            logError(o.getClass().getName());
-            throw new RuntimeException("Unexpected type for intent response code: " + o.getClass().getName());
-        }
-    }
-
-    private static void logError(String msg) {
-        String mDebugTag = "IabHelper";
-        Log.e(mDebugTag, "In-app billing error: " + msg);
-    }
-
-    /**
      * Starts the setup process. This will start up the setup process asynchronously.
      * You will be notified through the listener when the setup process is complete.
      * This method is safe to call from a UI thread.
@@ -221,12 +151,6 @@ public class IabHelper {
         // Connection to IAB service
         Timber.d("Starting in-app billing setup.");
         mServiceConn = new ServiceConnection() {
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-                Timber.d("Billing service disconnected.");
-                mService = null;
-            }
-
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 if (mDisposed) return;
@@ -271,6 +195,12 @@ public class IabHelper {
                     listener.onIabSetupFinished(new IabResult(BILLING_RESPONSE_RESULT_OK, "Setup successful."));
                 }
             }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                Timber.d("Billing service disconnected.");
+                mService = null;
+            }
         };
 
         Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
@@ -286,6 +216,12 @@ public class IabHelper {
                         new IabResult(BILLING_RESPONSE_RESULT_BILLING_UNAVAILABLE,
                                 "Billing service unavailable on device."));
             }
+        }
+    }
+
+    private void checkNotDisposed() {
+        if (mDisposed) {
+            throw new IllegalStateException("IabHelper was disposed of, so it cannot be used.");
         }
     }
 
@@ -310,12 +246,6 @@ public class IabHelper {
         mServiceConn = null;
         mService = null;
         mPurchaseListener = null;
-    }
-
-    private void checkNotDisposed() {
-        if (mDisposed) {
-            throw new IllegalStateException("IabHelper was disposed of, so it cannot be used.");
-        }
     }
 
     /**
@@ -382,6 +312,82 @@ public class IabHelper {
             result = new IabResult(IABHELPER_REMOTE_EXCEPTION, "Remote exception while starting purchase flow");
             if (listener != null) listener.onIabPurchaseFinished(result);
         }
+    }
+
+    // Checks that setup was done; if not, throws an exception.
+    private void checkSetupDone(String operation) {
+        if (!mSetupDone) {
+            logError("Illegal state for operation (" + operation + "): IAB helper is not set up.");
+            throw new IllegalStateException("IAB helper is not set up. Can't perform operation: " + operation);
+        }
+    }
+
+    private void flagStartAsync() {
+        if (mAsyncInProgress) throw new IllegalStateException("Can't start async operation (" +
+                "launchPurchaseFlow" + ") because another async operation(" + mAsyncOperation + ") is in progress.");
+        mAsyncOperation = "launchPurchaseFlow";
+        mAsyncInProgress = true;
+        Timber.d("Starting async operation: launchPurchaseFlow");
+    }
+
+    private void flagEndAsync() {
+        Timber.d("Ending async operation %s", mAsyncOperation);
+        mAsyncOperation = "";
+        mAsyncInProgress = false;
+    }
+
+    // Workaround to bug where sometimes response codes come as Long instead of Integer
+    private static int getResponseCodeFromBundle(Bundle b) {
+        Object o = b.get(RESPONSE_CODE);
+        if (o == null) {
+            Timber.d("Bundle with null response code, assuming OK (known issue)");
+            return BILLING_RESPONSE_RESULT_OK;
+        } else if (o instanceof Integer) {
+            return (Integer) o;
+        } else if (o instanceof Long) return (int) ((Long) o).longValue();
+        else {
+            logError("Unexpected type for bundle response code.");
+            logError(o.getClass().getName());
+            throw new RuntimeException("Unexpected type for bundle response code: " + o.getClass().getName());
+        }
+    }
+
+    private static void logError(String msg) {
+        String mDebugTag = "IabHelper";
+        Log.e(mDebugTag, "In-app billing error: " + msg);
+    }
+
+    /**
+     * Returns a human-readable description for the given response code.
+     *
+     * @param code The response code
+     * @return A human-readable string explaining the result code.
+     * It also includes the result code numerically.
+     */
+    public static String getResponseDesc(int code) {
+        String[] iab_msgs = ("0:OK/1:User Canceled/2:Unknown/" +
+                "3:Billing Unavailable/4:Item unavailable/" +
+                "5:Developer Error/6:Error/7:Item Already Owned/" +
+                "8:Item not owned").split("/");
+        String[] iabhelper_msgs = ("0:OK/-1001:Remote exception during initialization/" +
+                "-1002:Bad response received/" +
+                "-1003:Purchase signature verification failed/" +
+                "-1004:Send intent failed/" +
+                "-1005:User cancelled/" +
+                "-1006:Unknown purchase response/" +
+                "-1007:Missing token/" +
+                "-1008:Unknown error/" +
+                "-1009:Subscriptions not available/" +
+                "-1010:Invalid consumption attempt").split("/");
+
+        if (code <= IABHELPER_ERROR_BASE) {
+            int index = IABHELPER_ERROR_BASE - code;
+            if (index >= 0 && index < iabhelper_msgs.length) return iabhelper_msgs[index];
+            else return String.valueOf(code) + ":Unknown IAB Helper Error";
+        } else if (code < 0 || code >= iab_msgs.length) {
+            return String.valueOf(code) + ":Unknown";
+        } else
+            return iab_msgs[code];
     }
 
     /**
@@ -478,26 +484,20 @@ public class IabHelper {
         }
     }
 
-    // Checks that setup was done; if not, throws an exception.
-    private void checkSetupDone(String operation) {
-        if (!mSetupDone) {
-            logError("Illegal state for operation (" + operation + "): IAB helper is not set up.");
-            throw new IllegalStateException("IAB helper is not set up. Can't perform operation: " + operation);
+    // Workaround to bug where sometimes response codes come as Long instead of Integer
+    private static int getResponseCodeFromIntent(Intent i) {
+        Object o = i.getExtras().get(RESPONSE_CODE);
+        if (o == null) {
+            logError("Intent with no response code, assuming OK (known issue)");
+            return BILLING_RESPONSE_RESULT_OK;
+        } else if (o instanceof Integer) {
+            return (Integer) o;
+        } else if (o instanceof Long) return (int) ((Long) o).longValue();
+        else {
+            logError("Unexpected type for intent response code.");
+            logError(o.getClass().getName());
+            throw new RuntimeException("Unexpected type for intent response code: " + o.getClass().getName());
         }
-    }
-
-    private void flagStartAsync() {
-        if (mAsyncInProgress) throw new IllegalStateException("Can't start async operation (" +
-                "launchPurchaseFlow" + ") because another async operation(" + mAsyncOperation + ") is in progress.");
-        mAsyncOperation = "launchPurchaseFlow";
-        mAsyncInProgress = true;
-        Timber.d("Starting async operation: launchPurchaseFlow");
-    }
-
-    private void flagEndAsync() {
-        Timber.d("Ending async operation %s", mAsyncOperation);
-        mAsyncOperation = "";
-        mAsyncInProgress = false;
     }
 
     /**
