@@ -314,7 +314,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
             } else {
                 if (state.value == State.STOPPED || state.value == State.IDLE) prepare()
                 when (state.value) {
-                    State.STARTED, State.PAUSED -> {
+                    State.STARTED, State.PAUSED, State.PREPARED -> {
                         player.seekTo(time)
 
                         val copy = it.copy(time = time)
