@@ -25,16 +25,36 @@ android {
     buildToolsVersion '23.0.2'
 
     defaultConfig {
-        minSdkVersion 15
         targetSdkVersion 23
         versionCode 113
         versionName '2.6.1'
         vectorDrawables.useSupportLibrary = true
     }
 
+    def minSdkDimension = "minSdk"
+    def isSnapshotDimension = "snapshot"
+    flavorDimensions minSdkDimension, isSnapshotDimension
+    productFlavors {
+        regularMinSdk {
+            dimension minSdkDimension
+            minSdkVersion 15
+        }
+        largeMinSdk {
+            dimension minSdkDimension
+            minSdkVersion 21
+        }
+        snapshot {
+            dimension isSnapshotDimension
+            versionName += "-SNAPSHOT"
+        }
+        noSnapshot {
+            dimension isSnapshotDimension
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.pro'
             resValue "string", "app_name", "Material Player"

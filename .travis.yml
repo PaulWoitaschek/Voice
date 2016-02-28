@@ -37,6 +37,6 @@ script:
 #  - ./gradlew connectedCheck --stacktrace
 
 after_success:
-  - ./gradlew createDebugCoverageReport
+  - ./gradlew createRegularMinSdkDebugCoverageReport
   - pip install --user codecov
   - codecov
