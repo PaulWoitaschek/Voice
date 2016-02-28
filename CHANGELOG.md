@@ -1,5 +1,8 @@
 # Upcoming version
 
+# 2.6.0.3
+* Allow seek on prepared state as well
+
 # 2.6.0.2
 * Fixed cover picker
 * Improved player stability
