@@ -5,6 +5,7 @@
 -dontwarn javax.annotation.**
 -dontwarn sun.misc.Unsafe
 -dontnote
+-dontwarn Slimber
 
 # Retrolambda
 -dontwarn java.lang.invoke.*

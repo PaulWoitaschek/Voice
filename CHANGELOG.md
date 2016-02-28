@@ -1,4 +1,12 @@
-# 2.6.1
+# Upcoming version
+
+# 2.6.0.2
+* Fixed cover picker
+* Improved player stability
+* Updated translations
+* Smaller file size
+
+# 2.6.0.1
 * Fixed previous-song icon
 * Rewritten cover picker
 
