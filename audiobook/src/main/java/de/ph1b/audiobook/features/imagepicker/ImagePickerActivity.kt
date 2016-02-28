@@ -17,7 +17,6 @@
 
 package de.ph1b.audiobook.features.imagepicker
 
-import Slimber
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -33,6 +32,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import butterknife.bindView
 import com.squareup.picasso.Picasso
+import d
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.activity.BaseActivity
 import de.ph1b.audiobook.injection.App
@@ -42,6 +42,7 @@ import de.ph1b.audiobook.uitools.setInvisible
 import de.ph1b.audiobook.uitools.setVisible
 import de.ph1b.audiobook.utils.BookVendor
 import de.ph1b.audiobook.utils.ScreenShotWebView
+import i
 import rx.subjects.BehaviorSubject
 import java.io.Serializable
 import java.net.URLEncoder
@@ -131,20 +132,20 @@ class ImagePickerActivity : BaseActivity() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
 
-                Slimber.i { "page started with $url" }
+                i { "page started with $url" }
                 webViewIsLoading.onNext(true)
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
 
-                Slimber.i { "page stopped with $url" }
+                i { "page stopped with $url" }
                 webViewIsLoading.onNext(false)
             }
 
             @Suppress("OverridingDeprecatedMember")
             override fun onReceivedError(view: WebView, errorCode: Int, description: String?, failingUrl: String?) {
-                Slimber.d { "received webViewError. Set webVeiw invisible" }
+                d { "received webViewError. Set webVeiw invisible" }
                 view.loadUrl(ABOUT_BLANK)
                 progressBar.setInvisible()
                 noNetwork.setVisible()
@@ -158,7 +159,7 @@ class ImagePickerActivity : BaseActivity() {
                 .filter { it == true }
                 .subscribe {
                     // sets progressbar and webviews visibilities correctly once the page is loaded
-                    Slimber.i { "WebView is now loading. Set webView visible" }
+                    i { "WebView is now loading. Set webView visible" }
                     progressBar.setInvisible()
                     noNetwork.setInvisible()
                     webViewContainer.setVisible()
@@ -208,7 +209,7 @@ class ImagePickerActivity : BaseActivity() {
         webViewIsLoading
                 .filter { it == true }
                 .filter { !rotation.hasStarted() }
-                .doOnNext { Slimber.i { "is loading. Start animation" } }
+                .doOnNext { i { "is loading. Start animation" } }
                 .subscribe {
                     rotation.start()
                 }
@@ -216,7 +217,7 @@ class ImagePickerActivity : BaseActivity() {
         rotation.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationRepeat(p0: Animation?) {
                 if (webViewIsLoading.value == false ) {
-                    Slimber.i { "we are in the refresh round. cancel now." }
+                    i { "we are in the refresh round. cancel now." }
                     rotation.cancel()
                     rotation.reset()
                 }

@@ -17,7 +17,6 @@
 
 package de.ph1b.audiobook.dialog
 
-import Slimber
 import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -42,6 +41,7 @@ import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.utils.BookVendor
+import i
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import javax.inject.Inject
@@ -118,7 +118,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
     private lateinit var adapter: BookmarkAdapter
 
     fun addClicked() {
-        Slimber.i { "Add bookmark clicked." }
+        i { "Add bookmark clicked." }
         var title = bookmarkTitle.text.toString()
         if (title.isEmpty()) {
             title = book.currentChapter().name

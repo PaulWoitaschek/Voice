@@ -26,8 +26,8 @@ android {
 
     defaultConfig {
         targetSdkVersion 23
-        versionCode 114
-        versionName '2.6.2'
+        versionCode 115
+        versionName '2.6.0.2.1'
         vectorDrawables.useSupportLibrary = true
     }
 
@@ -159,5 +159,5 @@ dependencies {
     compile 'com.github.PaulWoitaschek:AndroidPlayer:0.008'
 
     // logs
-    compile 'com.github.PaulWoitaschek:Slimber:1.0.3'
+    compile 'com.github.PaulWoitaschek:Slimber:1.0.4'
 }

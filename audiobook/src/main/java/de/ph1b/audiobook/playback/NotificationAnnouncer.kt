@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.playback
 
-import Slimber.e
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
@@ -14,6 +13,7 @@ import de.ph1b.audiobook.activity.BookActivity
 import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
+import e
 import java.io.IOException
 import javax.inject.Inject
 

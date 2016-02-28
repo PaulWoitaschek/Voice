@@ -17,11 +17,11 @@
 
 package de.ph1b.audiobook.playback
 
-import Slimber
 import android.content.SharedPreferences
 import android.os.Build
 import de.ph1b.audiobook.persistence.internals.edit
 import de.ph1b.audiobook.persistence.internals.setBoolean
+import i
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -37,7 +37,7 @@ constructor(@Named(FOR) private val prefs: SharedPreferences, private val channe
 
     val useCustomMediaPlayer: Boolean =
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                Slimber.i { "sdk is below jelly bean. cant set media player" }
+                i { "sdk is below jelly bean. cant set media player" }
                 false
             } else {
                 // get key
@@ -55,14 +55,14 @@ constructor(@Named(FOR) private val prefs: SharedPreferences, private val channe
 
                 if (prefs.contains(key)) {
                     val canSet = prefs.getBoolean(key, false)
-                    Slimber.i { "prefs already has the key. CanSet $canSet" }
+                    i { "prefs already has the key. CanSet $canSet" }
                     canSet
                 } else {
                     val canSetCustom = channelDetector.channelCountMatches()
                     prefs.edit {
                         setBoolean(key to canSetCustom)
                     }
-                    Slimber.i { "Channel count matches returned = $canSetCustom" }
+                    i { "Channel count matches returned = $canSetCustom" }
                     canSetCustom
                 }
             }

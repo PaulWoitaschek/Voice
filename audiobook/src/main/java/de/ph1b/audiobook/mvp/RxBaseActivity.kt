@@ -17,9 +17,9 @@
 
 package de.ph1b.audiobook.mvp
 
-import Slimber
 import android.os.Bundle
 import de.ph1b.audiobook.activity.BaseActivity
+import i
 
 
 /**
@@ -45,14 +45,14 @@ abstract class RxBaseActivity<V, P> : BaseActivity() where P : Presenter<V> {
 
     override fun onStart() {
         super.onStart()
-        Slimber.i { "onResume" }
+        i { "onResume" }
 
         presenterDelegate.onStart()
     }
 
     override fun onStop() {
         super.onStop()
-        Slimber.i { "onPause" }
+        i { "onPause" }
 
         presenterDelegate.onStop()
     }

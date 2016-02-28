@@ -17,7 +17,6 @@
 
 package de.ph1b.audiobook.view.fragment
 
-import Slimber
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.DrawableRes
@@ -47,6 +46,7 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.presenter.BookShelfBasePresenter
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
+import i
 import java.util.*
 import javax.inject.Inject
 import dagger.Lazy as DaggerLazy
@@ -90,7 +90,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Slimber.i { "onCreate" }
+        i { "onCreate" }
 
         setHasOptionsMenu(true)
     }
@@ -252,7 +252,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
      * @param book the removed book
      */
     fun bookRemoved(book: Book) {
-        Slimber.i { "bookRemoved ${book.name}" }
+        i { "bookRemoved ${book.name}" }
         adapter.removeBook(book)
     }
 
@@ -262,7 +262,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
      * @param book the changed book
      */
     fun bookAddedOrUpdated(book: Book) {
-        Slimber.i { "bookAddedOrUpdated: ${book.name}" }
+        i { "bookAddedOrUpdated: ${book.name}" }
         adapter.updateOrAddBook(book)
     }
 
@@ -272,7 +272,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
      *@param books the new books
      */
     fun newBooks(books: List<Book>) {
-        Slimber.i { "${books.size} newBooks" }
+        i { "${books.size} newBooks" }
         adapter.newDataSet(books)
     }
 
@@ -281,7 +281,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
      * The book marked as current was changed. Updates the adapter and fab accordingly.
      */
     fun currentBookChanged(currentBook: Book?) {
-        Slimber.i { "currentBookChanged: ${currentBook?.name}" }
+        i { "currentBookChanged: ${currentBook?.name}" }
         this.currentBook = currentBook
 
         for (i in 0..adapter.itemCount - 1) {
@@ -304,7 +304,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
      * Sets the fab icon correctly accordingly to the new play state.
      */
     fun setPlayerPlaying(playing: Boolean) {
-        Slimber.i { "Called setPlayerPlaying $playing" }
+        i { "Called setPlayerPlaying $playing" }
         if (playing) {
             playPauseDrawable.transformToPause(!firstPlayStateUpdate)
         } else {
@@ -326,12 +326,12 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
     }
 
     fun showSpinnerIfNoData(showSpinnerIfNoData: Boolean) {
-        Slimber.i { "showSpinnerIfNoData $showSpinnerIfNoData" }
+        i { "showSpinnerIfNoData $showSpinnerIfNoData" }
         val shouldShowSpinner = adapter.itemCount == 0 && showSpinnerIfNoData
-        Slimber.i { "ShouldShowSpinner=$shouldShowSpinner" }
+        i { "ShouldShowSpinner=$shouldShowSpinner" }
         recyclerView.visibility = if (shouldShowSpinner) View.INVISIBLE else View.VISIBLE
         recyclerReplacementView.visibility = if (shouldShowSpinner) View.VISIBLE else View.INVISIBLE
-        Slimber.i { "ShowSpinnerIfNoData finished." }
+        i { "ShowSpinnerIfNoData finished." }
     }
 
 

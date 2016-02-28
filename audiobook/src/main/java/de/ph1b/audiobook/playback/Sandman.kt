@@ -17,9 +17,9 @@
 
 package de.ph1b.audiobook.playback
 
-import Slimber
 import de.ph1b.audiobook.assertMain
 import de.ph1b.audiobook.persistence.PrefsManager
+import i
 import rx.Observable
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
@@ -72,12 +72,12 @@ import javax.inject.Singleton
     fun toggleSleepSand() {
         assertMain()
 
-        Slimber.i { "toggleSleepSand. Left sleepTime is ${internalSleepSand.value}" }
+        i { "toggleSleepSand. Left sleepTime is ${internalSleepSand.value}" }
         if (internalSleepSand.value > 0L) {
-            Slimber.i { "sleepSand is active. cancelling now" }
+            i { "sleepSand is active. cancelling now" }
             internalSleepSand.onNext(-1L)
         } else {
-            Slimber.i { "preparing new sleep sand" }
+            i { "preparing new sleep sand" }
             val minutes = prefsManager.sleepTime
             internalSleepSand.onNext(TimeUnit.MINUTES.toMillis(minutes.toLong()))
         }

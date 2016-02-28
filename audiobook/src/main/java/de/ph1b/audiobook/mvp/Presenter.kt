@@ -17,8 +17,9 @@
 
 package de.ph1b.audiobook.mvp
 
-import Slimber
 import android.os.Bundle
+import d
+import i
 import rx.subscriptions.CompositeSubscription
 
 
@@ -39,18 +40,18 @@ abstract class Presenter<V> {
 
     fun bind(view: V) {
         if (this.view == null) {
-            Slimber.i { "binding $view" }
+            i { "binding $view" }
             this.view = view
 
             compositeSubscription = CompositeSubscription()
             onBind(view, compositeSubscription!!)
         } else {
-            Slimber.d { "$view already bound" }
+            d { "$view already bound" }
         }
     }
 
     fun unbind() {
-        Slimber.i { "Unbinding $view" }
+        i { "Unbinding $view" }
         this.view = null
         compositeSubscription?.unsubscribe()
     }
