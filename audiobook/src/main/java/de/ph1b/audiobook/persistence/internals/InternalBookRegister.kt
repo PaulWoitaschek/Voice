@@ -100,18 +100,16 @@ class InternalBookRegister
     }
 
 
-    fun updateBook(book: Book) {
-        db.asTransaction {
-            // update book itself
-            val bookCv = BookTable.getContentValues(book)
-            update(BookTable.TABLE_NAME, bookCv, "${BookTable.ID}=?", arrayOf(book.id.toString()))
+    fun updateBook(book: Book) = db.asTransaction {
+        // update book itself
+        val bookCv = BookTable.getContentValues(book)
+        update(BookTable.TABLE_NAME, bookCv, "${BookTable.ID}=?", arrayOf(book.id.toString()))
 
-            // delete old chapters and replace them with new ones
-            delete(ChapterTable.TABLE_NAME, "${BookTable.ID}=?", arrayOf(book.id.toString()))
-            for (c in book.chapters) {
-                val chapterCv = ChapterTable.getContentValues(c, book.id)
-                insert(ChapterTable.TABLE_NAME, null, chapterCv)
-            }
+        // delete old chapters and replace them with new ones
+        delete(ChapterTable.TABLE_NAME, "${BookTable.ID}=?", arrayOf(book.id.toString()))
+        for (c in book.chapters) {
+            val chapterCv = ChapterTable.getContentValues(c, book.id)
+            insert(ChapterTable.TABLE_NAME, null, chapterCv)
         }
     }
 
@@ -126,7 +124,7 @@ class InternalBookRegister
             insert(ChapterTable.TABLE_NAME, null, chapterCv)
         }
 
-        return newBook
+        return@asTransaction newBook
     }
 
     private fun byProjection(cursor: Cursor): Book {
