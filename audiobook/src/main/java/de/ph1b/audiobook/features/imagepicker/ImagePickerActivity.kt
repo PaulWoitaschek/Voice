@@ -37,6 +37,7 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.activity.BaseActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.layoutInflater
+import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.setInvisible
 import de.ph1b.audiobook.uitools.setVisible
@@ -55,7 +56,7 @@ class ImagePickerActivity : BaseActivity() {
         App.component().inject(this)
     }
 
-    @Inject internal lateinit var bookVendor: BookVendor
+    @Inject internal lateinit var bookChest: BookChest
     @Inject internal lateinit var imageHelper: ImageHelper
 
     private val webView: WebView by  bindView(R.id.webView)
@@ -107,7 +108,7 @@ class ImagePickerActivity : BaseActivity() {
     private var webViewIsLoading = BehaviorSubject.create(false)
     private val book by lazy {
         val args = intent.getSerializableExtra(NI) as Args
-        bookVendor.byId(args.bookId)!!
+        bookChest.bookById(args.bookId)!!
     }
     private val originalUrl by lazy {
         val encodedSearch = URLEncoder.encode("${book.name} cover", Charsets.UTF_8.name())

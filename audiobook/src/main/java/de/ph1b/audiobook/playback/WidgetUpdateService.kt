@@ -43,7 +43,6 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.receiver.BaseWidgetProvider
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
-import de.ph1b.audiobook.utils.BookVendor
 import e
 import rx.Observable
 import rx.subscriptions.CompositeSubscription
@@ -61,9 +60,8 @@ class WidgetUpdateService : Service() {
             ThreadPoolExecutor.DiscardOldestPolicy())
     private val subscriptions = CompositeSubscription()
     @Inject internal lateinit var prefs: PrefsManager
-    @Inject internal lateinit var db: BookChest
+    @Inject internal lateinit var bookChest: BookChest
     @Inject internal lateinit var playStateManager: PlayStateManager
-    @Inject internal lateinit var bookVendor: BookVendor
     @Inject internal lateinit var imageHelper: ImageHelper
     @Inject internal lateinit var serviceController: ServiceController
 
@@ -74,7 +72,7 @@ class WidgetUpdateService : Service() {
         // update widget if current book, current book id or playState have changed.
         subscriptions.add(
                 Observable.merge(
-                        db.updateObservable().filter { it.id == prefs.currentBookId.value },
+                        bookChest.updateObservable().filter { it.id == prefs.currentBookId.value },
                         playStateManager.playState,
                         prefs.currentBookId)
                         .subscribe { updateWidget() })
@@ -92,7 +90,7 @@ class WidgetUpdateService : Service() {
     private fun updateWidget() {
         executor.execute {
             val appWidgetManager = AppWidgetManager.getInstance(this@WidgetUpdateService)
-            val book = bookVendor.byId(prefs.currentBookId.value)
+            val book = bookChest.bookById(prefs.currentBookId.value)
             val isPortrait = isPortrait
             val ids = appWidgetManager.getAppWidgetIds(ComponentName(
                     this@WidgetUpdateService, BaseWidgetProvider::class.java))

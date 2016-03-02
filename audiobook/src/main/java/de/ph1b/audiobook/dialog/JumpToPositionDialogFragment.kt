@@ -25,10 +25,10 @@ import android.widget.NumberPicker
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.theme
-import de.ph1b.audiobook.utils.BookVendor
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -39,7 +39,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
     }
 
     @Inject internal lateinit var prefs: PrefsManager
-    @Inject internal lateinit var bookVendor: BookVendor
+    @Inject internal lateinit var db: BookChest
     @Inject internal lateinit var playerController: PlayerController
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -50,7 +50,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
         val colon = v.findViewById(R.id.colon)
 
         // init
-        val book = bookVendor.byId(prefs.currentBookId.value)!!
+        val book = db.bookById(prefs.currentBookId.value)!!
         val duration = book.currentChapter().duration
         val position = book.time
         val biggestHour = TimeUnit.MILLISECONDS.toHours(duration.toLong()).toInt()

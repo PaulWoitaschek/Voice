@@ -28,7 +28,6 @@ import de.ph1b.audiobook.activity.BaseActivity
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
-import de.ph1b.audiobook.utils.BookVendor
 import de.ph1b.audiobook.utils.FileRecognition
 import de.ph1b.audiobook.utils.MediaAnalyzer
 import rx.subjects.BehaviorSubject
@@ -48,7 +47,7 @@ import javax.inject.Singleton
 @Singleton
 class BookAdder
 @Inject
-constructor(private val context: Context, private val prefs: PrefsManager, private val db: BookChest, private val bookVendor: BookVendor, private val mediaAnalyzer: MediaAnalyzer, private val coverCollector: CoverFromDiscCollector) {
+constructor(private val context: Context, private val prefs: PrefsManager, private val db: BookChest, private val mediaAnalyzer: MediaAnalyzer, private val coverCollector: CoverFromDiscCollector) {
 
     private val executor = Executors.newSingleThreadExecutor()
     private val scannerActive = BehaviorSubject.create(false)
@@ -105,7 +104,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
                 try {
                     deleteOldBooks()
                     checkForBooks()
-                    coverCollector.findCovers(bookVendor.all())
+                    coverCollector.findCovers(db.activeBooks)
                 } catch (ex: InterruptedException) {
                     d(ex) { "We were interrupted at adding a book" }
                 }
@@ -174,7 +173,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
 
         //getting books to remove
         val booksToRemove = ArrayList<Book>(20)
-        for (book in bookVendor.all()) {
+        for (book in db.activeBooks) {
             var bookExists = false
             when (book.type) {
                 Book.Type.COLLECTION_FILE -> collectionBookFolders.forEach {
@@ -421,7 +420,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
                 if (orphaned) {
                     db.getOrphanedBooks()
                 } else {
-                    bookVendor.all()
+                    db.activeBooks
                 }
         if (rootFile.isDirectory) {
             for (b in books) {

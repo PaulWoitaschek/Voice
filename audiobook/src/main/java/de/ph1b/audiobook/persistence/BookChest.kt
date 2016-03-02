@@ -63,8 +63,10 @@ constructor(private val register: InternalBookRegister) {
     /**
      * All active books. We
      */
-    val activeBooks = Observable.fromCallable { synchronized(this) { ArrayList(active) } }
-            .flatMapIterable { list -> list }
+    val activeBooks: List<Book>
+        get() = synchronized(this) { ArrayList(active) }
+
+    fun bookById(id: Long) = activeBooks.firstOrNull { it.id == id }
 
     @Synchronized fun getOrphanedBooks() = ArrayList(orphaned)
 

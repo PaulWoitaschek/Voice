@@ -31,7 +31,6 @@ import de.ph1b.audiobook.model.Book
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayerController
-import de.ph1b.audiobook.utils.BookVendor
 import java.text.DecimalFormat
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -45,7 +44,6 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
 
     @Inject internal lateinit var prefs: PrefsManager
     @Inject internal lateinit var db: BookChest
-    @Inject internal lateinit var bookVendor: BookVendor
     @Inject internal lateinit var playerController: PlayerController
 
     private val SPEED_DELTA = 0.02f
@@ -66,7 +64,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
         val textView = v.findViewById(R.id.textView) as TextView
 
         // setting current speed
-        val book = bookVendor.byId(prefs.currentBookId.value) ?: throw AssertionError("Cannot instantiate $TAG without a current book")
+        val book = db.bookById(prefs.currentBookId.value) ?: throw AssertionError("Cannot instantiate $TAG without a current book")
         val speed = book.playbackSpeed
         seekBar.max = MAX_STEPS
         seekBar.progress = speedValueToSteps(speed)

@@ -179,13 +179,11 @@ class BookReaderService : Service() {
 
             // re-init controller when there is a new book set as the current book
             add(prefs.currentBookId
-                    .flatMap({ updatedId ->
-                        db.activeBooks.singleOrDefault(null) { it.id == updatedId }
-                    })
+                    .map { updatedId -> db.bookById(updatedId) }
                     .filter { it != null && (player.book()?.id != it.id) }
                     .subscribe {
                         player.stop()
-                        player.init(it)
+                        player.init(it!!)
                     })
 
             // notify player about changes in the current book
