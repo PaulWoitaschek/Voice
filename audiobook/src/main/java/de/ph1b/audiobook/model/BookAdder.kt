@@ -34,6 +34,7 @@ import rx.subjects.BehaviorSubject
 import v
 import java.io.File
 import java.util.*
+import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -98,7 +99,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
             stopScanner = true
             executor.execute {
                 v { "started" }
-                handler.post { scannerActive.onNext(true) }
+                handler.postBlocking { scannerActive.onNext(true) }
                 stopScanner = false
 
                 try {
@@ -110,7 +111,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
                 }
 
                 stopScanner = false
-                handler.post { scannerActive.onNext(false) }
+                handler.postBlocking { scannerActive.onNext(false) }
                 v { "stopped" }
             }
         }
@@ -229,7 +230,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
 
         for (b in booksToRemove) {
             d { "deleting book=${b.name}" };
-            handler.post { db.hideBook(b) }
+            handler.postBlocking { db.hideBook(b) }
         }
     }
 
@@ -260,7 +261,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
         var orphanedBook = getBookFromDb(rootFile, type, true)
         if (orphanedBook == null) {
             val newBook = Book(
-                    Book.ID_UNKNOWN.toLong(),
+                    Book.ID_UNKNOWN,
                     type,
                     false,
                     result.author,
@@ -271,7 +272,8 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
                     1.0f,
                     bookRoot)
             d { "adding newBook=${newBook.name}" }
-            handler.post { db.addBook(newBook) }
+            handler.postBlocking { db.addBook(newBook) }
+            d { "adding book of ${newBook.name} done" }
         } else {
             orphanedBook = orphanedBook.copy(chapters = newChapters)
 
@@ -279,12 +281,11 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
             val currentFile = orphanedBook.currentFile
             val pathValid = orphanedBook.chapters.any { it.file == currentFile }
             if (!pathValid) {
-                orphanedBook = orphanedBook.copy(currentFile = orphanedBook.chapters.first().file,
-                        time = 0)
+                orphanedBook = orphanedBook.copy(currentFile = orphanedBook.chapters.first().file, time = 0)
             }
 
             // now finally un-hide this book
-            handler.post { db.revealBook(orphanedBook as Book) }
+            handler.postBlocking { db.revealBook(orphanedBook as Book) }
         }
     }
 
@@ -321,7 +322,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
                     currentFile = if (currentPathIsGone) newChapters.first().file else bookToUpdate.currentFile,
                     time = if (currentPathIsGone) 0 else bookToUpdate.time)
 
-            handler.post { db.updateBook(bookToUpdate) }
+            handler.postBlocking { db.updateBook(bookToUpdate) }
         }
     }
 
@@ -348,7 +349,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
             // there are no chapters
             if (bookExisting != null) {
                 //so delete book if available
-                handler.post { db.hideBook(bookExisting) }
+                handler.postBlocking { db.hideBook(bookExisting) }
             }
         } else {
             // there are chapters
@@ -442,5 +443,14 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
             }
         }
         return null
+    }
+
+    private inline fun Handler.postBlocking(crossinline func: () -> Any) {
+        val cdl = CountDownLatch(1)
+        post {
+            func()
+            cdl.countDown()
+        }
+        cdl.await()
     }
 }
