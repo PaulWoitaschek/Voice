@@ -1,4 +1,9 @@
 # Upcoming version
+* Reverted support library due to crash on older devices
+* Simplified code
+* Fixed race condition while adding book
+* Fixed issue of new books not being recognized
+* Fixed cover crop
 
 # 2.6.0.3
 * Allow seek on prepared state as well
