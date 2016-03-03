@@ -69,12 +69,9 @@ class EditBookTitleDialogFragment : DialogFragment() {
                 .input(getString(R.string.bookmark_edit_hint), presetName, false) { materialDialog, charSequence ->
                     val newText = charSequence.toString()
                     if (newText != presetName) {
-                        bookChest.activeBooks
-                                .filter { it.id == bookId } // find book
-                                .map { it.copy(name = newText) }
-                                .subscribe {
-                                    bookChest.updateBook(it) // update book
-                                }
+                        bookChest.bookById(bookId)?.copy(name = newText)?.let {
+                            bookChest.updateBook(it)
+                        }
                     }
                 }
                 .positiveText(R.string.dialog_confirm)

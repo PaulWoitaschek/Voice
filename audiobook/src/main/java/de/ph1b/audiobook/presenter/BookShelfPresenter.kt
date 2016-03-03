@@ -46,12 +46,8 @@ constructor(private val bookChest: BookChest,
         i { "onBind Called for $view" }
 
         // initially updates the adapter with a new set of items
-        bookChest.activeBooks
-                .toList()
-                .subscribe {
-                    view.newBooks(it)
-                    view.showSpinnerIfNoData(bookAdder.scannerActive().value)
-                }
+        view.newBooks(bookChest.activeBooks)
+        view.showSpinnerIfNoData(bookAdder.scannerActive().value)
 
         val audioFoldersEmpty = prefsManager.collectionFolders.isEmpty() && prefsManager.singleBookFolders.isEmpty()
         if (audioFoldersEmpty) view.showNoFolderWarning()
@@ -74,10 +70,7 @@ constructor(private val bookChest: BookChest,
             // Subscription that notifies the adapter when the current book has changed. It also notifies
             // the item with the old indicator now falsely showing.
             add(prefsManager.currentBookId
-                    .flatMap { id ->
-                        bookChest.activeBooks
-                                .singleOrDefault(null, { it.id == id })
-                    }
+                    .map { id -> bookChest.bookById(id) }
                     .subscribe { view.currentBookChanged(it) })
 
             // observe if the scanner is active and there are books and show spinner accordingly.

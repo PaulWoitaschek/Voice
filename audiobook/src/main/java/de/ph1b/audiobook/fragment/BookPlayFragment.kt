@@ -56,7 +56,6 @@ import de.ph1b.audiobook.playback.Sandman
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
-import de.ph1b.audiobook.utils.BookVendor
 import i
 import rx.Observable
 import rx.functions.Action1
@@ -80,9 +79,8 @@ class BookPlayFragment : Fragment() {
     @Inject internal lateinit var mediaPlayer: PlayerController
     @Inject internal lateinit var sandMan: Sandman
     @Inject internal lateinit var prefs: PrefsManager
-    @Inject internal lateinit var bookProvider: BookChest
+    @Inject internal lateinit var bookChest: BookChest
     @Inject internal lateinit var bookmarkProvider: BookmarkProvider
-    @Inject internal lateinit var bookVendor: BookVendor
     @Inject internal lateinit var playStateManager: PlayStateManager
     @Inject internal lateinit var playerCapabilities: MediaPlayerCapabilities
 
@@ -134,7 +132,7 @@ class BookPlayFragment : Fragment() {
                 .onBackpressureLatest()
                 .subscribe { mediaPlayer.playPause() }
 
-        book = bookVendor.byId(bookId)
+        book = bookChest.bookById(bookId)
 
         //init views
         val actionBar = actionBar().apply {
@@ -325,7 +323,7 @@ class BookPlayFragment : Fragment() {
                         }
                     }))
 
-            add(Observable.merge(bookProvider.activeBooks, bookProvider.updateObservable())
+            add(Observable.merge(Observable.from(bookChest.activeBooks), bookChest.updateObservable())
                     .filter { it.id == bookId }
                     .doOnNext { this@BookPlayFragment.book = it }
                     .subscribe { book: Book ->

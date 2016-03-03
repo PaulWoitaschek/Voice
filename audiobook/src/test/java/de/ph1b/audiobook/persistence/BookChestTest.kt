@@ -26,9 +26,6 @@ import junit.framework.TestCase
 import org.fest.assertions.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.RobolectricGradleTestRunner
-import org.robolectric.RuntimeEnvironment
-import org.robolectric.annotation.Config
 
 /**
  * TODO:
@@ -48,7 +45,7 @@ class BookChestTest : TestCase() {
 
         var dummy = DummyCreator.dummyBook(5)
         bookChest.addBook(dummy)
-        val firstBook = bookChest.activeBooks.toBlocking().first()
+        val firstBook = bookChest.activeBooks.first()
         var dummyWithUpdatedId = dummy.copy(id = firstBook.id)
 
         assertThat(dummyWithUpdatedId).isEqualTo(firstBook)

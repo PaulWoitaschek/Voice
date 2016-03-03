@@ -37,11 +37,10 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.activity.BaseActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.layoutInflater
+import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.setInvisible
 import de.ph1b.audiobook.uitools.setVisible
-import de.ph1b.audiobook.utils.BookVendor
-import de.ph1b.audiobook.utils.ScreenShotWebView
 import i
 import rx.subjects.BehaviorSubject
 import java.io.Serializable
@@ -57,10 +56,10 @@ class ImagePickerActivity : BaseActivity() {
         App.component().inject(this)
     }
 
-    @Inject internal lateinit var bookVendor: BookVendor
+    @Inject internal lateinit var bookChest: BookChest
     @Inject internal lateinit var imageHelper: ImageHelper
 
-    private val webView: ScreenShotWebView by  bindView(R.id.webView)
+    private val webView: WebView by  bindView(R.id.webView)
     private val progressBar: View by  bindView(R.id.progressBar)
     private val noNetwork: View by bindView(R.id.noNetwork)
     private val webViewContainer: View by bindView(R.id.webViewContainer)
@@ -76,8 +75,16 @@ class ImagePickerActivity : BaseActivity() {
 
         override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
             if (p1?.itemId == R.id.confirm) {
+                // optain screenshot
+                webViewContainer.isDrawingCacheEnabled = true
+                webViewContainer.buildDrawingCache()
                 val cropRect = cropView.selectedRect
-                val screenShot = webView.takeScreenshot(cropRect)
+                val cache: Bitmap = webViewContainer.drawingCache
+                val screenShot = Bitmap.createBitmap(cache, cropRect.left, cropRect.top, cropRect.width(), cropRect.height())
+                webViewContainer.isDrawingCacheEnabled = false
+                cache.recycle()
+
+                // save screenshot
                 imageHelper.saveCover(screenShot, book.coverFile())
                 screenShot.recycle()
                 Picasso.with(this@ImagePickerActivity).invalidate(book.coverFile())
@@ -101,7 +108,7 @@ class ImagePickerActivity : BaseActivity() {
     private var webViewIsLoading = BehaviorSubject.create(false)
     private val book by lazy {
         val args = intent.getSerializableExtra(NI) as Args
-        bookVendor.byId(args.bookId)!!
+        bookChest.bookById(args.bookId)!!
     }
     private val originalUrl by lazy {
         val encodedSearch = URLEncoder.encode("${book.name} cover", Charsets.UTF_8.name())
@@ -237,15 +244,15 @@ class ImagePickerActivity : BaseActivity() {
             finish()
             true
         }
-        R.id.refresh      -> {
+        R.id.refresh -> {
             webView.reload()
             true
         }
-        R.id.home         -> {
+        R.id.home -> {
             webView.loadUrl(originalUrl)
             true
         }
-        else              -> false
+        else -> false
     }
 
     companion object {

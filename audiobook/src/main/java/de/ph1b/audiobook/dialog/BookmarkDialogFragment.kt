@@ -40,7 +40,6 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.DividerItemDecoration
-import de.ph1b.audiobook.utils.BookVendor
 import i
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -112,7 +111,6 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
     @Inject internal lateinit var db: BookChest
     @Inject internal lateinit var bookmarkProvider: BookmarkProvider
     @Inject internal lateinit var playStateManager: PlayStateManager
-    @Inject lateinit internal var bookVendor: BookVendor
     @Inject internal lateinit var playerController: PlayerController
     private lateinit var book: Book
     private lateinit var adapter: BookmarkAdapter
@@ -137,7 +135,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
         val customView = inflater.inflate(R.layout.dialog_bookmark, null)
         bookmarkTitle = customView.findViewById(R.id.bookmarkEdit) as EditText
 
-        book = bookVendor.byId(bookId())!!
+        book = db.bookById(bookId())!!
         adapter = BookmarkAdapter(book.chapters, this, context)
         val recyclerView = customView.findViewById(R.id.recycler) as RecyclerView
         recyclerView.adapter = adapter

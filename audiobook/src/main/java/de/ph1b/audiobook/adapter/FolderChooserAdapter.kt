@@ -67,8 +67,7 @@ class FolderChooserAdapter(private val c: Context, private val mode: FolderChoos
         val viewHolder: ViewHolder
         if (view == null) {
             val li = LayoutInflater.from(c)
-            view = li.inflate(R.layout.activity_folder_chooser_adapter_row_layout, parent,
-                    false)
+            view = li.inflate(R.layout.activity_folder_chooser_adapter_row_layout, parent, false)
 
             viewHolder = ViewHolder(view)
             view.tag = viewHolder
