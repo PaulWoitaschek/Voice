@@ -1,4 +1,6 @@
 # Upcoming version
+
+# 2.6.0.4
 * Reverted support library due to crash on older devices
 * Simplified code
 * Fixed race condition while adding book
