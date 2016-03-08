@@ -52,7 +52,7 @@ class InternalBookRegisterTest {
 
     @Before
     fun setUp() {
-        val internalDb = InternalDb(RuntimeEnvironment.application, "db")
+        val internalDb = InternalDb(RuntimeEnvironment.application)
         register = InternalBookRegister(internalDb)
     }
 

@@ -49,7 +49,7 @@ class BookChestTest {
 
     @Before
     fun setUp() {
-        val internalDb = InternalDb(RuntimeEnvironment.application, "db")
+        val internalDb = InternalDb(RuntimeEnvironment.application)
         val internalBookRegister = InternalBookRegister(internalDb)
         bookChest = BookChest(internalBookRegister)
     }
