@@ -17,10 +17,7 @@
 
 package de.ph1b.audiobook.persistence.internals
 
-import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
-
-import de.ph1b.audiobook.model.Chapter
 
 /**
  * Collection of strings representing the chapters table
@@ -40,15 +37,6 @@ internal object ChapterTable {
             "  ${BOOK_ID} INTEGER NOT NULL, " +
             "  FOREIGN KEY ( ${BOOK_ID} ) REFERENCES ${BookTable.TABLE_NAME} ( ${BookTable.ID} )" +
             " )"
-
-    fun getContentValues(chapter: Chapter, bookId: Long): ContentValues {
-        val chapterCv = ContentValues()
-        chapterCv.put(DURATION, chapter.duration)
-        chapterCv.put(NAME, chapter.name)
-        chapterCv.put(PATH, chapter.file.absolutePath)
-        chapterCv.put(BookTable.ID, bookId)
-        return chapterCv
-    }
 
     fun onCreate(db: SQLiteDatabase) {
         db.execSQL(CREATE_TABLE)
