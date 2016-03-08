@@ -63,4 +63,26 @@ class BookChestTest {
 
         assertThat(dummyWithUpdatedId).isEqualTo(firstBook)
     }
+
+    /**
+     * Test that makes sure that adding a book with the same root and type throws an exception.
+     */
+    @Test
+    fun testThatDoubleInsertThrows() {
+        val dummy = BookMocker.mock(-1)
+        bookChest.addBook(dummy)
+
+        val bookWithSameContent = dummy.copy(id = -1)
+
+        var thrown = false
+        try {
+            bookChest.addBook(bookWithSameContent)
+        } catch(e: Exception) {
+            e.printStackTrace()
+            thrown = true
+        }
+
+        assertThat(thrown).isTrue
+        assertThat(bookChest.activeBooks).hasSize(1)
+    }
 }
