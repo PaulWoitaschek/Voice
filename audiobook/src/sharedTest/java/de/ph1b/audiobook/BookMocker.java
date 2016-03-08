@@ -32,16 +32,16 @@ import kotlin.collections.CollectionsKt;
  *
  * @author Paul Woitaschek
  */
-public class DummyCreator {
+public class BookMocker {
 
     private static final Random rnd = new Random();
 
-    public static Book dummyBook(long id) {
+    public static Book mock(long id) {
         String root = "/root/";
-        return dummyBook(new File(root, "First.mp3"), new File(root, "/second.mp3"), id);
+        return mock(new File(root, "First.mp3"), new File(root, "/second.mp3"), id);
     }
 
-    public static Book dummyBook(File file1, File file2, long id) {
+    public static Book mock(File file1, File file2, long id) {
         List<Bookmark> bookmarks = new ArrayList<>();
         Book.Type type = Book.Type.SINGLE_FOLDER;
         String author = "TestAuthor";
@@ -67,7 +67,7 @@ public class DummyCreator {
                 root);
     }
 
-    public static Book dummyBook(File file1, File file2) {
-        return dummyBook(file1, file2, -1);
+    public static Book mock(File file1, File file2) {
+        return mock(file1, file2, -1);
     }
 }

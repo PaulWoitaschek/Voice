@@ -18,8 +18,8 @@
 package de.ph1b.audiobook.persistence.internals
 
 import android.os.Build
+import de.ph1b.audiobook.BookMocker
 import de.ph1b.audiobook.BuildConfig
-import de.ph1b.audiobook.DummyCreator
 import de.ph1b.audiobook.TestApp
 import org.fest.assertions.api.Assertions.assertThat
 import org.junit.Before
@@ -54,8 +54,8 @@ class InternalBookRegisterTest {
 
     @Test
     fun testHideRevealBook() {
-        val dummy = DummyCreator.dummyBook(-1)
-        register.addBook(dummy)
+        val mock = BookMocker.mock(-1)
+        register.addBook(mock)
 
         val activeBooks = register.activeBooks()
         val inactiveBooks = register.orphanedBooks()
@@ -77,20 +77,20 @@ class InternalBookRegisterTest {
     }
 
     @Test
-    fun addBook() {
-        val dummy1 = DummyCreator.dummyBook(-1)
-        val dummy2 = DummyCreator.dummyBook(-1)
-        val firstInserted = register.addBook(dummy1)
-        val secondInserted = register.addBook(dummy2)
+    fun testAddBook() {
+        val mock1 = BookMocker.mock(-1)
+        val mock2 = BookMocker.mock(-1)
+        val firstInserted = register.addBook(mock1)
+        val secondInserted = register.addBook(mock2)
 
         val containing = register.activeBooks()
 
         assertThat(containing).hasSize(2)
 
-        val dummy1WithUpdatedId = dummy1.copy(id = firstInserted.id)
-        val dummy2WithUpdatedId = dummy2.copy(id = secondInserted.id)
+        val mock1WithUpdatedId = mock1.copy(id = firstInserted.id)
+        val mock2WithUpdatedId = mock2.copy(id = secondInserted.id)
 
-        assertThat(containing).doesNotContain(dummy1, dummy2)
-        assertThat(containing).contains(dummy1WithUpdatedId, dummy2WithUpdatedId)
+        assertThat(containing).doesNotContain(mock1, mock2)
+        assertThat(containing).contains(mock1WithUpdatedId, mock2WithUpdatedId)
     }
 }

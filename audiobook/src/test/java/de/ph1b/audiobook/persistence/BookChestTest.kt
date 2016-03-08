@@ -18,8 +18,8 @@
 package de.ph1b.audiobook.persistence
 
 import android.os.Build
+import de.ph1b.audiobook.BookMocker
 import de.ph1b.audiobook.BuildConfig
-import de.ph1b.audiobook.DummyCreator
 import de.ph1b.audiobook.TestApp
 import de.ph1b.audiobook.persistence.internals.InternalBookRegister
 import de.ph1b.audiobook.persistence.internals.InternalDb
@@ -46,7 +46,7 @@ class BookChestTest {
         val internalBookRegister = InternalBookRegister(internalDb)
         val bookChest = BookChest(internalBookRegister)
 
-        var dummy = DummyCreator.dummyBook(5)
+        var dummy = BookMocker.mock(5)
         bookChest.addBook(dummy)
         val firstBook = bookChest.activeBooks.first()
         var dummyWithUpdatedId = dummy.copy(id = firstBook.id)
