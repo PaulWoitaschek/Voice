@@ -75,4 +75,22 @@ class InternalBookRegisterTest {
         assertThat(register.activeBooks()).hasSize(1)
         assertThat(register.orphanedBooks()).isEmpty()
     }
+
+    @Test
+    fun addBook() {
+        val dummy1 = DummyCreator.dummyBook(-1)
+        val dummy2 = DummyCreator.dummyBook(-1)
+        val firstInserted = register.addBook(dummy1)
+        val secondInserted = register.addBook(dummy2)
+
+        val containing = register.activeBooks()
+
+        assertThat(containing).hasSize(2)
+
+        val dummy1WithUpdatedId = dummy1.copy(id = firstInserted.id)
+        val dummy2WithUpdatedId = dummy2.copy(id = secondInserted.id)
+
+        assertThat(containing).doesNotContain(dummy1, dummy2)
+        assertThat(containing).contains(dummy1WithUpdatedId, dummy2WithUpdatedId)
+    }
 }
