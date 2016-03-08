@@ -24,14 +24,16 @@ import de.ph1b.audiobook.TestApp
 import de.ph1b.audiobook.persistence.internals.InternalBookRegister
 import de.ph1b.audiobook.persistence.internals.InternalDb
 import org.fest.assertions.api.Assertions.assertThat
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricGradleTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import org.robolectric.shadows.ShadowLog
 
 /**
- * TODO:
+ * Test for the book chest.
  *
  * @author: Paul Woitaschek
  */
@@ -39,13 +41,21 @@ import org.robolectric.annotation.Config
 @Config(constants = BuildConfig::class, sdk = intArrayOf(Build.VERSION_CODES.LOLLIPOP), manifest = "src/main/AndroidManifest.xml", application = TestApp::class)
 class BookChestTest {
 
+    init {
+        ShadowLog.stream = System.out
+    }
+
+    private lateinit var bookChest: BookChest
+
+    @Before
+    fun setUp() {
+        val internalDb = InternalDb(RuntimeEnvironment.application, "db")
+        val internalBookRegister = InternalBookRegister(internalDb)
+        bookChest = BookChest(internalBookRegister)
+    }
+
     @Test
     fun testBookChest() {
-        val dbName = System.currentTimeMillis().toString()
-        val internalDb = InternalDb(RuntimeEnvironment.application, dbName)
-        val internalBookRegister = InternalBookRegister(internalDb)
-        val bookChest = BookChest(internalBookRegister)
-
         var dummy = BookMocker.mock(5)
         bookChest.addBook(dummy)
         val firstBook = bookChest.activeBooks.first()
