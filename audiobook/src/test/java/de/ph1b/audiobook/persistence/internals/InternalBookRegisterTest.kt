@@ -110,6 +110,21 @@ class InternalBookRegisterTest {
         assertThat(containing).contains(mock1WithUpdatedId, mock2WithUpdatedId)
     }
 
+    @Test
+    fun testAddBookWithNullableAuthor() {
+        val mock = BookMocker.mock(-1)
+        val withNullableAuthor = mock.copy(author = null)
+        val inserted = register.addBook(withNullableAuthor)
+
+        assertThat(inserted)
+                .isEqualTo(withNullableAuthor.copy(id = inserted.id))
+
+        val retrieved = register.activeBooks()
+                .single()
+
+        assertThat(retrieved).isEqualTo(withNullableAuthor.copy(id = retrieved.id))
+    }
+
 
     @Test
     fun testUpdateBook() {
