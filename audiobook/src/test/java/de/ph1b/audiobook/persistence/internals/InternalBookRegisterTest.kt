@@ -21,6 +21,8 @@ import android.os.Build
 import de.ph1b.audiobook.BookMocker
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.TestApp
+import de.ph1b.audiobook.model.Book
+import de.ph1b.audiobook.model.Chapter
 import org.fest.assertions.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -29,6 +31,8 @@ import org.robolectric.RobolectricGradleTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowLog
+import java.io.File
+import java.util.*
 
 
 /**
@@ -104,5 +108,37 @@ class InternalBookRegisterTest {
 
         assertThat(containing).doesNotContain(mock1, mock2)
         assertThat(containing).contains(mock1WithUpdatedId, mock2WithUpdatedId)
+    }
+
+
+    @Test
+    fun testUpdateBook() {
+        val mock = BookMocker.mock(-1)
+        val inserted = register.addBook(mock)
+
+        val oldChapters = inserted.chapters
+        val substracted = oldChapters.minus(oldChapters.first())
+        val newChapters = substracted.plus(Chapter(File("/root/", "salkjsdg.mp3"), "askhsdglkjsdf", 113513516))
+
+        val changed = inserted.copy(
+                type = Book.Type.SINGLE_FILE,
+                useCoverReplacement = true,
+                author = if (Random().nextBoolean()) "lkajsdflkj" else null,
+                currentFile = newChapters.last().file,
+                time = 135135135,
+                name = "252587245",
+                chapters = newChapters,
+                playbackSpeed = 1.7f,
+                root = "slksjdglkjgaölskjdf")
+
+        register.updateBook(changed)
+
+        val containingBooks = register.activeBooks()
+
+        // check that there is still only one book
+        assertThat(containingBooks).hasSize(1)
+
+        assertThat(containingBooks).doesNotContain(inserted)
+        assertThat(containingBooks).contains(changed)
     }
 }
