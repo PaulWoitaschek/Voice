@@ -76,6 +76,18 @@ class InternalBookRegisterTest {
         assertThat(register.orphanedBooks()).isEmpty()
     }
 
+    /**
+     * Tests that the returned book matches the retrieved one
+     */
+    @Test
+    fun testAddBookReturn() {
+        val mock = BookMocker.mock(-1)
+        val inserted = register.addBook(mock)
+        val retrieved = register.activeBooks().single()
+
+        assertThat(inserted).isEqualTo(retrieved)
+    }
+
     @Test
     fun testAddBook() {
         val mock1 = BookMocker.mock(-1)
