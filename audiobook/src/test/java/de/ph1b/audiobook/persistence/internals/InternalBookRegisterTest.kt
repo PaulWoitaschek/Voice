@@ -15,42 +15,64 @@
  * /licenses/>.
  */
 
-package de.ph1b.audiobook.persistence
+package de.ph1b.audiobook.persistence.internals
 
 import android.os.Build
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.DummyCreator
 import de.ph1b.audiobook.TestApp
-import de.ph1b.audiobook.persistence.internals.InternalBookRegister
-import de.ph1b.audiobook.persistence.internals.InternalDb
 import org.fest.assertions.api.Assertions.assertThat
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricGradleTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import org.robolectric.shadows.ShadowLog
+
 
 /**
- * TODO:
+ * Simple test for book persistence.
  *
- * @author: Paul Woitaschek
+ * @author Paul Woitaschek
  */
 @RunWith(RobolectricGradleTestRunner::class)
 @Config(constants = BuildConfig::class, sdk = intArrayOf(Build.VERSION_CODES.LOLLIPOP), manifest = "src/main/AndroidManifest.xml", application = TestApp::class)
-class BookChestTest {
+class InternalBookRegisterTest {
+
+    init {
+        ShadowLog.stream = System.out
+    }
+
+    lateinit var register: InternalBookRegister
+
+    @Before
+    fun setUp() {
+        val internalDb = InternalDb(RuntimeEnvironment.application, "db")
+        register = InternalBookRegister(internalDb)
+    }
 
     @Test
-    fun testBookChest() {
-        val dbName = System.currentTimeMillis().toString()
-        val internalDb = InternalDb(RuntimeEnvironment.application, dbName)
-        val internalBookRegister = InternalBookRegister(internalDb)
-        val bookChest = BookChest(internalBookRegister)
+    fun testHideRevealBook() {
+        val dummy = DummyCreator.dummyBook(-1)
+        register.addBook(dummy)
 
-        var dummy = DummyCreator.dummyBook(5)
-        bookChest.addBook(dummy)
-        val firstBook = bookChest.activeBooks.first()
-        var dummyWithUpdatedId = dummy.copy(id = firstBook.id)
+        val activeBooks = register.activeBooks()
+        val inactiveBooks = register.orphanedBooks()
 
-        assertThat(dummyWithUpdatedId).isEqualTo(firstBook)
+        assertThat(activeBooks).hasSize(1)
+        assertThat(inactiveBooks).isEmpty()
+
+        register.hideBook(activeBooks.first().id)
+
+        assertThat(register.activeBooks()).isEmpty()
+        assertThat(register.orphanedBooks()).hasSize(1)
+
+        val hiddenBook = register.orphanedBooks().single()
+
+        register.revealBook(hiddenBook.id)
+
+        assertThat(register.activeBooks()).hasSize(1)
+        assertThat(register.orphanedBooks()).isEmpty()
     }
 }

@@ -137,8 +137,7 @@ dependencies {
     androidTestCompile('com.android.support.test:runner:0.4.1') {
         exclude module: 'support-annotations'
     }
-    androidTestCompile "com.jayway.android.robotium:robotium-solo:5.5.3"
-    testCompile "org.robolectric:robolectric:3.1-SNAPSHOT"
+    testCompile "org.robolectric:robolectric:3.0"
     androidTestCompile 'org.easytesting:fest-assert-core:2.0M10'
     testCompile 'org.easytesting:fest-assert-core:2.0M10'
     def okHttpVersion = "3.1.2"
