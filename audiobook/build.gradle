@@ -32,8 +32,7 @@ android {
     }
 
     def minSdkDimension = "minSdk"
-    def isSnapshotDimension = "snapshot"
-    flavorDimensions minSdkDimension, isSnapshotDimension
+    flavorDimensions minSdkDimension
     productFlavors {
         regularMinSdk {
             dimension minSdkDimension
@@ -42,13 +41,6 @@ android {
         largeMinSdk {
             dimension minSdkDimension
             minSdkVersion 21
-        }
-        snapshot {
-            dimension isSnapshotDimension
-            versionName += "-SNAPSHOT"
-        }
-        noSnapshot {
-            dimension isSnapshotDimension
         }
     }
 
