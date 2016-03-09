@@ -23,15 +23,17 @@ import android.database.sqlite.SQLiteOpenHelper
 import e
 import java.util.*
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Helper class that manages the underlying the database.
  *
  * @author Paul Woitaschek
  */
+@Singleton
 class InternalDb
-@Inject constructor(context: Context, dbName: String)
-: SQLiteOpenHelper(context, dbName, null, DATABASE_VERSION) {
+@Inject constructor(context: Context)
+: SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     override fun onCreate(db: SQLiteDatabase) {
         BookTable.onCreate(db)
@@ -55,6 +57,6 @@ class InternalDb
     companion object {
 
         private val DATABASE_VERSION = 33
-        val DATABASE_NAME = "autoBookDB"
+        private val DATABASE_NAME = "autoBookDB"
     }
 }

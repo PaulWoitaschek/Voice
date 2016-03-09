@@ -17,10 +17,7 @@
 
 package de.ph1b.audiobook.persistence.internals
 
-import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
-
-import de.ph1b.audiobook.model.Book
 
 /**
  * Collection of strings representing the book table
@@ -51,20 +48,6 @@ internal object BookTable {
             "  ${USE_COVER_REPLACEMENT} INTEGER NOT NULL, " +
             "  ${ACTIVE} INTEGER NOT NULL DEFAULT 1" +
             ")"
-
-    fun getContentValues(book: Book): ContentValues {
-        val bookCv = ContentValues()
-        bookCv.put(BookTable.NAME, book.name)
-        bookCv.put(BookTable.AUTHOR, book.author)
-        bookCv.put(BookTable.ACTIVE, 1)
-        bookCv.put(BookTable.CURRENT_MEDIA_PATH, book.currentFile.absolutePath)
-        bookCv.put(BookTable.PLAYBACK_SPEED, book.playbackSpeed)
-        bookCv.put(BookTable.ROOT, book.root)
-        bookCv.put(BookTable.TIME, book.time)
-        bookCv.put(BookTable.TYPE, book.type.name)
-        bookCv.put(BookTable.USE_COVER_REPLACEMENT, book.useCoverReplacement)
-        return bookCv
-    }
 
     fun onCreate(db: SQLiteDatabase) {
         db.execSQL(CREATE_TABLE)

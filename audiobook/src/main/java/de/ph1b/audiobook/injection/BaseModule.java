@@ -31,7 +31,6 @@ import de.paul_woitaschek.mediaplayer.MediaPlayer;
 import de.paul_woitaschek.mediaplayer.SpeedPlayer;
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.persistence.PrefsManager;
-import de.ph1b.audiobook.persistence.internals.InternalDb;
 import de.ph1b.audiobook.playback.MediaPlayerCapabilities;
 
 /**
@@ -63,11 +62,5 @@ public class BaseModule {
         } else {
             return new AndroidPlayer(context);
         }
-    }
-
-    @Provides
-    @Singleton
-    static InternalDb provideInternalDb(Context context) {
-        return new InternalDb(context, InternalDb.Companion.getDATABASE_NAME());
     }
 }
