@@ -15,13 +15,14 @@
   ~ along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
   ~ /licenses/>.
   -->
-<ImageView style="@style/Widget.AppCompat.ActionButton"
-           xmlns:android="http://schemas.android.com/apk/res/android"
-           xmlns:tools="http://schemas.android.com/tools"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:clickable="false"
-           android:contentDescription="@string/refresh"
-           android:orientation="vertical"
-           android:src="@drawable/refresh"
-           tools:tint="@android:color/black"/>
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.AppCompat.ActionButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clickable="false"
+    android:contentDescription="@string/refresh"
+    android:orientation="vertical"
+    app:srcCompat="@drawable/refresh"
+    tools:tint="@android:color/black" />

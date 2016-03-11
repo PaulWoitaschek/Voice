@@ -49,7 +49,7 @@ class DependencyLicensesActivity : BaseActivity() {
 
         setContentView(R.layout.activity_dependency_licenses)
 
-        val progressBar = findViewById(R.id.progressBar)
+        val progressBar = findViewById(R.id.progressBar)!!
 
         // set home enabled for toolbar
         val toolbar = findViewById(R.id.toolbar) as Toolbar

@@ -110,7 +110,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
         // init ActionBar
         actionBar().apply {
             setDisplayHomeAsUpEnabled(false)
-            setHomeAsUpIndicator(R.drawable.abc_ic_ab_back_material)
+            setHomeAsUpIndicator(R.drawable.ic_arrow_back)
             title = getString(R.string.app_name)
         }
 

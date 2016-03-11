@@ -143,8 +143,8 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
         listView = findViewById(R.id.listView) as ListView
         chosenFolderDescription = findViewById(R.id.twoline_text1) as TextView
         spinner = findViewById(R.id.toolSpinner) as Spinner
-        spinnerGroup = findViewById(R.id.spinnerGroup)
-        val abortButton = findViewById(R.id.abort)
+        spinnerGroup = findViewById(R.id.spinnerGroup)!!
+        val abortButton = findViewById(R.id.abort)!!
 
         // toolbar
         setSupportActionBar(toolbar)

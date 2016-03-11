@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="56dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="56dp">
 
     <ImageView
         android:id="@+id/icon"
@@ -15,7 +16,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:scaleType="fitStart"
-        android:src="@drawable/ic_folder"
+        app:srcCompat="@drawable/ic_folder"
         tools:ignore="ContentDescription"/>
 
     <TextView
@@ -46,6 +47,6 @@
         android:contentDescription="@string/remove"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:src="@drawable/ic_delete_white_24dp"/>
+        app:srcCompat="@drawable/ic_delete_white_24dp" />
 
 </RelativeLayout>

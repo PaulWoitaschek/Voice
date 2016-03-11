@@ -28,7 +28,7 @@ android {
         targetSdkVersion 23
         versionCode 118
         versionName '2.6.0.5'
-        //vectorDrawables.useSupportLibrary = true
+        vectorDrawables.useSupportLibrary = true
     }
 
     def minSdkDimension = "minSdk"
@@ -93,7 +93,7 @@ android {
 
 dependencies {
     // support library
-    def supportVersion = "23.1.1"
+    def supportVersion = "23.2.1"
     compile "com.android.support:appcompat-v7:$supportVersion"
     compile "com.android.support:recyclerview-v7:$supportVersion"
     compile "com.android.support:support-v4:$supportVersion"
