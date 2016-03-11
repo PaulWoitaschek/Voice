@@ -68,6 +68,7 @@ class BookReaderService : Service() {
                     PlaybackStateCompat.ACTION_REWIND or
                     PlaybackStateCompat.ACTION_PLAY or
                     PlaybackStateCompat.ACTION_PAUSE or
+                    PlaybackStateCompat.ACTION_PLAY_PAUSE or
                     PlaybackStateCompat.ACTION_STOP or
                     PlaybackStateCompat.ACTION_FAST_FORWARD or
                     PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
@@ -110,31 +111,43 @@ class BookReaderService : Service() {
         mediaSession = MediaSessionCompat(this, TAG, eventReceiver, buttonReceiverIntent).apply {
 
             setCallback(object : MediaSessionCompat.Callback() {
+                override fun onMediaButtonEvent(mediaButtonEvent: Intent?): Boolean {
+                    i { "onMediaButtonEvent($mediaButtonEvent)" }
+                    return super.onMediaButtonEvent(mediaButtonEvent)
+                }
+
                 override fun onSkipToNext() {
+                    i { "onSkipToNext" }
                     onFastForward()
                 }
 
                 override fun onRewind() {
+                    i { "onRewind" }
                     player.skip(MediaPlayer.Direction.BACKWARD)
                 }
 
                 override fun onSkipToPrevious() {
+                    i { "onSkipToPrevious" }
                     onRewind()
                 }
 
                 override fun onFastForward() {
+                    i { "onFastForward" }
                     player.skip(MediaPlayer.Direction.FORWARD)
                 }
 
                 override fun onStop() {
+                    i { "onStop" }
                     player.stop()
                 }
 
                 override fun onPause() {
+                    i { "onPause" }
                     player.pause(true)
                 }
 
                 override fun onPlay() {
+                    i { "onPlay" }
                     player.play()
                 }
             })
@@ -265,9 +278,7 @@ class BookReaderService : Service() {
                 val file = File(intent.getStringExtra(PlayerController.CHANGE_FILE))
                 player.changePosition(time, file)
             }
-            PlayerController.ACTION_PAUSE_NON_REWINDING -> {
-                player.pause(false)
-            }
+            PlayerController.ACTION_PAUSE_NON_REWINDING -> player.pause(false)
             PlayerController.ACTION_FORCE_NEXT -> player.next()
             PlayerController.ACTION_FORCE_PREVIOUS -> player.previous(true)
         }
