@@ -47,6 +47,6 @@
         android:contentDescription="@string/remove"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        app:srcCompat="@drawable/ic_delete_white_24dp" />
+        app:srcCompat="@drawable/delete" />
 
 </RelativeLayout>

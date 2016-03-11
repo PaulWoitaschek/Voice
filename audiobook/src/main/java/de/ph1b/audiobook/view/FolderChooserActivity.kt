@@ -234,7 +234,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
      */
     override fun setUpButtonEnabled(upEnabled: Boolean) {
         upButton.isEnabled = upEnabled
-        val upIcon = if (upEnabled) ContextCompat.getDrawable(this, R.drawable.ic_arrow_up_white_48dp) else null
+        val upIcon = if (upEnabled) ContextCompat.getDrawable(this, R.drawable.ic_arrow_upward) else null
         upButton.setImageDrawable(upIcon)
     }
 

@@ -60,7 +60,7 @@
             android:clickable="true"
             android:contentDescription="@string/content_navigate_up"
             android:scaleType="fitStart"
-            tools:src="@drawable/ic_arrow_up_white_48dp"/>
+            tools:src="@drawable/ic_arrow_upward" />
 
         <LinearLayout
             android:layout_width="wrap_content"

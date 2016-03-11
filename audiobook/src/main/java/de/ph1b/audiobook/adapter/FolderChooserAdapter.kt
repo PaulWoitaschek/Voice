@@ -85,7 +85,7 @@ class FolderChooserAdapter(private val c: Context, private val mode: FolderChoos
             viewHolder.textView.isEnabled = isDirectory
         }
 
-        val icon = ContextCompat.getDrawable(c, if (isDirectory) R.drawable.ic_folder else R.drawable.ic_audiotrack_white_48dp)
+        val icon = ContextCompat.getDrawable(c, if (isDirectory) R.drawable.ic_folder else R.drawable.ic_album)
         viewHolder.imageView.setImageDrawable(icon)
         viewHolder.imageView.contentDescription = c.getString(if (isDirectory) R.string.content_is_folder else R.string.content_is_file)
 

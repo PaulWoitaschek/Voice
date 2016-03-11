@@ -25,7 +25,7 @@ class FolderOverviewAdapter(private val c: Context,
         holder.textView.text = file
 
         if (bookCollections.contains(file)) {
-            holder.icon.setImageDrawable(ContextCompat.getDrawable(c, R.drawable.ic_folder_multiple_white_48dp))
+            holder.icon.setImageDrawable(ContextCompat.getDrawable(c, R.drawable.folder_multiple))
             holder.icon.contentDescription = c.getString(R.string.folder_add_collection)
         } else {
             holder.icon.setImageDrawable(ContextCompat.getDrawable(c, R.drawable.ic_folder))

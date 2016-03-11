@@ -6,21 +6,21 @@
 
     <item
         android:id="@+id/action_sleep"
-        android:icon="@drawable/ic_snooze_white_24dp"
+        android:icon="@drawable/alarm_off"
         android:orderInCategory="1"
         android:title="@string/action_sleep"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_bookmark"
-        android:icon="@drawable/ic_bookmark_outline_white_24dp"
+        android:icon="@drawable/bookmark_outline"
         android:orderInCategory="2"
         android:title="@string/bookmark"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_time_lapse"
-        android:icon="@drawable/ic_clock_fast_white_24dp"
+        android:icon="@drawable/speedometer"
         android:orderInCategory="3"
         android:title="@string/playback_speed"
         app:showAsAction="ifRoom"/>

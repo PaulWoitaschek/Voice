@@ -16,7 +16,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:contentDescription="@string/no_external_storage_action_bar_title"
-        app:srcCompat="@drawable/ic_usb_black_36dp" />
+        app:srcCompat="@drawable/usb" />
 
     <TextView
         android:id="@+id/textView"

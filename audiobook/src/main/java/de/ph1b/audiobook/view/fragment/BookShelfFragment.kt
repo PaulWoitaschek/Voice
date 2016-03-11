@@ -336,7 +336,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
 
 
     enum class DisplayMode constructor(@DrawableRes val icon: Int) {
-        GRID(R.drawable.ic_view_grid_white_24dp),
+        GRID(R.drawable.view_grid),
         LIST(R.drawable.ic_view_list);
 
         fun inverted(): DisplayMode = if (this == GRID) LIST else GRID
