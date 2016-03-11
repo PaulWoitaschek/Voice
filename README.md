@@ -3,6 +3,8 @@ MaterialAudiobookPlayer
 [![Travis](https://img.shields.io/travis/PaulWoitaschek/MaterialAudiobookPlayer/develop.svg)](https://travis-ci.org/PaulWoitaschek/MaterialAudiobookPlayer)
 <!--[![Code Coverage](https://img.shields.io/codecov/c/github/PaulWoitaschek/MaterialAudiobookPlayer/develop.svg)](https://codecov.io/github/paulwoitaschek/materialaudiobookplayer?branch=develop)-->
 
+<a href="https://zenhub.io"><img src="https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png"></a>
+
 This is my digital playground where I am learning. I'm integrating and validating new technologies and ideas here, playing around with new UI / UX components and developing with the best coding standard I come up with.
 
 At the same time I want to provide an audiobook player which is really easy in use and a joy to work with.
