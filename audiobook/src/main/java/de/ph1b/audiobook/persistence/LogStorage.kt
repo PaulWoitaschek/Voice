@@ -19,13 +19,12 @@ package de.ph1b.audiobook.persistence
 
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.inject.Inject
-import javax.inject.Singleton
 import java.util.Date as DateWithTime
 
 /** Storage for logs. Stores up to [AMOUNT_OF_ENTRIES] logs for each day. After that removes the first */
-@Singleton class LogStorage
-@Inject constructor() {
+object LogStorage {
+
+    private const val AMOUNT_OF_ENTRIES = 1000
 
     private val logs = ArrayList<String>(AMOUNT_OF_ENTRIES)
     private val dateField = DateWithTime()
@@ -43,8 +42,4 @@ import java.util.Date as DateWithTime
     }
 
     fun get(): List<String> = logs
-
-    companion object {
-        private const val AMOUNT_OF_ENTRIES = 1000
-    }
 }

@@ -66,7 +66,6 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
 
     // injection
     @Inject internal lateinit var prefs: PrefsManager
-    @Inject internal lateinit var logStorage: DaggerLazy<LogStorage>
 
     // viewAdded
     private lateinit var recyclerView: RecyclerView
@@ -165,7 +164,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
                     type = "message/rfc822";
                     putExtra(Intent.EXTRA_EMAIL, arrayOf("woitaschek@gmail.com"));
                     putExtra(Intent.EXTRA_SUBJECT, "MAP Logs");
-                    val logs = logStorage.get().get()
+                    val logs = LogStorage.get()
                     val logsBuilder = StringBuilder()
                     logs.forEach { logsBuilder.append(it).append("\n") }
                     putExtra(Intent.EXTRA_TEXT, logsBuilder.toString());

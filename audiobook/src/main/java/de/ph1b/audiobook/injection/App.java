@@ -39,7 +39,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import dagger.Lazy;
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.activity.BaseActivity;
 import de.ph1b.audiobook.activity.BookActivity;
@@ -83,8 +82,6 @@ public class App extends Application {
 
     private static ApplicationComponent applicationComponent;
     @Inject
-    Lazy<LogToStorageTree> toStorageTree;
-    @Inject
     BookAdder bookAdder;
 
     public static ApplicationComponent component() {
@@ -102,7 +99,7 @@ public class App extends Application {
         if (BuildConfig.DEBUG) {
             // init timber
             Timber.plant(new Timber.DebugTree());
-            Timber.plant(toStorageTree.get());
+            Timber.plant(new LogToStorageTree(LogStorage.INSTANCE));
 
             // force enable acra in debug mode
             PreferenceManager.getDefaultSharedPreferences(this)
@@ -281,6 +278,7 @@ public class App extends Application {
 
     public static class BreadCrumbSenderFactory implements ReportSenderFactory {
 
+        @NonNull
         @Override
         public ReportSender create(Context context, ACRAConfiguration config) {
             return new ReportSender() {
