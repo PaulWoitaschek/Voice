@@ -19,7 +19,6 @@ package de.ph1b.audiobook.injection;
 
 import android.app.Application;
 import android.content.Intent;
-import android.preference.PreferenceManager;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
@@ -34,6 +33,7 @@ import de.ph1b.audiobook.logging.BreadcrumbTree;
 import de.ph1b.audiobook.logging.LogToStorageTree;
 import de.ph1b.audiobook.model.BookAdder;
 import de.ph1b.audiobook.persistence.LogStorage;
+import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.playback.BookReaderService;
 import timber.log.Timber;
 
@@ -49,6 +49,8 @@ public class App extends Application {
     private static ApplicationComponent applicationComponent;
     @Inject
     BookAdder bookAdder;
+    @Inject
+    PrefsManager prefsManager;
 
     public static ApplicationComponent component() {
         return applicationComponent;
@@ -68,10 +70,7 @@ public class App extends Application {
             Timber.plant(new LogToStorageTree(LogStorage.INSTANCE));
 
             // force enable acra in debug mode
-            PreferenceManager.getDefaultSharedPreferences(this)
-                    .edit()
-                    .putBoolean("acra.enable", true)
-                    .apply();
+            prefsManager.setAcraEnabled(true);
 
             // forward crashes to timber
             //noinspection unchecked
