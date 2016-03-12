@@ -1,5 +1,12 @@
 # Upcoming version
 
+# 2.6.0.6
+* Improved overall performance
+* Sharper icons
+* Decreased size
+* Fixed headset controls for Android below Lollipop
+* Fixed a crash with the player
+
 # 2.6.0.4
 * Reverted support library due to crash on older devices
 * Simplified code
