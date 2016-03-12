@@ -28,7 +28,6 @@ import org.acra.sender.HttpSender;
 import javax.inject.Inject;
 
 import de.ph1b.audiobook.BuildConfig;
-import de.ph1b.audiobook.logging.BreadcrumbTree;
 import de.ph1b.audiobook.logging.DelegateCrashesToTimber;
 import de.ph1b.audiobook.logging.LogToStorageTree;
 import de.ph1b.audiobook.model.BookAdder;
@@ -79,7 +78,6 @@ public class App extends Application {
 
         // init acra and send breadcrumbs
         ACRA.init(this, acraBuilder.build());
-        Timber.plant(new BreadcrumbTree());
 
         Timber.i("onCreate");
 
@@ -88,7 +86,7 @@ public class App extends Application {
     }
 
     protected ApplicationComponent newComponent() {
-        return DaggerApp_ApplicationComponent.builder()
+        return DaggerApplicationComponent.builder()
                 .androidModule(new AndroidModule(this))
                 .build();
     }
