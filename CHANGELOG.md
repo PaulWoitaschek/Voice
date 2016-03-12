@@ -3,6 +3,7 @@
 # 2.6.0.6
 * Improved overall performance
 * Sharper icons
+* Fixed landscape layout for larger devices
 * Decreased size
 * Fixed headset controls for Android below Lollipop
 * Fixed a crash with the player
