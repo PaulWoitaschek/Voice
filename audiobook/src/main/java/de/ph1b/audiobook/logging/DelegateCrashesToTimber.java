@@ -13,9 +13,11 @@ import org.acra.util.JSONReportBuilder;
 import timber.log.Timber;
 
 /**
- * Created by ph1b on 12/03/16.
+ * A simple factory that delegates crashes to timber instead of sending them to the backend
+ *
+ * @author Paul Woitaschek
  */
-public class BreadCrumbSenderFactory implements ReportSenderFactory {
+public class DelegateCrashesToTimber implements ReportSenderFactory {
 
     @NonNull
     @Override

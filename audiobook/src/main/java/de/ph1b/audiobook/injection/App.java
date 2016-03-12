@@ -28,8 +28,8 @@ import org.acra.sender.HttpSender;
 import javax.inject.Inject;
 
 import de.ph1b.audiobook.BuildConfig;
-import de.ph1b.audiobook.logging.BreadCrumbSenderFactory;
 import de.ph1b.audiobook.logging.BreadcrumbTree;
+import de.ph1b.audiobook.logging.DelegateCrashesToTimber;
 import de.ph1b.audiobook.logging.LogToStorageTree;
 import de.ph1b.audiobook.model.BookAdder;
 import de.ph1b.audiobook.persistence.LogStorage;
@@ -74,7 +74,7 @@ public class App extends Application {
 
             // forward crashes to timber
             //noinspection unchecked
-            acraBuilder.setReportSenderFactoryClasses(new Class[]{BreadCrumbSenderFactory.class});
+            acraBuilder.setReportSenderFactoryClasses(new Class[]{DelegateCrashesToTimber.class});
         }
 
         // init acra and send breadcrumbs
