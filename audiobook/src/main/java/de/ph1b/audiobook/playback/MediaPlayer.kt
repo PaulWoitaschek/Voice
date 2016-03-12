@@ -80,7 +80,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
                             updatingSubscription = Observable.interval(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                                     .map { if (state.value == State.STARTED) player.currentPosition else -1 }
                                     .filter { it != -1 }
-                                    .distinctUntilChanged()
+                                    .distinct { it / 1000 } // let the value only pass the full second changed.
                                     .map { book.value?.copy(time = it) } // create a copy with new position
                                     .filter { it != null } // let it pass when it exists
                                     .subscribe { book.onNext(it) } // update the book
