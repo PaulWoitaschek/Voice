@@ -325,14 +325,10 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
     }
 
     fun showSpinnerIfNoData(showSpinnerIfNoData: Boolean) {
-        i { "showSpinnerIfNoData $showSpinnerIfNoData" }
         val shouldShowSpinner = adapter.itemCount == 0 && showSpinnerIfNoData
-        i { "ShouldShowSpinner=$shouldShowSpinner" }
         recyclerView.visibility = if (shouldShowSpinner) View.INVISIBLE else View.VISIBLE
         recyclerReplacementView.visibility = if (shouldShowSpinner) View.VISIBLE else View.INVISIBLE
-        i { "ShowSpinnerIfNoData finished." }
     }
-
 
     enum class DisplayMode constructor(@DrawableRes val icon: Int) {
         GRID(R.drawable.view_grid),
