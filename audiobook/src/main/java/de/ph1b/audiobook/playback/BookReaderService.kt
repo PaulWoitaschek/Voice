@@ -40,6 +40,7 @@ import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.receiver.AudioFocus
 import de.ph1b.audiobook.receiver.AudioFocusReceiver
 import de.ph1b.audiobook.receiver.HeadsetPlugReceiver
+import de.ph1b.audiobook.receiver.MediaEventReceiver
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.blocking
@@ -103,7 +104,7 @@ class BookReaderService : Service() {
     override fun onCreate() {
         super.onCreate()
 
-        val eventReceiver = ComponentName(packageName, MediaButtonReceiver::class.java.name);
+        val eventReceiver = ComponentName(packageName, MediaEventReceiver::class.java.name);
         val mediaButtonIntent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
             component = eventReceiver
         }
