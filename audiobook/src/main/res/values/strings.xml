@@ -118,9 +118,6 @@
     <string name="pref_support_title">Support</string>
     <string name="pref_support_translations">Translations</string>
     <string name="pref_support_contribute">Support and suggestions</string>
-    <string name="pref_support_donation">Donate</string>
-    <string name="donation_worked_thanks">Thanks a lot. That really helps :)</string>
-    <string name="donation_not_worked">Oops… something went wrong</string>
     <!--Misc-->
     <string name="popup_edit">Edit</string>
     <string name="remove">Remove</string>
@@ -129,8 +126,6 @@
     <string name="hide_folder_content">Do you want to hide the folder from music players, so they don\'t recognize your book as music?</string>
     <string name="hide_confirm">Hide</string>
     <!-- license activity -->
-    <string name="license_activity_title">Used Licenses</string>
-    <string name="licenses">Licenses</string>
     <string name="refresh">Refresh</string>
     <string name="reset">Reset</string>
     <string name="no_network">No network?</string>

@@ -7,7 +7,6 @@ import javax.inject.Singleton;
 import dagger.Component;
 import de.ph1b.audiobook.activity.BaseActivity;
 import de.ph1b.audiobook.activity.BookActivity;
-import de.ph1b.audiobook.activity.DependencyLicensesActivity;
 import de.ph1b.audiobook.adapter.BookShelfAdapter;
 import de.ph1b.audiobook.dialog.BookmarkDialogFragment;
 import de.ph1b.audiobook.dialog.EditBookTitleDialogFragment;
@@ -62,8 +61,6 @@ public interface ApplicationComponent {
     void inject(BaseActivity target);
 
     void inject(FolderChooserActivity target);
-
-    void inject(DependencyLicensesActivity target);
 
     void inject(ThemePickerDialogFragment target);
 
