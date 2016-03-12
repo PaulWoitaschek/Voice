@@ -160,9 +160,8 @@ class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOver
         }
 
         setSupportActionBar(toolbar)
-        val actionBar = supportActionBar
-        assert(actionBar != null)
-        actionBar!!.setDisplayHomeAsUpEnabled(true)
+        val actionBar = supportActionBar!!
+        actionBar.setDisplayHomeAsUpEnabled(true)
         actionBar.title = getString(R.string.audiobook_folders_title)
 
 

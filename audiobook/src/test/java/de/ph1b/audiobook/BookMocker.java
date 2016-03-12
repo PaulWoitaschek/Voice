@@ -18,12 +18,10 @@ package de.ph1b.audiobook;
 
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import de.ph1b.audiobook.model.Book;
-import de.ph1b.audiobook.model.Bookmark;
 import de.ph1b.audiobook.model.Chapter;
 import kotlin.collections.CollectionsKt;
 
@@ -42,7 +40,6 @@ public class BookMocker {
     }
 
     public static Book mock(File file1, File file2, long id) {
-        List<Bookmark> bookmarks = new ArrayList<>();
         Book.Type type = Book.Type.SINGLE_FOLDER;
         String author = "TestAuthor";
         int time = 0;
@@ -65,9 +62,5 @@ public class BookMocker {
                 chapters,
                 playbackSpeed,
                 root);
-    }
-
-    public static Book mock(File file1, File file2) {
-        return mock(file1, file2, -1);
     }
 }
