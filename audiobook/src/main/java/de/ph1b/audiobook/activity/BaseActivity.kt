@@ -65,9 +65,9 @@ abstract class BaseActivity : AppCompatActivity() {
             val serviceIntent = Intent(this, BookReaderService::class.java)
             stopService(serviceIntent)
 
-            val i = Intent(this, NoExternalStorageActivity::class.java)
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(Intent(i))
+            startActivity(Intent(this, NoExternalStorageActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            })
             return
         }
         recreateIfThemeChanged()

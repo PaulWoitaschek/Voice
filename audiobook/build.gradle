@@ -26,8 +26,8 @@ android {
 
     defaultConfig {
         targetSdkVersion 23
-        versionCode 118
-        versionName '2.6.0.5'
+        versionCode 119
+        versionName '2.6.0.6'
         vectorDrawables.useSupportLibrary = true
     }
 
@@ -123,20 +123,11 @@ dependencies {
 
     //testing
     testCompile "junit:junit:4.12"
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.1') {
-        exclude module: 'support-annotations'
-    }
     androidTestCompile('com.android.support.test:runner:0.4.1') {
         exclude module: 'support-annotations'
     }
     testCompile "org.robolectric:robolectric:3.0"
-    androidTestCompile 'org.easytesting:fest-assert-core:2.0M10'
     testCompile 'org.easytesting:fest-assert-core:2.0M10'
-    def okHttpVersion = "3.1.2"
-    testCompile "com.squareup.okhttp3:okhttp:$okHttpVersion"
-    androidTestCompile "com.squareup.okhttp3:okhttp:$okHttpVersion"
-    testCompile "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
-    androidTestCompile "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
 
     // rx extensions
     compile "io.reactivex:rxandroid:1.1.0"

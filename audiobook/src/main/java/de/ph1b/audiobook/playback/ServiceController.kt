@@ -12,35 +12,19 @@ import javax.inject.Inject
  */
 class ServiceController @Inject constructor(private val context: Context) {
 
-    fun getStopIntent(): Intent {
-        val intent = Intent(context, BookReaderService::class.java)
-        intent.setAction(Intent.ACTION_MEDIA_BUTTON)
-        val keyEvent = KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_STOP)
-        intent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent)
-        return intent
+    private fun intent() = Intent(context, BookReaderService::class.java)
+
+    private fun mediaButtonIntent(event: Int) = intent().apply {
+        action = Intent.ACTION_MEDIA_BUTTON
+        val keyEvent = KeyEvent(KeyEvent.ACTION_DOWN, event)
+        putExtra(Intent.EXTRA_KEY_EVENT, keyEvent)
     }
 
-    fun getPlayPauseIntent(): Intent {
-        val intent = Intent(context, BookReaderService::class.java)
-        intent.setAction(Intent.ACTION_MEDIA_BUTTON)
-        val keyEvent = KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
-        intent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent)
-        return intent
-    }
+    fun getStopIntent() = mediaButtonIntent(KeyEvent.KEYCODE_MEDIA_STOP)
 
-    fun getFastForwardIntent(): Intent {
-        val intent = Intent(context, BookReaderService::class.java)
-        intent.setAction(Intent.ACTION_MEDIA_BUTTON)
-        val keyEvent = KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD)
-        intent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent)
-        return intent
-    }
+    fun getPlayPauseIntent() = mediaButtonIntent(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)
 
-    fun getRewindIntent(): Intent {
-        val intent = Intent(context, BookReaderService::class.java)
-        intent.setAction(Intent.ACTION_MEDIA_BUTTON)
-        val keyEvent = KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_REWIND)
-        intent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent)
-        return intent
-    }
+    fun getFastForwardIntent() = mediaButtonIntent(KeyEvent.KEYCODE_MEDIA_FAST_FORWARD)
+
+    fun getRewindIntent() = mediaButtonIntent(KeyEvent.KEYCODE_MEDIA_REWIND)
 }

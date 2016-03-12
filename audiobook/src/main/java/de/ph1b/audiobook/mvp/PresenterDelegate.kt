@@ -26,7 +26,7 @@ import android.os.Bundle
  */
 class PresenterDelegate <V, P>(private val newPresenter: () -> P, private val getView: () -> V)  where P : Presenter<V> {
 
-    public var presenter: P? = null
+    var presenter: P? = null
         private set
 
     fun onCreate(savedInstanceState: Bundle?) {
