@@ -59,21 +59,21 @@ class NotificationAnnouncer
         // rewind
         val rewindIntent = serviceController.getRewindIntent()
         val rewindPI = PendingIntent.getService(context, KeyEvent.KEYCODE_MEDIA_REWIND, rewindIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-        notificationBuilder.addAction(R.drawable.ic_fast_rewind, context.getString(R.string.rewind), rewindPI)
+        notificationBuilder.addAction(R.drawable.ic_rewind_white_36dp, context.getString(R.string.rewind), rewindPI)
 
         // play/pause
         val playPauseIntent = serviceController.getPlayPauseIntent()
         val playPausePI = PendingIntent.getService(context, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         if (playState == PlayStateManager.PlayState.PLAYING) {
-            notificationBuilder.addAction(R.drawable.ic_pause, context.getString(R.string.pause), playPausePI)
+            notificationBuilder.addAction(R.drawable.ic_pause_white_36dp, context.getString(R.string.pause), playPausePI)
         } else {
-            notificationBuilder.addAction(R.drawable.ic_play_arrow, context.getString(R.string.play), playPausePI)
+            notificationBuilder.addAction(R.drawable.ic_play_white_36dp, context.getString(R.string.play), playPausePI)
         }
 
         // fast forward
         val fastForwardIntent = serviceController.getFastForwardIntent()
         val fastForwardPI = PendingIntent.getService(context, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, fastForwardIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-        notificationBuilder.addAction(R.drawable.ic_fast_forward, context.getString(R.string.fast_forward), fastForwardPI)
+        notificationBuilder.addAction(R.drawable.ic_fast_forward_white_36dp, context.getString(R.string.fast_forward), fastForwardPI)
 
         // stop intent
         val stopIntent = serviceController.getStopIntent()

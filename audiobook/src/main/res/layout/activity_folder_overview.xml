@@ -56,7 +56,7 @@
                 android:contentDescription="@string/folder_add_collection"
                 fab:fab_colorNormal="?attr/colorAccent"
                 fab:fab_colorPressed="?attr/colorAccentDark"
-                fab:fab_icon="@drawable/ic_folder_multiple_white_48dp"
+                fab:fab_icon="@drawable/folder_multiple"
                 fab:fab_size="mini"
                 fab:fab_title="@string/folder_add_collection"/>
 

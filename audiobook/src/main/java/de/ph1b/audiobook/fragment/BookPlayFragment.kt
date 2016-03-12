@@ -137,7 +137,7 @@ class BookPlayFragment : Fragment() {
         //init views
         val actionBar = actionBar().apply {
             setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.abc_ic_ab_back_material)
+            setHomeAsUpIndicator(R.drawable.ic_arrow_back)
         }
 
         //setup buttons
@@ -253,9 +253,9 @@ class BookPlayFragment : Fragment() {
         // sets the correct sleep timer icon
         val sleepTimerItem = menu.findItem(R.id.action_sleep)
         if (sandMan.sleepTimerActive()) {
-            sleepTimerItem.setIcon(R.drawable.ic_alarm_on_white_24dp)
+            sleepTimerItem.setIcon(R.drawable.alarm_off)
         } else {
-            sleepTimerItem.setIcon(R.drawable.ic_snooze_white_24dp)
+            sleepTimerItem.setIcon(R.drawable.alarm)
         }
 
         // hide bookmark and getTime change item if there is no valid book

@@ -65,7 +65,7 @@ class CoverReplacement(private val text: String, c: Context) : Drawable() {
     }
 
     override fun setColorFilter(cf: ColorFilter?) {
-        textPaint.setColorFilter(cf)
+        textPaint.colorFilter = cf
     }
 
     override fun getOpacity(): Int {

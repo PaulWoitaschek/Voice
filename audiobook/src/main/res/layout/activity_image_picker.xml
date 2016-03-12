@@ -15,10 +15,11 @@
   ~ /licenses/>.
   -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar"/>
 
@@ -49,8 +50,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/no_network"
-                android:src="@drawable/wifi_off"
-                android:tint="@android:color/white"/>
+                android:tint="@android:color/white"
+                app:srcCompat="@drawable/wifi_off" />
 
         </LinearLayout>
 
@@ -77,7 +78,7 @@
                 android:layout_gravity="right|end|bottom"
                 android:layout_margin="16dp"
                 android:contentDescription="@string/cover_crop"
-                android:src="@drawable/crop"
+                app:srcCompat="@drawable/crop"
                 tools:ignore="RtlHardcoded"/>
 
         </FrameLayout>

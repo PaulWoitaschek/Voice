@@ -26,9 +26,9 @@ android {
 
     defaultConfig {
         targetSdkVersion 23
-        versionCode 118
-        versionName '2.6.0.5'
-        //vectorDrawables.useSupportLibrary = true
+        versionCode 119
+        versionName '2.6.0.6'
+        vectorDrawables.useSupportLibrary = true
     }
 
     def minSdkDimension = "minSdk"
@@ -93,7 +93,7 @@ android {
 
 dependencies {
     // support library
-    def supportVersion = "23.1.1"
+    def supportVersion = "23.2.1"
     compile "com.android.support:appcompat-v7:$supportVersion"
     compile "com.android.support:recyclerview-v7:$supportVersion"
     compile "com.android.support:support-v4:$supportVersion"
@@ -123,20 +123,11 @@ dependencies {
 
     //testing
     testCompile "junit:junit:4.12"
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.1') {
-        exclude module: 'support-annotations'
-    }
     androidTestCompile('com.android.support.test:runner:0.4.1') {
         exclude module: 'support-annotations'
     }
     testCompile "org.robolectric:robolectric:3.0"
-    androidTestCompile 'org.easytesting:fest-assert-core:2.0M10'
     testCompile 'org.easytesting:fest-assert-core:2.0M10'
-    def okHttpVersion = "3.1.2"
-    testCompile "com.squareup.okhttp3:okhttp:$okHttpVersion"
-    androidTestCompile "com.squareup.okhttp3:okhttp:$okHttpVersion"
-    testCompile "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
-    androidTestCompile "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
 
     // rx extensions
     compile "io.reactivex:rxandroid:1.1.0"
@@ -147,7 +138,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     // player
-    compile 'com.github.PaulWoitaschek:AndroidPlayer:0.008'
+    compile 'com.github.PaulWoitaschek:AndroidPlayer:0.009'
 
     // logs
     compile 'com.github.PaulWoitaschek:Slimber:1.0.4'

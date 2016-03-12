@@ -66,7 +66,6 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
 
     // injection
     @Inject internal lateinit var prefs: PrefsManager
-    @Inject internal lateinit var logStorage: DaggerLazy<LogStorage>
 
     // viewAdded
     private lateinit var recyclerView: RecyclerView
@@ -110,7 +109,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
         // init ActionBar
         actionBar().apply {
             setDisplayHomeAsUpEnabled(false)
-            setHomeAsUpIndicator(R.drawable.abc_ic_ab_back_material)
+            setHomeAsUpIndicator(R.drawable.ic_arrow_back)
             title = getString(R.string.app_name)
         }
 
@@ -165,7 +164,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
                     type = "message/rfc822";
                     putExtra(Intent.EXTRA_EMAIL, arrayOf("woitaschek@gmail.com"));
                     putExtra(Intent.EXTRA_SUBJECT, "MAP Logs");
-                    val logs = logStorage.get().get()
+                    val logs = LogStorage.get()
                     val logsBuilder = StringBuilder()
                     logs.forEach { logsBuilder.append(it).append("\n") }
                     putExtra(Intent.EXTRA_TEXT, logsBuilder.toString());
@@ -326,17 +325,13 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
     }
 
     fun showSpinnerIfNoData(showSpinnerIfNoData: Boolean) {
-        i { "showSpinnerIfNoData $showSpinnerIfNoData" }
         val shouldShowSpinner = adapter.itemCount == 0 && showSpinnerIfNoData
-        i { "ShouldShowSpinner=$shouldShowSpinner" }
         recyclerView.visibility = if (shouldShowSpinner) View.INVISIBLE else View.VISIBLE
         recyclerReplacementView.visibility = if (shouldShowSpinner) View.VISIBLE else View.INVISIBLE
-        i { "ShowSpinnerIfNoData finished." }
     }
 
-
     enum class DisplayMode constructor(@DrawableRes val icon: Int) {
-        GRID(R.drawable.ic_view_grid_white_24dp),
+        GRID(R.drawable.view_grid),
         LIST(R.drawable.ic_view_list);
 
         fun inverted(): DisplayMode = if (this == GRID) LIST else GRID

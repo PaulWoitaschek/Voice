@@ -21,7 +21,6 @@ import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import org.json.JSONArray
-import java.util.*
 
 fun Cursor.string(columnName: String): String {
     return stringNullable(columnName)!!
@@ -84,14 +83,6 @@ fun SharedPreferences.Editor.setBoolean(pair: Pair<String, Boolean>) =
 
 fun SharedPreferences.Editor.setStringSet(pair: Pair<String, Set<String>>) =
         putStringSet(pair.first, pair.second)
-
-fun <T> JSONArray.toList(): List<T> = toMutableList()
-
-fun <T> JSONArray.toMutableList(): MutableList<T> {
-    val list = ArrayList<T>(length())
-    forEach<T> { list.add(it) }
-    return list
-}
 
 fun SQLiteDatabase.simpleQuery(table: String,
                                columns: Array<String>? = null,

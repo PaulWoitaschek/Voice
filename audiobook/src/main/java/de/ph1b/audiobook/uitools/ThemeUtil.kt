@@ -56,10 +56,6 @@ fun View.setInvisible() {
     visibility = View.INVISIBLE
 }
 
-fun View.setGone() {
-    visibility = View.GONE
-}
-
 object ThemeUtil {
 
     @AnyRes

@@ -54,6 +54,7 @@ constructor(c: Context, @Named(FOR) private val sp: SharedPreferences) {
     private val PREF_KEY_COLLECTION_FOLDERS = "folders"
     private val PREF_KEY_SINGLE_BOOK_FOLDERS = "singleBookFolders"
     private val PREF_KEY_DISPLAY_MODE = "displayMode"
+    private val PREF_KEY_ACRA_ENABLED = "acra.enable"
 
     private val seekTimeSubject: BehaviorSubject<Int>
     private val autoRewindAmountSubject: BehaviorSubject<Int>
@@ -142,6 +143,12 @@ constructor(c: Context, @Named(FOR) private val sp: SharedPreferences) {
             App.component().bookAdder.scanForFiles(true)
         }
 
+    /**
+     * Setting if crash reports are enabled.
+     */
+    var acraEnabled: Boolean
+        @Synchronized get() = sp.getBoolean(PREF_KEY_ACRA_ENABLED, false)
+        @Synchronized set(value) = sp.edit { setBoolean(PREF_KEY_ACRA_ENABLED to value) }
 
     /**
      * The time to sleep after which the player should pause the book when sleep timer has
@@ -150,7 +157,6 @@ constructor(c: Context, @Named(FOR) private val sp: SharedPreferences) {
     var sleepTime: Int
         @Synchronized get() = sp.getInt(PREF_KEY_SLEEP_TIME, 20)
         @Synchronized set(time) = sp.edit { setInt(PREF_KEY_SLEEP_TIME to time) }
-
 
     /**
      * The time to seek when pressing a skip button. (in seconds.)

@@ -76,9 +76,11 @@ class ImagePickerActivity : BaseActivity() {
         override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
             if (p1?.itemId == R.id.confirm) {
                 // optain screenshot
+                val cropRect = cropView.selectedRect
+                cropView.selectionOn = false
+
                 webViewContainer.isDrawingCacheEnabled = true
                 webViewContainer.buildDrawingCache()
-                val cropRect = cropView.selectedRect
                 val cache: Bitmap = webViewContainer.drawingCache
                 val screenShot = Bitmap.createBitmap(cache, cropRect.left, cropRect.top, cropRect.width(), cropRect.height())
                 webViewContainer.isDrawingCacheEnabled = false

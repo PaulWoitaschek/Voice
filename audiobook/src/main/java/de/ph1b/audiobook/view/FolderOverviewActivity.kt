@@ -148,8 +148,8 @@ class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOver
         fam = findViewById(R.id.fam) as FloatingActionsMenu
         recyclerView = findViewById(R.id.recycler) as RecyclerView
         val libraryBookButton = findViewById(R.id.add_library) as FloatingActionButton
-        backgroundOverlay = findViewById(R.id.overlay)
-        buttonRepresentingTheFam = findViewById(R.id.fab_expand_menu_button)
+        backgroundOverlay = findViewById(R.id.overlay)!!
+        buttonRepresentingTheFam = findViewById(R.id.fab_expand_menu_button)!!
         singleBookButton = findViewById(R.id.add_single) as FloatingActionButton
 
         singleBookButton.setOnClickListener {
@@ -160,9 +160,8 @@ class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOver
         }
 
         setSupportActionBar(toolbar)
-        val actionBar = supportActionBar
-        assert(actionBar != null)
-        actionBar!!.setDisplayHomeAsUpEnabled(true)
+        val actionBar = supportActionBar!!
+        actionBar.setDisplayHomeAsUpEnabled(true)
         actionBar.title = getString(R.string.audiobook_folders_title)
 
 
