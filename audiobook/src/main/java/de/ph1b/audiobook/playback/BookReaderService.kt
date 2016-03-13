@@ -167,8 +167,14 @@ class BookReaderService : MediaBrowserServiceCompat() {
 
                 override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
                     i { "onPlayFromMediaId $mediaId" }
-
-
+                    val uri = Uri.parse(mediaId)
+                    val type = BookUriSpec.matcher.match(uri)
+                    if (type == BookUriSpec.BOOKS_ID) {
+                        val id = BookUriSpec.extractBook(uri)
+                        prefs.setCurrentBookId(id)
+                    } else {
+                        e { "Invalid mediaId $mediaId" }
+                    }
                 }
 
                 override fun onSkipToNext() {
