@@ -21,6 +21,7 @@ import android.os.Build
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.TestApp
 import org.fest.assertions.api.Assertions.assertThat
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricGradleTestRunner
@@ -34,71 +35,46 @@ import org.robolectric.shadows.ShadowLog
  */
 @RunWith(RobolectricGradleTestRunner::class)
 @Config(constants = BuildConfig::class, sdk = intArrayOf(Build.VERSION_CODES.LOLLIPOP), manifest = "src/main/AndroidManifest.xml", application = TestApp::class)
-class BookUriSpecTest {
+class BookUriConverterTest {
+
+    lateinit var converter: BookUriConverter
 
     init {
         ShadowLog.stream = System.out
     }
 
+    @Before
+    fun setUp() {
+        converter = BookUriConverter()
+    }
+
     @Test
     fun testAllBooks() {
-        val uri = BookUriSpec.allBooks()
+        val uri = converter.allBooks()
 
         println(uri)
 
-        val match = BookUriSpec.matcher.match(uri)
+        val match = converter.match(uri)
 
-        assertThat(match).isEqualTo(BookUriSpec.BOOKS)
+        assertThat(match).isEqualTo(BookUriConverter.BOOKS)
     }
 
     @Test
     fun testSingleBook() {
-        val uri = BookUriSpec.book(1)
+        val uri = converter.book(1)
 
-        val match = BookUriSpec.matcher.match(uri)
+        val match = converter.match(uri)
 
-        assertThat(match).isEqualTo(BookUriSpec.BOOKS_ID)
-    }
-
-    @Test
-    fun testSingleChapter() {
-        val uri = BookUriSpec.chapter(5, 6)
-
-        val match = BookUriSpec.matcher.match(uri)
-
-        assertThat(match).isEqualTo(BookUriSpec.BOOK_CHAPTERS_ID)
-    }
-
-    @Test
-    fun testChapters() {
-        val uri = BookUriSpec.bookChapters(5)
-
-        val match = BookUriSpec.matcher.match(uri)
-
-        assertThat(match).isEqualTo(BookUriSpec.BOOK_CHAPTERS)
-    }
-
-    @Test
-    fun testExtractBookAndChapterId() {
-        val bookId = 7L
-        val chapterId = 42L
-
-        val uri = BookUriSpec.chapter(bookId, chapterId)
-
-        val extractedBookId = BookUriSpec.extractBook(uri)
-        val extractedChapterId = BookUriSpec.extractChapter(uri)
-
-        assertThat(bookId).isEqualTo(extractedBookId)
-        assertThat(chapterId).isEqualTo(extractedChapterId)
+        assertThat(match).isEqualTo(BookUriConverter.BOOKS_ID)
     }
 
     @Test
     fun testExtractBookOnly() {
         val bookId = 153L
 
-        val uri = BookUriSpec.book(bookId)
+        val uri = converter.book(bookId)
 
-        val extracted = BookUriSpec.extractBook(uri)
+        val extracted = converter.extractBook(uri)
 
         assertThat(bookId).isEqualTo(extracted)
     }

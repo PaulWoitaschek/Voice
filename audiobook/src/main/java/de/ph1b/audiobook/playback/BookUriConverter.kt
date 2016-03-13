@@ -19,31 +19,26 @@ package de.ph1b.audiobook.playback
 
 import android.content.UriMatcher
 import android.net.Uri
+import javax.inject.Inject
 
 /**
  * Helper class for converting book and chapter ids to uris and back.
  *
  * @author Paul Woitaschek
  */
-object BookUriSpec {
-    private const val booksAuthority = "BOOKS"
-    private const val PATH_BOOKS = "books"
-    private const val PATH_CHAPTERS = "chapters"
-    const val BOOKS = 1
-    const val BOOKS_ID = 2
-    const val BOOK_CHAPTERS = 3
-    const val BOOK_CHAPTERS_ID = 3
+class BookUriConverter
+@Inject constructor() {
 
     private fun baseBuilder() = Uri.Builder()
             .authority(booksAuthority)
             .appendPath(PATH_BOOKS)
 
-    val matcher = UriMatcher(UriMatcher.NO_MATCH).apply {
+    private val matcher = UriMatcher(UriMatcher.NO_MATCH).apply {
         addURI(booksAuthority, PATH_BOOKS, BOOKS)
         addURI(booksAuthority, "$PATH_BOOKS/#", BOOKS_ID)
-        addURI(booksAuthority, "$PATH_BOOKS/#/$PATH_CHAPTERS", BOOK_CHAPTERS)
-        addURI(booksAuthority, "$PATH_BOOKS/#/$PATH_CHAPTERS/#", BOOK_CHAPTERS_ID)
     }
+
+    fun match(uri: Uri) = matcher.match(uri)
 
     fun allBooks() = baseBuilder().build()
 
@@ -51,18 +46,12 @@ object BookUriSpec {
             .appendPath(bookId.toString())
             .build()
 
-    fun bookChapters(bookId: Long) = baseBuilder()
-            .appendPath(bookId.toString())
-            .appendPath(PATH_CHAPTERS)
-            .build()
-
-    fun chapter(bookId: Long, chapterId: Long) = baseBuilder()
-            .appendPath(bookId.toString())
-            .appendPath(PATH_CHAPTERS)
-            .appendPath(chapterId.toString())
-            .build()
-
     fun extractBook(uri: Uri) = uri.pathSegments.get(1).toLong()
 
-    fun extractChapter(uri: Uri) = uri.pathSegments.get(3).toLong()
+    companion object {
+        private const val booksAuthority = "BOOKS"
+        private const val PATH_BOOKS = "books"
+        const val BOOKS = 1
+        const val BOOKS_ID = 2
+    }
 }

@@ -51,6 +51,7 @@ import de.ph1b.audiobook.uitools.blocking
 import de.ph1b.audiobook.view.fragment.BookShelfFragment
 import e
 import i
+import rx.Observable
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 import v
@@ -68,28 +69,15 @@ class BookReaderService : MediaBrowserServiceCompat() {
         d { "onLoadChildren $parentId, $result" }
         val uri = Uri.parse(parentId)
 
-        val items = when (BookUriSpec.matcher.match(uri)) {
-            BookUriSpec.BOOKS -> {
+        val items = when (bookUriConverter.match(uri)) {
+            BookUriConverter.BOOKS -> {
                 d { "books" }
                 db.activeBooks.map {
                     val description = MediaDescriptionCompat.Builder()
                             .setTitle(it.name)
-                            .setMediaId(BookUriSpec.book(it.id).toString())
+                            .setMediaId(bookUriConverter.book(it.id).toString())
                             .build()
                     return@map MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
-                }
-            }
-            BookUriSpec.BOOKS_ID -> {
-                d { "booksId" }
-                val bookId = BookUriSpec.extractBook(uri)
-                val chapters = db.bookById(bookId)?.chapters
-
-                chapters?.mapIndexed { i, chapter ->
-                    val description = MediaDescriptionCompat.Builder()
-                            .setTitle("$i - ${chapter.name}")
-                            .setMediaId(BookUriSpec.chapter(bookId, i.toLong()).toString())
-                            .build()
-                    return@mapIndexed MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
                 }
             }
             else -> {
@@ -104,7 +92,7 @@ class BookReaderService : MediaBrowserServiceCompat() {
 
     override fun onGetRoot(clientPackageName: String, clientUid: Int, rootHints: Bundle?): BrowserRoot {
         v { "onGetRoot" }
-        return BrowserRoot(BookUriSpec.allBooks().toString(), null)
+        return BrowserRoot(bookUriConverter.allBooks().toString(), null)
     }
 
 
@@ -135,6 +123,7 @@ class BookReaderService : MediaBrowserServiceCompat() {
     @Inject internal lateinit var notificationAnnouncer: NotificationAnnouncer
     @Inject internal lateinit var playStateManager: PlayStateManager
     @Inject internal lateinit var audioFocusManager: AudioFocusManager
+    @Inject lateinit var bookUriConverter: BookUriConverter
     private val audioBecomingNoisyReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (playStateManager.playState.value === PlayState.PLAYING) {
@@ -168,9 +157,9 @@ class BookReaderService : MediaBrowserServiceCompat() {
                 override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
                     i { "onPlayFromMediaId $mediaId" }
                     val uri = Uri.parse(mediaId)
-                    val type = BookUriSpec.matcher.match(uri)
-                    if (type == BookUriSpec.BOOKS_ID) {
-                        val id = BookUriSpec.extractBook(uri)
+                    val type = bookUriConverter.match(uri)
+                    if (type == BookUriConverter.BOOKS_ID) {
+                        val id = bookUriConverter.extractBook(uri)
                         prefs.setCurrentBookId(id)
                     } else {
                         e { "Invalid mediaId $mediaId" }
@@ -324,6 +313,11 @@ class BookReaderService : MediaBrowserServiceCompat() {
 
             // adjusts stream and playback based on audio focus.
             add(audioFocusManager.handleAudioFocus(audioFocusReceiver.focusObservable()))
+
+            // notifies the media service about added or removed books
+            add(Observable.merge(db.addedObservable(), db.removedObservable())
+                    .subscribe { notifyChildrenChanged(bookUriConverter.allBooks().toString()) })
+
         }
     }
 
