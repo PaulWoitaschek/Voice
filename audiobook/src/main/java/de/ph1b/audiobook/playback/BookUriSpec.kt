@@ -26,9 +26,9 @@ import android.net.Uri
  * @author Paul Woitaschek
  */
 object BookUriSpec {
-    private val booksAuthority = "BOOKS"
-    private val PATH_BOOKS = "books"
-    private val PATH_CHAPTERS = "chapters"
+    private const val booksAuthority = "BOOKS"
+    private const val PATH_BOOKS = "books"
+    private const val PATH_CHAPTERS = "chapters"
     const val BOOKS = 1
     const val BOOKS_ID = 2
     const val BOOK_CHAPTERS = 3

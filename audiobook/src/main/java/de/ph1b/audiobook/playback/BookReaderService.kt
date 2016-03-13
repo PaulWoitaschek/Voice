@@ -23,7 +23,11 @@ import android.app.Service
 import android.content.*
 import android.graphics.Bitmap
 import android.media.AudioManager
-import android.os.IBinder
+import android.net.Uri
+import android.os.Bundle
+import android.support.v4.media.MediaBrowserCompat
+import android.support.v4.media.MediaBrowserServiceCompat
+import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
@@ -58,7 +62,51 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class BookReaderService : Service() {
+class BookReaderService : MediaBrowserServiceCompat() {
+
+    override fun onLoadChildren(parentId: String, result: Result<List<MediaBrowserCompat.MediaItem>>) {
+        d { "onLoadChildren $parentId, $result" }
+        val uri = Uri.parse(parentId)
+
+        val items = when (BookUriSpec.matcher.match(uri)) {
+            BookUriSpec.BOOKS -> {
+                d { "books" }
+                db.activeBooks.map {
+                    val description = MediaDescriptionCompat.Builder()
+                            .setTitle(it.name)
+                            .setMediaId(BookUriSpec.book(it.id).toString())
+                            .build()
+                    return@map MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
+                }
+            }
+            BookUriSpec.BOOKS_ID -> {
+                d { "booksId" }
+                val bookId = BookUriSpec.extractBook(uri)
+                val chapters = db.bookById(bookId)?.chapters
+
+                chapters?.mapIndexed { i, chapter ->
+                    val description = MediaDescriptionCompat.Builder()
+                            .setTitle("$i - ${chapter.name}")
+                            .setMediaId(BookUriSpec.chapter(bookId, i.toLong()).toString())
+                            .build()
+                    return@mapIndexed MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
+                }
+            }
+            else -> {
+                e { "Illegal parentId$parentId" }
+                null
+            }
+        }
+
+        d { "sending result $items" }
+        result.sendResult(items)
+    }
+
+    override fun onGetRoot(clientPackageName: String, clientUid: Int, rootHints: Bundle?): BrowserRoot {
+        v { "onGetRoot" }
+        return BrowserRoot(BookUriSpec.allBooks().toString(), null)
+    }
+
 
     init {
         App.component().inject(this)
@@ -117,6 +165,12 @@ class BookReaderService : Service() {
                     return super.onMediaButtonEvent(mediaButtonEvent)
                 }
 
+                override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
+                    i { "onPlayFromMediaId $mediaId" }
+
+
+                }
+
                 override fun onSkipToNext() {
                     i { "onSkipToNext" }
                     onFastForward()
@@ -154,8 +208,7 @@ class BookReaderService : Service() {
             })
             setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
         }
-
-        mediaSession.addOnActiveChangeListener { i { "active changed to ${mediaSession.isActive}" } }
+        sessionToken = mediaSession.sessionToken
 
         registerReceiver(audioBecomingNoisyReceiver, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
         registerReceiver(headsetPlugReceiver.broadcastReceiver, IntentFilter(Intent.ACTION_HEADSET_PLUG))
@@ -303,10 +356,6 @@ class BookReaderService : Service() {
         super.onDestroy()
     }
 
-    override fun onBind(intent: Intent): IBinder? {
-        return null
-    }
-
     private fun notifyChange(what: ChangeType, book: Book) {
         d { "updateRemoteControlClient called" }
 
@@ -379,6 +428,7 @@ class BookReaderService : Service() {
                     putExtra("playing", playState === PlayState.PLAYING)
                     putExtra("position", time)
                 }
+
     }
 
     companion object {

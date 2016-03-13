@@ -53,7 +53,7 @@ class BookUriSpecTest {
 
     @Test
     fun testSingleBook() {
-        val uri = BookUriSpec.book(5)
+        val uri = BookUriSpec.book(1)
 
         val match = BookUriSpec.matcher.match(uri)
 
