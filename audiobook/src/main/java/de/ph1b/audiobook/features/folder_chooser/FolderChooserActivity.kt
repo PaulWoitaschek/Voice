@@ -15,7 +15,7 @@
  * /licenses/>.
  */
 
-package de.ph1b.audiobook.view
+package de.ph1b.audiobook.features.folder_chooser
 
 import android.Manifest
 import android.annotation.TargetApi
@@ -32,7 +32,7 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
-import com.jakewharton.rxbinding.view.clicks
+import butterknife.bindView
 import com.jakewharton.rxbinding.widget.RxAdapterView
 import com.jakewharton.rxbinding.widget.itemClicks
 import de.ph1b.audiobook.R
@@ -41,11 +41,9 @@ import de.ph1b.audiobook.adapter.MultiLineSpinnerAdapter
 import de.ph1b.audiobook.dialog.HideFolderDialog
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.mvp.RxBaseActivity
-import de.ph1b.audiobook.presenter.FolderChooserPresenter
 import de.ph1b.audiobook.utils.PermissionHelper
 import e
 import i
-import rx.Observable
 import java.io.File
 
 /**
@@ -75,14 +73,15 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
         App.component().inject(this)
     }
 
-    private lateinit var upButton: ImageButton
-    private lateinit var currentFolderName: TextView
-    private lateinit var chooseButton: Button
-    private lateinit var toolbar: Toolbar
-    private lateinit var listView: ListView
-    private lateinit var chosenFolderDescription: TextView
-    private lateinit var spinner: Spinner
-    private lateinit var spinnerGroup: View
+    private val upButton: ImageButton by bindView(R.id.twoline_image1)
+    private val currentFolderName: TextView by bindView(R.id.twoline_text2)
+    private val chooseButton: Button by bindView(R.id.choose)
+    private val toolbar: Toolbar by bindView(R.id.toolbar)
+    private val listView: ListView by bindView(R.id.listView)
+    private val chosenFolderDescription: TextView by bindView(R.id.twoline_text1)
+    private val spinner: Spinner by bindView(R.id.toolSpinner)
+    private val spinnerGroup: View by bindView(R.id.spinnerGroup)
+    private val abortButton: View  by bindView(R.id.abort)
 
     private lateinit var adapter: FolderChooserAdapter
     private lateinit var spinnerAdapter: MultiLineSpinnerAdapter<File>
@@ -136,15 +135,6 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
 
         // find views
         setContentView(R.layout.activity_folder_chooser)
-        upButton = findViewById(R.id.twoline_image1) as ImageButton
-        currentFolderName = findViewById(R.id.twoline_text2) as TextView
-        chooseButton = findViewById(R.id.choose) as Button
-        toolbar = findViewById(R.id.toolbar) as Toolbar
-        listView = findViewById(R.id.listView) as ListView
-        chosenFolderDescription = findViewById(R.id.twoline_text1) as TextView
-        spinner = findViewById(R.id.toolSpinner) as Spinner
-        spinnerGroup = findViewById(R.id.spinnerGroup)!!
-        val abortButton = findViewById(R.id.abort)!!
 
         // toolbar
         setSupportActionBar(toolbar)
@@ -152,12 +142,9 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         // listeners
-        chooseButton.clicks()
-                .subscribe() { presenter()!!.chooseClicked() }
-        abortButton.clicks()
-                .subscribe { finish() }
-        upButton.clicks()
-                .subscribe { onBackPressed() }
+        chooseButton.setOnClickListener { presenter()!!.chooseClicked() }
+        abortButton.setOnClickListener { finish() }
+        upButton.setOnClickListener { onBackPressed() }
 
         // text
         chosenFolderDescription.setText(R.string.chosen_folder_description)
@@ -215,7 +202,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
         i { "newRootFolders called with $newFolders" }
         spinnerGroup.visibility = if (newFolders.size <= 1) View.INVISIBLE else View.VISIBLE
 
-        Observable.from(newFolders)
+        val newData = newFolders
                 .map {
                     val name = if (it.absolutePath == FolderChooserPresenter.MARSHMALLOW_SD_FALLBACK) {
                         getString(R.string.storage_all)
@@ -224,8 +211,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
                     }
                     MultiLineSpinnerAdapter.Data(it, name)
                 }
-                .toList()
-                .subscribe { spinnerAdapter.setData(it) }
+        spinnerAdapter.setData(newData)
     }
 
 

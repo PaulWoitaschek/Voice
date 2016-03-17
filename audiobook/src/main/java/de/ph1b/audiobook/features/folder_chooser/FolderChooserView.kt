@@ -15,7 +15,7 @@
  * /licenses/>.
  */
 
-package de.ph1b.audiobook.view
+package de.ph1b.audiobook.features.folder_chooser
 
 import java.io.File
 
