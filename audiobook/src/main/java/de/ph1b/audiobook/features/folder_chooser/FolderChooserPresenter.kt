@@ -15,7 +15,7 @@
  * /licenses/>.
  */
 
-package de.ph1b.audiobook.presenter
+package de.ph1b.audiobook.features.folder_chooser
 
 import android.os.Build
 import android.os.Bundle
@@ -28,8 +28,6 @@ import de.ph1b.audiobook.model.NaturalOrderComparator
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.utils.FileRecognition
-import de.ph1b.audiobook.view.FolderChooserActivity
-import de.ph1b.audiobook.view.FolderChooserView
 import i
 import rx.subscriptions.CompositeSubscription
 import v

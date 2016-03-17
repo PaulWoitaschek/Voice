@@ -35,6 +35,7 @@ import com.getbase.floatingactionbutton.FloatingActionButton
 import com.getbase.floatingactionbutton.FloatingActionsMenu
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.adapter.FolderOverviewAdapter
+import de.ph1b.audiobook.features.folder_chooser.FolderChooserActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.mvp.RxBaseActivity
 import de.ph1b.audiobook.presenter.FolderOverviewPresenter
