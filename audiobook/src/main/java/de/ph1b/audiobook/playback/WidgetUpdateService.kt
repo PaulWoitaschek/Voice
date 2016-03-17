@@ -190,9 +190,9 @@ class WidgetUpdateService : Service() {
         remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI)
 
         if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
-            remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_pause)
+            remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_36dp)
         } else {
-            remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_play_arrow)
+            remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_play_white_36dp)
         }
 
         // if we have any book, init the views and have a click on the whole widget start BookPlay.

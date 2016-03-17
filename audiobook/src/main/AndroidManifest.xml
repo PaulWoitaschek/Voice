@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of Material Audiobook Player.
   ~
   ~ Material Audiobook Player is free software: you can redistribute it and/or modify
@@ -16,17 +15,16 @@
   ~ /licenses/>.
   -->
 
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="de.ph1b.audiobook">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="com.android.vending.BILLING"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
         android:name=".injection.App"
@@ -41,14 +39,14 @@
 
         <meta-data
             android:name="com.google.android.backup.api_key"
-            android:value="AEdPqrEAAAAIjeSB6A5JNJpRSV5yPq22PvZtl95fWDzDIuk63w"/>
+            android:value="AEdPqrEAAAAIjeSB6A5JNJpRSV5yPq22PvZtl95fWDzDIuk63w" />
 
         <activity
             android:name=".activity.BookActivity"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
@@ -58,7 +56,7 @@
             android:parentActivityName=".activity.BookActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.BookActivity"/>
+                android:value=".activity.BookActivity" />
         </activity>
 
         <activity
@@ -67,19 +65,19 @@
             android:parentActivityName=".activity.SettingsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.SettingsActivity"/>
+                android:value=".activity.SettingsActivity" />
         </activity>
 
         <activity
             android:name=".activity.NoExternalStorageActivity"
-            android:label="@string/no_external_storage_action_bar_title"/>
+            android:label="@string/no_external_storage_action_bar_title" />
 
         <activity
-            android:name=".view.FolderChooserActivity"
+            android:name=".features.folder_chooser.FolderChooserActivity"
             android:parentActivityName=".activity.BookActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.BookActivity"/>
+                android:value=".activity.BookActivity" />
         </activity>
 
         <activity
@@ -87,18 +85,22 @@
             android:parentActivityName=".activity.BookActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.BookActivity"/>
+                android:value=".activity.BookActivity" />
         </activity>
 
         <service
             android:name=".playback.BookReaderService"
-            android:exported="false"/>
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
 
-        <service android:name=".playback.WidgetUpdateService"/>
+        <service android:name=".playback.WidgetUpdateService" />
 
         <receiver android:name=".receiver.MediaEventReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.MEDIA_BUTTON"/>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
 
@@ -107,12 +109,12 @@
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/widget_info"/>
+                android:resource="@xml/widget_info" />
         </receiver>
     </application>
 

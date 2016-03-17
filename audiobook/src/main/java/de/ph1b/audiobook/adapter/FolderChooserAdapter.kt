@@ -26,7 +26,7 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.view.FolderChooserActivity
+import de.ph1b.audiobook.features.folder_chooser.FolderChooserActivity
 import java.io.File
 import java.util.*
 

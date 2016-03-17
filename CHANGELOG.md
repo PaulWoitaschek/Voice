@@ -1,12 +1,16 @@
 # Upcoming version
 
 # 2.6.0.6
+* Removed dots that appeared on the covers
 * Improved overall performance
 * Sharper icons
 * Fixed landscape layout for larger devices
 * Decreased size
 * Fixed headset controls for Android below Lollipop
 * Fixed a crash with the player
+
+# 2.6.0.5
+* Just some tests
 
 # 2.6.0.4
 * Reverted support library due to crash on older devices

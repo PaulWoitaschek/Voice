@@ -26,8 +26,8 @@ android {
 
     defaultConfig {
         targetSdkVersion 23
-        versionCode 119
-        versionName '2.6.0.6'
+        versionCode 120
+        versionName '2.6.0.6.1'
         vectorDrawables.useSupportLibrary = true
     }
 
@@ -111,7 +111,7 @@ dependencies {
     compile "com.getbase:floatingactionbutton:1.10.1"
 
     // crash reporting
-    compile "ch.acra:acra:4.8.2"
+    compile "ch.acra:acra:4.8.5"
 
     // dependency injection
     def daggerVersion = "2.0.2"

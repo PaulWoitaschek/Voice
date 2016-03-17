@@ -23,7 +23,11 @@ import android.app.Service
 import android.content.*
 import android.graphics.Bitmap
 import android.media.AudioManager
-import android.os.IBinder
+import android.net.Uri
+import android.os.Bundle
+import android.support.v4.media.MediaBrowserCompat
+import android.support.v4.media.MediaBrowserServiceCompat
+import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
@@ -47,6 +51,7 @@ import de.ph1b.audiobook.uitools.blocking
 import de.ph1b.audiobook.view.fragment.BookShelfFragment
 import e
 import i
+import rx.Observable
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 import v
@@ -58,7 +63,38 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class BookReaderService : Service() {
+class BookReaderService : MediaBrowserServiceCompat() {
+
+    override fun onLoadChildren(parentId: String, result: Result<List<MediaBrowserCompat.MediaItem>>) {
+        d { "onLoadChildren $parentId, $result" }
+        val uri = Uri.parse(parentId)
+
+        val items = when (bookUriConverter.match(uri)) {
+            BookUriConverter.BOOKS -> {
+                d { "books" }
+                db.activeBooks.map {
+                    val description = MediaDescriptionCompat.Builder()
+                            .setTitle(it.name)
+                            .setMediaId(bookUriConverter.book(it.id).toString())
+                            .build()
+                    return@map MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
+                }
+            }
+            else -> {
+                e { "Illegal parentId$parentId" }
+                null
+            }
+        }
+
+        d { "sending result $items" }
+        result.sendResult(items)
+    }
+
+    override fun onGetRoot(clientPackageName: String, clientUid: Int, rootHints: Bundle?): BrowserRoot {
+        v { "onGetRoot" }
+        return BrowserRoot(bookUriConverter.allBooks().toString(), null)
+    }
+
 
     init {
         App.component().inject(this)
@@ -87,6 +123,7 @@ class BookReaderService : Service() {
     @Inject internal lateinit var notificationAnnouncer: NotificationAnnouncer
     @Inject internal lateinit var playStateManager: PlayStateManager
     @Inject internal lateinit var audioFocusManager: AudioFocusManager
+    @Inject lateinit var bookUriConverter: BookUriConverter
     private val audioBecomingNoisyReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (playStateManager.playState.value === PlayState.PLAYING) {
@@ -115,6 +152,18 @@ class BookReaderService : Service() {
                 override fun onMediaButtonEvent(mediaButtonEvent: Intent?): Boolean {
                     i { "onMediaButtonEvent($mediaButtonEvent)" }
                     return super.onMediaButtonEvent(mediaButtonEvent)
+                }
+
+                override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
+                    i { "onPlayFromMediaId $mediaId" }
+                    val uri = Uri.parse(mediaId)
+                    val type = bookUriConverter.match(uri)
+                    if (type == BookUriConverter.BOOKS_ID) {
+                        val id = bookUriConverter.extractBook(uri)
+                        prefs.setCurrentBookId(id)
+                    } else {
+                        e { "Invalid mediaId $mediaId" }
+                    }
                 }
 
                 override fun onSkipToNext() {
@@ -154,8 +203,7 @@ class BookReaderService : Service() {
             })
             setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
         }
-
-        mediaSession.addOnActiveChangeListener { i { "active changed to ${mediaSession.isActive}" } }
+        sessionToken = mediaSession.sessionToken
 
         registerReceiver(audioBecomingNoisyReceiver, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
         registerReceiver(headsetPlugReceiver.broadcastReceiver, IntentFilter(Intent.ACTION_HEADSET_PLUG))
@@ -265,6 +313,11 @@ class BookReaderService : Service() {
 
             // adjusts stream and playback based on audio focus.
             add(audioFocusManager.handleAudioFocus(audioFocusReceiver.focusObservable()))
+
+            // notifies the media service about added or removed books
+            add(Observable.merge(db.addedObservable(), db.removedObservable())
+                    .subscribe { notifyChildrenChanged(bookUriConverter.allBooks().toString()) })
+
         }
     }
 
@@ -301,10 +354,6 @@ class BookReaderService : Service() {
         subscriptions.unsubscribe()
 
         super.onDestroy()
-    }
-
-    override fun onBind(intent: Intent): IBinder? {
-        return null
     }
 
     private fun notifyChange(what: ChangeType, book: Book) {
@@ -379,6 +428,7 @@ class BookReaderService : Service() {
                     putExtra("playing", playState === PlayState.PLAYING)
                     putExtra("position", time)
                 }
+
     }
 
     companion object {
