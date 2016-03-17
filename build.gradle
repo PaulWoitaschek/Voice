@@ -18,10 +18,11 @@
 
 buildscript {
 
-    ext.kotlinVersion = '1.0.1'
+    ext.kotlinVersion = '1.0.1-rc-20'
 
     repositories {
         jcenter()
+        maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
     }
 
 
@@ -35,6 +36,7 @@ allprojects {
     repositories {
         jcenter()
         maven { url "https://jitpack.io" }
+        maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
         mavenCentral()
     }
