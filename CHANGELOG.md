@@ -1,5 +1,9 @@
 # Upcoming version
 
+# 2.7
+* Rudimentary Android Auto Support
+* Fixed issue with widget buttons not showing
+
 # 2.6.0.6
 * Removed dots that appeared on the covers
 * Improved overall performance
