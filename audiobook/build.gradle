@@ -142,6 +142,4 @@ dependencies {
 
     // logs
     compile 'com.github.PaulWoitaschek:Slimber:1.0.4'
-
-    compile 'com.hannesdorfmann.mosby:mvp:2.0.1'
 }
