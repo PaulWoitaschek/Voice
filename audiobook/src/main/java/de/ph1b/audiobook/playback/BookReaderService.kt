@@ -72,7 +72,7 @@ class BookReaderService : MediaBrowserServiceCompat() {
         val items = when (bookUriConverter.match(uri)) {
             BookUriConverter.BOOKS -> {
                 d { "books" }
-                db.activeBooks.map {
+                db.activeBooks.sorted().map {
                     val description = MediaDescriptionCompat.Builder()
                             .setTitle(it.name)
                             .setMediaId(bookUriConverter.book(it.id).toString())
