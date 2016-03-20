@@ -34,6 +34,7 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import com.squareup.picasso.Picasso
 import d
+import de.ph1b.audiobook.R
 import de.ph1b.audiobook.activity.BookActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.model.Book
@@ -65,27 +66,41 @@ import javax.inject.Inject
  */
 class BookReaderService : MediaBrowserServiceCompat() {
 
+    private fun mediaItems(uri: Uri): List<MediaBrowserCompat.MediaItem>? {
+        val match = bookUriConverter.match(uri)
+
+        if (match == BookUriConverter.ROOT) {
+            val current = db.bookById(prefs.currentBookId.value)?.let {
+                MediaDescriptionCompat.Builder()
+                        .setTitle("${getString(R.string.current_book)}: ${it.name}")
+                        .setMediaId(bookUriConverter.book(it.id).toString())
+                        .build().let {
+                    MediaBrowserCompat.MediaItem(it, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
+                }
+            }
+
+            val all = db.activeBooks.sorted().map {
+                val description = MediaDescriptionCompat.Builder()
+                        .setTitle(it.name)
+                        .setMediaId(bookUriConverter.book(it.id).toString())
+                        .build()
+                return@map MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
+            }
+
+            if (current == null) {
+                return all
+            } else {
+                return listOf(current) + all
+            }
+        } else {
+            return null
+        }
+    }
+
     override fun onLoadChildren(parentId: String, result: Result<List<MediaBrowserCompat.MediaItem>>) {
         d { "onLoadChildren $parentId, $result" }
         val uri = Uri.parse(parentId)
-
-        val items = when (bookUriConverter.match(uri)) {
-            BookUriConverter.BOOKS -> {
-                d { "books" }
-                db.activeBooks.sorted().map {
-                    val description = MediaDescriptionCompat.Builder()
-                            .setTitle(it.name)
-                            .setMediaId(bookUriConverter.book(it.id).toString())
-                            .build()
-                    return@map MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
-                }
-            }
-            else -> {
-                e { "Illegal parentId$parentId" }
-                null
-            }
-        }
-
+        val items = mediaItems(uri)
         d { "sending result $items" }
         result.sendResult(items)
     }
@@ -158,7 +173,7 @@ class BookReaderService : MediaBrowserServiceCompat() {
                     i { "onPlayFromMediaId $mediaId" }
                     val uri = Uri.parse(mediaId)
                     val type = bookUriConverter.match(uri)
-                    if (type == BookUriConverter.BOOKS_ID) {
+                    if (type == BookUriConverter.BOOK_ID) {
                         val id = bookUriConverter.extractBook(uri)
                         prefs.setCurrentBookId(id)
                     } else {

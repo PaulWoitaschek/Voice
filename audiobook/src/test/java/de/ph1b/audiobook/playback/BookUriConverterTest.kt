@@ -56,7 +56,7 @@ class BookUriConverterTest {
 
         val match = converter.match(uri)
 
-        assertThat(match).isEqualTo(BookUriConverter.BOOKS)
+        assertThat(match).isEqualTo(BookUriConverter.ROOT)
     }
 
     @Test
@@ -65,7 +65,7 @@ class BookUriConverterTest {
 
         val match = converter.match(uri)
 
-        assertThat(match).isEqualTo(BookUriConverter.BOOKS_ID)
+        assertThat(match).isEqualTo(BookUriConverter.BOOK_ID)
     }
 
     @Test

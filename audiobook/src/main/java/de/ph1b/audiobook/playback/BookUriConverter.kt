@@ -34,8 +34,8 @@ class BookUriConverter
             .appendPath(PATH_BOOKS)
 
     private val matcher = UriMatcher(UriMatcher.NO_MATCH).apply {
-        addURI(booksAuthority, PATH_BOOKS, BOOKS)
-        addURI(booksAuthority, "$PATH_BOOKS/#", BOOKS_ID)
+        addURI(booksAuthority, PATH_BOOKS, ROOT)
+        addURI(booksAuthority, "$PATH_BOOKS/#", BOOK_ID)
     }
 
     fun match(uri: Uri) = matcher.match(uri)
@@ -50,8 +50,8 @@ class BookUriConverter
 
     companion object {
         private const val booksAuthority = "BOOKS"
-        private const val PATH_BOOKS = "books"
-        const val BOOKS = 1
-        const val BOOKS_ID = 2
+        private const val PATH_BOOKS = "root"
+        const val ROOT = 1
+        const val BOOK_ID = 2
     }
 }
