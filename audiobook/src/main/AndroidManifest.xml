@@ -40,6 +40,13 @@
             android:name="com.google.android.gms.car.application"
             android:resource="@xml/automotive_app_desc"/>
 
+        <!-- auto notification -->
+        <meta-data
+            android:name="com.google.android.gms.car.notification.SmallIcon"
+            android:resource="@drawable/ic_notification"
+            tools:ignore="ManifestResource"/>
+
+        <!-- auto capabilities -->
         <meta-data
             android:name="com.google.android.backup.api_key"
             android:value="AEdPqrEAAAAIjeSB6A5JNJpRSV5yPq22PvZtl95fWDzDIuk63w"/>
@@ -93,10 +100,12 @@
 
         <service
             android:name=".playback.BookReaderService"
-            android:exported="true">
+            android:exported="false">
+
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService"/>
             </intent-filter>
+
         </service>
 
         <service android:name=".playback.WidgetUpdateService"/>
