@@ -325,8 +325,9 @@ class BookPlayFragment : Fragment() {
 
             add(Observable.merge(Observable.from(bookChest.activeBooks), bookChest.updateObservable())
                     .filter { it.id == bookId }
-                    .doOnNext { this@BookPlayFragment.book = it }
                     .subscribe { book: Book ->
+                        this@BookPlayFragment.book = book
+
                         val chapters = book.chapters
                         val chapter = book.currentChapter()
 
@@ -349,10 +350,7 @@ class BookPlayFragment : Fragment() {
 
             // hide / show left time view
             add(sandMan.sleepSand
-                    .map { it > 0 }
-                    .map { active ->
-                        if (active) View.VISIBLE else View.GONE
-                    }
+                    .map { if (it > 0) View.VISIBLE else View.GONE }
                     .distinctUntilChanged() // only set when visibility has changed
                     .subscribe { visibility ->
                         timerCountdownView.visibility = visibility
