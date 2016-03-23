@@ -70,9 +70,6 @@
     <string name="pref_support_title">Supporto</string>
     <string name="pref_support_translations">Traduzioni</string>
     <string name="pref_support_contribute">Supporto e Suggerimenti</string>
-    <string name="pref_support_donation">Dona</string>
-    <string name="donation_worked_thanks">Grazie infinite. Stai veramente aiutando :)</string>
-    <string name="donation_not_worked">Ooops… qualcosa è andato storto</string>
     <!--Misc-->
     <string name="popup_edit">Modifica</string>
     <string name="remove">Rimuovi</string>

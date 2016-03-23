@@ -18,7 +18,7 @@
 package de.ph1b.audiobook.mvp
 
 import android.os.Bundle
-import de.ph1b.audiobook.activity.BaseActivity
+import de.ph1b.audiobook.features.BaseActivity
 import i
 
 

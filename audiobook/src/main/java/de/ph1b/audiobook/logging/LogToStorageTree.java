@@ -2,8 +2,6 @@ package de.ph1b.audiobook.logging;
 
 import android.support.annotation.NonNull;
 
-import de.ph1b.audiobook.persistence.LogStorage;
-
 /**
  * Timber tree that delegates log messages to the log storage.
  *

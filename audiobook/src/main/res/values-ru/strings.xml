@@ -106,9 +106,6 @@
     <string name="pref_support_title">Поддержка</string>
     <string name="pref_support_translations">Переводы</string>
     <string name="pref_support_contribute">Поддержка и предложения</string>
-    <string name="pref_support_donation">Сделать пожертвование</string>
-    <string name="donation_worked_thanks">Большое спасибо. Это реальная помощь :)</string>
-    <string name="donation_not_worked">Что-то пошло не так…</string>
     <!--Misc-->
     <string name="popup_edit">Редактировать</string>
     <string name="remove">Удалить</string>

@@ -31,7 +31,7 @@ import de.paul_woitaschek.mediaplayer.MediaPlayer;
 import de.paul_woitaschek.mediaplayer.SpeedPlayer;
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.persistence.PrefsManager;
-import de.ph1b.audiobook.playback.MediaPlayerCapabilities;
+import de.ph1b.audiobook.playback.utils.MediaPlayerCapabilities;
 
 /**
  * Basic providing module.

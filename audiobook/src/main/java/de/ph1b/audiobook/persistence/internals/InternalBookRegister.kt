@@ -19,8 +19,8 @@ package de.ph1b.audiobook.persistence.internals
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
-import de.ph1b.audiobook.model.Book
-import de.ph1b.audiobook.model.Chapter
+import de.ph1b.audiobook.Book
+import de.ph1b.audiobook.Chapter
 import java.io.File
 import java.util.*
 import javax.inject.Inject

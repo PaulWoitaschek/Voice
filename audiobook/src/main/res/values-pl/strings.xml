@@ -104,9 +104,6 @@
     <string name="pref_support_title">Wsparcie</string>
     <string name="pref_support_translations">Tłumaczenia</string>
     <string name="pref_support_contribute">Wsparcie i propozycje</string>
-    <string name="pref_support_donation">Wspomóż</string>
-    <string name="donation_worked_thanks">Bardzo dziękuję. To naprawdę pomaga :)</string>
-    <string name="donation_not_worked">Oops… coś poszło nie tak</string>
     <!--Misc-->
     <string name="popup_edit">Edytuj</string>
     <string name="remove">Usuń</string>
@@ -115,6 +112,9 @@
     <string name="hide_folder_content">Czy chcesz ukryć ten folder tak, że programy do odtwarzania muzyki nie będą rozpoznawały książki jako muzyki?</string>
     <string name="hide_confirm">Ukryj</string>
     <!--license activity-->
-    <string name="license_activity_title">Wykorzystane Licencje</string>
-    <string name="licenses">Licencje</string>
+    <string name="refresh">Odśwież</string>
+    <string name="reset">Reset</string>
+    <string name="no_network">Brak sieci?</string>
+    <string name="network_top">To nie zadziałało…</string>
+    <string name="cover_crop">Przytnij okładkę</string>
 </resources>

@@ -100,9 +100,6 @@
     <string name="pref_support_title">Suporte</string>
     <string name="pref_support_translations">Traduções</string>
     <string name="pref_support_contribute">Suporte e sugestões</string>
-    <string name="pref_support_donation">Doação</string>
-    <string name="donation_worked_thanks">Muito obrigado! Isso realmente nos ajuda. :)</string>
-    <string name="donation_not_worked">Oops… alguma coisa deu errado</string>
     <!--Misc-->
     <string name="popup_edit">Editar</string>
     <string name="remove">Remover</string>
@@ -111,10 +108,9 @@
     <string name="hide_folder_content">Você gostaria de esconder a pasta dos players de música, para que eles não reconheçam seu livro como música?</string>
     <string name="hide_confirm">Esconder</string>
     <!--license activity-->
-    <string name="license_activity_title">Licenças usadas</string>
-    <string name="licenses">Licenças</string>
     <string name="refresh">Atualizar</string>
     <string name="reset">Reiniciar</string>
     <string name="no_network">Sem rede?</string>
     <string name="network_top">Isto não funcionou muito bem…</string>
+    <string name="cover_crop">Recortar capa</string>
 </resources>

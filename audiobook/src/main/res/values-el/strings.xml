@@ -70,9 +70,6 @@
     <string name="pref_support_title">Υποστήριξη</string>
     <string name="pref_support_translations">Μεταφράσεις</string>
     <string name="pref_support_contribute">Υποστήριξη και προτάσεις</string>
-    <string name="pref_support_donation">Δωρεά</string>
-    <string name="donation_worked_thanks">Ευχαριστούμε πολύ. Αυτό πραγματικά βοηθά :)</string>
-    <string name="donation_not_worked">Ουπς… κάτι πήγε στραβά</string>
     <!--Misc-->
     <string name="popup_edit">Επεξεργασία </string>
     <string name="remove">Αφαίρεση</string>

@@ -17,8 +17,8 @@
 
 package de.ph1b.audiobook.playback
 
-import de.ph1b.audiobook.assertMain
-import de.ph1b.audiobook.model.Book
+import de.ph1b.audiobook.Book
+import de.ph1b.audiobook.misc.assertMain
 import e
 import i
 import rx.Observable
@@ -81,9 +81,12 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
                                     .map { if (state.value == State.STARTED) player.currentPosition else -1 }
                                     .filter { it != -1 }
                                     .distinct { it / 1000 } // let the value only pass the full second changed.
-                                    .map { book.value?.copy(time = it) } // create a copy with new position
-                                    .filter { it != null } // let it pass when it exists
-                                    .subscribe { book.onNext(it) } // update the book
+                                    .subscribe {
+                                        // update the book
+                                        book.value?.copy(time = it).let {
+                                            book.onNext(it)
+                                        }
+                                    }
                         }
                     } else {
                         v { "stop updating" }

@@ -22,12 +22,11 @@ import android.os.Bundle
 import android.os.Environment
 import android.text.TextUtils
 import d
-import de.ph1b.audiobook.dialog.HideFolderDialog
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.model.NaturalOrderComparator
+import de.ph1b.audiobook.misc.FileRecognition
+import de.ph1b.audiobook.misc.NaturalOrderComparator
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.utils.FileRecognition
 import i
 import rx.subscriptions.CompositeSubscription
 import v

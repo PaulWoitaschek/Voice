@@ -106,9 +106,6 @@
     <string name="pref_support_title">Podpora</string>
     <string name="pref_support_translations">Překlady</string>
     <string name="pref_support_contribute">Podpora a návrhy</string>
-    <string name="pref_support_donation">Přispět</string>
-    <string name="donation_worked_thanks">Díky moc. Tohle nám pomůže :)</string>
-    <string name="donation_not_worked">Ups… něco se pokazilo</string>
     <!--Misc-->
     <string name="popup_edit">Upravit</string>
     <string name="remove">Smazat</string>
@@ -117,10 +114,9 @@
     <string name="hide_folder_content">Chcete skrýt tento adresář před hudebními přehrávači aby nerozpoznávaly tuto audioknihu jako hudební sbírku?</string>
     <string name="hide_confirm">Skrýt</string>
     <!--license activity-->
-    <string name="license_activity_title">Použité licence</string>
-    <string name="licenses">Licence</string>
     <string name="refresh">Obnovit</string>
     <string name="reset">Reset</string>
     <string name="no_network">Źádné připojení?</string>
     <string name="network_top">Tak tohle moc dobře nedopadlo…</string>
+    <string name="cover_crop">Oříznout obal</string>
 </resources>

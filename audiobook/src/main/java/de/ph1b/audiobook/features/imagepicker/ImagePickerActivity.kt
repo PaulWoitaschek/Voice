@@ -34,9 +34,9 @@ import butterknife.bindView
 import com.squareup.picasso.Picasso
 import d
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.activity.BaseActivity
+import de.ph1b.audiobook.features.BaseActivity
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.layoutInflater
+import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.setInvisible

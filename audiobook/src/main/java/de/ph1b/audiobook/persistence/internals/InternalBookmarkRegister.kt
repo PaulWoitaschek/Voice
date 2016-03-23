@@ -17,8 +17,8 @@
 
 package de.ph1b.audiobook.persistence.internals
 
-import de.ph1b.audiobook.model.Book
-import de.ph1b.audiobook.model.Bookmark
+import de.ph1b.audiobook.Book
+import de.ph1b.audiobook.Bookmark
 import java.util.*
 import javax.inject.Inject
 

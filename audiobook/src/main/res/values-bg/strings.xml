@@ -100,9 +100,6 @@
     <string name="pref_support_title">Поддръжка</string>
     <string name="pref_support_translations">Преводи</string>
     <string name="pref_support_contribute">Поддръжка и предложения</string>
-    <string name="pref_support_donation">Дарения</string>
-    <string name="donation_worked_thanks">Много благодаря, това наистина помага много :)</string>
-    <string name="donation_not_worked">Опаа… нещо се обърка</string>
     <!--Misc-->
     <string name="popup_edit">Редактиране</string>
     <string name="remove">Премахване</string>
@@ -111,10 +108,9 @@
     <string name="hide_folder_content">Желаете ли да скриете папката от музикални плеъри, за да не разпознават книгите Ви като музика?</string>
     <string name="hide_confirm">Да</string>
     <!--license activity-->
-    <string name="license_activity_title">Използвани Лицензи</string>
-    <string name="licenses">Лицензи</string>
     <string name="refresh">Опресняване</string>
     <string name="reset">Нулиране</string>
     <string name="no_network">Няма връзка с интернет?</string>
     <string name="network_top">Това май не проработи…</string>
+    <string name="cover_crop">Изрязване на обложката</string>
 </resources>

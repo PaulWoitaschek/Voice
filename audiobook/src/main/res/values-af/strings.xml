@@ -98,9 +98,6 @@
     <string name="pref_support_title">Ondersteun</string>
     <string name="pref_support_translations">Vertaal</string>
     <string name="pref_support_contribute">Ondersteuning en terugvoering</string>
-    <string name="pref_support_donation">Skenk</string>
-    <string name="donation_worked_thanks">Baie dankie. Dit help werklik baie :)</string>
-    <string name="donation_not_worked">Gits… iets het skeef geloop</string>
     <!--Misc-->
     <string name="popup_edit">Wysig</string>
     <string name="remove">Verwyder</string>

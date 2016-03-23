@@ -20,6 +20,7 @@ package de.ph1b.audiobook.playback
 import android.os.Build
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.TestApp
+import de.ph1b.audiobook.playback.utils.BookUriConverter
 import org.fest.assertions.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -56,7 +57,7 @@ class BookUriConverterTest {
 
         val match = converter.match(uri)
 
-        assertThat(match).isEqualTo(BookUriConverter.BOOKS)
+        assertThat(match).isEqualTo(BookUriConverter.ROOT)
     }
 
     @Test
@@ -65,7 +66,7 @@ class BookUriConverterTest {
 
         val match = converter.match(uri)
 
-        assertThat(match).isEqualTo(BookUriConverter.BOOKS_ID)
+        assertThat(match).isEqualTo(BookUriConverter.BOOK_ID)
     }
 
     @Test

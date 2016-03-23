@@ -102,9 +102,6 @@
     <string name="pref_support_title">Підтримка</string>
     <string name="pref_support_translations">Переклади</string>
     <string name="pref_support_contribute">Підтримка та пропозиції</string>
-    <string name="pref_support_donation">Зробити внесок</string>
-    <string name="donation_worked_thanks">Щиро дякуємо. Це велика підтримка :)</string>
-    <string name="donation_not_worked">Ой… на жаль, щось не спрацювало</string>
     <!--Misc-->
     <string name="popup_edit">Редагувати</string>
     <string name="remove">Видалити</string>
@@ -113,8 +110,6 @@
     <string name="hide_folder_content">Чи хочете ви приховати папку від музичних програвачів, щоб вони не розпізнавали вашу книгу як музику?</string>
     <string name="hide_confirm">Приховати</string>
     <!--license activity-->
-    <string name="license_activity_title">Використані ліцензії</string>
-    <string name="licenses">Ліцензії</string>
     <string name="refresh">Оновити</string>
     <string name="no_network">Немає мережі?</string>
 </resources>

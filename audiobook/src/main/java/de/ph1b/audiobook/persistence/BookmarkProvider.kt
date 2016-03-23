@@ -17,8 +17,8 @@
 
 package de.ph1b.audiobook.persistence
 
-import de.ph1b.audiobook.model.Book
-import de.ph1b.audiobook.model.Bookmark
+import de.ph1b.audiobook.Book
+import de.ph1b.audiobook.Bookmark
 import de.ph1b.audiobook.persistence.internals.InternalBookmarkRegister
 import rx.Observable
 import v
