@@ -39,8 +39,6 @@ inline fun<reified T : Activity> Activity.startActivity(args: Bundle? = null, fl
 
 fun Context.layoutInflater() = LayoutInflater.from(this)
 
-fun Fragment.layoutInflater() = LayoutInflater.from(this.context)
-
 fun assertMain() {
     if (BuildConfig.DEBUG) {
         if (Looper.getMainLooper().thread != Thread.currentThread()) {

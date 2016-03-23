@@ -2,6 +2,7 @@
 * Sort the books for Android Auto
 * Added the most recent book on top for Android Auto
 * Updated translations
+* Fixed icon centering in folder chooser
 * Fixed a crash when recovering previously deleted books
 * Minor memory optimization
 
