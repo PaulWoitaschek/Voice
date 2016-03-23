@@ -1,4 +1,9 @@
 # Upcoming version
+* Sort the books for Android Auto
+* Added the most recent book on top for Android Auto
+* Updated translations
+* Fixed a crash when recovering previously deleted books
+* Minor memory optimization
 
 # 2.7
 * Rudimentary Android Auto Support

@@ -21,7 +21,7 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
-import de.ph1b.audiobook.model.Bookmark
+import de.ph1b.audiobook.Bookmark
 import java.io.File
 
 fun Bookmark.toContentValues() = ContentValues().apply {

@@ -28,10 +28,10 @@ import org.acra.sender.HttpSender;
 import javax.inject.Inject;
 
 import de.ph1b.audiobook.BuildConfig;
+import de.ph1b.audiobook.features.BookAdder;
 import de.ph1b.audiobook.logging.DelegateCrashesToTimber;
+import de.ph1b.audiobook.logging.LogStorage;
 import de.ph1b.audiobook.logging.LogToStorageTree;
-import de.ph1b.audiobook.model.BookAdder;
-import de.ph1b.audiobook.persistence.LogStorage;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.playback.BookReaderService;
 import timber.log.Timber;

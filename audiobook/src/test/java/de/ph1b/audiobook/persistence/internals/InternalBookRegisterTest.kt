@@ -18,11 +18,7 @@
 package de.ph1b.audiobook.persistence.internals
 
 import android.os.Build
-import de.ph1b.audiobook.BookMocker
-import de.ph1b.audiobook.BuildConfig
-import de.ph1b.audiobook.TestApp
-import de.ph1b.audiobook.model.Book
-import de.ph1b.audiobook.model.Chapter
+import de.ph1b.audiobook.*
 import org.fest.assertions.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test

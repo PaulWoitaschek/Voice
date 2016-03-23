@@ -17,8 +17,8 @@
 
 package de.ph1b.audiobook.playback
 
-import de.ph1b.audiobook.assertMain
-import de.ph1b.audiobook.model.Book
+import de.ph1b.audiobook.Book
+import de.ph1b.audiobook.misc.assertMain
 import e
 import i
 import rx.Observable

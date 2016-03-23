@@ -17,8 +17,8 @@
 
 package de.ph1b.audiobook.persistence
 
-import de.ph1b.audiobook.assertMain
-import de.ph1b.audiobook.model.Book
+import de.ph1b.audiobook.Book
+import de.ph1b.audiobook.misc.assertMain
 import de.ph1b.audiobook.persistence.internals.InternalBookRegister
 import rx.Observable
 import rx.subjects.PublishSubject

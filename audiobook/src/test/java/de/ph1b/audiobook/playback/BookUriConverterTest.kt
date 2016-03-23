@@ -20,6 +20,7 @@ package de.ph1b.audiobook.playback
 import android.os.Build
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.TestApp
+import de.ph1b.audiobook.playback.utils.BookUriConverter
 import org.fest.assertions.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test

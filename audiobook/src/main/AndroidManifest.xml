@@ -52,7 +52,7 @@
             android:value="AEdPqrEAAAAIjeSB6A5JNJpRSV5yPq22PvZtl95fWDzDIuk63w"/>
 
         <activity
-            android:name=".activity.BookActivity"
+            android:name=".features.BookActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -61,41 +61,41 @@
         </activity>
 
         <activity
-            android:name=".activity.SettingsActivity"
+            android:name=".features.settings.SettingsActivity"
             android:label="@string/action_settings"
-            android:parentActivityName=".activity.BookActivity">
+            android:parentActivityName=".features.BookActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.BookActivity"/>
+                android:value=".features.BookActivity"/>
         </activity>
 
         <activity
-            android:name=".view.FolderOverviewActivity"
+            android:name=".features.folder_overview.FolderOverviewActivity"
             android:label="@string/audiobook_folders_title"
-            android:parentActivityName=".activity.SettingsActivity">
+            android:parentActivityName=".features.settings.SettingsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.SettingsActivity"/>
+                android:value=".features.settings.SettingsActivity"/>
         </activity>
 
         <activity
-            android:name=".activity.NoExternalStorageActivity"
+            android:name=".features.external_storage_missing.NoExternalStorageActivity"
             android:label="@string/no_external_storage_action_bar_title"/>
 
         <activity
             android:name=".features.folder_chooser.FolderChooserActivity"
-            android:parentActivityName=".activity.BookActivity">
+            android:parentActivityName=".features.BookActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.BookActivity"/>
+                android:value=".features.BookActivity"/>
         </activity>
 
         <activity
             android:name=".features.imagepicker.ImagePickerActivity"
-            android:parentActivityName=".activity.BookActivity">
+            android:parentActivityName=".features.BookActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.BookActivity"/>
+                android:value=".features.BookActivity"/>
         </activity>
 
         <service
@@ -117,7 +117,7 @@
         </receiver>
 
         <receiver
-            android:name=".receiver.BaseWidgetProvider"
+            android:name=".features.widget.BaseWidgetProvider"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name">
             <intent-filter>

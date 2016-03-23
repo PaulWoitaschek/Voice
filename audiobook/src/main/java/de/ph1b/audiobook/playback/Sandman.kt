@@ -17,7 +17,7 @@
 
 package de.ph1b.audiobook.playback
 
-import de.ph1b.audiobook.assertMain
+import de.ph1b.audiobook.misc.assertMain
 import de.ph1b.audiobook.persistence.PrefsManager
 import i
 import rx.Observable

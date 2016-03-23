@@ -18,6 +18,7 @@
 package de.ph1b.audiobook.model
 
 
+import de.ph1b.audiobook.misc.NaturalOrderComparator
 import junit.framework.TestCase
 import org.fest.assertions.api.Assertions.assertThat
 import org.junit.Rule

@@ -36,12 +36,10 @@ import butterknife.bindView
 import com.jakewharton.rxbinding.widget.RxAdapterView
 import com.jakewharton.rxbinding.widget.itemClicks
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.adapter.FolderChooserAdapter
-import de.ph1b.audiobook.adapter.MultiLineSpinnerAdapter
-import de.ph1b.audiobook.dialog.HideFolderDialog
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
+import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.mvp.RxBaseActivity
-import de.ph1b.audiobook.utils.PermissionHelper
 import e
 import i
 import java.io.File

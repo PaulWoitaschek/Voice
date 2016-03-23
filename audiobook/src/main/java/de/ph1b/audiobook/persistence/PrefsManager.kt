@@ -20,13 +20,13 @@ package de.ph1b.audiobook.persistence
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.assertMain
+import de.ph1b.audiobook.features.book_overview.BookShelfFragment
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.model.Book
+import de.ph1b.audiobook.misc.assertMain
 import de.ph1b.audiobook.persistence.internals.*
 import de.ph1b.audiobook.uitools.ThemeUtil
-import de.ph1b.audiobook.view.fragment.BookShelfFragment
 import rx.subjects.BehaviorSubject
 import java.util.*
 import javax.inject.Inject
