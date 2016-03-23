@@ -100,9 +100,6 @@
     <string name="pref_support_title">Support</string>
     <string name="pref_support_translations">Übersetzungen</string>
     <string name="pref_support_contribute">Support und Vorschläge</string>
-    <string name="pref_support_donation">Spenden</string>
-    <string name="donation_worked_thanks">Danke sehr. Das ist echt hilfreich :)</string>
-    <string name="donation_not_worked">Upps… Da ist was schief gelaufen</string>
     <!--Misc-->
     <string name="popup_edit">Bearbeiten</string>
     <string name="remove">Löschen</string>
@@ -111,10 +108,9 @@
     <string name="hide_folder_content">Möchten Sie den Ordner vor Music Playern verstecken, sodass diese Ihr Buch nicht als Musik erkennen?</string>
     <string name="hide_confirm">Verstecken</string>
     <!--license activity-->
-    <string name="license_activity_title">Lizenzen</string>
-    <string name="licenses">Verwendete Lizenzen</string>
     <string name="refresh">Neu laden</string>
     <string name="reset">Zurücksetzen</string>
     <string name="no_network">Kein Internet?</string>
     <string name="network_top">Das lief nicht besonders gut…</string>
+    <string name="cover_crop">Cover zurechtschneiden</string>
 </resources>

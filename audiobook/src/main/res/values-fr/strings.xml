@@ -100,9 +100,6 @@
     <string name="pref_support_title">Assistance</string>
     <string name="pref_support_translations">Traductions</string>
     <string name="pref_support_contribute">Assistance et suggestions</string>
-    <string name="pref_support_donation">Faire un don</string>
-    <string name="donation_worked_thanks">Merci beaucoup. C\'est d\'une grande aide :)</string>
-    <string name="donation_not_worked">Oups… Il y a eu un problème</string>
     <!--Misc-->
     <string name="popup_edit">Modifer</string>
     <string name="remove">Enlever</string>
@@ -111,6 +108,4 @@
     <string name="hide_folder_content">Voulez vous masquer le dossier aux lecteurs audio afin qu\'ils ne considèrent pas vos livres comme de la musique ?</string>
     <string name="hide_confirm">Masquer</string>
     <!--license activity-->
-    <string name="license_activity_title">Licences utilisées</string>
-    <string name="licenses">Licences</string>
 </resources>

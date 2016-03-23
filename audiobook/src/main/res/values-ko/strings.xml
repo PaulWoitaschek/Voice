@@ -96,9 +96,6 @@
     <string name="pref_support_title">앱 계발 지원</string>
     <string name="pref_support_translations">번역</string>
     <string name="pref_support_contribute">피드백 </string>
-    <string name="pref_support_donation">앱 계발자를 지원해주세요</string>
-    <string name="donation_worked_thanks">지원해주셔서 감사합니다. :)</string>
-    <string name="donation_not_worked">어랏… 뭔가 이상하네요</string>
     <!--Misc-->
     <string name="popup_edit">수정</string>
     <string name="remove">삭제</string>
@@ -107,10 +104,9 @@
     <string name="hide_folder_content">폴더를 숨겨서, 음악 앱이 이 책을 음악으로 인식하지 않도록 할까요?</string>
     <string name="hide_confirm">숨기기</string>
     <!--license activity-->
-    <string name="license_activity_title">오픈소스</string>
-    <string name="licenses">라이센스</string>
     <string name="refresh">새로고침</string>
     <string name="reset">초기화</string>
     <string name="no_network">인터넷끊김?</string>
     <string name="network_top">미안, 에러가 났어…</string>
+    <string name="cover_crop">책표지 자르기</string>
 </resources>

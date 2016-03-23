@@ -99,9 +99,6 @@
     <string name="pref_support_title">Steun</string>
     <string name="pref_support_translations">App vertalen</string>
     <string name="pref_support_contribute">Ondersteuning en suggesties</string>
-    <string name="pref_support_donation">Doneer</string>
-    <string name="donation_worked_thanks">Bedankt, dat helpt écht! :)</string>
-    <string name="donation_not_worked">Oeps… er ging iets mis</string>
     <!--Misc-->
     <string name="popup_edit">Bewerk</string>
     <string name="remove">Verwijder</string>
@@ -110,6 +107,4 @@
     <string name="hide_folder_content">Wilt u deze map verbergen voor andere mediaspelers, zodat uw luisterboeken niet als muziek worden gezien?</string>
     <string name="hide_confirm">Verberg</string>
     <!--license activity-->
-    <string name="license_activity_title">Gebruikte licenties</string>
-    <string name="licenses">Licenties</string>
 </resources>

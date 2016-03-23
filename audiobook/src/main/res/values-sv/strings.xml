@@ -100,9 +100,6 @@
     <string name="pref_support_title">Support</string>
     <string name="pref_support_translations">Översättningar</string>
     <string name="pref_support_contribute">Stöd och förslag</string>
-    <string name="pref_support_donation">Donera</string>
-    <string name="donation_worked_thanks">Tack så mycket! Det hjälper verkligen :)</string>
-    <string name="donation_not_worked">oj.. Något gick fel</string>
     <!--Misc-->
     <string name="popup_edit">ändra</string>
     <string name="remove">Ta bort</string>
@@ -111,6 +108,4 @@
     <string name="hide_folder_content">Vill du dölja mappen från musikspelare, så att de inte känner igen din bok som musik?</string>
     <string name="hide_confirm">Göm</string>
     <!--license activity-->
-    <string name="license_activity_title">Använd Licens</string>
-    <string name="licenses">Licenser </string>
 </resources>
