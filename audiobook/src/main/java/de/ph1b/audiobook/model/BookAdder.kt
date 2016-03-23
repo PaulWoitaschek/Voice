@@ -273,16 +273,16 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
                     bookRoot)
             d { "adding newBook=${newBook.name}" }
             handler.postBlocking { db.addBook(newBook) }
-            d { "adding book of ${newBook.name} done" }
         } else {
-            orphanedBook = orphanedBook.copy(chapters = newChapters)
+            // checks if current path is still valid.
+            val oldCurrentFile = orphanedBook.currentFile
+            val oldCurrentFileValid = newChapters.any { it.file == oldCurrentFile }
 
-            // checks if current path is still valid. if not, reset position.
-            val currentFile = orphanedBook.currentFile
-            val pathValid = orphanedBook.chapters.any { it.file == currentFile }
-            if (!pathValid) {
-                orphanedBook = orphanedBook.copy(currentFile = orphanedBook.chapters.first().file, time = 0)
-            }
+            // if the file is not valid, update time and position
+            val time = if (oldCurrentFileValid) orphanedBook.time else 0
+            val currentFile = if (oldCurrentFileValid) orphanedBook.currentFile else newChapters.first().file
+
+            orphanedBook = orphanedBook.copy(time = time, currentFile = currentFile, chapters = newChapters)
 
             // now finally un-hide this book
             handler.postBlocking { db.revealBook(orphanedBook as Book) }
