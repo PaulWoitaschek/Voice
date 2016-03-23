@@ -41,8 +41,8 @@ import timber.log.Timber;
         reportType = HttpSender.Type.JSON,
         buildConfigClass = BuildConfig.class,
         formUri = "http://acra-63e870.smileupps.com/acra-material/_design/acra-storage/_update/report",
-        formUriBasicAuthLogin = "97user",
-        formUriBasicAuthPassword = "sUjg9VkOgxTZbzVL")
+        formUriBasicAuthLogin = "122user",
+        formUriBasicAuthPassword = "J7aenghqfQhIcuZn")
 public class App extends Application {
 
     private static ApplicationComponent applicationComponent;
