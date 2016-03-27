@@ -100,7 +100,8 @@
 
         <service
             android:name=".playback.BookReaderService"
-            android:exported="false">
+            android:exported="true"
+            tools:ignore="ExportedService">
 
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService"/>
