@@ -26,8 +26,8 @@ android {
 
     defaultConfig {
         targetSdkVersion 23
-        versionCode 122
-        versionName '2.7.1'
+        versionCode 123
+        versionName '2.7.2'
         vectorDrawables.useSupportLibrary = true
     }
 
