@@ -1,4 +1,11 @@
 # Upcoming version
+
+# 2.7.2
+* Added a daynight theme for android auto
+* Correctly export the service for android auto
+* Play directly when a media was selected
+
+# 2.7.1
 * Sort the books for Android Auto
 * Added the most recent book on top for Android Auto
 * Updated translations

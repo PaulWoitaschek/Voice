@@ -160,7 +160,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
                     play()
                 }
             }
-            else -> i { "Play ignores state=$state " }
+            else -> i { "Play ignores state=${state.value} " }
         }
     }
 
@@ -247,7 +247,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
     fun pause(rewind: Boolean) {
         assertMain()
 
-        v { "pause acquired lock. state is=$state" }
+        v { "pause acquired lock. state is=${state.value}" }
         book.value?.let {
             when (state.value) {
                 State.STARTED -> {
@@ -269,7 +269,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
 
                     state.onNext(State.PAUSED)
                 }
-                else -> e { "pause called in illegal state=$state" }
+                else -> e { "pause called in illegal state=${state.value}" }
             }
         }
     }
@@ -323,7 +323,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
                         val copy = it.copy(time = time)
                         book.onNext(copy)
                     }
-                    else -> e { "changePosition called in illegal state=$state" }
+                    else -> e { "changePosition called in illegal state=${state.value}" }
                 }
             }
         }

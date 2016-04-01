@@ -17,50 +17,40 @@
 
 package de.ph1b.audiobook.playback.events
 
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import de.ph1b.audiobook.misc.RxBroadcast
 import i
-import rx.Observable
-import rx.subjects.PublishSubject
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
- * Simple receiver wrapper which holds a [BroadcastReceiver] that notifies on headset changes.
+ * Simple receiver wrapper which holds a [android.content.BroadcastReceiver] that notifies on headset changes.
  *
  * @author Paul Woitaschek
  */
-@Singleton
-class HeadsetPlugReceiver
-@Inject
-constructor() {
+object HeadsetPlugReceiver {
 
-    private val publishSubject = PublishSubject.create<HeadsetState>()
+    private val filter = IntentFilter(Intent.ACTION_HEADSET_PLUG)
+    private val PLUGGED = 1
+    private val UNPLUGGED = 0
 
-    fun observable(): Observable<HeadsetState> = publishSubject.asObservable()
-
-    val broadcastReceiver = object : BroadcastReceiver() {
-        private val PLUGGED = 1
-        private val UNPLUGGED = 0
-
-        override fun onReceive(context: Context?, intent: Intent?) {
-            i { "onReceive with context=$context and intent=$intent" }
-            if (intent?.action == Intent.ACTION_HEADSET_PLUG) {
-                val intState = intent?.getIntExtra("state", UNPLUGGED)
-                if (intState == UNPLUGGED) {
-                    publishSubject.onNext(HeadsetState.UNPLUGGED)
-                } else if (intState == PLUGGED) {
-                    publishSubject.onNext(HeadsetState.PLUGGED)
-                } else {
-                    i { "Unknown headsetState $intState" }
+    fun events(c: Context) = RxBroadcast.register(c, filter)
+            .map {
+                i { "onReceive with intent=$it" }
+                val intState = it?.getIntExtra("state", UNPLUGGED)
+                when (it?.getIntExtra("state", UNPLUGGED)) {
+                    UNPLUGGED -> HeadsetState.UNPLUGGED
+                    PLUGGED -> HeadsetState.PLUGGED
+                    else -> {
+                        i { "Unknown headsetState $intState" }
+                        HeadsetState.UNKNOWN
+                    }
                 }
             }
-        }
-    }
 
     enum class HeadsetState {
         PLUGGED,
-        UNPLUGGED
+        UNPLUGGED,
+        UNKNOWN
     }
 }

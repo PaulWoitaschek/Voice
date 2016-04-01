@@ -20,7 +20,9 @@ package de.ph1b.audiobook.playback
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.*
+import android.content.ComponentName
+import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.media.AudioManager
 import android.net.Uri
@@ -39,6 +41,7 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BookActivity
 import de.ph1b.audiobook.features.book_overview.BookShelfFragment
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.RxBroadcast
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager.PauseReason
@@ -133,19 +136,10 @@ class BookReaderService : MediaBrowserServiceCompat() {
     @Inject internal lateinit var audioManager: AudioManager
     @Inject internal lateinit var audioFocusReceiver: AudioFocusReceiver
     @Inject internal lateinit var imageHelper: ImageHelper
-    @Inject internal lateinit var headsetPlugReceiver: HeadsetPlugReceiver
     @Inject internal lateinit var notificationAnnouncer: NotificationAnnouncer
     @Inject internal lateinit var playStateManager: PlayStateManager
     @Inject internal lateinit var audioFocusManager: AudioFocusManager
     @Inject lateinit var bookUriConverter: BookUriConverter
-    private val audioBecomingNoisyReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            if (playStateManager.playState.value === PlayState.PLAYING) {
-                playStateManager.pauseReason = PauseReason.BECAUSE_HEADSET
-                player.pause(true)
-            }
-        }
-    }
     private lateinit var mediaSession: MediaSessionCompat
     /**
      * The last file the [.notifyChange] has used to update the metadata.
@@ -175,6 +169,7 @@ class BookReaderService : MediaBrowserServiceCompat() {
                     if (type == BookUriConverter.BOOK_ID) {
                         val id = bookUriConverter.extractBook(uri)
                         prefs.setCurrentBookId(id)
+                        onPlay()
                     } else {
                         e { "Invalid mediaId $mediaId" }
                     }
@@ -218,9 +213,6 @@ class BookReaderService : MediaBrowserServiceCompat() {
             setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
         }
         sessionToken = mediaSession.sessionToken
-
-        registerReceiver(audioBecomingNoisyReceiver, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
-        registerReceiver(headsetPlugReceiver.broadcastReceiver, IntentFilter(Intent.ACTION_HEADSET_PLUG))
 
         player.onError()
                 .subscribe {
@@ -313,7 +305,7 @@ class BookReaderService : MediaBrowserServiceCompat() {
                     })
 
             // resume playback when headset is reconnected. (if settings are set)
-            add(headsetPlugReceiver.observable()
+            add(HeadsetPlugReceiver.events(this@BookReaderService)
                     .subscribe { headsetState ->
                         if (headsetState == HeadsetPlugReceiver.HeadsetState.PLUGGED) {
                             if (playStateManager.pauseReason == PauseReason.BECAUSE_HEADSET) {
@@ -322,16 +314,27 @@ class BookReaderService : MediaBrowserServiceCompat() {
                                 }
                             }
                         }
-                    }
-            )
+                    })
 
             // adjusts stream and playback based on audio focus.
             add(audioFocusManager.handleAudioFocus(audioFocusReceiver.focusObservable()))
 
             // notifies the media service about added or removed books
             add(Observable.merge(db.addedObservable(), db.removedObservable())
-                    .subscribe { notifyChildrenChanged(bookUriConverter.allBooks().toString()) })
+                    .subscribe {
+                        v { "notify media browser service about children changed." }
+                        notifyChildrenChanged(bookUriConverter.allBooks().toString())
+                    })
 
+            // pause when audio is becoming noisy.
+            add(RxBroadcast.register(this@BookReaderService, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
+                    .subscribe {
+                        d { "audio becoming noisy. Playstate=${playStateManager.playState.value}" }
+                        if (playStateManager.playState.value === PlayState.PLAYING) {
+                            playStateManager.pauseReason = PauseReason.BECAUSE_HEADSET
+                            player.pause(true)
+                        }
+                    })
         }
     }
 
@@ -357,12 +360,6 @@ class BookReaderService : MediaBrowserServiceCompat() {
     override fun onDestroy() {
         v { "onDestroy called" }
         player.stop()
-
-        try {
-            unregisterReceiver(audioBecomingNoisyReceiver)
-            unregisterReceiver(headsetPlugReceiver.broadcastReceiver)
-        } catch (ignored: IllegalArgumentException) {
-        }
 
         mediaSession.release()
         subscriptions.unsubscribe()
