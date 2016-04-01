@@ -36,9 +36,11 @@
         android:theme="@style/PlaceHolder"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
+        <!-- Disabled due to compliance problems
         <meta-data
             android:name="com.google.android.gms.car.application"
             android:resource="@xml/automotive_app_desc"/>
+            -->
 
         <!-- auto notification -->
         <meta-data
