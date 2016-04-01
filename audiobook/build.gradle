@@ -17,17 +17,16 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply from: '../jacoco.gradle'
 
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    buildToolsVersion '23.0.3'
 
     defaultConfig {
         targetSdkVersion 23
-        versionCode 122
-        versionName '2.7.1'
+        versionCode 123
+        versionName '2.7.2'
         vectorDrawables.useSupportLibrary = true
     }
 
