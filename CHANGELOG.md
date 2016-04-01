@@ -1,5 +1,9 @@
 # Upcoming version
 
+# 2.7.2.1
+* Removed Android Auto temporary due to compliance problems
+* Added japanese translation
+
 # 2.7.2
 * Added a daynight theme for android auto
 * Correctly export the service for android auto
