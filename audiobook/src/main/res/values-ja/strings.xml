@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <!--BookShelf-->
+    <string name="mal_file_message">次のファイルは壊れている可能性があります:</string>
+    <string name="mal_file_title">欠陥ファイル</string>
+    <string name="content_current_book">これは現在のブックです</string>
+    <string name="current_book">現在のブック</string>
+    <string name="change_layout_type">レイアウトを変更</string>
+    <!--BookPlayFragment-->
+    <string name="cover">カバー</string>
+    <string name="play_pause">再生 / 一時停止</string>
+    <string name="action_sleep">スリープタイマー</string>
+    <plurals name="pauses_after">
+        <item quantity="other">%d 分後に一時停止します。</item>
+    </plurals>
+    <string name="rewind">巻き戻し</string>
+    <string name="fast_forward">早送り</string>
+    <string name="previous_track">前のトラック</string>
+    <string name="next_track">次のトラック</string>
+    <string name="play">再生</string>
+    <string name="pause">一時停止</string>
+    <!--NoExternalStorage-->
+    <string name="no_external_storage">外部ストレージが使用できません。コンピュータに接続されていること、マウントされていないことを確認してください。</string>
+    <string name="no_external_storage_action_bar_title">外部ストレージ</string>
+    <!--Dialogs-->
+    <string name="dialog_confirm">設定</string>
+    <string name="dialog_cancel">キャンセル</string>
+    <!--EditBookDialog-->
+    <string name="content_previous_cover">前のカバーを選択</string>
+    <string name="content_next_cover">次のカバーを選択</string>
+    <string name="content_cover">選択するカバーを表示</string>
+    <string name="edit_book_name">名前を編集</string>
+    <string name="edit_book_cover">カバーを編集</string>
+    <string name="edit_book_title">ブックを編集</string>
+    <!--JumpToPosition-->
+    <string name="action_time_change">移動</string>
+    <!--BookAdding-->
+    <string name="adding_failed_subfolder">フォルダーを、互いのサブフォルダーにすることはできません:</string>
+    <string name="audiobook_folders_title">オーディオブック フォルダー</string>
+    <string name="no_audiobook_folders_title">今すぐフォルダーを選択</string>
+    <string name="no_audiobook_folders_summary_start">今すぐオーディオブックのフォルダーを選択してください。</string>
+    <string name="no_audiobook_folders_end">異なる本を含む主なフォルダーを選択することができます。または、一冊のブックだけを選ぶこともできます。</string>
+    <string name="chosen_folder_description">選択したフォルダー:</string>
+    <string name="delete_folder">ライブラリーから削除しますか?</string>
+    <string name="delete_folder_content">ライブラリーから次のフォルダーを削除しますか?</string>
+    <string name="folder_add_single_book">単一のブック</string>
+    <string name="folder_add_collection">複数のブックを含むフォルダー</string>
+    <string name="for_example">例</string>
+    <string name="content_add_book">ブックを追加</string>
+    <string name="content_is_folder">フォルダー</string>
+    <string name="content_is_file">ファイル</string>
+    <string name="content_navigate_up">親のフォルダーに移動</string>
+    <string name="permission_read_ext_explanation">オーディオブックを探して、再生するため、このアプリはストレージを読み取る必要があります。</string>
+    <string name="permission_read_ext_request">もう一度、許可を求める必要がありますか?</string>
+    <string name="permission_rescan">再度要求する</string>
+    <string name="storage_pre_device">ストレージ:</string>
+    <string name="storage_all">すべて</string>
+    <!--PlaybackSpeed-->
+    <string name="playback_speed">再生速度</string>
+    <!--Bookmarks-->
+    <string name="bookmark">ブックマーク</string>
+    <string name="bookmark_edit_title">ブックマークを編集</string>
+    <string name="acc_button_add_bookmark">現在の位置の後にブックマークを追加</string>
+    <string name="bookmark_edit_hint">ブックマーク名</string>
+    <string name="bookmark_added">ブックマークを追加しました</string>
+    <string name="bookmark_delete_title">このブックマークを削除しますか?</string>
+    <!--Settings-->
+    <string name="pref_category_general">全般設定</string>
+    <string name="pref_category_playback">再生動作</string>
+    <string name="action_settings">設定</string>
+    <string name="pref_resume_on_replug">再生を再開</string>
+    <string name="pref_resume_on_replug_hint">接続したヘッドセットを取り外して一時停止した場合、再接続した場合に再開します。</string>
+    <plurals name="minutes">
+        <item quantity="other">%d 分</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="other">%d 秒</item>
+    </plurals>
+    <string name="pref_seek_time">スキップ量</string>
+    <string name="pref_sleep_time">スリープ時間</string>
+    <string name="pref_root_folder_title">オーディオブック フォルダー</string>
+    <string name="pref_root_folder_summary">選択したオーディオブック フォルダー。</string>
+    <string name="pref_theme_title">テーマ</string>
+    <string name="pref_theme_light">ライト</string>
+    <string name="pref_theme_dark">ダーク</string>
+    <string name="pref_pause_on_can_duck_title">割り込みで一時停止</string>
+    <string name="pref_pause_on_can_duck_summary">割り込みの間、音量を下げるのではなく、割り込みのときに一時停止します。</string>
+    <string name="pref_send_bugs_title">バグを報告</string>
+    <string name="pref_send_bugs_summary">開発を支援するために、クラッシュに関する匿名のレポートを自動的に送信します。</string>
+    <string name="pref_auto_rewind_title">自動巻き戻し</string>
+    <plurals name="pref_auto_rewind_summary">
+        <item quantity="other">手動で一時停止した後、自動的に %d 秒巻き戻します。</item>
+    </plurals>
+    <string name="pref_bookmark_on_sleep_title">スリープ時にブックマーク</string>
+    <string name="pref_bookmark_on_sleep_summary">スリープタイマーが設定されるたびに、自動的にブックマークを設定します。</string>
+    <string name="pref_support_title">サポート</string>
+    <string name="pref_support_translations">翻訳</string>
+    <string name="pref_support_contribute">サポートと提案</string>
+    <!--Misc-->
+    <string name="popup_edit">編集</string>
+    <string name="remove">削除</string>
+    <!--hide folder dialog-->
+    <string name="hide_folder_title">フォルダーを非表示</string>
+    <string name="hide_folder_content">音楽プレーヤーからフォルダーを非表示にしてもよろしいですか? ブックを音楽と認識しなくなります。</string>
+    <string name="hide_confirm">非表示</string>
+    <!--license activity-->
+    <string name="refresh">更新</string>
+    <string name="reset">リセット</string>
+    <string name="no_network">ネットワークなし?</string>
+    <string name="network_top">うまく動作しませんでした…</string>
+    <string name="cover_crop">カバーをトリミング</string>
+</resources>
