@@ -20,27 +20,21 @@ apply plugin: 'kotlin-android'
 
 
 android {
+
+    // dynamically pass 21 to the compiler for bulid speedup without losing lint warnings.
+    int minSdk = hasProperty('minSdk') ? minSdk.toInteger() : 15
+
     compileSdkVersion 23
     buildToolsVersion '23.0.3'
 
     defaultConfig {
+        applicationId "de.ph1b.audiobook"
+        minSdkVersion minSdk
         targetSdkVersion 23
         versionCode 124
         versionName '2.7.2.1'
-        vectorDrawables.useSupportLibrary = true
-    }
 
-    def minSdkDimension = "minSdk"
-    flavorDimensions minSdkDimension
-    productFlavors {
-        regularMinSdk {
-            dimension minSdkDimension
-            minSdkVersion 15
-        }
-        largeMinSdk {
-            dimension minSdkDimension
-            minSdkVersion 21
-        }
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
