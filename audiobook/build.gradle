@@ -48,14 +48,11 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.pro'
-            resValue "string", "app_name", "Material Player"
         }
         debug {
             minifyEnabled false
             shrinkResources false
             applicationIdSuffix ".debug"
-            resValue "string", "app_name", "[DBG] Material Player"
-            testCoverageEnabled = true
         }
     }
 
