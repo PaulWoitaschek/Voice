@@ -92,7 +92,7 @@ android {
 
 dependencies {
     // support library
-    def supportVersion = "23.2.1"
+    def supportVersion = "23.3.0"
     compile "com.android.support:appcompat-v7:$supportVersion"
     compile "com.android.support:recyclerview-v7:$supportVersion"
     compile "com.android.support:support-v4:$supportVersion"
@@ -130,7 +130,7 @@ dependencies {
 
     // rx extensions
     compile "io.reactivex:rxandroid:1.1.0"
-    compile "io.reactivex:rxjava:1.1.2"
+    compile "io.reactivex:rxjava:1.1.3"
     compile 'com.jakewharton.rxbinding:rxbinding-kotlin:0.4.0'
 
     // kotlin
