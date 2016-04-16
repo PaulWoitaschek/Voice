@@ -58,19 +58,6 @@ android {
         abortOnError false
     }
 
-    sourceSets {
-
-        String sharedTestDir = 'src/sharedTest/java'
-
-        test {
-            java.srcDirs += sharedTestDir
-        }
-
-        androidTest {
-            java.srcDirs += sharedTestDir
-        }
-    }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
