@@ -17,7 +17,6 @@ import de.ph1b.audiobook.features.book_playing.BookPlayFragment;
 import de.ph1b.audiobook.features.book_playing.JumpToPositionDialogFragment;
 import de.ph1b.audiobook.features.book_playing.SeekDialogFragment;
 import de.ph1b.audiobook.features.bookmarks.BookmarkDialogFragment;
-import de.ph1b.audiobook.features.folder_chooser.FolderChooserActivity;
 import de.ph1b.audiobook.features.folder_chooser.FolderChooserPresenter;
 import de.ph1b.audiobook.features.folder_overview.FolderOverviewActivity;
 import de.ph1b.audiobook.features.folder_overview.FolderOverviewPresenter;
@@ -59,8 +58,6 @@ public interface ApplicationComponent {
     void inject(CoverReplacement target);
 
     void inject(BaseActivity target);
-
-    void inject(FolderChooserActivity target);
 
     void inject(ThemePickerDialogFragment target);
 

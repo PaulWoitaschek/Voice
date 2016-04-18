@@ -19,7 +19,6 @@ package de.ph1b.audiobook.features.folder_chooser
 
 import android.Manifest
 import android.annotation.TargetApi
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -36,7 +35,6 @@ import butterknife.bindView
 import com.jakewharton.rxbinding.widget.RxAdapterView
 import com.jakewharton.rxbinding.widget.itemClicks
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
 import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.mvp.RxBaseActivity
@@ -65,10 +63,6 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
         val message = "${getString(R.string.adding_failed_subfolder)}\n$first\n$second"
         Toast.makeText(this, message, Toast.LENGTH_LONG)
                 .show()
-    }
-
-    init {
-        App.component().inject(this)
     }
 
     private val upButton: ImageButton by bindView(R.id.twoline_image1)
@@ -105,7 +99,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
                     permissions, grantResults)
             i { "permissionGrantingWorked=$permissionGrantingWorked" }
             if (permissionGrantingWorked) {
-                presenter()!!.gotPermission()
+                presenter().gotPermission()
             } else {
                 PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE)
                 e { "could not get permission" }
@@ -140,7 +134,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         // listeners
-        chooseButton.setOnClickListener { presenter()!!.chooseClicked() }
+        chooseButton.setOnClickListener { presenter().chooseClicked() }
         abortButton.setOnClickListener { finish() }
         upButton.setOnClickListener { onBackPressed() }
 
@@ -153,7 +147,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
         listView.itemClicks()
                 .subscribe {
                     val selectedFile = adapter.getItem(it)
-                    presenter()!!.fileSelected(selectedFile)
+                    presenter().fileSelected(selectedFile)
                 }
 
         // spinner
@@ -165,12 +159,12 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
                 .subscribe {
                     i { "spinner selected with position $it and adapter.count ${spinnerAdapter.count}" }
                     val item = spinnerAdapter.getItem(it)
-                    presenter()!!.fileSelected(item.data)
+                    presenter().fileSelected(item.data)
                 }
     }
 
     override fun onBackPressed() {
-        if (!presenter()!!.backConsumed()) {
+        if (!presenter().backConsumed()) {
             super.onBackPressed()
         }
     }
@@ -222,14 +216,13 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
         upButton.setImageDrawable(upIcon)
     }
 
-    override fun finishWithResult() {
-        i { "finishWithResult" }
-        setResult(Activity.RESULT_OK, Intent())
-        finish()
+    override fun finish() {
+        i { "finish" }
+        super.finish()
     }
 
     override fun onChosen() {
-        presenter()!!.hideFolderSelectionMade()
+        presenter().hideFolderSelectionMade()
     }
 
     enum class OperationMode {
