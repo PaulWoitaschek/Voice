@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="56dp">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="56dp">
 
     <ImageView
         android:id="@+id/icon"
         style="@style/TintedImageViewStyle"
         android:layout_width="56dp"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:scaleType="fitStart"
+        android:padding="8dp"
+        android:scaleType="centerInside"
         app:srcCompat="@drawable/ic_folder"
-        tools:ignore="ContentDescription"/>
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/ic_folder"
+        tools:tint="?attr/colorControlNormal"/>
 
     <TextView
         android:id="@+id/containing"
@@ -39,14 +40,15 @@
 
     <ImageButton
         android:id="@+id/remove"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:contentDescription="@string/remove"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        app:srcCompat="@drawable/delete" />
+        android:padding="8dp"
+        android:scaleType="centerInside"
+        app:srcCompat="@drawable/delete"
+        tools:src="@drawable/delete"/>
 
 </RelativeLayout>
