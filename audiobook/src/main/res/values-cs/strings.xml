@@ -89,8 +89,8 @@
     <string name="pref_root_folder_title">Adresář audioknihy</string>
     <string name="pref_root_folder_summary">Vybrané adresáře s audioknihami.</string>
     <string name="pref_theme_title">Vzhled</string>
-    <string name="pref_theme_light">Světlý</string>
-    <string name="pref_theme_dark">Tmavý</string>
+
+
     <string name="pref_pause_on_can_duck_title">Pozastavit při vyrušení</string>
     <string name="pref_pause_on_can_duck_summary">Pozastavit při vyrušení namísto snížení hlasitosti po trvání vyrušení.</string>
     <string name="pref_send_bugs_title">Nahlásit chybu</string>

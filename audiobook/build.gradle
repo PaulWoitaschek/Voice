@@ -33,8 +33,6 @@ android {
         targetSdkVersion 23
         versionCode 124
         versionName '2.7.2.1'
-
-        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -80,7 +78,7 @@ dependencies {
     compile "com.squareup.picasso:picasso:2.5.2"
 
     // material styled dialogs
-    compile("com.afollestad.material-dialogs:core:0.8.5.5@aar") {
+    compile("com.afollestad.material-dialogs:core:0.8.5.8@aar") {
         transitive = true
     }
 
@@ -115,7 +113,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     // player
-    compile 'com.github.PaulWoitaschek:AndroidPlayer:0.009'
+    compile 'com.github.PaulWoitaschek:AndroidPlayer:0.010'
 
     // logs
     compile 'com.github.PaulWoitaschek:Slimber:1.0.4'

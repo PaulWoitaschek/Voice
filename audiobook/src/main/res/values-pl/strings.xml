@@ -87,8 +87,8 @@
     <string name="pref_root_folder_title">Folder audiobooków</string>
     <string name="pref_root_folder_summary">Wybrane foldery z audiobookami</string>
     <string name="pref_theme_title">Motyw</string>
-    <string name="pref_theme_light">Jasny</string>
-    <string name="pref_theme_dark">Ciemny</string>
+
+
     <string name="pref_pause_on_can_duck_title">Zatrzymaj przy zakłóceniu</string>
     <string name="pref_pause_on_can_duck_summary">Spauzuj przy zakłóceniu zamiast ściszyć na czas jego trwania.</string>
     <string name="pref_send_bugs_title">Zgłaszaj błędy</string>

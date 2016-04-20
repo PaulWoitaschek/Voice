@@ -38,8 +38,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import android.support.v7.app.AppCompatActivity
-import android.util.TypedValue
-import de.ph1b.audiobook.R
+import android.support.v7.app.AppCompatDelegate
 import de.ph1b.audiobook.features.external_storage_missing.NoExternalStorageActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -53,11 +52,13 @@ import javax.inject.Inject
 abstract class BaseActivity : AppCompatActivity() {
 
     @Inject internal lateinit var prefsManager: PrefsManager
+    private var nightModeAtCreation: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        App.component().inject(this)
-        setTheme(prefsManager.theme.themeId)
+        App.component().inject(this);
         super.onCreate(savedInstanceState)
+
+        nightModeAtCreation = AppCompatDelegate.getDefaultNightMode()
     }
 
     override fun onResume() {
@@ -71,18 +72,9 @@ abstract class BaseActivity : AppCompatActivity() {
             })
             return
         }
-        recreateIfThemeChanged()
-    }
 
-    fun recreateIfThemeChanged() {
-        val outValue = TypedValue()
-        theme.resolveAttribute(R.attr.theme_name, outValue, true)
-        val oldThemeName = outValue.string.toString()
-        val newName = getString(prefsManager.theme.nameId)
-
-        if (newName != oldThemeName) {
-            recreate()
-        }
+        val nightModesDistinct = AppCompatDelegate.getDefaultNightMode() != nightModeAtCreation
+        if (nightModesDistinct) recreate()
     }
 
     companion object {

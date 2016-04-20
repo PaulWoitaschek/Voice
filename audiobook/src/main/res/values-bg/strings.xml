@@ -84,8 +84,8 @@
     <string name="pref_root_folder_title">Папка с аудио книги</string>
     <string name="pref_root_folder_summary">Списък на папки с аудио книги.</string>
     <string name="pref_theme_title">Фон на приложението</string>
-    <string name="pref_theme_light">Светъл</string>
-    <string name="pref_theme_dark">Тъмен</string>
+
+
     <string name="pref_pause_on_can_duck_title">Пауза при получаване на известие</string>
     <string name="pref_pause_on_can_duck_summary">Вместо да се намаля звука при получаване на изввестие, да се включи на пауза.</string>
     <string name="pref_send_bugs_title">Докладване на бъгове</string>

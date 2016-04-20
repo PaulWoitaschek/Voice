@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="72dp"
-    android:background="?attr/selectableItemBackground"
-    android:clickable="true"
-    android:orientation="horizontal">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:orientation="horizontal">
 
     <FrameLayout
         android:id="@+id/imageFrame"
@@ -28,7 +27,7 @@
             android:background="@drawable/current_playing_circle_background"
             android:contentDescription="@string/content_current_book"
             android:padding="4dp"
-            app:srcCompat="@drawable/ic_equalizer"
+            android:src="@drawable/ic_equalizer"
             tools:ignore="RtlHardcoded"/>
 
     </FrameLayout>
@@ -41,7 +40,7 @@
         android:layout_alignParentRight="true"
         android:layout_gravity="center_vertical"
         android:contentDescription="@string/popup_edit"
-        app:srcCompat="@drawable/ic_more_vert"
+        android:src="@drawable/ic_more_vert"
         tools:ignore="NewApi"/>
 
     <LinearLayout

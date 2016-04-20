@@ -84,8 +84,8 @@
     <string name="pref_root_folder_title">Hörbuch Ordner</string>
     <string name="pref_root_folder_summary">Die gewählten Hörbuchordner.</string>
     <string name="pref_theme_title">Thema</string>
-    <string name="pref_theme_light">Hell</string>
-    <string name="pref_theme_dark">Dunkel</string>
+
+
     <string name="pref_pause_on_can_duck_title">Pause bei Unterbrechung</string>
     <string name="pref_pause_on_can_duck_summary">Pausiert bei kurzer Unterbrechung anstelle die Lautstärke kurz herunterzusetzen.</string>
     <string name="pref_send_bugs_title">Sende Fehlerberichte</string>

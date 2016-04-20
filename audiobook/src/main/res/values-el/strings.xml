@@ -58,8 +58,8 @@
     <string name="pref_root_folder_title">Φάκελος ηχητικού βιβλίου</string>
     <string name="pref_root_folder_summary">Οι επιλεγμένοι φακέλοι ηχητικού βιβλίου.</string>
     <string name="pref_theme_title">Θέμα</string>
-    <string name="pref_theme_light">Φως</string>
-    <string name="pref_theme_dark">Σκοτάδι</string>
+
+
     <string name="pref_pause_on_can_duck_title">Παύση για Διακοπή</string>
     <string name="pref_pause_on_can_duck_summary">Παύση όταν διακόπτεται αντί για μείωση της έντασης κατά τη διάρκεια της διακοπής.</string>
     <string name="pref_send_bugs_title">Αναφορά σφαλμάτων </string>

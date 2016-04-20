@@ -81,8 +81,8 @@
     <string name="pref_root_folder_title">オーディオブック フォルダー</string>
     <string name="pref_root_folder_summary">選択したオーディオブック フォルダー。</string>
     <string name="pref_theme_title">テーマ</string>
-    <string name="pref_theme_light">ライト</string>
-    <string name="pref_theme_dark">ダーク</string>
+
+
     <string name="pref_pause_on_can_duck_title">割り込みで一時停止</string>
     <string name="pref_pause_on_can_duck_summary">割り込みの間、音量を下げるのではなく、割り込みのときに一時停止します。</string>
     <string name="pref_send_bugs_title">バグを報告</string>

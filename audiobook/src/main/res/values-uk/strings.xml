@@ -85,8 +85,8 @@
     <string name="pref_root_folder_title">Папка аудіокниги</string>
     <string name="pref_root_folder_summary">Обрані папки за аудіокнигами.</string>
     <string name="pref_theme_title">Тема</string>
-    <string name="pref_theme_light">Світла</string>
-    <string name="pref_theme_dark">Темна</string>
+
+
     <string name="pref_pause_on_can_duck_title">Призупинити при перериванні</string>
     <string name="pref_pause_on_can_duck_summary">Призупинити, коли перервано програвання замість зменшення гучності на час переривання.</string>
     <string name="pref_send_bugs_title">Відправити звіт про помилки</string>

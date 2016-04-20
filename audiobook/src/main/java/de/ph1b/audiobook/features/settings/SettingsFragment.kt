@@ -23,6 +23,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.preference.Preference
 import android.preference.PreferenceFragment
+import android.support.v7.app.AppCompatDelegate
 import android.view.*
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BaseActivity
@@ -157,7 +158,9 @@ class SettingsFragment : PreferenceFragment(), SettingsSetListener {
     override fun onSettingsSet(settingsChanged: Boolean) {
         if (settingsChanged) {
             updateValues()
-            handler.post { hostingActivity.recreateIfThemeChanged() }
+            AppCompatDelegate.setDefaultNightMode(prefs.theme.nightMode)
+            // must post so dialog can correctly destroy itself
+            handler.post { hostingActivity.recreate() }
         }
     }
 

@@ -41,26 +41,26 @@ import de.ph1b.audiobook.playback.utils.MediaPlayerCapabilities;
 @Module
 public class BaseModule {
 
-    @Provides
-    @Named(PrefsManager.FOR)
-    static SharedPreferences providePrefsForManager(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context);
-    }
+   @Provides
+   @Named(PrefsManager.FOR)
+   static SharedPreferences providePrefsForManager(Context context) {
+      return PreferenceManager.getDefaultSharedPreferences(context);
+   }
 
-    @Provides
-    @Named(MediaPlayerCapabilities.FOR)
-    static SharedPreferences provideForMediaPlayerCapabilities(Context context) {
-        String name = "forMediaPlayerCapabilities";
-        return context.getSharedPreferences(name, Context.MODE_PRIVATE);
-    }
+   @Provides
+   @Named(MediaPlayerCapabilities.FOR)
+   static SharedPreferences provideForMediaPlayerCapabilities(Context context) {
+      String name = "forMediaPlayerCapabilities";
+      return context.getSharedPreferences(name, Context.MODE_PRIVATE);
+   }
 
-    @Provides
-    @Singleton
-    static MediaPlayer providePlayer(MediaPlayerCapabilities capabilities, Context context) {
-        if (capabilities.getUseCustomMediaPlayer()) {
-            return new SpeedPlayer(BuildConfig.DEBUG, context);
-        } else {
-            return new AndroidPlayer(context);
-        }
-    }
+   @Provides
+   @Singleton
+   static MediaPlayer providePlayer(MediaPlayerCapabilities capabilities, Context context) {
+      if (capabilities.getUseCustomMediaPlayer()) {
+         return new SpeedPlayer(context, BuildConfig.DEBUG);
+      } else {
+         return new AndroidPlayer(context);
+      }
+   }
 }

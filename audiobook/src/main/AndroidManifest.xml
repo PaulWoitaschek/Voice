@@ -33,7 +33,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/PlaceHolder"
+        android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
         <!-- Disabled due to compliance problems
@@ -56,11 +56,12 @@
         <!-- auto theme -->
         <meta-data
             android:name="com.google.android.gms.car.application.theme"
-            android:resource="@style/Theme.AppCompat.DayNight" />
+            android:resource="@style/Theme.AppCompat.DayNight"/>
 
         <activity
             android:name=".features.BookActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -70,7 +71,8 @@
         <activity
             android:name=".features.settings.SettingsActivity"
             android:label="@string/action_settings"
-            android:parentActivityName=".features.BookActivity">
+            android:parentActivityName=".features.BookActivity"
+            android:theme="@style/AppTheme.Main">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".features.BookActivity"/>
@@ -79,7 +81,8 @@
         <activity
             android:name=".features.folder_overview.FolderOverviewActivity"
             android:label="@string/audiobook_folders_title"
-            android:parentActivityName=".features.settings.SettingsActivity">
+            android:parentActivityName=".features.settings.SettingsActivity"
+            android:theme="@style/AppTheme.Main">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".features.settings.SettingsActivity"/>
@@ -87,11 +90,13 @@
 
         <activity
             android:name=".features.external_storage_missing.NoExternalStorageActivity"
-            android:label="@string/no_external_storage_action_bar_title"/>
+            android:label="@string/no_external_storage_action_bar_title"
+            android:theme="@style/AppTheme.Main"/>
 
         <activity
             android:name=".features.folder_chooser.FolderChooserActivity"
-            android:parentActivityName=".features.BookActivity">
+            android:parentActivityName=".features.BookActivity"
+            android:theme="@style/AppTheme.Main">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".features.BookActivity"/>
@@ -99,7 +104,8 @@
 
         <activity
             android:name=".features.imagepicker.ImagePickerActivity"
-            android:parentActivityName=".features.BookActivity">
+            android:parentActivityName=".features.BookActivity"
+            android:theme="@style/AppTheme.Main">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".features.BookActivity"/>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="56dp">
@@ -15,7 +14,7 @@
         android:layout_centerVertical="true"
         android:padding="8dp"
         android:scaleType="centerInside"
-        app:srcCompat="@drawable/ic_folder"
+        android:src="@drawable/ic_folder"
         tools:ignore="ContentDescription"
         tools:src="@drawable/ic_folder"
         tools:tint="?attr/colorControlNormal"/>
@@ -48,7 +47,7 @@
         android:contentDescription="@string/remove"
         android:padding="8dp"
         android:scaleType="centerInside"
-        app:srcCompat="@drawable/delete"
+        android:src="@drawable/delete"
         tools:src="@drawable/delete"/>
 
 </RelativeLayout>
