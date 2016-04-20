@@ -113,4 +113,7 @@
     <string name="no_network">Kein Internet?</string>
     <string name="network_top">Das lief nicht besonders gut…</string>
     <string name="cover_crop">Cover zurechtschneiden</string>
+    <string name="pref_theme_day">Tag</string>
+    <string name="pref_theme_daynight">Tag / Nacht</string>
+    <string name="pref_theme_night">Nacht</string>
 </resources>
