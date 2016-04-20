@@ -33,7 +33,7 @@ abstract class RxBaseFragment <V, P> : Fragment() where P : Presenter<V> {
 
     abstract fun provideView(): V
 
-    fun presenter() = presenterDelegate.presenter
+    fun presenter() = presenterDelegate.presenter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

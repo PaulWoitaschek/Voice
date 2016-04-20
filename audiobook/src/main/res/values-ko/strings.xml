@@ -81,8 +81,8 @@
     <string name="pref_root_folder_title">오디오북 폴더</string>
     <string name="pref_root_folder_summary">선택한 폴더</string>
     <string name="pref_theme_title">테마</string>
-    <string name="pref_theme_light">하양</string>
-    <string name="pref_theme_dark">검정</string>
+
+
     <string name="pref_pause_on_can_duck_title">방해 시 일시정지</string>
     <string name="pref_pause_on_can_duck_summary">전화가 오거나, 문자가 왔을 때, 볼륨을 줄이기보다는 일시정지합니다.</string>
     <string name="pref_send_bugs_title">오류 보내기</string>

@@ -20,7 +20,6 @@ package de.ph1b.audiobook.features.folder_overview
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.content.Intent
 import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
@@ -189,7 +188,7 @@ class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOver
                         .negativeText(R.string.dialog_cancel)
                         .onPositive { materialDialog, dialogAction ->
                             val itemToDelete = adapter.getItem(position)
-                            presenter()!!.removeFolder(itemToDelete)
+                            presenter().removeFolder(itemToDelete)
                         }
                         .show()
             }
@@ -205,18 +204,13 @@ class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOver
 
     private fun startFolderChooserActivity(operationMode: FolderChooserActivity.OperationMode) {
         val intent = FolderChooserActivity.newInstanceIntent(this, operationMode)
-        startActivityForResult(intent, PICKER_REQUEST_CODE)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
         // we don't want our listener be informed.
         fam.setOnFloatingActionsMenuUpdateListener(null)
         fam.collapseImmediately()
         fam.setOnFloatingActionsMenuUpdateListener(famMenuListener)
 
         backgroundOverlay.visibility = View.INVISIBLE
+        startActivity(intent)
     }
 
     override fun onBackPressed() {
@@ -246,9 +240,5 @@ class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOver
         outState.putBoolean(BACKGROUND_OVERLAY_VISIBLE, backgroundOverlay.visibility == View.VISIBLE)
 
         super.onSaveInstanceState(outState)
-    }
-
-    companion object {
-        val PICKER_REQUEST_CODE = 42
     }
 }

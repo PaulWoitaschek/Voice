@@ -84,8 +84,8 @@
     <string name="pref_root_folder_title">Ljudboks mapp</string>
     <string name="pref_root_folder_summary">De valda ljudboksmapparna.</string>
     <string name="pref_theme_title">Tema</string>
-    <string name="pref_theme_light">Ljus</string>
-    <string name="pref_theme_dark">Mörk</string>
+
+
     <string name="pref_pause_on_can_duck_title">Pausa vid avbrott</string>
     <string name="pref_pause_on_can_duck_summary">Pausa när du blir avbruten i stället för att sänka volymen under hela avbrottet.</string>
     <string name="pref_send_bugs_title">Rapportera buggar</string>

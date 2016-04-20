@@ -4,9 +4,12 @@ import android.content.Context
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.support.annotation.*
+import android.support.annotation.AnyRes
+import android.support.annotation.AttrRes
+import android.support.annotation.StringRes
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
+import android.support.v7.app.AppCompatDelegate
 import android.view.View
 import android.widget.EditText
 import android.widget.NumberPicker
@@ -69,8 +72,9 @@ object ThemeUtil {
         return resId
     }
 
-    enum class Theme internal constructor(@StyleRes val themeId: Int, @StringRes val nameId: Int, @ColorRes val colorId: Int) {
-        LIGHT(R.style.LightTheme, R.string.pref_theme_light, R.color.light_primary_dark),
-        DARK(R.style.DarkTheme, R.string.pref_theme_dark, R.color.dark_primary_dark)
+    enum class Theme internal constructor(@StringRes val nameId: Int, @AppCompatDelegate.NightMode val nightMode: Int) {
+        DAY_NIGHT (R.string.pref_theme_daynight, AppCompatDelegate.MODE_NIGHT_AUTO),
+        DAY(R.string.pref_theme_day, AppCompatDelegate.MODE_NIGHT_NO),
+        NIGHT(R.string.pref_theme_night, AppCompatDelegate.MODE_NIGHT_YES)
     }
 }

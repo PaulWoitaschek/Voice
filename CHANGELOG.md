@@ -1,5 +1,10 @@
 # Upcoming version
 
+# 2.7.2.2
+* Added day night theme
+* Performance greatly improved
+* Small UI improvements
+
 # 2.7.2.1
 * Removed Android Auto temporary due to compliance problems
 * Added japanese translation

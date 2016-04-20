@@ -88,8 +88,8 @@
     <string name="pref_root_folder_title">Папки с аудиокнигами</string>
     <string name="pref_root_folder_summary">Выбранные папки с книгами.</string>
     <string name="pref_theme_title">Внешний вид</string>
-    <string name="pref_theme_light">Светлый</string>
-    <string name="pref_theme_dark">Темный</string>
+
+
     <string name="pref_pause_on_can_duck_title">Останавливать во время прерывания</string>
     <string name="pref_pause_on_can_duck_summary">Останавливать и не \"делать тише\" на время прерывания</string>
     <string name="pref_send_bugs_title">Отправлять отчеты об ошибках</string>

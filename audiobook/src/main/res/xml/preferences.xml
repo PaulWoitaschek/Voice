@@ -7,7 +7,7 @@
             android:title="@string/pref_root_folder_title"/>
         <Preference
             android:key="@string/pref_key_theme"
-            android:summary="@string/pref_theme_light"
+            android:summary="@string/pref_theme_daynight"
             android:title="@string/pref_theme_title"/>
         <CheckBoxPreference
             android:defaultValue="false"

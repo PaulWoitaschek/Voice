@@ -66,7 +66,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
     /**
      * Call this when choose was clicked.
      *
-     * Asks the user to add a .nomedia file if there is none. Else calls [FolderChooserView.finishWithResult]
+     * Asks the user to add a .nomedia file if there is none. Else calls [FolderChooserView.finish]
      */
     fun chooseClicked() {
         if (chosenFile!!.isDirectory && !HideFolderDialog.getNoMediaFileByFolder(chosenFile!!).exists()) {
@@ -155,7 +155,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
             }
         }
 
-        view!!.finishWithResult()
+        view!!.finish()
     }
 
     /**

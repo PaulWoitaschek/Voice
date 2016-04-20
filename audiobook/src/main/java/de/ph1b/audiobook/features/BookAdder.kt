@@ -324,7 +324,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
                     currentFile = if (currentPathIsGone) newChapters.first().file else bookToUpdate.currentFile,
                     time = if (currentPathIsGone) 0 else bookToUpdate.time)
 
-            handler.postBlocking { db.updateBook(bookToUpdate) }
+            handler.postBlocking { db.updateBook(bookToUpdate, true) }
         }
     }
 

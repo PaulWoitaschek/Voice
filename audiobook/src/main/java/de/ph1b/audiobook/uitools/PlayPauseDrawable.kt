@@ -118,7 +118,7 @@ class PlayPauseDrawable : Drawable() {
         canvas.translate(bounds.left.toFloat(), bounds.top.toFloat())
 
         // The current distance between the two pause bars.
-        val barDist = interpolate(pauseBarDistance, 0.0f, progress)
+        val barDist = interpolate(pauseBarDistance, 0.0f, progress) - 1 // -1 because else there is a small gap on some devices
         // The current width of each pause bar.
         val barWidth = interpolate(pauseBarWidth, pauseBarHeight / 1.75f, progress)
         // The current position of the left pause bar's top left coordinate.

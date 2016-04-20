@@ -82,8 +82,8 @@
     <string name="pref_root_folder_title">Klankboek gids</string>
     <string name="pref_root_folder_summary">Die geselekteerde klankboek gidse.</string>
     <string name="pref_theme_title">Tema</string>
-    <string name="pref_theme_light">Lig</string>
-    <string name="pref_theme_dark">Donker</string>
+
+
     <string name="pref_pause_on_can_duck_title">Breek op onderbreking</string>
     <string name="pref_pause_on_can_duck_summary">Breek wanneer onderbreek in stede daarvan om volume te verlaag vir die durasie van die onderbreking.</string>
     <string name="pref_send_bugs_title">Raporteer foute</string>

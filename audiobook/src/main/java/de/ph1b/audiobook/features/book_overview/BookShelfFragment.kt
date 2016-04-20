@@ -100,7 +100,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
 
         // init fab
         fab.setIconDrawable(playPauseDrawable)
-        fab.setOnClickListener { presenter()!!.playPauseRequested() }
+        fab.setOnClickListener { presenter().playPauseRequested() }
 
         // init ActionBar
         actionBar().apply {

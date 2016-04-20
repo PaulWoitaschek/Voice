@@ -1,17 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- # dark theme -->
-    <!-- blue grey 700 -->
-    <color name="dark_primary">#ff455a64</color>
-    <!-- blue grey 900 -->
-    <color name="dark_primary_dark">#ff263238</color>
-
-    <!-- # light theme -->
-    <!-- indigo 500 -->
-    <color name="light_primary">#ff3f51b5</color>
-    <!-- indigo 700 -->
-    <color name="light_primary_dark">#ff303f9f</color>
-
     <!-- accents -->
     <!-- pink 500 -->
     <color name="accent">#ffe91e63</color>
@@ -19,8 +7,15 @@
     <color name="accentDark">#ffc2185b</color>
     <!-- ## text colors -->
 
-    <color name="dark_icon_color">#ffffff</color>
-    <color name="light_icon_color">#757575</color>
+    <!-- indigo 500 -->
+    <color name="primary">#ff3f51b5</color>
+    <!-- indigo 700 -->
+    <color name="primaryDark">#ff303f9f</color>
+
+    <color name="navbarColor">@color/primaryDark</color>
+    <color name="background_overlay">@color/copy_primary_text_disabled_material_light</color>
+
+    <color name="icon_color">@color/secondary_text_default_material_light</color>
 
     <!-- copied private resources from appcompat -->
     <color name="copy_primary_text_disabled_material_dark">#4Dffffff</color>

@@ -89,7 +89,7 @@ constructor(c: Context, @Named(FOR) private val sp: SharedPreferences) {
         @Synchronized get() {
             val value = sp.getString(PREF_KEY_THEME, null)
             if (value == null) {
-                return ThemeUtil.Theme.LIGHT
+                return ThemeUtil.Theme.DAY_NIGHT
             } else {
                 return ThemeUtil.Theme.valueOf(value)
             }

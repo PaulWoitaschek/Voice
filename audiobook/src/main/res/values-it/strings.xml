@@ -58,8 +58,8 @@
     <string name="pref_root_folder_title">Cartella audiolibro</string>
     <string name="pref_root_folder_summary">Le cartelle audiolibro selezionate.</string>
     <string name="pref_theme_title">Tema</string>
-    <string name="pref_theme_light">Chiaro</string>
-    <string name="pref_theme_dark">Oscuro</string>
+
+
     <string name="pref_pause_on_can_duck_title">Pausa se interrotto</string>
     <string name="pref_pause_on_can_duck_summary">Pausa se interrotto, invece di abbassare il volume per la durata dell\'interruzione.</string>
     <string name="pref_send_bugs_title">Segnala bug</string>

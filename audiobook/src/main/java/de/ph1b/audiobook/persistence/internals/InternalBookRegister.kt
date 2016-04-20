@@ -127,14 +127,16 @@ class InternalBookRegister
         put(BookTable.USE_COVER_REPLACEMENT, useCoverReplacement)
     }
 
-    fun updateBook(book: Book) = db.asTransaction {
+    fun updateBook(book: Book, updateChapters:Boolean) = db.asTransaction {
         // update book itself
         val bookCv = book.toContentValues()
         update(BookTable.TABLE_NAME, bookCv, "${BookTable.ID}=?", arrayOf(book.id.toString()))
 
         // delete old chapters and replace them with new ones
-        delete(ChapterTable.TABLE_NAME, "${BookTable.ID}=?", arrayOf(book.id.toString()))
-        book.chapters.forEach { insert(it, book.id) }
+        if(updateChapters) {
+            delete(ChapterTable.TABLE_NAME, "${BookTable.ID}=?", arrayOf(book.id.toString()))
+            book.chapters.forEach { insert(it, book.id) }
+        }
     }
 
     fun addBook(toAdd: Book) = db.asTransaction {

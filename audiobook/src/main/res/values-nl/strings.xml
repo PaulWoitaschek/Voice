@@ -83,8 +83,8 @@
     <string name="pref_root_folder_title">Luisterboekmap</string>
     <string name="pref_root_folder_summary">Geselecteerde luisterboekmappen.</string>
     <string name="pref_theme_title">Thema</string>
-    <string name="pref_theme_light">Licht</string>
-    <string name="pref_theme_dark">Donker</string>
+
+
     <string name="pref_pause_on_can_duck_title">Pauzeer bij melding</string>
     <string name="pref_pause_on_can_duck_summary">Pauzeren wanneer een andere app een melding laat horen, ipv het afspeelvolume tijdelijk te verlagen.</string>
     <string name="pref_send_bugs_title">Rapporteer lieveheersbeestjes</string>

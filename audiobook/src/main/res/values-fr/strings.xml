@@ -84,8 +84,8 @@
     <string name="pref_root_folder_title">Dossier de livre audio</string>
     <string name="pref_root_folder_summary">Les dossiers de livres audio sélectionnés.</string>
     <string name="pref_theme_title">Thème</string>
-    <string name="pref_theme_light">Clair</string>
-    <string name="pref_theme_dark">Sombre</string>
+
+
     <string name="pref_pause_on_can_duck_title">Pause lors d\'une interruption</string>
     <string name="pref_pause_on_can_duck_summary">Pause lors d\'une interruption au lieu de baisser le volume pour la durée de l\'interruption.</string>
     <string name="pref_send_bugs_title">Signaler des bugs</string>

@@ -56,7 +56,7 @@ interface FolderChooserView {
     /**
      * When all tasks are completed this is called and the view should finish.
      **/
-    fun finishWithResult()
+    fun finish()
 
     /**
      * Ask the user to add a .nomedia file to the chosen folder so it won't be discovered by music
