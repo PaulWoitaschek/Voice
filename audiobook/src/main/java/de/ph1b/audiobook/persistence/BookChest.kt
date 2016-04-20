@@ -70,7 +70,7 @@ constructor(private val register: InternalBookRegister) {
 
     @Synchronized fun getOrphanedBooks() = ArrayList(orphaned)
 
-    @Synchronized fun updateBook(book: Book) {
+    @Synchronized fun updateBook(book: Book, chaptersChanged: Boolean = false) {
         v { "updateBook=${book.name} with time ${book.time}" }
         assertMain()
 
@@ -79,7 +79,7 @@ constructor(private val register: InternalBookRegister) {
             val next = bookIterator.next()
             if (book.id == next.id) {
                 bookIterator.set(book)
-                register.updateBook(book)
+                register.updateBook(book, chaptersChanged)
                 break
             }
         }
