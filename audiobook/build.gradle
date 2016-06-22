@@ -24,13 +24,13 @@ android {
     // dynamically pass 21 to the compiler for bulid speedup without losing lint warnings.
     int minSdk = hasProperty('minSdk') ? minSdk.toInteger() : 15
 
-    compileSdkVersion 23
+    compileSdkVersion 24
     buildToolsVersion '23.0.3'
 
     defaultConfig {
         applicationId "de.ph1b.audiobook"
         minSdkVersion minSdk
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionCode 125
         versionName '2.7.2.2'
     }
