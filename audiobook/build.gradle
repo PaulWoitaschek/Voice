@@ -25,7 +25,7 @@ android {
     int minSdk = hasProperty('minSdk') ? minSdk.toInteger() : 15
 
     compileSdkVersion 24
-    buildToolsVersion '23.0.3'
+    buildToolsVersion '24'
 
     defaultConfig {
         applicationId "de.ph1b.audiobook"
