@@ -50,9 +50,9 @@ import dagger.Lazy as DaggerLazy
 /**
  * Showing the shelf of all the available books and provide a navigation to each book
  */
-class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresenter>(), BookShelfAdapter.OnItemClickListener {
+class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(), BookShelfAdapter.OnItemClickListener {
 
-    override fun newPresenter() = App.component().bookShelfBasePresenter
+    override fun newPresenter() = App.component().bookShelfPresenter
 
     override fun provideView() = this
 
