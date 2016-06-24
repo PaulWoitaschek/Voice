@@ -17,23 +17,21 @@
 
 package de.ph1b.audiobook.features.imagepicker
 
+import android.databinding.DataBindingUtil
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.view.ActionMode
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import butterknife.bindView
 import com.squareup.picasso.Picasso
 import d
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.databinding.ActivityImagePickerBinding
 import de.ph1b.audiobook.features.BaseActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.layoutInflater
@@ -59,12 +57,7 @@ class ImagePickerActivity : BaseActivity() {
     @Inject internal lateinit var bookChest: BookChest
     @Inject internal lateinit var imageHelper: ImageHelper
 
-    private val webView: WebView by  bindView(R.id.webView)
-    private val progressBar: View by  bindView(R.id.progressBar)
-    private val noNetwork: View by bindView(R.id.noNetwork)
-    private val webViewContainer: View by bindView(R.id.webViewContainer)
-    private val cropView: CropOverlay by bindView(R.id.cropOverlay)
-    private val fab: FloatingActionButton by bindView(R.id.fab)
+    private lateinit var binding: ActivityImagePickerBinding
 
     private var actionMode: ActionMode ? = null
 
@@ -76,14 +69,14 @@ class ImagePickerActivity : BaseActivity() {
         override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
             if (p1?.itemId == R.id.confirm) {
                 // optain screenshot
-                val cropRect = cropView.selectedRect
-                cropView.selectionOn = false
+                val cropRect = binding.cropOverlay.selectedRect
+                binding.cropOverlay.selectionOn = false
 
-                webViewContainer.isDrawingCacheEnabled = true
-                webViewContainer.buildDrawingCache()
-                val cache: Bitmap = webViewContainer.drawingCache
+                binding.webViewContainer.isDrawingCacheEnabled = true
+                binding.webViewContainer.buildDrawingCache()
+                val cache: Bitmap = binding.webViewContainer.drawingCache
                 val screenShot = Bitmap.createBitmap(cache, cropRect.left, cropRect.top, cropRect.width(), cropRect.height())
-                webViewContainer.isDrawingCacheEnabled = false
+                binding.webViewContainer.isDrawingCacheEnabled = false
                 cache.recycle()
 
                 // save screenshot
@@ -102,8 +95,8 @@ class ImagePickerActivity : BaseActivity() {
         }
 
         override fun onDestroyActionMode(p0: ActionMode?) {
-            cropView.selectionOn = false
-            fab.show()
+            binding.cropOverlay.selectionOn = false
+            binding.fab.show()
         }
     }
 
@@ -117,26 +110,26 @@ class ImagePickerActivity : BaseActivity() {
         "https://www.google.com/search?safe=on&site=imghp&tbm=isch&tbs=isz:lt,islt:qsvga&q=$encodedSearch"
     }
 
-    private val toolBar: Toolbar by bindView(R.id.toolbar)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_image_picker)
-        setSupportActionBar(toolBar)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_image_picker)
+
+        setSupportActionBar(binding.toolbarInclude.toolbar)
         supportActionBar!!.apply {
             setDisplayHomeAsUpEnabled(true)
             title = ""
         }
 
-        with(webView.settings) {
+        with(binding.webView.settings) {
             setSupportZoom(true);
             builtInZoomControls = true;
             displayZoomControls = false;
             javaScriptEnabled = true
             userAgentString = "Mozilla/5.0 (Linux; U; Android 4.4; en-us; Nexus 4 Build/JOP24G) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30";
         }
-        webView.setWebViewClient(object : WebViewClient() {
+        binding.webView.setWebViewClient(object : WebViewClient() {
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
@@ -156,9 +149,9 @@ class ImagePickerActivity : BaseActivity() {
             override fun onReceivedError(view: WebView, errorCode: Int, description: String?, failingUrl: String?) {
                 d { "received webViewError. Set webVeiw invisible" }
                 view.loadUrl(ABOUT_BLANK)
-                progressBar.setInvisible()
-                noNetwork.setVisible()
-                webViewContainer.setInvisible()
+                binding.progressBar.setInvisible()
+                binding.noNetwork.setVisible()
+                binding.webViewContainer.setInvisible()
             }
         });
 
@@ -169,33 +162,33 @@ class ImagePickerActivity : BaseActivity() {
                 .subscribe {
                     // sets progressbar and webviews visibilities correctly once the page is loaded
                     i { "WebView is now loading. Set webView visible" }
-                    progressBar.setInvisible()
-                    noNetwork.setInvisible()
-                    webViewContainer.setVisible()
+                    binding.progressBar.setInvisible()
+                    binding.noNetwork.setInvisible()
+                    binding.webViewContainer.setVisible()
                 }
 
         // load the last page loaded or the original one of there is none
         val toLoad = savedInstanceState?.getString(SI_URL) ?: originalUrl
-        webView.loadUrl(toLoad)
+        binding.webView.loadUrl(toLoad)
 
-        fab.setOnClickListener {
-            cropView.selectionOn = true
+        binding.fab.setOnClickListener {
+            binding.cropOverlay.selectionOn = true
             actionMode = startSupportActionMode(actionModeCallback)
-            fab.hide()
+            binding.fab.hide()
         }
     }
 
     override fun onBackPressed() {
-        if (webView.canGoBack()) {
-            webView.goBack()
+        if (binding.webView.canGoBack()) {
+            binding.webView.goBack()
         } else {
             super.onBackPressed()
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        if (webView.url != ABOUT_BLANK) {
-            outState.putString(SI_URL, webView.url)
+        if (binding.webView.url != ABOUT_BLANK) {
+            outState.putString(SI_URL, binding.webView.url)
         }
 
         super.onSaveInstanceState(outState)
@@ -211,7 +204,7 @@ class ImagePickerActivity : BaseActivity() {
         }
         val rotateView = layoutInflater().inflate(R.layout.rotate_view, null).apply {
             animation = rotation
-            setOnClickListener { webView.reload() }
+            setOnClickListener { binding.webView.reload() }
         }
         MenuItemCompat.setActionView(refreshItem, rotateView)
 
@@ -247,11 +240,11 @@ class ImagePickerActivity : BaseActivity() {
             true
         }
         R.id.refresh -> {
-            webView.reload()
+            binding.webView.reload()
             true
         }
         R.id.home -> {
-            webView.loadUrl(originalUrl)
+            binding.webView.loadUrl(originalUrl)
             true
         }
         else -> false
@@ -259,17 +252,13 @@ class ImagePickerActivity : BaseActivity() {
 
     companion object {
 
-        // val TAG = ImagePickerActivity::class.java.simpleName
-
         private val NI = "ni"
         private val ABOUT_BLANK = "about:blank"
         private val SI_URL = "savedUrl"
 
-
         fun arguments(args: Args) = Bundle().apply {
             putSerializable(NI, args)
         }
-
     }
 
     data class Args(val bookId: Long) : Serializable
