@@ -48,7 +48,7 @@ class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOver
 
     override fun provideView() = this
 
-    private val BACKGROUND_OVERLAY_VISIBLE = "binding.overlayVisibility"
+    private val BACKGROUND_OVERLAY_VISIBLE = "overlayVisibility"
 
     private val bookCollections = ArrayList<String>(10)
     private val singleBooks = ArrayList<String>(10)
@@ -76,9 +76,7 @@ class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOver
                 // make the view visible and start the animation
                 binding.overlay.visibility = View.VISIBLE
                 anim.start()
-            } else {
-                binding.overlay.visibility = View.VISIBLE
-            }
+            } else binding.overlay.visibility = View.VISIBLE
         }
 
         override fun onMenuCollapsed() {
@@ -103,9 +101,7 @@ class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOver
 
                 // start the animation
                 anim.start()
-            } else {
-                binding.overlay.visibility = View.INVISIBLE
-            }
+            } else binding.overlay.visibility = View.INVISIBLE
         }
     }
 
@@ -147,15 +143,12 @@ class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOver
         actionBar.setDisplayHomeAsUpEnabled(true)
         actionBar.title = getString(R.string.audiobook_folders_title)
 
-
         //init views
         if (savedInstanceState != null) {
             // restoring overlay
             if (savedInstanceState.getBoolean(BACKGROUND_OVERLAY_VISIBLE)) {
                 binding.overlay.visibility = View.VISIBLE
-            } else {
-                binding.overlay.visibility = View.INVISIBLE
-            }
+            } else binding.overlay.visibility = View.INVISIBLE
         }
 
         // preparing list
