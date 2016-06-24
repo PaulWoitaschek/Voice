@@ -1,67 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:fab="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:fab="http://schemas.android.com/apk/res-auto">
 
-    <include layout="@layout/toolbar"/>
-
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler"
+        <include
+            android:id="@+id/toolbarInclude"
+            layout="@layout/toolbar"/>
+
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:clipToPadding="false"
-            android:paddingBottom="88dp"/>
+            android:layout_height="match_parent">
 
-        <View
-            android:id="@+id/overlay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/background_overlay"
-            android:visibility="invisible"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:clipToPadding="false"
+                android:paddingBottom="88dp"/>
 
-        <com.getbase.floatingactionbutton.FloatingActionsMenu
-            android:id="@+id/fam"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end|right"
-            android:layout_margin="16dp"
-            android:contentDescription="@string/content_add_book"
-            fab:fab_addButtonColorNormal="?attr/colorAccent"
-            fab:fab_addButtonColorPressed="?attr/colorAccentDark"
-            fab:fab_labelStyle="@style/fab_label_style"
-            fab:fab_labelsPosition="left">
+            <View
+                android:id="@+id/overlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/background_overlay"
+                android:visibility="invisible"/>
 
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/add_single"
+            <com.getbase.floatingactionbutton.FloatingActionsMenu
+                android:id="@+id/fam"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/folder_add_single_book"
-                fab:fab_colorNormal="?attr/colorAccent"
-                fab:fab_colorPressed="?attr/colorAccentDark"
-                fab:fab_icon="@drawable/ic_folder"
-                fab:fab_size="mini"
-                fab:fab_title="@string/folder_add_single_book"/>
+                android:layout_gravity="bottom|end|right"
+                android:layout_margin="16dp"
+                android:contentDescription="@string/content_add_book"
+                fab:fab_addButtonColorNormal="?attr/colorAccent"
+                fab:fab_addButtonColorPressed="?attr/colorAccentDark"
+                fab:fab_labelStyle="@style/fab_label_style"
+                fab:fab_labelsPosition="left">
 
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/add_library"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/folder_add_collection"
-                fab:fab_colorNormal="?attr/colorAccent"
-                fab:fab_colorPressed="?attr/colorAccentDark"
-                fab:fab_icon="@drawable/folder_multiple"
-                fab:fab_size="mini"
-                fab:fab_title="@string/folder_add_collection"/>
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/add_single"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/folder_add_single_book"
+                    fab:fab_colorNormal="?attr/colorAccent"
+                    fab:fab_colorPressed="?attr/colorAccentDark"
+                    fab:fab_icon="@drawable/ic_folder"
+                    fab:fab_size="mini"
+                    fab:fab_title="@string/folder_add_single_book"/>
 
-        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/add_library"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/folder_add_collection"
+                    fab:fab_colorNormal="?attr/colorAccent"
+                    fab:fab_colorPressed="?attr/colorAccentDark"
+                    fab:fab_icon="@drawable/folder_multiple"
+                    fab:fab_size="mini"
+                    fab:fab_title="@string/folder_add_collection"/>
 
-    </FrameLayout>
+            </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
-</LinearLayout>
+        </FrameLayout>
+
+    </LinearLayout>
+</layout>
