@@ -1,20 +1,3 @@
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
 package de.ph1b.audiobook.features.book_playing
 
 import android.content.Intent
@@ -25,12 +8,6 @@ import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
 import android.text.format.DateUtils
 import android.view.*
-import android.widget.ImageView
-import android.widget.SeekBar
-import android.widget.Spinner
-import android.widget.TextView
-import butterknife.bindView
-import com.getbase.floatingactionbutton.FloatingActionButton
 import com.jakewharton.rxbinding.view.clicks
 import com.jakewharton.rxbinding.widget.RxAdapterView
 import com.jakewharton.rxbinding.widget.RxSeekBar
@@ -56,6 +33,8 @@ import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
 import i
+import kotlinx.android.synthetic.main.fragment_book_play.*
+import kotlinx.android.synthetic.main.include_cover.*
 import rx.Observable
 import rx.functions.Action1
 import rx.subscriptions.CompositeSubscription
@@ -89,19 +68,6 @@ class BookPlayFragment : Fragment() {
 
     private val hostingActivity: AppCompatActivity by lazy { context as AppCompatActivity }
 
-    private val timerCountdownView: TextView by bindView(R.id.timerView)
-    private val playedTimeView: TextView by bindView(R.id.played)
-    private val seekBar: SeekBar by bindView(R.id.seekBar)
-    private val bookSpinner: Spinner by bindView(R.id.book_spinner)
-    private val maxTimeView: TextView by bindView(R.id.maxTime)
-    private val coverFrame: View by bindView(R.id.cover_frame)
-    private val coverView: ImageView by bindView(R.id.book_cover)
-    private val nextButton: View  by bindView(R.id.next)
-    private val fastForwardButton: View by bindView(R.id.fastForward)
-    private val playButton: FloatingActionButton by bindView(R.id.play)
-    private val rewindButton: View by bindView(R.id.rewind)
-    private val previousButton: View by bindView(R.id.previous)
-
     /**
      * @return the book id this fragment was instantiated with.
      */
@@ -111,12 +77,12 @@ class BookPlayFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        playButton.setOnClickListener { mediaPlayer.playPause() }
-        rewindButton.setOnClickListener { mediaPlayer.rewind() }
-        fastForwardButton.setOnClickListener { mediaPlayer.fastForward() }
-        nextButton.setOnClickListener { mediaPlayer.next() }
-        previousButton.setOnClickListener { mediaPlayer.previous() }
-        playedTimeView.setOnClickListener { launchJumpToPositionDialog() }
+        play.setOnClickListener { mediaPlayer.playPause() }
+        rewind.setOnClickListener { mediaPlayer.rewind() }
+        fastForward.setOnClickListener { mediaPlayer.fastForward() }
+        next.setOnClickListener { mediaPlayer.next() }
+        previous.setOnClickListener { mediaPlayer.previous() }
+        playedTime.setOnClickListener { launchJumpToPositionDialog() }
 
         var lastClick = 0L
         val doubleClickTime = ViewConfiguration.getDoubleTapTimeout()
@@ -140,18 +106,18 @@ class BookPlayFragment : Fragment() {
         }
 
         //setup buttons
-        playButton.setIconDrawable(playPauseDrawable)
+        play.setIconDrawable(playPauseDrawable)
         RxSeekBar.changeEvents(seekBar)
                 .subscribe {
-                    when (it ) {
-                        is  SeekBarProgressChangeEvent -> {
+                    when (it) {
+                        is SeekBarProgressChangeEvent -> {
                             //sets text to adjust while using seekBar
-                            playedTimeView.text = formatTime(it.progress().toLong(), seekBar.max.toLong())
+                            playedTime.text = formatTime(it.progress().toLong(), seekBar.max.toLong())
                         }
                         is SeekBarStopChangeEvent -> {
                             val progress = seekBar.progress
                             mediaPlayer.changePosition(progress, book!!.currentChapter().file)
-                            playedTimeView.text = formatTime(progress.toLong(), seekBar.max.toLong())
+                            playedTime.text = formatTime(progress.toLong(), seekBar.max.toLong())
                         }
                     }
                 }
@@ -201,28 +167,28 @@ class BookPlayFragment : Fragment() {
 
             // Next/Prev/spinner/book progress views hiding
             if (book!!.chapters.size == 1) {
-                nextButton.visibility = View.GONE
-                previousButton.visibility = View.GONE
+                next.visibility = View.GONE
+                previous.visibility = View.GONE
                 bookSpinner.visibility = View.GONE
             } else {
-                nextButton.visibility = View.VISIBLE
-                previousButton.visibility = View.VISIBLE
+                next.visibility = View.VISIBLE
+                previous.visibility = View.VISIBLE
                 bookSpinner.visibility = View.VISIBLE
             }
 
-            ViewCompat.setTransitionName(coverView, book!!.coverTransitionName)
+            ViewCompat.setTransitionName(cover, book!!.coverTransitionName)
         }
 
         // (Cover)
         val coverReplacement = CoverReplacement(if (book == null) "M" else book!!.name, context)
         if (book != null && !book!!.useCoverReplacement && book!!.coverFile().canRead()) {
-            Picasso.with(context).load(book!!.coverFile()).placeholder(coverReplacement).into(coverView)
+            Picasso.with(context).load(book!!.coverFile()).placeholder(coverReplacement).into(cover)
         } else {
             // we have to set the cover in onPreDraw. Else the transition will fail.
-            coverView.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+            cover.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
                 override fun onPreDraw(): Boolean {
-                    coverView.viewTreeObserver.removeOnPreDrawListener(this)
-                    coverView.setImageDrawable(coverReplacement)
+                    cover.viewTreeObserver.removeOnPreDrawListener(this)
+                    cover.setImageDrawable(coverReplacement)
                     return true
                 }
             })
@@ -337,13 +303,13 @@ class BookPlayFragment : Fragment() {
                         bookSpinner.setSelection(position, true)
                         val duration = chapter.duration
                         seekBar.max = duration
-                        maxTimeView.text = formatTime(duration.toLong(), duration.toLong())
+                        maxTime.text = formatTime(duration.toLong(), duration.toLong())
 
                         // Setting seekBar and played getTime view
                         val progress = book.time
                         if (!seekBar.isPressed) {
                             seekBar.progress = progress
-                            playedTimeView.text = formatTime(progress.toLong(), duration.toLong())
+                            playedTime.text = formatTime(progress.toLong(), duration.toLong())
                         }
                     })
 
@@ -392,7 +358,7 @@ class BookPlayFragment : Fragment() {
 
     companion object {
 
-        val TAG = BookPlayFragment::class.java.simpleName
+        val TAG: String = BookPlayFragment::class.java.simpleName
         private val NI_BOOK_ID = "niBookId"
 
 
