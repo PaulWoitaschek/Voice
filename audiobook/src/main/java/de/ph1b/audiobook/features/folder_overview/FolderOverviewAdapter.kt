@@ -42,10 +42,6 @@ class FolderOverviewAdapter(private val bookCollections: MutableList<String>,
         }
     }
 
-    interface OnFolderMoreClickedListener {
-        fun onFolderMoreClicked(position: Int)
-    }
-
     class ViewHolder(itemView: View, itemClicked: (position: Int) -> Unit) : RecyclerView.ViewHolder(itemView) {
 
         init {

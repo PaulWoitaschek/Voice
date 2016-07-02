@@ -231,7 +231,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
         }
 
         for (b in booksToRemove) {
-            d { "deleting book=${b.name}" };
+            d { "deleting book=${b.name}" }
             handler.postBlocking { db.hideBook(b) }
         }
     }

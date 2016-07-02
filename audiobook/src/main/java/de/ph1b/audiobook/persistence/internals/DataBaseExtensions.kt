@@ -1,26 +1,8 @@
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
 package de.ph1b.audiobook.persistence.internals
 
 import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import org.json.JSONArray
 
 fun Cursor.string(columnName: String): String {
     return stringNullable(columnName)!!
@@ -94,11 +76,4 @@ fun SQLiteDatabase.simpleQuery(table: String,
                                limit: String? = null,
                                distinct: Boolean = false): Cursor {
     return query(distinct, table, columns, selection, selectionArgs, groupBy, having, orderBy, limit)
-}
-
-inline fun <T> JSONArray.forEach(action: (T) -> Unit): Unit {
-    for (i in 0..length() - 1) {
-        @Suppress("UNCHECKED_CAST")
-        action(get(i) as T)
-    }
 }

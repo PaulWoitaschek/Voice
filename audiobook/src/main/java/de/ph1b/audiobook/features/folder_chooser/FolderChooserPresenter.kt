@@ -174,7 +174,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
             return true
         }
 
-        val newParts = newFile.split(File.separator);
+        val newParts = newFile.split(File.separator)
         for (s in folders) {
 
             if (newFile == s) {
@@ -183,9 +183,9 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
                 return false
             }
 
-            val oldParts = s.split(File.separator);
+            val oldParts = s.split(File.separator)
             val max = Math.min(oldParts.size, newParts.size) - 1
-            var filesAreSubsets = true;
+            var filesAreSubsets = true
             for (i in 0..max) {
                 if (oldParts[i] != newParts[i]) {
                     filesAreSubsets = false

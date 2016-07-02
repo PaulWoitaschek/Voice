@@ -56,10 +56,10 @@ class BookChestTest {
 
     @Test
     fun testBookChest() {
-        var dummy = BookMocker.mock(5)
+        val dummy = BookMocker.mock(5)
         bookChest.addBook(dummy)
         val firstBook = bookChest.activeBooks.first()
-        var dummyWithUpdatedId = dummy.copy(id = firstBook.id)
+        val dummyWithUpdatedId = dummy.copy(id = firstBook.id)
 
         assertThat(dummyWithUpdatedId).isEqualTo(firstBook)
     }

@@ -35,7 +35,7 @@ class BookUriConverter
 
     private val matcher = UriMatcher(UriMatcher.NO_MATCH).apply {
         addURI(booksAuthority, PATH_BOOKS, ROOT)
-        addURI(booksAuthority, "${PATH_BOOKS}/#", BOOK_ID)
+        addURI(booksAuthority, "$PATH_BOOKS/#", BOOK_ID)
     }
 
     fun match(uri: Uri) = matcher.match(uri)
