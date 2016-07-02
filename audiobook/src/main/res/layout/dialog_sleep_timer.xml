@@ -8,14 +8,14 @@
               android:orientation="vertical">
 
     <TextView
-        android:id="@+id/minute_text"
+        android:id="@+id/minuteText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/dialog_content_text_size"
         tools:text="Pauses after 8 minutes"/>
 
     <NumberPicker
-        android:id="@+id/minute"
+        android:id="@+id/numberPicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

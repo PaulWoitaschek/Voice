@@ -138,21 +138,17 @@ class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOver
         recycler.layoutManager = layoutManager
         recycler.addItemDecoration(DividerItemDecoration(this))
 
-        val moreClickedListener = object : FolderOverviewAdapter.OnFolderMoreClickedListener {
-            override fun onFolderMoreClicked(position: Int) {
-                MaterialDialog.Builder(this@FolderOverviewActivity)
-                        .title(R.string.delete_folder)
-                        .content("${getString(R.string.delete_folder_content)}\n${adapter.getItem(position)}")
-                        .positiveText(R.string.remove)
-                        .negativeText(R.string.dialog_cancel)
-                        .onPositive { materialDialog, dialogAction ->
-                            val itemToDelete = adapter.getItem(position)
-                            presenter().removeFolder(itemToDelete)
-                        }
-                        .show()
-            }
+        adapter = FolderOverviewAdapter(bookCollections, singleBooks) { toDelete ->
+            MaterialDialog.Builder(this@FolderOverviewActivity)
+                    .title(R.string.delete_folder)
+                    .content("${getString(R.string.delete_folder_content)}\n$toDelete")
+                    .positiveText(R.string.remove)
+                    .negativeText(R.string.dialog_cancel)
+                    .onPositive { materialDialog, dialogAction ->
+                        presenter().removeFolder(toDelete)
+                    }
+                    .show()
         }
-        adapter = FolderOverviewAdapter(this, bookCollections, singleBooks, moreClickedListener)
         recycler.adapter = adapter
 
         fam.setOnFloatingActionsMenuUpdateListener(famMenuListener)

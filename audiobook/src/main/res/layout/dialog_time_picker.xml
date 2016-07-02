@@ -7,7 +7,7 @@
               android:orientation="horizontal">
 
     <NumberPicker
-        android:id="@+id/number_hour"
+        android:id="@+id/numberHour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"/>
@@ -23,7 +23,7 @@
         tools:ignore="HardcodedText"/>
 
     <NumberPicker
-        android:id="@+id/number_minute"
+        android:id="@+id/numberMinute"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"/>

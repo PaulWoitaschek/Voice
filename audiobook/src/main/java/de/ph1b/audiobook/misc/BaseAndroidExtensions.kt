@@ -26,13 +26,15 @@ import android.os.Looper
 import android.support.annotation.DrawableRes
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import de.ph1b.audiobook.BuildConfig
 
 
-fun Fragment.actionBar() = (activity as AppCompatActivity).supportActionBar!!
+val Fragment.actionBar: ActionBar
+    get() = (activity as AppCompatActivity).supportActionBar!!
 
 inline fun <reified T : Activity> Activity.startActivity(args: Bundle? = null, flags: Int? = null) {
     val intent = Intent(this, T::class.java)
