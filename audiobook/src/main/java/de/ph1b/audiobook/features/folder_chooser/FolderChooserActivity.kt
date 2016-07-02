@@ -1,47 +1,26 @@
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
 package de.ph1b.audiobook.features.folder_chooser
 
 import android.Manifest
-import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
+import com.afollestad.materialdialogs.MaterialDialog
 import com.jakewharton.rxbinding.widget.RxAdapterView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.folder_chooser.FolderChooserActivity.Companion.newInstanceIntent
 import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
-import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.mvp.RxBaseActivity
 import de.ph1b.audiobook.uitools.DividerItemDecoration
-import e
 import i
 import kotlinx.android.synthetic.main.activity_folder_chooser.*
+import permissions.dispatcher.*
 import java.io.File
 
 /**
@@ -55,7 +34,7 @@ import java.io.File
 
  * @author Paul Woitaschek
  */
-class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPresenter>(), FolderChooserView, HideFolderDialog.OnChosenListener {
+@RuntimePermissions class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPresenter>(), FolderChooserView, HideFolderDialog.OnChosenListener {
 
     override fun newPresenter() = FolderChooserPresenter()
 
@@ -70,11 +49,6 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     private lateinit var adapter: FolderChooserAdapter
     private lateinit var spinnerAdapter: MultiLineSpinnerAdapter<File>
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private fun askForReadExternalStoragePermission() {
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSION_RESULT_READ_EXT_STORAGE)
-    }
-
     override fun askAddNoMediaFile(folderToHide: File) {
         val hideFolderDialog = HideFolderDialog.newInstance(folderToHide)
         hideFolderDialog.show(supportFragmentManager, HideFolderDialog.TAG)
@@ -83,39 +57,34 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
                                             grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        i { "onRequestPermissionsResult called" }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            val permissionGrantingWorked = PermissionHelper.permissionGrantingWorked(requestCode,
-                    PERMISSION_RESULT_READ_EXT_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,
-                    permissions, grantResults)
-            i { "permissionGrantingWorked=$permissionGrantingWorked" }
-            if (permissionGrantingWorked) {
-                presenter().gotPermission()
-            } else {
-                PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE)
-                e { "could not get permission" }
-            }
-        }
+        FolderChooserActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults)
     }
 
     override fun getMode() = OperationMode.valueOf(intent.getStringExtra(NI_OPERATION_MODE))
+
+    @NeedsPermission(STORAGE_PERMISSION) fun ensurePermissions() {
+        presenter().gotPermission()
+    }
+
+    @OnShowRationale(STORAGE_PERMISSION) fun showRationaleForStorage(request: PermissionRequest) {
+        val content = "${getString(R.string.permission_read_ext_explanation)}\n\n${getString(R.string.permission_read_ext_request)}"
+        MaterialDialog.Builder(this)
+                .cancelable(false)
+                .positiveText(R.string.permission_rescan)
+                .onPositive { materialDialog, dialogAction -> request.proceed() }
+                .content(content)
+                .show()
+    }
+
+    @OnPermissionDenied(STORAGE_PERMISSION) fun denied() {
+        FolderChooserActivityPermissionsDispatcher.ensurePermissionsWithCheck(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // permissions
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            val hasExternalStoragePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-            i { "hasExternalStoragePermission=$hasExternalStoragePermission" }
-            if (!hasExternalStoragePermission) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE)
-                } else {
-                    askForReadExternalStoragePermission()
-                }
-            }
-        }
+        FolderChooserActivityPermissionsDispatcher.ensurePermissionsWithCheck(this)
 
         // find views
         setContentView(R.layout.activity_folder_chooser)
@@ -204,11 +173,6 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
         upButton.setImageDrawable(upIcon)
     }
 
-    override fun finish() {
-        i { "finish" }
-        super.finish()
-    }
-
     override fun onChosen() {
         presenter().hideFolderSelectionMade()
     }
@@ -220,8 +184,8 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
 
     companion object {
 
-        private val NI_OPERATION_MODE = "niOperationMode"
-        private val PERMISSION_RESULT_READ_EXT_STORAGE = 1
+        private const val NI_OPERATION_MODE = "niOperationMode"
+        private const val STORAGE_PERMISSION = Manifest.permission.WRITE_EXTERNAL_STORAGE
 
         /**
          * Generates a new intent with the necessary extras

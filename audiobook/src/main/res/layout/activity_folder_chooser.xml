@@ -103,11 +103,11 @@
         android:layout_weight="1"
         tools:listitem="@layout/activity_folder_chooser_adapter_row_layout"/>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  style="?android:buttonBarStyle"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="horizontal">
+    <LinearLayout
+        style="?android:buttonBarStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/abort"
