@@ -1,13 +1,11 @@
 package de.ph1b.audiobook.features.folder_chooser
 
-import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
@@ -17,6 +15,8 @@ import com.jakewharton.rxbinding.widget.RxAdapterView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.folder_chooser.FolderChooserActivity.Companion.newInstanceIntent
 import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
+import de.ph1b.audiobook.misc.PermissionHelper
+import de.ph1b.audiobook.misc.drawable
 import de.ph1b.audiobook.mvp.RxBaseActivity
 import de.ph1b.audiobook.uitools.BetterSnack
 import de.ph1b.audiobook.uitools.DividerItemDecoration
@@ -64,11 +64,11 @@ import java.io.File
 
     override fun getMode() = OperationMode.valueOf(intent.getStringExtra(NI_OPERATION_MODE))
 
-    @NeedsPermission(STORAGE_PERMISSION) fun ensurePermissions() {
+    @NeedsPermission(PermissionHelper.NEEDED_PERMISSION) fun ensurePermissions() {
         presenter().gotPermission()
     }
 
-    @OnShowRationale(STORAGE_PERMISSION) fun showRationaleForStorage(request: PermissionRequest) {
+    @OnShowRationale(PermissionHelper.NEEDED_PERMISSION) fun showRationaleForStorage(request: PermissionRequest) {
         BetterSnack.make(
                 root = root,
                 text = getString(R.string.permission_external_new_explanation),
@@ -77,11 +77,11 @@ import java.io.File
         }
     }
 
-    @OnPermissionDenied(STORAGE_PERMISSION) fun denied() {
+    @OnPermissionDenied(PermissionHelper.NEEDED_PERMISSION) fun denied() {
         FolderChooserActivityPermissionsDispatcher.ensurePermissionsWithCheck(this)
     }
 
-    @OnNeverAskAgain(STORAGE_PERMISSION) fun deniedForever() {
+    @OnNeverAskAgain(PermissionHelper.NEEDED_PERMISSION) fun deniedForever() {
         BetterSnack.make(
                 root = root,
                 text = getString(R.string.permission_external_new_explanation),
@@ -187,7 +187,7 @@ import java.io.File
      */
     override fun setUpButtonEnabled(upEnabled: Boolean) {
         upButton.isEnabled = upEnabled
-        val upIcon = if (upEnabled) ContextCompat.getDrawable(this, R.drawable.ic_arrow_upward) else null
+        val upIcon = if (upEnabled) drawable(R.drawable.ic_arrow_upward) else null
         upButton.setImageDrawable(upIcon)
     }
 
@@ -203,7 +203,6 @@ import java.io.File
     companion object {
 
         private const val NI_OPERATION_MODE = "niOperationMode"
-        private const val STORAGE_PERMISSION = Manifest.permission.WRITE_EXTERNAL_STORAGE
 
         /**
          * Generates a new intent with the necessary extras

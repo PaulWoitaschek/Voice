@@ -18,6 +18,9 @@ import de.ph1b.audiobook.R
  */
 object PermissionHelper {
 
+    const val NEEDED_PERMISSION = Manifest.permission.WRITE_EXTERNAL_STORAGE
+
+
     /**
      * This is a helper for [Activity.onRequestPermissionsResult] that
      * lets you determine if the permission granting worked.

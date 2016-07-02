@@ -28,9 +28,9 @@ object BetterSnack {
         val bar = Snackbar.make(root, text, duration.internalDuration)
         bar.setCallback(object : Snackbar.Callback() {
             override fun onDismissed(snackbar: Snackbar?, event: Int) {
-                if (event == Snackbar.Callback.DISMISS_EVENT_MANUAL && duration == Duration.INDEFINITE_NO_DISMISS) {
+                if (event == Snackbar.Callback.DISMISS_EVENT_SWIPE && duration == Duration.INDEFINITE_NO_DISMISS) {
                     // show again to enforce a decision
-                    make(root, text, duration)
+                    make(root, text, duration, action, listener)
                 }
             }
         })
