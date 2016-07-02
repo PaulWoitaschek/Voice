@@ -46,7 +46,7 @@ class BookUriConverter
             .appendPath(bookId.toString())
             .build()
 
-    fun extractBook(uri: Uri) = uri.pathSegments.get(1).toLong()
+    fun extractBook(uri: Uri) = uri.pathSegments[1].toLong()
 
     companion object {
         private const val booksAuthority = "BOOKS"

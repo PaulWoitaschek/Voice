@@ -32,7 +32,7 @@ import javax.inject.Named
  */
 class MediaPlayerCapabilities
 @Inject
-constructor(@Named(FOR) private val prefs: SharedPreferences, private val channelDetector: FalseChannelDetector) {
+constructor(@Named(FOR) private val prefs: SharedPreferences, channelDetector: FalseChannelDetector) {
 
 
     val useCustomMediaPlayer: Boolean =

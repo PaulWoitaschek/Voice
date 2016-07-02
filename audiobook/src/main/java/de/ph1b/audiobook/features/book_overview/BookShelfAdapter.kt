@@ -135,8 +135,8 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
             for (i in 0..size() - 1) {
                 val existing = get(i)
                 var deleteBook = true
-                for (b in books) {
-                    if (existing.id == b.id) {
+                for ((id) in books) {
+                    if (existing.id == id) {
                         deleteBook = false
                         break
                     }

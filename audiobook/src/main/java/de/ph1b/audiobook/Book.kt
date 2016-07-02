@@ -60,11 +60,11 @@ data class Book(val id: Long,
 
     init {
         val chapterFiles = ArrayList<File>(chapters.size)
-        for (c in chapters) {
-            chapterFiles.add(c.file)
+        for ((file) in chapters) {
+            chapterFiles.add(file)
         }
-        check(playbackSpeed >= SPEED_MIN, { "speed $playbackSpeed must be >= ${SPEED_MIN}" })
-        check(playbackSpeed <= SPEED_MAX) { "speed $playbackSpeed must be <= ${SPEED_MAX}" }
+        check(playbackSpeed >= SPEED_MIN, { "speed $playbackSpeed must be >= $SPEED_MIN" })
+        check(playbackSpeed <= SPEED_MAX) { "speed $playbackSpeed must be <= $SPEED_MAX" }
         check(chapters.isNotEmpty(), { "chapters must not be empty" })
         check(chapterFiles.contains(currentFile), { "$chapterFiles must contain current file $currentFile" })
         check(name.isNotEmpty(), { "name must not be empty" })
@@ -82,8 +82,8 @@ data class Book(val id: Long,
      */
     val globalDuration: Int by lazy {
         var globalDuration = 0
-        for (c in chapters) {
-            globalDuration += c.duration
+        for ((file, name, duration) in chapters) {
+            globalDuration += duration
         }
         globalDuration
     }

@@ -142,7 +142,7 @@ class InternalBookRegisterTest {
                 playbackSpeed = 1.7f,
                 root = "slksjdglkjgaölskjdf")
 
-        register.updateBook(changed)
+        register.updateBook(changed, true)
 
         val containingBooks = register.activeBooks()
 
