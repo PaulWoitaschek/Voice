@@ -1,20 +1,3 @@
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
 package de.ph1b.audiobook.injection;
 
 import android.app.Application;
@@ -30,7 +13,6 @@ import javax.inject.Inject;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.features.BookAdder;
-import de.ph1b.audiobook.logging.DelegateCrashesToTimber;
 import de.ph1b.audiobook.logging.LogStorage;
 import de.ph1b.audiobook.logging.LogToStorageTree;
 import de.ph1b.audiobook.persistence.PrefsManager;
@@ -60,6 +42,7 @@ public class App extends Application {
       applicationComponent = newComponent();
       component().inject(this);
 
+
       ConfigurationBuilder acraBuilder = new ConfigurationBuilder(this);
       if (BuildConfig.DEBUG) {
          // init timber
@@ -68,10 +51,6 @@ public class App extends Application {
 
          // force enable acra in debug mode
          prefsManager.setAcraEnabled(true);
-
-         // forward crashes to timber
-         //noinspection unchecked
-         acraBuilder.setReportSenderFactoryClasses(new Class[]{DelegateCrashesToTimber.class});
       }
 
       // init acra and send breadcrumbs
