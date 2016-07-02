@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatDelegate;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
+import org.acra.config.ACRAConfigurationException;
 import org.acra.config.ConfigurationBuilder;
 import org.acra.sender.HttpSender;
 
@@ -39,11 +40,20 @@ public class App extends Application {
    @Override public void onCreate() {
       super.onCreate();
 
+      // init acra + return early if this is the sender service
+      try {
+         ACRA.init(this, new ConfigurationBuilder(this)
+               .build());
+      } catch (ACRAConfigurationException e) {
+         throw new RuntimeException(e);
+      }
+      if (ACRA.isACRASenderServiceProcess()) {
+         return;
+      }
+
       applicationComponent = newComponent();
       component().inject(this);
 
-
-      ConfigurationBuilder acraBuilder = new ConfigurationBuilder(this);
       if (BuildConfig.DEBUG) {
          // init timber
          Timber.plant(new Timber.DebugTree());
@@ -52,9 +62,6 @@ public class App extends Application {
          // force enable acra in debug mode
          prefsManager.setAcraEnabled(true);
       }
-
-      // init acra and send breadcrumbs
-      ACRA.init(this, acraBuilder.build());
 
       Timber.i("onCreate");
 

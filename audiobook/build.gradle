@@ -63,7 +63,7 @@ dependencies {
     compile "com.getbase:floatingactionbutton:1.10.1"
 
     // crash reporting
-    compile "ch.acra:acra:4.8.5"
+    compile "ch.acra:acra:4.9.0"
 
     // dependency injection
     def daggerVersion = "2.5"
