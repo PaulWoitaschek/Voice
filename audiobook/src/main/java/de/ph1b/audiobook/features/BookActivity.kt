@@ -23,9 +23,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.support.annotation.IdRes
 import android.support.v4.app.ActivityCompat
-import android.support.v7.widget.Toolbar
 import android.transition.TransitionInflater
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
@@ -40,6 +38,8 @@ import de.ph1b.audiobook.misc.startActivity
 import de.ph1b.audiobook.persistence.PrefsManager
 import e
 import i
+import kotlinx.android.synthetic.main.activity_book.*
+import kotlinx.android.synthetic.main.toolbar.*
 import v
 import java.io.File
 import java.util.*
@@ -55,7 +55,6 @@ class BookActivity : BaseActivity(), BookShelfFragment.Callback {
     private val TAG = BookActivity::class.java.simpleName
     private val FM_BOOK_SHELF = TAG + BookShelfFragment.TAG
     private val FM_BOOK_PLAY = TAG + BookPlayFragment.TAG
-    @IdRes private val FRAME_CONTAINER = R.id.play_container
 
     @Inject internal lateinit var prefs: PrefsManager
 
@@ -88,11 +87,11 @@ class BookActivity : BaseActivity(), BookShelfFragment.Callback {
             }
         }
 
-        setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
+        setSupportActionBar(toolbar!!)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(FRAME_CONTAINER, BookShelfFragment(), FM_BOOK_SHELF)
+                    .replace(container.id, BookShelfFragment(), FM_BOOK_SHELF)
                     .commit()
         }
 
@@ -113,7 +112,7 @@ class BookActivity : BaseActivity(), BookShelfFragment.Callback {
 
         val ft = supportFragmentManager.beginTransaction()
         val bookPlayFragment = BookPlayFragment.newInstance(bookId)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val move = TransitionInflater.from(this@BookActivity).inflateTransition(android.R.transition.move)
             bookPlayFragment.sharedElementEnterTransition = move
             for (entry in sharedViews.entries) {
@@ -122,7 +121,7 @@ class BookActivity : BaseActivity(), BookShelfFragment.Callback {
             }
         }
 
-        ft.replace(FRAME_CONTAINER, bookPlayFragment, FM_BOOK_PLAY)
+        ft.replace(container.id, bookPlayFragment, FM_BOOK_PLAY)
                 .addToBackStack(null)
                 .commit()
     }

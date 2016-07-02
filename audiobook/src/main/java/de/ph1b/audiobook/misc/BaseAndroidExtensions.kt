@@ -20,24 +20,32 @@ package de.ph1b.audiobook.misc
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Looper
+import android.support.annotation.DrawableRes
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
+import android.view.View
 import de.ph1b.audiobook.BuildConfig
 
 
 fun Fragment.actionBar() = (activity as AppCompatActivity).supportActionBar!!
 
-inline fun<reified T : Activity> Activity.startActivity(args: Bundle? = null, flags: Int? = null) {
+inline fun <reified T : Activity> Activity.startActivity(args: Bundle? = null, flags: Int? = null) {
     val intent = Intent(this, T::class.java)
     args?.let { intent.putExtras(args) }
     flags?.let { intent.flags = flags }
     startActivity(intent)
 }
 
-fun Context.layoutInflater() = LayoutInflater.from(this)
+fun Context.layoutInflater(): LayoutInflater = LayoutInflater.from(this)
+
+fun Context.drawable(@DrawableRes id: Int): Drawable = ContextCompat.getDrawable(this, id)
+
+fun View.layoutInflater() = context.layoutInflater()
 
 fun assertMain() {
     if (BuildConfig.DEBUG) {

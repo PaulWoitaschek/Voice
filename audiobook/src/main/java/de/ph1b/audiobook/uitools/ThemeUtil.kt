@@ -72,7 +72,7 @@ object ThemeUtil {
         return resId
     }
 
-    enum class Theme internal constructor(@StringRes val nameId: Int, @AppCompatDelegate.NightMode val nightMode: Int) {
+    enum class Theme(@StringRes val nameId: Int, @AppCompatDelegate.NightMode val nightMode: Int) {
         DAY_NIGHT (R.string.pref_theme_daynight, AppCompatDelegate.MODE_NIGHT_AUTO),
         DAY(R.string.pref_theme_day, AppCompatDelegate.MODE_NIGHT_NO),
         NIGHT(R.string.pref_theme_night, AppCompatDelegate.MODE_NIGHT_YES)
