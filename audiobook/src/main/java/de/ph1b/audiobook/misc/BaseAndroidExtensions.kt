@@ -22,7 +22,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.os.Looper
 import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
@@ -33,7 +32,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.SeekBar
-import de.ph1b.audiobook.BuildConfig
 
 
 val Fragment.actionBar: ActionBar
@@ -55,14 +53,6 @@ fun Context.drawable(@DrawableRes id: Int): Drawable = ContextCompat.getDrawable
 }
 
 fun View.layoutInflater() = context.layoutInflater()
-
-fun assertMain() {
-    if (BuildConfig.DEBUG) {
-        if (Looper.getMainLooper().thread != Thread.currentThread()) {
-            throw IllegalArgumentException("Must call on main thread")
-        }
-    }
-}
 
 fun SeekBar.onProgressChanged(progressChanged: (Int) -> Unit) {
     setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {

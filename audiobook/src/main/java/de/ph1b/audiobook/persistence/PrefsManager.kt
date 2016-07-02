@@ -7,7 +7,6 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.book_overview.BookShelfFragment
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.assertMain
 import de.ph1b.audiobook.persistence.internals.*
 import de.ph1b.audiobook.uitools.ThemeUtil
 import rx.Observable
@@ -86,7 +85,6 @@ constructor(c: Context, @Named(FOR) private val sp: SharedPreferences) {
      * @param bookId the book Id to set
      */
     @Synchronized fun setCurrentBookId(bookId: Long) {
-        assertMain()
         sp.edit { setLong(PREF_KEY_CURRENT_BOOK to bookId) }
         currentBookId.onNext(bookId)
     }
