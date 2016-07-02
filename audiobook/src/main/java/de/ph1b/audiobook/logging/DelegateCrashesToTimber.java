@@ -19,18 +19,17 @@ import timber.log.Timber;
  */
 public class DelegateCrashesToTimber implements ReportSenderFactory {
 
-    @NonNull
-    @Override
-    public ReportSender create(Context context, ACRAConfiguration config) {
-        return new ReportSender() {
-            @Override
-            public void send(Context context, CrashReportData errorContent) throws ReportSenderException {
-                try {
-                    Timber.e("Timber caught %s", errorContent.toJSON().toString());
-                } catch (JSONReportBuilder.JSONReportException e) {
-                    e.printStackTrace();
-                }
+   @NonNull @Override
+   public ReportSender create(@NonNull Context context, @NonNull ACRAConfiguration config) {
+      return new ReportSender() {
+         @Override
+         public void send(Context context, CrashReportData errorContent) throws ReportSenderException {
+            try {
+               Timber.e("Timber caught %s", errorContent.toJSON().toString());
+            } catch (JSONReportBuilder.JSONReportException e) {
+               e.printStackTrace();
             }
-        };
-    }
+         }
+      };
+   }
 }

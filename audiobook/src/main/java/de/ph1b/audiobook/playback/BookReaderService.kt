@@ -238,8 +238,7 @@ class BookReaderService : MediaBrowserServiceCompat() {
 
         subscriptions.apply {
             // set seek time to the player
-            add(prefs.seekTime
-                    .subscribe { player.seekTime = it })
+            add(prefs.seekTime.subscribe { player.seekTime = it })
 
             // set auto rewind amount to the player
             add(prefs.autoRewindAmount

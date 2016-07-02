@@ -110,7 +110,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
         }
     }
 
-    fun book(): Book = book.value
+    fun book(): Book? = book.value
 
     fun bookObservable(): Observable<Book> = book.asObservable()
 

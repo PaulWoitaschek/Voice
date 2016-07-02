@@ -25,9 +25,7 @@ import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment;
 import de.ph1b.audiobook.features.settings.dialogs.SleepDialogFragment;
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment;
 import de.ph1b.audiobook.features.widget.WidgetUpdateService;
-import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.playback.BookReaderService;
-import de.ph1b.audiobook.playback.PlayStateManager;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 
 /**
@@ -43,11 +41,7 @@ public interface ApplicationComponent {
 
    Context getContext();
 
-   PrefsManager getPrefsManager();
-
    BookAdder getBookAdder();
-
-   PlayStateManager playStateManager();
 
    void inject(WidgetUpdateService target);
 
@@ -88,8 +82,6 @@ public interface ApplicationComponent {
    void inject(BookShelfAdapter target);
 
    void inject(BookShelfFragment target);
-
-   void inject(BookShelfPresenter target);
 
    void inject(FolderOverviewPresenter target);
 }
