@@ -11,12 +11,12 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
-import com.afollestad.materialdialogs.MaterialDialog
 import com.jakewharton.rxbinding.widget.RxAdapterView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.folder_chooser.FolderChooserActivity.Companion.newInstanceIntent
 import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
 import de.ph1b.audiobook.mvp.RxBaseActivity
+import de.ph1b.audiobook.uitools.BetterSnack
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import i
 import kotlinx.android.synthetic.main.activity_folder_chooser.*
@@ -67,13 +67,12 @@ import java.io.File
     }
 
     @OnShowRationale(STORAGE_PERMISSION) fun showRationaleForStorage(request: PermissionRequest) {
-        val content = "${getString(R.string.permission_read_ext_explanation)}\n\n${getString(R.string.permission_read_ext_request)}"
-        MaterialDialog.Builder(this)
-                .cancelable(false)
-                .positiveText(R.string.permission_rescan)
-                .onPositive { materialDialog, dialogAction -> request.proceed() }
-                .content(content)
-                .show()
+        BetterSnack.make(
+                root = root,
+                text = getString(R.string.permission_external_new_explanation),
+                action = getString(R.string.permission_retry)) {
+            request.proceed()
+        }
     }
 
     @OnPermissionDenied(STORAGE_PERMISSION) fun denied() {
@@ -82,9 +81,6 @@ import java.io.File
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // permissions
-        FolderChooserActivityPermissionsDispatcher.ensurePermissionsWithCheck(this)
 
         // find views
         setContentView(R.layout.activity_folder_chooser)
@@ -118,6 +114,13 @@ import java.io.File
                     val item = spinnerAdapter.getItem(it)
                     presenter().fileSelected(item.data)
                 }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        // permissions
+        FolderChooserActivityPermissionsDispatcher.ensurePermissionsWithCheck(this)
     }
 
     override fun onBackPressed() {

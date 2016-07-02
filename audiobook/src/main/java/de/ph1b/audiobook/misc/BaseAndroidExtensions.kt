@@ -23,6 +23,8 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Looper
+import android.support.annotation.ColorInt
+import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
@@ -47,6 +49,10 @@ inline fun <reified T : Activity> Activity.startActivity(args: Bundle? = null, f
 fun Context.layoutInflater(): LayoutInflater = LayoutInflater.from(this)
 
 fun Context.drawable(@DrawableRes id: Int): Drawable = ContextCompat.getDrawable(this, id)
+
+@ColorInt fun Context.color(@ColorRes id: Int): Int {
+    return ContextCompat.getColor(this, id)
+}
 
 fun View.layoutInflater() = context.layoutInflater()
 
