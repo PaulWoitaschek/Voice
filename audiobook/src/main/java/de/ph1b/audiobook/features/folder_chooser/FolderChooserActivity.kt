@@ -4,7 +4,9 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
@@ -77,6 +79,19 @@ import java.io.File
 
     @OnPermissionDenied(STORAGE_PERMISSION) fun denied() {
         FolderChooserActivityPermissionsDispatcher.ensurePermissionsWithCheck(this)
+    }
+
+    @OnNeverAskAgain(STORAGE_PERMISSION) fun deniedForever() {
+        BetterSnack.make(
+                root = root,
+                text = getString(R.string.permission_external_new_explanation),
+                action = getString(R.string.permission_goto_settings)) {
+            val intent = Intent()
+            intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+            val uri = Uri.fromParts("package", packageName, null)
+            intent.data = uri
+            startActivity(intent)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
