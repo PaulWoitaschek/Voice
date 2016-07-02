@@ -30,6 +30,7 @@ import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.SeekBar
 import de.ph1b.audiobook.BuildConfig
 
 
@@ -55,4 +56,18 @@ fun assertMain() {
             throw IllegalArgumentException("Must call on main thread")
         }
     }
+}
+
+fun SeekBar.onProgressChanged(progressChanged: (Int) -> Unit) {
+    setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+            progressChanged(progress)
+        }
+
+        override fun onStartTrackingTouch(seekBar: SeekBar) {
+        }
+
+        override fun onStopTrackingTouch(seekBar: SeekBar) {
+        }
+    })
 }

@@ -4,13 +4,13 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.view.LayoutInflater
-import android.widget.SeekBar
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.settings.SettingsSetListener
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.layoutInflater
+import de.ph1b.audiobook.misc.onProgressChanged
 import de.ph1b.audiobook.persistence.PrefsManager
 import kotlinx.android.synthetic.main.dialog_amount_chooser.view.*
 import javax.inject.Inject
@@ -41,23 +41,15 @@ class AutoRewindDialogFragment : DialogFragment() {
         App.component().inject(this)
 
         // view binding
-        val v = LayoutInflater.from(context).inflate(R.layout.dialog_amount_chooser, null)
+        val v = context.layoutInflater().inflate(R.layout.dialog_amount_chooser, null)
         rewindText = v.textView
 
         val oldRewindAmount = prefs.autoRewindAmount.toBlocking().first()
         v.seekBar.max = SEEK_BAR_MAX - SEEK_BAR_MIN
         v.seekBar.progress = oldRewindAmount - SEEK_BAR_MIN
-        v.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                setText(progress)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-            }
-        })
+        v.seekBar.onProgressChanged {
+            setText(it)
+        }
 
         // text
         setText(v.seekBar.progress)
