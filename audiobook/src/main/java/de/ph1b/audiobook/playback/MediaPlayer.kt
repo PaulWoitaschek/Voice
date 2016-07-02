@@ -44,7 +44,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
 
     private var updatingSubscription: Subscription? = null
     private val errorSubject = PublishSubject.create<Unit>()
-    fun onError() = errorSubject.asObservable()
+    fun onError(): Observable<Unit> = errorSubject.asObservable()
 
     init {
         player.onCompletion
@@ -110,9 +110,9 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
         }
     }
 
-    fun book() = book.value
+    fun book(): Book = book.value
 
-    fun bookObservable() = book.asObservable()
+    fun bookObservable(): Observable<Book> = book.asObservable()
 
     /**
      * Prepares the current chapter set in book.

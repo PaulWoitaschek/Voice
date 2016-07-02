@@ -68,7 +68,7 @@ constructor(private val register: InternalBookRegister) {
 
     fun bookById(id: Long) = activeBooks.firstOrNull { it.id == id }
 
-    @Synchronized fun getOrphanedBooks() = ArrayList(orphaned)
+    @Synchronized fun getOrphanedBooks(): List<Book> = ArrayList(orphaned)
 
     @Synchronized fun updateBook(book: Book, chaptersChanged: Boolean = false) {
         v { "updateBook=${book.name} with time ${book.time}" }

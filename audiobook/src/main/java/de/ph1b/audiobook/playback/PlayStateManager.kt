@@ -16,14 +16,14 @@ class PlayStateManager
 @Inject
 constructor() {
 
-    val playState = BehaviorSubject.create(PlayStateManager.PlayState.STOPPED)
+    val playState: BehaviorSubject<PlayState> = BehaviorSubject.create(PlayStateManager.PlayState.STOPPED)
 
     init {
-        playState.subscribe({
+        playState.subscribe {
             if (it == PlayState.PLAYING || it == PlayState.STOPPED) {
                 pauseReason = PauseReason.NONE
             }
-        })
+        }
     }
 
     var pauseReason = PauseReason.NONE

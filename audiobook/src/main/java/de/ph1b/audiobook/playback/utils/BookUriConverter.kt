@@ -40,9 +40,9 @@ class BookUriConverter
 
     fun match(uri: Uri) = matcher.match(uri)
 
-    fun allBooks() = baseBuilder().build()
+    fun allBooks(): Uri = baseBuilder().build()
 
-    fun book(bookId: Long) = baseBuilder()
+    fun book(bookId: Long): Uri = baseBuilder()
             .appendPath(bookId.toString())
             .build()
 

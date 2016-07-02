@@ -1,20 +1,3 @@
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
 package de.ph1b.audiobook.persistence
 
 import android.content.Context
@@ -27,6 +10,7 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.assertMain
 import de.ph1b.audiobook.persistence.internals.*
 import de.ph1b.audiobook.uitools.ThemeUtil
+import rx.Observable
 import rx.subjects.BehaviorSubject
 import java.util.*
 import javax.inject.Inject
@@ -161,7 +145,7 @@ constructor(c: Context, @Named(FOR) private val sp: SharedPreferences) {
     /**
      * The time to seek when pressing a skip button. (in seconds.)
      */
-    var seekTime = seekTimeSubject.asObservable()
+    var seekTime: Observable<Int> = seekTimeSubject.asObservable()
 
     fun setSeekTime(seekTime: Int) {
         seekTimeSubject.onNext(seekTime)
@@ -170,7 +154,7 @@ constructor(c: Context, @Named(FOR) private val sp: SharedPreferences) {
     /**
      * The time to seek when pressing a skip button. (in seconds.)
      */
-    var autoRewindAmount = autoRewindAmountSubject.asObservable()
+    var autoRewindAmount: Observable<Int> = autoRewindAmountSubject.asObservable()
 
     fun setAutoRewindAmount(autoRewindAmount: Int) {
         autoRewindAmountSubject.onNext(autoRewindAmount)
@@ -198,7 +182,6 @@ constructor(c: Context, @Named(FOR) private val sp: SharedPreferences) {
     @Synchronized fun setBookmarkOnSleepTimer(): Boolean {
         return sp.getBoolean(PREF_KEY_BOOKMARK_ON_SLEEP, false)
     }
-
 
     /**
      * The display mode that has been set or the default.

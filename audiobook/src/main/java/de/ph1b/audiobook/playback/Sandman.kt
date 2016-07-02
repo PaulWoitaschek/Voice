@@ -88,7 +88,7 @@ import javax.inject.Singleton
      * This observable holds the time in ms left that the sleep timer has left. This is updated
      * periodically
      */
-    val sleepSand = internalSleepSand.asObservable()
+    val sleepSand: Observable<Long> = internalSleepSand.asObservable()
 
     fun sleepTimerActive(): Boolean = internalSleepSand.value > 0
 }

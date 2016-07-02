@@ -4,6 +4,7 @@ import android.media.AudioManager
 import android.telephony.TelephonyManager
 import d
 import i
+import rx.Observable
 import rx.subjects.PublishSubject
 import javax.inject.Inject
 
@@ -32,7 +33,7 @@ class AudioFocusReceiver
         }
     }
 
-    fun focusObservable() = subject.asObservable()
+    fun focusObservable(): Observable<AudioFocus> = subject.asObservable()
 
     private val subject = PublishSubject.create<AudioFocus>()
 }
