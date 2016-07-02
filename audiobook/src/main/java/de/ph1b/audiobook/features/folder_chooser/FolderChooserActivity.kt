@@ -3,9 +3,7 @@ package de.ph1b.audiobook.features.folder_chooser
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
@@ -18,7 +16,6 @@ import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
 import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.misc.drawable
 import de.ph1b.audiobook.mvp.RxBaseActivity
-import de.ph1b.audiobook.uitools.BetterSnack
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import i
 import kotlinx.android.synthetic.main.activity_folder_chooser.*
@@ -68,13 +65,9 @@ import java.io.File
         presenter().gotPermission()
     }
 
-    @OnShowRationale(PermissionHelper.NEEDED_PERMISSION) fun showRationaleForStorage(request: PermissionRequest) {
-        BetterSnack.make(
-                root = root,
-                text = getString(R.string.permission_external_new_explanation),
-                action = getString(R.string.permission_retry)) {
-            request.proceed()
-        }
+    @OnShowRationale(PermissionHelper.NEEDED_PERMISSION)
+    fun showRationaleForStorage(request: PermissionRequest) {
+        PermissionHelper.showRationaleAndProceed(root, request)
     }
 
     @OnPermissionDenied(PermissionHelper.NEEDED_PERMISSION) fun denied() {
@@ -82,16 +75,7 @@ import java.io.File
     }
 
     @OnNeverAskAgain(PermissionHelper.NEEDED_PERMISSION) fun deniedForever() {
-        BetterSnack.make(
-                root = root,
-                text = getString(R.string.permission_external_new_explanation),
-                action = getString(R.string.permission_goto_settings)) {
-            val intent = Intent()
-            intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-            val uri = Uri.fromParts("package", packageName, null)
-            intent.data = uri
-            startActivity(intent)
-        }
+        PermissionHelper.handleDeniedForever(root)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

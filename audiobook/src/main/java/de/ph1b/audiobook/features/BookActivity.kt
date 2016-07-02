@@ -19,10 +19,8 @@ package de.ph1b.audiobook.features
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.transition.TransitionInflater
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
@@ -35,7 +33,6 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.misc.startActivity
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.uitools.BetterSnack
 import i
 import kotlinx.android.synthetic.main.activity_book.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -69,12 +66,7 @@ import javax.inject.Inject
     }
 
     @OnShowRationale(PermissionHelper.NEEDED_PERMISSION) fun showRationaleForStorage(request: PermissionRequest) {
-        BetterSnack.make(
-                root = root,
-                text = getString(R.string.permission_external_new_explanation),
-                action = getString(R.string.permission_retry)) {
-            request.proceed()
-        }
+        PermissionHelper.showRationaleAndProceed(root, request)
     }
 
     @OnPermissionDenied(PermissionHelper.NEEDED_PERMISSION) fun denied() {
@@ -82,16 +74,7 @@ import javax.inject.Inject
     }
 
     @OnNeverAskAgain(PermissionHelper.NEEDED_PERMISSION) fun deniedForever() {
-        BetterSnack.make(
-                root = root,
-                text = getString(R.string.permission_external_new_explanation),
-                action = getString(R.string.permission_goto_settings)) {
-            val intent = Intent()
-            intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-            val uri = Uri.fromParts("package", packageName, null)
-            intent.data = uri
-            startActivity(intent)
-        }
+        PermissionHelper.handleDeniedForever(root)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
