@@ -77,6 +77,6 @@ class HideFolderDialog : DialogFragment() {
             return hideFolderDialog
         }
 
-        val TAG = HideFolderDialog::class.java.simpleName
+        val TAG: String = HideFolderDialog::class.java.simpleName
     }
 }

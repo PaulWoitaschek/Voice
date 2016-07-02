@@ -149,11 +149,11 @@ class BookReaderService : MediaBrowserServiceCompat() {
     override fun onCreate() {
         super.onCreate()
 
-        val eventReceiver = ComponentName(packageName, MediaEventReceiver::class.java.name);
+        val eventReceiver = ComponentName(packageName, MediaEventReceiver::class.java.name)
         val mediaButtonIntent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
             component = eventReceiver
         }
-        val buttonReceiverIntent = PendingIntent.getBroadcast(this, 0, mediaButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        val buttonReceiverIntent = PendingIntent.getBroadcast(this, 0, mediaButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         mediaSession = MediaSessionCompat(this, TAG, eventReceiver, buttonReceiverIntent).apply {
 
             setCallback(object : MediaSessionCompat.Callback() {
@@ -420,7 +420,7 @@ class BookReaderService : MediaBrowserServiceCompat() {
         }
     }
 
-    private enum class ChangeType internal constructor(private val intentUrl: String) {
+    private enum class ChangeType(private val intentUrl: String) {
         METADATA("com.android.music.metachanged"),
         PLAY_STATE("com.android.music.playstatechange");
 

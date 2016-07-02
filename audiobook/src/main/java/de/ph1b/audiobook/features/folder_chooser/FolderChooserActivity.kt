@@ -27,19 +27,21 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.support.v7.widget.Toolbar
+import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
-import android.widget.*
-import butterknife.bindView
+import android.widget.AdapterView
+import android.widget.Toast
 import com.jakewharton.rxbinding.widget.RxAdapterView
-import com.jakewharton.rxbinding.widget.itemClicks
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.features.folder_chooser.FolderChooserActivity.Companion.newInstanceIntent
 import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
 import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.mvp.RxBaseActivity
+import de.ph1b.audiobook.uitools.DividerItemDecoration
 import e
 import i
+import kotlinx.android.synthetic.main.activity_folder_chooser.*
 import java.io.File
 
 /**
@@ -64,16 +66,6 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
         Toast.makeText(this, message, Toast.LENGTH_LONG)
                 .show()
     }
-
-    private val upButton: ImageButton by bindView(R.id.twoline_image1)
-    private val currentFolderName: TextView by bindView(R.id.twoline_text2)
-    private val chooseButton: Button by bindView(R.id.choose)
-    private val toolbar: Toolbar by bindView(R.id.toolbar)
-    private val listView: ListView by bindView(R.id.listView)
-    private val chosenFolderDescription: TextView by bindView(R.id.twoline_text1)
-    private val spinner: Spinner by bindView(R.id.toolSpinner)
-    private val spinnerGroup: View by bindView(R.id.spinnerGroup)
-    private val abortButton: View  by bindView(R.id.abort)
 
     private lateinit var adapter: FolderChooserAdapter
     private lateinit var spinnerAdapter: MultiLineSpinnerAdapter<File>
@@ -134,26 +126,22 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         // listeners
-        chooseButton.setOnClickListener { presenter().chooseClicked() }
-        abortButton.setOnClickListener { finish() }
+        choose.setOnClickListener { presenter().chooseClicked() }
+        abort.setOnClickListener { finish() }
         upButton.setOnClickListener { onBackPressed() }
 
-        // text
-        chosenFolderDescription.setText(R.string.chosen_folder_description)
-
         //recycler
-        adapter = FolderChooserAdapter(this, getMode())
-        listView.adapter = adapter
-        listView.itemClicks()
-                .subscribe {
-                    val selectedFile = adapter.getItem(it)
-                    presenter().fileSelected(selectedFile)
-                }
+        adapter = FolderChooserAdapter(this, getMode()) {
+            presenter().fileSelected(it)
+        }
+        recycler.layoutManager = LinearLayoutManager(this)
+        recycler.addItemDecoration(DividerItemDecoration(this))
+        recycler.adapter = adapter
 
         // spinner
-        spinnerAdapter = MultiLineSpinnerAdapter(spinner, this, Color.WHITE)
-        spinner.adapter = spinnerAdapter
-        RxAdapterView.itemSelections(spinner)
+        spinnerAdapter = MultiLineSpinnerAdapter(toolSpinner, this, Color.WHITE)
+        toolSpinner.adapter = spinnerAdapter
+        RxAdapterView.itemSelections(toolSpinner)
                 .filter { it != AdapterView.INVALID_POSITION } // filter invalid entries
                 .skip(1) // skip the first that passed as its no real user input
                 .subscribe {
@@ -179,7 +167,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     }
 
     override fun setCurrentFolderText(text: String) {
-        currentFolderName.text = text
+        currentFolder.text = text
     }
 
     override fun showNewData(newData: List<File>) {
@@ -187,7 +175,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     }
 
     override fun setChooseButtonEnabled(chooseEnabled: Boolean) {
-        chooseButton.isEnabled = chooseEnabled
+        choose.isEnabled = chooseEnabled
     }
 
     override fun newRootFolders(newFolders: List<File>) {

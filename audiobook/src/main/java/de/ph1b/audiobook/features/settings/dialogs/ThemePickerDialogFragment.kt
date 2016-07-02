@@ -24,7 +24,6 @@ class ThemePickerDialogFragment : DialogFragment() {
 
     private lateinit var settingsSetListener: SettingsSetListener
 
-
     override fun onAttach(context: Context?) {
         super.onAttach(context)
 
@@ -56,6 +55,6 @@ class ThemePickerDialogFragment : DialogFragment() {
     }
 
     companion object {
-        val TAG = ThemePickerDialogFragment::class.java.simpleName
+        val TAG: String = ThemePickerDialogFragment::class.java.simpleName
     }
 }

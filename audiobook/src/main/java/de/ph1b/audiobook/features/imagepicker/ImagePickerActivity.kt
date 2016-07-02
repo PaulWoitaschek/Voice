@@ -1,36 +1,15 @@
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
 package de.ph1b.audiobook.features.imagepicker
 
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.view.ActionMode
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import butterknife.bindView
 import com.squareup.picasso.Picasso
 import d
 import de.ph1b.audiobook.R
@@ -42,6 +21,8 @@ import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.setInvisible
 import de.ph1b.audiobook.uitools.setVisible
 import i
+import kotlinx.android.synthetic.main.activity_image_picker.*
+import kotlinx.android.synthetic.main.toolbar.*
 import rx.subjects.BehaviorSubject
 import java.io.Serializable
 import java.net.URLEncoder
@@ -59,13 +40,6 @@ class ImagePickerActivity : BaseActivity() {
     @Inject internal lateinit var bookChest: BookChest
     @Inject internal lateinit var imageHelper: ImageHelper
 
-    private val webView: WebView by  bindView(R.id.webView)
-    private val progressBar: View by  bindView(R.id.progressBar)
-    private val noNetwork: View by bindView(R.id.noNetwork)
-    private val webViewContainer: View by bindView(R.id.webViewContainer)
-    private val cropView: CropOverlay by bindView(R.id.cropOverlay)
-    private val fab: FloatingActionButton by bindView(R.id.fab)
-
     private var actionMode: ActionMode ? = null
 
     private val actionModeCallback = object : ActionMode.Callback {
@@ -76,8 +50,8 @@ class ImagePickerActivity : BaseActivity() {
         override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
             if (p1?.itemId == R.id.confirm) {
                 // optain screenshot
-                val cropRect = cropView.selectedRect
-                cropView.selectionOn = false
+                val cropRect = cropOverlay.selectedRect
+                cropOverlay.selectionOn = false
 
                 webViewContainer.isDrawingCacheEnabled = true
                 webViewContainer.buildDrawingCache()
@@ -102,7 +76,7 @@ class ImagePickerActivity : BaseActivity() {
         }
 
         override fun onDestroyActionMode(p0: ActionMode?) {
-            cropView.selectionOn = false
+            cropOverlay.selectionOn = false
             fab.show()
         }
     }
@@ -117,24 +91,24 @@ class ImagePickerActivity : BaseActivity() {
         "https://www.google.com/search?safe=on&site=imghp&tbm=isch&tbs=isz:lt,islt:qsvga&q=$encodedSearch"
     }
 
-    private val toolBar: Toolbar by bindView(R.id.toolbar)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_image_picker)
-        setSupportActionBar(toolBar)
+
+        setSupportActionBar(toolbar)
         supportActionBar!!.apply {
             setDisplayHomeAsUpEnabled(true)
             title = ""
         }
 
         with(webView.settings) {
-            setSupportZoom(true);
-            builtInZoomControls = true;
-            displayZoomControls = false;
+            setSupportZoom(true)
+            builtInZoomControls = true
+            displayZoomControls = false
             javaScriptEnabled = true
-            userAgentString = "Mozilla/5.0 (Linux; U; Android 4.4; en-us; Nexus 4 Build/JOP24G) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30";
+            userAgentString = "Mozilla/5.0 (Linux; U; Android 4.4; en-us; Nexus 4 Build/JOP24G) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
         }
         webView.setWebViewClient(object : WebViewClient() {
 
@@ -160,7 +134,7 @@ class ImagePickerActivity : BaseActivity() {
                 noNetwork.setVisible()
                 webViewContainer.setInvisible()
             }
-        });
+        })
 
         // after first successful load set visibilities
         webViewIsLoading
@@ -179,7 +153,7 @@ class ImagePickerActivity : BaseActivity() {
         webView.loadUrl(toLoad)
 
         fab.setOnClickListener {
-            cropView.selectionOn = true
+            cropOverlay.selectionOn = true
             actionMode = startSupportActionMode(actionModeCallback)
             fab.hide()
         }
@@ -225,7 +199,7 @@ class ImagePickerActivity : BaseActivity() {
 
         rotation.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationRepeat(p0: Animation?) {
-                if (webViewIsLoading.value == false ) {
+                if (webViewIsLoading.value == false) {
                     i { "we are in the refresh round. cancel now." }
                     rotation.cancel()
                     rotation.reset()
@@ -259,17 +233,13 @@ class ImagePickerActivity : BaseActivity() {
 
     companion object {
 
-        // val TAG = ImagePickerActivity::class.java.simpleName
-
         private val NI = "ni"
         private val ABOUT_BLANK = "about:blank"
         private val SI_URL = "savedUrl"
 
-
         fun arguments(args: Args) = Bundle().apply {
             putSerializable(NI, args)
         }
-
     }
 
     data class Args(val bookId: Long) : Serializable

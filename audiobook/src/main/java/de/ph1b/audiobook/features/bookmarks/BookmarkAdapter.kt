@@ -22,11 +22,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.TextView
 import de.ph1b.audiobook.Bookmark
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.R
+import kotlinx.android.synthetic.main.dialog_bookmark_row_layout.view.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -64,7 +63,7 @@ class BookmarkAdapter(private val chapters: List<Chapter>, private val listener:
         notifyItemInserted(index)
     }
 
-    fun addAll(bookmarks:Iterable<Bookmark>){
+    fun addAll(bookmarks: Iterable<Bookmark>) {
         this.bookmarks.addAll(bookmarks)
         this.bookmarks.sort()
         notifyDataSetChanged()
@@ -84,27 +83,13 @@ class BookmarkAdapter(private val chapters: List<Chapter>, private val listener:
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val bookmark = bookmarks[position]
-        holder.title.text = bookmark.title
-
-        val size = chapters.size
-        var currentChapter = chapters.single { it.file == bookmark.mediaFile }
-        val index = chapters.indexOf(currentChapter)
-
-        holder.summary.text = context.getString(R.string.format_bookmarks_n_of, index + 1, size)
-        holder.time.text = context.getString(R.string.format_bookmarks_time, formatTime(bookmark.time),
-                formatTime(currentChapter.duration))
+        holder.bind(position)
     }
 
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
-
-    override fun getItemCount(): Int {
-        return bookmarks.size
-    }
+    override fun getItemCount(): Int = bookmarks.size
 
     interface OnOptionsMenuClickedListener {
+
         fun onOptionsMenuClicked(bookmark: Bookmark, v: View)
 
         fun onBookmarkClicked(bookmark: Bookmark)
@@ -112,18 +97,21 @@ class BookmarkAdapter(private val chapters: List<Chapter>, private val listener:
 
     inner class ViewHolder(itemView: View, listener: OnOptionsMenuClickedListener) : RecyclerView.ViewHolder(itemView) {
 
-        private val imageButton: ImageButton
-        internal val title: TextView
-        internal val summary: TextView
-        internal val time: TextView
+        fun bind(position: Int) {
+            val bookmark = bookmarks[position]
+            itemView.title.text = bookmark.title
+
+            val size = chapters.size
+            val currentChapter = chapters.single { it.file == bookmark.mediaFile }
+            val index = chapters.indexOf(currentChapter)
+
+            itemView.summary.text = context.getString(R.string.format_bookmarks_n_of, index + 1, size)
+            itemView.time.text = context.getString(R.string.format_bookmarks_time, formatTime(bookmark.time),
+                    formatTime(currentChapter.duration))
+        }
 
         init {
-            imageButton = itemView.findViewById(R.id.edit) as ImageButton
-            title = itemView.findViewById(R.id.text1) as TextView
-            summary = itemView.findViewById(R.id.text2) as TextView
-            time = itemView.findViewById(R.id.text3) as TextView
-
-            imageButton.setOnClickListener { listener.onOptionsMenuClicked(bookmarks[adapterPosition], imageButton) }
+            itemView.edit.setOnClickListener { listener.onOptionsMenuClicked(bookmarks[adapterPosition], it) }
             itemView.setOnClickListener { listener.onBookmarkClicked(bookmarks[adapterPosition]) }
         }
     }

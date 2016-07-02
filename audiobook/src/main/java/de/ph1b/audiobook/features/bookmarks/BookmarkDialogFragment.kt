@@ -1,32 +1,14 @@
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
 package de.ph1b.audiobook.features.bookmarks
 
 import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.InputType
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
 import android.widget.PopupMenu
+import android.widget.TextView
 import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.Book
@@ -40,6 +22,7 @@ import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import i
+import kotlinx.android.synthetic.main.dialog_bookmark.view.*
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import javax.inject.Inject
@@ -105,13 +88,13 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
         dialog.cancel()
     }
 
-    private lateinit var bookmarkTitle: EditText
     @Inject lateinit internal var prefs: PrefsManager
     @Inject internal lateinit var db: BookChest
     @Inject internal lateinit var bookmarkProvider: BookmarkProvider
     @Inject internal lateinit var playStateManager: PlayStateManager
     @Inject internal lateinit var playerController: PlayerController
     private lateinit var book: Book
+    private lateinit var bookmarkTitle: TextView
     private lateinit var adapter: BookmarkAdapter
 
     fun addClicked() {
@@ -123,7 +106,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
 
         bookmarkProvider.addBookmarkAtBookPosition(book, title)
         Toast.makeText(activity, R.string.bookmark_added, Toast.LENGTH_SHORT).show()
-        bookmarkTitle.setText("")
+        bookmarkTitle.text = ""
         dismiss()
     }
 
@@ -131,24 +114,23 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val inflater = activity.layoutInflater
-        val customView = inflater.inflate(R.layout.dialog_bookmark, null)
-        bookmarkTitle = customView.findViewById(R.id.bookmarkEdit) as EditText
+        val v = inflater.inflate(R.layout.dialog_bookmark, null)
+        bookmarkTitle = v.bookmarkTitle
 
         book = db.bookById(bookId())!!
         adapter = BookmarkAdapter(book.chapters, this, context)
-        val recyclerView = customView.findViewById(R.id.recycler) as RecyclerView
-        recyclerView.adapter = adapter
+        v.recycler.adapter = adapter
         val layoutManager = LinearLayoutManager(activity)
-        recyclerView.addItemDecoration(DividerItemDecoration(activity))
-        recyclerView.layoutManager = layoutManager
+        v.recycler.addItemDecoration(DividerItemDecoration(activity))
+        v.recycler.layoutManager = layoutManager
 
         bookmarkProvider.bookmarks(book)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { adapter.addAll(it) }
 
-        customView.findViewById(R.id.add).setOnClickListener { addClicked() }
-        bookmarkTitle.setOnEditorActionListener { v1, actionId, event ->
+        v.add.setOnClickListener { addClicked() }
+        v.bookmarkTitle.setOnEditorActionListener { v1, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 addClicked() //same as clicking on the +
                 return@setOnEditorActionListener true
@@ -157,7 +139,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
         }
 
         return MaterialDialog.Builder(context)
-                .customView(customView, false)
+                .customView(v, false)
                 .title(R.string.bookmark)
                 .negativeText(R.string.dialog_cancel)
                 .build()
@@ -165,7 +147,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
 
     companion object {
 
-        val TAG = BookmarkDialogFragment::class.java.simpleName
+        val TAG: String = BookmarkDialogFragment::class.java.simpleName
         private val BOOK_ID = "bookId"
 
         fun newInstance(bookId: Long): BookmarkDialogFragment {

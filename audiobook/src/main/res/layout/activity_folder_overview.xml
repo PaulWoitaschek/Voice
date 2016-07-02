@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:fab="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar"/>
 
@@ -39,7 +40,7 @@
             fab:fab_labelsPosition="left">
 
             <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/add_single"
+                android:id="@+id/addAsSingle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/folder_add_single_book"
@@ -50,7 +51,7 @@
                 fab:fab_title="@string/folder_add_single_book"/>
 
             <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/add_library"
+                android:id="@+id/addAsLibrary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/folder_add_collection"
