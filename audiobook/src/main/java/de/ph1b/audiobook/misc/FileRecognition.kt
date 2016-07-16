@@ -42,6 +42,7 @@ object FileRecognition {
                 "m4b",
                 "mp4",
                 "mid",
+                "mka",
                 "mkv",
                 "mp3",
                 "mp3package",
@@ -52,6 +53,7 @@ object FileRecognition {
                 "rtttl",
                 "rtx",
                 "wav",
+                "webm",
                 "wma",
                 "xmf"
         )
