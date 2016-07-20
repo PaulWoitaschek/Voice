@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply from: "../artifacts.gradle"
 
 android {
 
@@ -14,8 +15,8 @@ android {
         applicationId "de.ph1b.audiobook"
         minSdkVersion minSdk
         targetSdkVersion 24
-        versionCode 125
-        versionName '2.7.2.2'
+        versionCode 126
+        versionName '2.7.2.3'
     }
 
     buildTypes {

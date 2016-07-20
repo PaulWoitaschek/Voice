@@ -1,5 +1,9 @@
 # Upcoming version
 
+# 2.7.2.3
+* Made app ready for Android N
+* Handle permissions better and catch case where it was denied forever
+
 # 2.7.2.2
 * Added day night theme
 * Performance greatly improved
