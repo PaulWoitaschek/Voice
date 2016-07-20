@@ -44,6 +44,7 @@
     <!--Dialogs-->
     <string name="dialog_confirm">Set</string>
     <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_no">No</string>
     <!--EditBookDialog-->
     <string name="content_previous_cover">Chooses previous cover</string>
     <string name="content_next_cover">Chooses next cover</string>

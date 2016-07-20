@@ -33,7 +33,7 @@ class HideFolderDialog : DialogFragment() {
                 .title(R.string.hide_folder_title)
                 .content(R.string.hide_folder_content)
                 .positiveText(R.string.hide_confirm)
-                .negativeText(R.string.dialog_cancel)
+                .negativeText(R.string.dialog_no)
                 .onPositive { materialDialog, dialogAction ->
                     try {
                         i { "Create new File will be called." }
