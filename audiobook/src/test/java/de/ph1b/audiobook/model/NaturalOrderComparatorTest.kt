@@ -1,26 +1,9 @@
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
 package de.ph1b.audiobook.model
 
 
 import de.ph1b.audiobook.misc.NaturalOrderComparator
 import junit.framework.TestCase
-import org.fest.assertions.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -41,8 +24,7 @@ class NaturalOrderComparatorTest : TestCase() {
         testFolder.create()
     }
 
-    @Test
-    fun testFileComparator() {
+    @Test fun testFileComparator() {
         testFolder.newFolder("folder", "subfolder", "subsubfolder")
         testFolder.newFolder("storage", "emulated", "0")
         testFolder.newFolder("xFolder")
@@ -66,8 +48,7 @@ class NaturalOrderComparatorTest : TestCase() {
         assertThat(desiredOrder).isEqualTo(sorted)
     }
 
-    @Test
-    fun testStringComparator() {
+    @Test fun testStringComparator() {
         val desiredOrder = listOf(
                 "00 I",
                 "00 Introduction",

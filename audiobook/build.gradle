@@ -8,7 +8,7 @@ android {
     int minSdk = hasProperty('minSdk') ? minSdk.toInteger() : 15
 
     compileSdkVersion 24
-    buildToolsVersion '24'
+    buildToolsVersion '24.0.1'
 
     defaultConfig {
         applicationId "de.ph1b.audiobook"
@@ -45,7 +45,7 @@ kapt.generateStubs = true
 
 dependencies {
     // support library
-    def supportVersion = "24.0.0"
+    def supportVersion = "24.1.0"
     compile "com.android.support:appcompat-v7:$supportVersion"
     compile "com.android.support:recyclerview-v7:$supportVersion"
     compile "com.android.support:support-v4:$supportVersion"
@@ -55,9 +55,7 @@ dependencies {
     compile "com.squareup.picasso:picasso:2.5.2"
 
     // material styled dialogs
-    compile("com.afollestad.material-dialogs:core:0.8.6.0@aar") {
-        transitive = true
-    }
+    compile 'com.afollestad.material-dialogs:core:0.8.6.2'
 
     // fab
     compile "com.getbase:floatingactionbutton:1.10.1"
@@ -68,22 +66,18 @@ dependencies {
     // dependency injection
     def daggerVersion = "2.5"
     compile "com.google.dagger:dagger:$daggerVersion"
-    androidTestCompile "com.google.dagger:dagger:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
     provided "javax.annotation:jsr250-api:1.0"
 
     //testing
     testCompile "junit:junit:4.12"
-    androidTestCompile('com.android.support.test:runner:0.4.1') {
-        exclude module: 'support-annotations'
-    }
     testCompile "org.robolectric:robolectric:3.1"
-    testCompile 'org.easytesting:fest-assert-core:2.0M10'
+    testCompile "org.assertj:assertj-core:1.7.1"
 
     // rx extensions
     compile "io.reactivex:rxandroid:1.2.1"
-    compile "io.reactivex:rxjava:1.1.6"
+    compile "io.reactivex:rxjava:1.1.7"
     compile 'com.jakewharton.rxbinding:rxbinding-kotlin:0.4.0'
 
     // kotlin

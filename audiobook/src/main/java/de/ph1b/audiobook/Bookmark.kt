@@ -39,11 +39,8 @@ data class Bookmark(val mediaFile: File, val title: String, val time: Int, val i
         }
 
         // if files are the same compare time
-        if (time < other.time) {
-            return 1
-        } else if (time > other.time) {
-            return -1
-        }
+        val timeCompare = other.time.compareTo(time)
+        if (timeCompare != 0) return timeCompare
 
         // if time is the same compare the titles
         return NaturalOrderComparator.STRING_COMPARATOR.compare(title, other.title)
