@@ -51,6 +51,9 @@
     <string name="content_is_file">ファイル</string>
     <string name="content_navigate_up">親のフォルダーに移動</string>
     <string name="permission_read_ext_explanation">オーディオブックを探して、再生するため、このアプリはストレージを読み取る必要があります。</string>
+    <string name="permission_external_new_explanation">アクセス許可がないとブックを読むことができません</string>
+    <string name="permission_retry">再試行?</string>
+    <string name="permission_goto_settings">設定</string>
     <string name="permission_read_ext_request">もう一度、許可を求める必要がありますか?</string>
     <string name="permission_rescan">再度要求する</string>
     <string name="storage_pre_device">ストレージ:</string>
@@ -81,8 +84,9 @@
     <string name="pref_root_folder_title">オーディオブック フォルダー</string>
     <string name="pref_root_folder_summary">選択したオーディオブック フォルダー。</string>
     <string name="pref_theme_title">テーマ</string>
-
-
+    <string name="pref_theme_day">日中</string>
+    <string name="pref_theme_night">夜間</string>
+    <string name="pref_theme_daynight">日中 / 夜間</string>
     <string name="pref_pause_on_can_duck_title">割り込みで一時停止</string>
     <string name="pref_pause_on_can_duck_summary">割り込みの間、音量を下げるのではなく、割り込みのときに一時停止します。</string>
     <string name="pref_send_bugs_title">バグを報告</string>

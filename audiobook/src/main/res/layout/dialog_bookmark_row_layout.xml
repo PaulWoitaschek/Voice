@@ -33,7 +33,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/text1"
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
@@ -46,7 +46,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/text2"
+                android:id="@+id/summary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|start"
@@ -58,7 +58,7 @@
                 tools:text="(4/102)"/>
 
             <TextView
-                android:id="@+id/text3"
+                android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"

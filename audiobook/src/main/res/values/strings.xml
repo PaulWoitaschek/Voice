@@ -44,6 +44,7 @@
     <!--Dialogs-->
     <string name="dialog_confirm">Set</string>
     <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_no">No</string>
     <!--EditBookDialog-->
     <string name="content_previous_cover">Chooses previous cover</string>
     <string name="content_next_cover">Chooses next cover</string>
@@ -70,6 +71,9 @@
     <string name="content_is_file">File</string>
     <string name="content_navigate_up">Go to parent folder</string>
     <string name="permission_read_ext_explanation">The app needs to read your storage so it can find and play the audio books.</string>
+    <string name="permission_external_new_explanation">Can\'t read books without permission</string>
+    <string name="permission_retry">Retry?</string>
+    <string name="permission_goto_settings">Settings</string>
     <string name="permission_read_ext_request">Should we ask for the permission again?</string>
     <string name="permission_rescan">Request again</string>
     <string name="storage_pre_device">Storage:</string>

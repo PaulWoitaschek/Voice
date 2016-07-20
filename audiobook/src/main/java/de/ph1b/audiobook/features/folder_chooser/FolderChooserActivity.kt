@@ -1,45 +1,25 @@
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
 package de.ph1b.audiobook.features.folder_chooser
 
-import android.Manifest
-import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.Toolbar
+import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
-import android.widget.*
-import butterknife.bindView
+import android.widget.AdapterView
+import android.widget.Toast
 import com.jakewharton.rxbinding.widget.RxAdapterView
-import com.jakewharton.rxbinding.widget.itemClicks
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.features.folder_chooser.FolderChooserActivity.Companion.newInstanceIntent
 import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
 import de.ph1b.audiobook.misc.PermissionHelper
+import de.ph1b.audiobook.misc.drawable
 import de.ph1b.audiobook.mvp.RxBaseActivity
-import e
+import de.ph1b.audiobook.uitools.DividerItemDecoration
 import i
+import kotlinx.android.synthetic.main.activity_folder_chooser.*
+import permissions.dispatcher.*
 import java.io.File
 
 /**
@@ -53,7 +33,7 @@ import java.io.File
 
  * @author Paul Woitaschek
  */
-class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPresenter>(), FolderChooserView, HideFolderDialog.OnChosenListener {
+@RuntimePermissions class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPresenter>(), FolderChooserView, HideFolderDialog.OnChosenListener {
 
     override fun newPresenter() = FolderChooserPresenter()
 
@@ -65,23 +45,8 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
                 .show()
     }
 
-    private val upButton: ImageButton by bindView(R.id.twoline_image1)
-    private val currentFolderName: TextView by bindView(R.id.twoline_text2)
-    private val chooseButton: Button by bindView(R.id.choose)
-    private val toolbar: Toolbar by bindView(R.id.toolbar)
-    private val listView: ListView by bindView(R.id.listView)
-    private val chosenFolderDescription: TextView by bindView(R.id.twoline_text1)
-    private val spinner: Spinner by bindView(R.id.toolSpinner)
-    private val spinnerGroup: View by bindView(R.id.spinnerGroup)
-    private val abortButton: View  by bindView(R.id.abort)
-
     private lateinit var adapter: FolderChooserAdapter
     private lateinit var spinnerAdapter: MultiLineSpinnerAdapter<File>
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private fun askForReadExternalStoragePermission() {
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSION_RESULT_READ_EXT_STORAGE)
-    }
 
     override fun askAddNoMediaFile(folderToHide: File) {
         val hideFolderDialog = HideFolderDialog.newInstance(folderToHide)
@@ -91,39 +56,30 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
                                             grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        i { "onRequestPermissionsResult called" }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            val permissionGrantingWorked = PermissionHelper.permissionGrantingWorked(requestCode,
-                    PERMISSION_RESULT_READ_EXT_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,
-                    permissions, grantResults)
-            i { "permissionGrantingWorked=$permissionGrantingWorked" }
-            if (permissionGrantingWorked) {
-                presenter().gotPermission()
-            } else {
-                PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE)
-                e { "could not get permission" }
-            }
-        }
+        FolderChooserActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults)
     }
 
     override fun getMode() = OperationMode.valueOf(intent.getStringExtra(NI_OPERATION_MODE))
 
+    @NeedsPermission(PermissionHelper.NEEDED_PERMISSION) fun ensurePermissions() {
+        presenter().gotPermission()
+    }
+
+    @OnShowRationale(PermissionHelper.NEEDED_PERMISSION)
+    fun showRationaleForStorage(request: PermissionRequest) {
+        PermissionHelper.showRationaleAndProceed(root, request)
+    }
+
+    @OnPermissionDenied(PermissionHelper.NEEDED_PERMISSION) fun denied() {
+        FolderChooserActivityPermissionsDispatcher.ensurePermissionsWithCheck(this)
+    }
+
+    @OnNeverAskAgain(PermissionHelper.NEEDED_PERMISSION) fun deniedForever() {
+        PermissionHelper.handleDeniedForever(root)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // permissions
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            val hasExternalStoragePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-            i { "hasExternalStoragePermission=$hasExternalStoragePermission" }
-            if (!hasExternalStoragePermission) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE)
-                } else {
-                    askForReadExternalStoragePermission()
-                }
-            }
-        }
 
         // find views
         setContentView(R.layout.activity_folder_chooser)
@@ -134,26 +90,22 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         // listeners
-        chooseButton.setOnClickListener { presenter().chooseClicked() }
-        abortButton.setOnClickListener { finish() }
+        choose.setOnClickListener { presenter().chooseClicked() }
+        abort.setOnClickListener { finish() }
         upButton.setOnClickListener { onBackPressed() }
 
-        // text
-        chosenFolderDescription.setText(R.string.chosen_folder_description)
-
         //recycler
-        adapter = FolderChooserAdapter(this, getMode())
-        listView.adapter = adapter
-        listView.itemClicks()
-                .subscribe {
-                    val selectedFile = adapter.getItem(it)
-                    presenter().fileSelected(selectedFile)
-                }
+        adapter = FolderChooserAdapter(this, getMode()) {
+            presenter().fileSelected(it)
+        }
+        recycler.layoutManager = LinearLayoutManager(this)
+        recycler.addItemDecoration(DividerItemDecoration(this))
+        recycler.adapter = adapter
 
         // spinner
-        spinnerAdapter = MultiLineSpinnerAdapter(spinner, this, Color.WHITE)
-        spinner.adapter = spinnerAdapter
-        RxAdapterView.itemSelections(spinner)
+        spinnerAdapter = MultiLineSpinnerAdapter(toolSpinner, this, Color.WHITE)
+        toolSpinner.adapter = spinnerAdapter
+        RxAdapterView.itemSelections(toolSpinner)
                 .filter { it != AdapterView.INVALID_POSITION } // filter invalid entries
                 .skip(1) // skip the first that passed as its no real user input
                 .subscribe {
@@ -161,6 +113,13 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
                     val item = spinnerAdapter.getItem(it)
                     presenter().fileSelected(item.data)
                 }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        // permissions
+        FolderChooserActivityPermissionsDispatcher.ensurePermissionsWithCheck(this)
     }
 
     override fun onBackPressed() {
@@ -179,7 +138,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     }
 
     override fun setCurrentFolderText(text: String) {
-        currentFolderName.text = text
+        currentFolder.text = text
     }
 
     override fun showNewData(newData: List<File>) {
@@ -187,7 +146,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     }
 
     override fun setChooseButtonEnabled(chooseEnabled: Boolean) {
-        chooseButton.isEnabled = chooseEnabled
+        choose.isEnabled = chooseEnabled
     }
 
     override fun newRootFolders(newFolders: List<File>) {
@@ -212,13 +171,8 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
      */
     override fun setUpButtonEnabled(upEnabled: Boolean) {
         upButton.isEnabled = upEnabled
-        val upIcon = if (upEnabled) ContextCompat.getDrawable(this, R.drawable.ic_arrow_upward) else null
+        val upIcon = if (upEnabled) drawable(R.drawable.ic_arrow_upward) else null
         upButton.setImageDrawable(upIcon)
-    }
-
-    override fun finish() {
-        i { "finish" }
-        super.finish()
     }
 
     override fun onChosen() {
@@ -232,8 +186,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
 
     companion object {
 
-        private val NI_OPERATION_MODE = "niOperationMode"
-        private val PERMISSION_RESULT_READ_EXT_STORAGE = 1
+        private const val NI_OPERATION_MODE = "niOperationMode"
 
         /**
          * Generates a new intent with the necessary extras

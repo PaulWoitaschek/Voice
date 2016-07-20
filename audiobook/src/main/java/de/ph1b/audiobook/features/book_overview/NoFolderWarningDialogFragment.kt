@@ -48,6 +48,6 @@ class NoFolderWarningDialogFragment : DialogFragment() {
     }
 
     companion object {
-        val TAG = NoFolderWarningDialogFragment::class.java.simpleName
+        val TAG: String = NoFolderWarningDialogFragment::class.java.simpleName
     }
 }

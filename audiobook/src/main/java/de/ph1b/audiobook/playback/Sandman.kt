@@ -17,7 +17,6 @@
 
 package de.ph1b.audiobook.playback
 
-import de.ph1b.audiobook.misc.assertMain
 import de.ph1b.audiobook.persistence.PrefsManager
 import i
 import rx.Observable
@@ -70,8 +69,6 @@ import javax.inject.Singleton
      * @return true if the timer is now active, false if it now inactive
      */
     fun toggleSleepSand() {
-        assertMain()
-
         i { "toggleSleepSand. Left sleepTime is ${internalSleepSand.value}" }
         if (internalSleepSand.value > 0L) {
             i { "sleepSand is active. cancelling now" }
@@ -88,7 +85,7 @@ import javax.inject.Singleton
      * This observable holds the time in ms left that the sleep timer has left. This is updated
      * periodically
      */
-    val sleepSand = internalSleepSand.asObservable()
+    val sleepSand: Observable<Long> = internalSleepSand.asObservable()
 
     fun sleepTimerActive(): Boolean = internalSleepSand.value > 0
 }

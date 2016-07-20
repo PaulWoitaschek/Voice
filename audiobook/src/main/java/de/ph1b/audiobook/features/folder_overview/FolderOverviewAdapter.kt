@@ -1,36 +1,29 @@
 package de.ph1b.audiobook.features.folder_overview
 
-import android.content.Context
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.misc.drawable
+import kotlinx.android.synthetic.main.activity_folder_overview_row_layout.view.*
 
-class FolderOverviewAdapter(private val c: Context,
-                            private val bookCollections: MutableList<String>,
+class FolderOverviewAdapter(private val bookCollections: MutableList<String>,
                             private val singleBooks: MutableList<String>,
-                            private val listener: OnFolderMoreClickedListener) : RecyclerView.Adapter<FolderOverviewAdapter.ViewHolder>() {
+                            private val deleteClicked: (toDelete: String) -> Unit) :
+        RecyclerView.Adapter<FolderOverviewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.activity_folder_overview_row_layout, parent, false)
-        return ViewHolder(v, listener)
+        return ViewHolder(v) {
+            deleteClicked(getItem(it))
+        }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val file = getItem(position)
-        holder.textView.text = file
-
-        if (bookCollections.contains(file)) {
-            holder.icon.setImageDrawable(ContextCompat.getDrawable(c, R.drawable.folder_multiple))
-            holder.icon.contentDescription = c.getString(R.string.folder_add_collection)
-        } else {
-            holder.icon.setImageDrawable(ContextCompat.getDrawable(c, R.drawable.ic_folder))
-            holder.icon.contentDescription = c.getString(R.string.folder_add_single_book)
-        }
+        val isCollection = bookCollections.contains(file)
+        holder.bind(file, isCollection)
     }
 
     override fun getItemId(position: Int): Long {
@@ -41,7 +34,7 @@ class FolderOverviewAdapter(private val c: Context,
         return bookCollections.size + singleBooks.size
     }
 
-    fun getItem(position: Int): String {
+    private fun getItem(position: Int): String {
         if (bookCollections.size > position) {
             return bookCollections[position]
         } else {
@@ -49,19 +42,25 @@ class FolderOverviewAdapter(private val c: Context,
         }
     }
 
-    interface OnFolderMoreClickedListener {
-        fun onFolderMoreClicked(position: Int)
-    }
-
-    class ViewHolder(itemView: View, listener: OnFolderMoreClickedListener) : RecyclerView.ViewHolder(itemView) {
-
-        internal val icon: ImageView
-        internal val textView: TextView
+    class ViewHolder(itemView: View, itemClicked: (position: Int) -> Unit) : RecyclerView.ViewHolder(itemView) {
 
         init {
-            icon = itemView.findViewById(R.id.icon) as ImageView
-            textView = itemView.findViewById(R.id.containing) as TextView
-            itemView.findViewById(R.id.remove).setOnClickListener { listener.onFolderMoreClicked(adapterPosition) }
+            itemView.remove.setOnClickListener { itemClicked(adapterPosition) }
+        }
+
+        fun bind(text: String, isCollection: Boolean) {
+            // set text
+            itemView.textView.text = text
+
+            // set correct image
+            val drawableId = if (isCollection) R.drawable.folder_multiple else R.drawable.ic_folder
+            val drawable = itemView.context.drawable(drawableId)
+            itemView.icon.setImageDrawable(drawable)
+
+            // set content description
+            val contentDescriptionId = if (isCollection) R.string.folder_add_collection else R.string.folder_add_single_book
+            val contentDescription = itemView.context.getString(contentDescriptionId)
+            itemView.icon.contentDescription = contentDescription
         }
     }
 }

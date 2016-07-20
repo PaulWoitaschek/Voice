@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              style="?android:buttonBarStyle"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    style="?android:buttonBarStyle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -49,7 +51,7 @@
         android:gravity="center_vertical">
 
         <ImageButton
-            android:id="@+id/twoline_image1"
+            android:id="@+id/upButton"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_alignParentLeft="true"
@@ -77,11 +79,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
+                android:text="@string/chosen_folder_description"
                 android:textSize="@dimen/list_text_primary_size"
                 tools:text="This is the primary text which is surprisingly too long long long"/>
 
             <TextView
-                android:id="@+id/twoline_text2"
+                android:id="@+id/currentFolder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
@@ -93,19 +96,19 @@
 
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/listView"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:layout_weight="1"
         tools:listitem="@layout/activity_folder_chooser_adapter_row_layout"/>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  style="?android:buttonBarStyle"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="horizontal">
+    <LinearLayout
+        style="?android:buttonBarStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/abort"

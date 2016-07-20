@@ -22,9 +22,10 @@ import android.content.Intent
 import android.content.IntentFilter
 import de.ph1b.audiobook.misc.RxBroadcast
 import i
+import rx.Observable
 
 /**
- * Simple receiver wrapper which holds a [android.content.BroadcastReceiver] that notifies on headset changes.
+ * Simple receiver wrapper which holds a [BroadcastReceiver] that notifies on headset changes.
  *
  * @author Paul Woitaschek
  */
@@ -34,7 +35,7 @@ object HeadsetPlugReceiver {
     private val PLUGGED = 1
     private val UNPLUGGED = 0
 
-    fun events(c: Context) = RxBroadcast.register(c, filter)
+    fun events(c: Context): Observable<HeadsetState> = RxBroadcast.register(c, filter)
             .map {
                 i { "onReceive with intent=$it" }
                 val intState = it?.getIntExtra("state", UNPLUGGED)

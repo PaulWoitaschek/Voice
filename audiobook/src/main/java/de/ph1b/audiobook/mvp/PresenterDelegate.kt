@@ -24,7 +24,7 @@ import android.os.Bundle
  *
  * @author Paul Woitaschek
  */
-class PresenterDelegate <V, P>(private val newPresenter: () -> P, private val getView: () -> V)  where P : Presenter<V> {
+class PresenterDelegate<V, out P>(private val newPresenter: () -> P, private val getView: () -> V)  where P : Presenter<V> {
 
     private var presenter: P? = null
         private set

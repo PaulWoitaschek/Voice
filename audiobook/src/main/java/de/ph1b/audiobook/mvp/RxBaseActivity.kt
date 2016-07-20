@@ -39,7 +39,6 @@ abstract class RxBaseActivity<V, P> : BaseActivity() where P : Presenter<V> {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         presenterDelegate.onCreate(savedInstanceState)
     }
 

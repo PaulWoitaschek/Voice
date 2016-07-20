@@ -99,20 +99,20 @@ constructor(private val context: Context) {
                                         0,
                                         sampleSize,
                                         presentationTimeUs,
-                                        flags);
+                                        flags)
                                 if (!sawInputEOS) {
                                     extractor.advance()
                                 }
                             }
 
-                            var info = MediaCodec.BufferInfo()
+                            val info = MediaCodec.BufferInfo()
                             var res: Int
                             do {
-                                res = codec.dequeueOutputBuffer(info, 200);
+                                res = codec.dequeueOutputBuffer(info, 200)
                                 if (res >= 0) {
                                     val chunk = ByteArray(info.size)
-                                    outputBuffers[res].get(chunk);
-                                    outputBuffers[res].clear();
+                                    outputBuffers[res].get(chunk)
+                                    outputBuffers[res].clear()
                                     if (chunk.size > 0) {
                                         // first not empty chunk's size is not stable, so save the second chunk size
                                         if (firstNotEmptyChunk) {
@@ -126,29 +126,29 @@ constructor(private val context: Context) {
                                             firstNotEmptyChunk = true
                                         }
                                     }
-                                    codec.releaseOutputBuffer(res, false);
+                                    codec.releaseOutputBuffer(res, false)
                                     if ((info.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
-                                        sawOutputEOS = true;
+                                        sawOutputEOS = true
                                     }
                                 } else if (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED) {
-                                    outputBuffers = codec.outputBuffers;
+                                    outputBuffers = codec.outputBuffers
                                 } else if (res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
                                     val oFormat = codec
-                                            .outputFormat;
-                                    codecSampleRate = oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE);
-                                    codecChannelCount = oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
-                                    d { "Codec output format changed" };
-                                    d { "Codec output sample rate = " + codecSampleRate };
-                                    d { "Codec output channel count = " + codecChannelCount };
+                                            .outputFormat
+                                    codecSampleRate = oFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE)
+                                    codecChannelCount = oFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT)
+                                    d { "Codec output format changed" }
+                                    d { "Codec output sample rate = " + codecSampleRate }
+                                    d { "Codec output channel count = " + codecChannelCount }
 
-                                    outputBuffers = codec.outputBuffers;
+                                    outputBuffers = codec.outputBuffers
                                     if (file == monoFile) {
-                                        monoChannelCount = codecChannelCount;
+                                        monoChannelCount = codecChannelCount
                                     } else {
-                                        stereoChannelCount = codecChannelCount;
+                                        stereoChannelCount = codecChannelCount
                                     }
                                 }
-                            } while (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED || res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED);
+                            } while (res == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED || res == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED)
                         }
                         codec.release()
                     }

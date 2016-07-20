@@ -13,7 +13,7 @@ import rx.subscriptions.Subscriptions
  * @author Paul Woitaschek
  */
 object RxBroadcast {
-    fun register(c: Context, filter: IntentFilter) = Observable.create<Intent?> {
+    fun register(c: Context, filter: IntentFilter): Observable<Intent?> = Observable.create<Intent?> {
         val receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 if (!it.isUnsubscribed) it.onNext(intent)

@@ -18,7 +18,6 @@
 package de.ph1b.audiobook.persistence
 
 import de.ph1b.audiobook.Book
-import de.ph1b.audiobook.misc.assertMain
 import de.ph1b.audiobook.persistence.internals.InternalBookRegister
 import rx.Observable
 import rx.subjects.PublishSubject
@@ -53,7 +52,6 @@ constructor(private val register: InternalBookRegister) {
 
     @Synchronized fun addBook(book: Book) {
         v { "addBook=${book.name}" }
-        assertMain()
 
         val bookWithId = register.addBook(book)
         active.add(bookWithId)
@@ -68,11 +66,10 @@ constructor(private val register: InternalBookRegister) {
 
     fun bookById(id: Long) = activeBooks.firstOrNull { it.id == id }
 
-    @Synchronized fun getOrphanedBooks() = ArrayList(orphaned)
+    @Synchronized fun getOrphanedBooks(): List<Book> = ArrayList(orphaned)
 
     @Synchronized fun updateBook(book: Book, chaptersChanged: Boolean = false) {
         v { "updateBook=${book.name} with time ${book.time}" }
-        assertMain()
 
         val bookIterator = active.listIterator()
         while (bookIterator.hasNext()) {
@@ -89,7 +86,6 @@ constructor(private val register: InternalBookRegister) {
 
     @Synchronized fun hideBook(book: Book) {
         v { "hideBook=${book.name}" }
-        assertMain()
 
         val iterator = active.listIterator()
         while (iterator.hasNext()) {
@@ -106,7 +102,6 @@ constructor(private val register: InternalBookRegister) {
 
     @Synchronized fun revealBook(book: Book) {
         v { "Called revealBook=$book" }
-        assertMain()
 
         val orphanedBookIterator = orphaned.iterator()
         while (orphanedBookIterator.hasNext()) {

@@ -18,7 +18,6 @@
 package de.ph1b.audiobook.playback
 
 import de.ph1b.audiobook.Book
-import de.ph1b.audiobook.misc.assertMain
 import e
 import i
 import rx.Observable
@@ -44,7 +43,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
 
     private var updatingSubscription: Subscription? = null
     private val errorSubject = PublishSubject.create<Unit>()
-    fun onError() = errorSubject.asObservable()
+    fun onError(): Observable<Unit> = errorSubject.asObservable()
 
     init {
         player.onCompletion
@@ -102,24 +101,20 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
      * @param book The book to be initialized.
      */
     fun init(book: Book) {
-        assertMain()
-
         if (this.book.value != book) {
             i { "constructor called with ${book.name}" }
             this.book.onNext(book)
         }
     }
 
-    fun book() = book.value
+    fun book(): Book? = book.value
 
-    fun bookObservable() = book.asObservable()
+    fun bookObservable(): Observable<Book> = book.asObservable()
 
     /**
      * Prepares the current chapter set in book.
      */
     private fun prepare() {
-        assertMain()
-
         book.value?.let {
             try {
                 if (state.value != State.IDLE) player.reset()
@@ -140,8 +135,6 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
      * Plays the prepared file.
      */
     fun play() {
-        assertMain()
-
         when (state.value) {
             State.PLAYBACK_COMPLETED -> {
                 player.seekTo(0)
@@ -173,8 +166,6 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
      * @param direction The direction to skip
      */
     fun skip(direction: Direction) {
-        assertMain()
-
         v { "direction=$direction" }
         book.value?.let {
             if (state.value == State.IDLE && state.value == State.STOPPED) {
@@ -203,8 +194,6 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
      * If current time is > 2000ms, seek to 0. Else play previous chapter if there is one.
      */
     fun previous(toNullOfNewTrack: Boolean) {
-        assertMain()
-
         book.value?.let {
             if (state.value == State.IDLE || state.value == State.STOPPED) {
                 prepare()
@@ -230,8 +219,6 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
      * Stops the playback and releases some resources.
      */
     fun stop() {
-        assertMain()
-
         if (state.value == State.STARTED) player.pause()
         playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
         state.onNext(State.STOPPED)
@@ -245,8 +232,6 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
      * @param rewind true if the player should automatically rewind a little bit.
      */
     fun pause(rewind: Boolean) {
-        assertMain()
-
         v { "pause acquired lock. state is=${state.value}" }
         book.value?.let {
             when (state.value) {
@@ -278,8 +263,6 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
      * Plays the next chapter. If there is none, don't do anything.
      */
     fun next() {
-        assertMain()
-
         book.value?.nextChapter()?.let {
             changePosition(0, it.file)
         }
@@ -294,8 +277,6 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
      * @param file The path of the media to play (relative to the books root path)
      */
     fun changePosition(time: Int, file: File) {
-        assertMain()
-
         v { "changePosition with time $time and file $file" }
         book.value?.let {
             val changeFile = (it.currentChapter().file != file)
@@ -333,8 +314,6 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
      * The current playback speed. 1.0 for normal playback, 2.0 for twice the speed, etc.
      */
     fun setPlaybackSpeed(speed: Float) {
-        assertMain()
-
         book.value?.let {
             val copy = it.copy(playbackSpeed = speed)
             book.onNext(copy)

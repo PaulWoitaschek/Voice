@@ -25,4 +25,7 @@
     <color name="copy_background_material_dark">@color/material_grey_850</color>
     <color name="copy_secondary_text_disabled_material_dark">#36ffffff</color>
     <color name="copy_secondary_text_default_material_dark">#b3ffffff</color>
+
+    <color name="snackbar_background_color">@color/background_material_dark</color>
+    <color name="snackbar_text_color">@color/copy_primary_text_default_material_dark</color>
 </resources>

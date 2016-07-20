@@ -18,6 +18,7 @@
 package de.ph1b.audiobook.features.book_overview
 
 import de.ph1b.audiobook.features.BookAdder
+import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
@@ -39,7 +40,7 @@ constructor(private val bookChest: BookChest,
             private val prefsManager: PrefsManager,
             private val playStateManager: PlayStateManager,
             private val playerController: PlayerController)
-: BookShelfBasePresenter() {
+: Presenter<BookShelfFragment>() {
 
     override fun onBind(view: BookShelfFragment, subscriptions: CompositeSubscription) {
         i { "onBind Called for $view" }
@@ -83,7 +84,7 @@ constructor(private val bookChest: BookChest,
         }
     }
 
-    override fun playPauseRequested() {
+    fun playPauseRequested() {
         playerController.playPause()
     }
 }

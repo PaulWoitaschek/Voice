@@ -44,5 +44,5 @@ class BookmarkProvider
         v { "Added bookmark=$addedBookmark" }
     }
 
-    fun bookmarks(book: Book) = Observable.fromCallable { register.bookmarks(book) }
+    fun bookmarks(book: Book): Observable<List<Bookmark>> = Observable.fromCallable { register.bookmarks(book) }
 }

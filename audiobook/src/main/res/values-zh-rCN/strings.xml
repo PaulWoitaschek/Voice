@@ -81,8 +81,6 @@
     <string name="pref_root_folder_title">有声书目录</string>
     <string name="pref_root_folder_summary">已选中的有声书目录。</string>
     <string name="pref_theme_title">主题</string>
-
-
     <string name="pref_pause_on_can_duck_title">打扰暂停</string>
     <string name="pref_pause_on_can_duck_summary">有打扰时暂停，而不是降低音量。</string>
     <string name="pref_send_bugs_title">报告 Bug</string>

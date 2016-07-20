@@ -29,7 +29,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
 import com.afollestad.materialdialogs.internal.MDTintHelper
 import com.squareup.picasso.Picasso
@@ -40,6 +39,7 @@ import de.ph1b.audiobook.misc.NaturalOrderComparator
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import i
+import kotlinx.android.synthetic.main.fragment_book_shelf_list_layout.view.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -91,7 +91,7 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
     }
 
     fun removeBook(book: Book) {
-        i { "removeBooks called with $book" };
+        i { "removeBooks called with $book" }
         for (i in 0..sortedList.size() - 1) {
             if (sortedList.get(i).id == book.id) {
                 sortedList.removeItemAt(i)
@@ -135,8 +135,8 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
             for (i in 0..size() - 1) {
                 val existing = get(i)
                 var deleteBook = true
-                for (b in books) {
-                    if (existing.id == b.id) {
+                for ((id) in books) {
+                    if (existing.id == id) {
                         deleteBook = false
                         break
                     }
@@ -224,15 +224,9 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
     inner class ListViewHolder(parent: ViewGroup) : BaseViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.fragment_book_shelf_list_layout, parent, false)) {
 
-        private val progressBar: ProgressBar
-        private val leftTime: TextView
-        private val rightTime: TextView
 
         init {
-            progressBar = itemView.findViewById(R.id.progressBar) as ProgressBar
-            leftTime = itemView.findViewById(R.id.leftTime) as TextView
-            rightTime = itemView.findViewById(R.id.rightTime) as TextView
-            MDTintHelper.setTint(progressBar, ContextCompat.getColor(parent.context, R.color.accent))
+            MDTintHelper.setTint(itemView.progressBar, ContextCompat.getColor(parent.context, R.color.accent))
         }
 
         override fun bind(book: Book) {
@@ -242,9 +236,9 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
             val globalDuration = book.globalDuration
             val progress = Math.round(100f * globalPosition.toFloat() / globalDuration.toFloat())
 
-            leftTime.text = formatTime(globalPosition)
-            progressBar.progress = progress
-            rightTime.text = formatTime(globalDuration)
+            itemView.leftTime.text = formatTime(globalPosition)
+            itemView.progressBar.progress = progress
+            itemView.rightTime.text = formatTime(globalDuration)
         }
     }
 

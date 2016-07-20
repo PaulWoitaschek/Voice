@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_centerVertical="true"
-              android:gravity="center"
-              android:orientation="vertical"
-              tools:ignore="UseCompoundDrawables">
-
-    <include layout="@layout/toolbar"/>
+    <include
+        android:id="@+id/toolbarInclude"
+        layout="@layout/toolbar"/>
 
     <ImageView
         android:layout_width="50dp"

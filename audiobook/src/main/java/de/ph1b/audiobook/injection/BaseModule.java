@@ -27,9 +27,8 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import de.paul_woitaschek.mediaplayer.AndroidPlayer;
+import de.paul_woitaschek.mediaplayer.AntennaPlayer;
 import de.paul_woitaschek.mediaplayer.MediaPlayer;
-import de.paul_woitaschek.mediaplayer.SpeedPlayer;
-import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.playback.utils.MediaPlayerCapabilities;
 
@@ -58,7 +57,7 @@ public class BaseModule {
    @Singleton
    static MediaPlayer providePlayer(MediaPlayerCapabilities capabilities, Context context) {
       if (capabilities.getUseCustomMediaPlayer()) {
-         return new SpeedPlayer(context, BuildConfig.DEBUG);
+         return new AntennaPlayer(context);
       } else {
          return new AndroidPlayer(context);
       }

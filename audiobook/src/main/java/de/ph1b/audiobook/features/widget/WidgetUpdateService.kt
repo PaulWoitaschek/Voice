@@ -27,7 +27,6 @@ import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.IBinder
-import android.support.v4.content.ContextCompat
 import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.View
@@ -38,6 +37,7 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BookActivity
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.drawable
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
@@ -135,7 +135,7 @@ class WidgetUpdateService : Service() {
                             wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT)
                     remoteViews.setImageViewBitmap(R.id.imageView,
                             imageHelper.drawableToBitmap(
-                                    ContextCompat.getDrawable(this@WidgetUpdateService, R.drawable.icon_108dp),
+                                    drawable(R.drawable.icon_108dp),
                                     imageHelper.smallerScreenSize,
                                     imageHelper.smallerScreenSize))
                     remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)

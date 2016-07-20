@@ -35,18 +35,18 @@ class BookUriConverter
 
     private val matcher = UriMatcher(UriMatcher.NO_MATCH).apply {
         addURI(booksAuthority, PATH_BOOKS, ROOT)
-        addURI(booksAuthority, "${PATH_BOOKS}/#", BOOK_ID)
+        addURI(booksAuthority, "$PATH_BOOKS/#", BOOK_ID)
     }
 
     fun match(uri: Uri) = matcher.match(uri)
 
-    fun allBooks() = baseBuilder().build()
+    fun allBooks(): Uri = baseBuilder().build()
 
-    fun book(bookId: Long) = baseBuilder()
+    fun book(bookId: Long): Uri = baseBuilder()
             .appendPath(bookId.toString())
             .build()
 
-    fun extractBook(uri: Uri) = uri.pathSegments.get(1).toLong()
+    fun extractBook(uri: Uri) = uri.pathSegments[1].toLong()
 
     companion object {
         private const val booksAuthority = "BOOKS"

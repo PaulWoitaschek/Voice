@@ -186,7 +186,7 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
         val topDiff = dragRect.top - bounds.top - halfCircleSize
         if (topDiff < 0) {
-            dragRect.offset(0f, -topDiff);
+            dragRect.offset(0f, -topDiff)
         }
 
         val bottomDiff = dragRect.bottom - bounds.bottom + halfCircleSize

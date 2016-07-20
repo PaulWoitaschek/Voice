@@ -1,25 +1,8 @@
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
 package de.ph1b.audiobook.persistence.internals
 
 import android.os.Build
 import de.ph1b.audiobook.*
-import org.fest.assertions.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -52,8 +35,7 @@ class InternalBookRegisterTest {
         register = InternalBookRegister(internalDb)
     }
 
-    @Test
-    fun testHideRevealBook() {
+    @Test fun testHideRevealBook() {
         val mock = BookMocker.mock(-1)
         register.addBook(mock)
 
@@ -79,8 +61,7 @@ class InternalBookRegisterTest {
     /**
      * Tests that the returned book matches the retrieved one
      */
-    @Test
-    fun testAddBookReturn() {
+    @Test fun testAddBookReturn() {
         val mock = BookMocker.mock(-1)
         val inserted = register.addBook(mock)
         val retrieved = register.activeBooks().single()
@@ -88,8 +69,7 @@ class InternalBookRegisterTest {
         assertThat(inserted).isEqualTo(retrieved)
     }
 
-    @Test
-    fun testAddBook() {
+    @Test fun testAddBook() {
         val mock1 = BookMocker.mock(-1)
         val mock2 = BookMocker.mock(-1)
         val firstInserted = register.addBook(mock1)
@@ -106,8 +86,7 @@ class InternalBookRegisterTest {
         assertThat(containing).contains(mock1WithUpdatedId, mock2WithUpdatedId)
     }
 
-    @Test
-    fun testAddBookWithNullableAuthor() {
+    @Test fun testAddBookWithNullableAuthor() {
         val mock = BookMocker.mock(-1)
         val withNullableAuthor = mock.copy(author = null)
         val inserted = register.addBook(withNullableAuthor)
@@ -122,8 +101,7 @@ class InternalBookRegisterTest {
     }
 
 
-    @Test
-    fun testUpdateBook() {
+    @Test fun testUpdateBook() {
         val mock = BookMocker.mock(-1)
         val inserted = register.addBook(mock)
 
@@ -142,7 +120,7 @@ class InternalBookRegisterTest {
                 playbackSpeed = 1.7f,
                 root = "slksjdglkjgaölskjdf")
 
-        register.updateBook(changed)
+        register.updateBook(changed, true)
 
         val containingBooks = register.activeBooks()
 

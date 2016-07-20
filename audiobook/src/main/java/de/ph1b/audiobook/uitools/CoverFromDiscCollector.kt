@@ -33,7 +33,7 @@ import javax.inject.Inject
  * Class for retrieving covers from disc.
  */
 class CoverFromDiscCollector
-@Inject constructor(private val context: Context, private val activityManager: ActivityManager, private val imageHelper: ImageHelper) {
+@Inject constructor(context: Context, private val activityManager: ActivityManager, private val imageHelper: ImageHelper) {
 
     private val picasso = Picasso.with(context)
 
@@ -81,9 +81,9 @@ class CoverFromDiscCollector
     private fun getEmbeddedCover(chapters: List<Chapter>): Bitmap? {
         var tries = 0
         val maxTries = 5
-        for (c in chapters) {
+        for ((file) in chapters) {
             if (++tries < maxTries) {
-                val cover = imageHelper.getEmbeddedCover(c.file)
+                val cover = imageHelper.getEmbeddedCover(file)
                 if (cover != null) {
                     return cover
                 }

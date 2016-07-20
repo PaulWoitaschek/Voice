@@ -16,14 +16,14 @@ class PlayStateManager
 @Inject
 constructor() {
 
-    val playState = BehaviorSubject.create(PlayStateManager.PlayState.STOPPED)
+    val playState: BehaviorSubject<PlayState> = BehaviorSubject.create(PlayStateManager.PlayState.STOPPED)
 
     init {
-        playState.subscribe({
+        playState.subscribe {
             if (it == PlayState.PLAYING || it == PlayState.STOPPED) {
                 pauseReason = PauseReason.NONE
             }
-        })
+        }
     }
 
     var pauseReason = PauseReason.NONE
@@ -33,7 +33,7 @@ constructor() {
      *
      * @author Paul Woitaschek
      */
-    enum class PlayState internal constructor(@PlaybackStateCompat.State val playbackStateCompat: Int) {
+    enum class PlayState(@PlaybackStateCompat.State val playbackStateCompat: Int) {
         PLAYING(PlaybackStateCompat.STATE_PLAYING),
         PAUSED(PlaybackStateCompat.STATE_PAUSED),
         STOPPED(PlaybackStateCompat.STATE_STOPPED)

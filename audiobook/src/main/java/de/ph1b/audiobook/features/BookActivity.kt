@@ -17,15 +17,10 @@
 
 package de.ph1b.audiobook.features
 
-import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.support.annotation.IdRes
-import android.support.v4.app.ActivityCompat
-import android.support.v7.widget.Toolbar
 import android.transition.TransitionInflater
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
@@ -38,8 +33,10 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.misc.startActivity
 import de.ph1b.audiobook.persistence.PrefsManager
-import e
 import i
+import kotlinx.android.synthetic.main.activity_book.*
+import kotlinx.android.synthetic.main.toolbar.*
+import permissions.dispatcher.*
 import v
 import java.io.File
 import java.util.*
@@ -50,29 +47,34 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class BookActivity : BaseActivity(), BookShelfFragment.Callback {
+@RuntimePermissions class BookActivity : BaseActivity(), BookShelfFragment.Callback {
 
     private val TAG = BookActivity::class.java.simpleName
     private val FM_BOOK_SHELF = TAG + BookShelfFragment.TAG
     private val FM_BOOK_PLAY = TAG + BookPlayFragment.TAG
-    @IdRes private val FRAME_CONTAINER = R.id.play_container
 
     @Inject internal lateinit var prefs: PrefsManager
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
                                             grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        BookActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults)
+    }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            val permissionGrantingWorked = PermissionHelper.permissionGrantingWorked(requestCode,
-                    PERMISSION_RESULT_READ_EXT_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,
-                    permissions, grantResults)
-            i { "permissionGrantingWorked=$permissionGrantingWorked" }
-            if (!permissionGrantingWorked) {
-                PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE)
-                e { "could not get permission" }
-            }
-        }
+    // just ensure permissions, dont react
+    @NeedsPermission(PermissionHelper.NEEDED_PERMISSION) fun ensurePermissions() {
+    }
+
+    @OnShowRationale(PermissionHelper.NEEDED_PERMISSION) fun showRationaleForStorage(request: PermissionRequest) {
+        PermissionHelper.showRationaleAndProceed(root, request)
+    }
+
+    @OnPermissionDenied(PermissionHelper.NEEDED_PERMISSION) fun denied() {
+        BookActivityPermissionsDispatcher.ensurePermissionsWithCheck(this)
+    }
+
+    @OnNeverAskAgain(PermissionHelper.NEEDED_PERMISSION) fun deniedForever() {
+        PermissionHelper.handleDeniedForever(root)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,19 +82,11 @@ class BookActivity : BaseActivity(), BookShelfFragment.Callback {
         setContentView(R.layout.activity_book)
         App.component().inject(this)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            val anyFolderSet = prefs.collectionFolders.size + prefs.singleBookFolders.size > 0
-            val canReadStorage = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-            if (anyFolderSet && !canReadStorage) {
-                PermissionHelper.handleExtStorageRescan(this, PERMISSION_RESULT_READ_EXT_STORAGE)
-            }
-        }
-
-        setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
+        setSupportActionBar(toolbar!!)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(FRAME_CONTAINER, BookShelfFragment(), FM_BOOK_SHELF)
+                    .replace(container.id, BookShelfFragment(), FM_BOOK_SHELF)
                     .commit()
         }
 
@@ -108,12 +102,21 @@ class BookActivity : BaseActivity(), BookShelfFragment.Callback {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        val anyFolderSet = prefs.collectionFolders.size + prefs.singleBookFolders.size > 0
+        if (anyFolderSet) {
+            BookActivityPermissionsDispatcher.ensurePermissionsWithCheck(this)
+        }
+    }
+
     override fun onBookSelected(bookId: Long, sharedViews: Map<View, String>) {
         i { "onBookSelected with $bookId" }
 
         val ft = supportFragmentManager.beginTransaction()
         val bookPlayFragment = BookPlayFragment.newInstance(bookId)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val move = TransitionInflater.from(this@BookActivity).inflateTransition(android.R.transition.move)
             bookPlayFragment.sharedElementEnterTransition = move
             for (entry in sharedViews.entries) {
@@ -122,7 +125,7 @@ class BookActivity : BaseActivity(), BookShelfFragment.Callback {
             }
         }
 
-        ft.replace(FRAME_CONTAINER, bookPlayFragment, FM_BOOK_PLAY)
+        ft.replace(container.id, bookPlayFragment, FM_BOOK_PLAY)
                 .addToBackStack(null)
                 .commit()
     }

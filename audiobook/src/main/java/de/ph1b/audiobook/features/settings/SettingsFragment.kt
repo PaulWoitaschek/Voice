@@ -166,6 +166,6 @@ class SettingsFragment : PreferenceFragment(), SettingsSetListener {
 
     companion object {
 
-        val TAG = SettingsFragment::class.java.simpleName
+        val TAG: String = SettingsFragment::class.java.simpleName
     }
 }

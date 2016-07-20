@@ -52,6 +52,9 @@
     <string name="content_is_file">Datei</string>
     <string name="content_navigate_up">Zum übergeordneten Ordner</string>
     <string name="permission_read_ext_explanation">Die App benötigt Zugriff auf den externen Speicher, um die Hörbücher finden und abspielen zu können.</string>
+    <string name="permission_external_new_explanation">Kann keine Bücher lesen</string>
+    <string name="permission_retry">Erneut versuchen?</string>
+    <string name="permission_goto_settings">Einstellungen</string>
     <string name="permission_read_ext_request">Erneut nach der Berechtigung fragen?</string>
     <string name="permission_rescan">Erneut nachfragen?</string>
     <string name="storage_pre_device">Speicher:</string>
@@ -84,8 +87,9 @@
     <string name="pref_root_folder_title">Hörbuch Ordner</string>
     <string name="pref_root_folder_summary">Die gewählten Hörbuchordner.</string>
     <string name="pref_theme_title">Thema</string>
-
-
+    <string name="pref_theme_day">Tag</string>
+    <string name="pref_theme_night">Nacht</string>
+    <string name="pref_theme_daynight">Tag / Nacht</string>
     <string name="pref_pause_on_can_duck_title">Pause bei Unterbrechung</string>
     <string name="pref_pause_on_can_duck_summary">Pausiert bei kurzer Unterbrechung anstelle die Lautstärke kurz herunterzusetzen.</string>
     <string name="pref_send_bugs_title">Sende Fehlerberichte</string>
@@ -113,7 +117,4 @@
     <string name="no_network">Kein Internet?</string>
     <string name="network_top">Das lief nicht besonders gut…</string>
     <string name="cover_crop">Cover zurechtschneiden</string>
-    <string name="pref_theme_day">Tag</string>
-    <string name="pref_theme_daynight">Tag / Nacht</string>
-    <string name="pref_theme_night">Nacht</string>
 </resources>

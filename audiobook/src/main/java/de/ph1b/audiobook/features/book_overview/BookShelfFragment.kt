@@ -29,7 +29,6 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SimpleItemAnimator
 import android.view.*
 import android.widget.PopupMenu
-import com.getbase.floatingactionbutton.FloatingActionButton
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.R
@@ -43,6 +42,7 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import i
+import kotlinx.android.synthetic.main.fragment_book_shelf.*
 import java.util.*
 import javax.inject.Inject
 import dagger.Lazy as DaggerLazy
@@ -50,9 +50,9 @@ import dagger.Lazy as DaggerLazy
 /**
  * Showing the shelf of all the available books and provide a navigation to each book
  */
-class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresenter>(), BookShelfAdapter.OnItemClickListener {
+class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(), BookShelfAdapter.OnItemClickListener {
 
-    override fun newPresenter() = App.component().bookShelfBasePresenter
+    override fun newPresenter(): BookShelfPresenter = App.component().bookShelfPresenter
 
     override fun provideView() = this
 
@@ -64,9 +64,6 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
     @Inject internal lateinit var prefs: PrefsManager
 
     // viewAdded
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var recyclerReplacementView: View
-    private lateinit var fab: FloatingActionButton
     private val playPauseDrawable = PlayPauseDrawable()
     private val adapter by lazy { BookShelfAdapter(context, this) }
     private lateinit var listDecoration: RecyclerView.ItemDecoration
@@ -90,20 +87,15 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
         setHasOptionsMenu(true)
     }
 
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // find views
-        val view = inflater.inflate(R.layout.fragment_book_shelf, container, false)
-        recyclerView = view.findViewById(R.id.recyclerView) as RecyclerView
-        recyclerReplacementView = view.findViewById(R.id.recyclerReplacement)
-        fab = view.findViewById(R.id.fab) as FloatingActionButton
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         // init fab
         fab.setIconDrawable(playPauseDrawable)
         fab.setOnClickListener { presenter().playPauseRequested() }
 
         // init ActionBar
-        actionBar().apply {
+        actionBar.apply {
             setDisplayHomeAsUpEnabled(false)
             setHomeAsUpIndicator(R.drawable.ic_arrow_back)
             title = getString(R.string.app_name)
@@ -119,9 +111,10 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
         gridLayoutManager = GridLayoutManager(context, amountOfColumns())
         linearLayoutManager = LinearLayoutManager(context)
         initRecyclerView()
-
-        return view
     }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
+            inflater.inflate(R.layout.fragment_book_shelf, container, false)
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.book_shelf, menu)
@@ -157,16 +150,16 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
             }
             R.id.sendLogs -> {
                 val intent = Intent(Intent.ACTION_SEND).apply {
-                    type = "message/rfc822";
-                    putExtra(Intent.EXTRA_EMAIL, arrayOf("woitaschek@gmail.com"));
-                    putExtra(Intent.EXTRA_SUBJECT, "MAP Logs");
+                    type = "message/rfc822"
+                    putExtra(Intent.EXTRA_EMAIL, arrayOf("woitaschek@gmail.com"))
+                    putExtra(Intent.EXTRA_SUBJECT, "MAP Logs")
                     val logs = LogStorage.get()
                     val logsBuilder = StringBuilder()
                     logs.forEach { logsBuilder.append(it).append("\n") }
-                    putExtra(Intent.EXTRA_TEXT, logsBuilder.toString());
+                    putExtra(Intent.EXTRA_TEXT, logsBuilder.toString())
                 }
-                startActivity(Intent.createChooser(intent, "Send mail..."));
-                return true;
+                startActivity(Intent.createChooser(intent, "Send mail..."))
+                return true
             }
             else -> super.onOptionsItemSelected(item)
         }
@@ -210,7 +203,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
     private fun amountOfColumns(): Int {
         val r = recyclerView.resources
         val displayMetrics = resources.displayMetrics
-        var widthPx = displayMetrics.widthPixels.toFloat()
+        val widthPx = displayMetrics.widthPixels.toFloat()
         val desiredPx = r.getDimensionPixelSize(R.dimen.desired_medium_cover).toFloat()
         val columns = Math.round(widthPx / desiredPx)
         return Math.max(columns, 2)
@@ -323,7 +316,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
     fun showSpinnerIfNoData(showSpinnerIfNoData: Boolean) {
         val shouldShowSpinner = adapter.itemCount == 0 && showSpinnerIfNoData
         recyclerView.visibility = if (shouldShowSpinner) View.INVISIBLE else View.VISIBLE
-        recyclerReplacementView.visibility = if (shouldShowSpinner) View.VISIBLE else View.INVISIBLE
+        recyclerReplacement.visibility = if (shouldShowSpinner) View.VISIBLE else View.INVISIBLE
     }
 
     enum class DisplayMode constructor(@DrawableRes val icon: Int) {
@@ -340,7 +333,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfBasePresent
 
     companion object {
 
-        val TAG = BookShelfFragment::class.java.simpleName
+        val TAG: String = BookShelfFragment::class.java.simpleName
         val FM_NO_FOLDER_WARNING = TAG + NoFolderWarningDialogFragment.TAG
     }
 }
