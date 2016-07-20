@@ -54,6 +54,9 @@
     <string name="content_is_file">Soubor</string>
     <string name="content_navigate_up">Přejít o adresář výše</string>
     <string name="permission_read_ext_explanation">Aplikace musí mít povolení číst vaše úložiště aby bylo možno přehrávat audioknihy.</string>
+    <string name="permission_external_new_explanation">Nelze načíst knihy bez oprávnění</string>
+    <string name="permission_retry">Opakovat?</string>
+    <string name="permission_goto_settings">Nastavení</string>
     <string name="permission_read_ext_request">Znovu se dotázat na oprávnění?</string>
     <string name="permission_rescan">Vyžádat znovu</string>
     <string name="storage_pre_device">Úložiště:</string>
@@ -89,8 +92,9 @@
     <string name="pref_root_folder_title">Adresář audioknihy</string>
     <string name="pref_root_folder_summary">Vybrané adresáře s audioknihami.</string>
     <string name="pref_theme_title">Vzhled</string>
-
-
+    <string name="pref_theme_day">Den</string>
+    <string name="pref_theme_night">Noc</string>
+    <string name="pref_theme_daynight">Den / Noc</string>
     <string name="pref_pause_on_can_duck_title">Pozastavit při vyrušení</string>
     <string name="pref_pause_on_can_duck_summary">Pozastavit při vyrušení namísto snížení hlasitosti po trvání vyrušení.</string>
     <string name="pref_send_bugs_title">Nahlásit chybu</string>

@@ -52,6 +52,9 @@
     <string name="content_is_file">Fichier</string>
     <string name="content_navigate_up">Aller au dossier parent</string>
     <string name="permission_read_ext_explanation">L\'application a besoin de pouvoir parcourir vos fichiers pour trouver et lire les livres audio.</string>
+    <string name="permission_external_new_explanation">Impossible de lire des livres sans autorisation</string>
+    <string name="permission_retry">Réessayer ?</string>
+    <string name="permission_goto_settings">Paramètres</string>
     <string name="permission_read_ext_request">Devons nous redemander la permission plus tard ?</string>
     <string name="permission_rescan">Redemander plus tard</string>
     <string name="storage_pre_device">Stockage :</string>
@@ -84,8 +87,9 @@
     <string name="pref_root_folder_title">Dossier de livre audio</string>
     <string name="pref_root_folder_summary">Les dossiers de livres audio sélectionnés.</string>
     <string name="pref_theme_title">Thème</string>
-
-
+    <string name="pref_theme_day">Jour</string>
+    <string name="pref_theme_night">Nuit</string>
+    <string name="pref_theme_daynight">Jour / Nuit</string>
     <string name="pref_pause_on_can_duck_title">Pause lors d\'une interruption</string>
     <string name="pref_pause_on_can_duck_summary">Pause lors d\'une interruption au lieu de baisser le volume pour la durée de l\'interruption.</string>
     <string name="pref_send_bugs_title">Signaler des bugs</string>
@@ -108,4 +112,9 @@
     <string name="hide_folder_content">Voulez vous masquer le dossier aux lecteurs audio afin qu\'ils ne considèrent pas vos livres comme de la musique ?</string>
     <string name="hide_confirm">Masquer</string>
     <!--license activity-->
+    <string name="refresh">Rafraîchir</string>
+    <string name="reset">Réinitialiser</string>
+    <string name="no_network">Pas de connexion réseau ?</string>
+    <string name="network_top">Ca n\'a pas marché…</string>
+    <string name="cover_crop">Recadrer la couverture</string>
 </resources>

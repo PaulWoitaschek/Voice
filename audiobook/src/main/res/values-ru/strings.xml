@@ -54,8 +54,13 @@
     <string name="content_is_file">Файл</string>
     <string name="content_navigate_up">Перейти на папку выше</string>
     <string name="permission_read_ext_explanation">Приложению необходим доступ к вашей памяти, чтобы найти и воспроизвести аудиокниги.</string>
+    <string name="permission_external_new_explanation">Невозможно воспроизвести книгу без разрешений</string>
+    <string name="permission_retry">Повторить?</string>
+    <string name="permission_goto_settings">Настройки</string>
     <string name="permission_read_ext_request">Должны ли мы спрашивать  разрешение повторно?</string>
     <string name="permission_rescan">Запросить снова</string>
+    <string name="storage_pre_device">Хранилище:</string>
+    <string name="storage_all">Всё</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Скорость воспроизведения</string>
     <!--Bookmarks-->
@@ -88,8 +93,9 @@
     <string name="pref_root_folder_title">Папки с аудиокнигами</string>
     <string name="pref_root_folder_summary">Выбранные папки с книгами.</string>
     <string name="pref_theme_title">Внешний вид</string>
-
-
+    <string name="pref_theme_day">День</string>
+    <string name="pref_theme_night">Ночь</string>
+    <string name="pref_theme_daynight">День / Ночь</string>
     <string name="pref_pause_on_can_duck_title">Останавливать во время прерывания</string>
     <string name="pref_pause_on_can_duck_summary">Останавливать и не \"делать тише\" на время прерывания</string>
     <string name="pref_send_bugs_title">Отправлять отчеты об ошибках</string>
@@ -114,4 +120,9 @@
     <string name="hide_folder_content">Хотите ли вы скрыть папку от музыкальных проигрывателей так, чтобы они не идентифицировали вашу книгу как музыку?</string>
     <string name="hide_confirm">Скрыть</string>
     <!--license activity-->
+    <string name="refresh">Обновить</string>
+    <string name="reset">Сброс</string>
+    <string name="no_network">Нет сети?</string>
+    <string name="network_top">Что-то пошло не так…</string>
+    <string name="cover_crop">Обрезать обложку</string>
 </resources>

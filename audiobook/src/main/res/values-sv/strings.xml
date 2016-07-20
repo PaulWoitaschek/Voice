@@ -52,6 +52,9 @@
     <string name="content_is_file">Fil</string>
     <string name="content_navigate_up">Gå till överordnad mapp</string>
     <string name="permission_read_ext_explanation">Appen måste läsa din lagring så att den kan hitta och spela upp ljudböcker.</string>
+    <string name="permission_external_new_explanation">Det går inte att läsa böcker utan tillstånd</string>
+    <string name="permission_retry">Nytt försök?</string>
+    <string name="permission_goto_settings">Inställningar</string>
     <string name="permission_read_ext_request">Ska vi fråga efter rättigheter igen?</string>
     <string name="permission_rescan">Fråga igen</string>
     <string name="storage_pre_device">Lagring:</string>
@@ -84,8 +87,9 @@
     <string name="pref_root_folder_title">Ljudboks mapp</string>
     <string name="pref_root_folder_summary">De valda ljudboksmapparna.</string>
     <string name="pref_theme_title">Tema</string>
-
-
+    <string name="pref_theme_day">Dag</string>
+    <string name="pref_theme_night">Natt</string>
+    <string name="pref_theme_daynight">Dag/Natt</string>
     <string name="pref_pause_on_can_duck_title">Pausa vid avbrott</string>
     <string name="pref_pause_on_can_duck_summary">Pausa när du blir avbruten i stället för att sänka volymen under hela avbrottet.</string>
     <string name="pref_send_bugs_title">Rapportera buggar</string>
@@ -108,4 +112,9 @@
     <string name="hide_folder_content">Vill du dölja mappen från musikspelare, så att de inte känner igen din bok som musik?</string>
     <string name="hide_confirm">Göm</string>
     <!--license activity-->
+    <string name="refresh">Uppdatera</string>
+    <string name="reset">Återställ</string>
+    <string name="no_network">Inget Nätverk?</string>
+    <string name="network_top">Detta fungerade inte alltför väl ..</string>
+    <string name="cover_crop">Beskär omslag</string>
 </resources>

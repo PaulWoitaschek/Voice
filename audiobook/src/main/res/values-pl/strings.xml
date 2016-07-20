@@ -53,6 +53,9 @@
     <string name="content_is_file">Plik</string>
     <string name="content_navigate_up">Idź do folderu nadrzędnego</string>
     <string name="permission_read_ext_explanation">Aplikacja musi posiadać dostęp do pamięci dyskowej, by móc znaleźć i odtwarzać audiobooki.</string>
+    <string name="permission_external_new_explanation">Nie można odczytać książek bez uprawnień</string>
+    <string name="permission_retry">Powtórzyć?</string>
+    <string name="permission_goto_settings">Ustawienia</string>
     <string name="permission_read_ext_request">Czy powinniśmy pytać ponownie o nadanie uprawnień?</string>
     <string name="permission_rescan">Zarządaj ponownie</string>
     <string name="storage_pre_device">Przestrzeń dyskowa:</string>
@@ -87,8 +90,9 @@
     <string name="pref_root_folder_title">Folder audiobooków</string>
     <string name="pref_root_folder_summary">Wybrane foldery z audiobookami</string>
     <string name="pref_theme_title">Motyw</string>
-
-
+    <string name="pref_theme_day">Dzień</string>
+    <string name="pref_theme_night">Noc</string>
+    <string name="pref_theme_daynight">Dzień / Noc</string>
     <string name="pref_pause_on_can_duck_title">Zatrzymaj przy zakłóceniu</string>
     <string name="pref_pause_on_can_duck_summary">Spauzuj przy zakłóceniu zamiast ściszyć na czas jego trwania.</string>
     <string name="pref_send_bugs_title">Zgłaszaj błędy</string>
