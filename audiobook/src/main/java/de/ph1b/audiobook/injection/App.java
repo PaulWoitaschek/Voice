@@ -42,8 +42,10 @@ public class App extends Application {
 
       // init acra + return early if this is the sender service
       try {
-         ACRA.init(this, new ConfigurationBuilder(this)
-               .build());
+         if (!BuildConfig.DEBUG) {
+            ACRA.init(this, new ConfigurationBuilder(this)
+                  .build());
+         }
       } catch (ACRAConfigurationException e) {
          throw new RuntimeException(e);
       }
