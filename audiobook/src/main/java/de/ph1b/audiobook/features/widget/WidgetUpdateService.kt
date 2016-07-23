@@ -27,7 +27,6 @@ import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.IBinder
-import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
@@ -37,6 +36,7 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BookActivity
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.dpToPx
 import de.ph1b.audiobook.misc.drawable
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -224,18 +224,6 @@ class WidgetUpdateService : Service() {
         }
         remoteViews.setImageViewBitmap(R.id.imageView, cover)
         remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)
-    }
-
-    /**
-     * Converts dp to px
-
-     * @param dp the dp to be converted
-     * *
-     * @return the px the dp represent
-     */
-    private fun dpToPx(dp: Int): Int {
-        return Math.round(TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), resources.displayMetrics))
     }
 
     /**

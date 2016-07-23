@@ -1,16 +1,15 @@
 package de.ph1b.audiobook.features.imagepicker
 
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.FrameLayout
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.misc.dpToPx
 import i
 
 /**
@@ -70,14 +69,13 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
 
     private var eventType: EventType? = null
     private var resizeType: Resize? = null
-    private val touchOffset = resources.dpToPx(16f)
+    private val touchOffset = context.dpToPx(16)
 
     private fun newCircle() = LayoutInflater.from(context).inflate(R.layout.circle, this@CropOverlay, false).apply {
         visibility = View.GONE
     }
 
 
-    private fun Resources.dpToPx(dp: Float) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, displayMetrics)
     private fun minRectSize() = Math.min(bounds.width(), bounds.height()) / 3f
 
     private infix fun Float.inRangeOf(target: Float) = this >= (target - touchOffset) && this <= (target + touchOffset)
@@ -88,11 +86,11 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
         val rect = dragRect
 
         return when {
-            x inRangeOf rect.left    -> Resize.LEFT
-            x inRangeOf  rect.right  -> Resize.RIGHT
-            y inRangeOf rect.top     -> Resize.TOP
-            y inRangeOf  rect.bottom -> Resize.BOTTOM
-            else                     -> null
+            x inRangeOf rect.left -> Resize.LEFT
+            x inRangeOf rect.right -> Resize.RIGHT
+            y inRangeOf rect.top -> Resize.TOP
+            y inRangeOf rect.bottom -> Resize.BOTTOM
+            else -> null
         }
     }
 
@@ -145,17 +143,17 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
                     } else if (eventType == EventType.RESIZE) {
                         // resize depending on which side touched
                         val inset = when (resizeType!!) {
-                            Resize.TOP    -> y - dragRect.top
-                            Resize.RIGHT  -> dragRect.right - x
+                            Resize.TOP -> y - dragRect.top
+                            Resize.RIGHT -> dragRect.right - x
                             Resize.BOTTOM -> dragRect.bottom - y
-                            Resize.LEFT   -> x - dragRect.left
+                            Resize.LEFT -> x - dragRect.left
                         }
                         i { "inset=$inset, resizeType=$resizeType, dragRect=$dragRect, x=$x, y=$y" }
                         dragRect.squareInset(inset)
                     }
 
                 }
-                MotionEvent.ACTION_UP   -> {
+                MotionEvent.ACTION_UP -> {
                     // reset
                     lastTouchPoint.set(0f, 0f)
                 }
