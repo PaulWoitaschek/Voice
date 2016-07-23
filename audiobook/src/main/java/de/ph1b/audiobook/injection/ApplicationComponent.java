@@ -11,6 +11,7 @@ import de.ph1b.audiobook.features.BookAdder;
 import de.ph1b.audiobook.features.book_overview.BookShelfAdapter;
 import de.ph1b.audiobook.features.book_overview.BookShelfFragment;
 import de.ph1b.audiobook.features.book_overview.BookShelfPresenter;
+import de.ph1b.audiobook.features.book_overview.EditBookBottomSheet;
 import de.ph1b.audiobook.features.book_overview.EditBookTitleDialogFragment;
 import de.ph1b.audiobook.features.book_playing.BookPlayFragment;
 import de.ph1b.audiobook.features.book_playing.JumpToPositionDialogFragment;
@@ -60,6 +61,8 @@ public interface ApplicationComponent {
    void inject(JumpToPositionDialogFragment target);
 
    void inject(App target);
+
+   void inject(EditBookBottomSheet target);
 
    void inject(BookReaderService target);
 

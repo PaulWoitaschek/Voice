@@ -27,11 +27,14 @@ import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.SeekBar
+import android.widget.TextView
 
 
 val Fragment.actionBar: ActionBar
@@ -67,3 +70,18 @@ fun SeekBar.onProgressChanged(progressChanged: (Int) -> Unit) {
         }
     })
 }
+
+fun Context.dpToPx(dp: Int) = Math.round(TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), resources.displayMetrics))
+
+fun Drawable.tinted(@ColorInt color: Int): Drawable {
+    val wrapped = DrawableCompat.wrap(this)
+    DrawableCompat.setTint(wrapped, color)
+    return wrapped
+}
+
+fun TextView.leftCompoundDrawable(): Drawable? = compoundDrawables[0]
+fun TextView.topCompoundDrawable(): Drawable? = compoundDrawables[1]
+fun TextView.rightCompoundDrawable(): Drawable? = compoundDrawables[2]
+fun TextView.bottomCompoundDrawable(): Drawable? = compoundDrawables[3]
+

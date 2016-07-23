@@ -49,8 +49,8 @@
     <string name="content_previous_cover">Chooses previous cover</string>
     <string name="content_next_cover">Chooses next cover</string>
     <string name="content_cover">Shows cover to choose</string>
-    <string name="edit_book_name">Edit name</string>
-    <string name="edit_book_cover">Edit cover</string>
+    <string name="change_book_name">Name</string>
+    <string name="change_book_cover">Cover</string>
     <string name="edit_book_title">Edit book</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Jump to</string>

@@ -28,11 +28,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SimpleItemAnimator
 import android.view.*
-import android.widget.PopupMenu
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.bookmarks.BookmarkDialogFragment
 import de.ph1b.audiobook.features.settings.SettingsActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.logging.LogStorage
@@ -171,28 +169,9 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
     }
 
     override fun onMenuClicked(position: Int, view: View) {
-        val popupMenu = PopupMenu(context, view)
-        popupMenu.inflate(R.menu.bookshelf_popup)
-        popupMenu.setOnMenuItemClickListener {
-            val book = adapter.getItem(position)
-            when (it.itemId) {
-                R.id.edit_cover -> {
-                    callBack.onCoverChanged(book)
-                    return@setOnMenuItemClickListener true
-                }
-                R.id.edit_title -> {
-                    EditBookTitleDialogFragment.newInstance(book).show(fragmentManager,
-                            EditBookTitleDialogFragment.TAG)
-                    return@setOnMenuItemClickListener true
-                }
-                R.id.bookmark -> {
-                    BookmarkDialogFragment.newInstance(adapter.getItemId(position)).show(fragmentManager, TAG)
-                    return@setOnMenuItemClickListener true
-                }
-                else -> return@setOnMenuItemClickListener false
-            }
-        }
-        popupMenu.show()
+        val book = adapter.getItem(position)
+        EditBookBottomSheet.newInstance(book)
+                .show(fragmentManager, "editBottomSheet")
     }
 
     /**
