@@ -5,11 +5,11 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
-import android.widget.SeekBar
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.settings.SettingsSetListener
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.onProgressChanged
 import de.ph1b.audiobook.persistence.PrefsManager
 import kotlinx.android.synthetic.main.dialog_amount_chooser.view.*
 import javax.inject.Inject
@@ -38,18 +38,10 @@ class SeekDialogFragment : DialogFragment() {
         // init
         val oldSeekTime = prefs.seekTime.toBlocking().first()
         v.seekBar.max = SEEK_BAR_MAX - SEEK_BAR_MIN
-        v.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                val value = progress + SEEK_BAR_MIN
-                v.textView.text = context.resources.getQuantityString(R.plurals.seconds, value, value)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-            }
-        })
+        v.seekBar.onProgressChanged {
+            val value = it + SEEK_BAR_MIN
+            v.textView.text = context.resources.getQuantityString(R.plurals.seconds, value, value)
+        }
         v.seekBar.progress = oldSeekTime - SEEK_BAR_MIN
 
         return MaterialDialog.Builder(context)
