@@ -46,7 +46,7 @@ kapt.generateStubs = true
 
 dependencies {
     // support library
-    def supportVersion = "24.1.0"
+    def supportVersion = "24.1.1"
     compile "com.android.support:appcompat-v7:$supportVersion"
     compile "com.android.support:recyclerview-v7:$supportVersion"
     compile "com.android.support:support-v4:$supportVersion"
