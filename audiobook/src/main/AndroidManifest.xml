@@ -1,20 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~ This file is part of Material Audiobook Player.
-  ~
-  ~ Material Audiobook Player is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU General Public License as published by
-  ~ the Free Software Foundation, either version 3 of the License, or any later version.
-  ~
-  ~ Material Audiobook Player is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~ GNU General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU General Public License
-  ~ along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
-  ~ /licenses/>.
-  -->
-
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
           package="de.ph1b.audiobook">
@@ -59,9 +43,9 @@
             android:resource="@style/Theme.AppCompat.DayNight"/>
 
         <activity
-            android:name=".features.BookActivity"
+            android:name=".features.coldStart.SplashActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.Main">
+            android:theme="@style/AppTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -69,10 +53,13 @@
         </activity>
 
         <activity
+            android:name=".features.BookActivity"
+            android:label="@string/app_name"/>
+
+        <activity
             android:name=".features.settings.SettingsActivity"
             android:label="@string/action_settings"
-            android:parentActivityName=".features.BookActivity"
-            android:theme="@style/AppTheme.Main">
+            android:parentActivityName=".features.BookActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".features.BookActivity"/>
@@ -81,8 +68,7 @@
         <activity
             android:name=".features.folder_overview.FolderOverviewActivity"
             android:label="@string/audiobook_folders_title"
-            android:parentActivityName=".features.settings.SettingsActivity"
-            android:theme="@style/AppTheme.Main">
+            android:parentActivityName=".features.settings.SettingsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".features.settings.SettingsActivity"/>
@@ -90,13 +76,11 @@
 
         <activity
             android:name=".features.external_storage_missing.NoExternalStorageActivity"
-            android:label="@string/no_external_storage_action_bar_title"
-            android:theme="@style/AppTheme.Main"/>
+            android:label="@string/no_external_storage_action_bar_title"/>
 
         <activity
             android:name=".features.folder_chooser.FolderChooserActivity"
-            android:parentActivityName=".features.BookActivity"
-            android:theme="@style/AppTheme.Main">
+            android:parentActivityName=".features.BookActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".features.BookActivity"/>
@@ -104,8 +88,7 @@
 
         <activity
             android:name=".features.imagepicker.ImagePickerActivity"
-            android:parentActivityName=".features.BookActivity"
-            android:theme="@style/AppTheme.Main">
+            android:parentActivityName=".features.BookActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".features.BookActivity"/>
