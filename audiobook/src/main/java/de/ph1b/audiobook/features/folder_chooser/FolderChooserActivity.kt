@@ -19,6 +19,8 @@ import de.ph1b.audiobook.mvp.RxBaseActivity
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import i
 import kotlinx.android.synthetic.main.activity_folder_chooser.*
+import kotlinx.android.synthetic.main.include_file_navigation_header.*
+import kotlinx.android.synthetic.main.include_toolbar_with_spinner.*
 import permissions.dispatcher.*
 import java.io.File
 
