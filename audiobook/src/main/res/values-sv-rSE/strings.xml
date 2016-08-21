@@ -1,112 +1,112 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-  <!--BookShelf-->
-  <string name="mal_file_message">Följande fil kan vara korrupt:</string>
-  <string name="mal_file_title">Felaktig fil</string>
-  <string name="content_current_book">Det här är den aktuella boken</string>
-  <string name="current_book">Aktuell bok</string>
-  <string name="change_layout_type">Ändra layout</string>
-  <!--BookPlayFragment-->
-  <string name="cover">Omslag</string>
-  <string name="play_pause">Spela / Paus</string>
-  <string name="action_sleep">Sömntimer</string>
-  <plurals name="pauses_after">
-    <item quantity="one">Pausar efter %d minut.</item>
-    <item quantity="other">Pausar efter %d minuter.</item>
-  </plurals>
-  <string name="rewind">Bakåt</string>
-  <string name="fast_forward">Framåt</string>
-  <string name="previous_track">Föregående spår</string>
-  <string name="next_track">Nästa Spår</string>
-  <string name="play">Spela</string>
-  <string name="pause">Paus</string>
-  <!--NoExternalStorage-->
-  <string name="no_external_storage">Extern lagring är inte tillgänglig. Kontrollera att det är anslutet och inte anslutet till en dator.</string>
-  <string name="no_external_storage_action_bar_title">Extern lagring</string>
-  <!--Dialogs-->
-  <string name="dialog_confirm">Välj</string>
-  <string name="dialog_cancel">Ångra</string>
-  <!--EditBookDialog-->
-  <string name="content_previous_cover">Väljer föregående omslag</string>
-  <string name="content_next_cover">Väljer nästa omslag</string>
-  <string name="content_cover">Visar omslag att välja</string>
-  <string name="edit_book_title">Ändra bok</string>
-  <!--JumpToPosition-->
-  <string name="action_time_change">Hoppa till</string>
-  <!--BookAdding-->
-  <string name="adding_failed_subfolder">Katalogerna får inte vara underkataloger till varandra:</string>
-  <string name="audiobook_folders_title">Ljudbokskataloger</string>
-  <string name="no_audiobook_folders_title">Välj katalog nu</string>
-  <string name="no_audiobook_folders_summary_start">Var god välj ljudbokskatalog(er) nu.</string>
-  <string name="no_audiobook_folders_end">Du kan välja en huvudkatalog innehållande flera böcker. Eller så kan du välja en enskild bok.</string>
-  <string name="chosen_folder_description">Vald katalog:</string>
-  <string name="delete_folder">Ta bort från bibliotek?</string>
-  <string name="delete_folder_content">Vill du ta bort följande katalog från biblioteket?</string>
-  <string name="folder_add_single_book">Enskild bok</string>
-  <string name="folder_add_collection">Katalog med flera böcker</string>
-  <string name="for_example">t.ex.</string>
-  <string name="content_add_book">Lägg till en bok</string>
-  <string name="content_is_folder">Katalog</string>
-  <string name="content_is_file">Fil</string>
-  <string name="content_navigate_up">Gå upp en nivå</string>
-  <string name="permission_read_ext_explanation">Appen behöver läsa ditt lagringsutrymme för att kunna hitta och spela ljudböckerna.</string>
-  <string name="permission_read_ext_request">Ska vi be om behörigheten igen?</string>
-  <string name="permission_rescan">Efterfråga igen</string>
-  <string name="storage_pre_device">Lagring:</string>
-  <string name="storage_all">Allt</string>
-  <!--PlaybackSpeed-->
-  <string name="playback_speed">Uppspelningshastighet</string>
-  <!--Bookmarks-->
-  <string name="bookmark">Bokmärke</string>
-  <string name="bookmark_edit_title">Ändra bokmärke</string>
-  <string name="acc_button_add_bookmark">Lägger till bokmärke på nuvarande position</string>
-  <string name="bookmark_edit_hint">Bokmärkesnamn</string>
-  <string name="bookmark_added">Bokmärke skapat</string>
-  <string name="bookmark_delete_title">Ta bort bokmärke?</string>
-  <!--Settings-->
-  <string name="pref_category_general">Allmänna inställningar</string>
-  <string name="pref_category_playback">Uppspelningsbeteende</string>
-  <string name="action_settings">Inställningar</string>
-  <string name="pref_resume_on_replug">Fortsätt uppspelning</string>
-  <string name="pref_resume_on_replug_hint">Om du pausar genom att dra ur dina hörlurar kommer uppspelningen sättas igång igen när du återansluter dem.</string>
-  <plurals name="minutes">
-    <item quantity="one">%d minut</item>
-    <item quantity="other">%d minuter</item>
-  </plurals>
-  <plurals name="seconds">
-    <item quantity="one">%d sekund</item>
-    <item quantity="other">%d sekunder</item>
-  </plurals>
-  <string name="pref_seek_time">Hoppa över</string>
-  <string name="pref_sleep_time">Insomningstid</string>
-  <string name="pref_root_folder_title">Ljudbokskatalog</string>
-  <string name="pref_root_folder_summary">Valda ljudbokskataloger.</string>
-  <string name="pref_theme_title">Tema</string>
-  <string name="pref_pause_on_can_duck_title">Pausa vid avbrott</string>
-  <string name="pref_pause_on_can_duck_summary">Pausa vid avbrott istället för att sänka volymen under avbrottet.</string>
-  <string name="pref_send_bugs_title">Rapportera buggar</string>
-  <string name="pref_send_bugs_summary">Skickar automatiskt anonyma felrapporter för att underlätta utvecklingen.</string>
-  <string name="pref_auto_rewind_title">Automatisk tillbakaspolning</string>
-  <plurals name="pref_auto_rewind_summary">
-    <item quantity="one">Spolar automatiskt tillbaks %d sekund efter manuell pausning.</item>
-    <item quantity="other">Spolar automatiskt tillbaks %d sekunder efter manuell pausning.</item>
-  </plurals>
-  <string name="pref_bookmark_on_sleep_title">Bokmärke vid sovläge</string>
-  <string name="pref_bookmark_on_sleep_summary">Lägger automatiskt till ett nytt bokmärke varje gång sovläget aktiveras</string>
-  <string name="pref_support_title">Stötta</string>
-  <string name="pref_support_translations">Översättningar</string>
-  <string name="pref_support_contribute">Support och förslag</string>
-  <!--Misc-->
-  <string name="popup_edit">Ändra</string>
-  <string name="remove">Ta bort</string>
-  <!--hide folder dialog-->
-  <string name="hide_folder_title">Dölj katalog</string>
-  <string name="hide_folder_content">Vill du dölja katalogen från musikspelare, så de inte laddar in din bok som musik?</string>
-  <string name="hide_confirm">Dölj</string>
-  <!--license activity-->
-  <string name="refresh">Uppdatera</string>
-  <string name="reset">Återställ</string>
-  <string name="no_network">Inget nätverk?</string>
-  <string name="network_top">Det här fungerade inte så bra...</string>
-  <string name="cover_crop">Beskär omslag</string>
+<resources>
+    <!--BookShelf-->
+    <string name="mal_file_message">Följande fil kan vara korrupt:</string>
+    <string name="mal_file_title">Felaktig fil</string>
+    <string name="content_current_book">Det här är den aktuella boken</string>
+    <string name="current_book">Aktuell bok</string>
+    <string name="change_layout_type">Ändra layout</string>
+    <!--BookPlayFragment-->
+    <string name="cover">Omslag</string>
+    <string name="play_pause">Spela / Paus</string>
+    <string name="action_sleep">Sömntimer</string>
+    <plurals name="pauses_after">
+        <item quantity="one">Pausar efter %d minut.</item>
+        <item quantity="other">Pausar efter %d minuter.</item>
+    </plurals>
+    <string name="rewind">Bakåt</string>
+    <string name="fast_forward">Framåt</string>
+    <string name="previous_track">Föregående spår</string>
+    <string name="next_track">Nästa Spår</string>
+    <string name="play">Spela</string>
+    <string name="pause">Paus</string>
+    <!--NoExternalStorage-->
+    <string name="no_external_storage">Extern lagring är inte tillgänglig. Kontrollera att det är anslutet och inte anslutet till en dator.</string>
+    <string name="no_external_storage_action_bar_title">Extern lagring</string>
+    <!--Dialogs-->
+    <string name="dialog_confirm">Välj</string>
+    <string name="dialog_cancel">Ångra</string>
+    <!--EditBookDialog-->
+    <string name="content_previous_cover">Väljer föregående omslag</string>
+    <string name="content_next_cover">Väljer nästa omslag</string>
+    <string name="content_cover">Visar omslag att välja</string>
+    <string name="edit_book_title">Ändra bok</string>
+    <!--JumpToPosition-->
+    <string name="action_time_change">Hoppa till</string>
+    <!--BookAdding-->
+    <string name="adding_failed_subfolder">Katalogerna får inte vara underkataloger till varandra:</string>
+    <string name="audiobook_folders_title">Ljudbokskataloger</string>
+    <string name="no_audiobook_folders_title">Välj katalog nu</string>
+    <string name="no_audiobook_folders_summary_start">Var god välj ljudbokskatalog(er) nu.</string>
+    <string name="no_audiobook_folders_end">Du kan välja en huvudkatalog innehållande flera böcker. Eller så kan du välja en enskild bok.</string>
+    <string name="chosen_folder_description">Vald katalog:</string>
+    <string name="delete_folder">Ta bort från bibliotek?</string>
+    <string name="delete_folder_content">Vill du ta bort följande katalog från biblioteket?</string>
+    <string name="folder_add_single_book">Enskild bok</string>
+    <string name="folder_add_collection">Katalog med flera böcker</string>
+    <string name="for_example">t.ex.</string>
+    <string name="content_add_book">Lägg till en bok</string>
+    <string name="content_is_folder">Katalog</string>
+    <string name="content_is_file">Fil</string>
+    <string name="content_navigate_up">Gå upp en nivå</string>
+    <string name="permission_read_ext_explanation">Appen behöver läsa ditt lagringsutrymme för att kunna hitta och spela ljudböckerna.</string>
+    <string name="permission_read_ext_request">Ska vi be om behörigheten igen?</string>
+    <string name="permission_rescan">Efterfråga igen</string>
+    <string name="storage_pre_device">Lagring:</string>
+    <string name="storage_all">Allt</string>
+    <!--PlaybackSpeed-->
+    <string name="playback_speed">Uppspelningshastighet</string>
+    <!--Bookmarks-->
+    <string name="bookmark">Bokmärke</string>
+    <string name="bookmark_edit_title">Ändra bokmärke</string>
+    <string name="acc_button_add_bookmark">Lägger till bokmärke på nuvarande position</string>
+    <string name="bookmark_edit_hint">Bokmärkesnamn</string>
+    <string name="bookmark_added">Bokmärke skapat</string>
+    <string name="bookmark_delete_title">Ta bort bokmärke?</string>
+    <!--Settings-->
+    <string name="pref_category_general">Allmänna inställningar</string>
+    <string name="pref_category_playback">Uppspelningsbeteende</string>
+    <string name="action_settings">Inställningar</string>
+    <string name="pref_resume_on_replug">Fortsätt uppspelning</string>
+    <string name="pref_resume_on_replug_hint">Om du pausar genom att dra ur dina hörlurar kommer uppspelningen sättas igång igen när du återansluter dem.</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minut</item>
+        <item quantity="other">%d minuter</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%d sekund</item>
+        <item quantity="other">%d sekunder</item>
+    </plurals>
+    <string name="pref_seek_time">Hoppa över</string>
+    <string name="pref_sleep_time">Insomningstid</string>
+    <string name="pref_root_folder_title">Ljudbokskatalog</string>
+    <string name="pref_root_folder_summary">Valda ljudbokskataloger.</string>
+    <string name="pref_theme_title">Tema</string>
+    <string name="pref_pause_on_can_duck_title">Pausa vid avbrott</string>
+    <string name="pref_pause_on_can_duck_summary">Pausa vid avbrott istället för att sänka volymen under avbrottet.</string>
+    <string name="pref_send_bugs_title">Rapportera buggar</string>
+    <string name="pref_send_bugs_summary">Skickar automatiskt anonyma felrapporter för att underlätta utvecklingen.</string>
+    <string name="pref_auto_rewind_title">Automatisk tillbakaspolning</string>
+    <plurals name="pref_auto_rewind_summary">
+        <item quantity="one">Spolar automatiskt tillbaks %d sekund efter manuell pausning.</item>
+        <item quantity="other">Spolar automatiskt tillbaks %d sekunder efter manuell pausning.</item>
+    </plurals>
+    <string name="pref_bookmark_on_sleep_title">Bokmärke vid sovläge</string>
+    <string name="pref_bookmark_on_sleep_summary">Lägger automatiskt till ett nytt bokmärke varje gång sovläget aktiveras</string>
+    <string name="pref_support_title">Stötta</string>
+    <string name="pref_support_translations">Översättningar</string>
+    <string name="pref_support_contribute">Support och förslag</string>
+    <!--Misc-->
+    <string name="popup_edit">Ändra</string>
+    <string name="remove">Ta bort</string>
+    <!--hide folder dialog-->
+    <string name="hide_folder_title">Dölj katalog</string>
+    <string name="hide_folder_content">Vill du dölja katalogen från musikspelare, så de inte laddar in din bok som musik?</string>
+    <string name="hide_confirm">Dölj</string>
+    <!--license activity-->
+    <string name="refresh">Uppdatera</string>
+    <string name="reset">Återställ</string>
+    <string name="no_network">Inget nätverk?</string>
+    <string name="network_top">Det här fungerade inte så bra...</string>
+    <string name="cover_crop">Beskär omslag</string>
 </resources>
