@@ -84,7 +84,7 @@ import de.ph1b.audiobook.uitools.ThemeUtil
         return prefs.getStringSet(key, emptySet())
     }
 
-    @Provides @Reusable @CurrentBookId fun provideCurrentBookIdPreference(context: Context, prefs: RxSharedPreferences): Preference<Long> {
+    @Provides @Reusable @CurrentBookId fun provideCurrentBookIdPreference(prefs: RxSharedPreferences): Preference<Long> {
         val key = "currentBook"
         return prefs.getLong(key, Book.ID_UNKNOWN)
     }

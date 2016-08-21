@@ -30,8 +30,6 @@
     <string name="content_previous_cover">Kies vorige cover</string>
     <string name="content_next_cover">Kies volgende cover</string>
     <string name="content_cover">Toont cover om te kiezen</string>
-    <string name="edit_book_name">Wijzig naam</string>
-    <string name="edit_book_cover">Wijzig cover</string>
     <string name="edit_book_title">Bewerk boek</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Ga naar</string>
@@ -65,8 +63,8 @@
     <string name="bookmark_added">Bladwijzer toegevoegd</string>
     <string name="bookmark_delete_title">Verwijder deze bladwijzer?</string>
     <!--Settings-->
-    <string name="pref_category_general">Algemene instellingen</string>
-    <string name="pref_category_playback">Afspeelgedrag</string>
+
+
     <string name="action_settings">Voorkeuren</string>
     <string name="pref_resume_on_replug">Afspelen hervatten</string>
     <string name="pref_resume_on_replug_hint">Als u pauzeert door de headset te ontkoppelen, zal het afspelen hervatten als u deze weer aansluit.</string>
@@ -85,15 +83,15 @@
     <string name="pref_theme_title">Thema</string>
     <string name="pref_pause_on_can_duck_title">Pauzeer bij melding</string>
     <string name="pref_pause_on_can_duck_summary">Pauzeren wanneer een andere app een melding laat horen, ipv het afspeelvolume tijdelijk te verlagen.</string>
-    <string name="pref_send_bugs_title">Rapporteer lieveheersbeestjes</string>
-    <string name="pref_send_bugs_summary">Automatisch anoniem bugs rapporteren wanneer de app crasht, om de verdere ontwikkeling te helpen.</string>
+
+
     <string name="pref_auto_rewind_title">Automatisch terugspoelen</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Spoel automatisch %d seconde terug na handmatig pauzeren.</item>
         <item quantity="other">Spoel automatisch %d seconden terug na handmatig pauzeren.</item>
     </plurals>
-    <string name="pref_bookmark_on_sleep_title">Bladwijzer toevoegen bij inslapen</string>
-    <string name="pref_bookmark_on_sleep_summary">Maak automatisch een bladwijzer aan elke keer de slaap-timer afgaat.</string>
+
+
     <string name="pref_support_title">Steun</string>
     <string name="pref_support_translations">App vertalen</string>
     <string name="pref_support_contribute">Ondersteuning en suggesties</string>

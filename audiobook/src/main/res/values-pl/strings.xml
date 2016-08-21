@@ -27,12 +27,13 @@
     <!--Dialogs-->
     <string name="dialog_confirm">Wybierz</string>
     <string name="dialog_cancel">Anuluj</string>
+    <string name="dialog_no">Nie</string>
     <!--EditBookDialog-->
     <string name="content_previous_cover">Wybiera poprzednią okładkę</string>
     <string name="content_next_cover">Wybiera następną okładkę</string>
     <string name="content_cover">Pokazuje okładki do wyboru</string>
-    <string name="edit_book_name">Edytuj nazwę</string>
-    <string name="edit_book_cover">Edytuj okładkę</string>
+    <string name="change_book_name">Nazwa</string>
+    <string name="change_book_cover">Okładka</string>
     <string name="edit_book_title">Edytuj książkę</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Skocz do</string>
@@ -70,8 +71,8 @@
     <string name="bookmark_added">Zakładka dodana</string>
     <string name="bookmark_delete_title">Usunąć tę zakładkę?</string>
     <!--Settings-->
-    <string name="pref_category_general">Ustawienia ogólne</string>
-    <string name="pref_category_playback">Zachowanie odtwarzacza</string>
+
+
     <string name="action_settings">Preferencje</string>
     <string name="pref_resume_on_replug">Wznawiaj odtwarzanie</string>
     <string name="pref_resume_on_replug_hint">Jeśli zatrzymałeś poprzez wyjęcie słuchawek, odtwarzanie wznowi się po ponownym podłączeniu.</string>
@@ -95,16 +96,16 @@
     <string name="pref_theme_daynight">Dzień / Noc</string>
     <string name="pref_pause_on_can_duck_title">Zatrzymaj przy zakłóceniu</string>
     <string name="pref_pause_on_can_duck_summary">Spauzuj przy zakłóceniu zamiast ściszyć na czas jego trwania.</string>
-    <string name="pref_send_bugs_title">Zgłaszaj błędy</string>
-    <string name="pref_send_bugs_summary">Automatycznie wysyłaj anonimowe raporty o błędach by pomóc rozwijać aplikację.</string>
+
+
     <string name="pref_auto_rewind_title">Automatyczne przewijanie</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Automatycznie przewija o %d sekundę po ręcznej pauzie.</item>
         <item quantity="few">Automatycznie przewija o %d sekundy po ręcznej pauzie.</item>
         <item quantity="other">Automatycznie przewija o %d sekund po ręcznej pauzie.</item>
     </plurals>
-    <string name="pref_bookmark_on_sleep_title">Zakładka podczas drzemki</string>
-    <string name="pref_bookmark_on_sleep_summary">Automatycznie ustawia zakładkę za każdym razem gdy sleep timer jest ustawiony</string>
+
+
     <string name="pref_support_title">Wsparcie</string>
     <string name="pref_support_translations">Tłumaczenia</string>
     <string name="pref_support_contribute">Wsparcie i propozycje</string>
@@ -119,6 +120,6 @@
     <string name="refresh">Odśwież</string>
     <string name="reset">Reset</string>
     <string name="no_network">Brak sieci?</string>
-    <string name="network_top">To nie zadziałało…</string>
+    <string name="network_top">To nie zadziałało...</string>
     <string name="cover_crop">Przytnij okładkę</string>
 </resources>

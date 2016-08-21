@@ -27,12 +27,13 @@
     <!--Dialogs-->
     <string name="dialog_confirm">Встановити</string>
     <string name="dialog_cancel">Відмінити</string>
+    <string name="dialog_no">Немає</string>
     <!--EditBookDialog-->
     <string name="content_previous_cover">Обрати попередню обкладинку</string>
     <string name="content_next_cover">Обрати наступну обкладинку</string>
     <string name="content_cover">Показати обрану обкладинку</string>
-    <string name="edit_book_name">Змінити назву</string>
-    <string name="edit_book_cover">Змінити обкладинку</string>
+    <string name="change_book_name">Назва</string>
+    <string name="change_book_cover">Обкладинка</string>
     <string name="edit_book_title">Редагувати книгу</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Перейти до</string>
@@ -53,8 +54,13 @@
     <string name="content_is_file">Файл</string>
     <string name="content_navigate_up">Перейти вверх</string>
     <string name="permission_read_ext_explanation">Додатку необхідний дозвіл на читання вашого сховища даних для того, щоб шукати і відтворювати аудіокниги.</string>
+    <string name="permission_external_new_explanation">Неможливо прочитати книги без дозволу</string>
+    <string name="permission_retry">Спробувати ще раз?</string>
+    <string name="permission_goto_settings">Налаштування</string>
     <string name="permission_read_ext_request">Запитувати про дозволи знову?</string>
     <string name="permission_rescan">Запитати знову</string>
+    <string name="storage_pre_device">Пам\'ять</string>
+    <string name="storage_all">Усі</string>
     <!--PlaybackSpeed-->
     <string name="playback_speed">Швидкість програвання</string>
     <!--Bookmarks-->
@@ -65,8 +71,8 @@
     <string name="bookmark_added">Закладка додана</string>
     <string name="bookmark_delete_title">Видалити цю закладку?</string>
     <!--Settings-->
-    <string name="pref_category_general">Загальні налаштування</string>
-    <string name="pref_category_playback">Налаштування програвання</string>
+
+
     <string name="action_settings">Параметри</string>
     <string name="pref_resume_on_replug">Відновити програвання</string>
     <string name="pref_resume_on_replug_hint">Якщо програвання було припинено витяганням навушників, воно буде подовжено після підключення їх знову.</string>
@@ -85,18 +91,21 @@
     <string name="pref_root_folder_title">Папка аудіокниги</string>
     <string name="pref_root_folder_summary">Обрані папки за аудіокнигами.</string>
     <string name="pref_theme_title">Тема</string>
+    <string name="pref_theme_day">День</string>
+    <string name="pref_theme_night">Ніч</string>
+    <string name="pref_theme_daynight">Режим день / ніч</string>
     <string name="pref_pause_on_can_duck_title">Призупинити при перериванні</string>
     <string name="pref_pause_on_can_duck_summary">Призупинити, коли перервано програвання замість зменшення гучності на час переривання.</string>
-    <string name="pref_send_bugs_title">Відправити звіт про помилки</string>
-    <string name="pref_send_bugs_summary">Автоматично відсилати звіти про помилки під час збою для допомоги розробки проекту.</string>
+
+
     <string name="pref_auto_rewind_title">Автоматична перекрутка назад</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Автоматично перекрутити назад на %d секунду після ручного призупинення.</item>
         <item quantity="few">Автоматично перекрутити назад на %d секунд після ручного призупинення.</item>
         <item quantity="other">Автоматично перекрутити назад на %d секунд після ручного призупинення.</item>
     </plurals>
-    <string name="pref_bookmark_on_sleep_title">Автоматично додавати закладку, коли спрацьовує таймер сну</string>
-    <string name="pref_bookmark_on_sleep_summary">Автоматично додавати закладку, коли таймер сну включається.</string>
+
+
     <string name="pref_support_title">Підтримка</string>
     <string name="pref_support_translations">Переклади</string>
     <string name="pref_support_contribute">Підтримка та пропозиції</string>
@@ -109,5 +118,8 @@
     <string name="hide_confirm">Приховати</string>
     <!--license activity-->
     <string name="refresh">Оновити</string>
+    <string name="reset">Скинути</string>
     <string name="no_network">Немає мережі?</string>
+    <string name="network_top">Не спрацювало...</string>
+    <string name="cover_crop">Обкладинка</string>
 </resources>

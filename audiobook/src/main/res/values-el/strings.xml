@@ -30,8 +30,6 @@
     <string name="content_previous_cover">Επιλέγει τα προηγούμενα εξώφυλλα</string>
     <string name="content_next_cover">Επιλέγει το επόμενο εξώφυλλο</string>
     <string name="content_cover">Εμφανίζει εξώφυλλο για να επιλέξετε</string>
-    <string name="edit_book_name">Επεξεργασία ονόματος</string>
-    <string name="edit_book_cover">Επεξεργασία εξωφύλλου</string>
     <string name="edit_book_title">Επεξεργασία βιβλίου</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Μετάβαση σε</string>
@@ -66,8 +64,8 @@
     <string name="bookmark_added">Ο σελιδοδείκτης προστέθηκε</string>
     <string name="bookmark_delete_title">Διαγραφή αυτου του σελιδοδείκτη;</string>
     <!--Settings-->
-    <string name="pref_category_general">Γενικές ρυθμίσεις</string>
-    <string name="pref_category_playback">Συμπεριφορά αναπαραγωγής </string>
+
+
     <string name="action_settings">Προτιμήσεις</string>
     <string name="pref_resume_on_replug">Συνέχιση αναπαραγωγής</string>
     <string name="pref_resume_on_replug_hint">Αν διακοψετε βγαζοντας τα ακουστικά, θα επαναληφθεί η διαδικασια.</string>
@@ -86,15 +84,15 @@
     <string name="pref_theme_title">Θέμα</string>
     <string name="pref_pause_on_can_duck_title">Παύση για Διακοπή</string>
     <string name="pref_pause_on_can_duck_summary">Παύση όταν διακόπτεται αντί για μείωση της έντασης κατά τη διάρκεια της διακοπής.</string>
-    <string name="pref_send_bugs_title">Αναφορά σφαλμάτων </string>
-    <string name="pref_send_bugs_summary">Αποστέλλει αυτόματα ανώνυμες καταγγελίες σχετικά με τις διακοπές για να βοηθήσει την ανάπτυξη.</string>
+
+
     <string name="pref_auto_rewind_title">Αυτόματη αναζήτηση προς τα πίσω </string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Ξαναγυρνάει αυτόματα %d δευτερόλεπτο πίσω μετά από μια χειροκίνητη παύση.</item>
         <item quantity="other">Ξαναγυρνάει αυτόματα %d δευτερόλεπτα πίσω μετά από μια χειροκίνητη παύση.</item>
     </plurals>
-    <string name="pref_bookmark_on_sleep_title">Ρυθμιση του σελιδοδείκτη για εναρξη του χρονοδιακόπτη ύπνου</string>
-    <string name="pref_bookmark_on_sleep_summary">Ορίζει αυτόματα ένα σελιδοδείκτη κάθε φορά που ο χρονοδιακόπτης ύπνου έχει ρυθμιστεί.</string>
+
+
     <string name="pref_support_title">Υποστήριξη</string>
     <string name="pref_support_translations">Μεταφράσεις</string>
     <string name="pref_support_contribute">Υποστήριξη και προτάσεις</string>
@@ -109,6 +107,6 @@
     <string name="refresh">Ανανέωση</string>
     <string name="reset">Επαναφορά</string>
     <string name="no_network">Χωρίς δίκτυο;</string>
-    <string name="network_top">Αυτό δεν πέτυχε και πολύ…</string>
+    <string name="network_top">Αυτό δεν πέτυχε και πολύ...</string>
     <string name="cover_crop">Περικοπή εξωφύλλου</string>
 </resources>
