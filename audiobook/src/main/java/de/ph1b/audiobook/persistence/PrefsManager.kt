@@ -18,6 +18,7 @@ import javax.inject.Singleton
         val theme: Preference<ThemeUtil.Theme>,
         @ResumeOnReplug val resumeOnReplug: Preference<Boolean>,
         @BookmarkOnSleepTimer val bookmarkOnSleepTimer: Preference<Boolean>,
+        @ShakeToReset val shakeToReset: Preference<Boolean>,
         @PauseOnTempFocusLoss val pauseOnTempFocusLoss: Preference<Boolean>,
         @AutoRewindAmount val autoRewindAmount: Preference<Int>,
         @SeekTime val seekTime: Preference<Int>,

@@ -11,6 +11,9 @@ annotation class ResumeOnReplug
 annotation class BookmarkOnSleepTimer
 
 @Qualifier @Retention(RUNTIME)
+annotation class ShakeToReset
+
+@Qualifier @Retention(RUNTIME)
 annotation class AutoRewindAmount
 
 @Qualifier @Retention(RUNTIME)

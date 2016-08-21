@@ -17,8 +17,9 @@ class CustomBackupAgent : BackupAgentHelper() {
         val pauseOnCanDuck = getString(R.string.pref_key_pause_on_can_duck)
         val autoRewind = getString(R.string.pref_key_auto_rewind)
         val bookmarkOnSleep = getString(R.string.pref_key_bookmark_on_sleep)
+        val shakeToResetSleepTimer = getString(R.string.pref_key_shake_to_reset_sleep_timer)
 
-        val helper = SharedPreferencesBackupHelper(this, resumeOnReplug, seekTime, sleepTime, theme, pauseOnCanDuck, autoRewind, bookmarkOnSleep)
+        val helper = SharedPreferencesBackupHelper(this, resumeOnReplug, seekTime, sleepTime, theme, pauseOnCanDuck, autoRewind, bookmarkOnSleep, shakeToResetSleepTimer)
         addHelper(BACKUP_KEY, helper)
     }
 }

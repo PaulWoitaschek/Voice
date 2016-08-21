@@ -65,6 +65,7 @@
     <string name="playback_speed">Playback speed</string>
     <!--Bookmarks-->
     <string name="bookmark">Bookmark</string>
+    <string name="shake_to_reset">Shake to reset</string>
     <string name="bookmark_edit_title">Edit bookmark</string>
     <string name="acc_button_add_bookmark">Adds a bookmark at the current position</string>
     <string name="bookmark_edit_hint">Bookmark name</string>

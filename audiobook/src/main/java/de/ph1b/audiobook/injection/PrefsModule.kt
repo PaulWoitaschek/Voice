@@ -49,6 +49,11 @@ import de.ph1b.audiobook.uitools.ThemeUtil
         return prefs.getBoolean(key, false)
     }
 
+    @Provides @Reusable @ShakeToReset fun provideShakeToResetPreference(context: Context, prefs: RxSharedPreferences): Preference<Boolean> {
+        val key = context.getString(R.string.shake_to_reset)
+        return prefs.getBoolean(key, false)
+    }
+
     @Provides @Reusable @PauseOnTempFocusLoss fun providePauseOnTempFocusLossPreference(context: Context, prefs: RxSharedPreferences): Preference<Boolean> {
         val key = context.getString(R.string.pref_key_pause_on_can_duck)
         return prefs.getBoolean(key, false)

@@ -62,19 +62,28 @@ class SleepTimerDialogFragment : DialogFragment() {
         }
         layout.bookmarkSwitch.isChecked = prefs.bookmarkOnSleepTimer.value()
 
+        // setup shake to reset setting
+        layout.shakeToResetText.setOnClickListener {
+            layout.shakeToResetSwitch.toggle()
+        }
+        layout.shakeToResetSwitch.isChecked = prefs.shakeToReset.value()
+
         return MaterialDialog.Builder(context)
                 .title(R.string.action_sleep)
                 .positiveText(R.string.dialog_confirm)
                 .negativeText(R.string.dialog_cancel)
                 .customView(layout, true)
                 .positiveClicked {
-                    prefs.sleepTime.set( layout.seekBar.progress + min)
+                    prefs.sleepTime.set(layout.seekBar.progress + min)
 
-                    prefs.bookmarkOnSleepTimer.set( layout.bookmarkSwitch.isChecked)
+                    prefs.bookmarkOnSleepTimer.set(layout.bookmarkSwitch.isChecked)
                     if (prefs.bookmarkOnSleepTimer.value()) {
                         val date = DateUtils.formatDateTime(context, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE)
                         bookmarkProvider.addBookmarkAtBookPosition(book, date + ": " + getString(R.string.action_sleep))
                     }
+
+                    prefs.shakeToReset.set(layout.shakeToResetSwitch.isChecked)
+
                     sandMan.setActive(true)
                 }
                 .build()

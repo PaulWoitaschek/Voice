@@ -29,7 +29,6 @@
         android:id="@+id/bookmarkSwitch"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="?attr/selectableItemBackground"
         android:textAppearance="@style/TextBody1"
         app:layout_constraintBottom_toBottomOf="@+id/bookmark"
         app:layout_constraintHorizontal_bias="0.0"
@@ -49,7 +48,30 @@
         android:textAppearance="@style/TextBody1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar"
-        tools:text="@string/bookmark"/>
+        app:layout_constraintTop_toBottomOf="@+id/seekBar"/>
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/shakeToResetSwitch"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:textAppearance="@style/TextBody1"
+        app:layout_constraintBottom_toBottomOf="@+id/shakeToResetText"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/shakeToResetText"
+        app:layout_constraintVertical_bias="0.0"/>
+
+    <TextView
+        android:id="@+id/shakeToResetText"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:text="@string/shake_to_reset"
+        android:textAppearance="@style/TextBody1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bookmark"/>
 
 </android.support.constraint.ConstraintLayout>
