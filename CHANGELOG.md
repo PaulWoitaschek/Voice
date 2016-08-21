@@ -1,5 +1,12 @@
 # Upcoming version
 
+# 16.08
+* Added a splash activity for faster launches
+* Added an option for shake to reset the sleep timer
+* Set the sleep time directly from the play screen
+* Set the bookmark-on sleep directly from the play screen
+* Removed crash reporting
+
 # 2.7.2.3
 * Made app ready for Android N
 * Handle permissions better and catch case where it was denied forever
