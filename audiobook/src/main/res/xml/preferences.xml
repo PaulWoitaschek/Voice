@@ -1,31 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/pref_category_general">
-        <Preference
-            android:key="@string/pref_key_audiobook_folders"
-            android:summary="@string/pref_root_folder_summary"
-            android:title="@string/pref_root_folder_title"/>
-        <Preference
-            android:key="@string/pref_key_theme"
-            android:summary="@string/pref_theme_daynight"
-            android:title="@string/pref_theme_title"/>
-    </PreferenceCategory>
-    <PreferenceCategory android:title="@string/pref_category_playback">
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="@string/pref_key_resume_on_replug"
-            android:summary="@string/pref_resume_on_replug_hint"
-            android:title="@string/pref_resume_on_replug"/>
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="@string/pref_key_pause_on_can_duck"
-            android:summary="@string/pref_pause_on_can_duck_summary"
-            android:title="@string/pref_pause_on_can_duck_title"/>
-        <Preference
-            android:key="@string/pref_key_seek_time"
-            android:title="@string/pref_seek_time"/>
-        <Preference
-            android:key="@string/pref_key_auto_rewind"
-            android:title="@string/pref_auto_rewind_title"/>
-    </PreferenceCategory>
+    <Preference
+        android:key="@string/pref_key_audiobook_folders"
+        android:summary="@string/pref_root_folder_summary"
+        android:title="@string/pref_root_folder_title"/>
+    <Preference
+        android:key="@string/pref_key_theme"
+        android:summary="@string/pref_theme_daynight"
+        android:title="@string/pref_theme_title"/>
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="@string/pref_key_resume_on_replug"
+        android:summary="@string/pref_resume_on_replug_hint"
+        android:title="@string/pref_resume_on_replug"/>
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/pref_key_pause_on_can_duck"
+        android:summary="@string/pref_pause_on_can_duck_summary"
+        android:title="@string/pref_pause_on_can_duck_title"/>
+    <Preference
+        android:key="@string/pref_key_seek_time"
+        android:title="@string/pref_seek_time"/>
+    <Preference
+        android:key="@string/pref_key_auto_rewind"
+        android:title="@string/pref_auto_rewind_title"/>
 </PreferenceScreen>

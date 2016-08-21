@@ -71,8 +71,6 @@
     <string name="bookmark_added">Bookmark added</string>
     <string name="bookmark_delete_title">Delete this bookmark?</string>
     <!--Settings-->
-    <string name="pref_category_general">General settings</string>
-    <string name="pref_category_playback">Playback behaviour</string>
     <string name="action_settings">Preferences</string>
     <string name="pref_resume_on_replug">Resume playback</string>
     <string name="pref_resume_on_replug_hint">If you paused by plugging headset out, it will resume on replug.</string>
