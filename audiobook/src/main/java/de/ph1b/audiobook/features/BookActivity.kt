@@ -35,7 +35,7 @@ import javax.inject.Inject
     private val FM_BOOK_SHELF = TAG + BookShelfFragment.TAG
     private val FM_BOOK_PLAY = TAG + BookPlayFragment.TAG
 
-    @Inject internal lateinit var prefs: PrefsManager
+    @Inject lateinit var prefs: PrefsManager
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
                                             grantResults: IntArray) {

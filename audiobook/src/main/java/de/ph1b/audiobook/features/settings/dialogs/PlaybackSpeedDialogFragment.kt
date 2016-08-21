@@ -24,9 +24,9 @@ import javax.inject.Inject
  */
 class PlaybackSpeedDialogFragment : DialogFragment() {
 
-    @Inject internal lateinit var prefs: PrefsManager
-    @Inject internal lateinit var db: BookChest
-    @Inject internal lateinit var playerController: PlayerController
+    @Inject lateinit var prefs: PrefsManager
+    @Inject lateinit var db: BookChest
+    @Inject lateinit var playerController: PlayerController
 
     private val SPEED_DELTA = 0.02f
     private val MAX_STEPS = Math.round((Book.SPEED_MAX - Book.SPEED_MIN) / SPEED_DELTA)

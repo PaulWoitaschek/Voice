@@ -21,7 +21,7 @@ class SeekDialogFragment : DialogFragment() {
 
     private lateinit var settingsSetListener: SettingsSetListener
 
-    @Inject lateinit internal var prefs: PrefsManager
+    @Inject lateinit var prefs: PrefsManager
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)

@@ -38,8 +38,8 @@ class ImagePickerActivity : BaseActivity() {
         App.component().inject(this)
     }
 
-    @Inject internal lateinit var bookChest: BookChest
-    @Inject internal lateinit var imageHelper: ImageHelper
+    @Inject lateinit var bookChest: BookChest
+    @Inject lateinit var imageHelper: ImageHelper
 
     private var actionMode: ActionMode ? = null
 

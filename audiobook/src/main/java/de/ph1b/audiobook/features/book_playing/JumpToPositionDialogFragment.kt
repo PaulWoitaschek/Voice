@@ -18,9 +18,9 @@ import javax.inject.Inject
 
 class JumpToPositionDialogFragment : DialogFragment() {
 
-    @Inject internal lateinit var prefs: PrefsManager
-    @Inject internal lateinit var db: BookChest
-    @Inject internal lateinit var playerController: PlayerController
+    @Inject lateinit var prefs: PrefsManager
+    @Inject lateinit var db: BookChest
+    @Inject lateinit var playerController: PlayerController
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         App.component().inject(this)

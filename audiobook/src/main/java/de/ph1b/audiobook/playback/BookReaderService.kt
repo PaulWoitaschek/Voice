@@ -1,20 +1,3 @@
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
 package de.ph1b.audiobook.playback
 
 import android.app.NotificationManager
@@ -129,16 +112,16 @@ class BookReaderService : MediaBrowserServiceCompat() {
                     PlaybackStateCompat.ACTION_SEEK_TO)
     private val mediaMetaDataBuilder = MediaMetadataCompat.Builder()
     private val subscriptions = CompositeSubscription()
-    @Inject internal lateinit var prefs: PrefsManager
-    @Inject internal lateinit var player: MediaPlayer
-    @Inject internal lateinit var db: BookChest
-    @Inject internal lateinit var notificationManager: NotificationManager
-    @Inject internal lateinit var audioManager: AudioManager
-    @Inject internal lateinit var audioFocusReceiver: AudioFocusReceiver
-    @Inject internal lateinit var imageHelper: ImageHelper
-    @Inject internal lateinit var notificationAnnouncer: NotificationAnnouncer
-    @Inject internal lateinit var playStateManager: PlayStateManager
-    @Inject internal lateinit var audioFocusManager: AudioFocusManager
+    @Inject lateinit var prefs: PrefsManager
+    @Inject lateinit var player: MediaPlayer
+    @Inject lateinit var db: BookChest
+    @Inject lateinit var notificationManager: NotificationManager
+    @Inject lateinit var audioManager: AudioManager
+    @Inject lateinit var audioFocusReceiver: AudioFocusReceiver
+    @Inject lateinit var imageHelper: ImageHelper
+    @Inject lateinit var notificationAnnouncer: NotificationAnnouncer
+    @Inject lateinit var playStateManager: PlayStateManager
+    @Inject lateinit var audioFocusManager: AudioFocusManager
     @Inject lateinit var bookUriConverter: BookUriConverter
     private lateinit var mediaSession: MediaSessionCompat
     /**

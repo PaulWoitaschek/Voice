@@ -54,13 +54,13 @@ class BookPlayFragment : Fragment() {
         App.component().inject(this)
     }
 
-    @Inject internal lateinit var mediaPlayer: PlayerController
-    @Inject internal lateinit var sandMan: Sandman
-    @Inject internal lateinit var prefs: PrefsManager
-    @Inject internal lateinit var bookChest: BookChest
-    @Inject internal lateinit var bookmarkProvider: BookmarkProvider
-    @Inject internal lateinit var playStateManager: PlayStateManager
-    @Inject internal lateinit var playerCapabilities: MediaPlayerCapabilities
+    @Inject lateinit var mediaPlayer: PlayerController
+    @Inject lateinit var sandMan: Sandman
+    @Inject lateinit var prefs: PrefsManager
+    @Inject lateinit var bookChest: BookChest
+    @Inject lateinit var bookmarkProvider: BookmarkProvider
+    @Inject lateinit var playStateManager: PlayStateManager
+    @Inject lateinit var playerCapabilities: MediaPlayerCapabilities
 
     private val playPauseDrawable = PlayPauseDrawable()
     private var subscriptions: CompositeSubscription? = null

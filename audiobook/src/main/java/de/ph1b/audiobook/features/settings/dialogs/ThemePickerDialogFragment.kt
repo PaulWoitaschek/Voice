@@ -20,7 +20,7 @@ import javax.inject.Inject
  */
 class ThemePickerDialogFragment : DialogFragment() {
 
-    @Inject internal lateinit var prefsManager: PrefsManager
+    @Inject lateinit var prefsManager: PrefsManager
 
     private lateinit var settingsSetListener: SettingsSetListener
 

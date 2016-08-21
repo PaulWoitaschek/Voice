@@ -21,7 +21,7 @@ import javax.inject.Inject
  */
 class SleepDialogFragment : DialogFragment() {
 
-    @Inject internal lateinit var prefs: PrefsManager
+    @Inject lateinit var prefs: PrefsManager
 
     private lateinit var settingsSetListener: SettingsSetListener
 
