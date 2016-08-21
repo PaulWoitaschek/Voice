@@ -15,13 +15,10 @@ class CustomBackupAgent : BackupAgentHelper() {
         val sleepTime = getString(R.string.pref_key_sleep_time)
         val theme = getString(R.string.pref_key_theme)
         val pauseOnCanDuck = getString(R.string.pref_key_pause_on_can_duck)
-        val autoBugReportEnable = "acra.enable"
         val autoRewind = getString(R.string.pref_key_auto_rewind)
         val bookmarkOnSleep = getString(R.string.pref_key_bookmark_on_sleep)
 
-        val helper = SharedPreferencesBackupHelper(this,
-                resumeOnReplug, seekTime, sleepTime, theme, pauseOnCanDuck, autoBugReportEnable,
-                autoRewind, bookmarkOnSleep)
+        val helper = SharedPreferencesBackupHelper(this, resumeOnReplug, seekTime, sleepTime, theme, pauseOnCanDuck, autoRewind, bookmarkOnSleep)
         addHelper(BACKUP_KEY, helper)
     }
 }

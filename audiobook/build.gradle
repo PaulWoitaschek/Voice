@@ -62,9 +62,6 @@ dependencies {
     // fab
     compile "com.getbase:floatingactionbutton:1.10.1"
 
-    // crash reporting
-    compile "ch.acra:acra:4.9.0"
-
     // dependency injection
     def daggerVersion = "2.6"
     compile "com.google.dagger:dagger:$daggerVersion"
