@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.text.format.DateUtils
+import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
@@ -16,6 +17,7 @@ import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.BookmarkProvider
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.Sandman
+import de.ph1b.audiobook.playback.ShakeDetector
 import e
 import kotlinx.android.synthetic.main.dialog_sleep.view.*
 import javax.inject.Inject
@@ -31,6 +33,7 @@ class SleepTimerDialogFragment : DialogFragment() {
     @Inject lateinit var prefs: PrefsManager
     @Inject lateinit var sandMan: Sandman
     @Inject lateinit var bookChest: BookChest
+    @Inject lateinit var shakeDetector: ShakeDetector
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         App.component().inject(this)
@@ -67,6 +70,11 @@ class SleepTimerDialogFragment : DialogFragment() {
             layout.shakeToResetSwitch.toggle()
         }
         layout.shakeToResetSwitch.isChecked = prefs.shakeToReset.value()
+        val shakeSupported = shakeDetector.shakeSupported()
+        if (!shakeSupported) {
+            layout.shakeToResetSwitch.visibility = View.GONE
+            layout.shakeToResetText.visibility = View.GONE
+        }
 
         return MaterialDialog.Builder(context)
                 .title(R.string.action_sleep)
