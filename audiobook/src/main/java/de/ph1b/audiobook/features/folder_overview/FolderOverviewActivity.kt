@@ -180,7 +180,7 @@ class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOver
      * @param bookCollections The folders added as book collections.
      * @param singleBooks The folders added as single books.
      */
-    fun updateAdapterData(bookCollections: List<String>, singleBooks: List<String>) {
+    fun updateAdapterData(bookCollections: Collection<String>, singleBooks: Collection<String>) {
         this.bookCollections.clear()
         this.bookCollections.addAll(bookCollections)
         this.singleBooks.clear()

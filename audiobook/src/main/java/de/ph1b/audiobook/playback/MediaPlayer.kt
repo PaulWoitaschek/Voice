@@ -1,23 +1,7 @@
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
 package de.ph1b.audiobook.playback
 
 import de.ph1b.audiobook.Book
+import de.ph1b.audiobook.playback.player.Player
 import e
 import i
 import rx.Observable
@@ -31,12 +15,11 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
-import de.paul_woitaschek.mediaplayer.MediaPlayer as InternalPlayer
 
 @Singleton
 class MediaPlayer
 @Inject
-constructor(private val player: InternalPlayer, private val playStateManager: PlayStateManager) {
+constructor(private val player: Player, private val playStateManager: PlayStateManager) {
 
     private var book = BehaviorSubject.create<Book>()
     private var state = BehaviorSubject.create(State.IDLE)

@@ -1,23 +1,7 @@
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
 package de.ph1b.audiobook.features.folder_overview
 
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.PrefsManager
 import rx.subscriptions.CompositeSubscription
@@ -44,7 +28,7 @@ class FolderOverviewPresenter : Presenter<FolderOverviewActivity>() {
     private fun updateFoldersInView() {
         val collectionFolders = prefsManager.collectionFolders
         val singleFolders = prefsManager.singleBookFolders
-        view!!.updateAdapterData(collectionFolders, singleFolders)
+        view!!.updateAdapterData(collectionFolders.value(), singleFolders.value())
     }
 
     /**
@@ -53,17 +37,17 @@ class FolderOverviewPresenter : Presenter<FolderOverviewActivity>() {
      * @param folder The folder to remove.
      */
     fun removeFolder(folder: String) {
-        val collectionFolders = ArrayList(prefsManager.collectionFolders)
-        val singleFolders = ArrayList(prefsManager.singleBookFolders)
+        val collectionFolders = HashSet(prefsManager.collectionFolders.value())
+        val singleFolders = HashSet(prefsManager.singleBookFolders.value())
 
         val colRemoved = collectionFolders.remove(folder)
         if (colRemoved) {
-            prefsManager.collectionFolders = collectionFolders
+            prefsManager.collectionFolders.set(collectionFolders)
         }
 
         val singleRemoved = singleFolders.remove(folder)
         if (singleRemoved) {
-            prefsManager.singleBookFolders = singleFolders
+            prefsManager.singleBookFolders.set(singleFolders)
         }
 
         updateFoldersInView()

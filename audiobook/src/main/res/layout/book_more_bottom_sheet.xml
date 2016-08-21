@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp">
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/BottomSheetRow"
+        android:drawableLeft="@drawable/format_text"
+        android:drawableStart="@drawable/format_text"
+        android:text="@string/change_book_name"/>
+
+    <TextView
+        android:id="@+id/cover"
+        style="@style/BottomSheetRow"
+        android:drawableLeft="@drawable/image"
+        android:drawableStart="@drawable/image"
+        android:text="@string/change_book_cover"/>
+
+    <TextView
+        android:id="@+id/bookmark"
+        style="@style/BottomSheetRow"
+        android:drawableLeft="@drawable/bookmark"
+        android:drawableStart="@drawable/bookmark"
+        android:text="@string/bookmark"/>
+
+</LinearLayout>

@@ -9,6 +9,7 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.layoutInflater
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayerController
@@ -24,9 +25,9 @@ import javax.inject.Inject
  */
 class PlaybackSpeedDialogFragment : DialogFragment() {
 
-    @Inject internal lateinit var prefs: PrefsManager
-    @Inject internal lateinit var db: BookChest
-    @Inject internal lateinit var playerController: PlayerController
+    @Inject lateinit var prefs: PrefsManager
+    @Inject lateinit var db: BookChest
+    @Inject lateinit var playerController: PlayerController
 
     private val SPEED_DELTA = 0.02f
     private val MAX_STEPS = Math.round((Book.SPEED_MAX - Book.SPEED_MIN) / SPEED_DELTA)
@@ -43,7 +44,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
         val v = context.layoutInflater().inflate(R.layout.dialog_amount_chooser, null)
 
         // setting current speed
-        val book = db.bookById(prefs.currentBookId.value) ?: throw AssertionError("Cannot instantiate $TAG without a current book")
+        val book = db.bookById(prefs.currentBookId.value()) ?: throw AssertionError("Cannot instantiate $TAG without a current book")
         val speed = book.playbackSpeed
         v.seekBar.max = MAX_STEPS
         v.seekBar.progress = speedValueToSteps(speed)

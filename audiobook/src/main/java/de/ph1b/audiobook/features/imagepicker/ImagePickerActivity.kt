@@ -1,5 +1,7 @@
 package de.ph1b.audiobook.features.imagepicker
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v4.view.MenuItemCompat
@@ -24,7 +26,6 @@ import i
 import kotlinx.android.synthetic.main.activity_image_picker.*
 import kotlinx.android.synthetic.main.toolbar.*
 import rx.subjects.BehaviorSubject
-import java.io.Serializable
 import java.net.URLEncoder
 import javax.inject.Inject
 
@@ -37,8 +38,8 @@ class ImagePickerActivity : BaseActivity() {
         App.component().inject(this)
     }
 
-    @Inject internal lateinit var bookChest: BookChest
-    @Inject internal lateinit var imageHelper: ImageHelper
+    @Inject lateinit var bookChest: BookChest
+    @Inject lateinit var imageHelper: ImageHelper
 
     private var actionMode: ActionMode ? = null
 
@@ -83,8 +84,8 @@ class ImagePickerActivity : BaseActivity() {
 
     private var webViewIsLoading = BehaviorSubject.create(false)
     private val book by lazy {
-        val args = intent.getSerializableExtra(NI) as Args
-        bookChest.bookById(args.bookId)!!
+        val id = intent.getLongExtra(NI_BOOK_ID, -1)
+        bookChest.bookById(id)!!
     }
     private val originalUrl by lazy {
         val encodedSearch = URLEncoder.encode("${book.name} cover", Charsets.UTF_8.name())
@@ -233,14 +234,14 @@ class ImagePickerActivity : BaseActivity() {
 
     companion object {
 
-        private val NI = "ni"
-        private val ABOUT_BLANK = "about:blank"
-        private val SI_URL = "savedUrl"
+        private const val NI_BOOK_ID = "ni"
+        private const val ABOUT_BLANK = "about:blank"
+        private const val SI_URL = "savedUrl"
 
-        fun arguments(args: Args) = Bundle().apply {
-            putSerializable(NI, args)
+        fun newIntent(context: Context, bookId: Long): Intent {
+            val intent = Intent(context, ImagePickerActivity::class.java)
+            intent.putExtra(NI_BOOK_ID, bookId)
+            return intent
         }
     }
-
-    data class Args(val bookId: Long) : Serializable
 }

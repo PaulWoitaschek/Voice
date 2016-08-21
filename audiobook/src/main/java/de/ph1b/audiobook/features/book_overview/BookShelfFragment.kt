@@ -1,20 +1,3 @@
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
 package de.ph1b.audiobook.features.book_overview
 
 import android.content.Intent
@@ -28,15 +11,12 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SimpleItemAnimator
 import android.view.*
-import android.widget.PopupMenu
 import de.ph1b.audiobook.Book
-import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.bookmarks.BookmarkDialogFragment
 import de.ph1b.audiobook.features.settings.SettingsActivity
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.logging.LogStorage
 import de.ph1b.audiobook.misc.actionBar
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.RxBaseFragment
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.DividerItemDecoration
@@ -61,7 +41,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
     }
 
     // injection
-    @Inject internal lateinit var prefs: PrefsManager
+    @Inject lateinit var prefs: PrefsManager
 
     // viewAdded
     private val playPauseDrawable = PlayPauseDrawable()
@@ -123,14 +103,9 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
         val currentPlaying = menu.findItem(R.id.action_current)
         currentPlaying.isVisible = currentBook != null
 
-        if (BuildConfig.DEBUG) {
-            val sendLogs = menu.findItem(R.id.sendLogs)
-            sendLogs.isVisible = true
-        }
-
         // sets the grid / list toggle icon
         val displayModeItem = menu.findItem(R.id.action_change_layout)
-        displayModeItem.setIcon(prefs.displayMode.inverted().icon)
+        displayModeItem.setIcon(prefs.displayMode.value().inverted().icon)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -140,26 +115,13 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
                 true
             }
             R.id.action_current -> {
-                invokeBookSelectionCallback(prefs.currentBookId.value)
+                invokeBookSelectionCallback(prefs.currentBookId.value())
                 true
             }
             R.id.action_change_layout -> {
-                prefs.displayMode = prefs.displayMode.inverted()
+                prefs.displayMode.set(prefs.displayMode.value().inverted())
                 initRecyclerView()
                 true
-            }
-            R.id.sendLogs -> {
-                val intent = Intent(Intent.ACTION_SEND).apply {
-                    type = "message/rfc822"
-                    putExtra(Intent.EXTRA_EMAIL, arrayOf("woitaschek@gmail.com"))
-                    putExtra(Intent.EXTRA_SUBJECT, "MAP Logs")
-                    val logs = LogStorage.get()
-                    val logsBuilder = StringBuilder()
-                    logs.forEach { logsBuilder.append(it).append("\n") }
-                    putExtra(Intent.EXTRA_TEXT, logsBuilder.toString())
-                }
-                startActivity(Intent.createChooser(intent, "Send mail..."))
-                return true
             }
             else -> super.onOptionsItemSelected(item)
         }
@@ -171,28 +133,9 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
     }
 
     override fun onMenuClicked(position: Int, view: View) {
-        val popupMenu = PopupMenu(context, view)
-        popupMenu.inflate(R.menu.bookshelf_popup)
-        popupMenu.setOnMenuItemClickListener {
-            val book = adapter.getItem(position)
-            when (it.itemId) {
-                R.id.edit_cover -> {
-                    callBack.onCoverChanged(book)
-                    return@setOnMenuItemClickListener true
-                }
-                R.id.edit_title -> {
-                    EditBookTitleDialogFragment.newInstance(book).show(fragmentManager,
-                            EditBookTitleDialogFragment.TAG)
-                    return@setOnMenuItemClickListener true
-                }
-                R.id.bookmark -> {
-                    BookmarkDialogFragment.newInstance(adapter.getItemId(position)).show(fragmentManager, TAG)
-                    return@setOnMenuItemClickListener true
-                }
-                else -> return@setOnMenuItemClickListener false
-            }
-        }
-        popupMenu.show()
+        val book = adapter.getItem(position)
+        EditBookBottomSheet.newInstance(book)
+                .show(fragmentManager, "editBottomSheet")
     }
 
     /**
@@ -210,7 +153,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
     }
 
     private fun initRecyclerView() {
-        val defaultDisplayMode = prefs.displayMode
+        val defaultDisplayMode = prefs.displayMode.value()
         if (defaultDisplayMode == DisplayMode.GRID) {
             recyclerView.removeItemDecoration(listDecoration)
             recyclerView.layoutManager = gridLayoutManager
@@ -223,7 +166,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
     }
 
     private fun invokeBookSelectionCallback(bookId: Long) {
-        prefs.setCurrentBookId(bookId)
+        prefs.currentBookId.set(bookId)
 
         val sharedElements = HashMap<View, String>(2)
         val viewHolder = recyclerView.findViewHolderForItemId(bookId) as BookShelfAdapter.BaseViewHolder?

@@ -15,8 +15,8 @@ android {
         applicationId "de.ph1b.audiobook"
         minSdkVersion minSdk
         targetSdkVersion 24
-        versionCode 126
-        versionName '2.7.2.3'
+        versionCode 127
+        versionName '16.08'
     }
 
     buildTypes {
@@ -46,26 +46,24 @@ kapt.generateStubs = true
 
 dependencies {
     // support library
-    def supportVersion = "24.1.0"
+    def supportVersion = "24.2.0"
     compile "com.android.support:appcompat-v7:$supportVersion"
     compile "com.android.support:recyclerview-v7:$supportVersion"
     compile "com.android.support:support-v4:$supportVersion"
     compile "com.android.support:design:$supportVersion"
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
 
     // image loading
     compile "com.squareup.picasso:picasso:2.5.2"
 
     // material styled dialogs
-    compile 'com.afollestad.material-dialogs:core:0.8.6.2'
+    compile 'com.afollestad.material-dialogs:core:0.9.0.1'
 
     // fab
     compile "com.getbase:floatingactionbutton:1.10.1"
 
-    // crash reporting
-    compile "ch.acra:acra:4.9.0"
-
     // dependency injection
-    def daggerVersion = "2.5"
+    def daggerVersion = "2.6"
     compile "com.google.dagger:dagger:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
@@ -78,14 +76,15 @@ dependencies {
 
     // rx extensions
     compile "io.reactivex:rxandroid:1.2.1"
-    compile "io.reactivex:rxjava:1.1.7"
+    compile "io.reactivex:rxjava:1.1.9"
     compile 'com.jakewharton.rxbinding:rxbinding-kotlin:0.4.0'
+    compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.2'
 
     // kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     // player
-    compile 'com.github.PaulWoitaschek:AndroidPlayer:0.012'
+    compile "com.github.AntennaPod:AntennaPod-AudioPlayer:v1.0.16"
 
     // logs
     compile 'com.github.PaulWoitaschek:Slimber:1.0.4'

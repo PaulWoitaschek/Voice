@@ -1,13 +1,11 @@
 package de.ph1b.audiobook.features.folder_chooser
 
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.text.TextUtils
 import d
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.NaturalOrderComparator
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.PrefsManager
 import i
@@ -15,7 +13,6 @@ import rx.subscriptions.CompositeSubscription
 import v
 import java.io.File
 import java.util.*
-import java.util.regex.Pattern
 import javax.inject.Inject
 
 /**
@@ -122,18 +119,18 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
         when (view!!.getMode()) {
             FolderChooserActivity.OperationMode.COLLECTION_BOOK -> {
                 if (canAddNewFolder(chosen.absolutePath)) {
-                    val collections = ArrayList(prefsManager.collectionFolders)
+                    val collections = HashSet(prefsManager.collectionFolders.value())
                     collections.add(chosen.absolutePath)
-                    prefsManager.collectionFolders = collections
+                    prefsManager.collectionFolders.set( collections)
                     view!!.finish()
                 }
                 v { "chosenCollection = $chosen" }
             }
             FolderChooserActivity.OperationMode.SINGLE_BOOK -> {
                 if (canAddNewFolder(chosen.absolutePath)) {
-                    val singleBooks = ArrayList(prefsManager.singleBookFolders)
+                    val singleBooks = HashSet(prefsManager.singleBookFolders.value())
                     singleBooks.add(chosen.absolutePath)
-                    prefsManager.singleBookFolders = singleBooks
+                    prefsManager.singleBookFolders.set( singleBooks)
                     view!!.finish()
                 }
                 v { "chosenSingleBook = $chosen" }
@@ -149,8 +146,8 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
      */
     private fun canAddNewFolder(newFile: String): Boolean {
         v { "canAddNewFolder called with $newFile" }
-        val folders = ArrayList(prefsManager.collectionFolders)
-        folders.addAll(prefsManager.singleBookFolders)
+        val folders = HashSet(prefsManager.collectionFolders.value())
+        folders.addAll(prefsManager.singleBookFolders.value())
 
         // if this is the first folder adding is always allowed
         if (folders.isEmpty()) {
@@ -186,11 +183,11 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
 
     private fun refreshRootDirs() {
         rootDirs.clear()
-        rootDirs.addAll(storageDirs())
+        rootDirs.addAll(StorageDirFinder.storageDirs())
         view!!.newRootFolders(rootDirs)
         view!!.setChooseButtonEnabled(rootDirs.isNotEmpty())
 
-        if (chosenFile != null ) {
+        if (chosenFile != null) {
             fileSelected(chosenFile)
         } else if (rootDirs.isNotEmpty()) {
             fileSelected(rootDirs.first())
@@ -198,102 +195,6 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
             fileSelected(null)
         }
     }
-
-
-    /**
-     * Collects the storage dirs of the device.
-     *
-     * @return the list of storages.
-     */
-    private fun storageDirs(): List<File> {
-        val dirSeparator = Pattern.compile("/")
-
-        // Final set of paths
-        val rv: HashSet<String> = HashSet(5)
-        // Primary physical SD-CARD (not emulated)
-        val rawExternalStorage = System.getenv("EXTERNAL_STORAGE")
-        // All Secondary SD-CARDs (all exclude primary) separated by ":"
-        val rawSecondaryStorageStr = System.getenv("SECONDARY_STORAGE")
-        // Primary emulated SD-CARD
-        val rawEmulatedStorageTarget = System.getenv("EMULATED_STORAGE_TARGET")
-
-        if (TextUtils.isEmpty(rawEmulatedStorageTarget)) {
-            // Device has physical external storage; use plain paths.
-            if (TextUtils.isEmpty(rawExternalStorage)) {
-                // EXTERNAL_STORAGE undefined; falling back to default.
-                rv.add("/storage/sdcard0")
-            } else {
-                rv.add(rawExternalStorage)
-            }
-        } else {
-            // Device has emulated storage; external storage paths should have
-            // userId burned into them.
-            val rawUserId = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                ""
-            } else {
-                val path = Environment.getExternalStorageDirectory().absolutePath
-                val folders = dirSeparator.split(path)
-                val lastFolder = folders[folders.size - 1]
-                var isDigit = false
-                try {
-                    Integer.valueOf(lastFolder)
-                    isDigit = true
-                } catch (ignored: NumberFormatException) {
-                }
-                if (isDigit) lastFolder else ""
-            }
-            // /storage/emulated/0[1,2,...]
-            if (TextUtils.isEmpty(rawUserId)) {
-                rv.add(rawEmulatedStorageTarget)
-            } else {
-                rv.add(rawEmulatedStorageTarget + File.separator + rawUserId)
-            }
-        }
-        // Add all secondary storage
-        if (!TextUtils.isEmpty(rawSecondaryStorageStr)) {
-            // All Secondary SD-CARDs splitted into array
-            val rawSecondaryStorage = rawSecondaryStorageStr.split(File.pathSeparator)
-            rv.addAll(rawSecondaryStorage)
-        }
-        rv.add("/storage/extSdCard")
-        rv.add(Environment.getExternalStorageDirectory().absolutePath)
-        rv.add("/storage/emulated/0")
-        rv.add("/storage/sdcard1")
-        rv.add("/storage/external_SD")
-        rv.add("/storage/ext_sd")
-
-        // this is a workaround for marshmallow as we can't know the paths of the sd cards any more.
-        // if one of the files in the fallback dir has contents we add it to the list.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val fallbackFile = File(MARSHMALLOW_SD_FALLBACK)
-            val contents = fallbackFile.listFilesSafely()
-            for (content in contents) {
-                if (content.listFilesSafely().isNotEmpty()) {
-                    rv.add(MARSHMALLOW_SD_FALLBACK)
-                    break
-                }
-            }
-        }
-
-        val paths = ArrayList<File>(rv.size)
-        for (item  in rv) {
-            val f = File(item)
-            if (f.listFilesSafely().isNotEmpty()) {
-                paths.add(f)
-            }
-        }
-        return paths.sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
-    }
-
-    /**
-     * As there are cases where [File.listFiles] returns null even though it is a directory, we return
-     * an empty list instead.
-     */
-    private fun File.listFilesSafely(): List<File> {
-        val list: Array<File>? = listFiles()
-        return list?.toList() ?: emptyList()
-    }
-
 
     /**
      * Gets the containing files of a folder (restricted to music and folders) in a naturally sorted

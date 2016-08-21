@@ -1,24 +1,8 @@
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
 package de.ph1b.audiobook.playback.events
 
 import android.media.AudioManager
 import d
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
@@ -58,7 +42,7 @@ constructor(private val mediaPlayer: PlayerController, private val playStateMana
                     }
                     AudioFocus.LOSS_TRANSIENT_CAN_DUCK -> {
                         if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
-                            if (prefsManager.pauseOnTempFocusLoss()) {
+                            if (prefsManager.pauseOnTempFocusLoss.value()) {
                                 d { "Paused by audio-focus loss transient." }
                                 // Pause is temporary, don't rewind
                                 mediaPlayer.pauseNonRewinding()

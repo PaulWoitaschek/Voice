@@ -1,20 +1,3 @@
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
 package de.ph1b.audiobook.features.settings
 
 import android.app.Activity
@@ -30,7 +13,6 @@ import de.ph1b.audiobook.features.BaseActivity
 import de.ph1b.audiobook.features.book_playing.SeekDialogFragment
 import de.ph1b.audiobook.features.folder_overview.FolderOverviewActivity
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment
-import de.ph1b.audiobook.features.settings.dialogs.SleepDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.SupportDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment
 import de.ph1b.audiobook.injection.App
@@ -40,12 +22,11 @@ import javax.inject.Inject
 
 class SettingsFragment : PreferenceFragment(), SettingsSetListener {
 
-    @Inject internal lateinit var prefs: PrefsManager
+    @Inject lateinit var prefs: PrefsManager
 
     private val handler = Handler()
 
     private lateinit var themePreference: Preference
-    private lateinit var sleepPreference: Preference
     private lateinit var seekPreference: Preference
     private lateinit var autoRewindPreference: Preference
     private var onStartSubscriptions: CompositeSubscription? = null
@@ -81,13 +62,6 @@ class SettingsFragment : PreferenceFragment(), SettingsSetListener {
             true
         }
 
-        // sleep pref
-        sleepPreference = findPreference(getString(R.string.pref_key_sleep_time))
-        sleepPreference.setOnPreferenceClickListener {
-            SleepDialogFragment().show(hostingActivity.supportFragmentManager, SleepDialogFragment.TAG)
-            true
-        }
-
         // folder pref
         val folderPreference = findPreference(getString(R.string.pref_key_audiobook_folders))
         folderPreference.setOnPreferenceClickListener {
@@ -108,11 +82,11 @@ class SettingsFragment : PreferenceFragment(), SettingsSetListener {
 
         onStartSubscriptions = CompositeSubscription().apply {
 
-            add(prefs.autoRewindAmount
+            add(prefs.autoRewindAmount.asObservable()
                     .map { resources.getQuantityString(R.plurals.seconds, it, it) }
                     .subscribe { autoRewindPreference.summary = it })
 
-            add(prefs.seekTime
+            add(prefs.seekTime.asObservable()
                     .map { resources.getQuantityString(R.plurals.seconds, it, it) }
                     .subscribe { seekPreference.summary = it })
         }
@@ -125,12 +99,8 @@ class SettingsFragment : PreferenceFragment(), SettingsSetListener {
     }
 
     private fun updateValues() {
-        val theme = prefs.theme
+        val theme = prefs.theme.get()!!
         themePreference.setSummary(theme.nameId)
-
-        val sleepAmount = prefs.sleepTime
-        val sleepSummary = resources.getQuantityString(R.plurals.minutes, sleepAmount, sleepAmount)
-        sleepPreference.summary = sleepSummary
     }
 
     @Suppress("OverridingDeprecatedMember")
@@ -158,7 +128,7 @@ class SettingsFragment : PreferenceFragment(), SettingsSetListener {
     override fun onSettingsSet(settingsChanged: Boolean) {
         if (settingsChanged) {
             updateValues()
-            AppCompatDelegate.setDefaultNightMode(prefs.theme.nightMode)
+            AppCompatDelegate.setDefaultNightMode(prefs.theme.get()!!.nightMode)
             // must post so dialog can correctly destroy itself
             handler.post { hostingActivity.recreate() }
         }

@@ -51,21 +51,6 @@ inline fun Cursor.moveToNextLoop(func: Cursor.() -> Unit) {
     }
 }
 
-fun SharedPreferences.Editor.setString(pair: Pair<String, String>): SharedPreferences.Editor =
-        putString(pair.first, pair.second)
-
-fun SharedPreferences.Editor.setLong(pair: Pair<String, Long>): SharedPreferences.Editor =
-        putLong(pair.first, pair.second)
-
-fun SharedPreferences.Editor.setInt(pair: Pair<String, Int>): SharedPreferences.Editor =
-        putInt(pair.first, pair.second)
-
-fun SharedPreferences.Editor.setBoolean(pair: Pair<String, Boolean>): SharedPreferences.Editor =
-        putBoolean(pair.first, pair.second)
-
-fun SharedPreferences.Editor.setStringSet(pair: Pair<String, Set<String>>): SharedPreferences.Editor =
-        putStringSet(pair.first, pair.second)
-
 fun SQLiteDatabase.simpleQuery(table: String,
                                columns: Array<String>? = null,
                                selection: String? = null,

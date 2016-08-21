@@ -1,20 +1,3 @@
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
 package de.ph1b.audiobook.features
 
 import android.content.Context
@@ -31,7 +14,7 @@ import de.ph1b.audiobook.features.book_playing.BookPlayFragment
 import de.ph1b.audiobook.features.imagepicker.ImagePickerActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.PermissionHelper
-import de.ph1b.audiobook.misc.startActivity
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import i
 import kotlinx.android.synthetic.main.activity_book.*
@@ -53,7 +36,7 @@ import javax.inject.Inject
     private val FM_BOOK_SHELF = TAG + BookShelfFragment.TAG
     private val FM_BOOK_PLAY = TAG + BookPlayFragment.TAG
 
-    @Inject internal lateinit var prefs: PrefsManager
+    @Inject lateinit var prefs: PrefsManager
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
                                             grantResults: IntArray) {
@@ -105,7 +88,7 @@ import javax.inject.Inject
     override fun onStart() {
         super.onStart()
 
-        val anyFolderSet = prefs.collectionFolders.size + prefs.singleBookFolders.size > 0
+        val anyFolderSet = prefs.collectionFolders.value().size + prefs.singleBookFolders.value().size > 0
         if (anyFolderSet) {
             BookActivityPermissionsDispatcher.ensurePermissionsWithCheck(this)
         }
@@ -131,9 +114,8 @@ import javax.inject.Inject
     }
 
     override fun onCoverChanged(book: Book) {
-        val initializer = ImagePickerActivity.Args(book.id)
-        val args = ImagePickerActivity.arguments(initializer)
-        startActivity<ImagePickerActivity>(args)
+        val intent = ImagePickerActivity.newIntent(this, book.id)
+        startActivity(intent)
     }
 
     override fun onBackPressed() {
@@ -148,8 +130,6 @@ import javax.inject.Inject
     companion object {
         private val NI_MALFORMED_FILE = "malformedFile"
         private val NI_GO_TO_BOOK = "niGotoBook"
-
-        private val PERMISSION_RESULT_READ_EXT_STORAGE = 17
 
         /**
          * Returns an intent to start the activity with to inform the user that a certain file may be

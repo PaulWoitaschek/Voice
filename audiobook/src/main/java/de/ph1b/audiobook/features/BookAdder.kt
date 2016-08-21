@@ -1,20 +1,3 @@
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
 package de.ph1b.audiobook.features
 
 import android.Manifest
@@ -29,6 +12,7 @@ import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.MediaAnalyzer
 import de.ph1b.audiobook.misc.NaturalOrderComparator
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
@@ -131,7 +115,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
      */
     private val singleBookFiles: List<File>
         get() {
-            val singleBooksAsStrings = prefs.singleBookFolders
+            val singleBooksAsStrings = prefs.singleBookFolders.value()
             val singleBooks = ArrayList<File>(singleBooksAsStrings.size)
             for (s in singleBooksAsStrings) {
                 singleBooks.add(File(s))
@@ -150,7 +134,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
      */
     private val collectionBookFiles: List<File>
         get() {
-            val collectionFoldersStringList = prefs.collectionFolders
+            val collectionFoldersStringList = prefs.collectionFolders.value()
             val containingFiles = ArrayList<File>(collectionFoldersStringList.size)
             for (s in collectionFoldersStringList) {
                 val f = File(s)

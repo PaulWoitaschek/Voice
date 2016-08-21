@@ -78,7 +78,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
     override fun onBookmarkClicked(bookmark: Bookmark) {
         val wasPlaying = playStateManager.playState.value == PlayStateManager.PlayState.PLAYING
 
-        prefs.setCurrentBookId(bookId())
+        prefs.currentBookId.set(bookId())
         playerController.changePosition(bookmark.time, bookmark.mediaFile)
 
         if (wasPlaying) {
@@ -88,11 +88,11 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
         dialog.cancel()
     }
 
-    @Inject lateinit internal var prefs: PrefsManager
-    @Inject internal lateinit var db: BookChest
-    @Inject internal lateinit var bookmarkProvider: BookmarkProvider
-    @Inject internal lateinit var playStateManager: PlayStateManager
-    @Inject internal lateinit var playerController: PlayerController
+    @Inject lateinit var prefs: PrefsManager
+    @Inject lateinit var db: BookChest
+    @Inject lateinit var bookmarkProvider: BookmarkProvider
+    @Inject lateinit var playStateManager: PlayStateManager
+    @Inject lateinit var playerController: PlayerController
     private lateinit var book: Book
     private lateinit var bookmarkTitle: TextView
     private lateinit var adapter: BookmarkAdapter

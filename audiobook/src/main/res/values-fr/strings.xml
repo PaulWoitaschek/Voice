@@ -26,12 +26,13 @@
     <!--Dialogs-->
     <string name="dialog_confirm">Définir</string>
     <string name="dialog_cancel">Annuler</string>
+    <string name="dialog_no">Non</string>
     <!--EditBookDialog-->
     <string name="content_previous_cover">Choisis la couverture précédente</string>
     <string name="content_next_cover">Choisis la couverture suivante</string>
     <string name="content_cover">Montre la couverture à choisir</string>
-    <string name="edit_book_name">Modifier le nom</string>
-    <string name="edit_book_cover">Modifier la couverture</string>
+    <string name="change_book_name">Nom</string>
+    <string name="change_book_cover">Couverture</string>
     <string name="edit_book_title">Modifier le livre</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Aller à</string>
@@ -69,8 +70,8 @@
     <string name="bookmark_added">Marque-page ajouté</string>
     <string name="bookmark_delete_title">Supprimer ce marque-page ?</string>
     <!--Settings-->
-    <string name="pref_category_general">Réglages généraux</string>
-    <string name="pref_category_playback">Comportement de lecture</string>
+
+
     <string name="action_settings">Préférences</string>
     <string name="pref_resume_on_replug">Reprendre la lecture</string>
     <string name="pref_resume_on_replug_hint">Si vous avez mis en pause en débranchant le casque, la lecture reprendra en le rebranchant.</string>
@@ -92,15 +93,15 @@
     <string name="pref_theme_daynight">Jour / Nuit</string>
     <string name="pref_pause_on_can_duck_title">Pause lors d\'une interruption</string>
     <string name="pref_pause_on_can_duck_summary">Pause lors d\'une interruption au lieu de baisser le volume pour la durée de l\'interruption.</string>
-    <string name="pref_send_bugs_title">Signaler des bugs</string>
-    <string name="pref_send_bugs_summary">Envoie automatiquement des rapports anonymes sur les plantage pour aider au développement.</string>
+
+
     <string name="pref_auto_rewind_title">Rembobinage automatique</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Rembobine automatiquement de %d seconde après une pause manuelle.</item>
         <item quantity="other">Rembobine automatiquement de %d secondes après une pause manuelle.</item>
     </plurals>
-    <string name="pref_bookmark_on_sleep_title">Marque-page à la mise en veille</string>
-    <string name="pref_bookmark_on_sleep_summary">Place un marque-page automatiquement à chaque fois que le minuteur est réglé.</string>
+
+
     <string name="pref_support_title">Assistance</string>
     <string name="pref_support_translations">Traductions</string>
     <string name="pref_support_contribute">Assistance et suggestions</string>
@@ -115,6 +116,6 @@
     <string name="refresh">Rafraîchir</string>
     <string name="reset">Réinitialiser</string>
     <string name="no_network">Pas de connexion réseau ?</string>
-    <string name="network_top">Ca n\'a pas marché…</string>
+    <string name="network_top">Ca n\'a pas marché...</string>
     <string name="cover_crop">Recadrer la couverture</string>
 </resources>

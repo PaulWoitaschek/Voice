@@ -1,6 +1,6 @@
 [main]
 host = https://www.transifex.com
-lang_map = es_ES:es-rES,pt_BR:pt-rBR,zh_CN:zh-rCN
+lang_map = es_ES:es-rES,pt_BR:pt-rBR,zh_CN:zh-rCN,sv_SE:sv-rSE
 
 [material-audiobook-player.strings]
 file_filter = audiobook/src/main/res/values-<lang>/strings.xml

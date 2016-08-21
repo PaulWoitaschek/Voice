@@ -18,7 +18,7 @@ import javax.inject.Inject
  */
 class EditBookTitleDialogFragment : DialogFragment() {
 
-    @Inject internal lateinit var bookChest: BookChest
+    @Inject lateinit var bookChest: BookChest
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         App.component().inject(this)

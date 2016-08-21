@@ -11,6 +11,7 @@ import de.ph1b.audiobook.features.settings.SettingsSetListener
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.onProgressChanged
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import kotlinx.android.synthetic.main.dialog_amount_chooser.view.*
 import javax.inject.Inject
@@ -18,7 +19,7 @@ import javax.inject.Inject
 
 class AutoRewindDialogFragment : DialogFragment() {
 
-    @Inject internal lateinit var prefs: PrefsManager
+    @Inject lateinit var prefs: PrefsManager
 
     private lateinit var settingsSetListener: SettingsSetListener
     private lateinit var rewindText: TextView
@@ -44,7 +45,7 @@ class AutoRewindDialogFragment : DialogFragment() {
         val v = context.layoutInflater().inflate(R.layout.dialog_amount_chooser, null)
         rewindText = v.textView
 
-        val oldRewindAmount = prefs.autoRewindAmount.toBlocking().first()
+        val oldRewindAmount = prefs.autoRewindAmount.value()
         v.seekBar.max = SEEK_BAR_MAX - SEEK_BAR_MIN
         v.seekBar.progress = oldRewindAmount - SEEK_BAR_MIN
         v.seekBar.onProgressChanged {
@@ -61,7 +62,7 @@ class AutoRewindDialogFragment : DialogFragment() {
                 .negativeText(R.string.dialog_cancel)
                 .onPositive { materialDialog, dialogAction ->
                     val newRewindAmount = v.seekBar.progress + SEEK_BAR_MIN
-                    prefs.setAutoRewindAmount(newRewindAmount)
+                    prefs.autoRewindAmount.set(newRewindAmount)
                     settingsSetListener.onSettingsSet(oldRewindAmount != newRewindAmount)
                 }
                 .build()

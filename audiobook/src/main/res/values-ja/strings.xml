@@ -25,12 +25,13 @@
     <!--Dialogs-->
     <string name="dialog_confirm">設定</string>
     <string name="dialog_cancel">キャンセル</string>
+    <string name="dialog_no">いいえ</string>
     <!--EditBookDialog-->
     <string name="content_previous_cover">前のカバーを選択</string>
     <string name="content_next_cover">次のカバーを選択</string>
     <string name="content_cover">選択するカバーを表示</string>
-    <string name="edit_book_name">名前を編集</string>
-    <string name="edit_book_cover">カバーを編集</string>
+    <string name="change_book_name">名前</string>
+    <string name="change_book_cover">カバー</string>
     <string name="edit_book_title">ブックを編集</string>
     <!--JumpToPosition-->
     <string name="action_time_change">移動</string>
@@ -68,8 +69,8 @@
     <string name="bookmark_added">ブックマークを追加しました</string>
     <string name="bookmark_delete_title">このブックマークを削除しますか?</string>
     <!--Settings-->
-    <string name="pref_category_general">全般設定</string>
-    <string name="pref_category_playback">再生動作</string>
+
+
     <string name="action_settings">設定</string>
     <string name="pref_resume_on_replug">再生を再開</string>
     <string name="pref_resume_on_replug_hint">接続したヘッドセットを取り外して一時停止した場合、再接続した場合に再開します。</string>
@@ -89,14 +90,14 @@
     <string name="pref_theme_daynight">日中 / 夜間</string>
     <string name="pref_pause_on_can_duck_title">割り込みで一時停止</string>
     <string name="pref_pause_on_can_duck_summary">割り込みの間、音量を下げるのではなく、割り込みのときに一時停止します。</string>
-    <string name="pref_send_bugs_title">バグを報告</string>
-    <string name="pref_send_bugs_summary">開発を支援するために、クラッシュに関する匿名のレポートを自動的に送信します。</string>
+
+
     <string name="pref_auto_rewind_title">自動巻き戻し</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="other">手動で一時停止した後、自動的に %d 秒巻き戻します。</item>
     </plurals>
-    <string name="pref_bookmark_on_sleep_title">スリープ時にブックマーク</string>
-    <string name="pref_bookmark_on_sleep_summary">スリープタイマーが設定されるたびに、自動的にブックマークを設定します。</string>
+
+
     <string name="pref_support_title">サポート</string>
     <string name="pref_support_translations">翻訳</string>
     <string name="pref_support_contribute">サポートと提案</string>

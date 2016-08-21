@@ -1,22 +1,7 @@
-/*
- * This file is part of Material Audiobook Player.
- *
- * Material Audiobook Player is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
- *
- * Material Audiobook Player is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Material Audiobook Player. If not, see <http://www.gnu.org/licenses/>.
- * /licenses/>.
- */
-
 package de.ph1b.audiobook.playback
 
+import d
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import i
 import rx.Observable
@@ -31,7 +16,7 @@ import javax.inject.Singleton
  * Manages everything sleep related.
  */
 @Singleton class Sandman
-@Inject constructor(playerController: PlayerController, playStateManager: PlayStateManager, private val prefsManager: PrefsManager) {
+@Inject constructor(private val playerController: PlayerController, playStateManager: PlayStateManager, private val prefsManager: PrefsManager, shakeDetector: ShakeDetector) {
 
     /**
      * The time left till the playback stops in ms. If this is -1 the timer was stopped manually.
@@ -39,11 +24,17 @@ import javax.inject.Singleton
      */
     private val internalSleepSand = BehaviorSubject.create<Long>(-1L)
     private var sleepSubscription: Subscription? = null
+    private var shakeSubscription: Subscription? = null
+    private val shakeObservable = shakeDetector.create()
 
     init {
         // stops the player when the timer reaches 0
         internalSleepSand.filter { it == 0L } // when this reaches 0
-                .subscribe { playerController.stop() } // stop the player
+                .subscribe {
+                    // stop the player
+                    pauseOnShake(false)
+                    playerController.stop()
+                }
 
         // counts down the sleep sand
         val sleepUpdateInterval = 1000L
@@ -63,23 +54,36 @@ import javax.inject.Singleton
                 }
     }
 
-    /**
-     * Turns the sleep timer on or off.
-     *
-     * @return true if the timer is now active, false if it now inactive
-     */
-    fun toggleSleepSand() {
+    /** turns the sleep timer on or off **/
+    fun setActive(enable: Boolean) {
         i { "toggleSleepSand. Left sleepTime is ${internalSleepSand.value}" }
-        if (internalSleepSand.value > 0L) {
-            i { "sleepSand is active. cancelling now" }
-            internalSleepSand.onNext(-1L)
-        } else {
-            i { "preparing new sleep sand" }
-            val minutes = prefsManager.sleepTime
+
+        pauseOnShake(enable)
+
+        if (enable) {
+            i { "Starting sleepTimer" }
+            val minutes = prefsManager.sleepTime.value()
             internalSleepSand.onNext(TimeUnit.MINUTES.toMillis(minutes.toLong()))
+        } else {
+            i { "Cancelling sleepTimer" }
+            internalSleepSand.onNext(-1L)
         }
     }
 
+    private fun pauseOnShake(enable: Boolean) {
+        if (enable) {
+            val shouldSubscribe = shakeSubscription?.isUnsubscribed ?: true
+            if (shouldSubscribe) {
+                // setup shake detection if requested
+                if (prefsManager.shakeToReset.value()) {
+                    shakeSubscription = shakeObservable.subscribe {
+                        d { "reset now by shake" }
+                        setActive(true)
+                    }
+                }
+            }
+        } else shakeSubscription?.unsubscribe()
+    }
 
     /**
      * This observable holds the time in ms left that the sleep timer has left. This is updated

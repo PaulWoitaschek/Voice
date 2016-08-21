@@ -29,8 +29,6 @@
     <string name="content_previous_cover">选择上一个封面</string>
     <string name="content_next_cover">选择下一个封面</string>
     <string name="content_cover">显示可选封面</string>
-    <string name="edit_book_name">编辑书名</string>
-    <string name="edit_book_cover">编辑封面</string>
     <string name="edit_book_title">编辑书名</string>
     <!--JumpToPosition-->
     <string name="action_time_change">跳转到</string>
@@ -65,8 +63,8 @@
     <string name="bookmark_added">书签已添加</string>
     <string name="bookmark_delete_title">删除书签吗？</string>
     <!--Settings-->
-    <string name="pref_category_general">通用设置</string>
-    <string name="pref_category_playback">播放行为</string>
+
+
     <string name="action_settings">设置</string>
     <string name="pref_resume_on_replug">继续播放</string>
     <string name="pref_resume_on_replug_hint">如果因为耳机拔出而暂停，插入耳机将继续播放。</string>
@@ -83,14 +81,14 @@
     <string name="pref_theme_title">主题</string>
     <string name="pref_pause_on_can_duck_title">打扰暂停</string>
     <string name="pref_pause_on_can_duck_summary">有打扰时暂停，而不是降低音量。</string>
-    <string name="pref_send_bugs_title">报告 Bug</string>
-    <string name="pref_send_bugs_summary">自动发送匿名崩溃报告以帮助开发。</string>
+
+
     <string name="pref_auto_rewind_title">自动倒回</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="other">手动暂停 %d 秒后自动倒回。</item>
     </plurals>
-    <string name="pref_bookmark_on_sleep_title">睡眠书签</string>
-    <string name="pref_bookmark_on_sleep_summary">每次睡眠定时器设置以后自动加入书签。</string>
+
+
     <string name="pref_support_title">支持</string>
     <string name="pref_support_translations">翻译</string>
     <string name="pref_support_contribute">支持和建议</string>
