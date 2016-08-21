@@ -7,7 +7,6 @@ import javax.inject.Singleton;
 import dagger.Component;
 import de.ph1b.audiobook.features.BaseActivity;
 import de.ph1b.audiobook.features.BookActivity;
-import de.ph1b.audiobook.features.BookAdder;
 import de.ph1b.audiobook.features.book_overview.BookShelfAdapter;
 import de.ph1b.audiobook.features.book_overview.BookShelfFragment;
 import de.ph1b.audiobook.features.book_overview.BookShelfPresenter;
@@ -24,7 +23,6 @@ import de.ph1b.audiobook.features.imagepicker.ImagePickerActivity;
 import de.ph1b.audiobook.features.settings.SettingsFragment;
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment;
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment;
-import de.ph1b.audiobook.features.settings.dialogs.SleepDialogFragment;
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment;
 import de.ph1b.audiobook.features.widget.WidgetUpdateService;
 import de.ph1b.audiobook.playback.BookReaderService;
@@ -39,7 +37,6 @@ import de.ph1b.audiobook.uitools.CoverReplacement;
 @Singleton @Component(modules = {BaseModule.class, AndroidModule.class, PresenterModule.class, PrefsModule.class})
 public interface ApplicationComponent {
 
-   BookAdder getBookAdder();
    BookShelfPresenter getBookShelfPresenter();
    Context getContext();
 
@@ -62,7 +59,6 @@ public interface ApplicationComponent {
    void inject(PlaybackSpeedDialogFragment target);
    void inject(SeekDialogFragment target);
    void inject(SleepTimerDialogFragment target);
-   void inject(SleepDialogFragment target);
    void inject(SettingsFragment target);
    void inject(ThemePickerDialogFragment target);
    void inject(WidgetUpdateService target);
