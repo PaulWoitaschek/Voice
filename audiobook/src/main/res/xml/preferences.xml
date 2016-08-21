@@ -29,9 +29,6 @@
         <Preference
             android:key="@string/pref_key_seek_time"
             android:title="@string/pref_seek_time"/>
-        <Preference
-            android:key="@string/pref_key_sleep_time"
-            android:title="@string/pref_sleep_time"/>
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/pref_key_bookmark_on_sleep"
