@@ -25,12 +25,13 @@
     <!--Dialogs-->
     <string name="dialog_confirm">결정</string>
     <string name="dialog_cancel">취소</string>
+    <string name="dialog_no">취소</string>
     <!--EditBookDialog-->
     <string name="content_previous_cover">전 표지 고르기</string>
     <string name="content_next_cover">다음표지 고르기</string>
     <string name="content_cover">책표지 보여주기</string>
-    <string name="edit_book_name">제목 수정</string>
-    <string name="edit_book_cover">앨범아트 교체</string>
+    <string name="change_book_name">제목</string>
+    <string name="change_book_cover">책표지</string>
     <string name="edit_book_title">제목 수정</string>
     <!--JumpToPosition-->
     <string name="action_time_change">이동</string>
@@ -51,6 +52,9 @@
     <string name="content_is_file">파일</string>
     <string name="content_navigate_up">윗 폴더로 가기</string>
     <string name="permission_read_ext_explanation">오디오북을 재생하려면 기기의 저장공간을 인식해야 합니다.</string>
+    <string name="permission_external_new_explanation">읽기 권한이 없습니다</string>
+    <string name="permission_retry">재시도?</string>
+    <string name="permission_goto_settings">설정</string>
     <string name="permission_read_ext_request">나중에 또 물어볼까요?</string>
     <string name="permission_rescan"> 물어봐</string>
     <string name="storage_pre_device">저장공간</string>
@@ -65,8 +69,8 @@
     <string name="bookmark_added">책갈피 추가됨</string>
     <string name="bookmark_delete_title">책갈피 제거할까요?</string>
     <!--Settings-->
-    <string name="pref_category_general">기본설정</string>
-    <string name="pref_category_playback">재생 설정</string>
+
+
     <string name="action_settings">설정</string>
     <string name="pref_resume_on_replug">이어서 재생</string>
     <string name="pref_resume_on_replug_hint">이어폰잭을 빼면 자동으로 일시정지, 끼면 이어서 재생됩니다.</string>
@@ -86,14 +90,14 @@
     <string name="pref_theme_daynight">낮 / 밤</string>
     <string name="pref_pause_on_can_duck_title">방해 시 일시정지</string>
     <string name="pref_pause_on_can_duck_summary">전화가 오거나, 문자가 왔을 때, 볼륨을 줄이기보다는 일시정지합니다.</string>
-    <string name="pref_send_bugs_title">오류 보내기</string>
-    <string name="pref_send_bugs_summary">앱의 품질향상을 위해 익명으로 오류를 보냅니다.</string>
+
+
     <string name="pref_auto_rewind_title">자동 다시감기</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="other"> 일시정지 후 %d 초 앞에서 시작합니다</item>
     </plurals>
-    <string name="pref_bookmark_on_sleep_title">취침 시작위치 자동책갈피</string>
-    <string name="pref_bookmark_on_sleep_summary">취침타이머가 시작하는 지점을 자동으로 책갈피 합니다.</string>
+
+
     <string name="pref_support_title">앱 계발 지원</string>
     <string name="pref_support_translations">번역</string>
     <string name="pref_support_contribute">피드백 </string>

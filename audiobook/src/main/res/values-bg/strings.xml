@@ -26,12 +26,13 @@
     <!--Dialogs-->
     <string name="dialog_confirm">Да</string>
     <string name="dialog_cancel">Не</string>
+    <string name="dialog_no">Не</string>
     <!--EditBookDialog-->
     <string name="content_previous_cover">Избира предишната обложка</string>
     <string name="content_next_cover">Избира следващата обложка</string>
     <string name="content_cover">Избор на обложка</string>
-    <string name="edit_book_name">Редактиране на име</string>
-    <string name="edit_book_cover">Редактиране на обложка</string>
+    <string name="change_book_name">Заглавие</string>
+    <string name="change_book_cover">Обложка</string>
     <string name="edit_book_title">Редактиране на книга</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Прескочи до</string>
@@ -69,8 +70,8 @@
     <string name="bookmark_added">Отметката бе добавена</string>
     <string name="bookmark_delete_title">Да се изтрие ли тази отметка?</string>
     <!--Settings-->
-    <string name="pref_category_general">Общи настройки</string>
-    <string name="pref_category_playback">Настройки за възпроизвеждане</string>
+
+
     <string name="action_settings">Настройки</string>
     <string name="pref_resume_on_replug">Продължи възпроизвеждането</string>
     <string name="pref_resume_on_replug_hint">Ако паузата е била пусната от изваждането на слушалки, възпроизвеждането ще продължи при повторното им включване.</string>
@@ -92,15 +93,15 @@
     <string name="pref_theme_daynight">Ден/нощ</string>
     <string name="pref_pause_on_can_duck_title">Пауза при получаване на известие</string>
     <string name="pref_pause_on_can_duck_summary">Вместо да се намаля звука при получаване на изввестие, да се включи на пауза.</string>
-    <string name="pref_send_bugs_title">Докладване на бъгове</string>
-    <string name="pref_send_bugs_summary">Автоматично изпраща анонимни данни за възникнали грешки с цел подобряване на разразботването на приложението.</string>
+
+
     <string name="pref_auto_rewind_title">Авто пренавиване</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Автоматично пренавива %d секунда след ръчно паузиране</item>
         <item quantity="other">Автоматично пренавива %d секунди след ръчно поставяне на пауза.</item>
     </plurals>
-    <string name="pref_bookmark_on_sleep_title">Поставяне на отметка при пауза от страна на таймера</string>
-    <string name="pref_bookmark_on_sleep_summary">Автоматично поставя отметка при всяко задаване на таймера за пауза.</string>
+
+
     <string name="pref_support_title">Поддръжка</string>
     <string name="pref_support_translations">Преводи</string>
     <string name="pref_support_contribute">Поддръжка и предложения</string>
@@ -115,6 +116,6 @@
     <string name="refresh">Опресняване</string>
     <string name="reset">Нулиране</string>
     <string name="no_network">Няма връзка с интернет?</string>
-    <string name="network_top">Това май не проработи…</string>
+    <string name="network_top">Това май не проработи...</string>
     <string name="cover_crop">Изрязване на обложката</string>
 </resources>

@@ -30,8 +30,6 @@
     <string name="content_previous_cover">Sceglie la copertina precedente</string>
     <string name="content_next_cover">Sceglie la copertina successiva</string>
     <string name="content_cover">Mostra la copertina da scegliere</string>
-    <string name="edit_book_name">Modifica nome</string>
-    <string name="edit_book_cover">Modifica copertina</string>
     <string name="edit_book_title">Modifica libro</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Vai a</string>
@@ -66,8 +64,8 @@
     <string name="bookmark_added">Segnalibro aggiunto</string>
     <string name="bookmark_delete_title">Eliminare questo segnalibro?</string>
     <!--Settings-->
-    <string name="pref_category_general">Impostazioni generali</string>
-    <string name="pref_category_playback">Impostazioni riproduzione</string>
+
+
     <string name="action_settings">Preferenze</string>
     <string name="pref_resume_on_replug">Riprendi la riproduzione</string>
     <string name="pref_resume_on_replug_hint">Se hai messo in pausa disinserendo le cuffie, la riproduzione continuerà una volta reinserite.</string>
@@ -89,15 +87,15 @@
     <string name="pref_theme_daynight">Giorno / Notte</string>
     <string name="pref_pause_on_can_duck_title">Pausa se interrotto</string>
     <string name="pref_pause_on_can_duck_summary">Pausa se interrotto, invece di abbassare il volume per la durata dell\'interruzione.</string>
-    <string name="pref_send_bugs_title">Segnala bug</string>
-    <string name="pref_send_bugs_summary">Invia automaticamente segnalazioni anonime dei crash per aiutare lo sviluppo dell\'applicazione.</string>
+
+
     <string name="pref_auto_rewind_title">Riavvolgimento automatico</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Riavvolgimento automatico di %d secondo quando si mette in pausa manualmente.</item>
         <item quantity="other">Riavvolgimento automatico di %d secondi quando si mette in pausa manualmente.</item>
     </plurals>
-    <string name="pref_bookmark_on_sleep_title">Segnalibro in modalità standby</string>
-    <string name="pref_bookmark_on_sleep_summary">Aggiunge automaticamente un segnalibro ogni volta che la modalità standby è impostata.</string>
+
+
     <string name="pref_support_title">Supporto</string>
     <string name="pref_support_translations">Traduzioni</string>
     <string name="pref_support_contribute">Supporto e Suggerimenti</string>
@@ -112,6 +110,6 @@
     <string name="refresh">Aggiorna</string>
     <string name="reset">Resetta</string>
     <string name="no_network">Nessuna connessione?</string>
-    <string name="network_top">Questo non ha funzionato motl bene…</string>
+    <string name="network_top">Questo non ha funzionato motl bene...</string>
     <string name="cover_crop">Taglia copertina</string>
 </resources>

@@ -29,8 +29,6 @@
     <string name="content_previous_cover">पिछला कवर इस्तेमाल करें</string>
     <string name="content_next_cover">अगला कवर इस्तेमाल करें</string>
     <string name="content_cover">उपलब्ध कवर दिखाएँ</string>
-    <string name="edit_book_name">नाम बदलें</string>
-    <string name="edit_book_cover">कवर बदलें</string>
     <string name="edit_book_title">किताब में बदलाव करें</string>
     <!--JumpToPosition-->
     <!--BookAdding-->

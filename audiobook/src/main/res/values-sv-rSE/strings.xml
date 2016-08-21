@@ -64,8 +64,8 @@
     <string name="bookmark_added">Bokmärke skapat</string>
     <string name="bookmark_delete_title">Ta bort bokmärke?</string>
     <!--Settings-->
-    <string name="pref_category_general">Allmänna inställningar</string>
-    <string name="pref_category_playback">Uppspelningsbeteende</string>
+
+
     <string name="action_settings">Inställningar</string>
     <string name="pref_resume_on_replug">Fortsätt uppspelning</string>
     <string name="pref_resume_on_replug_hint">Om du pausar genom att dra ur dina hörlurar kommer uppspelningen sättas igång igen när du återansluter dem.</string>
@@ -84,15 +84,15 @@
     <string name="pref_theme_title">Tema</string>
     <string name="pref_pause_on_can_duck_title">Pausa vid avbrott</string>
     <string name="pref_pause_on_can_duck_summary">Pausa vid avbrott istället för att sänka volymen under avbrottet.</string>
-    <string name="pref_send_bugs_title">Rapportera buggar</string>
-    <string name="pref_send_bugs_summary">Skickar automatiskt anonyma felrapporter för att underlätta utvecklingen.</string>
+
+
     <string name="pref_auto_rewind_title">Automatisk tillbakaspolning</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Spolar automatiskt tillbaks %d sekund efter manuell pausning.</item>
         <item quantity="other">Spolar automatiskt tillbaks %d sekunder efter manuell pausning.</item>
     </plurals>
-    <string name="pref_bookmark_on_sleep_title">Bokmärke vid sovläge</string>
-    <string name="pref_bookmark_on_sleep_summary">Lägger automatiskt till ett nytt bokmärke varje gång sovläget aktiveras</string>
+
+
     <string name="pref_support_title">Stötta</string>
     <string name="pref_support_translations">Översättningar</string>
     <string name="pref_support_contribute">Support och förslag</string>
@@ -107,6 +107,6 @@
     <string name="refresh">Uppdatera</string>
     <string name="reset">Återställ</string>
     <string name="no_network">Inget nätverk?</string>
-    <string name="network_top">Det här fungerade inte så bra...</string>
+    <string name="network_top">Det här fungerade inte så bra…</string>
     <string name="cover_crop">Beskär omslag</string>
 </resources>
