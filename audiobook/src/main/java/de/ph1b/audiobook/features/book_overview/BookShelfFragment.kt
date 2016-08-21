@@ -12,11 +12,9 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SimpleItemAnimator
 import android.view.*
 import de.ph1b.audiobook.Book
-import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.settings.SettingsActivity
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.logging.LogStorage
 import de.ph1b.audiobook.misc.actionBar
 import de.ph1b.audiobook.mvp.RxBaseFragment
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -104,11 +102,6 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
         val currentPlaying = menu.findItem(R.id.action_current)
         currentPlaying.isVisible = currentBook != null
 
-        if (BuildConfig.DEBUG) {
-            val sendLogs = menu.findItem(R.id.sendLogs)
-            sendLogs.isVisible = true
-        }
-
         // sets the grid / list toggle icon
         val displayModeItem = menu.findItem(R.id.action_change_layout)
         displayModeItem.setIcon(prefs.displayMode.inverted().icon)
@@ -128,19 +121,6 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
                 prefs.displayMode = prefs.displayMode.inverted()
                 initRecyclerView()
                 true
-            }
-            R.id.sendLogs -> {
-                val intent = Intent(Intent.ACTION_SEND).apply {
-                    type = "message/rfc822"
-                    putExtra(Intent.EXTRA_EMAIL, arrayOf("woitaschek@gmail.com"))
-                    putExtra(Intent.EXTRA_SUBJECT, "MAP Logs")
-                    val logs = LogStorage.get()
-                    val logsBuilder = StringBuilder()
-                    logs.forEach { logsBuilder.append(it).append("\n") }
-                    putExtra(Intent.EXTRA_TEXT, logsBuilder.toString())
-                }
-                startActivity(Intent.createChooser(intent, "Send mail..."))
-                return true
             }
             else -> super.onOptionsItemSelected(item)
         }

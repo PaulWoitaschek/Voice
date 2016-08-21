@@ -14,8 +14,6 @@ import javax.inject.Inject;
 
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.features.BookAdder;
-import de.ph1b.audiobook.logging.LogStorage;
-import de.ph1b.audiobook.logging.LogToStorageTree;
 import de.ph1b.audiobook.persistence.PrefsManager;
 import de.ph1b.audiobook.playback.BookReaderService;
 import timber.log.Timber;
@@ -59,7 +57,6 @@ public class App extends Application {
       if (BuildConfig.DEBUG) {
          // init timber
          Timber.plant(new Timber.DebugTree());
-         Timber.plant(new LogToStorageTree(LogStorage.INSTANCE));
 
          // force enable acra in debug mode
          prefsManager.setAcraEnabled(true);

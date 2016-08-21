@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
     <item
         android:id="@+id/action_current"
@@ -16,13 +16,6 @@
         android:orderInCategory="95"
         android:title="@string/change_layout_type"
         app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/sendLogs"
-        android:title="Send logs"
-        android:visible="false"
-        app:showAsAction="never"
-        tools:ignore="HardcodedText" />
 
     <item
         android:id="@+id/action_settings"
