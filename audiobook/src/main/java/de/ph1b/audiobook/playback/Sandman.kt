@@ -32,6 +32,7 @@ import javax.inject.Singleton
         internalSleepSand.filter { it == 0L } // when this reaches 0
                 .subscribe {
                     // stop the player
+                    pauseOnShake(false)
                     playerController.stop()
                 }
 
@@ -48,7 +49,6 @@ import javax.inject.Singleton
                                 .map { it.coerceAtLeast(0) } // but keep at least 0
                                 .subscribe { internalSleepSand.onNext(it) }
                     } else {
-                        pauseOnShake(false)
                         sleepSubscription?.unsubscribe()
                     }
                 }
@@ -70,8 +70,8 @@ import javax.inject.Singleton
         }
     }
 
-    private fun pauseOnShake(enabled: Boolean) {
-        if (enabled) {
+    private fun pauseOnShake(enable: Boolean) {
+        if (enable) {
             val shouldSubscribe = shakeSubscription?.isUnsubscribed ?: true
             if (shouldSubscribe) {
                 // setup shake detection if requested
