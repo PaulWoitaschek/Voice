@@ -50,7 +50,7 @@ import de.ph1b.audiobook.uitools.ThemeUtil
     }
 
     @Provides @Reusable @ShakeToReset fun provideShakeToResetPreference(context: Context, prefs: RxSharedPreferences): Preference<Boolean> {
-        val key = context.getString(R.string.shake_to_reset)
+        val key = context.getString(R.string.pref_key_shake_to_reset_sleep_timer)
         return prefs.getBoolean(key, false)
     }
 
