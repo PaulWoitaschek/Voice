@@ -46,7 +46,7 @@ kapt.generateStubs = true
 
 dependencies {
     // support library
-    def supportVersion = "24.1.1"
+    def supportVersion = "24.2.0"
     compile "com.android.support:appcompat-v7:$supportVersion"
     compile "com.android.support:recyclerview-v7:$supportVersion"
     compile "com.android.support:support-v4:$supportVersion"
@@ -56,7 +56,7 @@ dependencies {
     compile "com.squareup.picasso:picasso:2.5.2"
 
     // material styled dialogs
-    compile 'com.afollestad.material-dialogs:core:0.8.6.2'
+    compile 'com.afollestad.material-dialogs:core:0.9.0.1'
 
     // fab
     compile "com.getbase:floatingactionbutton:1.10.1"
@@ -65,7 +65,7 @@ dependencies {
     compile "ch.acra:acra:4.9.0"
 
     // dependency injection
-    def daggerVersion = "2.5"
+    def daggerVersion = "2.6"
     compile "com.google.dagger:dagger:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
@@ -78,7 +78,7 @@ dependencies {
 
     // rx extensions
     compile "io.reactivex:rxandroid:1.2.1"
-    compile "io.reactivex:rxjava:1.1.7"
+    compile "io.reactivex:rxjava:1.1.9"
     compile 'com.jakewharton.rxbinding:rxbinding-kotlin:0.4.0'
 
     // kotlin
