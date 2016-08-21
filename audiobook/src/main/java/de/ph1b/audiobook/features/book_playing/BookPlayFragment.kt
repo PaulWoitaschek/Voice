@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
-import android.text.format.DateUtils
 import android.view.*
 import com.jakewharton.rxbinding.view.clicks
 import com.jakewharton.rxbinding.widget.RxAdapterView
@@ -23,7 +22,6 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
 import de.ph1b.audiobook.misc.actionBar
 import de.ph1b.audiobook.persistence.BookChest
-import de.ph1b.audiobook.persistence.BookmarkProvider
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
@@ -58,7 +56,6 @@ class BookPlayFragment : Fragment() {
     @Inject lateinit var sandMan: Sandman
     @Inject lateinit var prefs: PrefsManager
     @Inject lateinit var bookChest: BookChest
-    @Inject lateinit var bookmarkProvider: BookmarkProvider
     @Inject lateinit var playStateManager: PlayStateManager
     @Inject lateinit var playerCapabilities: MediaPlayerCapabilities
 
@@ -242,11 +239,9 @@ class BookPlayFragment : Fragment() {
                 return true
             }
             R.id.action_sleep -> {
-                sandMan.toggleSleepSand()
-                if (prefs.setBookmarkOnSleepTimer() && sandMan.sleepTimerActive()) {
-                    val date = DateUtils.formatDateTime(context, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE)
-                    bookmarkProvider.addBookmarkAtBookPosition(book!!, date + ": " + getString(R.string.action_sleep))
-                }
+                if (sandMan.sleepTimerActive()) sandMan.setActive(false)
+                else SleepTimerDialogFragment.newInstance(book!!)
+                        .show(childFragmentManager, "fmSleepTimer")
                 return true
             }
             R.id.action_time_lapse -> {

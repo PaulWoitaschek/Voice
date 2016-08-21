@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.SeekBar
 import android.widget.TextView
+import com.afollestad.materialdialogs.MaterialDialog
 
 
 val Fragment.actionBar: ActionBar
@@ -30,8 +31,8 @@ fun Context.drawable(@DrawableRes id: Int): Drawable = ContextCompat.getDrawable
 
 fun View.layoutInflater() = context.layoutInflater()
 
-fun SeekBar.onProgressChanged(progressChanged: (Int) -> Unit) {
-    setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+fun SeekBar.onProgressChanged(initialNotification: Boolean = false, progressChanged: (Int) -> Unit) {
+    val listener = object : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
             progressChanged(progress)
         }
@@ -41,7 +42,15 @@ fun SeekBar.onProgressChanged(progressChanged: (Int) -> Unit) {
 
         override fun onStopTrackingTouch(seekBar: SeekBar) {
         }
-    })
+    }
+
+    setOnSeekBarChangeListener(listener)
+    if (initialNotification) listener.onProgressChanged(this, progress, false)
+}
+
+fun MaterialDialog.Builder.positiveClicked(listener: () -> Unit): MaterialDialog.Builder {
+    onPositive { dialog, which -> listener() }
+    return this
 }
 
 fun Context.dpToPx(dp: Int) = Math.round(TypedValue.applyDimension(

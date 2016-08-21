@@ -16,6 +16,7 @@ import de.ph1b.audiobook.features.book_overview.EditBookTitleDialogFragment;
 import de.ph1b.audiobook.features.book_playing.BookPlayFragment;
 import de.ph1b.audiobook.features.book_playing.JumpToPositionDialogFragment;
 import de.ph1b.audiobook.features.book_playing.SeekDialogFragment;
+import de.ph1b.audiobook.features.book_playing.SleepTimerDialogFragment;
 import de.ph1b.audiobook.features.bookmarks.BookmarkDialogFragment;
 import de.ph1b.audiobook.features.folder_chooser.FolderChooserPresenter;
 import de.ph1b.audiobook.features.folder_overview.FolderOverviewPresenter;
@@ -34,57 +35,35 @@ import de.ph1b.audiobook.uitools.CoverReplacement;
  *
  * @author Paul Woitaschek
  */
-@Singleton
-@Component(modules = {BaseModule.class, AndroidModule.class, PresenterModule.class})
+@SuppressWarnings("WeakerAccess")
+@Singleton @Component(modules = {BaseModule.class, AndroidModule.class, PresenterModule.class})
 public interface ApplicationComponent {
 
+   BookAdder getBookAdder();
    BookShelfPresenter getBookShelfPresenter();
-
    Context getContext();
 
-   BookAdder getBookAdder();
-
-   void inject(WidgetUpdateService target);
-
-   void inject(EditBookTitleDialogFragment target);
-
-   void inject(CoverReplacement target);
-
-   void inject(BaseActivity target);
-
-   void inject(ThemePickerDialogFragment target);
-
-   void inject(SeekDialogFragment target);
-
-   void inject(ImagePickerActivity target);
-
-   void inject(JumpToPositionDialogFragment target);
-
    void inject(App target);
-
-   void inject(EditBookBottomSheet target);
-
-   void inject(BookReaderService target);
-
-   void inject(SettingsFragment target);
-
-   void inject(SleepDialogFragment target);
-
-   void inject(PlaybackSpeedDialogFragment target);
-
-   void inject(BookActivity target);
-
-   void inject(FolderChooserPresenter target);
-
-   void inject(BookPlayFragment target);
-
-   void inject(BookmarkDialogFragment target);
-
    void inject(AutoRewindDialogFragment target);
-
+   void inject(BaseActivity target);
+   void inject(BookReaderService target);
+   void inject(BookActivity target);
    void inject(BookShelfAdapter target);
-
+   void inject(BookmarkDialogFragment target);
+   void inject(BookPlayFragment target);
    void inject(BookShelfFragment target);
-
+   void inject(CoverReplacement target);
+   void inject(EditBookTitleDialogFragment target);
+   void inject(EditBookBottomSheet target);
+   void inject(FolderChooserPresenter target);
    void inject(FolderOverviewPresenter target);
+   void inject(ImagePickerActivity target);
+   void inject(JumpToPositionDialogFragment target);
+   void inject(PlaybackSpeedDialogFragment target);
+   void inject(SeekDialogFragment target);
+   void inject(SleepTimerDialogFragment target);
+   void inject(SleepDialogFragment target);
+   void inject(SettingsFragment target);
+   void inject(ThemePickerDialogFragment target);
+   void inject(WidgetUpdateService target);
 }

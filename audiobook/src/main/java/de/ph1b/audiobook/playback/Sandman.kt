@@ -46,23 +46,20 @@ import javax.inject.Singleton
                 }
     }
 
-    /**
-     * Turns the sleep timer on or off.
-     *
-     * @return true if the timer is now active, false if it now inactive
-     */
-    fun toggleSleepSand() {
+    /** turns the sleep timer on or off **/
+    fun setActive(enable: Boolean) {
         i { "toggleSleepSand. Left sleepTime is ${internalSleepSand.value}" }
-        if (internalSleepSand.value > 0L) {
-            i { "sleepSand is active. cancelling now" }
-            internalSleepSand.onNext(-1L)
-        } else {
-            i { "preparing new sleep sand" }
+        if (sleepTimerActive() == enable) return
+
+        if (enable) {
+            i { "Starting sleepTimer" }
             val minutes = prefsManager.sleepTime
             internalSleepSand.onNext(TimeUnit.MINUTES.toMillis(minutes.toLong()))
+        } else {
+            i { "Cancelling sleepTimer" }
+            internalSleepSand.onNext(-1L)
         }
     }
-
 
     /**
      * This observable holds the time in ms left that the sleep timer has left. This is updated

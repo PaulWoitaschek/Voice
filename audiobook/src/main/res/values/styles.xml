@@ -26,6 +26,8 @@
         <item name="android:textColorSecondaryInverse">@android:color/white</item>
     </style>
 
+    <style name="TextBody1" parent="TextAppearance.AppCompat.Body1"/>
+
     <style name="ToolbarPopup" parent="@style/ThemeOverlay.AppCompat.Light"/>
 
     <style name="BaseImageButtonStyle" parent="Base.Widget.AppCompat.ImageButton">
