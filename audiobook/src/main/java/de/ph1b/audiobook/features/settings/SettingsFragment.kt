@@ -13,7 +13,6 @@ import de.ph1b.audiobook.features.BaseActivity
 import de.ph1b.audiobook.features.book_playing.SeekDialogFragment
 import de.ph1b.audiobook.features.folder_overview.FolderOverviewActivity
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment
-import de.ph1b.audiobook.features.settings.dialogs.SleepDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.SupportDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment
 import de.ph1b.audiobook.injection.App
@@ -28,7 +27,6 @@ class SettingsFragment : PreferenceFragment(), SettingsSetListener {
     private val handler = Handler()
 
     private lateinit var themePreference: Preference
-    private lateinit var sleepPreference: Preference
     private lateinit var seekPreference: Preference
     private lateinit var autoRewindPreference: Preference
     private var onStartSubscriptions: CompositeSubscription? = null
@@ -61,13 +59,6 @@ class SettingsFragment : PreferenceFragment(), SettingsSetListener {
         autoRewindPreference = findPreference(getString(R.string.pref_key_auto_rewind))
         autoRewindPreference.setOnPreferenceClickListener {
             AutoRewindDialogFragment().show(hostingActivity.supportFragmentManager, AutoRewindDialogFragment.TAG)
-            true
-        }
-
-        // sleep pref
-        sleepPreference = findPreference(getString(R.string.pref_key_sleep_time))
-        sleepPreference.setOnPreferenceClickListener {
-            SleepDialogFragment().show(hostingActivity.supportFragmentManager, SleepDialogFragment.TAG)
             true
         }
 
@@ -110,10 +101,6 @@ class SettingsFragment : PreferenceFragment(), SettingsSetListener {
     private fun updateValues() {
         val theme = prefs.theme
         themePreference.setSummary(theme.nameId)
-
-        val sleepAmount = prefs.sleepTime
-        val sleepSummary = resources.getQuantityString(R.plurals.minutes, sleepAmount, sleepAmount)
-        sleepPreference.summary = sleepSummary
     }
 
     @Suppress("OverridingDeprecatedMember")
