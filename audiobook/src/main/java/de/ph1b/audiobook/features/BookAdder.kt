@@ -12,6 +12,7 @@ import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.MediaAnalyzer
 import de.ph1b.audiobook.misc.NaturalOrderComparator
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
@@ -114,7 +115,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
      */
     private val singleBookFiles: List<File>
         get() {
-            val singleBooksAsStrings = prefs.singleBookFolders
+            val singleBooksAsStrings = prefs.singleBookFolders.value()
             val singleBooks = ArrayList<File>(singleBooksAsStrings.size)
             for (s in singleBooksAsStrings) {
                 singleBooks.add(File(s))
@@ -133,7 +134,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
      */
     private val collectionBookFiles: List<File>
         get() {
-            val collectionFoldersStringList = prefs.collectionFolders
+            val collectionFoldersStringList = prefs.collectionFolders.value()
             val containingFiles = ArrayList<File>(collectionFoldersStringList.size)
             for (s in collectionFoldersStringList) {
                 val f = File(s)

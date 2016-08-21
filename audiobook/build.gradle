@@ -78,6 +78,7 @@ dependencies {
     compile "io.reactivex:rxandroid:1.2.1"
     compile "io.reactivex:rxjava:1.1.9"
     compile 'com.jakewharton.rxbinding:rxbinding-kotlin:0.4.0'
+    compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.2'
 
     // kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"

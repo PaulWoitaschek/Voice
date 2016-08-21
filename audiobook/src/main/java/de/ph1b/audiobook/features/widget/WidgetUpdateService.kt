@@ -21,6 +21,7 @@ import de.ph1b.audiobook.features.BookActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.dpToPx
 import de.ph1b.audiobook.misc.drawable
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
@@ -56,9 +57,9 @@ class WidgetUpdateService : Service() {
         // update widget if current book, current book id or playState have changed.
         subscriptions.add(
                 Observable.merge(
-                        bookChest.updateObservable().filter { it.id == prefs.currentBookId.value },
+                        bookChest.updateObservable().filter { it.id == prefs.currentBookId.value() },
                         playStateManager.playState,
-                        prefs.currentBookId)
+                        prefs.currentBookId.asObservable())
                         .subscribe { updateWidget() })
 
     }
@@ -74,7 +75,7 @@ class WidgetUpdateService : Service() {
     private fun updateWidget() {
         executor.execute {
             val appWidgetManager = AppWidgetManager.getInstance(this@WidgetUpdateService)
-            val book = bookChest.bookById(prefs.currentBookId.value)
+            val book = bookChest.bookById(prefs.currentBookId.value())
             val isPortrait = isPortrait
             val ids = appWidgetManager.getAppWidgetIds(ComponentName(
                     this@WidgetUpdateService, BaseWidgetProvider::class.java))

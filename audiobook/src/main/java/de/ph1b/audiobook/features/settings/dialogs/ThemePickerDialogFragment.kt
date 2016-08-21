@@ -33,7 +33,7 @@ class ThemePickerDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         App.component().inject(this)
 
-        val oldTheme = prefsManager.theme
+        val oldTheme = prefsManager.theme.get()!!
         val existingThemes = ThemeUtil.Theme.values()
         val names = ArrayList<String>(existingThemes.size)
         for (t in existingThemes) {
@@ -44,7 +44,7 @@ class ThemePickerDialogFragment : DialogFragment() {
                 .items(*names.toArray<CharSequence>(arrayOfNulls<CharSequence>(names.size)))
                 .itemsCallbackSingleChoice(existingThemes.indexOf(oldTheme)) { materialDialog, view, i, charSequence ->
                     val newTheme = existingThemes[i]
-                    prefsManager.theme = newTheme
+                    prefsManager.theme.set(newTheme)
                     settingsSetListener.onSettingsSet(newTheme != oldTheme)
                     true
                 }

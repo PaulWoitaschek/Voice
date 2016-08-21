@@ -9,6 +9,7 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.layoutInflater
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayerController
@@ -43,7 +44,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
         val v = context.layoutInflater().inflate(R.layout.dialog_amount_chooser, null)
 
         // setting current speed
-        val book = db.bookById(prefs.currentBookId.value) ?: throw AssertionError("Cannot instantiate $TAG without a current book")
+        val book = db.bookById(prefs.currentBookId.value()) ?: throw AssertionError("Cannot instantiate $TAG without a current book")
         val speed = book.playbackSpeed
         v.seekBar.max = MAX_STEPS
         v.seekBar.progress = speedValueToSteps(speed)

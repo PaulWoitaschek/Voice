@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.features.book_overview
 
 import de.ph1b.audiobook.features.BookAdder
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -32,7 +33,7 @@ constructor(private val bookChest: BookChest,
         view.newBooks(bookChest.activeBooks)
         view.showSpinnerIfNoData(bookAdder.scannerActive().value)
 
-        val audioFoldersEmpty = prefsManager.collectionFolders.isEmpty() && prefsManager.singleBookFolders.isEmpty()
+        val audioFoldersEmpty = prefsManager.collectionFolders.value().isEmpty() && prefsManager.singleBookFolders.value().isEmpty()
         if (audioFoldersEmpty) view.showNoFolderWarning()
 
         // scan for files
@@ -52,7 +53,7 @@ constructor(private val bookChest: BookChest,
 
             // Subscription that notifies the adapter when the current book has changed. It also notifies
             // the item with the old indicator now falsely showing.
-            add(prefsManager.currentBookId
+            add(prefsManager.currentBookId.asObservable()
                     .map { id -> bookChest.bookById(id) }
                     .subscribe { view.currentBookChanged(it) })
 

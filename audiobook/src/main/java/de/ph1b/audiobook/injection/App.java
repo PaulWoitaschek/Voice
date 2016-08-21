@@ -39,8 +39,8 @@ public class App extends Application {
       bookAdder.scanForFiles(true);
       startService(new Intent(this, BookReaderService.class));
 
-      //noinspection WrongConstant
-      AppCompatDelegate.setDefaultNightMode(prefsManager.getTheme().getNightMode());
+      //noinspection WrongConstant,ConstantConditions
+      AppCompatDelegate.setDefaultNightMode(prefsManager.getTheme().get().getNightMode());
    }
 
    protected ApplicationComponent newComponent() {

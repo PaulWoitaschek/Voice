@@ -16,6 +16,7 @@ import android.view.View
 import android.widget.SeekBar
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.f2prateek.rx.preferences.Preference
 
 
 val Fragment.actionBar: ActionBar
@@ -52,6 +53,9 @@ fun MaterialDialog.Builder.positiveClicked(listener: () -> Unit): MaterialDialog
     onPositive { dialog, which -> listener() }
     return this
 }
+
+/** same as get() but force cast to non null **/
+fun <T> Preference<T>.value() = get()!!
 
 fun Context.dpToPx(dp: Int) = Math.round(TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), resources.displayMetrics))

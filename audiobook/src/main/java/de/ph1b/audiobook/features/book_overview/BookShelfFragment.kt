@@ -16,6 +16,7 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.settings.SettingsActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.actionBar
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.RxBaseFragment
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.DividerItemDecoration
@@ -104,7 +105,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
 
         // sets the grid / list toggle icon
         val displayModeItem = menu.findItem(R.id.action_change_layout)
-        displayModeItem.setIcon(prefs.displayMode.inverted().icon)
+        displayModeItem.setIcon(prefs.displayMode.value().inverted().icon)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -114,11 +115,11 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
                 true
             }
             R.id.action_current -> {
-                invokeBookSelectionCallback(prefs.currentBookId.value)
+                invokeBookSelectionCallback(prefs.currentBookId.value())
                 true
             }
             R.id.action_change_layout -> {
-                prefs.displayMode = prefs.displayMode.inverted()
+                prefs.displayMode.set(prefs.displayMode.value().inverted())
                 initRecyclerView()
                 true
             }
@@ -152,7 +153,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
     }
 
     private fun initRecyclerView() {
-        val defaultDisplayMode = prefs.displayMode
+        val defaultDisplayMode = prefs.displayMode.value()
         if (defaultDisplayMode == DisplayMode.GRID) {
             recyclerView.removeItemDecoration(listDecoration)
             recyclerView.layoutManager = gridLayoutManager
@@ -165,7 +166,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
     }
 
     private fun invokeBookSelectionCallback(bookId: Long) {
-        prefs.setCurrentBookId(bookId)
+        prefs.currentBookId.set(bookId)
 
         val sharedElements = HashMap<View, String>(2)
         val viewHolder = recyclerView.findViewHolderForItemId(bookId) as BookShelfAdapter.BaseViewHolder?

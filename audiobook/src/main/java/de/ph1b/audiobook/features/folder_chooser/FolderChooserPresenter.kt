@@ -5,6 +5,7 @@ import d
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.NaturalOrderComparator
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.PrefsManager
 import i
@@ -118,18 +119,18 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
         when (view!!.getMode()) {
             FolderChooserActivity.OperationMode.COLLECTION_BOOK -> {
                 if (canAddNewFolder(chosen.absolutePath)) {
-                    val collections = ArrayList(prefsManager.collectionFolders)
+                    val collections = HashSet(prefsManager.collectionFolders.value())
                     collections.add(chosen.absolutePath)
-                    prefsManager.collectionFolders = collections
+                    prefsManager.collectionFolders.set( collections)
                     view!!.finish()
                 }
                 v { "chosenCollection = $chosen" }
             }
             FolderChooserActivity.OperationMode.SINGLE_BOOK -> {
                 if (canAddNewFolder(chosen.absolutePath)) {
-                    val singleBooks = ArrayList(prefsManager.singleBookFolders)
+                    val singleBooks = HashSet(prefsManager.singleBookFolders.value())
                     singleBooks.add(chosen.absolutePath)
-                    prefsManager.singleBookFolders = singleBooks
+                    prefsManager.singleBookFolders.set( singleBooks)
                     view!!.finish()
                 }
                 v { "chosenSingleBook = $chosen" }
@@ -145,8 +146,8 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
      */
     private fun canAddNewFolder(newFile: String): Boolean {
         v { "canAddNewFolder called with $newFile" }
-        val folders = ArrayList(prefsManager.collectionFolders)
-        folders.addAll(prefsManager.singleBookFolders)
+        val folders = HashSet(prefsManager.collectionFolders.value())
+        folders.addAll(prefsManager.singleBookFolders.value())
 
         // if this is the first folder adding is always allowed
         if (folders.isEmpty()) {

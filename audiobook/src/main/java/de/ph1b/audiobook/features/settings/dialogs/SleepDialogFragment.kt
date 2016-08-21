@@ -9,6 +9,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.settings.SettingsSetListener
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.theme
 import kotlinx.android.synthetic.main.dialog_sleep_timer.view.*
@@ -43,7 +44,7 @@ class SleepDialogFragment : DialogFragment() {
         }
 
         //init number picker
-        val oldValue = prefs.sleepTime
+        val oldValue = prefs.sleepTime.value()
         v.numberPicker.minValue = 1
         v.numberPicker.maxValue = 120
         v.numberPicker.value = oldValue
@@ -56,7 +57,7 @@ class SleepDialogFragment : DialogFragment() {
                 .negativeText(R.string.dialog_cancel)
                 .onPositive { materialDialog, dialogAction ->
                     val newValue = v.numberPicker.value
-                    prefs.sleepTime = newValue
+                    prefs.sleepTime .set( newValue)
                     settingsSetListener.onSettingsSet(newValue != oldValue)
                 }
                 .customView(v, true)

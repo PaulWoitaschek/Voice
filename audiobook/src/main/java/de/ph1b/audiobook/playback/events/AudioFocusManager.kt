@@ -2,6 +2,7 @@ package de.ph1b.audiobook.playback.events
 
 import android.media.AudioManager
 import d
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
@@ -41,7 +42,7 @@ constructor(private val mediaPlayer: PlayerController, private val playStateMana
                     }
                     AudioFocus.LOSS_TRANSIENT_CAN_DUCK -> {
                         if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
-                            if (prefsManager.pauseOnTempFocusLoss()) {
+                            if (prefsManager.pauseOnTempFocusLoss.value()) {
                                 d { "Paused by audio-focus loss transient." }
                                 // Pause is temporary, don't rewind
                                 mediaPlayer.pauseNonRewinding()

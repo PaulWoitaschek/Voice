@@ -10,6 +10,7 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.settings.SettingsSetListener
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.onProgressChanged
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import kotlinx.android.synthetic.main.dialog_amount_chooser.view.*
 import javax.inject.Inject
@@ -36,7 +37,7 @@ class SeekDialogFragment : DialogFragment() {
         val v = LayoutInflater.from(context).inflate(R.layout.dialog_amount_chooser, null)
 
         // init
-        val oldSeekTime = prefs.seekTime.toBlocking().first()
+        val oldSeekTime = prefs.seekTime.value()
         v.seekBar.max = SEEK_BAR_MAX - SEEK_BAR_MIN
         v.seekBar.onProgressChanged {
             val value = it + SEEK_BAR_MIN
@@ -51,7 +52,7 @@ class SeekDialogFragment : DialogFragment() {
                 .negativeText(R.string.dialog_cancel)
                 .onPositive { materialDialog, dialogAction ->
                     val newSeekTime = v.seekBar.progress + SEEK_BAR_MIN
-                    prefs.setSeekTime(newSeekTime)
+                    prefs.seekTime.set(newSeekTime)
                     settingsSetListener.onSettingsSet(oldSeekTime != newSeekTime)
                 }.build()
     }

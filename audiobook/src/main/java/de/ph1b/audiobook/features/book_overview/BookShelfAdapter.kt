@@ -19,6 +19,7 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.NaturalOrderComparator
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import i
@@ -285,7 +286,7 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
                 })
             }
 
-            indicatorVisible = book.id == prefs.currentBookId.value
+            indicatorVisible = book.id == prefs.currentBookId.value()
             if (indicatorVisible) {
                 currentPlayingIndicator.visibility = View.VISIBLE
             } else {

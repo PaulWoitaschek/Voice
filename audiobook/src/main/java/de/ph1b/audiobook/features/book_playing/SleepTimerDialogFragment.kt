@@ -11,6 +11,7 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.onProgressChanged
 import de.ph1b.audiobook.misc.positiveClicked
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.BookmarkProvider
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -48,7 +49,7 @@ class SleepTimerDialogFragment : DialogFragment() {
         val min = 5
         val max = 120
         layout.seekBar.max = max - min
-        layout.seekBar.progress = prefs.sleepTime - min
+        layout.seekBar.progress = prefs.sleepTime.value() - min
         layout.seekBar.onProgressChanged(true) {
             val corrected = it + min
             val text = resources.getQuantityString(R.plurals.pauses_after, corrected, corrected)
@@ -59,7 +60,7 @@ class SleepTimerDialogFragment : DialogFragment() {
         layout.bookmark.setOnClickListener {
             layout.bookmarkSwitch.toggle()
         }
-        layout.bookmarkSwitch.isChecked = prefs.bookmarkOnSleepTimer
+        layout.bookmarkSwitch.isChecked = prefs.bookmarkOnSleepTimer.value()
 
         return MaterialDialog.Builder(context)
                 .title(R.string.action_sleep)
@@ -67,10 +68,10 @@ class SleepTimerDialogFragment : DialogFragment() {
                 .negativeText(R.string.dialog_cancel)
                 .customView(layout, true)
                 .positiveClicked {
-                    prefs.sleepTime = layout.seekBar.progress + min
+                    prefs.sleepTime.set( layout.seekBar.progress + min)
 
-                    prefs.bookmarkOnSleepTimer = layout.bookmarkSwitch.isChecked
-                    if (prefs.bookmarkOnSleepTimer) {
+                    prefs.bookmarkOnSleepTimer.set( layout.bookmarkSwitch.isChecked)
+                    if (prefs.bookmarkOnSleepTimer.value()) {
                         val date = DateUtils.formatDateTime(context, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE)
                         bookmarkProvider.addBookmarkAtBookPosition(book, date + ": " + getString(R.string.action_sleep))
                     }

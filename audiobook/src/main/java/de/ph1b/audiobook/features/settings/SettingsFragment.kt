@@ -82,11 +82,11 @@ class SettingsFragment : PreferenceFragment(), SettingsSetListener {
 
         onStartSubscriptions = CompositeSubscription().apply {
 
-            add(prefs.autoRewindAmount
+            add(prefs.autoRewindAmount.asObservable()
                     .map { resources.getQuantityString(R.plurals.seconds, it, it) }
                     .subscribe { autoRewindPreference.summary = it })
 
-            add(prefs.seekTime
+            add(prefs.seekTime.asObservable()
                     .map { resources.getQuantityString(R.plurals.seconds, it, it) }
                     .subscribe { seekPreference.summary = it })
         }
@@ -99,7 +99,7 @@ class SettingsFragment : PreferenceFragment(), SettingsSetListener {
     }
 
     private fun updateValues() {
-        val theme = prefs.theme
+        val theme = prefs.theme.get()!!
         themePreference.setSummary(theme.nameId)
     }
 
@@ -128,7 +128,7 @@ class SettingsFragment : PreferenceFragment(), SettingsSetListener {
     override fun onSettingsSet(settingsChanged: Boolean) {
         if (settingsChanged) {
             updateValues()
-            AppCompatDelegate.setDefaultNightMode(prefs.theme.nightMode)
+            AppCompatDelegate.setDefaultNightMode(prefs.theme.get()!!.nightMode)
             // must post so dialog can correctly destroy itself
             handler.post { hostingActivity.recreate() }
         }

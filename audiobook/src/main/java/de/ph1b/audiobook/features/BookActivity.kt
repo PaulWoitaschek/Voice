@@ -14,6 +14,7 @@ import de.ph1b.audiobook.features.book_playing.BookPlayFragment
 import de.ph1b.audiobook.features.imagepicker.ImagePickerActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.PermissionHelper
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import i
 import kotlinx.android.synthetic.main.activity_book.*
@@ -87,7 +88,7 @@ import javax.inject.Inject
     override fun onStart() {
         super.onStart()
 
-        val anyFolderSet = prefs.collectionFolders.size + prefs.singleBookFolders.size > 0
+        val anyFolderSet = prefs.collectionFolders.value().size + prefs.singleBookFolders.value().size > 0
         if (anyFolderSet) {
             BookActivityPermissionsDispatcher.ensurePermissionsWithCheck(this)
         }

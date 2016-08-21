@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.playback
 
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import i
 import rx.Observable
@@ -53,7 +54,7 @@ import javax.inject.Singleton
 
         if (enable) {
             i { "Starting sleepTimer" }
-            val minutes = prefsManager.sleepTime
+            val minutes = prefsManager.sleepTime.value()
             internalSleepSand.onNext(TimeUnit.MINUTES.toMillis(minutes.toLong()))
         } else {
             i { "Cancelling sleepTimer" }

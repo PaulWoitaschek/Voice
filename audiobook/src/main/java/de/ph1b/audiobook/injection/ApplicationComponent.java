@@ -36,7 +36,7 @@ import de.ph1b.audiobook.uitools.CoverReplacement;
  * @author Paul Woitaschek
  */
 @SuppressWarnings("WeakerAccess")
-@Singleton @Component(modules = {BaseModule.class, AndroidModule.class, PresenterModule.class})
+@Singleton @Component(modules = {BaseModule.class, AndroidModule.class, PresenterModule.class, PrefsModule.class})
 public interface ApplicationComponent {
 
    BookAdder getBookAdder();

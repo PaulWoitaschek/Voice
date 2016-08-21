@@ -25,6 +25,7 @@ import de.ph1b.audiobook.features.BookActivity
 import de.ph1b.audiobook.features.book_overview.BookShelfFragment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.RxBroadcast
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager.PauseReason
@@ -55,7 +56,7 @@ class BookReaderService : MediaBrowserServiceCompat() {
         val match = bookUriConverter.match(uri)
 
         if (match == BookUriConverter.ROOT) {
-            val current = db.bookById(prefs.currentBookId.value)?.let {
+            val current = db.bookById(prefs.currentBookId.value())?.let {
                 MediaDescriptionCompat.Builder()
                         .setTitle("${getString(R.string.current_book)}: ${it.name}")
                         .setMediaId(bookUriConverter.book(it.id).toString())
@@ -151,7 +152,7 @@ class BookReaderService : MediaBrowserServiceCompat() {
                     val type = bookUriConverter.match(uri)
                     if (type == BookUriConverter.BOOK_ID) {
                         val id = bookUriConverter.extractBook(uri)
-                        prefs.setCurrentBookId(id)
+                        prefs.currentBookId.set(id)
                         onPlay()
                     } else {
                         e { "Invalid mediaId $mediaId" }
@@ -221,14 +222,15 @@ class BookReaderService : MediaBrowserServiceCompat() {
 
         subscriptions.apply {
             // set seek time to the player
-            add(prefs.seekTime.subscribe { player.seekTime = it })
+            add(prefs.seekTime.asObservable()
+                    .subscribe { player.seekTime = it })
 
             // set auto rewind amount to the player
-            add(prefs.autoRewindAmount
+            add(prefs.autoRewindAmount.asObservable()
                     .subscribe { player.autoRewindAmount = it })
 
             // re-init controller when there is a new book set as the current book
-            add(prefs.currentBookId
+            add(prefs.currentBookId.asObservable()
                     .map { updatedId -> db.bookById(updatedId) }
                     .filter { it != null && (player.book()?.id != it.id) }
                     .subscribe {
@@ -238,7 +240,7 @@ class BookReaderService : MediaBrowserServiceCompat() {
 
             // notify player about changes in the current book
             add(db.updateObservable()
-                    .filter { it.id == prefs.currentBookId.value }
+                    .filter { it.id == prefs.currentBookId.value() }
                     .subscribe {
                         player.init(it)
                         notifyChange(ChangeType.METADATA, it)
@@ -291,7 +293,7 @@ class BookReaderService : MediaBrowserServiceCompat() {
                     .subscribe { headsetState ->
                         if (headsetState == HeadsetPlugReceiver.HeadsetState.PLUGGED) {
                             if (playStateManager.pauseReason == PauseReason.BECAUSE_HEADSET) {
-                                if (prefs.resumeOnReplug()) {
+                                if (prefs.resumeOnReplug.value()) {
                                     player.play()
                                 }
                             }

@@ -8,6 +8,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.layoutInflater
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayerController
@@ -27,7 +28,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
         val v = context.layoutInflater().inflate(R.layout.dialog_time_picker, null)
 
         // init
-        val book = db.bookById(prefs.currentBookId.value)!!
+        val book = db.bookById(prefs.currentBookId.value())!!
         val duration = book.currentChapter().duration
         val position = book.time
         val biggestHour = TimeUnit.MILLISECONDS.toHours(duration.toLong()).toInt()

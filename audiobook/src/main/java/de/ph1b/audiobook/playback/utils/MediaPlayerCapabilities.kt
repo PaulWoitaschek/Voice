@@ -2,11 +2,8 @@ package de.ph1b.audiobook.playback.utils
 
 import android.content.SharedPreferences
 import android.os.Build
-import de.ph1b.audiobook.persistence.internals.edit
-import de.ph1b.audiobook.persistence.internals.setBoolean
 import i
 import javax.inject.Inject
-import javax.inject.Named
 
 /**
  * Provides information about if the custom media player can be used, or if there is a bug on the device.
@@ -15,7 +12,7 @@ import javax.inject.Named
  */
 class MediaPlayerCapabilities
 @Inject
-constructor(@Named(FOR) private val prefs: SharedPreferences, channelDetector: FalseChannelDetector) {
+constructor(prefs: SharedPreferences, channelDetector: FalseChannelDetector) {
 
 
     val useCustomMediaPlayer: Boolean =
@@ -42,15 +39,10 @@ constructor(@Named(FOR) private val prefs: SharedPreferences, channelDetector: F
                     canSet
                 } else {
                     val canSetCustom = channelDetector.channelCountMatches()
-                    prefs.edit {
-                        setBoolean(key to canSetCustom)
-                    }
+                    prefs.edit().putBoolean(key, canSetCustom)
+                            .apply()
                     i { "Channel count matches returned = $canSetCustom" }
                     canSetCustom
                 }
             }
-
-    companion object {
-        const val FOR = "forPlayerCapabilities"
-    }
 }

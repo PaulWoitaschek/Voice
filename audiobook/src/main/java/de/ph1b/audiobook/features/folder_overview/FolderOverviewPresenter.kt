@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.features.folder_overview
 
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.PrefsManager
 import rx.subscriptions.CompositeSubscription
@@ -27,7 +28,7 @@ class FolderOverviewPresenter : Presenter<FolderOverviewActivity>() {
     private fun updateFoldersInView() {
         val collectionFolders = prefsManager.collectionFolders
         val singleFolders = prefsManager.singleBookFolders
-        view!!.updateAdapterData(collectionFolders, singleFolders)
+        view!!.updateAdapterData(collectionFolders.value(), singleFolders.value())
     }
 
     /**
@@ -36,17 +37,17 @@ class FolderOverviewPresenter : Presenter<FolderOverviewActivity>() {
      * @param folder The folder to remove.
      */
     fun removeFolder(folder: String) {
-        val collectionFolders = ArrayList(prefsManager.collectionFolders)
-        val singleFolders = ArrayList(prefsManager.singleBookFolders)
+        val collectionFolders = HashSet(prefsManager.collectionFolders.value())
+        val singleFolders = HashSet(prefsManager.singleBookFolders.value())
 
         val colRemoved = collectionFolders.remove(folder)
         if (colRemoved) {
-            prefsManager.collectionFolders = collectionFolders
+            prefsManager.collectionFolders.set(collectionFolders)
         }
 
         val singleRemoved = singleFolders.remove(folder)
         if (singleRemoved) {
-            prefsManager.singleBookFolders = singleFolders
+            prefsManager.singleBookFolders.set(singleFolders)
         }
 
         updateFoldersInView()
