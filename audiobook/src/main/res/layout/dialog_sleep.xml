@@ -25,18 +25,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text"/>
 
-    <android.support.v7.widget.SwitchCompat
-        android:id="@+id/bookmarkSwitch"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:textAppearance="@style/TextBody1"
-        app:layout_constraintBottom_toBottomOf="@+id/bookmark"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/bookmark"
-        app:layout_constraintVertical_bias="0.0"/>
-
     <TextView
         android:id="@+id/bookmark"
         android:layout_width="0dp"
@@ -48,18 +36,17 @@
         android:textAppearance="@style/TextBody1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar"/>
+        app:layout_constraintTop_toBottomOf="@+id/seekBar"
+        />
 
     <android.support.v7.widget.SwitchCompat
-        android:id="@+id/shakeToResetSwitch"
+        android:id="@+id/bookmarkSwitch"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:textAppearance="@style/TextBody1"
-        app:layout_constraintBottom_toBottomOf="@+id/shakeToResetText"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/bookmark"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/shakeToResetText"
+        app:layout_constraintTop_toTopOf="@+id/bookmark"
         app:layout_constraintVertical_bias="0.0"/>
 
     <TextView
@@ -73,5 +60,15 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bookmark"/>
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/shakeToResetSwitch"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:textAppearance="@style/TextBody1"
+        app:layout_constraintBottom_toBottomOf="@+id/shakeToResetText"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/shakeToResetText"
+        app:layout_constraintVertical_bias="0.0"/>
 
 </android.support.constraint.ConstraintLayout>
