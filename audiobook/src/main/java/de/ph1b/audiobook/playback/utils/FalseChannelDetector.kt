@@ -1,9 +1,11 @@
 package de.ph1b.audiobook.playback.utils
 
+import android.annotation.TargetApi
 import android.content.Context
 import android.media.MediaCodec
 import android.media.MediaExtractor
 import android.media.MediaFormat
+import android.os.Build
 import d
 import i
 import javax.inject.Inject
@@ -21,6 +23,7 @@ class FalseChannelDetector
 constructor(private val context: Context) {
 
     @Suppress("DEPRECATION")
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     fun channelCountMatches(): Boolean {
         val monoFile = "mono.mp3"
         val stereoFile = "stereo.mp3"
