@@ -173,13 +173,12 @@ constructor(c: Context, @Named(FOR) private val sp: SharedPreferences) {
         return sp.getBoolean(PREF_KEY_PAUSE_ON_CAN_DUCK, false)
     }
 
-    /**
-     * @return true if a [Bookmark] should be set each time the sleep
-     * * timer is called
-     */
-    @Synchronized fun setBookmarkOnSleepTimer(): Boolean {
-        return sp.getBoolean(PREF_KEY_BOOKMARK_ON_SLEEP, false)
-    }
+    /**  if a bookmark should be created when the sleep timer is set **/
+    var bookmarkOnSleepTimer: Boolean
+        set(value) = sp.edit {
+            setBoolean(PREF_KEY_BOOKMARK_ON_SLEEP to value)
+        }
+        get() = sp.getBoolean(PREF_KEY_BOOKMARK_ON_SLEEP, false)
 
     /**
      * The display mode that has been set or the default.

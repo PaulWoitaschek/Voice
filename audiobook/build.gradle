@@ -51,6 +51,7 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$supportVersion"
     compile "com.android.support:support-v4:$supportVersion"
     compile "com.android.support:design:$supportVersion"
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
 
     // image loading
     compile "com.squareup.picasso:picasso:2.5.2"

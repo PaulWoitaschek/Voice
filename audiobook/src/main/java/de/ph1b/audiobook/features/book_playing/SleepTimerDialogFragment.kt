@@ -44,6 +44,7 @@ class SleepTimerDialogFragment : DialogFragment() {
             return super.onCreateDialog(savedInstanceState)
         }
 
+        // setup seekBar
         val min = 5
         val max = 120
         layout.seekBar.max = max - min
@@ -54,6 +55,12 @@ class SleepTimerDialogFragment : DialogFragment() {
             layout.text.text = text
         }
 
+        // setup bookmark toggle
+        layout.bookmark.setOnClickListener {
+            layout.bookmarkSwitch.toggle()
+        }
+        layout.bookmarkSwitch.isChecked = prefs.bookmarkOnSleepTimer
+
         return MaterialDialog.Builder(context)
                 .title(R.string.action_sleep)
                 .positiveText(R.string.dialog_confirm)
@@ -61,7 +68,9 @@ class SleepTimerDialogFragment : DialogFragment() {
                 .customView(layout, true)
                 .positiveClicked {
                     prefs.sleepTime = layout.seekBar.progress + min
-                    if (prefs.setBookmarkOnSleepTimer() && sandMan.sleepTimerActive()) {
+
+                    prefs.bookmarkOnSleepTimer = layout.bookmarkSwitch.isChecked
+                    if (prefs.bookmarkOnSleepTimer) {
                         val date = DateUtils.formatDateTime(context, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE)
                         bookmarkProvider.addBookmarkAtBookPosition(book, date + ": " + getString(R.string.action_sleep))
                     }
