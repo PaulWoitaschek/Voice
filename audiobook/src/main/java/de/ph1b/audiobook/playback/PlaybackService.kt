@@ -11,11 +11,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaBrowserServiceCompat
-import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
 import d
-import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BookActivity
 import de.ph1b.audiobook.features.book_overview.BookShelfFragment
 import de.ph1b.audiobook.injection.App
@@ -27,6 +25,8 @@ import de.ph1b.audiobook.playback.PlayStateManager.PauseReason
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.events.*
 import de.ph1b.audiobook.playback.utils.BookUriConverter
+import de.ph1b.audiobook.playback.utils.ChangeNotifier
+import de.ph1b.audiobook.playback.utils.MediaBrowserHelper
 import de.ph1b.audiobook.playback.utils.NotificationAnnouncer
 import e
 import i
@@ -43,49 +43,9 @@ import javax.inject.Inject
  */
 class PlaybackService : MediaBrowserServiceCompat() {
 
-    private fun mediaItems(uri: Uri): List<MediaBrowserCompat.MediaItem>? {
-        val match = bookUriConverter.match(uri)
+    override fun onLoadChildren(parentId: String, result: Result<List<MediaBrowserCompat.MediaItem>>) = mediaBrowserHelper.onLoadChildren(parentId, result)
 
-        if (match == BookUriConverter.ROOT) {
-            val current = db.bookById(prefs.currentBookId.value())?.let {
-                MediaDescriptionCompat.Builder()
-                        .setTitle("${getString(R.string.current_book)}: ${it.name}")
-                        .setMediaId(bookUriConverter.book(it.id).toString())
-                        .build().let {
-                    MediaBrowserCompat.MediaItem(it, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
-                }
-            }
-
-            val all = db.activeBooks.map {
-                val description = MediaDescriptionCompat.Builder()
-                        .setTitle(it.name)
-                        .setMediaId(bookUriConverter.book(it.id).toString())
-                        .build()
-                return@map MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
-            }
-
-            if (current == null) {
-                return all
-            } else {
-                return listOf(current) + all
-            }
-        } else {
-            return null
-        }
-    }
-
-    override fun onLoadChildren(parentId: String, result: Result<List<MediaBrowserCompat.MediaItem>>) {
-        d { "onLoadChildren $parentId, $result" }
-        val uri = Uri.parse(parentId)
-        val items = mediaItems(uri)
-        d { "sending result $items" }
-        result.sendResult(items)
-    }
-
-    override fun onGetRoot(clientPackageName: String, clientUid: Int, rootHints: Bundle?): BrowserRoot {
-        v { "onGetRoot" }
-        return BrowserRoot(bookUriConverter.allBooks().toString(), null)
-    }
+    override fun onGetRoot(clientPackageName: String, clientUid: Int, rootHints: Bundle?): BrowserRoot = mediaBrowserHelper.onGetRoot()
 
     init {
         App.component().inject(this)
@@ -102,6 +62,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     @Inject lateinit var playStateManager: PlayStateManager
     @Inject lateinit var audioFocusManager: AudioFocusManager
     @Inject lateinit var bookUriConverter: BookUriConverter
+    @Inject lateinit var mediaBrowserHelper: MediaBrowserHelper
     private lateinit var mediaSession: MediaSessionCompat
     private lateinit var changeNotifier: ChangeNotifier
 
@@ -117,10 +78,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
         mediaSession = MediaSessionCompat(this, TAG, eventReceiver, buttonReceiverIntent).apply {
 
             setCallback(object : MediaSessionCompat.Callback() {
-                override fun onMediaButtonEvent(mediaButtonEvent: Intent?): Boolean {
-                    i { "onMediaButtonEvent($mediaButtonEvent)" }
-                    return super.onMediaButtonEvent(mediaButtonEvent)
-                }
 
                 override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
                     i { "onPlayFromMediaId $mediaId" }

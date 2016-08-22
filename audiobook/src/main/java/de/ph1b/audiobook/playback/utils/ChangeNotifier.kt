@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.playback
+package de.ph1b.audiobook.playback.utils
 
 import android.content.Context
 import android.content.Intent
@@ -10,6 +10,7 @@ import com.squareup.picasso.Picasso
 import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.blocking

@@ -26,8 +26,8 @@ import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment;
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment;
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment;
 import de.ph1b.audiobook.features.widget.WidgetUpdateService;
-import de.ph1b.audiobook.playback.ChangeNotifier;
 import de.ph1b.audiobook.playback.PlaybackService;
+import de.ph1b.audiobook.playback.utils.ChangeNotifier;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 
 /**
