@@ -4,7 +4,6 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import d
 import dagger.Reusable
 import rx.AsyncEmitter
 import rx.Observable
@@ -38,7 +37,6 @@ import javax.inject.Inject
 
                 val gForce = Math.sqrt(gX * gX + gY * gY + gZ * gZ.toDouble())
                 if (gForce > 2.25) {
-                    d { "Shake with $gForce" }
                     emitter.onNext(null)
                 }
             }

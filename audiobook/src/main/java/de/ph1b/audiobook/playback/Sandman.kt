@@ -22,9 +22,11 @@ import javax.inject.Singleton
      * The time left till the playback stops in ms. If this is -1 the timer was stopped manually.
      * If this is 0 the timer simple counted down.
      */
-    private val internalSleepSand = BehaviorSubject.create<Long>(-1L)
+    private val NOT_ACTIVE = -1L
+    private val internalSleepSand = BehaviorSubject.create<Long>(NOT_ACTIVE)
     private var sleepSubscription: Subscription? = null
     private var shakeSubscription: Subscription? = null
+    private var shakeTimeoutSubscription: Subscription? = null
     private val shakeObservable = shakeDetector.create()
 
     init {
@@ -32,9 +34,21 @@ import javax.inject.Singleton
         internalSleepSand.filter { it == 0L } // when this reaches 0
                 .subscribe {
                     // stop the player
-                    pauseOnShake(false)
                     playerController.stop()
                 }
+
+        internalSleepSand.subscribe {
+            if (it > 0) {
+                // enable shake timer
+                resetTimerOnShake(true)
+            } else if (it == NOT_ACTIVE) {
+                // if the track ended by the user, disable the shake detector
+                resetTimerOnShake(false)
+            } else if (it == 0L) {
+                // if the timer stopped normally, setup a timer of 5 minutes to resume playback
+                resetTimerOnShake(true, 5)
+            }
+        }
 
         // counts down the sleep sand
         val sleepUpdateInterval = 1000L
@@ -47,7 +61,7 @@ import javax.inject.Singleton
                                 .filter { internalSleepSand.value > 0 } // only notify if there is still time left
                                 .map { internalSleepSand.value - sleepUpdateInterval } // calculate the new time
                                 .map { it.coerceAtLeast(0) } // but keep at least 0
-                                .subscribe { internalSleepSand.onNext(it) }
+                                .subscribe(internalSleepSand)
                     } else {
                         sleepSubscription?.unsubscribe()
                     }
@@ -58,31 +72,46 @@ import javax.inject.Singleton
     fun setActive(enable: Boolean) {
         i { "toggleSleepSand. Left sleepTime is ${internalSleepSand.value}" }
 
-        pauseOnShake(enable)
-
         if (enable) {
             i { "Starting sleepTimer" }
             val minutes = prefsManager.sleepTime.value()
             internalSleepSand.onNext(TimeUnit.MINUTES.toMillis(minutes.toLong()))
         } else {
             i { "Cancelling sleepTimer" }
-            internalSleepSand.onNext(-1L)
+            internalSleepSand.onNext(NOT_ACTIVE)
         }
     }
 
-    private fun pauseOnShake(enable: Boolean) {
+    private fun resetTimerOnShake(enable: Boolean, stopAfter: Long? = null) {
         if (enable) {
             val shouldSubscribe = shakeSubscription?.isUnsubscribed ?: true
             if (shouldSubscribe) {
                 // setup shake detection if requested
                 if (prefsManager.shakeToReset.value()) {
                     shakeSubscription = shakeObservable.subscribe {
+                        if (internalSleepSand.value == 0L) {
+                            d { "detected shake while sleepSand==0. Resume playback" }
+                            playerController.play()
+                        }
+
                         d { "reset now by shake" }
                         setActive(true)
                     }
                 }
             }
-        } else shakeSubscription?.unsubscribe()
+        } else {
+            shakeSubscription?.unsubscribe()
+        }
+
+
+        shakeTimeoutSubscription?.unsubscribe()
+        if (stopAfter != null) {
+            shakeTimeoutSubscription = Observable.timer(stopAfter, TimeUnit.MINUTES)
+                    .subscribe {
+                        d { "disabling pauseOnShake through timout" }
+                        resetTimerOnShake(false)
+                    }
+        }
     }
 
     /**
