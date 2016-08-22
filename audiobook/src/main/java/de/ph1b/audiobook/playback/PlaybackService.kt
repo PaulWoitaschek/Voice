@@ -267,9 +267,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
                 val file = File(intent.getStringExtra(PlayerController.CHANGE_FILE))
                 player.changePosition(time, file)
             }
-            PlayerController.ACTION_PAUSE_NON_REWINDING -> player.pause(false)
+            PlayerController.ACTION_PAUSE_NON_REWINDING -> player.pause(rewind = false)
             PlayerController.ACTION_FORCE_NEXT -> player.next()
-            PlayerController.ACTION_FORCE_PREVIOUS -> player.previous(true)
+            PlayerController.ACTION_FORCE_PREVIOUS -> player.previous(toNullOfNewTrack = true)
+            PlayerController.ACTION_VOLUME_HIGH -> player.setVolume(loud = true)
+            PlayerController.ACTION_VOLUME_LOW -> player.setVolume(loud = false)
         }
 
         return Service.START_STICKY

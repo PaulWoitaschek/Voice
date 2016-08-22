@@ -13,11 +13,11 @@ import java.io.IOException
  */
 abstract class Player {
 
-    protected val completionSubject = PublishSubject.create<Unit>()
+    protected val completionSubject: PublishSubject<Unit> = PublishSubject.create<Unit>()!!
 
-    protected val errorSubject = PublishSubject.create<Unit>()
+    protected val errorSubject: PublishSubject<Unit> = PublishSubject.create<Unit>()!!
 
-    protected val preparedSubject = PublishSubject.create<Unit>()
+    protected val preparedSubject: PublishSubject<Unit> = PublishSubject.create<Unit>()!!
 
     abstract fun seekTo(to: Int)
 
@@ -39,6 +39,10 @@ abstract class Player {
     abstract val duration: Int
 
     abstract var playbackSpeed: Float
+
+    abstract fun setAudioStreamType(streamType: Int)
+
+    abstract fun setVolume(volume: Float)
 
     val onError: Observable<Unit> = errorSubject.asObservable()
 

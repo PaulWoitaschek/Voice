@@ -22,6 +22,8 @@ class AntennaPlayer(private val context: Context) : Player() {
         } else handler.post { task() }
     }
 
+    override fun setVolume(volume: Float) = player.setVolume(volume, volume)
+
     init {
         val owning = org.antennapod.audio.MediaPlayer(context)
         player = SonicAudioPlayer(owning, context)
@@ -51,6 +53,8 @@ class AntennaPlayer(private val context: Context) : Player() {
     override fun reset() = player.reset()
 
     override fun setWakeMode(mode: Int) = player.setWakeMode(context, mode)
+
+    override fun setAudioStreamType(streamType: Int) = player.setAudioStreamType(streamType)
 
     override val currentPosition: Int
         get() = player.currentPosition

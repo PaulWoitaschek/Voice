@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.playback.events
 
-import android.media.AudioManager
 import d
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -20,7 +19,7 @@ import javax.inject.Singleton
 @Singleton
 class AudioFocusManager
 @Inject
-constructor(private val mediaPlayer: PlayerController, private val playStateManager: PlayStateManager, private val audioManager: AudioManager, private val prefsManager: PrefsManager) {
+constructor(private val mediaPlayer: PlayerController, private val playStateManager: PlayStateManager, private val prefsManager: PrefsManager) {
 
     fun handleAudioFocus(audioFocusObservable: Observable<AudioFocus>): Subscription =
             audioFocusObservable.subscribe { audioFocus: AudioFocus ->
@@ -32,7 +31,7 @@ constructor(private val mediaPlayer: PlayerController, private val playStateMana
                             mediaPlayer.play()
                         } else if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
                             d { "increasing volume" }
-                            audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0)
+                            mediaPlayer.volume(loud = true)
                         }
                     }
                     AudioFocus.LOSS,
@@ -49,7 +48,7 @@ constructor(private val mediaPlayer: PlayerController, private val playStateMana
                                 playStateManager.pauseReason = PlayStateManager.PauseReason.LOSS_TRANSIENT
                             } else {
                                 d { "lowering volume" }
-                                audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0)
+                                mediaPlayer.volume(loud = false)
                             }
                         }
                     }

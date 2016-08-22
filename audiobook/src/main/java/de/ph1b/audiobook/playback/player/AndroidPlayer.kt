@@ -23,6 +23,8 @@ class AndroidPlayer(private val context: Context) : Player() {
         player.setOnPreparedListener { preparedSubject.onNext(Unit) }
     }
 
+    override fun setVolume(volume: Float) = player.setVolume(volume, volume)
+
     override fun seekTo(to: Int) = player.seekTo(to)
 
     override fun isPlaying() = player.isPlaying
@@ -44,6 +46,8 @@ class AndroidPlayer(private val context: Context) : Player() {
     }
 
     override fun reset() = player.reset()
+
+    override fun setAudioStreamType(streamType: Int) = player.setAudioStreamType(streamType)
 
     override val currentPosition: Int
         get() = player.currentPosition
