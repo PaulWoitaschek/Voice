@@ -7,11 +7,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.*
-import com.jakewharton.rxbinding.view.clicks
-import com.jakewharton.rxbinding.widget.RxAdapterView
-import com.jakewharton.rxbinding.widget.RxSeekBar
-import com.jakewharton.rxbinding.widget.SeekBarProgressChangeEvent
-import com.jakewharton.rxbinding.widget.SeekBarStopChangeEvent
+import android.widget.SeekBar
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
@@ -20,6 +16,8 @@ import de.ph1b.audiobook.features.settings.SettingsActivity
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
+import de.ph1b.audiobook.misc.clicks
+import de.ph1b.audiobook.misc.itemSelections
 import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -101,20 +99,21 @@ class BookPlayFragment : Fragment() {
 
         //setup buttons
         play.setIconDrawable(playPauseDrawable)
-        RxSeekBar.changeEvents(seekBar)
-                .subscribe {
-                    when (it) {
-                        is SeekBarProgressChangeEvent -> {
-                            //sets text to adjust while using seekBar
-                            playedTime.text = formatTime(it.progress().toLong(), seekBar.max.toLong())
-                        }
-                        is SeekBarStopChangeEvent -> {
-                            val progress = seekBar.progress
-                            mediaPlayer.changePosition(progress, book!!.currentChapter().file)
-                            playedTime.text = formatTime(progress.toLong(), seekBar.max.toLong())
-                        }
-                    }
-                }
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(view: SeekBar?, progress: Int, p2: Boolean) {
+                //sets text to adjust while using seekBar
+                playedTime.text = formatTime(progress.toLong(), seekBar.max.toLong())
+            }
+
+            override fun onStartTrackingTouch(view: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(view: SeekBar?) {
+                val progress = seekBar.progress
+                mediaPlayer.changePosition(progress, book!!.currentChapter().file)
+                playedTime.text = formatTime(progress.toLong(), seekBar.max.toLong())
+            }
+        })
 
         if (book != null) {
             setupActionbar(title = book!!.name)
@@ -147,8 +146,7 @@ class BookPlayFragment : Fragment() {
             val adapter = MultiLineSpinnerAdapter<String>(bookSpinner, context, ContextCompat.getColor(context, ThemeUtil.getResourceId(context, android.R.attr.textColorPrimary)))
             adapter.setData(chapterNames)
             bookSpinner.adapter = adapter
-            //bookSpinner.adapter = spinnerAdapter
-            RxAdapterView.itemSelections(bookSpinner).subscribe {
+            bookSpinner.itemSelections {
                 // fire event only when that tag has been set (= this is not the first event) and
                 // this is a new value
                 val realInput = bookSpinner.tag != null && bookSpinner.tag != it

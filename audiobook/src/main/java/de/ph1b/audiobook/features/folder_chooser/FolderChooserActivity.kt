@@ -9,13 +9,9 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
-import com.jakewharton.rxbinding.widget.RxAdapterView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.folder_chooser.FolderChooserActivity.Companion.newInstanceIntent
-import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
-import de.ph1b.audiobook.misc.PermissionHelper
-import de.ph1b.audiobook.misc.drawable
-import de.ph1b.audiobook.misc.setupActionbar
+import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.mvp.RxBaseActivity
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import i
@@ -106,7 +102,7 @@ import java.io.File
         // spinner
         spinnerAdapter = MultiLineSpinnerAdapter(toolSpinner, this, Color.WHITE)
         toolSpinner.adapter = spinnerAdapter
-        RxAdapterView.itemSelections(toolSpinner)
+        toolSpinner.itemSelectionStream()
                 .filter { it != AdapterView.INVALID_POSITION } // filter invalid entries
                 .skip(1) // skip the first that passed as its no real user input
                 .subscribe {

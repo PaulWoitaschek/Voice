@@ -4,11 +4,11 @@ import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
-import com.jakewharton.rxbinding.widget.RxSeekBar
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.layoutInflater
+import de.ph1b.audiobook.misc.progressChangedStream
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -50,7 +50,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
         v.seekBar.progress = speedValueToSteps(speed)
 
         // observable of seek bar, mapped to speed
-        val seekObservable = RxSeekBar.userChanges(v.seekBar)
+        val seekObservable = v.seekBar.progressChangedStream()
                 .map { Book.SPEED_MIN + it * SPEED_DELTA }
                 .share()
 
