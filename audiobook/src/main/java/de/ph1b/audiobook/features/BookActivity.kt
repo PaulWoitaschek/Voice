@@ -14,6 +14,7 @@ import de.ph1b.audiobook.features.book_playing.BookPlayFragment
 import de.ph1b.audiobook.features.imagepicker.ImagePickerActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.PermissionHelper
+import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import i
@@ -65,7 +66,7 @@ import javax.inject.Inject
         setContentView(R.layout.activity_book)
         App.component().inject(this)
 
-        setSupportActionBar(toolbar!!)
+        setupActionbar(toolbar!!)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()

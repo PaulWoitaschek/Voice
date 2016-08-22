@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BaseActivity
+import de.ph1b.audiobook.misc.setupActionbar
 import kotlinx.android.synthetic.main.toolbar.*
 
 class SettingsActivity : BaseActivity(), SettingsSetListener {
@@ -13,7 +14,7 @@ class SettingsActivity : BaseActivity(), SettingsSetListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_settings)
 
-        setSupportActionBar(toolbar)
+        setupActionbar(toolbar = toolbar)
 
         if (savedInstanceState == null) {
             fragmentManager.beginTransaction()

@@ -15,6 +15,7 @@ import de.ph1b.audiobook.features.folder_chooser.FolderChooserActivity.Companion
 import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
 import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.misc.drawable
+import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.mvp.RxBaseActivity
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import i
@@ -87,9 +88,7 @@ import java.io.File
         setContentView(R.layout.activity_folder_chooser)
 
         // toolbar
-        setSupportActionBar(toolbar)
-        supportActionBar!!.setDisplayShowTitleEnabled(false)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        setupActionbar(toolbar = toolbar, showTitle = false, homeAsUpEnabled = true)
 
         // listeners
         choose.setOnClickListener { presenter().chooseClicked() }

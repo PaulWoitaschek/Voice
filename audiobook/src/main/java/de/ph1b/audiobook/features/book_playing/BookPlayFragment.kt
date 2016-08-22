@@ -20,7 +20,7 @@ import de.ph1b.audiobook.features.settings.SettingsActivity
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
-import de.ph1b.audiobook.misc.actionBar
+import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
@@ -97,10 +97,7 @@ class BookPlayFragment : Fragment() {
         book = bookChest.bookById(bookId)
 
         //init views
-        val actionBar = actionBar.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_arrow_back)
-        }
+        setupActionbar(homeAsUpEnabled = true, upIndicator = R.drawable.ic_arrow_back)
 
         //setup buttons
         play.setIconDrawable(playPauseDrawable)
@@ -120,7 +117,7 @@ class BookPlayFragment : Fragment() {
                 }
 
         if (book != null) {
-            actionBar.title = book!!.name
+            setupActionbar(title = book!!.name)
 
             // adapter
             val chapters = book!!.chapters

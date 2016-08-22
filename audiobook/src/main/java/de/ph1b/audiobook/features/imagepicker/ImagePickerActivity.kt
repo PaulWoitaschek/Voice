@@ -18,6 +18,7 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BaseActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.layoutInflater
+import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.setInvisible
@@ -98,11 +99,7 @@ class ImagePickerActivity : BaseActivity() {
 
         setContentView(R.layout.activity_image_picker)
 
-        setSupportActionBar(toolbar)
-        supportActionBar!!.apply {
-            setDisplayHomeAsUpEnabled(true)
-            title = ""
-        }
+        setupActionbar(toolbar = toolbar, homeAsUpEnabled = true, showTitle = false)
 
         with(webView.settings) {
             setSupportZoom(true)

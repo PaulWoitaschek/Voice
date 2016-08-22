@@ -15,7 +15,7 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.settings.SettingsActivity
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.actionBar
+import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.RxBaseFragment
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -75,11 +75,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
         fab.setOnClickListener { presenter().playPauseRequested() }
 
         // init ActionBar
-        actionBar.apply {
-            setDisplayHomeAsUpEnabled(false)
-            setHomeAsUpIndicator(R.drawable.ic_arrow_back)
-            title = getString(R.string.app_name)
-        }
+        setupActionbar(homeAsUpEnabled = true, upIndicator = R.drawable.ic_arrow_back, titleRes = R.string.app_name)
 
         // init RecyclerView
         recyclerView.setHasFixedSize(true)

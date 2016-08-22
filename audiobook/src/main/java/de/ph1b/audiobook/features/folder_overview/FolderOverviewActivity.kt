@@ -13,6 +13,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.getbase.floatingactionbutton.FloatingActionsMenu
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.folder_chooser.FolderChooserActivity
+import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.mvp.RxBaseActivity
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import kotlinx.android.synthetic.main.activity_folder_overview.*
@@ -119,10 +120,7 @@ class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOver
             startFolderChooserActivity(FolderChooserActivity.OperationMode.COLLECTION_BOOK)
         }
 
-        setSupportActionBar(toolbar)
-        val actionBar = supportActionBar!!
-        actionBar.setDisplayHomeAsUpEnabled(true)
-        actionBar.title = getString(R.string.audiobook_folders_title)
+        setupActionbar(toolbar = toolbar, homeAsUpEnabled = true, titleRes = R.string.audiobook_folders_title)
 
         //init views
         if (savedInstanceState != null) {
