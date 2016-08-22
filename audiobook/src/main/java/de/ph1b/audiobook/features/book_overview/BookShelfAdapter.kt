@@ -26,13 +26,8 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-/**
- * Adapter for a recycler-view book shelf that keeps the items in a sorted list.
- *
- * @param c                   the context
- * @param onItemClickListener the listener that will be called when a book has been selected
- */
-class BookShelfAdapter(private val c: Context, private val onItemClickListener: OnItemClickListener) : RecyclerView.Adapter<BookShelfAdapter.BaseViewHolder>() {
+// display all the books
+class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, ClickType) -> Unit) : RecyclerView.Adapter<BookShelfAdapter.BaseViewHolder>() {
 
     private val books = ArrayList<Book>()
 
@@ -117,27 +112,6 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
         return if (displayMode == BookShelfFragment.DisplayMode.LIST) 0 else 1
     }
 
-    interface OnItemClickListener {
-        /**
-         * This method will be invoked when a item has been clicked
-
-         * @param position adapter position of the item
-         */
-        fun onItemClicked(position: Int)
-
-        /**
-         * This method will be invoked when the menu of an item has been clicked
-
-         * @param position The adapter position
-         * *
-         * @param view     The view that was clicked
-         */
-        fun onMenuClicked(position: Int, view: View)
-    }
-
-    /**
-     * List viewHolder
-     */
     inner class ListViewHolder(parent: ViewGroup) : BaseViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.fragment_book_shelf_list_layout, parent, false)) {
 
@@ -226,10 +200,15 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
                 currentPlayingIndicator.visibility = View.GONE
             }
 
-            itemView.setOnClickListener { onItemClickListener.onItemClicked(adapterPosition) }
-            editBook.setOnClickListener { onItemClickListener.onMenuClicked(adapterPosition, it) }
+            itemView.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.REGULAR) }
+            editBook.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.MENU) }
 
             ViewCompat.setTransitionName(coverView, book.coverTransitionName)
         }
+    }
+
+    enum class ClickType {
+        REGULAR,
+        MENU
     }
 }

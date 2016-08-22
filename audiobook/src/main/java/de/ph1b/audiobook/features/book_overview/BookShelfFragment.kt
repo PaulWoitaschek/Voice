@@ -13,6 +13,7 @@ import android.support.v7.widget.SimpleItemAnimator
 import android.view.*
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.features.book_overview.BookShelfAdapter.ClickType
 import de.ph1b.audiobook.features.settings.SettingsActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.setupActionbar
@@ -30,7 +31,7 @@ import dagger.Lazy as DaggerLazy
 /**
  * Showing the shelf of all the available books and provide a navigation to each book
  */
-class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(), BookShelfAdapter.OnItemClickListener {
+class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>() {
 
     override fun newPresenter(): BookShelfPresenter = App.component().bookShelfPresenter
 
@@ -45,7 +46,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
 
     // viewAdded
     private val playPauseDrawable = PlayPauseDrawable()
-    private val adapter by lazy { BookShelfAdapter(context, this) }
+    private lateinit var adapter: BookShelfAdapter
     private lateinit var listDecoration: RecyclerView.ItemDecoration
     private lateinit var gridLayoutManager: GridLayoutManager
     private lateinit var linearLayoutManager: RecyclerView.LayoutManager
@@ -77,6 +78,14 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
 
         // init RecyclerView
         recyclerView.setHasFixedSize(true)
+        adapter = BookShelfAdapter(context) { book, clickType ->
+            if (clickType == ClickType.REGULAR) {
+                invokeBookSelectionCallback(book.id)
+            } else {
+                EditBookBottomSheet.newInstance(book)
+                        .show(childFragmentManager, "editBottomSheet")
+            }
+        }
         recyclerView.adapter = adapter
         // without this the item would blink on every change
         val anim = recyclerView.itemAnimator as SimpleItemAnimator
@@ -121,22 +130,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
         }
     }
 
-    override fun onItemClicked(position: Int) {
-        val bookId = adapter.getItemId(position)
-        invokeBookSelectionCallback(bookId)
-    }
-
-    override fun onMenuClicked(position: Int, view: View) {
-        val book = adapter.getItem(position)
-        EditBookBottomSheet.newInstance(book)
-                .show(childFragmentManager, "editBottomSheet")
-    }
-
-    /**
-     * Returns the amount of columns the main-grid will need.
-
-     * @return The amount of columns, but at least 2.
-     */
+    // Returns the amount of columns the main-grid will need
     private fun amountOfColumns(): Int {
         val r = recyclerView.resources
         val displayMetrics = resources.displayMetrics
