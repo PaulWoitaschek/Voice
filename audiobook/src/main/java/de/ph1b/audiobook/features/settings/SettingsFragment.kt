@@ -33,8 +33,6 @@ class SettingsFragment : PreferenceFragment(), SettingsSetListener {
     private lateinit var hostingActivity: BaseActivity
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        hostingActivity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-
         updateValues()
 
         return super.onCreateView(inflater, container, savedInstanceState)

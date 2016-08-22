@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable
 import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
-import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
@@ -45,29 +44,23 @@ fun Drawable.tinted(@ColorInt color: Int): Drawable {
 }
 
 fun Fragment.setupActionbar(toolbar: Toolbar? = null,
-                            homeAsUpEnabled: Boolean? = null,
                             @DrawableRes upIndicator: Int? = null,
-                            showTitle: Boolean? = false,
-                            @StringRes titleRes: Int? = null,
                             title: String? = null) =
-        (activity as AppCompatActivity).setupActionbar(toolbar, homeAsUpEnabled, upIndicator, showTitle, titleRes, title)
+        (activity as AppCompatActivity).setupActionbar(
+                toolbar = toolbar,
+                upIndicator = upIndicator,
+                title = title)
 
 fun AppCompatActivity.setupActionbar(toolbar: Toolbar? = null,
-                                     homeAsUpEnabled: Boolean? = null,
                                      @DrawableRes upIndicator: Int? = null,
-                                     showTitle: Boolean? = false,
-                                     @StringRes titleRes: Int? = null,
                                      title: String? = null) {
     if (toolbar != null) setSupportActionBar(toolbar)
 
     val actionBar = supportActionBar!!
 
-    if (homeAsUpEnabled != null) actionBar.setDisplayHomeAsUpEnabled(homeAsUpEnabled)
-
     if (upIndicator != null) actionBar.setHomeAsUpIndicator(upIndicator)
+    actionBar.setDisplayHomeAsUpEnabled(upIndicator != null)
 
-    if (titleRes != null) actionBar.setTitle(titleRes)
     if (title != null) actionBar.title = title
-
-    if (showTitle != null) actionBar.setDisplayShowTitleEnabled(showTitle)
+    actionBar.setDisplayShowTitleEnabled(title != null)
 }

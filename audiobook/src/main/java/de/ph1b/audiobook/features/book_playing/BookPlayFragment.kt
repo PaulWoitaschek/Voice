@@ -94,9 +94,6 @@ class BookPlayFragment : Fragment() {
 
         book = bookChest.bookById(bookId)
 
-        //init views
-        setupActionbar(homeAsUpEnabled = true, upIndicator = R.drawable.ic_arrow_back)
-
         //setup buttons
         play.setIconDrawable(playPauseDrawable)
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -116,7 +113,7 @@ class BookPlayFragment : Fragment() {
         })
 
         if (book != null) {
-            setupActionbar(title = book!!.name)
+            setupActionbar(upIndicator = R.drawable.ic_arrow_back, title = book!!.name)
 
             // adapter
             val chapters = book!!.chapters

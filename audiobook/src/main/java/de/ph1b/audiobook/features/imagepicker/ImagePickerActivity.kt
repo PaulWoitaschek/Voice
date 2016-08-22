@@ -99,7 +99,7 @@ class ImagePickerActivity : BaseActivity() {
 
         setContentView(R.layout.activity_image_picker)
 
-        setupActionbar(toolbar = toolbar, homeAsUpEnabled = true, showTitle = false)
+        setupActionbar(toolbar = toolbar)
 
         with(webView.settings) {
             setSupportZoom(true)

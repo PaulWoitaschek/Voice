@@ -75,7 +75,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
         fab.setOnClickListener { presenter().playPauseRequested() }
 
         // init ActionBar
-        setupActionbar(homeAsUpEnabled = true, upIndicator = R.drawable.ic_arrow_back, titleRes = R.string.app_name)
+        setupActionbar(title = getString(R.string.app_name))
 
         // init RecyclerView
         recyclerView.setHasFixedSize(true)

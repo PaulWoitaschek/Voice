@@ -16,7 +16,7 @@ class NoExternalStorageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_no_external)
 
-        setupActionbar(toolbar = toolbarInclude.toolbar, titleRes = R.string.no_external_storage_action_bar_title, homeAsUpEnabled = false)
+        setupActionbar(toolbar = toolbarInclude.toolbar, title = getString(R.string.no_external_storage_action_bar_title))
     }
 
     override fun onBackPressed() {

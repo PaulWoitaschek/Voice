@@ -65,7 +65,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
         setContentView(R.layout.activity_folder_chooser)
 
         // toolbar
-        setupActionbar(toolbar = toolbar, showTitle = false, homeAsUpEnabled = true)
+        setupActionbar(toolbar = toolbar, upIndicator = R.drawable.close, title = getString(R.string.audiobook_folders_title))
 
         // listeners
         choose.setOnClickListener { presenter().chooseClicked() }

@@ -14,7 +14,7 @@ class SettingsActivity : BaseActivity(), SettingsSetListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_settings)
 
-        setupActionbar(toolbar = toolbar)
+        setupActionbar(toolbar = toolbar, title = getString(R.string.action_settings), upIndicator = R.drawable.close)
 
         if (savedInstanceState == null) {
             fragmentManager.beginTransaction()

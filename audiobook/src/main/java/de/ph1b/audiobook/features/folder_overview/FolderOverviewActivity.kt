@@ -120,7 +120,7 @@ class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOver
             startFolderChooserActivity(FolderChooserActivity.OperationMode.COLLECTION_BOOK)
         }
 
-        setupActionbar(toolbar = toolbar, homeAsUpEnabled = true, titleRes = R.string.audiobook_folders_title)
+        setupActionbar(toolbar = toolbar, title = getString(R.string.audiobook_folders_title), upIndicator = R.drawable.close)
 
         //init views
         if (savedInstanceState != null) {
