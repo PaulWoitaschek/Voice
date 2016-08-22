@@ -26,6 +26,7 @@ import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment;
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment;
 import de.ph1b.audiobook.features.widget.WidgetUpdateService;
 import de.ph1b.audiobook.playback.BookReaderService;
+import de.ph1b.audiobook.playback.ChangeNotifier;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 
 /**
@@ -49,6 +50,7 @@ public interface ApplicationComponent {
    void inject(BookmarkDialogFragment target);
    void inject(BookPlayFragment target);
    void inject(BookShelfFragment target);
+   void inject(ChangeNotifier target);
    void inject(CoverReplacement target);
    void inject(EditBookTitleDialogFragment target);
    void inject(EditBookBottomSheet target);
