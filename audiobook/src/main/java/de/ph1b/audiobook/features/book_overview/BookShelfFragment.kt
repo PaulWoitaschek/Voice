@@ -135,7 +135,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
     override fun onMenuClicked(position: Int, view: View) {
         val book = adapter.getItem(position)
         EditBookBottomSheet.newInstance(book)
-                .show(fragmentManager, "editBottomSheet")
+                .show(childFragmentManager, "editBottomSheet")
     }
 
     /**
