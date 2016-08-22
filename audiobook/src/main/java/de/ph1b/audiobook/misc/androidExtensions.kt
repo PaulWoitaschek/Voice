@@ -13,8 +13,6 @@ import android.support.v7.app.AppCompatActivity
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.SeekBar
-import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.f2prateek.rx.preferences.Preference
 
@@ -32,23 +30,6 @@ fun Context.drawable(@DrawableRes id: Int): Drawable = ContextCompat.getDrawable
 
 fun View.layoutInflater() = context.layoutInflater()
 
-fun SeekBar.onProgressChanged(initialNotification: Boolean = false, progressChanged: (Int) -> Unit) {
-    val listener = object : SeekBar.OnSeekBarChangeListener {
-        override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-            progressChanged(progress)
-        }
-
-        override fun onStartTrackingTouch(seekBar: SeekBar) {
-        }
-
-        override fun onStopTrackingTouch(seekBar: SeekBar) {
-        }
-    }
-
-    setOnSeekBarChangeListener(listener)
-    if (initialNotification) listener.onProgressChanged(this, progress, false)
-}
-
 fun MaterialDialog.Builder.positiveClicked(listener: () -> Unit): MaterialDialog.Builder {
     onPositive { dialog, which -> listener() }
     return this
@@ -65,9 +46,3 @@ fun Drawable.tinted(@ColorInt color: Int): Drawable {
     DrawableCompat.setTint(wrapped, color)
     return wrapped
 }
-
-fun TextView.leftCompoundDrawable(): Drawable? = compoundDrawables[0]
-fun TextView.topCompoundDrawable(): Drawable? = compoundDrawables[1]
-fun TextView.rightCompoundDrawable(): Drawable? = compoundDrawables[2]
-fun TextView.bottomCompoundDrawable(): Drawable? = compoundDrawables[3]
-
