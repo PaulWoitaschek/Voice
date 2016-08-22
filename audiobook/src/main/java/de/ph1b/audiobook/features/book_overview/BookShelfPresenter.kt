@@ -39,7 +39,7 @@ constructor(private val bookChest: BookChest,
             // update books when they changed
             add(bookChest.booksStream().subscribe {
                 view.newBooks(it)
-                view.showSpinnerIfNoData(bookAdder.scannerActive().value)
+                view.showSpinnerIfNoData(bookAdder.scannerActive.toBlocking().first())
             })
 
             // Subscription that notifies the adapter when the current book has changed. It also notifies
@@ -49,8 +49,7 @@ constructor(private val bookChest: BookChest,
                     .subscribe { view.currentBookChanged(it) })
 
             // observe if the scanner is active and there are books and show spinner accordingly.
-            add(bookAdder.scannerActive()
-                    .subscribe { view.showSpinnerIfNoData(it) })
+            add(bookAdder.scannerActive.subscribe { view.showSpinnerIfNoData(it) })
 
             // Subscription that updates the UI based on the play state.
             add(playStateManager.playState

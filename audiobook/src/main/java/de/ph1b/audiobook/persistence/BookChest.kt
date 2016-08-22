@@ -2,6 +2,7 @@ package de.ph1b.audiobook.persistence
 
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.persistence.internals.InternalBookRegister
+import e
 import rx.Observable
 import rx.subjects.BehaviorSubject
 import rx.subjects.PublishSubject
@@ -56,47 +57,30 @@ import javax.inject.Singleton
     @Synchronized fun updateBook(book: Book, chaptersChanged: Boolean = false) {
         v { "updateBook=${book.name} with time ${book.time}" }
 
-        val bookIterator = active.listIterator()
-        while (bookIterator.hasNext()) {
-            val next = bookIterator.next()
-            if (book.id == next.id) {
-                bookIterator.set(book)
-                register.updateBook(book, chaptersChanged)
-                break
-            }
-        }
+        val index = active.indexOfFirst { it.id == book.id }
+        if (index != -1) {
+            active[index] = book
+            register.updateBook(book, chaptersChanged)
+            updated.onNext(book)
+            sortBooksAndNotifySubject()
+        } else e { "update failed as there was no book" }
+    }
 
-        updated.onNext(book)
+    @Synchronized fun hideBook(toDelete: List<Book>) {
+        v { "hideBooks=${toDelete.size}" }
+
+        val idsToDelete = toDelete.map { it.id }
+        active.removeAll { idsToDelete.contains(it.id) }
+        orphaned.addAll(toDelete)
         sortBooksAndNotifySubject()
     }
 
-    @Synchronized fun hideBook(book: Book) {
-        v { "hideBook=${book.name}" }
-
-        val iterator = active.listIterator()
-        while (iterator.hasNext()) {
-            val next = iterator.next()
-            if (next.id == book.id) {
-                iterator.remove()
-                register.hideBook(book.id)
-                break
-            }
-        }
-        orphaned.add(book)
-        sortBooksAndNotifySubject()
-    }
 
     @Synchronized fun revealBook(book: Book) {
         v { "Called revealBook=$book" }
 
-        val orphanedBookIterator = orphaned.iterator()
-        while (orphanedBookIterator.hasNext()) {
-            if (orphanedBookIterator.next().id == book.id) {
-                orphanedBookIterator.remove()
-                register.revealBook(book.id)
-                break
-            }
-        }
+        orphaned.removeAll { it.id == book.id }
+        register.revealBook(book.id)
         active.add(book)
         sortBooksAndNotifySubject()
     }
