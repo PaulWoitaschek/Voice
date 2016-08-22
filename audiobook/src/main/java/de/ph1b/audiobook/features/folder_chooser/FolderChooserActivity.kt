@@ -11,6 +11,7 @@ import android.widget.AdapterView
 import android.widget.Toast
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.folder_chooser.FolderChooserActivity.Companion.newInstanceIntent
+import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.mvp.RxBaseActivity
 import de.ph1b.audiobook.uitools.DividerItemDecoration
@@ -18,8 +19,8 @@ import i
 import kotlinx.android.synthetic.main.activity_folder_chooser.*
 import kotlinx.android.synthetic.main.include_file_navigation_header.*
 import kotlinx.android.synthetic.main.include_toolbar_with_spinner.*
-import permissions.dispatcher.*
 import java.io.File
+import javax.inject.Inject
 
 /**
  * Activity for choosing an audiobook folder. If there are multiple SD-Cards, the Activity unifies
@@ -32,7 +33,7 @@ import java.io.File
 
  * @author Paul Woitaschek
  */
-@RuntimePermissions class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPresenter>(), FolderChooserView, HideFolderDialog.OnChosenListener {
+class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPresenter>(), FolderChooserView, HideFolderDialog.OnChosenListener {
 
     override fun newPresenter() = FolderChooserPresenter()
 
@@ -47,38 +48,18 @@ import java.io.File
     private lateinit var adapter: FolderChooserAdapter
     private lateinit var spinnerAdapter: MultiLineSpinnerAdapter<File>
 
+    @Inject lateinit var permissionHelper: PermissionHelper
+
     override fun askAddNoMediaFile(folderToHide: File) {
         val hideFolderDialog = HideFolderDialog.newInstance(folderToHide)
         hideFolderDialog.show(supportFragmentManager, HideFolderDialog.TAG)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
-                                            grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        FolderChooserActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults)
-    }
-
     override fun getMode() = OperationMode.valueOf(intent.getStringExtra(NI_OPERATION_MODE))
-
-    @NeedsPermission(PermissionHelper.NEEDED_PERMISSION) fun ensurePermissions() {
-        presenter().gotPermission()
-    }
-
-    @OnShowRationale(PermissionHelper.NEEDED_PERMISSION)
-    fun showRationaleForStorage(request: PermissionRequest) {
-        PermissionHelper.showRationaleAndProceed(root, request)
-    }
-
-    @OnPermissionDenied(PermissionHelper.NEEDED_PERMISSION) fun denied() {
-        FolderChooserActivityPermissionsDispatcher.ensurePermissionsWithCheck(this)
-    }
-
-    @OnNeverAskAgain(PermissionHelper.NEEDED_PERMISSION) fun deniedForever() {
-        PermissionHelper.handleDeniedForever(root)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        App.component().inject(this)
 
         // find views
         setContentView(R.layout.activity_folder_chooser)
@@ -116,7 +97,7 @@ import java.io.File
         super.onStart()
 
         // permissions
-        FolderChooserActivityPermissionsDispatcher.ensurePermissionsWithCheck(this)
+        permissionHelper.storagePermission(this) { presenter().gotPermission() }
     }
 
     override fun onBackPressed() {

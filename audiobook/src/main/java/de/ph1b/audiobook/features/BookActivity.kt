@@ -20,7 +20,6 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import i
 import kotlinx.android.synthetic.main.activity_book.*
 import kotlinx.android.synthetic.main.toolbar.*
-import permissions.dispatcher.*
 import v
 import java.io.File
 import java.util.*
@@ -31,35 +30,14 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-@RuntimePermissions class BookActivity : BaseActivity(), BookShelfFragment.Callback {
+class BookActivity : BaseActivity(), BookShelfFragment.Callback {
 
     private val TAG = BookActivity::class.java.simpleName
     private val FM_BOOK_SHELF = TAG + BookShelfFragment.TAG
     private val FM_BOOK_PLAY = TAG + BookPlayFragment.TAG
 
     @Inject lateinit var prefs: PrefsManager
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
-                                            grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        BookActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults)
-    }
-
-    // just ensure permissions, dont react
-    @NeedsPermission(PermissionHelper.NEEDED_PERMISSION) fun ensurePermissions() {
-    }
-
-    @OnShowRationale(PermissionHelper.NEEDED_PERMISSION) fun showRationaleForStorage(request: PermissionRequest) {
-        PermissionHelper.showRationaleAndProceed(root, request)
-    }
-
-    @OnPermissionDenied(PermissionHelper.NEEDED_PERMISSION) fun denied() {
-        BookActivityPermissionsDispatcher.ensurePermissionsWithCheck(this)
-    }
-
-    @OnNeverAskAgain(PermissionHelper.NEEDED_PERMISSION) fun deniedForever() {
-        PermissionHelper.handleDeniedForever(root)
-    }
+    @Inject lateinit var permissionHelper: PermissionHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,7 +69,7 @@ import javax.inject.Inject
 
         val anyFolderSet = prefs.collectionFolders.value().size + prefs.singleBookFolders.value().size > 0
         if (anyFolderSet) {
-            BookActivityPermissionsDispatcher.ensurePermissionsWithCheck(this)
+            permissionHelper.storagePermission(this)
         }
     }
 

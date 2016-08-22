@@ -17,6 +17,7 @@ import de.ph1b.audiobook.features.book_playing.JumpToPositionDialogFragment;
 import de.ph1b.audiobook.features.book_playing.SeekDialogFragment;
 import de.ph1b.audiobook.features.book_playing.SleepTimerDialogFragment;
 import de.ph1b.audiobook.features.bookmarks.BookmarkDialogFragment;
+import de.ph1b.audiobook.features.folder_chooser.FolderChooserActivity;
 import de.ph1b.audiobook.features.folder_chooser.FolderChooserPresenter;
 import de.ph1b.audiobook.features.folder_overview.FolderOverviewPresenter;
 import de.ph1b.audiobook.features.imagepicker.ImagePickerActivity;
@@ -54,6 +55,7 @@ public interface ApplicationComponent {
    void inject(CoverReplacement target);
    void inject(EditBookTitleDialogFragment target);
    void inject(EditBookBottomSheet target);
+   void inject(FolderChooserActivity target);
    void inject(FolderChooserPresenter target);
    void inject(FolderOverviewPresenter target);
    void inject(ImagePickerActivity target);

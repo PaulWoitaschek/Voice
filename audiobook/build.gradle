@@ -89,7 +89,5 @@ dependencies {
     compile 'com.github.PaulWoitaschek:Slimber:1.0.4'
 
     // permissions
-    def permissionDispatcherVer = "2.1.3"
-    compile "com.github.hotchemi:permissionsdispatcher:$permissionDispatcherVer"
-    kapt "com.github.hotchemi:permissionsdispatcher-processor:$permissionDispatcherVer"
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar'
 }
