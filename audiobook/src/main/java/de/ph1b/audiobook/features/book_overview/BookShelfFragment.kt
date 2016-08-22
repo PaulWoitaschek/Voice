@@ -62,8 +62,6 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        i { "onCreate" }
-
         setHasOptionsMenu(true)
     }
 
@@ -174,35 +172,14 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
     }
 
     /**
-     * A book was removed
-     *
-     * @param book the removed book
-     */
-    fun bookRemoved(book: Book) {
-        i { "bookRemoved ${book.name}" }
-        adapter.removeBook(book)
-    }
-
-    /**
-     * A book was added or updated
-     *
-     * @param book the changed book
-     */
-    fun bookAddedOrUpdated(book: Book) {
-        i { "bookAddedOrUpdated: ${book.name}" }
-        adapter.updateOrAddBook(book)
-    }
-
-    /**
      * There is a completely new set of books
      *
-     *@param books the new books
+     * @param books the new books
      */
     fun newBooks(books: List<Book>) {
         i { "${books.size} newBooks" }
         adapter.newDataSet(books)
     }
-
 
     /**
      * The book marked as current was changed. Updates the adapter and fab accordingly.

@@ -4,9 +4,8 @@ import android.content.Context
 import android.support.annotation.CallSuper
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
-import android.support.v7.util.SortedList
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.util.SortedListAdapterCallback
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +17,6 @@ import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.NaturalOrderComparator
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverReplacement
@@ -36,20 +34,7 @@ import javax.inject.Inject
  */
 class BookShelfAdapter(private val c: Context, private val onItemClickListener: OnItemClickListener) : RecyclerView.Adapter<BookShelfAdapter.BaseViewHolder>() {
 
-    private val sortedList = SortedList(Book::class.java, object : SortedListAdapterCallback<Book>(this) {
-
-        override fun compare(o1: Book?, o2: Book?): Int {
-            return NaturalOrderComparator.STRING_COMPARATOR.compare(o1?.name, o2?.name)
-        }
-
-        override fun areContentsTheSame(oldItem: Book?, newItem: Book?): Boolean {
-            return oldItem?.globalPosition() == newItem?.globalPosition() && oldItem?.name == newItem?.name && oldItem?.useCoverReplacement == newItem?.useCoverReplacement
-        }
-
-        override fun areItemsTheSame(item1: Book?, item2: Book?): Boolean {
-            return item1?.id == item2?.id
-        }
-    })
+    private val books = ArrayList<Book>()
 
     @Inject lateinit var prefs: PrefsManager
 
@@ -65,84 +50,38 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
         return h + ":" + m
     }
 
-    private fun <T> SortedList<T>.batched(func: SortedList<T>.() -> Unit) {
-        beginBatchedUpdates()
-        try {
-            func()
-        } finally {
-            endBatchedUpdates()
-        }
-    }
-
-    fun removeBook(book: Book) {
-        i { "removeBooks called with $book" }
-        for (i in 0..sortedList.size() - 1) {
-            if (sortedList.get(i).id == book.id) {
-                sortedList.removeItemAt(i)
-                break
-            }
-        }
-    }
-
-    /**
-     * Adds a book or updates it if it already exists.
-
-     * @param book The new book
-     */
-    fun updateOrAddBook(book: Book) {
-        i { "updateOrAddBook ${book.name}" }
-        var index = -1
-        for (i in 0..sortedList.size() - 1) {
-            if (sortedList.get(i).id == book.id) {
-                index = i
-                break
-            }
-        }
-
-        if (index == -1) {
-            sortedList.add(book) // add it if it doesnt exist
-        } else {
-            sortedList.updateItemAt(index, book) // update it if it exists
-        }
-    }
-
     /**
      * Adds a new set of books and removes the ones that do not exist any longer
 
-     * @param books The new set of books
+     * @param newBooks The new set of books
      */
-    fun newDataSet(books: List<Book>) {
-        i { "newDataSet was called with ${books.size} books" }
-        sortedList.batched {
-            // remove old books
-            val booksToDelete = ArrayList<Book>(size())
-            for (i in 0..size() - 1) {
-                val existing = get(i)
-                var deleteBook = true
-                for ((id) in books) {
-                    if (existing.id == id) {
-                        deleteBook = false
-                        break
-                    }
-                }
-                if (deleteBook) {
-                    booksToDelete.add(existing)
-                }
-            }
-            for (b in booksToDelete) {
-                remove(b)
+    fun newDataSet(newBooks: List<Book>) {
+        i { "newDataSet was called with ${newBooks.size} books" }
+
+        val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun getOldListSize(): Int = books.size
+
+            override fun getNewListSize(): Int = newBooks.size
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                val oldItem = books[oldItemPosition]
+                val newItem = newBooks[newItemPosition]
+                return oldItem.globalPosition() == newItem.globalPosition() && oldItem.name == newItem.name && oldItem.useCoverReplacement == newItem.useCoverReplacement
             }
 
-            // add new books
-            for (b in books) {
-                updateOrAddBook(b)
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                val oldItem = books[oldItemPosition]
+                val newItem = newBooks[newItemPosition]
+                return oldItem.id == newItem.id
             }
-        }
+        }, false) // no need to detect moves as the list is sorted
+
+        books.clear()
+        books.addAll(newBooks)
+        diffResult.dispatchUpdatesTo(this)
     }
 
-    override fun getItemId(position: Int): Long {
-        return sortedList.get(position).id
-    }
+    override fun getItemId(position: Int): Long = books[position].id
 
     /**
      * Gets the item at a requested position
@@ -151,9 +90,7 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
      * *
      * @return the book at the position
      */
-    fun getItem(position: Int): Book {
-        return sortedList.get(position)
-    }
+    fun getItem(position: Int): Book = books[position]
 
     var displayMode: BookShelfFragment.DisplayMode = BookShelfFragment.DisplayMode.LIST
         set(value) {
@@ -172,16 +109,12 @@ class BookShelfAdapter(private val c: Context, private val onItemClickListener: 
         }
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        holder.bind(sortedList.get(position))
-    }
+    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) = holder.bind(books[position])
 
-    override fun getItemCount(): Int {
-        return sortedList.size()
-    }
+    override fun getItemCount(): Int = books.size
 
     override fun getItemViewType(position: Int): Int {
-        return if (displayMode == BookShelfFragment.DisplayMode.LIST ) 0 else 1
+        return if (displayMode == BookShelfFragment.DisplayMode.LIST) 0 else 1
     }
 
     interface OnItemClickListener {

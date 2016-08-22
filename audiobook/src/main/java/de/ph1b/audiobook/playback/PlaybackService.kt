@@ -30,7 +30,6 @@ import de.ph1b.audiobook.playback.utils.BookUriConverter
 import de.ph1b.audiobook.playback.utils.NotificationAnnouncer
 import e
 import i
-import rx.Observable
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 import v
@@ -57,7 +56,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
                 }
             }
 
-            val all = db.activeBooks.sorted().map {
+            val all = db.activeBooks.map {
                 val description = MediaDescriptionCompat.Builder()
                         .setTitle(it.name)
                         .setMediaId(bookUriConverter.book(it.id).toString())
@@ -282,7 +281,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
             add(audioFocusManager.handleAudioFocus(audioFocusReceiver.focusObservable()))
 
             // notifies the media service about added or removed books
-            add(Observable.merge(db.addedObservable(), db.removedObservable())
+            add(db.booksStream().map { it.size }.distinctUntilChanged()
                     .subscribe {
                         v { "notify media browser service about children changed." }
                         notifyChildrenChanged(bookUriConverter.allBooks().toString())

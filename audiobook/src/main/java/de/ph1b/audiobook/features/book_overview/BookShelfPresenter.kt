@@ -8,7 +8,6 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
 import i
-import rx.Observable
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
@@ -29,10 +28,6 @@ constructor(private val bookChest: BookChest,
     override fun onBind(view: BookShelfFragment, subscriptions: CompositeSubscription) {
         i { "onBind Called for $view" }
 
-        // initially updates the adapter with a new set of items
-        view.newBooks(bookChest.activeBooks)
-        view.showSpinnerIfNoData(bookAdder.scannerActive().value)
-
         val audioFoldersEmpty = prefsManager.collectionFolders.value().isEmpty() && prefsManager.singleBookFolders.value().isEmpty()
         if (audioFoldersEmpty) view.showNoFolderWarning()
 
@@ -40,16 +35,12 @@ constructor(private val bookChest: BookChest,
         bookAdder.scanForFiles(false)
 
         subscriptions.apply {
-            // informs the view once a book was removed
-            add(bookChest.removedObservable()
-                    .subscribe { view.bookRemoved(it) })
 
-            // Subscription that notifies the adapter when there is a new or updated book.
-            add(Observable.merge(bookChest.updateObservable(), bookChest.addedObservable())
-                    .subscribe {
-                        view.bookAddedOrUpdated(it)
-                        view.showSpinnerIfNoData(bookAdder.scannerActive().value)
-                    })
+            // update books when they changed
+            add(bookChest.booksStream().subscribe {
+                view.newBooks(it)
+                view.showSpinnerIfNoData(bookAdder.scannerActive().value)
+            })
 
             // Subscription that notifies the adapter when the current book has changed. It also notifies
             // the item with the old indicator now falsely showing.
