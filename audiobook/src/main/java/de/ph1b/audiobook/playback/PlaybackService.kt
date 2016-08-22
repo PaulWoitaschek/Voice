@@ -42,7 +42,7 @@ import javax.inject.Inject
  *
  * @author Paul Woitaschek
  */
-class BookReaderService : MediaBrowserServiceCompat() {
+class PlaybackService : MediaBrowserServiceCompat() {
 
     private fun mediaItems(uri: Uri): List<MediaBrowserCompat.MediaItem>? {
         val match = bookUriConverter.match(uri)
@@ -267,7 +267,7 @@ class BookReaderService : MediaBrowserServiceCompat() {
                     })
 
             // resume playback when headset is reconnected. (if settings are set)
-            add(HeadsetPlugReceiver.events(this@BookReaderService)
+            add(HeadsetPlugReceiver.events(this@PlaybackService)
                     .subscribe { headsetState ->
                         if (headsetState == HeadsetPlugReceiver.HeadsetState.PLUGGED) {
                             if (playStateManager.pauseReason == PauseReason.BECAUSE_HEADSET) {
@@ -289,7 +289,7 @@ class BookReaderService : MediaBrowserServiceCompat() {
                     })
 
             // pause when audio is becoming noisy.
-            add(RxBroadcast.register(this@BookReaderService, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
+            add(RxBroadcast.register(this@PlaybackService, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
                     .subscribe {
                         d { "audio becoming noisy. Playstate=${playStateManager.playState.value}" }
                         if (playStateManager.playState.value === PlayState.PLAYING) {
@@ -330,7 +330,7 @@ class BookReaderService : MediaBrowserServiceCompat() {
     }
 
     companion object {
-        private val TAG = BookReaderService::class.java.simpleName
+        private val TAG = PlaybackService::class.java.simpleName
         private val NOTIFICATION_ID = 42
     }
 }

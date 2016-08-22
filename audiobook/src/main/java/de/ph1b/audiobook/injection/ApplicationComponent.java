@@ -25,8 +25,8 @@ import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment;
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment;
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment;
 import de.ph1b.audiobook.features.widget.WidgetUpdateService;
-import de.ph1b.audiobook.playback.BookReaderService;
 import de.ph1b.audiobook.playback.ChangeNotifier;
+import de.ph1b.audiobook.playback.PlaybackService;
 import de.ph1b.audiobook.uitools.CoverReplacement;
 
 /**
@@ -44,7 +44,7 @@ public interface ApplicationComponent {
    void inject(App target);
    void inject(AutoRewindDialogFragment target);
    void inject(BaseActivity target);
-   void inject(BookReaderService target);
+   void inject(PlaybackService target);
    void inject(BookActivity target);
    void inject(BookShelfAdapter target);
    void inject(BookmarkDialogFragment target);

@@ -23,7 +23,7 @@ import javax.inject.Singleton
     private val fastForwardIntent = keyEventIntent(KeyEvent.KEYCODE_MEDIA_FAST_FORWARD)
     private val pauseIntentNonRewinding = intent(ACTION_PAUSE_NON_REWINDING)
 
-    private fun intent(action: String) = Intent(context, BookReaderService::class.java).apply {
+    private fun intent(action: String) = Intent(context, PlaybackService::class.java).apply {
         setAction(action)
     }
 

@@ -95,7 +95,7 @@
         </activity>
 
         <service
-            android:name=".playback.BookReaderService"
+            android:name=".playback.PlaybackService"
             android:exported="true"
             tools:ignore="ExportedService">
 
