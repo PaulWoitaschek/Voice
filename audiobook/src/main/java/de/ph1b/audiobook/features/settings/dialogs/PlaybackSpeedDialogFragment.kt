@@ -29,7 +29,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
     @Inject lateinit var db: BookChest
     @Inject lateinit var playerController: PlayerController
 
-    private val SPEED_DELTA = 0.02f
+    private val SPEED_DELTA = 0.01f
     private val MAX_STEPS = Math.round((Book.SPEED_MAX - Book.SPEED_MIN) / SPEED_DELTA)
     private val df = DecimalFormat("0.00")
 
