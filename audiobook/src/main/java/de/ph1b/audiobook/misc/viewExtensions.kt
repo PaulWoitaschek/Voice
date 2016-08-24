@@ -27,8 +27,8 @@ fun SeekBar.onProgressChanged(initialNotification: Boolean = false, progressChan
     if (initialNotification) listener.onProgressChanged(this, progress, false)
 }
 
-fun SeekBar.progressChangedStream(): Observable<Int> = Observable.fromAsync({ emitter ->
-    onProgressChanged { emitter.onNext(it) }
+fun SeekBar.progressChangedStream(initialNotification: Boolean = false): Observable<Int> = Observable.fromAsync({ emitter ->
+    onProgressChanged(initialNotification) { emitter.onNext(it) }
     emitter.setCancellation { setOnSeekBarChangeListener(null) }
 }, AsyncEmitter.BackpressureMode.LATEST)
 

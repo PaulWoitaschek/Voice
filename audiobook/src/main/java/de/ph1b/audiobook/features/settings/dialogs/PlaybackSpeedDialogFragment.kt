@@ -14,6 +14,7 @@ import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayerController
 import kotlinx.android.synthetic.main.dialog_amount_chooser.view.*
+import rx.android.schedulers.AndroidSchedulers
 import java.text.DecimalFormat
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -29,15 +30,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
     @Inject lateinit var db: BookChest
     @Inject lateinit var playerController: PlayerController
 
-    private val SPEED_DELTA = 0.02f
-    private val MAX_STEPS = Math.round((Book.SPEED_MAX - Book.SPEED_MIN) / SPEED_DELTA)
-    private val df = DecimalFormat("0.00")
-
-    private fun speedValueToSteps(speed: Float): Int =
-            Math.round((speed - Book.SPEED_MIN) * (MAX_STEPS + 1) / (Book.SPEED_MAX - Book.SPEED_MIN))
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
         App.component().inject(this)
 
         // init views
@@ -46,22 +39,19 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
         // setting current speed
         val book = db.bookById(prefs.currentBookId.value()) ?: throw AssertionError("Cannot instantiate $TAG without a current book")
         val speed = book.playbackSpeed
-        v.seekBar.max = MAX_STEPS
-        v.seekBar.progress = speedValueToSteps(speed)
+        v.seekBar.max = ((MAX - MIN) * FACTOR).toInt()
+        v.seekBar.progress = ((speed - MIN) * FACTOR).toInt()
 
         // observable of seek bar, mapped to speed
-        val seekObservable = v.seekBar.progressChangedStream()
-                .map { Book.SPEED_MIN + it * SPEED_DELTA }
-                .share()
-
-        // update speed text
-        seekObservable
-                .map { formatTime(it) } // to text
-                .subscribe { v.textView.text = it }
-
-        // set new speed
-        seekObservable.debounce(50, TimeUnit.MILLISECONDS) // debounce so we don't flood the player
-                .subscribe { playerController.setSpeed(it) }
+        v.seekBar.progressChangedStream(initialNotification = true)
+                .map { Book.SPEED_MIN + it.toFloat() / FACTOR }
+                .doOnNext {
+                    // update speed text
+                    val text = "${getString(R.string.playback_speed)}: ${speedFormatter.format(it)}"
+                    v.textView.text = text
+                }
+                .debounce(50, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .subscribe { playerController.setSpeed(it) } // update speed after debounce
 
         return MaterialDialog.Builder(activity)
                 .title(R.string.playback_speed)
@@ -69,9 +59,12 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
                 .build()
     }
 
-    private fun formatTime(time: Float): String = "${getString(R.string.playback_speed)}: ${df.format(time.toDouble())}x"
 
     companion object {
         val TAG: String = PlaybackSpeedDialogFragment::class.java.simpleName
+        private val MAX = Book.SPEED_MAX
+        private val MIN = Book.SPEED_MIN
+        private val FACTOR = 100F
+        private val speedFormatter = DecimalFormat("0.0 x")
     }
 }
