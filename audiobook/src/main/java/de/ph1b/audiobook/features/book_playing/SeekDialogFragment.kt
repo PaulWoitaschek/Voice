@@ -58,7 +58,7 @@ class SeekDialogFragment : DialogFragment() {
         val TAG: String = SeekDialogFragment::class.java.simpleName
 
         private val FACTOR = 10
-        private val MIN = 10
+        private val MIN = 3
         private val MAX = 60
     }
 }
