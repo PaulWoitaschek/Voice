@@ -51,10 +51,10 @@ class SleepTimerDialogFragment : DialogFragment() {
         // setup seekBar
         val min = 5
         val max = 120
-        layout.seekBar.max = max - min
-        layout.seekBar.progress = prefs.sleepTime.value() - min
-        layout.seekBar.onProgressChanged(true) {
-            val corrected = it + min
+        layout.seekBar.max = (max - min) * SEEK_FACTOR
+        layout.seekBar.progress = (prefs.sleepTime.value() - min) * SEEK_FACTOR
+        layout.seekBar.onProgressChanged(initialNotification = true) {
+            val corrected = it / SEEK_FACTOR + min
             val text = resources.getQuantityString(R.plurals.pauses_after, corrected, corrected)
             layout.text.text = text
         }
@@ -82,7 +82,8 @@ class SleepTimerDialogFragment : DialogFragment() {
                 .negativeText(R.string.dialog_cancel)
                 .customView(layout, true)
                 .positiveClicked {
-                    prefs.sleepTime.set(layout.seekBar.progress + min)
+                    val corrected = layout.seekBar.progress / SEEK_FACTOR + min
+                    prefs.sleepTime.set(corrected)
 
                     prefs.bookmarkOnSleepTimer.set(layout.bookmarkSwitch.isChecked)
                     if (prefs.bookmarkOnSleepTimer.value()) {
@@ -99,6 +100,7 @@ class SleepTimerDialogFragment : DialogFragment() {
 
     companion object {
         private val NI_BOOK_ID = "BOOK_ID"
+        private val SEEK_FACTOR = 10
         fun newInstance(book: Book) = SleepTimerDialogFragment().apply {
             arguments = Bundle().apply {
                 putLong(NI_BOOK_ID, book.id)
