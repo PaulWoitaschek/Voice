@@ -17,9 +17,6 @@ import javax.inject.Inject
 
 class SeekDialogFragment : DialogFragment() {
 
-    private val SEEK_BAR_MIN = 10
-    private val SEEK_BAR_MAX = 60
-
     private lateinit var settingsSetListener: SettingsSetListener
 
     @Inject lateinit var prefs: PrefsManager
@@ -38,12 +35,12 @@ class SeekDialogFragment : DialogFragment() {
 
         // init
         val oldSeekTime = prefs.seekTime.value()
-        v.seekBar.max = SEEK_BAR_MAX - SEEK_BAR_MIN
-        v.seekBar.onProgressChanged {
-            val value = it + SEEK_BAR_MIN
+        v.seekBar.max = (MAX - MIN) * FACTOR
+        v.seekBar.onProgressChanged(initialNotification = true) {
+            val value = it / FACTOR + MIN
             v.textView.text = context.resources.getQuantityString(R.plurals.seconds, value, value)
         }
-        v.seekBar.progress = oldSeekTime - SEEK_BAR_MIN
+        v.seekBar.progress = (oldSeekTime - MIN) * FACTOR
 
         return MaterialDialog.Builder(context)
                 .title(R.string.pref_seek_time)
@@ -51,15 +48,17 @@ class SeekDialogFragment : DialogFragment() {
                 .positiveText(R.string.dialog_confirm)
                 .negativeText(R.string.dialog_cancel)
                 .onPositive { materialDialog, dialogAction ->
-                    val newSeekTime = v.seekBar.progress + SEEK_BAR_MIN
+                    val newSeekTime = v.seekBar.progress / FACTOR + MIN
                     prefs.seekTime.set(newSeekTime)
                     settingsSetListener.onSettingsSet(oldSeekTime != newSeekTime)
                 }.build()
     }
 
-
     companion object {
-
         val TAG: String = SeekDialogFragment::class.java.simpleName
+
+        private val FACTOR = 10
+        private val MIN = 10
+        private val MAX = 60
     }
 }
