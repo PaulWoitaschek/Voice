@@ -9,7 +9,7 @@ jdk: oraclejdk8
 android:
   components:
     - tools
-    - build-tools-24.0.0
+    - build-tools-24.2.0
     - android-24
 #    - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
     - extra
