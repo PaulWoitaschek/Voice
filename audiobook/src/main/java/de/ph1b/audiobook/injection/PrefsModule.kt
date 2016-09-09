@@ -10,7 +10,7 @@ import dagger.Provides
 import dagger.Reusable
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.book_overview.BookShelfFragment.DisplayMode
+import de.ph1b.audiobook.features.book_overview.BookShelfController.DisplayMode
 import de.ph1b.audiobook.uitools.ThemeUtil
 
 /**

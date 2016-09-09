@@ -12,7 +12,7 @@ import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
 /**
- * Presenter for [BookShelfFragment].
+ * Presenter for [BookShelfController].
  *
  * @author Paul Woitaschek
  */
@@ -23,9 +23,9 @@ constructor(private val bookChest: BookChest,
             private val prefsManager: PrefsManager,
             private val playStateManager: PlayStateManager,
             private val playerController: PlayerController)
-: Presenter<BookShelfFragment>() {
+: Presenter<BookShelfController>() {
 
-    override fun onBind(view: BookShelfFragment, subscriptions: CompositeSubscription) {
+    override fun onBind(view: BookShelfController, subscriptions: CompositeSubscription) {
         i { "onBind Called for $view" }
 
         val audioFoldersEmpty = prefsManager.collectionFolders.value().isEmpty() && prefsManager.singleBookFolders.value().isEmpty()

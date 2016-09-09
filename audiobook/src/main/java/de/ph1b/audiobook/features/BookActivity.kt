@@ -2,27 +2,22 @@ package de.ph1b.audiobook.features
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.transition.TransitionInflater
-import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
-import de.ph1b.audiobook.Book
+import com.bluelinelabs.conductor.Conductor
+import com.bluelinelabs.conductor.Router
+import com.bluelinelabs.conductor.RouterTransaction
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.book_overview.BookShelfFragment
-import de.ph1b.audiobook.features.book_playing.BookPlayFragment
-import de.ph1b.audiobook.features.imagepicker.ImagePickerActivity
+import de.ph1b.audiobook.features.book_overview.BookShelfController
+import de.ph1b.audiobook.features.book_playing.BookPlayController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
-import i
 import kotlinx.android.synthetic.main.activity_book.*
 import kotlinx.android.synthetic.main.toolbar.*
-import v
 import java.io.File
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -30,14 +25,12 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class BookActivity : BaseActivity(), BookShelfFragment.Callback {
-
-    private val TAG = BookActivity::class.java.simpleName
-    private val FM_BOOK_SHELF = TAG + BookShelfFragment.TAG
-    private val FM_BOOK_PLAY = TAG + BookPlayFragment.TAG
+class BookActivity : BaseActivity() {
 
     @Inject lateinit var prefs: PrefsManager
     @Inject lateinit var permissionHelper: PermissionHelper
+
+    private lateinit var router: Router
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,20 +39,21 @@ class BookActivity : BaseActivity(), BookShelfFragment.Callback {
 
         setupActionbar(toolbar!!)
 
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                    .replace(container.id, BookShelfFragment(), FM_BOOK_SHELF)
-                    .commit()
+        router = Conductor.attachRouter(this, container, savedInstanceState)
+        if (!router.hasRootController()) {
+            router.setRoot(RouterTransaction.with(BookShelfController()))
         }
 
         if (savedInstanceState == null) {
             if (intent.hasExtra(NI_MALFORMED_FILE)) {
                 val malformedFile = intent.getSerializableExtra(NI_MALFORMED_FILE) as File
-                MaterialDialog.Builder(this).title(R.string.mal_file_title).content(getString(R.string.mal_file_message) + "\n\n" + malformedFile).show()
+                MaterialDialog.Builder(this).title(R.string.mal_file_title)
+                        .content(getString(R.string.mal_file_message) + "\n\n" + malformedFile)
+                        .show()
             }
             if (intent.hasExtra(NI_GO_TO_BOOK)) {
                 val bookId = intent.getLongExtra(NI_GO_TO_BOOK, -1)
-                onBookSelected(bookId, HashMap())
+                router.pushController(RouterTransaction.with(BookPlayController.newInstance(bookId)))
             }
         }
     }
@@ -73,37 +67,8 @@ class BookActivity : BaseActivity(), BookShelfFragment.Callback {
         }
     }
 
-    override fun onBookSelected(bookId: Long, sharedViews: Map<View, String>) {
-        i { "onBookSelected with $bookId" }
-
-        val ft = supportFragmentManager.beginTransaction()
-        val bookPlayFragment = BookPlayFragment.newInstance(bookId)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val move = TransitionInflater.from(this@BookActivity).inflateTransition(android.R.transition.move)
-            bookPlayFragment.sharedElementEnterTransition = move
-            for (entry in sharedViews.entries) {
-                v { "Added sharedElement=$entry" }
-                ft.addSharedElement(entry.key, entry.value)
-            }
-        }
-
-        ft.replace(container.id, bookPlayFragment, FM_BOOK_PLAY)
-                .addToBackStack(null)
-                .commit()
-    }
-
-    override fun onCoverChanged(book: Book) {
-        val intent = ImagePickerActivity.newIntent(this, book.id)
-        startActivity(intent)
-    }
-
     override fun onBackPressed() {
-        val bookShelfFragment = supportFragmentManager.findFragmentByTag(FM_BOOK_SHELF)
-        if (bookShelfFragment != null && bookShelfFragment.isVisible) {
-            finish()
-        } else {
-            super.onBackPressed()
-        }
+        if (!router.handleBack()) super.onBackPressed()
     }
 
     companion object {

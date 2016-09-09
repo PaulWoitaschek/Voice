@@ -87,7 +87,7 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
      */
     fun getItem(position: Int): Book = books[position]
 
-    var displayMode: BookShelfFragment.DisplayMode = BookShelfFragment.DisplayMode.LIST
+    var displayMode: BookShelfController.DisplayMode = BookShelfController.DisplayMode.LIST
         set(value) {
             if (value != field) {
                 field = value
@@ -109,7 +109,7 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
     override fun getItemCount(): Int = books.size
 
     override fun getItemViewType(position: Int): Int {
-        return if (displayMode == BookShelfFragment.DisplayMode.LIST) 0 else 1
+        return if (displayMode == BookShelfController.DisplayMode.LIST) 0 else 1
     }
 
     inner class ListViewHolder(parent: ViewGroup) : BaseViewHolder(

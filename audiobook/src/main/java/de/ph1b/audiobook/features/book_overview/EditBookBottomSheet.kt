@@ -8,6 +8,7 @@ import android.widget.TextView
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.bookmarks.BookmarkDialogFragment
+import de.ph1b.audiobook.features.imagepicker.ImagePickerActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.BookChest
@@ -23,8 +24,6 @@ import javax.inject.Inject
 class EditBookBottomSheet : BottomSheetDialogFragment() {
 
     @Inject lateinit var bookChest: BookChest
-
-    val callback: BookShelfFragment.Callback by lazy { activity as BookShelfFragment.Callback }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         App.component().inject(this)
@@ -48,12 +47,13 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
             dismiss()
         }
         view.cover.setOnClickListener {
-            callback.onCoverChanged(book)
+            val intent = ImagePickerActivity.newIntent(context, book.id)
+            startActivity(intent)
             dismiss()
         }
         view.bookmark.setOnClickListener {
             BookmarkDialogFragment.newInstance(book.id)
-                    .show(fragmentManager, BookShelfFragment.TAG)
+                    .show(fragmentManager, BookShelfController.TAG)
             dismiss()
         }
 

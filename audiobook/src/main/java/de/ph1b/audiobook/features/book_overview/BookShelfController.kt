@@ -1,37 +1,40 @@
 package de.ph1b.audiobook.features.book_overview
 
 import android.content.Intent
-import android.os.Bundle
+import android.os.Build
 import android.support.annotation.DrawableRes
 import android.support.v4.app.DialogFragment
-import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SimpleItemAnimator
 import android.view.*
+import com.bluelinelabs.conductor.RouterTransaction
+import com.getbase.floatingactionbutton.FloatingActionButton
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.book_overview.BookShelfAdapter.ClickType
+import de.ph1b.audiobook.features.book_playing.BookPlayController
 import de.ph1b.audiobook.features.settings.SettingsActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.setupActionbar
+import de.ph1b.audiobook.misc.supportTransitionName
 import de.ph1b.audiobook.misc.value
-import de.ph1b.audiobook.mvp.RxBaseFragment
+import de.ph1b.audiobook.mvp.RxBaseController
 import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.uitools.BookTransition
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import i
-import kotlinx.android.synthetic.main.fragment_book_shelf.*
-import java.util.*
+import kotlinx.android.synthetic.main.fragment_book_shelf.view.*
 import javax.inject.Inject
 import dagger.Lazy as DaggerLazy
 
 /**
  * Showing the shelf of all the available books and provide a navigation to each book
  */
-class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>() {
+class BookShelfController : RxBaseController<BookShelfController, BookShelfPresenter>() {
 
     override fun newPresenter(): BookShelfPresenter = App.component().bookShelfPresenter
 
@@ -39,6 +42,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
 
     init {
         App.component().inject(this)
+        setHasOptionsMenu(true)
     }
 
     // injection
@@ -53,51 +57,53 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
 
     // callbacks
     private val hostingActivity: AppCompatActivity by lazy { activity as AppCompatActivity }
-    private val callBack: Callback by lazy { activity as Callback }
 
     // vars
     private var firstPlayStateUpdate = true
     private var currentBook: Book? = null
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setHasOptionsMenu(true)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun onAttach(view: View) {
         // init fab
         fab.setIconDrawable(playPauseDrawable)
-        fab.setOnClickListener { presenter().playPauseRequested() }
+        fab.setOnClickListener { presenter.playPauseRequested() }
 
         // init ActionBar
-        setupActionbar(title = getString(R.string.app_name))
+        setupActionbar(title = activity.getString(R.string.app_name))
 
         // init RecyclerView
         recyclerView.setHasFixedSize(true)
-        adapter = BookShelfAdapter(context) { book, clickType ->
+        adapter = BookShelfAdapter(activity) { book, clickType ->
             if (clickType == ClickType.REGULAR) {
                 invokeBookSelectionCallback(book.id)
             } else {
                 EditBookBottomSheet.newInstance(book)
-                        .show(childFragmentManager, "editBottomSheet")
+                        .show(hostingActivity.supportFragmentManager, "editBottomSheet")
             }
         }
         recyclerView.adapter = adapter
         // without this the item would blink on every change
         val anim = recyclerView.itemAnimator as SimpleItemAnimator
         anim.supportsChangeAnimations = false
-        listDecoration = DividerItemDecoration(context)
-        gridLayoutManager = GridLayoutManager(context, amountOfColumns())
-        linearLayoutManager = LinearLayoutManager(context)
+        listDecoration = DividerItemDecoration(activity)
+        gridLayoutManager = GridLayoutManager(activity, amountOfColumns())
+        linearLayoutManager = LinearLayoutManager(activity)
         initRecyclerView()
+
+        super.onAttach(view)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.fragment_book_shelf, container, false)
+    private lateinit var recyclerReplacement: View
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var fab: FloatingActionButton
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
+        val view = inflater.inflate(R.layout.fragment_book_shelf, container, false)
+        recyclerView = view.recyclerView
+        fab = view.fab
+        recyclerReplacement = view.recyclerReplacement
+
+        return view
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.book_shelf, menu)
@@ -114,7 +120,7 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> {
-                startActivity(Intent(context, SettingsActivity::class.java))
+                startActivity(Intent(router.activity, SettingsActivity::class.java))
                 true
             }
             R.id.action_current -> {
@@ -156,13 +162,18 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
     private fun invokeBookSelectionCallback(bookId: Long) {
         prefs.currentBookId.set(bookId)
 
-        val sharedElements = HashMap<View, String>(2)
         val viewHolder = recyclerView.findViewHolderForItemId(bookId) as BookShelfAdapter.BaseViewHolder?
-        if (viewHolder != null) {
-            sharedElements.put(viewHolder.coverView, ViewCompat.getTransitionName(viewHolder.coverView))
+        val transaction = RouterTransaction.with(BookPlayController.newInstance(bookId))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val transition = BookTransition()
+            if (viewHolder != null) {
+                val transitionName = viewHolder.coverView.supportTransitionName
+                transition.transitionName = transitionName
+            }
+            transaction.pushChangeHandler(transition)
+                    .popChangeHandler(transition)
         }
-        sharedElements.put(fab, ViewCompat.getTransitionName(fab))
-        callBack.onBookSelected(bookId, sharedElements)
+        router.pushController(transaction)
     }
 
     /**
@@ -216,10 +227,10 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
      */
     fun showNoFolderWarning() {
         // show dialog if no folders are set
-        val noFolderWarningIsShowing = (fragmentManager.findFragmentByTag(FM_NO_FOLDER_WARNING) as DialogFragment?)?.dialog?.isShowing ?: false
+        val noFolderWarningIsShowing = (hostingActivity.supportFragmentManager.findFragmentByTag(FM_NO_FOLDER_WARNING) as DialogFragment?)?.dialog?.isShowing ?: false
         if (noFolderWarningIsShowing.not()) {
             val warning = NoFolderWarningDialogFragment()
-            warning.show(fragmentManager, FM_NO_FOLDER_WARNING)
+            warning.show(hostingActivity.supportFragmentManager, FM_NO_FOLDER_WARNING)
         }
     }
 
@@ -236,14 +247,9 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
         fun inverted(): DisplayMode = if (this == GRID) LIST else GRID
     }
 
-    interface Callback {
-        fun onBookSelected(bookId: Long, sharedViews: Map<View, String>)
-        fun onCoverChanged(book: Book)
-    }
-
     companion object {
 
-        val TAG: String = BookShelfFragment::class.java.simpleName
+        val TAG: String = BookShelfController::class.java.simpleName
         val FM_NO_FOLDER_WARNING = TAG + NoFolderWarningDialogFragment.TAG
     }
 }

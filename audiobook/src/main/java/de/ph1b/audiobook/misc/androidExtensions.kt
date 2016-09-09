@@ -8,12 +8,14 @@ import android.support.annotation.DrawableRes
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
+import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
+import com.bluelinelabs.conductor.Controller
 import com.f2prateek.rx.preferences.Preference
 
 fun Context.layoutInflater(): LayoutInflater = LayoutInflater.from(this)
@@ -23,6 +25,10 @@ fun Context.drawable(@DrawableRes id: Int): Drawable = ContextCompat.getDrawable
 @ColorInt fun Context.color(@ColorRes id: Int): Int {
     return ContextCompat.getColor(this, id)
 }
+
+var View.supportTransitionName: String?
+    get() = ViewCompat.getTransitionName(this)
+    set(value) = ViewCompat.setTransitionName(this, value)
 
 fun View.layoutInflater() = context.layoutInflater()
 
@@ -42,6 +48,14 @@ fun Drawable.tinted(@ColorInt color: Int): Drawable {
     DrawableCompat.setTint(wrapped, color)
     return wrapped
 }
+
+fun Controller.setupActionbar(toolbar: Toolbar? = null,
+                              @DrawableRes upIndicator: Int? = null,
+                              title: String? = null) =
+        (activity as AppCompatActivity).setupActionbar(
+                toolbar = toolbar,
+                upIndicator = upIndicator,
+                title = title)
 
 fun Fragment.setupActionbar(toolbar: Toolbar? = null,
                             @DrawableRes upIndicator: Int? = null,

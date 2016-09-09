@@ -2,12 +2,16 @@ package de.ph1b.audiobook.features.book_playing
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.*
+import android.widget.ImageView
 import android.widget.SeekBar
+import android.widget.Spinner
+import android.widget.TextView
+import com.bluelinelabs.conductor.rxlifecycle.RxController
+import com.getbase.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
@@ -29,11 +33,10 @@ import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
 import i
-import kotlinx.android.synthetic.main.fragment_book_play.*
-import kotlinx.android.synthetic.main.include_cover.*
+import kotlinx.android.synthetic.main.fragment_book_play.view.*
+import kotlinx.android.synthetic.main.include_cover.view.*
 import rx.Observable
 import rx.functions.Action1
-import rx.subscriptions.CompositeSubscription
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -44,10 +47,11 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class BookPlayFragment : Fragment() {
+class BookPlayController(bundle: Bundle) : RxController() {
 
     init {
         App.component().inject(this)
+        setHasOptionsMenu(true)
     }
 
     @Inject lateinit var mediaPlayer: PlayerController
@@ -58,19 +62,38 @@ class BookPlayFragment : Fragment() {
     @Inject lateinit var playerCapabilities: MediaPlayerCapabilities
 
     private val playPauseDrawable = PlayPauseDrawable()
-    private var subscriptions: CompositeSubscription? = null
     private var book: Book? = null
 
-    private val hostingActivity: AppCompatActivity by lazy { context as AppCompatActivity }
+    private val hostingActivity: AppCompatActivity by lazy { activity as AppCompatActivity }
 
-    /**
-     * @return the book id this fragment was instantiated with.
-     */
-    val bookId: Long
-        get() = arguments.getLong(NI_BOOK_ID)
+    private lateinit var play: FloatingActionButton
+    private lateinit var rewind: View
+    private lateinit var fastForward: View
+    private lateinit var next: View
+    private lateinit var previous: View
+    private lateinit var playedTime: TextView
+    private lateinit var maxTime: TextView
+    private lateinit var timerCountdownView: TextView
+    private lateinit var coverFrame: View
+    private lateinit var bookSpinner: Spinner
+    private lateinit var seekBar: SeekBar
+    private lateinit var cover: ImageView
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
+        val view = inflater.inflate(R.layout.fragment_book_play, container, false)
+
+        play = view.play
+        rewind = view.rewind
+        fastForward = view.fastForward
+        next = view.next
+        previous = view.previous
+        playedTime = view.playedTime
+        maxTime = view.maxTime
+        timerCountdownView = view.timerCountdownView
+        coverFrame = view.coverFrame
+        bookSpinner = view.bookSpinner
+        seekBar = view.seekBar
+        cover = view.cover
 
         play.setOnClickListener { mediaPlayer.playPause() }
         rewind.setOnClickListener { mediaPlayer.rewind() }
@@ -140,7 +163,7 @@ class BookPlayFragment : Fragment() {
                 chapterNames.add(MultiLineSpinnerAdapter.Data(chapterName, chapterName))
             }
 
-            val adapter = MultiLineSpinnerAdapter<String>(bookSpinner, context, ContextCompat.getColor(context, ThemeUtil.getResourceId(context, android.R.attr.textColorPrimary)))
+            val adapter = MultiLineSpinnerAdapter<String>(bookSpinner, activity, ContextCompat.getColor(activity, ThemeUtil.getResourceId(activity, android.R.attr.textColorPrimary)))
             adapter.setData(chapterNames)
             bookSpinner.adapter = adapter
             bookSpinner.itemSelections {
@@ -169,9 +192,9 @@ class BookPlayFragment : Fragment() {
         }
 
         // (Cover)
-        val coverReplacement = CoverReplacement(if (book == null) "M" else book!!.name, context)
+        val coverReplacement = CoverReplacement(if (book == null) "M" else book!!.name, activity)
         if (book != null && !book!!.useCoverReplacement && book!!.coverFile().canRead()) {
-            Picasso.with(context).load(book!!.coverFile()).placeholder(coverReplacement).into(cover)
+            Picasso.with(activity).load(book!!.coverFile()).placeholder(coverReplacement).into(cover)
         } else {
             // we have to set the cover in onPreDraw. Else the transition will fail.
             cover.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
@@ -182,20 +205,86 @@ class BookPlayFragment : Fragment() {
                 }
             })
         }
+
+        return view
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.fragment_book_play, container, false)
+    override fun onAttach(view: View) {
+        super.onAttach(view)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        playStateManager.playState
+                .bindToLifeCycle()
+                .subscribe(object : Action1<PlayStateManager.PlayState> {
+                    private var firstRun = true
 
-        setHasOptionsMenu(true)
+                    override fun call(playState: PlayStateManager.PlayState) {
+                        // animate only if this is not the first run
+                        i { "onNext with playState $playState" }
+                        if (playState === PlayStateManager.PlayState.PLAYING) {
+                            playPauseDrawable.transformToPause(!firstRun)
+                        } else {
+                            playPauseDrawable.transformToPlay(!firstRun)
+                        }
+
+                        firstRun = false
+                    }
+                })
+
+        Observable.merge(Observable.from(bookChest.activeBooks), bookChest.updateObservable())
+                .filter { it.id == bookId }
+                .bindToLifeCycle()
+                .subscribe { book: Book ->
+                    this@BookPlayController.book = book
+
+                    val chapters = book.chapters
+                    val chapter = book.currentChapter()
+
+                    val position = chapters.indexOf(chapter)
+                    /* Setting position as a tag, so we can make sure onItemSelected is only fired when
+                     the user changes the position himself.  */
+                    bookSpinner.tag = position
+                    bookSpinner.setSelection(position, true)
+                    val duration = chapter.duration
+                    seekBar.max = duration
+                    maxTime.text = formatTime(duration.toLong(), duration.toLong())
+
+                    // Setting seekBar and played getTime view
+                    val progress = book.time
+                    if (!seekBar.isPressed) {
+                        seekBar.progress = progress
+                        playedTime.text = formatTime(progress.toLong(), duration.toLong())
+                    }
+                }
+
+        // hide / show left time view
+        sandMan.sleepSand
+                .map { if (it > 0) View.VISIBLE else View.GONE }
+                .distinctUntilChanged() // only set when visibility has changed
+                .bindToLifeCycle()
+                .subscribe { visibility ->
+                    timerCountdownView.visibility = visibility
+                }
+
+        // invalidates the actionbar items
+        sandMan.sleepSand
+                .map { it > 0 } // sleep timer is active
+                .distinctUntilChanged() // only notify when event has changed
+                .bindToLifeCycle()
+                .subscribe { hostingActivity.invalidateOptionsMenu() }
+
+
+        // set the correct time to the sleep time view
+        sandMan.sleepSand
+                .distinctUntilChanged()
+                .filter { it > 0 }
+                .map { formatTime(it, it) }
+                .bindToLifeCycle()
+                .subscribe { timerCountdownView.text = it }
     }
 
 
     private fun launchJumpToPositionDialog() {
-        JumpToPositionDialogFragment().show(fragmentManager, JumpToPositionDialogFragment.TAG)
+        JumpToPositionDialogFragment().show(hostingActivity.supportFragmentManager, JumpToPositionDialogFragment.TAG)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -223,7 +312,7 @@ class BookPlayFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_settings -> {
-                startActivity(Intent(context, SettingsActivity::class.java))
+                startActivity(Intent(activity, SettingsActivity::class.java))
                 return true
             }
             R.id.action_time_change -> {
@@ -233,16 +322,16 @@ class BookPlayFragment : Fragment() {
             R.id.action_sleep -> {
                 if (sandMan.sleepTimerActive()) sandMan.setActive(false)
                 else SleepTimerDialogFragment.newInstance(book!!)
-                        .show(childFragmentManager, "fmSleepTimer")
+                        .show(hostingActivity.supportFragmentManager, "fmSleepTimer")
                 return true
             }
             R.id.action_time_lapse -> {
-                PlaybackSpeedDialogFragment().show(fragmentManager,
+                PlaybackSpeedDialogFragment().show(hostingActivity.supportFragmentManager,
                         PlaybackSpeedDialogFragment.TAG)
                 return true
             }
             R.id.action_bookmark -> {
-                BookmarkDialogFragment.newInstance(bookId).show(fragmentManager,
+                BookmarkDialogFragment.newInstance(bookId).show(hostingActivity.supportFragmentManager,
                         BookmarkDialogFragment.TAG)
                 return true
             }
@@ -252,83 +341,6 @@ class BookPlayFragment : Fragment() {
             }
             else -> return super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        subscriptions = CompositeSubscription().apply {
-            add(playStateManager.playState
-                    .subscribe(object : Action1<PlayStateManager.PlayState> {
-                        private var firstRun = true
-
-                        override fun call(playState: PlayStateManager.PlayState) {
-                            // animate only if this is not the first run
-                            i { "onNext with playState $playState" }
-                            if (playState === PlayStateManager.PlayState.PLAYING) {
-                                playPauseDrawable.transformToPause(!firstRun)
-                            } else {
-                                playPauseDrawable.transformToPlay(!firstRun)
-                            }
-
-                            firstRun = false
-                        }
-                    }))
-
-            add(Observable.merge(Observable.from(bookChest.activeBooks), bookChest.updateObservable())
-                    .filter { it.id == bookId }
-                    .subscribe { book: Book ->
-                        this@BookPlayFragment.book = book
-
-                        val chapters = book.chapters
-                        val chapter = book.currentChapter()
-
-                        val position = chapters.indexOf(chapter)
-                        /* Setting position as a tag, so we can make sure onItemSelected is only fired when
-                         the user changes the position himself.  */
-                        bookSpinner.tag = position
-                        bookSpinner.setSelection(position, true)
-                        val duration = chapter.duration
-                        seekBar.max = duration
-                        maxTime.text = formatTime(duration.toLong(), duration.toLong())
-
-                        // Setting seekBar and played getTime view
-                        val progress = book.time
-                        if (!seekBar.isPressed) {
-                            seekBar.progress = progress
-                            playedTime.text = formatTime(progress.toLong(), duration.toLong())
-                        }
-                    })
-
-            // hide / show left time view
-            add(sandMan.sleepSand
-                    .map { if (it > 0) View.VISIBLE else View.GONE }
-                    .distinctUntilChanged() // only set when visibility has changed
-                    .subscribe { visibility ->
-                        timerCountdownView.visibility = visibility
-                    })
-
-            // invalidates the actionbar items
-            add(sandMan.sleepSand
-                    .map { it > 0 } // sleep timer is active
-                    .distinctUntilChanged() // only notify when event has changed
-                    .subscribe { hostingActivity.invalidateOptionsMenu() }
-            )
-
-            // set the correct time to the sleep time view
-            add(sandMan.sleepSand
-                    .distinctUntilChanged()
-                    .filter { it > 0 }
-                    .map { formatTime(it, it) }
-                    .subscribe { timerCountdownView.text = it })
-        }
-
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        subscriptions!!.unsubscribe()
     }
 
     private fun formatTime(ms: Long, duration: Long): String {
@@ -344,22 +356,12 @@ class BookPlayFragment : Fragment() {
     }
 
     companion object {
-
-        val TAG: String = BookPlayFragment::class.java.simpleName
-        private val NI_BOOK_ID = "niBookId"
-
-
-        /**
-         * Method to create a new instance of this fragment. Do not create a new instance yourself.
-
-         * @param bookId the id to use
-         * *
-         * @return The new instance
-         */
-        fun newInstance(bookId: Long) = BookPlayFragment().apply {
-            arguments = Bundle().apply {
-                putLong(NI_BOOK_ID, bookId)
-            }
-        }
+        const val NI_BOOK_ID = "niBookId"
+        fun newInstance(bookId: Long) = BookPlayController(Bundle().apply {
+            putLong(NI_BOOK_ID, bookId)
+        })
     }
+
+    private fun <T> Observable<T>.bindToLifeCycle() = compose(bindToLifecycle<T>())
+    val bookId = bundle.getLong(NI_BOOK_ID)
 }

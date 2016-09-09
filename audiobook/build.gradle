@@ -6,10 +6,10 @@ apply from: "../artifacts.gradle"
 android {
 
     // dynamically pass 21 to the compiler for bulid speedup without losing lint warnings.
-    int minSdk = hasProperty('minSdk') ? minSdk.toInteger() : 15
+    int minSdk = hasProperty('minSdk') ? minSdk.toInteger() : 16
 
     compileSdkVersion 24
-    buildToolsVersion '24.0.1'
+    buildToolsVersion '24.0.2'
 
     defaultConfig {
         applicationId "de.ph1b.audiobook"
@@ -51,6 +51,7 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$supportVersion"
     compile "com.android.support:support-v4:$supportVersion"
     compile "com.android.support:design:$supportVersion"
+    compile "com.android.support:transition:$supportVersion"
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
 
     // image loading
@@ -90,4 +91,9 @@ dependencies {
 
     // permissions
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar'
+
+    def conductorVer = "2.0.1"
+    compile "com.bluelinelabs:conductor:$conductorVer"
+    compile "com.bluelinelabs:conductor-support:$conductorVer"
+    compile "com.bluelinelabs:conductor-rxlifecycle:$conductorVer"
 }
