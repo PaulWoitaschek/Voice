@@ -18,8 +18,8 @@ abstract class RxBaseController<V, P> : RxController() where P : Presenter<V> {
 
     val presenter = newPresenter()
 
-    @CallSuper override fun onRestoreViewState(view: View, savedViewState: Bundle) {
-        presenter.onRestore(savedViewState)
+    @CallSuper override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        presenter.onRestore(savedInstanceState)
     }
 
     @CallSuper override fun onAttach(view: View) {
@@ -30,7 +30,7 @@ abstract class RxBaseController<V, P> : RxController() where P : Presenter<V> {
         presenter.unbind()
     }
 
-    @CallSuper override fun onSaveViewState(view: View, outState: Bundle) {
+    @CallSuper override fun onSaveInstanceState(outState: Bundle) {
         presenter.onSave(outState)
     }
 }
