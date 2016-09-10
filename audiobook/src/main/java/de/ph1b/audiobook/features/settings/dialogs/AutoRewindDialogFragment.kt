@@ -1,12 +1,10 @@
 package de.ph1b.audiobook.features.settings.dialogs
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.settings.SettingsSetListener
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.onProgressChanged
@@ -19,14 +17,6 @@ import javax.inject.Inject
 class AutoRewindDialogFragment : DialogFragment() {
 
     @Inject lateinit var prefs: PrefsManager
-
-    private lateinit var settingsSetListener: SettingsSetListener
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-        settingsSetListener = context as SettingsSetListener
-    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         App.component().inject(this)
@@ -52,7 +42,6 @@ class AutoRewindDialogFragment : DialogFragment() {
                 .onPositive { materialDialog, dialogAction ->
                     val newRewindAmount = v.seekBar.progress / FACTOR + MIN
                     prefs.autoRewindAmount.set(newRewindAmount)
-                    settingsSetListener.onSettingsSet(oldRewindAmount != newRewindAmount)
                 }
                 .build()
     }

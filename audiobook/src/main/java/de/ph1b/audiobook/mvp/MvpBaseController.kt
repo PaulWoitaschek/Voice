@@ -3,14 +3,14 @@ package de.ph1b.audiobook.mvp
 import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.view.View
-import com.bluelinelabs.conductor.rxlifecycle.RxController
+import de.ph1b.audiobook.features.BaseController
 
 /**
  * Base fragment that provides a convenient way for binding a view to a presenter
  *
  * @author Paul Woitaschek
  */
-abstract class RxBaseController<V, P> : RxController() where P : Presenter<V> {
+abstract class MvpBaseController<V, P> : BaseController() where P : Presenter<V> {
 
     abstract fun newPresenter(): P
 

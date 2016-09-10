@@ -21,7 +21,7 @@ import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import i
-import kotlinx.android.synthetic.main.fragment_book_shelf_list_layout.view.*
+import kotlinx.android.synthetic.main.book_shelf_list_layout.view.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -113,7 +113,7 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
     }
 
     inner class ListViewHolder(parent: ViewGroup) : BaseViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.fragment_book_shelf_list_layout, parent, false)) {
+            LayoutInflater.from(parent.context).inflate(R.layout.book_shelf_list_layout, parent, false)) {
 
 
         init {
@@ -137,7 +137,7 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
      * ViewHolder for the grid
      */
     inner class GridViewHolder(parent: ViewGroup) : BaseViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.fragment_book_shelf_grid_layout, parent, false))
+            LayoutInflater.from(parent.context).inflate(R.layout.book_shelf_grid_layout, parent, false))
 
 
     /**

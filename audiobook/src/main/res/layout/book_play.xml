@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/x50"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        fab:layout_constraintGuide_percent="0.5"/>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/AppToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"/>
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:contentDescription="@string/play_pause"
+        android:transitionName="@string/fab_transition"
+        fab:fab_colorNormal="?attr/colorAccent"
+        fab:fab_colorPressed="?attr/colorAccentDark"
+        fab:layout_constraintBottom_toBottomOf="parent"
+        fab:layout_constraintLeft_toLeftOf="@id/x50"
+        fab:layout_constraintRight_toRightOf="@id/x50"
+        tools:ignore="UnusedAttribute"/>
+
+    <ImageButton
+        android:id="@+id/rewind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/rewind"
+        android:padding="8dp"
+        android:src="@drawable/ic_fast_rewind"
+        fab:layout_constraintBottom_toBottomOf="@id/play"
+        fab:layout_constraintRight_toLeftOf="@id/play"
+        fab:layout_constraintTop_toTopOf="@id/play"/>
+
+    <ImageButton
+        android:id="@+id/previous"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/previous_track"
+        android:padding="8dp"
+        android:src="@drawable/ic_skip_previous"
+        fab:layout_constraintBottom_toBottomOf="@id/play"
+        fab:layout_constraintRight_toLeftOf="@id/rewind"
+        fab:layout_constraintTop_toTopOf="@id/play"/>
+
+    <ImageButton
+        android:id="@+id/fastForward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/fast_forward"
+        android:padding="8dp"
+        android:src="@drawable/ic_fast_forward"
+        fab:layout_constraintBottom_toBottomOf="@id/play"
+        fab:layout_constraintLeft_toRightOf="@id/play"
+        fab:layout_constraintTop_toTopOf="@id/play"/>
+
+    <ImageButton
+        android:id="@+id/next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/next_track"
+        android:padding="8dp"
+        android:src="@drawable/ic_skip_next"
+        fab:layout_constraintBottom_toBottomOf="@id/play"
+        fab:layout_constraintLeft_toRightOf="@id/fastForward"
+        fab:layout_constraintTop_toTopOf="@id/play"/>
+
+    <TextView
+        android:id="@+id/playedTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/zeroTime"
+        fab:layout_constraintBottom_toTopOf="@id/play"
+        fab:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/maxTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/zeroTime"
+        fab:layout_constraintBottom_toTopOf="@id/play"
+        fab:layout_constraintRight_toRightOf="parent"/>
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        fab:layout_constraintBottom_toTopOf="@id/play"
+        fab:layout_constraintLeft_toRightOf="@id/playedTime"
+        fab:layout_constraintRight_toLeftOf="@id/maxTime"/>
+
+    <Spinner
+        android:id="@+id/bookSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        fab:layout_constraintBottom_toTopOf="@id/seekBar"/>
+
+    <ImageView
+        android:id="@+id/cover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/cover"
+        android:scaleType="centerCrop"
+        fab:layout_constraintBottom_toTopOf="@id/bookSpinner"
+        fab:layout_constraintTop_toBottomOf="@id/toolbar"
+        tools:ignore="UnusedAttribute"
+        tools:src="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/timerCountdownView"
+        style="@style/timer_text_view_style"
+        fab:layout_constraintRight_toRightOf="parent"
+        fab:layout_constraintTop_toBottomOf="@id/toolbar"
+        tools:text="00:34"/>
+
+</android.support.constraint.ConstraintLayout>

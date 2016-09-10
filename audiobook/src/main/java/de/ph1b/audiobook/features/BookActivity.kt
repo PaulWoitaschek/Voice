@@ -12,11 +12,9 @@ import de.ph1b.audiobook.features.book_overview.BookShelfController
 import de.ph1b.audiobook.features.book_playing.BookPlayController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.PermissionHelper
-import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import kotlinx.android.synthetic.main.activity_book.*
-import kotlinx.android.synthetic.main.toolbar.*
 import java.io.File
 import javax.inject.Inject
 
@@ -37,9 +35,7 @@ class BookActivity : BaseActivity() {
         setContentView(R.layout.activity_book)
         App.component().inject(this)
 
-        setupActionbar(toolbar!!)
-
-        router = Conductor.attachRouter(this, container, savedInstanceState)
+        router = Conductor.attachRouter(this, root, savedInstanceState)
         if (!router.hasRootController()) {
             router.setRoot(RouterTransaction.with(BookShelfController()))
         }

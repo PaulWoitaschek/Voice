@@ -21,7 +21,7 @@ import de.ph1b.audiobook.features.folder_chooser.FolderChooserActivity;
 import de.ph1b.audiobook.features.folder_chooser.FolderChooserPresenter;
 import de.ph1b.audiobook.features.folder_overview.FolderOverviewPresenter;
 import de.ph1b.audiobook.features.imagepicker.ImagePickerActivity;
-import de.ph1b.audiobook.features.settings.SettingsFragment;
+import de.ph1b.audiobook.features.settings.SettingsController;
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment;
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment;
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment;
@@ -53,6 +53,7 @@ public interface ApplicationComponent {
    void inject(BookShelfController target);
    void inject(ChangeNotifier target);
    void inject(CoverReplacement target);
+   void inject(SettingsController target);
    void inject(EditBookTitleDialogFragment target);
    void inject(EditBookBottomSheet target);
    void inject(FolderChooserActivity target);
@@ -63,7 +64,6 @@ public interface ApplicationComponent {
    void inject(PlaybackSpeedDialogFragment target);
    void inject(SeekDialogFragment target);
    void inject(SleepTimerDialogFragment target);
-   void inject(SettingsFragment target);
    void inject(ThemePickerDialogFragment target);
    void inject(WidgetUpdateService target);
 }

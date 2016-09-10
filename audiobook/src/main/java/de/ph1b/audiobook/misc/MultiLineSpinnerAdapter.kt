@@ -27,7 +27,7 @@ class MultiLineSpinnerAdapter<Type>(private val spinner: Spinner, private val co
         // no need for view holder pattern, we can just reuse the view as its a single TextView
         val textView =
                 if (convertView == null) {
-                    LayoutInflater.from(context).inflate(R.layout.fragment_book_play_spinner, parent, false) as TextView
+                    LayoutInflater.from(context).inflate(R.layout.book_play_spinner, parent, false) as TextView
                 } else {
                     convertView as TextView
                 }

@@ -1,13 +1,11 @@
 package de.ph1b.audiobook.features.book_playing
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.settings.SettingsSetListener
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.onProgressChanged
 import de.ph1b.audiobook.misc.value
@@ -17,15 +15,8 @@ import javax.inject.Inject
 
 class SeekDialogFragment : DialogFragment() {
 
-    private lateinit var settingsSetListener: SettingsSetListener
 
     @Inject lateinit var prefs: PrefsManager
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-        settingsSetListener = context as SettingsSetListener
-    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         App.component().inject(this)
@@ -50,7 +41,6 @@ class SeekDialogFragment : DialogFragment() {
                 .onPositive { materialDialog, dialogAction ->
                     val newSeekTime = v.seekBar.progress / FACTOR + MIN
                     prefs.seekTime.set(newSeekTime)
-                    settingsSetListener.onSettingsSet(oldSeekTime != newSeekTime)
                 }.build()
     }
 

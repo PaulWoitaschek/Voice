@@ -57,21 +57,12 @@
             android:label="@string/app_name"/>
 
         <activity
-            android:name=".features.settings.SettingsActivity"
-            android:label="@string/action_settings"
+            android:name=".features.folder_overview.FolderOverviewActivity"
+            android:label="@string/audiobook_folders_title"
             android:parentActivityName=".features.BookActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".features.BookActivity"/>
-        </activity>
-
-        <activity
-            android:name=".features.folder_overview.FolderOverviewActivity"
-            android:label="@string/audiobook_folders_title"
-            android:parentActivityName=".features.settings.SettingsActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".features.settings.SettingsActivity"/>
         </activity>
 
         <activity

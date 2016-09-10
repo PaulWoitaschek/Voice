@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable
 import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
-import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v4.view.ViewCompat
@@ -49,7 +48,7 @@ fun Drawable.tinted(@ColorInt color: Int): Drawable {
     return wrapped
 }
 
-fun Controller.setupActionbar(toolbar: Toolbar? = null,
+fun Controller.setupActionbar(toolbar: Toolbar,
                               @DrawableRes upIndicator: Int? = null,
                               title: String? = null) =
         (activity as AppCompatActivity).setupActionbar(
@@ -57,19 +56,10 @@ fun Controller.setupActionbar(toolbar: Toolbar? = null,
                 upIndicator = upIndicator,
                 title = title)
 
-fun Fragment.setupActionbar(toolbar: Toolbar? = null,
-                            @DrawableRes upIndicator: Int? = null,
-                            title: String? = null) =
-        (activity as AppCompatActivity).setupActionbar(
-                toolbar = toolbar,
-                upIndicator = upIndicator,
-                title = title)
-
-fun AppCompatActivity.setupActionbar(toolbar: Toolbar? = null,
+fun AppCompatActivity.setupActionbar(toolbar: Toolbar,
                                      @DrawableRes upIndicator: Int? = null,
                                      title: String? = null) {
-    if (toolbar != null) setSupportActionBar(toolbar)
-
+    setSupportActionBar(toolbar)
     val actionBar = supportActionBar!!
 
     if (upIndicator != null) actionBar.setHomeAsUpIndicator(upIndicator)

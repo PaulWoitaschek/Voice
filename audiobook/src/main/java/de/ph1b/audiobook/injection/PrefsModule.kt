@@ -21,7 +21,6 @@ import de.ph1b.audiobook.uitools.ThemeUtil
 @Module class PrefsModule {
 
     @Provides fun provideSharedPreferences(context: Context): SharedPreferences {
-        PreferenceManager.setDefaultValues(context, R.xml.preferences, false)
         return PreferenceManager.getDefaultSharedPreferences(context)
     }
 

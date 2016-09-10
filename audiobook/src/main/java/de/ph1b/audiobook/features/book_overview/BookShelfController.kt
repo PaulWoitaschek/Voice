@@ -1,40 +1,34 @@
 package de.ph1b.audiobook.features.book_overview
 
-import android.content.Intent
 import android.os.Build
 import android.support.annotation.DrawableRes
 import android.support.v4.app.DialogFragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SimpleItemAnimator
+import android.support.v7.widget.*
 import android.view.*
 import com.bluelinelabs.conductor.RouterTransaction
 import com.getbase.floatingactionbutton.FloatingActionButton
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.book_overview.BookShelfAdapter.ClickType
 import de.ph1b.audiobook.features.book_playing.BookPlayController
-import de.ph1b.audiobook.features.settings.SettingsActivity
+import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.misc.supportTransitionName
 import de.ph1b.audiobook.misc.value
-import de.ph1b.audiobook.mvp.RxBaseController
+import de.ph1b.audiobook.mvp.MvpBaseController
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.BookTransition
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import i
-import kotlinx.android.synthetic.main.fragment_book_shelf.view.*
+import kotlinx.android.synthetic.main.book_shelf.view.*
 import javax.inject.Inject
 import dagger.Lazy as DaggerLazy
 
 /**
  * Showing the shelf of all the available books and provide a navigation to each book
  */
-class BookShelfController : RxBaseController<BookShelfController, BookShelfPresenter>() {
+class BookShelfController : MvpBaseController<BookShelfController, BookShelfPresenter>() {
 
     override fun newPresenter(): BookShelfPresenter = App.component().bookShelfPresenter
 
@@ -45,22 +39,20 @@ class BookShelfController : RxBaseController<BookShelfController, BookShelfPrese
         setHasOptionsMenu(true)
     }
 
-    // injection
     @Inject lateinit var prefs: PrefsManager
 
-    // viewAdded
     private val playPauseDrawable = PlayPauseDrawable()
     private lateinit var adapter: BookShelfAdapter
     private lateinit var listDecoration: RecyclerView.ItemDecoration
     private lateinit var gridLayoutManager: GridLayoutManager
     private lateinit var linearLayoutManager: RecyclerView.LayoutManager
-
-    // callbacks
-    private val hostingActivity: AppCompatActivity by lazy { activity as AppCompatActivity }
-
-    // vars
     private var firstPlayStateUpdate = true
     private var currentBook: Book? = null
+
+    // views
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var fab: FloatingActionButton
+    private lateinit var toolbar: Toolbar
 
     override fun onAttach(view: View) {
         // init fab
@@ -68,16 +60,16 @@ class BookShelfController : RxBaseController<BookShelfController, BookShelfPrese
         fab.setOnClickListener { presenter.playPauseRequested() }
 
         // init ActionBar
-        setupActionbar(title = activity.getString(R.string.app_name))
+        setupActionbar(toolbar = toolbar, title = activity.getString(R.string.app_name))
 
         // init RecyclerView
         recyclerView.setHasFixedSize(true)
         adapter = BookShelfAdapter(activity) { book, clickType ->
-            if (clickType == ClickType.REGULAR) {
+            if (clickType == BookShelfAdapter.ClickType.REGULAR) {
                 invokeBookSelectionCallback(book.id)
             } else {
                 EditBookBottomSheet.newInstance(book)
-                        .show(hostingActivity.supportFragmentManager, "editBottomSheet")
+                        .show(fragmentManager, "editBottomSheet")
             }
         }
         recyclerView.adapter = adapter
@@ -92,15 +84,11 @@ class BookShelfController : RxBaseController<BookShelfController, BookShelfPrese
         super.onAttach(view)
     }
 
-    private lateinit var recyclerReplacement: View
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var fab: FloatingActionButton
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-        val view = inflater.inflate(R.layout.fragment_book_shelf, container, false)
+        val view = inflater.inflate(R.layout.book_shelf, container, false)
         recyclerView = view.recyclerView
         fab = view.fab
-        recyclerReplacement = view.recyclerReplacement
+        toolbar = view.toolbar
 
         return view
     }
@@ -120,7 +108,7 @@ class BookShelfController : RxBaseController<BookShelfController, BookShelfPrese
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> {
-                startActivity(Intent(router.activity, SettingsActivity::class.java))
+                router.pushController(RouterTransaction.with(SettingsController()))
                 true
             }
             R.id.action_current -> {
@@ -156,7 +144,7 @@ class BookShelfController : RxBaseController<BookShelfController, BookShelfPrese
             recyclerView.layoutManager = linearLayoutManager
         }
         adapter.displayMode = defaultDisplayMode
-        hostingActivity.invalidateOptionsMenu()
+        activity.invalidateOptionsMenu()
     }
 
     private fun invokeBookSelectionCallback(bookId: Long) {
@@ -227,17 +215,17 @@ class BookShelfController : RxBaseController<BookShelfController, BookShelfPrese
      */
     fun showNoFolderWarning() {
         // show dialog if no folders are set
-        val noFolderWarningIsShowing = (hostingActivity.supportFragmentManager.findFragmentByTag(FM_NO_FOLDER_WARNING) as DialogFragment?)?.dialog?.isShowing ?: false
+        val noFolderWarningIsShowing = (fragmentManager.findFragmentByTag(FM_NO_FOLDER_WARNING) as DialogFragment?)?.dialog?.isShowing ?: false
         if (noFolderWarningIsShowing.not()) {
             val warning = NoFolderWarningDialogFragment()
-            warning.show(hostingActivity.supportFragmentManager, FM_NO_FOLDER_WARNING)
+            warning.show(fragmentManager, FM_NO_FOLDER_WARNING)
         }
     }
 
     fun showSpinnerIfNoData(showSpinnerIfNoData: Boolean) {
         val shouldShowSpinner = adapter.itemCount == 0 && showSpinnerIfNoData
         recyclerView.visibility = if (shouldShowSpinner) View.INVISIBLE else View.VISIBLE
-        recyclerReplacement.visibility = if (shouldShowSpinner) View.VISIBLE else View.INVISIBLE
+        //recyclerReplacement.visibility = if (shouldShowSpinner) View.VISIBLE else View.INVISIBLE // todo
     }
 
     enum class DisplayMode constructor(@DrawableRes val icon: Int) {

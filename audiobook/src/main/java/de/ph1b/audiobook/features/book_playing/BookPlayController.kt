@@ -1,22 +1,22 @@
 package de.ph1b.audiobook.features.book_playing
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
-import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.view.*
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.Spinner
 import android.widget.TextView
-import com.bluelinelabs.conductor.rxlifecycle.RxController
+import com.bluelinelabs.conductor.RouterTransaction
 import com.getbase.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.bookmarks.BookmarkDialogFragment
-import de.ph1b.audiobook.features.settings.SettingsActivity
+import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
@@ -33,8 +33,7 @@ import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
 import i
-import kotlinx.android.synthetic.main.fragment_book_play.view.*
-import kotlinx.android.synthetic.main.include_cover.view.*
+import kotlinx.android.synthetic.main.book_play.view.*
 import rx.Observable
 import rx.functions.Action1
 import java.util.*
@@ -47,7 +46,7 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class BookPlayController(bundle: Bundle) : RxController() {
+class BookPlayController(bundle: Bundle) : BaseController() {
 
     init {
         App.component().inject(this)
@@ -64,8 +63,6 @@ class BookPlayController(bundle: Bundle) : RxController() {
     private val playPauseDrawable = PlayPauseDrawable()
     private var book: Book? = null
 
-    private val hostingActivity: AppCompatActivity by lazy { activity as AppCompatActivity }
-
     private lateinit var play: FloatingActionButton
     private lateinit var rewind: View
     private lateinit var fastForward: View
@@ -74,13 +71,13 @@ class BookPlayController(bundle: Bundle) : RxController() {
     private lateinit var playedTime: TextView
     private lateinit var maxTime: TextView
     private lateinit var timerCountdownView: TextView
-    private lateinit var coverFrame: View
     private lateinit var bookSpinner: Spinner
     private lateinit var seekBar: SeekBar
     private lateinit var cover: ImageView
+    private lateinit var toolbar: Toolbar
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-        val view = inflater.inflate(R.layout.fragment_book_play, container, false)
+        val view = inflater.inflate(R.layout.book_play, container, false)
 
         play = view.play
         rewind = view.rewind
@@ -90,10 +87,10 @@ class BookPlayController(bundle: Bundle) : RxController() {
         playedTime = view.playedTime
         maxTime = view.maxTime
         timerCountdownView = view.timerCountdownView
-        coverFrame = view.coverFrame
         bookSpinner = view.bookSpinner
         seekBar = view.seekBar
         cover = view.cover
+        toolbar = view.toolbar
 
         play.setOnClickListener { mediaPlayer.playPause() }
         rewind.setOnClickListener { mediaPlayer.rewind() }
@@ -104,7 +101,7 @@ class BookPlayController(bundle: Bundle) : RxController() {
 
         var lastClick = 0L
         val doubleClickTime = ViewConfiguration.getDoubleTapTimeout()
-        coverFrame.clicks()
+        cover.clicks()
                 .filter {
                     val currentTime = System.currentTimeMillis()
                     val doubleClick = currentTime - lastClick < doubleClickTime
@@ -136,7 +133,7 @@ class BookPlayController(bundle: Bundle) : RxController() {
         })
 
         if (book != null) {
-            setupActionbar(upIndicator = R.drawable.ic_arrow_back, title = book!!.name)
+            setupActionbar(toolbar = toolbar, upIndicator = R.drawable.ic_arrow_back, title = book!!.name)
 
             // adapter
             val chapters = book!!.chapters
@@ -270,7 +267,7 @@ class BookPlayController(bundle: Bundle) : RxController() {
                 .map { it > 0 } // sleep timer is active
                 .distinctUntilChanged() // only notify when event has changed
                 .bindToLifeCycle()
-                .subscribe { hostingActivity.invalidateOptionsMenu() }
+                .subscribe { activity.invalidateOptionsMenu() }
 
 
         // set the correct time to the sleep time view
@@ -282,9 +279,8 @@ class BookPlayController(bundle: Bundle) : RxController() {
                 .subscribe { timerCountdownView.text = it }
     }
 
-
     private fun launchJumpToPositionDialog() {
-        JumpToPositionDialogFragment().show(hostingActivity.supportFragmentManager, JumpToPositionDialogFragment.TAG)
+        JumpToPositionDialogFragment().show(fragmentManager, JumpToPositionDialogFragment.TAG)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -312,7 +308,7 @@ class BookPlayController(bundle: Bundle) : RxController() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_settings -> {
-                startActivity(Intent(activity, SettingsActivity::class.java))
+                router.pushController(RouterTransaction.with(SettingsController()))
                 return true
             }
             R.id.action_time_change -> {
@@ -322,21 +318,21 @@ class BookPlayController(bundle: Bundle) : RxController() {
             R.id.action_sleep -> {
                 if (sandMan.sleepTimerActive()) sandMan.setActive(false)
                 else SleepTimerDialogFragment.newInstance(book!!)
-                        .show(hostingActivity.supportFragmentManager, "fmSleepTimer")
+                        .show(fragmentManager, "fmSleepTimer")
                 return true
             }
             R.id.action_time_lapse -> {
-                PlaybackSpeedDialogFragment().show(hostingActivity.supportFragmentManager,
+                PlaybackSpeedDialogFragment().show(fragmentManager,
                         PlaybackSpeedDialogFragment.TAG)
                 return true
             }
             R.id.action_bookmark -> {
-                BookmarkDialogFragment.newInstance(bookId).show(hostingActivity.supportFragmentManager,
+                BookmarkDialogFragment.newInstance(bookId).show(fragmentManager,
                         BookmarkDialogFragment.TAG)
                 return true
             }
             android.R.id.home -> {
-                hostingActivity.onBackPressed()
+                router.popCurrentController()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
@@ -362,6 +358,5 @@ class BookPlayController(bundle: Bundle) : RxController() {
         })
     }
 
-    private fun <T> Observable<T>.bindToLifeCycle() = compose(bindToLifecycle<T>())
     val bookId = bundle.getLong(NI_BOOK_ID)
 }
