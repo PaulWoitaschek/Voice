@@ -20,6 +20,7 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.BookTransition
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
+import de.ph1b.audiobook.uitools.visible
 import i
 import kotlinx.android.synthetic.main.book_shelf.view.*
 import javax.inject.Inject
@@ -53,6 +54,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
     private lateinit var recyclerView: RecyclerView
     private lateinit var fab: FloatingActionButton
     private lateinit var toolbar: Toolbar
+    private lateinit var loadingProgress: View
 
     override fun onAttach(view: View) {
         // init fab
@@ -89,6 +91,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
         recyclerView = view.recyclerView
         fab = view.fab
         toolbar = view.toolbar
+        loadingProgress = view.loadingProgress
 
         return view
     }
@@ -222,10 +225,8 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
         }
     }
 
-    fun showSpinnerIfNoData(showSpinnerIfNoData: Boolean) {
-        val shouldShowSpinner = adapter.itemCount == 0 && showSpinnerIfNoData
-        recyclerView.visibility = if (shouldShowSpinner) View.INVISIBLE else View.VISIBLE
-        //recyclerReplacement.visibility = if (shouldShowSpinner) View.VISIBLE else View.INVISIBLE // todo
+    fun showLoading(loading: Boolean) {
+        loadingProgress.visible = loading
     }
 
     enum class DisplayMode constructor(@DrawableRes val icon: Int) {

@@ -8,6 +8,7 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
 import i
+import rx.Observable
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
@@ -39,7 +40,6 @@ constructor(private val bookChest: BookChest,
             // update books when they changed
             add(bookChest.booksStream().subscribe {
                 view.newBooks(it)
-                view.showSpinnerIfNoData(bookAdder.scannerActive.toBlocking().first())
             })
 
             // Subscription that notifies the adapter when the current book has changed. It also notifies
@@ -48,8 +48,10 @@ constructor(private val bookChest: BookChest,
                     .map { id -> bookChest.bookById(id) }
                     .subscribe { view.currentBookChanged(it) })
 
-            // observe if the scanner is active and there are books and show spinner accordingly.
-            add(bookAdder.scannerActive.subscribe { view.showSpinnerIfNoData(it) })
+            // if there are no books and the scanner is active, show loading
+            add(Observable.combineLatest(bookAdder.scannerActive, bookChest.booksStream().map { it.isEmpty() }, { active, booksEmpty ->
+                if (booksEmpty) active else false
+            }).subscribe { view.showLoading(it) })
 
             // Subscription that updates the UI based on the play state.
             add(playStateManager.playState

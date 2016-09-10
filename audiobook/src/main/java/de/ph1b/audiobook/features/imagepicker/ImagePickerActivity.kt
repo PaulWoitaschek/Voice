@@ -21,8 +21,7 @@ import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.uitools.ImageHelper
-import de.ph1b.audiobook.uitools.setInvisible
-import de.ph1b.audiobook.uitools.setVisible
+import de.ph1b.audiobook.uitools.visible
 import i
 import kotlinx.android.synthetic.main.activity_image_picker.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -128,9 +127,9 @@ class ImagePickerActivity : BaseActivity() {
             override fun onReceivedError(view: WebView, errorCode: Int, description: String?, failingUrl: String?) {
                 d { "received webViewError. Set webVeiw invisible" }
                 view.loadUrl(ABOUT_BLANK)
-                progressBar.setInvisible()
-                noNetwork.setVisible()
-                webViewContainer.setInvisible()
+                progressBar.visible = false
+                noNetwork.visible = true
+                webViewContainer.visible = false
             }
         })
 
@@ -141,9 +140,9 @@ class ImagePickerActivity : BaseActivity() {
                 .subscribe {
                     // sets progressbar and webviews visibilities correctly once the page is loaded
                     i { "WebView is now loading. Set webView visible" }
-                    progressBar.setInvisible()
-                    noNetwork.setInvisible()
-                    webViewContainer.setVisible()
+                    progressBar.visible = false
+                    noNetwork.visible = false
+                    webViewContainer.visible = true
                 }
 
         // load the last page loaded or the original one of there is none

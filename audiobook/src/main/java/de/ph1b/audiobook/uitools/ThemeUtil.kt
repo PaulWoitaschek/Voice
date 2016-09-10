@@ -51,13 +51,11 @@ fun NumberPicker.theme() {
     }
 }
 
-fun View.setVisible() {
-    visibility = View.VISIBLE
-}
-
-fun View.setInvisible() {
-    visibility = View.INVISIBLE
-}
+var View.visible: Boolean
+    get() = visibility == View.VISIBLE
+    set(value) {
+        visibility = if (value) View.VISIBLE else View.GONE
+    }
 
 object ThemeUtil {
 
@@ -73,7 +71,7 @@ object ThemeUtil {
     }
 
     enum class Theme(@StringRes val nameId: Int, @AppCompatDelegate.NightMode val nightMode: Int) {
-        DAY_NIGHT (R.string.pref_theme_daynight, AppCompatDelegate.MODE_NIGHT_AUTO),
+        DAY_NIGHT(R.string.pref_theme_daynight, AppCompatDelegate.MODE_NIGHT_AUTO),
         DAY(R.string.pref_theme_day, AppCompatDelegate.MODE_NIGHT_NO),
         NIGHT(R.string.pref_theme_night, AppCompatDelegate.MODE_NIGHT_YES)
     }

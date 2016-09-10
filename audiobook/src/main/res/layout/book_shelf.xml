@@ -23,6 +23,16 @@
         android:paddingBottom="104dp"
         android:paddingTop="4dp"/>
 
+    <ProgressBar
+        android:id="@+id/loadingProgress"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:visibility="gone"/>
+
     <com.getbase.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
