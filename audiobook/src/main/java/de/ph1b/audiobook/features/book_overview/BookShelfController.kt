@@ -90,8 +90,6 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
     }
 
     override fun onAttach(view: View) {
-        super.onAttach(view)
-
         // init ActionBar
         setupActionbar(toolbar = toolbar,
                 title = getString(R.string.app_name))

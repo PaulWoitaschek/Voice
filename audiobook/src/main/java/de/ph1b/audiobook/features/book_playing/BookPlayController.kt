@@ -196,8 +196,6 @@ class BookPlayController(bundle: Bundle) : BaseController() {
     }
 
     override fun onAttach(view: View) {
-        super.onAttach(view)
-
         setupActionbar(toolbar = toolbar,
                 upIndicator = R.drawable.ic_arrow_back,
                 title = book!!.name)
