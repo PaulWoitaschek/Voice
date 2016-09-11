@@ -174,9 +174,9 @@ class ImagePickerController(val bundle: Bundle) : BaseController() {
                 title = getString(R.string.cover))
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+    override fun onRestoreViewState(view: View, savedViewState: Bundle) {
         // load the last page loaded or the original one of there is none
-        val url: String? = savedInstanceState.getString(SI_URL)
+        val url: String? = savedViewState.getString(SI_URL)
         webView.loadUrl(url)
     }
 
@@ -187,12 +187,10 @@ class ImagePickerController(val bundle: Bundle) : BaseController() {
         } else return false
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
+    override fun onSaveViewState(view: View, outState: Bundle) {
         if (webView.url != ABOUT_BLANK) {
             outState.putString(SI_URL, webView.url)
         }
-
-        super.onSaveInstanceState(outState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
