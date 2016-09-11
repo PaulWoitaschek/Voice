@@ -1,26 +1,23 @@
 package de.ph1b.audiobook.features.imagepicker
 
-import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.view.ActionMode
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.support.v7.widget.Toolbar
+import android.view.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.squareup.picasso.Picasso
 import d
+import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.BaseActivity
+import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.find
-import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.uitools.ImageHelper
@@ -33,10 +30,15 @@ import javax.inject.Inject
 /**
  * Hosts the image picker.
  */
-class ImagePickerController : BaseActivity() {
+class ImagePickerController(val bundle: Bundle) : BaseController() {
+
+    constructor(book: Book) : this(Bundle().apply {
+        putLong(NI_BOOK_ID, book.id)
+    })
 
     init {
         App.component().inject(this)
+        setHasOptionsMenu(true)
     }
 
     @Inject lateinit var bookChest: BookChest
@@ -47,15 +49,16 @@ class ImagePickerController : BaseActivity() {
     private lateinit var webViewContainer: View
     private lateinit var webView: WebView
     private lateinit var fab: FloatingActionButton
+    private lateinit var toolbar: Toolbar
 
     private val actionModeCallback = object : ActionMode.Callback {
         override fun onPrepareActionMode(p0: ActionMode?, menu: Menu?): Boolean {
             return false
         }
 
-        override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
-            if (p1?.itemId == R.id.confirm) {
-                // optain screenshot
+        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+            if (item?.itemId == R.id.confirm) {
+                // obtain screenshot
                 val cropRect = cropOverlay.selectedRect
                 cropOverlay.selectionOn = false
 
@@ -69,15 +72,16 @@ class ImagePickerController : BaseActivity() {
                 // save screenshot
                 imageHelper.saveCover(screenShot, book.coverFile())
                 screenShot.recycle()
-                Picasso.with(this@ImagePickerController).invalidate(book.coverFile())
-                finish()
+                Picasso.with(activity).invalidate(book.coverFile())
+                actionMode?.finish()
+                router.popCurrentController()
                 return true
             }
             return false
         }
 
-        override fun onCreateActionMode(p0: ActionMode?, menu: Menu?): Boolean {
-            menuInflater.inflate(R.menu.crop_menu, menu)
+        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+            activity.menuInflater.inflate(R.menu.crop_menu, menu)
             return true
         }
 
@@ -89,7 +93,7 @@ class ImagePickerController : BaseActivity() {
 
     private var webViewIsLoading = BehaviorSubject.create(false)
     private val book by lazy {
-        val id = intent.getLongExtra(NI_BOOK_ID, -1)
+        val id = bundle.getLong(NI_BOOK_ID)
         bookChest.bookById(id)!!
     }
     private val originalUrl by lazy {
@@ -97,19 +101,16 @@ class ImagePickerController : BaseActivity() {
         "https://www.google.com/search?safe=on&site=imghp&tbm=isch&tbs=isz:lt,islt:qsvga&q=$encodedSearch"
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
+        val view = inflater.inflate(R.layout.activity_image_picker, container, false)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_image_picker)
-        val progressBar = findViewById(R.id.progressBar)
-        val noNetwork = findViewById(R.id.noNetwork)
-        cropOverlay = find(R.id.cropOverlay)
-        webViewContainer = find(R.id.webViewContainer)
-        webView = find(R.id.webView)
-        fab = find(R.id.fab)
-
-        setupActionbar(toolbar = find(R.id.toolbar))
+        val progressBar = view.findViewById(R.id.progressBar)
+        val noNetwork = view.findViewById(R.id.noNetwork)
+        cropOverlay = view.find(R.id.cropOverlay)
+        webViewContainer = view.find(R.id.webViewContainer)
+        webView = view.find(R.id.webView)
+        fab = view.find(R.id.fab)
+        toolbar = view.find(R.id.toolbar)
 
         with(webView.settings) {
             setSupportZoom(true)
@@ -156,23 +157,34 @@ class ImagePickerController : BaseActivity() {
                     webViewContainer.visible = true
                 }
 
-        // load the last page loaded or the original one of there is none
-        val toLoad = savedInstanceState?.getString(SI_URL) ?: originalUrl
-        webView.loadUrl(toLoad)
+        webView.loadUrl(originalUrl)
 
         fab.setOnClickListener {
             cropOverlay.selectionOn = true
-            actionMode = startSupportActionMode(actionModeCallback)
+            actionMode = activity.startSupportActionMode(actionModeCallback)
             fab.hide()
         }
+
+        return view
     }
 
-    override fun onBackPressed() {
+    override fun onAttach(view: View) {
+        setupActionbar(toolbar = toolbar,
+                upIndicator = R.drawable.close,
+                title = getString(R.string.cover))
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        // load the last page loaded or the original one of there is none
+        val url: String? = savedInstanceState.getString(SI_URL)
+        webView.loadUrl(url)
+    }
+
+    override fun handleBack(): Boolean {
         if (webView.canGoBack()) {
             webView.goBack()
-        } else {
-            super.onBackPressed()
-        }
+            return true
+        } else return false
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -183,12 +195,12 @@ class ImagePickerController : BaseActivity() {
         super.onSaveInstanceState(outState)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.image_picker, menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.image_picker, menu)
 
         // set the rotating icon
         val refreshItem = menu.findItem(R.id.refresh)
-        val rotation = AnimationUtils.loadAnimation(this, R.anim.rotate).apply {
+        val rotation = AnimationUtils.loadAnimation(activity, R.anim.rotate).apply {
             repeatCount = Animation.INFINITE
         }
         val rotateView = layoutInflater().inflate(R.layout.rotate_view, null).apply {
@@ -220,12 +232,12 @@ class ImagePickerController : BaseActivity() {
             override fun onAnimationStart(p0: Animation?) {
             }
         })
-        return true
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         android.R.id.home -> {
-            finish()
+            router.popCurrentController()
             true
         }
         R.id.refresh -> {
@@ -244,11 +256,5 @@ class ImagePickerController : BaseActivity() {
         private const val NI_BOOK_ID = "ni"
         private const val ABOUT_BLANK = "about:blank"
         private const val SI_URL = "savedUrl"
-
-        fun newIntent(context: Context, bookId: Long): Intent {
-            val intent = Intent(context, ImagePickerController::class.java)
-            intent.putExtra(NI_BOOK_ID, bookId)
-            return intent
-        }
     }
 }

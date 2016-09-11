@@ -57,10 +57,6 @@ class FolderOverviewController : MvpBaseController<FolderOverviewController, Fol
 
         overlay.visible = false
 
-        setupActionbar(toolbar = toolbar,
-                title = activity.getString(R.string.audiobook_folders_title),
-                upIndicator = R.drawable.close)
-
         // preparing list
         val layoutManager = LinearLayoutManager(activity)
         recycler.layoutManager = layoutManager
@@ -85,6 +81,14 @@ class FolderOverviewController : MvpBaseController<FolderOverviewController, Fol
         addAsLibrary.title = "${getString(R.string.folder_add_collection)}\n${getString(R.string.for_example)} AudioBooks"
 
         return view
+    }
+
+    override fun onAttach(view: View) {
+        super.onAttach(view)
+
+        setupActionbar(toolbar = toolbar,
+                title = activity.getString(R.string.audiobook_folders_title),
+                upIndicator = R.drawable.close)
     }
 
     override fun newPresenter() = FolderOverviewPresenter()

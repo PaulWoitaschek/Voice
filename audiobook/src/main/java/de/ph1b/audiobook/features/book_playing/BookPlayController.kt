@@ -128,7 +128,6 @@ class BookPlayController(bundle: Bundle) : BaseController() {
         })
 
         if (book != null) {
-            setupActionbar(toolbar = toolbar, upIndicator = R.drawable.ic_arrow_back, title = book!!.name)
 
             // adapter
             val chapters = book!!.chapters
@@ -198,6 +197,10 @@ class BookPlayController(bundle: Bundle) : BaseController() {
 
     override fun onAttach(view: View) {
         super.onAttach(view)
+
+        setupActionbar(toolbar = toolbar,
+                upIndicator = R.drawable.ic_arrow_back,
+                title = book!!.name)
 
         playStateManager.playState
                 .bindToLifeCycle()

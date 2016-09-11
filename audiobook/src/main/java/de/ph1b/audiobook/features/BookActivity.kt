@@ -8,11 +8,14 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
+import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.book_overview.BookShelfController
+import de.ph1b.audiobook.features.book_overview.EditBookBottomSheet
 import de.ph1b.audiobook.features.book_overview.NoFolderWarningDialogFragment
 import de.ph1b.audiobook.features.book_playing.BookPlayController
 import de.ph1b.audiobook.features.folder_overview.FolderOverviewController
+import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.misc.value
@@ -25,7 +28,7 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback {
+class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, EditBookBottomSheet.Callback {
 
     @Inject lateinit var prefs: PrefsManager
     @Inject lateinit var permissionHelper: PermissionHelper
@@ -106,5 +109,9 @@ class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback {
 
     override fun onNoFolderWarningConfirmed() {
         router.pushController(RouterTransaction.with(FolderOverviewController()))
+    }
+
+    override fun onImagePickerRequested(book: Book) {
+        router.pushController(RouterTransaction.with(ImagePickerController(book)))
     }
 }

@@ -74,7 +74,9 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
         spinnerGroup = find(R.id.spinnerGroup)
 
         // toolbar
-        setupActionbar(toolbar = find(R.id.toolbar), upIndicator = R.drawable.close, title = getString(R.string.audiobook_folders_title))
+        setupActionbar(toolbar = find(R.id.toolbar),
+                upIndicator = R.drawable.close,
+                title = getString(R.string.audiobook_folders_title))
 
         // listeners
         choose.setOnClickListener { presenter().chooseClicked() }

@@ -8,7 +8,6 @@ import android.widget.TextView
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.bookmarks.BookmarkDialogFragment
-import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.BookChest
@@ -49,8 +48,7 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
             dismiss()
         }
         cover.setOnClickListener {
-            val intent = ImagePickerController.newIntent(context, book.id)
-            startActivity(intent)
+            (activity as Callback).onImagePickerRequested(book)
             dismiss()
         }
         bookmark.setOnClickListener {
@@ -81,5 +79,9 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
                 putLong(NI_BOOK, book.id)
             }
         }
+    }
+
+    interface Callback {
+        fun onImagePickerRequested(book: Book)
     }
 }

@@ -67,9 +67,6 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
         fab.setIconDrawable(playPauseDrawable)
         fab.setOnClickListener { presenter.playPauseRequested() }
 
-        // init ActionBar
-        setupActionbar(toolbar = toolbar, title = activity.getString(R.string.app_name))
-
         // init RecyclerView
         recyclerView.setHasFixedSize(true)
         adapter = BookShelfAdapter(activity) { book, clickType ->
@@ -90,6 +87,14 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
         initRecyclerView()
 
         return view
+    }
+
+    override fun onAttach(view: View) {
+        super.onAttach(view)
+
+        // init ActionBar
+        setupActionbar(toolbar = toolbar,
+                title = getString(R.string.app_name))
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
