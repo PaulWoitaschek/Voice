@@ -4,10 +4,12 @@ import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.misc.drawable
+import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.layoutInflater
-import kotlinx.android.synthetic.main.activity_folder_chooser_adapter_row_layout.view.*
 import java.io.File
 import java.util.*
 
@@ -45,6 +47,9 @@ class FolderChooserAdapter(private val c: Context,
 
     inner class Holder(private val root: View) : RecyclerView.ViewHolder(root) {
 
+        private val textView: TextView = find(R.id.text)
+        private val image: ImageView = find(R.id.icon)
+
         init {
             root.setOnClickListener {
                 listener.invoke(data[adapterPosition])
@@ -54,17 +59,16 @@ class FolderChooserAdapter(private val c: Context,
         fun bind(selectedFile: File) {
             val isDirectory = selectedFile.isDirectory
 
-            root.text.text = selectedFile.name
+            textView.text = selectedFile.name
 
             // if its not a collection its also fine to pick a file
             if (mode == FolderChooserActivity.OperationMode.COLLECTION_BOOK) {
-                root.text.isEnabled = isDirectory
+                textView.isEnabled = isDirectory
             }
 
             val icon = c.drawable(if (isDirectory) R.drawable.ic_folder else R.drawable.ic_album)
-            root.icon.setImageDrawable(icon)
-            root.icon.contentDescription =
-                    c.getString(if (isDirectory) R.string.content_is_folder else R.string.content_is_file)
+            image.setImageDrawable(icon)
+            image.contentDescription = c.getString(if (isDirectory) R.string.content_is_folder else R.string.content_is_file)
         }
     }
 }

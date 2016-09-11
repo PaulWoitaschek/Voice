@@ -8,12 +8,11 @@ import android.widget.TextView
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.bookmarks.BookmarkDialogFragment
-import de.ph1b.audiobook.features.imagepicker.ImagePickerActivity
+import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.BookChest
 import e
-import kotlinx.android.synthetic.main.book_more_bottom_sheet.view.*
 import javax.inject.Inject
 
 /**
@@ -39,27 +38,30 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
 
         @SuppressWarnings("InflateParams")
         val view = context.layoutInflater().inflate(R.layout.book_more_bottom_sheet, null, false)
+        val title = view.findViewById(R.id.title) as TextView
+        val cover = view.findViewById(R.id.cover) as TextView
+        val bookmark = view.findViewById(R.id.bookmark) as TextView
         dialog.setContentView(view)
 
-        view.title.setOnClickListener {
+        title.setOnClickListener {
             EditBookTitleDialogFragment.newInstance(book)
                     .show(fragmentManager, EditBookTitleDialogFragment.TAG)
             dismiss()
         }
-        view.cover.setOnClickListener {
-            val intent = ImagePickerActivity.newIntent(context, book.id)
+        cover.setOnClickListener {
+            val intent = ImagePickerController.newIntent(context, book.id)
             startActivity(intent)
             dismiss()
         }
-        view.bookmark.setOnClickListener {
+        bookmark.setOnClickListener {
             BookmarkDialogFragment.newInstance(book.id)
                     .show(fragmentManager, BookShelfController.TAG)
             dismiss()
         }
 
-        tintLeftDrawable(view.title)
-        tintLeftDrawable(view.cover)
-        tintLeftDrawable(view.bookmark)
+        tintLeftDrawable(title)
+        tintLeftDrawable(cover)
+        tintLeftDrawable(bookmark)
 
         return dialog
     }

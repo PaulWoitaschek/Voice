@@ -3,6 +3,7 @@ package de.ph1b.audiobook.features
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.ViewGroup
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
@@ -16,7 +17,6 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
-import kotlinx.android.synthetic.main.activity_book.*
 import java.io.File
 import javax.inject.Inject
 
@@ -37,6 +37,7 @@ class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback {
         setContentView(R.layout.activity_book)
         App.component().inject(this)
 
+        val root = findViewById(R.id.root) as ViewGroup
         router = Conductor.attachRouter(this, root, savedInstanceState)
         if (!router.hasRootController()) {
             router.setRoot(RouterTransaction.with(BookShelfController()))

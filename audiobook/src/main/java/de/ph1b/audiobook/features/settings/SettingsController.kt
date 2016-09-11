@@ -1,6 +1,8 @@
 package de.ph1b.audiobook.features.settings
 
+import android.support.v7.widget.SwitchCompat
 import android.view.*
+import android.widget.TextView
 import com.bluelinelabs.conductor.RouterTransaction
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BaseController
@@ -10,11 +12,9 @@ import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.SupportDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.persistence.PrefsManager
-import kotlinx.android.synthetic.main.setting_row_double.view.*
-import kotlinx.android.synthetic.main.setting_row_switch.view.*
-import kotlinx.android.synthetic.main.settings.view.*
 import javax.inject.Inject
 
 /**
@@ -36,67 +36,87 @@ class SettingsController : BaseController() {
     }
 
     override fun onAttach(view: View) {
-        setupActionbar(toolbar = view.toolbar,
+        setupActionbar(toolbar = view.find(R.id.toolbar),
                 upIndicator = R.drawable.close,
                 title = activity.getString(R.string.action_settings))
 
         // audiobook folders
-        view.audiobookFolder.title.setText(R.string.pref_root_folder_title)
-        view.audiobookFolder.description.setText(R.string.pref_root_folder_summary)
-        view.audiobookFolder.setOnClickListener {
+        val audioBookFolder: View = view.find(R.id.audiobookFolder)
+        val audioBookFolderTitle: TextView = audioBookFolder.find(R.id.title)
+        val audioBookFolderDescription: TextView = audioBookFolder.find(R.id.description)
+        audioBookFolderTitle.setText(R.string.pref_root_folder_title)
+        audioBookFolderDescription.setText(R.string.pref_root_folder_summary)
+        audioBookFolder.setOnClickListener {
             router.pushController(RouterTransaction.with(FolderOverviewController()))
         }
 
         // theme
-        view.theme.title.setText(R.string.pref_theme_title)
-        view.theme.setOnClickListener {
+        val theme: View = view.find(R.id.theme)
+        val themeTitle: TextView = theme.find(R.id.title)
+        val themeDescription: TextView = theme.find(R.id.description)
+        themeTitle.setText(R.string.pref_theme_title)
+        theme.setOnClickListener {
             ThemePickerDialogFragment().show(fragmentManager, ThemePickerDialogFragment.TAG)
         }
         prefs.theme.asObservable()
                 .bindToLifeCycle()
-                .subscribe { view.theme.description.setText(it.nameId) }
+                .subscribe { themeDescription.setText(it.nameId) }
 
         // resume on playback
-        view.resumePlayback.switchTitle.setText(R.string.pref_resume_on_replug)
-        view.resumePlayback.switchDescription.setText(R.string.pref_resume_on_replug_hint)
-        view.resumePlayback.setOnClickListener { it.switchSetting.toggle() }
+        val resumePlayback: View = view.find(R.id.resumePlayback)
+        val resumePlaybackTitle: TextView = resumePlayback.find(R.id.switchTitle)
+        val resumePlaybackDescription: TextView = resumePlayback.find(R.id.switchDescription)
+        val resumePlaybackSwitch: SwitchCompat = resumePlayback.find(R.id.switchSetting)
+        resumePlaybackTitle.setText(R.string.pref_resume_on_replug)
+        resumePlaybackDescription.setText(R.string.pref_resume_on_replug_hint)
+        resumePlayback.setOnClickListener { resumePlaybackSwitch.toggle() }
         prefs.resumeOnReplug.asObservable()
                 .bindToLifeCycle()
-                .subscribe { view.resumePlayback.switchSetting.isChecked = it }
-        view.resumePlayback.switchSetting.setOnCheckedChangeListener { compoundButton, checked ->
+                .subscribe { resumePlaybackSwitch.isChecked = it }
+        resumePlaybackSwitch.setOnCheckedChangeListener { compoundButton, checked ->
             prefs.resumeOnReplug.set(checked)
         }
 
         // pause on interruption
-        view.pauseOnInterruption.switchTitle.setText(R.string.pref_pause_on_can_duck_title)
-        view.pauseOnInterruption.switchDescription.setText(R.string.pref_pause_on_can_duck_summary)
+        val pauseOnInterruption = view.find<View>(R.id.pauseOnInterruption)
+        val pauseOnInterruptionTitle = pauseOnInterruption.find<TextView>(R.id.switchTitle)
+        val pauseOnInterruptionDescription = pauseOnInterruption.find<TextView>(R.id.switchDescription)
+        val pauseOnInterruptionSwitch: SwitchCompat = pauseOnInterruption.find(R.id.switchSetting)
+        pauseOnInterruptionTitle.setText(R.string.pref_pause_on_can_duck_title)
+        pauseOnInterruptionDescription.setText(R.string.pref_pause_on_can_duck_summary)
         prefs.pauseOnTempFocusLoss.asObservable()
                 .bindToLifeCycle()
-                .subscribe { view.pauseOnInterruption.switchSetting.isChecked = it }
-        view.pauseOnInterruption.switchSetting.setOnCheckedChangeListener { compoundButton, checked ->
+                .subscribe { pauseOnInterruptionSwitch.isChecked = it }
+        pauseOnInterruptionSwitch.setOnCheckedChangeListener { compoundButton, checked ->
             prefs.pauseOnTempFocusLoss.set(checked)
         }
-        view.pauseOnInterruption.setOnClickListener { it.switchSetting.toggle() }
+        pauseOnInterruption.setOnClickListener { pauseOnInterruptionSwitch.toggle() }
 
         // skip amount
-        view.skipAmount.title.setText(R.string.pref_seek_time)
-        view.skipAmount.setOnClickListener {
+        val skipAmount = view.find<View>(R.id.skipAmount)
+        val skipAmountTitle = skipAmount.find<TextView>(R.id.title)
+        val skipAmountDescription = skipAmount.find<TextView>(R.id.description)
+        skipAmountTitle.setText(R.string.pref_seek_time)
+        skipAmount.setOnClickListener {
             SeekDialogFragment().show(fragmentManager, SeekDialogFragment.TAG)
         }
         prefs.seekTime.asObservable()
                 .map { resources.getQuantityString(R.plurals.seconds, it, it) }
                 .bindToLifeCycle()
-                .subscribe { view.skipAmount.description.text = it }
+                .subscribe { skipAmountDescription.text = it }
 
         // auto rewind
-        view.autoRewind.title.setText(R.string.pref_auto_rewind_title)
-        view.autoRewind.setOnClickListener {
+        val autoRewind = view.find<View>(R.id.autoRewind)
+        val autoRewindTitle: TextView = autoRewind.find(R.id.title)
+        val autoRewindDescription: TextView = autoRewind.find(R.id.description)
+        autoRewindTitle.setText(R.string.pref_auto_rewind_title)
+        autoRewind.setOnClickListener {
             AutoRewindDialogFragment().show(fragmentManager, AutoRewindDialogFragment.TAG)
         }
         prefs.autoRewindAmount.asObservable()
                 .map { resources.getQuantityString(R.plurals.seconds, it, it) }
                 .bindToLifeCycle()
-                .subscribe { view.autoRewind.description.text = it }
+                .subscribe { autoRewindDescription.text = it }
     }
 
 

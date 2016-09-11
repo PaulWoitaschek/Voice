@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import com.afollestad.materialdialogs.internal.MDTintHelper
 import com.squareup.picasso.Picasso
@@ -23,7 +24,6 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.visible
 import i
-import kotlinx.android.synthetic.main.book_shelf_list_layout.view.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -117,9 +117,12 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
     inner class ListViewHolder(parent: ViewGroup) : BaseViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.book_shelf_list_layout, parent, false)) {
 
+        private val progressBar = find<ProgressBar>(R.id.progressBar)
+        private val leftTime: TextView = find(R.id.leftTime)
+        private val rightTime: TextView = find(R.id.rightTime)
 
         init {
-            MDTintHelper.setTint(itemView.progressBar, parent.context.color(R.color.accent))
+            MDTintHelper.setTint(progressBar, parent.context.color(R.color.accent))
         }
 
         override fun bind(book: Book) {
@@ -129,9 +132,9 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
             val globalDuration = book.globalDuration
             val progress = Math.round(100f * globalPosition.toFloat() / globalDuration.toFloat())
 
-            itemView.leftTime.text = formatTime(globalPosition)
-            itemView.progressBar.progress = progress
-            itemView.rightTime.text = formatTime(globalDuration)
+            leftTime.text = formatTime(globalPosition)
+            progressBar.progress = progress
+            rightTime.text = formatTime(globalDuration)
         }
     }
 

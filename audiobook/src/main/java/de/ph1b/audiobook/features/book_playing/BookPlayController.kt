@@ -29,7 +29,6 @@ import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
 import de.ph1b.audiobook.uitools.visible
 import i
-import kotlinx.android.synthetic.main.book_play.view.*
 import rx.Observable
 import rx.functions.Action1
 import java.util.*
@@ -75,18 +74,18 @@ class BookPlayController(bundle: Bundle) : BaseController() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         val view = inflater.inflate(R.layout.book_play, container, false)
 
-        play = view.play
-        rewind = view.rewind
-        fastForward = view.fastForward
-        next = view.next
-        previous = view.previous
-        playedTime = view.playedTime
-        maxTime = view.maxTime
-        timerCountdownView = view.timerCountdownView
-        bookSpinner = view.bookSpinner
-        seekBar = view.seekBar
-        cover = view.cover
-        toolbar = view.toolbar
+        play = view.find(R.id.play)
+        rewind = view.find(R.id.rewind)
+        fastForward = view.find(R.id.fastForward)
+        next = view.find(R.id.next)
+        previous = view.find(R.id.previous)
+        playedTime = view.find(R.id.playedTime)
+        maxTime = view.find(R.id.maxTime)
+        timerCountdownView = view.find(R.id.timerCountdownView)
+        bookSpinner = view.find(R.id.bookSpinner)
+        seekBar = view.find(R.id.seekBar)
+        cover = view.find(R.id.cover)
+        toolbar = view.find(R.id.toolbar)
 
         play.setOnClickListener { mediaPlayer.playPause() }
         rewind.setOnClickListener { mediaPlayer.rewind() }

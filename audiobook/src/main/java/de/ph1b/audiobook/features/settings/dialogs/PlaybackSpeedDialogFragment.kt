@@ -3,17 +3,19 @@ package de.ph1b.audiobook.features.settings.dialogs
 import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.widget.SeekBar
+import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.progressChangedStream
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayerController
-import kotlinx.android.synthetic.main.dialog_amount_chooser.view.*
 import rx.android.schedulers.AndroidSchedulers
 import java.text.DecimalFormat
 import java.util.concurrent.TimeUnit
@@ -34,28 +36,30 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
         App.component().inject(this)
 
         // init views
-        val v = context.layoutInflater().inflate(R.layout.dialog_amount_chooser, null)
+        val view = context.layoutInflater().inflate(R.layout.dialog_amount_chooser, null)
+        val seekBar: SeekBar = view.find(R.id.seekBar)
+        val textView: TextView = view.find(R.id.textView)
 
         // setting current speed
         val book = db.bookById(prefs.currentBookId.value()) ?: throw AssertionError("Cannot instantiate $TAG without a current book")
         val speed = book.playbackSpeed
-        v.seekBar.max = ((MAX - MIN) * FACTOR).toInt()
-        v.seekBar.progress = ((speed - MIN) * FACTOR).toInt()
+        seekBar.max = ((MAX - MIN) * FACTOR).toInt()
+        seekBar.progress = ((speed - MIN) * FACTOR).toInt()
 
         // observable of seek bar, mapped to speed
-        v.seekBar.progressChangedStream(initialNotification = true)
+        seekBar.progressChangedStream(initialNotification = true)
                 .map { Book.SPEED_MIN + it.toFloat() / FACTOR }
                 .doOnNext {
                     // update speed text
                     val text = "${getString(R.string.playback_speed)}: ${speedFormatter.format(it)}"
-                    v.textView.text = text
+                    textView.text = text
                 }
                 .debounce(50, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .subscribe { playerController.setSpeed(it) } // update speed after debounce
 
         return MaterialDialog.Builder(activity)
                 .title(R.string.playback_speed)
-                .customView(v, true)
+                .customView(view, true)
                 .build()
     }
 

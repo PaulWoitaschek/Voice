@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.webkit.WebView
@@ -17,14 +19,13 @@ import d
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BaseActivity
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.visible
 import i
-import kotlinx.android.synthetic.main.activity_image_picker.*
-import kotlinx.android.synthetic.main.toolbar.*
 import rx.subjects.BehaviorSubject
 import java.net.URLEncoder
 import javax.inject.Inject
@@ -32,7 +33,7 @@ import javax.inject.Inject
 /**
  * Hosts the image picker.
  */
-class ImagePickerActivity : BaseActivity() {
+class ImagePickerController : BaseActivity() {
 
     init {
         App.component().inject(this)
@@ -42,6 +43,10 @@ class ImagePickerActivity : BaseActivity() {
     @Inject lateinit var imageHelper: ImageHelper
 
     private var actionMode: ActionMode ? = null
+    private lateinit var cropOverlay: CropOverlay
+    private lateinit var webViewContainer: View
+    private lateinit var webView: WebView
+    private lateinit var fab: FloatingActionButton
 
     private val actionModeCallback = object : ActionMode.Callback {
         override fun onPrepareActionMode(p0: ActionMode?, menu: Menu?): Boolean {
@@ -64,7 +69,7 @@ class ImagePickerActivity : BaseActivity() {
                 // save screenshot
                 imageHelper.saveCover(screenShot, book.coverFile())
                 screenShot.recycle()
-                Picasso.with(this@ImagePickerActivity).invalidate(book.coverFile())
+                Picasso.with(this@ImagePickerController).invalidate(book.coverFile())
                 finish()
                 return true
             }
@@ -97,8 +102,14 @@ class ImagePickerActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_image_picker)
+        val progressBar = findViewById(R.id.progressBar)
+        val noNetwork = findViewById(R.id.noNetwork)
+        cropOverlay = find(R.id.cropOverlay)
+        webViewContainer = find(R.id.webViewContainer)
+        webView = find(R.id.webView)
+        fab = find(R.id.fab)
 
-        setupActionbar(toolbar = toolbar)
+        setupActionbar(toolbar = find(R.id.toolbar))
 
         with(webView.settings) {
             setSupportZoom(true)
@@ -235,7 +246,7 @@ class ImagePickerActivity : BaseActivity() {
         private const val SI_URL = "savedUrl"
 
         fun newIntent(context: Context, bookId: Long): Intent {
-            val intent = Intent(context, ImagePickerActivity::class.java)
+            val intent = Intent(context, ImagePickerController::class.java)
             intent.putExtra(NI_BOOK_ID, bookId)
             return intent
         }

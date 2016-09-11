@@ -20,7 +20,7 @@ import de.ph1b.audiobook.features.bookmarks.BookmarkDialogFragment;
 import de.ph1b.audiobook.features.folder_chooser.FolderChooserActivity;
 import de.ph1b.audiobook.features.folder_chooser.FolderChooserPresenter;
 import de.ph1b.audiobook.features.folder_overview.FolderOverviewPresenter;
-import de.ph1b.audiobook.features.imagepicker.ImagePickerActivity;
+import de.ph1b.audiobook.features.imagepicker.ImagePickerController;
 import de.ph1b.audiobook.features.settings.SettingsController;
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment;
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment;
@@ -59,7 +59,7 @@ public interface ApplicationComponent {
    void inject(FolderChooserActivity target);
    void inject(FolderChooserPresenter target);
    void inject(FolderOverviewPresenter target);
-   void inject(ImagePickerActivity target);
+   void inject(ImagePickerController target);
    void inject(JumpToPositionDialogFragment target);
    void inject(PlaybackSpeedDialogFragment target);
    void inject(SeekDialogFragment target);

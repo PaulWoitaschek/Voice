@@ -69,7 +69,7 @@
         </activity>
 
         <activity
-            android:name=".features.imagepicker.ImagePickerActivity"
+            android:name=".features.imagepicker.ImagePickerController"
             android:parentActivityName=".features.BookActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

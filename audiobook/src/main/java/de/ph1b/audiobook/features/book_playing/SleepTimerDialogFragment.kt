@@ -3,7 +3,10 @@ package de.ph1b.audiobook.features.book_playing
 import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.support.v7.widget.SwitchCompat
 import android.text.format.DateUtils
+import android.widget.SeekBar
+import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
@@ -19,7 +22,6 @@ import de.ph1b.audiobook.playback.Sandman
 import de.ph1b.audiobook.playback.ShakeDetector
 import de.ph1b.audiobook.uitools.visible
 import e
-import kotlinx.android.synthetic.main.dialog_sleep.view.*
 import javax.inject.Inject
 
 /**
@@ -40,6 +42,12 @@ class SleepTimerDialogFragment : DialogFragment() {
 
         @SuppressWarnings("InflateParams")
         val layout = context.layoutInflater().inflate(R.layout.dialog_sleep, null)
+        val seekBar = layout.findViewById(R.id.seekBar) as SeekBar
+        val bookmark = layout.findViewById(R.id.bookmark)
+        val textView = layout.findViewById(R.id.text) as TextView
+        val bookmarkSwitch = layout.findViewById(R.id.bookmarkSwitch) as SwitchCompat
+        val shakeToResetSwitch = layout.findViewById(R.id.shakeToResetSwitch) as SwitchCompat
+        val shakeToResetText = layout.findViewById(R.id.shakeToResetText) as TextView
 
         val bookId = arguments.getLong(NI_BOOK_ID)
         val book = bookChest.bookById(bookId)
@@ -51,29 +59,29 @@ class SleepTimerDialogFragment : DialogFragment() {
         // setup seekBar
         val min = 5
         val max = 120
-        layout.seekBar.max = (max - min) * SEEK_FACTOR
-        layout.seekBar.progress = (prefs.sleepTime.value() - min) * SEEK_FACTOR
-        layout.seekBar.onProgressChanged(initialNotification = true) {
+        seekBar.max = (max - min) * SEEK_FACTOR
+        seekBar.progress = (prefs.sleepTime.value() - min) * SEEK_FACTOR
+        seekBar.onProgressChanged(initialNotification = true) {
             val corrected = it / SEEK_FACTOR + min
             val text = resources.getQuantityString(R.plurals.pauses_after, corrected, corrected)
-            layout.text.text = text
+            textView.text = text
         }
 
         // setup bookmark toggle
-        layout.bookmark.setOnClickListener {
-            layout.bookmarkSwitch.toggle()
+        bookmark.setOnClickListener {
+            bookmarkSwitch.toggle()
         }
-        layout.bookmarkSwitch.isChecked = prefs.bookmarkOnSleepTimer.value()
+        bookmarkSwitch.isChecked = prefs.bookmarkOnSleepTimer.value()
 
         // setup shake to reset setting
-        layout.shakeToResetText.setOnClickListener {
-            layout.shakeToResetSwitch.toggle()
+        shakeToResetText.setOnClickListener {
+            shakeToResetSwitch.toggle()
         }
-        layout.shakeToResetSwitch.isChecked = prefs.shakeToReset.value()
+        shakeToResetSwitch.isChecked = prefs.shakeToReset.value()
         val shakeSupported = shakeDetector.shakeSupported()
         if (!shakeSupported) {
-            layout.shakeToResetSwitch.visible = false
-            layout.shakeToResetText.visible = false
+            shakeToResetSwitch.visible = false
+            shakeToResetText.visible = false
         }
 
         return MaterialDialog.Builder(context)
@@ -82,16 +90,16 @@ class SleepTimerDialogFragment : DialogFragment() {
                 .negativeText(R.string.dialog_cancel)
                 .customView(layout, true)
                 .positiveClicked {
-                    val corrected = layout.seekBar.progress / SEEK_FACTOR + min
+                    val corrected = seekBar.progress / SEEK_FACTOR + min
                     prefs.sleepTime.set(corrected)
 
-                    prefs.bookmarkOnSleepTimer.set(layout.bookmarkSwitch.isChecked)
+                    prefs.bookmarkOnSleepTimer.set(bookmarkSwitch.isChecked)
                     if (prefs.bookmarkOnSleepTimer.value()) {
                         val date = DateUtils.formatDateTime(context, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE)
                         bookmarkProvider.addBookmarkAtBookPosition(book, date + ": " + getString(R.string.action_sleep))
                     }
 
-                    prefs.shakeToReset.set(layout.shakeToResetSwitch.isChecked)
+                    prefs.shakeToReset.set(shakeToResetSwitch.isChecked)
 
                     sandMan.setActive(true)
                 }
