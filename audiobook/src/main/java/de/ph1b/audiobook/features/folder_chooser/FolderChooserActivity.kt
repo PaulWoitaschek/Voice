@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
-import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
 import de.ph1b.audiobook.R
@@ -15,6 +14,7 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.mvp.RxBaseActivity
 import de.ph1b.audiobook.uitools.DividerItemDecoration
+import de.ph1b.audiobook.uitools.visible
 import i
 import kotlinx.android.synthetic.main.activity_folder_chooser.*
 import kotlinx.android.synthetic.main.include_file_navigation_header.*
@@ -129,7 +129,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
 
     override fun newRootFolders(newFolders: List<File>) {
         i { "newRootFolders called with $newFolders" }
-        spinnerGroup.visibility = if (newFolders.size <= 1) View.INVISIBLE else View.VISIBLE
+        spinnerGroup.visible = newFolders.size > 1
 
         val newData = newFolders
                 .map {

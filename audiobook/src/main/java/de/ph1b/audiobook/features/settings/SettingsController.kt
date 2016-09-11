@@ -1,11 +1,11 @@
 package de.ph1b.audiobook.features.settings
 
-import android.content.Intent
 import android.view.*
+import com.bluelinelabs.conductor.RouterTransaction
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.book_playing.SeekDialogFragment
-import de.ph1b.audiobook.features.folder_overview.FolderOverviewActivity
+import de.ph1b.audiobook.features.folder_overview.FolderOverviewController
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.SupportDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment
@@ -44,7 +44,7 @@ class SettingsController : BaseController() {
         view.audiobookFolder.title.setText(R.string.pref_root_folder_title)
         view.audiobookFolder.description.setText(R.string.pref_root_folder_summary)
         view.audiobookFolder.setOnClickListener {
-            startActivity(Intent(activity, FolderOverviewActivity::class.java))
+            router.pushController(RouterTransaction.with(FolderOverviewController()))
         }
 
         // theme

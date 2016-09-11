@@ -12,8 +12,8 @@ import java.util.*
  */
 object NaturalOrderComparator {
 
-    val STRING_COMPARATOR: Comparator<String> = IntelliJStringComparator()
-    val FILE_COMPARATOR = Comparator<File> { lhs, rhs ->
+    val stringComparator: Comparator<String> = IntelliJStringComparator()
+    val fileComparator = Comparator<File> { lhs, rhs ->
 
         if (lhs.isDirectory && !rhs.isDirectory) {
             return@Comparator -1
@@ -35,14 +35,14 @@ object NaturalOrderComparator {
             val pl = left[i].name
             val pr = right[i].name
             if (pl != pr) {
-                return@Comparator STRING_COMPARATOR.compare(pl, pr)
+                return@Comparator stringComparator.compare(pl, pr)
             }
             i++
         }
 
         // if sizes are the same
         if (leftSize == rightSize) {
-            return@Comparator STRING_COMPARATOR.compare(lhs.name, rhs.name)
+            return@Comparator stringComparator.compare(lhs.name, rhs.name)
         } else {
             return@Comparator rightSize - leftSize
         }

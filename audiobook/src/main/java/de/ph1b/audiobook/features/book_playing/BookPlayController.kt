@@ -1,8 +1,6 @@
 package de.ph1b.audiobook.features.book_playing
 
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewCompat
 import android.support.v7.widget.Toolbar
 import android.view.*
 import android.widget.ImageView
@@ -19,10 +17,7 @@ import de.ph1b.audiobook.features.bookmarks.BookmarkDialogFragment
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.MultiLineSpinnerAdapter
-import de.ph1b.audiobook.misc.clicks
-import de.ph1b.audiobook.misc.itemSelections
-import de.ph1b.audiobook.misc.setupActionbar
+import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
@@ -32,6 +27,7 @@ import de.ph1b.audiobook.playback.utils.MediaPlayerCapabilities
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
+import de.ph1b.audiobook.uitools.visible
 import i
 import kotlinx.android.synthetic.main.book_play.view.*
 import rx.Observable
@@ -160,7 +156,7 @@ class BookPlayController(bundle: Bundle) : BaseController() {
                 chapterNames.add(MultiLineSpinnerAdapter.Data(chapterName, chapterName))
             }
 
-            val adapter = MultiLineSpinnerAdapter<String>(bookSpinner, activity, ContextCompat.getColor(activity, ThemeUtil.getResourceId(activity, android.R.attr.textColorPrimary)))
+            val adapter = MultiLineSpinnerAdapter<String>(bookSpinner, activity, activity.color(ThemeUtil.getResourceId(activity, android.R.attr.textColorPrimary)))
             adapter.setData(chapterNames)
             bookSpinner.adapter = adapter
             bookSpinner.itemSelections {
@@ -175,17 +171,12 @@ class BookPlayController(bundle: Bundle) : BaseController() {
             }
 
             // Next/Prev/spinner/book progress views hiding
-            if (book!!.chapters.size == 1) {
-                next.visibility = View.GONE
-                previous.visibility = View.GONE
-                bookSpinner.visibility = View.GONE
-            } else {
-                next.visibility = View.VISIBLE
-                previous.visibility = View.VISIBLE
-                bookSpinner.visibility = View.VISIBLE
-            }
+            val multipleChapters = book!!.chapters.size > 1
+            next.visible = multipleChapters
+            previous.visible = multipleChapters
+            bookSpinner.visible = multipleChapters
 
-            ViewCompat.setTransitionName(cover, book!!.coverTransitionName)
+            cover.supportTransitionName = book!!.coverTransitionName
         }
 
         // (Cover)
@@ -255,11 +246,11 @@ class BookPlayController(bundle: Bundle) : BaseController() {
 
         // hide / show left time view
         sandMan.sleepSand
-                .map { if (it > 0) View.VISIBLE else View.GONE }
+                .map { it > 0 }
                 .distinctUntilChanged() // only set when visibility has changed
                 .bindToLifeCycle()
-                .subscribe { visibility ->
-                    timerCountdownView.visibility = visibility
+                .subscribe { visible ->
+                    timerCountdownView.visible = visible
                 }
 
         // invalidates the actionbar items

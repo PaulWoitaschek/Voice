@@ -29,7 +29,7 @@ data class Book(val id: Long,
                 val root: String) : Comparable<Book> {
 
     override fun compareTo(other: Book): Int {
-        return NaturalOrderComparator.STRING_COMPARATOR.compare(name, other.name)
+        return NaturalOrderComparator.stringComparator.compare(name, other.name)
     }
 
     companion object {

@@ -9,7 +9,9 @@ import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.book_overview.BookShelfController
+import de.ph1b.audiobook.features.book_overview.NoFolderWarningDialogFragment
 import de.ph1b.audiobook.features.book_playing.BookPlayController
+import de.ph1b.audiobook.features.folder_overview.FolderOverviewController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.misc.value
@@ -23,7 +25,7 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class BookActivity : BaseActivity() {
+class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback {
 
     @Inject lateinit var prefs: PrefsManager
     @Inject lateinit var permissionHelper: PermissionHelper
@@ -99,5 +101,9 @@ class BookActivity : BaseActivity() {
             putExtra(NI_GO_TO_BOOK, bookId)
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         }
+    }
+
+    override fun onNoFolderWarningConfirmed() {
+        router.pushController(RouterTransaction.with(FolderOverviewController()))
     }
 }

@@ -3,7 +3,6 @@ package de.ph1b.audiobook.misc
 import android.content.Context
 import android.graphics.Color
 import android.support.annotation.ColorInt
-import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,7 +43,7 @@ class MultiLineSpinnerAdapter<Type>(private val spinner: Spinner, private val co
             textView.setTextColor(Color.WHITE)
         } else {
             textView.setBackgroundResource(ThemeUtil.getResourceId(context, android.R.attr.windowBackground))
-            textView.setTextColor(ContextCompat.getColor(context, ThemeUtil.getResourceId(context, android.R.attr.textColorPrimary)))
+            textView.setTextColor(context.color(ThemeUtil.getResourceId(context, android.R.attr.textColorPrimary)))
         }
 
         return textView

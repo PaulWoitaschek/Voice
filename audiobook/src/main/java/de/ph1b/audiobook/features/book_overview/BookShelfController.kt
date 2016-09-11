@@ -12,6 +12,7 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.book_playing.BookPlayController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.misc.supportTransitionName
 import de.ph1b.audiobook.misc.value
@@ -22,7 +23,6 @@ import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.visible
 import i
-import kotlinx.android.synthetic.main.book_shelf.view.*
 import javax.inject.Inject
 import dagger.Lazy as DaggerLazy
 
@@ -56,7 +56,13 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
     private lateinit var toolbar: Toolbar
     private lateinit var loadingProgress: View
 
-    override fun onAttach(view: View) {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
+        val view = inflater.inflate(R.layout.book_shelf, container, false)
+        recyclerView = view.find(R.id.recyclerView)
+        fab = view.find(R.id.fab)
+        toolbar = view.find(R.id.toolbar)
+        loadingProgress = view.find(R.id.loadingProgress)
+
         // init fab
         fab.setIconDrawable(playPauseDrawable)
         fab.setOnClickListener { presenter.playPauseRequested() }
@@ -82,16 +88,6 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
         gridLayoutManager = GridLayoutManager(activity, amountOfColumns())
         linearLayoutManager = LinearLayoutManager(activity)
         initRecyclerView()
-
-        super.onAttach(view)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-        val view = inflater.inflate(R.layout.book_shelf, container, false)
-        recyclerView = view.recyclerView
-        fab = view.fab
-        toolbar = view.toolbar
-        loadingProgress = view.loadingProgress
 
         return view
     }
@@ -187,16 +183,12 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
         for (i in 0..adapter.itemCount - 1) {
             val itemId = adapter.getItemId(i)
             val vh = recyclerView.findViewHolderForItemId(itemId) as BookShelfAdapter.BaseViewHolder?
-            if (itemId == currentBook?.id || (vh != null && vh.indicatorIsVisible())) {
+            if (itemId == currentBook?.id || (vh != null && vh.indicatorVisible)) {
                 adapter.notifyItemChanged(i)
             }
         }
 
-        if (currentBook == null) {
-            fab.visibility = View.GONE
-        } else {
-            fab.visibility = View.VISIBLE
-        }
+        fab.visible = currentBook != null
     }
 
 

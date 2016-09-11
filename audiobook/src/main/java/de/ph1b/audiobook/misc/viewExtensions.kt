@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.misc
 
 import android.graphics.drawable.Drawable
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.Adapter
 import android.widget.AdapterView
@@ -57,3 +58,6 @@ fun TextView.leftCompoundDrawable(): Drawable? = compoundDrawables[0]
 fun TextView.topCompoundDrawable(): Drawable? = compoundDrawables[1]
 fun TextView.rightCompoundDrawable(): Drawable? = compoundDrawables[2]
 fun TextView.bottomCompoundDrawable(): Drawable? = compoundDrawables[3]
+
+fun <T : View> View.find(id: Int): T = findViewById(id) as T
+fun <T : View> RecyclerView.ViewHolder.find(id: Int): T = itemView.find(id)

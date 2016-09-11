@@ -2,8 +2,6 @@ package de.ph1b.audiobook.features.book_overview
 
 import android.content.Context
 import android.support.annotation.CallSuper
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewCompat
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -17,9 +15,13 @@ import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.color
+import de.ph1b.audiobook.misc.find
+import de.ph1b.audiobook.misc.supportTransitionName
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverReplacement
+import de.ph1b.audiobook.uitools.visible
 import i
 import kotlinx.android.synthetic.main.book_shelf_list_layout.view.*
 import java.util.*
@@ -117,7 +119,7 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
 
 
         init {
-            MDTintHelper.setTint(itemView.progressBar, ContextCompat.getColor(parent.context, R.color.accent))
+            MDTintHelper.setTint(itemView.progressBar, parent.context.color(R.color.accent))
         }
 
         override fun bind(book: Book) {
@@ -150,17 +152,15 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
         private val currentPlayingIndicator: ImageView
         private val titleView: TextView
         private val editBook: View
-        private var indicatorVisible = false
+        var indicatorVisible = false
+            private set
+
 
         init {
-            coverView = itemView.findViewById(R.id.coverView) as ImageView
-            currentPlayingIndicator = itemView.findViewById(R.id.currentPlayingIndicator) as ImageView
-            titleView = itemView.findViewById(R.id.title) as TextView
-            editBook = itemView.findViewById(R.id.editBook)
-        }
-
-        fun indicatorIsVisible(): Boolean {
-            return indicatorVisible
+            coverView = itemView.find(R.id.coverView)
+            currentPlayingIndicator = itemView.find(R.id.currentPlayingIndicator)
+            titleView = itemView.find(R.id.title)
+            editBook = itemView.find(R.id.editBook)
         }
 
         /**
@@ -194,16 +194,12 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
             }
 
             indicatorVisible = book.id == prefs.currentBookId.value()
-            if (indicatorVisible) {
-                currentPlayingIndicator.visibility = View.VISIBLE
-            } else {
-                currentPlayingIndicator.visibility = View.GONE
-            }
+            currentPlayingIndicator.visible = indicatorVisible
 
             itemView.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.REGULAR) }
             editBook.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.MENU) }
 
-            ViewCompat.setTransitionName(coverView, book.coverTransitionName)
+            coverView.supportTransitionName = book.coverTransitionName
         }
     }
 

@@ -7,10 +7,10 @@ import android.graphics.ColorFilter
 import android.graphics.Paint
 import android.graphics.Paint.Align
 import android.graphics.drawable.Drawable
-import android.support.v4.content.ContextCompat
 import android.text.TextPaint
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.color
 import de.ph1b.audiobook.persistence.PrefsManager
 import javax.inject.Inject
 
@@ -30,7 +30,7 @@ class CoverReplacement(private val text: String, c: Context) : Drawable() {
         check(text.isNotEmpty())
 
         // background
-        backgroundColor = ContextCompat.getColor(c, R.color.primaryDark)
+        backgroundColor = c.color(R.color.primaryDark)
     }
 
     override fun draw(canvas: Canvas) {

@@ -206,7 +206,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
         val containing = listFiles(FileRecognition.folderAndMusicFilter)
         if (containing != null) {
             val asList = ArrayList(Arrays.asList(*containing))
-            return asList.sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
+            return asList.sortedWith(NaturalOrderComparator.fileComparator)
         } else {
             return emptyList()
         }
