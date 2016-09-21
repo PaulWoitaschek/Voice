@@ -31,6 +31,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
     private val rootDirs = ArrayList<File>()
     private val SI_CHOSEN_FILE = "siChosenFile"
     private var chosenFile: File? = null
+    private val selectedFiles = ArrayList<File?>()
 
     override fun onBind(view: FolderChooserView, subscriptions: CompositeSubscription) {
         refreshRootDirs()
@@ -49,11 +50,12 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
      * Asks the user to add a .nomedia file if there is none. Else calls [FolderChooserView.finish]
      */
     fun chooseClicked() {
-        if (chosenFile!!.isDirectory && !HideFolderDialog.getNoMediaFileByFolder(chosenFile!!).exists()) {
-            view!!.askAddNoMediaFile(chosenFile!!)
-        } else {
-            addFileAndTerminate(chosenFile!!)
-        }
+//        if (chosenFile!!.isDirectory && !HideFolderDialog.getNoMediaFileByFolder(chosenFile!!).exists()) {
+//            view!!.askAddNoMediaFile(chosenFile!!)
+//        } else {
+//            addFileAndTerminate(chosenFile!!)
+//        }
+
     }
 
     /**
@@ -68,18 +70,6 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
     }
 
 
-    /**
-     * Call this when a file was selected by the user or the root folder has changed
-     */
-    fun fileSelected(selectedFile: File?) {
-        chosenFile = selectedFile
-        view!!.apply {
-            showNewData(selectedFile?.closestFolder()?.getContentsSorted() ?: emptyList())
-            setCurrentFolderText(selectedFile?.name ?: "")
-            setUpButtonEnabled(canGoBack())
-        }
-    }
-
     private fun canGoBack(): Boolean {
         if (rootDirs.isEmpty()) {
             return false
@@ -91,6 +81,29 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
             }
         }
         return true
+    }
+
+    /**
+     * Call this when a file was selected by the user or the root folder has changed
+     */
+    fun fileSelected(selectedFile: File?) {
+        selectedFiles.add(selectedFile)
+        chosenFile = selectedFile
+        view!!.apply {
+            showNewData(selectedFile?.closestFolder()?.getContentsSorted() ?: emptyList())
+//            setCurrentFolderText(selectedFile?.name ?: "")
+//            setUpButtonEnabled(canGoBack())
+        }
+    }
+
+    fun fileDeselected(selectedFile: File?) {
+        chosenFile = selectedFile
+        selectedFiles.remove(selectedFile)
+//        view!!.apply {
+//            showNewData(selectedFile?.closestFolder()?.getContentsSorted() ?: emptyList())
+//            setCurrentFolderText(selectedFile?.name ?: "")
+//            setUpButtonEnabled(canGoBack())
+//        }
     }
 
     /**

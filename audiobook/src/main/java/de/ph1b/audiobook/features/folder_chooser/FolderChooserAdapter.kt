@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.drawable
 import de.ph1b.audiobook.misc.layoutInflater
 import kotlinx.android.synthetic.main.activity_folder_chooser_adapter_row_layout.view.*
@@ -38,10 +39,33 @@ class FolderChooserAdapter(private val c: Context,
     private val data = ArrayList<File>()
     private val selectedItems = ArrayList<Boolean>()
 
+    fun checkFolder(folder : File) : Boolean {
+        if (!folder.isDirectory)
+            return false
+        val listFiles = folder.listFiles(FileRecognition.folderAndMusicFilter)
+        for (item in listFiles) {
+            if (FileRecognition.musicFilter.accept(item)) {
+                return true
+            } else {
+                if (item.isDirectory) {
+                    return checkFolder(item)
+                }
+            }
+        }
+        return false
+    }
+
     fun newData(newData: List<File>) {
         data.clear()
         selectedItems.clear()
-        data.addAll(newData)
+
+        for (item in newData) {
+            if (item.isDirectory && checkFolder(item)) {
+                data.add(item)
+            }
+        }
+
+//        data.addAll(newData)
 
         for (item in data) {
             selectedItems.add(false)
