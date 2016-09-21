@@ -16,29 +16,20 @@ object FileRecognition {
     private val audioTypes: List<String>
 
     init {
-        audioTypes = arrayListOf("3gp",
-                "aac",
+        audioTypes = arrayListOf("aac",
                 "awb",
                 "flac",
                 "imy",
                 "m4a",
                 "m4b",
-                "mp4",
                 "mid",
                 "mka",
                 "mkv",
                 "mp3",
                 "mp3package",
-                "mxmf",
-                "ogg",
-                "oga",
-                "ota",
-                "rtttl",
-                "rtx",
                 "wav",
                 "webm",
-                "wma",
-                "xmf"
+                "wma"
         )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             audioTypes.add("opus")

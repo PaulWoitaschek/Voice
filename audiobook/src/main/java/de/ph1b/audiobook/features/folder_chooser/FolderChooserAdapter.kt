@@ -39,7 +39,7 @@ class FolderChooserAdapter(private val c: Context,
     private val data = ArrayList<File>()
     private val selectedItems = ArrayList<Boolean>()
 
-    fun checkFolder(folder : File) : Boolean {
+    fun checkFolder(folder: File): Boolean {
         if (!folder.isDirectory)
             return false
         val listFiles = folder.listFiles(FileRecognition.folderAndMusicFilter)
@@ -60,7 +60,7 @@ class FolderChooserAdapter(private val c: Context,
         selectedItems.clear()
 
         for (item in newData) {
-            if (item.isDirectory && checkFolder(item)) {
+            if (checkFolder(item)) {
                 data.add(item)
             }
         }
