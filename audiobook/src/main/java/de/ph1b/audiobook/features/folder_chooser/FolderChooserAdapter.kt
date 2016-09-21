@@ -36,10 +36,17 @@ class FolderChooserAdapter(private val c: Context,
     override fun getItemCount() = data.size
 
     private val data = ArrayList<File>()
+    private val selectedItems = ArrayList<Boolean>()
 
     fun newData(newData: List<File>) {
         data.clear()
+        selectedItems.clear()
         data.addAll(newData)
+
+        for (item in data) {
+            selectedItems.add(false)
+        }
+
         notifyDataSetChanged()
     }
 
@@ -47,7 +54,8 @@ class FolderChooserAdapter(private val c: Context,
 
         init {
             root.setOnClickListener {
-                listener.invoke(data[adapterPosition])
+                selectedItems[adapterPosition] = !selectedItems[adapterPosition]
+                root.checkBox.setChecked(selectedItems[adapterPosition])
             }
         }
 
@@ -59,6 +67,12 @@ class FolderChooserAdapter(private val c: Context,
             // if its not a collection its also fine to pick a file
             if (mode == FolderChooserActivity.OperationMode.COLLECTION_BOOK) {
                 root.text.isEnabled = isDirectory
+            }
+
+            if (selectedItems[adapterPosition] == true) {
+                root.checkBox.setChecked(true)
+            } else {
+                root.checkBox.setChecked(false)
             }
 
             val icon = c.drawable(if (isDirectory) R.drawable.ic_folder else R.drawable.ic_album)

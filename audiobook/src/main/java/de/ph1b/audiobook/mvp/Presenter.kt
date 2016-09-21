@@ -7,8 +7,8 @@ import rx.subscriptions.CompositeSubscription
 
 
 /**
- * Basic class for presenters that enables clients to control views offers handy ways for subscriptions.
- *
+ * Basic class for presenters that enables clients to control views
+ * Offers handy ways for subscriptions
  * @author Paul Woitaschek
  */
 abstract class Presenter<V> {

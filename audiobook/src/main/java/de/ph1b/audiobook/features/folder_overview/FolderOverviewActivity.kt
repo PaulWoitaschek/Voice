@@ -110,13 +110,15 @@ class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOver
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+
         setContentView(R.layout.activity_folder_overview)
         buttonRepresentingTheFam = findViewById(R.id.fab_expand_menu_button)!!
 
-        addAsSingle.setOnClickListener {
-            startFolderChooserActivity(FolderChooserActivity.OperationMode.SINGLE_BOOK)
-        }
-        addAsLibrary.setOnClickListener {
+//        sdScan.setOnClickListener {
+//            startFolderChooserActivity(FolderChooserActivity.OperationMode.SINGLE_BOOK)
+//        }
+        beginScan.setOnClickListener {
             startFolderChooserActivity(FolderChooserActivity.OperationMode.COLLECTION_BOOK)
         }
 
@@ -151,8 +153,8 @@ class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOver
 
         fam.setOnFloatingActionsMenuUpdateListener(famMenuListener)
 
-        addAsSingle.title = "${getString(R.string.folder_add_single_book)}\n${getString(R.string.for_example)} Harry Potter 4"
-        addAsLibrary.title = "${getString(R.string.folder_add_collection)}\n${getString(R.string.for_example)} AudioBooks"
+//        internalScan.title = "${getString(R.string.folder_begin_scan_internal)}"
+        beginScan.title = "${getString(R.string.folder_begin_scan)}"
     }
 
     private fun startFolderChooserActivity(operationMode: FolderChooserActivity.OperationMode) {

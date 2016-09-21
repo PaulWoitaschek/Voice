@@ -39,19 +39,19 @@
             fab:fab_labelStyle="@style/fab_label_style"
             fab:fab_labelsPosition="left">
 
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/addAsSingle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/folder_add_single_book"
-                fab:fab_colorNormal="?attr/colorAccent"
-                fab:fab_colorPressed="?attr/colorAccentDark"
-                fab:fab_icon="@drawable/ic_folder"
-                fab:fab_size="mini"
-                fab:fab_title="@string/folder_add_single_book"/>
+            <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
+                <!--android:id="@+id/sdScan"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:contentDescription="@string/folder_add_single_book"-->
+                <!--fab:fab_colorNormal="?attr/colorAccent"-->
+                <!--fab:fab_colorPressed="?attr/colorAccentDark"-->
+                <!--fab:fab_icon="@drawable/ic_folder"-->
+                <!--fab:fab_size="mini"-->
+                <!--fab:fab_title="@string/folder_add_single_book"/>-->
 
             <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/addAsLibrary"
+                android:id="@+id/beginScan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/folder_add_collection"

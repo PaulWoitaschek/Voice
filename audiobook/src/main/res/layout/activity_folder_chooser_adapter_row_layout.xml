@@ -22,17 +22,27 @@
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/list_single_item_height"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
-        android:layout_marginEnd="16dp"
         android:layout_marginLeft="72dp"
-        android:layout_marginRight="16dp"
         android:layout_marginStart="72dp"
         android:gravity="center_vertical"
         android:singleLine="true"
         android:textSize="@dimen/list_text_primary_size"
-        tools:text="ExampleFolder"/>
+        tools:text="ExampleFolder"
+        android:layout_toLeftOf="@+id/checkBox"
+        android:layout_toStartOf="@+id/checkBox" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox"
+        android:layout_alignBaseline="@+id/text"
+        android:layout_alignBottom="@+id/text"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="12dp"
+        android:layout_marginEnd="12dp"
+        android:clickable="false"/>
 
 </RelativeLayout>

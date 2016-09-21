@@ -24,7 +24,9 @@ class NoFolderWarningDialogFragment : DialogFragment() {
                         "\n\n" + getString(R.string.no_audiobook_folders_end))
                 .positiveText(R.string.dialog_confirm)
                 .onPositive { materialDialog, dialogAction ->
-                    startActivity(Intent(context, FolderOverviewActivity::class.java))
+                    val i = Intent(context, FolderOverviewActivity::class.java)
+
+                    startActivity(i)
                 }
                 .cancelable(false)
                 .build()
