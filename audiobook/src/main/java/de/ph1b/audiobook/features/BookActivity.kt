@@ -1,12 +1,16 @@
 package de.ph1b.audiobook.features
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
+import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.book_overview.BookShelfFragment
@@ -17,6 +21,7 @@ import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.uitools.ImageHelper
 import i
 import kotlinx.android.synthetic.main.activity_book.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -35,9 +40,13 @@ class BookActivity : BaseActivity(), BookShelfFragment.Callback {
     private val TAG = BookActivity::class.java.simpleName
     private val FM_BOOK_SHELF = TAG + BookShelfFragment.TAG
     private val FM_BOOK_PLAY = TAG + BookPlayFragment.TAG
+    private val COVER_FROM_GALLERY = 1
+    private val CROP_COVER = 2
+    private var book: Book? = null
 
     @Inject lateinit var prefs: PrefsManager
     @Inject lateinit var permissionHelper: PermissionHelper
+    @Inject lateinit var imageHelper: ImageHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,9 +101,53 @@ class BookActivity : BaseActivity(), BookShelfFragment.Callback {
                 .commit()
     }
 
-    override fun onCoverChanged(book: Book) {
-        val intent = ImagePickerActivity.newIntent(this, book.id)
-        startActivity(intent)
+    override fun onCoverChanged(book: Book, mode: BookShelfFragment.Callback.CoverChangeMode) {
+        when (mode) {
+            BookShelfFragment.Callback.CoverChangeMode.INTERNET -> {
+                val imagePickerIntent = ImagePickerActivity.newIntent(this, book.id)
+                startActivity(imagePickerIntent)
+            }
+            BookShelfFragment.Callback.CoverChangeMode.FILE_SYSTEM -> {
+                val galleryPickerIntent = Intent(Intent.ACTION_PICK)
+                galleryPickerIntent.type = "image/*"
+                this.book = book
+                startActivityForResult(galleryPickerIntent, COVER_FROM_GALLERY)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            COVER_FROM_GALLERY -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    val imageUri = data?.data
+                    if (imageUri == null || book == null) {
+                        return
+                    }
+
+                    val cropIntent = Intent("com.android.camera.action.CROP")
+                    cropIntent.setDataAndType(imageUri, "image/*")
+                    cropIntent.putExtra("crop", "true")
+                            .putExtra("aspectX", 1)
+                            .putExtra("aspectY", 1)
+                            .putExtra("return-data", false)
+
+                    val outputUri = Uri.fromFile(book?.coverFile()) ?: null
+                    if (outputUri != null) {
+                        cropIntent.putExtra("output", outputUri)
+                        startActivityForResult(cropIntent, CROP_COVER)
+                    }
+                }
+            }
+            CROP_COVER -> {
+                val coverFile = book?.coverFile() ?: return
+                val coverBitmap = BitmapFactory.decodeFile(coverFile.path)
+                imageHelper.saveCover(coverBitmap, coverFile)
+                coverBitmap.recycle()
+                Picasso.with(this).invalidate(coverFile)
+            }
+            else -> super.onActivityResult(requestCode, resultCode, data)
+        }
     }
 
     override fun onBackPressed() {

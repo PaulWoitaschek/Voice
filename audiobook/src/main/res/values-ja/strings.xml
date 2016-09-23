@@ -31,7 +31,7 @@
     <string name="content_next_cover">次のカバーを選択</string>
     <string name="content_cover">選択するカバーを表示</string>
     <string name="change_book_name">名前</string>
-    <string name="change_book_cover">カバー</string>
+    <string name="download_book_cover">カバー</string>
     <string name="edit_book_title">ブックを編集</string>
     <!--JumpToPosition-->
     <string name="action_time_change">移動</string>

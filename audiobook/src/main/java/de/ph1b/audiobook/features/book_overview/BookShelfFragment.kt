@@ -237,8 +237,12 @@ class BookShelfFragment : RxBaseFragment<BookShelfFragment, BookShelfPresenter>(
     }
 
     interface Callback {
+        enum class CoverChangeMode {
+            INTERNET, FILE_SYSTEM
+        }
+
         fun onBookSelected(bookId: Long, sharedViews: Map<View, String>)
-        fun onCoverChanged(book: Book)
+        fun onCoverChanged(book: Book, mode: CoverChangeMode)
     }
 
     companion object {

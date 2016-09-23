@@ -33,7 +33,7 @@
     <string name="content_next_cover">Обрати наступну обкладинку</string>
     <string name="content_cover">Показати обрану обкладинку</string>
     <string name="change_book_name">Назва</string>
-    <string name="change_book_cover">Обкладинка</string>
+    <string name="download_book_cover">Обкладинка</string>
     <string name="edit_book_title">Редагувати книгу</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Перейти до</string>
