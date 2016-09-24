@@ -1,18 +1,18 @@
 package de.ph1b.audiobook.features.settings.dialogs
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.widget.SeekBar
+import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.settings.SettingsSetListener
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.onProgressChanged
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
-import kotlinx.android.synthetic.main.dialog_amount_chooser.view.*
 import javax.inject.Inject
 
 
@@ -20,25 +20,18 @@ class AutoRewindDialogFragment : DialogFragment() {
 
     @Inject lateinit var prefs: PrefsManager
 
-    private lateinit var settingsSetListener: SettingsSetListener
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-        settingsSetListener = context as SettingsSetListener
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         App.component().inject(this)
 
         // view binding
-        val v = context.layoutInflater().inflate(R.layout.dialog_amount_chooser, null)
-        val rewindText = v.textView
+        val view = context.layoutInflater().inflate(R.layout.dialog_amount_chooser, null)
+        val rewindText: TextView = view.find(R.id.textView)
 
         val oldRewindAmount = prefs.autoRewindAmount.value()
-        v.seekBar.max = (MAX - MIN) * FACTOR
-        v.seekBar.progress = (oldRewindAmount - MIN) * FACTOR
-        v.seekBar.onProgressChanged(initialNotification = true) {
+        val seekBar: SeekBar = view.find(R.id.seekBar)
+        seekBar.max = (MAX - MIN) * FACTOR
+        seekBar.progress = (oldRewindAmount - MIN) * FACTOR
+        seekBar.onProgressChanged(initialNotification = true) {
             val progress = it / FACTOR
             val autoRewindSummary = context.resources.getQuantityString(R.plurals.pref_auto_rewind_summary, progress, progress)
             rewindText.text = autoRewindSummary
@@ -46,13 +39,12 @@ class AutoRewindDialogFragment : DialogFragment() {
 
         return MaterialDialog.Builder(context)
                 .title(R.string.pref_auto_rewind_title)
-                .customView(v, true)
+                .customView(view, true)
                 .positiveText(R.string.dialog_confirm)
                 .negativeText(R.string.dialog_cancel)
                 .onPositive { materialDialog, dialogAction ->
-                    val newRewindAmount = v.seekBar.progress / FACTOR + MIN
+                    val newRewindAmount = seekBar.progress / FACTOR + MIN
                     prefs.autoRewindAmount.set(newRewindAmount)
-                    settingsSetListener.onSettingsSet(oldRewindAmount != newRewindAmount)
                 }
                 .build()
     }

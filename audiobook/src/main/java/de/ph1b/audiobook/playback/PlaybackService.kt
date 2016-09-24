@@ -15,7 +15,7 @@ import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
 import d
 import de.ph1b.audiobook.features.BookActivity
-import de.ph1b.audiobook.features.book_overview.BookShelfFragment
+import de.ph1b.audiobook.features.book_overview.BookShelfController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.RxBroadcast
 import de.ph1b.audiobook.misc.value
@@ -140,7 +140,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
                     if (book != null) {
                         startActivity(BookActivity.malformedFileIntent(this, book.currentFile))
                     } else {
-                        val intent = Intent(this, BookShelfFragment::class.java).apply {
+                        val intent = Intent(this, BookShelfController::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                         }
                         startActivity(intent)

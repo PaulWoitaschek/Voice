@@ -5,20 +5,18 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
-import android.widget.Toast
+import android.widget.*
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.folder_chooser.FolderChooserActivity.Companion.newInstanceIntent
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.mvp.RxBaseActivity
 import de.ph1b.audiobook.uitools.DividerItemDecoration
+import de.ph1b.audiobook.uitools.visible
 import i
-import kotlinx.android.synthetic.main.activity_folder_chooser.*
-import kotlinx.android.synthetic.main.include_file_navigation_header.*
-import kotlinx.android.synthetic.main.include_toolbar_with_spinner.*
 import java.io.File
 import javax.inject.Inject
 
@@ -47,6 +45,10 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
 
     private lateinit var adapter: FolderChooserAdapter
     private lateinit var spinnerAdapter: MultiLineSpinnerAdapter<File>
+    private lateinit var choose: View
+    private lateinit var upButton: ImageButton
+    private lateinit var currentFolder: TextView
+    private lateinit var spinnerGroup: View
 
     @Inject lateinit var permissionHelper: PermissionHelper
 
@@ -63,9 +65,18 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
 
         // find views
         setContentView(R.layout.activity_folder_chooser)
+        choose = findViewById(R.id.choose)
+        val abort = findViewById(R.id.abort)
+        val recyclerView = findViewById(R.id.recycler) as RecyclerView
+        upButton = find(R.id.upButton)
+        currentFolder = find(R.id.currentFolder)
+        val toolSpinner: Spinner = find(R.id.toolSpinner)
+        spinnerGroup = find(R.id.spinnerGroup)
 
         // toolbar
-        setupActionbar(toolbar = toolbar, upIndicator = R.drawable.close, title = getString(R.string.audiobook_folders_title))
+        setupActionbar(toolbar = find(R.id.toolbar),
+                upIndicator = R.drawable.close,
+                title = getString(R.string.audiobook_folders_title))
 
         // listeners
         choose.setOnClickListener { presenter().chooseClicked() }
@@ -76,9 +87,9 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
         adapter = FolderChooserAdapter(this, getMode()) {
             presenter().fileSelected(it)
         }
-        recycler.layoutManager = LinearLayoutManager(this)
-        recycler.addItemDecoration(DividerItemDecoration(this))
-        recycler.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.addItemDecoration(DividerItemDecoration(this))
+        recyclerView.adapter = adapter
 
         // spinner
         spinnerAdapter = MultiLineSpinnerAdapter(toolSpinner, this, Color.WHITE)
@@ -129,7 +140,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
 
     override fun newRootFolders(newFolders: List<File>) {
         i { "newRootFolders called with $newFolders" }
-        spinnerGroup.visibility = if (newFolders.size <= 1) View.INVISIBLE else View.VISIBLE
+        spinnerGroup.visible = newFolders.size > 1
 
         val newData = newFolders
                 .map {

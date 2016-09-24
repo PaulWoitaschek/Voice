@@ -103,7 +103,7 @@ import javax.inject.Singleton
             for (s in singleBooksAsStrings) {
                 singleBooks.add(File(s))
             }
-            return singleBooks.sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
+            return singleBooks.sortedWith(NaturalOrderComparator.fileComparator)
         }
 
     // Gets the saved collection book files the User chose in [FolderChooserView]
@@ -120,7 +120,7 @@ import javax.inject.Singleton
                     }
                 }
             }
-            return containingFiles.sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
+            return containingFiles.sortedWith(NaturalOrderComparator.fileComparator)
         }
 
     /** Deletes all the books that exist on the database but not on the hard drive or on the saved
@@ -304,7 +304,7 @@ import javax.inject.Singleton
         val containingFiles = rootFile.walk()
                 .filter { FileRecognition.musicFilter.accept(it) }
                 .toMutableList()
-                .sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
+                .sortedWith(NaturalOrderComparator.fileComparator)
 
         val containingMedia = ArrayList<Chapter>(containingFiles.size)
         for (f in containingFiles) {

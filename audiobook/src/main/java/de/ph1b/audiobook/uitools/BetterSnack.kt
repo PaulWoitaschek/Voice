@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.TextView
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.misc.color
+import de.ph1b.audiobook.misc.find
 
 /**
  * Creates [Snackbar]s with convenient values set + theming
@@ -46,7 +47,7 @@ object BetterSnack {
         bar.view.setBackgroundColor(root.context.color(R.color.snackbar_background_color))
 
         // theme text color
-        val textView = bar.view.findViewById(android.support.design.R.id.snackbar_text) as TextView
+        val textView: TextView = bar.view.find(android.support.design.R.id.snackbar_text)
         textView.setTextColor(root.context.color(R.color.snackbar_text_color))
 
         bar.show()

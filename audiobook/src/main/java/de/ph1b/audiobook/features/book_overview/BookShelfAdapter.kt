@@ -2,8 +2,6 @@ package de.ph1b.audiobook.features.book_overview
 
 import android.content.Context
 import android.support.annotation.CallSuper
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewCompat
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -11,17 +9,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import com.afollestad.materialdialogs.internal.MDTintHelper
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.color
+import de.ph1b.audiobook.misc.find
+import de.ph1b.audiobook.misc.supportTransitionName
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverReplacement
+import de.ph1b.audiobook.uitools.visible
 import i
-import kotlinx.android.synthetic.main.fragment_book_shelf_list_layout.view.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -87,7 +89,7 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
      */
     fun getItem(position: Int): Book = books[position]
 
-    var displayMode: BookShelfFragment.DisplayMode = BookShelfFragment.DisplayMode.LIST
+    var displayMode: BookShelfController.DisplayMode = BookShelfController.DisplayMode.LIST
         set(value) {
             if (value != field) {
                 field = value
@@ -109,15 +111,18 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
     override fun getItemCount(): Int = books.size
 
     override fun getItemViewType(position: Int): Int {
-        return if (displayMode == BookShelfFragment.DisplayMode.LIST) 0 else 1
+        return if (displayMode == BookShelfController.DisplayMode.LIST) 0 else 1
     }
 
     inner class ListViewHolder(parent: ViewGroup) : BaseViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.fragment_book_shelf_list_layout, parent, false)) {
+            LayoutInflater.from(parent.context).inflate(R.layout.book_shelf_list_layout, parent, false)) {
 
+        private val progressBar = find<ProgressBar>(R.id.progressBar)
+        private val leftTime: TextView = find(R.id.leftTime)
+        private val rightTime: TextView = find(R.id.rightTime)
 
         init {
-            MDTintHelper.setTint(itemView.progressBar, ContextCompat.getColor(parent.context, R.color.accent))
+            MDTintHelper.setTint(progressBar, parent.context.color(R.color.accent))
         }
 
         override fun bind(book: Book) {
@@ -127,9 +132,9 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
             val globalDuration = book.globalDuration
             val progress = Math.round(100f * globalPosition.toFloat() / globalDuration.toFloat())
 
-            itemView.leftTime.text = formatTime(globalPosition)
-            itemView.progressBar.progress = progress
-            itemView.rightTime.text = formatTime(globalDuration)
+            leftTime.text = formatTime(globalPosition)
+            progressBar.progress = progress
+            rightTime.text = formatTime(globalDuration)
         }
     }
 
@@ -137,7 +142,7 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
      * ViewHolder for the grid
      */
     inner class GridViewHolder(parent: ViewGroup) : BaseViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.fragment_book_shelf_grid_layout, parent, false))
+            LayoutInflater.from(parent.context).inflate(R.layout.book_shelf_grid_layout, parent, false))
 
 
     /**
@@ -150,17 +155,15 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
         private val currentPlayingIndicator: ImageView
         private val titleView: TextView
         private val editBook: View
-        private var indicatorVisible = false
+        var indicatorVisible = false
+            private set
+
 
         init {
-            coverView = itemView.findViewById(R.id.coverView) as ImageView
-            currentPlayingIndicator = itemView.findViewById(R.id.currentPlayingIndicator) as ImageView
-            titleView = itemView.findViewById(R.id.title) as TextView
-            editBook = itemView.findViewById(R.id.editBook)
-        }
-
-        fun indicatorIsVisible(): Boolean {
-            return indicatorVisible
+            coverView = itemView.find(R.id.coverView)
+            currentPlayingIndicator = itemView.find(R.id.currentPlayingIndicator)
+            titleView = itemView.find(R.id.title)
+            editBook = itemView.find(R.id.editBook)
         }
 
         /**
@@ -194,16 +197,12 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
             }
 
             indicatorVisible = book.id == prefs.currentBookId.value()
-            if (indicatorVisible) {
-                currentPlayingIndicator.visibility = View.VISIBLE
-            } else {
-                currentPlayingIndicator.visibility = View.GONE
-            }
+            currentPlayingIndicator.visible = indicatorVisible
 
             itemView.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.REGULAR) }
             editBook.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.MENU) }
 
-            ViewCompat.setTransitionName(coverView, book.coverTransitionName)
+            coverView.supportTransitionName = book.coverTransitionName
         }
     }
 

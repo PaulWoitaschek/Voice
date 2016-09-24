@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.text.InputType
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -15,6 +16,7 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Bookmark
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.BookmarkProvider
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -22,7 +24,6 @@ import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.DividerItemDecoration
 import i
-import kotlinx.android.synthetic.main.dialog_bookmark.view.*
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import javax.inject.Inject
@@ -114,23 +115,26 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val inflater = activity.layoutInflater
-        val v = inflater.inflate(R.layout.dialog_bookmark, null)
-        bookmarkTitle = v.bookmarkTitle
+        val view = inflater.inflate(R.layout.dialog_bookmark, null)
+        bookmarkTitle = view.find(R.id.bookmarkTitle)
 
         book = db.bookById(bookId())!!
         adapter = BookmarkAdapter(book.chapters, this, context)
-        v.recycler.adapter = adapter
+        val recycler = view.find<RecyclerView>(R.id.recycler)
+        recycler.adapter = adapter
         val layoutManager = LinearLayoutManager(activity)
-        v.recycler.addItemDecoration(DividerItemDecoration(activity))
-        v.recycler.layoutManager = layoutManager
+        recycler.addItemDecoration(DividerItemDecoration(activity))
+        recycler.layoutManager = layoutManager
 
         bookmarkProvider.bookmarks(book)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { adapter.addAll(it) }
 
-        v.add.setOnClickListener { addClicked() }
-        v.bookmarkTitle.setOnEditorActionListener { v1, actionId, event ->
+        val add: View = view.find(R.id.add)
+        add.setOnClickListener { addClicked() }
+        val bookmarkTitle: TextView = view.find(R.id.bookmarkTitle)
+        bookmarkTitle.setOnEditorActionListener { v1, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 addClicked() //same as clicking on the +
                 return@setOnEditorActionListener true
@@ -139,7 +143,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
         }
 
         return MaterialDialog.Builder(context)
-                .customView(v, false)
+                .customView(view, false)
                 .title(R.string.bookmark)
                 .negativeText(R.string.dialog_cancel)
                 .build()

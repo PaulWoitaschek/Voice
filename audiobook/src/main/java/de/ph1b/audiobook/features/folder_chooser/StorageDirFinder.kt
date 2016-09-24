@@ -101,7 +101,7 @@ object StorageDirFinder {
                 paths.add(f)
             }
         }
-        return paths.sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
+        return paths.sortedWith(NaturalOrderComparator.fileComparator)
     }
 
     /**

@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.FrameLayout
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.misc.dpToPx
+import de.ph1b.audiobook.uitools.visible
 import i
 
 /**
@@ -55,12 +56,11 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
         set(value) {
             if (value != field) {
                 field = value
-                val visibility = if (field) View.VISIBLE else View.GONE
 
-                leftCircle.visibility = visibility
-                rightCircle.visibility = visibility
-                topCircle.visibility = visibility
-                bottomCircle.visibility = visibility
+                leftCircle.visible = value
+                rightCircle.visible = value
+                topCircle.visible = value
+                bottomCircle.visible = value
 
                 invalidate()
             }
@@ -72,7 +72,7 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
     private val touchOffset = context.dpToPx(16)
 
     private fun newCircle() = LayoutInflater.from(context).inflate(R.layout.circle, this@CropOverlay, false).apply {
-        visibility = View.GONE
+        visible = false
     }
 
 

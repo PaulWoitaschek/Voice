@@ -7,17 +7,17 @@ import android.os.Build
 import android.support.annotation.AnyRes
 import android.support.annotation.AttrRes
 import android.support.annotation.StringRes
-import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.app.AppCompatDelegate
 import android.view.View
 import android.widget.EditText
 import android.widget.NumberPicker
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.misc.color
 
 fun NumberPicker.theme() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-        val colorAccent = ContextCompat.getColor(context, R.color.accent)
+        val colorAccent = context.color(R.color.accent)
         var i = 0
         val count = childCount
         while (i < count) {
@@ -51,13 +51,11 @@ fun NumberPicker.theme() {
     }
 }
 
-fun View.setVisible() {
-    visibility = View.VISIBLE
-}
-
-fun View.setInvisible() {
-    visibility = View.INVISIBLE
-}
+var View.visible: Boolean
+    get() = visibility == View.VISIBLE
+    set(value) {
+        visibility = if (value) View.VISIBLE else View.GONE
+    }
 
 object ThemeUtil {
 
@@ -73,7 +71,7 @@ object ThemeUtil {
     }
 
     enum class Theme(@StringRes val nameId: Int, @AppCompatDelegate.NightMode val nightMode: Int) {
-        DAY_NIGHT (R.string.pref_theme_daynight, AppCompatDelegate.MODE_NIGHT_AUTO),
+        DAY_NIGHT(R.string.pref_theme_daynight, AppCompatDelegate.MODE_NIGHT_AUTO),
         DAY(R.string.pref_theme_day, AppCompatDelegate.MODE_NIGHT_NO),
         NIGHT(R.string.pref_theme_night, AppCompatDelegate.MODE_NIGHT_YES)
     }

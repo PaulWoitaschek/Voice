@@ -6,35 +6,96 @@ import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewAnimationUtils
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
+import android.view.*
 import com.afollestad.materialdialogs.MaterialDialog
+import com.getbase.floatingactionbutton.FloatingActionButton
 import com.getbase.floatingactionbutton.FloatingActionsMenu
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.folder_chooser.FolderChooserActivity
+import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.setupActionbar
-import de.ph1b.audiobook.mvp.RxBaseActivity
+import de.ph1b.audiobook.mvp.MvpBaseController
 import de.ph1b.audiobook.uitools.DividerItemDecoration
-import kotlinx.android.synthetic.main.activity_folder_overview.*
-import kotlinx.android.synthetic.main.toolbar.*
-import java.util.*
+import de.ph1b.audiobook.uitools.visible
 
 /**
  * Activity that lets the user add, edit or remove the set audiobook folders.
 
  * @author Paul Woitaschek
  */
-class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOverviewPresenter>() {
+class FolderOverviewController : MvpBaseController<FolderOverviewController, FolderOverviewPresenter>() {
+
+    init {
+        setHasOptionsMenu(true)
+    }
+
+    private lateinit var overlay: View
+    private lateinit var fam: FloatingActionsMenu
+    private lateinit var recycler: RecyclerView
+    private lateinit var addAsSingle: FloatingActionButton
+    private lateinit var addAsLibrary: FloatingActionButton
+    private lateinit var toolbar: Toolbar
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
+        val view = inflater.inflate(R.layout.activity_folder_overview, container, false)
+        buttonRepresentingTheFam = view.find(R.id.fab_expand_menu_button)
+        overlay = view.find(R.id.overlay)
+        fam = view.find(R.id.fam)
+        recycler = view.find(R.id.recycler)
+        addAsSingle = view.find(R.id.addAsSingle)
+        addAsLibrary = view.find(R.id.addAsLibrary)
+        toolbar = view.find(R.id.toolbar)
+
+        addAsSingle.setOnClickListener {
+            startFolderChooserActivity(FolderChooserActivity.OperationMode.SINGLE_BOOK)
+        }
+        addAsLibrary.setOnClickListener {
+            startFolderChooserActivity(FolderChooserActivity.OperationMode.COLLECTION_BOOK)
+        }
+
+        overlay.visible = false
+
+        // preparing list
+        val layoutManager = LinearLayoutManager(activity)
+        recycler.layoutManager = layoutManager
+        recycler.addItemDecoration(DividerItemDecoration(activity))
+
+        adapter = FolderOverviewAdapter() { toDelete ->
+            MaterialDialog.Builder(activity)
+                    .title(R.string.delete_folder)
+                    .content("${getString(R.string.delete_folder_content)}\n$toDelete")
+                    .positiveText(R.string.remove)
+                    .negativeText(R.string.dialog_cancel)
+                    .onPositive { materialDialog, dialogAction ->
+                        presenter.removeFolder(toDelete)
+                    }
+                    .show()
+        }
+        recycler.adapter = adapter
+
+        fam.setOnFloatingActionsMenuUpdateListener(famMenuListener)
+
+        addAsSingle.title = "${getString(R.string.folder_add_single_book)}\n${getString(R.string.for_example)} Harry Potter 4"
+        addAsLibrary.title = "${getString(R.string.folder_add_collection)}\n${getString(R.string.for_example)} AudioBooks"
+
+        return view
+    }
+
+    override fun onAttach(view: View) {
+        super.onAttach(view)
+
+        setupActionbar(toolbar = toolbar,
+                title = activity.getString(R.string.audiobook_folders_title),
+                upIndicator = R.drawable.close)
+    }
 
     override fun newPresenter() = FolderOverviewPresenter()
 
     override fun provideView() = this
 
     private val BACKGROUND_OVERLAY_VISIBLE = "overlayVisibility"
-
-    private val bookCollections = ArrayList<String>(10)
-    private val singleBooks = ArrayList<String>(10)
 
     private lateinit var buttonRepresentingTheFam: View
 
@@ -56,9 +117,9 @@ class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOver
                         famCenter.x, famCenter.y, 0f, finalRadius.toFloat())
 
                 // make the view visible and start the animation
-                overlay.visibility = View.VISIBLE
+                overlay.visible = true
                 anim.start()
-            } else overlay.visibility = View.VISIBLE
+            } else overlay.visible = true
         }
 
         override fun onMenuCollapsed() {
@@ -77,13 +138,13 @@ class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOver
                 anim.addListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
                         super.onAnimationEnd(animation)
-                        overlay.visibility = View.INVISIBLE
+                        overlay.visible = false
                     }
                 })
 
                 // start the animation
                 anim.start()
-            } else overlay.visibility = View.INVISIBLE
+            } else overlay.visible = false
         }
     }
 
@@ -100,95 +161,43 @@ class FolderOverviewActivity : RxBaseActivity<FolderOverviewActivity, FolderOver
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                finish()
+                router.popCurrentController()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
         }
     }
 
-    public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_folder_overview)
-        buttonRepresentingTheFam = findViewById(R.id.fab_expand_menu_button)!!
-
-        addAsSingle.setOnClickListener {
-            startFolderChooserActivity(FolderChooserActivity.OperationMode.SINGLE_BOOK)
-        }
-        addAsLibrary.setOnClickListener {
-            startFolderChooserActivity(FolderChooserActivity.OperationMode.COLLECTION_BOOK)
-        }
-
-        setupActionbar(toolbar = toolbar, title = getString(R.string.audiobook_folders_title), upIndicator = R.drawable.close)
-
-        //init views
-        if (savedInstanceState != null) {
-            // restoring overlay
-            if (savedInstanceState.getBoolean(BACKGROUND_OVERLAY_VISIBLE)) {
-                overlay.visibility = View.VISIBLE
-            } else overlay.visibility = View.INVISIBLE
-        }
-
-        // preparing list
-        val layoutManager = LinearLayoutManager(this)
-        layoutManager.orientation = LinearLayoutManager.VERTICAL
-        recycler.layoutManager = layoutManager
-        recycler.addItemDecoration(DividerItemDecoration(this))
-
-        adapter = FolderOverviewAdapter(bookCollections, singleBooks) { toDelete ->
-            MaterialDialog.Builder(this@FolderOverviewActivity)
-                    .title(R.string.delete_folder)
-                    .content("${getString(R.string.delete_folder_content)}\n$toDelete")
-                    .positiveText(R.string.remove)
-                    .negativeText(R.string.dialog_cancel)
-                    .onPositive { materialDialog, dialogAction ->
-                        presenter().removeFolder(toDelete)
-                    }
-                    .show()
-        }
-        recycler.adapter = adapter
-
-        fam.setOnFloatingActionsMenuUpdateListener(famMenuListener)
-
-        addAsSingle.title = "${getString(R.string.folder_add_single_book)}\n${getString(R.string.for_example)} Harry Potter 4"
-        addAsLibrary.title = "${getString(R.string.folder_add_collection)}\n${getString(R.string.for_example)} AudioBooks"
+    override fun onRestoreViewState(view: View, savedViewState: Bundle) {
+        // restoring overlay
+        overlay.visible = savedViewState.getBoolean(BACKGROUND_OVERLAY_VISIBLE)
     }
 
     private fun startFolderChooserActivity(operationMode: FolderChooserActivity.OperationMode) {
-        val intent = FolderChooserActivity.newInstanceIntent(this, operationMode)
+        val intent = FolderChooserActivity.newInstanceIntent(activity, operationMode)
         // we don't want our listener be informed.
         fam.setOnFloatingActionsMenuUpdateListener(null)
         fam.collapseImmediately()
         fam.setOnFloatingActionsMenuUpdateListener(famMenuListener)
 
-        overlay.visibility = View.INVISIBLE
+        overlay.visible = false
         startActivity(intent)
     }
 
-    override fun onBackPressed() {
+    override fun handleBack(): Boolean {
         if (fam.isExpanded) {
             fam.collapse()
-        } else super.onBackPressed()
+            return true
+        } else return false
     }
 
-    /**
-     * Updates the adapter with new contents.
-     *
-     * @param bookCollections The folders added as book collections.
-     * @param singleBooks The folders added as single books.
-     */
-    fun updateAdapterData(bookCollections: Collection<String>, singleBooks: Collection<String>) {
-        this.bookCollections.clear()
-        this.bookCollections.addAll(bookCollections)
-        this.singleBooks.clear()
-        this.singleBooks.addAll(singleBooks)
-        adapter.notifyDataSetChanged()
+    /** Updates the adapter with new contents. **/
+    fun newData(models: Collection<FolderModel>) {
+        adapter.newItems(models)
     }
-
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putBoolean(BACKGROUND_OVERLAY_VISIBLE, overlay.visibility == View.VISIBLE)
+        outState.putBoolean(BACKGROUND_OVERLAY_VISIBLE, overlay.visible)
 
         super.onSaveInstanceState(outState)
     }

@@ -15,6 +15,6 @@ data class Chapter(val file: File, val name: String, val duration: Int) : Compar
     }
 
     override fun compareTo(other: Chapter): Int {
-        return NaturalOrderComparator.FILE_COMPARATOR.compare(file, other.file)
+        return NaturalOrderComparator.fileComparator.compare(file, other.file)
     }
 }
