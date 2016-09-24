@@ -47,12 +47,8 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
                     .show(fragmentManager, EditBookTitleDialogFragment.TAG)
             dismiss()
         }
-        view.internetCover.setOnClickListener {
-            callback.onCoverChanged(book, BookShelfFragment.Callback.CoverChangeMode.INTERNET)
-            dismiss()
-        }
-        view.fileCover.setOnClickListener {
-            callback.onCoverChanged(book, BookShelfFragment.Callback.CoverChangeMode.FILE_SYSTEM)
+        view.cover.setOnClickListener {
+            callback.onCoverChanged(book)
             dismiss()
         }
         view.bookmark.setOnClickListener {
@@ -62,8 +58,7 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
         }
 
         tintLeftDrawable(view.title)
-        tintLeftDrawable(view.internetCover)
-        tintLeftDrawable(view.fileCover)
+        tintLeftDrawable(view.cover)
         tintLeftDrawable(view.bookmark)
 
         return dialog
