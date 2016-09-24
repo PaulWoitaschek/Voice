@@ -21,8 +21,8 @@ import javax.inject.Inject
 
     fun shakeSupported() = sensorManager != null
 
-    fun create(): Observable<Unit> = Observable.fromAsync({ emitter ->
-        if (sensorManager == null) return@fromAsync
+    fun create(): Observable<Unit> = Observable.fromEmitter({ emitter ->
+        if (sensorManager == null) return@fromEmitter
 
         val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
