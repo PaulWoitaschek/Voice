@@ -32,7 +32,7 @@
     <string name="content_next_cover">Избира следващата обложка</string>
     <string name="content_cover">Избор на обложка</string>
     <string name="change_book_name">Заглавие</string>
-    <string name="download_book_cover">Обложка</string>
+    <string name="change_book_cover">Обложка</string>
     <string name="edit_book_title">Редактиране на книга</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Прескочи до</string>

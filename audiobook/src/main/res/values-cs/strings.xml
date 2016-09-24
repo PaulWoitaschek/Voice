@@ -34,7 +34,7 @@
     <string name="content_next_cover">Vybere další obal</string>
     <string name="content_cover">Zobrazí obaly pro vybrání</string>
     <string name="change_book_name">Název</string>
-    <string name="download_book_cover">Obal</string>
+    <string name="change_book_cover">Obal</string>
     <string name="edit_book_title">Upravit knihu</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Přeskočit na</string>

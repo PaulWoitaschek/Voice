@@ -31,7 +31,7 @@
     <string name="content_next_cover">다음표지 고르기</string>
     <string name="content_cover">책표지 보여주기</string>
     <string name="change_book_name">제목</string>
-    <string name="download_book_cover">책표지</string>
+    <string name="change_book_cover">책표지</string>
     <string name="edit_book_title">제목 수정</string>
     <!--JumpToPosition-->
     <string name="action_time_change">이동</string>

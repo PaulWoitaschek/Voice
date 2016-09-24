@@ -32,7 +32,7 @@
     <string name="content_next_cover">Escolher próxima capa</string>
     <string name="content_cover">Mostrar capa para escolher</string>
     <string name="change_book_name">Nome</string>
-    <string name="download_book_cover">Capa</string>
+    <string name="change_book_cover">Capa</string>
     <string name="edit_book_title">Editar livro</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Pular para</string>
