@@ -21,10 +21,12 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.widget.ImageView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.features.imagepicker.CropOverlay
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.uitools.*
@@ -47,7 +49,8 @@ class EditCoverDialogFragment : DialogFragment() {
 
         // retrieve views
         val customView = activity.layoutInflater.inflate(R.layout.dialog_cover_edit, null)
-        val coverImageView = customView.findViewById(R.id.edit_book) as DraggableBoxImageView
+        val cropOverlay = customView.findViewById(R.id.cropOverlay) as CropOverlay
+        val coverImage = customView.findViewById(R.id.coverImage) as ImageView
         val loadingProgressBar = customView.findViewById(R.id.cover_replacement)
 
         // init values
@@ -57,24 +60,27 @@ class EditCoverDialogFragment : DialogFragment() {
         val coverReplacement = CoverReplacement(book.name, context)
 
         loadingProgressBar.visible = true
-        coverImageView.visible = false
+        coverImage.visible = false
+        cropOverlay.selectionOn = false
         picasso.load(uri)
-                .into(coverImageView, object : PicassoCallback {
+                .into(coverImage, object : PicassoCallback {
                     override fun onError() {
-                        coverImageView.setImageDrawable(coverReplacement)
-                        coverImageView.visible = true
+                        coverImage.setImageDrawable(coverReplacement)
+                        coverImage.visible = true
+                        cropOverlay.selectionOn = true
                         loadingProgressBar.visible = false
                     }
 
                     override fun onSuccess() {
-                        coverImageView.visible = true
+                        coverImage.visible = true
+                        cropOverlay.selectionOn = true
                         loadingProgressBar.visible = false
                     }
                 })
 
         val positiveCallback = MaterialDialog.SingleButtonCallback { materialDialog, dialogAction ->
-
-            val r = coverImageView.selectedRect
+            cropOverlay.selectionOn = false
+            val r = cropOverlay.selectedRect
             val useCoverReplacement: Boolean
             if (!r.isEmpty) {
                 var cover = picasso.blocking { load(uri).get() }

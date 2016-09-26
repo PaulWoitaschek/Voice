@@ -12,13 +12,14 @@
         android:layout_gravity="center"
         android:visibility="gone"/>
 
-    <de.ph1b.audiobook.uitools.DraggableBoxImageView
-        android:id="@+id/edit_book"
+    <ImageView
+        android:id="@+id/coverImage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/content_cover"
-        android:scaleType="fitCenter"/>
+        android:layout_height="match_parent" />
+
+    <de.ph1b.audiobook.features.imagepicker.CropOverlay
+        android:id="@+id/cropOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </FrameLayout>
