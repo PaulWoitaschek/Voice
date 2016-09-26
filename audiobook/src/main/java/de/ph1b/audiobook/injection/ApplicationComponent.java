@@ -12,6 +12,7 @@ import de.ph1b.audiobook.features.book_overview.BookShelfController;
 import de.ph1b.audiobook.features.book_overview.BookShelfPresenter;
 import de.ph1b.audiobook.features.book_overview.EditBookBottomSheet;
 import de.ph1b.audiobook.features.book_overview.EditBookTitleDialogFragment;
+import de.ph1b.audiobook.features.book_overview.EditCoverDialogFragment;
 import de.ph1b.audiobook.features.book_playing.BookPlayController;
 import de.ph1b.audiobook.features.book_playing.JumpToPositionDialogFragment;
 import de.ph1b.audiobook.features.book_playing.SeekDialogFragment;
@@ -56,6 +57,7 @@ public interface ApplicationComponent {
    void inject(SettingsController target);
    void inject(EditBookTitleDialogFragment target);
    void inject(EditBookBottomSheet target);
+   void inject(EditCoverDialogFragment target);
    void inject(FolderChooserActivity target);
    void inject(FolderChooserPresenter target);
    void inject(FolderOverviewPresenter target);

@@ -35,6 +35,7 @@
     <string name="change_book_name">Name</string>
     <string name="change_book_cover">Cover</string>
     <string name="edit_book_title">Edit book</string>
+    <string name="use_cover">Use cover</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Jump to</string>
     <!--BookAdding-->
