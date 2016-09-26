@@ -43,7 +43,9 @@ class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Edi
         val root = findViewById(R.id.root) as ViewGroup
         router = Conductor.attachRouter(this, root, savedInstanceState)
         if (!router.hasRootController()) {
-            router.setRoot(RouterTransaction.with(BookShelfController()))
+            val rootTransaction = RouterTransaction.with(BookShelfController())
+                    .tag(BookShelfController::class.java.simpleName)
+            router.setRoot(rootTransaction)
         }
 
         if (savedInstanceState == null) {
@@ -111,7 +113,13 @@ class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Edi
         router.pushController(RouterTransaction.with(FolderOverviewController()))
     }
 
-    override fun onImagePickerRequested(book: Book) {
+    override fun onInternetCoverRequested(book: Book) {
         router.pushController(RouterTransaction.with(ImagePickerController(book)))
+    }
+
+    override fun onFileCoverRequested(book: Book) {
+        val bookShelfController =
+                router.getControllerWithTag(BookShelfController::class.java.simpleName) as BookShelfController
+        bookShelfController.changeCover(book)
     }
 }
