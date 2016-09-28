@@ -27,6 +27,7 @@ class SettingsFragment : PreferenceFragment(), SettingsSetListener {
     private val handler = Handler()
 
     private lateinit var themePreference: Preference
+    private lateinit var googlePreference: Preference
     private lateinit var seekPreference: Preference
     private lateinit var autoRewindPreference: Preference
     private var onStartSubscriptions: CompositeSubscription? = null
@@ -71,6 +72,12 @@ class SettingsFragment : PreferenceFragment(), SettingsSetListener {
         themePreference = findPreference(getString(R.string.pref_key_theme))
         themePreference.setOnPreferenceClickListener {
             ThemePickerDialogFragment().show(hostingActivity.supportFragmentManager, ThemePickerDialogFragment.TAG)
+            true
+        }
+
+        googlePreference = findPreference(getString(R.string.pref_key_google_account))
+        googlePreference.setOnPreferenceClickListener {
+//            ThemePickerDialogFragment().show(hostingActivity.supportFragmentManager, ThemePickerDialogFragment.TAG)
             true
         }
     }
@@ -133,7 +140,6 @@ class SettingsFragment : PreferenceFragment(), SettingsSetListener {
     }
 
     companion object {
-
         val TAG: String = SettingsFragment::class.java.simpleName
     }
 }

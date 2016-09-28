@@ -24,4 +24,7 @@
     <Preference
         android:key="@string/pref_key_auto_rewind"
         android:title="@string/pref_auto_rewind_title"/>
+    <Preference
+        android:key="@string/pref_key_google_account"
+        android:title="@string/pref_google_account"/>
 </PreferenceScreen>
