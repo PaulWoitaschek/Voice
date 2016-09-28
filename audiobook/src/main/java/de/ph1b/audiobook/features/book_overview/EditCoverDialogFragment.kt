@@ -18,6 +18,7 @@ package de.ph1b.audiobook.features.book_overview
 
 import android.app.Dialog
 import android.graphics.Bitmap
+import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -29,7 +30,10 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.imagepicker.CropOverlay
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.persistence.BookChest
-import de.ph1b.audiobook.uitools.*
+import de.ph1b.audiobook.uitools.CoverReplacement
+import de.ph1b.audiobook.uitools.ImageHelper
+import de.ph1b.audiobook.uitools.blocking
+import de.ph1b.audiobook.uitools.visible
 import javax.inject.Inject
 import com.squareup.picasso.Callback as PicassoCallback
 
@@ -85,6 +89,8 @@ class EditCoverDialogFragment : DialogFragment() {
             if (!r.isEmpty) {
                 var cover = picasso.blocking { load(uri).get() }
                 if (cover != null) {
+                    val scaleFactor: Float = cover.width.toFloat() / coverImage.measuredWidth
+                    scaleRect(r, scaleFactor)
                     cover = Bitmap.createBitmap(cover, r.left, r.top, r.width(), r.height())
                     imageHelper.saveCover(cover, book.coverFile())
 
@@ -114,6 +120,13 @@ class EditCoverDialogFragment : DialogFragment() {
                 .onPositive(positiveCallback)
                 .build()
     }
+
+    private fun scaleRect(rect: Rect, scaleFactor: Float) =
+            rect.set((rect.left * scaleFactor).toInt(),
+                    (rect.top * scaleFactor).toInt(),
+                    (rect.right * scaleFactor).toInt(),
+                    (rect.bottom * scaleFactor).toInt())
+
 
     companion object {
         val TAG = EditCoverDialogFragment::class.java.simpleName!!
