@@ -97,6 +97,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
         super.onActivityResumed(activity)
 
         pendingTransaction?.commit()
+        pendingTransaction = null
     }
 
     override fun onAttach(view: View) {
