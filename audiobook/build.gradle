@@ -28,7 +28,7 @@ android {
         debug {
             minifyEnabled false
             shrinkResources false
-            applicationIdSuffix ".debug"
+//            applicationIdSuffix ".debug"
         }
     }
 
@@ -52,6 +52,7 @@ dependencies {
     compile "com.android.support:support-v4:$supportVersion"
     compile "com.android.support:design:$supportVersion"
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
+    compile 'com.google.android.gms:play-services-auth:9.2.1'
 
     // image loading
     compile "com.squareup.picasso:picasso:2.5.2"
@@ -91,3 +92,5 @@ dependencies {
     // permissions
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar'
 }
+
+apply plugin: 'com.google.gms.google-services'
