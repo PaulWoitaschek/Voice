@@ -45,6 +45,7 @@ class EditCoverDialogFragment : DialogFragment() {
     @Inject internal lateinit var db: BookChest
     @Inject internal lateinit var bookChest: BookChest
     @Inject internal lateinit var imageHelper: ImageHelper
+    private val callback by lazy { activity as? Callback }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         App.component().inject(this)
@@ -111,6 +112,8 @@ class EditCoverDialogFragment : DialogFragment() {
                     db.updateBook(dbBook)
                 }
             }
+
+            callback?.onBookCoverChanged()
         }
 
         return MaterialDialog.Builder(context)
@@ -126,6 +129,10 @@ class EditCoverDialogFragment : DialogFragment() {
                     (rect.top * scaleFactor).toInt(),
                     (rect.right * scaleFactor).toInt(),
                     (rect.bottom * scaleFactor).toInt())
+
+    interface Callback {
+        fun onBookCoverChanged()
+    }
 
 
     companion object {

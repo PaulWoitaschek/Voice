@@ -144,6 +144,10 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
         startActivityForResult(galleryPickerIntent, COVER_FROM_GALLERY)
     }
 
+    fun bookCoverChanged() {
+        recyclerView.adapter.notifyDataSetChanged()
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             COVER_FROM_GALLERY -> {

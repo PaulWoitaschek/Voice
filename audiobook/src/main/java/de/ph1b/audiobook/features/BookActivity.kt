@@ -12,6 +12,7 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.book_overview.BookShelfController
 import de.ph1b.audiobook.features.book_overview.EditBookBottomSheet
+import de.ph1b.audiobook.features.book_overview.EditCoverDialogFragment
 import de.ph1b.audiobook.features.book_overview.NoFolderWarningDialogFragment
 import de.ph1b.audiobook.features.book_playing.BookPlayController
 import de.ph1b.audiobook.features.folder_overview.FolderOverviewController
@@ -28,7 +29,8 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, EditBookBottomSheet.Callback {
+class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback,
+        EditBookBottomSheet.Callback, EditCoverDialogFragment.Callback {
 
     @Inject lateinit var prefs: PrefsManager
     @Inject lateinit var permissionHelper: PermissionHelper
@@ -107,6 +109,12 @@ class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Edi
             putExtra(NI_GO_TO_BOOK, bookId)
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         }
+    }
+
+    override fun onBookCoverChanged() {
+        val bookShelfController =
+                router.getControllerWithTag(BookShelfController::class.java.simpleName) as BookShelfController
+        bookShelfController.bookCoverChanged()
     }
 
     override fun onNoFolderWarningConfirmed() {
