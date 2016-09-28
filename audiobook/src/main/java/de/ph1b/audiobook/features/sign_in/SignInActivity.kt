@@ -36,7 +36,6 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
         // Button listeners
         findViewById(R.id.sign_in_button).setOnClickListener(this)
         findViewById(R.id.sign_out_button).setOnClickListener(this)
-        findViewById(R.id.disconnect_button).setOnClickListener(this)
 
         // [START configure_signin]
         // Configure sign-in to request the user's ID, email address, and basic
@@ -178,7 +177,6 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
         when (v.id) {
             R.id.sign_in_button -> signIn()
             R.id.sign_out_button -> signOut()
-            R.id.disconnect_button -> revokeAccess()
         }
     }
 

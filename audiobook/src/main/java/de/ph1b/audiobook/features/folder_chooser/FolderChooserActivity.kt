@@ -75,6 +75,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
         //recycler
         adapter = FolderChooserAdapter(this, getMode()) {
             presenter().fileSelected(it)
+            presenter().userSelectedFile(it)
         }
         recycler.layoutManager = LinearLayoutManager(this)
         recycler.addItemDecoration(DividerItemDecoration(this))

@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.features.folder_chooser
 
 import android.os.Bundle
+import android.os.Environment
 import d
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.FileRecognition
@@ -97,9 +98,13 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
         chosenFile = selectedFile
         view!!.apply {
             showNewData(selectedFile?.closestFolder()?.getContentsSorted() ?: emptyList())
-//            setCurrentFolderText(selectedFile?.name ?: "")
-//            setUpButtonEnabled(canGoBack())
+            setCurrentFolderText(selectedFile?.name ?: "")
+            setUpButtonEnabled(canGoBack())
         }
+    }
+
+    fun userSelectedFile(file: File?) {
+        selectedFiles.add(file)
     }
 
     fun fileDeselected(selectedFile: File?) {
@@ -141,7 +146,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
                     val collections = HashSet(prefsManager.collectionFolders.value())
                     collections.add(chosen.absolutePath)
                     prefsManager.collectionFolders.set(collections)
-//                    view!!.finish()
+                    view!!.finish()
                 }
                 v { "chosenCollection = $chosen" }
             }
@@ -150,7 +155,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
                     val singleBooks = HashSet(prefsManager.singleBookFolders.value())
                     singleBooks.add(chosen.absolutePath)
                     prefsManager.singleBookFolders.set(singleBooks)
-//                    view!!.finish()
+                    view!!.finish()
                 }
                 v { "chosenSingleBook = $chosen" }
             }
