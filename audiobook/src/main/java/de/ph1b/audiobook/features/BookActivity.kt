@@ -111,10 +111,10 @@ class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback,
         }
     }
 
-    override fun onBookCoverChanged() {
+    override fun onBookCoverChanged(book: Book) {
         val bookShelfController =
                 router.getControllerWithTag(BookShelfController::class.java.simpleName) as BookShelfController
-        bookShelfController.bookCoverChanged()
+        bookShelfController.bookCoverChanged(book)
     }
 
     override fun onNoFolderWarningConfirmed() {

@@ -113,7 +113,7 @@ class EditCoverDialogFragment : DialogFragment() {
                 }
             }
 
-            callback?.onBookCoverChanged()
+            callback?.onBookCoverChanged(book)
         }
 
         return MaterialDialog.Builder(context)
@@ -131,7 +131,7 @@ class EditCoverDialogFragment : DialogFragment() {
                     (rect.bottom * scaleFactor).toInt())
 
     interface Callback {
-        fun onBookCoverChanged()
+        fun onBookCoverChanged(book: Book)
     }
 
 

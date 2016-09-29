@@ -31,6 +31,8 @@ import javax.inject.Inject
 // display all the books
 class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, ClickType) -> Unit) : RecyclerView.Adapter<BookShelfAdapter.BaseViewHolder>() {
 
+    private val PAYLOAD_COVER = 1
+
     private val books = ArrayList<Book>()
 
     @Inject lateinit var prefs: PrefsManager
@@ -78,6 +80,13 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
         diffResult.dispatchUpdatesTo(this)
     }
 
+    fun changeBookCover(book: Book) {
+        val index = books.indexOfFirst { it.id == book.id }
+        if (index >= 0) {
+            notifyItemChanged(index, PAYLOAD_COVER)
+        }
+    }
+
     override fun getItemId(position: Int): Long = books[position].id
 
     /**
@@ -107,6 +116,11 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) = holder.bind(books[position])
+
+    override fun onBindViewHolder(holder: BaseViewHolder, position: Int, payloads: MutableList<Any>) = when {
+        payloads.isEmpty() -> onBindViewHolder(holder, position)
+        else -> holder.bind(books[position], payloads)
+    }
 
     override fun getItemCount(): Int = books.size
 
@@ -178,6 +192,24 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
             val name = book.name
             titleView.text = name
 
+            bindCover(book)
+
+            indicatorVisible = book.id == prefs.currentBookId.value()
+            currentPlayingIndicator.visible = indicatorVisible
+
+            itemView.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.REGULAR) }
+            editBook.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.MENU) }
+
+            coverView.supportTransitionName = book.coverTransitionName
+        }
+
+        fun bind(book: Book, payloads: MutableList<Any>) {
+            when {
+                payloads.contains(PAYLOAD_COVER) -> bindCover(book)
+            }
+        }
+
+        private fun bindCover(book: Book) {
             // (Cover)
             val coverFile = book.coverFile()
             val coverReplacement = CoverReplacement(book.name, c)
@@ -195,14 +227,6 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
                     }
                 })
             }
-
-            indicatorVisible = book.id == prefs.currentBookId.value()
-            currentPlayingIndicator.visible = indicatorVisible
-
-            itemView.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.REGULAR) }
-            editBook.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.MENU) }
-
-            coverView.supportTransitionName = book.coverTransitionName
         }
     }
 
