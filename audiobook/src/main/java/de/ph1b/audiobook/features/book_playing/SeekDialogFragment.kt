@@ -3,13 +3,13 @@ package de.ph1b.audiobook.features.book_playing
 import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.view.LayoutInflater
 import android.widget.SeekBar
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.find
+import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.onProgressChanged
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -23,7 +23,7 @@ class SeekDialogFragment : DialogFragment() {
         App.component().inject(this)
 
         // find views
-        val view = LayoutInflater.from(context).inflate(R.layout.dialog_amount_chooser, null)
+        val view = context.layoutInflater().inflate(R.layout.dialog_amount_chooser, null)
         val seekBar: SeekBar = view.find(R.id.seekBar)
         val textView: TextView = view.find(R.id.textView)
 

@@ -2,7 +2,6 @@ package de.ph1b.audiobook.features.bookmarks
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -10,6 +9,7 @@ import de.ph1b.audiobook.Bookmark
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.misc.find
+import de.ph1b.audiobook.misc.layoutInflater
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -54,7 +54,7 @@ class BookmarkAdapter(private val chapters: List<Chapter>, private val listener:
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.dialog_bookmark_row_layout, parent, false)
+        val v = parent.layoutInflater().inflate(R.layout.dialog_bookmark_row_layout, parent, false)
         return ViewHolder(v, listener)
     }
 

@@ -3,13 +3,13 @@ package de.ph1b.audiobook.features.imagepicker
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.FrameLayout
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.misc.dpToPx
+import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.uitools.visible
 import i
 
@@ -71,7 +71,7 @@ class CropOverlay @JvmOverloads constructor(context: Context, attrs: AttributeSe
     private var resizeType: Resize? = null
     private val touchOffset = context.dpToPx(16)
 
-    private fun newCircle() = LayoutInflater.from(context).inflate(R.layout.circle, this@CropOverlay, false).apply {
+    private fun newCircle() = context.layoutInflater().inflate(R.layout.circle, this@CropOverlay, false).apply {
         visible = false
     }
 

@@ -4,7 +4,6 @@ import android.content.Context
 import android.support.annotation.CallSuper
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
@@ -16,10 +15,7 @@ import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.color
-import de.ph1b.audiobook.misc.find
-import de.ph1b.audiobook.misc.supportTransitionName
-import de.ph1b.audiobook.misc.value
+import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.visible
@@ -124,12 +120,9 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
 
     override fun getItemCount(): Int = books.size
 
-    override fun getItemViewType(position: Int): Int {
-        return if (displayMode == BookShelfController.DisplayMode.LIST) 0 else 1
-    }
+    override fun getItemViewType(position: Int): Int = if (displayMode == BookShelfController.DisplayMode.LIST) 0 else 1
 
-    inner class ListViewHolder(parent: ViewGroup) : BaseViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.book_shelf_list_layout, parent, false)) {
+    inner class ListViewHolder(parent: ViewGroup) : BaseViewHolder(parent.layoutInflater().inflate(R.layout.book_shelf_list_layout, parent, false)) {
 
         private val progressBar = find<ProgressBar>(R.id.progressBar)
         private val leftTime: TextView = find(R.id.leftTime)
@@ -155,8 +148,8 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
     /**
      * ViewHolder for the grid
      */
-    inner class GridViewHolder(parent: ViewGroup) : BaseViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.book_shelf_grid_layout, parent, false))
+    inner class GridViewHolder(parent: ViewGroup) : BaseViewHolder(parent.layoutInflater()
+            .inflate(R.layout.book_shelf_grid_layout, parent, false))
 
 
     /**
