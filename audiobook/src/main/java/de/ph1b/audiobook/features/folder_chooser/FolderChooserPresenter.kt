@@ -121,18 +121,18 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
                 if (canAddNewFolder(chosen.absolutePath)) {
                     val collections = HashSet(prefsManager.collectionFolders.value())
                     collections.add(chosen.absolutePath)
-                    prefsManager.collectionFolders.set( collections)
-                    view!!.finish()
+                    prefsManager.collectionFolders.set(collections)
                 }
+                view!!.finish()
                 v { "chosenCollection = $chosen" }
             }
             FolderChooserActivity.OperationMode.SINGLE_BOOK -> {
                 if (canAddNewFolder(chosen.absolutePath)) {
                     val singleBooks = HashSet(prefsManager.singleBookFolders.value())
                     singleBooks.add(chosen.absolutePath)
-                    prefsManager.singleBookFolders.set( singleBooks)
-                    view!!.finish()
+                    prefsManager.singleBookFolders.set(singleBooks)
                 }
+                view!!.finish()
                 v { "chosenSingleBook = $chosen" }
             }
         }
