@@ -29,8 +29,7 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback,
-        EditBookBottomSheet.Callback, EditCoverDialogFragment.Callback {
+class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, EditBookBottomSheet.Callback, EditCoverDialogFragment.Callback {
 
     @Inject lateinit var prefs: PrefsManager
     @Inject lateinit var permissionHelper: PermissionHelper
@@ -46,7 +45,7 @@ class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback,
         router = Conductor.attachRouter(this, root, savedInstanceState)
         if (!router.hasRootController()) {
             val rootTransaction = RouterTransaction.with(BookShelfController())
-                    .tag(BookShelfController::class.java.simpleName)
+                    .tag(TAG_BOOKSHELF_CONTROLLER)
             router.setRoot(rootTransaction)
         }
 
@@ -80,40 +79,26 @@ class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback,
     companion object {
         private val NI_MALFORMED_FILE = "malformedFile"
         private val NI_GO_TO_BOOK = "niGotoBook"
+        private val TAG_BOOKSHELF_CONTROLLER = BookShelfController::class.java.simpleName
 
-        /**
-         * Returns an intent to start the activity with to inform the user that a certain file may be
-         * defect
 
-         * @param c             The context
-         * *
-         * @param malformedFile The defect file
-         * *
-         * @return The intent to start the activity with.
-         */
+        /** Returns an intent to start the activity with to inform the user that a certain file may be defect **/
         fun malformedFileIntent(c: Context, malformedFile: File) = Intent(c, BookActivity::class.java).apply {
             putExtra(NI_MALFORMED_FILE, malformedFile)
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         }
 
-        /**
-         * Returns an intent that lets you go directly to the playback screen for a certain book
-
-         * @param c      The context
-         * *
-         * @param bookId The book id to target
-         * *
-         * @return The intent
-         */
+        /** Returns an intent that lets you go directly to the playback screen for a certain book **/
         fun goToBookIntent(c: Context, bookId: Long) = Intent(c, BookActivity::class.java).apply {
             putExtra(NI_GO_TO_BOOK, bookId)
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         }
     }
 
+    private fun bookShelfController() = router.getControllerWithTag(TAG_BOOKSHELF_CONTROLLER) as BookShelfController
+
     override fun onBookCoverChanged(book: Book) {
-        val bookShelfController =
-                router.getControllerWithTag(BookShelfController::class.java.simpleName) as BookShelfController
+        val bookShelfController = bookShelfController()
         bookShelfController.bookCoverChanged(book)
     }
 
@@ -126,8 +111,7 @@ class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback,
     }
 
     override fun onFileCoverRequested(book: Book) {
-        val bookShelfController =
-                router.getControllerWithTag(BookShelfController::class.java.simpleName) as BookShelfController
+        val bookShelfController = bookShelfController()
         bookShelfController.changeCover(book)
     }
 }
