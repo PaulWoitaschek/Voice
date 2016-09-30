@@ -1,8 +1,11 @@
 package de.ph1b.audiobook.features.book_overview
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Build
 import android.support.annotation.DrawableRes
 import android.support.v4.app.DialogFragment
+import android.support.v4.app.FragmentTransaction
 import android.support.v7.widget.*
 import android.view.*
 import com.bluelinelabs.conductor.RouterTransaction
@@ -18,10 +21,7 @@ import de.ph1b.audiobook.misc.supportTransitionName
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.MvpBaseController
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.uitools.BookTransition
-import de.ph1b.audiobook.uitools.DividerItemDecoration
-import de.ph1b.audiobook.uitools.PlayPauseDrawable
-import de.ph1b.audiobook.uitools.visible
+import de.ph1b.audiobook.uitools.*
 import i
 import javax.inject.Inject
 import dagger.Lazy as DaggerLazy
@@ -30,6 +30,7 @@ import dagger.Lazy as DaggerLazy
  * Showing the shelf of all the available books and provide a navigation to each book
  */
 class BookShelfController : MvpBaseController<BookShelfController, BookShelfPresenter>() {
+    private val COVER_FROM_GALLERY = 1
 
     override fun newPresenter(): BookShelfPresenter = App.component().bookShelfPresenter
 
@@ -38,6 +39,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
     init {
         App.component().inject(this)
         setHasOptionsMenu(true)
+        null.toString()
     }
 
     @Inject lateinit var prefs: PrefsManager
@@ -47,6 +49,8 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
     private lateinit var listDecoration: RecyclerView.ItemDecoration
     private lateinit var gridLayoutManager: GridLayoutManager
     private lateinit var linearLayoutManager: RecyclerView.LayoutManager
+    private var menuBook: Book? = null
+    private var pendingTransaction: FragmentTransaction? = null
     private var firstPlayStateUpdate = true
     private var currentBook: Book? = null
 
@@ -89,6 +93,13 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
         return view
     }
 
+    override fun onActivityResumed(activity: Activity?) {
+        super.onActivityResumed(activity)
+
+        pendingTransaction?.commit()
+        pendingTransaction = null
+    }
+
     override fun onAttach(view: View) {
         // init ActionBar
         setupActionbar(toolbar = toolbar,
@@ -123,6 +134,36 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    fun changeCover(book: Book) {
+        menuBook = book
+        val galleryPickerIntent = Intent(Intent.ACTION_PICK)
+        galleryPickerIntent.type = "image/*"
+        startActivityForResult(galleryPickerIntent, COVER_FROM_GALLERY)
+    }
+
+    fun bookCoverChanged(book: Book) {
+        adapter.changeBookCover(book)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            COVER_FROM_GALLERY -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    val imageUri = data?.data
+                    val book = menuBook
+                    if (imageUri == null || book == null) {
+                        return
+                    }
+
+                    pendingTransaction = fragmentManager.beginTransaction()
+                            .add(EditCoverDialogFragment.newInstance(book, imageUri),
+                                    EditCoverDialogFragment.TAG)
+                }
+            }
+            else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }
 

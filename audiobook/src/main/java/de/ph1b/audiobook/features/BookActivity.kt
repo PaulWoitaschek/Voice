@@ -12,6 +12,7 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.book_overview.BookShelfController
 import de.ph1b.audiobook.features.book_overview.EditBookBottomSheet
+import de.ph1b.audiobook.features.book_overview.EditCoverDialogFragment
 import de.ph1b.audiobook.features.book_overview.NoFolderWarningDialogFragment
 import de.ph1b.audiobook.features.book_playing.BookPlayController
 import de.ph1b.audiobook.features.folder_overview.FolderOverviewController
@@ -28,7 +29,8 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, EditBookBottomSheet.Callback {
+class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback,
+        EditBookBottomSheet.Callback, EditCoverDialogFragment.Callback {
 
     @Inject lateinit var prefs: PrefsManager
     @Inject lateinit var permissionHelper: PermissionHelper
@@ -43,7 +45,9 @@ class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Edi
         val root = findViewById(R.id.root) as ViewGroup
         router = Conductor.attachRouter(this, root, savedInstanceState)
         if (!router.hasRootController()) {
-            router.setRoot(RouterTransaction.with(BookShelfController()))
+            val rootTransaction = RouterTransaction.with(BookShelfController())
+                    .tag(BookShelfController::class.java.simpleName)
+            router.setRoot(rootTransaction)
         }
 
         if (savedInstanceState == null) {
@@ -107,11 +111,23 @@ class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Edi
         }
     }
 
+    override fun onBookCoverChanged(book: Book) {
+        val bookShelfController =
+                router.getControllerWithTag(BookShelfController::class.java.simpleName) as BookShelfController
+        bookShelfController.bookCoverChanged(book)
+    }
+
     override fun onNoFolderWarningConfirmed() {
         router.pushController(RouterTransaction.with(FolderOverviewController()))
     }
 
-    override fun onImagePickerRequested(book: Book) {
+    override fun onInternetCoverRequested(book: Book) {
         router.pushController(RouterTransaction.with(ImagePickerController(book)))
+    }
+
+    override fun onFileCoverRequested(book: Book) {
+        val bookShelfController =
+                router.getControllerWithTag(BookShelfController::class.java.simpleName) as BookShelfController
+        bookShelfController.changeCover(book)
     }
 }

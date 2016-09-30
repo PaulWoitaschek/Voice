@@ -38,7 +38,8 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
         @SuppressWarnings("InflateParams")
         val view = context.layoutInflater().inflate(R.layout.book_more_bottom_sheet, null, false)
         val title = view.findViewById(R.id.title) as TextView
-        val cover = view.findViewById(R.id.cover) as TextView
+        val internetCover = view.findViewById(R.id.internetCover) as TextView
+        val fileCover = view.findViewById(R.id.fileCover) as TextView
         val bookmark = view.findViewById(R.id.bookmark) as TextView
         dialog.setContentView(view)
 
@@ -47,8 +48,12 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
                     .show(fragmentManager, EditBookTitleDialogFragment.TAG)
             dismiss()
         }
-        cover.setOnClickListener {
-            (activity as Callback).onImagePickerRequested(book)
+        internetCover.setOnClickListener {
+            (activity as Callback).onInternetCoverRequested(book)
+            dismiss()
+        }
+        fileCover.setOnClickListener {
+            (activity as Callback).onFileCoverRequested(book)
             dismiss()
         }
         bookmark.setOnClickListener {
@@ -58,7 +63,8 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
         }
 
         tintLeftDrawable(title)
-        tintLeftDrawable(cover)
+        tintLeftDrawable(internetCover)
+        tintLeftDrawable(fileCover)
         tintLeftDrawable(bookmark)
 
         return dialog
@@ -82,6 +88,7 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
     }
 
     interface Callback {
-        fun onImagePickerRequested(book: Book)
+        fun onInternetCoverRequested(book: Book)
+        fun onFileCoverRequested(book: Book)
     }
 }
