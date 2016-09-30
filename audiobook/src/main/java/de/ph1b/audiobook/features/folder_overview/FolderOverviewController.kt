@@ -58,6 +58,10 @@ class FolderOverviewController : MvpBaseController<FolderOverviewController, Fol
 
         overlay.setVisibleWeak()
 
+        overlay.setOnClickListener {
+            fam.collapse()
+        }
+
         // preparing list
         val layoutManager = LinearLayoutManager(activity)
         recycler.layoutManager = layoutManager
@@ -197,9 +201,8 @@ class FolderOverviewController : MvpBaseController<FolderOverviewController, Fol
         adapter.newItems(models)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
+    override fun onSaveViewState(view: View, outState: Bundle) {
+        super.onSaveViewState(view, outState)
         outState.putInt(BACKGROUND_VISIBILITY, overlay.visibility)
-
-        super.onSaveInstanceState(outState)
     }
 }
