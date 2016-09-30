@@ -18,11 +18,12 @@ package de.ph1b.audiobook.features.book_overview
 
 import android.app.Dialog
 import android.graphics.Bitmap
-import android.graphics.Rect
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.widget.ImageView
+import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.Book
@@ -30,9 +31,9 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.imagepicker.CropOverlay
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.persistence.BookChest
-import de.ph1b.audiobook.uitools.CoverReplacement
+import de.ph1b.audiobook.uitools.CropTransformation
 import de.ph1b.audiobook.uitools.ImageHelper
-import de.ph1b.audiobook.uitools.blocking
+import de.ph1b.audiobook.uitools.SimpleTarget
 import de.ph1b.audiobook.uitools.visible
 import javax.inject.Inject
 import com.squareup.picasso.Callback as PicassoCallback
@@ -43,9 +44,8 @@ import com.squareup.picasso.Callback as PicassoCallback
 class EditCoverDialogFragment : DialogFragment() {
 
     @Inject internal lateinit var db: BookChest
-    @Inject internal lateinit var bookChest: BookChest
     @Inject internal lateinit var imageHelper: ImageHelper
-    private val callback by lazy { activity as? Callback }
+    private fun callback() = activity as Callback
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         App.component().inject(this)
@@ -61,74 +61,53 @@ class EditCoverDialogFragment : DialogFragment() {
         // init values
         val bookId = arguments.getLong(NI_BOOK_ID)
         val uri = Uri.parse(arguments.getString(NI_COVER_URI))
-        val book = bookChest.bookById(bookId)!!
-        val coverReplacement = CoverReplacement(book.name, context)
+        val book = db.bookById(bookId)!!
 
         loadingProgressBar.visible = true
-        coverImage.visible = false
         cropOverlay.selectionOn = false
         picasso.load(uri)
                 .into(coverImage, object : PicassoCallback {
                     override fun onError() {
-                        coverImage.setImageDrawable(coverReplacement)
-                        coverImage.visible = true
-                        cropOverlay.selectionOn = true
-                        loadingProgressBar.visible = false
+                        dismiss()
                     }
 
                     override fun onSuccess() {
-                        coverImage.visible = true
                         cropOverlay.selectionOn = true
                         loadingProgressBar.visible = false
                     }
                 })
 
-        val positiveCallback = MaterialDialog.SingleButtonCallback { materialDialog, dialogAction ->
-            cropOverlay.selectionOn = false
-            val r = cropOverlay.selectedRect
-            val useCoverReplacement: Boolean
-            if (!r.isEmpty) {
-                var cover = picasso.blocking { load(uri).get() }
-                if (cover != null) {
-                    val scaleFactor: Float = cover.width.toFloat() / coverImage.measuredWidth
-                    scaleRect(r, scaleFactor)
-                    cover = Bitmap.createBitmap(cover, r.left, r.top, r.width(), r.height())
-                    imageHelper.saveCover(cover, book.coverFile())
-
-                    picasso.invalidate(book.coverFile())
-                    useCoverReplacement = false
-                    cover.recycle()
-                } else {
-                    useCoverReplacement = true
-                }
-            } else {
-                useCoverReplacement = true
-            }
-
-            //noinspection SynchronizeOnNonFinalField
-            synchronized(db) {
-                val dbBook = bookChest.bookById(bookId)?.copy(useCoverReplacement = useCoverReplacement)
-                if (dbBook != null) {
-                    db.updateBook(dbBook)
-                }
-            }
-
-            callback?.onBookCoverChanged(book)
-        }
-
-        return MaterialDialog.Builder(context)
-                .customView(customView, true)
+        val dialog = MaterialDialog.Builder(context)
+                .customView(customView, false)
                 .title(R.string.use_cover)
                 .positiveText(R.string.dialog_confirm)
-                .onPositive(positiveCallback)
                 .build()
-    }
 
-    private fun scaleRect(rect: Rect, scaleFactor: Float) =
-            rect.set((rect.left * scaleFactor).toInt(),
-                    (rect.top * scaleFactor).toInt(),
-                    (rect.right * scaleFactor).toInt(),
-                    (rect.bottom * scaleFactor).toInt())
+        // use a click listener so the dialog stays open till the image was saved
+        dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener {
+            val r = cropOverlay.selectedRect
+            if (!r.isEmpty) {
+                val target = object : SimpleTarget() {
+                    override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) {
+                        imageHelper.saveCover(bitmap, book.coverFile())
+                        picasso.invalidate(book.coverFile())
+                        callback().onBookCoverChanged(book)
+                        dismiss()
+                    }
+
+                    override fun onBitmapFailed(errorDrawable: Drawable?) {
+                        dismiss()
+                    }
+                }
+                // picasso only holds a weak reference so we have to protect against gc
+                coverImage.tag = target
+                picasso.load(uri)
+                        .transform(CropTransformation(cropOverlay, coverImage))
+                        .into(target)
+            } else dismiss()
+        }
+        return dialog
+    }
 
     interface Callback {
         fun onBookCoverChanged(book: Book)
