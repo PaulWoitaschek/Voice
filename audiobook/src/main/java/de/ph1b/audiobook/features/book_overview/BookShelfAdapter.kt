@@ -27,8 +27,6 @@ import javax.inject.Inject
 // display all the books
 class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, ClickType) -> Unit) : RecyclerView.Adapter<BookShelfAdapter.BaseViewHolder>() {
 
-    private val PAYLOAD_COVER = 1
-
     private val books = ArrayList<Book>()
 
     @Inject lateinit var prefs: PrefsManager
@@ -45,11 +43,7 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
         return h + ":" + m
     }
 
-    /**
-     * Adds a new set of books and removes the ones that do not exist any longer
-
-     * @param newBooks The new set of books
-     */
+    /** Adds a new set of books and removes the ones that do not exist any longer **/
     fun newDataSet(newBooks: List<Book>) {
         i { "newDataSet was called with ${newBooks.size} books" }
 
@@ -79,19 +73,12 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
     fun changeBookCover(book: Book) {
         val index = books.indexOfFirst { it.id == book.id }
         if (index >= 0) {
-            notifyItemChanged(index, PAYLOAD_COVER)
+            notifyItemChanged(index)
         }
     }
 
     override fun getItemId(position: Int): Long = books[position].id
 
-    /**
-     * Gets the item at a requested position
-
-     * @param position the adapter position
-     * *
-     * @return the book at the position
-     */
     fun getItem(position: Int): Book = books[position]
 
     var displayMode: BookShelfController.DisplayMode = BookShelfController.DisplayMode.LIST
@@ -115,7 +102,7 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int, payloads: MutableList<Any>) = when {
         payloads.isEmpty() -> onBindViewHolder(holder, position)
-        else -> holder.bind(books[position], payloads)
+        else -> holder.bind(books[position])
     }
 
     override fun getItemCount(): Int = books.size
@@ -145,18 +132,12 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
         }
     }
 
-    /**
-     * ViewHolder for the grid
-     */
+    /** ViewHolder for the grid **/
     inner class GridViewHolder(parent: ViewGroup) : BaseViewHolder(parent.layoutInflater()
             .inflate(R.layout.book_shelf_grid_layout, parent, false))
 
 
-    /**
-     * ViewHolder base class
-
-     * @param itemView The view to bind to
-     */
+    /** ViewHolder base class **/
     abstract inner class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val coverView: ImageView
         private val currentPlayingIndicator: ImageView
@@ -194,12 +175,6 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
             editBook.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.MENU) }
 
             coverView.supportTransitionName = book.coverTransitionName
-        }
-
-        fun bind(book: Book, payloads: MutableList<Any>) {
-            when {
-                payloads.contains(PAYLOAD_COVER) -> bindCover(book)
-            }
         }
 
         private fun bindCover(book: Book) {
