@@ -8,7 +8,7 @@ android {
     int minSdk = hasProperty('minSdk') ? minSdk.toInteger() : 16
 
     compileSdkVersion 24
-    buildToolsVersion '24.0.2'
+    buildToolsVersion '24.0.3'
 
     defaultConfig {
         applicationId "de.ph1b.audiobook"
@@ -51,7 +51,7 @@ dependencies {
     compile "com.android.support:support-v4:$supportVersion"
     compile "com.android.support:design:$supportVersion"
     compile "com.android.support:transition:$supportVersion"
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha9'
 
     // image loading
     compile "com.squareup.picasso:picasso:2.5.2"
@@ -91,7 +91,7 @@ dependencies {
     // permissions
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar'
 
-    def conductorVer = "2.0.1"
+    def conductorVer = "2.0.2"
     compile "com.bluelinelabs:conductor:$conductorVer"
     compile "com.bluelinelabs:conductor-support:$conductorVer"
     compile "com.bluelinelabs:conductor-rxlifecycle:$conductorVer"
