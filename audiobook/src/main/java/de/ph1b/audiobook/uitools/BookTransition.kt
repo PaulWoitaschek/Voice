@@ -25,6 +25,7 @@ class BookTransition() : TransitionChangeHandler() {
                 .inflateTransition(android.R.transition.move)
         move.addTarget(R.id.fab)
         move.addTarget(R.id.play)
+        move.excludeTarget(R.id.toolbar, true)
         if (transitionName != null) move.addTarget(transitionName)
         move.addTarget(R.id.cover)
         return move
