@@ -57,6 +57,10 @@ var View.visible: Boolean
         visibility = if (value) View.VISIBLE else View.GONE
     }
 
+fun View.setVisibleWeak() {
+    visibility = View.INVISIBLE
+}
+
 object ThemeUtil {
 
     @AnyRes

@@ -18,6 +18,7 @@ import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.mvp.MvpBaseController
 import de.ph1b.audiobook.uitools.DividerItemDecoration
+import de.ph1b.audiobook.uitools.setVisibleWeak
 import de.ph1b.audiobook.uitools.visible
 
 /**
@@ -55,7 +56,7 @@ class FolderOverviewController : MvpBaseController<FolderOverviewController, Fol
             startFolderChooserActivity(FolderChooserActivity.OperationMode.COLLECTION_BOOK)
         }
 
-        overlay.visible = false
+        overlay.setVisibleWeak()
 
         // preparing list
         val layoutManager = LinearLayoutManager(activity)
@@ -95,7 +96,7 @@ class FolderOverviewController : MvpBaseController<FolderOverviewController, Fol
 
     override fun provideView() = this
 
-    private val BACKGROUND_OVERLAY_VISIBLE = "overlayVisibility"
+    private val BACKGROUND_VISIBILITY = "overlayVisibility"
 
     private lateinit var buttonRepresentingTheFam: View
 
@@ -138,13 +139,13 @@ class FolderOverviewController : MvpBaseController<FolderOverviewController, Fol
                 anim.addListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
                         super.onAnimationEnd(animation)
-                        overlay.visible = false
+                        overlay.setVisibleWeak()
                     }
                 })
 
                 // start the animation
                 anim.start()
-            } else overlay.visible = false
+            } else overlay.setVisibleWeak()
         }
     }
 
@@ -170,7 +171,7 @@ class FolderOverviewController : MvpBaseController<FolderOverviewController, Fol
 
     override fun onRestoreViewState(view: View, savedViewState: Bundle) {
         // restoring overlay
-        overlay.visible = savedViewState.getBoolean(BACKGROUND_OVERLAY_VISIBLE)
+        overlay.visibility = savedViewState.getInt(BACKGROUND_VISIBILITY)
     }
 
     private fun startFolderChooserActivity(operationMode: FolderChooserActivity.OperationMode) {
@@ -197,7 +198,7 @@ class FolderOverviewController : MvpBaseController<FolderOverviewController, Fol
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putBoolean(BACKGROUND_OVERLAY_VISIBLE, overlay.visible)
+        outState.putInt(BACKGROUND_VISIBILITY, overlay.visibility)
 
         super.onSaveInstanceState(outState)
     }
