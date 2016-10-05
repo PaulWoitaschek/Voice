@@ -91,7 +91,7 @@ dependencies {
     // permissions
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar'
 
-    def conductorVer = "2.0.2"
+    def conductorVer = "2.0.3"
     compile "com.bluelinelabs:conductor:$conductorVer"
     compile "com.bluelinelabs:conductor-support:$conductorVer"
     compile "com.bluelinelabs:conductor-rxlifecycle:$conductorVer"
