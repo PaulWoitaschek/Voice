@@ -2,11 +2,16 @@ package de.ph1b.audiobook.features.sign_in
 
 import android.app.ProgressDialog
 import android.content.Intent
+import android.content.IntentSender
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
+import android.support.annotation.Nullable
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -16,103 +21,164 @@ import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.GoogleApiClient
 import de.ph1b.audiobook.R
 
-/**
- * Activity to demonstrate basic retrieval of the Google user's ID, email address, and basic
- * profile.
- */
-class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveApi.DriveContentsResult;
+import com.google.android.gms.drive.DriveFolder
+import com.google.android.gms.drive.MetadataChangeSet;
+import de.ph1b.audiobook.uitools.GoogleDriveConnectionActivity
+import java.io.ByteArrayOutputStream
+import java.io.IOException
+
+
+class SignInActivity : AppCompatActivity(), OnConnectionFailedListener,
+        View.OnClickListener, ConnectionCallbacks {
 
     private var mGoogleApiClient: GoogleApiClient? = null
     private var mStatusTextView: TextView? = null
     private var mProgressDialog: ProgressDialog? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sign_in)
+    private val TAG = "SignInActivity"
+    private val REQUEST_CODE_CAPTURE_IMAGE = 1
+    private val REQUEST_CODE_CREATOR = 2
+    private val REQUEST_CODE_RESOLUTION = 3
+    private var mBitmapToSave: Bitmap? = null
 
-        // Views
-        mStatusTextView = findViewById(R.id.status) as TextView
+    private fun saveFileToDrive() {
+        // Start by creating a new contents, and setting a callback.
+        Log.i(TAG, "Creating new contents.")
+        val image = mBitmapToSave
+        Drive.DriveApi.newDriveContents(mGoogleApiClient).setResultCallback(object : ResultCallback<DriveContentsResult> {
 
-        // Button listeners
-        findViewById(R.id.sign_in_button).setOnClickListener(this)
-        findViewById(R.id.sign_out_button).setOnClickListener(this)
+            override fun onResult(result: DriveContentsResult) {
+                // If the operation was not successful, we cannot do anything
+                // and must
+                // fail.
+                if (!result.status.isSuccess) {
+                    Log.i(TAG, "Failed to create new contents.")
+                    return
+                }
+                // Otherwise, we can write our data to the new contents.
+                Log.i(TAG, "New contents created.")
+                // Get an output stream for the contents.
+                val outputStream = result.driveContents.outputStream
+                // Write the bitmap data from it.
+                val bitmapStream = ByteArrayOutputStream()
+                image!!.compress(Bitmap.CompressFormat.PNG, 100, bitmapStream)
+                try {
+                    outputStream.write(bitmapStream.toByteArray())
+                } catch (e1: IOException) {
+                    Log.i(TAG, "Unable to write file contents.")
+                }
 
-        // [START configure_signin]
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
-        // [END configure_signin]
+                // Create the initial metadata - MIME type and title.
+                // Note that the user will be able to change the title later.
+                val metadataChangeSet = MetadataChangeSet.Builder().setMimeType("image/jpeg").setTitle("Android Photo.png").build()
+                // Create an intent for the file chooser, and start it.
+                val intentSender = Drive.DriveApi.newCreateFileActivityBuilder().setInitialMetadata(metadataChangeSet).setInitialDriveContents(result.driveContents).build(mGoogleApiClient)
+                try {
+                    startIntentSenderForResult(
+                            intentSender, REQUEST_CODE_CREATOR, null, 0, 0, 0)
+                } catch (e: IntentSender.SendIntentException) {
+                    Log.i(TAG, "Failed to launch file chooser.")
+                }
 
-        // [START build_client]
-        // Build a GoogleApiClient with access to the Google Sign-In API and the
-        // options specified by gso.
-        mGoogleApiClient = GoogleApiClient.Builder(this).enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build()
-        // [END build_client]
-
-        // [START customize_button]
-        // Customize sign-in button. The sign-in button can be displayed in
-        // multiple sizes and color schemes. It can also be contextually
-        // rendered based on the requested scopes. For example. a red button may
-        // be displayed when Google+ scopes are requested, but a white button
-        // may be displayed when only basic profile is requested. Try adding the
-        // Scopes.PLUS_LOGIN scope to the GoogleSignInOptions to see the
-        // difference.
-        val signInButton = findViewById(R.id.sign_in_button) as SignInButton
-        signInButton.setSize(SignInButton.SIZE_STANDARD)
-        signInButton.setScopes(gso.scopeArray)
-        // [END customize_button]
-    }
-
-    public override fun onStart() {
-        super.onStart()
-
-        val opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient)
-        if (opr.isDone) {
-            // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
-            // and the GoogleSignInResult will be available instantly.
-            Log.d(TAG, "Got cached sign-in")
-            val result = opr.get()
-            handleSignInResult(result)
-        } else {
-            // If the user has not previously signed in on this device or the sign-in has expired,
-            // this asynchronous branch will attempt to sign in the user silently.  Cross-device
-            // single sign-on will occur in this branch.
-            showProgressDialog()
-            opr.setResultCallback { googleSignInResult ->
-                hideProgressDialog()
-                handleSignInResult(googleSignInResult)
             }
+        })
+    }
+
+    protected override fun onResume() {
+        super.onResume()
+        if (mGoogleApiClient == null) {
+            // Create the API client and bind it to an instance variable.
+            // We use this instance as the callback for connection and connection
+            // failures.
+            // Since no account name is passed, the user is prompted to choose.
+            mGoogleApiClient = GoogleApiClient.Builder(this).addApi(Drive.API).addScope(Drive.SCOPE_FILE).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build()
+        }
+        // Connect the client. Once connected, the camera is launched.
+        mGoogleApiClient!!.connect()
+    }
+
+    protected override fun onPause() {
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient!!.disconnect()
+        }
+        super.onPause()
+    }
+
+    protected override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+        when (requestCode) {
+            REQUEST_CODE_CAPTURE_IMAGE ->
+                // Called after a photo has been taken.
+                if (resultCode == AppCompatActivity.RESULT_OK) {
+                    // Store the image data as a bitmap for writing later.
+                    mBitmapToSave = data.extras.get("data") as Bitmap
+                }
+            REQUEST_CODE_CREATOR ->
+                // Called after a file is saved to Drive.
+                if (resultCode == RESULT_OK) {
+                    Log.i(TAG, "Image successfully saved.")
+                    mBitmapToSave = null
+                    // Just start the camera again for another photo.
+                    startActivityForResult(Intent(MediaStore.ACTION_IMAGE_CAPTURE),
+                            REQUEST_CODE_CAPTURE_IMAGE)
+                }
         }
     }
 
-    // [START onActivityResult]
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        super.onActivityResult(requestCode, resultCode, data)
+    override fun onConnectionFailed(result: ConnectionResult) {
+        // Called whenever the API client fails to connect.
+        Log.i(TAG, "GoogleApiClient connection failed: " + result.toString())
+        if (!result.hasResolution()) {
+            // show the localized error dialog.
+            GoogleApiAvailability.getInstance().getErrorDialog(this, result.errorCode, 0).show()
+            return
+        }
+        // The failure has a resolution. Resolve it.
+        // Called typically when the app is not yet authorized, and an
+        // authorization
+        // dialog is displayed to the user.
+        try {
+            result.startResolutionForResult(this, REQUEST_CODE_RESOLUTION)
+        } catch (e: IntentSender.SendIntentException) {
+            Log.e(TAG, "Exception while starting resolution activity", e)
+        }
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-            handleSignInResult(result)
+    }
+
+    override fun onConnected(@Nullable p0: Bundle?) {
+        Log.i(TAG, "API client connected.")
+//        if (mBitmapToSave == null) {
+//            // This activity has no UI of its own. Just start the camera.
+//            startActivityForResult(Intent(MediaStore.ACTION_IMAGE_CAPTURE),
+//                    REQUEST_CODE_CAPTURE_IMAGE)
+//            return
+//        }
+//        saveFileToDrive()
+        val changeSet = MetadataChangeSet.Builder().setTitle("MaterialAudiobookPlayer").build()
+        Drive.DriveApi.getRootFolder(mGoogleApiClient).createFolder(
+                mGoogleApiClient, changeSet).setResultCallback(callback)
+        Toast.makeText(this, "Folder created", Toast.LENGTH_SHORT).show();
+    }
+
+    val callback: ResultCallback<DriveFolder.DriveFolderResult> = object : ResultCallback<DriveFolder.DriveFolderResult> {
+        override fun onResult(result: DriveFolder.DriveFolderResult) {
+            if (!result.getStatus().isSuccess()) {
+                Log.i(TAG, "Error while trying to create the folder")
+                return
+            }
+            Log.i(TAG, "Created a folder: " + result.getDriveFolder().getDriveId())
         }
     }
-    // [END onActivityResult]
 
-    // [START handleSignInResult]
-    private fun handleSignInResult(result: GoogleSignInResult) {
-        Log.d(TAG, "handleSignInResult:" + result.isSuccess)
-        if (result.isSuccess) {
-            // Signed in successfully, show authenticated UI.
-            val acct = result.signInAccount
-            mStatusTextView!!.text = getString(R.string.signed_in_fmt, acct!!.displayName)
-            updateUI(true)
-        } else {
-            // Signed out, show unauthenticated UI.
-            updateUI(false)
-        }
+    override fun onConnectionSuspended(cause: Int) {
+        Log.i(TAG, "GoogleApiClient connection suspended")
     }
-    // [END handleSignInResult]
 
-    // [START signIn]
     private fun signIn() {
         val signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
         startActivityForResult(signInIntent, RC_SIGN_IN)
@@ -138,12 +204,6 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
         }
     }
     // [END revokeAccess]
-
-    override fun onConnectionFailed(connectionResult: ConnectionResult) {
-        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
-        // be available.
-        Log.d(TAG, "onConnectionFailed:" + connectionResult)
-    }
 
     private fun showProgressDialog() {
         if (mProgressDialog == null) {
@@ -181,8 +241,6 @@ class SignInActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLi
     }
 
     companion object {
-
-        private val TAG = "SignInActivity"
         private val RC_SIGN_IN = 9001
     }
 }
