@@ -37,12 +37,11 @@ class FolderChooserAdapter(private val c: Context,
     override fun getItemCount() = data.size
 
     private val data = ArrayList<File>()
-    private val selectedItems = ArrayList<Boolean>()
 
-    fun checkFolder(folder: File): Boolean {
-        if (!folder.isDirectory)
-            return false
-        val listFiles = folder.listFiles(FileRecognition.folderAndMusicFilter)
+    fun checkFolder(file: File): Boolean {
+        if (!file.isDirectory)
+            return FileRecognition.musicFilter.accept(file)
+        val listFiles = file.listFiles(FileRecognition.folderAndMusicFilter)
         for (item in listFiles) {
             if (FileRecognition.musicFilter.accept(item)) {
                 return true
@@ -57,20 +56,8 @@ class FolderChooserAdapter(private val c: Context,
 
     fun newData(newData: List<File>) {
         data.clear()
-        selectedItems.clear()
-
-        for (item in newData) {
-            if (checkFolder(item)) {
-                data.add(item)
-            }
-        }
-
-//        data.addAll(newData)
-
-        for (item in data) {
-            selectedItems.add(false)
-        }
-
+        //data.addAll(newData)
+        newData.forEach { item -> if (checkFolder(item)) data.add(item) }
         notifyDataSetChanged()
     }
 
@@ -78,8 +65,7 @@ class FolderChooserAdapter(private val c: Context,
 
         init {
             root.setOnClickListener {
-                selectedItems[adapterPosition] = !selectedItems[adapterPosition]
-                root.checkBox.setChecked(selectedItems[adapterPosition])
+                listener.invoke(data[adapterPosition])
             }
         }
 
@@ -91,12 +77,6 @@ class FolderChooserAdapter(private val c: Context,
             // if its not a collection its also fine to pick a file
             if (mode == FolderChooserActivity.OperationMode.COLLECTION_BOOK) {
                 root.text.isEnabled = isDirectory
-            }
-
-            if (selectedItems[adapterPosition] == true) {
-                root.checkBox.setChecked(true)
-            } else {
-                root.checkBox.setChecked(false)
             }
 
             val icon = c.drawable(if (isDirectory) R.drawable.ic_folder else R.drawable.ic_album)
