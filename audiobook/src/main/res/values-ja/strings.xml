@@ -34,7 +34,7 @@
     <string name="download_book_cover">インターネットからのカバー</string>
     <string name="pick_book_cover">ファイルシステムからのカバー</string>
     <string name="edit_book_title">ブックを編集</string>
-    <string name="use_cover">カバーを使用する</string>
+
     <!--JumpToPosition-->
     <string name="action_time_change">移動</string>
     <!--BookAdding-->
