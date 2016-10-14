@@ -36,7 +36,6 @@
     <string name="download_book_cover">Cover from internet</string>
     <string name="pick_book_cover">Cover from file system</string>
     <string name="edit_book_title">Edit book</string>
-    <string name="use_cover">Use cover</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Jump to</string>
     <!--BookAdding-->

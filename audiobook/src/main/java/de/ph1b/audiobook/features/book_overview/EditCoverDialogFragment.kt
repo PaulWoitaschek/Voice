@@ -79,7 +79,7 @@ class EditCoverDialogFragment : DialogFragment() {
 
         val dialog = MaterialDialog.Builder(context)
                 .customView(customView, false)
-                .title(R.string.use_cover)
+                .title(R.string.cover)
                 .positiveText(R.string.dialog_confirm)
                 .build()
 
