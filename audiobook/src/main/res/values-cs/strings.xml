@@ -37,7 +37,7 @@
     <string name="download_book_cover">Obal z internetu</string>
     <string name="pick_book_cover">Obal ze souborového systému</string>
     <string name="edit_book_title">Upravit knihu</string>
-    <string name="use_cover">Použít obal</string>
+
     <!--JumpToPosition-->
     <string name="action_time_change">Přeskočit na</string>
     <!--BookAdding-->
