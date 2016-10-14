@@ -44,7 +44,7 @@ class NaturalOrderComparatorTest : TestCase() {
                 testFolder.newFile("a.jpg"))
 
         val sorted = ArrayList(desiredOrder)
-        Collections.sort(sorted, NaturalOrderComparator.FILE_COMPARATOR)
+        Collections.sort(sorted, NaturalOrderComparator.fileComparator)
         assertThat(desiredOrder).isEqualTo(sorted)
     }
 
@@ -67,7 +67,7 @@ class NaturalOrderComparatorTest : TestCase() {
                 "e")
 
         val sorted = ArrayList(desiredOrder)
-        Collections.sort(sorted, NaturalOrderComparator.STRING_COMPARATOR)
+        Collections.sort(sorted, NaturalOrderComparator.stringComparator)
         assertThat(desiredOrder).isEqualTo(sorted)
     }
 

@@ -15,11 +15,18 @@
         android:text="@string/change_book_name"/>
 
     <TextView
-        android:id="@+id/cover"
+        android:id="@+id/internetCover"
         style="@style/BottomSheetRow"
-        android:drawableLeft="@drawable/image"
-        android:drawableStart="@drawable/image"
-        android:text="@string/change_book_cover"/>
+        android:drawableLeft="@drawable/ic_download"
+        android:drawableStart="@drawable/ic_download"
+        android:text="@string/download_book_cover"/>
+
+    <TextView
+        android:id="@+id/fileCover"
+        style="@style/BottomSheetRow"
+        android:drawableLeft="@drawable/ic_image"
+        android:drawableStart="@drawable/ic_image"
+        android:text="@string/pick_book_cover"/>
 
     <TextView
         android:id="@+id/bookmark"

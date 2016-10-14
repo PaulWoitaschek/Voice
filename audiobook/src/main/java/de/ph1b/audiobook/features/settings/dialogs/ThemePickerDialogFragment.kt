@@ -1,12 +1,13 @@
 package de.ph1b.audiobook.features.settings.dialogs
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.DialogFragment
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.app.AppCompatDelegate
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.settings.SettingsSetListener
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.ThemeUtil
@@ -21,14 +22,6 @@ import javax.inject.Inject
 class ThemePickerDialogFragment : DialogFragment() {
 
     @Inject lateinit var prefsManager: PrefsManager
-
-    private lateinit var settingsSetListener: SettingsSetListener
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-        settingsSetListener = context as SettingsSetListener
-    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         App.component().inject(this)
@@ -45,7 +38,12 @@ class ThemePickerDialogFragment : DialogFragment() {
                 .itemsCallbackSingleChoice(existingThemes.indexOf(oldTheme)) { materialDialog, view, i, charSequence ->
                     val newTheme = existingThemes[i]
                     prefsManager.theme.set(newTheme)
-                    settingsSetListener.onSettingsSet(newTheme != oldTheme)
+                    AppCompatDelegate.setDefaultNightMode(newTheme.nightMode)
+
+                    // use post so the dialog can close correctly
+                    Handler().post {
+                        (activity as AppCompatActivity).delegate.applyDayNight()
+                    }
                     true
                 }
                 .positiveText(R.string.dialog_confirm)

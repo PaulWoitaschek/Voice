@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.playback
 
+import android.media.AudioManager
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.playback.player.Player
 import e
@@ -29,6 +30,7 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
     fun onError(): Observable<Unit> = errorSubject.asObservable()
 
     init {
+        player.setAudioStreamType(AudioManager.STREAM_MUSIC)
         player.onCompletion
                 .subscribe {
                     // After the current song has ended, prepare the next one if there is one. Else stop the
@@ -94,9 +96,9 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
 
     fun bookObservable(): Observable<Book> = book.asObservable()
 
-    /**
-     * Prepares the current chapter set in book.
-     */
+    fun setVolume(loud: Boolean) = player.setVolume(if (loud) 1F else 0.1F)
+
+    // Prepares the current chapter set in book.
     private fun prepare() {
         book.value?.let {
             try {

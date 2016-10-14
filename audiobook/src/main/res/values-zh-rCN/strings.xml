@@ -63,8 +63,6 @@
     <string name="bookmark_added">书签已添加</string>
     <string name="bookmark_delete_title">删除书签吗？</string>
     <!--Settings-->
-
-
     <string name="action_settings">设置</string>
     <string name="pref_resume_on_replug">继续播放</string>
     <string name="pref_resume_on_replug_hint">如果因为耳机拔出而暂停，插入耳机将继续播放。</string>
@@ -81,14 +79,10 @@
     <string name="pref_theme_title">主题</string>
     <string name="pref_pause_on_can_duck_title">打扰暂停</string>
     <string name="pref_pause_on_can_duck_summary">有打扰时暂停，而不是降低音量。</string>
-
-
     <string name="pref_auto_rewind_title">自动倒回</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="other">手动暂停 %d 秒后自动倒回。</item>
     </plurals>
-
-
     <string name="pref_support_title">支持</string>
     <string name="pref_support_translations">翻译</string>
     <string name="pref_support_contribute">支持和建议</string>
@@ -103,6 +97,6 @@
     <string name="refresh">刷新</string>
     <string name="reset">重置</string>
     <string name="no_network">网络连接失败</string>
-    <string name="network_top">出了一些小问题…</string>
+    <string name="network_top">出了一些小问题...</string>
     <string name="cover_crop">封面裁剪</string>
 </resources>

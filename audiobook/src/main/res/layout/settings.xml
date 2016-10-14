@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/AppToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"/>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="?attr/actionBarSize"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:divider="?android:attr/listDivider"
+            android:orientation="vertical"
+            android:showDividers="middle">
+
+            <include
+                android:id="@+id/audiobookFolder"
+                layout="@layout/setting_row_double"/>
+
+            <include
+                android:id="@+id/theme"
+                layout="@layout/setting_row_double"/>
+
+            <include
+                android:id="@+id/resumePlayback"
+                layout="@layout/setting_row_switch"/>
+
+            <include
+                android:id="@+id/pauseOnInterruption"
+                layout="@layout/setting_row_switch"/>
+
+            <include
+                android:id="@+id/skipAmount"
+                layout="@layout/setting_row_double"/>
+
+            <include
+                android:id="@+id/autoRewind"
+                layout="@layout/setting_row_double"/>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

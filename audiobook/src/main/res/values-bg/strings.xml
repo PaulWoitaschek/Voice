@@ -32,8 +32,10 @@
     <string name="content_next_cover">Избира следващата обложка</string>
     <string name="content_cover">Избор на обложка</string>
     <string name="change_book_name">Заглавие</string>
-    <string name="change_book_cover">Обложка</string>
+    <string name="download_book_cover">Обложка от интернет</string>
+    <string name="pick_book_cover">Обложка от хранилището</string>
     <string name="edit_book_title">Редактиране на книга</string>
+
     <!--JumpToPosition-->
     <string name="action_time_change">Прескочи до</string>
     <!--BookAdding-->
@@ -64,14 +66,13 @@
     <string name="playback_speed">Скорост на възпроизвеждане</string>
     <!--Bookmarks-->
     <string name="bookmark">Отметка</string>
+    <string name="shake_to_reset">Разклатете за нулиране</string>
     <string name="bookmark_edit_title">Редактиране на отметка</string>
     <string name="acc_button_add_bookmark">Добавя отметка на сегашното местоположение</string>
     <string name="bookmark_edit_hint">Име на отметката</string>
     <string name="bookmark_added">Отметката бе добавена</string>
     <string name="bookmark_delete_title">Да се изтрие ли тази отметка?</string>
     <!--Settings-->
-
-
     <string name="action_settings">Настройки</string>
     <string name="pref_resume_on_replug">Продължи възпроизвеждането</string>
     <string name="pref_resume_on_replug_hint">Ако паузата е била пусната от изваждането на слушалки, възпроизвеждането ще продължи при повторното им включване.</string>
@@ -93,15 +94,11 @@
     <string name="pref_theme_daynight">Ден/нощ</string>
     <string name="pref_pause_on_can_duck_title">Пауза при получаване на известие</string>
     <string name="pref_pause_on_can_duck_summary">Вместо да се намаля звука при получаване на изввестие, да се включи на пауза.</string>
-
-
     <string name="pref_auto_rewind_title">Авто пренавиване</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Автоматично пренавива %d секунда след ръчно паузиране</item>
         <item quantity="other">Автоматично пренавива %d секунди след ръчно поставяне на пауза.</item>
     </plurals>
-
-
     <string name="pref_support_title">Поддръжка</string>
     <string name="pref_support_translations">Преводи</string>
     <string name="pref_support_contribute">Поддръжка и предложения</string>

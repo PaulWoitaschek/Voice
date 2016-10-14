@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import de.ph1b.audiobook.BuildConfig;
 import de.ph1b.audiobook.features.BookAdder;
 import de.ph1b.audiobook.persistence.PrefsManager;
-import de.ph1b.audiobook.playback.BookReaderService;
+import de.ph1b.audiobook.playback.PlaybackService;
 import timber.log.Timber;
 
 public class App extends Application {
@@ -37,7 +37,7 @@ public class App extends Application {
       Timber.i("onCreate");
 
       bookAdder.scanForFiles(true);
-      startService(new Intent(this, BookReaderService.class));
+      startService(new Intent(this, PlaybackService.class));
 
       //noinspection WrongConstant,ConstantConditions
       AppCompatDelegate.setDefaultNightMode(prefsManager.getTheme().get().getNightMode());

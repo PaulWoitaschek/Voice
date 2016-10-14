@@ -12,7 +12,6 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.BookChest
 import e
-import kotlinx.android.synthetic.main.book_more_bottom_sheet.view.*
 import javax.inject.Inject
 
 /**
@@ -23,8 +22,6 @@ import javax.inject.Inject
 class EditBookBottomSheet : BottomSheetDialogFragment() {
 
     @Inject lateinit var bookChest: BookChest
-
-    val callback: BookShelfFragment.Callback by lazy { activity as BookShelfFragment.Callback }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         App.component().inject(this)
@@ -40,26 +37,35 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
 
         @SuppressWarnings("InflateParams")
         val view = context.layoutInflater().inflate(R.layout.book_more_bottom_sheet, null, false)
+        val title = view.findViewById(R.id.title) as TextView
+        val internetCover = view.findViewById(R.id.internetCover) as TextView
+        val fileCover = view.findViewById(R.id.fileCover) as TextView
+        val bookmark = view.findViewById(R.id.bookmark) as TextView
         dialog.setContentView(view)
 
-        view.title.setOnClickListener {
+        title.setOnClickListener {
             EditBookTitleDialogFragment.newInstance(book)
                     .show(fragmentManager, EditBookTitleDialogFragment.TAG)
             dismiss()
         }
-        view.cover.setOnClickListener {
-            callback.onCoverChanged(book)
+        internetCover.setOnClickListener {
+            (activity as Callback).onInternetCoverRequested(book)
             dismiss()
         }
-        view.bookmark.setOnClickListener {
+        fileCover.setOnClickListener {
+            (activity as Callback).onFileCoverRequested(book)
+            dismiss()
+        }
+        bookmark.setOnClickListener {
             BookmarkDialogFragment.newInstance(book.id)
-                    .show(fragmentManager, BookShelfFragment.TAG)
+                    .show(fragmentManager, BookShelfController.TAG)
             dismiss()
         }
 
-        tintLeftDrawable(view.title)
-        tintLeftDrawable(view.cover)
-        tintLeftDrawable(view.bookmark)
+        tintLeftDrawable(title)
+        tintLeftDrawable(internetCover)
+        tintLeftDrawable(fileCover)
+        tintLeftDrawable(bookmark)
 
         return dialog
     }
@@ -79,5 +85,10 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
                 putLong(NI_BOOK, book.id)
             }
         }
+    }
+
+    interface Callback {
+        fun onInternetCoverRequested(book: Book)
+        fun onFileCoverRequested(book: Book)
     }
 }

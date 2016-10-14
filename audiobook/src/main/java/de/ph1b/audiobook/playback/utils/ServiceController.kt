@@ -3,7 +3,7 @@ package de.ph1b.audiobook.playback.utils
 import android.content.Context
 import android.content.Intent
 import android.view.KeyEvent
-import de.ph1b.audiobook.playback.BookReaderService
+import de.ph1b.audiobook.playback.PlaybackService
 import javax.inject.Inject
 
 /**
@@ -13,7 +13,7 @@ import javax.inject.Inject
  */
 class ServiceController @Inject constructor(private val context: Context) {
 
-    private fun intent() = Intent(context, BookReaderService::class.java)
+    private fun intent() = Intent(context, PlaybackService::class.java)
 
     private fun mediaButtonIntent(event: Int) = intent().apply {
         action = Intent.ACTION_MEDIA_BUTTON

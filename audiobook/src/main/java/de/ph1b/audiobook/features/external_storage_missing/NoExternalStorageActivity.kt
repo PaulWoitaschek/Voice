@@ -5,19 +5,18 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BaseActivity
-import kotlinx.android.synthetic.main.activity_no_external.*
-import kotlinx.android.synthetic.main.toolbar.view.*
+import de.ph1b.audiobook.misc.find
+import de.ph1b.audiobook.misc.setupActionbar
 
 class NoExternalStorageActivity : AppCompatActivity() {
 
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView( R.layout.activity_no_external)
+        setContentView(R.layout.activity_no_external)
 
-        setSupportActionBar(toolbarInclude.toolbar)
-        supportActionBar!!.setTitle(R.string.no_external_storage_action_bar_title)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+        setupActionbar(toolbar = find(R.id.toolbar),
+                title = getString(R.string.no_external_storage_action_bar_title))
     }
 
     override fun onBackPressed() {

@@ -1,4 +1,12 @@
 # Upcoming version
+* Added option to select cover from disk. Many thanks to [@alilotfi](https://github.com/alilotfi)
+
+# 16.08
+* Added a splash activity for faster launches
+* Added an option for shake to reset the sleep timer
+* Set the sleep time directly from the play screen
+* Set the bookmark-on sleep directly from the play screen
+* Removed crash reporting
 
 # 2.7.2.3
 * Made app ready for Android N

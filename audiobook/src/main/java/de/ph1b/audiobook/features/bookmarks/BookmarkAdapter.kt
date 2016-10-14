@@ -2,13 +2,14 @@ package de.ph1b.audiobook.features.bookmarks
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import de.ph1b.audiobook.Bookmark
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.R
-import kotlinx.android.synthetic.main.dialog_bookmark_row_layout.view.*
+import de.ph1b.audiobook.misc.find
+import de.ph1b.audiobook.misc.layoutInflater
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -53,7 +54,7 @@ class BookmarkAdapter(private val chapters: List<Chapter>, private val listener:
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.dialog_bookmark_row_layout, parent, false)
+        val v = parent.layoutInflater().inflate(R.layout.dialog_bookmark_row_layout, parent, false)
         return ViewHolder(v, listener)
     }
 
@@ -80,21 +81,26 @@ class BookmarkAdapter(private val chapters: List<Chapter>, private val listener:
 
     inner class ViewHolder(itemView: View, listener: OnOptionsMenuClickedListener) : RecyclerView.ViewHolder(itemView) {
 
+        private val title: TextView = find(R.id.title)
+        private val summary: TextView = find(R.id.summary)
+        private val time: TextView = find(R.id.time)
+        private val edit: View = find(R.id.edit)
+
         fun bind(position: Int) {
             val bookmark = bookmarks[position]
-            itemView.title.text = bookmark.title
+            title.text = bookmark.title
 
             val size = chapters.size
             val currentChapter = chapters.single { it.file == bookmark.mediaFile }
             val index = chapters.indexOf(currentChapter)
 
-            itemView.summary.text = context.getString(R.string.format_bookmarks_n_of, index + 1, size)
-            itemView.time.text = context.getString(R.string.format_bookmarks_time, formatTime(bookmark.time),
+            summary.text = context.getString(R.string.format_bookmarks_n_of, index + 1, size)
+            time.text = context.getString(R.string.format_bookmarks_time, formatTime(bookmark.time),
                     formatTime(currentChapter.duration))
         }
 
         init {
-            itemView.edit.setOnClickListener { listener.onOptionsMenuClicked(bookmarks[adapterPosition], it) }
+            edit.setOnClickListener { listener.onOptionsMenuClicked(bookmarks[adapterPosition], it) }
             itemView.setOnClickListener { listener.onBookmarkClicked(bookmarks[adapterPosition]) }
         }
     }

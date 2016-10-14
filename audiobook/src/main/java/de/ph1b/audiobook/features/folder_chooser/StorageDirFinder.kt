@@ -39,7 +39,6 @@ object StorageDirFinder {
             // Device has physical external storage; use plain paths.
             if (TextUtils.isEmpty(rawExternalStorage)) {
                 // EXTERNAL_STORAGE undefined; falling back to default.
-                rv.add("/storage/sdcard0")
             } else {
                 rv.add(rawExternalStorage)
             }
@@ -73,12 +72,14 @@ object StorageDirFinder {
             val rawSecondaryStorage = rawSecondaryStorageStr.split(File.pathSeparator)
             rv.addAll(rawSecondaryStorage)
         }
-        rv.add("/storage/extSdCard")
         rv.add(Environment.getExternalStorageDirectory().absolutePath)
+        rv.add("/storage/extSdCard")
         rv.add("/storage/emulated/0")
         rv.add("/storage/sdcard1")
         rv.add("/storage/external_SD")
         rv.add("/storage/ext_sd")
+        rv.add("/storage/sdcard0")
+        rv.add("/mnt/external_sd")
 
         // this is a workaround for marshmallow as we can't know the paths of the sd cards any more.
         // if one of the files in the fallback dir has contents we add it to the list.
@@ -100,7 +101,7 @@ object StorageDirFinder {
                 paths.add(f)
             }
         }
-        return paths.sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
+        return paths.sortedWith(NaturalOrderComparator.fileComparator)
     }
 
     /**

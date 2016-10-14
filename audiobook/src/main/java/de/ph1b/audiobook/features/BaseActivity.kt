@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatDelegate
 import de.ph1b.audiobook.features.external_storage_missing.NoExternalStorageActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.playback.BookReaderService
+import de.ph1b.audiobook.playback.PlaybackService
 import javax.inject.Inject
 
 /**
@@ -30,7 +30,7 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if (!storageMounted()) {
-            val serviceIntent = Intent(this, BookReaderService::class.java)
+            val serviceIntent = Intent(this, PlaybackService::class.java)
             stopService(serviceIntent)
 
             startActivity(Intent(this, NoExternalStorageActivity::class.java).apply {

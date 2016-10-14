@@ -22,8 +22,10 @@ import javax.inject.Singleton
     private val rewindIntent = keyEventIntent(KeyEvent.KEYCODE_MEDIA_REWIND)
     private val fastForwardIntent = keyEventIntent(KeyEvent.KEYCODE_MEDIA_FAST_FORWARD)
     private val pauseIntentNonRewinding = intent(ACTION_PAUSE_NON_REWINDING)
+    private val lowVolumeIntent = intent(ACTION_VOLUME_LOW)
+    private val highVolumeIntent = intent(ACTION_VOLUME_HIGH)
 
-    private fun intent(action: String) = Intent(context, BookReaderService::class.java).apply {
+    private fun intent(action: String) = Intent(context, PlaybackService::class.java).apply {
         setAction(action)
     }
 
@@ -54,6 +56,8 @@ import javax.inject.Singleton
 
     fun next() = fire(nextIntent)
 
+    fun volume(loud: Boolean) = fire(if (loud) highVolumeIntent else lowVolumeIntent)
+
     fun setSpeed(speed: Float) {
         fire(intent(ACTION_SPEED).apply {
             putExtra(EXTRA_SPEED, speed)
@@ -79,5 +83,8 @@ import javax.inject.Singleton
         val ACTION_FORCE_PREVIOUS = "actionForcePrevious"
 
         val ACTION_PAUSE_NON_REWINDING = "ActionPauseNonRewinding"
+
+        val ACTION_VOLUME_HIGH = "volumeHigh"
+        val ACTION_VOLUME_LOW = "volumeLow"
     }
 }

@@ -63,8 +63,6 @@
     <string name="bookmark_added">Bladwijzer toegevoegd</string>
     <string name="bookmark_delete_title">Verwijder deze bladwijzer?</string>
     <!--Settings-->
-
-
     <string name="action_settings">Voorkeuren</string>
     <string name="pref_resume_on_replug">Afspelen hervatten</string>
     <string name="pref_resume_on_replug_hint">Als u pauzeert door de headset te ontkoppelen, zal het afspelen hervatten als u deze weer aansluit.</string>
@@ -83,15 +81,11 @@
     <string name="pref_theme_title">Thema</string>
     <string name="pref_pause_on_can_duck_title">Pauzeer bij melding</string>
     <string name="pref_pause_on_can_duck_summary">Pauzeren wanneer een andere app een melding laat horen, ipv het afspeelvolume tijdelijk te verlagen.</string>
-
-
     <string name="pref_auto_rewind_title">Automatisch terugspoelen</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Spoel automatisch %d seconde terug na handmatig pauzeren.</item>
         <item quantity="other">Spoel automatisch %d seconden terug na handmatig pauzeren.</item>
     </plurals>
-
-
     <string name="pref_support_title">Steun</string>
     <string name="pref_support_translations">App vertalen</string>
     <string name="pref_support_contribute">Ondersteuning en suggesties</string>

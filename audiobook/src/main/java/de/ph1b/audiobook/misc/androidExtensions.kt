@@ -5,22 +5,17 @@ import android.graphics.drawable.Drawable
 import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
-import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
-import android.support.v7.app.ActionBar
+import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.SeekBar
-import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.bluelinelabs.conductor.Controller
 import com.f2prateek.rx.preferences.Preference
-
-
-val Fragment.actionBar: ActionBar
-    get() = (activity as AppCompatActivity).supportActionBar!!
 
 fun Context.layoutInflater(): LayoutInflater = LayoutInflater.from(this)
 
@@ -30,24 +25,11 @@ fun Context.drawable(@DrawableRes id: Int): Drawable = ContextCompat.getDrawable
     return ContextCompat.getColor(this, id)
 }
 
+var View.supportTransitionName: String?
+    get() = ViewCompat.getTransitionName(this)
+    set(value) = ViewCompat.setTransitionName(this, value)
+
 fun View.layoutInflater() = context.layoutInflater()
-
-fun SeekBar.onProgressChanged(initialNotification: Boolean = false, progressChanged: (Int) -> Unit) {
-    val listener = object : SeekBar.OnSeekBarChangeListener {
-        override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-            progressChanged(progress)
-        }
-
-        override fun onStartTrackingTouch(seekBar: SeekBar) {
-        }
-
-        override fun onStopTrackingTouch(seekBar: SeekBar) {
-        }
-    }
-
-    setOnSeekBarChangeListener(listener)
-    if (initialNotification) listener.onProgressChanged(this, progress, false)
-}
 
 fun MaterialDialog.Builder.positiveClicked(listener: () -> Unit): MaterialDialog.Builder {
     onPositive { dialog, which -> listener() }
@@ -66,8 +48,23 @@ fun Drawable.tinted(@ColorInt color: Int): Drawable {
     return wrapped
 }
 
-fun TextView.leftCompoundDrawable(): Drawable? = compoundDrawables[0]
-fun TextView.topCompoundDrawable(): Drawable? = compoundDrawables[1]
-fun TextView.rightCompoundDrawable(): Drawable? = compoundDrawables[2]
-fun TextView.bottomCompoundDrawable(): Drawable? = compoundDrawables[3]
+fun Controller.setupActionbar(toolbar: Toolbar,
+                              @DrawableRes upIndicator: Int? = null,
+                              title: String? = null) =
+        (activity as AppCompatActivity).setupActionbar(
+                toolbar = toolbar,
+                upIndicator = upIndicator,
+                title = title)
 
+fun AppCompatActivity.setupActionbar(toolbar: Toolbar,
+                                     @DrawableRes upIndicator: Int? = null,
+                                     title: String? = null) {
+    setSupportActionBar(toolbar)
+    val actionBar = supportActionBar!!
+
+    if (upIndicator != null) actionBar.setHomeAsUpIndicator(upIndicator)
+    actionBar.setDisplayHomeAsUpEnabled(upIndicator != null)
+
+    if (title != null) actionBar.title = title
+    actionBar.setDisplayShowTitleEnabled(title != null)
+}

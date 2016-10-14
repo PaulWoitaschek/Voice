@@ -2,27 +2,26 @@ package de.ph1b.audiobook.features
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.transition.TransitionInflater
-import android.view.View
+import android.view.ViewGroup
 import com.afollestad.materialdialogs.MaterialDialog
+import com.bluelinelabs.conductor.Conductor
+import com.bluelinelabs.conductor.Router
+import com.bluelinelabs.conductor.RouterTransaction
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.book_overview.BookShelfFragment
-import de.ph1b.audiobook.features.book_playing.BookPlayFragment
-import de.ph1b.audiobook.features.imagepicker.ImagePickerActivity
+import de.ph1b.audiobook.features.book_overview.BookShelfController
+import de.ph1b.audiobook.features.book_overview.EditBookBottomSheet
+import de.ph1b.audiobook.features.book_overview.EditCoverDialogFragment
+import de.ph1b.audiobook.features.book_overview.NoFolderWarningDialogFragment
+import de.ph1b.audiobook.features.book_playing.BookPlayController
+import de.ph1b.audiobook.features.folder_overview.FolderOverviewController
+import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
-import i
-import kotlinx.android.synthetic.main.activity_book.*
-import kotlinx.android.synthetic.main.toolbar.*
-import permissions.dispatcher.*
-import v
 import java.io.File
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -30,57 +29,36 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-@RuntimePermissions class BookActivity : BaseActivity(), BookShelfFragment.Callback {
-
-    private val TAG = BookActivity::class.java.simpleName
-    private val FM_BOOK_SHELF = TAG + BookShelfFragment.TAG
-    private val FM_BOOK_PLAY = TAG + BookPlayFragment.TAG
+class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, EditBookBottomSheet.Callback, EditCoverDialogFragment.Callback {
 
     @Inject lateinit var prefs: PrefsManager
+    @Inject lateinit var permissionHelper: PermissionHelper
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
-                                            grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        BookActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults)
-    }
-
-    // just ensure permissions, dont react
-    @NeedsPermission(PermissionHelper.NEEDED_PERMISSION) fun ensurePermissions() {
-    }
-
-    @OnShowRationale(PermissionHelper.NEEDED_PERMISSION) fun showRationaleForStorage(request: PermissionRequest) {
-        PermissionHelper.showRationaleAndProceed(root, request)
-    }
-
-    @OnPermissionDenied(PermissionHelper.NEEDED_PERMISSION) fun denied() {
-        BookActivityPermissionsDispatcher.ensurePermissionsWithCheck(this)
-    }
-
-    @OnNeverAskAgain(PermissionHelper.NEEDED_PERMISSION) fun deniedForever() {
-        PermissionHelper.handleDeniedForever(root)
-    }
+    private lateinit var router: Router
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book)
         App.component().inject(this)
 
-        setSupportActionBar(toolbar!!)
-
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                    .replace(container.id, BookShelfFragment(), FM_BOOK_SHELF)
-                    .commit()
+        val root = findViewById(R.id.root) as ViewGroup
+        router = Conductor.attachRouter(this, root, savedInstanceState)
+        if (!router.hasRootController()) {
+            val rootTransaction = RouterTransaction.with(BookShelfController())
+                    .tag(TAG_BOOKSHELF_CONTROLLER)
+            router.setRoot(rootTransaction)
         }
 
         if (savedInstanceState == null) {
             if (intent.hasExtra(NI_MALFORMED_FILE)) {
                 val malformedFile = intent.getSerializableExtra(NI_MALFORMED_FILE) as File
-                MaterialDialog.Builder(this).title(R.string.mal_file_title).content(getString(R.string.mal_file_message) + "\n\n" + malformedFile).show()
+                MaterialDialog.Builder(this).title(R.string.mal_file_title)
+                        .content(getString(R.string.mal_file_message) + "\n\n" + malformedFile)
+                        .show()
             }
             if (intent.hasExtra(NI_GO_TO_BOOK)) {
                 val bookId = intent.getLongExtra(NI_GO_TO_BOOK, -1)
-                onBookSelected(bookId, HashMap())
+                router.pushController(RouterTransaction.with(BookPlayController.newInstance(bookId)))
             }
         }
     }
@@ -90,74 +68,50 @@ import javax.inject.Inject
 
         val anyFolderSet = prefs.collectionFolders.value().size + prefs.singleBookFolders.value().size > 0
         if (anyFolderSet) {
-            BookActivityPermissionsDispatcher.ensurePermissionsWithCheck(this)
+            permissionHelper.storagePermission(this)
         }
-    }
-
-    override fun onBookSelected(bookId: Long, sharedViews: Map<View, String>) {
-        i { "onBookSelected with $bookId" }
-
-        val ft = supportFragmentManager.beginTransaction()
-        val bookPlayFragment = BookPlayFragment.newInstance(bookId)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val move = TransitionInflater.from(this@BookActivity).inflateTransition(android.R.transition.move)
-            bookPlayFragment.sharedElementEnterTransition = move
-            for (entry in sharedViews.entries) {
-                v { "Added sharedElement=$entry" }
-                ft.addSharedElement(entry.key, entry.value)
-            }
-        }
-
-        ft.replace(container.id, bookPlayFragment, FM_BOOK_PLAY)
-                .addToBackStack(null)
-                .commit()
-    }
-
-    override fun onCoverChanged(book: Book) {
-        val intent = ImagePickerActivity.newIntent(this, book.id)
-        startActivity(intent)
     }
 
     override fun onBackPressed() {
-        val bookShelfFragment = supportFragmentManager.findFragmentByTag(FM_BOOK_SHELF)
-        if (bookShelfFragment != null && bookShelfFragment.isVisible) {
-            finish()
-        } else {
-            super.onBackPressed()
-        }
+        if (!router.handleBack()) super.onBackPressed()
     }
 
     companion object {
         private val NI_MALFORMED_FILE = "malformedFile"
         private val NI_GO_TO_BOOK = "niGotoBook"
+        private val TAG_BOOKSHELF_CONTROLLER = BookShelfController::class.java.simpleName
 
-        /**
-         * Returns an intent to start the activity with to inform the user that a certain file may be
-         * defect
 
-         * @param c             The context
-         * *
-         * @param malformedFile The defect file
-         * *
-         * @return The intent to start the activity with.
-         */
+        /** Returns an intent to start the activity with to inform the user that a certain file may be defect **/
         fun malformedFileIntent(c: Context, malformedFile: File) = Intent(c, BookActivity::class.java).apply {
             putExtra(NI_MALFORMED_FILE, malformedFile)
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         }
 
-        /**
-         * Returns an intent that lets you go directly to the playback screen for a certain book
-
-         * @param c      The context
-         * *
-         * @param bookId The book id to target
-         * *
-         * @return The intent
-         */
+        /** Returns an intent that lets you go directly to the playback screen for a certain book **/
         fun goToBookIntent(c: Context, bookId: Long) = Intent(c, BookActivity::class.java).apply {
             putExtra(NI_GO_TO_BOOK, bookId)
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         }
+    }
+
+    private fun bookShelfController() = router.getControllerWithTag(TAG_BOOKSHELF_CONTROLLER) as BookShelfController
+
+    override fun onBookCoverChanged(book: Book) {
+        val bookShelfController = bookShelfController()
+        bookShelfController.bookCoverChanged(book)
+    }
+
+    override fun onNoFolderWarningConfirmed() {
+        router.pushController(RouterTransaction.with(FolderOverviewController()))
+    }
+
+    override fun onInternetCoverRequested(book: Book) {
+        router.pushController(RouterTransaction.with(ImagePickerController(book)))
+    }
+
+    override fun onFileCoverRequested(book: Book) {
+        val bookShelfController = bookShelfController()
+        bookShelfController.changeCover(book)
     }
 }

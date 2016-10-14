@@ -13,7 +13,7 @@ import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
 /**
- * Presenter for [BookShelfFragment].
+ * Presenter for [BookShelfController].
  *
  * @author Paul Woitaschek
  */
@@ -24,14 +24,10 @@ constructor(private val bookChest: BookChest,
             private val prefsManager: PrefsManager,
             private val playStateManager: PlayStateManager,
             private val playerController: PlayerController)
-: Presenter<BookShelfFragment>() {
+: Presenter<BookShelfController>() {
 
-    override fun onBind(view: BookShelfFragment, subscriptions: CompositeSubscription) {
+    override fun onBind(view: BookShelfController, subscriptions: CompositeSubscription) {
         i { "onBind Called for $view" }
-
-        // initially updates the adapter with a new set of items
-        view.newBooks(bookChest.activeBooks)
-        view.showSpinnerIfNoData(bookAdder.scannerActive().value)
 
         val audioFoldersEmpty = prefsManager.collectionFolders.value().isEmpty() && prefsManager.singleBookFolders.value().isEmpty()
         if (audioFoldersEmpty) view.showNoFolderWarning()
@@ -40,16 +36,11 @@ constructor(private val bookChest: BookChest,
         bookAdder.scanForFiles(false)
 
         subscriptions.apply {
-            // informs the view once a book was removed
-            add(bookChest.removedObservable()
-                    .subscribe { view.bookRemoved(it) })
 
-            // Subscription that notifies the adapter when there is a new or updated book.
-            add(Observable.merge(bookChest.updateObservable(), bookChest.addedObservable())
-                    .subscribe {
-                        view.bookAddedOrUpdated(it)
-                        view.showSpinnerIfNoData(bookAdder.scannerActive().value)
-                    })
+            // update books when they changed
+            add(bookChest.booksStream().subscribe {
+                view.newBooks(it)
+            })
 
             // Subscription that notifies the adapter when the current book has changed. It also notifies
             // the item with the old indicator now falsely showing.
@@ -57,9 +48,10 @@ constructor(private val bookChest: BookChest,
                     .map { id -> bookChest.bookById(id) }
                     .subscribe { view.currentBookChanged(it) })
 
-            // observe if the scanner is active and there are books and show spinner accordingly.
-            add(bookAdder.scannerActive()
-                    .subscribe { view.showSpinnerIfNoData(it) })
+            // if there are no books and the scanner is active, show loading
+            add(Observable.combineLatest(bookAdder.scannerActive, bookChest.booksStream().map { it.isEmpty() }, { active, booksEmpty ->
+                if (booksEmpty) active else false
+            }).subscribe { view.showLoading(it) })
 
             // Subscription that updates the UI based on the play state.
             add(playStateManager.playState

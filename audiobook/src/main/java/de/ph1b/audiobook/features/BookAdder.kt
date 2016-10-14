@@ -16,6 +16,7 @@ import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookChest
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
+import rx.Observable
 import rx.subjects.BehaviorSubject
 import v
 import java.io.File
@@ -31,25 +32,16 @@ import javax.inject.Singleton
 
  * @author Paul Woitaschek
  */
-@Singleton
-class BookAdder
-@Inject
-constructor(private val context: Context, private val prefs: PrefsManager, private val db: BookChest, private val mediaAnalyzer: MediaAnalyzer, private val coverCollector: CoverFromDiscCollector) {
+@Singleton class BookAdder
+@Inject constructor(private val context: Context, private val prefs: PrefsManager, private val db: BookChest, private val mediaAnalyzer: MediaAnalyzer, private val coverCollector: CoverFromDiscCollector) {
 
     private val executor = Executors.newSingleThreadExecutor()
-    private val scannerActive = BehaviorSubject.create(false)
+    private val scannerActiveSubject = BehaviorSubject.create(false)
+    val scannerActive: Observable<Boolean> = scannerActiveSubject.asObservable()
     private val handler = Handler(context.mainLooper)
     @Volatile private var stopScanner = false
 
-    fun scannerActive(): BehaviorSubject<Boolean> {
-        return scannerActive
-    }
-
-    /**
-     * Checks for new books
-
-     * @throws InterruptedException if a reset on the scanner has been requested
-     */
+    // check for new books
     @Throws(InterruptedException::class)
     private fun checkForBooks() {
         val singleBooks = singleBookFiles
@@ -73,19 +65,18 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
         }
     }
 
-
     /**
      * Starts scanning for new [Book] or changes within.
-
+     *
      * @param interrupting true if a eventually running scanner should be interrupted.
      */
     fun scanForFiles(interrupting: Boolean) {
-        d { "scanForFiles called with scannerActive=${scannerActive.value} and interrupting=$interrupting" }
-        if (!scannerActive.value || interrupting) {
+        d { "scanForFiles called with scannerActive=${scannerActiveSubject.value} and interrupting=$interrupting" }
+        if (!scannerActiveSubject.value || interrupting) {
             stopScanner = true
             executor.execute {
                 v { "started" }
-                handler.postBlocking { scannerActive.onNext(true) }
+                handler.postBlocking { scannerActiveSubject.onNext(true) }
                 stopScanner = false
 
                 try {
@@ -97,22 +88,14 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
                 }
 
                 stopScanner = false
-                handler.postBlocking { scannerActive.onNext(false) }
+                handler.postBlocking { scannerActiveSubject.onNext(false) }
                 v { "stopped" }
             }
         }
         v { "scanForFiles method done (executor should be called" }
     }
 
-    /**
-     * Gets the saved single book files the User chose in [FolderChooserView]
-
-     * @return An array of chosen single book folders.
-     * *
-     * @see Book.Type.SINGLE_FILE
-
-     * @see Book.Type.SINGLE_FOLDER
-     */
+    /** the saved single book files the User chose in [FolderChooserView] */
     private val singleBookFiles: List<File>
         get() {
             val singleBooksAsStrings = prefs.singleBookFolders.value()
@@ -120,18 +103,10 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
             for (s in singleBooksAsStrings) {
                 singleBooks.add(File(s))
             }
-            return singleBooks.sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
+            return singleBooks.sortedWith(NaturalOrderComparator.fileComparator)
         }
 
-    /**
-     * Gets the saved collection book files the User chose in [FolderChooserView]
-
-     * @return An array of chosen collection book folders.
-     * *
-     * @see Book.Type.COLLECTION_FILE
-
-     * @see Book.Type.COLLECTION_FOLDER
-     */
+    // Gets the saved collection book files the User chose in [FolderChooserView]
     private val collectionBookFiles: List<File>
         get() {
             val collectionFoldersStringList = prefs.collectionFolders.value()
@@ -145,13 +120,11 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
                     }
                 }
             }
-            return containingFiles.sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
+            return containingFiles.sortedWith(NaturalOrderComparator.fileComparator)
         }
 
-    /**
-     * Deletes all the books that exist on the database but not on the hard drive or on the saved
-     * audio book paths.
-     */
+    /** Deletes all the books that exist on the database but not on the hard drive or on the saved
+     * audio book paths. **/
     @Throws(InterruptedException::class)
     private fun deleteOldBooks() {
         d { "deleteOldBooks started" }
@@ -214,21 +187,11 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
             }
         }
 
-        for (b in booksToRemove) {
-            d { "deleting book=${b.name}" }
-            handler.postBlocking { db.hideBook(b) }
-        }
+        d { "deleting $booksToRemove" }
+        handler.postBlocking { db.hideBook(booksToRemove) }
     }
 
-    /**
-     * Adds a new book
-
-     * @param rootFile    The root of the book
-     * *
-     * @param newChapters The new chapters that have been found matching to the location of the book
-     * *
-     * @param type        The type of the book
-     */
+    // adds a new book
     private fun addNewBook(rootFile: File, newChapters: List<Chapter>, type: Book.Type) {
         val bookRoot = if (rootFile.isDirectory)
             rootFile.absolutePath
@@ -275,14 +238,8 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
         }
     }
 
-    /**
-     * Updates a book. Adds the new chapters to the book and corrects the
-     * [Book.currentFile] and [Book.time].
-
-     * @param bookExisting The existing book
-     * *
-     * @param newChapters  The new chapters matching to the book
-     */
+    /** Updates a book. Adds the new chapters to the book and corrects the
+     * [Book.currentFile] and [Book.time]. **/
     private fun updateBook(bookExisting: Book, newChapters: List<Chapter>) {
         var bookToUpdate = bookExisting
         val bookHasChanged = bookToUpdate.chapters != newChapters
@@ -312,16 +269,8 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
         }
     }
 
-    /**
-     * Adds a book if not there yet, updates it if there are changes or hides it if it does not
-     * exist any longer
-
-     * @param rootFile The Book root
-     * *
-     * @param type     The type of the book
-     * *
-     * @throws InterruptedException If the scanner has been requested to reset
-     */
+    /** Adds a book if not there yet, updates it if there are changes or hides it if it does not
+     * exist any longer **/
     @Throws(InterruptedException::class)
     private fun checkBook(rootFile: File, type: Book.Type) {
         val newChapters = getChaptersByRootFile(rootFile)
@@ -335,7 +284,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
             // there are no chapters
             if (bookExisting != null) {
                 //so delete book if available
-                handler.postBlocking { db.hideBook(bookExisting) }
+                handler.postBlocking { db.hideBook(listOf(bookExisting)) }
             }
         } else {
             // there are chapters
@@ -349,21 +298,13 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
         }
     }
 
-    /**
-     * Returns all the chapters matching to a Book root
-
-     * @param rootFile The root of the book
-     * *
-     * @return The chapters
-     * *
-     * @throws InterruptedException If the scanner has been requested to terminate
-     */
+    // Returns all the chapters matching to a Book root
     @Throws(InterruptedException::class)
     private fun getChaptersByRootFile(rootFile: File): List<Chapter> {
         val containingFiles = rootFile.walk()
                 .filter { FileRecognition.musicFilter.accept(it) }
                 .toMutableList()
-                .sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
+                .sortedWith(NaturalOrderComparator.fileComparator)
 
         val containingMedia = ArrayList<Chapter>(containingFiles.size)
         for (f in containingFiles) {
@@ -376,11 +317,7 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
         return containingMedia
     }
 
-    /**
-     * Throws an interruption if [.stopScanner] is true.
-
-     * @throws InterruptedException
-     */
+    // Throws an interruption if [.stopScanner] is true.
     @Throws(InterruptedException::class)
     private fun throwIfStopRequested() {
         if (stopScanner) {
@@ -391,15 +328,8 @@ constructor(private val context: Context, private val prefs: PrefsManager, priva
 
     /**
      * Gets a book from the database matching to a defines mask.
-
-     * @param rootFile The root of the book
-     * *
-     * @param type     The type of the book
-     * *
+     *
      * @param orphaned If we sould return a book that is orphaned, or a book that is currently
-     * *                 active
-     * *
-     * @return The Book if available, or `null`
      */
     private fun getBookFromDb(rootFile: File, type: Book.Type, orphaned: Boolean): Book? {
         d { "getBookFromDb, rootFile=$rootFile, type=$type, orphaned=$orphaned" }

@@ -80,14 +80,11 @@
     <string name="pref_theme_title">Tema</string>
     <string name="pref_pause_on_can_duck_title">Breek op onderbreking</string>
     <string name="pref_pause_on_can_duck_summary">Breek wanneer onderbreek in stede daarvan om volume te verlaag vir die durasie van die onderbreking.</string>
-
-
     <string name="pref_auto_rewind_title">Outomatiese terugdraai</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Outomastiese terugdraai van %d sekonde na /\'n breek.</item>
         <item quantity="other">Outomastiese terugdraai van %d sekondes na /\'n breek.</item>
     </plurals>
-
     <string name="pref_support_title">Ondersteun</string>
     <string name="pref_support_translations">Vertaal</string>
     <string name="pref_support_contribute">Ondersteuning en terugvoering</string>

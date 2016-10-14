@@ -121,18 +121,18 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
                 if (canAddNewFolder(chosen.absolutePath)) {
                     val collections = HashSet(prefsManager.collectionFolders.value())
                     collections.add(chosen.absolutePath)
-                    prefsManager.collectionFolders.set( collections)
-                    view!!.finish()
+                    prefsManager.collectionFolders.set(collections)
                 }
+                view!!.finish()
                 v { "chosenCollection = $chosen" }
             }
             FolderChooserActivity.OperationMode.SINGLE_BOOK -> {
                 if (canAddNewFolder(chosen.absolutePath)) {
                     val singleBooks = HashSet(prefsManager.singleBookFolders.value())
                     singleBooks.add(chosen.absolutePath)
-                    prefsManager.singleBookFolders.set( singleBooks)
-                    view!!.finish()
+                    prefsManager.singleBookFolders.set(singleBooks)
                 }
+                view!!.finish()
                 v { "chosenSingleBook = $chosen" }
             }
         }
@@ -206,7 +206,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
         val containing = listFiles(FileRecognition.folderAndMusicFilter)
         if (containing != null) {
             val asList = ArrayList(Arrays.asList(*containing))
-            return asList.sortedWith(NaturalOrderComparator.FILE_COMPARATOR)
+            return asList.sortedWith(NaturalOrderComparator.fileComparator)
         } else {
             return emptyList()
         }

@@ -29,12 +29,12 @@ data class Book(val id: Long,
                 val root: String) : Comparable<Book> {
 
     override fun compareTo(other: Book): Int {
-        return NaturalOrderComparator.STRING_COMPARATOR.compare(name, other.name)
+        return NaturalOrderComparator.stringComparator.compare(name, other.name)
     }
 
     companion object {
         const val ID_UNKNOWN = -1L
-        const val SPEED_MAX = 2F
+        const val SPEED_MAX = 2.5F
         const val SPEED_MIN = 0.5F
     }
 
