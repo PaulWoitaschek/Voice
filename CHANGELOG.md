@@ -1,4 +1,5 @@
 # Upcoming version
+* Added option to select cover from disk. Many thanks to [@alilotfi](https://github.com/alilotfi)
 
 # 16.08
 * Added a splash activity for faster launches
