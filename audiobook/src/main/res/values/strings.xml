@@ -36,7 +36,7 @@
     <string name="download_book_cover">Cover from internet</string>
     <string name="pick_book_cover">Cover from file system</string>
     <string name="edit_book_title">Edit book</string>
-    <!--JumpToPosition-->
+    l    <!--JumpToPosition-->
     <string name="action_time_change">Jump to</string>
     <!--BookAdding-->
     <string name="adding_failed_subfolder">The folders must not be a subfolder of each other:</string>

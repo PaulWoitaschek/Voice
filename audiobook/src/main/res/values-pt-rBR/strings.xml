@@ -32,7 +32,6 @@
     <string name="content_next_cover">Escolher próxima capa</string>
     <string name="content_cover">Mostrar capa para escolher</string>
     <string name="change_book_name">Nome</string>
-    <string name="change_book_cover">Capa</string>
     <string name="edit_book_title">Editar livro</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Pular para</string>
@@ -64,14 +63,13 @@
     <string name="playback_speed">Velocidade de reprodução</string>
     <!--Bookmarks-->
     <string name="bookmark">Marcador</string>
+    <string name="shake_to_reset">Agite para reiniciar</string>
     <string name="bookmark_edit_title">Editar marcador</string>
     <string name="acc_button_add_bookmark">Adicionar um marcador na posição atual</string>
     <string name="bookmark_edit_hint">Nome do marcador</string>
     <string name="bookmark_added">Marcador adicionado</string>
     <string name="bookmark_delete_title">Apagar esse marcador?</string>
     <!--Settings-->
-
-
     <string name="action_settings">Preferências</string>
     <string name="pref_resume_on_replug">Retomar reprodução</string>
     <string name="pref_resume_on_replug_hint">Se você pausou removendo os fones, a reprodução será retomada ao reconectar.</string>
@@ -93,15 +91,11 @@
     <string name="pref_theme_daynight">Dia / Noite</string>
     <string name="pref_pause_on_can_duck_title">Pausa na Interrupção</string>
     <string name="pref_pause_on_can_duck_summary">Pausar quando interromper ao invés de diminuir o volume durante a interrupção.</string>
-
-
     <string name="pref_auto_rewind_title">Retornar automaticamente</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Volta automaticamente %d segundo após pausar manualmente.</item>
         <item quantity="other">Volta automaticamente %d segundos após pausar manualmente.</item>
     </plurals>
-
-
     <string name="pref_support_title">Suporte</string>
     <string name="pref_support_translations">Traduções</string>
     <string name="pref_support_contribute">Suporte e sugestões</string>

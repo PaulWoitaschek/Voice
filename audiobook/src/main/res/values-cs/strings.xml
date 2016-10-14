@@ -22,7 +22,7 @@
     <string name="play">Spustit</string>
     <string name="pause">Pozastavit</string>
     <!--NoExternalStorage-->
-    <string name="no_external_storage">Externí úložiště není dostupné. Ověřte prosím, že je
+  <string name="no_external_storage">Externí úložiště není dostupné. Ověřte prosím, že je
         připojeno a není používáno vaším počítačem.</string>
     <string name="no_external_storage_action_bar_title">Externí úložiště</string>
     <!--Dialogs-->
@@ -34,8 +34,10 @@
     <string name="content_next_cover">Vybere další obal</string>
     <string name="content_cover">Zobrazí obaly pro vybrání</string>
     <string name="change_book_name">Název</string>
-    <string name="change_book_cover">Obal</string>
+    <string name="download_book_cover">Obal z internetu</string>
+    <string name="pick_book_cover">Obal ze souborového systému</string>
     <string name="edit_book_title">Upravit knihu</string>
+    <string name="use_cover">Použít obal</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Přeskočit na</string>
     <!--BookAdding-->
@@ -66,14 +68,13 @@
     <string name="playback_speed">Rychlost přehrávání</string>
     <!--Bookmarks-->
     <string name="bookmark">Záložka</string>
+    <string name="shake_to_reset">Potřesením resetovat</string>
     <string name="bookmark_edit_title">Upravit záložku</string>
     <string name="acc_button_add_bookmark">Přidá záložku na aktuální pozici</string>
     <string name="bookmark_edit_hint">Jméno záložky</string>
     <string name="bookmark_added">Záložka přidána</string>
     <string name="bookmark_delete_title">Smazat tuto záložku?</string>
     <!--Settings-->
-
-
     <string name="action_settings">Nastavení</string>
     <string name="pref_resume_on_replug">Pokračovat v přehrávání</string>
   <string name="pref_resume_on_replug_hint">Pokud pozastavíte přehrávání vytažením sluchátek, při jejich
@@ -98,16 +99,12 @@
     <string name="pref_theme_daynight">Den / Noc</string>
     <string name="pref_pause_on_can_duck_title">Pozastavit při vyrušení</string>
     <string name="pref_pause_on_can_duck_summary">Pozastavit při vyrušení namísto snížení hlasitosti po trvání vyrušení.</string>
-
-
     <string name="pref_auto_rewind_title">Automaticky přetočit</string>
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Automaticky přetočí o %d sekundu po ručním pozastavení.</item>
         <item quantity="few">Automaticky přetočí o %d sekundy po ručním pozastavení.</item>
         <item quantity="other">Automaticky přetočí o %d sekund po ručním pozastavení.</item>
     </plurals>
-
-
     <string name="pref_support_title">Podpora</string>
     <string name="pref_support_translations">Překlady</string>
     <string name="pref_support_contribute">Podpora a návrhy</string>
