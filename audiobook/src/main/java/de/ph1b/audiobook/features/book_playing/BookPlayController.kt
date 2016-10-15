@@ -41,7 +41,7 @@ import javax.inject.Inject
 
  * @author Paul Woitaschek
  */
-class BookPlayController(bundle: Bundle) : BaseController() {
+class BookPlayController(bundle: Bundle) : BaseController(bundle) {
 
     init {
         App.component().inject(this)

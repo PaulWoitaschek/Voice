@@ -30,7 +30,7 @@ import javax.inject.Inject
 /**
  * Hosts the image picker.
  */
-class ImagePickerController(val bundle: Bundle) : BaseController() {
+class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
 
     constructor(book: Book) : this(Bundle().apply {
         putLong(NI_BOOK_ID, book.id)
@@ -44,7 +44,7 @@ class ImagePickerController(val bundle: Bundle) : BaseController() {
     @Inject lateinit var bookChest: BookChest
     @Inject lateinit var imageHelper: ImageHelper
 
-    private var actionMode: ActionMode ? = null
+    private var actionMode: ActionMode? = null
     private lateinit var cropOverlay: CropOverlay
     private lateinit var webViewContainer: View
     private lateinit var webView: WebView
