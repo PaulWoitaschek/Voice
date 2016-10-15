@@ -1,9 +1,8 @@
-# Upcoming version
+# 2.8.0
 * Added option to select cover from disk. Many thanks to [@alilotfi](https://github.com/alilotfi)
-
-# 16.08
 * Added a splash activity for faster launches
 * Added an option for shake to reset the sleep timer
+* Use a bottom sheet when editing books
 * Set the sleep time directly from the play screen
 * Set the bookmark-on sleep directly from the play screen
 * Removed crash reporting
