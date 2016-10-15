@@ -14,8 +14,8 @@ android {
         applicationId "de.ph1b.audiobook"
         minSdkVersion minSdk
         targetSdkVersion 24
-        versionCode 128
-        versionName '2.8.0'
+        versionCode 129
+        versionName '2.8.0.1'
     }
 
     buildTypes {
@@ -91,6 +91,10 @@ dependencies {
     // permissions
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar'
 
+    // crashes
+    compile "ch.acra:acra:4.9.1"
+
+    // conductor
     def conductorVer = "2.0.3"
     compile "com.bluelinelabs:conductor:$conductorVer"
     compile "com.bluelinelabs:conductor-support:$conductorVer"

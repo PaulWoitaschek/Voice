@@ -18,7 +18,7 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import javax.inject.Inject
 
 /**
- * TODO
+ * Controller for the user settings
  *
  * @author Paul Woitaschek
  */
