@@ -33,3 +33,6 @@
 -keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
     rx.internal.util.atomic.LinkedQueueNode consumerNode;
 }
+
+# acra
+-keep class de.ph1b.audiobook.BuildConfig { *; }
