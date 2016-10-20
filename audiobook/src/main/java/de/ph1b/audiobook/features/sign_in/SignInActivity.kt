@@ -1,15 +1,19 @@
 package de.ph1b.audiobook.features.sign_in
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.graphics.Bitmap
+import android.net.ConnectivityManager
 import android.os.Bundle
+import android.os.Handler
 import android.provider.MediaStore
 import android.support.annotation.Nullable
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
+import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 
@@ -26,12 +30,18 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveApi
 import com.google.android.gms.drive.DriveApi.DriveContentsResult;
 import com.google.android.gms.drive.DriveFolder
 import com.google.android.gms.drive.MetadataChangeSet;
-import de.ph1b.audiobook.uitools.GoogleDriveConnectionActivity
+import com.google.android.gms.drive.query.Filters
+import com.google.android.gms.drive.query.Query
+import com.google.android.gms.drive.query.SearchableField
+import de.ph1b.audiobook.uitools.ResultsAdapter
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
 
 
 class SignInActivity : AppCompatActivity(), OnConnectionFailedListener,
@@ -46,6 +56,10 @@ class SignInActivity : AppCompatActivity(), OnConnectionFailedListener,
     private val REQUEST_CODE_CREATOR = 2
     private val REQUEST_CODE_RESOLUTION = 3
     private var mBitmapToSave: Bitmap? = null
+
+    private var mResultsListView: ListView? = null
+    private var mResultsAdapter: ResultsAdapter? = null
+
 
     private fun saveFileToDrive() {
         // Start by creating a new contents, and setting a callback.
@@ -159,10 +173,26 @@ class SignInActivity : AppCompatActivity(), OnConnectionFailedListener,
 //            return
 //        }
 //        saveFileToDrive()
+
+
         val changeSet = MetadataChangeSet.Builder().setTitle("MaterialAudiobookPlayer").build()
         Drive.DriveApi.getRootFolder(mGoogleApiClient).createFolder(
                 mGoogleApiClient, changeSet).setResultCallback(callback)
         Toast.makeText(this, "Folder created", Toast.LENGTH_SHORT).show();
+
+        val query = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, "text/plain")).build()
+        Drive.DriveApi.query(mGoogleApiClient, query).setResultCallback(metadataCallback)
+    }
+
+    private val metadataCallback = object : ResultCallback<DriveApi.MetadataBufferResult> {
+        override fun onResult(result: DriveApi.MetadataBufferResult) {
+            if (!result.getStatus().isSuccess()) {
+                Log.i(TAG, "Problem while retrieving results")
+                return
+            }
+            mResultsAdapter?.clear()
+            mResultsAdapter?.append(result.getMetadataBuffer())
+        }
     }
 
     val callback: ResultCallback<DriveFolder.DriveFolderResult> = object : ResultCallback<DriveFolder.DriveFolderResult> {
@@ -242,5 +272,75 @@ class SignInActivity : AppCompatActivity(), OnConnectionFailedListener,
 
     companion object {
         private val RC_SIGN_IN = 9001
+    }
+
+
+    fun isConnected(context: Context): Boolean {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val activeNetwork = cm.activeNetworkInfo
+        if (activeNetwork != null && activeNetwork.isConnected) {
+            try {
+                val url = URL("http://www.google.com/")
+                val urlc = url.openConnection() as HttpURLConnection
+                urlc.setRequestProperty("User-Agent", "test")
+                urlc.setRequestProperty("Connection", "close")
+                urlc.connectTimeout = 1000 // mTimeout is in seconds
+                urlc.connect()
+                if (urlc.responseCode == 200) {
+                    return true
+                } else {
+                    return false
+                }
+            } catch (e: IOException) {
+                Log.i("warning", "Error checking internet connection", e)
+                return false
+            }
+
+        }
+
+        return false
+
+    }
+
+    fun isNetworkAvailable(handler: Handler, timeout: Int, context: Context) {
+        // ask fo message '0' (not connected) or '1' (connected) on 'handler'
+        // the answer must be send before before within the 'timeout' (in milliseconds)
+
+        object : Thread() {
+            private var responded = false
+
+            override fun run() {
+                // set 'responded' to TRUE if is able to connect with google mobile (responds fast)
+                object : Thread() {
+                    override fun run() {
+                        try {
+                            responded = isConnected(context)
+                        } catch (e: Exception) {
+                        }
+
+                    }
+                }.start()
+
+                try {
+                    var waited = 0
+                    while (!responded && waited < timeout) {
+                        Thread.sleep(100)
+                        if (!responded) {
+                            waited += 100
+                        }
+                    }
+                } catch (e: InterruptedException) {
+                } // do nothing
+                finally {
+                    if (!responded) {
+                        handler.sendEmptyMessage(0)
+                    } else {
+                        handler.sendEmptyMessage(1)
+                    }
+
+                }
+            }
+        }.start()
     }
 }
