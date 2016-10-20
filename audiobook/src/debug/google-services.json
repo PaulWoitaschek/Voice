@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "655569102553",
+    "project_id": "friendly-sensor-475"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:655569102553:android:804ab75bd5031ced",
+        "android_client_info": {
+          "package_name": "de.ph1b.audiobook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "655569102553-dq3u8m350hi44krotjkv7gr20e93hto9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "de.ph1b.audiobook",
+            "certificate_hash": "565AEFA266EED7FF65FFF52A17906FC96A150206"
+          }
+        },
+        {
+          "client_id": "655569102553-ig4si2ouu7ckl2bl2gdorbph9s1j0acc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTLAfsmihoKQDQFVDwU-ZrYAGDvXV9R0Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
