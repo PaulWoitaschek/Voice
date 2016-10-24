@@ -18,5 +18,8 @@
     rx.internal.util.atomic.LinkedQueueNode consumerNode;
 }
 
+# picasso
+-dontwarn com.squareup.picasso.OkHttpDownloader
+
 # acra
 -keep class de.ph1b.audiobook.BuildConfig { *; }
