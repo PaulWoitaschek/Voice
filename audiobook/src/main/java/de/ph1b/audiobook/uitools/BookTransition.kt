@@ -19,7 +19,7 @@ class BookTransition() : TransitionChangeHandler() {
 
     var transitionName: String? = null
 
-    override fun getTransition(container: ViewGroup, from: View, to: View, isPush: Boolean): Transition {
+    override fun getTransition(container: ViewGroup, from: View?, to: View?, isPush: Boolean): Transition {
         val context = container.context
         val move = TransitionInflater.from(context)
                 .inflateTransition(android.R.transition.move)
