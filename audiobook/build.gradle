@@ -7,13 +7,13 @@ android {
     // dynamically pass 21 to the compiler for bulid speedup without losing lint warnings.
     int minSdk = hasProperty('minSdk') ? minSdk.toInteger() : 16
 
-    compileSdkVersion 24
-    buildToolsVersion '24.0.3'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "de.ph1b.audiobook"
         minSdkVersion minSdk
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 130
         versionName '2.8.0.2'
     }
@@ -45,13 +45,13 @@ kapt.generateStubs = true
 
 dependencies {
     // support library
-    def supportVersion = "24.2.1"
+    def supportVersion = "25.0.0"
     compile "com.android.support:appcompat-v7:$supportVersion"
     compile "com.android.support:recyclerview-v7:$supportVersion"
     compile "com.android.support:support-v4:$supportVersion"
     compile "com.android.support:design:$supportVersion"
     compile "com.android.support:transition:$supportVersion"
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha9'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta1'
 
     // image loading
     compile "com.squareup.picasso:picasso:2.5.2"
@@ -76,7 +76,7 @@ dependencies {
 
     // rx extensions
     compile "io.reactivex:rxandroid:1.2.1"
-    compile "io.reactivex:rxjava:1.2.0"
+    compile "io.reactivex:rxjava:1.2.1"
     compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.2'
 
     // kotlin
@@ -89,7 +89,7 @@ dependencies {
     compile 'com.github.PaulWoitaschek:Slimber:1.0.4'
 
     // permissions
-    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar'
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.8.0@aar'
 
     // crashes
     compile "ch.acra:acra:4.9.1"

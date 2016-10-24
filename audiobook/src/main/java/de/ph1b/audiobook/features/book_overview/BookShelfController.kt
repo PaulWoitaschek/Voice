@@ -21,7 +21,10 @@ import de.ph1b.audiobook.misc.supportTransitionName
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.MvpBaseController
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.uitools.*
+import de.ph1b.audiobook.uitools.BookTransition
+import de.ph1b.audiobook.uitools.DividerItemDecoration
+import de.ph1b.audiobook.uitools.PlayPauseDrawable
+import de.ph1b.audiobook.uitools.visible
 import i
 import javax.inject.Inject
 import dagger.Lazy as DaggerLazy
@@ -39,7 +42,6 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
     init {
         App.component().inject(this)
         setHasOptionsMenu(true)
-        null.toString()
     }
 
     @Inject lateinit var prefs: PrefsManager
