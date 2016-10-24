@@ -26,4 +26,4 @@ script:
 after_success:
   - ./gradlew createRegularMinSdkDebugCoverageReport
   - pip install --user codecov
-  - codecov
+  - codecovg
