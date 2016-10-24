@@ -28,8 +28,7 @@ class InternalBookRegister
                         BookTable.PLAYBACK_SPEED,
                         BookTable.ROOT,
                         BookTable.TIME,
-                        BookTable.TYPE,
-                        BookTable.USE_COVER_REPLACEMENT),
+                        BookTable.TYPE),
                 selection = "${BookTable.ACTIVE} =?",
                 selectionArgs = arrayOf(if (active) "1" else "0")
         )
@@ -43,7 +42,6 @@ class InternalBookRegister
             val bookRoot: String = string(BookTable.ROOT)
             val bookTime: Int = int(BookTable.TIME)
             val bookType: String = string(BookTable.TYPE)
-            val bookUseCoverReplacement: Int = int(BookTable.USE_COVER_REPLACEMENT)
 
             val chapterCursor = db.simpleQuery(table = ChapterTable.TABLE_NAME,
                     columns = arrayOf(ChapterTable.NAME, ChapterTable.DURATION, ChapterTable.PATH),
@@ -59,7 +57,6 @@ class InternalBookRegister
 
             books.add(Book(bookId,
                     Book.Type.valueOf(bookType),
-                    bookUseCoverReplacement == 1,
                     bookAuthor,
                     File(currentPath),
                     bookTime,
@@ -107,7 +104,6 @@ class InternalBookRegister
         put(BookTable.ROOT, root)
         put(BookTable.TIME, time)
         put(BookTable.TYPE, type.name)
-        put(BookTable.USE_COVER_REPLACEMENT, useCoverReplacement)
     }
 
     fun updateBook(book: Book, updateChapters:Boolean) = db.asTransaction {

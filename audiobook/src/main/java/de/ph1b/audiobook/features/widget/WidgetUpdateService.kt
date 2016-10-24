@@ -194,7 +194,7 @@ class WidgetUpdateService : Service() {
         var cover: Bitmap? = null
         try {
             val coverFile = book.coverFile()
-            if (!book.useCoverReplacement && coverFile.exists() && coverFile.canRead()) {
+            if (coverFile.exists() && coverFile.canRead()) {
                 cover = Picasso.with(this@WidgetUpdateService).load(coverFile).get()
             }
         } catch (ex: IOException) {

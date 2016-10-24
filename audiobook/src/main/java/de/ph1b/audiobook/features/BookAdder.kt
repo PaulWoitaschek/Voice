@@ -212,7 +212,6 @@ import javax.inject.Singleton
             val newBook = Book(
                     Book.ID_UNKNOWN,
                     type,
-                    false,
                     result.author,
                     firstChapterFile,
                     0,

@@ -19,7 +19,6 @@ import java.util.*
  */
 data class Book(val id: Long,
                 val type: Type,
-                val useCoverReplacement: Boolean,
                 val author: String?,
                 val currentFile: File,
                 val time: Int,
@@ -40,7 +39,6 @@ data class Book(val id: Long,
 
     private val COVER_TRANSITION_PREFIX = "bookCoverTransition_"
 
-
     init {
         val chapterFiles = ArrayList<File>(chapters.size)
         for ((file) in chapters) {
@@ -59,7 +57,6 @@ data class Book(val id: Long,
      */
     val coverTransitionName = COVER_TRANSITION_PREFIX + id
 
-
     /**
      * The global duration. It sums up the duration of all chapters.
      */
@@ -70,7 +67,6 @@ data class Book(val id: Long,
         }
         globalDuration
     }
-
 
     /**
      * @return the global position. It sums up the duration of all elapsed chapters plus the position
@@ -91,7 +87,7 @@ data class Book(val id: Long,
 
     fun currentChapter(): Chapter {
         for (c in chapters) {
-            if (c.file.equals(currentFile)) {
+            if (c.file == currentFile) {
                 return c
             }
         }
@@ -106,7 +102,6 @@ data class Book(val id: Long,
         return null
     }
 
-
     fun previousChapter(): Chapter? {
         val currentIndex = chapters.indexOf(currentChapter())
         if (currentIndex > 0) {
@@ -114,7 +109,6 @@ data class Book(val id: Long,
         }
         return null
     }
-
 
     fun coverFile(): File {
         val separator = File.separator

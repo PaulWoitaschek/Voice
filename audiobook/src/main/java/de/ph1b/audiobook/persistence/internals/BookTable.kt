@@ -16,7 +16,6 @@ object BookTable {
     const val ROOT = "bookRoot"
     const val TIME = "bookTime"
     const val TYPE = "bookType"
-    const val USE_COVER_REPLACEMENT = "bookUseCoverReplacement"
     const val ACTIVE = "BOOK_ACTIVE"
     const val TABLE_NAME = "tableBooks"
     const private val CREATE_TABLE = "CREATE TABLE $TABLE_NAME ( " +
@@ -28,7 +27,6 @@ object BookTable {
             "  $ROOT TEXT NOT NULL, " +
             "  $TIME INTEGER NOT NULL, " +
             "  $TYPE TEXT NOT NULL, " +
-            "  $USE_COVER_REPLACEMENT INTEGER NOT NULL, " +
             "  $ACTIVE INTEGER NOT NULL DEFAULT 1" +
             ")"
 
