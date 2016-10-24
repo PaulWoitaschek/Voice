@@ -48,9 +48,9 @@ import javax.inject.Singleton
      * All active books. We
      */
     val activeBooks: List<Book>
-        get() = synchronized(active) { ArrayList(active) }
+        get() = synchronized(this) { ArrayList(active) }
 
-    fun bookById(id: Long) = active.firstOrNull { it.id == id }
+    @Synchronized fun bookById(id: Long) = active.firstOrNull { it.id == id }
 
     @Synchronized fun getOrphanedBooks(): List<Book> = ArrayList(orphaned)
 
