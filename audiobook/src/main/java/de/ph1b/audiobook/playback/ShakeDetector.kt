@@ -5,7 +5,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import dagger.Reusable
-import rx.AsyncEmitter
+import rx.Emitter
 import rx.Observable
 import javax.inject.Inject
 
@@ -45,5 +45,5 @@ import javax.inject.Inject
         // subscribed upon registration, unsubscribe upon cancellation
         sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_UI)
         emitter.setCancellation { sensorManager.unregisterListener(listener) }
-    }, AsyncEmitter.BackpressureMode.LATEST)
+    }, Emitter.BackpressureMode.LATEST)
 }
