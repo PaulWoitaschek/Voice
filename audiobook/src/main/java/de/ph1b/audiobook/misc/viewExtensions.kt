@@ -8,7 +8,7 @@ import android.widget.Adapter
 import android.widget.AdapterView
 import android.widget.SeekBar
 import android.widget.TextView
-import rx.AsyncEmitter
+import rx.Emitter
 import rx.Observable
 
 
@@ -32,12 +32,12 @@ fun SeekBar.onProgressChanged(initialNotification: Boolean = false, progressChan
 fun SeekBar.progressChangedStream(initialNotification: Boolean = false): Observable<Int> = Observable.fromEmitter({ emitter ->
     onProgressChanged(initialNotification) { emitter.onNext(it) }
     emitter.setCancellation { setOnSeekBarChangeListener(null) }
-}, AsyncEmitter.BackpressureMode.LATEST)
+}, Emitter.BackpressureMode.LATEST)
 
 fun <T : View> T.clicks(): Observable<T> = Observable.fromEmitter({ emitter ->
     setOnClickListener { emitter.onNext(this) }
     emitter.setCancellation { setOnClickListener(null) }
-}, AsyncEmitter.BackpressureMode.BUFFER)
+}, Emitter.BackpressureMode.BUFFER)
 
 fun <T : Adapter> AdapterView<T>.itemSelections(listener: (Int) -> Unit) {
     onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -53,7 +53,7 @@ fun <T : Adapter> AdapterView<T>.itemSelections(listener: (Int) -> Unit) {
 fun <T : Adapter> AdapterView<T>.itemSelectionStream(): Observable<Int> = Observable.fromEmitter({ emitter ->
     itemSelections { emitter.onNext(it) }
     emitter.setCancellation { onItemSelectedListener = null }
-}, AsyncEmitter.BackpressureMode.LATEST)
+}, Emitter.BackpressureMode.LATEST)
 
 fun TextView.leftCompoundDrawable(): Drawable? = compoundDrawables[0]
 fun TextView.topCompoundDrawable(): Drawable? = compoundDrawables[1]
