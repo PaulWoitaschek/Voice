@@ -281,7 +281,7 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
         inflater.inflate(R.menu.book_play, menu)
 
         val speedItem = menu.findItem(R.id.action_time_lapse)
-        speedItem.isEnabled = playerCapabilities.useCustomMediaPlayer
+        speedItem.isEnabled = playerCapabilities.useCustomMediaPlayer()
 
         // sets the correct sleep timer icon
         val sleepTimerItem = menu.findItem(R.id.action_sleep)

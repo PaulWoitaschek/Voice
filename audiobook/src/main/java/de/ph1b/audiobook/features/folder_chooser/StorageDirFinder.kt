@@ -45,20 +45,16 @@ object StorageDirFinder {
         } else {
             // Device has emulated storage; external storage paths should have
             // userId burned into them.
-            val rawUserId = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                ""
-            } else {
-                val path = Environment.getExternalStorageDirectory().absolutePath
-                val folders = dirSeparator.split(path)
-                val lastFolder = folders[folders.size - 1]
-                var isDigit = false
-                try {
-                    Integer.valueOf(lastFolder)
-                    isDigit = true
-                } catch (ignored: NumberFormatException) {
-                }
-                if (isDigit) lastFolder else ""
+            val path = Environment.getExternalStorageDirectory().absolutePath
+            val folders = dirSeparator.split(path)
+            val lastFolder = folders[folders.size - 1]
+            var isDigit = false
+            try {
+                Integer.valueOf(lastFolder)
+                isDigit = true
+            } catch (ignored: NumberFormatException) {
             }
+            val rawUserId = if (isDigit) lastFolder else ""
             // /storage/emulated/0[1,2,...]
             if (TextUtils.isEmpty(rawUserId)) {
                 rv.add(rawEmulatedStorageTarget)

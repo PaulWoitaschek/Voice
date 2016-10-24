@@ -3,7 +3,6 @@ package de.ph1b.audiobook.features
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Handler
 import android.support.v4.content.ContextCompat
 import d
@@ -181,10 +180,8 @@ import javax.inject.Singleton
         if (!BaseActivity.storageMounted()) {
             throw InterruptedException("Storage is not mounted")
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                throw InterruptedException("Does not have external storage permission")
-            }
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            throw InterruptedException("Does not have external storage permission")
         }
 
         d { "deleting $booksToRemove" }

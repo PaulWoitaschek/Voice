@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Bitmap
-import android.os.Build
 import android.os.IBinder
 import android.view.KeyEvent
 import android.view.View
@@ -85,31 +84,29 @@ class WidgetUpdateService : Service() {
 
                 if (book != null) {
                     initElements(remoteViews, book)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        val opts = appWidgetManager.getAppWidgetOptions(widgetId)
-                        val minHeight = dpToPx(opts.getInt(
-                                AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT))
-                        val maxHeight = dpToPx(opts.getInt(
-                                AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT))
-                        val minWidth = dpToPx(opts.getInt(
-                                AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH))
-                        val maxWidth = dpToPx(opts.getInt(
-                                AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH))
 
-                        val useWidth: Int
-                        val useHeight: Int
+                    val opts = appWidgetManager.getAppWidgetOptions(widgetId)
+                    val minHeight = dpToPx(opts.getInt(
+                            AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT))
+                    val maxHeight = dpToPx(opts.getInt(
+                            AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT))
+                    val minWidth = dpToPx(opts.getInt(
+                            AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH))
+                    val maxWidth = dpToPx(opts.getInt(
+                            AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH))
 
-                        if (isPortrait) {
-                            useWidth = minWidth
-                            useHeight = maxHeight
-                        } else {
-                            useWidth = maxWidth
-                            useHeight = minHeight
-                        }
-                        if (useWidth > 0 && useHeight > 0) {
-                            setVisibilities(remoteViews, useWidth, useHeight,
-                                    book.chapters.size == 1)
-                        }
+                    val useWidth: Int
+                    val useHeight: Int
+
+                    if (isPortrait) {
+                        useWidth = minWidth
+                        useHeight = maxHeight
+                    } else {
+                        useWidth = maxWidth
+                        useHeight = minHeight
+                    }
+                    if (useWidth > 0 && useHeight > 0) {
+                        setVisibilities(remoteViews, useWidth, useHeight, book.chapters.size == 1)
                     }
                 } else {
                     // directly going back to bookChoose
