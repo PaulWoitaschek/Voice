@@ -111,7 +111,6 @@ class InternalBookRegisterTest {
 
         val changed = inserted.copy(
                 type = Book.Type.SINGLE_FILE,
-                useCoverReplacement = true,
                 author = if (Random().nextBoolean()) "lkajsdflkj" else null,
                 currentFile = newChapters.last().file,
                 time = 135135135,

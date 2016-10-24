@@ -19,7 +19,7 @@ import javax.inject.Singleton
 @Module class BaseModule {
 
     @Provides @Singleton fun providePlayer(capabilities: MediaPlayerCapabilities, context: Context): Player {
-        if (capabilities.useCustomMediaPlayer) {
+        if (capabilities.useCustomMediaPlayer()) {
             return AntennaPlayer(context)
         } else {
             return AndroidPlayer(context)

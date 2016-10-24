@@ -1,19 +1,12 @@
 language: android
 jdk: oraclejdk8
 
-#env:
-#  global:
-#    - ANDROID_TARGET=android-23
-#    - ANDROID_ABI=armeabi-v7a
-
 android:
   components:
     - tools
-    - build-tools-24.0.1
-    - android-24
-#    - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
+    - build-tools-25.0.0
+    - android-25
     - extra
-
 
 notifications:
   email: false
@@ -27,16 +20,19 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
+licenses:
+  - android-sdk-license-.+
+  - '.+'
+
 script:
   - ./gradlew build assembleAndroidTest
-#  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
-#  - emulator -avd test -no-skin -no-audio -no-window &
-#  - android-wait-for-emulator
-#  - adb shell input keyevent 82 &
-#  - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
-#  - ./gradlew connectedCheck --stacktrace
+
+before_install:
+  - mkdir "$ANDROID_HOME/licenses" || true
+  - echo -e "\ne6b7c2ab7fa2298c15165e9583d0acf0b04a2232" > "$ANDROID_HOME/licenses/android-sdk-license"
+  - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
 
 after_success:
   - ./gradlew createRegularMinSdkDebugCoverageReport
   - pip install --user codecov
-  - codecov
+  - codecovg

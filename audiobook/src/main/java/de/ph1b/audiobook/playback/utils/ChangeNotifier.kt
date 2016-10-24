@@ -70,8 +70,9 @@ class ChangeNotifier(private val mediaSession: MediaSessionCompat) {
             // an updated picture
             var bitmap: Bitmap? = null
             val coverFile = book.coverFile()
-            if (!book.useCoverReplacement && coverFile.exists() && coverFile.canRead()) {
-                bitmap = Picasso.with(context).blocking { load(coverFile).get() }
+            if (coverFile.exists() && coverFile.canRead()) {
+                bitmap = Picasso.with(context)
+                        .blocking { load(coverFile).get() }
             }
             if (bitmap == null) {
                 val replacement = CoverReplacement(book.name, context)

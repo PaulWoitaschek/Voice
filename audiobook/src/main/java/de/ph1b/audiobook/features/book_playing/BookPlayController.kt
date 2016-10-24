@@ -179,8 +179,11 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
 
         // (Cover)
         val coverReplacement = CoverReplacement(if (book == null) "M" else book!!.name, activity)
-        if (book != null && !book!!.useCoverReplacement && book!!.coverFile().canRead()) {
-            Picasso.with(activity).load(book!!.coverFile()).placeholder(coverReplacement).into(cover)
+        if (book?.coverFile()?.canRead() ?: false) {
+            Picasso.with(activity)
+                    .load(book!!.coverFile())
+                    .placeholder(coverReplacement)
+                    .into(cover)
         } else {
             // we have to set the cover in onPreDraw. Else the transition will fail.
             cover.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
@@ -278,7 +281,7 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
         inflater.inflate(R.menu.book_play, menu)
 
         val speedItem = menu.findItem(R.id.action_time_lapse)
-        speedItem.isEnabled = playerCapabilities.useCustomMediaPlayer
+        speedItem.isEnabled = playerCapabilities.useCustomMediaPlayer()
 
         // sets the correct sleep timer icon
         val sleepTimerItem = menu.findItem(R.id.action_sleep)

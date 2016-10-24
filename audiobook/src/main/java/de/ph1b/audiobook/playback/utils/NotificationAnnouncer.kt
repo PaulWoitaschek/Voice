@@ -33,7 +33,7 @@ class NotificationAnnouncer
         var cover: Bitmap? = null
         try {
             val coverFile = book.coverFile()
-            if (!book.useCoverReplacement && coverFile.exists() && coverFile.canRead()) {
+            if (coverFile.exists() && coverFile.canRead()) {
                 cover = Picasso.with(context)
                         .load(coverFile)
                         .resize(width, height)

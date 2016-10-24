@@ -55,7 +55,7 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
             override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
                 val oldItem = books[oldItemPosition]
                 val newItem = newBooks[newItemPosition]
-                return oldItem.globalPosition() == newItem.globalPosition() && oldItem.name == newItem.name && oldItem.useCoverReplacement == newItem.useCoverReplacement
+                return oldItem.globalPosition() == newItem.globalPosition() && oldItem.name == newItem.name
             }
 
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
@@ -182,7 +182,7 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
             val coverFile = book.coverFile()
             val coverReplacement = CoverReplacement(book.name, c)
 
-            if (!book.useCoverReplacement && coverFile.exists() && coverFile.canRead()) {
+            if (coverFile.exists() && coverFile.canRead()) {
                 Picasso.with(c).load(coverFile).placeholder(coverReplacement).into(coverView)
             } else {
                 Picasso.with(c).cancelRequest(coverView)

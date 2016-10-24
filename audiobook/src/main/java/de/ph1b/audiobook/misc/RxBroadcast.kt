@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import rx.AsyncEmitter
+import rx.Emitter
 import rx.Observable
 
 /**
@@ -25,5 +25,5 @@ object RxBroadcast {
         it.setCancellation {
             c.unregisterReceiver(receiver)
         }
-    }, AsyncEmitter.BackpressureMode.BUFFER)
+    }, Emitter.BackpressureMode.BUFFER)
 }

@@ -15,7 +15,7 @@ class NoExternalStorageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_no_external)
 
-        setupActionbar(toolbar = find(R.id.toolbar),
+        setupActionbar(toolbar = find(R.id.toolbarInclude),
                 title = getString(R.string.no_external_storage_action_bar_title))
     }
 
