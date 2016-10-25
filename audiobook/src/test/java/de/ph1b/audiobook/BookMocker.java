@@ -33,15 +33,6 @@ public class BookMocker {
       if (root == null) {
          root = "fakeRoot";
       }
-      return new Book(id,
-            type,
-            false,
-            author,
-            file1,
-            time,
-            name,
-            chapters,
-            playbackSpeed,
-            root);
+      return new Book(id, type, author, file1, time, name, chapters, playbackSpeed, root);
    }
 }
