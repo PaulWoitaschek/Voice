@@ -43,11 +43,9 @@ class SleepTimerDialogFragment : DialogFragment() {
         @SuppressWarnings("InflateParams")
         val layout = context.layoutInflater().inflate(R.layout.dialog_sleep, null)
         val seekBar = layout.findViewById(R.id.seekBar) as SeekBar
-        val bookmark = layout.findViewById(R.id.bookmark)
         val textView = layout.findViewById(R.id.text) as TextView
         val bookmarkSwitch = layout.findViewById(R.id.bookmarkSwitch) as SwitchCompat
         val shakeToResetSwitch = layout.findViewById(R.id.shakeToResetSwitch) as SwitchCompat
-        val shakeToResetText = layout.findViewById(R.id.shakeToResetText) as TextView
 
         val bookId = arguments.getLong(NI_BOOK_ID)
         val book = bookChest.bookById(bookId)
@@ -68,20 +66,13 @@ class SleepTimerDialogFragment : DialogFragment() {
         }
 
         // setup bookmark toggle
-        bookmark.setOnClickListener {
-            bookmarkSwitch.toggle()
-        }
         bookmarkSwitch.isChecked = prefs.bookmarkOnSleepTimer.value()
 
         // setup shake to reset setting
-        shakeToResetText.setOnClickListener {
-            shakeToResetSwitch.toggle()
-        }
         shakeToResetSwitch.isChecked = prefs.shakeToReset.value()
         val shakeSupported = shakeDetector.shakeSupported()
         if (!shakeSupported) {
             shakeToResetSwitch.visible = false
-            shakeToResetText.visible = false
         }
 
         return MaterialDialog.Builder(context)
