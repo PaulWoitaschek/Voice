@@ -3,6 +3,7 @@ package de.ph1b.audiobook.features.bookmarks
 import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.InputType
@@ -22,7 +23,6 @@ import de.ph1b.audiobook.persistence.BookmarkProvider
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
-import de.ph1b.audiobook.uitools.DividerItemDecoration
 import i
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -123,7 +123,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
         val recycler = view.find<RecyclerView>(R.id.recycler)
         recycler.adapter = adapter
         val layoutManager = LinearLayoutManager(activity)
-        recycler.addItemDecoration(DividerItemDecoration(activity))
+        recycler.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
         recycler.layoutManager = layoutManager
 
         bookmarkProvider.bookmarks(book)

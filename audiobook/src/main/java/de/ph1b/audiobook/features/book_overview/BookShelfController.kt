@@ -22,7 +22,6 @@ import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.MvpBaseController
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.BookTransition
-import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.visible
 import i
@@ -87,7 +86,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
         // without this the item would blink on every change
         val anim = recyclerView.itemAnimator as SimpleItemAnimator
         anim.supportsChangeAnimations = false
-        listDecoration = DividerItemDecoration(activity)
+        listDecoration = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
         gridLayoutManager = GridLayoutManager(activity, amountOfColumns())
         linearLayoutManager = LinearLayoutManager(activity)
         initRecyclerView()

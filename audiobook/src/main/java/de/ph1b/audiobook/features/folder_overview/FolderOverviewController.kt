@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
@@ -17,7 +18,6 @@ import de.ph1b.audiobook.features.folder_chooser.FolderChooserActivity
 import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.mvp.MvpBaseController
-import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.uitools.setVisibleWeak
 import de.ph1b.audiobook.uitools.visible
 
@@ -65,7 +65,7 @@ class FolderOverviewController : MvpBaseController<FolderOverviewController, Fol
         // preparing list
         val layoutManager = LinearLayoutManager(activity)
         recycler.layoutManager = layoutManager
-        recycler.addItemDecoration(DividerItemDecoration(activity))
+        recycler.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
 
         adapter = FolderOverviewAdapter() { toDelete ->
             MaterialDialog.Builder(activity)

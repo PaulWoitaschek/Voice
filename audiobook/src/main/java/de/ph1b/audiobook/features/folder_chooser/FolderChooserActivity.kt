@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
@@ -14,7 +15,6 @@ import de.ph1b.audiobook.features.folder_chooser.FolderChooserActivity.Companion
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.mvp.RxBaseActivity
-import de.ph1b.audiobook.uitools.DividerItemDecoration
 import de.ph1b.audiobook.uitools.visible
 import i
 import java.io.File
@@ -28,7 +28,7 @@ import javax.inject.Inject
  *
  * Use [newInstanceIntent] to get a new intent with the necessary
  * values.
-
+ *
  * @author Paul Woitaschek
  */
 class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPresenter>(), FolderChooserView, HideFolderDialog.OnChosenListener {
@@ -88,7 +88,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
             presenter().fileSelected(it)
         }
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.addItemDecoration(DividerItemDecoration(this))
+        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         recyclerView.adapter = adapter
 
         // spinner
