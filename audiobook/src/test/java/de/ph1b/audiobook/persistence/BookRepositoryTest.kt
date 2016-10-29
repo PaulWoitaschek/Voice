@@ -22,19 +22,19 @@ import org.robolectric.shadows.ShadowLog
  */
 @RunWith(RobolectricGradleTestRunner::class)
 @Config(constants = BuildConfig::class, sdk = intArrayOf(Build.VERSION_CODES.LOLLIPOP), manifest = "src/main/AndroidManifest.xml", application = TestApp::class)
-class BookChestTest {
+class BookRepositoryTest {
 
     init {
         ShadowLog.stream = System.out
     }
 
-    private lateinit var bookChest: BookChest
+    private lateinit var bookChest: BookRepository
 
     @Before
     fun setUp() {
         val internalDb = InternalDb(RuntimeEnvironment.application)
         val internalBookRegister = InternalBookRegister(internalDb)
-        bookChest = BookChest(internalBookRegister)
+        bookChest = BookRepository(internalBookRegister)
     }
 
     @Test

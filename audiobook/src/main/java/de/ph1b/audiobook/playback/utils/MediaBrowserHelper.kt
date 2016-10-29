@@ -9,7 +9,7 @@ import d
 import dagger.Reusable
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.misc.value
-import de.ph1b.audiobook.persistence.BookChest
+import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import javax.inject.Inject
 
@@ -19,7 +19,7 @@ import javax.inject.Inject
  * @author Paul Woitaschek
  */
 @Reusable class MediaBrowserHelper
-@Inject constructor(private val bookUriConverter: BookUriConverter, private val db: BookChest, private val prefs: PrefsManager, private val context: Context) {
+@Inject constructor(private val bookUriConverter: BookUriConverter, private val db: BookRepository, private val prefs: PrefsManager, private val context: Context) {
 
     fun onGetRoot(): MediaBrowserServiceCompat.BrowserRoot = MediaBrowserServiceCompat.BrowserRoot(bookUriConverter.allBooks().toString(), null)
 

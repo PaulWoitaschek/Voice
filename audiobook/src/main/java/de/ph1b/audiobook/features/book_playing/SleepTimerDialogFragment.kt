@@ -15,7 +15,7 @@ import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.onProgressChanged
 import de.ph1b.audiobook.misc.positiveClicked
 import de.ph1b.audiobook.misc.value
-import de.ph1b.audiobook.persistence.BookChest
+import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.BookmarkProvider
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.Sandman
@@ -34,7 +34,7 @@ class SleepTimerDialogFragment : DialogFragment() {
     @Inject lateinit var bookmarkProvider: BookmarkProvider
     @Inject lateinit var prefs: PrefsManager
     @Inject lateinit var sandMan: Sandman
-    @Inject lateinit var bookChest: BookChest
+    @Inject lateinit var bookChest: BookRepository
     @Inject lateinit var shakeDetector: ShakeDetector
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

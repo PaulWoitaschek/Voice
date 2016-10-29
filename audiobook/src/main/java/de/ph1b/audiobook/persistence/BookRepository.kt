@@ -14,10 +14,10 @@ import javax.inject.Singleton
 
 /**
  * Provides access to all books.
-
+ *
  * @author Paul Woitaschek
  */
-@Singleton class BookChest
+@Singleton class BookRepository
 @Inject constructor(private val register: InternalBookRegister) {
 
     private val active: MutableList<Book> by lazy { register.activeBooks().toMutableList() }

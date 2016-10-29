@@ -18,7 +18,7 @@ import de.ph1b.audiobook.Bookmark
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.find
-import de.ph1b.audiobook.persistence.BookChest
+import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.BookmarkProvider
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
@@ -90,7 +90,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
     }
 
     @Inject lateinit var prefs: PrefsManager
-    @Inject lateinit var db: BookChest
+    @Inject lateinit var db: BookRepository
     @Inject lateinit var bookmarkProvider: BookmarkProvider
     @Inject lateinit var playStateManager: PlayStateManager
     @Inject lateinit var playerController: PlayerController

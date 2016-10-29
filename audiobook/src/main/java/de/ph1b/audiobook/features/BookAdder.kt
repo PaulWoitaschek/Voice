@@ -12,7 +12,7 @@ import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.MediaAnalyzer
 import de.ph1b.audiobook.misc.NaturalOrderComparator
 import de.ph1b.audiobook.misc.value
-import de.ph1b.audiobook.persistence.BookChest
+import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import rx.Observable
@@ -32,7 +32,7 @@ import javax.inject.Singleton
  * @author Paul Woitaschek
  */
 @Singleton class BookAdder
-@Inject constructor(private val context: Context, private val prefs: PrefsManager, private val db: BookChest, private val mediaAnalyzer: MediaAnalyzer, private val coverCollector: CoverFromDiscCollector) {
+@Inject constructor(private val context: Context, private val prefs: PrefsManager, private val db: BookRepository, private val mediaAnalyzer: MediaAnalyzer, private val coverCollector: CoverFromDiscCollector) {
 
     private val executor = Executors.newSingleThreadExecutor()
     private val scannerActiveSubject = BehaviorSubject.create(false)

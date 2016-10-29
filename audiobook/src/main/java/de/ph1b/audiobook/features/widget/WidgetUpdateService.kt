@@ -21,7 +21,7 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.dpToPx
 import de.ph1b.audiobook.misc.drawable
 import de.ph1b.audiobook.misc.value
-import de.ph1b.audiobook.persistence.BookChest
+import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.utils.ServiceController
@@ -44,7 +44,7 @@ class WidgetUpdateService : Service() {
             ThreadPoolExecutor.DiscardOldestPolicy())
     private val subscriptions = CompositeSubscription()
     @Inject lateinit var prefs: PrefsManager
-    @Inject lateinit var bookChest: BookChest
+    @Inject lateinit var bookChest: BookRepository
     @Inject lateinit var playStateManager: PlayStateManager
     @Inject lateinit var imageHelper: ImageHelper
     @Inject lateinit var serviceController: ServiceController

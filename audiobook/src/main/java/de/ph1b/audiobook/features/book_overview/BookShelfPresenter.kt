@@ -3,7 +3,7 @@ package de.ph1b.audiobook.features.book_overview
 import de.ph1b.audiobook.features.BookAdder
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.Presenter
-import de.ph1b.audiobook.persistence.BookChest
+import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
@@ -19,7 +19,7 @@ import javax.inject.Inject
  */
 class BookShelfPresenter
 @Inject
-constructor(private val bookChest: BookChest,
+constructor(private val bookChest: BookRepository,
             private val bookAdder: BookAdder,
             private val prefsManager: PrefsManager,
             private val playStateManager: PlayStateManager,

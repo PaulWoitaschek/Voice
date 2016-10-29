@@ -8,7 +8,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.persistence.BookChest
+import de.ph1b.audiobook.persistence.BookRepository
 import javax.inject.Inject
 
 /**
@@ -18,7 +18,7 @@ import javax.inject.Inject
  */
 class EditBookTitleDialogFragment : DialogFragment() {
 
-    @Inject lateinit var bookChest: BookChest
+    @Inject lateinit var bookChest: BookRepository
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         App.component().inject(this)

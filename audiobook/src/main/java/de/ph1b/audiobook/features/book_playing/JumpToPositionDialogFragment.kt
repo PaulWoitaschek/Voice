@@ -9,7 +9,7 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.value
-import de.ph1b.audiobook.persistence.BookChest
+import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.theme
@@ -20,7 +20,7 @@ import javax.inject.Inject
 class JumpToPositionDialogFragment : DialogFragment() {
 
     @Inject lateinit var prefs: PrefsManager
-    @Inject lateinit var db: BookChest
+    @Inject lateinit var db: BookRepository
     @Inject lateinit var playerController: PlayerController
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

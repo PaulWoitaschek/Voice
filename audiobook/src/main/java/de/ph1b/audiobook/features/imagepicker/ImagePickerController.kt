@@ -19,7 +19,7 @@ import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.setupActionbar
-import de.ph1b.audiobook.persistence.BookChest
+import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.visible
 import i
@@ -41,7 +41,7 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
         setHasOptionsMenu(true)
     }
 
-    @Inject lateinit var bookChest: BookChest
+    @Inject lateinit var bookChest: BookRepository
     @Inject lateinit var imageHelper: ImageHelper
 
     private var actionMode: ActionMode? = null

@@ -30,7 +30,7 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.imagepicker.CropOverlay
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.persistence.BookChest
+import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.uitools.CropTransformation
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.SimpleTarget
@@ -43,7 +43,7 @@ import com.squareup.picasso.Callback as PicassoCallback
  */
 class EditCoverDialogFragment : DialogFragment() {
 
-    @Inject internal lateinit var db: BookChest
+    @Inject internal lateinit var db: BookRepository
     @Inject internal lateinit var imageHelper: ImageHelper
     private fun callback() = activity as Callback
 

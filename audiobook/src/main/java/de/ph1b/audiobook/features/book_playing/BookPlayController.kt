@@ -18,7 +18,7 @@ import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
-import de.ph1b.audiobook.persistence.BookChest
+import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
@@ -51,7 +51,7 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
     @Inject lateinit var mediaPlayer: PlayerController
     @Inject lateinit var sandMan: Sandman
     @Inject lateinit var prefs: PrefsManager
-    @Inject lateinit var bookChest: BookChest
+    @Inject lateinit var bookChest: BookRepository
     @Inject lateinit var playStateManager: PlayStateManager
     @Inject lateinit var playerCapabilities: MediaPlayerCapabilities
 

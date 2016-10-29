@@ -19,7 +19,7 @@ import de.ph1b.audiobook.features.book_overview.BookShelfController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.RxBroadcast
 import de.ph1b.audiobook.misc.value
-import de.ph1b.audiobook.persistence.BookChest
+import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager.PauseReason
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
@@ -54,7 +54,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     private val subscriptions = CompositeSubscription()
     @Inject lateinit var prefs: PrefsManager
     @Inject lateinit var player: MediaPlayer
-    @Inject lateinit var db: BookChest
+    @Inject lateinit var db: BookRepository
     @Inject lateinit var notificationManager: NotificationManager
     @Inject lateinit var audioManager: AudioManager
     @Inject lateinit var audioFocusReceiver: AudioFocusReceiver
