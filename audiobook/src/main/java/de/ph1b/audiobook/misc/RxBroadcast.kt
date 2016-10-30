@@ -4,8 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import rx.Emitter
-import rx.Observable
+import io.reactivex.Observable
 
 /**
  * Wraps a broadcast receiver in an observable that registers and unregisters based on the subscription.
@@ -13,17 +12,17 @@ import rx.Observable
  * @author Paul Woitaschek
  */
 object RxBroadcast {
-    fun register(c: Context, filter: IntentFilter): Observable<Intent?> = Observable.fromEmitter({
+    fun register(c: Context, filter: IntentFilter): Observable<Intent> = Observable.create {
         val receiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
+            override fun onReceive(context: Context?, intent: Intent) {
                 it.onNext(intent)
             }
         }
 
         // register upon subscription, unregister upon unsubscription
         c.registerReceiver(receiver, filter)
-        it.setCancellation {
+        it.setCancellable {
             c.unregisterReceiver(receiver)
         }
-    }, Emitter.BackpressureMode.BUFFER)
+    }
 }

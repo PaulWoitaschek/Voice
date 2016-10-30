@@ -3,9 +3,9 @@ package de.ph1b.audiobook.persistence
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.persistence.internals.InternalBookRegister
 import e
-import rx.Observable
-import rx.subjects.BehaviorSubject
-import rx.subjects.PublishSubject
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 import v
 import java.util.*
 import javax.inject.Inject
@@ -25,11 +25,11 @@ import javax.inject.Singleton
 
     private val updated = PublishSubject.create<Book>()
 
-    private val all: BehaviorSubject<List<Book>> by lazy { BehaviorSubject.create<List<Book>>(active) }
+    private val all: BehaviorSubject<List<Book>> by lazy { BehaviorSubject.createDefault<List<Book>>(active) }
 
-    fun updateObservable(): Observable<Book> = updated.asObservable()
+    fun updateObservable(): Observable<Book> = updated
 
-    fun booksStream(): Observable<List<Book>> = all.asObservable()
+    fun booksStream(): Observable<List<Book>> = all
 
     private fun sortBooksAndNotifySubject() {
         active.sort()

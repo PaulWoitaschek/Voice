@@ -18,6 +18,7 @@ import de.ph1b.audiobook.features.BookActivity
 import de.ph1b.audiobook.features.book_overview.BookShelfController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.RxBroadcast
+import de.ph1b.audiobook.misc.asV2Observable
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -30,8 +31,8 @@ import de.ph1b.audiobook.playback.utils.MediaBrowserHelper
 import de.ph1b.audiobook.playback.utils.NotificationAnnouncer
 import e
 import i
-import rx.schedulers.Schedulers
-import rx.subscriptions.CompositeSubscription
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import v
 import java.io.File
 import javax.inject.Inject
@@ -51,7 +52,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
         App.component().inject(this)
     }
 
-    private val subscriptions = CompositeSubscription()
+    private val disposables = CompositeDisposable()
     @Inject lateinit var prefs: PrefsManager
     @Inject lateinit var player: MediaPlayer
     @Inject lateinit var db: BookRepository
@@ -154,17 +155,17 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
         playStateManager.playState.onNext(PlayState.STOPPED)
 
-        subscriptions.apply {
+        disposables.apply {
             // set seek time to the player
-            add(prefs.seekTime.asObservable()
+            add(prefs.seekTime.asV2Observable()
                     .subscribe { player.seekTime = it })
 
             // set auto rewind amount to the player
-            add(prefs.autoRewindAmount.asObservable()
+            add(prefs.autoRewindAmount.asV2Observable()
                     .subscribe { player.autoRewindAmount = it })
 
             // re-init controller when there is a new book set as the current book
-            add(prefs.currentBookId.asObservable()
+            add(prefs.currentBookId.asV2Observable()
                     .map { updatedId -> db.bookById(updatedId) }
                     .filter { it != null && (player.book()?.id != it.id) }
                     .subscribe {
@@ -282,7 +283,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
         player.stop()
 
         mediaSession.release()
-        subscriptions.unsubscribe()
+        disposables.dispose()
 
         super.onDestroy()
     }

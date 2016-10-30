@@ -9,8 +9,8 @@ import android.view.View
 import com.tbruyelle.rxpermissions.RxPermissions
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.uitools.BetterSnack
-import rx.Observable
-import rx.subjects.PublishSubject
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 /**
@@ -26,14 +26,14 @@ class PermissionHelper
 
     fun storagePermission(activity: Activity, gotPermission: () -> Unit = {}) {
         val root = activity.findViewById(android.R.id.content)
-        rxPermissions.request(PERMISSION)
+        rxPermissions.request(PERMISSION).toV2Observable()
                 .repeatWhen { permissionDialogConfirmed }
                 .flatMap { granted ->
                     if (granted) {
                         gotPermission()
                         Observable.just(true)
                     } else {
-                        rxPermissions.shouldShowRequestPermissionRationale(activity, PERMISSION)
+                        rxPermissions.shouldShowRequestPermissionRationale(activity, PERMISSION).toV2Observable()
                                 .doOnNext { showRationale ->
                                     if (showRationale) {
                                         showRationale(root) {

@@ -5,7 +5,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import de.ph1b.audiobook.misc.RxBroadcast
 import i
-import rx.Observable
+import io.reactivex.Observable
 
 /**
  * Simple receiver wrapper which holds a [BroadcastReceiver] that notifies on headset changes.

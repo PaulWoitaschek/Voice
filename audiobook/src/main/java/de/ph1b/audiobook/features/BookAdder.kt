@@ -15,8 +15,8 @@ import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
-import rx.Observable
-import rx.subjects.BehaviorSubject
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 import v
 import java.io.File
 import java.util.*
@@ -35,8 +35,8 @@ import javax.inject.Singleton
 @Inject constructor(private val context: Context, private val prefs: PrefsManager, private val db: BookRepository, private val mediaAnalyzer: MediaAnalyzer, private val coverCollector: CoverFromDiscCollector) {
 
     private val executor = Executors.newSingleThreadExecutor()
-    private val scannerActiveSubject = BehaviorSubject.create(false)
-    val scannerActive: Observable<Boolean> = scannerActiveSubject.asObservable()
+    private val scannerActiveSubject = BehaviorSubject.createDefault(false)
+    val scannerActive: Observable<Boolean> = scannerActiveSubject
     private val handler = Handler(context.mainLooper)
     @Volatile private var stopScanner = false
 

@@ -5,11 +5,11 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.playback.player.Player
 import e
 import i
-import rx.Observable
-import rx.Subscription
-import rx.android.schedulers.AndroidSchedulers
-import rx.subjects.BehaviorSubject
-import rx.subjects.PublishSubject
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 import v
 import java.io.File
 import java.io.IOException
@@ -23,11 +23,11 @@ class MediaPlayer
 constructor(private val player: Player, private val playStateManager: PlayStateManager) {
 
     private var book = BehaviorSubject.create<Book>()
-    private var state = BehaviorSubject.create(State.IDLE)
+    private var state = BehaviorSubject.createDefault(State.IDLE)
 
-    private var updatingSubscription: Subscription? = null
+    private var updatingDisposable: Disposable? = null
     private val errorSubject = PublishSubject.create<Unit>()
-    fun onError(): Observable<Unit> = errorSubject.asObservable()
+    fun onError(): Observable<Unit> = errorSubject
 
     init {
         player.setAudioStreamType(AudioManager.STREAM_MUSIC)
@@ -59,9 +59,9 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
                 .subscribe { isPlaying ->
                     if (isPlaying) {
                         v { "startUpdating" }
-                        if (updatingSubscription?.isUnsubscribed ?: true) {
+                        if (updatingDisposable?.isDisposed ?: true) {
                             // updates the book automatically with the current position
-                            updatingSubscription = Observable.interval(200, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                            updatingDisposable = Observable.interval(200L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                                     .map { if (state.value == State.STARTED) player.currentPosition else -1 }
                                     .filter { it != -1 }
                                     .distinct { it / 1000 } // let the value only pass the full second changed.
@@ -74,7 +74,7 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
                         }
                     } else {
                         v { "stop updating" }
-                        updatingSubscription?.unsubscribe()
+                        updatingDisposable?.dispose()
                     }
                 }
     }
@@ -94,7 +94,7 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
 
     fun book(): Book? = book.value
 
-    fun bookObservable(): Observable<Book> = book.asObservable()
+    fun bookObservable(): Observable<Book> = book
 
     fun setVolume(loud: Boolean) = player.setVolume(if (loud) 1F else 0.1F)
 

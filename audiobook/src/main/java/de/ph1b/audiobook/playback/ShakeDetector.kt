@@ -5,8 +5,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import dagger.Reusable
-import rx.Emitter
-import rx.Observable
+import io.reactivex.Observable
 import javax.inject.Inject
 
 /**
@@ -21,8 +20,8 @@ import javax.inject.Inject
 
     fun shakeSupported() = sensorManager != null
 
-    fun create(): Observable<Unit> = Observable.fromEmitter({ emitter ->
-        if (sensorManager == null) return@fromEmitter
+    fun detect(): Observable<Unit> = Observable.create {
+        if (sensorManager == null) return@create
 
         val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
@@ -37,13 +36,13 @@ import javax.inject.Inject
 
                 val gForce = Math.sqrt(gX * gX + gY * gY + gZ * gZ.toDouble())
                 if (gForce > 2.25) {
-                    emitter.onNext(null)
+                    it.onNext(Unit)
                 }
             }
         }
 
         // subscribed upon registration, unsubscribe upon cancellation
         sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_UI)
-        emitter.setCancellation { sensorManager.unregisterListener(listener) }
-    }, Emitter.BackpressureMode.LATEST)
+        it.setCancellable { sensorManager.unregisterListener(listener) }
+    }
 }

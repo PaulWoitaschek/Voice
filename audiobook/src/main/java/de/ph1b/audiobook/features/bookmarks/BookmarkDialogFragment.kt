@@ -24,13 +24,13 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
 import i
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
  * Dialog for creating a bookmark
-
+ *
  * @author Paul Woitaschek
  */
 class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuClickedListener {

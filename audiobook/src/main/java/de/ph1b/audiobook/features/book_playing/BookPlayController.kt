@@ -29,8 +29,7 @@ import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
 import de.ph1b.audiobook.uitools.visible
 import i
-import rx.Observable
-import rx.functions.Action1
+import io.reactivex.Observable
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -203,25 +202,23 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
                 upIndicator = R.drawable.ic_arrow_back,
                 title = book!!.name)
 
+        var firstPlayStateChange = true
         playStateManager.playState
                 .bindToLifeCycle()
-                .subscribe(object : Action1<PlayStateManager.PlayState> {
-                    private var firstRun = true
-
-                    override fun call(playState: PlayStateManager.PlayState) {
-                        // animate only if this is not the first run
-                        i { "onNext with playState $playState" }
-                        if (playState === PlayStateManager.PlayState.PLAYING) {
-                            playPauseDrawable.transformToPause(!firstRun)
-                        } else {
-                            playPauseDrawable.transformToPlay(!firstRun)
-                        }
-
-                        firstRun = false
+                .subscribe {
+                    // animate only if this is not the first run
+                    i { "onNext with playState $it" }
+                    if (it === PlayStateManager.PlayState.PLAYING) {
+                        playPauseDrawable.transformToPause(!firstPlayStateChange)
+                    } else {
+                        playPauseDrawable.transformToPlay(!firstPlayStateChange)
                     }
-                })
 
-        Observable.merge(Observable.from(bookChest.activeBooks), bookChest.updateObservable())
+                    firstPlayStateChange = false
+                }
+
+
+        Observable.merge(Observable.fromIterable(bookChest.activeBooks), bookChest.updateObservable())
                 .filter { it.id == bookId }
                 .bindToLifeCycle()
                 .subscribe { book: Book ->
