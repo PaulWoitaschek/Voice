@@ -1,7 +1,6 @@
 MaterialAudiobookPlayer
 =======================
-<!--[![Travis](https://img.shields.io/travis/PaulWoitaschek/MaterialAudiobookPlayer/develop.svg)](https://travis-ci.org/PaulWoitaschek/MaterialAudiobookPlayer)-->
-<!--[![Code Coverage](https://img.shields.io/codecov/c/github/PaulWoitaschek/MaterialAudiobookPlayer/develop.svg)](https://codecov.io/github/paulwoitaschek/materialaudiobookplayer?branch=develop)-->
+[![Travis](https://img.shields.io/travis/PaulWoitaschek/MaterialAudiobookPlayer/develop.svg)](https://travis-ci.org/PaulWoitaschek/MaterialAudiobookPlayer)
 
 This is my digital playground where I am learning. I'm integrating and validating new technologies and ideas here, playing around with new UI / UX components and developing with the best coding standard I come up with.
 
@@ -13,14 +12,9 @@ If you like to [contribute](#contrib) or [translate](#trans), that is very appre
 <a href="https://play.google.com/store/apps/details?id=de.ph1b.audiobook"><img src="https://github.com/Ph1b/MaterialAudiobookPlayer/blob/master/Images/map-port.jpg" width="400" ></a>
 
 [![Download from Google Play](http://www.android.com/images/brand/android_app_on_play_large.png "Download from Google Play")](https://play.google.com/store/apps/details?id=de.ph1b.audiobook)
-[![AntennaPod on fdroid.org](https://camo.githubusercontent.com/7df0eafa4433fa4919a56f87c3d99cf81b68d01c/68747470733a2f2f662d64726f69642e6f72672f77696b692f696d616765732f632f63342f462d44726f69642d627574746f6e5f617661696c61626c652d6f6e2e706e67 "Download from fdroid.org")](https://f-droid.org/repository/browse/?fdfilter=material&fdid=de.ph1b.audiobook)
+[![Material Audiobook Player on fdroid.org](https://camo.githubusercontent.com/7df0eafa4433fa4919a56f87c3d99cf81b68d01c/68747470733a2f2f662d64726f69642e6f72672f77696b692f696d616765732f632f63342f462d44726f69642d627574746f6e5f617661696c61626c652d6f6e2e706e67 "Download from fdroid.org")](https://f-droid.org/repository/browse/?fdfilter=material&fdid=de.ph1b.audiobook)
 
 # <a name="contrib">Contribution</a>
-
-## Testing
-It's always great to have testers to test new features. We use Google Play Beta Tests so everyone with a google account can join these here:
-[**BETA**](https://play.google.com/apps/testing/de.ph1b.audiobook)
-Please report issues like usual but tell that and which beta you are using ;-)
 
 ## Development
 
