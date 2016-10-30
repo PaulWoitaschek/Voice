@@ -34,7 +34,6 @@
     <string name="download_book_cover">검색된 앨범커버</string>
     <string name="pick_book_cover">기기의 앨범커버</string>
     <string name="edit_book_title">제목 수정</string>
-
     <!--JumpToPosition-->
     <string name="action_time_change">이동</string>
     <!--BookAdding-->

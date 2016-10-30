@@ -33,6 +33,8 @@
     <string name="content_next_cover">Wybiera następną okładkę</string>
     <string name="content_cover">Pokazuje okładki do wyboru</string>
     <string name="change_book_name">Nazwa</string>
+    <string name="download_book_cover">Okładka z internetu</string>
+    <string name="pick_book_cover">Okładka z pamięci telefonu</string>
     <string name="edit_book_title">Edytuj książkę</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Skocz do</string>
