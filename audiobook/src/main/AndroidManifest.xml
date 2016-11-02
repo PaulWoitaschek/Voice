@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <application
         android:name=".injection.App"
@@ -119,7 +120,16 @@
                 android:resource="@xml/widget_info" />
         </receiver>
 
-        <activity android:name=".features.sign_in.SignInActivity"></activity>
+        <activity android:name=".features.sign_in.SignInActivity">
+            <meta-data android:name="com.google.android.apps.drive.APP_ID" android:value="id=655569102553-dq3u8m350hi44krotjkv7gr20e93hto9.apps.googleusercontent.com" />
+            <intent-filter>
+                <action android:name="com.google.android.apps.drive.DRIVE_OPEN" />
+                <data android:mimeType="audio/mpeg3" />
+                <data android:mimeType="image/png" />
+                <data android:mimeType="image/jpeg" />
+                <data android:mimeType="image/jpg" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
