@@ -26,6 +26,7 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.Sandman
+import de.ph1b.audiobook.playback.events.AudioFocusManager
 import de.ph1b.audiobook.playback.utils.MediaPlayerCapabilities
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
@@ -81,24 +82,30 @@ class BookPlayFragment : Fragment() {
         previous.setOnClickListener { mediaPlayer.previous() }
         playedTime.setOnClickListener { launchJumpToPositionDialog() }
 
-        var lastClick = 0L
-        val doubleClickTime = ViewConfiguration.getDoubleTapTimeout()
-        coverFrame.clicks()
-                .filter {
-                    val currentTime = System.currentTimeMillis()
-                    val doubleClick = currentTime - lastClick < doubleClickTime
-                    lastClick = currentTime
-                    doubleClick
-                }
-                .doOnNext { lastClick = 0 } // resets so triple clicks won't cause another invoke
-                .onBackpressureLatest()
-                .subscribe { mediaPlayer.playPause() }
+
         coverFrame!!.setOnTouchListener(object : OnSwipeTouchListener(context) {
-//            override fun onSwipeDown() {
-////                Toast.makeText(this@MainActivity, "Down", Toast.LENGTH_SHORT).show()
-//            }
+            override fun onSwipeDown() {
+//                Toast.makeText(this@MainActivity, "Down", Toast.LENGTH_SHORT).show()
+                mediaPlayer.volume(false)
+            }
+
+            override fun onDoubleTapAction(){
+//                mediaPlayer.playPause()
+                BookmarkDialogFragment.newInstance(bookId).show(fragmentManager, BookmarkDialogFragment.TAG)
+            }
+
+            override fun onLongPressAction() {
+                mediaPlayer.playPause()
+            }
+
+            override fun onSwipeUp() {
+//                super.onSwipeUp()
+                mediaPlayer.volume(true)
+
+            }
 
             override fun onSwipeLeft() {
+
                 mediaPlayer.rewind()
 //                Toast.makeText(this@MainActivity, "Left", Toast.LENGTH_SHORT).show()
             }
@@ -110,8 +117,28 @@ class BookPlayFragment : Fragment() {
             override fun onSwipeRight() {
 //                Toast.makeText(this@MainActivity, "Right", Toast.LENGTH_SHORT).show()
                 mediaPlayer.fastForward()
+
+//                val progress = seekBar.progress
+//
+//                mediaPlayer.changePosition(progress, book!!.currentChapter().file)
             }
+
         })
+
+
+        /*var lastClick = 0L
+        val doubleClickTime = ViewConfiguration.getDoubleTapTimeout()
+        coverFrame.clicks()
+                .filter {
+                    val currentTime = System.currentTimeMillis()
+                    val doubleClick = currentTime - lastClick < doubleClickTime
+                    lastClick = currentTime
+                    doubleClick
+                }
+                .doOnNext { lastClick = 0 } // resets so triple clicks won't cause another invoke
+                .onBackpressureLatest()
+                .subscribe { mediaPlayer.playPause() }*/
+
 
         book = bookChest.bookById(bookId)
 
@@ -203,26 +230,6 @@ class BookPlayFragment : Fragment() {
                 }
             })
         }
-//fixme this part with view need to be fixed
-        view!!.setOnTouchListener(object : OnSwipeTouchListener(context) {
-            override fun onSwipeDown() {
-//                Toast.makeText(this@MainActivity, "Down", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onSwipeLeft() {
-                mediaPlayer.rewind()
-//                Toast.makeText(this@MainActivity, "Left", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onSwipeUp() {
-//                Toast.makeText(this@MainActivity, "Up", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onSwipeRight() {
-//                Toast.makeText(this@MainActivity, "Right", Toast.LENGTH_SHORT).show()
-                mediaPlayer.fastForward()
-            }
-        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
