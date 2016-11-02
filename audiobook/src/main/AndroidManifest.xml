@@ -57,7 +57,7 @@
             <intent-filter>
                 <action android:name="com.google.android.apps.drive.DRIVE_OPEN" />
                 <data android:mimeType="application/vnd.google-apps.drive-sdk.1234567890" />
-                <data android:mimeType="audio/mpeg3" />
+                <data android:mimeType="audio/mp3" />
                 <data android:mimeType="image/png" />
                 <data android:mimeType="image/jpeg" />
                 <data android:mimeType="image/jpg" />
@@ -148,7 +148,11 @@
                 <data android:mimeType="image/jpeg" />
                 <data android:mimeType="image/jpg" />
             </intent-filter>
-        </activity>
+        </activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

@@ -1,18 +1,48 @@
 package de.ph1b.audiobook.features.sign_in;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveApi;
+import com.google.android.gms.drive.DriveFile;
+import com.google.android.gms.drive.DriveFolder;
+import com.google.android.gms.drive.DriveId;
+import com.google.android.gms.drive.Metadata;
+import com.google.android.gms.drive.MetadataBuffer;
+import com.google.android.gms.drive.MetadataChangeSet;
+import com.google.android.gms.drive.query.Filters;
+import com.google.android.gms.drive.query.Query;
+import com.google.android.gms.drive.query.SearchableField;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import de.ph1b.audiobook.R;
 
 /**
  * Created by Timur on 29.10.2016.
@@ -38,6 +68,20 @@ public class GoogleDriveConnectionActivity extends Activity implements
      * Google API client.
      */
     private GoogleApiClient mGoogleApiClient;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+
+    Button mSyncButton;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+
+
+    }
 
     /**
      * Called when activity gets visible. A connection to Drive services need to
@@ -45,9 +89,25 @@ public class GoogleDriveConnectionActivity extends Activity implements
      * {@code ConnectionCallbacks} and {@code OnConnectionFailedListener} on the
      * activities itself.
      */
+
+
     @Override
     protected void onResume() {
         super.onResume();
+
+        setContentView(R.layout.google_drive_connection);
+
+        mSyncButton = (Button) findViewById(R.id.button2);
+
+        mSyncButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                DriveId driveId = DriveId.decodeFromString(getPreferences(Context.MODE_PRIVATE).getString("FOLDER_ID", null));
+                syncFiles(Drive.DriveApi.getFolder(mGoogleApiClient, driveId));
+            }
+        });
+
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addApi(Drive.API)
@@ -59,7 +119,6 @@ public class GoogleDriveConnectionActivity extends Activity implements
         }
         mGoogleApiClient.connect();
         Toast.makeText(this, "Connected to Google Drive", Toast.LENGTH_LONG).show();
-
     }
 
     /**
@@ -92,6 +151,117 @@ public class GoogleDriveConnectionActivity extends Activity implements
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.i(TAG, "GoogleApiClient connected");
+
+
+        boolean folderExists = getPreferences(Context.MODE_PRIVATE).getString("FOLDER_ID", null) != null;
+
+        if (!folderExists) {
+            MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+                    .setTitle("MaterialAudiobookPlayer").build();
+            Drive.DriveApi.getRootFolder(getGoogleApiClient()).createFolder(
+                    getGoogleApiClient(), changeSet).setResultCallback(callback);
+            File directory = new File(Environment.getExternalStorageDirectory() +
+                    File.separator +
+                    "MaterialAudiobookPlayer");
+            directory.mkdirs();
+        } else {
+            mSyncButton.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    final ResultCallback<DriveFolder.DriveFolderResult> callback = new ResultCallback<DriveFolder.DriveFolderResult>() {
+        @Override
+        public void onResult(DriveFolder.DriveFolderResult result) {
+            if (!result.getStatus().isSuccess()) {
+                showMessage("Error while trying to create the folder");
+                return;
+            }
+
+            String folderId = result.getDriveFolder().getDriveId().encodeToString();
+            saveFolderId(folderId);
+            showMessage("Created a folder: " + result.getDriveFolder().getDriveId());
+            Toast.makeText(GoogleDriveConnectionActivity.this,
+                    "Created a folder: " + result.getDriveFolder().getDriveId(), Toast.LENGTH_LONG).show();
+
+
+        }
+    };
+
+
+    private void syncFiles(DriveFolder folder) {
+//        folder.listChildren(mGoogleApiClient).setResultCallback(childrenRetrievedCallback);
+
+        Query query = new Query.Builder()
+                .addFilter(Filters.eq(SearchableField.MIME_TYPE, "audio/mp3"))
+                .build();
+
+        folder.queryChildren(getGoogleApiClient(), query).setResultCallback(childrenRetrievedCallback);
+
+
+//        DriveFile file = folder.getDriveId().asDriveFile();
+//        file.open(mGoogleApiClient, DriveFile.MODE_READ_ONLY, null).setResultCallback(driveContentsCallback);
+    }
+
+    private ResultCallback<DriveApi.DriveContentsResult> driveContentsCallback =
+            new ResultCallback<DriveApi.DriveContentsResult>() {
+                @Override
+                public void onResult(DriveApi.DriveContentsResult result) {
+                    if (!result.getStatus().isSuccess()) {
+                        showMessage("Error while opening the file contents");
+                        return;
+                    }
+                    InputStream is = result.getDriveContents().getInputStream();
+
+
+                    try {
+                        byte[] buffer = new byte[is.available()];
+                        is.read(buffer);
+
+                        File targetFile = new File(Environment.getExternalStorageDirectory() +
+                                File.separator +
+                                "MaterialAudiobookPlayer" + File.separator + "test.hz");
+                        OutputStream outStream = new FileOutputStream(targetFile);
+                        outStream.write(buffer);
+
+                        showMessage("Job's done");
+                    } catch (IOException e) {
+                        showMessage("Go fuck yourself");
+                    }
+
+
+                }
+            };
+
+    ResultCallback<DriveApi.MetadataBufferResult> childrenRetrievedCallback = new
+            ResultCallback<DriveApi.MetadataBufferResult>() {
+                @Override
+                public void onResult(DriveApi.MetadataBufferResult result) {
+                    if (!result.getStatus().isSuccess()) {
+                        showMessage("Problem while retrieving files");
+                        return;
+                    }
+
+                    MetadataBuffer buffer = result.getMetadataBuffer();
+
+                    for (Metadata data : buffer) {
+
+                        if (!data.isFolder()) {
+                            DriveFile file = data.getDriveId().asDriveFile();
+                            file.open(mGoogleApiClient, DriveFile.MODE_READ_ONLY, null).setResultCallback(driveContentsCallback);
+                        }
+                    }
+
+                    showMessage("Successfully listed files.");
+                }
+            };
+
+
+    private void saveFolderId(String folderId) {
+        SharedPreferences sharedPref = GoogleDriveConnectionActivity.this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("FOLDER_ID", folderId);
+        editor.apply();
     }
 
     /**
@@ -134,5 +304,50 @@ public class GoogleDriveConnectionActivity extends Activity implements
      */
     public GoogleApiClient getGoogleApiClient() {
         return mGoogleApiClient;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("GoogleDriveConnection Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
     }
 }

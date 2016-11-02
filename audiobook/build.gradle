@@ -96,6 +96,7 @@ dependencies {
     // permissions
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile 'com.google.android.gms:play-services-appindexing:9.2.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
