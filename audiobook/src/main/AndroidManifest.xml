@@ -45,6 +45,25 @@
             android:name="com.google.android.gms.car.application.theme"
             android:resource="@style/Theme.AppCompat.DayNight" />
 
+        <meta-data
+            android:name="com.google.android.apps.drive.APP_ID"
+            android:value="id=655569102553-dq3u8m350hi44krotjkv7gr20e93hto9.apps.googleusercontent.com" />
+
+
+        <activity android:name=".features.sign_in.GoogleDriveConnectionActivity">
+            <meta-data
+                android:name="com.google.android.apps.drive.APP_ID"
+                android:value="id=655569102553-dq3u8m350hi44krotjkv7gr20e93hto9.apps.googleusercontent.com" />
+            <intent-filter>
+                <action android:name="com.google.android.apps.drive.DRIVE_OPEN" />
+                <data android:mimeType="application/vnd.google-apps.drive-sdk.1234567890" />
+                <data android:mimeType="audio/mpeg3" />
+                <data android:mimeType="image/png" />
+                <data android:mimeType="image/jpeg" />
+                <data android:mimeType="image/jpg" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".features.coldStart.SplashActivity"
             android:label="@string/app_name"

@@ -15,6 +15,7 @@ import de.ph1b.audiobook.features.folder_overview.FolderOverviewActivity
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.SupportDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment
+import de.ph1b.audiobook.features.sign_in.GoogleDriveConnectionActivity
 import de.ph1b.audiobook.features.sign_in.SignInActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -78,7 +79,7 @@ class SettingsFragment : PreferenceFragment(), SettingsSetListener {
 
         googlePreference = findPreference(getString(R.string.pref_key_google_account))
         googlePreference.setOnPreferenceClickListener {
-            startActivity(Intent(hostingActivity, SignInActivity::class.java))
+            startActivity(Intent(hostingActivity, GoogleDriveConnectionActivity::class.java))
             true
         }
     }
