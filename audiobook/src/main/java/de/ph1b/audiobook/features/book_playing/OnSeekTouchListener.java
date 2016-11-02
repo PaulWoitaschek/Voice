@@ -21,11 +21,11 @@ Usage:
   }
 
 */
-public class OnSwipeTouchListener implements View.OnTouchListener {
+public class OnSeekTouchListener implements View.OnTouchListener {
 
     private GestureDetector gestureDetector;
 
-    public OnSwipeTouchListener(Context c) {
+    public OnSeekTouchListener(Context c) {
         gestureDetector = new GestureDetector(c, new GestureListener());
     }
 
@@ -43,11 +43,6 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
             return true;
         }
 
-        @Override
-        public boolean onDoubleTap(MotionEvent e) {
-            onDoubleTapAction();
-            return super.onDoubleTap(e);
-        }
 
         // Determines the fling velocity and then fires the appropriate swipe event accordingly
         @Override
@@ -78,18 +73,6 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
             }
             return result;
         }
-
-        @Override
-        public void onLongPress(MotionEvent e) {
-            onLongPressAction();
-            super.onLongPress(e);
-        }
-    }
-
-    public void onDoubleTapAction() {
-    }
-
-    public void onLongPressAction() {
     }
 
     public void onSwipeRight() {
