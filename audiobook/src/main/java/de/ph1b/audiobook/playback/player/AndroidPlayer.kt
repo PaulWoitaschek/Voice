@@ -41,8 +41,8 @@ class AndroidPlayer(private val context: Context) : Player() {
     override var playbackSpeed: Float = 1F
 
     override fun prepare(file: File) {
-//        player.setDataSource(file.absolutePath)
-        player.setDataSource("https://cs1-17v4.vk-cdn.net/p31/cd8cd2ef16d61e.mp3")
+        player.setDataSource(file.absolutePath)
+//        player.setDataSource("https://cs1-17v4.vk-cdn.net/p31/cd8cd2ef16d61e.mp3")
         player.prepare()
     }
 

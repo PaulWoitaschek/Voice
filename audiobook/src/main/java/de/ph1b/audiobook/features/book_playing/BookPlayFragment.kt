@@ -6,8 +6,10 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.widget.SeekBar
+import android.widget.Toast
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
@@ -91,6 +93,25 @@ class BookPlayFragment : Fragment() {
                 .doOnNext { lastClick = 0 } // resets so triple clicks won't cause another invoke
                 .onBackpressureLatest()
                 .subscribe { mediaPlayer.playPause() }
+        coverFrame!!.setOnTouchListener(object : OnSwipeTouchListener(context) {
+//            override fun onSwipeDown() {
+////                Toast.makeText(this@MainActivity, "Down", Toast.LENGTH_SHORT).show()
+//            }
+
+            override fun onSwipeLeft() {
+                mediaPlayer.rewind()
+//                Toast.makeText(this@MainActivity, "Left", Toast.LENGTH_SHORT).show()
+            }
+
+//            override fun onSwipeUp() {
+////                Toast.makeText(this@MainActivity, "Up", Toast.LENGTH_SHORT).show()
+//            }
+
+            override fun onSwipeRight() {
+//                Toast.makeText(this@MainActivity, "Right", Toast.LENGTH_SHORT).show()
+                mediaPlayer.fastForward()
+            }
+        })
 
         book = bookChest.bookById(bookId)
 
@@ -182,6 +203,26 @@ class BookPlayFragment : Fragment() {
                 }
             })
         }
+//fixme this part with view need to be fixed
+        view!!.setOnTouchListener(object : OnSwipeTouchListener(context) {
+            override fun onSwipeDown() {
+//                Toast.makeText(this@MainActivity, "Down", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onSwipeLeft() {
+                mediaPlayer.rewind()
+//                Toast.makeText(this@MainActivity, "Left", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onSwipeUp() {
+//                Toast.makeText(this@MainActivity, "Up", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onSwipeRight() {
+//                Toast.makeText(this@MainActivity, "Right", Toast.LENGTH_SHORT).show()
+                mediaPlayer.fastForward()
+            }
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
