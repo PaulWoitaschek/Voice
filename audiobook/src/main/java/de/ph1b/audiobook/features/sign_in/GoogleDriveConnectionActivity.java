@@ -26,6 +26,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveApi;
+import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFile;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveId;
@@ -36,11 +37,17 @@ import com.google.android.gms.drive.query.Filters;
 import com.google.android.gms.drive.query.Query;
 import com.google.android.gms.drive.query.SearchableField;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 import de.ph1b.audiobook.R;
 
@@ -102,9 +109,7 @@ public class GoogleDriveConnectionActivity extends Activity implements
         mSyncButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                DriveId driveId = DriveId.decodeFromString(getPreferences(Context.MODE_PRIVATE).getString("FOLDER_ID", null));
-                syncFiles(Drive.DriveApi.getFolder(mGoogleApiClient, driveId));
+                syncFiles();
             }
         });
 
@@ -184,19 +189,82 @@ public class GoogleDriveConnectionActivity extends Activity implements
             Toast.makeText(GoogleDriveConnectionActivity.this,
                     "Created a folder: " + result.getDriveFolder().getDriveId(), Toast.LENGTH_LONG).show();
 
-
         }
     };
 
 
-    private void syncFiles(DriveFolder folder) {
+    private void syncFiles() {
 //        folder.listChildren(mGoogleApiClient).setResultCallback(childrenRetrievedCallback);
+//        DriveId driveId = DriveId.decodeFromString(getPreferences(Context.MODE_PRIVATE).getString("FOLDER_ID", null));
+//        DriveFile driveFile = driveId.asDriveFile();
+//        driveFile.open(mGoogleApiClient, DriveFile.MODE_READ_ONLY, null)
+//                .setResultCallback(driveContentsCallback);
+        Drive.DriveApi.newDriveContents(getGoogleApiClient())
+                .setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
+                    @Override
+                    public void onResult(@NonNull DriveApi.DriveContentsResult result) {
+                        if (!result.getStatus().isSuccess()) {
+                            showMessage("Error while trying to create new file contents");
+                            return;
+                        }
+                        final DriveContents driveContents = result.getDriveContents();
+
+                        // Perform I/O off the UI thread.
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                // write content to DriveContents
+                                OutputStream outputStream = driveContents.getOutputStream();
+                                Writer writer = new OutputStreamWriter(outputStream);
+                                try {
+                                    writer.write("Hello World!");
+                                    writer.close();
+                                } catch (IOException e) {
+                                    Log.e(TAG, e.getMessage());
+                                }
+
+                                MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+                                        .setTitle("New file")
+                                        .setMimeType("text/plain")
+                                        .setStarred(true).build();
+
+                                // create a file on root folder
+                                Drive.DriveApi.getRootFolder(getGoogleApiClient())
+                                        .createFile(getGoogleApiClient(), changeSet, driveContents)
+                                        .setResultCallback(new ResultCallback<DriveFolder.DriveFileResult>() {
+                                            @Override
+                                            public void onResult(@NonNull DriveFolder.DriveFileResult driveFileResult) {
+                                                if (!driveFileResult.getStatus().isSuccess()) {
+                                                    showMessage("Error while trying to create the file");
+                                                    return;
+                                                }
+                                                showMessage("Created a file with content: " + driveFileResult.getDriveFile().getDriveId());
+                                            }
+                                        });
+                            }
+                        }.start();
+                    }
+                });
+
 
         Query query = new Query.Builder()
-                .addFilter(Filters.eq(SearchableField.MIME_TYPE, "audio/mp3"))
-                .build();
+                .addFilter(Filters.and(
+                        Filters.eq(SearchableField.TITLE, "New file"),
+                        Filters.eq(SearchableField.MIME_TYPE, "text/plain"))).build();
+        Drive.DriveApi.query(getGoogleApiClient(), query)
+                .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
 
-        folder.queryChildren(getGoogleApiClient(), query).setResultCallback(childrenRetrievedCallback);
+                    @Override
+                    public void onResult(DriveApi.MetadataBufferResult result) {
+                        Metadata md = result.getMetadataBuffer().get(0);
+                        DriveId driveId = md.getDriveId();
+                        DriveFile driveFile = driveId.asDriveFile();
+                        driveFile.open(mGoogleApiClient, DriveFile.MODE_READ_ONLY, null)
+                                .setResultCallback(driveContentsCallback);
+                    }
+                });
+//
+//        folder.queryChildren(getGoogleApiClient(), query).setResultCallback(childrenRetrievedCallback);
 
 
 //        DriveFile file = folder.getDriveId().asDriveFile();
@@ -211,25 +279,28 @@ public class GoogleDriveConnectionActivity extends Activity implements
                         showMessage("Error while opening the file contents");
                         return;
                     }
-                    InputStream is = result.getDriveContents().getInputStream();
-
-
+                    DriveContents driveContents = result.getDriveContents();
+                    InputStream inputStream = driveContents.getInputStream();
+                    OutputStream out = null;
                     try {
-                        byte[] buffer = new byte[is.available()];
-                        is.read(buffer);
-
-                        File targetFile = new File(Environment.getExternalStorageDirectory() +
+                        out = new FileOutputStream(Environment.getExternalStorageDirectory() +
                                 File.separator +
-                                "MaterialAudiobookPlayer" + File.separator + "test.hz");
-                        OutputStream outStream = new FileOutputStream(targetFile);
-                        outStream.write(buffer);
+                                "MaterialAudiobookPlayer" +
+                                File.separator +
+                                "NewFile.txt");
+                        byte[] buffer = new byte[1024];
+                        int read;
+                        while ((read = inputStream.read(buffer)) != -1) {
+                            out.write(buffer, 0, read);
+                        }
+                        out.flush();
+                        inputStream.close();
+                        out.close();
 
-                        showMessage("Job's done");
                     } catch (IOException e) {
-                        showMessage("Go fuck yourself");
+                        e.printStackTrace();
                     }
-
-
+                    driveContents.discard(mGoogleApiClient);
                 }
             };
 
