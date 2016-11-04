@@ -8,8 +8,7 @@ import android.widget.Adapter
 import android.widget.AdapterView
 import android.widget.SeekBar
 import android.widget.TextView
-import rx.Emitter
-import rx.Observable
+import io.reactivex.Observable
 
 
 fun SeekBar.onProgressChanged(initialNotification: Boolean = false, progressChanged: (Int) -> Unit) {
@@ -29,15 +28,15 @@ fun SeekBar.onProgressChanged(initialNotification: Boolean = false, progressChan
     if (initialNotification) listener.onProgressChanged(this, progress, false)
 }
 
-fun SeekBar.progressChangedStream(initialNotification: Boolean = false): Observable<Int> = Observable.fromEmitter({ emitter ->
-    onProgressChanged(initialNotification) { emitter.onNext(it) }
-    emitter.setCancellation { setOnSeekBarChangeListener(null) }
-}, Emitter.BackpressureMode.LATEST)
+fun SeekBar.progressChangedStream(initialNotification: Boolean = false): Observable<Int> = Observable.create {
+    onProgressChanged(initialNotification) { position -> it.onNext(position) }
+    it.setCancellable { setOnSeekBarChangeListener(null) }
+}
 
-fun <T : View> T.clicks(): Observable<T> = Observable.fromEmitter({ emitter ->
-    setOnClickListener { emitter.onNext(this) }
-    emitter.setCancellation { setOnClickListener(null) }
-}, Emitter.BackpressureMode.BUFFER)
+fun <T : View> T.clicks(): Observable<T> = Observable.create {
+    setOnClickListener { v -> it.onNext(this) }
+    it.setCancellable { setOnClickListener(null) }
+}
 
 fun <T : Adapter> AdapterView<T>.itemSelections(listener: (Int) -> Unit) {
     onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -50,10 +49,10 @@ fun <T : Adapter> AdapterView<T>.itemSelections(listener: (Int) -> Unit) {
     }
 }
 
-fun <T : Adapter> AdapterView<T>.itemSelectionStream(): Observable<Int> = Observable.fromEmitter({ emitter ->
-    itemSelections { emitter.onNext(it) }
-    emitter.setCancellation { onItemSelectedListener = null }
-}, Emitter.BackpressureMode.LATEST)
+fun <T : Adapter> AdapterView<T>.itemSelectionStream(): Observable<Int> = Observable.create {
+    itemSelections { position -> it.onNext(position) }
+    it.setCancellable { onItemSelectedListener = null }
+}
 
 fun TextView.leftCompoundDrawable(): Drawable? = compoundDrawables[0]
 fun TextView.topCompoundDrawable(): Drawable? = compoundDrawables[1]

@@ -21,18 +21,18 @@ import java.util.*
  */
 @RunWith(RobolectricGradleTestRunner::class)
 @Config(constants = BuildConfig::class, sdk = intArrayOf(Build.VERSION_CODES.LOLLIPOP), manifest = "src/main/AndroidManifest.xml", application = TestApp::class)
-class InternalBookRegisterTest {
+class BookStorageTest {
 
     init {
         ShadowLog.stream = System.out
     }
 
-    lateinit var register: InternalBookRegister
+    lateinit var register: BookStorage
 
     @Before
     fun setUp() {
         val internalDb = InternalDb(RuntimeEnvironment.application)
-        register = InternalBookRegister(internalDb)
+        register = BookStorage(internalDb)
     }
 
     @Test fun testHideRevealBook() {

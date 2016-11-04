@@ -8,17 +8,17 @@ import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.persistence.BookChest
+import de.ph1b.audiobook.persistence.BookRepository
 import javax.inject.Inject
 
 /**
  * Simple dialog for changing the name of a book
-
+ *
  * @author Paul Woitaschek
  */
 class EditBookTitleDialogFragment : DialogFragment() {
 
-    @Inject lateinit var bookChest: BookChest
+    @Inject lateinit var repo: BookRepository
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         App.component().inject(this)
@@ -32,8 +32,8 @@ class EditBookTitleDialogFragment : DialogFragment() {
                 .input(getString(R.string.bookmark_edit_hint), presetName, false) { materialDialog, charSequence ->
                     val newText = charSequence.toString()
                     if (newText != presetName) {
-                        bookChest.bookById(bookId)?.copy(name = newText)?.let {
-                            bookChest.updateBook(it)
+                        repo.bookById(bookId)?.copy(name = newText)?.let {
+                            repo.updateBook(it)
                         }
                     }
                 }

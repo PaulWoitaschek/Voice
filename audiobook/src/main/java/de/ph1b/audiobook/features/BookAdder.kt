@@ -12,11 +12,11 @@ import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.MediaAnalyzer
 import de.ph1b.audiobook.misc.NaturalOrderComparator
 import de.ph1b.audiobook.misc.value
-import de.ph1b.audiobook.persistence.BookChest
+import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
-import rx.Observable
-import rx.subjects.BehaviorSubject
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 import v
 import java.io.File
 import java.util.*
@@ -32,11 +32,11 @@ import javax.inject.Singleton
  * @author Paul Woitaschek
  */
 @Singleton class BookAdder
-@Inject constructor(private val context: Context, private val prefs: PrefsManager, private val db: BookChest, private val mediaAnalyzer: MediaAnalyzer, private val coverCollector: CoverFromDiscCollector) {
+@Inject constructor(private val context: Context, private val prefs: PrefsManager, private val repo: BookRepository, private val mediaAnalyzer: MediaAnalyzer, private val coverCollector: CoverFromDiscCollector) {
 
     private val executor = Executors.newSingleThreadExecutor()
-    private val scannerActiveSubject = BehaviorSubject.create(false)
-    val scannerActive: Observable<Boolean> = scannerActiveSubject.asObservable()
+    private val scannerActiveSubject = BehaviorSubject.createDefault(false)
+    val scannerActive: Observable<Boolean> = scannerActiveSubject
     private val handler = Handler(context.mainLooper)
     @Volatile private var stopScanner = false
 
@@ -81,7 +81,7 @@ import javax.inject.Singleton
                 try {
                     deleteOldBooks()
                     checkForBooks()
-                    coverCollector.findCovers(db.activeBooks)
+                    coverCollector.findCovers(repo.activeBooks)
                 } catch (ex: InterruptedException) {
                     d(ex) { "We were interrupted at adding a book" }
                 }
@@ -132,7 +132,7 @@ import javax.inject.Singleton
 
         //getting books to remove
         val booksToRemove = ArrayList<Book>(20)
-        for (book in db.activeBooks) {
+        for (book in repo.activeBooks) {
             var bookExists = false
             when (book.type) {
                 Book.Type.COLLECTION_FILE -> collectionBookFolders.forEach {
@@ -185,7 +185,7 @@ import javax.inject.Singleton
         }
 
         d { "deleting $booksToRemove" }
-        handler.postBlocking { db.hideBook(booksToRemove) }
+        handler.postBlocking { repo.hideBook(booksToRemove) }
     }
 
     // adds a new book
@@ -217,7 +217,7 @@ import javax.inject.Singleton
                     1.0f,
                     bookRoot)
             d { "adding newBook=${newBook.name}" }
-            handler.postBlocking { db.addBook(newBook) }
+            handler.postBlocking { repo.addBook(newBook) }
         } else {
             // checks if current path is still valid.
             val oldCurrentFile = orphanedBook.currentFile
@@ -230,7 +230,7 @@ import javax.inject.Singleton
             orphanedBook = orphanedBook.copy(time = time, currentFile = currentFile, chapters = newChapters)
 
             // now finally un-hide this book
-            handler.postBlocking { db.revealBook(orphanedBook as Book) }
+            handler.postBlocking { repo.revealBook(orphanedBook as Book) }
         }
     }
 
@@ -261,7 +261,7 @@ import javax.inject.Singleton
                     currentFile = if (currentPathIsGone) newChapters.first().file else bookToUpdate.currentFile,
                     time = if (currentPathIsGone) 0 else bookToUpdate.time)
 
-            handler.postBlocking { db.updateBook(bookToUpdate, true) }
+            handler.postBlocking { repo.updateBook(bookToUpdate, true) }
         }
     }
 
@@ -280,7 +280,7 @@ import javax.inject.Singleton
             // there are no chapters
             if (bookExisting != null) {
                 //so delete book if available
-                handler.postBlocking { db.hideBook(listOf(bookExisting)) }
+                handler.postBlocking { repo.hideBook(listOf(bookExisting)) }
             }
         } else {
             // there are chapters
@@ -331,9 +331,9 @@ import javax.inject.Singleton
         d { "getBookFromDb, rootFile=$rootFile, type=$type, orphaned=$orphaned" }
         val books: List<Book> =
                 if (orphaned) {
-                    db.getOrphanedBooks()
+                    repo.getOrphanedBooks()
                 } else {
-                    db.activeBooks
+                    repo.activeBooks
                 }
         if (rootFile.isDirectory) {
             for (b in books) {

@@ -9,7 +9,7 @@ import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.PrefsManager
 import i
-import rx.subscriptions.CompositeSubscription
+import io.reactivex.disposables.CompositeDisposable
 import v
 import java.io.File
 import java.util.*
@@ -32,7 +32,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
     private val SI_CHOSEN_FILE = "siChosenFile"
     private var chosenFile: File? = null
 
-    override fun onBind(view: FolderChooserView, subscriptions: CompositeSubscription) {
+    override fun onBind(view: FolderChooserView, disposables: CompositeDisposable) {
         refreshRootDirs()
     }
 

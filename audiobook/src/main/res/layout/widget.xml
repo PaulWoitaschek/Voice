@@ -33,7 +33,8 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textColor="@color/copy_abc_primary_text_material_dark"
                 android:textSize="@dimen/list_text_primary_size"
                 tools:text="Title text"/>
@@ -42,7 +43,8 @@
                 android:id="@+id/summary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textColor="@color/copy_abc_secondary_text_material_dark"
                 android:textSize="@dimen/list_text_secondary_size"
                 tools:text="Subtitle"/>

@@ -3,7 +3,7 @@ package de.ph1b.audiobook.persistence
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Bookmark
 import de.ph1b.audiobook.persistence.internals.InternalBookmarkRegister
-import rx.Observable
+import io.reactivex.Observable
 import v
 import javax.inject.Inject
 import javax.inject.Singleton

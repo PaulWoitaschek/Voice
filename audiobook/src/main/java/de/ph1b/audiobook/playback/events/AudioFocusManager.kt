@@ -6,8 +6,8 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
 import i
-import rx.Observable
-import rx.Subscription
+import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -21,7 +21,7 @@ class AudioFocusManager
 @Inject
 constructor(private val mediaPlayer: PlayerController, private val playStateManager: PlayStateManager, private val prefsManager: PrefsManager) {
 
-    fun handleAudioFocus(audioFocusObservable: Observable<AudioFocus>): Subscription =
+    fun handleAudioFocus(audioFocusObservable: Observable<AudioFocus>): Disposable =
             audioFocusObservable.subscribe { audioFocus: AudioFocus ->
                 i { "handleAudioFocu changed to $audioFocus" }
                 when (audioFocus) {

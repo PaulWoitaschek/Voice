@@ -1,11 +1,11 @@
 package de.ph1b.audiobook.persistence
 
 import de.ph1b.audiobook.Book
-import de.ph1b.audiobook.persistence.internals.InternalBookRegister
+import de.ph1b.audiobook.persistence.internals.BookStorage
 import e
-import rx.Observable
-import rx.subjects.BehaviorSubject
-import rx.subjects.PublishSubject
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 import v
 import java.util.*
 import javax.inject.Inject
@@ -14,22 +14,22 @@ import javax.inject.Singleton
 
 /**
  * Provides access to all books.
-
+ *
  * @author Paul Woitaschek
  */
-@Singleton class BookChest
-@Inject constructor(private val register: InternalBookRegister) {
+@Singleton class BookRepository
+@Inject constructor(private val storage: BookStorage) {
 
-    private val active: MutableList<Book> by lazy { register.activeBooks().toMutableList() }
-    private val orphaned: MutableList<Book> by lazy { register.orphanedBooks().toMutableList() }
+    private val active: MutableList<Book> by lazy { storage.activeBooks().toMutableList() }
+    private val orphaned: MutableList<Book> by lazy { storage.orphanedBooks().toMutableList() }
 
     private val updated = PublishSubject.create<Book>()
 
-    private val all: BehaviorSubject<List<Book>> by lazy { BehaviorSubject.create<List<Book>>(active) }
+    private val all: BehaviorSubject<List<Book>> by lazy { BehaviorSubject.createDefault<List<Book>>(active) }
 
-    fun updateObservable(): Observable<Book> = updated.asObservable()
+    fun updateObservable(): Observable<Book> = updated
 
-    fun booksStream(): Observable<List<Book>> = all.asObservable()
+    fun booksStream(): Observable<List<Book>> = all
 
     private fun sortBooksAndNotifySubject() {
         active.sort()
@@ -39,14 +39,12 @@ import javax.inject.Singleton
     @Synchronized fun addBook(book: Book) {
         v { "addBook=${book.name}" }
 
-        val bookWithId = register.addBook(book)
+        val bookWithId = storage.addBook(book)
         active.add(bookWithId)
         sortBooksAndNotifySubject()
     }
 
-    /**
-     * All active books. We
-     */
+    /** All active books. */
     val activeBooks: List<Book>
         get() = synchronized(this) { ArrayList(active) }
 
@@ -60,7 +58,7 @@ import javax.inject.Singleton
         val index = active.indexOfFirst { it.id == book.id }
         if (index != -1) {
             active[index] = book
-            register.updateBook(book, chaptersChanged)
+            storage.updateBook(book, chaptersChanged)
             updated.onNext(book)
             sortBooksAndNotifySubject()
         } else e { "update failed as there was no book" }
@@ -69,7 +67,7 @@ import javax.inject.Singleton
     @Synchronized fun hideBook(toDelete: List<Book>) {
         v { "hideBooks=${toDelete.size}" }
 
-        val idsToDelete = toDelete.map { it.id }
+        val idsToDelete = toDelete.map(Book::id)
         active.removeAll { idsToDelete.contains(it.id) }
         orphaned.addAll(toDelete)
         sortBooksAndNotifySubject()
@@ -80,7 +78,7 @@ import javax.inject.Singleton
         v { "Called revealBook=$book" }
 
         orphaned.removeAll { it.id == book.id }
-        register.revealBook(book.id)
+        storage.revealBook(book.id)
         active.add(book)
         sortBooksAndNotifySubject()
     }

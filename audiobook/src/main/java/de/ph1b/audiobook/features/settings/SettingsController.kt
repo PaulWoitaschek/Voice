@@ -12,6 +12,7 @@ import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.SupportDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.asV2Observable
 import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -58,7 +59,7 @@ class SettingsController : BaseController() {
         theme.setOnClickListener {
             ThemePickerDialogFragment().show(fragmentManager, ThemePickerDialogFragment.TAG)
         }
-        prefs.theme.asObservable()
+        prefs.theme.asV2Observable()
                 .bindToLifeCycle()
                 .subscribe { themeDescription.setText(it.nameId) }
 
@@ -70,7 +71,7 @@ class SettingsController : BaseController() {
         resumePlaybackTitle.setText(R.string.pref_resume_on_replug)
         resumePlaybackDescription.setText(R.string.pref_resume_on_replug_hint)
         resumePlayback.setOnClickListener { resumePlaybackSwitch.toggle() }
-        prefs.resumeOnReplug.asObservable()
+        prefs.resumeOnReplug.asV2Observable()
                 .bindToLifeCycle()
                 .subscribe { resumePlaybackSwitch.isChecked = it }
         resumePlaybackSwitch.setOnCheckedChangeListener { compoundButton, checked ->
@@ -84,7 +85,7 @@ class SettingsController : BaseController() {
         val pauseOnInterruptionSwitch: SwitchCompat = pauseOnInterruption.find(R.id.switchSetting)
         pauseOnInterruptionTitle.setText(R.string.pref_pause_on_can_duck_title)
         pauseOnInterruptionDescription.setText(R.string.pref_pause_on_can_duck_summary)
-        prefs.pauseOnTempFocusLoss.asObservable()
+        prefs.pauseOnTempFocusLoss.asV2Observable()
                 .bindToLifeCycle()
                 .subscribe { pauseOnInterruptionSwitch.isChecked = it }
         pauseOnInterruptionSwitch.setOnCheckedChangeListener { compoundButton, checked ->
@@ -100,7 +101,7 @@ class SettingsController : BaseController() {
         skipAmount.setOnClickListener {
             SeekDialogFragment().show(fragmentManager, SeekDialogFragment.TAG)
         }
-        prefs.seekTime.asObservable()
+        prefs.seekTime.asV2Observable()
                 .map { resources.getQuantityString(R.plurals.seconds, it, it) }
                 .bindToLifeCycle()
                 .subscribe { skipAmountDescription.text = it }
@@ -113,7 +114,7 @@ class SettingsController : BaseController() {
         autoRewind.setOnClickListener {
             AutoRewindDialogFragment().show(fragmentManager, AutoRewindDialogFragment.TAG)
         }
-        prefs.autoRewindAmount.asObservable()
+        prefs.autoRewindAmount.asV2Observable()
                 .map { resources.getQuantityString(R.plurals.seconds, it, it) }
                 .bindToLifeCycle()
                 .subscribe { autoRewindDescription.text = it }

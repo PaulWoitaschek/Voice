@@ -32,6 +32,8 @@
     <string name="content_next_cover">Väljer nästa omslag</string>
     <string name="content_cover">Visa omslag att välja</string>
     <string name="change_book_name">Namn</string>
+    <string name="download_book_cover">Omslag från Internet</string>
+    <string name="pick_book_cover">Omslag från Filsystem</string>
     <string name="edit_book_title">Ändra bok</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Hoppa till</string>

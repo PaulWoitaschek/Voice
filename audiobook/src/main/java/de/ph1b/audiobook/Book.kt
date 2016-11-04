@@ -6,7 +6,6 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.NaturalOrderComparator
 import i
 import java.io.File
-import java.util.*
 
 
 /**
@@ -40,14 +39,10 @@ data class Book(val id: Long,
     private val COVER_TRANSITION_PREFIX = "bookCoverTransition_"
 
     init {
-        val chapterFiles = ArrayList<File>(chapters.size)
-        for ((file) in chapters) {
-            chapterFiles.add(file)
-        }
         check(playbackSpeed >= SPEED_MIN, { "speed $playbackSpeed must be >= $SPEED_MIN" })
         check(playbackSpeed <= SPEED_MAX) { "speed $playbackSpeed must be <= $SPEED_MAX" }
         check(chapters.isNotEmpty(), { "chapters must not be empty" })
-        check(chapterFiles.contains(currentFile), { "$chapterFiles must contain current file $currentFile" })
+        check(chapters.find { it.file == currentFile } != null, { "$chapters must contain current $currentFile" })
         check(name.isNotEmpty(), { "name must not be empty" })
         check(root.isNotEmpty(), { "root must not be empty" })
     }

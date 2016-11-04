@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.playback
 
 import android.support.v4.media.session.PlaybackStateCompat
-import rx.subjects.BehaviorSubject
+import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,7 +16,7 @@ class PlayStateManager
 @Inject
 constructor() {
 
-    val playState: BehaviorSubject<PlayState> = BehaviorSubject.create(PlayStateManager.PlayState.STOPPED)
+    val playState: BehaviorSubject<PlayState> = BehaviorSubject.createDefault(PlayStateManager.PlayState.STOPPED)
 
     init {
         playState.subscribe {

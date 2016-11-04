@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.playback.player
 
-import rx.Observable
-import rx.subjects.PublishSubject
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import java.io.File
 import java.io.IOException
 
@@ -44,7 +44,7 @@ abstract class Player {
 
     abstract fun setVolume(volume: Float)
 
-    val onError: Observable<Unit> = errorSubject.asObservable()
+    val onError: Observable<Unit> = errorSubject
 
-    val onCompletion: Observable<Unit> = completionSubject.asObservable()
+    val onCompletion: Observable<Unit> = completionSubject
 }

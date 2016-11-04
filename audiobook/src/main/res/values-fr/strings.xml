@@ -32,6 +32,8 @@
     <string name="content_next_cover">Choisis la couverture suivante</string>
     <string name="content_cover">Montre la couverture à choisir</string>
     <string name="change_book_name">Nom</string>
+    <string name="download_book_cover">Couverture depuis internet</string>
+    <string name="pick_book_cover">Couverture depuis l\'arborescence</string>
     <string name="edit_book_title">Modifier le livre</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Aller à</string>
@@ -63,7 +65,7 @@
     <string name="playback_speed">Vitesse de lecture</string>
     <!--Bookmarks-->
     <string name="bookmark">Marque-page</string>
-  <string name="shake_to_reset">Agitez pour réinitialiser</string>
+    <string name="shake_to_reset">Agitez pour réinitialiser</string>
     <string name="bookmark_edit_title">Modifier le marque-page</string>
     <string name="acc_button_add_bookmark">Ajouter un marque-page à la position actuelle</string>
     <string name="bookmark_edit_hint">Nom du marque-page</string>

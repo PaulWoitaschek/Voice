@@ -3,7 +3,7 @@ package de.ph1b.audiobook.mvp
 import android.os.Bundle
 import d
 import i
-import rx.subscriptions.CompositeSubscription
+import io.reactivex.disposables.CompositeDisposable
 
 
 /**
@@ -15,7 +15,7 @@ abstract class Presenter<V> {
 
     protected var view: V? = null
 
-    private var compositeSubscription: CompositeSubscription? = null
+    private var compositeDisposable: CompositeDisposable? = null
 
     open fun onRestore(savedState: Bundle?) {
 
@@ -26,8 +26,8 @@ abstract class Presenter<V> {
             i { "binding $view" }
             this.view = view
 
-            compositeSubscription = CompositeSubscription()
-            onBind(view, compositeSubscription!!)
+            compositeDisposable = CompositeDisposable()
+            onBind(view, compositeDisposable!!)
         } else {
             d { "$view already bound" }
         }
@@ -36,12 +36,12 @@ abstract class Presenter<V> {
     fun unbind() {
         i { "Unbinding $view" }
         this.view = null
-        compositeSubscription?.unsubscribe()
+        compositeDisposable?.dispose()
     }
 
     open fun onSave(state: Bundle) {
 
     }
 
-    abstract fun onBind(view: V, subscriptions: CompositeSubscription)
+    abstract fun onBind(view: V, disposables: CompositeDisposable)
 }

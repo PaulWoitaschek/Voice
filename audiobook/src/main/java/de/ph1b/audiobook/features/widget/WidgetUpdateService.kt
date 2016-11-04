@@ -18,18 +18,19 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BookActivity
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.asV2Observable
 import de.ph1b.audiobook.misc.dpToPx
 import de.ph1b.audiobook.misc.drawable
 import de.ph1b.audiobook.misc.value
-import de.ph1b.audiobook.persistence.BookChest
+import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.utils.ServiceController
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
 import e
-import rx.Observable
-import rx.subscriptions.CompositeSubscription
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import java.io.IOException
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
@@ -42,9 +43,9 @@ class WidgetUpdateService : Service() {
             5, TimeUnit.SECONDS,
             LinkedBlockingQueue<Runnable>(2), // queue capacity
             ThreadPoolExecutor.DiscardOldestPolicy())
-    private val subscriptions = CompositeSubscription()
+    private val disposables = CompositeDisposable()
     @Inject lateinit var prefs: PrefsManager
-    @Inject lateinit var bookChest: BookChest
+    @Inject lateinit var repo: BookRepository
     @Inject lateinit var playStateManager: PlayStateManager
     @Inject lateinit var imageHelper: ImageHelper
     @Inject lateinit var serviceController: ServiceController
@@ -54,12 +55,12 @@ class WidgetUpdateService : Service() {
         App.component().inject(this)
 
         // update widget if current book, current book id or playState have changed.
-        subscriptions.add(
-                Observable.merge(
-                        bookChest.updateObservable().filter { it.id == prefs.currentBookId.value() },
-                        playStateManager.playState,
-                        prefs.currentBookId.asObservable())
-                        .subscribe { updateWidget() })
+        disposables.add(Observable.merge(
+                repo.updateObservable().filter { it.id == prefs.currentBookId.value() },
+                playStateManager.playState,
+                prefs.currentBookId.asV2Observable())
+                .subscribe { updateWidget() }
+        )
 
     }
 
@@ -74,7 +75,7 @@ class WidgetUpdateService : Service() {
     private fun updateWidget() {
         executor.execute {
             val appWidgetManager = AppWidgetManager.getInstance(this@WidgetUpdateService)
-            val book = bookChest.bookById(prefs.currentBookId.value())
+            val book = repo.bookById(prefs.currentBookId.value())
             val isPortrait = isPortrait
             val ids = appWidgetManager.getAppWidgetIds(ComponentName(
                     this@WidgetUpdateService, BaseWidgetProvider::class.java))
@@ -298,7 +299,7 @@ class WidgetUpdateService : Service() {
     override fun onDestroy() {
         super.onDestroy()
 
-        subscriptions.unsubscribe()
+        disposables.dispose()
 
         executor.shutdown()
     }

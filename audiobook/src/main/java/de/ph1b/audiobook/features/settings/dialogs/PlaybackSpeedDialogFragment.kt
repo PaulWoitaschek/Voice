@@ -13,10 +13,10 @@ import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.progressChangedStream
 import de.ph1b.audiobook.misc.value
-import de.ph1b.audiobook.persistence.BookChest
+import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayerController
-import rx.android.schedulers.AndroidSchedulers
+import io.reactivex.android.schedulers.AndroidSchedulers
 import java.text.DecimalFormat
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -29,7 +29,7 @@ import javax.inject.Inject
 class PlaybackSpeedDialogFragment : DialogFragment() {
 
     @Inject lateinit var prefs: PrefsManager
-    @Inject lateinit var db: BookChest
+    @Inject lateinit var repo: BookRepository
     @Inject lateinit var playerController: PlayerController
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -41,7 +41,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
         val textView: TextView = view.find(R.id.textView)
 
         // setting current speed
-        val book = db.bookById(prefs.currentBookId.value()) ?: throw AssertionError("Cannot instantiate $TAG without a current book")
+        val book = repo.bookById(prefs.currentBookId.value()) ?: throw AssertionError("Cannot instantiate $TAG without a current book")
         val speed = book.playbackSpeed
         seekBar.max = ((MAX - MIN) * FACTOR).toInt()
         seekBar.progress = ((speed - MIN) * FACTOR).toInt()

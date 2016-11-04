@@ -35,7 +35,6 @@
     <string name="download_book_cover">Обложка от интернет</string>
     <string name="pick_book_cover">Обложка от хранилището</string>
     <string name="edit_book_title">Редактиране на книга</string>
-
     <!--JumpToPosition-->
     <string name="action_time_change">Прескочи до</string>
     <!--BookAdding-->

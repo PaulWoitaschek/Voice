@@ -1,11 +1,14 @@
 package de.ph1b.audiobook.features.folder_overview
 
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.asV2Observable
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.PrefsManager
-import rx.Observable
-import rx.subscriptions.CompositeSubscription
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.BiFunction
 import java.util.*
+
 import javax.inject.Inject
 
 /**
@@ -21,14 +24,15 @@ class FolderOverviewPresenter : Presenter<FolderOverviewController>() {
 
     @Inject lateinit var prefsManager: PrefsManager
 
-    override fun onBind(view: FolderOverviewController, subscriptions: CompositeSubscription) {
+    override fun onBind(view: FolderOverviewController, disposables: CompositeDisposable) {
 
-        val collectionFolderStream = prefsManager.collectionFolders.asObservable()
+        val collectionFolderStream = prefsManager.collectionFolders.asV2Observable()
                 .map { it.map { FolderModel(it, true) } }
-        val singleFolderStream = prefsManager.singleBookFolders.asObservable()
+        val singleFolderStream = prefsManager.singleBookFolders.asV2Observable()
                 .map { it.map { FolderModel(it, false) } }
 
-        subscriptions.add(Observable.combineLatest(collectionFolderStream, singleFolderStream, { collection, single -> collection + single })
+        val combined = Observable.combineLatest(collectionFolderStream, singleFolderStream, BiFunction<List<FolderModel>, List<FolderModel>, List<FolderModel>> { t1, t2 -> t1 + t2 })
+        disposables.add(combined
                 .subscribe { view.newData(it) })
     }
 

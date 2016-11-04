@@ -3,6 +3,7 @@ package de.ph1b.audiobook.features.bookmarks
 import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.InputType
@@ -17,20 +18,19 @@ import de.ph1b.audiobook.Bookmark
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.find
-import de.ph1b.audiobook.persistence.BookChest
+import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.BookmarkProvider
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
-import de.ph1b.audiobook.uitools.DividerItemDecoration
 import i
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
  * Dialog for creating a bookmark
-
+ *
  * @author Paul Woitaschek
  */
 class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuClickedListener {
@@ -90,7 +90,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
     }
 
     @Inject lateinit var prefs: PrefsManager
-    @Inject lateinit var db: BookChest
+    @Inject lateinit var repo: BookRepository
     @Inject lateinit var bookmarkProvider: BookmarkProvider
     @Inject lateinit var playStateManager: PlayStateManager
     @Inject lateinit var playerController: PlayerController
@@ -118,12 +118,12 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
         val view = inflater.inflate(R.layout.dialog_bookmark, null)
         bookmarkTitle = view.find(R.id.bookmarkTitle)
 
-        book = db.bookById(bookId())!!
+        book = repo.bookById(bookId())!!
         adapter = BookmarkAdapter(book.chapters, this, context)
         val recycler = view.find<RecyclerView>(R.id.recycler)
         recycler.adapter = adapter
         val layoutManager = LinearLayoutManager(activity)
-        recycler.addItemDecoration(DividerItemDecoration(activity))
+        recycler.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
         recycler.layoutManager = layoutManager
 
         bookmarkProvider.bookmarks(book)

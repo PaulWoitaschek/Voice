@@ -15,7 +15,7 @@ import de.ph1b.audiobook.misc.layoutInflater
 import de.ph1b.audiobook.misc.onProgressChanged
 import de.ph1b.audiobook.misc.positiveClicked
 import de.ph1b.audiobook.misc.value
-import de.ph1b.audiobook.persistence.BookChest
+import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.BookmarkProvider
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.Sandman
@@ -34,7 +34,7 @@ class SleepTimerDialogFragment : DialogFragment() {
     @Inject lateinit var bookmarkProvider: BookmarkProvider
     @Inject lateinit var prefs: PrefsManager
     @Inject lateinit var sandMan: Sandman
-    @Inject lateinit var bookChest: BookChest
+    @Inject lateinit var repo: BookRepository
     @Inject lateinit var shakeDetector: ShakeDetector
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -43,14 +43,12 @@ class SleepTimerDialogFragment : DialogFragment() {
         @SuppressWarnings("InflateParams")
         val layout = context.layoutInflater().inflate(R.layout.dialog_sleep, null)
         val seekBar = layout.findViewById(R.id.seekBar) as SeekBar
-        val bookmark = layout.findViewById(R.id.bookmark)
         val textView = layout.findViewById(R.id.text) as TextView
         val bookmarkSwitch = layout.findViewById(R.id.bookmarkSwitch) as SwitchCompat
         val shakeToResetSwitch = layout.findViewById(R.id.shakeToResetSwitch) as SwitchCompat
-        val shakeToResetText = layout.findViewById(R.id.shakeToResetText) as TextView
 
         val bookId = arguments.getLong(NI_BOOK_ID)
-        val book = bookChest.bookById(bookId)
+        val book = repo.bookById(bookId)
         if (book == null) {
             e { "no book" }
             return super.onCreateDialog(savedInstanceState)
@@ -68,20 +66,13 @@ class SleepTimerDialogFragment : DialogFragment() {
         }
 
         // setup bookmark toggle
-        bookmark.setOnClickListener {
-            bookmarkSwitch.toggle()
-        }
         bookmarkSwitch.isChecked = prefs.bookmarkOnSleepTimer.value()
 
         // setup shake to reset setting
-        shakeToResetText.setOnClickListener {
-            shakeToResetSwitch.toggle()
-        }
         shakeToResetSwitch.isChecked = prefs.shakeToReset.value()
         val shakeSupported = shakeDetector.shakeSupported()
         if (!shakeSupported) {
             shakeToResetSwitch.visible = false
-            shakeToResetText.visible = false
         }
 
         return MaterialDialog.Builder(context)
