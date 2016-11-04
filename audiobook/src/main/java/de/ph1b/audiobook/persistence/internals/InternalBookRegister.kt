@@ -21,7 +21,8 @@ class InternalBookRegister
 
     private fun books(active: Boolean) = db.asTransaction {
         val cursor = db.simpleQuery(table = BookTable.TABLE_NAME,
-                columns = arrayOf(BookTable.ID,
+                columns = arrayOf(
+                        BookTable.ID,
                         BookTable.NAME,
                         BookTable.AUTHOR,
                         BookTable.CURRENT_MEDIA_PATH,
@@ -30,7 +31,7 @@ class InternalBookRegister
                         BookTable.TIME,
                         BookTable.TYPE),
                 selection = "${BookTable.ACTIVE} =?",
-                selectionArgs = arrayOf(if (active) "1" else "0")
+                selectionArgs = toStringArray(if (active) 1 else 0)
         )
         val books = ArrayList<Book>(cursor.count)
         cursor.moveToNextLoop {
@@ -46,7 +47,7 @@ class InternalBookRegister
             val chapterCursor = db.simpleQuery(table = ChapterTable.TABLE_NAME,
                     columns = arrayOf(ChapterTable.NAME, ChapterTable.DURATION, ChapterTable.PATH),
                     selection = "${ChapterTable.BOOK_ID} =?",
-                    selectionArgs = arrayOf(bookId.toString()))
+                    selectionArgs = toStringArray(bookId))
             val chapters = ArrayList<Chapter>(chapterCursor.count)
             chapterCursor.moveToNextLoop {
                 val name: String = string(ChapterTable.NAME)
@@ -75,7 +76,7 @@ class InternalBookRegister
     private fun setBookVisible(bookId: Long, visible: Boolean) = db.update(BookTable.TABLE_NAME,
             ContentValues().apply {
                 put(BookTable.ACTIVE, if (visible) 1 else 0)
-            }, "${BookTable.ID} =?", arrayOf(bookId.toString()))
+            }, "${BookTable.ID} =?", toStringArray(bookId))
 
     fun revealBook(bookId: Long) {
         setBookVisible(bookId, true)
@@ -106,16 +107,22 @@ class InternalBookRegister
         put(BookTable.TYPE, type.name)
     }
 
-    fun updateBook(book: Book, updateChapters:Boolean) = db.asTransaction {
+    fun updateBook(book: Book, updateChapters: Boolean) = db.asTransaction {
+        if (book.id == -1L) throw IllegalArgumentException("Book $book has an invalid id")
+
         // update book itself
         val bookCv = book.toContentValues()
-        update(BookTable.TABLE_NAME, bookCv, "${BookTable.ID}=?", arrayOf(book.id.toString()))
+        update(BookTable.TABLE_NAME, bookCv, "${BookTable.ID}=?", toStringArray(book.id))
 
         // delete old chapters and replace them with new ones
-        if(updateChapters) {
-            delete(ChapterTable.TABLE_NAME, "${BookTable.ID}=?", arrayOf(book.id.toString()))
+        if (updateChapters) {
+            delete(ChapterTable.TABLE_NAME, "${BookTable.ID}=?", toStringArray(book.id))
             book.chapters.forEach { insert(it, book.id) }
         }
+    }
+
+    private fun toStringArray(vararg elements: Any) = Array(elements.size) {
+        elements[it].toString()
     }
 
     fun addBook(toAdd: Book) = db.asTransaction {
