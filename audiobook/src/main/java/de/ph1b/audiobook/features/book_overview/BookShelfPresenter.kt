@@ -7,6 +7,7 @@ import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
+import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.PlayerController
 import i
 import io.reactivex.Observable
@@ -59,8 +60,10 @@ constructor(private val repo: BookRepository,
 
             // Subscription that updates the UI based on the play state.
             add(playStateManager.playState
-                    .map { it == PlayStateManager.PlayState.PLAYING }
-                    .subscribe { view.setPlayerPlaying(it) })
+                    .subscribe {
+                        val playing = it == PlayState.PLAYING
+                        view.setPlayerPlaying(playing)
+                    })
         }
     }
 
