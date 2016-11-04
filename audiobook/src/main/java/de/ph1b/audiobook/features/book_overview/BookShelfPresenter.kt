@@ -38,20 +38,11 @@ constructor(private val bookChest: BookRepository,
         bookAdder.scanForFiles(false)
 
         disposables.apply {
+
             // update books when they changed
             add(bookChest.booksStream().subscribe {
                 view.newBooks(it)
             })
-
-            // Subscription that notifies the adapter when the current book has changed. It also notifies
-            // the item with the old indicator now falsely showing.
-            add(prefsManager.currentBookId.asV2Observable()
-                    .map { id -> bookChest.bookById(id) }
-                    .subscribe { view.currentBookChanged(it) })
-        }
-
-        disposables.apply {
-
 
             // Subscription that notifies the adapter when the current book has changed. It also notifies
             // the item with the old indicator now falsely showing.
