@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
+import e
 import java.io.File
 import java.util.*
 import javax.inject.Inject
@@ -39,7 +40,7 @@ class BookStorage
             if (bookId >= 0) {
                 val bookName: String = string(BookTable.NAME)
                 val bookAuthor: String? = stringNullable(BookTable.AUTHOR)
-                val currentPath: String = string(BookTable.CURRENT_MEDIA_PATH)
+                var currentFile = File(string(BookTable.CURRENT_MEDIA_PATH))
                 val bookSpeed: Float = float(BookTable.PLAYBACK_SPEED)
                 val bookRoot: String = string(BookTable.ROOT)
                 val bookTime: Int = int(BookTable.TIME)
@@ -57,10 +58,15 @@ class BookStorage
                     chapters.add(Chapter(File(path), name, duration))
                 }
 
+                if (chapters.find { it.file == currentFile } == null) {
+                    e { "Couldn't get current file. Return first file" }
+                    currentFile = chapters[0].file
+                }
+
                 books.add(Book(bookId,
                         Book.Type.valueOf(bookType),
                         bookAuthor,
-                        File(currentPath),
+                        currentFile,
                         bookTime,
                         bookName,
                         chapters,
