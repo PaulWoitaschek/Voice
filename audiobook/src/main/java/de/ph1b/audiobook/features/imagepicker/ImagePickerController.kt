@@ -23,7 +23,7 @@ import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.visible
 import i
-import rx.subjects.BehaviorSubject
+import io.reactivex.subjects.BehaviorSubject
 import java.net.URLEncoder
 import javax.inject.Inject
 
@@ -41,7 +41,7 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
         setHasOptionsMenu(true)
     }
 
-    @Inject lateinit var bookChest: BookRepository
+    @Inject lateinit var repo: BookRepository
     @Inject lateinit var imageHelper: ImageHelper
 
     private var actionMode: ActionMode? = null
@@ -91,10 +91,10 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
         }
     }
 
-    private var webViewIsLoading = BehaviorSubject.create(false)
+    private var webViewIsLoading = BehaviorSubject.createDefault(false)
     private val book by lazy {
         val id = bundle.getLong(NI_BOOK_ID)
-        bookChest.bookById(id)!!
+        repo.bookById(id)!!
     }
     private val originalUrl by lazy {
         val encodedSearch = URLEncoder.encode("${book.name} cover", Charsets.UTF_8.name())

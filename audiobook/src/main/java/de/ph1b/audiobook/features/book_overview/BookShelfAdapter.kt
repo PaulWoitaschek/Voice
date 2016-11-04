@@ -48,6 +48,7 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
         i { "newDataSet was called with ${newBooks.size} books" }
 
         val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+
             override fun getOldListSize(): Int = books.size
 
             override fun getNewListSize(): Int = newBooks.size
@@ -67,6 +68,7 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
 
         books.clear()
         books.addAll(newBooks)
+
         diffResult.dispatchUpdatesTo(this)
     }
 
@@ -85,7 +87,7 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
         set(value) {
             if (value != field) {
                 field = value
-                i { "displaymode changed to $field" }
+                i { "displayMode changed to $field" }
                 notifyDataSetChanged()
             }
         }

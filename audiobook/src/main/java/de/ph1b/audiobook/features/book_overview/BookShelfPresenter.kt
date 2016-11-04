@@ -21,7 +21,7 @@ import javax.inject.Inject
  */
 class BookShelfPresenter
 @Inject
-constructor(private val bookChest: BookRepository,
+constructor(private val repo: BookRepository,
             private val bookAdder: BookAdder,
             private val prefsManager: PrefsManager,
             private val playStateManager: PlayStateManager,
@@ -38,29 +38,20 @@ constructor(private val bookChest: BookRepository,
         bookAdder.scanForFiles(false)
 
         disposables.apply {
+
             // update books when they changed
-            add(bookChest.booksStream().subscribe {
+            add(repo.booksStream().subscribe {
                 view.newBooks(it)
             })
 
             // Subscription that notifies the adapter when the current book has changed. It also notifies
             // the item with the old indicator now falsely showing.
             add(prefsManager.currentBookId.asV2Observable()
-                    .map { id -> bookChest.bookById(id) }
-                    .subscribe { view.currentBookChanged(it) })
-        }
-
-        disposables.apply {
-
-
-            // Subscription that notifies the adapter when the current book has changed. It also notifies
-            // the item with the old indicator now falsely showing.
-            add(prefsManager.currentBookId.asV2Observable()
-                    .map { id -> bookChest.bookById(id) }
+                    .map { id -> repo.bookById(id) }
                     .subscribe { view.currentBookChanged(it) })
 
             // if there are no books and the scanner is active, show loading
-            add(Observable.combineLatest(bookAdder.scannerActive, bookChest.booksStream().map { it.isEmpty() }, BiFunction<Boolean, Boolean, Boolean> { active, booksEmpty ->
+            add(Observable.combineLatest(bookAdder.scannerActive, repo.booksStream().map { it.isEmpty() }, BiFunction<Boolean, Boolean, Boolean> { active, booksEmpty ->
                 if (booksEmpty) active else false
             }).subscribe { view.showLoading(it) })
 
@@ -71,7 +62,5 @@ constructor(private val bookChest: BookRepository,
         }
     }
 
-    fun playPauseRequested() {
-        playerController.playPause()
-    }
+    fun playPauseRequested() = playerController.playPause()
 }

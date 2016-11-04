@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import com.bluelinelabs.conductor.rxlifecycle.RxController
 import de.ph1b.audiobook.misc.toV1Observable
 import de.ph1b.audiobook.misc.toV2Observable
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 
 
@@ -17,7 +16,7 @@ abstract class BaseController : RxController {
     constructor(args: Bundle) : super(args)
     constructor() : super()
 
-    fun <T> Observable<T>.bindToLifeCycle(): Observable<T> = toV1Observable(BackpressureStrategy.MISSING)
+    fun <T> Observable<T>.bindToLifeCycle(): Observable<T> = toV1Observable()
             .compose(bindToLifecycle<T>())
             .toV2Observable()
 

@@ -20,7 +20,7 @@ import javax.inject.Inject
 class JumpToPositionDialogFragment : DialogFragment() {
 
     @Inject lateinit var prefs: PrefsManager
-    @Inject lateinit var db: BookRepository
+    @Inject lateinit var repo: BookRepository
     @Inject lateinit var playerController: PlayerController
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -31,7 +31,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
         val numberMinute = view.findViewById(R.id.numberMinute) as NumberPicker
 
         // init
-        val book = db.bookById(prefs.currentBookId.value())!!
+        val book = repo.bookById(prefs.currentBookId.value())!!
         val duration = book.currentChapter().duration
         val position = book.time
         val biggestHour = TimeUnit.MILLISECONDS.toHours(duration.toLong()).toInt()

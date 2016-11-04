@@ -90,7 +90,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
     }
 
     @Inject lateinit var prefs: PrefsManager
-    @Inject lateinit var db: BookRepository
+    @Inject lateinit var repo: BookRepository
     @Inject lateinit var bookmarkProvider: BookmarkProvider
     @Inject lateinit var playStateManager: PlayStateManager
     @Inject lateinit var playerController: PlayerController
@@ -118,7 +118,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
         val view = inflater.inflate(R.layout.dialog_bookmark, null)
         bookmarkTitle = view.find(R.id.bookmarkTitle)
 
-        book = db.bookById(bookId())!!
+        book = repo.bookById(bookId())!!
         adapter = BookmarkAdapter(book.chapters, this, context)
         val recycler = view.find<RecyclerView>(R.id.recycler)
         recycler.adapter = adapter

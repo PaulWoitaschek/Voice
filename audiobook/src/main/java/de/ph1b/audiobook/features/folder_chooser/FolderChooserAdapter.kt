@@ -45,7 +45,7 @@ class FolderChooserAdapter(private val c: Context,
         notifyDataSetChanged()
     }
 
-    inner class Holder(private val root: View) : RecyclerView.ViewHolder(root) {
+    inner class Holder(root: View) : RecyclerView.ViewHolder(root) {
 
         private val textView: TextView = find(R.id.text)
         private val image: ImageView = find(R.id.icon)

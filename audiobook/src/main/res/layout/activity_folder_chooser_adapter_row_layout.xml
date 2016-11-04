@@ -30,8 +30,9 @@
         android:layout_marginLeft="72dp"
         android:layout_marginRight="16dp"
         android:layout_marginStart="72dp"
+        android:ellipsize="end"
         android:gravity="center_vertical"
-        android:singleLine="true"
+        android:maxLines="1"
         android:textSize="@dimen/list_text_primary_size"
         tools:text="ExampleFolder"/>
 
