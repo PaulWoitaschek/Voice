@@ -166,11 +166,13 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
             // re-init controller when there is a new book set as the current book
             add(prefs.currentBookId.asV2Observable()
-                    .map { updatedId -> repo.bookById(updatedId) }
-                    .filter { it != null && (player.book()?.id != it.id) }
                     .subscribe {
-                        player.stop()
-                        player.init(it!!)
+                        if (player.book()?.id != it) {
+                            player.stop()
+
+                            val newBook = repo.bookById(it)
+                            if (newBook != null) player.init(newBook)
+                        }
                     })
 
             // notify player about changes in the current book

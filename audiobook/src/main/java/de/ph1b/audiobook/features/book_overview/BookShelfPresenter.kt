@@ -47,8 +47,10 @@ constructor(private val repo: BookRepository,
             // Subscription that notifies the adapter when the current book has changed. It also notifies
             // the item with the old indicator now falsely showing.
             add(prefsManager.currentBookId.asV2Observable()
-                    .map { id -> repo.bookById(id) }
-                    .subscribe { view.currentBookChanged(it) })
+                    .subscribe {
+                        val book = repo.bookById(it)
+                        view.currentBookChanged(book)
+                    })
 
             // if there are no books and the scanner is active, show loading
             add(Observable.combineLatest(bookAdder.scannerActive, repo.booksStream().map { it.isEmpty() }, BiFunction<Boolean, Boolean, Boolean> { active, booksEmpty ->
