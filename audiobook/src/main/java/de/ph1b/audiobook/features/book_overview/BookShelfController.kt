@@ -208,19 +208,13 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
         router.pushController(transaction)
     }
 
-    /**
-     * There is a completely new set of books
-     *
-     * @param books the new books
-     */
+    /** Display a new set of books */
     fun newBooks(books: List<Book>) {
         i { "${books.size} newBooks" }
         adapter.newDataSet(books)
     }
 
-    /**
-     * The book marked as current was changed. Updates the adapter and fab accordingly.
-     */
+    /** The book marked as current was changed. Updates the adapter and fab accordingly. */
     fun currentBookChanged(currentBook: Book?) {
         i { "currentBookChanged: ${currentBook?.name}" }
         this.currentBook = currentBook
@@ -236,10 +230,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
         fab.visible = currentBook != null
     }
 
-
-    /**
-     * Sets the fab icon correctly accordingly to the new play state.
-     */
+    /** Sets the fab icon correctly accordingly to the new play state. */
     fun setPlayerPlaying(playing: Boolean) {
         i { "Called setPlayerPlaying $playing" }
         if (playing) {
@@ -250,9 +241,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
         firstPlayStateUpdate = false
     }
 
-    /**
-     * Show a warning that no audiobook folder was chosen
-     */
+    /** Show a warning that no audiobook folder was chosen */
     fun showNoFolderWarning() {
         // show dialog if no folders are set
         val noFolderWarningIsShowing = (fragmentManager.findFragmentByTag(FM_NO_FOLDER_WARNING) as DialogFragment?)?.dialog?.isShowing ?: false

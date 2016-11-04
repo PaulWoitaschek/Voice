@@ -69,7 +69,7 @@ import javax.inject.Singleton
     @Synchronized fun hideBook(toDelete: List<Book>) {
         v { "hideBooks=${toDelete.size}" }
 
-        val idsToDelete = toDelete.map { it.id }
+        val idsToDelete = toDelete.map(Book::id)
         active.removeAll { idsToDelete.contains(it.id) }
         orphaned.addAll(toDelete)
         sortBooksAndNotifySubject()
