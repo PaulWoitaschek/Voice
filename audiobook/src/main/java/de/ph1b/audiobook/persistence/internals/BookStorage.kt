@@ -36,35 +36,37 @@ class BookStorage
         val books = ArrayList<Book>(cursor.count)
         cursor.moveToNextLoop {
             val bookId: Long = long(BookTable.ID)
-            val bookName: String = string(BookTable.NAME)
-            val bookAuthor: String? = stringNullable(BookTable.AUTHOR)
-            val currentPath: String = string(BookTable.CURRENT_MEDIA_PATH)
-            val bookSpeed: Float = float(BookTable.PLAYBACK_SPEED)
-            val bookRoot: String = string(BookTable.ROOT)
-            val bookTime: Int = int(BookTable.TIME)
-            val bookType: String = string(BookTable.TYPE)
+            if (bookId >= 0) {
+                val bookName: String = string(BookTable.NAME)
+                val bookAuthor: String? = stringNullable(BookTable.AUTHOR)
+                val currentPath: String = string(BookTable.CURRENT_MEDIA_PATH)
+                val bookSpeed: Float = float(BookTable.PLAYBACK_SPEED)
+                val bookRoot: String = string(BookTable.ROOT)
+                val bookTime: Int = int(BookTable.TIME)
+                val bookType: String = string(BookTable.TYPE)
 
-            val chapterCursor = db.simpleQuery(table = ChapterTable.TABLE_NAME,
-                    columns = arrayOf(ChapterTable.NAME, ChapterTable.DURATION, ChapterTable.PATH),
-                    selection = "${ChapterTable.BOOK_ID} =?",
-                    selectionArgs = toStringArray(bookId))
-            val chapters = ArrayList<Chapter>(chapterCursor.count)
-            chapterCursor.moveToNextLoop {
-                val name: String = string(ChapterTable.NAME)
-                val duration: Int = int(ChapterTable.DURATION)
-                val path: String = string(ChapterTable.PATH)
-                chapters.add(Chapter(File(path), name, duration))
+                val chapterCursor = db.simpleQuery(table = ChapterTable.TABLE_NAME,
+                        columns = arrayOf(ChapterTable.NAME, ChapterTable.DURATION, ChapterTable.PATH),
+                        selection = "${ChapterTable.BOOK_ID} =?",
+                        selectionArgs = toStringArray(bookId))
+                val chapters = ArrayList<Chapter>(chapterCursor.count)
+                chapterCursor.moveToNextLoop {
+                    val name: String = string(ChapterTable.NAME)
+                    val duration: Int = int(ChapterTable.DURATION)
+                    val path: String = string(ChapterTable.PATH)
+                    chapters.add(Chapter(File(path), name, duration))
+                }
+
+                books.add(Book(bookId,
+                        Book.Type.valueOf(bookType),
+                        bookAuthor,
+                        File(currentPath),
+                        bookTime,
+                        bookName,
+                        chapters,
+                        bookSpeed,
+                        bookRoot))
             }
-
-            books.add(Book(bookId,
-                    Book.Type.valueOf(bookType),
-                    bookAuthor,
-                    File(currentPath),
-                    bookTime,
-                    bookName,
-                    chapters,
-                    bookSpeed,
-                    bookRoot))
         }
         return@asTransaction books
     }
