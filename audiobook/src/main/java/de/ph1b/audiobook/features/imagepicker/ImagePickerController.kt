@@ -23,7 +23,7 @@ import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.uitools.ImageHelper
 import de.ph1b.audiobook.uitools.visible
 import i
-import rx.subjects.BehaviorSubject
+import io.reactivex.subjects.BehaviorSubject
 import java.net.URLEncoder
 import javax.inject.Inject
 
@@ -91,7 +91,7 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
         }
     }
 
-    private var webViewIsLoading = BehaviorSubject.create(false)
+    private var webViewIsLoading = BehaviorSubject.createDefault(false)
     private val book by lazy {
         val id = bundle.getLong(NI_BOOK_ID)
         bookChest.bookById(id)!!

@@ -103,7 +103,6 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
                     doubleClick
                 }
                 .doOnNext { lastClick = 0 } // resets so triple clicks won't cause another invoke
-                .onBackpressureLatest()
                 .subscribe { mediaPlayer.playPause() }
 
         book = bookChest.bookById(bookId)

@@ -82,7 +82,7 @@ dependencies {
     def rxJavaVersion = "2.0.0"
     compile "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
     compile "io.reactivex.rxjava2:rxandroid:$rxJavaVersion"
-    compile 'com.github.akarnokd:rxjava2-interop:0.6.0'
+    compile 'com.github.akarnokd:rxjava2-interop:0.6.1'
     compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.2'
 
     // kotlin
