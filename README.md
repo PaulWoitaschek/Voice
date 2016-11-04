@@ -18,7 +18,7 @@ If you like to [contribute](#contrib) or [translate](#trans), that is very appre
 
 ## Development
 
-All help is very welcomed! We track all the issues and ideas in a separate [issue](https://github.com/Ph1b/MaterialAudiobookPlayer/issues). If you search for work to do, you can check the list of [approved features](https://github.com/Ph1b/MaterialAudiobookPlayer/issues?q=is%3Aopen+is%3Aissue+label%3A%22feature+approved%22). 
+If you wan to help check the label [PR-Welcome](https://github.com/PaulWoitaschek/MaterialAudiobookPlayer/issues?q=is%3Aopen+is%3Aissue+label%3A%22PR+welcome%22). 
 Its always a good idea to talk about what are going to do before you actually start it, so frustration can be avoided.
 
 Some rules for coding:
@@ -32,10 +32,6 @@ The project page is on [transifex](https://www.transifex.com/projects/p/material
 Or you can start translating a new language if you speak it ;-)
 
 # License
-Copyright (C) 2015 [Paul Woitaschek](http://www.paul-woitaschek.de/)
+Copyright (C) 2014 [Paul Woitaschek](http://www.paul-woitaschek.de/)
 
 The license is [GnuGPLv3](https://github.com/Ph1b/MaterialAudiobookPlayer/blob/master/LICENSE.md). With contributing you agree to license your code under the same conditions.
-
-# Donations
-Paypal: 
-[![Paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=HVZXESGUMV7N6)

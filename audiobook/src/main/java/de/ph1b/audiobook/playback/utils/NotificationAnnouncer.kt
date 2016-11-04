@@ -86,7 +86,7 @@ class NotificationAnnouncer
 
         return notificationBuilder
                 .setStyle(NotificationCompat.MediaStyle()
-                        .setShowActionsInCompactView(0, 1)
+                        .setShowActionsInCompactView(0, 1, 2)
                         .setCancelButtonIntent(stopPI)
                         .setShowCancelButton(true)
                         .setMediaSession(sessionToken))
