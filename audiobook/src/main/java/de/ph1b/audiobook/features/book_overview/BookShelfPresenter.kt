@@ -7,6 +7,7 @@ import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
+import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.PlayerController
 import i
 import io.reactivex.Observable
@@ -47,8 +48,10 @@ constructor(private val repo: BookRepository,
             // Subscription that notifies the adapter when the current book has changed. It also notifies
             // the item with the old indicator now falsely showing.
             add(prefsManager.currentBookId.asV2Observable()
-                    .map { id -> repo.bookById(id) }
-                    .subscribe { view.currentBookChanged(it) })
+                    .subscribe {
+                        val book = repo.bookById(it)
+                        view.currentBookChanged(book)
+                    })
 
             // if there are no books and the scanner is active, show loading
             add(Observable.combineLatest(bookAdder.scannerActive, repo.booksStream().map { it.isEmpty() }, BiFunction<Boolean, Boolean, Boolean> { active, booksEmpty ->
@@ -57,8 +60,10 @@ constructor(private val repo: BookRepository,
 
             // Subscription that updates the UI based on the play state.
             add(playStateManager.playState
-                    .map { it == PlayStateManager.PlayState.PLAYING }
-                    .subscribe { view.setPlayerPlaying(it) })
+                    .subscribe {
+                        val playing = it == PlayState.PLAYING
+                        view.setPlayerPlaying(playing)
+                    })
         }
     }
 
