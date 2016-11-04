@@ -21,7 +21,7 @@ import javax.inject.Inject
  */
 class EditBookBottomSheet : BottomSheetDialogFragment() {
 
-    @Inject lateinit var bookChest: BookRepository
+    @Inject lateinit var repo: BookRepository
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         App.component().inject(this)
@@ -29,7 +29,7 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
         val dialog = BottomSheetDialog(context, R.style.BottomSheetStyle)
 
         // if there is no book, skip here
-        val book = bookChest.bookById(bookId())
+        val book = repo.bookById(bookId())
         if (book == null) {
             e { "book is null. Return early" }
             return dialog

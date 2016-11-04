@@ -29,7 +29,7 @@ import javax.inject.Inject
 class PlaybackSpeedDialogFragment : DialogFragment() {
 
     @Inject lateinit var prefs: PrefsManager
-    @Inject lateinit var db: BookRepository
+    @Inject lateinit var repo: BookRepository
     @Inject lateinit var playerController: PlayerController
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -41,7 +41,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
         val textView: TextView = view.find(R.id.textView)
 
         // setting current speed
-        val book = db.bookById(prefs.currentBookId.value()) ?: throw AssertionError("Cannot instantiate $TAG without a current book")
+        val book = repo.bookById(prefs.currentBookId.value()) ?: throw AssertionError("Cannot instantiate $TAG without a current book")
         val speed = book.playbackSpeed
         seekBar.max = ((MAX - MIN) * FACTOR).toInt()
         seekBar.progress = ((speed - MIN) * FACTOR).toInt()

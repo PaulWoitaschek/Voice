@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.persistence
 
 import de.ph1b.audiobook.Book
-import de.ph1b.audiobook.persistence.internals.InternalBookRegister
+import de.ph1b.audiobook.persistence.internals.BookStorage
 import e
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
@@ -18,10 +18,10 @@ import javax.inject.Singleton
  * @author Paul Woitaschek
  */
 @Singleton class BookRepository
-@Inject constructor(private val register: InternalBookRegister) {
+@Inject constructor(private val storage: BookStorage) {
 
-    private val active: MutableList<Book> by lazy { register.activeBooks().toMutableList() }
-    private val orphaned: MutableList<Book> by lazy { register.orphanedBooks().toMutableList() }
+    private val active: MutableList<Book> by lazy { storage.activeBooks().toMutableList() }
+    private val orphaned: MutableList<Book> by lazy { storage.orphanedBooks().toMutableList() }
 
     private val updated = PublishSubject.create<Book>()
 
@@ -39,14 +39,12 @@ import javax.inject.Singleton
     @Synchronized fun addBook(book: Book) {
         v { "addBook=${book.name}" }
 
-        val bookWithId = register.addBook(book)
+        val bookWithId = storage.addBook(book)
         active.add(bookWithId)
         sortBooksAndNotifySubject()
     }
 
-    /**
-     * All active books. We
-     */
+    /** All active books. */
     val activeBooks: List<Book>
         get() = synchronized(this) { ArrayList(active) }
 
@@ -60,7 +58,7 @@ import javax.inject.Singleton
         val index = active.indexOfFirst { it.id == book.id }
         if (index != -1) {
             active[index] = book
-            register.updateBook(book, chaptersChanged)
+            storage.updateBook(book, chaptersChanged)
             updated.onNext(book)
             sortBooksAndNotifySubject()
         } else e { "update failed as there was no book" }
@@ -80,7 +78,7 @@ import javax.inject.Singleton
         v { "Called revealBook=$book" }
 
         orphaned.removeAll { it.id == book.id }
-        register.revealBook(book.id)
+        storage.revealBook(book.id)
         active.add(book)
         sortBooksAndNotifySubject()
     }

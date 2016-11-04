@@ -14,7 +14,7 @@ import javax.inject.Inject
  *
  * @author: Paul Woitaschek
  */
-class InternalBookRegister
+class BookStorage
 @Inject constructor(internalDb: InternalDb) {
 
     private val db by lazy { internalDb.writableDatabase }

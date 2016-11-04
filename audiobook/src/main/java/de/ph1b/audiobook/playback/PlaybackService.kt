@@ -55,7 +55,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     private val disposables = CompositeDisposable()
     @Inject lateinit var prefs: PrefsManager
     @Inject lateinit var player: MediaPlayer
-    @Inject lateinit var db: BookRepository
+    @Inject lateinit var repo: BookRepository
     @Inject lateinit var notificationManager: NotificationManager
     @Inject lateinit var audioManager: AudioManager
     @Inject lateinit var audioFocusReceiver: AudioFocusReceiver
@@ -151,7 +151,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
         // update book when changed by player
         player.bookObservable()
                 .filter { it != null }
-                .subscribe { db.updateBook(it) }
+                .subscribe { repo.updateBook(it) }
 
         playStateManager.playState.onNext(PlayState.STOPPED)
 
@@ -166,7 +166,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
             // re-init controller when there is a new book set as the current book
             add(prefs.currentBookId.asV2Observable()
-                    .map { updatedId -> db.bookById(updatedId) }
+                    .map { updatedId -> repo.bookById(updatedId) }
                     .filter { it != null && (player.book()?.id != it.id) }
                     .subscribe {
                         player.stop()
@@ -174,7 +174,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
                     })
 
             // notify player about changes in the current book
-            add(db.updateObservable()
+            add(repo.updateObservable()
                     .filter { it.id == prefs.currentBookId.value() }
                     .subscribe {
                         player.init(it)
@@ -239,7 +239,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
             add(audioFocusManager.handleAudioFocus(audioFocusReceiver.focusObservable()))
 
             // notifies the media service about added or removed books
-            add(db.booksStream().map { it.size }.distinctUntilChanged()
+            add(repo.booksStream().map { it.size }.distinctUntilChanged()
                     .subscribe {
                         v { "notify media browser service about children changed." }
                         notifyChildrenChanged(bookUriConverter.allBooks().toString())

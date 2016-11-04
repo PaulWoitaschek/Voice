@@ -34,7 +34,7 @@ class SleepTimerDialogFragment : DialogFragment() {
     @Inject lateinit var bookmarkProvider: BookmarkProvider
     @Inject lateinit var prefs: PrefsManager
     @Inject lateinit var sandMan: Sandman
-    @Inject lateinit var bookChest: BookRepository
+    @Inject lateinit var repo: BookRepository
     @Inject lateinit var shakeDetector: ShakeDetector
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -48,7 +48,7 @@ class SleepTimerDialogFragment : DialogFragment() {
         val shakeToResetSwitch = layout.findViewById(R.id.shakeToResetSwitch) as SwitchCompat
 
         val bookId = arguments.getLong(NI_BOOK_ID)
-        val book = bookChest.bookById(bookId)
+        val book = repo.bookById(bookId)
         if (book == null) {
             e { "no book" }
             return super.onCreateDialog(savedInstanceState)

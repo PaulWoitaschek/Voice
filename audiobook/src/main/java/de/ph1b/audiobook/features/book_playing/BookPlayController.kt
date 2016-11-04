@@ -50,7 +50,7 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
     @Inject lateinit var mediaPlayer: PlayerController
     @Inject lateinit var sandMan: Sandman
     @Inject lateinit var prefs: PrefsManager
-    @Inject lateinit var bookChest: BookRepository
+    @Inject lateinit var repo: BookRepository
     @Inject lateinit var playStateManager: PlayStateManager
     @Inject lateinit var playerCapabilities: MediaPlayerCapabilities
 
@@ -105,7 +105,7 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
                 .doOnNext { lastClick = 0 } // resets so triple clicks won't cause another invoke
                 .subscribe { mediaPlayer.playPause() }
 
-        book = bookChest.bookById(bookId)
+        book = repo.bookById(bookId)
 
         //setup buttons
         play.setIconDrawable(playPauseDrawable)
@@ -217,7 +217,7 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
                 }
 
 
-        Observable.merge(Observable.fromIterable(bookChest.activeBooks), bookChest.updateObservable())
+        Observable.merge(Observable.fromIterable(repo.activeBooks), repo.updateObservable())
                 .filter { it.id == bookId }
                 .bindToLifeCycle()
                 .subscribe { book: Book ->

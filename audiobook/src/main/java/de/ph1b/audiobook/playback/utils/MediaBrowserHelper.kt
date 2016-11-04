@@ -19,7 +19,7 @@ import javax.inject.Inject
  * @author Paul Woitaschek
  */
 @Reusable class MediaBrowserHelper
-@Inject constructor(private val bookUriConverter: BookUriConverter, private val db: BookRepository, private val prefs: PrefsManager, private val context: Context) {
+@Inject constructor(private val bookUriConverter: BookUriConverter, private val repo: BookRepository, private val prefs: PrefsManager, private val context: Context) {
 
     fun onGetRoot(): MediaBrowserServiceCompat.BrowserRoot = MediaBrowserServiceCompat.BrowserRoot(bookUriConverter.allBooks().toString(), null)
 
@@ -35,7 +35,7 @@ import javax.inject.Inject
         val match = bookUriConverter.match(uri)
 
         if (match == BookUriConverter.ROOT) {
-            val current = db.bookById(prefs.currentBookId.value())?.let {
+            val current = repo.bookById(prefs.currentBookId.value())?.let {
                 MediaDescriptionCompat.Builder()
                         .setTitle("${context.getString(R.string.current_book)}: ${it.name}")
                         .setMediaId(bookUriConverter.book(it.id).toString())
@@ -44,7 +44,7 @@ import javax.inject.Inject
                 }
             }
 
-            val all = db.activeBooks.map {
+            val all = repo.activeBooks.map {
                 val description = MediaDescriptionCompat.Builder()
                         .setTitle(it.name)
                         .setMediaId(bookUriConverter.book(it.id).toString())

@@ -45,7 +45,7 @@ class WidgetUpdateService : Service() {
             ThreadPoolExecutor.DiscardOldestPolicy())
     private val disposables = CompositeDisposable()
     @Inject lateinit var prefs: PrefsManager
-    @Inject lateinit var bookChest: BookRepository
+    @Inject lateinit var repo: BookRepository
     @Inject lateinit var playStateManager: PlayStateManager
     @Inject lateinit var imageHelper: ImageHelper
     @Inject lateinit var serviceController: ServiceController
@@ -56,7 +56,7 @@ class WidgetUpdateService : Service() {
 
         // update widget if current book, current book id or playState have changed.
         disposables.add(Observable.merge(
-                bookChest.updateObservable().filter { it.id == prefs.currentBookId.value() },
+                repo.updateObservable().filter { it.id == prefs.currentBookId.value() },
                 playStateManager.playState,
                 prefs.currentBookId.asV2Observable())
                 .subscribe { updateWidget() }
@@ -75,7 +75,7 @@ class WidgetUpdateService : Service() {
     private fun updateWidget() {
         executor.execute {
             val appWidgetManager = AppWidgetManager.getInstance(this@WidgetUpdateService)
-            val book = bookChest.bookById(prefs.currentBookId.value())
+            val book = repo.bookById(prefs.currentBookId.value())
             val isPortrait = isPortrait
             val ids = appWidgetManager.getAppWidgetIds(ComponentName(
                     this@WidgetUpdateService, BaseWidgetProvider::class.java))
