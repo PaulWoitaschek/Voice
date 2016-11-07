@@ -81,7 +81,7 @@ dependencies {
     // rx extensions
     def rxJavaVersion = "2.0.0"
     compile "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
-    compile "io.reactivex.rxjava2:rxandroid:$rxJavaVersion"
+    //compile "io.reactivex.rxjava2:rxandroid:$rxJavaVersion" todo: re-add this when https://github.com/ReactiveX/RxAndroid/issues/346 is fixed
     compile 'com.github.akarnokd:rxjava2-interop:0.6.1'
     compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.2'
 
