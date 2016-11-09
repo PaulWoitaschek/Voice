@@ -14,8 +14,8 @@ android {
         applicationId "de.ph1b.audiobook"
         minSdkVersion minSdk
         targetSdkVersion 25
-        versionCode 135
-        versionName '2.8.0.4.3'
+        versionCode 136
+        versionName '2.8.0.4.4'
     }
 
     buildTypes {
