@@ -93,6 +93,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
                     }
                 }
 
+                override fun onPlayFromSearch(query: String?, extras: Bundle?) {
+                    i { "onPlayFromSearch $query" }
+                    player.play()
+                }
+
                 override fun onSkipToNext() {
                     i { "onSkipToNext" }
                     onFastForward()
