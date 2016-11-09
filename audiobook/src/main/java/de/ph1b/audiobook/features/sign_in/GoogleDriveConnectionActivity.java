@@ -70,6 +70,7 @@ public class GoogleDriveConnectionActivity extends Activity implements
      * Next available request code.
      */
     protected static final int NEXT_AVAILABLE_REQUEST_CODE = 2;
+    private static final int REQUEST_CODE_OPENER = 3;
 
     /**
      * Google API client.
@@ -135,6 +136,24 @@ public class GoogleDriveConnectionActivity extends Activity implements
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_RESOLUTION && resultCode == RESULT_OK) {
             mGoogleApiClient.connect();
+        } else if (requestCode == REQUEST_CODE_OPENER) {
+            Query query = new Query.Builder()
+                    .addFilter(Filters.and(
+                            Filters.eq(SearchableField.MIME_TYPE, "audio/mpeg"))).build();
+            Drive.DriveApi.query(getGoogleApiClient(), query)
+                    .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
+
+                        @Override
+                        public void onResult(DriveApi.MetadataBufferResult result) {
+                            Metadata md = result.getMetadataBuffer().get(0);
+                            DriveId driveId = md.getDriveId();
+                            DriveFile driveFile = driveId.asDriveFile();
+                            driveFile.open(mGoogleApiClient, DriveFile.MODE_READ_ONLY, null)
+                                    .setResultCallback(driveContentsCallback);
+
+                        }
+                    });
+
         }
     }
 
@@ -199,71 +218,66 @@ public class GoogleDriveConnectionActivity extends Activity implements
 //        DriveFile driveFile = driveId.asDriveFile();
 //        driveFile.open(mGoogleApiClient, DriveFile.MODE_READ_ONLY, null)
 //                .setResultCallback(driveContentsCallback);
-        Drive.DriveApi.newDriveContents(getGoogleApiClient())
-                .setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
-                    @Override
-                    public void onResult(@NonNull DriveApi.DriveContentsResult result) {
-                        if (!result.getStatus().isSuccess()) {
-                            showMessage("Error while trying to create new file contents");
-                            return;
-                        }
-                        final DriveContents driveContents = result.getDriveContents();
-
-                        // Perform I/O off the UI thread.
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                // write content to DriveContents
-                                OutputStream outputStream = driveContents.getOutputStream();
-                                Writer writer = new OutputStreamWriter(outputStream);
-                                try {
-                                    writer.write("Hello World!");
-                                    writer.close();
-                                } catch (IOException e) {
-                                    Log.e(TAG, e.getMessage());
-                                }
-
-                                MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                                        .setTitle("New file")
-                                        .setMimeType("text/plain")
-                                        .setStarred(true).build();
-
-                                // create a file on root folder
-                                Drive.DriveApi.getRootFolder(getGoogleApiClient())
-                                        .createFile(getGoogleApiClient(), changeSet, driveContents)
-                                        .setResultCallback(new ResultCallback<DriveFolder.DriveFileResult>() {
-                                            @Override
-                                            public void onResult(@NonNull DriveFolder.DriveFileResult driveFileResult) {
-                                                if (!driveFileResult.getStatus().isSuccess()) {
-                                                    showMessage("Error while trying to create the file");
-                                                    return;
-                                                }
-                                                showMessage("Created a file with content: " + driveFileResult.getDriveFile().getDriveId());
-                                            }
-                                        });
-                            }
-                        }.start();
-                    }
-                });
-
-
-        Query query = new Query.Builder()
-                .addFilter(Filters.and(
-                        Filters.eq(SearchableField.TITLE, "New file"),
-                        Filters.eq(SearchableField.MIME_TYPE, "text/plain"))).build();
-        Drive.DriveApi.query(getGoogleApiClient(), query)
-                .setResultCallback(new ResultCallback<DriveApi.MetadataBufferResult>() {
-
-                    @Override
-                    public void onResult(DriveApi.MetadataBufferResult result) {
-                        Metadata md = result.getMetadataBuffer().get(0);
-                        DriveId driveId = md.getDriveId();
-                        DriveFile driveFile = driveId.asDriveFile();
-                        driveFile.open(mGoogleApiClient, DriveFile.MODE_READ_ONLY, null)
-                                .setResultCallback(driveContentsCallback);
-                    }
-                });
+//        Drive.DriveApi.newDriveContents(getGoogleApiClient())
+//                .setResultCallback(new ResultCallback<DriveApi.DriveContentsResult>() {
+//                    @Override
+//                    public void onResult(@NonNull DriveApi.DriveContentsResult result) {
+//                        if (!result.getStatus().isSuccess()) {
+//                            showMessage("Error while trying to create new file contents");
+//                            return;
+//                        }
+//                        final DriveContents driveContents = result.getDriveContents();
 //
+//                        // Perform I/O off the UI thread.
+//                        new Thread() {
+//                            @Override
+//                            public void run() {
+//                                // write content to DriveContents
+//                                OutputStream outputStream = driveContents.getOutputStream();
+//                                Writer writer = new OutputStreamWriter(outputStream);
+//                                try {
+//                                    writer.write("Hello World!");
+//                                    writer.close();
+//                                } catch (IOException e) {
+//                                    Log.e(TAG, e.getMessage());
+//                                }
+//
+//                                MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+//                                        .setTitle("New file")
+//                                        .setMimeType("text/plain")
+//                                        .setStarred(true).build();
+//
+//                                // create a file on root folder
+//                                Drive.DriveApi.getRootFolder(getGoogleApiClient())
+//                                        .createFile(getGoogleApiClient(), changeSet, driveContents)
+//                                        .setResultCallback(new ResultCallback<DriveFolder.DriveFileResult>() {
+//                                            @Override
+//                                            public void onResult(@NonNull DriveFolder.DriveFileResult driveFileResult) {
+//                                                if (!driveFileResult.getStatus().isSuccess()) {
+//                                                    showMessage("Error while trying to create the file");
+//                                                    return;
+//                                                }
+//                                                showMessage("Created a file with content: " + driveFileResult.getDriveFile().getDriveId());
+//                                            }
+//                                        });
+//                            }
+//                        }.start();
+//                    }
+//                });
+
+        IntentSender intentSender = Drive.DriveApi
+                .newOpenFileActivityBuilder()
+//                these mimetypes enable these folders/files types to be selected
+                .setMimeType(new String[]{DriveFolder.MIME_TYPE, "audio/mpeg", "image/png"})
+                .build(mGoogleApiClient);
+        try {
+            startIntentSenderForResult(
+                    intentSender, REQUEST_CODE_OPENER, null, 0, 0, 0);
+        } catch (IntentSender.SendIntentException e) {
+            Log.w(TAG, "Unable to send intent", e);
+        }
+
+
 //        folder.queryChildren(getGoogleApiClient(), query).setResultCallback(childrenRetrievedCallback);
 
 
@@ -287,7 +301,7 @@ public class GoogleDriveConnectionActivity extends Activity implements
                                 File.separator +
                                 "MaterialAudiobookPlayer" +
                                 File.separator +
-                                "NewFile.txt");
+                                "NewFile.mp3");
                         byte[] buffer = new byte[1024];
                         int read;
                         while ((read = inputStream.read(buffer)) != -1) {
