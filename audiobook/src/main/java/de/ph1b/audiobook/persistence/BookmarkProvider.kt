@@ -19,7 +19,7 @@ class BookmarkProvider
 
     fun deleteBookmark(id: Long) = register.deleteBookmark(id)
 
-    fun addBookmark(bookmark: Bookmark) = register.addBookmark(bookmark)
+    fun addBookmark(bookmark: Bookmark) = register.addBookmark(bookmark) //generated bookmark file is registered here
 
     fun addBookmarkAtBookPosition(book: Book, title: String) {
         val addedBookmark = Bookmark(book.currentChapter().file, title, book.time)
