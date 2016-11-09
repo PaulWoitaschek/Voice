@@ -15,7 +15,7 @@ import de.ph1b.audiobook.uitools.ThemeUtil
 
 /**
  * Module for preferences
-
+ *
  * @author Paul Woitaschek
  */
 @Module class PrefsModule {

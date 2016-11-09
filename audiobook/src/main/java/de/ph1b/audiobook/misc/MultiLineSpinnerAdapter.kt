@@ -64,5 +64,5 @@ class MultiLineSpinnerAdapter<Type>(private val spinner: Spinner, private val co
         }
     }
 
-    data class Data<E>(val data: E, val shown: String)
+    data class Data<out E>(val data: E, val shown: String)
 }

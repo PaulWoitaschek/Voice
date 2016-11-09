@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
 
 /**
  * Adapter for displaying a list of bookmarks.
-
+ *
  * @author Paul Woitaschek
  */
 class BookmarkAdapter(private val chapters: List<Chapter>, private val listener: OnOptionsMenuClickedListener, private val context: Context) : RecyclerView.Adapter<BookmarkAdapter.ViewHolder>() {

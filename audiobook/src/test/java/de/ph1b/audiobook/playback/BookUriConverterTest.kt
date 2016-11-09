@@ -14,7 +14,7 @@ import org.robolectric.shadows.ShadowLog
 
 /**
  * Test for the book uri spec
-
+ *
  * @author Paul Woitaschek
  */
 @RunWith(RobolectricGradleTestRunner::class)

@@ -10,7 +10,7 @@ import i
  *
  * @author Paul Woitaschek
  */
-abstract class RxBaseActivity<V, P> : BaseActivity() where P : Presenter<V> {
+abstract class RxBaseActivity<V, out P> : BaseActivity() where P : Presenter<V> {
 
     private val presenterDelegate = PresenterDelegate({ newPresenter() }, { provideView() })
 

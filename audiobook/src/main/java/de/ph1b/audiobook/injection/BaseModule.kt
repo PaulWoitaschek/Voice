@@ -13,7 +13,7 @@ import javax.inject.Singleton
 
 /**
  * Basic providing module.
-
+ *
  * @author Paul Woitaschek
  */
 @Module class BaseModule {

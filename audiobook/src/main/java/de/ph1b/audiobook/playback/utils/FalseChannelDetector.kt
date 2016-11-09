@@ -96,7 +96,7 @@ constructor(private val context: Context) {
                                     val chunk = ByteArray(info.size)
                                     outputBuffers[res].get(chunk)
                                     outputBuffers[res].clear()
-                                    if (chunk.size > 0) {
+                                    if (chunk.isNotEmpty()) {
                                         // first not empty chunk's size is not stable, so save the second chunk size
                                         if (firstNotEmptyChunk) {
                                             if (file == monoFile) {

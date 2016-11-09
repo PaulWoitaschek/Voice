@@ -93,14 +93,12 @@ class CoverFromDiscCollector
         val mi = ActivityManager.MemoryInfo()
         activityManager.getMemoryInfo(mi)
         val dimen = imageHelper.smallerScreenSize
-        for (f in coverFiles) {
-            // only read cover if its size is less than a third of the available memory
-            if (f.length() < (mi.availMem / 3L)) {
-                try {
-                    return picasso.load(f).resize(dimen, dimen).get()
-                } catch (ex: IOException) {
-                    e(ex) { "Error when saving cover $f" }
-                }
+        // only read cover if its size is less than a third of the available memory
+        coverFiles.filter { it.length() < (mi.availMem / 3L) }.forEach {
+            try {
+                return picasso.load(it).resize(dimen, dimen).get()
+            } catch (ex: IOException) {
+                e(ex) { "Error when saving cover $it" }
             }
         }
         return null

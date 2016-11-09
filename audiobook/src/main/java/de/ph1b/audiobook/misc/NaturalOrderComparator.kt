@@ -7,7 +7,7 @@ import java.util.*
 
 /**
  * Simple class holding various static comparators.
-
+ *
  * @author Paul Woitaschek
  */
 object NaturalOrderComparator {
@@ -50,7 +50,7 @@ object NaturalOrderComparator {
 
     private fun getFileWithParents(target: File): List<File> {
         val all = ArrayList<File>(10)
-        var current: File ? = target
+        var current: File? = target
         do {
             all.add(current!!)
             current = current.parentFile

@@ -10,7 +10,7 @@ import de.ph1b.audiobook.features.BaseController
  *
  * @author Paul Woitaschek
  */
-abstract class MvpBaseController<V, P> : BaseController() where P : Presenter<V> {
+abstract class MvpBaseController<V, out P> : BaseController() where P : Presenter<V> {
 
     init {
         addLifecycleListener(object : LifecycleListener() {
@@ -32,9 +32,7 @@ abstract class MvpBaseController<V, P> : BaseController() where P : Presenter<V>
         })
     }
 
-    abstract fun newPresenter(): P
-
     abstract fun provideView(): V
 
-    val presenter = newPresenter()
+    abstract val presenter: P
 }

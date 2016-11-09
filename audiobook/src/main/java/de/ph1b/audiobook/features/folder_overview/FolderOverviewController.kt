@@ -22,11 +22,13 @@ import de.ph1b.audiobook.uitools.setVisibleWeak
 import de.ph1b.audiobook.uitools.visible
 
 /**
- * Activity that lets the user add, edit or remove the set audiobook folders.
-
+ * Activity that lets the user add, edit or remove the set audio book folders.
+ *
  * @author Paul Woitaschek
  */
 class FolderOverviewController : MvpBaseController<FolderOverviewController, FolderOverviewPresenter>() {
+
+    override val presenter: FolderOverviewPresenter = FolderOverviewPresenter()
 
     init {
         setHasOptionsMenu(true)
@@ -67,7 +69,7 @@ class FolderOverviewController : MvpBaseController<FolderOverviewController, Fol
         recycler.layoutManager = layoutManager
         recycler.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
 
-        adapter = FolderOverviewAdapter() { toDelete ->
+        adapter = FolderOverviewAdapter { toDelete ->
             MaterialDialog.Builder(activity)
                     .title(R.string.delete_folder)
                     .content("${getString(R.string.delete_folder_content)}\n$toDelete")
@@ -95,8 +97,6 @@ class FolderOverviewController : MvpBaseController<FolderOverviewController, Fol
                 title = activity.getString(R.string.audiobook_folders_title),
                 upIndicator = R.drawable.close)
     }
-
-    override fun newPresenter() = FolderOverviewPresenter()
 
     override fun provideView() = this
 

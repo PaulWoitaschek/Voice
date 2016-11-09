@@ -32,9 +32,9 @@ import dagger.Lazy as DaggerLazy
  * Showing the shelf of all the available books and provide a navigation to each book
  */
 class BookShelfController : MvpBaseController<BookShelfController, BookShelfPresenter>() {
-    private val COVER_FROM_GALLERY = 1
 
-    override fun newPresenter(): BookShelfPresenter = App.component().bookShelfPresenter
+    override val presenter= App.component().bookShelfPresenter!!
+    private val COVER_FROM_GALLERY = 1
 
     override fun provideView() = this
 

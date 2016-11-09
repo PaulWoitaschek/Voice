@@ -37,7 +37,7 @@ import javax.inject.Inject
 
 /**
  * Base class for book playing interaction.
-
+ *
  * @author Paul Woitaschek
  */
 class BookPlayController(bundle: Bundle) : BaseController(bundle) {
@@ -330,11 +330,11 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
     }
 
     private fun formatTime(ms: Long, duration: Long): String {
-        val h = TimeUnit.MILLISECONDS.toHours(ms.toLong()).toString()
-        val m = "%02d".format((TimeUnit.MILLISECONDS.toMinutes(ms.toLong()) % 60))
-        val s = "%02d".format((TimeUnit.MILLISECONDS.toSeconds(ms.toLong()) % 60))
+        val h = TimeUnit.MILLISECONDS.toHours(ms).toString()
+        val m = "%02d".format((TimeUnit.MILLISECONDS.toMinutes(ms) % 60))
+        val s = "%02d".format((TimeUnit.MILLISECONDS.toSeconds(ms) % 60))
 
-        if (TimeUnit.MILLISECONDS.toHours(duration.toLong()) == 0L) {
+        if (TimeUnit.MILLISECONDS.toHours(duration) == 0L) {
             return m + ":" + s
         } else {
             return "$h:$m:$s"

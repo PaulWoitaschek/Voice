@@ -8,10 +8,7 @@ import android.support.v4.content.ContextCompat
 import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
-import de.ph1b.audiobook.misc.FileRecognition
-import de.ph1b.audiobook.misc.MediaAnalyzer
-import de.ph1b.audiobook.misc.NaturalOrderComparator
-import de.ph1b.audiobook.misc.value
+import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
@@ -28,7 +25,7 @@ import javax.inject.Singleton
 
 /**
  * Base class for adding new books.
-
+ *
  * @author Paul Woitaschek
  */
 @Singleton class BookAdder
@@ -98,10 +95,7 @@ import javax.inject.Singleton
     private val singleBookFiles: List<File>
         get() {
             val singleBooksAsStrings = prefs.singleBookFolders.value()
-            val singleBooks = ArrayList<File>(singleBooksAsStrings.size)
-            for (s in singleBooksAsStrings) {
-                singleBooks.add(File(s))
-            }
+            val singleBooks = singleBooksAsStrings.map(::File)
             return singleBooks.sortedWith(NaturalOrderComparator.fileComparator)
         }
 
@@ -109,16 +103,12 @@ import javax.inject.Singleton
     private val collectionBookFiles: List<File>
         get() {
             val collectionFoldersStringList = prefs.collectionFolders.value()
+
             val containingFiles = ArrayList<File>(collectionFoldersStringList.size)
-            for (s in collectionFoldersStringList) {
-                val f = File(s)
-                if (f.exists() && f.isDirectory) {
-                    val containing = f.listFiles(FileRecognition.folderAndMusicFilter)
-                    if (containing != null) {
-                        containingFiles.addAll(Arrays.asList(*containing))
-                    }
-                }
-            }
+            collectionFoldersStringList
+                    .map(::File)
+                    .map { it.listFilesSafely(FileRecognition.folderAndMusicFilter) }
+                    .forEach { containingFiles.addAll(it) }
             return containingFiles.sortedWith(NaturalOrderComparator.fileComparator)
         }
 
@@ -336,10 +326,8 @@ import javax.inject.Singleton
                     repo.activeBooks
                 }
         if (rootFile.isDirectory) {
-            for (b in books) {
-                if (rootFile.absolutePath == b.root && type === b.type) {
-                    return b
-                }
+            return books.firstOrNull {
+                rootFile.absolutePath == it.root && type === it.type
             }
         } else if (rootFile.isFile) {
             d { "getBookFromDb, its a file" }

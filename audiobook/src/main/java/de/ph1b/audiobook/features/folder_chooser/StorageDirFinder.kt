@@ -6,6 +6,7 @@ import android.os.Environment
 import android.support.annotation.RequiresPermission
 import android.text.TextUtils
 import de.ph1b.audiobook.misc.NaturalOrderComparator
+import de.ph1b.audiobook.misc.listFilesSafely
 import java.io.File
 import java.util.*
 import java.util.regex.Pattern
@@ -91,21 +92,8 @@ object StorageDirFinder {
         }
 
         val paths = ArrayList<File>(rv.size)
-        for (item in rv) {
-            val f = File(item)
-            if (f.listFilesSafely().isNotEmpty()) {
-                paths.add(f)
-            }
-        }
+        rv.map { File(it) }
+                .filterTo(paths) { it.listFilesSafely().isNotEmpty() }
         return paths.sortedWith(NaturalOrderComparator.fileComparator)
-    }
-
-    /**
-     * As there are cases where [File.listFiles] returns null even though it is a directory, we return
-     * an empty list instead.
-     */
-    private fun File.listFilesSafely(): List<File> {
-        val list: Array<File>? = listFiles()
-        return list?.toList() ?: emptyList()
     }
 }

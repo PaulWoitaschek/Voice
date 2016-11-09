@@ -11,12 +11,11 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.ThemeUtil
-import java.util.*
 import javax.inject.Inject
 
 /**
  * Dialog for picking the UI theme.
-
+ *
  * @author Paul Woitaschek
  */
 class ThemePickerDialogFragment : DialogFragment() {
@@ -28,13 +27,10 @@ class ThemePickerDialogFragment : DialogFragment() {
 
         val oldTheme = prefsManager.theme.get()!!
         val existingThemes = ThemeUtil.Theme.values()
-        val names = ArrayList<String>(existingThemes.size)
-        for (t in existingThemes) {
-            names.add(getString(t.nameId))
-        }
+        val names = existingThemes.map { getString(it.nameId) }
 
         return MaterialDialog.Builder(context)
-                .items(*names.toArray<CharSequence>(arrayOfNulls<CharSequence>(names.size)))
+                .items(*names.toTypedArray())
                 .itemsCallbackSingleChoice(existingThemes.indexOf(oldTheme)) { materialDialog, view, i, charSequence ->
                     val newTheme = existingThemes[i]
                     prefsManager.theme.set(newTheme)

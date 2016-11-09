@@ -5,6 +5,7 @@ import d
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.NaturalOrderComparator
+import de.ph1b.audiobook.misc.listFilesSafely
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -85,12 +86,8 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
             return false
         }
 
-        for (f in rootDirs) {
-            if (f == chosenFile!!.closestFolder()) {
-                return false // to go up we must not already be in top level
-            }
-        }
-        return true
+        // to go up we must not already be in top level
+        return rootDirs.none { it == chosenFile!!.closestFolder() }
     }
 
     /**
@@ -165,12 +162,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
 
             val oldParts = s.split(File.separator)
             val max = Math.min(oldParts.size, newParts.size) - 1
-            var filesAreSubsets = true
-            for (i in 0..max) {
-                if (oldParts[i] != newParts[i]) {
-                    filesAreSubsets = false
-                }
-            }
+            val filesAreSubsets = (0..max).none { oldParts[it] != newParts[it] }
             if (filesAreSubsets) {
                 i { "the files are sub folders of each other." }
                 view!!.showSubFolderWarning(s, newFile)
@@ -203,13 +195,8 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
      * @return The containing files
      */
     private fun File.getContentsSorted(): List<File> {
-        val containing = listFiles(FileRecognition.folderAndMusicFilter)
-        if (containing != null) {
-            val asList = ArrayList(Arrays.asList(*containing))
-            return asList.sortedWith(NaturalOrderComparator.fileComparator)
-        } else {
-            return emptyList()
-        }
+        val containing = listFilesSafely(FileRecognition.folderAndMusicFilter)
+        return containing.sortedWith(NaturalOrderComparator.fileComparator)
     }
 
     override fun onRestore(savedState: Bundle?) {

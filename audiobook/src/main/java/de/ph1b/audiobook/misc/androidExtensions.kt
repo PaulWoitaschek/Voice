@@ -16,6 +16,8 @@ import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bluelinelabs.conductor.Controller
 import com.f2prateek.rx.preferences.Preference
+import java.io.File
+import java.io.FileFilter
 
 fun Context.layoutInflater(): LayoutInflater = LayoutInflater.from(this)
 
@@ -67,4 +69,13 @@ fun AppCompatActivity.setupActionbar(toolbar: Toolbar,
 
     if (title != null) actionBar.title = title
     actionBar.setDisplayShowTitleEnabled(title != null)
+}
+
+/**
+ * As there are cases where [File.listFiles] returns null even though it is a directory, we return
+ * an empty list instead.
+ */
+fun File.listFilesSafely(filter: FileFilter? = null): List<File> {
+    val array: Array<File>? = if (filter == null) listFiles() else listFiles(filter)
+    return array?.toList() ?: emptyList()
 }

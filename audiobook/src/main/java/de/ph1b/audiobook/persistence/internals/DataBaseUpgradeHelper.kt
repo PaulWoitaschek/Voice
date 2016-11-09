@@ -151,13 +151,7 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
             val bookmarkTimesSafe = ArrayList<Int>()
 
             for (i in bookmarkRelPathsUnsafe.indices) {
-                var bookmarkExists = false
-                for (chapterPath in chapterPaths) {
-                    if (chapterPath == bookmarkRelPathsUnsafe[i]) {
-                        bookmarkExists = true
-                        break
-                    }
-                }
+                val bookmarkExists = chapterPaths.any { it == bookmarkRelPathsUnsafe[i] }
                 if (bookmarkExists) {
                     bookmarkRelPathsSafe.add(bookmarkRelPathsUnsafe[i])
                     bookmarkTitlesSafe.add(bookmarkTitlesUnsafe[i])
@@ -172,12 +166,7 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
                 e.printStackTrace()
             }
 
-            var relPathExists = false
-            for (chapterPath in chapterPaths) {
-                if (chapterPath == currentPath) {
-                    relPathExists = true
-                }
-            }
+            val relPathExists = chapterPaths.contains(currentPath)
             if (!relPathExists) {
                 currentPath = chapterPaths.first()
                 currentTime = 0
@@ -572,12 +561,7 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
             if (chapterPaths.isEmpty()) {
                 db.delete(TABLE_BOOK, BOOK_ID + "=?", arrayOf(bookId.toString()))
             } else {
-                var mediaPathValid = false
-                for (s in chapterPaths) {
-                    if (s == bookmarkCurrentMediaPath) {
-                        mediaPathValid = true
-                    }
-                }
+                val mediaPathValid = chapterPaths.contains(bookmarkCurrentMediaPath)
                 if (!mediaPathValid) {
                     val cv = ContentValues()
                     cv.put(BOOK_CURRENT_MEDIA_PATH, chapterPaths.first())

@@ -80,14 +80,7 @@ data class Book(val id: Long,
         throw IllegalStateException("Current chapter was not found while looking up the global position")
     }
 
-    fun currentChapter(): Chapter {
-        for (c in chapters) {
-            if (c.file == currentFile) {
-                return c
-            }
-        }
-        throw IllegalArgumentException("currentChapter has no valid id with" + " currentFile=" + currentFile)
-    }
+    fun currentChapter() = chapters.first { it.file == currentFile }
 
     fun nextChapter(): Chapter? {
         val currentIndex = chapters.indexOf(currentChapter())

@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 /**
  * Simple helper for obtaining android api 23 permissions
-
+ *
  * @author Paul Woitaschek
  */
 class PermissionHelper

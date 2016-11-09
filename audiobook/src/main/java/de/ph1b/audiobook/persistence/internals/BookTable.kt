@@ -4,7 +4,7 @@ import android.database.sqlite.SQLiteDatabase
 
 /**
  * Collection of strings representing the book table
-
+ *
  * @author Paul Woitaschek
  */
 object BookTable {
