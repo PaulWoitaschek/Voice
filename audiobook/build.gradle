@@ -89,7 +89,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     // player
-    compile "com.github.AntennaPod:AntennaPod-AudioPlayer:v1.0.16"
+    compile 'com.github.PaulWoitaschek:AntennaPod-AudioPlayer:v1.0.16-ph1b'
 
     // logs
     compile 'com.github.PaulWoitaschek:Slimber:1.0.4'

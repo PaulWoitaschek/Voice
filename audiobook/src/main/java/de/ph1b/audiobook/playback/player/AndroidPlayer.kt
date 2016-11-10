@@ -19,6 +19,8 @@ class AndroidPlayer(private val context: Context) : Player() {
             errorSubject.onNext(Unit)
             false
         }
+        player.audioSessionId = Player.AUDIO_SESSION_ID
+
         player.setOnCompletionListener { completionSubject.onNext(Unit) }
         player.setOnPreparedListener { preparedSubject.onNext(Unit) }
     }

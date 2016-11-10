@@ -47,4 +47,8 @@ abstract class Player {
     val onError: Observable<Unit> = errorSubject
 
     val onCompletion: Observable<Unit> = completionSubject
+
+    companion object {
+        val AUDIO_SESSION_ID = 9
+    }
 }

@@ -27,6 +27,7 @@ class AntennaPlayer(private val context: Context) : Player() {
     init {
         val owning = org.antennapod.audio.MediaPlayer(context)
         player = SonicAudioPlayer(owning, context)
+        player.audioSessionId = Player.AUDIO_SESSION_ID
 
         owning.setOnErrorListener { mediaPlayer, i, j ->
             postOnMain { errorSubject.onNext(Unit) }

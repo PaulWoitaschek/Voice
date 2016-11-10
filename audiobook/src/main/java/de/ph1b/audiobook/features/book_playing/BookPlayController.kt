@@ -287,6 +287,10 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
             sleepTimerItem.setIcon(R.drawable.alarm)
         }
 
+        val hasEqualizer = Equalizer.exists(activity)
+        val equalizerItem = menu.findItem(R.id.action_equalizer)
+        equalizerItem.isEnabled = hasEqualizer
+
         // hide bookmark and getTime change item if there is no valid book
         val currentBookExists = book != null
         val bookmarkItem = menu.findItem(R.id.action_bookmark)
@@ -295,38 +299,40 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
         timeChangeItem.isVisible = currentBookExists
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_settings -> {
-                router.pushController(RouterTransaction.with(SettingsController()))
-                return true
-            }
-            R.id.action_time_change -> {
-                launchJumpToPositionDialog()
-                return true
-            }
-            R.id.action_sleep -> {
-                if (sandMan.sleepTimerActive()) sandMan.setActive(false)
-                else SleepTimerDialogFragment.newInstance(book!!)
-                        .show(fragmentManager, "fmSleepTimer")
-                return true
-            }
-            R.id.action_time_lapse -> {
-                PlaybackSpeedDialogFragment().show(fragmentManager,
-                        PlaybackSpeedDialogFragment.TAG)
-                return true
-            }
-            R.id.action_bookmark -> {
-                BookmarkDialogFragment.newInstance(bookId).show(fragmentManager,
-                        BookmarkDialogFragment.TAG)
-                return true
-            }
-            android.R.id.home -> {
-                router.popCurrentController()
-                return true
-            }
-            else -> return super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_settings -> {
+            router.pushController(RouterTransaction.with(SettingsController()))
+            true
         }
+        R.id.action_time_change -> {
+            launchJumpToPositionDialog()
+            true
+        }
+        R.id.action_sleep -> {
+            if (sandMan.sleepTimerActive()) sandMan.setActive(false)
+            else SleepTimerDialogFragment.newInstance(book!!)
+                    .show(fragmentManager, "fmSleepTimer")
+            true
+        }
+        R.id.action_time_lapse -> {
+            PlaybackSpeedDialogFragment().show(fragmentManager,
+                    PlaybackSpeedDialogFragment.TAG)
+            true
+        }
+        R.id.action_bookmark -> {
+            BookmarkDialogFragment.newInstance(bookId).show(fragmentManager,
+                    BookmarkDialogFragment.TAG)
+            true
+        }
+        R.id.action_equalizer -> {
+            Equalizer.launch(activity)
+            true
+        }
+        android.R.id.home -> {
+            router.popCurrentController()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     private fun formatTime(ms: Long, duration: Long): String {
