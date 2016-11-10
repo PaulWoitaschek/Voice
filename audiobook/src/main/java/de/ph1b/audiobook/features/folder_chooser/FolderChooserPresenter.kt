@@ -28,6 +28,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
     }
 
     @Inject lateinit var prefsManager: PrefsManager
+    @Inject lateinit var storageDirFinder: StorageDirFinder
 
     private val rootDirs = ArrayList<File>()
     private val SI_CHOSEN_FILE = "siChosenFile"
@@ -175,7 +176,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
 
     private fun refreshRootDirs() {
         rootDirs.clear()
-        rootDirs.addAll(StorageDirFinder.storageDirs())
+        rootDirs.addAll(storageDirFinder.storageDirs())
         view!!.newRootFolders(rootDirs)
         view!!.setChooseButtonEnabled(rootDirs.isNotEmpty())
 
@@ -214,6 +215,6 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
     }
 
     companion object {
-        val MARSHMALLOW_SD_FALLBACK = "/"
+        val MARSHMALLOW_SD_FALLBACK = "/storage"
     }
 }

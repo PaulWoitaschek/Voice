@@ -1,22 +1,26 @@
 package de.ph1b.audiobook.features.folder_chooser
 
 import android.Manifest
+import android.content.Context
 import android.os.Build
 import android.os.Environment
 import android.support.annotation.RequiresPermission
+import android.support.v4.os.EnvironmentCompat
 import android.text.TextUtils
 import de.ph1b.audiobook.misc.NaturalOrderComparator
-import de.ph1b.audiobook.misc.listFilesSafely
 import java.io.File
 import java.util.*
 import java.util.regex.Pattern
+import javax.inject.Inject
+import javax.inject.Singleton
+
 
 /**
  * Finder for external storages.
  *
  * @author Paul Woitaschek
  */
-object StorageDirFinder {
+@Singleton class StorageDirFinder @Inject constructor(private val context: Context) {
 
     /**
      * Collects the storage dirs of the device.
@@ -81,19 +85,90 @@ object StorageDirFinder {
         // this is a workaround for marshmallow as we can't know the paths of the sd cards any more.
         // if one of the files in the fallback dir has contents we add it to the list.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val fallbackFile = File(FolderChooserPresenter.MARSHMALLOW_SD_FALLBACK)
-            val contents = fallbackFile.listFilesSafely()
-            for (content in contents) {
-                if (content.listFilesSafely().isNotEmpty()) {
-                    rv.add(FolderChooserPresenter.MARSHMALLOW_SD_FALLBACK)
-                    break
+            rv.add(FolderChooserPresenter.MARSHMALLOW_SD_FALLBACK)
+        }
+        rv.addAll(storageDirs2())
+
+        // get the non empty files
+        val nonEmptyFiles = rv.map(::File).filter { it.length() > 0 }
+        // make sure they are unique by putting them with their canonical path as key
+        val map = HashMap<String, File>()
+        nonEmptyFiles.forEach {
+            map.put(it.canonicalPath, it)
+        }
+        // sort them
+        return map.values.sortedWith(NaturalOrderComparator.fileComparator)
+    }
+
+    // solution from http://stackoverflow.com/a/40205116
+    private fun storageDirs2(): List<String> {
+
+        val results = ArrayList<String>()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { //Method 1 for KitKat & above
+            val externalDirs = context.getExternalFilesDirs(null)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                for (file in externalDirs) {
+                    val path = file.path.split("/Android")[0]
+                    if (Environment.isExternalStorageRemovable(file)) {
+                        results.add(path)
+                    }
+                }
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                for (file in externalDirs) {
+                    val path = file.path.split("/Android")[0]
+                    if (Environment.MEDIA_MOUNTED == EnvironmentCompat.getStorageState(file)) {
+                        results.add(path)
+                    }
                 }
             }
         }
 
-        val paths = ArrayList<File>(rv.size)
-        rv.map { File(it) }
-                .filterTo(paths) { it.listFilesSafely().isNotEmpty() }
-        return paths.sortedWith(NaturalOrderComparator.fileComparator)
+        if (results.isEmpty()) { //Method 2 for all versions
+            // better variation of: http://stackoverflow.com/a/40123073/5002496
+            var output = ""
+            try {
+                val process = ProcessBuilder().command("mount | grep /dev/block/vold")
+                        .redirectErrorStream(true).start()
+                process.waitFor()
+                val inputStream = process.inputStream
+                val buffer = ByteArray(1024)
+                while (inputStream.read(buffer) !== -1) {
+                    output += String(buffer)
+                }
+                inputStream.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            if (!output.trim { it <= ' ' }.isEmpty()) {
+                val devicePoints = output.split("\n".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()
+                for (voldPoint in devicePoints) {
+                    results.add(voldPoint.split(" ".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()[2])
+                }
+            }
+        }
+
+        //Below few lines is to remove paths which may not be external memory card, like OTG (feel free to comment them out)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            var i = 0
+            while (i < results.size) {
+                if (!results.get(i).toLowerCase().matches(".*[0-9a-f]{4}[-][0-9a-f]{4}".toRegex())) {
+                    results.removeAt(i--)
+                }
+                i++
+            }
+        } else {
+            var i = 0
+            while (i < results.size) {
+                if (!results.get(i).toLowerCase().contains("ext") && !results.get(i).toLowerCase().contains("sdcard")) {
+                    results.removeAt(i--)
+                }
+                i++
+            }
+        }
+
+        return results
     }
+
 }
