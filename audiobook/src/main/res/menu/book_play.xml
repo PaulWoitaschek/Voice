@@ -7,33 +7,34 @@
     <item
         android:id="@+id/action_sleep"
         android:icon="@drawable/alarm_off"
-        android:orderInCategory="1"
         android:title="@string/action_sleep"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/action_bookmark"
         android:icon="@drawable/bookmark_outline"
-        android:orderInCategory="2"
         android:title="@string/bookmark"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/action_time_lapse"
         android:icon="@drawable/speedometer"
-        android:orderInCategory="3"
         android:title="@string/playback_speed"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_equalizer"
+        android:icon="@drawable/ic_equalizer"
+        android:title="@string/equalizer"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_time_change"
-        android:orderInCategory="4"
         android:title="@string/action_time_change"
         app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_settings"
-        android:orderInCategory="5"
         android:title="@string/action_settings"
         app:showAsAction="never"/>
 </menu>
