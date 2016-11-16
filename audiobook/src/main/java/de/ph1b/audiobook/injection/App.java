@@ -45,7 +45,8 @@ public class App extends Application {
 
     // init acra + return early if this is the sender service
     if (!BuildConfig.DEBUG) {
-      if (new Random().nextInt(5) == 0)
+      boolean isSenderProcess = ACRA.isACRASenderServiceProcess();
+      if (isSenderProcess || new Random().nextInt(5) == 0)
         try {
           ACRAConfiguration config = new ConfigurationBuilder(this)
             .build();
@@ -53,7 +54,8 @@ public class App extends Application {
         } catch (ACRAConfigurationException e) {
           throw new RuntimeException(e);
         }
-      if (ACRA.isACRASenderServiceProcess()) return;
+
+      if (isSenderProcess) return;
     }
 
     applicationComponent = newComponent();
