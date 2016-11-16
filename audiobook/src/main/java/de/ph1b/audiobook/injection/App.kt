@@ -20,9 +20,9 @@ import javax.inject.Inject
   httpMethod = Method.PUT,
   reportType = Type.JSON,
   buildConfigClass = BuildConfig::class,
-  formUri = "http://acra-f85814.smileupps.com/acra-myapp-0b5541/_design/acra-storage/_update/report",
-  formUriBasicAuthLogin = "129user",
-  formUriBasicAuthPassword = "IQykOJBswx7C7YtY")
+  formUri = BuildConfig.ACRA_SERVER,
+  formUriBasicAuthLogin = BuildConfig.ACRA_USER,
+  formUriBasicAuthPassword = BuildConfig.ACRA_PASSWORD)
 class App : Application() {
 
   @Inject lateinit var bookAdder: BookAdder
