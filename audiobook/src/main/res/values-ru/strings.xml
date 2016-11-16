@@ -72,8 +72,6 @@
     <string name="bookmark_delete_title">Удалить эту закладку?</string>
     <!--Settings-->
     <string name="action_settings">Настройки</string>
-    <string name="pref_resume_on_replug">Прокрутка назад</string>
-    <string name="pref_resume_on_replug_hint">Автоматическая прокрутка назад после паузы.</string>
     <plurals name="minutes">
         <item quantity="one">%d минуту</item>
         <item quantity="few">%d минут</item>

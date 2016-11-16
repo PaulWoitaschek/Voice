@@ -20,6 +20,7 @@
     <string name="next_track">Próximo capitulo</string>
     <string name="play">Tocar</string>
     <string name="pause">Pausar</string>
+    <string name="equalizer">Equalizador</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Memória Externa não está disponível. Por favor verifique se está conectado e montado em seu computador.</string>
     <string name="no_external_storage_action_bar_title">Memória Externa</string>
@@ -32,6 +33,8 @@
     <string name="content_next_cover">Escolher próxima capa</string>
     <string name="content_cover">Mostrar capa para escolher</string>
     <string name="change_book_name">Nome</string>
+    <string name="download_book_cover">Capa da internet</string>
+    <string name="pick_book_cover">Capa do arquivo de sistema</string>
     <string name="edit_book_title">Editar livro</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Pular para</string>

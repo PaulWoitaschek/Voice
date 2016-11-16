@@ -21,6 +21,7 @@
     <string name="next_track">Наступний файл</string>
     <string name="play">Програвати</string>
     <string name="pause">Призупинити</string>
+    <string name="equalizer">Еквалайзер</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Картка пам’яті не знайдена. Будь ласка, переконайтеся, що вона встановлена та ваш пристрій не з’єднаний із комп’ютером кабелем.</string>
     <string name="no_external_storage_action_bar_title">Картка пам’яті</string>
@@ -33,6 +34,8 @@
     <string name="content_next_cover">Обрати наступну обкладинку</string>
     <string name="content_cover">Показати обрану обкладинку</string>
     <string name="change_book_name">Назва</string>
+    <string name="download_book_cover">Обкладинка з інтернету</string>
+    <string name="pick_book_cover">Обкладинка з файлу</string>
     <string name="edit_book_title">Редагувати книгу</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Перейти до</string>
