@@ -13,35 +13,35 @@ import io.reactivex.disposables.CompositeDisposable
  */
 abstract class Presenter<V> {
 
-    protected var view: V? = null
+  protected var view: V? = null
 
-    private var compositeDisposable: CompositeDisposable? = null
+  private var compositeDisposable: CompositeDisposable? = null
 
-    open fun onRestore(savedState: Bundle?) {
+  open fun onRestore(savedState: Bundle?) {
 
+  }
+
+  fun bind(view: V) {
+    if (this.view == null) {
+      i { "binding $view" }
+      this.view = view
+
+      compositeDisposable = CompositeDisposable()
+      onBind(view, compositeDisposable!!)
+    } else {
+      d { "$view already bound" }
     }
+  }
 
-    fun bind(view: V) {
-        if (this.view == null) {
-            i { "binding $view" }
-            this.view = view
+  fun unbind() {
+    i { "Unbinding $view" }
+    this.view = null
+    compositeDisposable?.dispose()
+  }
 
-            compositeDisposable = CompositeDisposable()
-            onBind(view, compositeDisposable!!)
-        } else {
-            d { "$view already bound" }
-        }
-    }
+  open fun onSave(state: Bundle) {
 
-    fun unbind() {
-        i { "Unbinding $view" }
-        this.view = null
-        compositeDisposable?.dispose()
-    }
+  }
 
-    open fun onSave(state: Bundle) {
-
-    }
-
-    abstract fun onBind(view: V, disposables: CompositeDisposable)
+  abstract fun onBind(view: V, disposables: CompositeDisposable)
 }

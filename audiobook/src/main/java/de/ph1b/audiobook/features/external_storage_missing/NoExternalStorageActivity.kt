@@ -11,29 +11,29 @@ import de.ph1b.audiobook.misc.setupActionbar
 class NoExternalStorageActivity : AppCompatActivity() {
 
 
-    public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_no_external)
+  public override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_no_external)
 
-        setupActionbar(toolbar = find(R.id.toolbarInclude),
-                title = getString(R.string.no_external_storage_action_bar_title))
-    }
+    setupActionbar(toolbar = find(R.id.toolbarInclude),
+      title = getString(R.string.no_external_storage_action_bar_title))
+  }
 
-    override fun onBackPressed() {
-        if (BaseActivity.storageMounted()) {
-            super.onBackPressed()
-        } else {
-            val i = Intent(Intent.ACTION_MAIN)
-            i.addCategory(Intent.CATEGORY_HOME)
-            i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            startActivity(i)
-        }
+  override fun onBackPressed() {
+    if (BaseActivity.storageMounted()) {
+      super.onBackPressed()
+    } else {
+      val i = Intent(Intent.ACTION_MAIN)
+      i.addCategory(Intent.CATEGORY_HOME)
+      i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+      startActivity(i)
     }
+  }
 
-    public override fun onResume() {
-        super.onResume()
-        if (BaseActivity.storageMounted()) {
-            onBackPressed()
-        }
+  public override fun onResume() {
+    super.onResume()
+    if (BaseActivity.storageMounted()) {
+      onBackPressed()
     }
+  }
 }

@@ -13,57 +13,57 @@ import java.io.File
  */
 class AntennaPlayer(private val context: Context) : Player() {
 
-    private val player: SonicAudioPlayer
-    private val handler = Handler(context.mainLooper)
+  private val player: SonicAudioPlayer
+  private val handler = Handler(context.mainLooper)
 
-    private inline fun postOnMain(crossinline task: () -> Unit) {
-        if (Thread.currentThread() == Looper.getMainLooper().thread) {
-            task()
-        } else handler.post { task() }
+  private inline fun postOnMain(crossinline task: () -> Unit) {
+    if (Thread.currentThread() == Looper.getMainLooper().thread) {
+      task()
+    } else handler.post { task() }
+  }
+
+  override fun setVolume(volume: Float) = player.setVolume(volume, volume)
+
+  init {
+    val owning = org.antennapod.audio.MediaPlayer(context)
+    player = SonicAudioPlayer(owning, context)
+    player.audioSessionId = Player.AUDIO_SESSION_ID
+
+    owning.setOnErrorListener { mediaPlayer, i, j ->
+      postOnMain { errorSubject.onNext(Unit) }
+      false
     }
-
-    override fun setVolume(volume: Float) = player.setVolume(volume, volume)
-
-    init {
-        val owning = org.antennapod.audio.MediaPlayer(context)
-        player = SonicAudioPlayer(owning, context)
-        player.audioSessionId = Player.AUDIO_SESSION_ID
-
-        owning.setOnErrorListener { mediaPlayer, i, j ->
-            postOnMain { errorSubject.onNext(Unit) }
-            false
-        }
-        owning.setOnCompletionListener { postOnMain { completionSubject.onNext(Unit) } }
-        owning.setOnPreparedListener { postOnMain { preparedSubject.onNext(Unit) } }
-    }
+    owning.setOnCompletionListener { postOnMain { completionSubject.onNext(Unit) } }
+    owning.setOnPreparedListener { postOnMain { preparedSubject.onNext(Unit) } }
+  }
 
 
-    override fun seekTo(to: Int) = player.seekTo(to)
+  override fun seekTo(to: Int) = player.seekTo(to)
 
-    override fun isPlaying() = player.isPlaying
+  override fun isPlaying() = player.isPlaying
 
-    override fun start() = player.start()
+  override fun start() = player.start()
 
-    override fun pause() = player.pause()
+  override fun pause() = player.pause()
 
-    override fun prepare(file: File) {
-        player.setDataSource(file.absolutePath)
-        player.prepare()
-    }
+  override fun prepare(file: File) {
+    player.setDataSource(file.absolutePath)
+    player.prepare()
+  }
 
-    override fun reset() = player.reset()
+  override fun reset() = player.reset()
 
-    override fun setWakeMode(mode: Int) = player.setWakeMode(context, mode)
+  override fun setWakeMode(mode: Int) = player.setWakeMode(context, mode)
 
-    override fun setAudioStreamType(streamType: Int) = player.setAudioStreamType(streamType)
+  override fun setAudioStreamType(streamType: Int) = player.setAudioStreamType(streamType)
 
-    override val currentPosition: Int
-        get() = player.currentPosition
+  override val currentPosition: Int
+    get() = player.currentPosition
 
-    override val duration: Int
-        get() = player.duration
+  override val duration: Int
+    get() = player.duration
 
-    override var playbackSpeed: Float
-        get() = player.currentSpeedMultiplier
-        set(value) = player.setPlaybackSpeed(value)
+  override var playbackSpeed: Float
+    get() = player.currentSpeedMultiplier
+    set(value) = player.setPlaybackSpeed(value)
 }

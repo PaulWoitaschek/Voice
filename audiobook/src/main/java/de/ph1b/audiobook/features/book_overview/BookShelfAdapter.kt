@@ -27,181 +27,181 @@ import javax.inject.Inject
 // display all the books
 class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, ClickType) -> Unit) : RecyclerView.Adapter<BookShelfAdapter.BaseViewHolder>() {
 
-    private val books = ArrayList<Book>()
+  private val books = ArrayList<Book>()
 
-    @Inject lateinit var prefs: PrefsManager
+  @Inject lateinit var prefs: PrefsManager
+
+  init {
+    i { "A new adapter was created." }
+    App.component().inject(this)
+    setHasStableIds(true)
+  }
+
+  private fun formatTime(ms: Int): String {
+    val h = "%02d".format((TimeUnit.MILLISECONDS.toHours(ms.toLong())))
+    val m = "%02d".format((TimeUnit.MILLISECONDS.toMinutes(ms.toLong()) % 60))
+    return h + ":" + m
+  }
+
+  /** Adds a new set of books and removes the ones that do not exist any longer **/
+  fun newDataSet(newBooks: List<Book>) {
+    i { "newDataSet was called with ${newBooks.size} books" }
+
+    val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+
+      override fun getOldListSize(): Int = books.size
+
+      override fun getNewListSize(): Int = newBooks.size
+
+      override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        val oldItem = books[oldItemPosition]
+        val newItem = newBooks[newItemPosition]
+        return oldItem.globalPosition() == newItem.globalPosition() && oldItem.name == newItem.name
+      }
+
+      override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        val oldItem = books[oldItemPosition]
+        val newItem = newBooks[newItemPosition]
+        return oldItem.id == newItem.id
+      }
+    }, false) // no need to detect moves as the list is sorted
+
+    books.clear()
+    books.addAll(newBooks)
+
+    diffResult.dispatchUpdatesTo(this)
+  }
+
+  fun changeBookCover(book: Book) {
+    val index = books.indexOfFirst { it.id == book.id }
+    if (index >= 0) {
+      notifyItemChanged(index)
+    }
+  }
+
+  override fun getItemId(position: Int): Long = books[position].id
+
+  fun getItem(position: Int): Book = books[position]
+
+  var displayMode: BookShelfController.DisplayMode = BookShelfController.DisplayMode.LIST
+    set(value) {
+      if (value != field) {
+        field = value
+        i { "displayMode changed to $field" }
+        notifyDataSetChanged()
+      }
+    }
+
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
+    when (viewType) {
+      1 -> return GridViewHolder(parent)
+      0 -> return ListViewHolder(parent)
+      else -> throw IllegalStateException("Illegal viewType=" + viewType)
+    }
+  }
+
+  override fun onBindViewHolder(holder: BaseViewHolder, position: Int) = holder.bind(books[position])
+
+  override fun onBindViewHolder(holder: BaseViewHolder, position: Int, payloads: MutableList<Any>) = when {
+    payloads.isEmpty() -> onBindViewHolder(holder, position)
+    else -> holder.bind(books[position])
+  }
+
+  override fun getItemCount(): Int = books.size
+
+  override fun getItemViewType(position: Int): Int = if (displayMode == BookShelfController.DisplayMode.LIST) 0 else 1
+
+  inner class ListViewHolder(parent: ViewGroup) : BaseViewHolder(parent.layoutInflater().inflate(R.layout.book_shelf_list_layout, parent, false)) {
+
+    private val progressBar = find<ProgressBar>(R.id.progressBar)
+    private val leftTime: TextView = find(R.id.leftTime)
+    private val rightTime: TextView = find(R.id.rightTime)
 
     init {
-        i { "A new adapter was created." }
-        App.component().inject(this)
-        setHasStableIds(true)
+      MDTintHelper.setTint(progressBar, parent.context.color(R.color.accent))
     }
 
-    private fun formatTime(ms: Int): String {
-        val h = "%02d".format((TimeUnit.MILLISECONDS.toHours(ms.toLong())))
-        val m = "%02d".format((TimeUnit.MILLISECONDS.toMinutes(ms.toLong()) % 60))
-        return h + ":" + m
+    override fun bind(book: Book) {
+      super.bind(book)
+
+      val globalPosition = book.globalPosition()
+      val globalDuration = book.globalDuration
+      val progress = Math.round(100f * globalPosition.toFloat() / globalDuration.toFloat())
+
+      leftTime.text = formatTime(globalPosition)
+      progressBar.progress = progress
+      rightTime.text = formatTime(globalDuration)
+    }
+  }
+
+  /** ViewHolder for the grid **/
+  inner class GridViewHolder(parent: ViewGroup) : BaseViewHolder(parent.layoutInflater()
+    .inflate(R.layout.book_shelf_grid_layout, parent, false))
+
+
+  /** ViewHolder base class **/
+  abstract inner class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    val coverView: ImageView
+    private val currentPlayingIndicator: ImageView
+    private val titleView: TextView
+    private val editBook: View
+    var indicatorVisible = false
+      private set
+
+
+    init {
+      coverView = itemView.find(R.id.coverView)
+      currentPlayingIndicator = itemView.find(R.id.currentPlayingIndicator)
+      titleView = itemView.find(R.id.title)
+      editBook = itemView.find(R.id.editBook)
     }
 
-    /** Adds a new set of books and removes the ones that do not exist any longer **/
-    fun newDataSet(newBooks: List<Book>) {
-        i { "newDataSet was called with ${newBooks.size} books" }
+    /**
+     * Binds the ViewHolder to a book
 
-        val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+     * @param book The book to bind to
+     */
+    @CallSuper
+    open fun bind(book: Book) {
 
-            override fun getOldListSize(): Int = books.size
+      //setting text
+      val name = book.name
+      titleView.text = name
 
-            override fun getNewListSize(): Int = newBooks.size
+      bindCover(book)
 
-            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                val oldItem = books[oldItemPosition]
-                val newItem = newBooks[newItemPosition]
-                return oldItem.globalPosition() == newItem.globalPosition() && oldItem.name == newItem.name
-            }
+      indicatorVisible = book.id == prefs.currentBookId.value()
+      currentPlayingIndicator.visible = indicatorVisible
 
-            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                val oldItem = books[oldItemPosition]
-                val newItem = newBooks[newItemPosition]
-                return oldItem.id == newItem.id
-            }
-        }, false) // no need to detect moves as the list is sorted
+      itemView.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.REGULAR) }
+      editBook.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.MENU) }
 
-        books.clear()
-        books.addAll(newBooks)
-
-        diffResult.dispatchUpdatesTo(this)
+      coverView.supportTransitionName = book.coverTransitionName
     }
 
-    fun changeBookCover(book: Book) {
-        val index = books.indexOfFirst { it.id == book.id }
-        if (index >= 0) {
-            notifyItemChanged(index)
-        }
+    private fun bindCover(book: Book) {
+      // (Cover)
+      val coverFile = book.coverFile()
+      val coverReplacement = CoverReplacement(book.name, c)
+
+      if (coverFile.exists() && coverFile.canRead()) {
+        Picasso.with(c).load(coverFile).placeholder(coverReplacement).into(coverView)
+      } else {
+        Picasso.with(c).cancelRequest(coverView)
+        // we have to set the replacement in onPreDraw, else the transition will fail.
+        coverView.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+          override fun onPreDraw(): Boolean {
+            coverView.viewTreeObserver.removeOnPreDrawListener(this)
+            coverView.setImageDrawable(coverReplacement)
+            return true
+          }
+        })
+      }
     }
+  }
 
-    override fun getItemId(position: Int): Long = books[position].id
-
-    fun getItem(position: Int): Book = books[position]
-
-    var displayMode: BookShelfController.DisplayMode = BookShelfController.DisplayMode.LIST
-        set(value) {
-            if (value != field) {
-                field = value
-                i { "displayMode changed to $field" }
-                notifyDataSetChanged()
-            }
-        }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-        when (viewType) {
-            1 -> return GridViewHolder(parent)
-            0 -> return ListViewHolder(parent)
-            else -> throw IllegalStateException("Illegal viewType=" + viewType)
-        }
-    }
-
-    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) = holder.bind(books[position])
-
-    override fun onBindViewHolder(holder: BaseViewHolder, position: Int, payloads: MutableList<Any>) = when {
-        payloads.isEmpty() -> onBindViewHolder(holder, position)
-        else -> holder.bind(books[position])
-    }
-
-    override fun getItemCount(): Int = books.size
-
-    override fun getItemViewType(position: Int): Int = if (displayMode == BookShelfController.DisplayMode.LIST) 0 else 1
-
-    inner class ListViewHolder(parent: ViewGroup) : BaseViewHolder(parent.layoutInflater().inflate(R.layout.book_shelf_list_layout, parent, false)) {
-
-        private val progressBar = find<ProgressBar>(R.id.progressBar)
-        private val leftTime: TextView = find(R.id.leftTime)
-        private val rightTime: TextView = find(R.id.rightTime)
-
-        init {
-            MDTintHelper.setTint(progressBar, parent.context.color(R.color.accent))
-        }
-
-        override fun bind(book: Book) {
-            super.bind(book)
-
-            val globalPosition = book.globalPosition()
-            val globalDuration = book.globalDuration
-            val progress = Math.round(100f * globalPosition.toFloat() / globalDuration.toFloat())
-
-            leftTime.text = formatTime(globalPosition)
-            progressBar.progress = progress
-            rightTime.text = formatTime(globalDuration)
-        }
-    }
-
-    /** ViewHolder for the grid **/
-    inner class GridViewHolder(parent: ViewGroup) : BaseViewHolder(parent.layoutInflater()
-            .inflate(R.layout.book_shelf_grid_layout, parent, false))
-
-
-    /** ViewHolder base class **/
-    abstract inner class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val coverView: ImageView
-        private val currentPlayingIndicator: ImageView
-        private val titleView: TextView
-        private val editBook: View
-        var indicatorVisible = false
-            private set
-
-
-        init {
-            coverView = itemView.find(R.id.coverView)
-            currentPlayingIndicator = itemView.find(R.id.currentPlayingIndicator)
-            titleView = itemView.find(R.id.title)
-            editBook = itemView.find(R.id.editBook)
-        }
-
-        /**
-         * Binds the ViewHolder to a book
-
-         * @param book The book to bind to
-         */
-        @CallSuper
-        open fun bind(book: Book) {
-
-            //setting text
-            val name = book.name
-            titleView.text = name
-
-            bindCover(book)
-
-            indicatorVisible = book.id == prefs.currentBookId.value()
-            currentPlayingIndicator.visible = indicatorVisible
-
-            itemView.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.REGULAR) }
-            editBook.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.MENU) }
-
-            coverView.supportTransitionName = book.coverTransitionName
-        }
-
-        private fun bindCover(book: Book) {
-            // (Cover)
-            val coverFile = book.coverFile()
-            val coverReplacement = CoverReplacement(book.name, c)
-
-            if (coverFile.exists() && coverFile.canRead()) {
-                Picasso.with(c).load(coverFile).placeholder(coverReplacement).into(coverView)
-            } else {
-                Picasso.with(c).cancelRequest(coverView)
-                // we have to set the replacement in onPreDraw, else the transition will fail.
-                coverView.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-                    override fun onPreDraw(): Boolean {
-                        coverView.viewTreeObserver.removeOnPreDrawListener(this)
-                        coverView.setImageDrawable(coverReplacement)
-                        return true
-                    }
-                })
-            }
-        }
-    }
-
-    enum class ClickType {
-        REGULAR,
-        MENU
-    }
+  enum class ClickType {
+    REGULAR,
+    MENU
+  }
 }

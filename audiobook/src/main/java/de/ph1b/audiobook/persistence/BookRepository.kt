@@ -20,66 +20,66 @@ import javax.inject.Singleton
 @Singleton class BookRepository
 @Inject constructor(private val storage: BookStorage) {
 
-    private val active: MutableList<Book> by lazy { storage.activeBooks().toMutableList() }
-    private val orphaned: MutableList<Book> by lazy { storage.orphanedBooks().toMutableList() }
+  private val active: MutableList<Book> by lazy { storage.activeBooks().toMutableList() }
+  private val orphaned: MutableList<Book> by lazy { storage.orphanedBooks().toMutableList() }
 
-    private val updated = PublishSubject.create<Book>()
+  private val updated = PublishSubject.create<Book>()
 
-    private val all: BehaviorSubject<List<Book>> by lazy { BehaviorSubject.createDefault<List<Book>>(active) }
+  private val all: BehaviorSubject<List<Book>> by lazy { BehaviorSubject.createDefault<List<Book>>(active) }
 
-    fun updateObservable(): Observable<Book> = updated
+  fun updateObservable(): Observable<Book> = updated
 
-    fun booksStream(): Observable<List<Book>> = all
+  fun booksStream(): Observable<List<Book>> = all
 
-    private fun sortBooksAndNotifySubject() {
-        active.sort()
-        all.onNext(active)
-    }
+  private fun sortBooksAndNotifySubject() {
+    active.sort()
+    all.onNext(active)
+  }
 
-    @Synchronized fun addBook(book: Book) {
-        v { "addBook=${book.name}" }
+  @Synchronized fun addBook(book: Book) {
+    v { "addBook=${book.name}" }
 
-        val bookWithId = storage.addBook(book)
-        active.add(bookWithId)
-        sortBooksAndNotifySubject()
-    }
+    val bookWithId = storage.addBook(book)
+    active.add(bookWithId)
+    sortBooksAndNotifySubject()
+  }
 
-    /** All active books. */
-    val activeBooks: List<Book>
-        get() = synchronized(this) { ArrayList(active) }
+  /** All active books. */
+  val activeBooks: List<Book>
+    get() = synchronized(this) { ArrayList(active) }
 
-    @Synchronized fun bookById(id: Long) = active.firstOrNull { it.id == id }
+  @Synchronized fun bookById(id: Long) = active.firstOrNull { it.id == id }
 
-    @Synchronized fun getOrphanedBooks(): List<Book> = ArrayList(orphaned)
+  @Synchronized fun getOrphanedBooks(): List<Book> = ArrayList(orphaned)
 
-    @Synchronized fun updateBook(book: Book, chaptersChanged: Boolean = false) {
-        v { "updateBook=${book.name} with time ${book.time}" }
+  @Synchronized fun updateBook(book: Book, chaptersChanged: Boolean = false) {
+    v { "updateBook=${book.name} with time ${book.time}" }
 
-        val index = active.indexOfFirst { it.id == book.id }
-        if (index != -1) {
-            active[index] = book
-            storage.updateBook(book, chaptersChanged)
-            updated.onNext(book)
-            sortBooksAndNotifySubject()
-        } else e { "update failed as there was no book" }
-    }
+    val index = active.indexOfFirst { it.id == book.id }
+    if (index != -1) {
+      active[index] = book
+      storage.updateBook(book, chaptersChanged)
+      updated.onNext(book)
+      sortBooksAndNotifySubject()
+    } else e { "update failed as there was no book" }
+  }
 
-    @Synchronized fun hideBook(toDelete: List<Book>) {
-        v { "hideBooks=${toDelete.size}" }
+  @Synchronized fun hideBook(toDelete: List<Book>) {
+    v { "hideBooks=${toDelete.size}" }
 
-        val idsToDelete = toDelete.map(Book::id)
-        active.removeAll { idsToDelete.contains(it.id) }
-        orphaned.addAll(toDelete)
-        sortBooksAndNotifySubject()
-    }
+    val idsToDelete = toDelete.map(Book::id)
+    active.removeAll { idsToDelete.contains(it.id) }
+    orphaned.addAll(toDelete)
+    sortBooksAndNotifySubject()
+  }
 
 
-    @Synchronized fun revealBook(book: Book) {
-        v { "Called revealBook=$book" }
+  @Synchronized fun revealBook(book: Book) {
+    v { "Called revealBook=$book" }
 
-        orphaned.removeAll { it.id == book.id }
-        storage.revealBook(book.id)
-        active.add(book)
-        sortBooksAndNotifySubject()
-    }
+    orphaned.removeAll { it.id == book.id }
+    storage.revealBook(book.id)
+    active.add(book)
+    sortBooksAndNotifySubject()
+  }
 }

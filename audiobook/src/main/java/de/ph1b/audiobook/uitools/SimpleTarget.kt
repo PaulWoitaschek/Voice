@@ -8,12 +8,12 @@ import com.squareup.picasso.Target
 
 abstract class SimpleTarget : Target {
 
-    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-    }
+  override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+  }
 
-    override fun onBitmapFailed(errorDrawable: Drawable?) {
-    }
+  override fun onBitmapFailed(errorDrawable: Drawable?) {
+  }
 
-    override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) {
-    }
+  override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) {
+  }
 }

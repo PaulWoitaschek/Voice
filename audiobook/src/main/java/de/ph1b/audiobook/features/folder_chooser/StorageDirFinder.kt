@@ -22,153 +22,153 @@ import javax.inject.Singleton
  */
 @Singleton class StorageDirFinder @Inject constructor(private val context: Context) {
 
-    /**
-     * Collects the storage dirs of the device.
-     *
-     * @return the list of storages.
-     */
-    @RequiresPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun storageDirs(): List<File> {
-        val dirSeparator = Pattern.compile("/")
+  /**
+   * Collects the storage dirs of the device.
+   *
+   * @return the list of storages.
+   */
+  @RequiresPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+  fun storageDirs(): List<File> {
+    val dirSeparator = Pattern.compile("/")
 
-        // Final set of paths
-        val rv: HashSet<String> = HashSet(5)
-        // Primary physical SD-CARD (not emulated)
-        val rawExternalStorage = System.getenv("EXTERNAL_STORAGE")
-        // All Secondary SD-CARDs (all exclude primary) separated by ":"
-        val rawSecondaryStorageStr = System.getenv("SECONDARY_STORAGE")
-        // Primary emulated SD-CARD
-        val rawEmulatedStorageTarget = System.getenv("EMULATED_STORAGE_TARGET")
+    // Final set of paths
+    val rv: HashSet<String> = HashSet(5)
+    // Primary physical SD-CARD (not emulated)
+    val rawExternalStorage = System.getenv("EXTERNAL_STORAGE")
+    // All Secondary SD-CARDs (all exclude primary) separated by ":"
+    val rawSecondaryStorageStr = System.getenv("SECONDARY_STORAGE")
+    // Primary emulated SD-CARD
+    val rawEmulatedStorageTarget = System.getenv("EMULATED_STORAGE_TARGET")
 
-        if (TextUtils.isEmpty(rawEmulatedStorageTarget)) {
-            // Device has physical external storage; use plain paths.
-            if (TextUtils.isEmpty(rawExternalStorage)) {
-                // EXTERNAL_STORAGE undefined; falling back to default.
-            } else {
-                rv.add(rawExternalStorage)
-            }
-        } else {
-            // Device has emulated storage; external storage paths should have
-            // userId burned into them.
-            val path = Environment.getExternalStorageDirectory().absolutePath
-            val folders = dirSeparator.split(path)
-            val lastFolder = folders[folders.size - 1]
-            var isDigit = false
-            try {
-                Integer.valueOf(lastFolder)
-                isDigit = true
-            } catch (ignored: NumberFormatException) {
-            }
-            val rawUserId = if (isDigit) lastFolder else ""
-            // /storage/emulated/0[1,2,...]
-            if (TextUtils.isEmpty(rawUserId)) {
-                rv.add(rawEmulatedStorageTarget)
-            } else {
-                rv.add(rawEmulatedStorageTarget + File.separator + rawUserId)
-            }
-        }
-        // Add all secondary storage
-        if (!TextUtils.isEmpty(rawSecondaryStorageStr)) {
-            // All Secondary SD-CARDs splitted into array
-            val rawSecondaryStorage = rawSecondaryStorageStr.split(File.pathSeparator)
-            rv.addAll(rawSecondaryStorage)
-        }
-        rv.add(Environment.getExternalStorageDirectory().absolutePath)
-        rv.add("/storage/extSdCard")
-        rv.add("/storage/emulated/0")
-        rv.add("/storage/sdcard1")
-        rv.add("/storage/external_SD")
-        rv.add("/storage/ext_sd")
-        rv.add("/storage/sdcard0")
-        rv.add("/mnt/external_sd")
+    if (TextUtils.isEmpty(rawEmulatedStorageTarget)) {
+      // Device has physical external storage; use plain paths.
+      if (TextUtils.isEmpty(rawExternalStorage)) {
+        // EXTERNAL_STORAGE undefined; falling back to default.
+      } else {
+        rv.add(rawExternalStorage)
+      }
+    } else {
+      // Device has emulated storage; external storage paths should have
+      // userId burned into them.
+      val path = Environment.getExternalStorageDirectory().absolutePath
+      val folders = dirSeparator.split(path)
+      val lastFolder = folders[folders.size - 1]
+      var isDigit = false
+      try {
+        Integer.valueOf(lastFolder)
+        isDigit = true
+      } catch (ignored: NumberFormatException) {
+      }
+      val rawUserId = if (isDigit) lastFolder else ""
+      // /storage/emulated/0[1,2,...]
+      if (TextUtils.isEmpty(rawUserId)) {
+        rv.add(rawEmulatedStorageTarget)
+      } else {
+        rv.add(rawEmulatedStorageTarget + File.separator + rawUserId)
+      }
+    }
+    // Add all secondary storage
+    if (!TextUtils.isEmpty(rawSecondaryStorageStr)) {
+      // All Secondary SD-CARDs splitted into array
+      val rawSecondaryStorage = rawSecondaryStorageStr.split(File.pathSeparator)
+      rv.addAll(rawSecondaryStorage)
+    }
+    rv.add(Environment.getExternalStorageDirectory().absolutePath)
+    rv.add("/storage/extSdCard")
+    rv.add("/storage/emulated/0")
+    rv.add("/storage/sdcard1")
+    rv.add("/storage/external_SD")
+    rv.add("/storage/ext_sd")
+    rv.add("/storage/sdcard0")
+    rv.add("/mnt/external_sd")
 
-        // this is a workaround for marshmallow as we can't know the paths of the sd cards any more.
-        // if one of the files in the fallback dir has contents we add it to the list.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            rv.add(FolderChooserPresenter.MARSHMALLOW_SD_FALLBACK)
-        }
-        rv.addAll(storageDirs2())
+    // this is a workaround for marshmallow as we can't know the paths of the sd cards any more.
+    // if one of the files in the fallback dir has contents we add it to the list.
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      rv.add(FolderChooserPresenter.MARSHMALLOW_SD_FALLBACK)
+    }
+    rv.addAll(storageDirs2())
 
-        // get the non empty files
-        val nonEmptyFiles = rv.map(::File).filter { it.length() > 0 }
-        // make sure they are unique by putting them with their canonical path as key
-        val map = HashMap<String, File>()
-        nonEmptyFiles.forEach {
-            map.put(it.canonicalPath, it)
+    // get the non empty files
+    val nonEmptyFiles = rv.map(::File).filter { it.length() > 0 }
+    // make sure they are unique by putting them with their canonical path as key
+    val map = HashMap<String, File>()
+    nonEmptyFiles.forEach {
+      map.put(it.canonicalPath, it)
+    }
+    // sort them
+    return map.values.sortedWith(NaturalOrderComparator.fileComparator)
+  }
+
+  // solution from http://stackoverflow.com/a/40205116
+  private fun storageDirs2(): List<String> {
+
+    val results = ArrayList<String>()
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { //Method 1 for KitKat & above
+      val externalDirs = context.getExternalFilesDirs(null)
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        for (file in externalDirs) {
+          val path = file.path.split("/Android")[0]
+          if (Environment.isExternalStorageRemovable(file)) {
+            results.add(path)
+          }
         }
-        // sort them
-        return map.values.sortedWith(NaturalOrderComparator.fileComparator)
+      } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        for (file in externalDirs) {
+          val path = file.path.split("/Android")[0]
+          if (Environment.MEDIA_MOUNTED == EnvironmentCompat.getStorageState(file)) {
+            results.add(path)
+          }
+        }
+      }
     }
 
-    // solution from http://stackoverflow.com/a/40205116
-    private fun storageDirs2(): List<String> {
-
-        val results = ArrayList<String>()
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { //Method 1 for KitKat & above
-            val externalDirs = context.getExternalFilesDirs(null)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                for (file in externalDirs) {
-                    val path = file.path.split("/Android")[0]
-                    if (Environment.isExternalStorageRemovable(file)) {
-                        results.add(path)
-                    }
-                }
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                for (file in externalDirs) {
-                    val path = file.path.split("/Android")[0]
-                    if (Environment.MEDIA_MOUNTED == EnvironmentCompat.getStorageState(file)) {
-                        results.add(path)
-                    }
-                }
-            }
+    if (results.isEmpty()) { //Method 2 for all versions
+      // better variation of: http://stackoverflow.com/a/40123073/5002496
+      var output = ""
+      try {
+        val process = ProcessBuilder().command("mount | grep /dev/block/vold")
+          .redirectErrorStream(true).start()
+        process.waitFor()
+        val inputStream = process.inputStream
+        val buffer = ByteArray(1024)
+        while (inputStream.read(buffer) !== -1) {
+          output += String(buffer)
         }
+        inputStream.close()
+      } catch (e: Exception) {
+        e.printStackTrace()
+      }
 
-        if (results.isEmpty()) { //Method 2 for all versions
-            // better variation of: http://stackoverflow.com/a/40123073/5002496
-            var output = ""
-            try {
-                val process = ProcessBuilder().command("mount | grep /dev/block/vold")
-                        .redirectErrorStream(true).start()
-                process.waitFor()
-                val inputStream = process.inputStream
-                val buffer = ByteArray(1024)
-                while (inputStream.read(buffer) !== -1) {
-                    output += String(buffer)
-                }
-                inputStream.close()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-
-            if (!output.trim { it <= ' ' }.isEmpty()) {
-                val devicePoints = output.split("\n".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()
-                for (voldPoint in devicePoints) {
-                    results.add(voldPoint.split(" ".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()[2])
-                }
-            }
+      if (!output.trim { it <= ' ' }.isEmpty()) {
+        val devicePoints = output.split("\n".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()
+        for (voldPoint in devicePoints) {
+          results.add(voldPoint.split(" ".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()[2])
         }
-
-        //Below few lines is to remove paths which may not be external memory card, like OTG (feel free to comment them out)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            var i = 0
-            while (i < results.size) {
-                if (!results.get(i).toLowerCase().matches(".*[0-9a-f]{4}[-][0-9a-f]{4}".toRegex())) {
-                    results.removeAt(i--)
-                }
-                i++
-            }
-        } else {
-            var i = 0
-            while (i < results.size) {
-                if (!results.get(i).toLowerCase().contains("ext") && !results.get(i).toLowerCase().contains("sdcard")) {
-                    results.removeAt(i--)
-                }
-                i++
-            }
-        }
-
-        return results
+      }
     }
+
+    //Below few lines is to remove paths which may not be external memory card, like OTG (feel free to comment them out)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      var i = 0
+      while (i < results.size) {
+        if (!results.get(i).toLowerCase().matches(".*[0-9a-f]{4}[-][0-9a-f]{4}".toRegex())) {
+          results.removeAt(i--)
+        }
+        i++
+      }
+    } else {
+      var i = 0
+      while (i < results.size) {
+        if (!results.get(i).toLowerCase().contains("ext") && !results.get(i).toLowerCase().contains("sdcard")) {
+          results.removeAt(i--)
+        }
+        i++
+      }
+    }
+
+    return results
+  }
 
 }

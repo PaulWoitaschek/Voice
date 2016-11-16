@@ -33,7 +33,7 @@ import dagger.Lazy as DaggerLazy
  */
 class BookShelfController : MvpBaseController<BookShelfController, BookShelfPresenter>() {
 
-    override val presenter= App.component().bookShelfPresenter!!
+    override val presenter = App.component().bookShelfPresenter!!
     private val COVER_FROM_GALLERY = 1
 
     override fun provideView() = this
@@ -79,9 +79,9 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
                 invokeBookSelectionCallback(book.id)
             } else {
                 EditBookBottomSheet.newInstance(book)
-                        .show(fragmentManager, "editBottomSheet")
+                  .show(fragmentManager, "editBottomSheet")
             }
-        }
+    }
         recyclerView.adapter = adapter
         // without this the item would blink on every change
         val anim = recyclerView.itemAnimator as SimpleItemAnimator
@@ -94,7 +94,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
         return view
     }
 
-    override fun onActivityResumed(activity: Activity?) {
+    override fun onActivityResumed(activity: Activity) {
         super.onActivityResumed(activity)
 
         pendingTransaction?.commit()
@@ -104,7 +104,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
     override fun onAttach(view: View) {
         // init ActionBar
         setupActionbar(toolbar = toolbar,
-                title = getString(R.string.app_name))
+          title = getString(R.string.app_name))
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -135,7 +135,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
                 true
             }
             else -> super.onOptionsItemSelected(item)
-        }
+    }
     }
 
     fun changeCover(book: Book) {
@@ -160,18 +160,18 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
                     }
 
                     pendingTransaction = fragmentManager.beginTransaction()
-                            .add(EditCoverDialogFragment.newInstance(book, imageUri),
-                                    EditCoverDialogFragment.TAG)
-                }
+                      .add(EditCoverDialogFragment.newInstance(book, imageUri),
+                        EditCoverDialogFragment.TAG)
+        }
             }
             else -> super.onActivityResult(requestCode, resultCode, data)
-        }
+    }
     }
 
     // Returns the amount of columns the main-grid will need
     private fun amountOfColumns(): Int {
         val r = recyclerView.resources
-        val displayMetrics = resources.displayMetrics
+        val displayMetrics = r.displayMetrics
         val widthPx = displayMetrics.widthPixels.toFloat()
         val desiredPx = r.getDimensionPixelSize(R.dimen.desired_medium_cover).toFloat()
         val columns = Math.round(widthPx / desiredPx)
@@ -186,7 +186,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
         } else {
             recyclerView.addItemDecoration(listDecoration, 0)
             recyclerView.layoutManager = linearLayoutManager
-        }
+    }
         adapter.displayMode = defaultDisplayMode
         activity.invalidateOptionsMenu()
     }
@@ -203,8 +203,8 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
                 transition.transitionName = transitionName
             }
             transaction.pushChangeHandler(transition)
-                    .popChangeHandler(transition)
-        }
+              .popChangeHandler(transition)
+    }
         router.pushController(transaction)
     }
 
@@ -225,7 +225,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
             if (itemId == currentBook?.id || (vh != null && vh.indicatorVisible)) {
                 adapter.notifyItemChanged(i)
             }
-        }
+    }
 
         fab.visible = currentBook != null
     }
@@ -237,7 +237,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
             playPauseDrawable.transformToPause(!firstPlayStateUpdate)
         } else {
             playPauseDrawable.transformToPlay(!firstPlayStateUpdate)
-        }
+    }
         firstPlayStateUpdate = false
     }
 
@@ -248,7 +248,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
         if (noFolderWarningIsShowing.not()) {
             val warning = NoFolderWarningDialogFragment()
             warning.show(fragmentManager, FM_NO_FOLDER_WARNING)
-        }
+    }
     }
 
     fun showLoading(loading: Boolean) {

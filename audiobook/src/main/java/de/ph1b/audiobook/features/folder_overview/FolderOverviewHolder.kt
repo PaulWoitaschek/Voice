@@ -10,26 +10,26 @@ import de.ph1b.audiobook.misc.find
 
 class FolderOverviewHolder(itemView: View, itemClicked: (position: Int) -> Unit) : RecyclerView.ViewHolder(itemView) {
 
-    private var remove: View = find(R.id.remove)
-    private val textView: TextView = find(R.id.textView)
-    private val icon: ImageView = find(R.id.icon)
+  private var remove: View = find(R.id.remove)
+  private val textView: TextView = find(R.id.textView)
+  private val icon: ImageView = find(R.id.icon)
 
-    init {
-        remove.setOnClickListener { itemClicked(adapterPosition) }
-    }
+  init {
+    remove.setOnClickListener { itemClicked(adapterPosition) }
+  }
 
-    fun bind(model: FolderModel) {
-        // set text
-        textView.text = model.folder
+  fun bind(model: FolderModel) {
+    // set text
+    textView.text = model.folder
 
-        // set correct image
-        val drawableId = if (model.isCollection) R.drawable.folder_multiple else R.drawable.ic_folder
-        val drawable = itemView.context.drawable(drawableId)
-        icon.setImageDrawable(drawable)
+    // set correct image
+    val drawableId = if (model.isCollection) R.drawable.folder_multiple else R.drawable.ic_folder
+    val drawable = itemView.context.drawable(drawableId)
+    icon.setImageDrawable(drawable)
 
-        // set content description
-        val contentDescriptionId = if (model.isCollection) R.string.folder_add_collection else R.string.folder_add_single_book
-        val contentDescription = itemView.context.getString(contentDescriptionId)
-        icon.contentDescription = contentDescription
-    }
+    // set content description
+    val contentDescriptionId = if (model.isCollection) R.string.folder_add_collection else R.string.folder_add_single_book
+    val contentDescription = itemView.context.getString(contentDescriptionId)
+    icon.contentDescription = contentDescription
+  }
 }

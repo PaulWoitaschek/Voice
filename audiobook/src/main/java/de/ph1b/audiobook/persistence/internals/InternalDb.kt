@@ -16,28 +16,28 @@ import javax.inject.Singleton
 @Singleton class InternalDb
 @Inject constructor(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
-    override fun onCreate(db: SQLiteDatabase) {
-        BookTable.onCreate(db)
-        ChapterTable.onCreate(db)
-        BookmarkTable.onCreate(db)
-    }
+  override fun onCreate(db: SQLiteDatabase) {
+    BookTable.onCreate(db)
+    ChapterTable.onCreate(db)
+    BookmarkTable.onCreate(db)
+  }
 
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        try {
-            val upgradeHelper = DataBaseUpgradeHelper(db)
-            upgradeHelper.upgrade(oldVersion)
-        } catch (ex: InvalidPropertiesFormatException) {
-            e(ex) { "Error at upgrade" }
-            BookTable.dropTableIfExists(db)
-            ChapterTable.dropTableIfExists(db)
-            BookmarkTable.dropTableIfExists(db)
-            onCreate(db)
-        }
+  override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+    try {
+      val upgradeHelper = DataBaseUpgradeHelper(db)
+      upgradeHelper.upgrade(oldVersion)
+    } catch (ex: InvalidPropertiesFormatException) {
+      e(ex) { "Error at upgrade" }
+      BookTable.dropTableIfExists(db)
+      ChapterTable.dropTableIfExists(db)
+      BookmarkTable.dropTableIfExists(db)
+      onCreate(db)
     }
+  }
 
-    companion object {
+  companion object {
 
-        private val DATABASE_VERSION = 33
-        private val DATABASE_NAME = "autoBookDB"
-    }
+    private val DATABASE_VERSION = 33
+    private val DATABASE_NAME = "autoBookDB"
+  }
 }

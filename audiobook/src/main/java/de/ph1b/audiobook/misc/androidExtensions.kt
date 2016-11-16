@@ -24,51 +24,51 @@ fun Context.layoutInflater(): LayoutInflater = LayoutInflater.from(this)
 fun Context.drawable(@DrawableRes id: Int): Drawable = ContextCompat.getDrawable(this, id)
 
 @ColorInt fun Context.color(@ColorRes id: Int): Int {
-    return ContextCompat.getColor(this, id)
+  return ContextCompat.getColor(this, id)
 }
 
 var View.supportTransitionName: String?
-    get() = ViewCompat.getTransitionName(this)
-    set(value) = ViewCompat.setTransitionName(this, value)
+  get() = ViewCompat.getTransitionName(this)
+  set(value) = ViewCompat.setTransitionName(this, value)
 
 fun View.layoutInflater() = context.layoutInflater()
 
 fun MaterialDialog.Builder.positiveClicked(listener: () -> Unit): MaterialDialog.Builder {
-    onPositive { dialog, which -> listener() }
-    return this
+  onPositive { dialog, which -> listener() }
+  return this
 }
 
 /** same as get() but force cast to non null **/
 fun <T> Preference<T>.value() = get()!!
 
 fun Context.dpToPx(dp: Int) = Math.round(TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), resources.displayMetrics))
+  TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), resources.displayMetrics))
 
 fun Drawable.tinted(@ColorInt color: Int): Drawable {
-    val wrapped = DrawableCompat.wrap(this)
-    DrawableCompat.setTint(wrapped, color)
-    return wrapped
+  val wrapped = DrawableCompat.wrap(this)
+  DrawableCompat.setTint(wrapped, color)
+  return wrapped
 }
 
 fun Controller.setupActionbar(toolbar: Toolbar,
                               @DrawableRes upIndicator: Int? = null,
                               title: String? = null) =
-        (activity as AppCompatActivity).setupActionbar(
-                toolbar = toolbar,
-                upIndicator = upIndicator,
-                title = title)
+  (activity as AppCompatActivity).setupActionbar(
+    toolbar = toolbar,
+    upIndicator = upIndicator,
+    title = title)
 
 fun AppCompatActivity.setupActionbar(toolbar: Toolbar,
                                      @DrawableRes upIndicator: Int? = null,
                                      title: String? = null) {
-    setSupportActionBar(toolbar)
-    val actionBar = supportActionBar!!
+  setSupportActionBar(toolbar)
+  val actionBar = supportActionBar!!
 
-    if (upIndicator != null) actionBar.setHomeAsUpIndicator(upIndicator)
-    actionBar.setDisplayHomeAsUpEnabled(upIndicator != null)
+  if (upIndicator != null) actionBar.setHomeAsUpIndicator(upIndicator)
+  actionBar.setDisplayHomeAsUpEnabled(upIndicator != null)
 
-    if (title != null) actionBar.title = title
-    actionBar.setDisplayShowTitleEnabled(title != null)
+  if (title != null) actionBar.title = title
+  actionBar.setDisplayShowTitleEnabled(title != null)
 }
 
 /**
@@ -76,6 +76,6 @@ fun AppCompatActivity.setupActionbar(toolbar: Toolbar,
  * an empty list instead.
  */
 fun File.listFilesSafely(filter: FileFilter? = null): List<File> {
-    val array: Array<File>? = if (filter == null) listFiles() else listFiles(filter)
-    return array?.toList() ?: emptyList()
+  val array: Array<File>? = if (filter == null) listFiles() else listFiles(filter)
+  return array?.toList() ?: emptyList()
 }

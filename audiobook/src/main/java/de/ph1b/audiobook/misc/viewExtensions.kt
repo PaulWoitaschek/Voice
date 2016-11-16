@@ -12,46 +12,46 @@ import io.reactivex.Observable
 
 
 fun SeekBar.onProgressChanged(initialNotification: Boolean = false, progressChanged: (Int) -> Unit) {
-    val listener = object : SeekBar.OnSeekBarChangeListener {
-        override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-            progressChanged(progress)
-        }
-
-        override fun onStartTrackingTouch(seekBar: SeekBar) {
-        }
-
-        override fun onStopTrackingTouch(seekBar: SeekBar) {
-        }
+  val listener = object : SeekBar.OnSeekBarChangeListener {
+    override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+      progressChanged(progress)
     }
 
-    setOnSeekBarChangeListener(listener)
-    if (initialNotification) listener.onProgressChanged(this, progress, false)
+    override fun onStartTrackingTouch(seekBar: SeekBar) {
+    }
+
+    override fun onStopTrackingTouch(seekBar: SeekBar) {
+    }
+  }
+
+  setOnSeekBarChangeListener(listener)
+  if (initialNotification) listener.onProgressChanged(this, progress, false)
 }
 
 fun SeekBar.progressChangedStream(initialNotification: Boolean = false): Observable<Int> = Observable.create {
-    onProgressChanged(initialNotification) { position -> it.onNext(position) }
-    it.setCancellable { setOnSeekBarChangeListener(null) }
+  onProgressChanged(initialNotification) { position -> it.onNext(position) }
+  it.setCancellable { setOnSeekBarChangeListener(null) }
 }
 
 fun <T : View> T.clicks(): Observable<T> = Observable.create {
-    setOnClickListener { v -> it.onNext(this) }
-    it.setCancellable { setOnClickListener(null) }
+  setOnClickListener { v -> it.onNext(this) }
+  it.setCancellable { setOnClickListener(null) }
 }
 
 fun <T : Adapter> AdapterView<T>.itemSelections(listener: (Int) -> Unit) {
-    onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-        override fun onNothingSelected(parent: AdapterView<*>?) {
-        }
-
-        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-            listener(position)
-        }
+  onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+    override fun onNothingSelected(parent: AdapterView<*>?) {
     }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+      listener(position)
+    }
+  }
 }
 
 fun <T : Adapter> AdapterView<T>.itemSelectionStream(): Observable<Int> = Observable.create {
-    itemSelections { position -> it.onNext(position) }
-    it.setCancellable { onItemSelectedListener = null }
+  itemSelections { position -> it.onNext(position) }
+  it.setCancellable { onItemSelectedListener = null }
 }
 
 fun TextView.leftCompoundDrawable(): Drawable? = compoundDrawables[0]

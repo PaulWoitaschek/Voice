@@ -14,27 +14,27 @@ import io.reactivex.Observable
  */
 object HeadsetPlugReceiver {
 
-    private val filter = IntentFilter(Intent.ACTION_HEADSET_PLUG)
-    private val PLUGGED = 1
-    private val UNPLUGGED = 0
+  private val filter = IntentFilter(Intent.ACTION_HEADSET_PLUG)
+  private val PLUGGED = 1
+  private val UNPLUGGED = 0
 
-    fun events(c: Context): Observable<HeadsetState> = RxBroadcast.register(c, filter)
-            .map {
-                i { "onReceive with intent=$it" }
-                val intState = it?.getIntExtra("state", UNPLUGGED)
-                when (it?.getIntExtra("state", UNPLUGGED)) {
-                    UNPLUGGED -> HeadsetState.UNPLUGGED
-                    PLUGGED -> HeadsetState.PLUGGED
-                    else -> {
-                        i { "Unknown headsetState $intState" }
-                        HeadsetState.UNKNOWN
-                    }
-                }
-            }
-
-    enum class HeadsetState {
-        PLUGGED,
-        UNPLUGGED,
-        UNKNOWN
+  fun events(c: Context): Observable<HeadsetState> = RxBroadcast.register(c, filter)
+    .map {
+      i { "onReceive with intent=$it" }
+      val intState = it?.getIntExtra("state", UNPLUGGED)
+      when (it?.getIntExtra("state", UNPLUGGED)) {
+        UNPLUGGED -> HeadsetState.UNPLUGGED
+        PLUGGED -> HeadsetState.PLUGGED
+        else -> {
+          i { "Unknown headsetState $intState" }
+          HeadsetState.UNKNOWN
+        }
+      }
     }
+
+  enum class HeadsetState {
+    PLUGGED,
+    UNPLUGGED,
+    UNKNOWN
+  }
 }

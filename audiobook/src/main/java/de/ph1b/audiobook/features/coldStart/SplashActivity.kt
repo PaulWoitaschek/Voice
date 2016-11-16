@@ -12,11 +12,11 @@ import de.ph1b.audiobook.features.BookActivity
  */
 class SplashActivity : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-        val intent = Intent(this, BookActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
+    val intent = Intent(this, BookActivity::class.java)
+    startActivity(intent)
+    finish()
+  }
 }

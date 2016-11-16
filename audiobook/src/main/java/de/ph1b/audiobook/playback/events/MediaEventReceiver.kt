@@ -12,11 +12,11 @@ import de.ph1b.audiobook.playback.PlaybackService
  * @author Paul Woitaschek
  */
 class MediaEventReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent?) {
-        if (context != null && intent != null) {
-            context.startService(Intent(intent).apply {
-                component = ComponentName(context, PlaybackService::class.java)
-            })
-        }
+  override fun onReceive(context: Context?, intent: Intent?) {
+    if (context != null && intent != null) {
+      context.startService(Intent(intent).apply {
+        component = ComponentName(context, PlaybackService::class.java)
+      })
     }
+  }
 }

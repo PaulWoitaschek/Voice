@@ -26,49 +26,49 @@ import java.util.*
 class FolderChooserAdapter(private val c: Context,
                            private val mode: FolderChooserActivity.OperationMode,
                            private val listener: (selected: File) -> Unit)
-: RecyclerView.Adapter<FolderChooserAdapter.Holder>() {
+  : RecyclerView.Adapter<FolderChooserAdapter.Holder>() {
 
-    override fun onBindViewHolder(holder: Holder, position: Int) = holder.bind(data[position])
+  override fun onBindViewHolder(holder: Holder, position: Int) = holder.bind(data[position])
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        val view = parent.layoutInflater().inflate(R.layout.activity_folder_chooser_adapter_row_layout, parent, false)
-        return Holder(view)
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
+    val view = parent.layoutInflater().inflate(R.layout.activity_folder_chooser_adapter_row_layout, parent, false)
+    return Holder(view)
+  }
+
+  override fun getItemCount() = data.size
+
+  private val data = ArrayList<File>()
+
+  fun newData(newData: List<File>) {
+    data.clear()
+    data.addAll(newData)
+    notifyDataSetChanged()
+  }
+
+  inner class Holder(root: View) : RecyclerView.ViewHolder(root) {
+
+    private val textView: TextView = find(R.id.text)
+    private val image: ImageView = find(R.id.icon)
+
+    init {
+      root.setOnClickListener {
+        listener.invoke(data[adapterPosition])
+      }
     }
 
-    override fun getItemCount() = data.size
+    fun bind(selectedFile: File) {
+      val isDirectory = selectedFile.isDirectory
 
-    private val data = ArrayList<File>()
+      textView.text = selectedFile.name
 
-    fun newData(newData: List<File>) {
-        data.clear()
-        data.addAll(newData)
-        notifyDataSetChanged()
+      // if its not a collection its also fine to pick a file
+      if (mode == FolderChooserActivity.OperationMode.COLLECTION_BOOK) {
+        textView.isEnabled = isDirectory
+      }
+
+      val icon = c.drawable(if (isDirectory) R.drawable.ic_folder else R.drawable.ic_album)
+      image.setImageDrawable(icon)
+      image.contentDescription = c.getString(if (isDirectory) R.string.content_is_folder else R.string.content_is_file)
     }
-
-    inner class Holder(root: View) : RecyclerView.ViewHolder(root) {
-
-        private val textView: TextView = find(R.id.text)
-        private val image: ImageView = find(R.id.icon)
-
-        init {
-            root.setOnClickListener {
-                listener.invoke(data[adapterPosition])
-            }
-        }
-
-        fun bind(selectedFile: File) {
-            val isDirectory = selectedFile.isDirectory
-
-            textView.text = selectedFile.name
-
-            // if its not a collection its also fine to pick a file
-            if (mode == FolderChooserActivity.OperationMode.COLLECTION_BOOK) {
-                textView.isEnabled = isDirectory
-            }
-
-            val icon = c.drawable(if (isDirectory) R.drawable.ic_folder else R.drawable.ic_album)
-            image.setImageDrawable(icon)
-            image.contentDescription = c.getString(if (isDirectory) R.string.content_is_folder else R.string.content_is_file)
-        }
-    }
+  }
 }

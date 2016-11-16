@@ -10,11 +10,11 @@ import java.io.File
  */
 data class Chapter(val file: File, val name: String, val duration: Int) : Comparable<Chapter> {
 
-    init {
-        check(name.isNotEmpty())
-    }
+  init {
+    check(name.isNotEmpty())
+  }
 
-    override fun compareTo(other: Chapter): Int {
-        return NaturalOrderComparator.fileComparator.compare(file, other.file)
-    }
+  override fun compareTo(other: Chapter): Int {
+    return NaturalOrderComparator.fileComparator.compare(file, other.file)
+  }
 }

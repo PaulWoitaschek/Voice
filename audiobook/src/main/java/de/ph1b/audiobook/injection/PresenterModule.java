@@ -16,9 +16,9 @@ import de.ph1b.audiobook.playback.PlayerController;
  */
 @Module public class PresenterModule {
 
-   @Provides static BookShelfPresenter provideBookShelfPresenter(
-         BookRepository bookRepository, BookAdder bookAdder, PrefsManager prefsManager,
-         PlayStateManager playStateManager, PlayerController mediaPlayer) {
-      return new BookShelfPresenter(bookRepository, bookAdder, prefsManager, playStateManager, mediaPlayer);
-   }
+  @Provides static BookShelfPresenter provideBookShelfPresenter(
+    BookRepository bookRepository, BookAdder bookAdder, PrefsManager prefsManager,
+    PlayStateManager playStateManager, PlayerController mediaPlayer) {
+    return new BookShelfPresenter(bookRepository, bookAdder, prefsManager, playStateManager, mediaPlayer);
+  }
 }

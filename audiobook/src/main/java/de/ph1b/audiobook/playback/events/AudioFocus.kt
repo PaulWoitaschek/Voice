@@ -6,9 +6,9 @@ package de.ph1b.audiobook.playback.events
  * @author Paul Woitaschek
  */
 enum class AudioFocus {
-    GAIN,
-    LOSS,
-    LOSS_TRANSIENT_CAN_DUCK,
-    LOSS_TRANSIENT,
-    LOSS_INCOMING_CALL
+  GAIN,
+  LOSS,
+  LOSS_TRANSIENT_CAN_DUCK,
+  LOSS_TRANSIENT,
+  LOSS_INCOMING_CALL
 }

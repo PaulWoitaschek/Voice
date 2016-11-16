@@ -12,45 +12,45 @@ import android.media.MediaPlayer as AndroidMediaPlayer
  */
 class AndroidPlayer(private val context: Context) : Player() {
 
-    private val player = AndroidMediaPlayer()
+  private val player = AndroidMediaPlayer()
 
-    init {
-        player.setOnErrorListener { mediaPlayer, i, j ->
-            errorSubject.onNext(Unit)
-            false
-        }
-        player.audioSessionId = Player.AUDIO_SESSION_ID
-
-        player.setOnCompletionListener { completionSubject.onNext(Unit) }
-        player.setOnPreparedListener { preparedSubject.onNext(Unit) }
+  init {
+    player.setOnErrorListener { mediaPlayer, i, j ->
+      errorSubject.onNext(Unit)
+      false
     }
+    player.audioSessionId = Player.AUDIO_SESSION_ID
 
-    override fun setVolume(volume: Float) = player.setVolume(volume, volume)
+    player.setOnCompletionListener { completionSubject.onNext(Unit) }
+    player.setOnPreparedListener { preparedSubject.onNext(Unit) }
+  }
 
-    override fun seekTo(to: Int) = player.seekTo(to)
+  override fun setVolume(volume: Float) = player.setVolume(volume, volume)
 
-    override fun isPlaying() = player.isPlaying
+  override fun seekTo(to: Int) = player.seekTo(to)
 
-    override fun start() = player.start()
+  override fun isPlaying() = player.isPlaying
 
-    override fun pause() = player.pause()
+  override fun start() = player.start()
 
-    override fun setWakeMode(mode: Int) = player.setWakeMode(context, mode)
+  override fun pause() = player.pause()
 
-    override val duration: Int
-        get() = player.duration
+  override fun setWakeMode(mode: Int) = player.setWakeMode(context, mode)
 
-    override var playbackSpeed: Float = 1F
+  override val duration: Int
+    get() = player.duration
 
-    override fun prepare(file: File) {
-        player.setDataSource(file.absolutePath)
-        player.prepare()
-    }
+  override var playbackSpeed: Float = 1F
 
-    override fun reset() = player.reset()
+  override fun prepare(file: File) {
+    player.setDataSource(file.absolutePath)
+    player.prepare()
+  }
 
-    override fun setAudioStreamType(streamType: Int) = player.setAudioStreamType(streamType)
+  override fun reset() = player.reset()
 
-    override val currentPosition: Int
-        get() = player.currentPosition
+  override fun setAudioStreamType(streamType: Int) = player.setAudioStreamType(streamType)
+
+  override val currentPosition: Int
+    get() = player.currentPosition
 }

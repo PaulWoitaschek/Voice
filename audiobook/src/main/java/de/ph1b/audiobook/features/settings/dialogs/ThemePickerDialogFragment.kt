@@ -20,35 +20,35 @@ import javax.inject.Inject
  */
 class ThemePickerDialogFragment : DialogFragment() {
 
-    @Inject lateinit var prefsManager: PrefsManager
+  @Inject lateinit var prefsManager: PrefsManager
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        App.component().inject(this)
+  override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    App.component().inject(this)
 
-        val oldTheme = prefsManager.theme.get()!!
-        val existingThemes = ThemeUtil.Theme.values()
-        val names = existingThemes.map { getString(it.nameId) }
+    val oldTheme = prefsManager.theme.get()!!
+    val existingThemes = ThemeUtil.Theme.values()
+    val names = existingThemes.map { getString(it.nameId) }
 
-        return MaterialDialog.Builder(context)
-                .items(*names.toTypedArray())
-                .itemsCallbackSingleChoice(existingThemes.indexOf(oldTheme)) { materialDialog, view, i, charSequence ->
-                    val newTheme = existingThemes[i]
-                    prefsManager.theme.set(newTheme)
-                    AppCompatDelegate.setDefaultNightMode(newTheme.nightMode)
+    return MaterialDialog.Builder(context)
+      .items(*names.toTypedArray())
+      .itemsCallbackSingleChoice(existingThemes.indexOf(oldTheme)) { materialDialog, view, i, charSequence ->
+        val newTheme = existingThemes[i]
+        prefsManager.theme.set(newTheme)
+        AppCompatDelegate.setDefaultNightMode(newTheme.nightMode)
 
-                    // use post so the dialog can close correctly
-                    Handler().post {
-                        (activity as AppCompatActivity).delegate.applyDayNight()
-                    }
-                    true
-                }
-                .positiveText(R.string.dialog_confirm)
-                .negativeText(R.string.dialog_cancel)
-                .title(R.string.pref_theme_title)
-                .build()
-    }
+        // use post so the dialog can close correctly
+        Handler().post {
+          (activity as AppCompatActivity).delegate.applyDayNight()
+        }
+        true
+      }
+      .positiveText(R.string.dialog_confirm)
+      .negativeText(R.string.dialog_cancel)
+      .title(R.string.pref_theme_title)
+      .build()
+  }
 
-    companion object {
-        val TAG: String = ThemePickerDialogFragment::class.java.simpleName
-    }
+  companion object {
+    val TAG: String = ThemePickerDialogFragment::class.java.simpleName
+  }
 }

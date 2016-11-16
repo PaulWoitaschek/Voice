@@ -38,282 +38,282 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class WidgetUpdateService : Service() {
-    private val executor = ThreadPoolExecutor(
-            1, 1, // single thread
-            5, TimeUnit.SECONDS,
-            LinkedBlockingQueue<Runnable>(2), // queue capacity
-            ThreadPoolExecutor.DiscardOldestPolicy())
-    private val disposables = CompositeDisposable()
-    @Inject lateinit var prefs: PrefsManager
-    @Inject lateinit var repo: BookRepository
-    @Inject lateinit var playStateManager: PlayStateManager
-    @Inject lateinit var imageHelper: ImageHelper
-    @Inject lateinit var serviceController: ServiceController
+  private val executor = ThreadPoolExecutor(
+    1, 1, // single thread
+    5, TimeUnit.SECONDS,
+    LinkedBlockingQueue<Runnable>(2), // queue capacity
+    ThreadPoolExecutor.DiscardOldestPolicy())
+  private val disposables = CompositeDisposable()
+  @Inject lateinit var prefs: PrefsManager
+  @Inject lateinit var repo: BookRepository
+  @Inject lateinit var playStateManager: PlayStateManager
+  @Inject lateinit var imageHelper: ImageHelper
+  @Inject lateinit var serviceController: ServiceController
 
-    override fun onCreate() {
-        super.onCreate()
-        App.component().inject(this)
+  override fun onCreate() {
+    super.onCreate()
+    App.component().inject(this)
 
-        // update widget if current book, current book id or playState have changed.
-        disposables.add(Observable.merge(
-                repo.updateObservable().filter { it.id == prefs.currentBookId.value() },
-                playStateManager.playState,
-                prefs.currentBookId.asV2Observable())
-                .subscribe { updateWidget() }
-        )
+    // update widget if current book, current book id or playState have changed.
+    disposables.add(Observable.merge(
+      repo.updateObservable().filter { it.id == prefs.currentBookId.value() },
+      playStateManager.playState,
+      prefs.currentBookId.asV2Observable())
+      .subscribe { updateWidget() }
+    )
 
-    }
+  }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        updateWidget()
-        return Service.START_STICKY
-    }
+  override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    updateWidget()
+    return Service.START_STICKY
+  }
 
-    /**
-     * Asynchronously updates the widget
-     */
-    private fun updateWidget() {
-        executor.execute {
-            val appWidgetManager = AppWidgetManager.getInstance(this@WidgetUpdateService)
-            val book = repo.bookById(prefs.currentBookId.value())
-            val isPortrait = isPortrait
-            val ids = appWidgetManager.getAppWidgetIds(ComponentName(
-                    this@WidgetUpdateService, BaseWidgetProvider::class.java))
+  /**
+   * Asynchronously updates the widget
+   */
+  private fun updateWidget() {
+    executor.execute {
+      val appWidgetManager = AppWidgetManager.getInstance(this@WidgetUpdateService)
+      val book = repo.bookById(prefs.currentBookId.value())
+      val isPortrait = isPortrait
+      val ids = appWidgetManager.getAppWidgetIds(ComponentName(
+        this@WidgetUpdateService, BaseWidgetProvider::class.java))
 
-            for (widgetId in ids) {
-                val remoteViews = RemoteViews(packageName, R.layout.widget)
+      for (widgetId in ids) {
+        val remoteViews = RemoteViews(packageName, R.layout.widget)
 
-                if (book != null) {
-                    initElements(remoteViews, book)
+        if (book != null) {
+          initElements(remoteViews, book)
 
-                    val opts = appWidgetManager.getAppWidgetOptions(widgetId)
-                    val minHeight = dpToPx(opts.getInt(
-                            AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT))
-                    val maxHeight = dpToPx(opts.getInt(
-                            AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT))
-                    val minWidth = dpToPx(opts.getInt(
-                            AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH))
-                    val maxWidth = dpToPx(opts.getInt(
-                            AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH))
+          val opts = appWidgetManager.getAppWidgetOptions(widgetId)
+          val minHeight = dpToPx(opts.getInt(
+            AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT))
+          val maxHeight = dpToPx(opts.getInt(
+            AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT))
+          val minWidth = dpToPx(opts.getInt(
+            AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH))
+          val maxWidth = dpToPx(opts.getInt(
+            AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH))
 
-                    val useWidth: Int
-                    val useHeight: Int
+          val useWidth: Int
+          val useHeight: Int
 
-                    if (isPortrait) {
-                        useWidth = minWidth
-                        useHeight = maxHeight
-                    } else {
-                        useWidth = maxWidth
-                        useHeight = minHeight
-                    }
-                    if (useWidth > 0 && useHeight > 0) {
-                        setVisibilities(remoteViews, useWidth, useHeight, book.chapters.size == 1)
-                    }
-                } else {
-                    // directly going back to bookChoose
-                    val wholeWidgetClickI = Intent(this@WidgetUpdateService, BookActivity::class.java)
-                    wholeWidgetClickI.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                    val wholeWidgetClickPI = PendingIntent.getActivity(this@WidgetUpdateService, System.currentTimeMillis().toInt(),
-                            wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT)
-                    remoteViews.setImageViewBitmap(R.id.imageView,
-                            imageHelper.drawableToBitmap(
-                                    drawable(R.drawable.icon_108dp),
-                                    imageHelper.smallerScreenSize,
-                                    imageHelper.smallerScreenSize))
-                    remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)
-                }
-
-                appWidgetManager.updateAppWidget(widgetId, remoteViews)
-            }
-        }
-    }
-
-    /**
-     * Returning if the current orientation is portrait. If it is unknown, measure the display-spec
-     * and return accordingly.
-
-     * @return true if the current orientation is portrait
-     */
-    private val isPortrait: Boolean
-        get() {
-            val orientation = resources.configuration.orientation
-            val window = getSystemService(Context.WINDOW_SERVICE) as WindowManager
-            val display = window.defaultDisplay
-
-            @Suppress("DEPRECATION")
-            val displayWidth = display.width
-            @Suppress("DEPRECATION")
-            val displayHeight = display.height
-
-            return orientation != Configuration.ORIENTATION_LANDSCAPE && (orientation == Configuration.ORIENTATION_PORTRAIT || displayWidth == displayHeight || displayWidth < displayHeight)
-        }
-
-    /**
-     * Initializes the elements of the widgets with a book
-
-     * @param remoteViews The Widget RemoteViews
-     * *
-     * @param book        The book to be initalized
-     */
-    private fun initElements(remoteViews: RemoteViews, book: Book) {
-        val playPauseI = serviceController.getPlayPauseIntent()
-        val playPausePI = PendingIntent.getService(this,
-                KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseI, PendingIntent.FLAG_UPDATE_CURRENT)
-        remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI)
-
-        val fastForwardI = serviceController.getFastForwardIntent()
-        val fastForwardPI = PendingIntent.getService(this,
-                KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, fastForwardI,
-                PendingIntent.FLAG_UPDATE_CURRENT)
-        remoteViews.setOnClickPendingIntent(R.id.fastForward, fastForwardPI)
-
-        val rewindI = serviceController.getRewindIntent()
-        val rewindPI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_REWIND,
-                rewindI, PendingIntent.FLAG_UPDATE_CURRENT)
-        remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI)
-
-        if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
-            remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_36dp)
+          if (isPortrait) {
+            useWidth = minWidth
+            useHeight = maxHeight
+          } else {
+            useWidth = maxWidth
+            useHeight = minHeight
+          }
+          if (useWidth > 0 && useHeight > 0) {
+            setVisibilities(remoteViews, useWidth, useHeight, book.chapters.size == 1)
+          }
         } else {
-            remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_play_white_36dp)
+          // directly going back to bookChoose
+          val wholeWidgetClickI = Intent(this@WidgetUpdateService, BookActivity::class.java)
+          wholeWidgetClickI.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+          val wholeWidgetClickPI = PendingIntent.getActivity(this@WidgetUpdateService, System.currentTimeMillis().toInt(),
+            wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT)
+          remoteViews.setImageViewBitmap(R.id.imageView,
+            imageHelper.drawableToBitmap(
+              drawable(R.drawable.icon_108dp),
+              imageHelper.smallerScreenSize,
+              imageHelper.smallerScreenSize))
+          remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)
         }
 
-        // if we have any book, init the views and have a click on the whole widget start BookPlay.
-        // if we have no book, simply have a click on the whole widget start BookChoose.
-        remoteViews.setTextViewText(R.id.title, book.name)
-        val name = book.currentChapter().name
+        appWidgetManager.updateAppWidget(widgetId, remoteViews)
+      }
+    }
+  }
 
-        remoteViews.setTextViewText(R.id.summary, name)
+  /**
+   * Returning if the current orientation is portrait. If it is unknown, measure the display-spec
+   * and return accordingly.
 
-        val wholeWidgetClickI = BookActivity.goToBookIntent(this, book.id)
-        val wholeWidgetClickPI = PendingIntent.getActivity(this@WidgetUpdateService, System.currentTimeMillis().toInt(), wholeWidgetClickI,
-                PendingIntent.FLAG_UPDATE_CURRENT)
+   * @return true if the current orientation is portrait
+   */
+  private val isPortrait: Boolean
+    get() {
+      val orientation = resources.configuration.orientation
+      val window = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+      val display = window.defaultDisplay
 
-        var cover: Bitmap? = null
-        try {
-            val coverFile = book.coverFile()
-            if (coverFile.exists() && coverFile.canRead()) {
-                cover = Picasso.with(this@WidgetUpdateService).load(coverFile).get()
-            }
-        } catch (ex: IOException) {
-            e(ex) { "Error when retrieving cover for book $book" }
-        }
+      @Suppress("DEPRECATION")
+      val displayWidth = display.width
+      @Suppress("DEPRECATION")
+      val displayHeight = display.height
 
-        if (cover == null) {
-            cover = imageHelper.drawableToBitmap(CoverReplacement(book.name, this@WidgetUpdateService),
-                    imageHelper.smallerScreenSize,
-                    imageHelper.smallerScreenSize)
-        }
-        remoteViews.setImageViewBitmap(R.id.imageView, cover)
-        remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)
+      return orientation != Configuration.ORIENTATION_LANDSCAPE && (orientation == Configuration.ORIENTATION_PORTRAIT || displayWidth == displayHeight || displayWidth < displayHeight)
     }
 
-    /**
-     * Sets visibilities on widgets element, depending on the size of the widget
+  /**
+   * Initializes the elements of the widgets with a book
 
-     * @param remoteViews   the widget the widget RemoteViews
-     * *
-     * @param width         the width of the widget
-     * *
-     * @param height        the height of the widget
-     * *
-     * @param singleChapter if true if the book has only one chapter
-     */
-    private fun setVisibilities(remoteViews: RemoteViews, width: Int,
-                                height: Int, singleChapter: Boolean) {
-        setXVisibility(remoteViews, width, height)
-        setYVisibility(remoteViews, height, singleChapter)
+   * @param remoteViews The Widget RemoteViews
+   * *
+   * @param book        The book to be initalized
+   */
+  private fun initElements(remoteViews: RemoteViews, book: Book) {
+    val playPauseI = serviceController.getPlayPauseIntent()
+    val playPausePI = PendingIntent.getService(this,
+      KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseI, PendingIntent.FLAG_UPDATE_CURRENT)
+    remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI)
+
+    val fastForwardI = serviceController.getFastForwardIntent()
+    val fastForwardPI = PendingIntent.getService(this,
+      KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, fastForwardI,
+      PendingIntent.FLAG_UPDATE_CURRENT)
+    remoteViews.setOnClickPendingIntent(R.id.fastForward, fastForwardPI)
+
+    val rewindI = serviceController.getRewindIntent()
+    val rewindPI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_REWIND,
+      rewindI, PendingIntent.FLAG_UPDATE_CURRENT)
+    remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI)
+
+    if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
+      remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_36dp)
+    } else {
+      remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_play_white_36dp)
     }
 
-    /**
-     * Set visibilities dependent on widget width.
+    // if we have any book, init the views and have a click on the whole widget start BookPlay.
+    // if we have no book, simply have a click on the whole widget start BookChoose.
+    remoteViews.setTextViewText(R.id.title, book.name)
+    val name = book.currentChapter().name
 
-     * @param remoteViews the widget RemoteViews
-     * *
-     * @param widgetWidth The widget width
-     * *
-     * @param coverSize   The cover size
-     */
-    private fun setXVisibility(remoteViews: RemoteViews, widgetWidth: Int,
-                               coverSize: Int) {
-        val singleButtonSize = dpToPx(8 + 36 + 8)
-        // widget height because cover is square
-        var summarizedItemWidth = 3 * singleButtonSize + coverSize
+    remoteViews.setTextViewText(R.id.summary, name)
 
-        // set all views visible
-        remoteViews.setViewVisibility(R.id.imageView, View.VISIBLE)
-        remoteViews.setViewVisibility(R.id.rewind, View.VISIBLE)
-        remoteViews.setViewVisibility(R.id.fastForward, View.VISIBLE)
+    val wholeWidgetClickI = BookActivity.goToBookIntent(this, book.id)
+    val wholeWidgetClickPI = PendingIntent.getActivity(this@WidgetUpdateService, System.currentTimeMillis().toInt(), wholeWidgetClickI,
+      PendingIntent.FLAG_UPDATE_CURRENT)
 
-        // hide cover if we need space
-        if (summarizedItemWidth > widgetWidth) {
-            remoteViews.setViewVisibility(R.id.imageView, View.GONE)
-            summarizedItemWidth -= coverSize
-        }
-
-        // hide fast forward if we need space
-        if (summarizedItemWidth > widgetWidth) {
-            remoteViews.setViewVisibility(R.id.fastForward, View.GONE)
-            summarizedItemWidth -= singleButtonSize
-        }
-
-        // hide rewind if we need space
-        if (summarizedItemWidth > widgetWidth) {
-            remoteViews.setViewVisibility(R.id.rewind, View.GONE)
-        }
+    var cover: Bitmap? = null
+    try {
+      val coverFile = book.coverFile()
+      if (coverFile.exists() && coverFile.canRead()) {
+        cover = Picasso.with(this@WidgetUpdateService).load(coverFile).get()
+      }
+    } catch (ex: IOException) {
+      e(ex) { "Error when retrieving cover for book $book" }
     }
 
-    /**
-     * Sets visibilities dependent on widget height.
+    if (cover == null) {
+      cover = imageHelper.drawableToBitmap(CoverReplacement(book.name, this@WidgetUpdateService),
+        imageHelper.smallerScreenSize,
+        imageHelper.smallerScreenSize)
+    }
+    remoteViews.setImageViewBitmap(R.id.imageView, cover)
+    remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)
+  }
 
-     * @param remoteViews   The Widget RemoteViews
-     * *
-     * @param widgetHeight  The widget height
-     * *
-     * @param singleChapter true if the book has only one chapter
-     */
-    private fun setYVisibility(remoteViews: RemoteViews, widgetHeight: Int,
-                               singleChapter: Boolean) {
-        val buttonSize = dpToPx(8 + 36 + 8)
-        val titleSize = resources.getDimensionPixelSize(R.dimen.list_text_primary_size)
-        val summarySize = resources.getDimensionPixelSize(R.dimen.list_text_secondary_size)
+  /**
+   * Sets visibilities on widgets element, depending on the size of the widget
 
-        var summarizedItemsHeight = buttonSize + titleSize + summarySize
+   * @param remoteViews   the widget the widget RemoteViews
+   * *
+   * @param width         the width of the widget
+   * *
+   * @param height        the height of the widget
+   * *
+   * @param singleChapter if true if the book has only one chapter
+   */
+  private fun setVisibilities(remoteViews: RemoteViews, width: Int,
+                              height: Int, singleChapter: Boolean) {
+    setXVisibility(remoteViews, width, height)
+    setYVisibility(remoteViews, height, singleChapter)
+  }
 
-        // first setting all views visible
-        remoteViews.setViewVisibility(R.id.summary, View.VISIBLE)
-        remoteViews.setViewVisibility(R.id.title, View.VISIBLE)
+  /**
+   * Set visibilities dependent on widget width.
 
-        // when we are in a single chapter or we are to high, hide summary
-        if (singleChapter || widgetHeight < summarizedItemsHeight) {
-            remoteViews.setViewVisibility(R.id.summary, View.GONE)
-            summarizedItemsHeight -= summarySize
-        }
+   * @param remoteViews the widget RemoteViews
+   * *
+   * @param widgetWidth The widget width
+   * *
+   * @param coverSize   The cover size
+   */
+  private fun setXVisibility(remoteViews: RemoteViews, widgetWidth: Int,
+                             coverSize: Int) {
+    val singleButtonSize = dpToPx(8 + 36 + 8)
+    // widget height because cover is square
+    var summarizedItemWidth = 3 * singleButtonSize + coverSize
 
-        // if we ar still to high, hide title
-        if (summarizedItemsHeight > widgetHeight) {
-            remoteViews.setViewVisibility(R.id.title, View.GONE)
-        }
+    // set all views visible
+    remoteViews.setViewVisibility(R.id.imageView, View.VISIBLE)
+    remoteViews.setViewVisibility(R.id.rewind, View.VISIBLE)
+    remoteViews.setViewVisibility(R.id.fastForward, View.VISIBLE)
+
+    // hide cover if we need space
+    if (summarizedItemWidth > widgetWidth) {
+      remoteViews.setViewVisibility(R.id.imageView, View.GONE)
+      summarizedItemWidth -= coverSize
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-        disposables.dispose()
-
-        executor.shutdown()
+    // hide fast forward if we need space
+    if (summarizedItemWidth > widgetWidth) {
+      remoteViews.setViewVisibility(R.id.fastForward, View.GONE)
+      summarizedItemWidth -= singleButtonSize
     }
 
-    override fun onConfigurationChanged(newCfg: Configuration) {
-        val oldOrientation = this.resources.configuration.orientation
-        val newOrientation = newCfg.orientation
+    // hide rewind if we need space
+    if (summarizedItemWidth > widgetWidth) {
+      remoteViews.setViewVisibility(R.id.rewind, View.GONE)
+    }
+  }
 
-        if (newOrientation != oldOrientation) {
-            updateWidget()
-        }
+  /**
+   * Sets visibilities dependent on widget height.
+
+   * @param remoteViews   The Widget RemoteViews
+   * *
+   * @param widgetHeight  The widget height
+   * *
+   * @param singleChapter true if the book has only one chapter
+   */
+  private fun setYVisibility(remoteViews: RemoteViews, widgetHeight: Int,
+                             singleChapter: Boolean) {
+    val buttonSize = dpToPx(8 + 36 + 8)
+    val titleSize = resources.getDimensionPixelSize(R.dimen.list_text_primary_size)
+    val summarySize = resources.getDimensionPixelSize(R.dimen.list_text_secondary_size)
+
+    var summarizedItemsHeight = buttonSize + titleSize + summarySize
+
+    // first setting all views visible
+    remoteViews.setViewVisibility(R.id.summary, View.VISIBLE)
+    remoteViews.setViewVisibility(R.id.title, View.VISIBLE)
+
+    // when we are in a single chapter or we are to high, hide summary
+    if (singleChapter || widgetHeight < summarizedItemsHeight) {
+      remoteViews.setViewVisibility(R.id.summary, View.GONE)
+      summarizedItemsHeight -= summarySize
     }
 
-    override fun onBind(intent: Intent): IBinder? {
-        return null
+    // if we ar still to high, hide title
+    if (summarizedItemsHeight > widgetHeight) {
+      remoteViews.setViewVisibility(R.id.title, View.GONE)
     }
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+
+    disposables.dispose()
+
+    executor.shutdown()
+  }
+
+  override fun onConfigurationChanged(newCfg: Configuration) {
+    val oldOrientation = this.resources.configuration.orientation
+    val newOrientation = newCfg.orientation
+
+    if (newOrientation != oldOrientation) {
+      updateWidget()
+    }
+  }
+
+  override fun onBind(intent: Intent): IBinder? {
+    return null
+  }
 }

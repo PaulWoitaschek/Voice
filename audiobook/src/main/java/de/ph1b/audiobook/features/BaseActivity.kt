@@ -17,35 +17,35 @@ import javax.inject.Inject
  */
 abstract class BaseActivity : AppCompatActivity() {
 
-    @Inject lateinit var prefsManager: PrefsManager
-    private var nightModeAtCreation: Int? = null
+  @Inject lateinit var prefsManager: PrefsManager
+  private var nightModeAtCreation: Int? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        App.component().inject(this)
-        super.onCreate(savedInstanceState)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    App.component().inject(this)
+    super.onCreate(savedInstanceState)
 
-        nightModeAtCreation = AppCompatDelegate.getDefaultNightMode()
+    nightModeAtCreation = AppCompatDelegate.getDefaultNightMode()
+  }
+
+  override fun onResume() {
+    super.onResume()
+    if (!storageMounted()) {
+      val serviceIntent = Intent(this, PlaybackService::class.java)
+      stopService(serviceIntent)
+
+      startActivity(Intent(this, NoExternalStorageActivity::class.java).apply {
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+      })
+      return
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (!storageMounted()) {
-            val serviceIntent = Intent(this, PlaybackService::class.java)
-            stopService(serviceIntent)
+    val nightModesDistinct = AppCompatDelegate.getDefaultNightMode() != nightModeAtCreation
+    if (nightModesDistinct) recreate()
+  }
 
-            startActivity(Intent(this, NoExternalStorageActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            })
-            return
-        }
-
-        val nightModesDistinct = AppCompatDelegate.getDefaultNightMode() != nightModeAtCreation
-        if (nightModesDistinct) recreate()
+  companion object {
+    fun storageMounted(): Boolean {
+      return Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
     }
-
-    companion object {
-        fun storageMounted(): Boolean {
-            return Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
-        }
-    }
+  }
 }

@@ -12,17 +12,17 @@ import io.reactivex.Observable
  * @author Paul Woitaschek
  */
 object RxBroadcast {
-    fun register(c: Context, filter: IntentFilter): Observable<Intent> = Observable.create {
-        val receiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent) {
-                it.onNext(intent)
-            }
-        }
-
-        // register upon subscription, unregister upon unsubscription
-        c.registerReceiver(receiver, filter)
-        it.setCancellable {
-            c.unregisterReceiver(receiver)
-        }
+  fun register(c: Context, filter: IntentFilter): Observable<Intent> = Observable.create {
+    val receiver = object : BroadcastReceiver() {
+      override fun onReceive(context: Context?, intent: Intent) {
+        it.onNext(intent)
+      }
     }
+
+    // register upon subscription, unregister upon unsubscription
+    c.registerReceiver(receiver, filter)
+    it.setCancellable {
+      c.unregisterReceiver(receiver)
+    }
+  }
 }

@@ -16,32 +16,32 @@ class PlayStateManager
 @Inject
 constructor() {
 
-    val playState: BehaviorSubject<PlayState> = BehaviorSubject.createDefault(PlayStateManager.PlayState.STOPPED)
+  val playState: BehaviorSubject<PlayState> = BehaviorSubject.createDefault(PlayStateManager.PlayState.STOPPED)
 
-    init {
-        playState.subscribe {
-            if (it == PlayState.PLAYING || it == PlayState.STOPPED) {
-                pauseReason = PauseReason.NONE
-            }
-        }
+  init {
+    playState.subscribe {
+      if (it == PlayState.PLAYING || it == PlayState.STOPPED) {
+        pauseReason = PauseReason.NONE
+      }
     }
+  }
 
-    var pauseReason = PauseReason.NONE
+  var pauseReason = PauseReason.NONE
 
-    /**
-     * Represents the play states for the playback.
-     *
-     * @author Paul Woitaschek
-     */
-    enum class PlayState(@PlaybackStateCompat.State val playbackStateCompat: Int) {
-        PLAYING(PlaybackStateCompat.STATE_PLAYING),
-        PAUSED(PlaybackStateCompat.STATE_PAUSED),
-        STOPPED(PlaybackStateCompat.STATE_STOPPED)
-    }
+  /**
+   * Represents the play states for the playback.
+   *
+   * @author Paul Woitaschek
+   */
+  enum class PlayState(@PlaybackStateCompat.State val playbackStateCompat: Int) {
+    PLAYING(PlaybackStateCompat.STATE_PLAYING),
+    PAUSED(PlaybackStateCompat.STATE_PAUSED),
+    STOPPED(PlaybackStateCompat.STATE_STOPPED)
+  }
 
-    enum class PauseReason {
-        NONE,
-        BECAUSE_HEADSET,
-        LOSS_TRANSIENT
-    }
+  enum class PauseReason {
+    NONE,
+    BECAUSE_HEADSET,
+    LOSS_TRANSIENT
+  }
 }

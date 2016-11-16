@@ -12,42 +12,42 @@ import i
  */
 abstract class RxBaseActivity<V, out P> : BaseActivity() where P : Presenter<V> {
 
-    private val presenterDelegate = PresenterDelegate({ newPresenter() }, { provideView() })
+  private val presenterDelegate = PresenterDelegate({ newPresenter() }, { provideView() })
 
-    abstract fun newPresenter(): P
+  abstract fun newPresenter(): P
 
-    abstract fun provideView(): V
+  abstract fun provideView(): V
 
-    fun presenter() = presenterDelegate.presenter()
+  fun presenter() = presenterDelegate.presenter()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        presenterDelegate.onCreate(savedInstanceState)
-    }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    presenterDelegate.onCreate(savedInstanceState)
+  }
 
-    override fun onStart() {
-        super.onStart()
-        i { "onResume" }
+  override fun onStart() {
+    super.onStart()
+    i { "onResume" }
 
-        presenterDelegate.onStart()
-    }
+    presenterDelegate.onStart()
+  }
 
-    override fun onStop() {
-        super.onStop()
-        i { "onPause" }
+  override fun onStop() {
+    super.onStop()
+    i { "onPause" }
 
-        presenterDelegate.onStop()
-    }
+    presenterDelegate.onStop()
+  }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
 
-        presenterDelegate.onSaveInstanceState(outState)
-    }
+    presenterDelegate.onSaveInstanceState(outState)
+  }
 
-    override fun onDestroy() {
-        super.onDestroy()
+  override fun onDestroy() {
+    super.onDestroy()
 
-        presenterDelegate.onDestroy()
-    }
+    presenterDelegate.onDestroy()
+  }
 }

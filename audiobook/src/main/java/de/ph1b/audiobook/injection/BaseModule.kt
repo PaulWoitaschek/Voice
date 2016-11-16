@@ -18,13 +18,13 @@ import javax.inject.Singleton
  */
 @Module class BaseModule {
 
-    @Provides @Singleton fun providePlayer(capabilities: MediaPlayerCapabilities, context: Context): Player {
-        if (capabilities.useCustomMediaPlayer()) {
-            return AntennaPlayer(context)
-        } else {
-            return AndroidPlayer(context)
-        }
+  @Provides @Singleton fun providePlayer(capabilities: MediaPlayerCapabilities, context: Context): Player {
+    if (capabilities.useCustomMediaPlayer()) {
+      return AntennaPlayer(context)
+    } else {
+      return AndroidPlayer(context)
     }
+  }
 
-    @Provides @Reusable fun provideRxPermissions(context: Context): RxPermissions = RxPermissions.getInstance(context)
+  @Provides @Reusable fun provideRxPermissions(context: Context): RxPermissions = RxPermissions.getInstance(context)
 }

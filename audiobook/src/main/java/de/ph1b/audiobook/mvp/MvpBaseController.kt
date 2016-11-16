@@ -12,27 +12,27 @@ import de.ph1b.audiobook.features.BaseController
  */
 abstract class MvpBaseController<V, out P> : BaseController() where P : Presenter<V> {
 
-    init {
-        addLifecycleListener(object : LifecycleListener() {
-            override fun onRestoreInstanceState(controller: Controller, savedInstanceState: Bundle) {
-                presenter.onRestore(savedInstanceState)
-            }
+  init {
+    addLifecycleListener(object : LifecycleListener() {
+      override fun onRestoreInstanceState(controller: Controller, savedInstanceState: Bundle) {
+        presenter.onRestore(savedInstanceState)
+      }
 
-            override fun postAttach(controller: Controller, view: View) {
-                presenter.bind(provideView())
-            }
+      override fun postAttach(controller: Controller, view: View) {
+        presenter.bind(provideView())
+      }
 
-            override fun postDetach(controller: Controller, view: View) {
-                presenter.unbind()
-            }
+      override fun postDetach(controller: Controller, view: View) {
+        presenter.unbind()
+      }
 
-            override fun onSaveInstanceState(controller: Controller, outState: Bundle) {
-                presenter.onSave(outState)
-            }
-        })
-    }
+      override fun onSaveInstanceState(controller: Controller, outState: Bundle) {
+        presenter.onSave(outState)
+      }
+    })
+  }
 
-    abstract fun provideView(): V
+  abstract fun provideView(): V
 
-    abstract val presenter: P
+  abstract val presenter: P
 }

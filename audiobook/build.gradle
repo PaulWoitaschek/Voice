@@ -49,7 +49,7 @@ kapt.generateStubs = true
 
 dependencies {
     // support library
-    def supportVersion = "25.0.0"
+    def supportVersion = "25.0.1"
     compile "com.android.support:appcompat-v7:$supportVersion"
     compile "com.android.support:recyclerview-v7:$supportVersion"
     compile "com.android.support:support-v4:$supportVersion"
@@ -79,9 +79,9 @@ dependencies {
     testCompile "org.assertj:assertj-core:1.7.1"
 
     // rx extensions
-    def rxJavaVersion = "2.0.0"
+    def rxJavaVersion = "2.0.1"
     compile "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
-    //compile "io.reactivex.rxjava2:rxandroid:$rxJavaVersion" todo: re-add this when https://github.com/ReactiveX/RxAndroid/issues/346 is fixed
+    compile "io.reactivex.rxjava2:rxandroid:$rxJavaVersion"
     compile 'com.github.akarnokd:rxjava2-interop:0.6.1'
     compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.2'
 
@@ -95,13 +95,13 @@ dependencies {
     compile 'com.github.PaulWoitaschek:Slimber:1.0.4'
 
     // permissions
-    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.8.0@aar'
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.8.2@aar'
 
     // crashes
     compile "ch.acra:acra:4.9.1"
 
     // conductor
-    def conductorVer = "2.0.3"
+    def conductorVer = "2.0.4"
     compile "com.bluelinelabs:conductor:$conductorVer"
     compile "com.bluelinelabs:conductor-support:$conductorVer"
     compile "com.bluelinelabs:conductor-rxlifecycle:$conductorVer"

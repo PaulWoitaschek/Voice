@@ -18,65 +18,65 @@ import java.io.IOException
  */
 class HideFolderDialog : DialogFragment() {
 
-    private lateinit var callback: OnChosenListener
+  private lateinit var callback: OnChosenListener
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
+  override fun onAttach(context: Context?) {
+    super.onAttach(context)
 
-        callback = context as OnChosenListener
-    }
+    callback = context as OnChosenListener
+  }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val pathToHide = arguments.getString(PATH_TO_HIDE)!!
-        val hideFile = getNoMediaFileByFolder(File(pathToHide))
-        return MaterialDialog.Builder(activity)
-                .title(R.string.hide_folder_title)
-                .content(R.string.hide_folder_content)
-                .positiveText(R.string.hide_confirm)
-                .negativeText(R.string.dialog_no)
-                .onPositive { materialDialog, dialogAction ->
-                    try {
-                        i { "Create new File will be called." }
-                        //noinspection ResultOfMethodCallIgnored
-                        hideFile.createNewFile()
-                    } catch (ex: IOException) {
-                        e(ex) { "Error at creating the hide-file" }
-                    }
-                }
-                .onAny { materialDialog, dialogAction -> callback.onChosen() }
-                .build()
-    }
-
-
-    interface OnChosenListener {
-        fun onChosen()
-    }
-
-    companion object {
-
-        private val PATH_TO_HIDE = "pathToHide"
-
-        /**
-         * Returns a file that called .nomedia that prevents music players from recognizing the book as
-         * music.
-
-         * @param folder The folder
-         * *
-         * @return The file that provides the hiding
-         */
-        fun getNoMediaFileByFolder(folder: File): File {
-            return File(folder, ".nomedia")
+  override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    val pathToHide = arguments.getString(PATH_TO_HIDE)!!
+    val hideFile = getNoMediaFileByFolder(File(pathToHide))
+    return MaterialDialog.Builder(activity)
+      .title(R.string.hide_folder_title)
+      .content(R.string.hide_folder_content)
+      .positiveText(R.string.hide_confirm)
+      .negativeText(R.string.dialog_no)
+      .onPositive { materialDialog, dialogAction ->
+        try {
+          i { "Create new File will be called." }
+          //noinspection ResultOfMethodCallIgnored
+          hideFile.createNewFile()
+        } catch (ex: IOException) {
+          e(ex) { "Error at creating the hide-file" }
         }
+      }
+      .onAny { materialDialog, dialogAction -> callback.onChosen() }
+      .build()
+  }
 
-        fun newInstance(pathToHide: File): HideFolderDialog {
-            val args = Bundle()
-            args.putString(PATH_TO_HIDE, pathToHide.absolutePath)
 
-            val hideFolderDialog = HideFolderDialog()
-            hideFolderDialog.arguments = args
-            return hideFolderDialog
-        }
+  interface OnChosenListener {
+    fun onChosen()
+  }
 
-        val TAG: String = HideFolderDialog::class.java.simpleName
+  companion object {
+
+    private val PATH_TO_HIDE = "pathToHide"
+
+    /**
+     * Returns a file that called .nomedia that prevents music players from recognizing the book as
+     * music.
+
+     * @param folder The folder
+     * *
+     * @return The file that provides the hiding
+     */
+    fun getNoMediaFileByFolder(folder: File): File {
+      return File(folder, ".nomedia")
     }
+
+    fun newInstance(pathToHide: File): HideFolderDialog {
+      val args = Bundle()
+      args.putString(PATH_TO_HIDE, pathToHide.absolutePath)
+
+      val hideFolderDialog = HideFolderDialog()
+      hideFolderDialog.arguments = args
+      return hideFolderDialog
+    }
+
+    val TAG: String = HideFolderDialog::class.java.simpleName
+  }
 }

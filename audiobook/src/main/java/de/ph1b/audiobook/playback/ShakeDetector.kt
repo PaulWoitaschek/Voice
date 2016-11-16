@@ -18,31 +18,31 @@ import javax.inject.Inject
 @Reusable class ShakeDetector
 @Inject constructor(private val sensorManager: SensorManager?) {
 
-    fun shakeSupported() = sensorManager != null
+  fun shakeSupported() = sensorManager != null
 
-    fun detect(): Observable<Unit> = Observable.create {
-        if (sensorManager == null) return@create
+  fun detect(): Observable<Unit> = Observable.create {
+    if (sensorManager == null) return@create
 
-        val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+    val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
-        val listener = object : SensorEventListener {
-            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-            }
+    val listener = object : SensorEventListener {
+      override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+      }
 
-            override fun onSensorChanged(event: SensorEvent) {
-                val gX = event.values[0] / SensorManager.GRAVITY_EARTH
-                val gY = event.values[1] / SensorManager.GRAVITY_EARTH
-                val gZ = event.values[2] / SensorManager.GRAVITY_EARTH
+      override fun onSensorChanged(event: SensorEvent) {
+        val gX = event.values[0] / SensorManager.GRAVITY_EARTH
+        val gY = event.values[1] / SensorManager.GRAVITY_EARTH
+        val gZ = event.values[2] / SensorManager.GRAVITY_EARTH
 
-                val gForce = Math.sqrt(gX * gX + gY * gY + gZ * gZ.toDouble())
-                if (gForce > 2.25) {
-                    it.onNext(Unit)
-                }
-            }
+        val gForce = Math.sqrt(gX * gX + gY * gY + gZ * gZ.toDouble())
+        if (gForce > 2.25) {
+          it.onNext(Unit)
         }
-
-        // subscribed upon registration, unsubscribe upon cancellation
-        sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_UI)
-        it.setCancellable { sensorManager.unregisterListener(listener) }
+      }
     }
+
+    // subscribed upon registration, unsubscribe upon cancellation
+    sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_UI)
+    it.setCancellable { sensorManager.unregisterListener(listener) }
+  }
 }

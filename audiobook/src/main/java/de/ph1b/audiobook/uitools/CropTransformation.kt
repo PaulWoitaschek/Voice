@@ -13,24 +13,24 @@ import de.ph1b.audiobook.features.imagepicker.CropOverlay
  */
 class CropTransformation(cropOverlay: CropOverlay, private val cropSource: ImageView) : Transformation {
 
-    private val rect = cropOverlay.selectedRect
+  private val rect = cropOverlay.selectedRect
 
-    override fun key(): String = "cropTransformation"
+  override fun key(): String = "cropTransformation"
 
-    override fun transform(source: Bitmap): Bitmap {
-        val scaleFactor: Float = source.width.toFloat() / cropSource.measuredWidth
-        scaleRect(rect, scaleFactor)
-        try {
-            return Bitmap.createBitmap(source, rect.left, rect.top, rect.width(), rect.height())
-        } finally {
-            source.recycle()
-        }
+  override fun transform(source: Bitmap): Bitmap {
+    val scaleFactor: Float = source.width.toFloat() / cropSource.measuredWidth
+    scaleRect(rect, scaleFactor)
+    try {
+      return Bitmap.createBitmap(source, rect.left, rect.top, rect.width(), rect.height())
+    } finally {
+      source.recycle()
     }
+  }
 
-    private fun scaleRect(rect: Rect, scaleFactor: Float) =
-            rect.set((rect.left * scaleFactor).toInt(),
-                    (rect.top * scaleFactor).toInt(),
-                    (rect.right * scaleFactor).toInt(),
-                    (rect.bottom * scaleFactor).toInt())
+  private fun scaleRect(rect: Rect, scaleFactor: Float) =
+    rect.set((rect.left * scaleFactor).toInt(),
+      (rect.top * scaleFactor).toInt(),
+      (rect.right * scaleFactor).toInt(),
+      (rect.bottom * scaleFactor).toInt())
 
 }
