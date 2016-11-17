@@ -90,12 +90,14 @@ class BookPlayFragment : Fragment() {
             }
 
             override fun onDoubleTapAction(){
-//                mediaPlayer.playPause()
-                BookmarkDialogFragment.newInstance(bookId).show(fragmentManager, BookmarkDialogFragment.TAG)
+                mediaPlayer.playPause()
+//                BookmarkDialogFragment.newInstance(bookId).show(fragmentManager, BookmarkDialogFragment.TAG)
             }
 
             override fun onLongPressAction() {
-                mediaPlayer.playPause()
+//                mediaPlayer.playPause()
+                BookmarkDialogFragment.newInstance(bookId).show(fragmentManager, BookmarkDialogFragment.TAG)
+
             }
 
             override fun onSwipeUp() {
