@@ -106,45 +106,43 @@ import javax.inject.Singleton
     val results = ArrayList<String>()
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { //Method 1 for KitKat & above
-      val externalDirs = context.getExternalFilesDirs(null)
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        for (file in externalDirs) {
-          val path = file.path.split("/Android")[0]
-          if (Environment.isExternalStorageRemovable(file)) {
-            results.add(path)
-          }
-        }
-      } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-        for (file in externalDirs) {
-          val path = file.path.split("/Android")[0]
-          if (Environment.MEDIA_MOUNTED == EnvironmentCompat.getStorageState(file)) {
-            results.add(path)
+      val externalDirs: Array<File?>? = context.getExternalFilesDirs(null)
+      externalDirs?.forEach {
+        if (it != null) {
+          val path = it.path.split("/Android")[0]
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (Environment.isExternalStorageRemovable(it)) {
+              results.add(path)
+            }
+          } else {
+            if (Environment.MEDIA_MOUNTED == EnvironmentCompat.getStorageState(it)) {
+              results.add(path)
+            }
           }
         }
       }
     }
 
-    if (results.isEmpty()) { //Method 2 for all versions
-      // better variation of: http://stackoverflow.com/a/40123073/5002496
-      var output = ""
-      try {
-        val process = ProcessBuilder().command("mount | grep /dev/block/vold")
-          .redirectErrorStream(true).start()
-        process.waitFor()
-        val inputStream = process.inputStream
-        val buffer = ByteArray(1024)
-        while (inputStream.read(buffer) !== -1) {
-          output += String(buffer)
-        }
-        inputStream.close()
-      } catch (e: Exception) {
-        e.printStackTrace()
+    //Method 2 for all versions
+    // better variation of: http://stackoverflow.com/a/40123073/5002496
+    var output = ""
+    try {
+      val process = ProcessBuilder().command("mount | grep /dev/block/vold")
+        .redirectErrorStream(true).start()
+      process.waitFor()
+      val inputStream = process.inputStream
+      val buffer = ByteArray(1024)
+      while (inputStream.read(buffer) !== -1) {
+        output += String(buffer)
       }
+      inputStream.close()
+    } catch (e: Exception) {
+      e.printStackTrace()
+    }
 
-      if (!output.trim { it <= ' ' }.isEmpty()) {
-        val devicePoints = output.split("\n".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()
-        devicePoints.mapTo(results) { it.split(" ".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()[2] }
-      }
+    if (!output.trim { it <= ' ' }.isEmpty()) {
+      val devicePoints = output.split("\n".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()
+      devicePoints.mapTo(results) { it.split(" ".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()[2] }
     }
 
     //Below few lines is to remove paths which may not be external memory card, like OTG (feel free to comment them out)
