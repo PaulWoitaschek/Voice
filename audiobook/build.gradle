@@ -6,7 +6,7 @@ apply from: "../artifacts.gradle"
 android {
 
     // dynamically pass 21 to the compiler for build speedup without losing lint warnings.
-    int minSdk = hasProperty('minSdk') ? minSdk.toInteger() : 16
+    int minSdk = project.hasProperty('minSdk') ? minSdk.toInteger() : 16
 
     compileSdkVersion 25
     buildToolsVersion '25.0.0'
@@ -15,8 +15,8 @@ android {
         applicationId "de.ph1b.audiobook"
         minSdkVersion minSdk
         targetSdkVersion 25
-        versionCode 137
-        versionName 'nightly2016-11-10 '
+        versionCode 138
+        versionName 'v2.9'
 
         def acraServer = project.hasProperty("ACRA_SERVER") ? ACRA_SERVER : "\"http://127.0.0.1/\""
         buildConfigField("String", "ACRA_SERVER", acraServer)
