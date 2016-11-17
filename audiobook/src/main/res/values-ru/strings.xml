@@ -22,6 +22,7 @@
     <string name="next_track">Следующий файл</string>
     <string name="play">Воспроизвести</string>
     <string name="pause">Пауза</string>
+    <string name="equalizer">Эквалайзер</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Карта памяти недоступна. Пожалуйста убедитесь, что она установлена и вы не соединены кабелем с компьютером.</string>
     <string name="no_external_storage_action_bar_title">Карта памяти</string>
@@ -34,6 +35,8 @@
     <string name="content_next_cover">Выбрать следующую обложку</string>
     <string name="content_cover">Показать выбранную обложку</string>
     <string name="change_book_name">Название</string>
+    <string name="download_book_cover">Получить обложку из интернета</string>
+    <string name="pick_book_cover">Получить обложку из системы</string>
     <string name="edit_book_title">Редактировать книгу</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Перейти к</string>
@@ -65,6 +68,7 @@
     <string name="playback_speed">Скорость воспроизведения</string>
     <!--Bookmarks-->
     <string name="bookmark">Закладки</string>
+    <string name="shake_to_reset">Встряхнуть для сброса</string>
     <string name="bookmark_edit_title">Редактировать</string>
     <string name="acc_button_add_bookmark">Добавляет закладку текущей позиции</string>
     <string name="bookmark_edit_hint">Название закладки</string>
@@ -72,6 +76,8 @@
     <string name="bookmark_delete_title">Удалить эту закладку?</string>
     <!--Settings-->
     <string name="action_settings">Настройки</string>
+    <string name="pref_resume_on_replug">Продолжить воспроизведение</string>
+    <string name="pref_resume_on_replug_hint">Продолжить воспроизведение при повторном подключении наушников.</string>
     <plurals name="minutes">
         <item quantity="one">%d минуту</item>
         <item quantity="few">%d минут</item>
