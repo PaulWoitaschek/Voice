@@ -52,13 +52,13 @@ import javax.inject.Singleton
 
   @Synchronized fun getOrphanedBooks(): List<Book> = ArrayList(orphaned)
 
-  @Synchronized fun updateBook(book: Book, chaptersChanged: Boolean = false) {
+  @Synchronized fun updateBook(book: Book) {
     v { "updateBook=${book.name} with time ${book.time}" }
 
     val index = active.indexOfFirst { it.id == book.id }
     if (index != -1) {
       active[index] = book
-      storage.updateBook(book, chaptersChanged)
+      storage.updateBook(book)
       updated.onNext(book)
       sortBooksAndNotifySubject()
     } else e { "update failed as there was no book" }

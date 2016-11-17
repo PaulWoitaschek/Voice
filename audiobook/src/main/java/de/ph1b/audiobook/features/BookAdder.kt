@@ -251,7 +251,7 @@ import javax.inject.Singleton
         currentFile = if (currentPathIsGone) newChapters.first().file else bookToUpdate.currentFile,
         time = if (currentPathIsGone) 0 else bookToUpdate.time)
 
-      handler.postBlocking { repo.updateBook(bookToUpdate, true) }
+      handler.postBlocking { repo.updateBook(bookToUpdate) }
     }
   }
 

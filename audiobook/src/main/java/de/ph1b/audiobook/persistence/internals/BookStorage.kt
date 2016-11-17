@@ -115,7 +115,7 @@ class BookStorage
     put(BookTable.TYPE, type.name)
   }
 
-  fun updateBook(book: Book, updateChapters: Boolean) = db.asTransaction {
+  fun updateBook(book: Book) = db.asTransaction {
     if (book.id == -1L) throw IllegalArgumentException("Book $book has an invalid id")
 
     // update book itself
@@ -123,10 +123,8 @@ class BookStorage
     update(BookTable.TABLE_NAME, bookCv, "${BookTable.ID}=?", toStringArray(book.id))
 
     // delete old chapters and replace them with new ones
-    if (updateChapters) {
-      delete(ChapterTable.TABLE_NAME, "${BookTable.ID}=?", toStringArray(book.id))
-      book.chapters.forEach { insert(it, book.id) }
-    }
+    delete(ChapterTable.TABLE_NAME, "${BookTable.ID}=?", toStringArray(book.id))
+    book.chapters.forEach { insert(it, book.id) }
   }
 
   private fun toStringArray(vararg elements: Any) = Array(elements.size) {
