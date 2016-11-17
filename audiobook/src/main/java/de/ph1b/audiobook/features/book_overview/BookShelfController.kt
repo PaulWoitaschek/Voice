@@ -33,7 +33,7 @@ import dagger.Lazy as DaggerLazy
  */
 class BookShelfController : MvpBaseController<BookShelfController, BookShelfPresenter>() {
 
-    override val presenter = App.component().bookShelfPresenter!!
+    override val presenter = App.component().bookShelfPresenter
     private val COVER_FROM_GALLERY = 1
 
     override fun provideView() = this

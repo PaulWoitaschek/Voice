@@ -119,7 +119,7 @@ class BookStorageTest {
                 playbackSpeed = 1.7f,
                 root = "slksjdglkjgaölskjdf")
 
-        register.updateBook(changed, true)
+        register.updateBook(changed)
 
         val containingBooks = register.activeBooks()
 

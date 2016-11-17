@@ -143,9 +143,7 @@ import javax.inject.Singleton
 
       if (!output.trim { it <= ' ' }.isEmpty()) {
         val devicePoints = output.split("\n".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()
-        for (voldPoint in devicePoints) {
-          results.add(voldPoint.split(" ".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()[2])
-        }
+        devicePoints.mapTo(results) { it.split(" ".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()[2] }
       }
     }
 
@@ -153,7 +151,7 @@ import javax.inject.Singleton
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       var i = 0
       while (i < results.size) {
-        if (!results.get(i).toLowerCase().matches(".*[0-9a-f]{4}[-][0-9a-f]{4}".toRegex())) {
+        if (!results[i].toLowerCase().matches(".*[0-9a-f]{4}[-][0-9a-f]{4}".toRegex())) {
           results.removeAt(i--)
         }
         i++
@@ -161,7 +159,7 @@ import javax.inject.Singleton
     } else {
       var i = 0
       while (i < results.size) {
-        if (!results.get(i).toLowerCase().contains("ext") && !results.get(i).toLowerCase().contains("sdcard")) {
+        if (!results[i].toLowerCase().contains("ext") && !results[i].toLowerCase().contains("sdcard")) {
           results.removeAt(i--)
         }
         i++
