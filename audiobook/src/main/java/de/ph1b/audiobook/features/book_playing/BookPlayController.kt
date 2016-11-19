@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.features.book_playing
 
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.*
@@ -20,10 +21,10 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.playback.MediaPlayer
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.Sandman
-import de.ph1b.audiobook.playback.utils.MediaPlayerCapabilities
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
 import de.ph1b.audiobook.uitools.ThemeUtil
@@ -48,11 +49,12 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
   }
 
   @Inject lateinit var mediaPlayer: PlayerController
+  @Inject lateinit var internalPlayer: MediaPlayer
   @Inject lateinit var sandMan: Sandman
   @Inject lateinit var prefs: PrefsManager
   @Inject lateinit var repo: BookRepository
+  @Inject lateinit var equalizer: Equalizer
   @Inject lateinit var playStateManager: PlayStateManager
-  @Inject lateinit var playerCapabilities: MediaPlayerCapabilities
 
   private val playPauseDrawable = PlayPauseDrawable()
   private var book: Book? = null
@@ -277,7 +279,7 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
     inflater.inflate(R.menu.book_play, menu)
 
     val speedItem = menu.findItem(R.id.action_time_lapse)
-    speedItem.isEnabled = playerCapabilities.useCustomMediaPlayer()
+    speedItem.isVisible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
 
     // sets the correct sleep timer icon
     val sleepTimerItem = menu.findItem(R.id.action_sleep)
@@ -287,9 +289,8 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
       sleepTimerItem.setIcon(R.drawable.alarm)
     }
 
-    val hasEqualizer = Equalizer.exists(activity)
     val equalizerItem = menu.findItem(R.id.action_equalizer)
-    equalizerItem.isEnabled = hasEqualizer
+    equalizerItem.isVisible = equalizer.exists
 
     // hide bookmark and getTime change item if there is no valid book
     val currentBookExists = book != null
@@ -325,7 +326,7 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
       true
     }
     R.id.action_equalizer -> {
-      Equalizer.launch(activity)
+      equalizer.launch(activity, internalPlayer.audioSessionId())
       true
     }
     android.R.id.home -> {

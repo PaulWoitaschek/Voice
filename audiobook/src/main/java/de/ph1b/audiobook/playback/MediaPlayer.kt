@@ -1,8 +1,17 @@
 package de.ph1b.audiobook.playback
 
-import android.media.AudioManager
+import android.media.PlaybackParams
+import android.net.Uri
+import android.os.Build
+import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
+import com.google.android.exoplayer2.source.ExtractorMediaSource
+import com.google.android.exoplayer2.upstream.DataSource
 import de.ph1b.audiobook.Book
-import de.ph1b.audiobook.playback.player.Player
+import de.ph1b.audiobook.features.book_playing.Equalizer
+import de.ph1b.audiobook.playback.utils.onAudioSessionId
+import de.ph1b.audiobook.playback.utils.onEnded
+import de.ph1b.audiobook.playback.utils.onError
 import e
 import i
 import io.reactivex.Observable
@@ -12,15 +21,15 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import v
 import java.io.File
-import java.io.IOException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
+
 @Singleton
 class MediaPlayer
 @Inject
-constructor(private val player: Player, private val playStateManager: PlayStateManager) {
+constructor(private val player: SimpleExoPlayer, private val dataSourceFactory: DataSource.Factory, private val playStateManager: PlayStateManager, private val equalizer: Equalizer) {
 
   private var book = BehaviorSubject.create<Book>()
   private var state = BehaviorSubject.createDefault(State.IDLE)
@@ -30,30 +39,32 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
   fun onError(): Observable<Unit> = errorSubject
 
   init {
-    player.setAudioStreamType(AudioManager.STREAM_MUSIC)
-    player.onCompletion
-      .subscribe {
-        // After the current song has ended, prepare the next one if there is one. Else stop the
-        // resources.
-        book.value?.let {
-          v { "onCompletion called, nextChapter=${it.nextChapter()}" }
-          if (it.nextChapter() != null) {
-            next()
-          } else {
-            v { "Reached last track. Stopping player" }
-            playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
+    player.onEnded {
+      // After the current song has ended, prepare the next one if there is one. Else stop the
+      // resources.
+      book.value?.let {
+        v { "onCompletion called, nextChapter=${it.nextChapter()}" }
+        if (it.nextChapter() != null) {
+          next()
+        } else {
+          v { "Reached last track. Stopping player" }
+          playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
+          player.playWhenReady = false
 
-            state.onNext(State.PLAYBACK_COMPLETED)
-          }
+          state.onNext(State.IDLE)
         }
       }
+    }
+    player.onError {
+      e { "exoPlayer error $it" }
+      player.stop()
+      state.onNext(MediaPlayer.State.IDLE)
+      errorSubject.onNext(Unit)
+    }
 
-    player.onError
-      .subscribe {
-        player.reset()
-        state.onNext(MediaPlayer.State.IDLE)
-        errorSubject.onNext(Unit)
-      }
+    player.onAudioSessionId {
+      equalizer.update(it)
+    }
 
     state.map { it == State.STARTED }
       .subscribe { isPlaying ->
@@ -62,12 +73,12 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
           if (updatingDisposable?.isDisposed ?: true) {
             // updates the book automatically with the current position
             updatingDisposable = Observable.interval(200L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-              .map { if (state.value == State.STARTED) player.currentPosition else -1 }
-              .filter { it != -1 }
+              .map { if (state.value == State.STARTED) player.currentPosition else -1L }
+              .filter { it != -1L }
               .distinct { it / 1000 } // let the value only pass the full second changed.
               .subscribe {
                 // update the book
-                book.value?.copy(time = it).let {
+                book.value?.copy(time = it.toInt()).let {
                   book.onNext(it)
                 }
               }
@@ -96,43 +107,37 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
 
   fun bookObservable(): Observable<Book> = book
 
-  fun setVolume(loud: Boolean) = player.setVolume(if (loud) 1F else 0.1F)
+  fun setVolume(loud: Boolean) {
+    player.volume = if (loud) 1F else 0.1F
+  }
 
   // Prepares the current chapter set in book.
   private fun prepare() {
     book.value?.let {
-      try {
-        if (state.value != State.IDLE) player.reset()
-
-        player.prepare(it.currentChapter().file)
-        player.seekTo(it.time)
-        player.playbackSpeed = it.playbackSpeed
-        state.onNext(State.PAUSED)
-      } catch (ex: IOException) {
-        e(ex) { "Error when preparing the player." }
-        state.onNext(State.STOPPED)
-      }
+      i { "prepare ${it.currentFile}" }
+      val extractorsFactory = DefaultExtractorsFactory()
+      val uri = Uri.fromFile(it.currentFile)
+      val source = ExtractorMediaSource(uri, dataSourceFactory, extractorsFactory, null, null)
+      player.prepare(source)
+      equalizer.update(player.audioSessionId)
+      player.seekTo(it.time.toLong())
+      // player.playbackSpeed = it.playbackSpeed
+      state.onNext(State.PAUSED)
     }
   }
-
 
   /**
    * Plays the prepared file.
    */
   fun play() {
+    i { "play called in state ${state.value}" }
     when (state.value) {
-      State.PLAYBACK_COMPLETED -> {
-        player.seekTo(0)
-        player.start()
-        playStateManager.playState.onNext(PlayStateManager.PlayState.PLAYING)
-        state.onNext(State.STARTED)
-      }
       State.PAUSED -> {
-        player.start()
+        player.playWhenReady = true
         playStateManager.playState.onNext(PlayStateManager.PlayState.PLAYING)
         state.onNext(State.STARTED)
       }
-      State.STOPPED -> {
+      State.IDLE -> {
         prepare()
         if (state.value == State.PAUSED) {
           play()
@@ -153,9 +158,9 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
   fun skip(direction: Direction) {
     v { "direction=$direction" }
     book.value?.let {
-      if (state.value == State.IDLE && state.value == State.STOPPED) {
+      if (state.value == State.IDLE) {
         prepare()
-        if (state.value != State.PREPARED) return
+        if (state.value != State.PAUSED) return
       }
 
       val currentPos = player.currentPosition
@@ -170,7 +175,7 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
       } else if (seekTo > duration) {
         next()
       } else {
-        changePosition(seekTo, it.currentFile)
+        changePosition(seekTo.toInt(), it.currentFile)
       }
     }
   }
@@ -180,9 +185,9 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
    */
   fun previous(toNullOfNewTrack: Boolean) {
     book.value?.let {
-      if (state.value == State.IDLE || state.value == State.STOPPED) {
+      if (state.value == State.IDLE) {
         prepare()
-        if (state.value != State.PREPARED) return
+        if (state.value != State.PAUSED) return
       }
 
       val previousChapter = it.previousChapter()
@@ -204,10 +209,12 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
    * Stops the playback and releases some resources.
    */
   fun stop() {
-    if (state.value == State.STARTED) player.pause()
+    if (state.value == State.STARTED) player.playWhenReady = false
     playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
-    state.onNext(State.STOPPED)
+    state.onNext(State.IDLE)
   }
+
+  fun audioSessionId() = player.audioSessionId
 
 
   /**
@@ -221,7 +228,7 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
     book.value?.let {
       when (state.value) {
         State.STARTED -> {
-          player.pause()
+          player.playWhenReady = false
 
           if (rewind) {
             val autoRewind = autoRewindAmount * 1000
@@ -230,7 +237,7 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
               var seekTo = originalPosition - autoRewind
               seekTo = Math.max(seekTo, 0)
               player.seekTo(seekTo)
-              val copy = it.copy(time = seekTo)
+              val copy = it.copy(time = seekTo.toInt())
               book.onNext(copy)
             }
           }
@@ -274,17 +281,17 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
 
         prepare()
         if (wasPlaying) {
-          player.start()
+          player.playWhenReady = true
           state.onNext(State.STARTED)
           playStateManager.playState.onNext(PlayStateManager.PlayState.PLAYING)
         } else {
           playStateManager.playState.onNext(PlayStateManager.PlayState.PAUSED)
         }
       } else {
-        if (state.value == State.STOPPED || state.value == State.IDLE) prepare()
+        if (state.value == State.IDLE) prepare()
         when (state.value) {
-          State.STARTED, State.PAUSED, State.PREPARED -> {
-            player.seekTo(time)
+          State.STARTED, State.PAUSED -> {
+            player.seekTo(time.toLong())
 
             val copy = it.copy(time = time)
             book.onNext(copy)
@@ -303,9 +310,24 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
       val copy = it.copy(playbackSpeed = speed)
       book.onNext(copy)
 
+
       player.playbackSpeed = speed
     }
   }
+
+  private var SimpleExoPlayer.playbackSpeed: Float
+    set(value) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (playbackSpeed == value) return
+
+        playbackParams = PlaybackParams().apply {
+          speed = value
+        }
+      }
+    }
+    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      playbackParams?.speed ?: 1F
+    } else 1F
 
   /**
    * The direction to skip.
@@ -319,10 +341,7 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
    */
   private enum class State {
     IDLE,
-    PREPARED,
     STARTED,
-    PAUSED,
-    STOPPED,
-    PLAYBACK_COMPLETED;
+    PAUSED
   }
 }
