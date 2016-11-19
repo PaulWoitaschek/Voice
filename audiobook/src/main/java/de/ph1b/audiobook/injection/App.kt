@@ -13,7 +13,6 @@ import org.acra.config.ConfigurationBuilder
 import org.acra.sender.HttpSender.Method
 import org.acra.sender.HttpSender.Type
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 @ReportsCrashes(
@@ -34,11 +33,10 @@ class App : Application() {
     // init acra + return early if this is the sender service
     if (!BuildConfig.DEBUG) {
       val isSenderProcess = ACRA.isACRASenderServiceProcess()
-      if (isSenderProcess || Random().nextInt(5) == 0) {
-        val config = ConfigurationBuilder(this)
-          .build()
-        ACRA.init(this, config)
-      }
+      //if (isSenderProcess || Random().nextInt(5) == 0) {
+      val config = ConfigurationBuilder(this)
+        .build()
+      ACRA.init(this, config)
       if (isSenderProcess) return
     }
 
