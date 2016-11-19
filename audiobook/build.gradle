@@ -15,8 +15,8 @@ android {
         applicationId "de.ph1b.audiobook"
         minSdkVersion minSdk
         targetSdkVersion 25
-        versionCode 138
-        versionName 'v2.9'
+        versionCode 139
+        versionName 'v2.9.0.1'
 
         def acraServer = project.hasProperty("ACRA_SERVER") ? ACRA_SERVER : "\"http://127.0.0.1/\""
         buildConfigField("String", "ACRA_SERVER", acraServer)
