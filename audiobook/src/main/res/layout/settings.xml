@@ -49,6 +49,10 @@
                 android:id="@+id/autoRewind"
                 layout="@layout/setting_row_double"/>
 
+            <include
+                android:id="@+id/broadcastTrack"
+                layout="@layout/setting_row_switch"/>
+
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

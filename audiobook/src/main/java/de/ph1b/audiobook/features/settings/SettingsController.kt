@@ -118,7 +118,23 @@ class SettingsController : BaseController() {
       .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
       .bindToLifeCycle()
       .subscribe { autoRewindDescription.text = it }
+
+    // broadcast track information
+    val broadcastTrack: View = view.find(R.id.broadcastTrack)
+    val broadcastTrackTitle: TextView = broadcastTrack.find(R.id.switchTitle)
+    val broadcastTrackDescription: TextView = broadcastTrack.find(R.id.switchDescription)
+    val broadcastTrackSwitch: SwitchCompat = broadcastTrack.find(R.id.switchSetting)
+    broadcastTrackTitle.setText(R.string.pref_broadcast_track_information)
+    broadcastTrackDescription.setText(R.string.pref_broadcast_track_information_hint)
+    broadcastTrack.setOnClickListener { broadcastTrackSwitch.toggle() }
+    prefs.broadCastTrackInformation.asV2Observable()
+      .bindToLifeCycle()
+      .subscribe { broadcastTrackSwitch.isChecked = it }
+    broadcastTrackSwitch.setOnCheckedChangeListener { compoundButton, checked ->
+      prefs.broadCastTrackInformation.set(checked)
+    }
   }
+
 
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

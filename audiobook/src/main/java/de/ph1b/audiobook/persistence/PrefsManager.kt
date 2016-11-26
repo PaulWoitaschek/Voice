@@ -26,4 +26,5 @@ import javax.inject.Singleton
   @SleepTime val sleepTime: Preference<Int>,
   @SingleBookFolders val singleBookFolders: Preference<Set<String>>,
   @CollectionFolders val collectionFolders: Preference<Set<String>>,
-  @CurrentBookId val currentBookId: Preference<Long>)
+  @CurrentBookId val currentBookId: Preference<Long>,
+  @BroadCastTrackInformation val broadCastTrackInformation: Preference<Boolean>)
