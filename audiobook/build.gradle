@@ -102,7 +102,7 @@ dependencies {
     compile 'com.github.PaulWoitaschek:Slimber:1.0.4'
 
     // permissions
-    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.8.2@aar'
+    compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.8.2@aar'
 
     // crashes
     compile "ch.acra:acra:4.9.1"
