@@ -9,6 +9,7 @@ import android.support.v4.media.session.PlaybackStateCompat
 import com.squareup.picasso.Picasso
 import d
 import de.ph1b.audiobook.Book
+import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.CoverReplacement
@@ -120,6 +121,7 @@ class ChangeNotifier(private val mediaSession: MediaSessionCompat) {
         putExtra("track", chapterName)
         putExtra("playing", playState === PlayStateManager.PlayState.PLAYING)
         putExtra("position", time)
+        putExtra("package", BuildConfig.APPLICATION_ID)
       }
   }
 }
