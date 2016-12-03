@@ -9,7 +9,7 @@ android {
     int minSdk = project.hasProperty('minSdk') ? minSdk.toInteger() : 16
 
     compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    buildToolsVersion '25.0.1'
 
     defaultConfig {
         applicationId "de.ph1b.audiobook"
@@ -87,10 +87,9 @@ dependencies {
     testCompile "org.assertj:assertj-core:1.7.1"
 
     // rx extensions
-    def rxJavaVersion = "2.0.1"
-    compile "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
-    compile "io.reactivex.rxjava2:rxandroid:$rxJavaVersion"
-    compile 'com.github.akarnokd:rxjava2-interop:0.6.1'
+    compile "io.reactivex.rxjava2:rxjava:2.0.2"
+    compile "io.reactivex.rxjava2:rxandroid:2.0.1"
+    compile 'com.github.akarnokd:rxjava2-interop:0.7.0'
     compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.2'
 
     // kotlin
