@@ -1,8 +1,6 @@
 package de.ph1b.audiobook.playback
 
-import android.media.PlaybackParams
 import android.net.Uri
-import android.os.Build
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.source.ExtractorMediaSource
@@ -12,6 +10,7 @@ import de.ph1b.audiobook.features.book_playing.Equalizer
 import de.ph1b.audiobook.playback.utils.onAudioSessionId
 import de.ph1b.audiobook.playback.utils.onEnded
 import de.ph1b.audiobook.playback.utils.onError
+import de.ph1b.audiobook.playback.utils.setPlaybackSpeed
 import e
 import i
 import io.reactivex.Observable
@@ -90,12 +89,7 @@ constructor(private val player: SimpleExoPlayer, private val dataSourceFactory: 
       }
   }
 
-
-  /**
-   * Initializes a new book. After this, a call to play can be made.
-
-   * @param book The book to be initialized.
-   */
+  /** Initializes a new book. After this, a call to play can be made. */
   fun init(book: Book) {
     if (this.book.value != book) {
       i { "constructor called with ${book.name}" }
@@ -121,14 +115,12 @@ constructor(private val player: SimpleExoPlayer, private val dataSourceFactory: 
       player.prepare(source)
       equalizer.update(player.audioSessionId)
       player.seekTo(it.time.toLong())
-      // player.playbackSpeed = it.playbackSpeed
+      player.setPlaybackSpeed(it.playbackSpeed)
       state.onNext(State.PAUSED)
     }
   }
 
-  /**
-   * Plays the prepared file.
-   */
+  /** Plays the prepared file. */
   fun play() {
     i { "play called in state ${state.value}" }
     when (state.value) {
@@ -150,11 +142,7 @@ constructor(private val player: SimpleExoPlayer, private val dataSourceFactory: 
   var seekTime = 0
   var autoRewindAmount = 0
 
-  /**
-   * Skips by the amount, specified in the settings.
-
-   * @param direction The direction to skip
-   */
+  /** Skips by the amount, specified in the settings */
   fun skip(direction: Direction) {
     v { "direction=$direction" }
     book.value?.let {
@@ -180,9 +168,7 @@ constructor(private val player: SimpleExoPlayer, private val dataSourceFactory: 
     }
   }
 
-  /**
-   * If current time is > 2000ms, seek to 0. Else play previous chapter if there is one.
-   */
+  /** If current time is > 2000ms, seek to 0. Else play previous chapter if there is one */
   fun previous(toNullOfNewTrack: Boolean) {
     book.value?.let {
       if (state.value == State.IDLE) {
@@ -205,9 +191,7 @@ constructor(private val player: SimpleExoPlayer, private val dataSourceFactory: 
     }
   }
 
-  /**
-   * Stops the playback and releases some resources.
-   */
+  /** Stops the playback and releases some resources. */
   fun stop() {
     if (state.value == State.STARTED) player.playWhenReady = false
     playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
@@ -220,7 +204,6 @@ constructor(private val player: SimpleExoPlayer, private val dataSourceFactory: 
   /**
    * Pauses the player. Also stops the updating mechanism which constantly updates the book to the
    * database.
-
    * @param rewind true if the player should automatically rewind a little bit.
    */
   fun pause(rewind: Boolean) {
@@ -251,9 +234,7 @@ constructor(private val player: SimpleExoPlayer, private val dataSourceFactory: 
     }
   }
 
-  /**
-   * Plays the next chapter. If there is none, don't do anything.
-   */
+  /** Plays the next chapter. If there is none, don't do anything.  */
   fun next() {
     book.value?.nextChapter()?.let {
       changePosition(0, it.file)
@@ -263,7 +244,6 @@ constructor(private val player: SimpleExoPlayer, private val dataSourceFactory: 
   /**
    * Changes the current position in book. If the path is the same, continues playing the song.
    * Else calls [.prepare] to prepare the next file
-
    * @param time The time in chapter at which to start
    * *
    * @param file The path of the media to play (relative to the books root path)
@@ -302,43 +282,24 @@ constructor(private val player: SimpleExoPlayer, private val dataSourceFactory: 
     }
   }
 
-  /**
-   * The current playback speed. 1.0 for normal playback, 2.0 for twice the speed, etc.
-   */
+  /** The current playback speed. 1.0 for normal playback, 2.0 for twice the speed, etc.  */
   fun setPlaybackSpeed(speed: Float) {
     book.value?.let {
       val copy = it.copy(playbackSpeed = speed)
       book.onNext(copy)
 
 
-      player.playbackSpeed = speed
+      player.setPlaybackSpeed(speed)
     }
   }
 
-  private var SimpleExoPlayer.playbackSpeed: Float
-    set(value) {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        if (playbackSpeed == value) return
 
-        playbackParams = PlaybackParams().apply {
-          speed = value
-        }
-      }
-    }
-    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      playbackParams?.speed ?: 1F
-    } else 1F
-
-  /**
-   * The direction to skip.
-   */
+  /** The direction to skip. */
   enum class Direction {
     FORWARD, BACKWARD
   }
 
-  /**
-   * The various internal states the player can have.
-   */
+  /** The various internal states the player can have. */
   private enum class State {
     IDLE,
     STARTED,
