@@ -18,13 +18,13 @@ android {
         versionCode 140
         versionName 'v2.9.0.2'
 
-        def acraServer = project.hasProperty("ACRA_SERVER") ? ACRA_SERVER : "\"http://127.0.0.1/\""
+        def acraServer = project.hasProperty("ACRA_SERVER") ? "\"$ACRA_SERVER\"" : "\"http://127.0.0.1/\""
         buildConfigField("String", "ACRA_SERVER", acraServer)
 
-        def acraUser = project.hasProperty("ACRA_USER") ? ACRA_USER : "\"user\""
+        def acraUser = project.hasProperty("ACRA_USER") ? "\"$ACRA_USER\"" : "\"user\""
         buildConfigField("String", "ACRA_USER", acraUser)
 
-        def acraPassword = project.hasProperty("ACRA_PASSWORD") ? ACRA_PASSWORD : "\"password\""
+        def acraPassword = project.hasProperty("ACRA_PASSWORD") ? "\"$ACRA_PASSWORD\"" : "\"password\""
         buildConfigField("String", "ACRA_PASSWORD", acraPassword)
     }
 
