@@ -1,3 +1,18 @@
+# 2.9.0.2
+* Restore playback speed when changing the book
+* Smaller app
+* Support for scrobbling
+
+# 2.9.0.1
+# 2.9
+# 2.8.0.4.3
+# 2.8.0.4.2
+# 2.8.0.4.1
+# 2.8.0.4
+# 2.8.0.3
+# 2.8.0.2
+# 2.8.0.1
+
 # 2.8.0
 * Added option to select cover from disk. Many thanks to [@alilotfi](https://github.com/alilotfi)
 * Added a splash activity for faster launches
