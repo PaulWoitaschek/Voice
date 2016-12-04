@@ -12,23 +12,22 @@ import java.io.File
  * Represents a playable book.
  *
  * @param id the book id
- * @param author the author of the book. Might be null
+ * @param author the author of the book.
  *
  * @author Paul Woitaschek
  */
-data class Book(val id: Long,
-                val type: Type,
-                val author: String?,
-                val currentFile: File,
-                val time: Int,
-                val name: String,
-                val chapters: List<Chapter>,
-                val playbackSpeed: Float,
-                val root: String) : Comparable<Book> {
+data class Book(
+  val id: Long,
+  val type: Type,
+  val author: String?,
+  val currentFile: File,
+  val time: Int,
+  val name: String,
+  val chapters: List<Chapter>,
+  val playbackSpeed: Float,
+  val root: String) : Comparable<Book> {
 
-  override fun compareTo(other: Book): Int {
-    return NaturalOrderComparator.stringComparator.compare(name, other.name)
-  }
+  override fun compareTo(other: Book) = NaturalOrderComparator.stringComparator.compare(name, other.name)
 
   companion object {
     const val ID_UNKNOWN = -1L
@@ -47,14 +46,10 @@ data class Book(val id: Long,
     check(root.isNotEmpty(), { "root must not be empty" })
   }
 
-  /**
-   * The transition name for the cover transition.
-   */
+  /** The transition name for the cover transition. */
   val coverTransitionName = COVER_TRANSITION_PREFIX + id
 
-  /**
-   * The global duration. It sums up the duration of all chapters.
-   */
+  /** The global duration. It sums up the duration of all chapters. */
   val globalDuration: Int by lazy {
     var globalDuration = 0
     for ((file, name, duration) in chapters) {
