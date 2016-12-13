@@ -87,4 +87,9 @@ import de.ph1b.audiobook.uitools.ThemeUtil
     val key = "currentBook"
     return prefs.getLong(key, Book.ID_UNKNOWN)
   }
+
+    @Provides @Reusable @BroadCastTrackInformation fun broadCastTrackInformationPreference(context: Context, prefs: RxSharedPreferences): Preference<Boolean> {
+      val key = context.getString(R.string.pref_key_broadcast_track_information)
+      return prefs.getBoolean(key, true)
+    }
 }

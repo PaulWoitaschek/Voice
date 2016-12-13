@@ -3,6 +3,7 @@
     <string name="app_name" translatable="false">Material Player</string>
     <string name="zeroTime" translatable="false">0:00:00</string>
 
+    <string name="pref_key_broadcast_track_information">BROADCAST_TRACK_INFORMATION</string>
     <string name="pref_key_seek_time" translatable="false">SEEK_TIME</string>
     <string name="pref_key_sleep_time" translatable="false">SLEEP_TIME</string>
     <string name="pref_key_resume_on_replug" translatable="false">RESUME_ON_REPLUG</string>

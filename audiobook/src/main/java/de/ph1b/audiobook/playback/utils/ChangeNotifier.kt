@@ -11,6 +11,8 @@ import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.value
+import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
@@ -29,6 +31,7 @@ class ChangeNotifier(private val mediaSession: MediaSessionCompat) {
     App.component().inject(this)
   }
 
+  @Inject lateinit var prefs: PrefsManager
   @Inject lateinit var imageHelper: ImageHelper
   @Inject lateinit var context: Context
   @Inject lateinit var playStateManager: PlayStateManager
@@ -60,7 +63,9 @@ class ChangeNotifier(private val mediaSession: MediaSessionCompat) {
     val author = book.author
     val position = book.time
 
-    context.sendBroadcast(what.broadcastIntent(author, bookName, chapterName, playState, position))
+    if(prefs.broadCastTrackInformation.value()) {
+      context.sendBroadcast(what.broadcastIntent(author, bookName, chapterName, playState, position))
+    }
 
     //noinspection ResourceType
     playbackStateBuilder.setState(playState.playbackStateCompat, position.toLong(), book.playbackSpeed)

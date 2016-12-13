@@ -10,6 +10,7 @@ class CustomBackupAgent : BackupAgentHelper() {
   private val BACKUP_KEY = "BACKUP_KEY"
 
   override fun onCreate() {
+    val broadcastTrackInformation = getString(R.string.pref_key_broadcast_track_information)
     val resumeOnReplug = getString(R.string.pref_key_resume_on_replug)
     val seekTime = getString(R.string.pref_key_seek_time)
     val sleepTime = getString(R.string.pref_key_sleep_time)
@@ -19,7 +20,7 @@ class CustomBackupAgent : BackupAgentHelper() {
     val bookmarkOnSleep = getString(R.string.pref_key_bookmark_on_sleep)
     val shakeToResetSleepTimer = getString(R.string.pref_key_shake_to_reset_sleep_timer)
 
-    val helper = SharedPreferencesBackupHelper(this, resumeOnReplug, seekTime, sleepTime, theme, pauseOnCanDuck, autoRewind, bookmarkOnSleep, shakeToResetSleepTimer)
+    val helper = SharedPreferencesBackupHelper(this, broadcastTrackInformation, resumeOnReplug, seekTime, sleepTime, theme, pauseOnCanDuck, autoRewind, bookmarkOnSleep, shakeToResetSleepTimer)
     addHelper(BACKUP_KEY, helper)
   }
 }
