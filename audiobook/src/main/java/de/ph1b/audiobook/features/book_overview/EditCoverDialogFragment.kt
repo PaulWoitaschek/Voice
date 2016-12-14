@@ -71,7 +71,7 @@ class EditCoverDialogFragment : DialogFragment() {
     dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener {
       val r = cropOverlay.selectedRect
       if (!r.isEmpty) {
-        val target = object : SimpleTarget() {
+        val target = object : SimpleTarget {
           override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) {
             imageHelper.saveCover(bitmap, book.coverFile())
             picasso.invalidate(book.coverFile())

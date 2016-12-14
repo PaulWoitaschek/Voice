@@ -6,7 +6,7 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 
 
-abstract class SimpleTarget : Target {
+interface SimpleTarget : Target {
 
   override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
   }
