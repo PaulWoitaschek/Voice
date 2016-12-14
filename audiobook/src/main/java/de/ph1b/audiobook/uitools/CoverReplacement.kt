@@ -25,7 +25,7 @@ class CoverReplacement(private val text: String, c: Context) : Drawable() {
   @Inject lateinit var prefsManager: PrefsManager
 
   init {
-    App.component().inject(this)
+    App.component.inject(this)
 
     check(text.isNotEmpty())
 

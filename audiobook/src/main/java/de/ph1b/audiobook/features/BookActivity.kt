@@ -39,7 +39,7 @@ class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Edi
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_book)
-    App.component().inject(this)
+    App.component.inject(this)
 
     val root = findViewById(R.id.root) as ViewGroup
     router = Conductor.attachRouter(this, root, savedInstanceState)

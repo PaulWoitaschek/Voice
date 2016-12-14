@@ -20,7 +20,7 @@ class SeekDialogFragment : DialogFragment() {
   @Inject lateinit var prefs: PrefsManager
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    App.component().inject(this)
+    App.component.inject(this)
 
     // find views
     val view = context.layoutInflater().inflate(R.layout.dialog_amount_chooser, null)

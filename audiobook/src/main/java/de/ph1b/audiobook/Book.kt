@@ -109,7 +109,7 @@ data class Book(val id: Long,
       root.replace(separator, "")
     } + ".jpg"
 
-    val coverFile = File("${Environment.getExternalStorageDirectory().absolutePath}${separator}Android${separator}data$separator${App.component().context.packageName}",
+    val coverFile = File("${Environment.getExternalStorageDirectory().absolutePath}${separator}Android${separator}data$separator${App.component.context.packageName}",
       name)
     i { "CoverFile is $coverFile" }
     if (!coverFile.parentFile.exists()) {

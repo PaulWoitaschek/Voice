@@ -21,7 +21,7 @@ class EditBookTitleDialogFragment : DialogFragment() {
   @Inject lateinit var repo: BookRepository
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    App.component().inject(this)
+    App.component.inject(this)
 
     val presetName = arguments.getString(NI_PRESET_NAME)
     val bookId = arguments.getLong(NI_BOOK_ID)

@@ -23,7 +23,7 @@ class ThemePickerDialogFragment : DialogFragment() {
   @Inject lateinit var prefsManager: PrefsManager
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    App.component().inject(this)
+    App.component.inject(this)
 
     val oldTheme = prefsManager.theme.get()!!
     val existingThemes = ThemeUtil.Theme.values()

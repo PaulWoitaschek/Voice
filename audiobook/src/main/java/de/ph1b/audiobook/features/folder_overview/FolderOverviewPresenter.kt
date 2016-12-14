@@ -19,7 +19,7 @@ import javax.inject.Inject
 class FolderOverviewPresenter : Presenter<FolderOverviewController>() {
 
   init {
-    App.component().inject(this)
+    App.component.inject(this)
   }
 
   @Inject lateinit var prefsManager: PrefsManager

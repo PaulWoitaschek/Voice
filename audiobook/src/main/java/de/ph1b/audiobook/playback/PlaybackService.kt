@@ -49,7 +49,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   override fun onGetRoot(clientPackageName: String, clientUid: Int, rootHints: Bundle?): BrowserRoot = mediaBrowserHelper.onGetRoot()
 
   init {
-    App.component().inject(this)
+    App.component.inject(this)
   }
 
   private val disposables = CompositeDisposable()

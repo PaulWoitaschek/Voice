@@ -33,7 +33,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
   @Inject lateinit var playerController: PlayerController
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    App.component().inject(this)
+    App.component.inject(this)
 
     // init views
     val view = context.layoutInflater().inflate(R.layout.dialog_amount_chooser, null)

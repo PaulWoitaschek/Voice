@@ -61,7 +61,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    App.component().inject(this)
+    App.component.inject(this)
 
     // find views
     setContentView(R.layout.activity_folder_chooser)

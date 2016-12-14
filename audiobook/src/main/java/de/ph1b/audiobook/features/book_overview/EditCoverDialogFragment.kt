@@ -32,7 +32,7 @@ class EditCoverDialogFragment : DialogFragment() {
   private fun callback() = activity as Callback
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    App.component().inject(this)
+    App.component.inject(this)
 
     val picasso = Picasso.with(context)
 

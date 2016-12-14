@@ -24,7 +24,7 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
   @Inject lateinit var repo: BookRepository
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    App.component().inject(this)
+    App.component.inject(this)
 
     val dialog = BottomSheetDialog(context, R.style.BottomSheetStyle)
 

@@ -21,7 +21,7 @@ abstract class BaseActivity : AppCompatActivity() {
   private var nightModeAtCreation: Int? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    App.component().inject(this)
+    App.component.inject(this)
     super.onCreate(savedInstanceState)
 
     nightModeAtCreation = AppCompatDelegate.getDefaultNightMode()

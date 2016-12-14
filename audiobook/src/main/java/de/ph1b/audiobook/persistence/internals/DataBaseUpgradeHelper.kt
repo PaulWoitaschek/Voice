@@ -251,7 +251,7 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
         }
         if (coverFile.exists() && coverFile.canWrite()) {
           try {
-            val newCoverFile = File(Environment.getExternalStorageDirectory().absolutePath + File.separator + "Android" + File.separator + "data" + File.separator + App.component().context.packageName,
+            val newCoverFile = File(Environment.getExternalStorageDirectory().absolutePath + File.separator + "Android" + File.separator + "data" + File.separator + App.component.context.packageName,
               newBookId.toString() + ".jpg")
             if (!coverFile.parentFile.exists()) {
               //noinspection ResultOfMethodCallIgnored

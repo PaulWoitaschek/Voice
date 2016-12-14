@@ -24,7 +24,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
   @Inject lateinit var playerController: PlayerController
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    App.component().inject(this)
+    App.component.inject(this)
     val view = context.layoutInflater().inflate(R.layout.dialog_time_picker, null)
     val colon = view.findViewById(R.id.colon)
     val numberHour = view.findViewById(R.id.numberHour) as NumberPicker

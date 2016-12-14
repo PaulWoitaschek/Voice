@@ -25,7 +25,7 @@ import javax.inject.Inject
 class ChangeNotifier(private val mediaSession: MediaSessionCompat) {
 
   init {
-    App.component().inject(this)
+    App.component.inject(this)
   }
 
   @Inject lateinit var imageHelper: ImageHelper

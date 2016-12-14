@@ -37,7 +37,7 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
   })
 
   init {
-    App.component().inject(this)
+    App.component.inject(this)
     setHasOptionsMenu(true)
   }
 

@@ -36,7 +36,7 @@ import javax.inject.Inject
 class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuClickedListener {
 
   init {
-    App.component().inject(this)
+    App.component.inject(this)
   }
 
   override fun onOptionsMenuClicked(bookmark: Bookmark, v: View) {

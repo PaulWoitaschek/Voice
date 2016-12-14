@@ -33,7 +33,7 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
 
   init {
     i { "A new adapter was created." }
-    App.component().inject(this)
+    App.component.inject(this)
     setHasStableIds(true)
   }
 

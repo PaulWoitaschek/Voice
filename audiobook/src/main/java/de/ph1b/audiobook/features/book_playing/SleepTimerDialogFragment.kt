@@ -38,7 +38,7 @@ class SleepTimerDialogFragment : DialogFragment() {
   @Inject lateinit var shakeDetector: ShakeDetector
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    App.component().inject(this)
+    App.component.inject(this)
 
     @SuppressWarnings("InflateParams")
     val layout = context.layoutInflater().inflate(R.layout.dialog_sleep, null)

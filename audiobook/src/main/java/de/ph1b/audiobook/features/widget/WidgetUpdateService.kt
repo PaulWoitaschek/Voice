@@ -52,7 +52,7 @@ class WidgetUpdateService : Service() {
 
   override fun onCreate() {
     super.onCreate()
-    App.component().inject(this)
+    App.component.inject(this)
 
     // update widget if current book, current book id or playState have changed.
     disposables.add(Observable.merge(
