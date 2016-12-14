@@ -101,7 +101,7 @@ dependencies {
     def conductorVer = "2.0.5"
     compile "com.bluelinelabs:conductor:$conductorVer"
     compile "com.bluelinelabs:conductor-support:$conductorVer"
-    compile "com.bluelinelabs:conductor-rxlifecycle:$conductorVer"
+    compile "com.bluelinelabs:conductor-rxlifecycle2:$conductorVer"
 }
 
 apply plugin: 'com.google.gms.google-services'
