@@ -95,7 +95,7 @@ dependencies {
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.8.2@aar'
 
     def vPlayServices = "10.0.1"
-    compile "com.google.firebase:firebase-crash:$vPlayServices"
+    releaseCompile "com.google.firebase:firebase-crash:$vPlayServices"
 
     // conductor
     def conductorVer = "2.0.5"
