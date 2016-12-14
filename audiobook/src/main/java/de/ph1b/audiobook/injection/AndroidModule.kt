@@ -7,14 +7,12 @@ import android.content.Context
 import android.hardware.SensorManager
 import android.media.AudioManager
 import android.net.ConnectivityManager
-import android.os.Handler
 import android.telephony.TelephonyManager
 import android.view.WindowManager
 import com.google.android.exoplayer2.DefaultLoadControl
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.google.android.exoplayer2.trackselection.FixedTrackSelection
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
@@ -39,9 +37,7 @@ import javax.inject.Singleton
   @Provides @Singleton fun provideSensorManager(context: Context) = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager?
 
   @Provides @Singleton fun provideExoPlayer(context: Context): SimpleExoPlayer {
-    val mainHandler = Handler()
-    val fixedTrackSelectorFactory = FixedTrackSelection.Factory()
-    val trackSelector = DefaultTrackSelector(mainHandler, fixedTrackSelectorFactory)
+    val trackSelector = DefaultTrackSelector()
     val loadControl = DefaultLoadControl()
     return ExoPlayerFactory.newSimpleInstance(context, trackSelector, loadControl)
   }
