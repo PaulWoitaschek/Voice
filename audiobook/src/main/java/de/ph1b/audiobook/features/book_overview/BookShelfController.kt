@@ -13,6 +13,7 @@ import com.getbase.floatingactionbutton.FloatingActionButton
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.book_playing.BookPlayController
+import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.find
@@ -31,7 +32,7 @@ import dagger.Lazy as DaggerLazy
 /**
  * Showing the shelf of all the available books and provide a navigation to each book
  */
-class BookShelfController : MvpBaseController<BookShelfController, BookShelfPresenter>(), EditCoverDialogFragment.Callback {
+class BookShelfController : MvpBaseController<BookShelfController, BookShelfPresenter>(), EditCoverDialogFragment.Callback, EditBookBottomSheet.Callback {
 
   override val presenter = App.component.bookShelfPresenter
   private val COVER_FROM_GALLERY = 1
@@ -78,7 +79,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
       if (clickType == BookShelfAdapter.ClickType.REGULAR) {
         invokeBookSelectionCallback(book.id)
       } else {
-        EditBookBottomSheet.newInstance(book)
+        EditBookBottomSheet.newInstance(this, book)
           .show(fragmentManager, "editBottomSheet")
       }
     }
@@ -136,13 +137,6 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
       }
       else -> super.onOptionsItemSelected(item)
     }
-  }
-
-  fun changeCover(book: Book) {
-    menuBook = book
-    val galleryPickerIntent = Intent(Intent.ACTION_PICK)
-    galleryPickerIntent.type = "image/*"
-    startActivityForResult(galleryPickerIntent, COVER_FROM_GALLERY)
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -253,7 +247,16 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
 
   override fun onBookCoverChanged(book: Book) = adapter.changeBookCover(book)
 
-  enum class DisplayMode constructor(@DrawableRes val icon: Int) {
+  override fun onInternetCoverRequested(book: Book) = router.pushController(RouterTransaction.with(ImagePickerController(book)))
+
+  override fun onFileCoverRequested(book: Book) {
+    menuBook = book
+    val galleryPickerIntent = Intent(Intent.ACTION_PICK)
+    galleryPickerIntent.type = "image/*"
+    startActivityForResult(galleryPickerIntent, COVER_FROM_GALLERY)
+  }
+
+  enum class DisplayMode(@DrawableRes val icon: Int) {
     GRID(R.drawable.view_grid),
     LIST(R.drawable.ic_view_list);
 

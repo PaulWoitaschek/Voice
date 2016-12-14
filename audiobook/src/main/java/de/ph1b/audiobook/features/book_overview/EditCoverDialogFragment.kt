@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
 import android.widget.ImageView
 import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
@@ -14,7 +15,7 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.imagepicker.CropOverlay
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.BaseDialogFragment
+import de.ph1b.audiobook.misc.findCallback
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.uitools.CropTransformation
 import de.ph1b.audiobook.uitools.ImageHelper
@@ -26,7 +27,7 @@ import com.squareup.picasso.Callback as PicassoCallback
 /**
  * Simple dialog to edit the cover of a book.
  */
-class EditCoverDialogFragment : BaseDialogFragment() {
+class EditCoverDialogFragment : DialogFragment() {
 
   @Inject internal lateinit var repo: BookRepository
   @Inject internal lateinit var imageHelper: ImageHelper

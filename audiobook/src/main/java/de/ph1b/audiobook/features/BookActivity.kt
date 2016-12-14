@@ -8,14 +8,11 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
-import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.book_overview.BookShelfController
-import de.ph1b.audiobook.features.book_overview.EditBookBottomSheet
 import de.ph1b.audiobook.features.book_overview.NoFolderWarningDialogFragment
 import de.ph1b.audiobook.features.book_playing.BookPlayController
 import de.ph1b.audiobook.features.folder_overview.FolderOverviewController
-import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.misc.RouterProvider
@@ -29,7 +26,7 @@ import javax.inject.Inject
  *
  * @author Paul Woitaschek
  */
-class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, EditBookBottomSheet.Callback, RouterProvider {
+class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, RouterProvider {
 
   @Inject lateinit var prefs: PrefsManager
   @Inject lateinit var permissionHelper: PermissionHelper
@@ -45,7 +42,6 @@ class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Edi
     router = Conductor.attachRouter(this, root, savedInstanceState)
     if (!router.hasRootController()) {
       val rootTransaction = RouterTransaction.with(BookShelfController())
-        .tag(TAG_BOOKSHELF_CONTROLLER)
       router.setRoot(rootTransaction)
     }
 
@@ -81,8 +77,6 @@ class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Edi
   companion object {
     private val NI_MALFORMED_FILE = "malformedFile"
     private val NI_GO_TO_BOOK = "niGotoBook"
-    private val TAG_BOOKSHELF_CONTROLLER = BookShelfController::class.java.simpleName
-
 
     /** Returns an intent to start the activity with to inform the user that a certain file may be defect **/
     fun malformedFileIntent(c: Context, malformedFile: File) = Intent(c, BookActivity::class.java).apply {
@@ -97,18 +91,7 @@ class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Edi
     }
   }
 
-  private fun bookShelfController() = router.getControllerWithTag(TAG_BOOKSHELF_CONTROLLER) as BookShelfController
-
   override fun onNoFolderWarningConfirmed() {
     router.pushController(RouterTransaction.with(FolderOverviewController()))
-  }
-
-  override fun onInternetCoverRequested(book: Book) {
-    router.pushController(RouterTransaction.with(ImagePickerController(book)))
-  }
-
-  override fun onFileCoverRequested(book: Book) {
-    val bookShelfController = bookShelfController()
-    bookShelfController.changeCover(book)
   }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
 import android.widget.TextView
+import com.bluelinelabs.conductor.Controller
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.bookmarks.BookmarkDialogFragment
@@ -22,6 +23,8 @@ import javax.inject.Inject
 class EditBookBottomSheet : BottomSheetDialogFragment() {
 
   @Inject lateinit var repo: BookRepository
+
+  private fun callback() = findCallback<Callback>(NI_TARGET)
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     App.component.inject(this)
@@ -49,11 +52,11 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
       dismiss()
     }
     internetCover.setOnClickListener {
-      (activity as Callback).onInternetCoverRequested(book)
+      callback().onInternetCoverRequested(book)
       dismiss()
     }
     fileCover.setOnClickListener {
-      (activity as Callback).onFileCoverRequested(book)
+      callback().onFileCoverRequested(book)
       dismiss()
     }
     bookmark.setOnClickListener {
@@ -79,10 +82,12 @@ class EditBookBottomSheet : BottomSheetDialogFragment() {
   private fun bookId() = arguments.getLong(NI_BOOK)
 
   companion object {
-    private const val NI_BOOK = "niBook"
-    fun newInstance(book: Book) = EditBookBottomSheet().apply {
+    private const val NI_BOOK = "ni#book"
+    private const val NI_TARGET = "ni#target"
+    fun <T> newInstance(target: T, book: Book) where T : Controller, T : Callback = EditBookBottomSheet().apply {
       arguments = Bundle().apply {
         putLong(NI_BOOK, book.id)
+        putString(NI_TARGET, target.instanceId)
       }
     }
   }

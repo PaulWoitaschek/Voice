@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
+import android.support.v4.app.DialogFragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v4.view.ViewCompat
@@ -78,4 +79,13 @@ fun AppCompatActivity.setupActionbar(toolbar: Toolbar,
 fun File.listFilesSafely(filter: FileFilter? = null): List<File> {
   val array: Array<File>? = if (filter == null) listFiles() else listFiles(filter)
   return array?.toList() ?: emptyList()
+}
+
+/** find a callback. The hosting activity must implement [RouterProvider] and the supplied key must match to the instance id of a controller */
+fun <T> DialogFragment.findCallback(controllerBundleKey: String): T {
+  val routerProvider = activity as RouterProvider
+  val router = routerProvider.provideRouter()
+  val controllerId: String = arguments.getString(controllerBundleKey)
+  @Suppress("UNCHECKED_CAST")
+  return router.getControllerWithInstanceId(controllerId) as T
 }
