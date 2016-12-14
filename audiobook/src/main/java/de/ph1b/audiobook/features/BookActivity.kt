@@ -12,13 +12,13 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.book_overview.BookShelfController
 import de.ph1b.audiobook.features.book_overview.EditBookBottomSheet
-import de.ph1b.audiobook.features.book_overview.EditCoverDialogFragment
 import de.ph1b.audiobook.features.book_overview.NoFolderWarningDialogFragment
 import de.ph1b.audiobook.features.book_playing.BookPlayController
 import de.ph1b.audiobook.features.folder_overview.FolderOverviewController
 import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.PermissionHelper
+import de.ph1b.audiobook.misc.RouterProvider
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import java.io.File
@@ -29,7 +29,7 @@ import javax.inject.Inject
  *
  * @author Paul Woitaschek
  */
-class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, EditBookBottomSheet.Callback, EditCoverDialogFragment.Callback {
+class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, EditBookBottomSheet.Callback, RouterProvider {
 
   @Inject lateinit var prefs: PrefsManager
   @Inject lateinit var permissionHelper: PermissionHelper
@@ -62,6 +62,8 @@ class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Edi
       }
     }
   }
+
+  override fun provideRouter() = router
 
   override fun onStart() {
     super.onStart()
@@ -96,11 +98,6 @@ class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Edi
   }
 
   private fun bookShelfController() = router.getControllerWithTag(TAG_BOOKSHELF_CONTROLLER) as BookShelfController
-
-  override fun onBookCoverChanged(book: Book) {
-    val bookShelfController = bookShelfController()
-    bookShelfController.bookCoverChanged(book)
-  }
 
   override fun onNoFolderWarningConfirmed() {
     router.pushController(RouterTransaction.with(FolderOverviewController()))
