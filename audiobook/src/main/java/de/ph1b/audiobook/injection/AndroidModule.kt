@@ -19,6 +19,7 @@ import com.google.android.exoplayer2.util.Util
 import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.Module
 import dagger.Provides
+import de.ph1b.audiobook.BuildConfig
 import javax.inject.Singleton
 
 
@@ -50,7 +51,7 @@ import javax.inject.Singleton
 
   @Provides @Singleton fun provideAnalytics(context: Context): FirebaseAnalytics {
     val analytics = FirebaseAnalytics.getInstance(context)
-    analytics.setAnalyticsCollectionEnabled(true)
+    analytics.setAnalyticsCollectionEnabled(!BuildConfig.DEBUG)
     return analytics
   }
 }
