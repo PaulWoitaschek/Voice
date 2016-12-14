@@ -1,5 +1,7 @@
 package de.ph1b.audiobook.playback.utils
 
+import android.media.PlaybackParams
+import android.os.Build
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.audio.AudioRendererEventListener
 import com.google.android.exoplayer2.decoder.DecoderCounters
@@ -66,4 +68,12 @@ inline fun SimpleExoPlayer.onAudioSessionId(crossinline action: (Int) -> Unit) {
     override fun onAudioDisabled(counters: DecoderCounters?) {
     }
   })
+}
+
+fun SimpleExoPlayer.setPlaybackSpeed(speed: Float) {
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    playbackParams = PlaybackParams().apply {
+      this.speed = speed
+    }
+  }
 }

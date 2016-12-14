@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.injection
 
 import android.content.Context
-import com.tbruyelle.rxpermissions.RxPermissions
+import com.tbruyelle.rxpermissions2.RxPermissions
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable

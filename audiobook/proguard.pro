@@ -1,4 +1,5 @@
 -dontobfuscate
+-optimizationpasses 5
 -dontwarn javax.annotation.**
 -dontwarn sun.misc.Unsafe
 -dontnote

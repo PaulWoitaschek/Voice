@@ -16,7 +16,6 @@ android {
         minSdkVersion minSdk
         targetSdkVersion 25
         versionCode 140
-        versionName 'v2.9.0.2-SNAPSHOT'
     }
 
     buildTypes {
@@ -42,6 +41,11 @@ android {
 
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
+    }
+
+    // don't crunch images as we optimize them forehand
+    aaptOptions {
+        cruncherEnabled = false
     }
 }
 
@@ -79,7 +83,7 @@ dependencies {
     // rx extensions
     compile "io.reactivex.rxjava2:rxjava:2.0.2"
     compile "io.reactivex.rxjava2:rxandroid:2.0.1"
-    compile 'com.github.akarnokd:rxjava2-interop:0.6.1'
+    compile 'com.github.akarnokd:rxjava2-interop:0.7.2'
     compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.2'
 
     // kotlin
@@ -92,7 +96,7 @@ dependencies {
     compile 'com.github.PaulWoitaschek:Slimber:1.0.4'
 
     // permissions
-    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.8.2@aar'
+    compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.8.2@aar'
 
     def vPlayServices = "10.0.1"
     releaseCompile "com.google.firebase:firebase-crash:$vPlayServices"
