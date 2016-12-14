@@ -42,11 +42,6 @@ android {
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
     }
-
-    // don't crunch images as we optimize them forehand
-    aaptOptions {
-        cruncherEnabled = false
-    }
 }
 
 dependencies {
