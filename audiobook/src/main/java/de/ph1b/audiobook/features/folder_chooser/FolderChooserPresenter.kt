@@ -2,6 +2,7 @@ package de.ph1b.audiobook.features.folder_chooser
 
 import android.os.Bundle
 import d
+import de.ph1b.audiobook.features.tracking.Tracker
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.FileRecognition
 import de.ph1b.audiobook.misc.NaturalOrderComparator
@@ -28,6 +29,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
   }
 
   @Inject lateinit var prefsManager: PrefsManager
+  @Inject lateinit var tracker: Tracker
   @Inject lateinit var storageDirFinder: StorageDirFinder
 
   private val rootDirs = ArrayList<File>()
@@ -120,6 +122,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
           val collections = HashSet(prefsManager.collectionFolders.value())
           collections.add(chosen.absolutePath)
           prefsManager.collectionFolders.set(collections)
+          tracker.addedFolder(true)
         }
         view!!.finish()
         v { "chosenCollection = $chosen" }
@@ -129,6 +132,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
           val singleBooks = HashSet(prefsManager.singleBookFolders.value())
           singleBooks.add(chosen.absolutePath)
           prefsManager.singleBookFolders.set(singleBooks)
+          tracker.addedFolder(false)
         }
         view!!.finish()
         v { "chosenSingleBook = $chosen" }

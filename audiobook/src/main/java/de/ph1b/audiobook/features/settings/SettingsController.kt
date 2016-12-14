@@ -11,6 +11,7 @@ import de.ph1b.audiobook.features.folder_overview.FolderOverviewController
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.SupportDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment
+import de.ph1b.audiobook.features.tracking.Tracker
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.asV2Observable
 import de.ph1b.audiobook.misc.find
@@ -26,15 +27,14 @@ import javax.inject.Inject
 class SettingsController : BaseController() {
 
   @Inject lateinit var prefs: PrefsManager
+  @Inject lateinit var tracker: Tracker
 
   init {
     App.component.inject(this)
     setHasOptionsMenu(true)
   }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-    return inflater.inflate(R.layout.settings, container, false)
-  }
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View = inflater.inflate(R.layout.settings, container, false)
 
   override fun onAttach(view: View) {
     setupActionbar(toolbar = view.find(R.id.toolbar),
@@ -75,6 +75,8 @@ class SettingsController : BaseController() {
       .bindToLifeCycle()
       .subscribe { resumePlaybackSwitch.isChecked = it }
     resumePlaybackSwitch.setOnCheckedChangeListener { compoundButton, checked ->
+      if (prefs.resumeOnReplug.get() != checked) tracker.resumePlaybackOnHeadset(checked)
+
       prefs.resumeOnReplug.set(checked)
     }
 
@@ -89,6 +91,8 @@ class SettingsController : BaseController() {
       .bindToLifeCycle()
       .subscribe { pauseOnInterruptionSwitch.isChecked = it }
     pauseOnInterruptionSwitch.setOnCheckedChangeListener { compoundButton, checked ->
+      if (prefs.pauseOnTempFocusLoss.get() != checked) tracker.pauseOnInterruption(checked)
+
       prefs.pauseOnTempFocusLoss.set(checked)
     }
     pauseOnInterruption.setOnClickListener { pauseOnInterruptionSwitch.toggle() }
@@ -121,9 +125,7 @@ class SettingsController : BaseController() {
   }
 
 
-  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    inflater.inflate(R.menu.menu_settings, menu)
-  }
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) = inflater.inflate(R.menu.menu_settings, menu)
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {

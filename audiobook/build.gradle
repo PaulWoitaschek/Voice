@@ -49,7 +49,6 @@ dependencies {
     def supportVersion = "25.0.1"
     compile "com.android.support:appcompat-v7:$supportVersion"
     compile "com.android.support:recyclerview-v7:$supportVersion"
-    compile "com.android.support:support-v4:$supportVersion"
     compile "com.android.support:design:$supportVersion"
     compile "com.android.support:transition:$supportVersion"
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
@@ -95,6 +94,7 @@ dependencies {
 
     def vPlayServices = "10.0.1"
     releaseCompile "com.google.firebase:firebase-crash:$vPlayServices"
+    compile "com.google.firebase:firebase-core:$vPlayServices"
 
     // conductor
     def conductorVer = "2.0.5"

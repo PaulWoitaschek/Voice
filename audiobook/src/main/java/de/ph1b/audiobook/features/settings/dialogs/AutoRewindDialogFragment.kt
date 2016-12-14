@@ -7,6 +7,7 @@ import android.widget.SeekBar
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
+import de.ph1b.audiobook.features.tracking.Tracker
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.layoutInflater
@@ -19,6 +20,7 @@ import javax.inject.Inject
 class AutoRewindDialogFragment : DialogFragment() {
 
   @Inject lateinit var prefs: PrefsManager
+  @Inject lateinit var tracker: Tracker
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     App.component.inject(this)
@@ -44,6 +46,7 @@ class AutoRewindDialogFragment : DialogFragment() {
       .negativeText(R.string.dialog_cancel)
       .onPositive { materialDialog, dialogAction ->
         val newRewindAmount = seekBar.progress / FACTOR + MIN
+        if (prefs.autoRewindAmount.get() != newRewindAmount) tracker.autoRewindAmount(newRewindAmount)
         prefs.autoRewindAmount.set(newRewindAmount)
       }
       .build()

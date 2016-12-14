@@ -13,9 +13,11 @@ import de.ph1b.audiobook.features.book_overview.BookShelfController
 import de.ph1b.audiobook.features.book_overview.NoFolderWarningDialogFragment
 import de.ph1b.audiobook.features.book_playing.BookPlayController
 import de.ph1b.audiobook.features.folder_overview.FolderOverviewController
+import de.ph1b.audiobook.features.tracking.Tracker
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.misc.RouterProvider
+import de.ph1b.audiobook.misc.onControllerChanged
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import java.io.File
@@ -30,6 +32,7 @@ class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
 
   @Inject lateinit var prefs: PrefsManager
   @Inject lateinit var permissionHelper: PermissionHelper
+  @Inject lateinit var tracker: Tracker
 
   private lateinit var router: Router
 
@@ -44,6 +47,9 @@ class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
       val rootTransaction = RouterTransaction.with(BookShelfController())
       router.setRoot(rootTransaction)
     }
+
+    // track upon changes
+    router.onControllerChanged { tracker.track(it) }
 
     if (savedInstanceState == null) {
       if (intent.hasExtra(NI_MALFORMED_FILE)) {

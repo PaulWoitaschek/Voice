@@ -16,6 +16,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -45,5 +46,11 @@ import javax.inject.Singleton
   @Provides @Singleton fun provideDataSourceFactory(context: Context): DataSource.Factory {
     val userAgent = Util.getUserAgent(context, context.packageName)
     return DefaultDataSourceFactory(context, userAgent, null)
+  }
+
+  @Provides @Singleton fun provideAnalytics(context: Context): FirebaseAnalytics {
+    val analytics = FirebaseAnalytics.getInstance(context)
+    analytics.setAnalyticsCollectionEnabled(true)
+    return analytics
   }
 }
