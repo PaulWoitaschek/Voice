@@ -616,6 +616,12 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
     }
   }
 
+  /** due to a bug negative book ids were inserted */
+  fun upgrade33() {
+    val TABLE_NAME = "tableBooks"
+    db.delete(TABLE_NAME, "bookId<=-1", null)
+  }
+
   @Throws(InvalidPropertiesFormatException::class)
   fun upgrade(fromVersion: Int) {
     i { "upgrade fromVersion=$fromVersion" }
@@ -629,5 +635,6 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
     if (fromVersion <= 30) upgrade30()
     if (fromVersion <= 31) upgrade31()
     if (fromVersion <= 32) upgrade32()
+    if (fromVersion <= 33) upgrade33()
   }
 }
