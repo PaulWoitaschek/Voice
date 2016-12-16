@@ -581,12 +581,11 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
     data class Holder(val path: String, val title: String, val time: Long)
 
     val cursor = db.query(BOOKMARK_TABLE_NAME, null, null, null, null, null, null)
-    val entries = ArrayList<Holder>()
-    cursor.moveToNextLoop {
+    val entries = cursor.mapRows {
       val path = string(BM_PATH)
       val title = string(BM_TITLE)
       val time = long(BM_TIME)
-      entries.add(Holder(path, title, time))
+      Holder(path, title, time)
     }
     i { "Restored bookmarks=$entries" }
 

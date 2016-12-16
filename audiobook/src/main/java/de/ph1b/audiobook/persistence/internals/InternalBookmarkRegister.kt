@@ -2,7 +2,6 @@ package de.ph1b.audiobook.persistence.internals
 
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Bookmark
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -32,16 +31,12 @@ class InternalBookmarkRegister
       if (i > 0) whereBuilder.append(" OR ")
       whereBuilder.append(pathAlike)
     }
-    val cursor = db.query(BookmarkTable.TABLE_NAME,
+
+    return db.query(BookmarkTable.TABLE_NAME,
       arrayOf(BookmarkTable.PATH, BookmarkTable.TIME, BookmarkTable.TITLE, BookmarkTable.ID),
       whereBuilder.toString(),
       book.chapters.map { it.file.absolutePath }.toTypedArray(),
       null, null, null)
-
-    val bookmarks = ArrayList<Bookmark>(cursor.count)
-    cursor.moveToNextLoop {
-      bookmarks.add(cursor.toBookmark())
-    }
-    return bookmarks
+      .mapRows { toBookmark() }
   }
 }

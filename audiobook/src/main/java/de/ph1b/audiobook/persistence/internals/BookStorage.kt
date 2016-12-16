@@ -6,7 +6,6 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
 import e
 import java.io.File
-import java.util.*
 import javax.inject.Inject
 
 
@@ -21,7 +20,7 @@ class BookStorage
   private val db by lazy { internalDb.writableDatabase }
 
   private fun books(active: Boolean) = db.asTransaction {
-    val cursor = db.simpleQuery(table = BookTable.TABLE_NAME,
+    return@asTransaction db.simpleQuery(table = BookTable.TABLE_NAME,
       columns = arrayOf(
         BookTable.ID,
         BookTable.NAME,
@@ -33,48 +32,34 @@ class BookStorage
         BookTable.TYPE),
       selection = "${BookTable.ACTIVE} =?",
       selectionArgs = toStringArray(if (active) 1 else 0)
-    )
-    val books = ArrayList<Book>(cursor.count)
-    cursor.moveToNextLoop {
+    ).mapRows {
       val bookId: Long = long(BookTable.ID)
-      if (bookId >= 0) {
-        val bookName: String = string(BookTable.NAME)
-        val bookAuthor: String? = stringNullable(BookTable.AUTHOR)
-        var currentFile = File(string(BookTable.CURRENT_MEDIA_PATH))
-        val bookSpeed: Float = float(BookTable.PLAYBACK_SPEED)
-        val bookRoot: String = string(BookTable.ROOT)
-        val bookTime: Int = int(BookTable.TIME)
-        val bookType: String = string(BookTable.TYPE)
+      val bookName: String = string(BookTable.NAME)
+      val bookAuthor: String? = stringNullable(BookTable.AUTHOR)
+      var currentFile = File(string(BookTable.CURRENT_MEDIA_PATH))
+      val bookSpeed: Float = float(BookTable.PLAYBACK_SPEED)
+      val bookRoot: String = string(BookTable.ROOT)
+      val bookTime: Int = int(BookTable.TIME)
+      val bookType: String = string(BookTable.TYPE)
 
-        val chapterCursor = db.simpleQuery(table = ChapterTable.TABLE_NAME,
-          columns = arrayOf(ChapterTable.NAME, ChapterTable.DURATION, ChapterTable.PATH),
-          selection = "${ChapterTable.BOOK_ID} =?",
-          selectionArgs = toStringArray(bookId))
-        val chapters = ArrayList<Chapter>(chapterCursor.count)
-        chapterCursor.moveToNextLoop {
+      val chapters = db.simpleQuery(table = ChapterTable.TABLE_NAME,
+        columns = arrayOf(ChapterTable.NAME, ChapterTable.DURATION, ChapterTable.PATH),
+        selection = "${ChapterTable.BOOK_ID} =?",
+        selectionArgs = toStringArray(bookId))
+        .mapRows {
           val name: String = string(ChapterTable.NAME)
           val duration: Int = int(ChapterTable.DURATION)
           val path: String = string(ChapterTable.PATH)
-          chapters.add(Chapter(File(path), name, duration))
+          Chapter(File(path), name, duration)
         }
 
-        if (chapters.find { it.file == currentFile } == null) {
-          e { "Couldn't get current file. Return first file" }
-          currentFile = chapters[0].file
-        }
-
-        books.add(Book(bookId,
-          Book.Type.valueOf(bookType),
-          bookAuthor,
-          currentFile,
-          bookTime,
-          bookName,
-          chapters,
-          bookSpeed,
-          bookRoot))
+      if (chapters.find { it.file == currentFile } == null) {
+        e { "Couldn't get current file. Return first file" }
+        currentFile = chapters[0].file
       }
+
+      Book(bookId, Book.Type.valueOf(bookType), bookAuthor, currentFile, bookTime, bookName, chapters, bookSpeed, bookRoot)
     }
-    return@asTransaction books
   }
 
   fun activeBooks() = books(true)
