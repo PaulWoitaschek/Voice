@@ -80,7 +80,7 @@ class BookStorage
   }
 
   private fun SQLiteDatabase.insert(chapter: Chapter, bookId: Long) =
-    insert(ChapterTable.TABLE_NAME, null, chapter.toContentValues(bookId))
+    insertOrThrow(ChapterTable.TABLE_NAME, null, chapter.toContentValues(bookId))
 
   private fun Chapter.toContentValues(bookId: Long) = ContentValues().apply {
     put(ChapterTable.DURATION, duration)
@@ -118,7 +118,7 @@ class BookStorage
 
   fun addBook(toAdd: Book) = db.asTransaction {
     val bookCv = toAdd.toContentValues()
-    val bookId = insert(BookTable.TABLE_NAME, null, bookCv)
+    val bookId = insertOrThrow(BookTable.TABLE_NAME, null, bookCv)
     val newBook = toAdd.copy(id = bookId)
     newBook.chapters.forEach { insert(it, bookId) }
     return@asTransaction newBook

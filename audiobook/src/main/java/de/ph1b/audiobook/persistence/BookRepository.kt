@@ -54,6 +54,7 @@ import javax.inject.Singleton
 
   @Synchronized fun updateBook(book: Book) {
     v { "updateBook=${book.name} with time ${book.time}" }
+    check(book.id != -1L)
 
     val index = active.indexOfFirst { it.id == book.id }
     if (index != -1) {
@@ -72,7 +73,6 @@ import javax.inject.Singleton
     orphaned.addAll(toDelete)
     sortBooksAndNotifySubject()
   }
-
 
   @Synchronized fun revealBook(book: Book) {
     v { "Called revealBook=$book" }
