@@ -17,7 +17,7 @@ abstract class Presenter<V> {
 
   private var compositeDisposable: CompositeDisposable? = null
 
-  open fun onRestore(savedState: Bundle?) {
+  open fun onRestore(savedState: Bundle) {
 
   }
 

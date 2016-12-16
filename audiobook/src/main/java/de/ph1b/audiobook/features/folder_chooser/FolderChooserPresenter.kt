@@ -40,9 +40,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
     refreshRootDirs()
   }
 
-  /**
-   * Call this when the read external storage permission was granted.
-   */
+  /** Call this when the read external storage permission was granted. */
   fun gotPermission() {
     refreshRootDirs()
   }
@@ -72,9 +70,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
   }
 
 
-  /**
-   * Call this when a file was selected by the user or the root folder has changed
-   */
+  /** Call this when a file was selected by the user or the root folder has changed */
   fun fileSelected(selectedFile: File?) {
     chosenFile = selectedFile
     view!!.apply {
@@ -196,7 +192,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
   /**
    * Gets the containing files of a folder (restricted to music and folders) in a naturally sorted
    * order.
-   * *
+   *
    * @return The containing files
    */
   private fun File.getContentsSorted(): List<File> {
@@ -204,10 +200,10 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
     return containing.sortedWith(NaturalOrderComparator.fileComparator)
   }
 
-  override fun onRestore(savedState: Bundle?) {
+  override fun onRestore(savedState: Bundle) {
     super.onRestore(savedState)
 
-    chosenFile = savedState?.getSerializable(SI_CHOSEN_FILE) as File?
+    chosenFile = savedState.getSerializable(SI_CHOSEN_FILE) as File?
   }
 
   override fun onSave(state: Bundle) {

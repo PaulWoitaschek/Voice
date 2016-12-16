@@ -16,7 +16,7 @@ class PresenterDelegate<V, out P>(private val newPresenter: () -> P, private val
 
   fun onCreate(savedInstanceState: Bundle?) {
     presenter = newPresenter.invoke()
-    presenter!!.onRestore(savedInstanceState)
+    if (savedInstanceState != null) presenter!!.onRestore(savedInstanceState)
   }
 
   fun onStart() {
