@@ -20,71 +20,43 @@ import de.ph1b.audiobook.uitools.ThemeUtil
  */
 @Module class PrefsModule {
 
-  @Provides fun provideSharedPreferences(context: Context): SharedPreferences {
-    return PreferenceManager.getDefaultSharedPreferences(context)
-  }
+  @Provides fun provideSharedPreferences(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)
 
-  @Provides @Reusable fun provideRxSharedPreferences(sharedPreferences: SharedPreferences): RxSharedPreferences {
-    return RxSharedPreferences.create(sharedPreferences)
-  }
+  @Provides @Reusable fun provideRxSharedPreferences(sharedPreferences: SharedPreferences) = RxSharedPreferences.create(sharedPreferences)
 
   @Provides @Reusable fun provideThemePreference(context: Context, prefs: RxSharedPreferences): Preference<ThemeUtil.Theme> {
-    val key = context.getString(R.string.pref_key_theme)
-    return prefs.getEnum(key, ThemeUtil.Theme.DAY_NIGHT, ThemeUtil.Theme::class.java)
+    return prefs.getEnum(context.getString(R.string.pref_key_theme), ThemeUtil.Theme.DAY_NIGHT, ThemeUtil.Theme::class.java)
   }
 
-  @Provides @Reusable fun provideDisplayModePreference(prefs: RxSharedPreferences): Preference<DisplayMode> {
-    val key = "displayMode"
-    return prefs.getEnum(key, DisplayMode.GRID, DisplayMode::class.java)
-  }
+  @Provides @Reusable fun provideDisplayModePreference(prefs: RxSharedPreferences) = prefs.getEnum("displayMode", DisplayMode.GRID, DisplayMode::class.java)
 
-  @Provides @Reusable @ResumeOnReplug fun provideResumeOnReplugPreference(context: Context, prefs: RxSharedPreferences): Preference<Boolean> {
-    val key = context.getString(R.string.pref_key_resume_on_replug)
-    return prefs.getBoolean(key, true)
-  }
+  @Provides @Reusable @ResumeOnReplug fun provideResumeOnReplugPreference(context: Context, prefs: RxSharedPreferences) =
+    prefs.getBoolean(context.getString(R.string.pref_key_resume_on_replug), true)
 
-  @Provides @Reusable @BookmarkOnSleepTimer fun provideBookmarkOnSleepTimerPreference(context: Context, prefs: RxSharedPreferences): Preference<Boolean> {
-    val key = context.getString(R.string.pref_key_bookmark_on_sleep)
-    return prefs.getBoolean(key, false)
-  }
+  @Provides @Reusable @BookmarkOnSleepTimer fun provideBookmarkOnSleepTimerPreference(context: Context, prefs: RxSharedPreferences) =
+    prefs.getBoolean(context.getString(R.string.pref_key_bookmark_on_sleep), false)
 
-  @Provides @Reusable @ShakeToReset fun provideShakeToResetPreference(context: Context, prefs: RxSharedPreferences): Preference<Boolean> {
-    val key = context.getString(R.string.pref_key_shake_to_reset_sleep_timer)
-    return prefs.getBoolean(key, false)
-  }
+  @Provides @Reusable @ShakeToReset fun provideShakeToResetPreference(context: Context, prefs: RxSharedPreferences) =
+    prefs.getBoolean(context.getString(R.string.pref_key_shake_to_reset_sleep_timer), false)
 
-  @Provides @Reusable @PauseOnTempFocusLoss fun providePauseOnTempFocusLossPreference(context: Context, prefs: RxSharedPreferences): Preference<Boolean> {
-    val key = context.getString(R.string.pref_key_pause_on_can_duck)
-    return prefs.getBoolean(key, false)
-  }
+  @Provides @Reusable @PauseOnTempFocusLoss fun providePauseOnTempFocusLossPreference(context: Context, prefs: RxSharedPreferences) =
+    prefs.getBoolean(context.getString(R.string.pref_key_pause_on_can_duck), false)
 
-  @Provides @Reusable @AutoRewindAmount fun provideAutoRewindAmountPreference(context: Context, prefs: RxSharedPreferences): Preference<Int> {
-    val key = context.getString(R.string.pref_key_auto_rewind)
-    return prefs.getInteger(key, 2)
-  }
+  @Provides @Reusable @Analytics fun provideAnalyticPreference(context: Context, prefs: RxSharedPreferences) =
+    prefs.getBoolean(context.getString(R.string.pref_key_analytics), true)
 
-  @Provides @Reusable @SeekTime fun provideSeekTimePreference(context: Context, prefs: RxSharedPreferences): Preference<Int> {
-    val key = context.getString(R.string.pref_key_seek_time)
-    return prefs.getInteger(key, 20)
-  }
+  @Provides @Reusable @AutoRewindAmount fun provideAutoRewindAmountPreference(context: Context, prefs: RxSharedPreferences) =
+    prefs.getInteger(context.getString(R.string.pref_key_auto_rewind), 2)
 
-  @Provides @Reusable @SleepTime fun provideSleepTimePreference(context: Context, prefs: RxSharedPreferences): Preference<Int> {
-    val key = context.getString(R.string.pref_key_sleep_time)
-    return prefs.getInteger(key, 20)
-  }
+  @Provides @Reusable @SeekTime fun provideSeekTimePreference(context: Context, prefs: RxSharedPreferences) =
+    prefs.getInteger(context.getString(R.string.pref_key_seek_time), 20)
 
-  @Provides @Reusable @SingleBookFolders fun provideSingleBookFoldersPreference(prefs: RxSharedPreferences): Preference<Set<String>> {
-    val key = "singleBookFolders"
-    return prefs.getStringSet(key, emptySet())
-  }
+  @Provides @Reusable @SleepTime fun provideSleepTimePreference(context: Context, prefs: RxSharedPreferences) =
+    prefs.getInteger(context.getString(R.string.pref_key_sleep_time), 20)
 
-  @Provides @Reusable @CollectionFolders fun provideCollectionFoldersPreference(prefs: RxSharedPreferences): Preference<Set<String>> {
-    val key = "folders"
-    return prefs.getStringSet(key, emptySet())
-  }
+  @Provides @Reusable @SingleBookFolders fun provideSingleBookFoldersPreference(prefs: RxSharedPreferences) = prefs.getStringSet("singleBookFolders", emptySet())
 
-  @Provides @Reusable @CurrentBookId fun provideCurrentBookIdPreference(prefs: RxSharedPreferences): Preference<Long> {
-    val key = "currentBook"
-    return prefs.getLong(key, Book.ID_UNKNOWN)
-  }
+  @Provides @Reusable @CollectionFolders fun provideCollectionFoldersPreference(prefs: RxSharedPreferences): Preference<Set<String>> = prefs.getStringSet("folders", emptySet())
+
+  @Provides @Reusable @CurrentBookId fun provideCurrentBookIdPreference(prefs: RxSharedPreferences) = prefs.getLong("currentBook", Book.ID_UNKNOWN)
 }

@@ -1,5 +1,7 @@
 package de.ph1b.audiobook.features.settings
 
+import android.support.annotation.IdRes
+import android.support.annotation.StringRes
 import android.support.v7.widget.SwitchCompat
 import android.view.*
 import android.widget.TextView
@@ -41,22 +43,13 @@ class SettingsController : BaseController() {
       upIndicator = R.drawable.close,
       title = activity.getString(R.string.action_settings))
 
-    // audiobook folders
-    val audioBookFolder: View = view.find(R.id.audiobookFolder)
-    val audioBookFolderTitle: TextView = audioBookFolder.find(R.id.title)
-    val audioBookFolderDescription: TextView = audioBookFolder.find(R.id.description)
-    audioBookFolderTitle.setText(R.string.pref_root_folder_title)
-    audioBookFolderDescription.setText(R.string.pref_root_folder_summary)
-    audioBookFolder.setOnClickListener {
+    // audio book folders
+    setupTextSetting(R.id.audiobookFolder, R.string.pref_root_folder_title, R.string.pref_root_folder_summary) {
       router.pushController(RouterTransaction.with(FolderOverviewController()))
     }
 
     // theme
-    val theme: View = view.find(R.id.theme)
-    val themeTitle: TextView = theme.find(R.id.title)
-    val themeDescription: TextView = theme.find(R.id.description)
-    themeTitle.setText(R.string.pref_theme_title)
-    theme.setOnClickListener {
+    val themeDescription = setupTextSetting(R.id.theme, R.string.pref_theme_title) {
       ThemePickerDialogFragment().show(fragmentManager, ThemePickerDialogFragment.TAG)
     }
     prefs.theme.asV2Observable()
@@ -64,45 +57,25 @@ class SettingsController : BaseController() {
       .subscribe { themeDescription.setText(it.nameId) }
 
     // resume on playback
-    val resumePlayback: View = view.find(R.id.resumePlayback)
-    val resumePlaybackTitle: TextView = resumePlayback.find(R.id.switchTitle)
-    val resumePlaybackDescription: TextView = resumePlayback.find(R.id.switchDescription)
-    val resumePlaybackSwitch: SwitchCompat = resumePlayback.find(R.id.switchSetting)
-    resumePlaybackTitle.setText(R.string.pref_resume_on_replug)
-    resumePlaybackDescription.setText(R.string.pref_resume_on_replug_hint)
-    resumePlayback.setOnClickListener { resumePlaybackSwitch.toggle() }
+    val resumePlaybackSwitch = setupSwitchSetting(R.id.resumePlayback, R.string.pref_resume_on_replug, R.string.pref_resume_on_replug_hint) {
+      if (prefs.resumeOnReplug.get() != it) tracker.resumePlaybackOnHeadset(it)
+      prefs.resumeOnReplug.set(it)
+    }
     prefs.resumeOnReplug.asV2Observable()
       .bindToLifeCycle()
       .subscribe { resumePlaybackSwitch.isChecked = it }
-    resumePlaybackSwitch.setOnCheckedChangeListener { compoundButton, checked ->
-      if (prefs.resumeOnReplug.get() != checked) tracker.resumePlaybackOnHeadset(checked)
-
-      prefs.resumeOnReplug.set(checked)
-    }
 
     // pause on interruption
-    val pauseOnInterruption = view.find<View>(R.id.pauseOnInterruption)
-    val pauseOnInterruptionTitle = pauseOnInterruption.find<TextView>(R.id.switchTitle)
-    val pauseOnInterruptionDescription = pauseOnInterruption.find<TextView>(R.id.switchDescription)
-    val pauseOnInterruptionSwitch: SwitchCompat = pauseOnInterruption.find(R.id.switchSetting)
-    pauseOnInterruptionTitle.setText(R.string.pref_pause_on_can_duck_title)
-    pauseOnInterruptionDescription.setText(R.string.pref_pause_on_can_duck_summary)
+    val pauseOnInterruptionSwitch = setupSwitchSetting(R.id.pauseOnInterruption, R.string.pref_pause_on_can_duck_title, R.string.pref_pause_on_can_duck_summary) {
+      if (prefs.pauseOnTempFocusLoss.get() != it) tracker.pauseOnInterruption(it)
+      prefs.pauseOnTempFocusLoss.set(it)
+    }
     prefs.pauseOnTempFocusLoss.asV2Observable()
       .bindToLifeCycle()
       .subscribe { pauseOnInterruptionSwitch.isChecked = it }
-    pauseOnInterruptionSwitch.setOnCheckedChangeListener { compoundButton, checked ->
-      if (prefs.pauseOnTempFocusLoss.get() != checked) tracker.pauseOnInterruption(checked)
-
-      prefs.pauseOnTempFocusLoss.set(checked)
-    }
-    pauseOnInterruption.setOnClickListener { pauseOnInterruptionSwitch.toggle() }
 
     // skip amount
-    val skipAmount = view.find<View>(R.id.skipAmount)
-    val skipAmountTitle = skipAmount.find<TextView>(R.id.title)
-    val skipAmountDescription = skipAmount.find<TextView>(R.id.description)
-    skipAmountTitle.setText(R.string.pref_seek_time)
-    skipAmount.setOnClickListener {
+    val skipAmountDescription = setupTextSetting(R.id.skipAmount, R.string.pref_seek_time) {
       SeekDialogFragment().show(fragmentManager, SeekDialogFragment.TAG)
     }
     prefs.seekTime.asV2Observable()
@@ -111,19 +84,48 @@ class SettingsController : BaseController() {
       .subscribe { skipAmountDescription.text = it }
 
     // auto rewind
-    val autoRewind = view.find<View>(R.id.autoRewind)
-    val autoRewindTitle: TextView = autoRewind.find(R.id.title)
-    val autoRewindDescription: TextView = autoRewind.find(R.id.description)
-    autoRewindTitle.setText(R.string.pref_auto_rewind_title)
-    autoRewind.setOnClickListener {
+    val autoRewindDescription = setupTextSetting(R.id.autoRewind, R.string.pref_auto_rewind_title) {
       AutoRewindDialogFragment().show(fragmentManager, AutoRewindDialogFragment.TAG)
     }
     prefs.autoRewindAmount.asV2Observable()
       .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
       .bindToLifeCycle()
       .subscribe { autoRewindDescription.text = it }
+
+    // analytics
+    val analyticsSwitch = setupSwitchSetting(R.id.analytics, R.string.pref_analytic_title, R.string.pref_analytic_content) {
+      prefs.analytics.set(it)
+    }
+    prefs.analytics.asV2Observable()
+      .bindToLifeCycle()
+      .subscribe { analyticsSwitch.isChecked = it }
   }
 
+  private inline fun setupTextSetting(@IdRes id: Int, @StringRes titleRes: Int, @StringRes contentRes: Int? = null, crossinline onClick: () -> Unit): TextView {
+    val theme: View = view!!.find(id)
+    val title: TextView = theme.find(R.id.title)
+    val description: TextView = theme.find(R.id.description)
+    if (contentRes != null) description.setText(contentRes)
+    title.setText(titleRes)
+    theme.setOnClickListener {
+      onClick()
+    }
+    return description
+  }
+
+  private inline fun setupSwitchSetting(@IdRes id: Int, @StringRes titleRes: Int, @StringRes contentRes: Int, crossinline onChecked: (Boolean) -> Unit): SwitchCompat {
+    val root = view!!.find<View>(id)
+    val title = root.find<TextView>(R.id.switchTitle)
+    val content = root.find<TextView>(R.id.switchDescription)
+    val switch: SwitchCompat = root.find(R.id.switchSetting)
+    title.setText(titleRes)
+    content.setText(contentRes)
+    switch.setOnCheckedChangeListener { compoundButton, checked ->
+      onChecked(checked)
+    }
+    root.setOnClickListener { switch.toggle() }
+    return switch
+  }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) = inflater.inflate(R.menu.menu_settings, menu)
 

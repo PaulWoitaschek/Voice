@@ -11,6 +11,7 @@
     <string name="pref_key_pause_on_can_duck" translatable="false">PAUSE_ON_CAN_DUCK</string>
     <string name="pref_key_auto_rewind" translatable="false">AUTO_REWIND</string>
     <string name="pref_key_bookmark_on_sleep" translatable="false">BOOKMARK_ON_SLEEP</string>
+    <string name="pref_key_analytics" translatable="false">ANALYTIC_PREF</string>
     <string-array name="pref_support_values">
         <item>@string/pref_support_contribute</item>
         <item>@string/pref_support_translations</item>

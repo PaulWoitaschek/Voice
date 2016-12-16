@@ -33,3 +33,6 @@ annotation class CollectionFolders
 
 @Qualifier @Retention(RUNTIME)
 annotation class CurrentBookId
+
+@Qualifier @Retention(RUNTIME)
+annotation class Analytics
