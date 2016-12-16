@@ -9,6 +9,7 @@ import android.media.AudioManager
 import android.net.ConnectivityManager
 import android.telephony.TelephonyManager
 import android.view.WindowManager
+import com.f2prateek.rx.preferences.Preference
 import com.google.android.exoplayer2.DefaultLoadControl
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -49,9 +50,9 @@ import javax.inject.Singleton
     return DefaultDataSourceFactory(context, userAgent, null)
   }
 
-  @Provides @Singleton fun provideAnalytics(context: Context): FirebaseAnalytics {
+  @Provides @Singleton fun provideAnalytics(context: Context, @Analytics pref: Preference<Boolean>): FirebaseAnalytics {
     val analytics = FirebaseAnalytics.getInstance(context)
-    analytics.setAnalyticsCollectionEnabled(!BuildConfig.DEBUG)
+    analytics.setAnalyticsCollectionEnabled(!BuildConfig.DEBUG && pref.get()!!)
     return analytics
   }
 }

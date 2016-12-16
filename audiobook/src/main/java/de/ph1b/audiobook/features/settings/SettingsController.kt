@@ -95,6 +95,7 @@ class SettingsController : BaseController() {
     // analytics
     val analyticsSwitch = setupSwitchSetting(R.id.analytics, R.string.pref_analytic_title, R.string.pref_analytic_content) {
       prefs.analytics.set(it)
+      tracker.setEnabled(it)
     }
     prefs.analytics.asV2Observable()
       .bindToLifeCycle()

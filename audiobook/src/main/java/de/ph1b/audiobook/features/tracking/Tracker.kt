@@ -3,6 +3,7 @@ package de.ph1b.audiobook.features.tracking
 import android.os.Bundle
 import com.bluelinelabs.conductor.Controller
 import com.google.firebase.analytics.FirebaseAnalytics
+import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.features.book_overview.BookShelfController
 import de.ph1b.audiobook.uitools.ThemeUtil
 import javax.inject.Inject
@@ -32,6 +33,8 @@ import javax.inject.Singleton
   fun seekTime(seekTime: Int) = logSimple("seekTime") { putInt(it, seekTime) }
 
   fun addedFolder(isCollectionFolder: Boolean) = logSimple("folderAdded") { putBoolean("isCollectionFolder", isCollectionFolder) }
+
+  fun setEnabled(enabled: Boolean) = analytics.setAnalyticsCollectionEnabled(!BuildConfig.DEBUG && enabled)
 
   /** extension function that logs an event and executes the supplied function on the bundle before sending it */
   private inline fun logSimple(eventName: String, bundleFunction: Bundle.(event: String) -> Unit) {
