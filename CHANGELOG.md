@@ -1,3 +1,10 @@
+# 2.9.1
+* Updated player
+* Invalid Book entry cleanup
+* Fixed backup
+* ACRA crash reports -> Firebase crash reports
+* Firebase Analytics
+
 # 2.9.0.2
 * Restore playback speed when changing the book
 * Smaller app
