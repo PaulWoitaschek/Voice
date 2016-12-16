@@ -56,7 +56,7 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
       override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         val oldItem = books[oldItemPosition]
         val newItem = newBooks[newItemPosition]
-        return oldItem.globalPosition() == newItem.globalPosition() && oldItem.name == newItem.name
+        return oldItem.id == newItem.id && oldItem.globalPosition() == newItem.globalPosition() && oldItem.name == newItem.name
       }
 
       override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
@@ -79,7 +79,11 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
     }
   }
 
-  override fun getItemId(position: Int): Long = books[position].id
+  override fun getItemId(position: Int): Long {
+    val id = books[position].id
+    check(id >= 0)
+    return id
+  }
 
   fun getItem(position: Int): Book = books[position]
 
