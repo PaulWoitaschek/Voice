@@ -20,16 +20,21 @@
     <string name="next_track">Traccia successiva</string>
     <string name="play">Play</string>
     <string name="pause">Pausa</string>
+    <string name="equalizer">Equalizzatore</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Memoria Esterna non disponibile. Per favore assicurarsi che sia collegata e non montata sul computer.</string>
     <string name="no_external_storage_action_bar_title">Memoria Esterna</string>
     <!--Dialogs-->
     <string name="dialog_confirm">Imposta</string>
     <string name="dialog_cancel">Annulla</string>
+    <string name="dialog_no">No</string>
     <!--EditBookDialog-->
     <string name="content_previous_cover">Sceglie la copertina precedente</string>
     <string name="content_next_cover">Sceglie la copertina successiva</string>
     <string name="content_cover">Mostra la copertina da scegliere</string>
+    <string name="change_book_name">Nome</string>
+    <string name="download_book_cover">Copertina da Internet</string>
+    <string name="pick_book_cover">Copertina da file nel sistema</string>
     <string name="edit_book_title">Modifica libro</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Vai a</string>
@@ -50,6 +55,9 @@
     <string name="content_is_file">File</string>
     <string name="content_navigate_up">Vai alla cartella superiore</string>
     <string name="permission_read_ext_explanation">L\'app deve leggere la memoria del dispositivo per trovare e far partire gli audiolibri.</string>
+    <string name="permission_external_new_explanation">Non puoi leggere libri senza permesso</string>
+    <string name="permission_retry">Riprovare?</string>
+    <string name="permission_goto_settings">Impostazioni</string>
     <string name="permission_read_ext_request">Dovremo richiederti il permesso in futuro?</string>
     <string name="permission_rescan">Richiedi ancora</string>
     <string name="storage_pre_device">Supporto di memoria:</string>
@@ -58,6 +66,7 @@
     <string name="playback_speed">Velocità di riproduzione</string>
     <!--Bookmarks-->
     <string name="bookmark">Segnalibro</string>
+    <string name="shake_to_reset">Scuoti per resettare</string>
     <string name="bookmark_edit_title">Modifica segnalibro</string>
     <string name="acc_button_add_bookmark">Aggiunge un segnalibro alla posizione corrente</string>
     <string name="bookmark_edit_hint">Nome segnalibro</string>

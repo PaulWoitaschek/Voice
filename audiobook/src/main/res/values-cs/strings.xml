@@ -23,7 +23,7 @@
     <string name="pause">Pozastavit</string>
     <string name="equalizer">Ekvalizér</string>
     <!--NoExternalStorage-->
-    <string name="no_external_storage">Externí úložiště není dostupné. Ověřte prosím, že je
+  <string name="no_external_storage">Externí úložiště není dostupné. Ověřte prosím, že je
         připojeno a není používáno vaším počítačem.</string>
     <string name="no_external_storage_action_bar_title">Externí úložiště</string>
     <!--Dialogs-->

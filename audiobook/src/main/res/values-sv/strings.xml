@@ -20,6 +20,7 @@
     <string name="next_track">Nästa spår</string>
     <string name="play">Spela</string>
     <string name="pause">Pausa</string>
+    <string name="equalizer">Utjämnare</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">Extern lagring är inte tillgänglig. Se till att den är ansluten och inte inkopplad i datorn.</string>
     <string name="no_external_storage_action_bar_title">Extern lagring</string>
