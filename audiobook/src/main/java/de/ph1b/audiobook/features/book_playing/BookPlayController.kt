@@ -199,9 +199,7 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
   }
 
   override fun onAttach(view: View) {
-    setupActionbar(toolbar = toolbar,
-      upIndicator = R.drawable.ic_arrow_back,
-      title = book!!.name)
+    setupActionbar(toolbar = toolbar, upIndicator = R.drawable.ic_arrow_back, title = book?.name)
 
     var firstPlayStateChange = true
     playStateManager.playState
