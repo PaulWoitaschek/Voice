@@ -189,16 +189,9 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
     }
   }
 
-  /**
-   * Gets the containing files of a folder (restricted to music and folders) in a naturally sorted
-   * order.
-   *
-   * @return The containing files
-   */
-  private fun File.getContentsSorted(): List<File> {
-    val containing = listFilesSafely(FileRecognition.folderAndMusicFilter)
-    return containing.sortedWith(NaturalOrderComparator.fileComparator)
-  }
+  /** Gets the containing files of a folder (restricted to music and folders) in a naturally sorted order.  */
+  private fun File.getContentsSorted() = listFilesSafely(FileRecognition.folderAndMusicFilter)
+    .sortedWith(NaturalOrderComparator.fileComparator)
 
   override fun onRestore(savedState: Bundle) {
     super.onRestore(savedState)
