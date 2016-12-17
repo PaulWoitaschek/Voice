@@ -79,11 +79,7 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
     }
   }
 
-  override fun getItemId(position: Int): Long {
-    val id = books[position].id
-    check(id >= 0)
-    return id
-  }
+  override fun getItemId(position: Int) = books[position].id
 
   fun getItem(position: Int): Book = books[position]
 
