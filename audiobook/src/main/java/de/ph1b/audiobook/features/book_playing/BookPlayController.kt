@@ -245,22 +245,16 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
         }
       }
 
-    // hide / show left time view
-    sandMan.sleepSand
-      .map { it > 0 }
-      .distinctUntilChanged() // only set when visibility has changed
-      .bindToLifeCycle()
-      .subscribe { visible ->
-        timerCountdownView.visible = visible
-      }
-
-    // invalidates the actionbar items
     sandMan.sleepSand
       .map { it > 0 } // sleep timer is active
       .distinctUntilChanged() // only notify when event has changed
       .bindToLifeCycle()
-      .subscribe { activity.invalidateOptionsMenu() }
-
+      .subscribe {
+        // hide / show left time view
+        timerCountdownView.visible = it
+        // invalidates the actionbar items
+        activity.invalidateOptionsMenu()
+      }
 
     // set the correct time to the sleep time view
     sandMan.sleepSand
