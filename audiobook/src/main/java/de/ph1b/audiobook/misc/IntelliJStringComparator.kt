@@ -14,6 +14,10 @@ class IntelliJStringComparator : Comparator<String> {
   private fun isDecimalDigit(c: Char) = c >= '0' && c <= '9'
 
   override fun compare(lhs: String?, rhs: String?): Int {
+    return naturalCompare(lhs, rhs, false)
+  }
+
+  private fun naturalCompare(lhs: String?, rhs: String?, caseSensitive: Boolean): Int {
     if (lhs === rhs) {
       return 0
     }
@@ -66,13 +70,17 @@ class IntelliJStringComparator : Comparator<String> {
         i--
         j--
       } else {
-        // similar logic to charsMatch() below
-        if (ch1 != ch2) {
-          val diff1 = ch1.toUpperCase() - ch2.toUpperCase()
-          if (diff1 != 0) {
-            val diff2 = ch1.toLowerCase() - ch2.toLowerCase()
-            if (diff2 != 0) {
-              return diff2
+        if (caseSensitive) {
+          return ch1 - ch2
+        } else {
+          // similar logic to charsMatch() below
+          if (ch1 != ch2) {
+            val diff1 = ch1.toUpperCase() - ch2.toUpperCase()
+            if (diff1 != 0) {
+              val diff2 = ch1.toLowerCase() - ch2.toLowerCase()
+              if (diff2 != 0) {
+                return diff2
+              }
             }
           }
         }
@@ -89,9 +97,9 @@ class IntelliJStringComparator : Comparator<String> {
     if (j < string2Length) {
       return -1
     }
-    if (string1Length == string2Length) {
+    if (!caseSensitive && string1Length == string2Length) {
       // do case sensitive compare if case insensitive strings are equal
-      return compare(lhs, rhs)
+      return naturalCompare(lhs, rhs, true)
     }
     return string1Length - string2Length
   }
