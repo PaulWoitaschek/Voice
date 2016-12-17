@@ -104,7 +104,7 @@
     <string name="pref_support_translations">Translations</string>
     <string name="pref_support_contribute">Support and suggestions</string>
     <string name="pref_analytic_title">Statistics</string>
-    <string name="pref_analytic_content">Collect anonymous usage statistic to help us improve the app.</string>
+    <string name="pref_analytic_content">Collect and send anonymous usage statistic to help us improve the app.</string>
 
     <!--Misc-->
     <string name="popup_edit">Edit</string>
