@@ -13,9 +13,7 @@ class IntelliJStringComparator : Comparator<String> {
 
   private fun isDecimalDigit(c: Char) = c >= '0' && c <= '9'
 
-  override fun compare(lhs: String?, rhs: String?): Int {
-    return naturalCompare(lhs, rhs, false)
-  }
+  override fun compare(lhs: String?, rhs: String?) = naturalCompare(lhs, rhs, false)
 
   private fun naturalCompare(lhs: String?, rhs: String?, caseSensitive: Boolean): Int {
     if (lhs === rhs) {
