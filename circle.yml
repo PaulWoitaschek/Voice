@@ -11,4 +11,4 @@ dependencies:
     - echo y | android update sdk --no-ui --all --filter "build-tools-25.0.2"
   override:
     # workaround from https://code.google.com/p/android/issues/detail?id=212128 for constraint layout
-    gradle dependencies || true
+    - ./gradlew dependencies || true
