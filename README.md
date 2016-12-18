@@ -1,6 +1,6 @@
 MaterialAudiobookPlayer
 =======================
-![CI Status](https://circleci.com/gh/PaulWoitaschek/MaterialAudiobookPlayer.svg?&style=shield&circle-token=3e7023d997fb5667ed60f751f963aaaf8c1f02d4)
+[![CI Status](https://circleci.com/gh/PaulWoitaschek/MaterialAudiobookPlayer.svg?&style=shield&circle-token=3e7023d997fb5667ed60f751f963aaaf8c1f02d4)](https://circleci.com/gh/PaulWoitaschek/MaterialAudiobookPlayer)
 
 This is my digital playground where I am learning. I'm integrating and validating new technologies and ideas here, playing around with new UI / UX components and developing with the best coding standard I come up with.
 
