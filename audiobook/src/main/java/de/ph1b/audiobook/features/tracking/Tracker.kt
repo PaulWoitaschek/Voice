@@ -4,7 +4,7 @@ import android.os.Bundle
 import com.bluelinelabs.conductor.Controller
 import com.google.firebase.analytics.FirebaseAnalytics
 import de.ph1b.audiobook.BuildConfig
-import de.ph1b.audiobook.features.book_overview.BookShelfController
+import de.ph1b.audiobook.features.bookOverview.BookShelfController
 import de.ph1b.audiobook.uitools.ThemeUtil
 import javax.inject.Inject
 import javax.inject.Singleton

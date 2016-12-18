@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.folder_overview
+package de.ph1b.audiobook.features.folderOverview
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -14,7 +14,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.getbase.floatingactionbutton.FloatingActionButton
 import com.getbase.floatingactionbutton.FloatingActionsMenu
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.folder_chooser.FolderChooserActivity
+import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity
 import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.mvp.MvpBaseController

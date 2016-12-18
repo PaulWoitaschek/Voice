@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.folder_chooser
+package de.ph1b.audiobook.features.folderChooser
 
 import java.io.File
 

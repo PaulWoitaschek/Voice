@@ -61,11 +61,11 @@
         </activity>
 
         <activity
-            android:name=".features.external_storage_missing.NoExternalStorageActivity"
+            android:name=".features.externalStorageMissing.NoExternalStorageActivity"
             android:label="@string/no_external_storage_action_bar_title"/>
 
         <activity
-            android:name=".features.folder_chooser.FolderChooserActivity"
+            android:name=".features.folderChooser.FolderChooserActivity"
             android:parentActivityName=".features.BookActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

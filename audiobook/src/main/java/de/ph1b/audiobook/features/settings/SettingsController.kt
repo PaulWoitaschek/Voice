@@ -8,8 +8,8 @@ import android.widget.TextView
 import com.bluelinelabs.conductor.RouterTransaction
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BaseController
-import de.ph1b.audiobook.features.book_playing.SeekDialogFragment
-import de.ph1b.audiobook.features.folder_overview.FolderOverviewController
+import de.ph1b.audiobook.features.bookPlaying.SeekDialogFragment
+import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.SupportDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment

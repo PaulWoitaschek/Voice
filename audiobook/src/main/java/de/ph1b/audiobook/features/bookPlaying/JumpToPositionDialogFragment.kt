@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.book_playing
+package de.ph1b.audiobook.features.bookPlaying
 
 import android.app.Dialog
 import android.os.Bundle

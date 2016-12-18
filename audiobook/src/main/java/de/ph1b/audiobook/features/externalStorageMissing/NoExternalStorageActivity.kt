@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.external_storage_missing
+package de.ph1b.audiobook.features.externalStorageMissing
 
 import android.content.Intent
 import android.os.Bundle

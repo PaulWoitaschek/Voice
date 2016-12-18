@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.folder_chooser
+package de.ph1b.audiobook.features.folderChooser
 
 import android.content.Context
 import android.content.Intent
@@ -11,7 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.folder_chooser.FolderChooserActivity.Companion.newInstanceIntent
+import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity.Companion.newInstanceIntent
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.mvp.RxBaseActivity

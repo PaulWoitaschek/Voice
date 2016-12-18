@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.book_overview
+package de.ph1b.audiobook.features.bookOverview
 
 import de.ph1b.audiobook.features.BookAdder
 import de.ph1b.audiobook.misc.asV2Observable

@@ -1,7 +1,7 @@
 package de.ph1b.audiobook.persistence
 
 import com.f2prateek.rx.preferences.Preference
-import de.ph1b.audiobook.features.book_overview.BookShelfController
+import de.ph1b.audiobook.features.bookOverview.BookShelfController
 import de.ph1b.audiobook.injection.*
 import de.ph1b.audiobook.uitools.ThemeUtil
 import javax.inject.Inject

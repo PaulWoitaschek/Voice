@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.book_overview
+package de.ph1b.audiobook.features.bookOverview
 
 import android.app.Dialog
 import android.os.Bundle

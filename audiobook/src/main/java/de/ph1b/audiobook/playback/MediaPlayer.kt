@@ -6,7 +6,7 @@ import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.upstream.DataSource
 import de.ph1b.audiobook.Book
-import de.ph1b.audiobook.features.book_playing.Equalizer
+import de.ph1b.audiobook.features.bookPlaying.Equalizer
 import de.ph1b.audiobook.playback.utils.onAudioSessionId
 import de.ph1b.audiobook.playback.utils.onEnded
 import de.ph1b.audiobook.playback.utils.onError

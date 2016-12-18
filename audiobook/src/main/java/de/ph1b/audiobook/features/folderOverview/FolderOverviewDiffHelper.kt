@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.folder_overview
+package de.ph1b.audiobook.features.folderOverview
 
 import android.support.v7.util.DiffUtil
 

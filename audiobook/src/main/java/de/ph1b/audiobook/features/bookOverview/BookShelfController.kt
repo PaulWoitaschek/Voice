@@ -1,4 +1,4 @@
-package de.ph1b.audiobook.features.book_overview
+package de.ph1b.audiobook.features.bookOverview
 
 import android.app.Activity
 import android.content.Intent
@@ -12,7 +12,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.getbase.floatingactionbutton.FloatingActionButton
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.book_playing.BookPlayController
+import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.features.tracking.Tracker

@@ -15,7 +15,7 @@ import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
 import d
 import de.ph1b.audiobook.features.BookActivity
-import de.ph1b.audiobook.features.book_overview.BookShelfController
+import de.ph1b.audiobook.features.bookOverview.BookShelfController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.RxBroadcast
 import de.ph1b.audiobook.misc.asV2Observable

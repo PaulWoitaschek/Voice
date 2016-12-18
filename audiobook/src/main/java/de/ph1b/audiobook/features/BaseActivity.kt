@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
-import de.ph1b.audiobook.features.external_storage_missing.NoExternalStorageActivity
+import de.ph1b.audiobook.features.externalStorageMissing.NoExternalStorageActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlaybackService
