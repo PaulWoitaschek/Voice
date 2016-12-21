@@ -647,7 +647,7 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
 
     data class Holder(val id: Long, val name: String, val author: String?, val path: String, val speed: Float, val root: String, val time: Long, val type: String, val active: Int)
 
-    val entries = db.simpleQuery(TABLE_NAME)
+    val entries = db.query(TABLE_NAME)
       .mapRows {
         Holder(long(ID), string(NAME), stringNullable(AUTHOR), string(CURRENT_MEDIA_PATH), float(PLAYBACK_SPEED), string(ROOT), long(TIME), string(TYPE), int(ACTIVE))
       }

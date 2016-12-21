@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.persistence.internals
 
+import android.content.ContentValues
 import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
@@ -65,16 +66,26 @@ inline fun <T> Cursor.mapRows(mapper: Cursor.() -> T): List<T> {
   return list
 }
 
-
-fun SQLiteDatabase.simpleQuery(
+fun SQLiteDatabase.query(
   table: String,
-  columns: Array<String>? = null,
+  columns: List<String>? = null,
   selection: String? = null,
-  selectionArgs: Array<String>? = null,
+  selectionArgs: List<Any>? = null,
   groupBy: String? = null,
   having: String? = null,
   orderBy: String? = null,
   limit: String? = null,
   distinct: Boolean = false): Cursor {
-  return query(distinct, table, columns, selection, selectionArgs, groupBy, having, orderBy, limit)
+  val argsAsString = selectionArgs?.map(Any::toString)?.toTypedArray()
+  return query(distinct, table, columns?.toTypedArray(), selection, argsAsString, groupBy, having, orderBy, limit)
+}
+
+fun SQLiteDatabase.update(table: String, values: ContentValues, whereClause: String, vararg whereArgs: Any): Int {
+  val whereArgsMapped = whereArgs.map(Any::toString).toTypedArray()
+  return update(table, values, whereClause, whereArgsMapped)
+}
+
+fun SQLiteDatabase.delete(table: String, whereClause: String, vararg whereArgs: Any): Int {
+  val whereArgsMapped = whereArgs.map(Any::toString).toTypedArray()
+  return delete(table, whereClause, whereArgsMapped)
 }

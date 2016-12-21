@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 
 /**
- * Provides access to the peristent storage for bookmarks.
+ * Provides access to the persistent storage for bookmarks.
  *
  * @author: Paul Woitaschek
  */
@@ -20,8 +20,8 @@ class BookStorage
   private val db by lazy { internalDb.writableDatabase }
 
   private fun books(active: Boolean) = db.asTransaction {
-    return@asTransaction db.simpleQuery(table = BookTable.TABLE_NAME,
-      columns = arrayOf(
+    return@asTransaction db.query(table = BookTable.TABLE_NAME,
+      columns = listOf(
         BookTable.ID,
         BookTable.NAME,
         BookTable.AUTHOR,
@@ -31,7 +31,7 @@ class BookStorage
         BookTable.TIME,
         BookTable.TYPE),
       selection = "${BookTable.ACTIVE} =?",
-      selectionArgs = toStringArray(if (active) 1 else 0)
+      selectionArgs = listOf(if (active) 1 else 0)
     ).mapRows {
       val bookId: Long = long(BookTable.ID)
       val bookName: String = string(BookTable.NAME)
@@ -42,10 +42,10 @@ class BookStorage
       val bookTime: Int = int(BookTable.TIME)
       val bookType: String = string(BookTable.TYPE)
 
-      val chapters = db.simpleQuery(table = ChapterTable.TABLE_NAME,
-        columns = arrayOf(ChapterTable.NAME, ChapterTable.DURATION, ChapterTable.PATH),
+      val chapters = db.query(table = ChapterTable.TABLE_NAME,
+        columns = listOf(ChapterTable.NAME, ChapterTable.DURATION, ChapterTable.PATH),
         selection = "${ChapterTable.BOOK_ID} =?",
-        selectionArgs = toStringArray(bookId))
+        selectionArgs = listOf(bookId))
         .mapRows {
           val name: String = string(ChapterTable.NAME)
           val duration: Int = int(ChapterTable.DURATION)
@@ -66,10 +66,12 @@ class BookStorage
 
   fun orphanedBooks() = books(false)
 
-  private fun setBookVisible(bookId: Long, visible: Boolean) = db.update(BookTable.TABLE_NAME,
-    ContentValues().apply {
+  private fun setBookVisible(bookId: Long, visible: Boolean): Int {
+    val cv = ContentValues().apply {
       put(BookTable.ACTIVE, if (visible) 1 else 0)
-    }, "${BookTable.ID} =?", toStringArray(bookId))
+    }
+    return db.update(BookTable.TABLE_NAME, cv, "${BookTable.ID} =?", bookId)
+  }
 
   fun revealBook(bookId: Long) {
     setBookVisible(bookId, true)
@@ -105,15 +107,11 @@ class BookStorage
 
     // update book itself
     val bookCv = book.toContentValues()
-    update(BookTable.TABLE_NAME, bookCv, "${BookTable.ID}=?", toStringArray(book.id))
+    update(BookTable.TABLE_NAME, bookCv, "${BookTable.ID}=?", book.id)
 
     // delete old chapters and replace them with new ones
-    delete(ChapterTable.TABLE_NAME, "${BookTable.ID}=?", toStringArray(book.id))
+    delete(ChapterTable.TABLE_NAME, "${BookTable.ID}=?", book.id)
     book.chapters.forEach { insert(it, book.id) }
-  }
-
-  private fun toStringArray(vararg elements: Any) = Array(elements.size) {
-    elements[it].toString()
   }
 
   fun addBook(toAdd: Book) = db.asTransaction {

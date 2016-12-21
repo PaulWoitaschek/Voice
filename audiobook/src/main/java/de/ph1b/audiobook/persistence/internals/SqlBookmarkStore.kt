@@ -28,11 +28,11 @@ class SqlBookmarkStore
     val pathWhere = book.chapters.joinToString(separator = ",", prefix = "(", postfix = ")") { "?" }
     val pathArgs = book.chapters.map { it.file.absolutePath }
 
-    val query = db.simpleQuery(
+    val query = db.query(
       BookmarkTable.TABLE_NAME,
-      arrayOf(BookmarkTable.PATH, BookmarkTable.TIME, BookmarkTable.TITLE, BookmarkTable.ID),
+      listOf(BookmarkTable.PATH, BookmarkTable.TIME, BookmarkTable.TITLE, BookmarkTable.ID),
       "${BookmarkTable.PATH} IN $pathWhere",
-      pathArgs.toTypedArray())
+      pathArgs)
     return query.mapRows { toBookmark() }
   }
 }
