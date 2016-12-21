@@ -25,18 +25,14 @@ class SqlBookmarkStore
   }
 
   fun bookmarks(book: Book): List<Bookmark> {
-    val whereBuilder = StringBuilder()
-    val pathAlike = "${BookmarkTable.PATH} =?"
-    for (i in 0..book.chapters.size - 1) {
-      if (i > 0) whereBuilder.append(" OR ")
-      whereBuilder.append(pathAlike)
-    }
+    val pathWhere = book.chapters.joinToString(separator = ",", prefix = "(", postfix = ")") { "?" }
+    val pathArgs = book.chapters.map { it.file.absolutePath }
 
-    return db.query(BookmarkTable.TABLE_NAME,
+    val query = db.simpleQuery(
+      BookmarkTable.TABLE_NAME,
       arrayOf(BookmarkTable.PATH, BookmarkTable.TIME, BookmarkTable.TITLE, BookmarkTable.ID),
-      whereBuilder.toString(),
-      book.chapters.map { it.file.absolutePath }.toTypedArray(),
-      null, null, null)
-      .mapRows { toBookmark() }
+      "${BookmarkTable.PATH} IN $pathWhere",
+      pathArgs.toTypedArray())
+    return query.mapRows { toBookmark() }
   }
 }
