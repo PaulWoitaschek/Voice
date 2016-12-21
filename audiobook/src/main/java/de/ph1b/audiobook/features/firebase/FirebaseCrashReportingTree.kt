@@ -9,11 +9,11 @@ import timber.log.Timber
  *
  * @author Paul Woitaschek
  */
-class FirebaseCrashReportingTree : Timber.DebugTree() {
+class FirebaseCrashReportingTree : Timber.Tree() {
 
   override fun log(priority: Int, tag: String?, message: String?, t: Throwable?) {
     if (priority >= Log.DEBUG && message != null) {
-      FirebaseCrashProxy.log(tag + "\t" + message)
+      FirebaseCrashProxy.log(message)
     }
   }
 }
