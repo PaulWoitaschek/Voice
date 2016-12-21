@@ -24,7 +24,10 @@ import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager.PauseReason
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
-import de.ph1b.audiobook.playback.events.*
+import de.ph1b.audiobook.playback.events.AudioFocus
+import de.ph1b.audiobook.playback.events.AudioFocusReceiver
+import de.ph1b.audiobook.playback.events.HeadsetPlugReceiver
+import de.ph1b.audiobook.playback.events.MediaEventReceiver
 import de.ph1b.audiobook.playback.utils.BookUriConverter
 import de.ph1b.audiobook.playback.utils.ChangeNotifier
 import de.ph1b.audiobook.playback.utils.MediaBrowserHelper
@@ -61,7 +64,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
   @Inject lateinit var audioFocusReceiver: AudioFocusReceiver
   @Inject lateinit var notificationAnnouncer: NotificationAnnouncer
   @Inject lateinit var playStateManager: PlayStateManager
-  @Inject lateinit var audioFocusManager: AudioFocusManager
   @Inject lateinit var bookUriConverter: BookUriConverter
   @Inject lateinit var mediaBrowserHelper: MediaBrowserHelper
   private lateinit var mediaSession: MediaSessionCompat
@@ -243,7 +245,45 @@ class PlaybackService : MediaBrowserServiceCompat() {
         })
 
       // adjusts stream and playback based on audio focus.
-      add(audioFocusManager.handleAudioFocus(audioFocusReceiver.focusObservable()))
+      add(audioFocusReceiver.focusObservable().subscribe { audioFocus: AudioFocus ->
+        i { "handleAudioFocus changed to $audioFocus" }
+        when (audioFocus) {
+          AudioFocus.GAIN -> {
+            d { "started by audioFocus gained" }
+            if (playStateManager.pauseReason == PlayStateManager.PauseReason.LOSS_TRANSIENT) {
+              player.play()
+            } else if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
+              d { "increasing volume" }
+              player.setVolume(loud = true)
+            }
+          }
+          AudioFocus.LOSS,
+          AudioFocus.LOSS_INCOMING_CALL -> {
+            d { "paused by audioFocus loss" }
+            player.stop()
+          }
+          AudioFocus.LOSS_TRANSIENT_CAN_DUCK -> {
+            if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
+              if (prefs.pauseOnTempFocusLoss.value()) {
+                d { "Paused by audio-focus loss transient." }
+                // Pause is temporary, don't rewind
+                player.pause(false)
+                playStateManager.pauseReason = PlayStateManager.PauseReason.LOSS_TRANSIENT
+              } else {
+                d { "lowering volume" }
+                player.setVolume(loud = false)
+              }
+            }
+          }
+          AudioFocus.LOSS_TRANSIENT -> {
+            if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
+              d { "Paused by audio-focus loss transient." }
+              player.pause(true) // auto pause
+              playStateManager.pauseReason = PlayStateManager.PauseReason.LOSS_TRANSIENT
+            }
+          }
+        }
+      })
 
       // notifies the media service about added or removed books
       add(repo.booksStream().map { it.size }.distinctUntilChanged()
@@ -255,7 +295,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
       // pause when audio is becoming noisy.
       add(RxBroadcast.register(this@PlaybackService, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
         .subscribe {
-          d { "audio becoming noisy. Playstate=${playStateManager.playState.value}" }
+          d { "audio becoming noisy. playState=${playStateManager.playState.value}" }
           if (playStateManager.playState.value === PlayState.PLAYING) {
             playStateManager.pauseReason = PauseReason.BECAUSE_HEADSET
             player.pause(true)
