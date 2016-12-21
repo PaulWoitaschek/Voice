@@ -21,9 +21,6 @@ import javax.inject.Singleton
   private val previousIntent = intent(ACTION_FORCE_PREVIOUS)
   private val rewindIntent = keyEventIntent(KeyEvent.KEYCODE_MEDIA_REWIND)
   private val fastForwardIntent = keyEventIntent(KeyEvent.KEYCODE_MEDIA_FAST_FORWARD)
-  private val pauseIntentNonRewinding = intent(ACTION_PAUSE_NON_REWINDING)
-  private val lowVolumeIntent = intent(ACTION_VOLUME_LOW)
-  private val highVolumeIntent = intent(ACTION_VOLUME_HIGH)
 
   private fun intent(action: String) = Intent(context, PlaybackService::class.java).apply {
     setAction(action)
@@ -37,8 +34,6 @@ import javax.inject.Singleton
   fun pause() = fire(pauseIntent)
 
   fun stop() = fire(stopIntent)
-
-  fun pauseNonRewinding() = fire(pauseIntentNonRewinding)
 
   fun rewind() = fire(rewindIntent)
 
@@ -56,8 +51,6 @@ import javax.inject.Singleton
 
   fun next() = fire(nextIntent)
 
-  fun volume(loud: Boolean) = fire(if (loud) highVolumeIntent else lowVolumeIntent)
-
   fun setSpeed(speed: Float) {
     fire(intent(ACTION_SPEED).apply {
       putExtra(EXTRA_SPEED, speed)
@@ -72,19 +65,14 @@ import javax.inject.Singleton
   }
 
   companion object {
-    val ACTION_SPEED = "ActionsetSpeed"
-    val EXTRA_SPEED = "speedExtra"
+    val ACTION_SPEED = "action#setSpeed"
+    val EXTRA_SPEED = "extra#speed"
 
-    val ACTION_CHANGE = "actionChange"
+    val ACTION_CHANGE = "action#change"
     val CHANGE_TIME = "changeTime"
     val CHANGE_FILE = "changeFile"
 
     val ACTION_FORCE_NEXT = "actionForceNext"
     val ACTION_FORCE_PREVIOUS = "actionForcePrevious"
-
-    val ACTION_PAUSE_NON_REWINDING = "ActionPauseNonRewinding"
-
-    val ACTION_VOLUME_HIGH = "volumeHigh"
-    val ACTION_VOLUME_LOW = "volumeLow"
   }
 }
