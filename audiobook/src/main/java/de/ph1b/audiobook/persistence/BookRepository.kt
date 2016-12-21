@@ -53,7 +53,6 @@ import javax.inject.Singleton
   @Synchronized fun getOrphanedBooks(): List<Book> = ArrayList(orphaned)
 
   @Synchronized fun updateBook(book: Book) {
-    v { "updateBook=${book.name} with time ${book.time}" }
     check(book.id != -1L)
 
     val index = active.indexOfFirst { it.id == book.id }

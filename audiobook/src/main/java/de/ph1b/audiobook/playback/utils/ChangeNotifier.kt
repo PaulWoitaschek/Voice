@@ -50,8 +50,6 @@ class ChangeNotifier(private val mediaSession: MediaSessionCompat) {
   private val mediaMetaDataBuilder = MediaMetadataCompat.Builder()
 
   fun notify(what: Type, book: Book) {
-    d { "updateRemoteControlClient called" }
-
     val c = book.currentChapter()
     val playState = playStateManager.playState.value
 
