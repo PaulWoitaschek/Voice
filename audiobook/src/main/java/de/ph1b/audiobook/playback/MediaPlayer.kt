@@ -28,7 +28,11 @@ import javax.inject.Singleton
 @Singleton
 class MediaPlayer
 @Inject
-constructor(private val player: SimpleExoPlayer, private val dataSourceFactory: DataSource.Factory, private val playStateManager: PlayStateManager, private val equalizer: Equalizer) {
+constructor(private val player: SimpleExoPlayer,
+            private val dataSourceFactory: DataSource.Factory,
+            private val playStateManager: PlayStateManager,
+            private val equalizer: Equalizer,
+            private val wakeLockManager: WakeLockManager) {
 
   private var book = BehaviorSubject.create<Book>()
   private var state = BehaviorSubject.createDefault(State.IDLE)
@@ -67,6 +71,7 @@ constructor(private val player: SimpleExoPlayer, private val dataSourceFactory: 
 
     state.map { it == State.STARTED }
       .subscribe { isPlaying ->
+        wakeLockManager.stayAwake(isPlaying)
         if (isPlaying) {
           v { "startUpdating" }
           if (updatingDisposable?.isDisposed ?: true) {

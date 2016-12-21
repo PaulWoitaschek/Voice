@@ -7,6 +7,7 @@ import android.content.Context
 import android.hardware.SensorManager
 import android.media.AudioManager
 import android.net.ConnectivityManager
+import android.os.PowerManager
 import android.telephony.TelephonyManager
 import android.view.WindowManager
 import com.f2prateek.rx.preferences.Preference
@@ -38,6 +39,7 @@ import javax.inject.Singleton
   @Provides @Singleton fun provideWindowManager(context: Context) = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
   @Provides @Singleton fun provideNotificationManager(context: Context) = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
   @Provides @Singleton fun provideSensorManager(context: Context) = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager?
+  @Provides @Singleton fun providePowerManager(context: Context) = context.getSystemService(Context.POWER_SERVICE) as PowerManager
 
   @Provides @Singleton fun provideExoPlayer(context: Context): SimpleExoPlayer {
     val trackSelector = DefaultTrackSelector()
