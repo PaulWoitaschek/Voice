@@ -67,7 +67,6 @@ dependencies {
     def daggerVersion = "2.7"
     compile "com.google.dagger:dagger:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
-    kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
     provided "javax.annotation:jsr250-api:1.0"
 
     //testing
@@ -76,9 +75,9 @@ dependencies {
     testCompile "org.assertj:assertj-core:1.7.1"
 
     // rx extensions
-    compile "io.reactivex.rxjava2:rxjava:2.0.2"
+    compile "io.reactivex.rxjava2:rxjava:2.0.3"
     compile "io.reactivex.rxjava2:rxandroid:2.0.1"
-    compile 'com.github.akarnokd:rxjava2-interop:0.7.2'
+    compile 'com.github.akarnokd:rxjava2-interop:0.8.1'
     compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.2'
 
     // kotlin
