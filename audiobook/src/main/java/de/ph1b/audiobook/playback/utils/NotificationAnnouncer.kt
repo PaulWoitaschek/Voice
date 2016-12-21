@@ -26,27 +26,37 @@ import javax.inject.Inject
 class NotificationAnnouncer
 @Inject constructor(private val context: Context, private val imageHelper: ImageHelper, private val serviceController: ServiceController) {
 
-  fun getNotification(book: Book, playState: PlayStateManager.PlayState, sessionToken: MediaSessionCompat.Token): Notification {
-    // cover
+  var cachedImage: CachedImage? = null
+
+  private fun cover(book: Book): Bitmap {
+    // first try to get use a cached image
+    cachedImage?.let {
+      if (it.matches(book)) return it.cover
+    }
+
     val width = imageHelper.smallerScreenSize
     val height = imageHelper.smallerScreenSize
-    var cover: Bitmap? = null
-    try {
+
+    // get the cover or fallback to a replacement
+    val cover = try {
       val coverFile = book.coverFile()
       if (coverFile.exists() && coverFile.canRead()) {
-        cover = Picasso.with(context)
+        Picasso.with(context)
           .load(coverFile)
           .resize(width, height)
           .get()
-      }
+      } else null
     } catch (ex: IOException) {
       e(ex) { "Error when retrieving cover from $book" }
-    }
+      null
+    } ?: imageHelper.drawableToBitmap(CoverReplacement(book.name, context), width, height)
 
-    if (cover == null) {
-      cover = imageHelper.drawableToBitmap(CoverReplacement(book.name, context), width, height)
-    }
+    // add a cache entry
+    cachedImage = CachedImage(book.id, cover)
+    return cover
+  }
 
+  fun getNotification(book: Book, playState: PlayStateManager.PlayState, sessionToken: MediaSessionCompat.Token): Notification {
     val notificationBuilder = NotificationCompat.Builder(context)
     val chapter = book.currentChapter()
 
@@ -100,7 +110,7 @@ class NotificationAnnouncer
       .setWhen(0)
       .setDeleteIntent(stopPI)
       .setAutoCancel(true)
-      .setLargeIcon(cover)
+      .setLargeIcon(cover(book))
       .build()
   }
 }
