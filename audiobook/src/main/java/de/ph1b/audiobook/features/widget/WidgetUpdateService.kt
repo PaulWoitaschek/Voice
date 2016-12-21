@@ -16,7 +16,7 @@ import android.widget.RemoteViews
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.BookActivity
+import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.asV2Observable
 import de.ph1b.audiobook.misc.dpToPx
@@ -111,7 +111,7 @@ class WidgetUpdateService : Service() {
           }
         } else {
           // directly going back to bookChoose
-          val wholeWidgetClickI = Intent(this@WidgetUpdateService, BookActivity::class.java)
+          val wholeWidgetClickI = Intent(this@WidgetUpdateService, MainActivity::class.java)
           wholeWidgetClickI.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
           val wholeWidgetClickPI = PendingIntent.getActivity(this@WidgetUpdateService, System.currentTimeMillis().toInt(),
             wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT)
@@ -185,7 +185,7 @@ class WidgetUpdateService : Service() {
 
     remoteViews.setTextViewText(R.id.summary, name)
 
-    val wholeWidgetClickI = BookActivity.goToBookIntent(this, book.id)
+    val wholeWidgetClickI = MainActivity.goToBookIntent(this, book.id)
     val wholeWidgetClickPI = PendingIntent.getActivity(this@WidgetUpdateService, System.currentTimeMillis().toInt(), wholeWidgetClickI,
       PendingIntent.FLAG_UPDATE_CURRENT)
 

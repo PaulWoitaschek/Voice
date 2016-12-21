@@ -3,7 +3,7 @@ package de.ph1b.audiobook.injection
 import android.content.Context
 import dagger.Component
 import de.ph1b.audiobook.features.BaseActivity
-import de.ph1b.audiobook.features.BookActivity
+import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.features.bookOverview.*
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.bookPlaying.JumpToPositionDialogFragment
@@ -40,7 +40,7 @@ interface ApplicationComponent {
   fun inject(target: AutoRewindDialogFragment)
   fun inject(target: BaseActivity)
   fun inject(target: PlaybackService)
-  fun inject(target: BookActivity)
+  fun inject(target: MainActivity)
   fun inject(target: BookShelfAdapter)
   fun inject(target: BookmarkDialogFragment)
   fun inject(target: BookPlayController)

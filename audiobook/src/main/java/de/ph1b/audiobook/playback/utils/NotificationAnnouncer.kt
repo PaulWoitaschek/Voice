@@ -10,7 +10,7 @@ import android.view.KeyEvent
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.BookActivity
+import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.uitools.CoverReplacement
 import de.ph1b.audiobook.uitools.ImageHelper
@@ -81,7 +81,7 @@ class NotificationAnnouncer
     val stopPI = PendingIntent.getService(context, KeyEvent.KEYCODE_MEDIA_STOP, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
     // content click
-    val contentIntent = BookActivity.goToBookIntent(context, book.id)
+    val contentIntent = MainActivity.goToBookIntent(context, book.id)
     val contentPI = PendingIntent.getActivity(context, 0, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
     return notificationBuilder

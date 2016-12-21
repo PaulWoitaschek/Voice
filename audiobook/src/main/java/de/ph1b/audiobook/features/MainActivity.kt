@@ -27,7 +27,7 @@ import javax.inject.Inject
  *
  * @author Paul Woitaschek
  */
-class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, RouterProvider {
+class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, RouterProvider {
 
   @Inject lateinit var prefs: PrefsManager
   @Inject lateinit var permissionHelper: PermissionHelper
@@ -92,13 +92,13 @@ class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
     private val NI_GO_TO_BOOK = "niGotoBook"
 
     /** Returns an intent to start the activity with to inform the user that a certain file may be defect **/
-    fun malformedFileIntent(c: Context, malformedFile: File) = Intent(c, BookActivity::class.java).apply {
+    fun malformedFileIntent(c: Context, malformedFile: File) = Intent(c, MainActivity::class.java).apply {
       putExtra(NI_MALFORMED_FILE, malformedFile)
       flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
     }
 
     /** Returns an intent that lets you go directly to the playback screen for a certain book **/
-    fun goToBookIntent(c: Context, bookId: Long) = Intent(c, BookActivity::class.java).apply {
+    fun goToBookIntent(c: Context, bookId: Long) = Intent(c, MainActivity::class.java).apply {
       putExtra(NI_GO_TO_BOOK, bookId)
       flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
     }

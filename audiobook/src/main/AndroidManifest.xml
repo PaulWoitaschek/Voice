@@ -53,7 +53,7 @@
         </activity>
 
         <activity
-            android:name=".features.BookActivity"
+            android:name=".features.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.media.action.MEDIA_PLAY_FROM_SEARCH"/>
@@ -67,10 +67,10 @@
 
         <activity
             android:name=".features.folderChooser.FolderChooserActivity"
-            android:parentActivityName=".features.BookActivity">
+            android:parentActivityName=".features.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".features.BookActivity"/>
+                android:value=".features.MainActivity"/>
         </activity>
 
         <service
