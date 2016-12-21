@@ -20,10 +20,11 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
-        <!-- android auto declaration -->
+        <!-- android auto declaration, disabled due to compliance problems
         <meta-data
             android:name="com.google.android.gms.car.application"
             android:resource="@xml/automotive_app_desc"/>
+            -->
 
         <!-- auto notification -->
         <meta-data
