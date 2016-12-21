@@ -1,7 +1,7 @@
 # Why doesn't MAP support xyz Media Format?
 Material Audiobook Player uses the media formats supported by the Android platform. 
 
-You can see the currently supported file extensions [here](https://github.com/PaulWoitaschek/MaterialAudiobookPlayer/blob/develop/audiobook/src/main/java/de/ph1b/audiobook/misc/FileRecognition.kt). 
+You can see the currently supported media types [here](https://developer.android.com/guide/appendix/media-formats.html#core). 
 If a file does not show up even though it should its most likely damaged or not supported by your version of Android at all.
 
 # Why isn't feature xyz in the app?
