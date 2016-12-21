@@ -97,7 +97,16 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
         override fun onPlayFromSearch(query: String?, extras: Bundle?) {
           i { "onPlayFromSearch $query" }
-          player.play()
+          if (query != null) {
+            val match = repo.activeBooks.firstOrNull {
+              it.name.contentEquals(query)
+            }
+            i { "found a match ${match?.name}" }
+            if (match != null) {
+              prefs.currentBookId.set(match.id)
+              player.play()
+            }
+          }
         }
 
         override fun onSkipToNext() {
