@@ -1,3 +1,8 @@
+# 2.9.2
+* Performance improvements
+* Make sure playback doesn't get interrupted by setting a wakelock
+* Make notification persistent
+
 # 2.9.1
 * Updated player
 * Invalid Book entry cleanup
