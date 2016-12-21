@@ -14,6 +14,7 @@ object NaturalOrderComparator {
 
   val stringComparator: Comparator<String> = IntelliJStringComparator()
   val fileComparator = Comparator<File> { lhs, rhs ->
+    if (lhs == rhs) return@Comparator 0
 
     if (lhs.isDirectory && !rhs.isDirectory) {
       return@Comparator -1
