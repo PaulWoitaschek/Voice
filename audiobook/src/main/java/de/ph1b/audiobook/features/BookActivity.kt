@@ -5,9 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
 import com.afollestad.materialdialogs.MaterialDialog
-import com.bluelinelabs.conductor.Conductor
-import com.bluelinelabs.conductor.Router
-import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.*
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.bookOverview.BookShelfController
 import de.ph1b.audiobook.features.bookOverview.NoFolderWarningDialogFragment
@@ -22,6 +20,7 @@ import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import java.io.File
 import javax.inject.Inject
+
 
 /**
  * Activity that coordinates the book shelf and play screens.
@@ -47,7 +46,15 @@ class BookActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
       val rootTransaction = RouterTransaction.with(BookShelfController())
       router.setRoot(rootTransaction)
     }
+    router.addChangeListener(object : ControllerChangeHandler.ControllerChangeListener {
+      override fun onChangeStarted(to: Controller?, from: Controller?, isPush: Boolean, container: ViewGroup, handler: ControllerChangeHandler) {
+        from?.setOptionsMenuHidden(true)
+      }
 
+      override fun onChangeCompleted(to: Controller?, from: Controller?, isPush: Boolean, container: ViewGroup, handler: ControllerChangeHandler) {
+        from?.setOptionsMenuHidden(false)
+      }
+    })
     // track upon changes
     router.onControllerChanged { tracker.track(it) }
 

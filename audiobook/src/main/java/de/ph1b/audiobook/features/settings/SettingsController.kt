@@ -19,6 +19,7 @@ import de.ph1b.audiobook.misc.asV2Observable
 import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.uitools.VerticalChangeHandler
 import javax.inject.Inject
 
 /**
@@ -45,7 +46,10 @@ class SettingsController : BaseController() {
 
     // audio book folders
     setupTextSetting(R.id.audiobookFolder, R.string.pref_root_folder_title, R.string.pref_root_folder_summary) {
-      router.pushController(RouterTransaction.with(FolderOverviewController()))
+      val transaction = RouterTransaction.with(FolderOverviewController())
+        .pushChangeHandler(VerticalChangeHandler())
+        .popChangeHandler(VerticalChangeHandler())
+      router.pushController(transaction)
     }
 
     // theme
