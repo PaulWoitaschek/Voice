@@ -7,9 +7,9 @@ import javax.inject.Inject
 /**
  * Provides access to the peristent storage for bookmarks.
  *
- * @author: Paul Woitaschek
+ * @author Paul Woitaschek
  */
-class InternalBookmarkRegister
+class SqlBookmarkStore
 @Inject constructor(internalDb: InternalDb) {
 
   private val db by lazy { internalDb.writableDatabase }
