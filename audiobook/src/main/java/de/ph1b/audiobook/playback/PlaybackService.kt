@@ -250,9 +250,9 @@ class PlaybackService : MediaBrowserServiceCompat() {
         when (audioFocus) {
           AudioFocus.GAIN -> {
             d { "started by audioFocus gained" }
-            if (playStateManager.pauseReason == PlayStateManager.PauseReason.LOSS_TRANSIENT) {
+            if (playStateManager.pauseReason == PauseReason.LOSS_TRANSIENT) {
               player.play()
-            } else if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
+            } else if (playStateManager.playState.value === PlayState.PLAYING) {
               d { "increasing volume" }
               player.setVolume(loud = true)
             }
@@ -260,15 +260,16 @@ class PlaybackService : MediaBrowserServiceCompat() {
           AudioFocus.LOSS,
           AudioFocus.LOSS_INCOMING_CALL -> {
             d { "paused by audioFocus loss" }
-            player.stop()
+            player.pause(true)
+            playStateManager.pauseReason = PauseReason.NONE
           }
           AudioFocus.LOSS_TRANSIENT_CAN_DUCK -> {
-            if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
+            if (playStateManager.playState.value === PlayState.PLAYING) {
               if (prefs.pauseOnTempFocusLoss.value()) {
                 d { "Paused by audio-focus loss transient." }
                 // Pause is temporary, don't rewind
                 player.pause(false)
-                playStateManager.pauseReason = PlayStateManager.PauseReason.LOSS_TRANSIENT
+                playStateManager.pauseReason = PauseReason.LOSS_TRANSIENT
               } else {
                 d { "lowering volume" }
                 player.setVolume(loud = false)
@@ -276,10 +277,10 @@ class PlaybackService : MediaBrowserServiceCompat() {
             }
           }
           AudioFocus.LOSS_TRANSIENT -> {
-            if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
+            if (playStateManager.playState.value === PlayState.PLAYING) {
               d { "Paused by audio-focus loss transient." }
               player.pause(true) // auto pause
-              playStateManager.pauseReason = PlayStateManager.PauseReason.LOSS_TRANSIENT
+              playStateManager.pauseReason = PauseReason.LOSS_TRANSIENT
             }
           }
         }
