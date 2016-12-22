@@ -7,6 +7,7 @@ import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.upstream.DataSource
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.features.bookPlaying.Equalizer
+import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.utils.onAudioSessionId
 import de.ph1b.audiobook.playback.utils.onEnded
 import de.ph1b.audiobook.playback.utils.onError
@@ -51,7 +52,7 @@ constructor(private val player: SimpleExoPlayer,
           next()
         } else {
           v { "Reached last track. Stopping player" }
-          playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
+          playStateManager.playState.onNext(PlayState.STOPPED)
           player.playWhenReady = false
 
           state.onNext(State.IDLE)
@@ -61,7 +62,7 @@ constructor(private val player: SimpleExoPlayer,
     player.onError {
       e { "exoPlayer error $it" }
       player.stop()
-      state.onNext(MediaPlayer.State.IDLE)
+      state.onNext(State.IDLE)
       errorSubject.onNext(Unit)
     }
 
@@ -131,7 +132,7 @@ constructor(private val player: SimpleExoPlayer,
     when (state.value) {
       State.PAUSED -> {
         player.playWhenReady = true
-        playStateManager.playState.onNext(PlayStateManager.PlayState.PLAYING)
+        playStateManager.playState.onNext(PlayState.PLAYING)
         state.onNext(State.STARTED)
       }
       State.IDLE -> {
@@ -199,7 +200,7 @@ constructor(private val player: SimpleExoPlayer,
   /** Stops the playback and releases some resources. */
   fun stop() {
     if (state.value == State.STARTED) player.playWhenReady = false
-    playStateManager.playState.onNext(PlayStateManager.PlayState.STOPPED)
+    playStateManager.playState.onNext(PlayState.STOPPED)
     state.onNext(State.IDLE)
   }
 
@@ -230,7 +231,7 @@ constructor(private val player: SimpleExoPlayer,
             }
           }
 
-          playStateManager.playState.onNext(PlayStateManager.PlayState.PAUSED)
+          playStateManager.playState.onNext(PlayState.PAUSED)
 
           state.onNext(State.PAUSED)
         }
@@ -268,9 +269,9 @@ constructor(private val player: SimpleExoPlayer,
         if (wasPlaying) {
           player.playWhenReady = true
           state.onNext(State.STARTED)
-          playStateManager.playState.onNext(PlayStateManager.PlayState.PLAYING)
+          playStateManager.playState.onNext(PlayState.PLAYING)
         } else {
-          playStateManager.playState.onNext(PlayStateManager.PlayState.PAUSED)
+          playStateManager.playState.onNext(PlayState.PAUSED)
         }
       } else {
         if (state.value == State.IDLE) prepare()
@@ -292,7 +293,6 @@ constructor(private val player: SimpleExoPlayer,
     book.value?.let {
       val copy = it.copy(playbackSpeed = speed)
       book.onNext(copy)
-
 
       player.setPlaybackSpeed(speed)
     }
