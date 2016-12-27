@@ -127,10 +127,9 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
       }
     })
 
-    if (book != null) {
-
+    book?.let { book ->
       // adapter
-      val chapters = book!!.chapters
+      val chapters = book.chapters
       val chapterNames = ArrayList<MultiLineSpinnerAdapter.Data<String>>(chapters.size)
       for (i in chapters.indices) {
         var chapterName = chapters[i].name
@@ -163,22 +162,22 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
         val realInput = bookSpinner.tag != null && bookSpinner.tag != it
         if (realInput) {
           i { "spinner: onItemSelected. firing: $it" }
-          mediaPlayer.changePosition(0, book!!.chapters[it].file)
+          mediaPlayer.changePosition(0, book.chapters[it].file)
           bookSpinner.tag = it
         }
       }
 
       // Next/Prev/spinner/book progress views hiding
-      val multipleChapters = book!!.chapters.size > 1
+      val multipleChapters = book.chapters.size > 1
       next.visible = multipleChapters
       previous.visible = multipleChapters
       bookSpinner.visible = multipleChapters
 
-      cover.supportTransitionName = book!!.coverTransitionName
+      cover.supportTransitionName = book.coverTransitionName
     }
 
     // (Cover)
-    val coverReplacement = CoverReplacement(if (book == null) "M" else book!!.name, activity)
+    val coverReplacement = CoverReplacement(book?.name ?: "M", activity)
     if (book?.coverFile()?.canRead() ?: false) {
       Picasso.with(activity)
         .load(book!!.coverFile())
@@ -186,13 +185,7 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
         .into(cover)
     } else {
       // we have to set the cover in onPreDraw. Else the transition will fail.
-      cover.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-        override fun onPreDraw(): Boolean {
-          cover.viewTreeObserver.removeOnPreDrawListener(this)
-          cover.setImageDrawable(coverReplacement)
-          return true
-        }
-      })
+      cover.onFirstPreDraw { cover.setImageDrawable(coverReplacement) }
     }
 
     return view
@@ -303,8 +296,12 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
     }
     R.id.action_sleep -> {
       if (sandMan.sleepTimerActive()) sandMan.setActive(false)
-      else SleepTimerDialogFragment.newInstance(book!!)
-        .show(fragmentManager, "fmSleepTimer")
+      else {
+        book?.let {
+          SleepTimerDialogFragment.newInstance(it)
+            .show(fragmentManager, "fmSleepTimer")
+        }
+      }
       true
     }
     R.id.action_time_lapse -> {
