@@ -5,6 +5,7 @@ import android.os.Build
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.SimpleExoPlayer
+import io.reactivex.Observable
 
 
 inline fun ExoPlayer.onEnded(crossinline action: () -> Unit) {
@@ -15,9 +16,29 @@ inline fun ExoPlayer.onEnded(crossinline action: () -> Unit) {
   })
 }
 
-inline fun ExoPlayer.onError(crossinline action: (ExoPlaybackException?) -> Unit) {
+fun ExoPlayer.stateChanges(): Observable<PlayerState> = Observable.create<PlayerState> {
+  val listener = object : SimpleEventListener {
+    override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+      val state = PlayerState.byExoState(playWhenReady, playbackState)
+      it.onNext(state)
+    }
+  }
+
+  addListener(listener)
+  it.setCancellable { removeListener(listener) }
+}
+
+inline fun ExoPlayer.onPositionDiscontinuity(crossinline action: () -> Unit) {
   addListener(object : SimpleEventListener {
-    override fun onPlayerError(error: ExoPlaybackException?) {
+    override fun onPositionDiscontinuity() {
+      action()
+    }
+  })
+}
+
+inline fun ExoPlayer.onError(crossinline action: (ExoPlaybackException) -> Unit) {
+  addListener(object : SimpleEventListener {
+    override fun onPlayerError(error: ExoPlaybackException) {
       action(error)
     }
   })
@@ -38,3 +59,4 @@ fun SimpleExoPlayer.setPlaybackSpeed(speed: Float) {
     }
   }
 }
+

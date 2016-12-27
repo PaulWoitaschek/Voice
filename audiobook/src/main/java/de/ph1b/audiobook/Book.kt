@@ -51,11 +51,7 @@ data class Book(
 
   /** The global duration. It sums up the duration of all chapters. */
   val globalDuration: Int by lazy {
-    var globalDuration = 0
-    for ((file, name, duration) in chapters) {
-      globalDuration += duration
-    }
-    globalDuration
+    chapters.sumBy { it.duration }
   }
 
   /**
@@ -64,12 +60,12 @@ data class Book(
    */
   fun globalPosition(): Int {
     var globalPosition = 0
-    for (c in chapters) {
-      if (c == currentChapter()) {
+    chapters.forEach {
+      if (it == currentChapter()) {
         globalPosition += time
         return globalPosition
       } else {
-        globalPosition += c.duration
+        globalPosition += it.duration
       }
     }
     throw IllegalStateException("Current chapter was not found while looking up the global position")
@@ -77,21 +73,11 @@ data class Book(
 
   fun currentChapter() = chapters.first { it.file == currentFile }
 
-  fun nextChapter(): Chapter? {
-    val currentIndex = chapters.indexOf(currentChapter())
-    if (currentIndex < chapters.size - 1) {
-      return chapters[currentIndex + 1]
-    }
-    return null
-  }
+  fun nextChapter() = chapters.getOrNull(currentChapterIndex() + 1)
 
-  fun previousChapter(): Chapter? {
-    val currentIndex = chapters.indexOf(currentChapter())
-    if (currentIndex > 0) {
-      return chapters[currentIndex - 1]
-    }
-    return null
-  }
+  fun currentChapterIndex() = chapters.indexOf(currentChapter())
+
+  fun previousChapter() = chapters.getOrNull(currentChapterIndex() - 1)
 
   fun coverFile(): File {
     val separator = File.separator

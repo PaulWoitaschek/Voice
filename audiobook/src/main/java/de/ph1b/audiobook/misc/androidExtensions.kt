@@ -2,6 +2,7 @@ package de.ph1b.audiobook.misc
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
@@ -104,3 +105,5 @@ fun Router.onControllerChanged(action: (controller: Controller) -> Unit) {
     }
   })
 }
+
+fun File.toUri() = Uri.fromFile(this)

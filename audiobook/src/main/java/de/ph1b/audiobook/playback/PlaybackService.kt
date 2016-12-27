@@ -172,14 +172,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
     playStateManager.playState.onNext(PlayState.STOPPED)
 
     disposables.apply {
-      // set seek time to the player
-      add(prefs.seekTime.asV2Observable()
-        .subscribe { player.seekTime = it })
-
-      // set auto rewind amount to the player
-      add(prefs.autoRewindAmount.asV2Observable()
-        .subscribe { player.autoRewindAmount = it })
-
       // re-init controller when there is a new book set as the current book
       add(prefs.currentBookId.asV2Observable()
         .subscribe {

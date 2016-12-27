@@ -16,7 +16,7 @@ interface SimpleEventListener : ExoPlayer.EventListener {
 
   }
 
-  override fun onPlayerError(error: ExoPlaybackException?) {
+  override fun onPlayerError(error: ExoPlaybackException) {
   }
 
   override fun onLoadingChanged(isLoading: Boolean) {

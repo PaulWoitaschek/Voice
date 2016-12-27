@@ -1,22 +1,22 @@
 package de.ph1b.audiobook.playback
 
-import android.net.Uri
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
+import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.upstream.DataSource
+import d
 import de.ph1b.audiobook.Book
+import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.features.bookPlaying.Equalizer
+import de.ph1b.audiobook.misc.toUri
+import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
-import de.ph1b.audiobook.playback.utils.onAudioSessionId
-import de.ph1b.audiobook.playback.utils.onEnded
-import de.ph1b.audiobook.playback.utils.onError
-import de.ph1b.audiobook.playback.utils.setPlaybackSpeed
+import de.ph1b.audiobook.playback.utils.*
 import e
 import i
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import v
@@ -29,76 +29,86 @@ import javax.inject.Singleton
 @Singleton
 class MediaPlayer
 @Inject
-constructor(private val player: SimpleExoPlayer,
-            private val dataSourceFactory: DataSource.Factory,
-            private val playStateManager: PlayStateManager,
-            private val equalizer: Equalizer,
-            private val wakeLockManager: WakeLockManager) {
+constructor(
+  private val player: SimpleExoPlayer,
+  private val dataSourceFactory: DataSource.Factory,
+  private val playStateManager: PlayStateManager,
+  private val equalizer: Equalizer,
+  private val wakeLockManager: WakeLockManager,
+  private val prefsManager: PrefsManager) {
+
+  private val extractorsFactory = DefaultExtractorsFactory()
 
   private var book = BehaviorSubject.create<Book>()
-  private var state = BehaviorSubject.createDefault(State.IDLE)
 
-  private var updatingDisposable: Disposable? = null
   private val errorSubject = PublishSubject.create<Unit>()
   fun onError(): Observable<Unit> = errorSubject
+  private val state = BehaviorSubject.createDefault(PlayerState.IDLE)
 
   init {
+    // upon end stop the player
     player.onEnded {
-      // After the current song has ended, prepare the next one if there is one. Else stop the
-      // resources.
-      book.value?.let {
-        v { "onCompletion called, nextChapter=${it.nextChapter()}" }
-        if (it.nextChapter() != null) {
-          next()
-        } else {
-          v { "Reached last track. Stopping player" }
-          playStateManager.playState.onNext(PlayState.STOPPED)
-          player.playWhenReady = false
-
-          state.onNext(State.IDLE)
-        }
-      }
+      v { "onEnded. Stopping player" }
+      playStateManager.playState.onNext(PlayState.STOPPED)
+      player.playWhenReady = false
     }
+
+    // upon error stop the player
     player.onError {
-      e { "exoPlayer error $it" }
+      e(it) { "onPlayerError" }
+      playStateManager.playState.onNext(PlayState.STOPPED)
       player.stop()
-      state.onNext(State.IDLE)
+      player.playWhenReady = false
       errorSubject.onNext(Unit)
     }
 
+    // upon position change update the book
+    player.onPositionDiscontinuity {
+      i { "onPositionDiscontinuity with currentPos=${player.currentPosition.toInt()}" }
+      book.value?.let {
+        val index = player.currentWindowIndex
+        val updated = it.copy(time = player.currentPosition.toInt(), currentFile = it.chapters[index].file)
+        book.onNext(updated)
+      }
+    }
+
+    // update equalizer with new audio session upon arrival
     player.onAudioSessionId {
       equalizer.update(it)
     }
 
-    state.map { it == State.STARTED }
-      .subscribe { isPlaying ->
-        wakeLockManager.stayAwake(isPlaying)
-        if (isPlaying) {
-          v { "startUpdating" }
-          if (updatingDisposable?.isDisposed ?: true) {
-            // updates the book automatically with the current position
-            updatingDisposable = Observable.interval(200L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-              .map { if (state.value == State.STARTED) player.currentPosition else -1L }
-              .filter { it != -1L }
-              .distinct { it / 1000 } // let the value only pass the full second changed.
-              .subscribe {
-                // update the book
-                book.value?.copy(time = it.toInt()).let {
-                  book.onNext(it)
-                }
-              }
-          }
-        } else {
-          v { "stop updating" }
-          updatingDisposable?.dispose()
-        }
+    // proxy player states
+    player.stateChanges().subscribe(state)
+
+    // set the wake-lock based on the play state
+    state.subscribe { wakeLockManager.stayAwake(it == PlayerState.PLAYING) }
+
+    // when the player is started update the book based on an interval, else don't
+    state.switchMap {
+      if (it == PlayerState.PLAYING) {
+        Observable.interval(200L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+          .map { if (state.value == PlayerState.PLAYING) player.currentPosition else -1L }
+          .filter { it != -1L }
+          .distinct { it / 1000 } // let the value only pass the full second changed.
+      } else Observable.empty()
+    }.subscribe { time ->
+      // update the book
+      book.value?.let {
+        val index = player.currentWindowIndex
+        val updated = it.copy(time = time.toInt(), currentFile = it.chapters[index].file)
+        book.onNext(updated)
       }
+    }
   }
 
   /** Initializes a new book. After this, a call to play can be made. */
   fun init(book: Book) {
     if (this.book.value != book) {
       i { "constructor called with ${book.name}" }
+
+      val source = book.toMediaSource()
+      player.prepare(source)
+
       this.book.onNext(book)
     }
   }
@@ -111,55 +121,30 @@ constructor(private val player: SimpleExoPlayer,
     player.volume = if (loud) 1F else 0.1F
   }
 
-  // Prepares the current chapter set in book.
-  private fun prepare() {
-    book.value?.let {
-      i { "prepare ${it.currentFile}" }
-      val extractorsFactory = DefaultExtractorsFactory()
-      val uri = Uri.fromFile(it.currentFile)
-      val source = ExtractorMediaSource(uri, dataSourceFactory, extractorsFactory, null, null)
-      player.prepare(source)
-      equalizer.update(player.audioSessionId)
-      player.seekTo(it.time.toLong())
-      player.setPlaybackSpeed(it.playbackSpeed)
-      state.onNext(State.PAUSED)
-    }
-  }
-
   /** Plays the prepared file. */
   fun play() {
-    i { "play called in state ${state.value}" }
-    when (state.value) {
-      State.PAUSED -> {
+    i { "play" }
+
+    val state = this.state.value
+    when (state) {
+      PlayerState.PAUSED, PlayerState.ENDED -> {
         player.playWhenReady = true
         playStateManager.playState.onNext(PlayState.PLAYING)
-        state.onNext(State.STARTED)
       }
-      State.IDLE -> {
-        prepare()
-        if (state.value == State.PAUSED) {
-          play()
-        }
-      }
-      else -> i { "Play ignores state=${state.value} " }
+      else -> d { "ignore play in state $state" }
     }
   }
-
-  var seekTime = 0
-  var autoRewindAmount = 0
 
   /** Skips by the amount, specified in the settings */
   fun skip(direction: Direction) {
-    v { "direction=$direction" }
-    book.value?.let {
-      if (state.value == State.IDLE) {
-        prepare()
-        if (state.value != State.PAUSED) return
-      }
+    v { "skip $direction" }
 
+    if (state.value == PlayerState.IDLE) return
+
+    book.value?.let {
       val currentPos = player.currentPosition
       val duration = player.duration
-      val delta = seekTime * 1000
+      val delta = prefsManager.seekTime.get()!! * 1000
 
       val seekTo = if ((direction == Direction.FORWARD)) currentPos + delta else currentPos - delta
       v { "currentPos=$currentPos, seekTo=$seekTo, duration=$duration" }
@@ -176,22 +161,18 @@ constructor(private val player: SimpleExoPlayer,
 
   /** If current time is > 2000ms, seek to 0. Else play previous chapter if there is one */
   fun previous(toNullOfNewTrack: Boolean) {
-    book.value?.let {
-      if (state.value == State.IDLE) {
-        prepare()
-        if (state.value != State.PAUSED) return
-      }
+    v { "previous toNullOfTrack $toNullOfNewTrack" }
+    if (state.value == PlayerState.IDLE) return
 
+    book.value?.let {
       val previousChapter = it.previousChapter()
       if (player.currentPosition > 2000 || previousChapter == null) {
-        player.seekTo(0)
-        val copy = it.copy(time = 0)
-        book.onNext(copy)
+        changePosition(0, it.currentFile)
       } else {
         if (toNullOfNewTrack) {
           changePosition(0, previousChapter.file)
         } else {
-          changePosition(previousChapter.duration - (seekTime * 1000), previousChapter.file)
+          changePosition(previousChapter.duration - (prefsManager.seekTime.get()!! * 1000), previousChapter.file)
         }
       }
     }
@@ -199,92 +180,54 @@ constructor(private val player: SimpleExoPlayer,
 
   /** Stops the playback and releases some resources. */
   fun stop() {
-    if (state.value == State.STARTED) player.playWhenReady = false
+    v { "stop" }
+    player.playWhenReady = false
     playStateManager.playState.onNext(PlayState.STOPPED)
-    state.onNext(State.IDLE)
   }
 
   fun audioSessionId() = player.audioSessionId
 
-
-  /**
-   * Pauses the player. Also stops the updating mechanism which constantly updates the book to the
-   * database.
-   * @param rewind true if the player should automatically rewind a little bit.
-   */
+  /** pause the player. if rewind is true the position gets rewinded */
   fun pause(rewind: Boolean) {
-    v { "pause acquired lock. state is=${state.value}" }
-    book.value?.let {
-      when (state.value) {
-        State.STARTED -> {
+    v { "pause" }
+    when (state.value) {
+      PlayerState.PLAYING -> {
+        book.value?.let {
           player.playWhenReady = false
-
           if (rewind) {
-            val autoRewind = autoRewindAmount * 1000
+            val autoRewind = prefsManager.autoRewindAmount.get()!! * 1000
             if (autoRewind != 0) {
-              val originalPosition = player.currentPosition
-              var seekTo = originalPosition - autoRewind
-              seekTo = Math.max(seekTo, 0)
-              player.seekTo(seekTo)
-              val copy = it.copy(time = seekTo.toInt())
-              book.onNext(copy)
+              val seekTo = (player.currentPosition - autoRewind)
+                .coerceAtLeast(0)
+                .toInt()
+              changePosition(seekTo, it.currentFile)
             }
           }
 
           playStateManager.playState.onNext(PlayState.PAUSED)
-
-          state.onNext(State.PAUSED)
         }
-        else -> e { "pause called in illegal state=${state.value}" }
       }
+      else -> e { "pause ignored because of ${state.value}" }
     }
   }
 
   /** Plays the next chapter. If there is none, don't do anything.  */
   fun next() {
+    i { "next" }
     book.value?.nextChapter()?.let {
       changePosition(0, it.file)
     }
   }
 
-  /**
-   * Changes the current position in book. If the path is the same, continues playing the song.
-   * Else calls [.prepare] to prepare the next file
-   * @param time The time in chapter at which to start
-   * *
-   * @param file The path of the media to play (relative to the books root path)
-   */
+  /** Changes the current position in book. */
   fun changePosition(time: Int, file: File) {
     v { "changePosition with time $time and file $file" }
+    if (state.value == PlayerState.IDLE) return
+
     book.value?.let {
-      val changeFile = (it.currentChapter().file != file)
-      v { "changeFile=$changeFile" }
-      if (changeFile) {
-        val wasPlaying = (state.value == State.STARTED)
-
-        val copy = it.copy(currentFile = file, time = time)
-        book.onNext(copy)
-
-        prepare()
-        if (wasPlaying) {
-          player.playWhenReady = true
-          state.onNext(State.STARTED)
-          playStateManager.playState.onNext(PlayState.PLAYING)
-        } else {
-          playStateManager.playState.onNext(PlayState.PAUSED)
-        }
-      } else {
-        if (state.value == State.IDLE) prepare()
-        when (state.value) {
-          State.STARTED, State.PAUSED -> {
-            player.seekTo(time.toLong())
-
-            val copy = it.copy(time = time)
-            book.onNext(copy)
-          }
-          else -> e { "changePosition called in illegal state=${state.value}" }
-        }
-      }
+      val copy = it.copy(currentFile = file, time = time)
+      book.onNext(copy)
+      player.seekTo(copy.currentChapterIndex(), time.toLong())
     }
   }
 
@@ -298,16 +241,18 @@ constructor(private val player: SimpleExoPlayer,
     }
   }
 
-
   /** The direction to skip. */
   enum class Direction {
     FORWARD, BACKWARD
   }
 
-  /** The various internal states the player can have. */
-  private enum class State {
-    IDLE,
-    STARTED,
-    PAUSED
-  }
+  private fun Chapter.toMediaSource() = ExtractorMediaSource(this.file.toUri(), dataSourceFactory, extractorsFactory, null, null)
+
+  /** convert a book to a media source. If the size is > 1 use a concat media source, else a regular */
+  private fun Book.toMediaSource() = if (chapters.size > 1) {
+    val allSources = chapters.map {
+      it.toMediaSource()
+    }
+    ConcatenatingMediaSource(*allSources.toTypedArray())
+  } else currentChapter().toMediaSource()
 }
