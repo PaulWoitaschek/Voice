@@ -16,6 +16,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.ControllerChangeHandler
@@ -107,3 +108,13 @@ fun Router.onControllerChanged(action: (controller: Controller) -> Unit) {
 }
 
 fun File.toUri() = Uri.fromFile(this)
+
+inline fun View.onFirstPreDraw(crossinline action: () -> Unit) {
+  viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+    override fun onPreDraw(): Boolean {
+      viewTreeObserver.removeOnPreDrawListener(this)
+      action()
+      return true
+    }
+  })
+}
