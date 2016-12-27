@@ -6,7 +6,6 @@ import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -189,13 +188,7 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
       } else {
         Picasso.with(c).cancelRequest(coverView)
         // we have to set the replacement in onPreDraw, else the transition will fail.
-        coverView.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-          override fun onPreDraw(): Boolean {
-            coverView.viewTreeObserver.removeOnPreDrawListener(this)
-            coverView.setImageDrawable(coverReplacement)
-            return true
-          }
-        })
+        coverView.onFirstPreDraw { coverView.setImageDrawable(coverReplacement) }
       }
     }
   }
