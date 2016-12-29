@@ -20,7 +20,7 @@ class CoverReplacement(private val text: String, c: Context) : Drawable() {
     color = Color.WHITE
     textAlign = Align.CENTER
   }
-  private val backgroundColor: Int
+  private val backgroundColor = c.color(R.color.primaryDark)
 
   @Inject lateinit var prefsManager: PrefsManager
 
@@ -28,9 +28,6 @@ class CoverReplacement(private val text: String, c: Context) : Drawable() {
     App.component.inject(this)
 
     check(text.isNotEmpty())
-
-    // background
-    backgroundColor = c.color(R.color.primaryDark)
   }
 
   override fun draw(canvas: Canvas) {

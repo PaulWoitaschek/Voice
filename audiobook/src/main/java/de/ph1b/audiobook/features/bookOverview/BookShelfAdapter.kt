@@ -141,26 +141,15 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
 
   /** ViewHolder base class **/
   abstract inner class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val coverView: ImageView
-    private val currentPlayingIndicator: ImageView
-    private val titleView: TextView
-    private val editBook: View
+    val coverView: ImageView = itemView.find(R.id.coverView)
+    private val currentPlayingIndicator: ImageView = itemView.find(R.id.currentPlayingIndicator)
+    private val titleView: TextView = itemView.find(R.id.title)
+    private val editBook: View = itemView.find(R.id.editBook)
     var indicatorVisible = false
       private set
 
 
-    init {
-      coverView = itemView.find(R.id.coverView)
-      currentPlayingIndicator = itemView.find(R.id.currentPlayingIndicator)
-      titleView = itemView.find(R.id.title)
-      editBook = itemView.find(R.id.editBook)
-    }
-
-    /**
-     * Binds the ViewHolder to a book
-
-     * @param book The book to bind to
-     */
+    /** Binds the ViewHolder to a book */
     @CallSuper
     open fun bind(book: Book) {
 

@@ -47,7 +47,10 @@ class PlayPauseDrawable : Drawable() {
   private var pauseBarDistance = 0F
   private val leftPauseBar = Path()
   private val rightPauseBar = Path()
-  private val paint: Paint
+  private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    style = Paint.Style.FILL
+    color = Color.WHITE
+  }
   private var progress: Float = 0F
     set(progress) {
       field = progress
@@ -65,15 +68,7 @@ class PlayPauseDrawable : Drawable() {
   private var isPlay: Boolean = false
   private var animator: Animator? = null
 
-  init {
-    paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    paint.style = Paint.Style.FILL
-    paint.color = Color.WHITE
-  }
-
-  /**
-   * Linear interpolate between a and b with parameter t.
-   */
+  /** Linear interpolate between a and b with parameter t.  */
   private fun interpolate(a: Float, b: Float, t: Float): Float {
     return a + (b - a) * t
   }
