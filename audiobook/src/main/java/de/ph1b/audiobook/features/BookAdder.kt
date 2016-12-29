@@ -29,7 +29,7 @@ import javax.inject.Singleton
  * @author Paul Woitaschek
  */
 @Singleton class BookAdder
-@Inject constructor(private val context: Context, private val prefs: PrefsManager, private val repo: BookRepository, private val mediaAnalyzer: MediaAnalyzer, private val coverCollector: CoverFromDiscCollector) {
+@Inject constructor(private val context: Context, private val prefs: PrefsManager, private val repo: BookRepository, private val coverCollector: CoverFromDiscCollector) {
 
   private val executor = Executors.newSingleThreadExecutor()
   private val scannerActiveSubject = BehaviorSubject.createDefault(false)
@@ -186,7 +186,7 @@ import javax.inject.Singleton
       rootFile.parent
 
     val firstChapterFile = newChapters.first().file
-    val result = mediaAnalyzer.compute(firstChapterFile)
+    val result = MediaAnalyzer.compute(firstChapterFile)
     var bookName = result.bookName
     if (bookName.isNullOrEmpty()) {
       val withoutExtension = rootFile.nameWithoutExtension
@@ -294,7 +294,7 @@ import javax.inject.Singleton
 
     val containingMedia = ArrayList<Chapter>(containingFiles.size)
     for (f in containingFiles) {
-      val result = mediaAnalyzer.compute(f)
+      val result = MediaAnalyzer.compute(f)
       if (result.duration > 0) {
         containingMedia.add(Chapter(f, result.chapterName, result.duration))
       }

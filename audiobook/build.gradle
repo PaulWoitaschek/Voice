@@ -74,7 +74,9 @@ dependencies {
     //testing
     testCompile "junit:junit:4.12"
     testCompile "org.robolectric:robolectric:3.1"
-    testCompile "org.assertj:assertj-core:1.7.1"
+    def vAssertJ = "1.7.1"
+    testCompile "org.assertj:assertj-core:$vAssertJ"
+    androidTestCompile "org.assertj:assertj-core:$vAssertJ"
     def vSupportTest = "0.5"
     def supportExclude = { exclude module: 'support-annotations' }
     androidTestCompile("com.android.support.test:runner:$vSupportTest", supportExclude)

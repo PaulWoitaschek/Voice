@@ -2,15 +2,13 @@ package de.ph1b.audiobook.misc
 
 import android.media.MediaMetadataRetriever
 import java.io.File
-import javax.inject.Inject
 
 /**
  * Simple class for analyzing media files and finding information about their metadata.
  *
  * @author Paul Woitaschek
  */
-class MediaAnalyzer
-@Inject constructor() {
+object MediaAnalyzer {
 
   /**
    * As [MediaMetadataRetriever] has several bugs it is important to catch the exception here as

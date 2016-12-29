@@ -51,6 +51,7 @@ constructor(
       v { "onEnded. Stopping player" }
       playStateManager.playState.onNext(PlayState.STOPPED)
       player.playWhenReady = false
+      state.onNext(PlayerState.ENDED)
     }
 
     // upon error stop the player
@@ -77,9 +78,6 @@ constructor(
       equalizer.update(it)
     }
 
-    // proxy player states
-    player.stateChanges().subscribe(state)
-
     // set the wake-lock based on the play state
     state.subscribe { wakeLockManager.stayAwake(it == PlayerState.PLAYING) }
 
@@ -104,12 +102,13 @@ constructor(
   /** Initializes a new book. After this, a call to play can be made. */
   fun init(book: Book) {
     if (this.book.value != book) {
-      i { "constructor called with ${book.name}" }
+      i { "init ${book.name}" }
 
       val source = book.toMediaSource()
       player.prepare(source)
 
       this.book.onNext(book)
+      state.onNext(PlayerState.PAUSED)
     }
   }
 

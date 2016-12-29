@@ -5,7 +5,6 @@ import android.os.Build
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.SimpleExoPlayer
-import io.reactivex.Observable
 
 
 inline fun ExoPlayer.onEnded(crossinline action: () -> Unit) {
@@ -14,18 +13,6 @@ inline fun ExoPlayer.onEnded(crossinline action: () -> Unit) {
       if (playbackState == ExoPlayer.STATE_ENDED) action()
     }
   })
-}
-
-fun ExoPlayer.stateChanges(): Observable<PlayerState> = Observable.create<PlayerState> {
-  val listener = object : SimpleEventListener {
-    override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-      val state = PlayerState.byExoState(playWhenReady, playbackState)
-      it.onNext(state)
-    }
-  }
-
-  addListener(listener)
-  it.setCancellable { removeListener(listener) }
 }
 
 inline fun ExoPlayer.onPositionDiscontinuity(crossinline action: () -> Unit) {
