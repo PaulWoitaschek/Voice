@@ -46,8 +46,6 @@ constructor(
   private val state = BehaviorSubject.createDefault(PlayerState.IDLE)
 
   init {
-    state.subscribe { d { "state changed to $it" } }
-
     // upon end stop the player
     player.onEnded {
       v { "onEnded. Stopping player" }
