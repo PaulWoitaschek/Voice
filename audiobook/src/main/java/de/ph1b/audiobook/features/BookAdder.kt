@@ -91,7 +91,7 @@ import javax.inject.Singleton
     v { "scanForFiles method done (executor should be called" }
   }
 
-  /** the saved single book files the User chose in [FolderChooserView] */
+  /** the saved single book files the User chose in [de.ph1b.audiobook.features.folderChooser.FolderChooserView] */
   private val singleBookFiles: List<File>
     get() {
       val singleBooksAsStrings = prefs.singleBookFolders.value()
@@ -315,7 +315,7 @@ import javax.inject.Singleton
   /**
    * Gets a book from the database matching to a defines mask.
    *
-   * @param orphaned If we sould return a book that is orphaned, or a book that is currently
+   * @param orphaned If we should return a book that is orphaned, or a book that is currently
    */
   private fun getBookFromDb(rootFile: File, type: Book.Type, orphaned: Boolean): Book? {
     d { "getBookFromDb, rootFile=$rootFile, type=$type, orphaned=$orphaned" }
