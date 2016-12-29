@@ -91,6 +91,13 @@ class MediaPlayerTest {
 
     // check that we are in the last chapter
     assertThat(player.book()!!.chapters.last()).isEqualTo(player.book()!!.currentChapter())
+
+    // after we ended and click play again assert that we are playing
+    player.play()
+    assertThat(playStateManager.playState).isEqualTo(PlayState.PLAYING)
+
+    // make sure we are in the first chapter again
+    assertThat(player.book()!!.chapters.first()).isEqualTo(player.book()!!.currentChapter())
   }
 
   fun waitFor(playState: PlayState) {
