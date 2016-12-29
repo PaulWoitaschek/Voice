@@ -52,7 +52,6 @@ constructor(
     player.onEnded {
       v { "onEnded. Stopping player" }
       playStateManager.playState = PlayState.STOPPED
-      player.playWhenReady = false
       state.onNext(PlayerState.ENDED)
     }
 
@@ -108,6 +107,7 @@ constructor(
 
       val source = book.toMediaSource()
       player.prepare(source)
+      player.seekTo(book.currentChapterIndex(), book.time.toLong())
 
       this.book.onNext(book)
       state.onNext(PlayerState.PAUSED)
@@ -126,14 +126,19 @@ constructor(
   fun play() {
     i { "play" }
 
-    val state = this.state.value
-    when (state) {
-      PlayerState.PAUSED, PlayerState.ENDED -> {
+    book.value?.let {
+      val state = this.state.value
+
+      if (state == PlayerState.ENDED) {
+        i { "play in state ended. Back to the beginning" }
+        changePosition(0, it.chapters.first().file)
+      }
+
+      if (state == PlayerState.ENDED || state == PlayerState.PAUSED) {
         player.playWhenReady = true
         this.state.onNext(PlayerState.PLAYING)
         playStateManager.playState = PlayState.PLAYING
-      }
-      else -> d { "ignore play in state $state" }
+      } else d { "ignore play in state $state" }
     }
   }
 
