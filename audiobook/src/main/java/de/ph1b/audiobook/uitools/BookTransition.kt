@@ -15,7 +15,7 @@ import de.ph1b.audiobook.R
  * @author Paul Woitaschek
  */
 @TargetApi(21)
-class BookTransition() : TransitionChangeHandler() {
+class BookTransition : TransitionChangeHandler() {
 
   var transitionName: String? = null
 
