@@ -69,12 +69,9 @@ constructor(private val windowManager: WindowManager) {
 
     // save bitmap to storage
     try {
-      val coverOut = FileOutputStream(destination)
-      try {
-        bitmapToSave.compress(Bitmap.CompressFormat.JPEG, 90, coverOut)
-        coverOut.flush()
-      } finally {
-        coverOut.close()
+      FileOutputStream(destination).use {
+        bitmapToSave.compress(Bitmap.CompressFormat.JPEG, 90, it)
+        it.flush()
       }
     } catch (e: IOException) {
       e(e) { "Error at saving image with destination=$destination" }

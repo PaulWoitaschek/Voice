@@ -43,27 +43,19 @@ inline fun SharedPreferences.edit(func: SharedPreferences.Editor.() -> Unit) {
   editor.apply()
 }
 
-inline fun Cursor.moveToNextLoop(func: Cursor.() -> Unit) {
-  try {
-    while (moveToNext()) {
-      func()
-    }
-  } finally {
-    close()
+inline fun Cursor.moveToNextLoop(func: Cursor.() -> Unit) = use {
+  while (moveToNext()) {
+    func()
   }
 }
 
 /** a function that iterates of the rows of a cursor and maps all using a supplied mapper function */
-inline fun <T> Cursor.mapRows(mapper: Cursor.() -> T): List<T> {
+inline fun <T> Cursor.mapRows(mapper: Cursor.() -> T): List<T> = use {
   val list = ArrayList<T>(count)
-  try {
-    while (moveToNext()) {
-      list.add(mapper())
-    }
-  } finally {
-    close()
+  while (moveToNext()) {
+    list.add(mapper())
   }
-  return list
+  list
 }
 
 fun SQLiteDatabase.query(
