@@ -73,7 +73,7 @@ class MediaPlayerTest {
 
   @Test fun testPlaybackCycle() {
     val testObserver = TestObserver<PlayState>()
-    playStateManager.playState.subscribe(testObserver)
+    playStateManager.playStateStream().subscribe(testObserver)
 
     val chapters = files.map {
       val result = MediaAnalyzer.compute(it)

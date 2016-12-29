@@ -195,7 +195,7 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
     setupActionbar(toolbar = toolbar, upIndicator = R.drawable.ic_arrow_back, title = book?.name)
 
     var firstPlayStateChange = true
-    playStateManager.playState
+    playStateManager.playStateStream()
       .bindToLifeCycle()
       .subscribe {
         // animate only if this is not the first run

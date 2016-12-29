@@ -49,7 +49,7 @@ constructor(
     // upon end stop the player
     player.onEnded {
       v { "onEnded. Stopping player" }
-      playStateManager.playState.onNext(PlayState.STOPPED)
+      playStateManager.playState = PlayState.STOPPED
       player.playWhenReady = false
       state.onNext(PlayerState.ENDED)
     }
@@ -57,7 +57,7 @@ constructor(
     // upon error stop the player
     player.onError {
       e(it) { "onPlayerError" }
-      playStateManager.playState.onNext(PlayState.STOPPED)
+      playStateManager.playState = PlayState.STOPPED
       player.stop()
       player.playWhenReady = false
       errorSubject.onNext(Unit)
@@ -128,7 +128,7 @@ constructor(
     when (state) {
       PlayerState.PAUSED, PlayerState.ENDED -> {
         player.playWhenReady = true
-        playStateManager.playState.onNext(PlayState.PLAYING)
+        playStateManager.playState = PlayState.PLAYING
       }
       else -> d { "ignore play in state $state" }
     }
@@ -181,7 +181,7 @@ constructor(
   fun stop() {
     v { "stop" }
     player.playWhenReady = false
-    playStateManager.playState.onNext(PlayState.STOPPED)
+    playStateManager.playState = PlayState.STOPPED
   }
 
   fun audioSessionId() = player.audioSessionId
@@ -203,7 +203,7 @@ constructor(
             }
           }
 
-          playStateManager.playState.onNext(PlayState.PAUSED)
+          playStateManager.playState = PlayState.PAUSED
         }
       }
       else -> e { "pause ignored because of ${state.value}" }

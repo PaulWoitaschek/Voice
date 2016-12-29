@@ -52,7 +52,7 @@ import javax.inject.Singleton
 
     // counts down the sleep sand
     val sleepUpdateInterval = 1000L
-    playStateManager.playState
+    playStateManager.playStateStream()
       .map { it == PlayStateManager.PlayState.PLAYING }
       .distinctUntilChanged()
       .subscribe { playing ->

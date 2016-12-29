@@ -77,7 +77,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
   }
 
   override fun onBookmarkClicked(bookmark: Bookmark) {
-    val wasPlaying = playStateManager.playState.value == PlayStateManager.PlayState.PLAYING
+    val wasPlaying = playStateManager.playState == PlayStateManager.PlayState.PLAYING
 
     prefs.currentBookId.set(bookId())
     playerController.changePosition(bookmark.time, bookmark.mediaFile)

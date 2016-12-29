@@ -169,7 +169,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
       .filter { it != null }
       .subscribe { repo.updateBook(it) }
 
-    playStateManager.playState.onNext(PlayState.STOPPED)
+    playStateManager.playState = PlayState.STOPPED
 
     disposables.apply {
       // re-init controller when there is a new book set as the current book
@@ -197,7 +197,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
         .subscribe { currentlyHasFocus = it })
 
       // handle changes on the play state
-      add(playStateManager.playState
+      add(playStateManager.playStateStream()
         .observeOn(Schedulers.io())
         .subscribe {
           d { "onPlayStateManager.PlayStateChanged:$it" }
@@ -253,7 +253,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
             d { "started by audioFocus gained" }
             if (playStateManager.pauseReason == PauseReason.LOSS_TRANSIENT) {
               player.play()
-            } else if (playStateManager.playState.value === PlayState.PLAYING) {
+            } else if (playStateManager.playState == PlayState.PLAYING) {
               d { "increasing volume" }
               player.setVolume(loud = true)
             }
@@ -265,7 +265,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
             playStateManager.pauseReason = PauseReason.NONE
           }
           AudioFocus.LOSS_TRANSIENT_CAN_DUCK -> {
-            if (playStateManager.playState.value === PlayState.PLAYING) {
+            if (playStateManager.playState == PlayState.PLAYING) {
               if (prefs.pauseOnTempFocusLoss.value()) {
                 d { "Paused by audio-focus loss transient." }
                 // Pause is temporary, don't rewind
@@ -278,7 +278,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
             }
           }
           AudioFocus.LOSS_TRANSIENT -> {
-            if (playStateManager.playState.value === PlayState.PLAYING) {
+            if (playStateManager.playState === PlayState.PLAYING) {
               d { "Paused by audio-focus loss transient." }
               player.pause(true) // auto pause
               playStateManager.pauseReason = PauseReason.LOSS_TRANSIENT
@@ -297,8 +297,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
       // pause when audio is becoming noisy.
       add(RxBroadcast.register(this@PlaybackService, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
         .subscribe {
-          d { "audio becoming noisy. playState=${playStateManager.playState.value}" }
-          if (playStateManager.playState.value === PlayState.PLAYING) {
+          d { "audio becoming noisy. playState=${playStateManager.playState}" }
+          if (playStateManager.playState === PlayState.PLAYING) {
             playStateManager.pauseReason = PauseReason.BECAUSE_HEADSET
             player.pause(true)
           }

@@ -59,11 +59,10 @@ constructor(private val repo: BookRepository,
       }).subscribe { view.showLoading(it) })
 
       // Subscription that updates the UI based on the play state.
-      add(playStateManager.playState
-        .subscribe {
-          val playing = it == PlayState.PLAYING
-          view.setPlayerPlaying(playing)
-        })
+      add(playStateManager.playStateStream().subscribe {
+        val playing = it == PlayState.PLAYING
+        view.setPlayerPlaying(playing)
+      })
     }
   }
 

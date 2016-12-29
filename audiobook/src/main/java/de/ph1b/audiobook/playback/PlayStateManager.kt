@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.playback
 
 import android.support.v4.media.session.PlaybackStateCompat
+import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -16,10 +17,10 @@ class PlayStateManager
 @Inject
 constructor() {
 
-  val playState: BehaviorSubject<PlayState> = BehaviorSubject.createDefault(PlayStateManager.PlayState.STOPPED)
+  private val playStateSubject = BehaviorSubject.createDefault(PlayStateManager.PlayState.STOPPED)
 
   init {
-    playState.subscribe {
+    playStateSubject.subscribe {
       if (it == PlayState.PLAYING || it == PlayState.STOPPED) {
         pauseReason = PauseReason.NONE
       }
@@ -28,11 +29,13 @@ constructor() {
 
   var pauseReason = PauseReason.NONE
 
-  /**
-   * Represents the play states for the playback.
-   *
-   * @author Paul Woitaschek
-   */
+  fun playStateStream(): Observable<PlayState> = playStateSubject.distinctUntilChanged()
+
+  var playState: PlayState
+    set(value) = playStateSubject.onNext(value)
+    get() = playStateSubject.value
+
+  /** Represents the play states for the playback.  */
   enum class PlayState(@PlaybackStateCompat.State val playbackStateCompat: Int) {
     PLAYING(PlaybackStateCompat.STATE_PLAYING),
     PAUSED(PlaybackStateCompat.STATE_PAUSED),

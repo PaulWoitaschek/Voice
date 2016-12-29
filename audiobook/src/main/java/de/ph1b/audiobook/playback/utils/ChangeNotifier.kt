@@ -51,7 +51,7 @@ class ChangeNotifier(private val mediaSession: MediaSessionCompat) {
 
   fun notify(what: Type, book: Book) {
     val c = book.currentChapter()
-    val playState = playStateManager.playState.value
+    val playState = playStateManager.playState
 
     val bookName = book.name
     val chapterName = c.name

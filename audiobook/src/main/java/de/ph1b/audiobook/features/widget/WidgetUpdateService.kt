@@ -57,7 +57,7 @@ class WidgetUpdateService : Service() {
     // update widget if current book, current book id or playState have changed.
     disposables.add(Observable.merge(
       repo.updateObservable().filter { it.id == prefs.currentBookId.value() },
-      playStateManager.playState,
+      playStateManager.playStateStream(),
       prefs.currentBookId.asV2Observable())
       .subscribe { updateWidget() }
     )
@@ -172,7 +172,7 @@ class WidgetUpdateService : Service() {
       rewindI, PendingIntent.FLAG_UPDATE_CURRENT)
     remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI)
 
-    if (playStateManager.playState.value === PlayStateManager.PlayState.PLAYING) {
+    if (playStateManager.playState === PlayStateManager.PlayState.PLAYING) {
       remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_pause_white_36dp)
     } else {
       remoteViews.setImageViewResource(R.id.playPause, R.drawable.ic_play_white_36dp)
