@@ -136,8 +136,7 @@ import javax.inject.Singleton
         output += String(buffer)
       }
       inputStream.close()
-    } catch (e: Exception) {
-      e.printStackTrace()
+    } catch (ignored: Exception) {
     }
 
     if (!output.trim { it <= ' ' }.isEmpty()) {

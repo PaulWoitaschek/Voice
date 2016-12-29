@@ -17,6 +17,8 @@ android {
         targetSdkVersion 25
         versionCode 146
         versionName '2.9.2'
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -73,6 +75,11 @@ dependencies {
     testCompile "junit:junit:4.12"
     testCompile "org.robolectric:robolectric:3.1"
     testCompile "org.assertj:assertj-core:1.7.1"
+    def vSupportTest = "0.5"
+    def supportExclude = { exclude module: 'support-annotations' }
+    androidTestCompile("com.android.support.test:runner:$vSupportTest", supportExclude)
+    androidTestCompile("com.android.support.test:rules:$vSupportTest", supportExclude)
+    androidTestCompile "org.mockito:mockito-core:2.4.3"
 
     // rx extensions
     compile "io.reactivex.rxjava2:rxjava:2.0.3"
