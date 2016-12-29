@@ -17,7 +17,7 @@ class PlayStateManager
 @Inject
 constructor() {
 
-  private val playStateSubject = BehaviorSubject.createDefault(PlayStateManager.PlayState.STOPPED)
+  private val playStateSubject = BehaviorSubject.createDefault(PlayState.STOPPED)
 
   init {
     playStateSubject.subscribe {

@@ -22,10 +22,11 @@ import org.junit.Rule
 import org.junit.Test
 import java.io.File
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 /**
- * TODO
+ * Tests for the media player
  *
  * @author Paul Woitaschek
  */
@@ -72,8 +73,8 @@ class MediaPlayerTest {
   }
 
   @Test fun testPlaybackCycle() {
-    val testObserver = TestObserver<PlayState>()
-    playStateManager.playStateStream().subscribe(testObserver)
+    val regularCompletionObserver = TestObserver<PlayState>()
+    playStateManager.playStateStream().subscribe(regularCompletionObserver)
 
     val chapters = files.map {
       val result = MediaAnalyzer.compute(it)
@@ -83,7 +84,20 @@ class MediaPlayerTest {
     player.init(book)
     player.play()
 
-    Thread.sleep(10000)
-    assertThat(testObserver.values()).containsExactly(PlayState.STOPPED, PlayState.PLAYING, PlayState.STOPPED)
+    waitFor(PlayState.STOPPED)
+
+    // check that we are in stopped again after the book ended
+    assertThat(regularCompletionObserver.values()).containsExactly(PlayState.STOPPED, PlayState.PLAYING, PlayState.STOPPED)
+
+    // check that we are in the last chapter
+    assertThat(player.book()!!.chapters.last()).isEqualTo(player.book()!!.currentChapter())
+  }
+
+  fun waitFor(playState: PlayState) {
+    // wait for max 10 secs to get to stopped state again
+    playStateManager.playStateStream()
+      .filter { it == playState }
+      .timeout(10, TimeUnit.SECONDS)
+      .blockingFirst()
   }
 }
