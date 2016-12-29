@@ -113,6 +113,6 @@
     <string name="refresh">Aggiorna</string>
     <string name="reset">Resetta</string>
     <string name="no_network">Nessuna connessione?</string>
-    <string name="network_top">Questo non ha funzionato motl bene...</string>
+    <string name="network_top">Questo non ha funzionato motl bene…</string>
     <string name="cover_crop">Taglia copertina</string>
 </resources>

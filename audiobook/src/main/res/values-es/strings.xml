@@ -110,6 +110,6 @@
     <string name="refresh">Actualizar</string>
     <string name="reset">Reiniciar</string>
     <string name="no_network">¿Sin red?</string>
-    <string name="network_top">Esto no funcionó del todo bien...</string>
+    <string name="network_top">Esto no funcionó del todo bien…</string>
     <string name="cover_crop">Recortar cubierta</string>
 </resources>

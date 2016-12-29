@@ -101,6 +101,6 @@
     <string name="refresh">Ανανέωση</string>
     <string name="reset">Επαναφορά</string>
     <string name="no_network">Χωρίς δίκτυο;</string>
-    <string name="network_top">Αυτό δεν πέτυχε και πολύ...</string>
+    <string name="network_top">Αυτό δεν πέτυχε και πολύ…</string>
     <string name="cover_crop">Περικοπή εξωφύλλου</string>
 </resources>

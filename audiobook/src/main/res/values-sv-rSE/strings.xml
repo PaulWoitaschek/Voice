@@ -101,6 +101,6 @@
     <string name="refresh">Uppdatera</string>
     <string name="reset">Återställ</string>
     <string name="no_network">Inget nätverk?</string>
-    <string name="network_top">Det här fungerade inte så bra...</string>
+    <string name="network_top">Det här fungerade inte så bra…</string>
     <string name="cover_crop">Beskär omslag</string>
 </resources>

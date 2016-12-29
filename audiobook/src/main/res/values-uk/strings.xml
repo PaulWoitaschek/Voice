@@ -117,6 +117,6 @@
     <string name="refresh">Оновити</string>
     <string name="reset">Скинути</string>
     <string name="no_network">Немає мережі?</string>
-    <string name="network_top">Не спрацювало...</string>
+    <string name="network_top">Не спрацювало…</string>
     <string name="cover_crop">Обкладинка</string>
 </resources>

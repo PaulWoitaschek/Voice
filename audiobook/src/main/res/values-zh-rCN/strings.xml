@@ -97,6 +97,6 @@
     <string name="refresh">刷新</string>
     <string name="reset">重置</string>
     <string name="no_network">网络连接失败</string>
-    <string name="network_top">出了一些小问题...</string>
+    <string name="network_top">出了一些小问题…</string>
     <string name="cover_crop">封面裁剪</string>
 </resources>

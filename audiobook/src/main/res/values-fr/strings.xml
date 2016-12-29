@@ -113,6 +113,6 @@
     <string name="refresh">Rafraîchir</string>
     <string name="reset">Réinitialiser</string>
     <string name="no_network">Pas de connexion réseau ?</string>
-    <string name="network_top">Ca n\'a pas marché...</string>
+    <string name="network_top">Ca n\'a pas marché…</string>
     <string name="cover_crop">Recadrer la couverture</string>
 </resources>

@@ -115,6 +115,6 @@
     <string name="refresh">Опресняване</string>
     <string name="reset">Нулиране</string>
     <string name="no_network">Няма връзка с интернет?</string>
-    <string name="network_top">Това май не проработи...</string>
+    <string name="network_top">Това май не проработи…</string>
     <string name="cover_crop">Изрязване на обложката</string>
 </resources>

@@ -121,6 +121,6 @@
     <string name="refresh">Обновить</string>
     <string name="reset">Сброс</string>
     <string name="no_network">Нет сети?</string>
-    <string name="network_top">Что-то пошло не так...</string>
+    <string name="network_top">Что-то пошло не так…</string>
     <string name="cover_crop">Обрезать обложку</string>
 </resources>

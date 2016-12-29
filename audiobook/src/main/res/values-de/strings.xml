@@ -115,6 +115,6 @@
     <string name="refresh">Neu laden</string>
     <string name="reset">Zurücksetzen</string>
     <string name="no_network">Kein Internet?</string>
-    <string name="network_top">Das lief nicht besonders gut...</string>
+    <string name="network_top">Das lief nicht besonders gut…</string>
     <string name="cover_crop">Cover zurechtschneiden</string>
 </resources>

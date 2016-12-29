@@ -117,6 +117,6 @@
     <string name="refresh">Odśwież</string>
     <string name="reset">Reset</string>
     <string name="no_network">Brak sieci?</string>
-    <string name="network_top">To nie zadziałało...</string>
+    <string name="network_top">To nie zadziałało…</string>
     <string name="cover_crop">Przytnij okładkę</string>
 </resources>
