@@ -46,6 +46,8 @@ constructor(
   private val state = BehaviorSubject.createDefault(PlayerState.IDLE)
 
   init {
+    state.subscribe { d { "state changed to $it" } }
+
     // upon end stop the player
     player.onEnded {
       v { "onEnded. Stopping player" }
@@ -85,9 +87,9 @@ constructor(
     state.switchMap {
       if (it == PlayerState.PLAYING) {
         Observable.interval(200L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-          .map { if (state.value == PlayerState.PLAYING) player.currentPosition else -1L }
-          .filter { it != -1L }
-          .distinct { it / 1000 } // let the value only pass the full second changed.
+          .filter { state.value == PlayerState.PLAYING }
+          .map { player.currentPosition }
+          .distinctUntilChanged { it -> it / 1000 } // let the value only pass the full second changed.
       } else Observable.empty()
     }.subscribe { time ->
       // update the book
@@ -128,6 +130,7 @@ constructor(
     when (state) {
       PlayerState.PAUSED, PlayerState.ENDED -> {
         player.playWhenReady = true
+        this.state.onNext(PlayerState.PLAYING)
         playStateManager.playState = PlayState.PLAYING
       }
       else -> d { "ignore play in state $state" }
@@ -204,6 +207,7 @@ constructor(
           }
 
           playStateManager.playState = PlayState.PAUSED
+          state.onNext(PlayerState.PAUSED)
         }
       }
       else -> e { "pause ignored because of ${state.value}" }
