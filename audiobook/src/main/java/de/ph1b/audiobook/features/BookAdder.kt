@@ -93,24 +93,16 @@ import javax.inject.Singleton
 
   /** the saved single book files the User chose in [de.ph1b.audiobook.features.folderChooser.FolderChooserView] */
   private val singleBookFiles: List<File>
-    get() {
-      val singleBooksAsStrings = prefs.singleBookFolders.value()
-      val singleBooks = singleBooksAsStrings.map(::File)
-      return singleBooks.sortedWith(NaturalOrderComparator.fileComparator)
-    }
+    get() = prefs.singleBookFolders.value()
+      .map(::File)
+      .sortedWith(NaturalOrderComparator.fileComparator)
 
   // Gets the saved collection book files the User chose in [FolderChooserView]
   private val collectionBookFiles: List<File>
-    get() {
-      val collectionFoldersStringList = prefs.collectionFolders.value()
-
-      val containingFiles = ArrayList<File>(collectionFoldersStringList.size)
-      collectionFoldersStringList
-        .map(::File)
-        .map { it.listFilesSafely(FileRecognition.folderAndMusicFilter) }
-        .forEach { containingFiles.addAll(it) }
-      return containingFiles.sortedWith(NaturalOrderComparator.fileComparator)
-    }
+    get() = prefs.collectionFolders.value()
+      .map(::File)
+      .flatMap { it.listFilesSafely(FileRecognition.folderAndMusicFilter) }
+      .sortedWith(NaturalOrderComparator.fileComparator)
 
   /** Deletes all the books that exist on the database but not on the hard drive or on the saved
    * audio book paths. **/
