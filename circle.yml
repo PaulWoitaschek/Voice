@@ -20,3 +20,11 @@ dependencies:
   override:
     # workaround from https://code.google.com/p/android/issues/detail?id=212128 for constraint layout
     - ./gradlew dependencies || true
+test:
+  pre:
+    - emulator -avd circleci-android25 -no-audio -no-window:
+        background: true
+        parallel: true
+    - circle-android wait-for-boot
+  override:
+    - ./gradlew connectedAndroidTest
