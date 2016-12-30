@@ -1,3 +1,8 @@
+# 2.9.3
+* Gapless Playback
+* Fixed an issue where books were not updated correctly after seeking back
+* Don't distort covers when auto-reading from disc
+
 # 2.9.2
 * Performance improvements
 * More animations

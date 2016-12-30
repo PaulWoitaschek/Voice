@@ -14,36 +14,32 @@ import javax.inject.Inject
 
 /**
  * Class for retrieving covers from disc.
+ *
+ * @author Paul WOitaschek
  */
 class CoverFromDiscCollector
 @Inject constructor(context: Context, private val activityManager: ActivityManager, private val imageHelper: ImageHelper) {
 
   private val picasso = Picasso.with(context)
 
-  /**
-   * Trys to find covers and saves them to storage if found.
-
-   * @throws InterruptedException
-   */
+  /** Find and stores covers for each book */
   fun findCovers(books: List<Book>) {
-    for (b in books) {
-      val coverFile = b.coverFile()
+    books.forEach {
+      val coverFile = it.coverFile()
       if (!coverFile.exists()) {
-        if (b.type === Book.Type.COLLECTION_FOLDER || b.type === Book.Type.SINGLE_FOLDER) {
-          val root = File(b.root)
+        if (it.type === Book.Type.COLLECTION_FOLDER || it.type === Book.Type.SINGLE_FOLDER) {
+          val root = File(it.root)
           if (root.exists()) {
             val images = root.walk().filter { FileRecognition.imageFilter.accept(it) }
-            val cover = getCoverFromDisk(images.toList())
-            if (cover != null) {
-              imageHelper.saveCover(cover, coverFile)
+            getCoverFromDisk(images.toList())?.let {
+              imageHelper.saveCover(it, coverFile)
               picasso.invalidate(coverFile)
-              continue
+              return@forEach
             }
           }
         }
-        val cover = getEmbeddedCover(b.chapters)
-        if (cover != null) {
-          imageHelper.saveCover(cover, coverFile)
+        getEmbeddedCover(it.chapters)?.let {
+          imageHelper.saveCover(it, coverFile)
           picasso.invalidate(coverFile)
         }
       }
@@ -51,15 +47,7 @@ class CoverFromDiscCollector
   }
 
 
-  /**
-   * Finds an embedded cover within a [Chapter]
-
-   * @param chapters The chapters to search trough
-   * *
-   * @return An embedded cover if there is one. Else return `null`
-   * *
-   * @throws InterruptedException If the scanner has been requested to reset.
-   */
+  /** Find the embedded cover of a chapter */
   @Throws(InterruptedException::class)
   private fun getEmbeddedCover(chapters: List<Chapter>): Bitmap? {
     var tries = 0
@@ -77,16 +65,7 @@ class CoverFromDiscCollector
     return null
   }
 
-
-  /**
-   * Returns a Bitmap from an array of [File] that should be images
-
-   * @param coverFiles The image files to check
-   * *
-   * @return A bitmap or `null` if there is none.
-   * *
-   * @throws InterruptedException If the scanner has been requested to reset.
-   */
+  /** Returns the first bitmap that could be parsed from an image file */
   @Throws(InterruptedException::class)
   private fun getCoverFromDisk(coverFiles: List<File>): Bitmap? {
     // if there are images, get the first one.
@@ -96,13 +75,15 @@ class CoverFromDiscCollector
     // only read cover if its size is less than a third of the available memory
     coverFiles.filter { it.length() < (mi.availMem / 3L) }.forEach {
       try {
-        return picasso.load(it).resize(dimen, dimen).get()
+        return picasso.load(it)
+          .resize(dimen, dimen)
+          .onlyScaleDown()
+          .centerCrop()
+          .get()
       } catch (ex: IOException) {
         e(ex) { "Error when saving cover $it" }
       }
     }
     return null
   }
-
-
 }
