@@ -15,12 +15,12 @@ class PresenterDelegate<V, out P>(private val newPresenter: () -> P, private val
   fun presenter() = presenter!!
 
   fun onCreate(savedInstanceState: Bundle?) {
-    presenter = newPresenter.invoke()
+    presenter = newPresenter()
     if (savedInstanceState != null) presenter!!.onRestore(savedInstanceState)
   }
 
   fun onStart() {
-    presenter!!.bind(getView.invoke())
+    presenter!!.bind(getView())
   }
 
   fun onStop() {

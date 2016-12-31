@@ -51,9 +51,7 @@ class FolderChooserAdapter(private val c: Context,
     private val image: ImageView = find(R.id.icon)
 
     init {
-      root.setOnClickListener {
-        listener.invoke(data[adapterPosition])
-      }
+      root.setOnClickListener { listener(data[adapterPosition]) }
     }
 
     fun bind(selectedFile: File) {
