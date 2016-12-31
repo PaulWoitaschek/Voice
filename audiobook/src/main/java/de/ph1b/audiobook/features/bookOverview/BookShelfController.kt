@@ -243,7 +243,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
   fun showNoFolderWarning() {
     // show dialog if no folders are set
     val noFolderWarningIsShowing = (fragmentManager.findFragmentByTag(FM_NO_FOLDER_WARNING) as DialogFragment?)?.dialog?.isShowing ?: false
-    if (noFolderWarningIsShowing.not()) {
+    if (!noFolderWarningIsShowing) {
       val warning = NoFolderWarningDialogFragment()
       warning.show(fragmentManager, FM_NO_FOLDER_WARNING)
     }
