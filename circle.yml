@@ -9,7 +9,6 @@ machine:
 dependencies:
   cache_directories:
     - ~/.android
-    - ~/android
   pre:
     # licenses for constraint layout
     - mkdir "$ANDROID_HOME/licenses" || true
@@ -28,3 +27,4 @@ test:
     - circle-android wait-for-boot
   override:
     - ./gradlew connectedAndroidTest --stacktrace
+    - adb logcat -d > $CIRCLE_ARTIFACTS/logcat.txt
