@@ -8,44 +8,52 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.misc.FileRecognition
 import e
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Class for retrieving covers from disc.
  *
- * @author Paul WOitaschek
+ * @author Paul Woitaschek
  */
-class CoverFromDiscCollector
+@Singleton class CoverFromDiscCollector
 @Inject constructor(context: Context, private val activityManager: ActivityManager, private val imageHelper: ImageHelper) {
 
   private val picasso = Picasso.with(context)
+  private val coverChangedSubject = PublishSubject.create<Long>()
 
   /** Find and stores covers for each book */
   fun findCovers(books: List<Book>) {
-    books.forEach {
-      val coverFile = it.coverFile()
+    books.forEach { book ->
+      val coverFile = book.coverFile()
       if (!coverFile.exists()) {
-        if (it.type === Book.Type.COLLECTION_FOLDER || it.type === Book.Type.SINGLE_FOLDER) {
-          val root = File(it.root)
+        if (book.type === Book.Type.COLLECTION_FOLDER || book.type === Book.Type.SINGLE_FOLDER) {
+          val root = File(book.root)
           if (root.exists()) {
             val images = root.walk().filter { FileRecognition.imageFilter.accept(it) }
             getCoverFromDisk(images.toList())?.let {
               imageHelper.saveCover(it, coverFile)
               picasso.invalidate(coverFile)
+              coverChangedSubject.onNext(book.id)
               return@forEach
             }
           }
         }
-        getEmbeddedCover(it.chapters)?.let {
+        getEmbeddedCover(book.chapters)?.let {
           imageHelper.saveCover(it, coverFile)
           picasso.invalidate(coverFile)
+          coverChangedSubject.onNext(book.id)
         }
       }
     }
   }
 
+  /** emits the bookId of a cover that has changed */
+  fun coverChanged(): Observable<Long> = coverChangedSubject.hide()
 
   /** Find the embedded cover of a chapter */
   @Throws(InterruptedException::class)

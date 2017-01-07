@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.features.bookOverview
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Build
@@ -157,6 +158,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
             return
           }
 
+          @SuppressLint("CommitTransaction")
           pendingTransaction = fragmentManager.beginTransaction()
             .add(EditCoverDialogFragment.newInstance(this, book, imageUri),
               EditCoverDialogFragment.TAG)
@@ -253,7 +255,9 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
     loadingProgress.visible = loading
   }
 
-  override fun onBookCoverChanged(book: Book) = adapter.changeBookCover(book)
+  override fun onBookCoverChanged(book: Book) = adapter.reloadBookCover(book.id)
+
+  fun bookCoverChanged(bookId: Long) = adapter.reloadBookCover(bookId)
 
   override fun onInternetCoverRequested(book: Book) = router.pushController(RouterTransaction.with(ImagePickerController(book)))
 

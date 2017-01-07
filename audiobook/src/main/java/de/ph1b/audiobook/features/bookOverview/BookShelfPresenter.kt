@@ -9,6 +9,7 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.PlayerController
+import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import i
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -26,7 +27,8 @@ constructor(private val repo: BookRepository,
             private val bookAdder: BookAdder,
             private val prefsManager: PrefsManager,
             private val playStateManager: PlayStateManager,
-            private val playerController: PlayerController)
+            private val playerController: PlayerController,
+            private val coverFromDiscCollector: CoverFromDiscCollector)
   : Presenter<BookShelfController>() {
 
   override fun onBind(view: BookShelfController, disposables: CompositeDisposable) {
@@ -39,7 +41,6 @@ constructor(private val repo: BookRepository,
     bookAdder.scanForFiles(false)
 
     disposables.apply {
-
       // update books when they changed
       add(repo.booksStream().subscribe {
         view.newBooks(it)
@@ -63,6 +64,10 @@ constructor(private val repo: BookRepository,
         val playing = it == PlayState.PLAYING
         view.setPlayerPlaying(playing)
       })
+
+      // notify view when a book cover changed
+      add(coverFromDiscCollector.coverChanged()
+        .subscribe { view.bookCoverChanged(it) })
     }
   }
 

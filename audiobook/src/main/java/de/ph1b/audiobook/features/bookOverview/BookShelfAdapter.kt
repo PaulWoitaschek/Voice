@@ -71,8 +71,8 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
     diffResult.dispatchUpdatesTo(this)
   }
 
-  fun changeBookCover(book: Book) {
-    val index = books.indexOfFirst { it.id == book.id }
+  fun reloadBookCover(bookId: Long) {
+    val index = books.indexOfFirst { it.id == bookId }
     if (index >= 0) {
       notifyItemChanged(index)
     }
