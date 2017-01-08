@@ -104,6 +104,7 @@ constructor(
       i { "init ${book.name}" }
 
       val source = book.toMediaSource()
+      player.playWhenReady = false
       player.prepare(source)
       player.seekTo(book.currentChapterIndex(), book.time.toLong())
 

@@ -88,7 +88,7 @@ import javax.inject.Singleton
         v { "stopped" }
       }
     }
-    v { "scanForFiles method done (executor should be called" }
+    v { "scanForFiles method done" }
   }
 
   /** the saved single book files the User chose in [de.ph1b.audiobook.features.folderChooser.FolderChooserView] */
