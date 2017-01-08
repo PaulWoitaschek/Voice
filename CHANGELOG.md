@@ -1,3 +1,6 @@
+# 2.9.3.1
+* Hotfix for an issue that lead to a crash when an old book was updated
+
 # 2.9.3
 * Gapless Playback
 * Fixed an issue where books were not updated correctly after seeking back
