@@ -103,12 +103,13 @@ constructor(
     if (this.book.value != book) {
       i { "init ${book.name}" }
 
-      val source = book.toMediaSource()
       player.playWhenReady = false
-      player.prepare(source)
-      player.seekTo(book.currentChapterIndex(), book.time.toLong())
 
       this.book.onNext(book)
+
+      player.prepare(book.toMediaSource())
+      player.seekTo(book.currentChapterIndex(), book.time.toLong())
+
       state.onNext(PlayerState.PAUSED)
     }
   }
