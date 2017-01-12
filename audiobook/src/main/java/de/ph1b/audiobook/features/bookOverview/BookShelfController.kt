@@ -18,10 +18,7 @@ import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.features.settings.SettingsController
 import de.ph1b.audiobook.features.tracking.Tracker
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.find
-import de.ph1b.audiobook.misc.setupActionbar
-import de.ph1b.audiobook.misc.supportTransitionName
-import de.ph1b.audiobook.misc.value
+import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.mvp.MvpBaseController
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.BookTransition
@@ -257,7 +254,13 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
 
   override fun onBookCoverChanged(book: Book) = adapter.reloadBookCover(book.id)
 
-  fun bookCoverChanged(bookId: Long) = adapter.reloadBookCover(bookId)
+  fun bookCoverChanged(bookId: Long) {
+    // there is an issue where notifyDataSetChanges throws:
+    // java.lang.IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling
+    recyclerView.postedIfComputingLayout {
+      adapter.reloadBookCover(bookId)
+    }
+  }
 
   override fun onInternetCoverRequested(book: Book) = router.pushController(RouterTransaction.with(ImagePickerController(book)))
 

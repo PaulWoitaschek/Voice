@@ -66,3 +66,9 @@ fun <T : View> RecyclerView.ViewHolder.find(id: Int): T = itemView.find(id)
 
 @Suppress("UNCHECKED_CAST")
 fun <T : View> Activity.find(id: Int): T = findViewById(id) as T
+
+/** if the recyclerview is computing layout, post the action. else just execute it */
+inline fun RecyclerView.postedIfComputingLayout(crossinline action: () -> Unit) {
+  if (!isComputingLayout) action()
+  else post { action() }
+}
