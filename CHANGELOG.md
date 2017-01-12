@@ -1,3 +1,6 @@
+# 2.9.3.2
+* Hotfix: Restore last playback speed when selecting a book
+
 # 2.9.3.1
 * Hotfix for an issue that lead to a crash when an old book was updated
 
