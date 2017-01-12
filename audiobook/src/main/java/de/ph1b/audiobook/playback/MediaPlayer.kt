@@ -109,6 +109,7 @@ constructor(
 
       player.prepare(book.toMediaSource())
       player.seekTo(book.currentChapterIndex(), book.time.toLong())
+      player.setPlaybackSpeed(book.playbackSpeed)
 
       state.onNext(PlayerState.PAUSED)
     }
