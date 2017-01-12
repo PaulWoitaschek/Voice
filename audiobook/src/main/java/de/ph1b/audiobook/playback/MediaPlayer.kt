@@ -190,6 +190,7 @@ constructor(
   fun stop() {
     v { "stop" }
     player.playWhenReady = false
+    state.onNext(PlayerState.PAUSED)
     playStateManager.playState = PlayState.STOPPED
   }
 
