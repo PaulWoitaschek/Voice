@@ -1,3 +1,6 @@
+# 2.9.3.3
+* Fix: After sleeptimer ends playback can correctly be resumed
+
 # 2.9.3.2
 * Hotfix: Restore last playback speed when selecting a book
 
