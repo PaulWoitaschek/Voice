@@ -29,8 +29,8 @@ import javax.inject.Inject
  */
 class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, RouterProvider {
 
+  private lateinit var permissionHelper: PermissionHelper
   @Inject lateinit var prefs: PrefsManager
-  @Inject lateinit var permissionHelper: PermissionHelper
   @Inject lateinit var tracker: Tracker
 
   private lateinit var router: Router
@@ -39,6 +39,8 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_book)
     App.component.inject(this)
+
+    permissionHelper = PermissionHelper(this)
 
     val root = findViewById(R.id.root) as ViewGroup
     router = Conductor.attachRouter(this, root, savedInstanceState)
@@ -79,7 +81,7 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
 
     val anyFolderSet = prefs.collectionFolders.value().size + prefs.singleBookFolders.value().size > 0
     if (anyFolderSet) {
-      permissionHelper.storagePermission(this)
+      permissionHelper.storagePermission()
     }
   }
 

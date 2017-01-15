@@ -18,7 +18,6 @@ import de.ph1b.audiobook.mvp.RxBaseActivity
 import de.ph1b.audiobook.uitools.visible
 import i
 import java.io.File
-import javax.inject.Inject
 
 /**
  * Activity for choosing an audiobook folder. If there are multiple SD-Cards, the Activity unifies
@@ -49,8 +48,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
   private lateinit var upButton: ImageButton
   private lateinit var currentFolder: TextView
   private lateinit var spinnerGroup: View
-
-  @Inject lateinit var permissionHelper: PermissionHelper
+  private lateinit var permissionHelper: PermissionHelper
 
   override fun askAddNoMediaFile(folderToHide: File) {
     val hideFolderDialog = HideFolderDialog.newInstance(folderToHide)
@@ -62,6 +60,8 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     App.component.inject(this)
+
+    permissionHelper = PermissionHelper(this)
 
     // find views
     setContentView(R.layout.activity_folder_chooser)
@@ -108,7 +108,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     super.onStart()
 
     // permissions
-    permissionHelper.storagePermission(this) { presenter().gotPermission() }
+    permissionHelper.storagePermission { presenter().gotPermission() }
   }
 
   override fun onBackPressed() {

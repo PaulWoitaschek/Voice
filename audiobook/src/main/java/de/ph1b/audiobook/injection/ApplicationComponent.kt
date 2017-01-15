@@ -31,7 +31,7 @@ import javax.inject.Singleton
  * @author Paul Woitaschek
  */
 @Singleton
-@Component(modules = arrayOf(BaseModule::class, AndroidModule::class, PrefsModule::class))
+@Component(modules = arrayOf(AndroidModule::class, PrefsModule::class))
 interface ApplicationComponent {
 
   val bookShelfPresenter: BookShelfPresenter

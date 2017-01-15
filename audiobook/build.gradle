@@ -60,7 +60,7 @@ dependencies {
     compile "com.squareup.picasso:picasso:2.5.2"
 
     // material styled dialogs
-    compile 'com.afollestad.material-dialogs:core:0.9.2.1'
+    compile 'com.afollestad.material-dialogs:core:0.9.2.3'
 
     // fab
     compile "com.getbase:floatingactionbutton:1.10.1"
@@ -96,10 +96,10 @@ dependencies {
     compile 'com.google.android.exoplayer:exoplayer:r2.1.1'
 
     // logs
-    compile 'com.github.PaulWoitaschek:Slimber:1.0.4'
+    compile 'com.github.PaulWoitaschek:Slimber:1.0.5'
 
     // permissions
-    compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.8.2@aar'
+    compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.1@aar'
 
     def vPlayServices = "10.0.1"
     releaseCompile "com.google.firebase:firebase-crash:$vPlayServices"

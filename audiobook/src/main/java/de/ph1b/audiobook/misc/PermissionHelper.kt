@@ -19,12 +19,13 @@ import javax.inject.Inject
  * @author Paul Woitaschek
  */
 class PermissionHelper
-@Inject constructor(private val rxPermissions: RxPermissions) {
+@Inject constructor(private val activity: Activity) {
 
   private val PERMISSION = Manifest.permission.WRITE_EXTERNAL_STORAGE
   private val permissionDialogConfirmed = PublishSubject.create<Unit>()
+  private val rxPermissions = RxPermissions(activity)
 
-  fun storagePermission(activity: Activity, gotPermission: () -> Unit = {}) {
+  fun storagePermission(gotPermission: () -> Unit = {}) {
     val root = activity.findViewById(android.R.id.content)
     rxPermissions.request(PERMISSION)
       .repeatWhen { permissionDialogConfirmed }
