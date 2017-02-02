@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.media.audiofx.AudioEffect
-import com.google.android.exoplayer2.audio.AudioTrack
+import com.google.android.exoplayer2.C
 import i
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -34,14 +34,14 @@ import javax.inject.Singleton
   fun update(audioSessionId: Int) {
     i { "update to $audioSessionId" }
 
-    if (audioSessionId == AudioTrack.SESSION_ID_NOT_SET) return
+    if (audioSessionId == C.AUDIO_SESSION_ID_UNSET) return
     updateIntent.putAudioSessionId(audioSessionId)
     context.sendBroadcast(updateIntent)
   }
 
   fun launch(activity: Activity, audioSessionId: Int) {
     i { "launch with $audioSessionId" }
-    if (audioSessionId == AudioTrack.SESSION_ID_NOT_SET) return
+    if (audioSessionId == C.AUDIO_SESSION_ID_UNSET) return
 
     launchIntent.putAudioSessionId(audioSessionId)
     activity.startActivityForResult(launchIntent, 12)

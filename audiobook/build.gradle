@@ -49,7 +49,7 @@ android {
 
 dependencies {
     // support library
-    def supportVersion = "25.1.0"
+    def supportVersion = "25.1.1"
     compile "com.android.support:appcompat-v7:$supportVersion"
     compile "com.android.support:recyclerview-v7:$supportVersion"
     compile "com.android.support:design:$supportVersion"
@@ -84,16 +84,16 @@ dependencies {
     androidTestCompile "org.mockito:mockito-core:2.4.3"
 
     // rx extensions
-    compile "io.reactivex.rxjava2:rxjava:2.0.4"
+    compile "io.reactivex.rxjava2:rxjava:2.0.5"
     compile "io.reactivex.rxjava2:rxandroid:2.0.1"
-    compile 'com.github.akarnokd:rxjava2-interop:0.8.3'
+    compile 'com.github.akarnokd:rxjava2-interop:0.8.4'
     compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.2'
 
     // kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     // player
-    compile 'com.google.android.exoplayer:exoplayer:r2.1.1'
+    compile 'com.google.android.exoplayer:exoplayer:r2.2.0'
 
     // logs
     compile 'com.github.PaulWoitaschek:Slimber:1.0.5'
@@ -106,7 +106,7 @@ dependencies {
     compile "com.google.firebase:firebase-core:$vPlayServices"
 
     // conductor
-    def conductorVer = "2.0.5"
+    def conductorVer = "2.1.0"
     compile "com.bluelinelabs:conductor:$conductorVer"
     compile "com.bluelinelabs:conductor-support:$conductorVer"
     compile "com.bluelinelabs:conductor-rxlifecycle2:$conductorVer"
