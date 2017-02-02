@@ -13,6 +13,7 @@ import de.ph1b.audiobook.features.BaseController
 abstract class MvpBaseController<V, out P> : BaseController() where P : Presenter<V> {
 
   init {
+    @Suppress("LeakingThis")
     addLifecycleListener(object : LifecycleListener() {
       override fun onRestoreInstanceState(controller: Controller, savedInstanceState: Bundle) {
         presenter.onRestore(savedInstanceState)

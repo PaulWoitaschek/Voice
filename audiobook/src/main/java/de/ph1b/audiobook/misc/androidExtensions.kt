@@ -107,7 +107,7 @@ fun Router.onControllerChanged(action: (controller: Controller) -> Unit) {
   })
 }
 
-fun File.toUri() = Uri.fromFile(this)
+fun File.toUri(): Uri = Uri.fromFile(this)
 
 inline fun View.onFirstPreDraw(crossinline action: () -> Unit) {
   viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
