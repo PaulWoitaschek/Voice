@@ -46,17 +46,12 @@ constructor(
   private val state = BehaviorSubject.createDefault(PlayerState.IDLE)
 
   init {
-    // upon end stop the player
-    player.onEnded {
-      v { "onEnded. Stopping player" }
-      playStateManager.playState = PlayState.STOPPED
-      state.onNext(PlayerState.ENDED)
-    }
+    // delegate player state changes
+    player.onStateChanged { if (state.value != it) state.onNext(it) }
 
     // upon error stop the player
     player.onError {
       e(it) { "onPlayerError" }
-      playStateManager.playState = PlayState.STOPPED
       player.stop()
       player.playWhenReady = false
       errorSubject.onNext(Unit)
@@ -73,12 +68,28 @@ constructor(
     }
 
     // update equalizer with new audio session upon arrival
-    player.onAudioSessionId {
-      equalizer.update(it)
-    }
+    player.onAudioSessionId { equalizer.update(it) }
 
-    // set the wake-lock based on the play state
-    state.subscribe { wakeLockManager.stayAwake(it == PlayerState.PLAYING) }
+    state.subscribe {
+      i { "state changed to $it" }
+
+      // set the wake-lock based on the play state
+      wakeLockManager.stayAwake(it == PlayerState.PLAYING)
+
+      // upon end stop the player
+      if (it == PlayerState.ENDED) {
+        v { "onEnded. Stopping player" }
+        player.playWhenReady = false
+      }
+
+      // update global play state
+      playStateManager.playState = when (it) {
+        PlayerState.IDLE, PlayerState.ENDED -> PlayState.STOPPED
+        PlayerState.PAUSED -> PlayState.PAUSED
+        PlayerState.PLAYING -> PlayState.PLAYING
+        else -> throw AssertionError()
+      }
+    }
 
     // when the player is started update the book based on an interval, else don't
     state.switchMap {
@@ -110,8 +121,6 @@ constructor(
       player.prepare(book.toMediaSource())
       player.seekTo(book.currentChapterIndex(), book.time.toLong())
       player.setPlaybackSpeed(book.playbackSpeed)
-
-      state.onNext(PlayerState.PAUSED)
     }
   }
 
@@ -137,8 +146,6 @@ constructor(
 
       if (state == PlayerState.ENDED || state == PlayerState.PAUSED) {
         player.playWhenReady = true
-        this.state.onNext(PlayerState.PLAYING)
-        playStateManager.playState = PlayState.PLAYING
       } else d { "ignore play in state $state" }
     }
   }
@@ -164,6 +171,7 @@ constructor(
       } else {
         changePosition(seekTo.toInt(), it.currentFile)
       }
+      player.playbackState
     }
   }
 
@@ -190,8 +198,6 @@ constructor(
   fun stop() {
     v { "stop" }
     player.playWhenReady = false
-    state.onNext(PlayerState.PAUSED)
-    playStateManager.playState = PlayState.STOPPED
   }
 
   fun audioSessionId() = player.audioSessionId
@@ -212,9 +218,6 @@ constructor(
               changePosition(seekTo, it.currentFile)
             }
           }
-
-          playStateManager.playState = PlayState.PAUSED
-          state.onNext(PlayerState.PAUSED)
         }
       }
       else -> e { "pause ignored because of ${state.value}" }
