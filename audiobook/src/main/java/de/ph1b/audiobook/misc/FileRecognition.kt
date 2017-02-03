@@ -16,22 +16,22 @@ object FileRecognition {
   private val audioTypes: List<String>
 
   init {
-    audioTypes = arrayListOf("3gp",
+    audioTypes = arrayListOf(
+      "3gp",
       "aac",
       "awb",
-      "flac",
       "imy",
       "m4a",
       "m4b",
-      "mp4",
       "mid",
       "mka",
       "mkv",
       "mp3",
       "mp3package",
+      "mp4",
       "mxmf",
-      "ogg",
       "oga",
+      "ogg",
       "ota",
       "rtttl",
       "rtx",
