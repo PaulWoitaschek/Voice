@@ -20,6 +20,8 @@ import de.ph1b.audiobook.features.settings.dialogs.PlaybackSpeedDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment
 import de.ph1b.audiobook.features.widget.WidgetUpdateService
 import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.playback.MediaPlayer
+import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlaybackService
 import de.ph1b.audiobook.playback.utils.ChangeNotifier
 import de.ph1b.audiobook.uitools.CoverReplacement
@@ -37,6 +39,8 @@ interface ApplicationComponent {
   val bookShelfPresenter: BookShelfPresenter
   val context: Context
   val prefsManager: PrefsManager
+  val player: MediaPlayer
+  val playStateManager: PlayStateManager
 
   fun inject(target: App)
   fun inject(target: AutoRewindDialogFragment)

@@ -198,6 +198,7 @@ constructor(
   fun stop() {
     v { "stop" }
     player.playWhenReady = false
+    player.stop()
   }
 
   fun audioSessionId() = player.audioSessionId

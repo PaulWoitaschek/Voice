@@ -169,8 +169,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
       .filter { it != null }
       .subscribe { repo.updateBook(it) }
 
-    playStateManager.playState = PlayState.STOPPED
-
     disposables.apply {
       // re-init controller when there is a new book set as the current book
       add(prefs.currentBookId.asV2Observable()

@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.playback
 
 import android.support.v4.media.session.PlaybackStateCompat
+import i
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
@@ -32,7 +33,10 @@ constructor() {
   fun playStateStream(): Observable<PlayState> = playStateSubject.distinctUntilChanged()
 
   var playState: PlayState
-    set(value) = playStateSubject.onNext(value)
+    set(value) {
+      i { "playState set to $value" }
+      playStateSubject.onNext(value)
+    }
     get() = playStateSubject.value
 
   /** Represents the play states for the playback.  */
