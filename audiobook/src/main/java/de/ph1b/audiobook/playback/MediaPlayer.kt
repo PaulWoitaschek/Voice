@@ -24,6 +24,7 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.properties.Delegates
 
 
 @Singleton
@@ -39,7 +40,27 @@ constructor(
 
   private val extractorsFactory = DefaultExtractorsFactory()
 
-  private var book = BehaviorSubject.create<Book>()
+  var onBookChanged: ((Book?) -> Unit)? = null
+
+  var book: Book? by Delegates.observable<Book?>(null) { property, old, new ->
+    if (old != new) {
+      onBookChanged?.invoke(new)
+    }
+  }
+    private set
+
+  fun init(book: Book?) {
+    if (this.book != book) {
+      this.book = book
+      if (book == null) return
+
+      i { "init ${book.name}" }
+      player.playWhenReady = false
+      player.prepare(book.toMediaSource())
+      player.seekTo(book.currentChapterIndex(), book.time.toLong())
+      player.setPlaybackSpeed(book.playbackSpeed)
+    }
+  }
 
   private val errorSubject = PublishSubject.create<Unit>()
   fun onError(): Observable<Unit> = errorSubject
@@ -60,10 +81,9 @@ constructor(
     // upon position change update the book
     player.onPositionDiscontinuity {
       i { "onPositionDiscontinuity with currentPos=${player.currentPosition.toInt()}" }
-      book.value?.let {
+      book?.let {
         val index = player.currentWindowIndex
-        val updated = it.copy(time = player.currentPosition.toInt(), currentFile = it.chapters[index].file)
-        book.onNext(updated)
+        book = it.copy(time = player.currentPosition.toInt(), currentFile = it.chapters[index].file)
       }
     }
 
@@ -101,32 +121,12 @@ constructor(
       } else Observable.empty()
     }.subscribe { time ->
       // update the book
-      book.value?.let {
+      book?.let {
         val index = player.currentWindowIndex
-        val updated = it.copy(time = time.toInt(), currentFile = it.chapters[index].file)
-        book.onNext(updated)
+        book = it.copy(time = time.toInt(), currentFile = it.chapters[index].file)
       }
     }
   }
-
-  /** Initializes a new book. After this, a call to play can be made. */
-  fun init(book: Book) {
-    if (this.book.value != book) {
-      i { "init ${book.name}" }
-
-      player.playWhenReady = false
-
-      this.book.onNext(book)
-
-      player.prepare(book.toMediaSource())
-      player.seekTo(book.currentChapterIndex(), book.time.toLong())
-      player.setPlaybackSpeed(book.playbackSpeed)
-    }
-  }
-
-  fun book(): Book? = book.value
-
-  fun bookObservable(): Observable<Book> = book
 
   fun setVolume(loud: Boolean) {
     player.volume = if (loud) 1F else 0.1F
@@ -136,7 +136,7 @@ constructor(
   fun play() {
     i { "play" }
 
-    book.value?.let {
+    book?.let {
       val state = this.state.value
 
       if (state == PlayerState.ENDED) {
@@ -156,7 +156,7 @@ constructor(
 
     if (state.value == PlayerState.IDLE) return
 
-    book.value?.let {
+    book?.let {
       val currentPos = player.currentPosition
       val duration = player.duration
       val delta = prefsManager.seekTime.get()!! * 1000
@@ -180,7 +180,7 @@ constructor(
     v { "previous toNullOfTrack $toNullOfNewTrack" }
     if (state.value == PlayerState.IDLE) return
 
-    book.value?.let {
+    book?.let {
       val previousChapter = it.previousChapter()
       if (player.currentPosition > 2000 || previousChapter == null) {
         changePosition(0, it.currentFile)
@@ -208,7 +208,7 @@ constructor(
     v { "pause" }
     when (state.value) {
       PlayerState.PLAYING -> {
-        book.value?.let {
+        book?.let {
           player.playWhenReady = false
           if (rewind) {
             val autoRewind = prefsManager.autoRewindAmount.get()!! * 1000
@@ -228,7 +228,7 @@ constructor(
   /** Plays the next chapter. If there is none, don't do anything.  */
   fun next() {
     i { "next" }
-    book.value?.nextChapter()?.let {
+    book?.nextChapter()?.let {
       changePosition(0, it.file)
     }
   }
@@ -238,19 +238,17 @@ constructor(
     v { "changePosition with time $time and file $file" }
     if (state.value == PlayerState.IDLE) return
 
-    book.value?.let {
+    book?.let {
       val copy = it.copy(currentFile = file, time = time)
-      book.onNext(copy)
+      book = copy
       player.seekTo(copy.currentChapterIndex(), time.toLong())
     }
   }
 
   /** The current playback speed. 1.0 for normal playback, 2.0 for twice the speed, etc.  */
   fun setPlaybackSpeed(speed: Float) {
-    book.value?.let {
-      val copy = it.copy(playbackSpeed = speed)
-      book.onNext(copy)
-
+    book?.let {
+      book = it.copy(playbackSpeed = speed)
       player.setPlaybackSpeed(speed)
     }
   }

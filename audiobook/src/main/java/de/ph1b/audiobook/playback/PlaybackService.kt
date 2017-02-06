@@ -153,7 +153,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
       .subscribe {
         // inform user on errors
         e { "onError" }
-        val book = player.book()
+        val book = player.book
         if (book != null) {
           startActivity(MainActivity.malformedFileIntent(this, book.currentFile))
         } else {
@@ -165,19 +165,17 @@ class PlaybackService : MediaBrowserServiceCompat() {
       }
 
     // update book when changed by player
-    player.bookObservable()
-      .filter { it != null }
-      .subscribe { repo.updateBook(it) }
+    player.onBookChanged = {
+      it?.let { repo.updateBook(it) }
+    }
 
     disposables.apply {
       // re-init controller when there is a new book set as the current book
       add(prefs.currentBookId.asV2Observable()
         .subscribe {
-          if (player.book()?.id != it) {
+          if (player.book?.id != it) {
             player.stop()
-
-            val newBook = repo.bookById(it)
-            if (newBook != null) player.init(newBook)
+            player.init(repo.bookById(it))
           }
         })
 
@@ -199,7 +197,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
         .observeOn(Schedulers.io())
         .subscribe {
           d { "onPlayStateManager.PlayStateChanged:$it" }
-          val controllerBook = player.book()
+          val controllerBook = player.book
           if (controllerBook != null) {
             when (it!!) {
               PlayState.PLAYING -> {
