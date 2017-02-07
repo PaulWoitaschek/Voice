@@ -51,10 +51,11 @@ constructor(
 
   fun init(book: Book?) {
     if (this.book != book) {
+      i { "init ${book?.name}" }
+
       this.book = book
       if (book == null) return
 
-      i { "init ${book.name}" }
       player.playWhenReady = false
       player.prepare(book.toMediaSource())
       player.seekTo(book.currentChapterIndex(), book.time.toLong())

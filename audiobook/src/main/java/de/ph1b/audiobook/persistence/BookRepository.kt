@@ -66,10 +66,12 @@ import javax.inject.Singleton
 
   @Synchronized fun hideBook(toDelete: List<Book>) {
     v { "hideBooks=${toDelete.size}" }
+    if (toDelete.isEmpty()) return
 
     val idsToDelete = toDelete.map(Book::id)
     active.removeAll { idsToDelete.contains(it.id) }
     orphaned.addAll(toDelete)
+    toDelete.forEach { storage.hideBook(it.id) }
     sortBooksAndNotifySubject()
   }
 
@@ -77,8 +79,8 @@ import javax.inject.Singleton
     v { "Called revealBook=$book" }
 
     orphaned.removeAll { it.id == book.id }
-    storage.revealBook(book.id)
     active.add(book)
+    storage.revealBook(book.id)
     sortBooksAndNotifySubject()
   }
 }
