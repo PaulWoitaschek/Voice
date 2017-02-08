@@ -1,3 +1,5 @@
+apply plugin: 'com.github.ben-manes.versions'
+
 buildscript {
 
     ext.kotlinVersion = '1.0.6'
@@ -10,6 +12,7 @@ buildscript {
         classpath 'com.android.tools.build:gradle:2.2.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath 'com.google.gms:google-services:3.0.0'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.13.0'
     }
 }
 
@@ -17,6 +20,16 @@ allprojects {
     repositories {
         jcenter()
         maven { url "https://jitpack.io" }
+    }
+
+    dependencyUpdates.resolutionStrategy = {
+        componentSelection { rules ->
+            rules.all { ComponentSelection selection ->
+                def candidate = selection.candidate
+                if (candidate.group == 'org.assertj' && !candidate.version.startsWith("1")) selection.reject("Only version 1 of assertJ supported")
+                if (['beta', 'alpha'].any { forbidden -> candidate.version.contains(forbidden) }) selection.reject("blacklisted")
+            }
+        }
     }
 }
 
