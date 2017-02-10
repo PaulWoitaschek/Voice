@@ -98,8 +98,6 @@
     <string name="pref_support_title">支持</string>
     <string name="pref_support_translations">翻译</string>
     <string name="pref_support_contribute">支持和建议</string>
-    <string name="pref_analytic_title">统计</string>
-    <string name="pref_analytic_content">收集并匿名发送使用信息，以帮助改进该应用。</string>
     <!--Misc-->
     <string name="popup_edit">编辑</string>
     <string name="remove">删除</string>

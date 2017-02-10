@@ -13,7 +13,6 @@ import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
 import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.SupportDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment
-import de.ph1b.audiobook.features.tracking.Tracker
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.asV2Observable
 import de.ph1b.audiobook.misc.find
@@ -30,7 +29,6 @@ import javax.inject.Inject
 class SettingsController : BaseController() {
 
   @Inject lateinit var prefs: PrefsManager
-  @Inject lateinit var tracker: Tracker
 
   init {
     App.component.inject(this)
@@ -62,7 +60,6 @@ class SettingsController : BaseController() {
 
     // resume on playback
     val resumePlaybackSwitch = setupSwitchSetting(R.id.resumePlayback, R.string.pref_resume_on_replug, R.string.pref_resume_on_replug_hint) {
-      if (prefs.resumeOnReplug.get() != it) tracker.resumePlaybackOnHeadset(it)
       prefs.resumeOnReplug.set(it)
     }
     prefs.resumeOnReplug.asV2Observable()
@@ -71,7 +68,6 @@ class SettingsController : BaseController() {
 
     // pause on interruption
     val pauseOnInterruptionSwitch = setupSwitchSetting(R.id.pauseOnInterruption, R.string.pref_pause_on_can_duck_title, R.string.pref_pause_on_can_duck_summary) {
-      if (prefs.pauseOnTempFocusLoss.get() != it) tracker.pauseOnInterruption(it)
       prefs.pauseOnTempFocusLoss.set(it)
     }
     prefs.pauseOnTempFocusLoss.asV2Observable()
@@ -95,15 +91,6 @@ class SettingsController : BaseController() {
       .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
       .bindToLifeCycle()
       .subscribe { autoRewindDescription.text = it }
-
-    // analytics
-    val analyticsSwitch = setupSwitchSetting(R.id.analytics, R.string.pref_analytic_title, R.string.pref_analytic_content) {
-      prefs.analytics.set(it)
-      tracker.setEnabled(it)
-    }
-    prefs.analytics.asV2Observable()
-      .bindToLifeCycle()
-      .subscribe { analyticsSwitch.isChecked = it }
   }
 
   private inline fun setupTextSetting(@IdRes id: Int, @StringRes titleRes: Int, @StringRes contentRes: Int? = null, crossinline onClick: () -> Unit): TextView {

@@ -16,7 +16,6 @@ import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.imagepicker.ImagePickerController
 import de.ph1b.audiobook.features.settings.SettingsController
-import de.ph1b.audiobook.features.tracking.Tracker
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.mvp.MvpBaseController
@@ -45,7 +44,6 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
   }
 
   @Inject lateinit var prefs: PrefsManager
-  @Inject lateinit var tracker: Tracker
 
   private val playPauseDrawable = PlayPauseDrawable()
   private lateinit var adapter: BookShelfAdapter
@@ -136,7 +134,6 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
       }
       R.id.action_change_layout -> {
         val newDisplayMode = prefs.displayMode.value().inverted()
-        tracker.displayModeChanged(newDisplayMode)
         prefs.displayMode.set(newDisplayMode)
         initRecyclerView()
         true

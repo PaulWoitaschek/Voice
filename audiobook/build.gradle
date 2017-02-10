@@ -96,7 +96,6 @@ dependencies {
 
     def vPlayServices = "10.0.1"
     releaseCompile "com.google.firebase:firebase-crash:$vPlayServices"
-    compile "com.google.firebase:firebase-core:$vPlayServices"
 
     // conductor
     def conductorVer = "2.1.0"

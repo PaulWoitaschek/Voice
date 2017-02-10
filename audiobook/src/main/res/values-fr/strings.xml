@@ -102,8 +102,6 @@
     <string name="pref_support_title">Assistance</string>
     <string name="pref_support_translations">Traductions</string>
     <string name="pref_support_contribute">Assistance et suggestions</string>
-    <string name="pref_analytic_title">Statistiques</string>
-    <string name="pref_analytic_content">Collecte et envoie anonymement des statistiques d\'utilisation pour nous permettre d\'améliorer l\'application.</string>
     <!--Misc-->
     <string name="popup_edit">Modifer</string>
     <string name="remove">Enlever</string>

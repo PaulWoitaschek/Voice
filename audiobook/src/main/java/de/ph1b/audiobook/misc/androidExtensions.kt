@@ -15,12 +15,9 @@ import android.support.v7.widget.Toolbar
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bluelinelabs.conductor.Controller
-import com.bluelinelabs.conductor.ControllerChangeHandler
-import com.bluelinelabs.conductor.Router
 import com.f2prateek.rx.preferences.Preference
 import java.io.File
 import java.io.FileFilter
@@ -93,18 +90,6 @@ fun <T> DialogFragment.findCallback(controllerBundleKey: String): T {
   val controllerId: String = arguments.getString(controllerBundleKey)
   @Suppress("UNCHECKED_CAST")
   return router.getControllerWithInstanceId(controllerId) as T
-}
-
-/** execute a supplied action when the change to a controller has completed */
-fun Router.onControllerChanged(action: (controller: Controller) -> Unit) {
-  addChangeListener(object : ControllerChangeHandler.ControllerChangeListener {
-    override fun onChangeStarted(to: Controller?, from: Controller?, isPush: Boolean, container: ViewGroup, handler: ControllerChangeHandler) {
-    }
-
-    override fun onChangeCompleted(to: Controller?, from: Controller?, isPush: Boolean, container: ViewGroup, handler: ControllerChangeHandler) {
-      if (to != null) action(to)
-    }
-  })
 }
 
 fun File.toUri(): Uri = Uri.fromFile(this)

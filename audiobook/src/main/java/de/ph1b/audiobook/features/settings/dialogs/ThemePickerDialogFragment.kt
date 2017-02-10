@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.features.tracking.Tracker
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.ThemeUtil
@@ -22,7 +21,6 @@ import javax.inject.Inject
 class ThemePickerDialogFragment : DialogFragment() {
 
   @Inject lateinit var prefsManager: PrefsManager
-  @Inject lateinit var tracker: Tracker
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     App.component.inject(this)
@@ -35,9 +33,6 @@ class ThemePickerDialogFragment : DialogFragment() {
       .items(*names.toTypedArray())
       .itemsCallbackSingleChoice(existingThemes.indexOf(oldTheme)) { materialDialog, view, i, charSequence ->
         val newTheme = existingThemes[i]
-        if (oldTheme != newTheme) {
-          tracker.track(newTheme)
-        }
         prefsManager.theme.set(newTheme)
         AppCompatDelegate.setDefaultNightMode(newTheme.nightMode)
 

@@ -102,8 +102,6 @@
     <string name="pref_support_title">Support</string>
     <string name="pref_support_translations">Übersetzungen</string>
     <string name="pref_support_contribute">Support und Vorschläge</string>
-    <string name="pref_analytic_title">Statistiken</string>
-    <string name="pref_analytic_content">Sammle und sende anonyme Nutzungsstatistiken um uns bei der App-Entwicklung zu helfen.</string>
     <!--Misc-->
     <string name="popup_edit">Bearbeiten</string>
     <string name="remove">Löschen</string>

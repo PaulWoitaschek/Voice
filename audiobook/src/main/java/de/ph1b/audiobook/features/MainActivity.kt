@@ -11,11 +11,9 @@ import de.ph1b.audiobook.features.bookOverview.BookShelfController
 import de.ph1b.audiobook.features.bookOverview.NoFolderWarningDialogFragment
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
-import de.ph1b.audiobook.features.tracking.Tracker
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.misc.RouterProvider
-import de.ph1b.audiobook.misc.onControllerChanged
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import java.io.File
@@ -31,7 +29,6 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
 
   private lateinit var permissionHelper: PermissionHelper
   @Inject lateinit var prefs: PrefsManager
-  @Inject lateinit var tracker: Tracker
 
   private lateinit var router: Router
 
@@ -57,8 +54,6 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
         from?.setOptionsMenuHidden(false)
       }
     })
-    // track upon changes
-    router.onControllerChanged { tracker.track(it) }
 
     if (savedInstanceState == null) {
       if (intent.hasExtra(NI_MALFORMED_FILE)) {
