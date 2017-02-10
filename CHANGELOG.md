@@ -1,3 +1,7 @@
+# 2.9.3.7
+* Removed tracking
+* Fixes
+
 # 2.9.3.3
 * Fix: After sleeptimer ends playback can correctly be resumed
 
