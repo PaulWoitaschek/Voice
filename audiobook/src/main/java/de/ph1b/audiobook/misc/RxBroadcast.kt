@@ -20,9 +20,7 @@ object RxBroadcast {
     }
 
     // register upon subscription, unregister upon unsubscription
+    it.setCancellable { c.unregisterReceiver(receiver) }
     c.registerReceiver(receiver, filter)
-    it.setCancellable {
-      c.unregisterReceiver(receiver)
-    }
   }
 }

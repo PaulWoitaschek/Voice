@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Handler
 import android.support.v4.content.ContextCompat
-import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.misc.*
@@ -14,7 +13,6 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import v
 import java.io.File
 import java.util.*
 import java.util.concurrent.CountDownLatch
@@ -42,7 +40,6 @@ import javax.inject.Singleton
   private fun checkForBooks() {
     val singleBooks = singleBookFiles
     for (f in singleBooks) {
-      d { "checkForBooks with singleBookFile=$f" }
       if (f.isFile && f.canRead()) {
         checkBook(f, Book.Type.SINGLE_FILE)
       } else if (f.isDirectory && f.canRead()) {
@@ -52,7 +49,6 @@ import javax.inject.Singleton
 
     val collectionBooks = collectionBookFiles
     for (f in collectionBooks) {
-      d { "checking collectionBook=$f" }
       if (f.isFile && f.canRead()) {
         checkBook(f, Book.Type.COLLECTION_FILE)
       } else if (f.isDirectory && f.canRead()) {
@@ -67,11 +63,9 @@ import javax.inject.Singleton
    * @param interrupting true if a eventually running scanner should be interrupted.
    */
   fun scanForFiles(interrupting: Boolean) {
-    d { "scanForFiles called with scannerActive=${scannerActiveSubject.value} and interrupting=$interrupting" }
     if (!scannerActiveSubject.value || interrupting) {
       stopScanner = true
       executor.execute {
-        v { "started" }
         handler.postBlocking { scannerActiveSubject.onNext(true) }
         stopScanner = false
 
@@ -79,16 +73,13 @@ import javax.inject.Singleton
           deleteOldBooks()
           checkForBooks()
           coverCollector.findCovers(repo.activeBooks)
-        } catch (ex: InterruptedException) {
-          d(ex) { "We were interrupted at adding a book" }
+        } catch (ignored: InterruptedException) {
         }
 
         stopScanner = false
         handler.postBlocking { scannerActiveSubject.onNext(false) }
-        v { "stopped" }
       }
     }
-    v { "scanForFiles method done" }
   }
 
   /** the saved single book files the User chose in [de.ph1b.audiobook.features.folderChooser.FolderChooserView] */
@@ -108,7 +99,6 @@ import javax.inject.Singleton
    * audio book paths. **/
   @Throws(InterruptedException::class)
   private fun deleteOldBooks() {
-    d { "deleteOldBooks started" }
     val singleBookFiles = singleBookFiles
     val collectionBookFolders = collectionBookFiles
 
@@ -166,7 +156,6 @@ import javax.inject.Singleton
       throw InterruptedException("Does not have external storage permission")
     }
 
-    d { "deleting $booksToRemove" }
     handler.postBlocking { repo.hideBook(booksToRemove) }
   }
 
@@ -198,7 +187,6 @@ import javax.inject.Singleton
         newChapters,
         1.0f,
         bookRoot)
-      d { "adding newBook=${newBook.name}" }
       handler.postBlocking { repo.addBook(newBook) }
     } else {
       // checks if current path is still valid.
@@ -310,7 +298,6 @@ import javax.inject.Singleton
    * @param orphaned If we should return a book that is orphaned, or a book that is currently
    */
   private fun getBookFromDb(rootFile: File, type: Book.Type, orphaned: Boolean): Book? {
-    d { "getBookFromDb, rootFile=$rootFile, type=$type, orphaned=$orphaned" }
     val books: List<Book> =
       if (orphaned) {
         repo.getOrphanedBooks()
@@ -322,12 +309,9 @@ import javax.inject.Singleton
         rootFile.absolutePath == it.root && type === it.type
       }
     } else if (rootFile.isFile) {
-      d { "getBookFromDb, its a file" }
       for (b in books) {
-        v { "Comparing bookRoot=${b.root} with ${rootFile.parentFile.absoluteFile}" }
         if (rootFile.parentFile.absolutePath == b.root && type === b.type) {
           val singleChapter = b.chapters.first()
-          d { "getBookFromDb, singleChapterPath=${singleChapter.file} compared with=${rootFile.absoluteFile}" }
           if (singleChapter.file == rootFile) {
             return b
           }
