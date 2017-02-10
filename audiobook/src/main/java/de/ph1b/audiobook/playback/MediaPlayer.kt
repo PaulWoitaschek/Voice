@@ -77,6 +77,7 @@ constructor(
       player.stop()
       player.playWhenReady = false
       errorSubject.onNext(Unit)
+      playStateManager.playState = PlayState.STOPPED
     }
 
     // upon position change update the book
@@ -101,14 +102,7 @@ constructor(
       if (it == PlayerState.ENDED) {
         v { "onEnded. Stopping player" }
         player.playWhenReady = false
-      }
-
-      // update global play state
-      playStateManager.playState = when (it) {
-        PlayerState.IDLE, PlayerState.ENDED -> PlayState.STOPPED
-        PlayerState.PAUSED -> PlayState.PAUSED
-        PlayerState.PLAYING -> PlayState.PLAYING
-        else -> throw AssertionError()
+        playStateManager.playState = PlayState.STOPPED
       }
     }
 
@@ -147,6 +141,7 @@ constructor(
 
       if (state == PlayerState.ENDED || state == PlayerState.PAUSED) {
         player.playWhenReady = true
+        playStateManager.playState = PlayState.PLAYING
       } else d { "ignore play in state $state" }
     }
   }
@@ -200,6 +195,7 @@ constructor(
     v { "stop" }
     player.playWhenReady = false
     player.stop()
+    playStateManager.playState = PlayState.STOPPED
   }
 
   fun audioSessionId() = player.audioSessionId
@@ -211,6 +207,7 @@ constructor(
       PlayerState.PLAYING -> {
         book?.let {
           player.playWhenReady = false
+          playStateManager.playState = PlayState.PAUSED
           if (rewind) {
             val autoRewind = prefsManager.autoRewindAmount.get()!! * 1000
             if (autoRewind != 0) {
