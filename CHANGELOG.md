@@ -1,5 +1,6 @@
 # 3.0
 * Old player with speed for everyone back
+* Flac is back
 * New sleep layout as bottom sheet with custom keypad
 
 # 2.9.3.7
