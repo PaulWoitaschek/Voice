@@ -142,6 +142,7 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
         val coordinator = this@apply.findViewById(R.id.design_bottom_sheet) as FrameLayout
         val behavior = BottomSheetBehavior.from(coordinator)
         behavior.peekHeight = time.bottom
+        behavior.state = BottomSheetBehavior.STATE_EXPANDED
       }
     }
   }
