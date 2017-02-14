@@ -20,6 +20,7 @@ object FileRecognition {
       "3gp",
       "aac",
       "awb",
+      "flac",
       "imy",
       "m4a",
       "m4b",
