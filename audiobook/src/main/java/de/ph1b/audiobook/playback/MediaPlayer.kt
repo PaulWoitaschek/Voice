@@ -27,6 +27,9 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
 
   private var bookSubject = BehaviorSubject.create<Book>()
   private var stateSubject = BehaviorSubject.createDefault(State.IDLE)
+  private var state: State
+    set(value) = stateSubject.onNext(value)
+    get() = stateSubject.value
 
   private val seekTime: Int
     get() = prefs.seekTime.get()!!
@@ -50,14 +53,14 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
           v { "Reached last track. Stopping player" }
           playStateManager.playState = PlayState.STOPPED
 
-          stateSubject.onNext(State.PLAYBACK_COMPLETED)
+          state = State.PLAYBACK_COMPLETED
         }
       }
     }
 
     player.onError {
       player.reset()
-      stateSubject.onNext(State.IDLE)
+      state = State.IDLE
       errorSubject.onNext(Unit)
     }
 
@@ -93,15 +96,15 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
   private fun prepare() {
     bookSubject.value?.let {
       try {
-        if (stateSubject.value != State.IDLE) player.reset()
+        if (state != State.IDLE) player.reset()
 
         player.prepare(Uri.fromFile(it.currentChapter().file))
         player.seekTo(it.time)
         player.playbackSpeed = it.playbackSpeed
-        stateSubject.onNext(State.PAUSED)
+        state = State.PAUSED
       } catch (ex: IOException) {
         e(ex) { "Error when preparing the player." }
-        stateSubject.onNext(State.STOPPED)
+        state = State.STOPPED
       }
     }
   }
@@ -109,34 +112,34 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
 
   /** Plays the prepared file. */
   fun play() {
-    when (stateSubject.value) {
+    when (state) {
       State.PLAYBACK_COMPLETED -> {
         player.seekTo(0)
         player.start()
         playStateManager.playState = PlayState.PLAYING
-        stateSubject.onNext(State.STARTED)
+        state = State.STARTED
       }
       State.PAUSED -> {
         player.start()
         playStateManager.playState = PlayState.PLAYING
-        stateSubject.onNext(State.STARTED)
+        state = State.STARTED
       }
       State.STOPPED -> {
         prepare()
-        if (stateSubject.value == State.PAUSED) {
+        if (state == State.PAUSED) {
           play()
         }
       }
-      else -> i { "Play ignores state=${stateSubject.value} " }
+      else -> i { "Play ignores state=$state " }
     }
   }
 
   fun skip(direction: Direction) {
     v { "direction=$direction" }
     bookSubject.value?.let {
-      if (stateSubject.value == State.IDLE && stateSubject.value == State.STOPPED) {
+      if (state == State.IDLE && state == State.STOPPED) {
         prepare()
-        if (stateSubject.value != State.PREPARED) return
+        if (state != State.PREPARED) return
       }
 
       val currentPos = player.currentPosition
@@ -159,9 +162,9 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
   /** If current time is > 2000ms, seek to 0. Else play previous chapter if there is one. */
   fun previous(toNullOfNewTrack: Boolean) {
     bookSubject.value?.let {
-      if (stateSubject.value == State.IDLE || stateSubject.value == State.STOPPED) {
+      if (state == State.IDLE || state == State.STOPPED) {
         prepare()
-        if (stateSubject.value != State.PREPARED) return
+        if (state != State.PREPARED) return
       }
 
       val previousChapter = it.previousChapter()
@@ -181,9 +184,9 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
 
   /** Stops the playback and releases some resources. */
   fun stop() {
-    if (stateSubject.value == State.STARTED) player.pause()
+    if (state == State.STARTED) player.pause()
     playStateManager.playState = PlayState.STOPPED
-    stateSubject.onNext(State.STOPPED)
+    state = State.STOPPED
   }
 
 
@@ -194,9 +197,9 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
    * @param rewind true if the player should automatically rewind a little bit.
    */
   fun pause(rewind: Boolean) {
-    v { "pause in state ${stateSubject.value}" }
+    v { "pause in state $state" }
     bookSubject.value?.let {
-      when (stateSubject.value) {
+      when (state) {
         State.STARTED -> {
           player.pause()
 
@@ -214,9 +217,9 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
 
           playStateManager.playState = PlayState.PAUSED
 
-          stateSubject.onNext(State.PAUSED)
+          state = State.PAUSED
         }
-        else -> e { "pause called in illegal state=${stateSubject.value}" }
+        else -> e { "pause called in illegal state=$state" }
       }
     }
   }
@@ -241,10 +244,10 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
   fun changePosition(time: Int, file: File) {
     v { "changePosition with time $time and file $file" }
     bookSubject.value?.let {
-      val changeFile = (it.currentChapter().file != file)
+      val changeFile = it.currentChapter().file != file
       v { "changeFile=$changeFile" }
       if (changeFile) {
-        val wasPlaying = stateSubject.value == State.STARTED
+        val wasPlaying = state == State.STARTED
 
         val copy = it.copy(currentFile = file, time = time)
         bookSubject.onNext(copy)
@@ -252,21 +255,21 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
         prepare()
         if (wasPlaying) {
           player.start()
-          stateSubject.onNext(State.STARTED)
+          state = State.STARTED
           playStateManager.playState = PlayState.PLAYING
         } else {
           playStateManager.playState = PlayState.PAUSED
         }
       } else {
-        if (stateSubject.value == State.STOPPED || stateSubject.value == State.IDLE) prepare()
-        when (stateSubject.value) {
+        if (state == State.STOPPED || state == State.IDLE) prepare()
+        when (state) {
           State.STARTED, State.PAUSED, State.PREPARED -> {
             player.seekTo(time)
 
             val copy = it.copy(time = time)
             bookSubject.onNext(copy)
           }
-          else -> e { "changePosition called in illegal state=${stateSubject.value}" }
+          else -> e { "changePosition called in illegal state=$state" }
         }
       }
     }
@@ -279,8 +282,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
     bookSubject.value?.let {
       val copy = it.copy(playbackSpeed = speed)
       bookSubject.onNext(copy)
-
-      player.playbackSpeed = speed
+      if (state != State.IDLE && state != State.STOPPED) player.playbackSpeed = speed
     }
   }
 
