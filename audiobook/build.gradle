@@ -87,7 +87,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     // player
-    compile 'com.google.android.exoplayer:exoplayer:r2.2.0'
+    compile 'com.github.PaulWoitaschek:AndroidPlayer:0.3.3'
 
     // logs
     compile 'com.github.PaulWoitaschek:Slimber:1.0.5'
@@ -95,8 +95,7 @@ dependencies {
     // permissions
     compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.1@aar'
 
-    def vPlayServices = "10.0.1"
-    releaseCompile "com.google.firebase:firebase-crash:$vPlayServices"
+    releaseCompile "com.google.firebase:firebase-crash:10.0.1"
 
     // conductor
     def conductorVer = "2.1.0"

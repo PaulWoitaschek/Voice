@@ -2,7 +2,6 @@ package de.ph1b.audiobook.misc
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
@@ -91,8 +90,6 @@ fun <T> DialogFragment.findCallback(controllerBundleKey: String): T {
   @Suppress("UNCHECKED_CAST")
   return router.getControllerWithInstanceId(controllerId) as T
 }
-
-fun File.toUri(): Uri = Uri.fromFile(this)
 
 inline fun View.onFirstPreDraw(crossinline action: () -> Unit) {
   viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
