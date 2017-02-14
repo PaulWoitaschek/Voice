@@ -126,7 +126,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
       }
       State.STOPPED -> {
         prepare()
-        if (state == State.PAUSED) {
+        if (state == State.PREPARED) {
           play()
         }
       }
@@ -256,6 +256,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
         bookSubject.onNext(copy)
 
         prepare()
+        if (state != State.PREPARED) return
         if (wasPlaying) {
           player.start()
           state = State.STARTED
