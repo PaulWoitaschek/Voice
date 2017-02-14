@@ -49,12 +49,6 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
     outState.putInt(SI_MINUTES, selectedMinutes)
   }
 
-  override fun onViewStateRestored(savedInstanceState: Bundle?) {
-    super.onViewStateRestored(savedInstanceState)
-    selectedMinutes = savedInstanceState?.getInt(SI_MINUTES) ?: prefs.seekTime.get()!!
-    updateTimeState()
-  }
-
   @SuppressLint("SetTextI18n")
   private fun appendNumber(number: Int) {
     val newNumber = selectedMinutes * 10 + number
@@ -81,7 +75,7 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
     time = layout.find(R.id.time)
 
     // restore or get fresh
-    selectedMinutes = savedInstanceState?.getInt(SI_MINUTES) ?: prefs.seekTime.get()!!
+    selectedMinutes = savedInstanceState?.getInt(SI_MINUTES) ?: prefs.sleepTime.get()!!
     updateTimeState()
 
     layout.findViewById(R.id.one).setOnClickListener { appendNumber(1) }
