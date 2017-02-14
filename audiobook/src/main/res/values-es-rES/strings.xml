@@ -33,7 +33,6 @@
     <string name="pref_resume_on_replug">Reanudar la reproduccion</string>
     <string name="pref_resume_on_replug_hint">Si usted hizo una pausa por desconnectando el cable, se reanudara cuando conecten el cable.</string>
     <string name="pref_seek_time">Saltar cantidad</string>
-    <string name="pref_sleep_time">Temporizador para dormir</string>
     <!--Misc-->
     <string name="popup_edit">Editar</string>
     <string name="remove">Borrar</string>

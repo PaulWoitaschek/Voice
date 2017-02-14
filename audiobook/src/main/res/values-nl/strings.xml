@@ -66,16 +66,11 @@
     <string name="action_settings">Voorkeuren</string>
     <string name="pref_resume_on_replug">Afspelen hervatten</string>
     <string name="pref_resume_on_replug_hint">Als u pauzeert door de headset te ontkoppelen, zal het afspelen hervatten als u deze weer aansluit.</string>
-    <plurals name="minutes">
-        <item quantity="one">%d minuut</item>
-        <item quantity="other">%d minuten</item>
-    </plurals>
     <plurals name="seconds">
         <item quantity="one">%d seconde</item>
         <item quantity="other">%d seconden</item>
     </plurals>
     <string name="pref_seek_time">Skiptijd</string>
-    <string name="pref_sleep_time">Slaap timer</string>
     <string name="pref_root_folder_title">Luisterboekmap</string>
     <string name="pref_root_folder_summary">Geselecteerde luisterboekmappen.</string>
     <string name="pref_theme_title">Thema</string>

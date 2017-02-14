@@ -78,12 +78,6 @@
     <string name="action_settings">Настройки</string>
     <string name="pref_resume_on_replug">Продолжить воспроизведение</string>
     <string name="pref_resume_on_replug_hint">Продолжить воспроизведение при повторном подключении наушников.</string>
-    <plurals name="minutes">
-        <item quantity="one">%d минуту</item>
-        <item quantity="few">%d минут</item>
-        <item quantity="many">%d минут</item>
-        <item quantity="other">%d минут</item>
-    </plurals>
     <plurals name="seconds">
         <item quantity="one">%d секунду</item>
         <item quantity="few">%d секунд</item>
@@ -91,7 +85,6 @@
         <item quantity="other">%d секунд</item>
     </plurals>
     <string name="pref_seek_time">Ускоренная перемотка</string>
-    <string name="pref_sleep_time">Время сна</string>
     <string name="pref_root_folder_title">Папки с аудиокнигами</string>
     <string name="pref_root_folder_summary">Выбранные папки с книгами.</string>
     <string name="pref_theme_title">Внешний вид</string>

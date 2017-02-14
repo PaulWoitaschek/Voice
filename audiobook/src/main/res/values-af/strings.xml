@@ -65,16 +65,11 @@
     <string name="action_settings">Voorkeure</string>
     <string name="pref_resume_on_replug">Hervat terugspeling</string>
     <string name="pref_resume_on_replug_hint">Indien speling gebreek is as gevolg van oorfone wat verwyder was sal dit hervat word sodra die oorfone terug gesit is.</string>
-    <plurals name="minutes">
-        <item quantity="one">%d minuut</item>
-        <item quantity="other">%d minute</item>
-    </plurals>
     <plurals name="seconds">
         <item quantity="one">%d sekonde</item>
         <item quantity="other">%d sekondes</item>
     </plurals>
     <string name="pref_seek_time">Skip hoeveelheid</string>
-    <string name="pref_sleep_time">Slaap tyd</string>
     <string name="pref_root_folder_title">Klankboek gids</string>
     <string name="pref_root_folder_summary">Die geselekteerde klankboek gidse.</string>
     <string name="pref_theme_title">Tema</string>

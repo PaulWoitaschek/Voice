@@ -77,18 +77,12 @@
     <string name="action_settings">Параметри</string>
     <string name="pref_resume_on_replug">Відновити програвання</string>
     <string name="pref_resume_on_replug_hint">Якщо програвання було припинено витяганням навушників, воно буде подовжено після підключення їх знову.</string>
-    <plurals name="minutes">
-        <item quantity="one">%d хвилина</item>
-        <item quantity="few">%d хвилин</item>
-        <item quantity="other">%d хвилин</item>
-    </plurals>
     <plurals name="seconds">
         <item quantity="one">%d секунда</item>
         <item quantity="few">%d секунд</item>
         <item quantity="other">%d секунд</item>
     </plurals>
     <string name="pref_seek_time">Пропустити</string>
-    <string name="pref_sleep_time">Час засинання</string>
     <string name="pref_root_folder_title">Папка аудіокниги</string>
     <string name="pref_root_folder_summary">Обрані папки за аудіокнигами.</string>
     <string name="pref_theme_title">Тема</string>

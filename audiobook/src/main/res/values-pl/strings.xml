@@ -77,18 +77,12 @@
     <string name="action_settings">Preferencje</string>
     <string name="pref_resume_on_replug">Wznawiaj odtwarzanie</string>
     <string name="pref_resume_on_replug_hint">Jeśli zatrzymałeś poprzez wyjęcie słuchawek, odtwarzanie wznowi się po ponownym podłączeniu.</string>
-    <plurals name="minutes">
-        <item quantity="one">%d minuta</item>
-        <item quantity="few">%d minuty</item>
-        <item quantity="other">%d minut</item>
-    </plurals>
     <plurals name="seconds">
         <item quantity="one">%d sekunda</item>
         <item quantity="few">%d sekundy</item>
         <item quantity="other">%d sekund</item>
     </plurals>
     <string name="pref_seek_time">Przewiń o</string>
-    <string name="pref_sleep_time">Czas drzemki</string>
     <string name="pref_root_folder_title">Folder audiobooków</string>
     <string name="pref_root_folder_summary">Wybrane foldery z audiobookami</string>
     <string name="pref_theme_title">Motyw</string>

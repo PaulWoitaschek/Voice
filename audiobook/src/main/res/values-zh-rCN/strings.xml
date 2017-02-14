@@ -75,14 +75,10 @@
     <string name="action_settings">偏好设置</string>
     <string name="pref_resume_on_replug">继续播放</string>
     <string name="pref_resume_on_replug_hint">若因拔出耳机而暂停，插入耳机后将继续播放。</string>
-    <plurals name="minutes">
-        <item quantity="other">%d分钟</item>
-    </plurals>
     <plurals name="seconds">
         <item quantity="other">%d秒</item>
     </plurals>
     <string name="pref_seek_time">跳过时间</string>
-    <string name="pref_sleep_time">睡眠定时</string>
     <string name="pref_root_folder_title">有声书目录</string>
     <string name="pref_root_folder_summary">已选中的有声书目录。</string>
     <string name="pref_theme_title">主题</string>

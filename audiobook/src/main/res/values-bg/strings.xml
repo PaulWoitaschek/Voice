@@ -76,16 +76,11 @@
     <string name="action_settings">Настройки</string>
     <string name="pref_resume_on_replug">Продължи възпроизвеждането</string>
     <string name="pref_resume_on_replug_hint">Ако паузата е била пусната от изваждането на слушалки, възпроизвеждането ще продължи при повторното им включване.</string>
-    <plurals name="minutes">
-        <item quantity="one">%d минута</item>
-        <item quantity="other">%d минути</item>
-    </plurals>
     <plurals name="seconds">
         <item quantity="one">%d секунда</item>
         <item quantity="other">%d секунди</item>
     </plurals>
     <string name="pref_seek_time">Количестество на прескачане</string>
-    <string name="pref_sleep_time">Време на таймера за сън</string>
     <string name="pref_root_folder_title">Папка с аудио книги</string>
     <string name="pref_root_folder_summary">Списък на папки с аудио книги.</string>
     <string name="pref_theme_title">Фон на приложението</string>

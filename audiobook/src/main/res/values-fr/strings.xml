@@ -76,16 +76,11 @@
     <string name="action_settings">Préférences</string>
     <string name="pref_resume_on_replug">Reprendre la lecture</string>
     <string name="pref_resume_on_replug_hint">Si vous avez mis en pause en débranchant le casque, la lecture reprendra en le rebranchant.</string>
-    <plurals name="minutes">
-        <item quantity="one">%d minute</item>
-        <item quantity="other">%d minutes</item>
-    </plurals>
     <plurals name="seconds">
         <item quantity="one">%d seconde</item>
         <item quantity="other">%d secondes</item>
     </plurals>
     <string name="pref_seek_time">Sauter de</string>
-    <string name="pref_sleep_time">Temps avant la pause</string>
     <string name="pref_root_folder_title">Dossier de livre audio</string>
     <string name="pref_root_folder_summary">Les dossiers de livres audio sélectionnés.</string>
     <string name="pref_theme_title">Thème</string>

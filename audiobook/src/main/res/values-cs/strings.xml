@@ -79,18 +79,12 @@
     <string name="pref_resume_on_replug">Pokračovat v přehrávání</string>
   <string name="pref_resume_on_replug_hint">Pokud pozastavíte přehrávání vytažením sluchátek, při jejich
         připojení bude znovu spuštěno.</string>
-    <plurals name="minutes">
-        <item quantity="one">%d minuta</item>
-        <item quantity="few">%d minuty</item>
-        <item quantity="other">%d minut</item>
-    </plurals>
     <plurals name="seconds">
         <item quantity="one">%d sekunda</item>
         <item quantity="few">%d sekundy</item>
         <item quantity="other">%d sekund</item>
     </plurals>
     <string name="pref_seek_time">Přeskočit o</string>
-    <string name="pref_sleep_time">Časovač vypnutí</string>
     <string name="pref_root_folder_title">Adresář audioknihy</string>
     <string name="pref_root_folder_summary">Vybrané adresáře s audioknihami.</string>
     <string name="pref_theme_title">Vzhled</string>

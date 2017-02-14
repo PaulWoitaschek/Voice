@@ -67,16 +67,11 @@
     <string name="action_settings">Inställningar</string>
     <string name="pref_resume_on_replug">Fortsätt uppspelning</string>
     <string name="pref_resume_on_replug_hint">Om du pausar genom att dra ur dina hörlurar kommer uppspelningen sättas igång igen när du återansluter dem.</string>
-    <plurals name="minutes">
-        <item quantity="one">%d minut</item>
-        <item quantity="other">%d minuter</item>
-    </plurals>
     <plurals name="seconds">
         <item quantity="one">%d sekund</item>
         <item quantity="other">%d sekunder</item>
     </plurals>
     <string name="pref_seek_time">Hoppa över</string>
-    <string name="pref_sleep_time">Insomningstid</string>
     <string name="pref_root_folder_title">Ljudbokskatalog</string>
     <string name="pref_root_folder_summary">Valda ljudbokskataloger.</string>
     <string name="pref_theme_title">Tema</string>

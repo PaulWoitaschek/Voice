@@ -75,14 +75,10 @@
     <string name="action_settings">設定</string>
     <string name="pref_resume_on_replug">再生を再開</string>
     <string name="pref_resume_on_replug_hint">接続したヘッドセットを取り外して一時停止した場合、再接続した場合に再開します。</string>
-    <plurals name="minutes">
-        <item quantity="other">%d 分</item>
-    </plurals>
     <plurals name="seconds">
         <item quantity="other">%d 秒</item>
     </plurals>
     <string name="pref_seek_time">スキップ量</string>
-    <string name="pref_sleep_time">スリープ時間</string>
     <string name="pref_root_folder_title">オーディオブック フォルダー</string>
     <string name="pref_root_folder_summary">選択したオーディオブック フォルダー。</string>
     <string name="pref_theme_title">テーマ</string>

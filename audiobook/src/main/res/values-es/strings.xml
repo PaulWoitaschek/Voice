@@ -73,16 +73,11 @@
     <string name="action_settings">Preferencias</string>
     <string name="pref_resume_on_replug">Reanudar</string>
     <string name="pref_resume_on_replug_hint">Si pausaste al desconectar tus audífonos, la reproducción continuará cuando los vuelvas a conectar.</string>
-    <plurals name="minutes">
-        <item quantity="one">%d minuto</item>
-        <item quantity="other">%d minutos</item>
-    </plurals>
     <plurals name="seconds">
         <item quantity="one">%d segundo</item>
         <item quantity="other">%d segundos</item>
     </plurals>
     <string name="pref_seek_time">Omitir cantidad</string>
-    <string name="pref_sleep_time">Hora del temporizador</string>
     <string name="pref_root_folder_title">Directorio de audiolibros</string>
     <string name="pref_root_folder_summary">Los directorios de audiolibros seleccionados.</string>
     <string name="pref_theme_title">Tema</string>
