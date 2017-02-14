@@ -3,12 +3,14 @@ package de.ph1b.audiobook.features.bookPlaying
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
+import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatDialogFragment
 import android.support.v7.widget.SwitchCompat
 import android.text.format.DateUtils
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.TextView
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
@@ -137,6 +139,9 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
       setOnShowListener {
         val parentView = layout.parent as View
         parentView.background = null
+        val coordinator = this@apply.findViewById(R.id.design_bottom_sheet) as FrameLayout
+        val behavior = BottomSheetBehavior.from(coordinator)
+        behavior.peekHeight = time.bottom
       }
     }
   }
