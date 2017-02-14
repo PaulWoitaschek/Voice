@@ -96,12 +96,11 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
   private fun prepare() {
     bookSubject.value?.let {
       try {
-        if (state != State.IDLE) player.reset()
-
+        player.reset()
         player.prepare(Uri.fromFile(it.currentChapter().file))
         player.seekTo(it.time)
         player.playbackSpeed = it.playbackSpeed
-        state = State.PAUSED
+        state = State.PREPARED
       } catch (ex: IOException) {
         e(ex) { "Error when preparing the player." }
         state = State.STOPPED
@@ -112,6 +111,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
 
   /** Plays the prepared file. */
   fun play() {
+    v { "play called in state $state" }
     when (state) {
       State.PLAYBACK_COMPLETED -> {
         player.seekTo(0)
@@ -119,7 +119,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
         playStateManager.playState = PlayState.PLAYING
         state = State.STARTED
       }
-      State.PAUSED -> {
+      State.PREPARED, State.PAUSED -> {
         player.start()
         playStateManager.playState = PlayState.PLAYING
         state = State.STARTED
@@ -161,6 +161,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
 
   /** If current time is > 2000ms, seek to 0. Else play previous chapter if there is one. */
   fun previous(toNullOfNewTrack: Boolean) {
+    i { "previous with toNullOfNewTrack=$toNullOfNewTrack called in state $state" }
     bookSubject.value?.let {
       if (state == State.IDLE || state == State.STOPPED) {
         prepare()
@@ -169,6 +170,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
 
       val previousChapter = it.previousChapter()
       if (player.currentPosition > 2000 || previousChapter == null) {
+        i { "seekTo beginning" }
         player.seekTo(0)
         val copy = it.copy(time = 0)
         bookSubject.onNext(copy)
@@ -248,6 +250,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
       v { "changeFile=$changeFile" }
       if (changeFile) {
         val wasPlaying = state == State.STARTED
+        v { "wasPlaying=$wasPlaying" }
 
         val copy = it.copy(currentFile = file, time = time)
         bookSubject.onNext(copy)
