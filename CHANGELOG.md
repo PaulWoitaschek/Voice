@@ -1,3 +1,7 @@
+# 3.0
+* Old player with speed for everyone back
+* New sleep layout as bottom sheet with custom keypad
+
 # 2.9.3.7
 * Removed tracking
 * Fixes
