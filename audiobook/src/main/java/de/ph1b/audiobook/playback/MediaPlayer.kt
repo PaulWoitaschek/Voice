@@ -1,11 +1,10 @@
 package de.ph1b.audiobook.playback
 
-import android.media.AudioManager
-import android.net.Uri
 import android.os.PowerManager
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
+import de.ph1b.audiobook.playback.player.Player
 import e
 import i
 import io.reactivex.Observable
@@ -18,12 +17,11 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
-import de.paul_woitaschek.mediaplayer.MediaPlayer as InternalPlayer
 
 @Singleton
 class MediaPlayer
 @Inject
-constructor(private val player: InternalPlayer, private val playStateManager: PlayStateManager, private val prefs: PrefsManager) {
+constructor(private val player: Player, private val playStateManager: PlayStateManager, private val prefs: PrefsManager) {
 
   private var bookSubject = BehaviorSubject.create<Book>()
   private var stateSubject = BehaviorSubject.createDefault(State.IDLE)
@@ -40,7 +38,6 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
   fun onError(): Observable<Unit> = errorSubject.hide()
 
   init {
-    player.setAudioStreamType(AudioManager.STREAM_MUSIC)
     player.setWakeMode(PowerManager.PARTIAL_WAKE_LOCK)
     player.onCompletion {
       // After the current song has ended, prepare the next one if there is one. Else stop the
@@ -97,7 +94,7 @@ constructor(private val player: InternalPlayer, private val playStateManager: Pl
     bookSubject.value?.let {
       try {
         player.reset()
-        player.prepare(Uri.fromFile(it.currentChapter().file))
+        player.prepare(it.currentChapter().file)
         player.seekTo(it.time)
         player.playbackSpeed = it.playbackSpeed
         state = State.PREPARED

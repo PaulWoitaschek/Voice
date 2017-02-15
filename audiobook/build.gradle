@@ -7,6 +7,7 @@ android {
 
     // dynamically pass 21 to the compiler for build speedup without losing lint warnings.
     int minSdk = project.hasProperty('minSdk') ? minSdk.toInteger() : 16
+    minSdk = 16
 
     compileSdkVersion 25
     buildToolsVersion '25.0.2'
@@ -78,16 +79,13 @@ dependencies {
     testCompile "org.assertj:assertj-core:1.7.1"
 
     // rx extensions
-    compile "io.reactivex.rxjava2:rxjava:2.0.5"
+    compile "io.reactivex.rxjava2:rxjava:2.0.6"
     compile "io.reactivex.rxjava2:rxandroid:2.0.1"
-    compile 'com.github.akarnokd:rxjava2-interop:0.9.0'
+    compile 'com.github.akarnokd:rxjava2-interop:0.9.1'
     compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.2'
 
     // kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-
-    // player
-    compile 'com.github.PaulWoitaschek:AndroidPlayer:0.3.4'
 
     // logs
     compile 'com.github.PaulWoitaschek:Slimber:1.0.5'
