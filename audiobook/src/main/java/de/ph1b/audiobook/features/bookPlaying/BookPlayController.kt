@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.features.bookPlaying
 
-import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.*
@@ -262,9 +261,6 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     inflater.inflate(R.menu.book_play, menu)
-
-    val speedItem = menu.findItem(R.id.action_time_lapse)
-    speedItem.isVisible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
 
     // sets the correct sleep timer icon
     val sleepTimerItem = menu.findItem(R.id.action_sleep)
