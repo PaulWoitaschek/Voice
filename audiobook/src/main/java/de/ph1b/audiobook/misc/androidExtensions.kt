@@ -15,7 +15,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewTreeObserver
-import com.afollestad.materialdialogs.MaterialDialog
 import com.bluelinelabs.conductor.Controller
 import com.f2prateek.rx.preferences.Preference
 import java.io.File
@@ -34,11 +33,6 @@ var View.supportTransitionName: String?
   set(value) = ViewCompat.setTransitionName(this, value)
 
 fun View.layoutInflater() = context.layoutInflater()
-
-fun MaterialDialog.Builder.positiveClicked(listener: () -> Unit): MaterialDialog.Builder {
-  onPositive { dialog, which -> listener() }
-  return this
-}
 
 /** same as get() but force cast to non null **/
 fun <T> Preference<T>.value() = get()!!
