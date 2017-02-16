@@ -84,13 +84,13 @@ import javax.inject.Singleton
 
   /** the saved single book files the User chose in [de.ph1b.audiobook.features.folderChooser.FolderChooserView] */
   private val singleBookFiles: List<File>
-    get() = prefs.singleBookFolders.value()
+    get() = prefs.singleBookFolders.value
       .map(::File)
       .sortedWith(NaturalOrderComparator.fileComparator)
 
   // Gets the saved collection book files the User chose in [FolderChooserView]
   private val collectionBookFiles: List<File>
-    get() = prefs.collectionFolders.value()
+    get() = prefs.collectionFolders.value
       .map(::File)
       .flatMap { it.listFilesSafely(FileRecognition.folderAndMusicFilter) }
       .sortedWith(NaturalOrderComparator.fileComparator)

@@ -27,7 +27,7 @@ class AutoRewindDialogFragment : DialogFragment() {
     val view = context.layoutInflater().inflate(R.layout.dialog_amount_chooser, null)
     val rewindText: TextView = view.find(R.id.textView)
 
-    val oldRewindAmount = prefs.autoRewindAmount.value()
+    val oldRewindAmount = prefs.autoRewindAmount.value
     val seekBar: SeekBar = view.find(R.id.seekBar)
     seekBar.max = (MAX - MIN) * FACTOR
     seekBar.progress = (oldRewindAmount - MIN) * FACTOR
@@ -44,7 +44,7 @@ class AutoRewindDialogFragment : DialogFragment() {
       .negativeText(R.string.dialog_cancel)
       .onPositive { materialDialog, dialogAction ->
         val newRewindAmount = seekBar.progress / FACTOR + MIN
-        prefs.autoRewindAmount.set(newRewindAmount)
+        prefs.autoRewindAmount.value = newRewindAmount
       }
       .build()
   }

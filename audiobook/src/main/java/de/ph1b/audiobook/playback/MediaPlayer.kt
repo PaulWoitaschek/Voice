@@ -2,6 +2,7 @@ package de.ph1b.audiobook.playback
 
 import android.os.PowerManager
 import de.ph1b.audiobook.Book
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.player.Player
@@ -30,9 +31,9 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
     get() = stateSubject.value
 
   private val seekTime: Int
-    get() = prefs.seekTime.get()!!
+    get() = prefs.seekTime.value
   private val autoRewindAmount: Int
-    get() = prefs.autoRewindAmount.get()!!
+    get() = prefs.autoRewindAmount.value
 
   private val errorSubject = PublishSubject.create<Unit>()
   fun onError(): Observable<Unit> = errorSubject.hide()

@@ -74,7 +74,7 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
   override fun onStart() {
     super.onStart()
 
-    val anyFolderSet = prefs.collectionFolders.value().size + prefs.singleBookFolders.value().size > 0
+    val anyFolderSet = prefs.collectionFolders.value.size + prefs.singleBookFolders.value.size > 0
     if (anyFolderSet) {
       permissionHelper.storagePermission()
     }

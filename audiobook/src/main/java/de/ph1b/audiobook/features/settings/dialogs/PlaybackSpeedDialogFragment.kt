@@ -41,7 +41,7 @@ class PlaybackSpeedDialogFragment : DialogFragment() {
     val textView: TextView = view.find(R.id.textView)
 
     // setting current speed
-    val book = repo.bookById(prefs.currentBookId.value()) ?: throw AssertionError("Cannot instantiate $TAG without a current book")
+    val book = repo.bookById(prefs.currentBookId.value) ?: throw AssertionError("Cannot instantiate $TAG without a current book")
     val speed = book.playbackSpeed
     seekBar.max = ((MAX - MIN) * FACTOR).toInt()
     seekBar.progress = ((speed - MIN) * FACTOR).toInt()

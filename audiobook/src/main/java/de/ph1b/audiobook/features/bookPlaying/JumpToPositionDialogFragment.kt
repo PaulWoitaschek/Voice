@@ -31,7 +31,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
     val numberMinute = view.findViewById(R.id.numberMinute) as NumberPicker
 
     // init
-    val book = repo.bookById(prefs.currentBookId.value())!!
+    val book = repo.bookById(prefs.currentBookId.value)!!
     val duration = book.currentChapter().duration
     val position = book.time
     val biggestHour = TimeUnit.MILLISECONDS.toHours(duration.toLong()).toInt()

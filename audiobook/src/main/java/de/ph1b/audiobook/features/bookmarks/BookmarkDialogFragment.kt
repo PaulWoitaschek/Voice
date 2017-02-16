@@ -18,6 +18,7 @@ import de.ph1b.audiobook.Bookmark
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.find
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.BookmarkProvider
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -79,7 +80,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
   override fun onBookmarkClicked(bookmark: Bookmark) {
     val wasPlaying = playStateManager.playState == PlayStateManager.PlayState.PLAYING
 
-    prefs.currentBookId.set(bookId())
+    prefs.currentBookId.value = bookId()
     playerController.changePosition(bookmark.time, bookmark.mediaFile)
 
     if (wasPlaying) {

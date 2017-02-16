@@ -74,7 +74,7 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
     time = layout.find(R.id.time)
 
     // restore or get fresh
-    selectedMinutes = savedInstanceState?.getInt(SI_MINUTES) ?: prefs.sleepTime.get()!!
+    selectedMinutes = savedInstanceState?.getInt(SI_MINUTES) ?: prefs.sleepTime.value
     updateTimeState()
 
     // find views and prepare clicks
@@ -107,25 +107,25 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
     fab.setOnClickListener {
       // should be hidden if
       check(selectedMinutes > 0) { "fab should be hidden when time is invalid" }
-      prefs.sleepTime.set(selectedMinutes)
+      prefs.sleepTime.value = selectedMinutes
 
-      prefs.bookmarkOnSleepTimer.set(bookmarkSwitch.isChecked)
-      if (prefs.bookmarkOnSleepTimer.value()) {
+      prefs.bookmarkOnSleepTimer.value = bookmarkSwitch.isChecked
+      if (prefs.bookmarkOnSleepTimer.value) {
         val date = DateUtils.formatDateTime(context, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_NUMERIC_DATE)
         bookmarkProvider.addBookmarkAtBookPosition(book, date + ": " + getString(R.string.action_sleep))
       }
 
-      prefs.shakeToReset.set(shakeToResetSwitch.isChecked)
+      prefs.shakeToReset.value = shakeToResetSwitch.isChecked
 
       sandMan.setActive(true)
       dismiss()
     }
 
     // setup bookmark toggle
-    bookmarkSwitch.isChecked = prefs.bookmarkOnSleepTimer.value()
+    bookmarkSwitch.isChecked = prefs.bookmarkOnSleepTimer.value
 
     // setup shake to reset setting
-    shakeToResetSwitch.isChecked = prefs.shakeToReset.value()
+    shakeToResetSwitch.isChecked = prefs.shakeToReset.value
     val shakeSupported = shakeDetector.shakeSupported()
     if (!shakeSupported) {
       shakeToResetSwitch.visible = false

@@ -88,7 +88,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
           val type = bookUriConverter.match(uri)
           if (type == BookUriConverter.BOOK_ID) {
             val id = bookUriConverter.extractBook(uri)
-            prefs.currentBookId.set(id)
+            prefs.currentBookId.value = id
             onPlay()
           } else {
             e { "Invalid mediaId $mediaId" }
@@ -103,7 +103,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
             }
             i { "found a match ${match?.name}" }
             if (match != null) {
-              prefs.currentBookId.set(match.id)
+              prefs.currentBookId.value = match.id
               player.play()
             }
           }
@@ -181,7 +181,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
       // notify player about changes in the current book
       add(repo.updateObservable()
-        .filter { it.id == prefs.currentBookId.value() }
+        .filter { it.id == prefs.currentBookId.value }
         .subscribe {
           player.init(it)
           changeNotifier.notify(ChangeNotifier.Type.METADATA, it)
@@ -234,7 +234,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
         .subscribe { headsetState ->
           if (headsetState == HeadsetPlugReceiver.HeadsetState.PLUGGED) {
             if (playStateManager.pauseReason == PauseReason.BECAUSE_HEADSET) {
-              if (prefs.resumeOnReplug.value()) {
+              if (prefs.resumeOnReplug.value) {
                 player.play()
               }
             }
@@ -262,7 +262,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
           }
           AudioFocus.LOSS_TRANSIENT_CAN_DUCK -> {
             if (playStateManager.playState == PlayState.PLAYING) {
-              if (prefs.pauseOnTempFocusLoss.value()) {
+              if (prefs.pauseOnTempFocusLoss.value) {
                 d { "Paused by audio-focus loss transient." }
                 // Pause is temporary, don't rewind
                 player.pause(false)

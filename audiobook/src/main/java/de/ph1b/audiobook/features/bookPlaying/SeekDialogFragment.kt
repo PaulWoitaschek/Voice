@@ -28,7 +28,7 @@ class SeekDialogFragment : DialogFragment() {
     val textView: TextView = view.find(R.id.textView)
 
     // init
-    val oldSeekTime = prefs.seekTime.value()
+    val oldSeekTime = prefs.seekTime.value
     seekBar.max = (MAX - MIN) * FACTOR
     seekBar.onProgressChanged(initialNotification = true) {
       val value = it / FACTOR + MIN
@@ -43,7 +43,7 @@ class SeekDialogFragment : DialogFragment() {
       .negativeText(R.string.dialog_cancel)
       .onPositive { materialDialog, dialogAction ->
         val newSeekTime = seekBar.progress / FACTOR + MIN
-        prefs.seekTime.set(newSeekTime)
+        prefs.seekTime.value = newSeekTime
       }.build()
   }
 

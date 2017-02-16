@@ -158,7 +158,7 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
 
       bindCover(book)
 
-      indicatorVisible = book.id == prefs.currentBookId.value()
+      indicatorVisible = book.id == prefs.currentBookId.value
       currentPlayingIndicator.visible = indicatorVisible
 
       itemView.setOnClickListener { bookClicked(getItem(adapterPosition), ClickType.REGULAR) }

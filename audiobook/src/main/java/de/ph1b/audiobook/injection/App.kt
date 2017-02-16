@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatDelegate
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.features.BookAdder
 import de.ph1b.audiobook.features.firebase.FirebaseCrashReportingTree
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlaybackService
 import timber.log.Timber
@@ -28,7 +29,7 @@ class App : Application() {
     bookAdder.scanForFiles(true)
     startService(Intent(this, PlaybackService::class.java))
 
-    AppCompatDelegate.setDefaultNightMode(prefsManager.theme.get()!!.nightMode)
+    AppCompatDelegate.setDefaultNightMode(prefsManager.theme.value.nightMode)
   }
 
   private fun newComponent() = DaggerApplicationComponent.builder()

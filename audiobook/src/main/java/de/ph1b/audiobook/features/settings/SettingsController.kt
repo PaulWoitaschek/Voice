@@ -17,6 +17,7 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.asV2Observable
 import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.setupActionbar
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.VerticalChangeHandler
 import javax.inject.Inject
@@ -60,7 +61,7 @@ class SettingsController : BaseController() {
 
     // resume on playback
     val resumePlaybackSwitch = setupSwitchSetting(R.id.resumePlayback, R.string.pref_resume_on_replug, R.string.pref_resume_on_replug_hint) {
-      prefs.resumeOnReplug.set(it)
+      prefs.resumeOnReplug.value = it
     }
     prefs.resumeOnReplug.asV2Observable()
       .bindToLifeCycle()
@@ -68,7 +69,7 @@ class SettingsController : BaseController() {
 
     // pause on interruption
     val pauseOnInterruptionSwitch = setupSwitchSetting(R.id.pauseOnInterruption, R.string.pref_pause_on_can_duck_title, R.string.pref_pause_on_can_duck_summary) {
-      prefs.pauseOnTempFocusLoss.set(it)
+      prefs.pauseOnTempFocusLoss.value = it
     }
     prefs.pauseOnTempFocusLoss.asV2Observable()
       .bindToLifeCycle()

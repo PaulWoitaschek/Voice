@@ -74,7 +74,7 @@ import javax.inject.Singleton
 
     if (enable) {
       i { "Starting sleepTimer" }
-      val minutes = prefsManager.sleepTime.value()
+      val minutes = prefsManager.sleepTime.value
       internalSleepSand.onNext(TimeUnit.MINUTES.toMillis(minutes.toLong()))
     } else {
       i { "Cancelling sleepTimer" }
@@ -87,7 +87,7 @@ import javax.inject.Singleton
       val shouldSubscribe = shakeDisposable?.isDisposed ?: true
       if (shouldSubscribe) {
         // setup shake detection if requested
-        if (prefsManager.shakeToReset.value()) {
+        if (prefsManager.shakeToReset.value) {
           shakeDisposable = shakeObservable.subscribe {
             if (internalSleepSand.value == 0L) {
               d { "detected shake while sleepSand==0. Resume playback" }

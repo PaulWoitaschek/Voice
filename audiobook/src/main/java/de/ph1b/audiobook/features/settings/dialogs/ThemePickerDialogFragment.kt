@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatDelegate
 import com.afollestad.materialdialogs.MaterialDialog
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.ThemeUtil
 import javax.inject.Inject
@@ -25,7 +26,7 @@ class ThemePickerDialogFragment : DialogFragment() {
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     App.component.inject(this)
 
-    val oldTheme = prefsManager.theme.get()!!
+    val oldTheme = prefsManager.theme.value
     val existingThemes = ThemeUtil.Theme.values()
     val names = existingThemes.map { getString(it.nameId) }
 
@@ -33,7 +34,7 @@ class ThemePickerDialogFragment : DialogFragment() {
       .items(*names.toTypedArray())
       .itemsCallbackSingleChoice(existingThemes.indexOf(oldTheme)) { materialDialog, view, i, charSequence ->
         val newTheme = existingThemes[i]
-        prefsManager.theme.set(newTheme)
+        prefsManager.theme.value = newTheme
         AppCompatDelegate.setDefaultNightMode(newTheme.nightMode)
 
         // use post so the dialog can close correctly

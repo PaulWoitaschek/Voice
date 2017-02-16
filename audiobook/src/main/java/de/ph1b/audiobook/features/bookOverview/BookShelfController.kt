@@ -116,7 +116,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
 
     // sets the grid / list toggle icon
     val displayModeItem = menu.findItem(R.id.action_change_layout)
-    displayModeItem.setIcon(prefs.displayMode.value().inverted().icon)
+    displayModeItem.setIcon(prefs.displayMode.value.inverted().icon)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -129,12 +129,12 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
         true
       }
       R.id.action_current -> {
-        invokeBookSelectionCallback(prefs.currentBookId.value())
+        invokeBookSelectionCallback(prefs.currentBookId.value)
         true
       }
       R.id.action_change_layout -> {
-        val newDisplayMode = prefs.displayMode.value().inverted()
-        prefs.displayMode.set(newDisplayMode)
+        val newDisplayMode = prefs.displayMode.value.inverted()
+        prefs.displayMode.value = newDisplayMode
         initRecyclerView()
         true
       }
@@ -173,7 +173,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
   }
 
   private fun initRecyclerView() {
-    val defaultDisplayMode = prefs.displayMode.value()
+    val defaultDisplayMode = prefs.displayMode.value
     if (defaultDisplayMode == DisplayMode.GRID) {
       recyclerView.removeItemDecoration(listDecoration)
       recyclerView.layoutManager = gridLayoutManager
@@ -186,7 +186,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
   }
 
   private fun invokeBookSelectionCallback(bookId: Long) {
-    prefs.currentBookId.set(bookId)
+    prefs.currentBookId.value = bookId
 
     val viewHolder = recyclerView.findViewHolderForItemId(bookId) as BookShelfAdapter.BaseViewHolder?
     val transaction = RouterTransaction.with(BookPlayController.newInstance(bookId))

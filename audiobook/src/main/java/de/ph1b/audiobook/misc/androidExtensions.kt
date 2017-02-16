@@ -34,8 +34,10 @@ var View.supportTransitionName: String?
 
 fun View.layoutInflater() = context.layoutInflater()
 
-/** same as get() but force cast to non null **/
-fun <T> Preference<T>.value() = get()!!
+/** enforce a non-null property */
+var <T> Preference<T>.value: T
+  get() = get()!!
+  set(value) = set(value!!)
 
 fun Context.dpToPx(dp: Int) = Math.round(TypedValue.applyDimension(
   TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), resources.displayMetrics))

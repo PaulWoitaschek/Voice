@@ -56,7 +56,7 @@ class WidgetUpdateService : Service() {
 
     // update widget if current book, current book id or playState have changed.
     disposables.add(Observable.merge(
-      repo.updateObservable().filter { it.id == prefs.currentBookId.value() },
+      repo.updateObservable().filter { it.id == prefs.currentBookId.value },
       playStateManager.playStateStream(),
       prefs.currentBookId.asV2Observable())
       .subscribe { updateWidget() }
@@ -75,7 +75,7 @@ class WidgetUpdateService : Service() {
   private fun updateWidget() {
     executor.execute {
       val appWidgetManager = AppWidgetManager.getInstance(this@WidgetUpdateService)
-      val book = repo.bookById(prefs.currentBookId.value())
+      val book = repo.bookById(prefs.currentBookId.value)
       val isPortrait = isPortrait
       val ids = appWidgetManager.getAppWidgetIds(ComponentName(
         this@WidgetUpdateService, BaseWidgetProvider::class.java))

@@ -113,18 +113,18 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
     when (view!!.getMode()) {
       FolderChooserActivity.OperationMode.COLLECTION_BOOK -> {
         if (canAddNewFolder(chosen.absolutePath)) {
-          val collections = HashSet(prefsManager.collectionFolders.value())
+          val collections = HashSet(prefsManager.collectionFolders.value)
           collections.add(chosen.absolutePath)
-          prefsManager.collectionFolders.set(collections)
+          prefsManager.collectionFolders.value = collections
         }
         view!!.finish()
         v { "chosenCollection = $chosen" }
       }
       FolderChooserActivity.OperationMode.SINGLE_BOOK -> {
         if (canAddNewFolder(chosen.absolutePath)) {
-          val singleBooks = HashSet(prefsManager.singleBookFolders.value())
+          val singleBooks = HashSet(prefsManager.singleBookFolders.value)
           singleBooks.add(chosen.absolutePath)
-          prefsManager.singleBookFolders.set(singleBooks)
+          prefsManager.singleBookFolders.value = singleBooks
         }
         view!!.finish()
         v { "chosenSingleBook = $chosen" }
@@ -140,8 +140,8 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
    */
   private fun canAddNewFolder(newFile: String): Boolean {
     v { "canAddNewFolder called with $newFile" }
-    val folders = HashSet(prefsManager.collectionFolders.value())
-    folders.addAll(prefsManager.singleBookFolders.value())
+    val folders = HashSet(prefsManager.collectionFolders.value)
+    folders.addAll(prefsManager.singleBookFolders.value)
 
     // if this is the first folder adding is always allowed
     if (folders.isEmpty()) {

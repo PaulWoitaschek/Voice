@@ -35,7 +35,7 @@ import javax.inject.Inject
     val match = bookUriConverter.match(uri)
 
     if (match == BookUriConverter.ROOT) {
-      val current = repo.bookById(prefs.currentBookId.value())?.let {
+      val current = repo.bookById(prefs.currentBookId.value)?.let {
         MediaDescriptionCompat.Builder()
           .setTitle("${context.getString(R.string.current_book)}: ${it.name}")
           .setMediaId(bookUriConverter.book(it.id).toString())

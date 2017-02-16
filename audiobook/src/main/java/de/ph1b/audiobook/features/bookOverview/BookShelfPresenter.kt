@@ -34,7 +34,7 @@ constructor(private val repo: BookRepository,
   override fun onBind(view: BookShelfController, disposables: CompositeDisposable) {
     i { "onBind Called for $view" }
 
-    val audioFoldersEmpty = prefsManager.collectionFolders.value().isEmpty() && prefsManager.singleBookFolders.value().isEmpty()
+    val audioFoldersEmpty = prefsManager.collectionFolders.value.isEmpty() && prefsManager.singleBookFolders.value.isEmpty()
     if (audioFoldersEmpty) view.showNoFolderWarning()
 
     // scan for files
