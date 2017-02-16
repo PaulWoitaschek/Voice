@@ -358,10 +358,14 @@ class Player @Inject constructor(private val context: Context) {
 
       initDevice(sampleRate, channelCount)
       extractor!!.selectTrack(trackNum)
-      codec = MediaCodec.createDecoderByType(mime)
-        .apply {
-          configure(oFormat, null, null, 0)
-        }
+      try {
+        codec = MediaCodec.createDecoderByType(mime)
+          .apply {
+            configure(oFormat, null, null, 0)
+          }
+      } catch (e: IllegalArgumentException) {
+        throw IOException("Error while creating decoder for type $mime", e)
+      }
     }
   }
 
