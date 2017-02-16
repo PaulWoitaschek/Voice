@@ -6,11 +6,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <android.support.constraint.Guideline
+        android:id="@+id/fabX"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="44dp"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/fabY"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="28dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <TextView
         android:id="@+id/time"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
         android:background="@color/primary"
         android:gravity="center"
         android:maxLines="1"
@@ -20,7 +35,7 @@
         android:textSize="28sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fabY"
         tools:text="64 Minuten"/>
 
     <View
@@ -210,7 +225,9 @@
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:src="@drawable/check"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="@id/fabY"
+        app:layout_constraintLeft_toLeftOf="@id/fabX"
+        app:layout_constraintRight_toRightOf="@id/fabX"
+        app:layout_constraintTop_toTopOf="@id/fabY"/>
 
 </android.support.constraint.ConstraintLayout>
