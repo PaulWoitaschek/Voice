@@ -179,6 +179,8 @@ class Player @Inject constructor(private val context: Context) {
     }
   }
 
+  private fun Sonic.availableBytes() = numChannels * samplesAvailable() * 2
+
   fun start() {
     errorInWrongState(validStatesForStart, "start")
 
@@ -342,7 +344,10 @@ class Player @Inject constructor(private val context: Context) {
       val trackNum = 0
       val oFormat = extractor!!.getTrackFormat(trackNum)
 
-      if (!oFormat.containsAllKeys(MediaFormat.KEY_SAMPLE_RATE, MediaFormat.KEY_CHANNEL_COUNT, MediaFormat.KEY_MIME, MediaFormat.KEY_DURATION)) {
+      val hasAllKeys = arrayOf(MediaFormat.KEY_SAMPLE_RATE, MediaFormat.KEY_CHANNEL_COUNT, MediaFormat.KEY_MIME, MediaFormat.KEY_DURATION).all {
+        oFormat.containsKey(it)
+      }
+      if (!hasAllKeys) {
         throw IOException("MediaFormat misses keys.")
       }
 
@@ -377,16 +382,25 @@ class Player @Inject constructor(private val context: Context) {
   @Throws(IOException::class)
   private fun initDevice(sampleRate: Int, numChannels: Int) {
     lock.withLock {
-      val format = findFormatFromChannels(numChannels)
-      val minSize = AudioTrack.getMinBufferSize(sampleRate, format,
-        AudioFormat.ENCODING_PCM_16BIT)
+      val format = when (numChannels) {
+        1 -> AudioFormat.CHANNEL_OUT_MONO
+        2 -> AudioFormat.CHANNEL_OUT_STEREO
+        3 -> AudioFormat.CHANNEL_OUT_STEREO or AudioFormat.CHANNEL_OUT_FRONT_CENTER
+        4 -> AudioFormat.CHANNEL_OUT_QUAD
+        5 -> AudioFormat.CHANNEL_OUT_QUAD or AudioFormat.CHANNEL_OUT_FRONT_CENTER
+        6 -> AudioFormat.CHANNEL_OUT_5POINT1
+        7 -> AudioFormat.CHANNEL_OUT_5POINT1 or AudioFormat.CHANNEL_OUT_BACK_CENTER
+        8 -> if (Build.VERSION.SDK_INT >= 23) {
+          AudioFormat.CHANNEL_OUT_7POINT1_SURROUND
+        } else -1
+        else -> -1 // Error
+      }
+      val minSize = AudioTrack.getMinBufferSize(sampleRate, format, AudioFormat.ENCODING_PCM_16BIT)
 
       if (minSize == AudioTrack.ERROR || minSize == AudioTrack.ERROR_BAD_VALUE) {
-        throw IOException("getMinBufferSize returned " + minSize)
+        throw IOException("getMinBufferSize returned $minSize")
       }
-      track = AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, format,
-        AudioFormat.ENCODING_PCM_16BIT, minSize * 4,
-        AudioTrack.MODE_STREAM)
+      track = AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, format, AudioFormat.ENCODING_PCM_16BIT, minSize * 4, AudioTrack.MODE_STREAM)
       sonic = Sonic(sampleRate, numChannels)
     }
   }
