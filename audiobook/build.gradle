@@ -93,7 +93,7 @@ dependencies {
     // permissions
     compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.1@aar'
 
-    releaseCompile "com.google.firebase:firebase-crash:10.0.1"
+    releaseCompile "com.google.firebase:firebase-crash:10.2.0"
 
     // conductor
     def conductorVer = "2.1.0"
