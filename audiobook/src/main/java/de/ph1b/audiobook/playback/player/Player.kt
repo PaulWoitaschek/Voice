@@ -342,7 +342,7 @@ class Player @Inject constructor(private val context: Context) {
       val trackNum = 0
       val oFormat = extractor!!.getTrackFormat(trackNum)
 
-      if (!oFormat.containsKeys(MediaFormat.KEY_SAMPLE_RATE, MediaFormat.KEY_CHANNEL_COUNT, MediaFormat.KEY_MIME, MediaFormat.KEY_DURATION)) {
+      if (!oFormat.containsAllKeys(MediaFormat.KEY_SAMPLE_RATE, MediaFormat.KEY_CHANNEL_COUNT, MediaFormat.KEY_MIME, MediaFormat.KEY_DURATION)) {
         throw IOException("MediaFormat misses keys.")
       }
 
