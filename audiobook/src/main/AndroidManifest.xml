@@ -12,7 +12,6 @@
     <application
         android:name=".injection.App"
         android:allowBackup="true"
-        android:backupAgent=".persistence.internals.CustomBackupAgent"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -31,11 +30,6 @@
             android:name="com.google.android.gms.car.notification.SmallIcon"
             android:resource="@drawable/ic_notification"
             tools:ignore="ManifestResource"/>
-
-        <!-- auto capabilities -->
-        <meta-data
-            android:name="com.google.android.backup.api_key"
-            android:value="AEdPqrEAAAAIjeSB6A5JNJpRSV5yPq22PvZtl95fWDzDIuk63w"/>
 
         <!-- auto theme -->
         <meta-data
