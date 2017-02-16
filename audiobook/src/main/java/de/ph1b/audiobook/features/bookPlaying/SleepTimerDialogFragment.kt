@@ -24,7 +24,6 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.Sandman
 import de.ph1b.audiobook.playback.ShakeDetector
 import de.ph1b.audiobook.uitools.visible
-import e
 import javax.inject.Inject
 
 /**
@@ -78,6 +77,7 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
     selectedMinutes = savedInstanceState?.getInt(SI_MINUTES) ?: prefs.sleepTime.get()!!
     updateTimeState()
 
+    // find views and prepare clicks
     layout.findViewById(R.id.one).setOnClickListener { appendNumber(1) }
     layout.findViewById(R.id.two).setOnClickListener { appendNumber(2) }
     layout.findViewById(R.id.three).setOnClickListener { appendNumber(3) }
@@ -88,17 +88,21 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
     layout.findViewById(R.id.eight).setOnClickListener { appendNumber(8) }
     layout.findViewById(R.id.nine).setOnClickListener { appendNumber(9) }
     layout.findViewById(R.id.zero).setOnClickListener { appendNumber(0) }
-    layout.findViewById(R.id.delete).setOnClickListener {
+    val delete = layout.findViewById(R.id.delete)
+    // upon delete remove the last number
+    delete.setOnClickListener {
       selectedMinutes /= 10
       updateTimeState()
     }
+    // upon long click remove all numbers
+    delete.setOnLongClickListener {
+      selectedMinutes = 0
+      updateTimeState()
+      true
+    }
 
     val bookId = arguments.getLong(NI_BOOK_ID)
-    val book = repo.bookById(bookId)
-    if (book == null) {
-      e { "no book" }
-      return super.onCreateDialog(savedInstanceState)
-    }
+    val book = repo.bookById(bookId) ?: return super.onCreateDialog(savedInstanceState)
 
     fab.setOnClickListener {
       // should be hidden if
