@@ -11,7 +11,7 @@ import java.util.*
  */
 class IntelliJStringComparator : Comparator<String> {
 
-  private fun isDecimalDigit(c: Char) = c >= '0' && c <= '9'
+  private fun isDecimalDigit(c: Char) = c in '0'..'9'
 
   override fun compare(lhs: String?, rhs: String?) = naturalCompare(lhs, rhs, false)
 

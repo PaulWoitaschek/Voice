@@ -58,17 +58,9 @@ import javax.inject.Singleton
   /** Find the embedded cover of a chapter */
   @Throws(InterruptedException::class)
   private fun getEmbeddedCover(chapters: List<Chapter>): Bitmap? {
-    var tries = 0
-    val maxTries = 5
-    for ((file) in chapters) {
-      if (++tries < maxTries) {
-        val cover = imageHelper.getEmbeddedCover(file)
-        if (cover != null) {
-          return cover
-        }
-      } else {
-        return null
-      }
+    chapters.forEachIndexed { index, (file) ->
+      val cover = imageHelper.getEmbeddedCover(file)
+      if (cover != null || index == 5) return cover
     }
     return null
   }

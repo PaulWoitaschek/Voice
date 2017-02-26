@@ -23,7 +23,7 @@ fun NumberPicker.theme() {
     while (i < count) {
       val child = getChildAt(i)
       try {
-        val selectorWheelPaintField = javaClass.getDeclaredField("mSelectorWheelPaint")
+        val selectorWheelPaintField = this::class.java.getDeclaredField("mSelectorWheelPaint")
         selectorWheelPaintField.isAccessible = true
         (selectorWheelPaintField.get(this) as Paint).color = colorAccent
         (child as EditText?)?.setTextColor(colorAccent)

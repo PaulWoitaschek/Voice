@@ -307,9 +307,9 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
     when (intent?.action) {
       Intent.ACTION_MEDIA_BUTTON -> MediaButtonReceiver.handleIntent(mediaSession, intent)
-      PlayerController.ACTION_SPEED -> player.setPlaybackSpeed(intent!!.getFloatExtra(PlayerController.EXTRA_SPEED, 1F))
+      PlayerController.ACTION_SPEED -> player.setPlaybackSpeed(intent.getFloatExtra(PlayerController.EXTRA_SPEED, 1F))
       PlayerController.ACTION_CHANGE -> {
-        val time = intent!!.getIntExtra(PlayerController.CHANGE_TIME, 0)
+        val time = intent.getIntExtra(PlayerController.CHANGE_TIME, 0)
         val file = File(intent.getStringExtra(PlayerController.CHANGE_FILE))
         player.changePosition(time, file)
       }
