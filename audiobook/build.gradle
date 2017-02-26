@@ -50,56 +50,42 @@ android {
 }
 
 dependencies {
-    // support library
-    def supportVersion = "25.1.1"
-    compile "com.android.support:appcompat-v7:$supportVersion"
-    compile "com.android.support:recyclerview-v7:$supportVersion"
-    compile "com.android.support:design:$supportVersion"
-    compile "com.android.support:transition:$supportVersion"
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta5'
+    compile libraries.supportAppCompat
+    compile libraries.supportRecyclerView
+    compile libraries.supportDesign
+    compile libraries.supportTransitions
+    compile libraries.supportConstraintLayout
 
-    // image loading
-    compile "com.squareup.picasso:picasso:2.5.2"
+    compile libraries.picasso
 
-    // material styled dialogs
-    compile 'com.afollestad.material-dialogs:core:0.9.3.0'
+    compile libraries.materialDialogs
 
-    // fab
-    compile "com.getbase:floatingactionbutton:1.10.1"
+    compile libraries.floatingActionButton
 
-    // dependency injection
-    def daggerVersion = "2.9"
-    compile "com.google.dagger:dagger:$daggerVersion"
-    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
-    provided "javax.annotation:jsr250-api:1.0"
+    compile libraries.dagger
+    kapt libraries.daggerCompiler
+    provided libraries.jsr250
 
-    //testing
-    testCompile "junit:junit:4.12"
-    testCompile "org.robolectric:robolectric:3.2.2"
-    testCompile "org.assertj:assertj-core:1.7.1"
+    testCompile libraries.junit
+    testCompile libraries.robolectric
+    testCompile libraries.assertJ
 
-    // rx extensions
-    compile "io.reactivex.rxjava2:rxjava:2.0.6"
-    compile "io.reactivex.rxjava2:rxandroid:2.0.1"
-    compile 'com.github.akarnokd:rxjava2-interop:0.9.1'
-    compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.2'
+    compile libraries.rxJava
+    compile libraries.rxAndroid
+    compile libraries.rxInterop
+    compile libraries.rxPreferences
 
-    // kotlin
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    compile libraries.kotlinStdLib
 
-    // logs
-    compile 'com.github.PaulWoitaschek:Slimber:1.0.5'
+    compile libraries.slimber
 
-    // permissions
-    compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.1@aar'
+    compile libraries.rxPermissions
 
-    releaseCompile "com.google.firebase:firebase-crash:10.2.0"
+    releaseCompile libraries.firebaseCrash
 
-    // conductor
-    def conductorVer = "2.1.0"
-    compile "com.bluelinelabs:conductor:$conductorVer"
-    compile "com.bluelinelabs:conductor-support:$conductorVer"
-    compile "com.bluelinelabs:conductor-rxlifecycle2:$conductorVer"
+    compile libraries.conductor
+    compile libraries.conductorSupport
+    compile libraries.conductorLifecycle
 }
 
 apply plugin: 'com.google.gms.google-services'
