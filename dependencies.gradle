@@ -13,7 +13,7 @@ ext.versions = [
         "rxAndroid"           : "2.0.1",
         "rxJavaInterop"       : "0.9.2",
         "conductor"           : "2.1.0",
-        "kotlin"              : "1.0.6",
+        "kotlin"              : "1.1.0-rc-91",
         "slimber"             : "1.0.5",
         "rxPreferences"       : "1.0.2",
         "rxPermissions"       : "0.9.2@aar",
