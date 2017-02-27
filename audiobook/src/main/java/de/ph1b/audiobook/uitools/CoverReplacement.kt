@@ -9,24 +9,18 @@ import android.graphics.Paint.Align
 import android.graphics.drawable.Drawable
 import android.text.TextPaint
 import de.ph1b.audiobook.R
-import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.color
-import de.ph1b.audiobook.persistence.PrefsManager
-import javax.inject.Inject
 
 
 class CoverReplacement(private val text: String, c: Context) : Drawable() {
+
   private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
     color = Color.WHITE
     textAlign = Align.CENTER
   }
   private val backgroundColor = c.color(R.color.primaryDark)
 
-  @Inject lateinit var prefsManager: PrefsManager
-
   init {
-    App.component.inject(this)
-
     check(text.isNotEmpty())
   }
 
@@ -49,7 +43,5 @@ class CoverReplacement(private val text: String, c: Context) : Drawable() {
     textPaint.colorFilter = cf
   }
 
-  override fun getOpacity(): Int {
-    return textPaint.alpha
-  }
+  override fun getOpacity() = textPaint.alpha
 }

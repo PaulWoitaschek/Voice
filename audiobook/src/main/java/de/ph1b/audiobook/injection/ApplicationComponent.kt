@@ -24,7 +24,6 @@ import de.ph1b.audiobook.playback.MediaPlayer
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlaybackService
 import de.ph1b.audiobook.playback.utils.ChangeNotifier
-import de.ph1b.audiobook.uitools.CoverReplacement
 import javax.inject.Singleton
 
 /**
@@ -52,7 +51,6 @@ interface ApplicationComponent {
   fun inject(target: BookPlayController)
   fun inject(target: BookShelfController)
   fun inject(target: ChangeNotifier)
-  fun inject(target: CoverReplacement)
   fun inject(target: SettingsController)
   fun inject(target: EditBookTitleDialogFragment)
   fun inject(target: EditBookBottomSheet)
