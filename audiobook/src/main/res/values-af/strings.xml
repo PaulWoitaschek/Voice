@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="mal_file_message">Die volgende lêer is beskadig:</string>
-    <string name="mal_file_title">Defektiewe lêers</string>
     <string name="content_current_book">Dit is die huidige boek</string>
     <string name="current_book">Huidige boek</string>
     <string name="change_layout_type">Verander uitleg</string>

@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="mal_file_message">Возможно данный файл поврежден:</string>
-    <string name="mal_file_title">Поврежденный файл</string>
     <string name="content_current_book">Книга, которую вы сейчас слушаете</string>
     <string name="current_book">Текущая книга</string>
     <string name="change_layout_type">Изменить макет</string>

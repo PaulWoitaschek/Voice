@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="mal_file_message">Následující soubor může být poškozen:</string>
-    <string name="mal_file_title">Najít soubor</string>
     <string name="content_current_book">Toto je aktuální kniha</string>
     <string name="current_book">Aktuální kniha</string>
     <string name="change_layout_type">Změnit vzhled</string>
@@ -23,7 +21,7 @@
     <string name="pause">Pozastavit</string>
     <string name="equalizer">Ekvalizér</string>
     <!--NoExternalStorage-->
-  <string name="no_external_storage">Externí úložiště není dostupné. Ověřte prosím, že je
+    <string name="no_external_storage">Externí úložiště není dostupné. Ověřte prosím, že je
         připojeno a není používáno vaším počítačem.</string>
     <string name="no_external_storage_action_bar_title">Externí úložiště</string>
     <!--Dialogs-->
@@ -77,7 +75,7 @@
     <!--Settings-->
     <string name="action_settings">Nastavení</string>
     <string name="pref_resume_on_replug">Pokračovat v přehrávání</string>
-  <string name="pref_resume_on_replug_hint">Pokud pozastavíte přehrávání vytažením sluchátek, při jejich
+    <string name="pref_resume_on_replug_hint">Pokud pozastavíte přehrávání vytažením sluchátek, při jejich
         připojení bude znovu spuštěno.</string>
     <plurals name="seconds">
         <item quantity="one">%d sekunda</item>

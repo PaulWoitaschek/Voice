@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="mal_file_message">Dit bestand is mogelijk beschadigd:</string>
-    <string name="mal_file_title">Beschadigd bestand</string>
     <string name="content_current_book">Dit is het huidige boek</string>
     <string name="current_book">Huidig boek</string>
     <string name="change_layout_type">Verander layout</string>

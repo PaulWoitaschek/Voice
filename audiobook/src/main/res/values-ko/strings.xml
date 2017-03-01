@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="mal_file_message">선택한 파일을 인식할 수 없습니다:</string>
-    <string name="mal_file_title"> 고장난 파일</string>
     <string name="content_current_book">재생 중인 책</string>
     <string name="current_book">재생 중인 책</string>
     <string name="change_layout_type">서재모양</string>

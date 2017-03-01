@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="mal_file_message">以下文件可能已经损坏：</string>
-    <string name="mal_file_title">损坏文件</string>
     <string name="content_current_book">这是当前书籍</string>
     <string name="current_book">当前书籍</string>
     <string name="change_layout_type">改变布局</string>

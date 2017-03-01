@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="mal_file_message">Följande fil kan vara korrupt:</string>
-    <string name="mal_file_title">Felaktig fil</string>
     <string name="content_current_book">Det här är den aktuella boken</string>
     <string name="current_book">Aktuell bok</string>
     <string name="change_layout_type">Ändra layout</string>

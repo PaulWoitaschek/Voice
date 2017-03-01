@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="mal_file_message">Le fichier suivant est probablement corrompu :</string>
-    <string name="mal_file_title">Fichier défectueux</string>
     <string name="content_current_book">Ceci est le livre en cours</string>
     <string name="current_book">Livre en cours</string>
     <string name="change_layout_type">Modifier la disposition</string>

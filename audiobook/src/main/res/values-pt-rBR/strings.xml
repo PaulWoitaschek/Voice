@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="mal_file_message">O seguinte arquivo pode estar corrompido:</string>
-    <string name="mal_file_title">Arquivo corrompido</string>
     <string name="content_current_book">Este é o livro atual</string>
     <string name="current_book">Livro atual</string>
     <string name="change_layout_type">Trocar layout</string>

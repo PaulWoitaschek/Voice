@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="mal_file_message">यह फ़ाइल ख़राब हो सकती है:</string>
-    <string name="mal_file_title">खराब फ़ाइल</string>
     <string name="content_current_book">यह वर्तमान किताब है</string>
     <string name="current_book">वर्तमान किताब</string>
     <string name="change_layout_type">लेआउट बदलें</string>

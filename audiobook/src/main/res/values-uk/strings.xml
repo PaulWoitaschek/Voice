@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="mal_file_message">Цей файл може бути зіпсований:</string>
-    <string name="mal_file_title">Зіпсований файл</string>
     <string name="content_current_book">Книга, яку ви прослуховуєте</string>
     <string name="current_book">Поточна книга</string>
     <string name="change_layout_type">Змінити відображення</string>

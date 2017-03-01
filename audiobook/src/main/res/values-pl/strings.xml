@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="mal_file_message">Poniższy plik może być uszkodzony</string>
-    <string name="mal_file_title">Uszkodzony plik</string>
     <string name="content_current_book">To jest aktualna książka</string>
     <string name="current_book">Aktualna książka</string>
     <string name="change_layout_type">Zmień układ</string>
@@ -13,6 +11,7 @@
     <plurals name="pauses_after">
         <item quantity="one">Zatrzymaj po %d minucie.</item>
         <item quantity="few">Zatrzymaj po %d minutach.</item>
+        <item quantity="many">Zatrzymaj po %d minutach.</item>
         <item quantity="other">Zatrzymaj po %d minutach.</item>
     </plurals>
     <string name="rewind">Przewiń</string>
@@ -80,6 +79,7 @@
     <plurals name="seconds">
         <item quantity="one">%d sekunda</item>
         <item quantity="few">%d sekundy</item>
+        <item quantity="many">%d sekund</item>
         <item quantity="other">%d sekund</item>
     </plurals>
     <string name="pref_seek_time">Przewiń o</string>
@@ -95,6 +95,7 @@
     <plurals name="pref_auto_rewind_summary">
         <item quantity="one">Automatycznie przewija o %d sekundę po ręcznej pauzie.</item>
         <item quantity="few">Automatycznie przewija o %d sekundy po ręcznej pauzie.</item>
+        <item quantity="many">Automatycznie przewija o %d sekund po ręcznej pauzie.</item>
         <item quantity="other">Automatycznie przewija o %d sekund po ręcznej pauzie.</item>
     </plurals>
     <string name="pref_support_title">Wsparcie</string>

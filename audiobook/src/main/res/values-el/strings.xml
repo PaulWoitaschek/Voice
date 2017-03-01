@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
-    <string name="mal_file_message">Το ακόλουθο αρχείο μπορεί να είναι κατεστραμμένο:</string>
-    <string name="mal_file_title">Αρχείο με ελαττώματα</string>
     <string name="content_current_book">Αυτό είναι το τρέχον βιβλίο</string>
     <string name="current_book">Τρέχον βιβλίο</string>
     <string name="change_layout_type">Αλλαγή διάταξης</string>
