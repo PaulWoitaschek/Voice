@@ -53,7 +53,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   }
 
   private val disposables = CompositeDisposable()
-  var currentlyHasFocus = false
+  private var currentlyHasFocus = false
   @Inject lateinit var prefs: PrefsManager
   @Inject lateinit var player: MediaPlayer
   @Inject lateinit var repo: BookRepository
@@ -74,11 +74,11 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
     val callState = telephonyManager.callState
     if (callState != TelephonyManager.CALL_STATE_IDLE) {
-      d { "Call state is:$callState. Pausing now" }
+      d { "Call state is $callState. Pausing now" }
+      val wasPlaying = playStateManager.playState == PlayState.PLAYING
       player.pause(true)
-      playStateManager.pauseReason = PauseReason.CALL
+      playStateManager.pauseReason = if (wasPlaying) PauseReason.CALL else PauseReason.NONE
     } else {
-      i { "FocusChange is $focusChange" }
       when (focusChange) {
         AudioManager.AUDIOFOCUS_GAIN -> {
           d { "gain" }
