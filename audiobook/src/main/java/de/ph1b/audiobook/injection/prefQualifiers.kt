@@ -23,6 +23,9 @@ annotation class SeekTime
 annotation class PauseOnTempFocusLoss
 
 @Qualifier @Retention(RUNTIME)
+annotation class PrefResumeAfterCall
+
+@Qualifier @Retention(RUNTIME)
 annotation class SleepTime
 
 @Qualifier @Retention(RUNTIME)

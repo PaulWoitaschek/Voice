@@ -6,6 +6,7 @@ import android.support.v7.widget.SwitchCompat
 import android.view.*
 import android.widget.TextView
 import com.bluelinelabs.conductor.RouterTransaction
+import com.f2prateek.rx.preferences.Preference
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BaseController
 import de.ph1b.audiobook.features.bookPlaying.SeekDialogFragment
@@ -17,7 +18,6 @@ import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.asV2Observable
 import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.setupActionbar
-import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.VerticalChangeHandler
 import javax.inject.Inject
@@ -39,9 +39,11 @@ class SettingsController : BaseController() {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View = inflater.inflate(R.layout.settings, container, false)
 
   override fun onAttach(view: View) {
-    setupActionbar(toolbar = view.find(R.id.toolbar),
+    setupActionbar(
+      toolbar = view.find(R.id.toolbar),
       upIndicator = R.drawable.close,
-      title = activity.getString(R.string.action_settings))
+      title = activity.getString(R.string.action_settings)
+    )
 
     // audio book folders
     setupTextSetting(R.id.audiobookFolder, R.string.pref_root_folder_title, R.string.pref_root_folder_summary) {
@@ -60,20 +62,28 @@ class SettingsController : BaseController() {
       .subscribe { themeDescription.setText(it.nameId) }
 
     // resume on playback
-    val resumePlaybackSwitch = setupSwitchSetting(R.id.resumePlayback, R.string.pref_resume_on_replug, R.string.pref_resume_on_replug_hint) {
-      prefs.resumeOnReplug.value = it
-    }
-    prefs.resumeOnReplug.asV2Observable()
-      .bindToLifeCycle()
-      .subscribe { resumePlaybackSwitch.isChecked = it }
+    setupSwitchSetting(
+      id = R.id.resumePlayback,
+      titleRes = R.string.pref_resume_on_replug,
+      contentRes = R.string.pref_resume_on_replug_hint,
+      pref = prefs.resumeOnReplug
+    )
+
+    // resume on playback
+    setupSwitchSetting(
+      id = R.id.resumeAfterCall,
+      titleRes = R.string.pref_resume_after_call,
+      contentRes = R.string.pref_resume_after_call_hint,
+      pref = prefs.resumeAfterCall
+    )
 
     // pause on interruption
-    val pauseOnInterruptionSwitch = setupSwitchSetting(R.id.pauseOnInterruption, R.string.pref_pause_on_can_duck_title, R.string.pref_pause_on_can_duck_summary) {
-      prefs.pauseOnTempFocusLoss.value = it
-    }
-    prefs.pauseOnTempFocusLoss.asV2Observable()
-      .bindToLifeCycle()
-      .subscribe { pauseOnInterruptionSwitch.isChecked = it }
+    setupSwitchSetting(
+      id = R.id.pauseOnInterruption,
+      titleRes = R.string.pref_pause_on_can_duck_title,
+      contentRes = R.string.pref_pause_on_can_duck_summary,
+      pref = prefs.pauseOnTempFocusLoss
+    )
 
     // skip amount
     val skipAmountDescription = setupTextSetting(R.id.skipAmount, R.string.pref_seek_time) {
@@ -106,33 +116,36 @@ class SettingsController : BaseController() {
     return description
   }
 
-  private inline fun setupSwitchSetting(@IdRes id: Int, @StringRes titleRes: Int, @StringRes contentRes: Int, crossinline onChecked: (Boolean) -> Unit): SwitchCompat {
+  private fun setupSwitchSetting(@IdRes id: Int, @StringRes titleRes: Int, @StringRes contentRes: Int, pref: Preference<Boolean>) {
     val root = view!!.find<View>(id)
     val title = root.find<TextView>(R.id.switchTitle)
     val content = root.find<TextView>(R.id.switchDescription)
     val switch: SwitchCompat = root.find(R.id.switchSetting)
+
     title.setText(titleRes)
     content.setText(contentRes)
-    switch.setOnCheckedChangeListener { compoundButton, checked ->
-      onChecked(checked)
+
+    switch.setOnCheckedChangeListener { _, checked ->
+      pref.set(checked)
     }
+    pref.asV2Observable()
+      .bindToLifeCycle()
+      .subscribe { switch.isChecked = it }
+
     root.setOnClickListener { switch.toggle() }
-    return switch
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) = inflater.inflate(R.menu.menu_settings, menu)
 
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    when (item.itemId) {
-      R.id.action_contribute -> {
-        SupportDialogFragment().show(fragmentManager, SupportDialogFragment.TAG)
-        return true
-      }
-      android.R.id.home -> {
-        router.popCurrentController()
-        return true
-      }
-      else -> return false
+  override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+    R.id.action_contribute -> {
+      SupportDialogFragment().show(fragmentManager, SupportDialogFragment.TAG)
+      true
     }
+    android.R.id.home -> {
+      router.popCurrentController()
+      true
+    }
+    else -> false
   }
 }

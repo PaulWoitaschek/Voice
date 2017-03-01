@@ -18,7 +18,6 @@ import de.ph1b.audiobook.uitools.ThemeUtil
  * @author Paul Woitaschek
  */
 @Module class PrefsModule {
-
   @Provides fun provideSharedPreferences(context: Context) = PreferenceManager.getDefaultSharedPreferences(context)!!
   @Provides @Reusable fun provideRxSharedPreferences(sharedPreferences: SharedPreferences) = RxSharedPreferences.create(sharedPreferences)
   @Provides @Reusable fun provideThemePreference(prefs: RxSharedPreferences) = prefs.getEnum("THEME2_KEY", ThemeUtil.Theme.DAY_NIGHT, ThemeUtil.Theme::class.java)
@@ -33,4 +32,5 @@ import de.ph1b.audiobook.uitools.ThemeUtil
   @Provides @Reusable @SingleBookFolders fun provideSingleBookFoldersPreference(prefs: RxSharedPreferences) = prefs.getStringSet("singleBookFolders", emptySet())
   @Provides @Reusable @CollectionFolders fun provideCollectionFoldersPreference(prefs: RxSharedPreferences): Preference<Set<String>> = prefs.getStringSet("folders", emptySet())
   @Provides @Reusable @CurrentBookId fun provideCurrentBookIdPreference(prefs: RxSharedPreferences) = prefs.getLong("currentBook", Book.ID_UNKNOWN)
+  @Provides @Reusable @PrefResumeAfterCall fun provideResumeAfterCallPreference(prefs: RxSharedPreferences) = prefs.getBoolean("resumeAfterCall", false)
 }
