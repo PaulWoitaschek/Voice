@@ -11,7 +11,6 @@ import i
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
 import v
 import java.io.File
 import java.io.IOException
@@ -35,9 +34,6 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
   private val autoRewindAmount: Int
     get() = prefs.autoRewindAmount.value
 
-  private val errorSubject = PublishSubject.create<Unit>()
-  fun onError(): Observable<Unit> = errorSubject.hide()
-
   init {
     player.setWakeMode(PowerManager.PARTIAL_WAKE_LOCK)
     player.onCompletion {
@@ -59,7 +55,6 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
     player.onError {
       player.reset()
       state = State.IDLE
-      errorSubject.onNext(Unit)
     }
 
     stateSubject.switchMap {

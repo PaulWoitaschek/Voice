@@ -2,8 +2,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation"
            tools:locale="en">
     <!--BookShelf-->
-    <string name="mal_file_message">The following file may be corrupt:</string>
-    <string name="mal_file_title">Defect file</string>
     <string name="content_current_book">This is the current book</string>
     <string name="current_book">Current book</string>
     <string name="change_layout_type">Change layout</string>

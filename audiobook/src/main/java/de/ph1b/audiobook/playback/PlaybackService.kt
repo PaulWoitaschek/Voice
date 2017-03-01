@@ -15,8 +15,6 @@ import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
 import android.telephony.TelephonyManager
 import d
-import de.ph1b.audiobook.features.MainActivity
-import de.ph1b.audiobook.features.bookOverview.BookShelfController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.RxBroadcast
 import de.ph1b.audiobook.misc.asV2Observable
@@ -205,21 +203,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
     }
     sessionToken = mediaSession.sessionToken
     changeNotifier = ChangeNotifier(mediaSession)
-
-    player.onError()
-      .subscribe {
-        // inform user on errors
-        e { "onError" }
-        val book = player.book()
-        if (book != null) {
-          startActivity(MainActivity.malformedFileIntent(this, book.currentFile))
-        } else {
-          val intent = Intent(this, BookShelfController::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-          }
-          startActivity(intent)
-        }
-      }
 
     // update book when changed by player
     player.bookObservable().distinctUntilChanged().subscribe {
