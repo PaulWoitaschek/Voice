@@ -5,7 +5,6 @@ import android.support.annotation.StringRes
 import android.support.v7.widget.SwitchCompat
 import android.view.*
 import android.widget.TextView
-import com.bluelinelabs.conductor.RouterTransaction
 import com.f2prateek.rx.preferences.Preference
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.features.BaseController
@@ -15,6 +14,7 @@ import de.ph1b.audiobook.features.settings.dialogs.AutoRewindDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.SupportDialogFragment
 import de.ph1b.audiobook.features.settings.dialogs.ThemePickerDialogFragment
 import de.ph1b.audiobook.injection.App
+import de.ph1b.audiobook.misc.asTransaction
 import de.ph1b.audiobook.misc.asV2Observable
 import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.setupActionbar
@@ -47,9 +47,10 @@ class SettingsController : BaseController() {
 
     // audio book folders
     setupTextSetting(R.id.audiobookFolder, R.string.pref_root_folder_title, R.string.pref_root_folder_summary) {
-      val transaction = RouterTransaction.with(FolderOverviewController())
-        .pushChangeHandler(VerticalChangeHandler())
-        .popChangeHandler(VerticalChangeHandler())
+      val transaction = FolderOverviewController().asTransaction(
+        VerticalChangeHandler(),
+        VerticalChangeHandler()
+      )
       router.pushController(transaction)
     }
 

@@ -7,7 +7,6 @@ import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.Spinner
 import android.widget.TextView
-import com.bluelinelabs.conductor.RouterTransaction
 import com.getbase.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
 import de.ph1b.audiobook.Book
@@ -24,10 +23,7 @@ import de.ph1b.audiobook.playback.MediaPlayer
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.Sandman
-import de.ph1b.audiobook.uitools.CoverReplacement
-import de.ph1b.audiobook.uitools.PlayPauseDrawable
-import de.ph1b.audiobook.uitools.ThemeUtil
-import de.ph1b.audiobook.uitools.visible
+import de.ph1b.audiobook.uitools.*
 import i
 import io.reactivex.Observable
 import java.util.*
@@ -283,7 +279,8 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
 
   override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
     R.id.action_settings -> {
-      router.pushController(RouterTransaction.with(SettingsController()))
+      val transaction = SettingsController().asTransaction(VerticalChangeHandler(), VerticalChangeHandler())
+      router.pushController(transaction)
       true
     }
     R.id.action_time_change -> {

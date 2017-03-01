@@ -14,6 +14,7 @@ import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.PermissionHelper
 import de.ph1b.audiobook.misc.RouterProvider
+import de.ph1b.audiobook.misc.asTransaction
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import java.io.File
@@ -102,6 +103,7 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
   }
 
   override fun onNoFolderWarningConfirmed() {
-    router.pushController(RouterTransaction.with(FolderOverviewController()))
+    val transaction = FolderOverviewController().asTransaction()
+    router.pushController(transaction)
   }
 }

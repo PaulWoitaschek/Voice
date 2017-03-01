@@ -122,9 +122,10 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     return when (item.itemId) {
       R.id.action_settings -> {
-        val transaction = RouterTransaction.with(SettingsController())
-          .pushChangeHandler(VerticalChangeHandler())
-          .popChangeHandler(VerticalChangeHandler())
+        val transaction = SettingsController().asTransaction(
+          VerticalChangeHandler(),
+          VerticalChangeHandler()
+        )
         router.pushController(transaction)
         true
       }
