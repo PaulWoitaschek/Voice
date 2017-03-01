@@ -33,9 +33,9 @@ fun SeekBar.progressChangedStream(initialNotification: Boolean = false): Observa
   it.setCancellable { setOnSeekBarChangeListener(null) }
 }
 
-fun <T : View> T.clicks(): Observable<T> = Observable.create {
-  setOnClickListener { v -> it.onNext(this) }
-  it.setCancellable { setOnClickListener(null) }
+fun <T : View> T.clicks(): Observable<T> = Observable.create { emitter ->
+  setOnClickListener { emitter.onNext(this) }
+  emitter.setCancellable { setOnClickListener(null) }
 }
 
 fun <T : Adapter> AdapterView<T>.itemSelections(listener: (Int) -> Unit) {

@@ -41,7 +41,7 @@ class SeekDialogFragment : DialogFragment() {
       .customView(view, true)
       .positiveText(R.string.dialog_confirm)
       .negativeText(R.string.dialog_cancel)
-      .onPositive { materialDialog, dialogAction ->
+      .onPositive { _, _ ->
         val newSeekTime = seekBar.progress / FACTOR + MIN
         prefs.seekTime.value = newSeekTime
       }.build()

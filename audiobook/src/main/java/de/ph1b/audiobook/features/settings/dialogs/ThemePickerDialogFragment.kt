@@ -32,7 +32,7 @@ class ThemePickerDialogFragment : DialogFragment() {
 
     return MaterialDialog.Builder(context)
       .items(*names.toTypedArray())
-      .itemsCallbackSingleChoice(existingThemes.indexOf(oldTheme)) { materialDialog, view, i, charSequence ->
+      .itemsCallbackSingleChoice(existingThemes.indexOf(oldTheme)) { _, _, i, _ ->
         val newTheme = existingThemes[i]
         prefsManager.theme.value = newTheme
         AppCompatDelegate.setDefaultNightMode(newTheme.nightMode)

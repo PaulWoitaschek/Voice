@@ -27,7 +27,7 @@ import javax.inject.Singleton
    *
    * @return the list of storages.
    */
-  @RequiresPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+  @RequiresPermission(value = Manifest.permission.READ_EXTERNAL_STORAGE)
   fun storageDirs(): List<File> {
     val dirSeparator = Pattern.compile("/")
 
@@ -132,7 +132,7 @@ import javax.inject.Singleton
       process.waitFor()
       val inputStream = process.inputStream
       val buffer = ByteArray(1024)
-      while (inputStream.read(buffer) !== -1) {
+      while (inputStream.read(buffer) != -1) {
         output += String(buffer)
       }
       inputStream.close()

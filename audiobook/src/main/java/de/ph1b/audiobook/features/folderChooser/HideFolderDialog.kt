@@ -34,7 +34,7 @@ class HideFolderDialog : DialogFragment() {
       .content(R.string.hide_folder_content)
       .positiveText(R.string.hide_confirm)
       .negativeText(R.string.dialog_no)
-      .onPositive { materialDialog, dialogAction ->
+      .onPositive { _, _ ->
         try {
           i { "Create new File will be called." }
           //noinspection ResultOfMethodCallIgnored
@@ -43,7 +43,7 @@ class HideFolderDialog : DialogFragment() {
           e(ex) { "Error at creating the hide-file" }
         }
       }
-      .onAny { materialDialog, dialogAction -> callback.onChosen() }
+      .onAny { _, _ -> callback.onChosen() }
       .build()
   }
 

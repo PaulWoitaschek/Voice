@@ -42,7 +42,7 @@ class AutoRewindDialogFragment : DialogFragment() {
       .customView(view, true)
       .positiveText(R.string.dialog_confirm)
       .negativeText(R.string.dialog_cancel)
-      .onPositive { materialDialog, dialogAction ->
+      .onPositive { _, _ ->
         val newRewindAmount = seekBar.progress / FACTOR + MIN
         prefs.autoRewindAmount.value = newRewindAmount
       }

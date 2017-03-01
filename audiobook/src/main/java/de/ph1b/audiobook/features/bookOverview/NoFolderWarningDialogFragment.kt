@@ -21,7 +21,7 @@ class NoFolderWarningDialogFragment : DialogFragment() {
       .content(getString(R.string.no_audiobook_folders_summary_start) +
         "\n\n" + getString(R.string.no_audiobook_folders_end))
       .positiveText(R.string.dialog_confirm)
-      .onPositive { materialDialog, dialogAction ->
+      .onPositive { _, _ ->
         (activity as Callback).onNoFolderWarningConfirmed()
       }
       .cancelable(false)

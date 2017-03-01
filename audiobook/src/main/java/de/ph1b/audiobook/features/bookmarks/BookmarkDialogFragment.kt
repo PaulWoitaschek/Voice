@@ -50,7 +50,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
           MaterialDialog.Builder(context)
             .title(R.string.bookmark_edit_title)
             .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
-            .input(getString(R.string.bookmark_edit_hint), bookmark.title, false) { materialDialog, charSequence ->
+            .input(getString(R.string.bookmark_edit_hint), bookmark.title, false) { _, charSequence ->
               val newBookmark = Bookmark(bookmark.mediaFile, charSequence.toString(), bookmark.time)
               adapter.replace(bookmark, newBookmark)
               bookmarkProvider.deleteBookmark(bookmark.id)
@@ -64,7 +64,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
             .content(bookmark.title)
             .positiveText(R.string.remove)
             .negativeText(R.string.dialog_cancel)
-            .onPositive { materialDialog, dialogAction ->
+            .onPositive { _, _ ->
               adapter.remove(bookmark)
               bookmarkProvider.deleteBookmark(bookmark.id)
             }
@@ -135,7 +135,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
     val add: View = view.find(R.id.add)
     add.setOnClickListener { addClicked() }
     val bookmarkTitle: TextView = view.find(R.id.bookmarkTitle)
-    bookmarkTitle.setOnEditorActionListener { v1, actionId, event ->
+    bookmarkTitle.setOnEditorActionListener { _, actionId, _ ->
       if (actionId == EditorInfo.IME_ACTION_DONE) {
         addClicked() //same as clicking on the +
         return@setOnEditorActionListener true

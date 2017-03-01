@@ -15,7 +15,7 @@ import de.ph1b.audiobook.R
 class SupportDialogFragment : DialogFragment() {
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    val onSupportListItemClicked = MaterialDialog.ListCallback { materialDialog, view, i, charSequence ->
+    val onSupportListItemClicked = MaterialDialog.ListCallback { _, _, i, _ ->
       when (i) {
       //dev and support
         0 -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(GITHUB_URL)))

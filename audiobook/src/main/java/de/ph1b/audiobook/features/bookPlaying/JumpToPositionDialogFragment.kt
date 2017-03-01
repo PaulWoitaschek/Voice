@@ -56,7 +56,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
     numberHour.value = defaultHour
     numberMinute.value = defaultMinute
 
-    numberHour.setOnValueChangedListener { picker, oldVal, newVal ->
+    numberHour.setOnValueChangedListener { _, _, newVal ->
       if (newVal == biggestHour) {
         numberMinute.maxValue = (durationInMinutes - newVal * 60) % 60
       } else {
@@ -64,7 +64,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
       }
     }
 
-    numberMinute.setOnValueChangedListener { picker, oldVal, newVal ->
+    numberMinute.setOnValueChangedListener { _, oldVal, newVal ->
       var hValue = numberHour.value
 
       //scrolling forward
@@ -83,7 +83,7 @@ class JumpToPositionDialogFragment : DialogFragment() {
     return MaterialDialog.Builder(context)
       .customView(view, true)
       .title(R.string.action_time_change)
-      .onPositive { materialDialog, dialogAction ->
+      .onPositive { _, _ ->
         val h = numberHour.value
         val m = numberMinute.value
         val newPosition = (m + 60 * h) * 60 * 1000
