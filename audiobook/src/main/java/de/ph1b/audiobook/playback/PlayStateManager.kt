@@ -48,6 +48,7 @@ constructor() {
 
   enum class PauseReason {
     NONE,
+    CALL,
     BECAUSE_HEADSET,
     LOSS_TRANSIENT
   }

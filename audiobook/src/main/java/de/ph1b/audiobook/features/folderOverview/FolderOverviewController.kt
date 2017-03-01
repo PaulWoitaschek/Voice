@@ -75,7 +75,7 @@ class FolderOverviewController : MvpBaseController<FolderOverviewController, Fol
         .content("${getString(R.string.delete_folder_content)}\n$toDelete")
         .positiveText(R.string.remove)
         .negativeText(R.string.dialog_cancel)
-        .onPositive { materialDialog, dialogAction ->
+        .onPositive { _, _ ->
           presenter.removeFolder(toDelete)
         }
         .show()

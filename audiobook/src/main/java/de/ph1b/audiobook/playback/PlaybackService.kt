@@ -13,6 +13,7 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaBrowserServiceCompat
 import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
+import android.telephony.TelephonyManager
 import d
 import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.features.bookOverview.BookShelfController
@@ -24,8 +25,6 @@ import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager.PauseReason
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
-import de.ph1b.audiobook.playback.events.AudioFocus
-import de.ph1b.audiobook.playback.events.AudioFocusReceiver
 import de.ph1b.audiobook.playback.events.HeadsetPlugReceiver
 import de.ph1b.audiobook.playback.events.MediaEventReceiver
 import de.ph1b.audiobook.playback.utils.BookUriConverter
@@ -56,18 +55,76 @@ class PlaybackService : MediaBrowserServiceCompat() {
   }
 
   private val disposables = CompositeDisposable()
+  var currentlyHasFocus = false
   @Inject lateinit var prefs: PrefsManager
   @Inject lateinit var player: MediaPlayer
   @Inject lateinit var repo: BookRepository
   @Inject lateinit var notificationManager: NotificationManager
   @Inject lateinit var audioManager: AudioManager
-  @Inject lateinit var audioFocusReceiver: AudioFocusReceiver
   @Inject lateinit var notificationAnnouncer: NotificationAnnouncer
   @Inject lateinit var playStateManager: PlayStateManager
   @Inject lateinit var bookUriConverter: BookUriConverter
   @Inject lateinit var mediaBrowserHelper: MediaBrowserHelper
+  @Inject lateinit var telephonyManager: TelephonyManager
   private lateinit var mediaSession: MediaSessionCompat
   private lateinit var changeNotifier: ChangeNotifier
+
+  private val audioFocusListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
+    i { "audio focus listener got focus $focusChange" }
+
+    currentlyHasFocus = focusChange == AudioManager.AUDIOFOCUS_GAIN
+
+    val callState = telephonyManager.callState
+    if (callState != TelephonyManager.CALL_STATE_IDLE) {
+      d { "Call state is:$callState. Pausing now" }
+      player.pause(true)
+      playStateManager.pauseReason = PauseReason.CALL
+    } else {
+      i { "FocusChange is $focusChange" }
+      when (focusChange) {
+        AudioManager.AUDIOFOCUS_GAIN -> {
+          d { "gain" }
+          val pauseReason = playStateManager.pauseReason
+          if (pauseReason == PauseReason.LOSS_TRANSIENT) {
+            d { "loss was transient so start playback" }
+            player.play()
+          } else if (pauseReason == PauseReason.CALL && prefs.resumeAfterCall.value) {
+            d { "we were paused because of a call and we should resume after a call. Start playback" }
+            player.play()
+          } else if (playStateManager.playState == PlayState.PLAYING) {
+            d { "increasing volume" }
+            player.setVolume(loud = true)
+          }
+        }
+        AudioManager.AUDIOFOCUS_LOSS -> {
+          d { "paused by audioFocus loss" }
+          player.pause(rewind = true)
+          playStateManager.pauseReason = PauseReason.NONE
+        }
+        AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
+          if (playStateManager.playState == PlayState.PLAYING) {
+            if (prefs.pauseOnTempFocusLoss.value) {
+              d { "Paused by audio-focus loss transient." }
+              // Pause is temporary, don't rewind
+              player.pause(rewind = false)
+              playStateManager.pauseReason = PauseReason.LOSS_TRANSIENT
+            } else {
+              d { "lowering volume" }
+              player.setVolume(loud = false)
+            }
+          }
+        }
+        AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
+          if (playStateManager.playState === PlayState.PLAYING) {
+            d { "Paused by audio-focus loss transient." }
+            player.pause(rewind = true) // auto pause
+            playStateManager.pauseReason = PauseReason.LOSS_TRANSIENT
+          }
+        }
+        else -> d { "ignore audioFocus=$focusChange" }
+      }
+    }
+  }
 
 
   override fun onCreate() {
@@ -187,11 +244,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
           changeNotifier.notify(ChangeNotifier.Type.METADATA, it)
         })
 
-      var currentlyHasFocus = false
-      add(audioFocusReceiver.focusObservable()
-        .map { it == AudioFocus.GAIN }
-        .subscribe { currentlyHasFocus = it })
-
       // handle changes on the play state
       add(playStateManager.playStateStream()
         .observeOn(Schedulers.io())
@@ -202,7 +254,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
             when (it!!) {
               PlayState.PLAYING -> {
                 if (!currentlyHasFocus) {
-                  audioManager.requestAudioFocus(audioFocusReceiver.audioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
+                  d { "we don't have focus so we request it now" }
+                  audioManager.requestAudioFocus(audioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
                 }
 
                 mediaSession.isActive = true
@@ -219,7 +272,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
                 mediaSession.isActive = false
                 d { "Set mediaSession to inactive" }
 
-                audioManager.abandonAudioFocus(audioFocusReceiver.audioFocusListener)
+                audioManager.abandonAudioFocus(audioFocusListener)
                 notificationManager.cancel(NOTIFICATION_ID)
                 stopForeground(true)
               }
@@ -240,48 +293,6 @@ class PlaybackService : MediaBrowserServiceCompat() {
             }
           }
         })
-
-      // adjusts stream and playback based on audio focus.
-      add(audioFocusReceiver.focusObservable().subscribe { audioFocus: AudioFocus ->
-        i { "handleAudioFocus changed to $audioFocus" }
-        when (audioFocus) {
-          AudioFocus.GAIN -> {
-            d { "started by audioFocus gained" }
-            if (playStateManager.pauseReason == PauseReason.LOSS_TRANSIENT) {
-              player.play()
-            } else if (playStateManager.playState == PlayState.PLAYING) {
-              d { "increasing volume" }
-              player.setVolume(loud = true)
-            }
-          }
-          AudioFocus.LOSS,
-          AudioFocus.LOSS_INCOMING_CALL -> {
-            d { "paused by audioFocus loss" }
-            player.pause(true)
-            playStateManager.pauseReason = PauseReason.NONE
-          }
-          AudioFocus.LOSS_TRANSIENT_CAN_DUCK -> {
-            if (playStateManager.playState == PlayState.PLAYING) {
-              if (prefs.pauseOnTempFocusLoss.value) {
-                d { "Paused by audio-focus loss transient." }
-                // Pause is temporary, don't rewind
-                player.pause(false)
-                playStateManager.pauseReason = PauseReason.LOSS_TRANSIENT
-              } else {
-                d { "lowering volume" }
-                player.setVolume(loud = false)
-              }
-            }
-          }
-          AudioFocus.LOSS_TRANSIENT -> {
-            if (playStateManager.playState === PlayState.PLAYING) {
-              d { "Paused by audio-focus loss transient." }
-              player.pause(true) // auto pause
-              playStateManager.pauseReason = PauseReason.LOSS_TRANSIENT
-            }
-          }
-        }
-      })
 
       // notifies the media service about added or removed books
       add(repo.booksStream().map { it.size }.distinctUntilChanged()
