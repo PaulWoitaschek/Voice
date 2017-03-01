@@ -7,7 +7,6 @@ import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.util.Property
 import android.view.animation.DecelerateInterpolator
-import v
 
 
 /**
@@ -149,7 +148,6 @@ class PlayPauseDrawable : Drawable() {
   }
 
   override fun jumpToCurrentState() {
-    v { "jumpToCurrentState(}" }
     animator?.cancel()
     progress = if (isPlay) 1.0f else 0.0f
   }
