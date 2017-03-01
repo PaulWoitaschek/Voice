@@ -68,9 +68,7 @@ object ThemeUtil {
     val ta = c.obtainStyledAttributes(intArrayOf(attr))
     val resId = ta.getResourceId(0, -1)
     ta.recycle()
-    if (resId == -1) {
-      throw IllegalArgumentException("Resource with attr=$attr not found")
-    }
+    check(resId != -1) { "Resource with attr=$attr not found" }
     return resId
   }
 

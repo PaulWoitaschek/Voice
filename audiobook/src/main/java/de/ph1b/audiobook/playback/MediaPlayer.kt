@@ -1,11 +1,13 @@
 package de.ph1b.audiobook.playback
 
+import android.content.Context
+import android.net.Uri
 import android.os.PowerManager
+import de.paul_woitaschek.mediaplayer.SpeedPlayer
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
-import de.ph1b.audiobook.playback.player.Player
 import e
 import i
 import io.reactivex.Observable
@@ -21,8 +23,9 @@ import javax.inject.Singleton
 @Singleton
 class MediaPlayer
 @Inject
-constructor(private val player: Player, private val playStateManager: PlayStateManager, private val prefs: PrefsManager) {
+constructor(context: Context, private val playStateManager: PlayStateManager, private val prefs: PrefsManager) {
 
+  private val player = SpeedPlayer(context)
   private var bookSubject = BehaviorSubject.create<Book>()
   private var stateSubject = BehaviorSubject.createDefault(State.IDLE)
   private var state: State
@@ -90,7 +93,7 @@ constructor(private val player: Player, private val playStateManager: PlayStateM
     bookSubject.value?.let {
       try {
         player.reset()
-        player.prepare(it.currentChapter().file)
+        player.prepare(Uri.fromFile(it.currentChapter().file))
         player.seekTo(it.time)
         player.playbackSpeed = it.playbackSpeed
         state = State.PREPARED

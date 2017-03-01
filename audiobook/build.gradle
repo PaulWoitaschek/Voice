@@ -81,6 +81,8 @@ dependencies {
 
     compile libraries.rxPermissions
 
+    compile libraries.androidPlayer
+
     releaseCompile libraries.firebaseCrash
 
     compile libraries.conductor

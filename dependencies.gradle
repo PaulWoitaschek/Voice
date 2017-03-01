@@ -1,4 +1,5 @@
 ext.versions = [
+        "androidPlayer"       : "0.3.6",
         "support"             : "25.2.0",
         "constraintLayout"    : "1.0.0",
         "picasso"             : "2.5.2",
@@ -43,15 +44,16 @@ ext.libraries = [
         "rxInterop"              : "com.github.akarnokd:rxjava2-interop:$versions.rxJavaInterop",
         "rxPreferences"          : "com.f2prateek.rx.preferences:rx-preferences:$versions.rxPreferences",
         "kotlinStdLib"           : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
-        "slimber"                : "com.github.PaulWoitaschek:Slimber:$versions.slimber",
-        "rxPermissions"          : "com.tbruyelle.rxpermissions2:rxpermissions:$versions.rxPermissions",
-        "firebaseCrash"          : "com.google.firebase:firebase-crash:$versions.playServices",
-        "conductor"              : "com.bluelinelabs:conductor:$versions.conductor",
-        "conductorSupport"       : "com.bluelinelabs:conductor-support:$versions.conductor",
-        "conductorLifecycle"     : "com.bluelinelabs:conductor-rxlifecycle2:$versions.conductor",
+        "slimber"           : "com.github.PaulWoitaschek:Slimber:$versions.slimber",
+        "rxPermissions"     : "com.tbruyelle.rxpermissions2:rxpermissions:$versions.rxPermissions",
+        "firebaseCrash"     : "com.google.firebase:firebase-crash:$versions.playServices",
+        "conductor"         : "com.bluelinelabs:conductor:$versions.conductor",
+        "conductorSupport"  : "com.bluelinelabs:conductor-support:$versions.conductor",
+        "conductorLifecycle": "com.bluelinelabs:conductor-rxlifecycle2:$versions.conductor",
+        "androidPlayer"     : "com.github.PaulWoitaschek:AndroidPlayer:$versions.androidPlayer",
 
         // testing
-        "junit"                  : "junit:junit:$versions.junit",
-        "robolectric"            : "org.robolectric:robolectric:$versions.robolectric",
-        "assertJ"                : "org.assertj:assertj-core:$versions.assertJ",
+        "junit"             : "junit:junit:$versions.junit",
+        "robolectric"       : "org.robolectric:robolectric:$versions.robolectric",
+        "assertJ"           : "org.assertj:assertj-core:$versions.assertJ",
 ]
