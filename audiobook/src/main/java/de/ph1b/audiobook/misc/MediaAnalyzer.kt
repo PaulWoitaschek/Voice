@@ -22,14 +22,6 @@ object MediaAnalyzer {
     }
   }
 
-  private fun String.toIntOrDefault(default: Int): Int {
-    return try {
-      toInt()
-    } catch(ignored: NumberFormatException) {
-      default
-    }
-  }
-
   fun compute(input: File): Result {
     // Note: MediaMetadataRetriever throws undocumented RuntimeExceptions. We catch these
     // and act appropriate.
@@ -37,8 +29,8 @@ object MediaAnalyzer {
     try {
       mmr.setDataSource(input.absolutePath)
 
-      val parsedDuration = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
-      val duration = parsedDuration?.toIntOrDefault(-1) ?: -1
+      val parsedDuration: String? = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+      val duration = parsedDuration?.toIntOrNull() ?: -1
 
       // getting chapter-name
       var chapterName = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_TITLE)
