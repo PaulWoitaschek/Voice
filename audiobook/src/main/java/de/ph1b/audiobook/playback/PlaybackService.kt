@@ -65,6 +65,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
   @Inject lateinit var mediaBrowserHelper: MediaBrowserHelper
   @Inject lateinit var telephonyManager: TelephonyManager
   private lateinit var mediaSession: MediaSessionCompat
+  private val androidAutoState = AndroidAutoStateReceiver()
   private lateinit var changeNotifier: ChangeNotifier
 
   private val audioFocusListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
@@ -101,7 +102,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
         }
         AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
           if (playStateManager.playState == PlayState.PLAYING) {
-            if (prefs.pauseOnTempFocusLoss.value) {
+            // if android auto is connected temporarily pause the player so the playback does disturb voice recongition
+            if (prefs.pauseOnTempFocusLoss.value || androidAutoState.connected) {
               d { "Paused by audio-focus loss transient." }
               // Pause is temporary, don't rewind
               player.pause(rewind = false)
@@ -127,6 +129,9 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
   override fun onCreate() {
     super.onCreate()
+
+    // register android auto connected receiver
+    registerReceiver(androidAutoState, AndroidAutoStateReceiver.filter())
 
     val eventReceiver = ComponentName(packageName, MediaEventReceiver::class.java.name)
     val mediaButtonIntent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
@@ -321,6 +326,8 @@ class PlaybackService : MediaBrowserServiceCompat() {
 
     mediaSession.release()
     disposables.dispose()
+
+    unregisterReceiver(androidAutoState)
 
     super.onDestroy()
   }
