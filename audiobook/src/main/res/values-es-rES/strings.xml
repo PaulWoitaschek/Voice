@@ -1,25 +1,33 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <!--BookShelf-->
+    <string name="content_current_book">Este es el libro actual</string>
+    <string name="current_book">Libro actual</string>
     <!--BookPlayFragment-->
     <string name="cover">Portada</string>
-    <string name="play_pause">Tocar / Pausa</string>
+    <string name="play_pause">Reproducir / Pausa</string>
     <string name="action_sleep">sueño acción</string>
     <string name="rewind">Rebobinar</string>
     <string name="fast_forward">Avance rápido</string>
     <string name="previous_track">Pista anterior</string>
     <string name="next_track">Proxima pista </string>
+    <string name="play">Reproducir</string>
+    <string name="pause">Pausar</string>
+    <string name="equalizer">Ecualizador</string>
     <!--NoExternalStorage-->
-    <string name="no_external_storage">Almacenamiento externo no está disponible. Por favor, asegúrese que esta
-         conectado a su computadora.</string>
+    <string name="no_external_storage">Almacenamiento externo no disponible. Por favor, asegúrese que está conectado a su computadora.</string>
     <string name="no_external_storage_action_bar_title">Almacenamiento externo</string>
     <!--Dialogs-->
     <string name="dialog_confirm">Confirmar</string>
     <string name="dialog_cancel">Cancelar</string>
+    <string name="dialog_no">No</string>
     <!--EditBookDialog-->
     <string name="content_previous_cover">Elejir la portada anterior.</string>
     <string name="content_next_cover">Elejir la proxima portada.</string>
-    <string name="content_cover">Muenstre a portada para escojer</string>
+    <string name="content_cover">Muestre a portada para escojer</string>
+    <string name="change_book_name">Nombre</string>
+    <string name="download_book_cover">Portada de internet</string>
+    <string name="pick_book_cover">Portada del sistema de archivos</string>
     <string name="edit_book_title">Editar libro</string>
     <!--JumpToPosition-->
     <string name="action_time_change">Saltar a</string>
@@ -28,14 +36,31 @@
     <!--PlaybackSpeed-->
     <string name="playback_speed">Velocidad de reproducción</string>
     <!--Bookmarks-->
+    <string name="bookmark">Marcador</string>
+    <string name="shake_to_reset">Agitar para reiniciar</string>
+    <string name="bookmark_edit_title">Editar marcador</string>
+    <string name="acc_button_add_bookmark">Añade un marcador en la posición actual</string>
     <!--Settings-->
     <string name="action_settings">Preferencias</string>
     <string name="pref_resume_on_replug">Reanudar la reproduccion</string>
     <string name="pref_resume_on_replug_hint">Si usted hizo una pausa por desconnectando el cable, se reanudara cuando conecten el cable.</string>
-    <string name="pref_seek_time">Saltar cantidad</string>
+    <string name="pref_seek_time">Duración salto</string>
+    <string name="pref_root_folder_title">Carpeta de audiolibros</string>
+    <string name="pref_theme_title">Tema</string>
+    <string name="pref_theme_day">Día</string>
+    <string name="pref_theme_night">Noche</string>
+    <string name="pref_theme_daynight">Día / Noche</string>
+    <string name="pref_support_title">Soporte</string>
+    <string name="pref_support_translations">Traducciones</string>
     <!--Misc-->
     <string name="popup_edit">Editar</string>
     <string name="remove">Borrar</string>
     <!--hide folder dialog-->
+    <string name="hide_folder_title">Ocultar carpeta</string>
+    <string name="hide_folder_content">Quiere ocultar la carpeta a reproductores de música, para que no reconozcan su libro como música?</string>
+    <string name="hide_confirm">Ocultar</string>
     <!--license activity-->
+    <string name="refresh">Refrescar</string>
+    <string name="reset">Reiniciar</string>
+    <string name="cover_crop">Cortar portada</string>
 </resources>
