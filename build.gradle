@@ -8,10 +8,10 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0-rc1'
+        classpath "com.android.tools.build:gradle:$versions.androidPlugin"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
-        classpath 'com.google.gms:google-services:3.0.0'
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.14.0'
+        classpath "com.google.gms:google-services:$versions.googleServices"
+        classpath "com.github.ben-manes:gradle-versions-plugin:$versions.gradleVersionsPlugin"
     }
 }
 
@@ -27,7 +27,7 @@ allprojects {
             rules.all { ComponentSelection selection ->
                 def candidate = selection.candidate
                 if (candidate.group == 'org.assertj' && !candidate.version.startsWith("1")) selection.reject("Only version 1 of assertJ supported")
-                if (['beta', 'alpha'].any { forbidden -> candidate.version.contains(forbidden) }) selection.reject("blacklisted")
+                if (['rc', 'beta', 'alpha'].any { forbidden -> candidate.version.contains(forbidden) }) selection.reject("blacklisted")
             }
         }
     }
