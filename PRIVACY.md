@@ -1,3 +1,3 @@
 # Privacy Policy
 
-Crashes are anonymously sent through Firebase Crash reporting.
+Crashes are anonymously sent through Fabric Crashlytic Crash reporting.
