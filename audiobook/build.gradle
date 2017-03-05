@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'io.fabric'
 apply from: "../artifacts.gradle"
 
 android {
@@ -31,6 +32,7 @@ android {
         debug {
             minifyEnabled false
             shrinkResources false
+            ext.enableCrashlytics = false
         }
     }
 
@@ -62,6 +64,10 @@ dependencies {
 
     compile libraries.floatingActionButton
 
+    compile(libraries.crashlytics) {
+        transitive = true
+    }
+
     compile libraries.dagger
     kapt libraries.daggerCompiler
     provided libraries.jsr250
@@ -83,11 +89,7 @@ dependencies {
 
     compile libraries.androidPlayer
 
-    releaseCompile libraries.firebaseCrash
-
     compile libraries.conductor
     compile libraries.conductorSupport
     compile libraries.conductorLifecycle
 }
-
-apply plugin: 'com.google.gms.google-services'

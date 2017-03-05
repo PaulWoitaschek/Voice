@@ -5,13 +5,14 @@ buildscript {
 
     repositories {
         jcenter()
+        maven { url 'https://maven.fabric.io/public' }
     }
 
     dependencies {
         classpath "com.android.tools.build:gradle:$versions.androidPlugin"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
-        classpath "com.google.gms:google-services:$versions.googleServices"
         classpath "com.github.ben-manes:gradle-versions-plugin:$versions.gradleVersionsPlugin"
+        classpath "io.fabric.tools:gradle:$versions.fabric"
     }
 }
 
@@ -19,6 +20,7 @@ allprojects {
     repositories {
         jcenter()
         mavenCentral()
+        maven { url 'https://maven.fabric.io/public' }
         maven { url "https://jitpack.io" }
     }
 

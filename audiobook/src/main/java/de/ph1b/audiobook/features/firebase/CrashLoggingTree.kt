@@ -1,7 +1,6 @@
 package de.ph1b.audiobook.features.firebase
 
-import android.util.Log
-
+import com.crashlytics.android.Crashlytics
 import timber.log.Timber
 
 /**
@@ -9,11 +8,9 @@ import timber.log.Timber
  *
  * @author Paul Woitaschek
  */
-class FirebaseCrashReportingTree : Timber.Tree() {
+class CrashLoggingTree : Timber.Tree() {
 
   override fun log(priority: Int, tag: String?, message: String?, t: Throwable?) {
-    if (priority >= Log.DEBUG && message != null) {
-      FirebaseCrashProxy.log(message)
-    }
+    Crashlytics.log(priority, tag, message)
   }
 }
