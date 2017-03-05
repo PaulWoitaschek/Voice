@@ -159,7 +159,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
           i { "onPlayFromSearch $query" }
           if (query != null) {
             val match = repo.activeBooks.firstOrNull {
-              it.name.contentEquals(query)
+              it.name.contains(query, ignoreCase = true) || it.author?.contains(query, ignoreCase = true) == true
             }
             i { "found a match ${match?.name}" }
             if (match != null) {
