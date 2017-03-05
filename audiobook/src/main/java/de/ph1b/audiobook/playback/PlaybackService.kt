@@ -212,87 +212,88 @@ class PlaybackService : MediaBrowserServiceCompat() {
     disposables.apply {
       // re-init controller when there is a new book set as the current book
       add(prefs.currentBookId.asV2Observable()
-        .subscribe {
-          if (player.book()?.id != it) {
-            player.stop()
-            repo.bookById(it)?.let { player.init(it) }
-          }
-        })
+          .subscribe {
+            if (player.book()?.id != it) {
+              player.stop()
+              repo.bookById(it)?.let { player.init(it) }
+            }
+          })
 
       // notify player about changes in the current book
       add(repo.updateObservable()
-        .filter { it.id == prefs.currentBookId.value }
-        .subscribe {
-          player.init(it)
-          changeNotifier.notify(ChangeNotifier.Type.METADATA, it)
-        })
+          .filter { it.id == prefs.currentBookId.value }
+          .subscribe {
+            player.init(it)
+            changeNotifier.notify(ChangeNotifier.Type.METADATA, it)
+          })
 
       // handle changes on the play state
       add(playStateManager.playStateStream()
-        .observeOn(Schedulers.io())
-        .subscribe {
-          d { "onPlayStateManager.PlayStateChanged:$it" }
-          val controllerBook = player.book()
-          if (controllerBook != null) {
-            when (it!!) {
-              PlayState.PLAYING -> {
-                if (!currentlyHasFocus) {
-                  d { "we don't have focus so we request it now" }
-                  audioManager.requestAudioFocus(audioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
+          .observeOn(Schedulers.io())
+          .subscribe {
+            d { "onPlayStateManager.PlayStateChanged:$it" }
+            val controllerBook = player.book()
+            if (controllerBook != null) {
+              when (it!!) {
+                PlayState.PLAYING -> {
+                  if (!currentlyHasFocus) {
+                    d { "we don't have focus so we request it now" }
+                    val grantResult = audioManager.requestAudioFocus(audioFocusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
+                    currentlyHasFocus = grantResult == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+                    d { "request granted=$currentlyHasFocus" }
+                  }
+
+                  mediaSession.isActive = true
+                  d { "set mediaSession to active" }
+                  val notification = notificationAnnouncer.getNotification(controllerBook, it, mediaSession.sessionToken)
+                  startForeground(NOTIFICATION_ID, notification)
                 }
+                PlayState.PAUSED -> {
+                  stopForeground(false)
+                  val notification = notificationAnnouncer.getNotification(controllerBook, it, mediaSession.sessionToken)
+                  notificationManager.notify(NOTIFICATION_ID, notification)
+                }
+                PlayState.STOPPED -> {
+                  mediaSession.isActive = false
+                  d { "Set mediaSession to inactive" }
 
-                mediaSession.isActive = true
-                d { "set mediaSession to active" }
-                val notification = notificationAnnouncer.getNotification(controllerBook, it, mediaSession.sessionToken)
-                startForeground(NOTIFICATION_ID, notification)
+                  audioManager.abandonAudioFocus(audioFocusListener)
+                  notificationManager.cancel(NOTIFICATION_ID)
+                  stopForeground(true)
+                }
               }
-              PlayState.PAUSED -> {
-                stopForeground(false)
-                val notification = notificationAnnouncer.getNotification(controllerBook, it, mediaSession.sessionToken)
-                notificationManager.notify(NOTIFICATION_ID, notification)
-              }
-              PlayState.STOPPED -> {
-                mediaSession.isActive = false
-                d { "Set mediaSession to inactive" }
 
-                audioManager.abandonAudioFocus(audioFocusListener)
-                notificationManager.cancel(NOTIFICATION_ID)
-                stopForeground(true)
-              }
+              changeNotifier.notify(ChangeNotifier.Type.PLAY_STATE, controllerBook)
             }
-
-            changeNotifier.notify(ChangeNotifier.Type.PLAY_STATE, controllerBook)
-          }
-        })
+          })
 
       // resume playback when headset is reconnected. (if settings are set)
       add(HeadsetPlugReceiver.events(this@PlaybackService)
-        .subscribe { headsetState ->
-          if (headsetState == HeadsetPlugReceiver.HeadsetState.PLUGGED) {
-            if (playStateManager.pauseReason == PauseReason.BECAUSE_HEADSET) {
-              if (prefs.resumeOnReplug.value) {
-                player.play()
+          .subscribe { headsetState ->
+            if (headsetState == HeadsetPlugReceiver.HeadsetState.PLUGGED) {
+              if (playStateManager.pauseReason == PauseReason.BECAUSE_HEADSET) {
+                if (prefs.resumeOnReplug.value) {
+                  player.play()
+                }
               }
             }
-          }
-        })
+          })
 
       // notifies the media service about added or removed books
       add(repo.booksStream().map { it.size }.distinctUntilChanged()
-        .subscribe {
-          v { "notify media browser service about children changed." }
-          notifyChildrenChanged(bookUriConverter.allBooks().toString())
-        })
+          .subscribe {
+            notifyChildrenChanged(bookUriConverter.allBooks().toString())
+          })
 
       // pause when audio is becoming noisy.
       add(RxBroadcast.register(this@PlaybackService, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
-        .subscribe {
-          d { "audio becoming noisy. playState=${playStateManager.playState}" }
-          if (playStateManager.playState === PlayState.PLAYING) {
-            playStateManager.pauseReason = PauseReason.BECAUSE_HEADSET
-            player.pause(true)
-          }
-        })
+          .subscribe {
+            d { "audio becoming noisy. playState=${playStateManager.playState}" }
+            if (playStateManager.playState === PlayState.PLAYING) {
+              playStateManager.pauseReason = PauseReason.BECAUSE_HEADSET
+              player.pause(true)
+            }
+          })
     }
   }
 
