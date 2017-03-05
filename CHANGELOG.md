@@ -1,3 +1,7 @@
+# 3.0.9
+* Update audio-focus correctly so we pause correctly when another app requests audio-focus
+* Replaced firebase with crashlytics
+
 # 3.0
 * Old player with speed for everyone back
 * Flac is back
