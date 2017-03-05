@@ -24,11 +24,10 @@
             android:name="io.fabric.ApiKey"
             android:value="122335d07af0e8a95ee41da564520a0d2fff550a"/>
 
-        <!-- android auto declaration, disabled due to compliance problems
+        <!-- android auto declaration -->
         <meta-data
             android:name="com.google.android.gms.car.application"
             android:resource="@xml/automotive_app_desc"/>
-            -->
 
         <!-- auto notification -->
         <meta-data
