@@ -263,6 +263,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
                   d { "Set mediaSession to inactive" }
 
                   audioManager.abandonAudioFocus(audioFocusListener)
+                  currentlyHasFocus = false
                   notificationManager.cancel(NOTIFICATION_ID)
                   stopForeground(true)
                 }
