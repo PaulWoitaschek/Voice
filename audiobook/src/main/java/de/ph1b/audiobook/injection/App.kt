@@ -35,7 +35,7 @@ class App : Application() {
     component.inject(this)
 
     if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
-    Timber.plant(CrashLoggingTree())
+    else Timber.plant(CrashLoggingTree())
 
     bookAdder.scanForFiles(true)
     startService(Intent(this, PlaybackService::class.java))
