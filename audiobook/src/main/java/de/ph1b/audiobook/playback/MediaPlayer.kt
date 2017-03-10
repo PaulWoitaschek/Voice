@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
+import d
 import de.paul_woitaschek.mediaplayer.AndroidPlayer
 import de.paul_woitaschek.mediaplayer.SpeedPlayer
 import de.ph1b.audiobook.Book
@@ -16,6 +17,7 @@ import i
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.BehaviorSubject
+import timber.log.Timber
 import v
 import java.io.File
 import java.io.IOException
@@ -28,13 +30,16 @@ import de.paul_woitaschek.mediaplayer.MediaPlayer as InternalPlayer
 class MediaPlayer
 @Inject
 constructor(
-    context: Context,
+    private val context: Context,
     private val playStateManager: PlayStateManager,
     private val prefs: PrefsManager,
-    playerCapabilities: MediaPlayerCapabilities) {
+    private val playerCapabilities: MediaPlayerCapabilities) {
 
   // on android >= M we use the regular android player as it can use speed. Else use it only if there is a bug in the device
-  private val player: InternalPlayer = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M || !playerCapabilities.useCustomMediaPlayer()) {
+  private var player: InternalPlayer = newPlayer()
+  private val nextPlayer = NextPlayer(newPlayer())
+
+  private fun newPlayer(): InternalPlayer = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M || !playerCapabilities.useCustomMediaPlayer()) {
     AndroidPlayer(context)
   } else SpeedPlayer(context)
 
@@ -49,8 +54,7 @@ constructor(
   private val autoRewindAmount: Int
     get() = prefs.autoRewindAmount.value
 
-  init {
-
+  private fun attachCallbacks(player: InternalPlayer) {
     player.setWakeMode(PowerManager.PARTIAL_WAKE_LOCK)
     player.onCompletion {
       // After the current song has ended, prepare the next one if there is one. Else stop the
@@ -69,9 +73,14 @@ constructor(
     }
 
     player.onError {
+      Timber.e("onError")
       player.reset()
       state = State.IDLE
     }
+  }
+
+  init {
+    attachCallbacks(player)
 
     stateSubject.switchMap {
       if (it == State.STARTED) {
@@ -90,7 +99,7 @@ constructor(
   /** Initializes a new book. After this, a call to play can be made. */
   fun init(book: Book) {
     if (this.bookSubject.value != book) {
-      i { "constructor called with ${book.name}" }
+      i { "init called with ${book.name}" }
       this.bookSubject.onNext(book)
     }
   }
@@ -104,9 +113,29 @@ constructor(
   // Prepares the current chapter set in book.
   private fun prepare() {
     bookSubject.value?.let {
+      val start = System.currentTimeMillis()
       try {
-        player.reset()
-        player.prepare(Uri.fromFile(it.currentChapter().file))
+        val fileToPrepare = it.currentChapter().file
+
+        var prepared = false
+        if (nextPlayer.ready()) {
+          i { "player ready!" }
+          val (newPlayer, ready, preparedFile) = nextPlayer.swap(player, it.nextChapter()?.file)
+
+          player = newPlayer
+          attachCallbacks(player)
+          prepared = ready && preparedFile == fileToPrepare
+          if (!prepared) d { "still have to prepare because ready=$ready, rightFile=${preparedFile == fileToPrepare}" }
+        } else d { "nextPlayer is still preparing" }
+
+        if (!prepared) {
+          d { "prepare blocking" }
+          player.reset()
+          player.prepare(Uri.fromFile(fileToPrepare))
+          state = State.PREPARED
+        }
+
+        v { "preparing took ${System.currentTimeMillis() - start}ms" }
         player.seekTo(it.time)
         player.playbackSpeed = it.playbackSpeed
         state = State.PREPARED
@@ -116,7 +145,6 @@ constructor(
       }
     }
   }
-
 
   /** Plays the prepared file. */
   fun play() {
