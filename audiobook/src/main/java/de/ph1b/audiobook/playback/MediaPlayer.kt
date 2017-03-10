@@ -2,12 +2,15 @@ package de.ph1b.audiobook.playback
 
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.os.PowerManager
+import de.paul_woitaschek.mediaplayer.AndroidPlayer
 import de.paul_woitaschek.mediaplayer.SpeedPlayer
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
+import de.ph1b.audiobook.playback.utils.MediaPlayerCapabilities
 import e
 import i
 import io.reactivex.Observable
@@ -19,13 +22,22 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
+import de.paul_woitaschek.mediaplayer.MediaPlayer as InternalPlayer
 
 @Singleton
 class MediaPlayer
 @Inject
-constructor(context: Context, private val playStateManager: PlayStateManager, private val prefs: PrefsManager) {
+constructor(
+    context: Context,
+    private val playStateManager: PlayStateManager,
+    private val prefs: PrefsManager,
+    playerCapabilities: MediaPlayerCapabilities) {
 
-  private val player = SpeedPlayer(context)
+  // on android >= M we use the regular android player as it can use speed. Else use it only if there is a bug in the device
+  private val player: InternalPlayer = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M || !playerCapabilities.useCustomMediaPlayer()) {
+    AndroidPlayer(context)
+  } else SpeedPlayer(context)
+
   private var bookSubject = BehaviorSubject.create<Book>()
   private var stateSubject = BehaviorSubject.createDefault(State.IDLE)
   private var state: State
@@ -38,6 +50,7 @@ constructor(context: Context, private val playStateManager: PlayStateManager, pr
     get() = prefs.autoRewindAmount.value
 
   init {
+
     player.setWakeMode(PowerManager.PARTIAL_WAKE_LOCK)
     player.onCompletion {
       // After the current song has ended, prepare the next one if there is one. Else stop the
@@ -63,8 +76,8 @@ constructor(context: Context, private val playStateManager: PlayStateManager, pr
     stateSubject.switchMap {
       if (it == State.STARTED) {
         Observable.interval(200L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-          .map { player.currentPosition }
-          .distinctUntilChanged { it -> it / 1000 } // let the value only pass the full second changed.
+            .map { player.currentPosition }
+            .distinctUntilChanged { it -> it / 1000 } // let the value only pass the full second changed.
       } else Observable.empty()
     }.subscribe {
       // update the book
