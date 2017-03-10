@@ -107,7 +107,7 @@ class BookStorageTest {
 
         val oldChapters = inserted.chapters
         val substracted = oldChapters.minus(oldChapters.first())
-        val newChapters = substracted.plus(Chapter(File("/root/", "salkjsdg.mp3"), "askhsdglkjsdf", 113513516))
+      val newChapters = substracted.plus(Chapter(File("/root/", "salkjsdg.mp3"), "askhsdglkjsdf", 113513516, 131351))
 
         val changed = inserted.copy(
                 type = Book.Type.SINGLE_FILE,

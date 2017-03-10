@@ -21,17 +21,17 @@ class BookStorage
 
   private fun books(active: Boolean) = db.asTransaction {
     return@asTransaction db.query(table = BookTable.TABLE_NAME,
-      columns = listOf(
-        BookTable.ID,
-        BookTable.NAME,
-        BookTable.AUTHOR,
-        BookTable.CURRENT_MEDIA_PATH,
-        BookTable.PLAYBACK_SPEED,
-        BookTable.ROOT,
-        BookTable.TIME,
-        BookTable.TYPE),
-      selection = "${BookTable.ACTIVE} =?",
-      selectionArgs = listOf(if (active) 1 else 0)
+        columns = listOf(
+            BookTable.ID,
+            BookTable.NAME,
+            BookTable.AUTHOR,
+            BookTable.CURRENT_MEDIA_PATH,
+            BookTable.PLAYBACK_SPEED,
+            BookTable.ROOT,
+            BookTable.TIME,
+            BookTable.TYPE),
+        selection = "${BookTable.ACTIVE} =?",
+        selectionArgs = listOf(if (active) 1 else 0)
     ).mapRows {
       val bookId: Long = long(BookTable.ID)
       val bookName: String = string(BookTable.NAME)
@@ -43,15 +43,16 @@ class BookStorage
       val bookType: String = string(BookTable.TYPE)
 
       val chapters = db.query(table = ChapterTable.TABLE_NAME,
-        columns = listOf(ChapterTable.NAME, ChapterTable.DURATION, ChapterTable.PATH),
-        selection = "${ChapterTable.BOOK_ID} =?",
-        selectionArgs = listOf(bookId))
-        .mapRows {
-          val name: String = string(ChapterTable.NAME)
-          val duration: Int = int(ChapterTable.DURATION)
-          val path: String = string(ChapterTable.PATH)
-          Chapter(File(path), name, duration)
-        }
+          columns = listOf(ChapterTable.NAME, ChapterTable.DURATION, ChapterTable.PATH, ChapterTable.LAST_MODIFIED),
+          selection = "${ChapterTable.BOOK_ID} =?",
+          selectionArgs = listOf(bookId))
+          .mapRows {
+            val name: String = string(ChapterTable.NAME)
+            val duration: Int = int(ChapterTable.DURATION)
+            val path: String = string(ChapterTable.PATH)
+            val lastModified = long(ChapterTable.LAST_MODIFIED)
+            Chapter(File(path), name, duration, lastModified)
+          }
 
       if (chapters.find { it.file == currentFile } == null) {
         e { "Couldn't get current file. Return first file" }
@@ -82,13 +83,14 @@ class BookStorage
   }
 
   private fun SQLiteDatabase.insert(chapter: Chapter, bookId: Long) =
-    insertOrThrow(ChapterTable.TABLE_NAME, null, chapter.toContentValues(bookId))
+      insertOrThrow(ChapterTable.TABLE_NAME, null, chapter.toContentValues(bookId))
 
   private fun Chapter.toContentValues(bookId: Long) = ContentValues().apply {
     put(ChapterTable.DURATION, duration)
     put(ChapterTable.NAME, name)
     put(ChapterTable.PATH, file.absolutePath)
     put(ChapterTable.BOOK_ID, bookId)
+    put(ChapterTable.LAST_MODIFIED, fileLastModified)
   }
 
   private fun Book.toContentValues() = ContentValues().apply {

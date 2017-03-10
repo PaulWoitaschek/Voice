@@ -1,12 +1,14 @@
 package de.ph1b.audiobook.persistence
 
 import de.ph1b.audiobook.Book
+import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.persistence.internals.BookStorage
 import e
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import v
+import java.io.File
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -82,5 +84,16 @@ import javax.inject.Singleton
     active.add(book)
     storage.revealBook(book.id)
     sortBooksAndNotifySubject()
+  }
+
+  fun chapterByFile(file: File) = chapterByFile(file, active) ?: chapterByFile(file, orphaned)
+
+  private fun chapterByFile(file: File, books: List<Book>): Chapter? {
+    books.forEach {
+      it.chapters.forEach {
+        if (it.file == file) return it
+      }
+    }
+    return null
   }
 }

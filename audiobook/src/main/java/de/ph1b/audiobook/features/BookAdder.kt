@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Handler
 import android.support.v4.content.ContextCompat
+import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.misc.*
@@ -17,6 +18,7 @@ import java.io.File
 import java.util.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -66,6 +68,7 @@ import javax.inject.Singleton
     if (!scannerActiveSubject.value || interrupting) {
       stopScanner = true
       executor.execute {
+        val scanStart = System.nanoTime()
         handler.postBlocking { scannerActiveSubject.onNext(true) }
         stopScanner = false
 
@@ -78,6 +81,7 @@ import javax.inject.Singleton
 
         stopScanner = false
         handler.postBlocking { scannerActiveSubject.onNext(false) }
+        d { "a full scan took ${TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - scanStart)}" }
       }
     }
   }
@@ -85,15 +89,15 @@ import javax.inject.Singleton
   /** the saved single book files the User chose in [de.ph1b.audiobook.features.folderChooser.FolderChooserView] */
   private val singleBookFiles: List<File>
     get() = prefs.singleBookFolders.value
-      .map(::File)
-      .sortedWith(NaturalOrderComparator.fileComparator)
+        .map(::File)
+        .sortedWith(NaturalOrderComparator.fileComparator)
 
   // Gets the saved collection book files the User chose in [FolderChooserView]
   private val collectionBookFiles: List<File>
     get() = prefs.collectionFolders.value
-      .map(::File)
-      .flatMap { it.listFilesSafely(FileRecognition.folderAndMusicFilter) }
-      .sortedWith(NaturalOrderComparator.fileComparator)
+        .map(::File)
+        .flatMap { it.listFilesSafely(FileRecognition.folderAndMusicFilter) }
+        .sortedWith(NaturalOrderComparator.fileComparator)
 
   /** Deletes all the books that exist on the database but not on the hard drive or on the saved
    * audio book paths. **/
@@ -178,15 +182,15 @@ import javax.inject.Singleton
     var orphanedBook = getBookFromDb(rootFile, type, true)
     if (orphanedBook == null) {
       val newBook = Book(
-        Book.ID_UNKNOWN,
-        type,
-        result.author,
-        firstChapterFile,
-        0,
-        bookName,
-        newChapters,
-        1.0f,
-        bookRoot)
+          Book.ID_UNKNOWN,
+          type,
+          result.author,
+          firstChapterFile,
+          0,
+          bookName,
+          newChapters,
+          1.0f,
+          bookRoot)
       handler.postBlocking { repo.addBook(newBook) }
     } else {
       // checks if current path is still valid.
@@ -227,9 +231,9 @@ import javax.inject.Singleton
       //set new bookmarks and chapters.
       // if the current path is gone, reset it correctly.
       bookToUpdate = bookToUpdate.copy(
-        chapters = newChapters,
-        currentFile = if (currentPathIsGone) newChapters.first().file else bookToUpdate.currentFile,
-        time = if (currentPathIsGone) 0 else bookToUpdate.time)
+          chapters = newChapters,
+          currentFile = if (currentPathIsGone) newChapters.first().file else bookToUpdate.currentFile,
+          time = if (currentPathIsGone) 0 else bookToUpdate.time)
 
       handler.postBlocking { repo.updateBook(bookToUpdate) }
     }
@@ -268,15 +272,24 @@ import javax.inject.Singleton
   @Throws(InterruptedException::class)
   private fun getChaptersByRootFile(rootFile: File): List<Chapter> {
     val containingFiles = rootFile.walk()
-      .filter { FileRecognition.musicFilter.accept(it) }
-      .toMutableList()
-      .sortedWith(NaturalOrderComparator.fileComparator)
+        .filter { FileRecognition.musicFilter.accept(it) }
+        .sortedWith(NaturalOrderComparator.fileComparator)
+        .toList()
 
     val containingMedia = ArrayList<Chapter>(containingFiles.size)
     for (f in containingFiles) {
+      // check for existing chapter first so we can skip parsing
+      val existingChapter = repo.chapterByFile(f)
+      val lastModified = f.lastModified()
+      if (existingChapter?.fileLastModified == lastModified) {
+        containingMedia.add(existingChapter)
+        continue
+      }
+
+      // else parse and add
       val result = MediaAnalyzer.compute(f)
       if (result.duration > 0) {
-        containingMedia.add(Chapter(f, result.chapterName, result.duration))
+        containingMedia.add(Chapter(f, result.chapterName, result.duration, lastModified))
       }
       throwIfStopRequested()
     }
@@ -299,11 +312,11 @@ import javax.inject.Singleton
    */
   private fun getBookFromDb(rootFile: File, type: Book.Type, orphaned: Boolean): Book? {
     val books: List<Book> =
-      if (orphaned) {
-        repo.getOrphanedBooks()
-      } else {
-        repo.activeBooks
-      }
+        if (orphaned) {
+          repo.getOrphanedBooks()
+        } else {
+          repo.activeBooks
+        }
     if (rootFile.isDirectory) {
       return books.firstOrNull {
         rootFile.absolutePath == it.root && type === it.type

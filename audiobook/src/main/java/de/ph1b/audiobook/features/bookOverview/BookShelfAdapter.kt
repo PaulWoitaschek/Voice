@@ -44,8 +44,6 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
 
   /** Adds a new set of books and removes the ones that do not exist any longer **/
   fun newDataSet(newBooks: List<Book>) {
-    i { "newDataSet was called with ${newBooks.size} books" }
-
     val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
 
       override fun getOldListSize(): Int = books.size
@@ -135,7 +133,7 @@ class BookShelfAdapter(private val c: Context, private val bookClicked: (Book, C
 
   /** ViewHolder for the grid **/
   inner class GridViewHolder(parent: ViewGroup) : BaseViewHolder(parent.layoutInflater()
-    .inflate(R.layout.book_shelf_grid_layout, parent, false))
+      .inflate(R.layout.book_shelf_grid_layout, parent, false))
 
 
   /** ViewHolder base class **/

@@ -8,7 +8,7 @@ import java.io.File
  *
  * @author Paul Woitaschek
  */
-data class Chapter(val file: File, val name: String, val duration: Int) : Comparable<Chapter> {
+data class Chapter(val file: File, val name: String, val duration: Int, val fileLastModified: Long) : Comparable<Chapter> {
 
   init {
     check(name.isNotEmpty())

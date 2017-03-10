@@ -22,8 +22,8 @@ object BookMocker {
     val author = "TestAuthor"
     val time = 0
     val name = "TestBook"
-    val chapter1 = Chapter(file1, file1.name, 1 + rnd.nextInt(100000))
-    val chapter2 = Chapter(file2, file2.name, 1 + rnd.nextInt(200000))
+    val chapter1 = Chapter(file1, file1.name, 1 + rnd.nextInt(100000), 13534)
+    val chapter2 = Chapter(file2, file2.name, 1 + rnd.nextInt(200000), 134134)
     val chapters = listOf(chapter1, chapter2)
     val playbackSpeed = 1f
     var root: String? = file1.parent

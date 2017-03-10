@@ -48,8 +48,8 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
 
 
     val bookCursor = db.query(copyBookTableName,
-      arrayOf("BOOK_ID", "BOOK_ROOT", "BOOK_TYPE"),
-      null, null, null, null, null)
+        arrayOf("BOOK_ID", "BOOK_ROOT", "BOOK_TYPE"),
+        null, null, null, null, null)
 
     bookCursor.moveToNextLoop {
       val bookId = bookCursor.getLong(0)
@@ -57,8 +57,8 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
       val type = bookCursor.getString(2)
 
       val mediaCursor = db.query(copyChapterTableName, arrayOf("CHAPTER_PATH", "CHAPTER_DURATION", "CHAPTER_NAME"),
-        "BOOK_ID" + "=?", arrayOf(bookId.toString()),
-        null, null, null)
+          "BOOK_ID" + "=?", arrayOf(bookId.toString()),
+          null, null, null)
       val chapterNames = ArrayList<String>(mediaCursor.count)
       val chapterDurations = ArrayList<Int>(mediaCursor.count)
       val chapterPaths = ArrayList<String>(mediaCursor.count)
@@ -252,7 +252,7 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
         if (coverFile.exists() && coverFile.canWrite()) {
           try {
             val newCoverFile = File(Environment.getExternalStorageDirectory().absolutePath + File.separator + "Android" + File.separator + "data" + File.separator + App.component.context.packageName,
-              newBookId.toString() + ".jpg")
+                newBookId.toString() + ".jpg")
             if (!coverFile.parentFile.exists()) {
               //noinspection ResultOfMethodCallIgnored
               coverFile.parentFile.mkdirs()
@@ -280,8 +280,8 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
 
     // get all books
     val cursor = db.query("TABLE_BOOK",
-      arrayOf("BOOK_ID", "BOOK_JSON"),
-      null, null, null, null, null)
+        arrayOf("BOOK_ID", "BOOK_JSON"),
+        null, null, null, null, null)
     val allBooks = ArrayList<JSONObject>(cursor.count)
     try {
       while (cursor.moveToNext()) {
@@ -381,7 +381,7 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
 
     // fetching old contents
     val cursor = db.query("TABLE_BOOK", arrayOf("BOOK_JSON", "BOOK_ACTIVE"),
-      null, null, null, null, null)
+        null, null, null, null, null)
     val bookContents = ArrayList<String>(cursor.count)
     val activeMapping = ArrayList<Boolean>(cursor.count)
     cursor.moveToNextLoop {
@@ -509,18 +509,18 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
     val TABLE_CHAPTERS = "tableChapters"
 
     val bookCursor = db.query(TABLE_BOOK,
-      arrayOf(BOOK_ID),
-      null, null, null, null, null)
+        arrayOf(BOOK_ID),
+        null, null, null, null, null)
 
     bookCursor.moveToNextLoop {
       val bookId = bookCursor.getLong(0)
 
       var chapterCount = 0
       val chapterCursor = db.query(TABLE_CHAPTERS,
-        null,
-        BOOK_ID + "=?",
-        arrayOf(bookId.toString()),
-        null, null, null)
+          null,
+          BOOK_ID + "=?",
+          arrayOf(bookId.toString()),
+          null, null, null)
       chapterCursor.moveToNextLoop {
         chapterCount++
       }
@@ -541,17 +541,17 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
     val CHAPTER_PATH = "chapterPath"
 
     val bookCursor = db.query(TABLE_BOOK,
-      arrayOf(BOOK_ID, BOOK_CURRENT_MEDIA_PATH),
-      null, null, null, null, null)
+        arrayOf(BOOK_ID, BOOK_CURRENT_MEDIA_PATH),
+        null, null, null, null, null)
     bookCursor.moveToNextLoop {
       val bookId = bookCursor.getLong(0)
       val bookmarkCurrentMediaPath = bookCursor.getString(1)
 
       val chapterCursor = db.query(TABLE_CHAPTERS,
-        arrayOf(CHAPTER_PATH),
-        BOOK_ID + "=?",
-        arrayOf(bookId.toString()),
-        null, null, null)
+          arrayOf(CHAPTER_PATH),
+          BOOK_ID + "=?",
+          arrayOf(bookId.toString()),
+          null, null, null)
       val chapterPaths = ArrayList<String>(chapterCursor.count)
       chapterCursor.moveToNextLoop {
         val chapterPath = chapterCursor.getString(0)
@@ -634,23 +634,23 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
     val ACTIVE = "BOOK_ACTIVE"
     val TABLE_NAME = "tableBooks"
     val CREATE_TABLE = "CREATE TABLE $TABLE_NAME ( " +
-      "  $ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-      "  $NAME TEXT NOT NULL, " +
-      "  $AUTHOR TEXT, " +
-      "  $CURRENT_MEDIA_PATH TEXT NOT NULL, " +
-      "  $PLAYBACK_SPEED REAL NOT NULL, " +
-      "  $ROOT TEXT NOT NULL, " +
-      "  $TIME INTEGER NOT NULL, " +
-      "  $TYPE TEXT NOT NULL, " +
-      "  $ACTIVE INTEGER NOT NULL DEFAULT 1" +
-      ")"
+        "  $ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        "  $NAME TEXT NOT NULL, " +
+        "  $AUTHOR TEXT, " +
+        "  $CURRENT_MEDIA_PATH TEXT NOT NULL, " +
+        "  $PLAYBACK_SPEED REAL NOT NULL, " +
+        "  $ROOT TEXT NOT NULL, " +
+        "  $TIME INTEGER NOT NULL, " +
+        "  $TYPE TEXT NOT NULL, " +
+        "  $ACTIVE INTEGER NOT NULL DEFAULT 1" +
+        ")"
 
     data class Holder(val id: Long, val name: String, val author: String?, val path: String, val speed: Float, val root: String, val time: Long, val type: String, val active: Int)
 
     val entries = db.query(TABLE_NAME)
-      .mapRows {
-        Holder(long(ID), string(NAME), stringNullable(AUTHOR), string(CURRENT_MEDIA_PATH), float(PLAYBACK_SPEED), string(ROOT), long(TIME), string(TYPE), int(ACTIVE))
-      }
+        .mapRows {
+          Holder(long(ID), string(NAME), stringNullable(AUTHOR), string(CURRENT_MEDIA_PATH), float(PLAYBACK_SPEED), string(ROOT), long(TIME), string(TYPE), int(ACTIVE))
+        }
     db.asTransaction {
       db.execSQL("DROP TABLE $TABLE_NAME")
       db.execSQL(CREATE_TABLE)
@@ -665,6 +665,47 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
           put(TIME, it.time)
           put(TYPE, it.type)
           put(ACTIVE, it.active)
+        }
+        db.insert(TABLE_NAME, null, cv)
+      }
+    }
+  }
+
+  // the field LAST_MODIFIED was added to the chapters
+  fun upgrade36() {
+    val TABLE_NAME = "tableChapters"
+
+    val DURATION = "chapterDuration"
+    val NAME = "chapterName"
+    val PATH = "chapterPath"
+    val BOOK_ID = "bookId"
+    val LAST_MODIFIED = "lastModified"
+
+    class Holder(val duration: Long, val name: String, val path: String, val bookId: Long)
+
+    val data = db.query(TABLE_NAME).mapRows {
+      Holder(long(DURATION), string(NAME), string(PATH), long(BOOK_ID))
+    }
+
+    val CREATE_TABLE = "CREATE TABLE $TABLE_NAME ( " +
+        "$DURATION INTEGER NOT NULL, " +
+        "$NAME TEXT NOT NULL, " +
+        "$PATH TEXT NOT NULL, " +
+        "$BOOK_ID INTEGER NOT NULL, " +
+        "$LAST_MODIFIED INTEGER NOT NULL, " +
+        "FOREIGN KEY ( $BOOK_ID ) REFERENCES tableBooks ( bookId )" +
+        ")"
+
+    db.asTransaction {
+      db.execSQL("DROP TABLE $TABLE_NAME")
+      db.execSQL(CREATE_TABLE)
+      data.forEach {
+        val cv = ContentValues().apply {
+          put(DURATION, it.duration)
+          put(NAME, it.name)
+          put(BOOK_ID, it.bookId)
+          put(PATH, it.path)
+          put(LAST_MODIFIED, 0L)
         }
         db.insert(TABLE_NAME, null, cv)
       }
@@ -686,5 +727,6 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
     if (fromVersion <= 32) upgrade32()
     if (fromVersion <= 34) upgrade34()
     if (fromVersion <= 35) upgrade35()
+    if (fromVersion <= 36) upgrade36()
   }
 }

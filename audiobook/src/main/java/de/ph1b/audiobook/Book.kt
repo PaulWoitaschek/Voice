@@ -4,7 +4,6 @@ package de.ph1b.audiobook
 import android.os.Environment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.NaturalOrderComparator
-import i
 import java.io.File
 
 
@@ -17,15 +16,15 @@ import java.io.File
  * @author Paul Woitaschek
  */
 data class Book(
-  val id: Long,
-  val type: Type,
-  val author: String?,
-  val currentFile: File,
-  val time: Int,
-  val name: String,
-  val chapters: List<Chapter>,
-  val playbackSpeed: Float,
-  val root: String) : Comparable<Book> {
+    val id: Long,
+    val type: Type,
+    val author: String?,
+    val currentFile: File,
+    val time: Int,
+    val name: String,
+    val chapters: List<Chapter>,
+    val playbackSpeed: Float,
+    val root: String) : Comparable<Book> {
 
   override fun compareTo(other: Book) = NaturalOrderComparator.stringComparator.compare(name, other.name)
 
@@ -56,7 +55,7 @@ data class Book(
 
   /**
    * @return the global position. It sums up the duration of all elapsed chapters plus the position
-   * * in the current chapter.
+   * in the current chapter.
    */
   fun globalPosition(): Int {
     var globalPosition = 0
@@ -91,8 +90,7 @@ data class Book(
     } + ".jpg"
 
     val coverFile = File("${Environment.getExternalStorageDirectory().absolutePath}${separator}Android${separator}data$separator${App.component.context.packageName}",
-      name)
-    i { "CoverFile is $coverFile" }
+        name)
     if (!coverFile.parentFile.exists()) {
       //noinspection ResultOfMethodCallIgnored
       coverFile.parentFile.mkdirs()
