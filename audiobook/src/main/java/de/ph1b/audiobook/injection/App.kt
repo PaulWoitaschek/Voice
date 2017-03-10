@@ -31,7 +31,9 @@ class App : Application() {
         .build()
     Fabric.with(this, crashlytics)
 
-    component = newComponent()
+    component = DaggerApplicationComponent.builder()
+        .androidModule(AndroidModule(this))
+        .build()
     component.inject(this)
 
     if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
@@ -42,10 +44,6 @@ class App : Application() {
 
     AppCompatDelegate.setDefaultNightMode(prefsManager.theme.value.nightMode)
   }
-
-  private fun newComponent() = DaggerApplicationComponent.builder()
-      .androidModule(AndroidModule(this))
-      .build()
 
   companion object {
 
