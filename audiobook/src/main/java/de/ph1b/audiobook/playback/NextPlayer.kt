@@ -2,6 +2,7 @@ package de.ph1b.audiobook.playback
 
 import android.net.Uri
 import de.paul_woitaschek.mediaplayer.MediaPlayer
+import e
 import i
 import java.io.File
 import kotlin.concurrent.thread
@@ -23,12 +24,12 @@ class NextPlayer(private var player: MediaPlayer) {
   // the player is ready to be swapped
   fun ready() = !(preparingThread?.isAlive ?: false)
 
-  // swaps the players and prepares the new one. Make sure to check ready() first
+  // swaps the players and prepares the new one.
   fun swap(nextPlayer: MediaPlayer, newFileToPrepare: File?): PlayerWithState {
-    check(ready()) { "still preparing" }
+    // if not ready, wait for the thread
+    preparingThread?.join()
 
     // release callbacks before setting the old player
-    player.onPrepared(null)
     player.onError(null)
     player.onCompletion(null)
 
@@ -46,6 +47,7 @@ class NextPlayer(private var player: MediaPlayer) {
       if (newFileToPrepare != null) {
         i { "prepare new file $newFileToPrepare" }
         player.onError {
+          e { "onError" }
           player.reset()
           state = State.IDLE
         }

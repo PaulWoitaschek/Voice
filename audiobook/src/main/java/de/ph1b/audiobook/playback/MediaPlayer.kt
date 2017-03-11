@@ -17,7 +17,6 @@ import i
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.BehaviorSubject
-import timber.log.Timber
 import v
 import java.io.File
 import java.io.IOException
@@ -73,7 +72,7 @@ constructor(
     }
 
     player.onError {
-      Timber.e("onError")
+      e { "onError" }
       player.reset()
       state = State.IDLE
     }
