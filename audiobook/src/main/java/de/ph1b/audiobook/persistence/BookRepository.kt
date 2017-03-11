@@ -86,7 +86,7 @@ import javax.inject.Singleton
     sortBooksAndNotifySubject()
   }
 
-  fun chapterByFile(file: File) = chapterByFile(file, active) ?: chapterByFile(file, orphaned)
+  @Synchronized fun chapterByFile(file: File) = chapterByFile(file, active) ?: chapterByFile(file, orphaned)
 
   private fun chapterByFile(file: File, books: List<Book>): Chapter? {
     books.forEach {
