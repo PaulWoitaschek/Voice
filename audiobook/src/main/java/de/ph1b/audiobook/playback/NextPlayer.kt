@@ -16,7 +16,8 @@ import kotlin.concurrent.thread
 class NextPlayer(private var player: MediaPlayer) {
 
   private var preparingThread: Thread? = null
-  private var fileToPrepare: File? = null
+  var fileToPrepare: File? = null
+    private set
   @Volatile private var prepared = false
 
   // the player is ready to be swapped

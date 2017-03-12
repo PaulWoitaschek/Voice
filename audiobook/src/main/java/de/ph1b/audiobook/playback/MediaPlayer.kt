@@ -125,10 +125,10 @@ constructor(
         val fileToPrepare = it.currentChapter().file
 
         var prepared = false
-        if (nextPlayer.ready()) {
-          i { "player ready!" }
+        // if nextPlayer is has the file we are looking for, use it. Else swap the files so
+        // the nextPlayer can prepare the future file
+        if (nextPlayer.fileToPrepare == fileToPrepare || nextPlayer.ready()) {
           val (newPlayer, ready, preparedFile) = nextPlayer.swap(player, it.nextChapter()?.file)
-
           player = newPlayer
           attachCallbacks(player)
           prepared = ready && preparedFile == fileToPrepare
