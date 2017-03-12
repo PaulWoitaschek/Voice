@@ -5,6 +5,7 @@ import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
+import com.crashlytics.android.Crashlytics
 import d
 import de.paul_woitaschek.mediaplayer.AndroidPlayer
 import de.paul_woitaschek.mediaplayer.SpeedPlayer
@@ -21,6 +22,7 @@ import io.reactivex.subjects.BehaviorSubject
 import v
 import java.io.File
 import java.io.IOException
+import java.lang.IllegalStateException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -136,7 +138,14 @@ constructor(
         if (!prepared) {
           d { "prepare blocking" }
           player.reset()
-          player.prepare(Uri.fromFile(fileToPrepare))
+          val uri = Uri.fromFile(fileToPrepare)
+          try {
+            player.prepare(uri)
+          } catch (e: IllegalStateException) {
+            Crashlytics.logException(RuntimeException("IllegalStateException after reset. Android Bug"))
+            player.reset()
+            player.prepare(uri)
+          }
           state = State.PREPARED
         }
 
