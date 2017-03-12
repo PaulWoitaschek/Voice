@@ -111,6 +111,11 @@ constructor(
     if (bookSubject.value != book) {
       i { "init called with ${book.name}" }
       bookSubject.onNext(book)
+
+      // prepare the nextPlayer with the current file so upon prepare the file will be ready
+      player = nextPlayer.swap(player, book.currentFile)
+          .player
+      state = State.IDLE
     }
   }
 
