@@ -210,7 +210,7 @@ class PlaybackService : MediaBrowserServiceCompat() {
     changeNotifier = ChangeNotifier(mediaSession)
 
     // update book when changed by player
-    player.bookObservable().distinctUntilChanged().subscribe {
+    player.bookStream.distinctUntilChanged().subscribe {
       it?.let { repo.updateBook(it) }
     }
 

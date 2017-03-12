@@ -62,6 +62,9 @@ constructor(
   private val autoRewindAmount: Int
     get() = prefs.autoRewindAmount.value
 
+  fun book(): Book? = bookSubject.value
+  val bookStream = bookSubject.hide()!!
+
   private fun attachCallbacks(player: InternalPlayer) {
     player.onCompletion {
       // After the current song has ended, prepare the next one if there is one. Else stop the
@@ -105,15 +108,11 @@ constructor(
 
   /** Initializes a new book. After this, a call to play can be made. */
   fun init(book: Book) {
-    if (this.bookSubject.value != book) {
+    if (bookSubject.value != book) {
       i { "init called with ${book.name}" }
-      this.bookSubject.onNext(book)
+      bookSubject.onNext(book)
     }
   }
-
-  fun book(): Book? = bookSubject.value
-
-  fun bookObservable(): Observable<Book> = bookSubject
 
   fun setVolume(loud: Boolean) = player.setVolume(if (loud) 1F else 0.1F)
 
@@ -175,7 +174,7 @@ constructor(
         playStateManager.playState = PlayState.PLAYING
         state = State.STARTED
       }
-      State.STOPPED -> {
+      State.STOPPED, State.IDLE -> {
         prepare()
         if (state == State.PREPARED) {
           play()
@@ -241,7 +240,6 @@ constructor(
     playStateManager.playState = PlayState.STOPPED
     state = State.STOPPED
   }
-
 
   /**
    * Pauses the player. Also stops the updating mechanism which constantly updates the book to the
