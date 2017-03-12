@@ -1,5 +1,5 @@
 ext.versions = [
-        "androidPlayer"       : "0.3.7",
+        "androidPlayer"       : "0.3.8",
         "androidPlugin"       : "2.3.0",
         "assertJ"             : "1.7.1",
         "conductor"           : "2.1.1",
