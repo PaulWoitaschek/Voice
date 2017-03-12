@@ -39,7 +39,7 @@ class App : Application() {
     if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
     else Timber.plant(CrashLoggingTree())
 
-    bookAdder.scanForFiles(true)
+    bookAdder.scanForFiles()
     startService(Intent(this, PlaybackService::class.java))
 
     AppCompatDelegate.setDefaultNightMode(prefsManager.theme.value.nightMode)

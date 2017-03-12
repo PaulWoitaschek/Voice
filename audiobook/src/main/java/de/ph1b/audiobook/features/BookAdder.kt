@@ -59,30 +59,24 @@ import javax.inject.Singleton
     }
   }
 
-  /**
-   * Starts scanning for new [Book] or changes within.
-   *
-   * @param interrupting true if a eventually running scanner should be interrupted.
-   */
-  fun scanForFiles(interrupting: Boolean) {
-    if (!scannerActiveSubject.value || interrupting) {
-      stopScanner = true
-      executor.execute {
-        val scanStart = System.nanoTime()
-        handler.postBlocking { scannerActiveSubject.onNext(true) }
-        stopScanner = false
+  /** Restarts the scanner **/
+  fun scanForFiles() {
+    stopScanner = true
+    executor.execute {
+      val scanStart = System.nanoTime()
+      handler.postBlocking { scannerActiveSubject.onNext(true) }
+      stopScanner = false
 
-        try {
-          deleteOldBooks()
-          checkForBooks()
-          coverCollector.findCovers(repo.activeBooks)
-        } catch (ignored: InterruptedException) {
-        }
-
-        stopScanner = false
-        handler.postBlocking { scannerActiveSubject.onNext(false) }
-        d { "a full scan took ${TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - scanStart)}" }
+      try {
+        deleteOldBooks()
+        checkForBooks()
+        coverCollector.findCovers(repo.activeBooks)
+      } catch (ignored: InterruptedException) {
       }
+
+      stopScanner = false
+      handler.postBlocking { scannerActiveSubject.onNext(false) }
+      d { "a full scan took ${TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - scanStart)}" }
     }
   }
 

@@ -38,7 +38,7 @@ constructor(private val repo: BookRepository,
     if (audioFoldersEmpty) view.showNoFolderWarning()
 
     // scan for files
-    bookAdder.scanForFiles(false)
+    bookAdder.scanForFiles()
 
     disposables.apply {
       // update books when they changed
