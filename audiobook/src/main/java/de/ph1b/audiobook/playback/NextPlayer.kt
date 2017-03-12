@@ -5,6 +5,7 @@ import de.paul_woitaschek.mediaplayer.MediaPlayer
 import e
 import i
 import java.io.File
+import java.io.IOException
 import kotlin.concurrent.thread
 
 /**
@@ -15,11 +16,8 @@ import kotlin.concurrent.thread
 class NextPlayer(private var player: MediaPlayer) {
 
   private var preparingThread: Thread? = null
-
   private var fileToPrepare: File? = null
-
-  @Volatile private var state: State = State.IDLE
-    private set
+  @Volatile private var prepared = false
 
   // the player is ready to be swapped
   fun ready() = !(preparingThread?.isAlive ?: false)
@@ -32,36 +30,40 @@ class NextPlayer(private var player: MediaPlayer) {
     // release callbacks before setting the old player
     player.onError(null)
     player.onCompletion(null)
+    val playerWithState = PlayerWithState(player, prepared, fileToPrepare)
 
-    // fire a new thread as what's actually time consuming is the call to .reset() on the current player
+    // set future player
+    player = nextPlayer
+    fileToPrepare = newFileToPrepare
+    fileToPrepare?.let { prepareAsync(it) }
+
+    return playerWithState
+  }
+
+  // fire a new thread as what's actually time consuming is the call to .reset() on the current player
+  private fun prepareAsync(file: File) {
     preparingThread = thread {
-      // set future player
-      this.player = nextPlayer
-      fileToPrepare = newFileToPrepare
-
       // reset and set error callback
       player.reset()
-      state = State.IDLE
+      prepared = false
 
       // prepare if requested
-      if (newFileToPrepare != null) {
-        i { "prepare new file $newFileToPrepare" }
-        player.onError {
-          e { "onError" }
-          player.reset()
-          state = State.IDLE
-        }
-        player.prepare(Uri.fromFile(newFileToPrepare))
-        state = State.PREPARED
+      i { "prepare new file $file" }
+      player.onError {
+        e { "onError" }
+        player.reset()
+        prepared = false
+      }
+      try {
+        player.prepare(Uri.fromFile(file))
+        prepared = true
+      } catch (e: IOException) {
+        e(e) { "Exception while preparing $file async" }
+        player.reset()
+        prepared = false
       }
     }
-    return PlayerWithState(player, state == State.PREPARED, fileToPrepare)
   }
 
   data class PlayerWithState(val player: MediaPlayer, val ready: Boolean, val preparedFile: File?)
-
-  enum class State {
-    IDLE,
-    PREPARED
-  }
 }
