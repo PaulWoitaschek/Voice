@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.playback
 
 import android.content.Context
+import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
@@ -35,12 +36,18 @@ constructor(
     private val playerCapabilities: MediaPlayerCapabilities) {
 
   // on android >= M we use the regular android player as it can use speed. Else use it only if there is a bug in the device
-  private var player: InternalPlayer = newPlayer()
+  private var player = newPlayer()
   private val nextPlayer = NextPlayer(newPlayer())
 
-  private fun newPlayer(): InternalPlayer = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M || !playerCapabilities.useCustomMediaPlayer()) {
-    AndroidPlayer(context)
-  } else SpeedPlayer(context)
+  private fun newPlayer(): InternalPlayer {
+    val player = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M || !playerCapabilities.useCustomMediaPlayer()) {
+      AndroidPlayer(context)
+    } else SpeedPlayer(context)
+    return player.apply {
+      setWakeMode(PowerManager.PARTIAL_WAKE_LOCK)
+      setAudioStreamType(AudioManager.STREAM_MUSIC)
+    }
+  }
 
   private var bookSubject = BehaviorSubject.create<Book>()
   private var stateSubject = BehaviorSubject.createDefault(State.IDLE)
@@ -54,7 +61,6 @@ constructor(
     get() = prefs.autoRewindAmount.value
 
   private fun attachCallbacks(player: InternalPlayer) {
-    player.setWakeMode(PowerManager.PARTIAL_WAKE_LOCK)
     player.onCompletion {
       // After the current song has ended, prepare the next one if there is one. Else stop the
       // resources.
