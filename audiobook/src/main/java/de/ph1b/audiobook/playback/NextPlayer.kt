@@ -35,32 +35,34 @@ class NextPlayer(private var player: MediaPlayer) {
     // set future player
     player = nextPlayer
     fileToPrepare = newFileToPrepare
-    fileToPrepare?.let { prepareAsync(it) }
+    prepareAsync()
 
     return playerWithState
   }
 
   // fire a new thread as what's actually time consuming is the call to .reset() on the current player
-  private fun prepareAsync(file: File) {
+  private fun prepareAsync() {
     preparingThread = thread {
       // reset and set error callback
       player.reset()
       prepared = false
 
-      // prepare if requested
-      i { "prepare new file $file" }
-      player.onError {
-        e { "onError" }
-        player.reset()
-        prepared = false
-      }
-      try {
-        player.prepare(Uri.fromFile(file))
-        prepared = true
-      } catch (e: IOException) {
-        e(e) { "Exception while preparing $file async" }
-        player.reset()
-        prepared = false
+      fileToPrepare?.let {
+        // prepare if requested
+        i { "prepare new file $it" }
+        player.onError {
+          e { "onError" }
+          player.reset()
+          prepared = false
+        }
+        try {
+          player.prepare(Uri.fromFile(it))
+          prepared = true
+        } catch (e: IOException) {
+          e(e) { "Exception while preparing $it async" }
+          player.reset()
+          prepared = false
+        }
       }
     }
   }
