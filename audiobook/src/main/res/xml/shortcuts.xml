@@ -2,9 +2,9 @@
            xmlns:tools="http://schemas.android.com/tools"
            tools:targetApi="n_mr1">
     <shortcut
-        android:icon="@drawable/ic_play_arrow"
+        android:icon="@drawable/ic_shortcut_play_circle_filled"
         android:shortcutId="playCurrent"
-        android:shortcutShortLabel="@string/cover">
+        android:shortcutShortLabel="@string/play_current">
         <intent
             android:action="playCurrent"
             android:targetClass="de.ph1b.audiobook.features.coldStart.SplashActivity"
