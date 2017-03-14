@@ -85,8 +85,6 @@ dependencies {
 
     compile libraries.slimber
 
-    compile libraries.rxPermissions
-
     compile libraries.androidPlayer
 
     compile libraries.conductor

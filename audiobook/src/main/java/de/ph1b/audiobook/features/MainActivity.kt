@@ -11,10 +11,7 @@ import de.ph1b.audiobook.features.bookOverview.NoFolderWarningDialogFragment
 import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
 import de.ph1b.audiobook.injection.App
-import de.ph1b.audiobook.misc.PermissionHelper
-import de.ph1b.audiobook.misc.RouterProvider
-import de.ph1b.audiobook.misc.asTransaction
-import de.ph1b.audiobook.misc.value
+import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.PrefsManager
 import javax.inject.Inject
 
@@ -27,6 +24,7 @@ import javax.inject.Inject
 class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, RouterProvider {
 
   private lateinit var permissionHelper: PermissionHelper
+  private lateinit var permissions: Permissions
   @Inject lateinit var prefs: PrefsManager
 
   private lateinit var router: Router
@@ -36,7 +34,8 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
     setContentView(R.layout.activity_book)
     App.component.inject(this)
 
-    permissionHelper = PermissionHelper(this)
+    permissions = Permissions(this)
+    permissionHelper = PermissionHelper(this, permissions)
 
     val root = findViewById(R.id.root) as ViewGroup
     router = Conductor.attachRouter(this, root, savedInstanceState)
@@ -60,6 +59,11 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
         router.pushController(RouterTransaction.with(BookPlayController.newInstance(bookId)))
       }
     }
+  }
+
+  override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    this.permissions.onRequestPermissionsResult(requestCode, permissions, grantResults)
   }
 
   override fun provideRouter() = router

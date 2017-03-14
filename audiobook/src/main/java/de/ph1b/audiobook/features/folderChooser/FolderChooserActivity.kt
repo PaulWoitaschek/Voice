@@ -39,7 +39,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
   override fun showSubFolderWarning(first: String, second: String) {
     val message = "${getString(R.string.adding_failed_subfolder)}\n$first\n$second"
     Toast.makeText(this, message, Toast.LENGTH_LONG)
-      .show()
+        .show()
   }
 
   private lateinit var adapter: FolderChooserAdapter
@@ -48,6 +48,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
   private lateinit var upButton: ImageButton
   private lateinit var currentFolder: TextView
   private lateinit var spinnerGroup: View
+  private lateinit var permissions: Permissions
   private lateinit var permissionHelper: PermissionHelper
 
   override fun askAddNoMediaFile(folderToHide: File) {
@@ -61,7 +62,8 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     super.onCreate(savedInstanceState)
     App.component.inject(this)
 
-    permissionHelper = PermissionHelper(this)
+    permissions = Permissions(this)
+    permissionHelper = PermissionHelper(this, permissions)
 
     // find views
     setContentView(R.layout.activity_folder_chooser)
@@ -75,8 +77,8 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
 
     // toolbar
     setupActionbar(toolbar = find(R.id.toolbar),
-      upIndicator = R.drawable.close,
-      title = getString(R.string.audiobook_folders_title))
+        upIndicator = R.drawable.close,
+        title = getString(R.string.audiobook_folders_title))
 
     // listeners
     choose.setOnClickListener { presenter().chooseClicked() }
@@ -95,13 +97,18 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     spinnerAdapter = MultiLineSpinnerAdapter(toolSpinner, this, Color.WHITE)
     toolSpinner.adapter = spinnerAdapter
     toolSpinner.itemSelectionStream()
-      .filter { it != AdapterView.INVALID_POSITION } // filter invalid entries
-      .skip(1) // skip the first that passed as its no real user input
-      .subscribe {
-        i { "spinner selected with position $it and adapter.count ${spinnerAdapter.count}" }
-        val item = spinnerAdapter.getItem(it)
-        presenter().fileSelected(item.data)
-      }
+        .filter { it != AdapterView.INVALID_POSITION } // filter invalid entries
+        .skip(1) // skip the first that passed as its no real user input
+        .subscribe {
+          i { "spinner selected with position $it and adapter.count ${spinnerAdapter.count}" }
+          val item = spinnerAdapter.getItem(it)
+          presenter().fileSelected(item.data)
+        }
+  }
+
+  override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    this.permissions.onRequestPermissionsResult(requestCode, permissions, grantResults)
   }
 
   override fun onStart() {
@@ -143,14 +150,14 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     spinnerGroup.visible = newFolders.size > 1
 
     val newData = newFolders
-      .map {
-        val name = if (it.absolutePath == FolderChooserPresenter.MARSHMALLOW_SD_FALLBACK) {
-          getString(R.string.storage_all)
-        } else {
-          it.name
+        .map {
+          val name = if (it.absolutePath == FolderChooserPresenter.MARSHMALLOW_SD_FALLBACK) {
+            getString(R.string.storage_all)
+          } else {
+            it.name
+          }
+          MultiLineSpinnerAdapter.Data(it, name)
         }
-        MultiLineSpinnerAdapter.Data(it, name)
-      }
     spinnerAdapter.setData(newData)
   }
 
