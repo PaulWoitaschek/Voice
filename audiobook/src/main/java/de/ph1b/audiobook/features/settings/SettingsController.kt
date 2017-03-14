@@ -19,7 +19,6 @@ import de.ph1b.audiobook.misc.asV2Observable
 import de.ph1b.audiobook.misc.find
 import de.ph1b.audiobook.misc.setupActionbar
 import de.ph1b.audiobook.persistence.PrefsManager
-import de.ph1b.audiobook.uitools.VerticalChangeHandler
 import javax.inject.Inject
 
 /**
@@ -40,17 +39,14 @@ class SettingsController : BaseController() {
 
   override fun onAttach(view: View) {
     setupActionbar(
-      toolbar = view.find(R.id.toolbar),
-      upIndicator = R.drawable.close,
-      title = activity.getString(R.string.action_settings)
+        toolbar = view.find(R.id.toolbar),
+        upIndicator = R.drawable.close,
+        title = activity.getString(R.string.action_settings)
     )
 
     // audio book folders
     setupTextSetting(R.id.audiobookFolder, R.string.pref_root_folder_title, R.string.pref_root_folder_summary) {
-      val transaction = FolderOverviewController().asTransaction(
-        VerticalChangeHandler(),
-        VerticalChangeHandler()
-      )
+      val transaction = FolderOverviewController().asTransaction()
       router.pushController(transaction)
     }
 
@@ -59,31 +55,31 @@ class SettingsController : BaseController() {
       ThemePickerDialogFragment().show(fragmentManager, ThemePickerDialogFragment.TAG)
     }
     prefs.theme.asV2Observable()
-      .bindToLifeCycle()
-      .subscribe { themeDescription.setText(it.nameId) }
+        .bindToLifeCycle()
+        .subscribe { themeDescription.setText(it.nameId) }
 
     // resume on playback
     setupSwitchSetting(
-      id = R.id.resumePlayback,
-      titleRes = R.string.pref_resume_on_replug,
-      contentRes = R.string.pref_resume_on_replug_hint,
-      pref = prefs.resumeOnReplug
+        id = R.id.resumePlayback,
+        titleRes = R.string.pref_resume_on_replug,
+        contentRes = R.string.pref_resume_on_replug_hint,
+        pref = prefs.resumeOnReplug
     )
 
     // resume on playback
     setupSwitchSetting(
-      id = R.id.resumeAfterCall,
-      titleRes = R.string.pref_resume_after_call,
-      contentRes = R.string.pref_resume_after_call_hint,
-      pref = prefs.resumeAfterCall
+        id = R.id.resumeAfterCall,
+        titleRes = R.string.pref_resume_after_call,
+        contentRes = R.string.pref_resume_after_call_hint,
+        pref = prefs.resumeAfterCall
     )
 
     // pause on interruption
     setupSwitchSetting(
-      id = R.id.pauseOnInterruption,
-      titleRes = R.string.pref_pause_on_can_duck_title,
-      contentRes = R.string.pref_pause_on_can_duck_summary,
-      pref = prefs.pauseOnTempFocusLoss
+        id = R.id.pauseOnInterruption,
+        titleRes = R.string.pref_pause_on_can_duck_title,
+        contentRes = R.string.pref_pause_on_can_duck_summary,
+        pref = prefs.pauseOnTempFocusLoss
     )
 
     // skip amount
@@ -91,18 +87,18 @@ class SettingsController : BaseController() {
       SeekDialogFragment().show(fragmentManager, SeekDialogFragment.TAG)
     }
     prefs.seekTime.asV2Observable()
-      .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
-      .bindToLifeCycle()
-      .subscribe { skipAmountDescription.text = it }
+        .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
+        .bindToLifeCycle()
+        .subscribe { skipAmountDescription.text = it }
 
     // auto rewind
     val autoRewindDescription = setupTextSetting(R.id.autoRewind, R.string.pref_auto_rewind_title) {
       AutoRewindDialogFragment().show(fragmentManager, AutoRewindDialogFragment.TAG)
     }
     prefs.autoRewindAmount.asV2Observable()
-      .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
-      .bindToLifeCycle()
-      .subscribe { autoRewindDescription.text = it }
+        .map { resources!!.getQuantityString(R.plurals.seconds, it, it) }
+        .bindToLifeCycle()
+        .subscribe { autoRewindDescription.text = it }
   }
 
   private inline fun setupTextSetting(@IdRes id: Int, @StringRes titleRes: Int, @StringRes contentRes: Int? = null, crossinline onClick: () -> Unit): TextView {
@@ -130,8 +126,8 @@ class SettingsController : BaseController() {
       pref.set(checked)
     }
     pref.asV2Observable()
-      .bindToLifeCycle()
-      .subscribe { switch.isChecked = it }
+        .bindToLifeCycle()
+        .subscribe { switch.isChecked = it }
 
     root.setOnClickListener { switch.toggle() }
   }

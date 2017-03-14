@@ -43,12 +43,16 @@
 
         <activity
             android:name=".features.coldStart.SplashActivity"
+            android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts"/>
         </activity>
 
         <activity

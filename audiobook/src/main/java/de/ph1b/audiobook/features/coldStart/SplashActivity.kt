@@ -1,6 +1,5 @@
 package de.ph1b.audiobook.features.coldStart
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import de.ph1b.audiobook.features.MainActivity
@@ -15,7 +14,9 @@ class SplashActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    val intent = Intent(this, MainActivity::class.java)
+    // app shortcut
+    val playCurrentBookImmediately = intent.action == "playCurrent"
+    val intent = MainActivity.newIntent(this, playCurrentBookImmediately)
     startActivity(intent)
     finish()
   }

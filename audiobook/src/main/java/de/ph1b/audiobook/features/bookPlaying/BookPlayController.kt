@@ -23,7 +23,10 @@ import de.ph1b.audiobook.playback.MediaPlayer
 import de.ph1b.audiobook.playback.PlayStateManager
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.playback.Sandman
-import de.ph1b.audiobook.uitools.*
+import de.ph1b.audiobook.uitools.CoverReplacement
+import de.ph1b.audiobook.uitools.PlayPauseDrawable
+import de.ph1b.audiobook.uitools.ThemeUtil
+import de.ph1b.audiobook.uitools.visible
 import i
 import io.reactivex.Observable
 import java.util.*
@@ -279,7 +282,7 @@ class BookPlayController(bundle: Bundle) : BaseController(bundle) {
 
   override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
     R.id.action_settings -> {
-      val transaction = SettingsController().asTransaction(VerticalChangeHandler(), VerticalChangeHandler())
+      val transaction = SettingsController().asTransaction()
       router.pushController(transaction)
       true
     }

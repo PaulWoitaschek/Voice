@@ -22,7 +22,6 @@ import de.ph1b.audiobook.mvp.MvpBaseController
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.BookTransition
 import de.ph1b.audiobook.uitools.PlayPauseDrawable
-import de.ph1b.audiobook.uitools.VerticalChangeHandler
 import de.ph1b.audiobook.uitools.visible
 import i
 import javax.inject.Inject
@@ -122,10 +121,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     return when (item.itemId) {
       R.id.action_settings -> {
-        val transaction = SettingsController().asTransaction(
-          VerticalChangeHandler(),
-          VerticalChangeHandler()
-        )
+        val transaction = SettingsController().asTransaction()
         router.pushController(transaction)
         true
       }

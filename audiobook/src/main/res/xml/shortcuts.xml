@@ -1,0 +1,13 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android"
+           xmlns:tools="http://schemas.android.com/tools"
+           tools:targetApi="n_mr1">
+    <shortcut
+        android:icon="@drawable/ic_play_arrow"
+        android:shortcutId="playCurrent"
+        android:shortcutShortLabel="@string/cover">
+        <intent
+            android:action="playCurrent"
+            android:targetClass="de.ph1b.audiobook.features.coldStart.SplashActivity"
+            android:targetPackage="de.ph1b.audiobook"/>
+    </shortcut>
+</shortcuts>

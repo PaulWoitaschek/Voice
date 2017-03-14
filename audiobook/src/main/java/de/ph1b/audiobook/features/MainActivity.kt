@@ -12,7 +12,9 @@ import de.ph1b.audiobook.features.bookPlaying.BookPlayController
 import de.ph1b.audiobook.features.folderOverview.FolderOverviewController
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.*
+import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
+import de.ph1b.audiobook.playback.PlayerController
 import javax.inject.Inject
 
 
@@ -26,6 +28,8 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
   private lateinit var permissionHelper: PermissionHelper
   private lateinit var permissions: Permissions
   @Inject lateinit var prefs: PrefsManager
+  @Inject lateinit var playerController: PlayerController
+  @Inject lateinit var repo: BookRepository
 
   private lateinit var router: Router
 
@@ -40,9 +44,9 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
     val root = findViewById(R.id.root) as ViewGroup
     router = Conductor.attachRouter(this, root, savedInstanceState)
     if (!router.hasRootController()) {
-      val rootTransaction = RouterTransaction.with(BookShelfController())
-      router.setRoot(rootTransaction)
+      setupRouter()
     }
+
     router.addChangeListener(object : ControllerChangeHandler.ControllerChangeListener {
       override fun onChangeStarted(to: Controller?, from: Controller?, isPush: Boolean, container: ViewGroup, handler: ControllerChangeHandler) {
         from?.setOptionsMenuHidden(true)
@@ -52,13 +56,30 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
         from?.setOptionsMenuHidden(false)
       }
     })
+  }
 
-    if (savedInstanceState == null) {
-      if (intent.hasExtra(NI_GO_TO_BOOK)) {
-        val bookId = intent.getLongExtra(NI_GO_TO_BOOK, -1)
-        router.pushController(RouterTransaction.with(BookPlayController.newInstance(bookId)))
+  private fun setupRouter() {
+    // if we should enter a book set the backstack and return early
+    repo.bookById(intent.getLongExtra(NI_GO_TO_BOOK, -1))?.let {
+      val bookShelf = RouterTransaction.with(BookShelfController())
+      val bookPlay = BookPlayController.newInstance(it.id).asTransaction()
+      router.setBackstack(listOf(bookShelf, bookPlay), null)
+      return
+    }
+
+    // if we should play the current book, set the backstack and return early
+    if (intent.getBooleanExtra(NI_PLAY_CURRENT_BOOK_IMMEDIATELY, false)) {
+      repo.bookById(prefs.currentBookId.get()!!)?.let {
+        val bookShelf = RouterTransaction.with(BookShelfController())
+        val bookPlay = BookPlayController.newInstance(it.id).asTransaction()
+        router.setBackstack(listOf(bookShelf, bookPlay), null)
+        playerController.play()
+        return
       }
     }
+
+    val rootTransaction = RouterTransaction.with(BookShelfController())
+    router.setRoot(rootTransaction)
   }
 
   override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -82,12 +103,17 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
   }
 
   companion object {
-    private val NI_GO_TO_BOOK = "niGotoBook"
+    private const val NI_GO_TO_BOOK = "niGotoBook"
+    private const val NI_PLAY_CURRENT_BOOK_IMMEDIATELY = "ni#playCurrentBookImmediately"
 
     /** Returns an intent that lets you go directly to the playback screen for a certain book **/
     fun goToBookIntent(c: Context, bookId: Long) = Intent(c, MainActivity::class.java).apply {
       putExtra(NI_GO_TO_BOOK, bookId)
       flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+    }
+
+    fun newIntent(context: Context, playCurrentBookImmediately: Boolean) = Intent(context, MainActivity::class.java).apply {
+      putExtra(NI_PLAY_CURRENT_BOOK_IMMEDIATELY, playCurrentBookImmediately)
     }
   }
 
