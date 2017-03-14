@@ -37,12 +37,15 @@ constructor(
     private val prefs: PrefsManager,
     private val playerCapabilities: MediaPlayerCapabilities) {
 
-  // on android >= M we use the regular android player as it can use speed. Else use it only if there is a bug in the device
   private var player = newPlayer()
   private val nextPlayer = NextPlayer(newPlayer())
 
   private fun newPlayer(): InternalPlayer {
-    val player = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M || !playerCapabilities.useCustomMediaPlayer()) {
+    // on android >= N-MR1 we use the regular android player as it can use speed.
+    // it is available on Marshmallow but the setPlaybackParams sometimes throws an IllegalStateExceptoin
+    // which was fixed on N_MR1.
+    // Else use it only if there is a bug in the device
+    val player = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 || !playerCapabilities.useCustomMediaPlayer()) {
       AndroidPlayer(context)
     } else SpeedPlayer(context)
     return player.apply {
