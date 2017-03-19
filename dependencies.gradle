@@ -13,6 +13,7 @@ ext.versions = [
         "junit"               : "4.12",
         "kotlin"              : "1.1.1",
         "materialDialogs"     : "0.9.4.1",
+        "okHttp"              : "3.6.0",
         "picasso"             : "2.5.2",
         "robolectric"         : "3.3.1",
         "rxAndroid"           : "2.0.1",
@@ -20,7 +21,7 @@ ext.versions = [
         "rxJavaInterop"       : "0.9.3",
         "rxPreferences"       : "1.0.2",
         "slimber"             : "1.0.6",
-        "support"             : "25.3.0"
+        "support"             : "25.3.0",
 ]
 
 ext.libraries = [
@@ -46,15 +47,16 @@ ext.libraries = [
         "rxInterop"              : "com.github.akarnokd:rxjava2-interop:$versions.rxJavaInterop",
         "rxPreferences"          : "com.f2prateek.rx.preferences:rx-preferences:$versions.rxPreferences",
         "kotlinStdLib"           : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
-        "slimber"           : "com.github.PaulWoitaschek:Slimber:$versions.slimber",
-        "conductor"         : "com.bluelinelabs:conductor:$versions.conductor",
-        "conductorSupport"  : "com.bluelinelabs:conductor-support:$versions.conductor",
-        "conductorLifecycle": "com.bluelinelabs:conductor-rxlifecycle2:$versions.conductor",
-        "androidPlayer"     : "com.github.PaulWoitaschek:AndroidPlayer:$versions.androidPlayer",
-        "crashlytics"       : "com.crashlytics.sdk.android:crashlytics:$versions.crashlytics@aar",
+        "slimber"                : "com.github.PaulWoitaschek:Slimber:$versions.slimber",
+        "conductor"              : "com.bluelinelabs:conductor:$versions.conductor",
+        "conductorSupport"       : "com.bluelinelabs:conductor-support:$versions.conductor",
+        "conductorLifecycle"     : "com.bluelinelabs:conductor-rxlifecycle2:$versions.conductor",
+        "androidPlayer"          : "com.github.PaulWoitaschek:AndroidPlayer:$versions.androidPlayer",
+        "crashlytics"            : "com.crashlytics.sdk.android:crashlytics:$versions.crashlytics@aar",
 
         // testing
-        "junit"             : "junit:junit:$versions.junit",
-        "robolectric"       : "org.robolectric:robolectric:$versions.robolectric",
-        "assertJ"           : "org.assertj:assertj-core:$versions.assertJ",
+        "junit"                  : "junit:junit:$versions.junit",
+        "robolectric"            : "org.robolectric:robolectric:$versions.robolectric",
+        "assertJ"                : "org.assertj:assertj-core:$versions.assertJ",
+        "okHttp"                 : "com.squareup.okhttp3:okhttp:$versions.okHttp",
 ]
