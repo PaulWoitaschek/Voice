@@ -76,6 +76,8 @@ dependencies {
     testCompile libraries.robolectric
     testCompile libraries.assertJ
 
+    testCompile libraries.okHttp
+
     compile libraries.rxJava
     compile libraries.rxAndroid
     compile libraries.rxInterop
