@@ -37,7 +37,7 @@ import javax.inject.Singleton
 
   companion object {
 
-    private val DATABASE_VERSION = 37
+    private val DATABASE_VERSION = 38
     private val DATABASE_NAME = "autoBookDB"
   }
 }

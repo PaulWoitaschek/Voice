@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.persistence.internals
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import android.os.Environment
@@ -33,7 +34,7 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
 
    * @throws InvalidPropertiesFormatException if there is an internal data mismatch
    */
-  @SuppressWarnings("ConstantConditions", "CollectionWithoutInitialCapacity")
+  @SuppressWarnings("ConstantConditions", "CollectionWithoutInitialCapacity, Recycle")
   @Throws(InvalidPropertiesFormatException::class)
   private fun upgrade24() {
     val copyBookTableName = "TABLE_BOOK_COPY"
@@ -45,7 +46,6 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
     val newBookTable = "TABLE_BOOK"
     val CREATE_TABLE_BOOK = "CREATE TABLE $newBookTable ( BOOK_ID INTEGER PRIMARY KEY AUTOINCREMENT, BOOK_JSON TEXT NOT NULL)"
     db.execSQL(CREATE_TABLE_BOOK)
-
 
     val bookCursor = db.query(copyBookTableName,
         arrayOf("BOOK_ID", "BOOK_ROOT", "BOOK_TYPE"),
@@ -67,7 +67,6 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
         chapterDurations.add(mediaCursor.getInt(1))
         chapterNames.add(mediaCursor.getString(2))
       }
-
 
       val configFile: File
       when (type) {
@@ -307,13 +306,13 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
     } catch (e: JSONException) {
       throw InvalidPropertiesFormatException(e)
     }
-
   }
 
 
   /**
    * Adds a new column indicating if the book should be actively shown or hidden.
    */
+  @SuppressLint("Recycle")
   private fun upgrade26() {
     val copyBookTableName = "TABLE_BOOK_COPY"
     db.execSQL("DROP TABLE IF EXISTS " + copyBookTableName)
@@ -323,7 +322,7 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
     val cursor = db.query(copyBookTableName, arrayOf("BOOK_JSON"), null, null, null, null, null)
     cursor.moveToNextLoop {
       val cv = ContentValues()
-      cv.put("BOOK_JSON", cursor.getString(0))
+      cv.put("BOOK_JSON", getString(0))
       cv.put("BOOK_ACTIVE", 1)
       cv.put("LAST_TIME_BOOK_WAS_ACTIVE", System.currentTimeMillis())
       db.insert("TABLE_BOOK", null, cv)
@@ -376,6 +375,7 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
     }
   }
 
+  @SuppressLint("Recycle")
   private fun upgrade29() {
     d { "upgrade29" }
 
@@ -502,18 +502,15 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
   /**
    * Queries through all books and removes the ones that were added empty by a bug.
    */
+  @SuppressLint("Recycle")
   private fun upgrade30() {
     // book keys
     val BOOK_ID = "bookId"
     val TABLE_BOOK = "tableBooks"
     val TABLE_CHAPTERS = "tableChapters"
 
-    val bookCursor = db.query(TABLE_BOOK,
-        arrayOf(BOOK_ID),
-        null, null, null, null, null)
-
-    bookCursor.moveToNextLoop {
-      val bookId = bookCursor.getLong(0)
+    db.query(TABLE_BOOK, arrayOf(BOOK_ID), null, null, null, null, null).moveToNextLoop {
+      val bookId = getLong(0)
 
       var chapterCount = 0
       val chapterCursor = db.query(TABLE_CHAPTERS,
@@ -533,6 +530,7 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
   /**
    * Corrects media paths that have been falsely set.
    */
+  @SuppressLint("Recycle")
   private fun upgrade31() {
     val BOOK_ID = "bookId"
     val TABLE_BOOK = "tableBooks"
@@ -540,12 +538,11 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
     val BOOK_CURRENT_MEDIA_PATH = "bookCurrentMediaPath"
     val CHAPTER_PATH = "chapterPath"
 
-    val bookCursor = db.query(TABLE_BOOK,
+    db.query(TABLE_BOOK,
         arrayOf(BOOK_ID, BOOK_CURRENT_MEDIA_PATH),
-        null, null, null, null, null)
-    bookCursor.moveToNextLoop {
-      val bookId = bookCursor.getLong(0)
-      val bookmarkCurrentMediaPath = bookCursor.getString(1)
+        null, null, null, null, null).moveToNextLoop {
+      val bookId = getLong(0)
+      val bookmarkCurrentMediaPath = getString(1)
 
       val chapterCursor = db.query(TABLE_CHAPTERS,
           arrayOf(CHAPTER_PATH),
@@ -571,6 +568,7 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
     }
   }
 
+  @SuppressLint("Recycle")
   private fun upgrade32() {
     val BOOKMARK_TABLE_NAME = "tableBookmarks"
     val BM_PATH = "bookmarkPath"
@@ -712,6 +710,19 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
     }
   }
 
+  fun upgrade37() {
+    db.asTransaction {
+      // add new chapter mark table
+      db.execSQL("ALTER TABLE tableChapters ADD marks TEXT")
+
+      // invalidate modification time stamps so the chapters will be re-scanned
+      val cv = ContentValues().apply {
+        put("lastModified", 0)
+      }
+      db.update("tableChapters", cv, null, null)
+    }
+  }
+
   @Throws(InvalidPropertiesFormatException::class)
   fun upgrade(fromVersion: Int) {
     i { "upgrade fromVersion=$fromVersion" }
@@ -728,5 +739,6 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
     if (fromVersion <= 34) upgrade34()
     if (fromVersion <= 35) upgrade35()
     if (fromVersion <= 36) upgrade36()
+    if (fromVersion <= 37) upgrade37()
   }
 }

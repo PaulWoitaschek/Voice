@@ -2,6 +2,8 @@ package de.ph1b.audiobook.persistence.internals
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
 import e
@@ -15,7 +17,12 @@ import javax.inject.Inject
  * @author: Paul Woitaschek
  */
 class BookStorage
-@Inject constructor(internalDb: InternalDb) {
+@Inject constructor(
+    internalDb: InternalDb,
+    moshi: Moshi
+) {
+
+  private val chapterMarkAdapter = moshi.adapter<Map<Long, String>>(Types.newParameterizedType(Map::class.java, java.lang.Long::class.java, String::class.java))
 
   private val db by lazy { internalDb.writableDatabase }
 
@@ -43,7 +50,7 @@ class BookStorage
       val bookType: String = string(BookTable.TYPE)
 
       val chapters = db.query(table = ChapterTable.TABLE_NAME,
-          columns = listOf(ChapterTable.NAME, ChapterTable.DURATION, ChapterTable.PATH, ChapterTable.LAST_MODIFIED),
+          columns = listOf(ChapterTable.NAME, ChapterTable.DURATION, ChapterTable.PATH, ChapterTable.LAST_MODIFIED, ChapterTable.MARKS),
           selection = "${ChapterTable.BOOK_ID} =?",
           selectionArgs = listOf(bookId))
           .mapRows {
@@ -51,7 +58,10 @@ class BookStorage
             val duration: Int = int(ChapterTable.DURATION)
             val path: String = string(ChapterTable.PATH)
             val lastModified = long(ChapterTable.LAST_MODIFIED)
-            Chapter(File(path), name, duration, lastModified)
+            val chapterMarks = stringNullable(ChapterTable.MARKS)?.let {
+              chapterMarkAdapter.fromJson(it)!!
+            } ?: emptyMap()
+            Chapter(File(path), name, duration, lastModified, chapterMarks)
           }
 
       if (chapters.find { it.file == currentFile } == null) {
@@ -91,6 +101,8 @@ class BookStorage
     put(ChapterTable.PATH, file.absolutePath)
     put(ChapterTable.BOOK_ID, bookId)
     put(ChapterTable.LAST_MODIFIED, fileLastModified)
+    val markValue = chapterMarkAdapter.toJson(marks)
+    put(ChapterTable.MARKS, markValue)
   }
 
   private fun Book.toContentValues() = ContentValues().apply {

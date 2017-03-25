@@ -6,6 +6,7 @@ import java.io.InputStream
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
 import java.util.*
+import kotlin.collections.HashMap
 
 private const val HEADER_LENGTH = 10
 private const val ID3_LENGTH = 3
@@ -30,7 +31,7 @@ object ID3ChapterReader {
   private var readerPosition: Int = 0
   private var currentChapter: ChapterMetaData? = null
 
-  @Synchronized fun readInputStream(input: InputStream): List<ChapterMetaData> {
+  @Synchronized fun readInputStream(input: InputStream): Map<Long, String> {
     chapters.clear()
 
     try {
@@ -60,7 +61,11 @@ object ID3ChapterReader {
       Timber.e(e)
     }
 
-    return chapters.toList()
+    val map = HashMap<Long, String>(chapters.size)
+    chapters.forEach { (_, start, title) ->
+      if (title != null) map.put(start, title)
+    }
+    return map
   }
 
   /** Returns true if string only contains null-bytes.  */
@@ -256,4 +261,6 @@ object ID3ChapterReader {
       }
     }
   }
+
+  data class ChapterMetaData(var id3ID: String, var start: Long, var title: String? = null)
 }

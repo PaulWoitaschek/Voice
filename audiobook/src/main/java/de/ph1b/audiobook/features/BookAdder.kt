@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat
 import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
+import de.ph1b.audiobook.features.chapterReader.ID3ChapterReader
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -283,7 +284,10 @@ import javax.inject.Singleton
       // else parse and add
       val result = MediaAnalyzer.compute(f)
       if (result.duration > 0) {
-        containingMedia.add(Chapter(f, result.chapterName, result.duration, lastModified))
+        val marks = if (f.extension == "mp3") {
+          f.inputStream().use { ID3ChapterReader.readInputStream(it) }
+        } else emptyMap()
+        containingMedia.add(Chapter(f, result.chapterName, result.duration, lastModified, marks))
       }
       throwIfStopRequested()
     }

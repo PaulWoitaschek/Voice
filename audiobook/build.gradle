@@ -92,4 +92,6 @@ dependencies {
     compile libraries.conductor
     compile libraries.conductorSupport
     compile libraries.conductorLifecycle
+
+    compile libraries.moshi
 }
