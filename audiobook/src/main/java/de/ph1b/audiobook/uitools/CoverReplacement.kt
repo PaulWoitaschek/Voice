@@ -25,8 +25,8 @@ class CoverReplacement(private val text: String, c: Context) : Drawable() {
   }
 
   override fun draw(canvas: Canvas) {
-    val height = bounds.height()
-    val width = bounds.width()
+    val height = canvas.height
+    val width = canvas.width
 
     textPaint.textSize = 2f * width / 3f
 
