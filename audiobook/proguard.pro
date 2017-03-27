@@ -22,5 +22,7 @@
 # picasso
 -dontwarn com.squareup.picasso.OkHttpDownloader
 
-# acra
--keep class de.ph1b.audiobook.BuildConfig { *; }
+# mp4parser
+-keep class * implements com.coremedia.iso.boxes.Box { *; }
+-dontwarn okio.**
+-dontwarn com.googlecode.mp4parser.**
