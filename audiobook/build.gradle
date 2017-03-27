@@ -100,4 +100,5 @@ dependencies {
     compile libraries.conductorLifecycle
 
     compile libraries.moshi
+    compile libraries.isoparser
 }

@@ -9,6 +9,7 @@ ext.versions = [
         "fabric"              : "1.22.1",
         "floatingActionButton": "1.10.1",
         "gradleVersionsPlugin": "0.14.0",
+        "isoparser"           : "1.1.21",
         "jsr250"              : "1.0",
         "junit"               : "4.12",
         "kotlin"              : "1.1.1",
@@ -28,7 +29,7 @@ ext.versions = [
 ext.libraries = [
 
         // support libraries
-        "supportAppCompat"  : "com.android.support:appcompat-v7:$versions.support",
+        "supportAppCompat"       : "com.android.support:appcompat-v7:$versions.support",
         "supportRecyclerView"    : "com.android.support:recyclerview-v7:$versions.support",
         "supportDesign"          : "com.android.support:design:$versions.support",
         "supportTransitions"     : "com.android.support:transition:$versions.support",
@@ -48,17 +49,18 @@ ext.libraries = [
         "rxInterop"              : "com.github.akarnokd:rxjava2-interop:$versions.rxJavaInterop",
         "rxPreferences"          : "com.f2prateek.rx.preferences:rx-preferences:$versions.rxPreferences",
         "kotlinStdLib"           : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
-        "slimber"           : "com.github.PaulWoitaschek:Slimber:$versions.slimber",
-        "conductor"         : "com.bluelinelabs:conductor:$versions.conductor",
-        "conductorSupport"  : "com.bluelinelabs:conductor-support:$versions.conductor",
-        "conductorLifecycle": "com.bluelinelabs:conductor-rxlifecycle2:$versions.conductor",
-        "androidPlayer"     : "com.github.PaulWoitaschek:AndroidPlayer:$versions.androidPlayer",
-        "crashlytics"       : "com.crashlytics.sdk.android:crashlytics:$versions.crashlytics@aar",
-        "moshi"             : "com.squareup.moshi:moshi:$versions.moshi",
+        "slimber"                : "com.github.PaulWoitaschek:Slimber:$versions.slimber",
+        "conductor"              : "com.bluelinelabs:conductor:$versions.conductor",
+        "conductorSupport"       : "com.bluelinelabs:conductor-support:$versions.conductor",
+        "conductorLifecycle"     : "com.bluelinelabs:conductor-rxlifecycle2:$versions.conductor",
+        "androidPlayer"          : "com.github.PaulWoitaschek:AndroidPlayer:$versions.androidPlayer",
+        "crashlytics"            : "com.crashlytics.sdk.android:crashlytics:$versions.crashlytics@aar",
+        "moshi"                  : "com.squareup.moshi:moshi:$versions.moshi",
+        "isoparser"              : "com.googlecode.mp4parser:isoparser:$versions.isoparser",
 
         // testing
-        "junit"             : "junit:junit:$versions.junit",
-        "robolectric"       : "org.robolectric:robolectric:$versions.robolectric",
-        "assertJ"           : "org.assertj:assertj-core:$versions.assertJ",
-        "okHttp"            : "com.squareup.okhttp3:okhttp:$versions.okHttp",
+        "junit"                  : "junit:junit:$versions.junit",
+        "robolectric"            : "org.robolectric:robolectric:$versions.robolectric",
+        "assertJ"                : "org.assertj:assertj-core:$versions.assertJ",
+        "okHttp"                 : "com.squareup.okhttp3:okhttp:$versions.okHttp",
 ]
