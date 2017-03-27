@@ -78,7 +78,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
         invokeBookSelectionCallback(book.id)
       } else {
         EditBookBottomSheet.newInstance(this, book)
-          .show(fragmentManager, "editBottomSheet")
+            .show(fragmentManager, "editBottomSheet")
       }
     }
     recyclerView.adapter = adapter
@@ -103,7 +103,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
   override fun onAttach(view: View) {
     // init ActionBar
     setupActionbar(toolbar = toolbar,
-      title = getString(R.string.app_name))
+        title = getString(R.string.app_name))
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -151,8 +151,8 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
 
           @SuppressLint("CommitTransaction")
           pendingTransaction = fragmentManager.beginTransaction()
-            .add(EditCoverDialogFragment.newInstance(this, book, imageUri),
-              EditCoverDialogFragment.TAG)
+              .add(EditCoverDialogFragment.newInstance(this, book, imageUri),
+                  EditCoverDialogFragment.TAG)
         }
       }
       else -> super.onActivityResult(requestCode, resultCode, data)
@@ -186,7 +186,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
     prefs.currentBookId.value = bookId
 
     val viewHolder = recyclerView.findViewHolderForItemId(bookId) as BookShelfAdapter.BaseViewHolder?
-    val transaction = RouterTransaction.with(BookPlayController.newInstance(bookId))
+    val transaction = RouterTransaction.with(BookPlayController(bookId))
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       val transition = BookTransition()
       if (viewHolder != null) {
@@ -194,7 +194,7 @@ class BookShelfController : MvpBaseController<BookShelfController, BookShelfPres
         transition.transitionName = transitionName
       }
       transaction.pushChangeHandler(transition)
-        .popChangeHandler(transition)
+          .popChangeHandler(transition)
     }
     router.pushController(transaction)
   }

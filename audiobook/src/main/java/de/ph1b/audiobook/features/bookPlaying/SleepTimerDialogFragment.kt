@@ -12,7 +12,6 @@ import android.text.format.DateUtils
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
-import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.R
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.find
@@ -148,9 +147,9 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
   companion object {
     private val NI_BOOK_ID = "ni#bookId"
     private val SI_MINUTES = "si#time"
-    fun newInstance(book: Book) = SleepTimerDialogFragment().apply {
+    fun newInstance(bookId: Long) = SleepTimerDialogFragment().apply {
       arguments = Bundle().apply {
-        putLong(NI_BOOK_ID, book.id)
+        putLong(NI_BOOK_ID, bookId)
       }
     }
   }

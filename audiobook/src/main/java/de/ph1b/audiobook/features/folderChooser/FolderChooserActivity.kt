@@ -76,9 +76,11 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     spinnerGroup = find(R.id.spinnerGroup)
 
     // toolbar
-    setupActionbar(toolbar = find(R.id.toolbar),
+    setupActionbar(
+        toolbar = find(R.id.toolbar),
         upIndicator = R.drawable.close,
-        title = getString(R.string.audiobook_folders_title))
+        title = getString(R.string.audiobook_folders_title)
+    )
 
     // listeners
     choose.setOnClickListener { presenter().chooseClicked() }
@@ -94,7 +96,13 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     recyclerView.adapter = adapter
 
     // spinner
-    spinnerAdapter = MultiLineSpinnerAdapter(toolSpinner, this, Color.WHITE)
+    spinnerAdapter = MultiLineSpinnerAdapter(toolSpinner, this, Color.WHITE) { file, _ ->
+      if (file.absolutePath == FolderChooserPresenter.MARSHMALLOW_SD_FALLBACK) {
+        getString(R.string.storage_all)
+      } else {
+        file.name
+      }
+    }
     toolSpinner.adapter = spinnerAdapter
     toolSpinner.itemSelectionStream()
         .filter { it != AdapterView.INVALID_POSITION } // filter invalid entries
@@ -102,7 +110,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
         .subscribe {
           i { "spinner selected with position $it and adapter.count ${spinnerAdapter.count}" }
           val item = spinnerAdapter.getItem(it)
-          presenter().fileSelected(item.data)
+          presenter().fileSelected(item)
         }
   }
 
@@ -148,17 +156,7 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
   override fun newRootFolders(newFolders: List<File>) {
     i { "newRootFolders called with $newFolders" }
     spinnerGroup.visible = newFolders.size > 1
-
-    val newData = newFolders
-        .map {
-          val name = if (it.absolutePath == FolderChooserPresenter.MARSHMALLOW_SD_FALLBACK) {
-            getString(R.string.storage_all)
-          } else {
-            it.name
-          }
-          MultiLineSpinnerAdapter.Data(it, name)
-        }
-    spinnerAdapter.setData(newData)
+    spinnerAdapter.setData(newFolders)
   }
 
 

@@ -62,7 +62,7 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
     // if we should enter a book set the backstack and return early
     repo.bookById(intent.getLongExtra(NI_GO_TO_BOOK, -1))?.let {
       val bookShelf = RouterTransaction.with(BookShelfController())
-      val bookPlay = BookPlayController.newInstance(it.id).asTransaction()
+      val bookPlay = BookPlayController(it.id).asTransaction()
       router.setBackstack(listOf(bookShelf, bookPlay), null)
       return
     }
@@ -71,7 +71,7 @@ class MainActivity : BaseActivity(), NoFolderWarningDialogFragment.Callback, Rou
     if (intent.getBooleanExtra(NI_PLAY_CURRENT_BOOK_IMMEDIATELY, false)) {
       repo.bookById(prefs.currentBookId.get()!!)?.let {
         val bookShelf = RouterTransaction.with(BookShelfController())
-        val bookPlay = BookPlayController.newInstance(it.id).asTransaction()
+        val bookPlay = BookPlayController(it.id).asTransaction()
         router.setBackstack(listOf(bookShelf, bookPlay), null)
         playerController.play()
         return

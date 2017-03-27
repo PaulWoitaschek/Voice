@@ -13,7 +13,9 @@ import javax.inject.Singleton
  *
  * @author Paul Woitaschek
  */
-@Singleton class Equalizer @Inject constructor(private val context: Context) {
+@Singleton class Equalizer @Inject constructor(
+    private val context: Context
+) {
 
   private val launchIntent = Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL).apply {
     putExtra(AudioEffect.EXTRA_PACKAGE_NAME, context.packageName)
@@ -34,14 +36,12 @@ import javax.inject.Singleton
     i { "update to $audioSessionId" }
     if (audioSessionId == -1) return
     updateIntent.putAudioSessionId(audioSessionId)
+    launchIntent.putAudioSessionId(audioSessionId)
     context.sendBroadcast(updateIntent)
   }
 
-  fun launch(activity: Activity, audioSessionId: Int) {
-    i { "launch with $audioSessionId" }
-    if (audioSessionId == -1) return
-
-    launchIntent.putAudioSessionId(audioSessionId)
+  fun launch(activity: Activity) {
+    i { "launch" }
     activity.startActivityForResult(launchIntent, 12)
   }
 }

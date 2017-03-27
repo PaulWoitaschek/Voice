@@ -18,19 +18,26 @@ import java.util.*
  *
  * @author Paul Woitaschek
  */
-class MultiLineSpinnerAdapter<Type>(private val spinner: Spinner, private val context: Context, @ColorInt private val unselectedTextColor: Int) : BaseAdapter(), SpinnerAdapter {
+class MultiLineSpinnerAdapter<Type>(
+    private val spinner: Spinner,
+    private val context: Context,
+    @ColorInt private val unselectedTextColor: Int,
+    private val resolveName: (type: Type, position: Int) -> String = { type, _ -> type.toString() }
+) : BaseAdapter(), SpinnerAdapter {
+
+  private val data = ArrayList<Type>()
 
   override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
     // no need for view holder pattern, we can just reuse the view as its a single TextView
     val textView =
-      if (convertView == null) {
-        context.layoutInflater().inflate(R.layout.book_play_spinner, parent, false) as TextView
-      } else {
-        convertView as TextView
-      }
+        if (convertView == null) {
+          context.layoutInflater().inflate(R.layout.book_play_spinner, parent, false) as TextView
+        } else {
+          convertView as TextView
+        }
 
     val selected = position == spinner.selectedItemPosition
-    textView.text = getItem(position).shown
+    textView.text = resolveName(getItem(position), position)
 
     if (parent == spinner) {
       textView.setBackgroundResource(0)
@@ -52,15 +59,11 @@ class MultiLineSpinnerAdapter<Type>(private val spinner: Spinner, private val co
 
   override fun getCount() = data.size
 
-  private val data = ArrayList<Data<Type>>()
-
-  fun setData(data: List<Data<Type>>) {
+  fun setData(data: List<Type>) {
     if (this.data != data) {
       this.data.clear()
       this.data.addAll(data)
       notifyDataSetChanged()
     }
   }
-
-  data class Data<out E>(val data: E, val shown: String)
 }

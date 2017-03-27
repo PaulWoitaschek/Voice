@@ -103,7 +103,7 @@
         app:layout_constraintLeft_toRightOf="@id/playedTime"
         app:layout_constraintRight_toLeftOf="@id/maxTime"/>
 
-    <Spinner
+    <de.ph1b.audiobook.misc.SilentSpinner
         android:id="@+id/bookSpinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

@@ -10,7 +10,9 @@ import de.ph1b.audiobook.features.BaseController
  *
  * @author Paul Woitaschek
  */
-abstract class MvpBaseController<V, out P> : BaseController() where P : Presenter<V> {
+abstract class MvpBaseController<V, out P>(args: Bundle) : BaseController(args) where P : Presenter<V> {
+
+  constructor() : this(Bundle())
 
   init {
     @Suppress("LeakingThis")
@@ -33,7 +35,8 @@ abstract class MvpBaseController<V, out P> : BaseController() where P : Presente
     })
   }
 
-  abstract fun provideView(): V
+  @Suppress("UNCHECKED_CAST")
+  open fun provideView(): V = this as V
 
   abstract val presenter: P
 }

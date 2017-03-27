@@ -23,12 +23,13 @@ import javax.inject.Inject
  */
 class BookShelfPresenter
 @Inject
-constructor(private val repo: BookRepository,
-            private val bookAdder: BookAdder,
-            private val prefsManager: PrefsManager,
-            private val playStateManager: PlayStateManager,
-            private val playerController: PlayerController,
-            private val coverFromDiscCollector: CoverFromDiscCollector)
+constructor(
+    private val repo: BookRepository,
+    private val bookAdder: BookAdder,
+    private val prefsManager: PrefsManager,
+    private val playStateManager: PlayStateManager,
+    private val playerController: PlayerController,
+    private val coverFromDiscCollector: CoverFromDiscCollector)
   : Presenter<BookShelfController>() {
 
   override fun onBind(view: BookShelfController, disposables: CompositeDisposable) {
@@ -49,10 +50,10 @@ constructor(private val repo: BookRepository,
       // Subscription that notifies the adapter when the current book has changed. It also notifies
       // the item with the old indicator now falsely showing.
       add(prefsManager.currentBookId.asV2Observable()
-        .subscribe {
-          val book = repo.bookById(it)
-          view.currentBookChanged(book)
-        })
+          .subscribe {
+            val book = repo.bookById(it)
+            view.currentBookChanged(book)
+          })
 
       // if there are no books and the scanner is active, show loading
       add(Observable.combineLatest(bookAdder.scannerActive, repo.booksStream().map { it.isEmpty() }, BiFunction<Boolean, Boolean, Boolean> { active, booksEmpty ->
@@ -67,7 +68,7 @@ constructor(private val repo: BookRepository,
 
       // notify view when a book cover changed
       add(coverFromDiscCollector.coverChanged()
-        .subscribe { view.bookCoverChanged(it) })
+          .subscribe { view.bookCoverChanged(it) })
     }
   }
 

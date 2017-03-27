@@ -5,10 +5,7 @@ import dagger.Component
 import de.ph1b.audiobook.features.BaseActivity
 import de.ph1b.audiobook.features.MainActivity
 import de.ph1b.audiobook.features.bookOverview.*
-import de.ph1b.audiobook.features.bookPlaying.BookPlayController
-import de.ph1b.audiobook.features.bookPlaying.JumpToPositionDialogFragment
-import de.ph1b.audiobook.features.bookPlaying.SeekDialogFragment
-import de.ph1b.audiobook.features.bookPlaying.SleepTimerDialogFragment
+import de.ph1b.audiobook.features.bookPlaying.*
 import de.ph1b.audiobook.features.bookmarks.BookmarkDialogFragment
 import de.ph1b.audiobook.features.folderChooser.FolderChooserActivity
 import de.ph1b.audiobook.features.folderChooser.FolderChooserPresenter
@@ -44,24 +41,25 @@ interface ApplicationComponent {
   fun inject(target: App)
   fun inject(target: AutoRewindDialogFragment)
   fun inject(target: BaseActivity)
-  fun inject(target: PlaybackService)
-  fun inject(target: MainActivity)
-  fun inject(target: BookShelfAdapter)
   fun inject(target: BookmarkDialogFragment)
   fun inject(target: BookPlayController)
+  fun inject(target: BookPlayPresenter)
+  fun inject(target: BookShelfAdapter)
   fun inject(target: BookShelfController)
   fun inject(target: ChangeNotifier)
-  fun inject(target: SettingsController)
-  fun inject(target: EditBookTitleDialogFragment)
   fun inject(target: EditBookBottomSheet)
+  fun inject(target: EditBookTitleDialogFragment)
   fun inject(target: EditCoverDialogFragment)
   fun inject(target: FolderChooserActivity)
   fun inject(target: FolderChooserPresenter)
   fun inject(target: FolderOverviewPresenter)
   fun inject(target: ImagePickerController)
   fun inject(target: JumpToPositionDialogFragment)
+  fun inject(target: MainActivity)
+  fun inject(target: PlaybackService)
   fun inject(target: PlaybackSpeedDialogFragment)
   fun inject(target: SeekDialogFragment)
+  fun inject(target: SettingsController)
   fun inject(target: SleepTimerDialogFragment)
   fun inject(target: ThemePickerDialogFragment)
   fun inject(target: WidgetUpdateService)
