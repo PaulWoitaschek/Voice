@@ -17,3 +17,5 @@ reports
 .idea
 mainframer.sh
 .mainframer
+*.keystore
+signing.properties

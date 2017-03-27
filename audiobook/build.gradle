@@ -23,11 +23,16 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release
+    }
+
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.pro'
+            signingConfig signingConfigs.release
         }
         debug {
             minifyEnabled false
@@ -55,6 +60,23 @@ android {
             resConfigs "en", "xxhdpi"
         }
     }
+}
+
+def Properties props = new Properties()
+def propFile = new File('signing.properties')
+if (propFile.canRead()) {
+    props.load(new FileInputStream(propFile))
+    if (props != null && props.containsKey('STORE_FILE') && props.containsKey('STORE_PASSWORD') && props.containsKey('KEY_ALIAS') && props.containsKey('KEY_PASSWORD')) {
+        android.signingConfigs.release.storeFile = rootProject.file(props['STORE_FILE'])
+        android.signingConfigs.release.storePassword = props['STORE_PASSWORD']
+        android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
+        android.signingConfigs.release.keyPassword = props['KEY_PASSWORD']
+    } else {
+        throw IllegalArgumentException("Invalid properties")
+    }
+} else {
+    println 'signing.properties not found'
+    android.buildTypes.release.signingConfig = null
 }
 
 dependencies {
