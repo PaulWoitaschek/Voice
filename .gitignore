@@ -15,3 +15,5 @@ MaterialAudiobookPlayer.iml
 reports
 *.mp3
 .idea
+mainframer.sh
+.mainframer
