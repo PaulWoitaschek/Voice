@@ -23,6 +23,6 @@
 -dontwarn com.squareup.picasso.OkHttpDownloader
 
 # mp4parser
--keep class * implements com.coremedia.iso.boxes.Box { *; }
+-keep class ** implements com.coremedia.iso.boxes.Box { *; }
 -dontwarn okio.**
 -dontwarn com.googlecode.mp4parser.**
