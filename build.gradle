@@ -30,6 +30,7 @@ allprojects {
                 def candidate = selection.candidate
                 if (candidate.group == 'org.assertj' && !candidate.version.startsWith("1")) selection.reject("Only version 1 of assertJ supported")
                 if (['rc', 'beta', 'alpha'].any { forbidden -> candidate.version.contains(forbidden) }) selection.reject("blacklisted")
+                if (candidate.group == 'javax.annotation' && candidate.version == '1.0-20050927.133100') selection.reject()
             }
         }
     }
