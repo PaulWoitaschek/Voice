@@ -104,14 +104,13 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
       }
     }
     toolSpinner.adapter = spinnerAdapter
-    toolSpinner.itemSelectionStream()
-        .filter { it != AdapterView.INVALID_POSITION } // filter invalid entries
-        .skip(1) // skip the first that passed as its no real user input
-        .subscribe {
-          i { "spinner selected with position $it and adapter.count ${spinnerAdapter.count}" }
-          val item = spinnerAdapter.getItem(it)
-          presenter().fileSelected(item)
-        }
+    toolSpinner.itemSelections {
+      if (it != AdapterView.INVALID_POSITION) {
+        i { "spinner selected with position $it and adapter.count ${spinnerAdapter.count}" }
+        val item = spinnerAdapter.getItem(it)
+        presenter().fileSelected(item)
+      }
+    }
   }
 
   override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

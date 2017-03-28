@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.features.bookPlaying
 
 import android.os.Bundle
+import android.support.v7.widget.AppCompatSpinner
 import android.support.v7.widget.Toolbar
 import android.view.*
 import android.widget.ImageView
@@ -57,7 +58,7 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
   private lateinit var playedTime: TextView
   private lateinit var maxTime: TextView
   private lateinit var timerCountdownView: TextView
-  private lateinit var bookSpinner: SilentSpinner
+  private lateinit var bookSpinner: AppCompatSpinner
   private lateinit var seekBar: SeekBar
   private lateinit var cover: ImageView
   private lateinit var toolbar: Toolbar
@@ -98,7 +99,7 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
     this.currentChapter = currentChapter
 
     val chapterIndex = data.indexOf(currentChapter)
-    bookSpinner.setSelectionSilently(chapterIndex, true)
+    bookSpinner.setSelection(chapterIndex, true)
     val duration = currentChapter.duration
     seekBar.max = duration.toInt()
     maxTime.text = formatTime(duration, duration)
@@ -298,7 +299,7 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
     val s = "%02d".format((TimeUnit.MILLISECONDS.toSeconds(ms) % 60))
 
     if (TimeUnit.MILLISECONDS.toHours(duration) == 0L) {
-      return m + ":" + s
+      return "$m:$s"
     } else {
       return "$h:$m:$s"
     }

@@ -38,20 +38,25 @@ fun <T : View> T.clicks(): Observable<T> = Observable.create { emitter ->
   emitter.setCancellable { setOnClickListener(null) }
 }
 
-fun <T : Adapter> AdapterView<T>.itemSelections(listener: (Int) -> Unit) {
+inline fun <T : Adapter> AdapterView<T>.itemSelections(crossinline listener: (Int) -> Unit) {
+  // add an onTouchListener to check if it's really user input
+  var isUserSelection = false
+  setOnTouchListener { _, _ ->
+    isUserSelection = true
+    false
+  }
   onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
     override fun onNothingSelected(parent: AdapterView<*>?) {
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-      listener(position)
+      // only fire the listener if it was user input
+      if (isUserSelection) {
+        isUserSelection = false
+        listener(position)
+      }
     }
   }
-}
-
-fun <T : Adapter> AdapterView<T>.itemSelectionStream(): Observable<Int> = Observable.create {
-  itemSelections { position -> it.onNext(position) }
-  it.setCancellable { onItemSelectedListener = null }
 }
 
 fun TextView.leftCompoundDrawable(): Drawable? = compoundDrawables[0]

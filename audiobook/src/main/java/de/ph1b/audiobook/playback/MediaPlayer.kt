@@ -139,7 +139,9 @@ constructor(
           player = newPlayer
           attachCallbacks(player)
           prepared = ready && preparedFile == fileToPrepare
-          if (!prepared) d { "still have to prepare because ready=$ready, rightFile=${preparedFile == fileToPrepare}" }
+          if (!prepared) {
+            d { "still have to prepare because ready=$ready, rightFile=${preparedFile == fileToPrepare}" }
+          } else d { "already prepared :)" }
         } else d { "nextPlayer is still preparing" }
 
         if (!prepared) {
@@ -335,8 +337,6 @@ constructor(
       }
     }
   }
-
-  fun audioSessionId() = player.audioSessionId()
 
   /** The current playback speed. 1.0 for normal playback, 2.0 for twice the speed, etc. */
   fun setPlaybackSpeed(speed: Float) {
