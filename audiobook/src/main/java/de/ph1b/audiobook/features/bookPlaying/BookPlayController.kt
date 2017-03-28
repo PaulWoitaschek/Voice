@@ -89,6 +89,7 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
         data.add(BookPlayChapter(it.file, 0L, it.duration.toLong(), it.name))
       }
     }
+    spinnerAdapter.setData(data)
 
     val dataForCurrentFile = data.filter { it.file == book.currentFile }
 
@@ -110,8 +111,6 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
       seekBar.progress = progress.toInt()
       playedTime.text = formatTime(progress, duration)
     }
-
-    spinnerAdapter.setData(data)
 
     // name
     activity.supportActionBar!!.apply {
