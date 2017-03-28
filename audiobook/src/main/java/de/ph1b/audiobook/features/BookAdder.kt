@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Handler
 import android.support.v4.content.ContextCompat
+import com.crashlytics.android.Crashlytics
 import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
@@ -16,6 +17,7 @@ import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
+import timber.log.Timber
 import java.io.File
 import java.util.*
 import java.util.concurrent.CountDownLatch
@@ -288,7 +290,14 @@ import javax.inject.Singleton
         val marks = if (f.extension == "mp3") {
           f.inputStream().use { ID3ChapterReader.readInputStream(it) }
         } else if (f.extension in arrayOf("mp4", "m4a", "m4b", "aac")) {
-          Mp4ChapterReader.readChapters(f)
+          try {
+            Mp4ChapterReader.readChapters(f)
+          } catch (e: Exception) {
+            Timber.e(e)
+            // todo this is while the mp4 feature is experimental
+            Crashlytics.logException(e)
+            emptyMap<Long, String>()
+          }
         } else emptyMap()
         containingMedia.add(Chapter(f, result.chapterName, result.duration, lastModified, marks))
       }
