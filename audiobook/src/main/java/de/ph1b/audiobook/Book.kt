@@ -4,6 +4,7 @@ package de.ph1b.audiobook
 import android.os.Environment
 import de.ph1b.audiobook.injection.App
 import de.ph1b.audiobook.misc.NaturalOrderComparator
+import de.ph1b.audiobook.misc.forEachIndexed
 import java.io.File
 
 
@@ -71,6 +72,13 @@ data class Book(
   }
 
   fun currentChapter() = chapters.first { it.file == currentFile }
+
+  fun nextChapterMarkPosition(): Int? {
+    currentChapter().marks.forEachIndexed { _, start, _ ->
+      if (start > time) return start
+    }
+    return null
+  }
 
   fun nextChapter() = chapters.getOrNull(currentChapterIndex() + 1)
 

@@ -98,7 +98,7 @@ inline fun View.onFirstPreDraw(crossinline action: () -> Unit) {
   })
 }
 
-fun <E> SparseArray<E>.forEachIndexed(action: (index: Int, key: Int, value: E) -> Unit) {
+inline fun <E> SparseArray<E>.forEachIndexed(action: (index: Int, key: Int, value: E) -> Unit) {
   val size = size()
   for (index in 0 until size) {
     val key = keyAt(index)

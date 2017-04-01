@@ -74,7 +74,7 @@ constructor(
       // resources.
       bookSubject.value?.let {
         v { "onCompletion called, nextChapter=${it.nextChapter()}" }
-        if (it.nextChapter() != null) {
+        if (it.nextChapterMarkPosition() != null || it.nextChapter() != null) {
           next()
         } else {
           v { "Reached last track. Stopping player" }
@@ -289,9 +289,12 @@ constructor(
    * Plays the next chapter. If there is none, don't do anything.
    */
   fun next() {
-    bookSubject.value?.nextChapter()?.let {
-      changePosition(0, it.file)
-    }
+    val book = bookSubject.value
+        ?: return
+
+    val nextChapterMarkPosition = book.nextChapterMarkPosition()
+    if (nextChapterMarkPosition != null) changePosition(nextChapterMarkPosition, book.currentFile)
+    else book.nextChapter()?.let { changePosition(0, it.file) }
   }
 
   /**
