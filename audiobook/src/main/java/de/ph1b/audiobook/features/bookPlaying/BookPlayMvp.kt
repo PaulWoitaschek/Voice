@@ -14,7 +14,7 @@ interface BookPlayMvp {
     fun render(book: Book)
     fun finish()
     fun showPlaying(playing: Boolean)
-    fun showLeftSleepTime(ms: Long)
+    fun showLeftSleepTime(ms: Int)
     fun openSleepTimeDialog()
   }
 
@@ -24,7 +24,7 @@ interface BookPlayMvp {
     abstract fun fastForward()
     abstract fun next()
     abstract fun previous()
-    abstract fun seekTo(position: Long, file: File? = null)
+    abstract fun seekTo(position: Int, file: File? = null)
     abstract fun toggleSleepTimer()
   }
 }

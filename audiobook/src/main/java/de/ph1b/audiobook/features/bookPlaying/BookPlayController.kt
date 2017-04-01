@@ -43,7 +43,7 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
   private val playPauseDrawable = PlayPauseDrawable()
   private var currentChapter: BookPlayChapter? = null
   private var firstPlayStateChange = true
-  private var leftSleepTime = 0L
+  private var leftSleepTime = 0
 
   override val presenter = BookPlayPresenter(bookId)
 
@@ -73,20 +73,15 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
     // adapter
     data.clear()
     book.chapters.forEach {
-      if (it.marks.size > 1) {
-        val list = it.marks.toList().sortedBy { it.first }
-        list.forEachIndexed { index, (position, name) ->
-          val start = if (index == 0) {
-            0
-          } else {
-            position
-          }
-          val nextPosition = list.getOrNull(index + 1)
-          val stop = nextPosition?.first ?: it.duration.toLong()
+      if (it.marks.size() > 1) {
+        it.marks.forEachIndexed { index, position, name ->
+          val start = if (index == 0) 0 else position
+          val nextPosition = it.marks.keyAtOrNull(index + 1)
+          val stop = nextPosition ?: it.duration
           data.add(BookPlayChapter(it.file, start, stop, name))
         }
       } else {
-        data.add(BookPlayChapter(it.file, 0L, it.duration.toLong(), it.name))
+        data.add(BookPlayChapter(it.file, 0, it.duration, it.name))
       }
     }
     spinnerAdapter.setData(data)
@@ -95,20 +90,20 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
 
     // find closest position
     val currentChapter = dataForCurrentFile.firstOrNull { book.time >= it.start && book.time < it.stop }
-        ?: dataForCurrentFile.firstOrNull { book.time.toLong() == it.stop }
+        ?: dataForCurrentFile.firstOrNull { book.time == it.stop }
         ?: dataForCurrentFile.first()
     this.currentChapter = currentChapter
 
     val chapterIndex = data.indexOf(currentChapter)
     bookSpinner.setSelection(chapterIndex, true)
     val duration = currentChapter.duration
-    seekBar.max = duration.toInt()
+    seekBar.max = duration
     maxTime.text = formatTime(duration, duration)
 
     // Setting seekBar and played getTime view
     val progress = book.time - currentChapter.start
     if (!seekBar.isPressed) {
-      seekBar.progress = progress.toInt()
+      seekBar.progress = progress
       playedTime.text = formatTime(progress, duration)
     }
 
@@ -182,7 +177,7 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
     seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
       override fun onProgressChanged(view: SeekBar?, progress: Int, p2: Boolean) {
         //sets text to adjust while using seekBar
-        playedTime.text = formatTime(progress.toLong(), seekBar.max.toLong())
+        playedTime.text = formatTime(progress, seekBar.max)
       }
 
       override fun onStartTrackingTouch(view: SeekBar?) {
@@ -191,7 +186,7 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
       override fun onStopTrackingTouch(view: SeekBar?) {
         currentChapter?.let {
           val progress = seekBar.progress
-          presenter.seekTo(it.start + progress.toLong(), it.file)
+          presenter.seekTo(it.start + progress, it.file)
         }
       }
     })
@@ -229,7 +224,7 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
     JumpToPositionDialogFragment().show(fragmentManager, JumpToPositionDialogFragment.TAG)
   }
 
-  override fun showLeftSleepTime(ms: Long) {
+  override fun showLeftSleepTime(ms: Int) {
     this.leftSleepTime = ms
     activity.invalidateOptionsMenu()
   }
@@ -292,12 +287,12 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
     else -> super.onOptionsItemSelected(item)
   }
 
-  private fun formatTime(ms: Long, duration: Long): String {
-    val h = TimeUnit.MILLISECONDS.toHours(ms).toString()
-    val m = "%02d".format((TimeUnit.MILLISECONDS.toMinutes(ms) % 60))
-    val s = "%02d".format((TimeUnit.MILLISECONDS.toSeconds(ms) % 60))
+  private fun formatTime(ms: Int, duration: Int): String {
+    val h = TimeUnit.MILLISECONDS.toHours(ms.toLong()).toString()
+    val m = "%02d".format((TimeUnit.MILLISECONDS.toMinutes(ms.toLong()) % 60))
+    val s = "%02d".format((TimeUnit.MILLISECONDS.toSeconds(ms.toLong()) % 60))
 
-    if (TimeUnit.MILLISECONDS.toHours(duration) == 0L) {
+    if (TimeUnit.MILLISECONDS.toHours(duration.toLong()) == 0L) {
       return "$m:$s"
     } else {
       return "$h:$m:$s"

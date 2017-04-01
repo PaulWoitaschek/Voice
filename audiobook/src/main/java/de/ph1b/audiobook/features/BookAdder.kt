@@ -296,9 +296,9 @@ import javax.inject.Singleton
             Timber.e(e)
             // todo this is while the mp4 feature is experimental
             Crashlytics.logException(e)
-            emptyMap<Long, String>()
+            emptySparseArray<String>()
           }
-        } else emptyMap()
+        } else emptySparseArray<String>()
         containingMedia.add(Chapter(f, result.chapterName, result.duration, lastModified, marks))
       }
       throwIfStopRequested()

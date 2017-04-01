@@ -723,6 +723,19 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
     }
   }
 
+  fun upgrade38() {
+    // invalidate modification time stamps so the chapters will be re-scanned
+    val lastModifiedCv = ContentValues().apply {
+      put("lastModified", 0)
+    }
+    db.update("tableChapters", lastModifiedCv, null, null)
+
+    val marksCv = ContentValues().apply {
+      put("marks", null as String?)
+    }
+    db.update("tableChapters", marksCv, null, null)
+  }
+
   @Throws(InvalidPropertiesFormatException::class)
   fun upgrade(fromVersion: Int) {
     i { "upgrade fromVersion=$fromVersion" }
@@ -740,5 +753,6 @@ class DataBaseUpgradeHelper(private val db: SQLiteDatabase) {
     if (fromVersion <= 35) upgrade35()
     if (fromVersion <= 36) upgrade36()
     if (fromVersion <= 37) upgrade37()
+    if (fromVersion <= 38) upgrade38()
   }
 }

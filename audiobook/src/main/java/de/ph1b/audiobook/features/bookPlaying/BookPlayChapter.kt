@@ -4,8 +4,8 @@ import java.io.File
 
 data class BookPlayChapter(
     val file: File,
-    val start: Long,
-    val stop: Long,
+    val start: Int,
+    val stop: Int,
     val name: String) {
 
   val duration = stop - start

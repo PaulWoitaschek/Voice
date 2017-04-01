@@ -3,9 +3,10 @@ package de.ph1b.audiobook.persistence.internals
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
+import de.ph1b.audiobook.misc.SparseArrayAdapter
+import de.ph1b.audiobook.misc.emptySparseArray
 import e
 import java.io.File
 import javax.inject.Inject
@@ -22,7 +23,7 @@ class BookStorage
     moshi: Moshi
 ) {
 
-  private val chapterMarkAdapter = moshi.adapter<Map<Long, String>>(Types.newParameterizedType(Map::class.java, java.lang.Long::class.java, String::class.java))
+  private val chapterMarkAdapter = SparseArrayAdapter<String>(moshi.adapter(String::class.java))
 
   private val db by lazy { internalDb.writableDatabase }
 
@@ -60,7 +61,7 @@ class BookStorage
             val lastModified = long(ChapterTable.LAST_MODIFIED)
             val chapterMarks = stringNullable(ChapterTable.MARKS)?.let {
               chapterMarkAdapter.fromJson(it)!!
-            } ?: emptyMap()
+            } ?: emptySparseArray()
             Chapter(File(path), name, duration, lastModified, chapterMarks)
           }
 

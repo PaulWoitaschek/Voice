@@ -1,12 +1,12 @@
 package de.ph1b.audiobook.features.chapterReader
 
+import android.util.SparseArray
 import timber.log.Timber
 import java.io.IOException
 import java.io.InputStream
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
 import java.util.*
-import kotlin.collections.HashMap
 
 private const val HEADER_LENGTH = 10
 private const val ID3_LENGTH = 3
@@ -31,7 +31,7 @@ object ID3ChapterReader {
   private var readerPosition: Int = 0
   private var currentChapter: ChapterMetaData? = null
 
-  @Synchronized fun readInputStream(input: InputStream): Map<Long, String> {
+  @Synchronized fun readInputStream(input: InputStream): SparseArray<String> {
     chapters.clear()
 
     try {
@@ -61,11 +61,11 @@ object ID3ChapterReader {
       Timber.e(e)
     }
 
-    val map = HashMap<Long, String>(chapters.size)
+    val array = SparseArray<String>(chapters.size)
     chapters.forEach { (_, start, title) ->
-      if (title != null) map.put(start, title)
+      if (title != null) array.put(start, title)
     }
-    return map
+    return array
   }
 
   /** Returns true if string only contains null-bytes.  */
@@ -236,7 +236,7 @@ object ID3ChapterReader {
         val elementId = StringBuffer()
         readISOString(elementId, input, Integer.MAX_VALUE)
         val startTimeSource = readBytes(input, 4)
-        val startTime = (startTimeSource[0].toInt() shl 24 or (startTimeSource[1].toInt() shl 16) or (startTimeSource[2].toInt() shl 8) or startTimeSource[3].toInt()).toLong()
+        val startTime = (startTimeSource[0].toInt() shl 24 or (startTimeSource[1].toInt() shl 16) or (startTimeSource[2].toInt() shl 8) or startTimeSource[3].toInt())
         currentChapter = ChapterMetaData(elementId.toString(), startTime, null)
         skipBytes(input, 12)
         return true
@@ -262,5 +262,5 @@ object ID3ChapterReader {
     }
   }
 
-  data class ChapterMetaData(var id3ID: String, var start: Long, var title: String? = null)
+  data class ChapterMetaData(var id3ID: String, var start: Int, var title: String? = null)
 }

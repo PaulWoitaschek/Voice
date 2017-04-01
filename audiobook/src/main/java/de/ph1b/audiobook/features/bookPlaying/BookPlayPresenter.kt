@@ -71,11 +71,11 @@ class BookPlayPresenter(private val bookId: Long) : BookPlayMvp.Presenter() {
     playerController.previous()
   }
 
-  override fun seekTo(position: Long, file: File?) {
+  override fun seekTo(position: Int, file: File?) {
     i { "seekTo position$position, file$file" }
     val book = bookRepository.bookById(bookId)
         ?: return
-    playerController.changePosition(position.toInt(), file ?: book.currentFile)
+    playerController.changePosition(position, file ?: book.currentFile)
   }
 
   override fun toggleSleepTimer() {

@@ -11,6 +11,7 @@ import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.SparseArray
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -40,7 +41,7 @@ var <T> Preference<T>.value: T
   set(value) = set(value!!)
 
 fun Context.dpToPx(dp: Int) = Math.round(TypedValue.applyDimension(
-  TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), resources.displayMetrics))
+    TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), resources.displayMetrics))
 
 fun Drawable.tinted(@ColorInt color: Int): Drawable {
   val wrapped = DrawableCompat.wrap(this)
@@ -51,10 +52,10 @@ fun Drawable.tinted(@ColorInt color: Int): Drawable {
 fun Controller.setupActionbar(toolbar: Toolbar,
                               @DrawableRes upIndicator: Int? = null,
                               title: String? = null) =
-  (activity as AppCompatActivity).setupActionbar(
-    toolbar = toolbar,
-    upIndicator = upIndicator,
-    title = title)
+    (activity as AppCompatActivity).setupActionbar(
+        toolbar = toolbar,
+        upIndicator = upIndicator,
+        title = title)
 
 fun AppCompatActivity.setupActionbar(toolbar: Toolbar,
                                      @DrawableRes upIndicator: Int? = null,
@@ -96,3 +97,16 @@ inline fun View.onFirstPreDraw(crossinline action: () -> Unit) {
     }
   })
 }
+
+fun <E> SparseArray<E>.forEachIndexed(action: (index: Int, key: Int, value: E) -> Unit) {
+  val size = size()
+  for (index in 0 until size) {
+    val key = keyAt(index)
+    val value = valueAt(index)
+    action(index, key, value)
+  }
+}
+
+fun SparseArray<*>.keyAtOrNull(index: Int) = if (index >= size()) null else keyAt(index)
+
+fun SparseArray<*>.isNotEmpty() = size() > 0

@@ -22,8 +22,8 @@ import javax.inject.Singleton
    * The time left till the playback stops in ms. If this is -1 the timer was stopped manually.
    * If this is 0 the timer simple counted down.
    */
-  private val NOT_ACTIVE = -1L
-  private val internalSleepSand = BehaviorSubject.createDefault<Long>(NOT_ACTIVE)
+  private val NOT_ACTIVE = -1
+  private val internalSleepSand = BehaviorSubject.createDefault<Int>(NOT_ACTIVE)
   private var sleepDisposable: Disposable? = null
   private var shakeDisposable: Disposable? = null
   private var shakeTimeoutDisposable: Disposable? = null
@@ -31,7 +31,7 @@ import javax.inject.Singleton
 
   init {
     // stops the player when the timer reaches 0
-    internalSleepSand.filter { it == 0L } // when this reaches 0
+    internalSleepSand.filter { it == 0 } // when this reaches 0
       .subscribe {
         // stop the player
         playerController.stop()
@@ -44,7 +44,7 @@ import javax.inject.Singleton
       } else if (it == NOT_ACTIVE) {
         // if the track ended by the user, disable the shake detector
         resetTimerOnShake(false)
-      } else if (it == 0L) {
+      } else if (it == 0) {
         // if the timer stopped normally, setup a timer of 5 minutes to resume playback
         resetTimerOnShake(true, 5)
       }
@@ -61,7 +61,7 @@ import javax.inject.Singleton
             .filter { internalSleepSand.value > 0 } // only notify if there is still time left
             .map { internalSleepSand.value - sleepUpdateInterval } // calculate the new time
             .map { it.coerceAtLeast(0) } // but keep at least 0
-            .subscribe { internalSleepSand.onNext(it) }
+              .subscribe { internalSleepSand.onNext(it.toInt()) }
         } else {
           sleepDisposable?.dispose()
         }
@@ -75,7 +75,7 @@ import javax.inject.Singleton
     if (enable) {
       i { "Starting sleepTimer" }
       val minutes = prefsManager.sleepTime.value
-      internalSleepSand.onNext(TimeUnit.MINUTES.toMillis(minutes.toLong()))
+      internalSleepSand.onNext(TimeUnit.MINUTES.toMillis(minutes.toLong()).toInt())
     } else {
       i { "Cancelling sleepTimer" }
       internalSleepSand.onNext(NOT_ACTIVE)
@@ -89,7 +89,7 @@ import javax.inject.Singleton
         // setup shake detection if requested
         if (prefsManager.shakeToReset.value) {
           shakeDisposable = shakeObservable.subscribe {
-            if (internalSleepSand.value == 0L) {
+            if (internalSleepSand.value == 0) {
               d { "detected shake while sleepSand==0. Resume playback" }
               playerController.play()
             }
@@ -118,7 +118,7 @@ import javax.inject.Singleton
    * This observable holds the time in ms left that the sleep timer has left. This is updated
    * periodically
    */
-  val sleepSand: Observable<Long> = internalSleepSand
+  val sleepSand: Observable<Int> = internalSleepSand
 
   fun sleepTimerActive(): Boolean = internalSleepSand.value > 0
 }

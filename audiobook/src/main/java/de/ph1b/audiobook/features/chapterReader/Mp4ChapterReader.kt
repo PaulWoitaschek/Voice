@@ -1,18 +1,20 @@
 package de.ph1b.audiobook.features.chapterReader
 
+import android.util.SparseArray
 import com.coremedia.iso.IsoFile
 import com.coremedia.iso.IsoTypeReader
 import com.coremedia.iso.boxes.*
 import com.coremedia.iso.boxes.mdat.MediaDataBox
 import com.googlecode.mp4parser.boxes.apple.AppleLyricsBox
 import com.googlecode.mp4parser.util.Path
+import de.ph1b.audiobook.misc.emptySparseArray
+import de.ph1b.audiobook.misc.isNotEmpty
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.nio.ByteBuffer
 import java.nio.channels.Channels
-import java.util.ArrayList
+import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.HashMap
 
 /**
  * Reads mp4 chapters
@@ -21,7 +23,7 @@ import kotlin.collections.HashMap
  */
 object Mp4ChapterReader {
 
-  fun readChapters(file: File): Map<Long, String> {
+  fun readChapters(file: File): SparseArray<String> {
     val isoFile = IsoFile(file.absolutePath)
 
     val fromChap = chap(isoFile)
@@ -33,29 +35,29 @@ object Mp4ChapterReader {
     return lyr(isoFile)
   }
 
-  private fun chap(isoFile: IsoFile): Map<Long, String> {
+  private fun chap(isoFile: IsoFile): SparseArray<String> {
     val chapBoxData = Path.getPath<UnknownBox>(isoFile, "moov/trak/tref/chap")
         ?.data
-        ?: return emptyMap()
+        ?: return emptySparseArray()
     chapBoxData.rewind()
 
     val trackId = chapBoxData.int
 
     val trak = Path.getPaths<TrackBox>(isoFile, "moov/trak").firstOrNull {
       it.trackHeaderBox.trackId == trackId.toLong()
-    } ?: return emptyMap()
+    } ?: return emptySparseArray()
 
     val timeScale = Path.getPath<MediaHeaderBox?>(trak, "mdia/mdhd")
         ?.timescale
-        ?: return emptyMap()
+        ?: return emptySparseArray()
 
     val durations = Path.getPath<TimeToSampleBox?>(trak, "mdia/minf/stbl/stts")
         ?.entries
         ?.map { it.count * 1000 / timeScale * it.delta }
-        ?: return emptyMap()
+        ?: return emptySparseArray()
 
     val mdat = Path.getPath<MediaDataBox?>(isoFile, "mdat[${trackId - 1}]")
-        ?: return emptyMap()
+        ?: return emptySparseArray()
 
     val outputStream = ByteArrayOutputStream()
     mdat.getBox(Channels.newChannel(outputStream))
@@ -73,24 +75,24 @@ object Mp4ChapterReader {
     }
 
     if (names.size != durations.size || names.isEmpty())
-      return emptyMap()
+      return emptySparseArray()
 
-    val map = HashMap<Long, String>(names.size)
-    var position = 0L
+    val array = SparseArray<String>(names.size)
+    var position = 0
     names.forEachIndexed { index, name ->
-      map.put(position, name)
-      position += durations[index]
+      array.put(position, name)
+      position += durations[index].toInt()
     }
-    return map
+    return array
   }
 
-  private fun lyr(isoFile: IsoFile): Map<Long, String> {
+  private fun lyr(isoFile: IsoFile): SparseArray<String> {
     val lyr: AppleLyricsBox = Path.getPath(isoFile, "/moov/udta/meta/ilst/©lyr")
-        ?: return emptyMap()
+        ?: return emptySparseArray()
 
     val lines = lyr.value.split("\n")
 
-    val map = HashMap<Long, String>()
+    val array = SparseArray<String>()
     for (line in lines) {
       val split = line.split(delimiters = ' ', limit = 2)
       if (split.size != 2) continue
@@ -119,23 +121,23 @@ object Mp4ChapterReader {
       val position = TimeUnit.HOURS.toMillis(h) + TimeUnit.MINUTES.toMillis(m) + TimeUnit.SECONDS.toMillis(s) + ms
       val name = split[1]
 
-      map.put(position, name)
+      array.put(position.toInt(), name)
     }
-    return map
+    return array
   }
 
-  private fun chpl(isoFile: IsoFile): Map<Long, String> {
+  private fun chpl(isoFile: IsoFile): SparseArray<String> {
     val mvhd: MovieHeaderBox = Path.getPath(isoFile, "/moov/mvhd")
-        ?: return emptyMap()
+        ?: return emptySparseArray()
     val timeScale = mvhd.timescale
 
     val chplBox: UnknownBox = Path.getPath(isoFile, "/moov/udta/chpl")
-        ?: return emptyMap()
+        ?: return emptySparseArray()
     val data = chplBox.data
 
     val count = data.get(8)
     data.position(9)
-    val map = HashMap<Long, String>()
+    val array = SparseArray<String>()
     (0 until count).forEach {
       val duration = IsoTypeReader.readUInt64(data) / timeScale / 10
       val titleSize = data.get()
@@ -144,8 +146,8 @@ object Mp4ChapterReader {
       data.get(titleBytes, 0, titleBytes.size)
       val title = String(titleBytes)
 
-      map.put(duration, title)
+      array.put(duration.toInt(), title)
     }
-    return map
+    return array
   }
 }

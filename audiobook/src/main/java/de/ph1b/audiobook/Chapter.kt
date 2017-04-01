@@ -1,5 +1,6 @@
 package de.ph1b.audiobook
 
+import android.util.SparseArray
 import de.ph1b.audiobook.misc.NaturalOrderComparator
 import java.io.File
 
@@ -13,7 +14,7 @@ data class Chapter(
     val name: String,
     val duration: Int,
     val fileLastModified: Long,
-    val marks: Map<Long, String>
+    val marks: SparseArray<String>
 ) : Comparable<Chapter> {
 
   init {
