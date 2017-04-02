@@ -77,7 +77,7 @@ class BookPlayController(bundle: Bundle) : MvpBaseController<BookPlayMvp.View, B
         it.marks.forEachIndexed { index, position, name ->
           val start = if (index == 0) 0 else position
           val nextPosition = it.marks.keyAtOrNull(index + 1)
-          val stop = nextPosition ?: it.duration
+          val stop = if (nextPosition == null) it.duration else nextPosition - 1
           data.add(BookPlayChapter(it.file, start, stop, name))
         }
       } else {

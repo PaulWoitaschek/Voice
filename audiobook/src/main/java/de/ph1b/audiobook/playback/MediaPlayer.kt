@@ -10,6 +10,7 @@ import d
 import de.paul_woitaschek.mediaplayer.AndroidPlayer
 import de.paul_woitaschek.mediaplayer.SpeedPlayer
 import de.ph1b.audiobook.Book
+import de.ph1b.audiobook.misc.forEachIndexed
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
@@ -228,20 +229,47 @@ constructor(
         if (state != State.PREPARED) return
       }
 
-      val previousChapter = it.previousChapter()
-      if (player.currentPosition > 2000 || previousChapter == null) {
-        i { "seekTo beginning" }
-        player.seekTo(0)
-        val copy = it.copy(time = 0)
-        bookSubject.onNext(copy)
+      val handled = previousByMarks(it)
+      if (!handled) previousByFile(it, toNullOfNewTrack)
+    }
+  }
+
+  private fun previousByFile(book: Book, toNullOfNewTrack: Boolean) {
+    val previousChapter = book.previousChapter()
+    if (player.currentPosition > 2000 || previousChapter == null) {
+      i { "seekTo beginning" }
+      player.seekTo(0)
+      val copy = book.copy(time = 0)
+      bookSubject.onNext(copy)
+    } else {
+      if (toNullOfNewTrack) {
+        changePosition(0, previousChapter.file)
       } else {
-        if (toNullOfNewTrack) {
-          changePosition(0, previousChapter.file)
-        } else {
-          changePosition(previousChapter.duration - (seekTime * 1000), previousChapter.file)
+        changePosition(previousChapter.duration - (seekTime * 1000), previousChapter.file)
+      }
+    }
+  }
+
+  private fun previousByMarks(book: Book): Boolean {
+    val marks = book.currentChapter().marks
+    marks.forEachIndexed(reversed = true) { index, startOfMark, _ ->
+      if (book.time >= startOfMark) {
+        val diff = book.time - startOfMark
+        if (diff > 2000) {
+          player.seekTo(startOfMark)
+          val copy = book.copy(time = startOfMark)
+          bookSubject.onNext(copy)
+          return true
+        } else if (index > 0) {
+          val seekTo = marks.keyAt(index - 1)
+          player.seekTo(seekTo)
+          val copy = book.copy(time = seekTo)
+          bookSubject.onNext(copy)
+          return true
         }
       }
     }
+    return false
   }
 
   /** Stops the playback and releases some resources. */
