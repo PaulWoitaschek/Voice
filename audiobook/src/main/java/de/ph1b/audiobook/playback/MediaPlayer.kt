@@ -5,8 +5,6 @@ import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
-import com.crashlytics.android.Crashlytics
-import d
 import de.paul_woitaschek.mediaplayer.AndroidPlayer
 import de.paul_woitaschek.mediaplayer.SpeedPlayer
 import de.ph1b.audiobook.Book
@@ -24,7 +22,6 @@ import io.reactivex.subjects.BehaviorSubject
 import v
 import java.io.File
 import java.io.IOException
-import java.lang.IllegalStateException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -34,27 +31,23 @@ import de.paul_woitaschek.mediaplayer.MediaPlayer as InternalPlayer
 class MediaPlayer
 @Inject
 constructor(
-    private val context: Context,
+    context: Context,
     private val playStateManager: PlayStateManager,
     private val prefs: PrefsManager,
-    private val playerCapabilities: MediaPlayerCapabilities) {
+    playerCapabilities: MediaPlayerCapabilities) {
 
-  private var player = newPlayer()
-  private val nextPlayer = NextPlayer(newPlayer())
 
-  private fun newPlayer(): InternalPlayer {
-    // on android >= N-MR1 we use the regular android player as it can use speed.
-    // it is available on Marshmallow but the setPlaybackParams sometimes throws an IllegalStateExceptoin
-    // which was fixed on N_MR1.
-    // Else use it only if there is a bug in the device
-    val player = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 || !playerCapabilities.useCustomMediaPlayer()) {
-      AndroidPlayer(context)
-    } else SpeedPlayer(context)
-    return player.apply {
-      setWakeMode(PowerManager.PARTIAL_WAKE_LOCK)
-      setAudioStreamType(AudioManager.STREAM_MUSIC)
-    }
-  }
+  // on android >= N-MR1 we use the regular android player as it can use speed.
+  // it is available on Marshmallow but the setPlaybackParams sometimes throws an IllegalStateExceptoin
+  // which was fixed on N_MR1.
+  // Else use it only if there is a bug in the device
+  private val player = (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 || !playerCapabilities.useCustomMediaPlayer()) {
+    AndroidPlayer(context)
+  } else SpeedPlayer(context))
+      .apply {
+        setWakeMode(PowerManager.PARTIAL_WAKE_LOCK)
+        setAudioStreamType(AudioManager.STREAM_MUSIC)
+      }
 
   private var bookSubject = BehaviorSubject.create<Book>()
   private var stateSubject = BehaviorSubject.createDefault(State.IDLE)
@@ -70,7 +63,7 @@ constructor(
   fun book(): Book? = bookSubject.value
   val bookStream = bookSubject.hide()!!
 
-  private fun attachCallbacks(player: InternalPlayer) {
+  init {
     player.onCompletion {
       // After the current song has ended, prepare the next one if there is one. Else stop the
       // resources.
@@ -92,10 +85,6 @@ constructor(
       player.reset()
       state = State.IDLE
     }
-  }
-
-  init {
-    attachCallbacks(player)
 
     stateSubject.switchMap {
       if (it == State.STARTED) {
@@ -116,10 +105,6 @@ constructor(
     if (bookSubject.value != book) {
       i { "init called with ${book.name}" }
       bookSubject.onNext(book)
-
-      // prepare the nextPlayer with the current file so upon prepare the file will be ready
-      player = nextPlayer.swap(player, book.currentFile)
-          .player
       state = State.IDLE
     }
   }
@@ -132,33 +117,10 @@ constructor(
       val start = System.currentTimeMillis()
       try {
         val fileToPrepare = it.currentChapter().file
-
-        var prepared = false
-        // if nextPlayer is has the file we are looking for, use it. Else swap the files so
-        // the nextPlayer can prepare the future file
-        if (nextPlayer.fileToPrepare == fileToPrepare || nextPlayer.ready()) {
-          val (newPlayer, ready, preparedFile) = nextPlayer.swap(player, it.nextChapter()?.file)
-          player = newPlayer
-          attachCallbacks(player)
-          prepared = ready && preparedFile == fileToPrepare
-          if (!prepared) {
-            d { "still have to prepare because ready=$ready, rightFile=${preparedFile == fileToPrepare}" }
-          } else d { "already prepared :)" }
-        } else d { "nextPlayer is still preparing" }
-
-        if (!prepared) {
-          d { "prepare blocking" }
-          player.reset()
-          val uri = Uri.fromFile(fileToPrepare)
-          try {
-            player.prepare(uri)
-          } catch (e: IllegalStateException) {
-            Crashlytics.logException(RuntimeException("IllegalStateException after reset. Android Bug"))
-            player.reset()
-            player.prepare(uri)
-          }
-          state = State.PREPARED
-        }
+        player.reset()
+        val uri = Uri.fromFile(fileToPrepare)
+        player.prepare(uri)
+        state = State.PREPARED
 
         v { "preparing took ${System.currentTimeMillis() - start}ms" }
         player.seekTo(it.time)
