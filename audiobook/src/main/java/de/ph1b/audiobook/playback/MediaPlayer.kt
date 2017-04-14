@@ -238,9 +238,7 @@ constructor(
     val previousChapter = book.previousChapter()
     if (player.currentPosition > 2000 || previousChapter == null) {
       i { "seekTo beginning" }
-      player.seekTo(0)
-      val copy = book.copy(time = 0)
-      bookSubject.onNext(copy)
+      changePosition(0, book.currentFile)
     } else {
       if (toNullOfNewTrack) {
         changePosition(0, previousChapter.file)
@@ -256,15 +254,11 @@ constructor(
       if (book.time >= startOfMark) {
         val diff = book.time - startOfMark
         if (diff > 2000) {
-          player.seekTo(startOfMark)
-          val copy = book.copy(time = startOfMark)
-          bookSubject.onNext(copy)
+          changePosition(startOfMark, book.currentFile)
           return true
         } else if (index > 0) {
           val seekTo = marks.keyAt(index - 1)
-          player.seekTo(seekTo)
-          val copy = book.copy(time = seekTo)
-          bookSubject.onNext(copy)
+          changePosition(seekTo, book.currentFile)
           return true
         }
       }
@@ -295,12 +289,9 @@ constructor(
           if (rewind) {
             val autoRewind = autoRewindAmount * 1000
             if (autoRewind != 0) {
-              val originalPosition = player.currentPosition
-              var seekTo = originalPosition - autoRewind
-              seekTo = Math.max(seekTo, 0)
-              player.seekTo(seekTo)
-              val copy = it.copy(time = seekTo)
-              bookSubject.onNext(copy)
+              val seekTo = (player.currentPosition - autoRewind)
+                  .coerceAtLeast(0)
+              changePosition(seekTo, it.currentFile)
             }
           }
 
@@ -313,9 +304,7 @@ constructor(
     }
   }
 
-  /**
-   * Plays the next chapter. If there is none, don't do anything.
-   */
+  /** Plays the next chapter. If there is none, don't do anything **/
   fun next() {
     val book = bookSubject.value
         ?: return
@@ -328,10 +317,6 @@ constructor(
   /**
    * Changes the current position in book. If the path is the same, continues playing the song.
    * Else calls [.prepare] to prepare the next file
-
-   * @param time The time in chapter at which to start
-   * *
-   * @param file The path of the media to play (relative to the books root path)
    */
   fun changePosition(time: Int, file: File) {
     v { "changePosition with time $time and file $file" }
@@ -358,10 +343,10 @@ constructor(
         if (state == State.STOPPED || state == State.IDLE) prepare()
         when (state) {
           State.STARTED, State.PAUSED, State.PREPARED -> {
-            player.seekTo(time)
-
             val copy = it.copy(time = time)
             bookSubject.onNext(copy)
+
+            player.seekTo(time)
           }
           else -> e { "changePosition called in illegal state=$state" }
         }
@@ -374,7 +359,9 @@ constructor(
     bookSubject.value?.let {
       val copy = it.copy(playbackSpeed = speed)
       bookSubject.onNext(copy)
-      if (state != State.IDLE && state != State.STOPPED) player.playbackSpeed = speed
+      if (state != State.IDLE && state != State.STOPPED) {
+        player.playbackSpeed = speed
+      }
     }
   }
 
