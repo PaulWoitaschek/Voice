@@ -31,5 +31,5 @@ import javax.inject.Singleton
   @Provides @Singleton fun provideNotificationManager(context: Context) = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
   @Provides @Singleton fun provideSensorManager(context: Context) = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager?
   @Provides @Singleton fun providePowerManager(context: Context) = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-  @Provides @Singleton fun provideMoshi() = Moshi.Builder().build()
+  @Provides @Singleton fun provideMoshi(): Moshi = Moshi.Builder().build()
 }
