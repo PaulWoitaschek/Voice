@@ -318,16 +318,17 @@ constructor(
    * Changes the current position in book. If the path is the same, continues playing the song.
    * Else calls [.prepare] to prepare the next file
    */
-  fun changePosition(time: Int, file: File? = null) {
-    v { "changePosition with time $time and file $file" }
+  fun changePosition(time: Int, changedFile: File? = null) {
+    v { "changePosition with time $time and file $changedFile" }
     bookSubject.value?.let {
+      val file = changedFile ?: it.currentFile
       val changeFile = it.currentChapter().file != file
       v { "changeFile=$changeFile" }
       if (changeFile) {
         val wasPlaying = state == State.STARTED
         v { "wasPlaying=$wasPlaying" }
 
-        val copy = if (file == null) it.copy(time = time) else it.copy(time = time, currentFile = file)
+        val copy = it.copy(time = time, currentFile = file)
         bookSubject.onNext(copy)
 
         prepare()
