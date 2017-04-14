@@ -11,6 +11,7 @@ import de.paul_woitaschek.mediaplayer.AndroidPlayer
 import de.paul_woitaschek.mediaplayer.SpeedPlayer
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.misc.forEachIndexed
+import de.ph1b.audiobook.misc.keyAtOrNull
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlayStateManager.PlayState
@@ -274,14 +275,12 @@ constructor(
   }
 
   /**
-   * Pauses the player. Also stops the updating mechanism which constantly updates the book to the
-   * database.
-   *
+   * Pauses the player.
    * @param rewind true if the player should automatically rewind a little bit.
    */
   fun pause(rewind: Boolean) {
     v { "pause in state $state" }
-    bookSubject.value?.let {
+    bookSubject.value?.let { it ->
       when (state) {
         State.STARTED -> {
           player.pause()
@@ -289,9 +288,26 @@ constructor(
           if (rewind) {
             val autoRewind = autoRewindAmount * 1000
             if (autoRewind != 0) {
-              val seekTo = (player.currentPosition - autoRewind)
-                  .coerceAtLeast(0)
-              changePosition(seekTo)
+              // get the raw rewinded position
+              val currentPosition = player.currentPosition
+              var maybeSeekTo = currentPosition - autoRewind
+                  .coerceAtLeast(0) // make sure not to get into negative time
+
+              // now try to find the current chapter mark and make sure we don't auto-rewind
+              // to a previous mark
+              val chapterMarks = it.currentChapter().marks
+              chapterMarks.forEachIndexed(reversed = true) findStartOfmark@ { index, startOfMark, _ ->
+                if (startOfMark <= currentPosition) {
+                  val next = chapterMarks.keyAtOrNull(index + 1)
+                  if (next == null || next > currentPosition) {
+                    maybeSeekTo = maybeSeekTo.coerceAtLeast(startOfMark)
+                    return@findStartOfmark
+                  }
+                }
+              }
+
+              // finally change position
+              changePosition(maybeSeekTo)
             }
           }
 
