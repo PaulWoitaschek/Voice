@@ -108,6 +108,17 @@ inline fun <E> SparseArray<E>.forEachIndexed(reversed: Boolean = false, action: 
   }
 }
 
+fun <T> SparseArray<T>.equalsTo(other: SparseArray<T>): Boolean {
+  val size = this.size()
+  if (size != other.size()) return false
+  for (index in 0 until size) {
+    if (keyAt(index) != other.keyAt(index) || valueAt(index) != other.valueAt(index)) {
+      return false
+    }
+  }
+  return true
+}
+
 fun SparseArray<*>.keyAtOrNull(index: Int) = if (index >= size()) null else keyAt(index)
 
 fun SparseArray<*>.isNotEmpty() = size() > 0
