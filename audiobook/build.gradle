@@ -6,16 +6,12 @@ apply from: "../artifacts.gradle"
 
 android {
 
-    // dynamically pass 21 to the compiler for build speedup without losing lint warnings.
-    int minSdk = project.hasProperty('minSdk') ? minSdk.toInteger() : 16
-    minSdk = 16
-
     compileSdkVersion 25
     buildToolsVersion '25.0.2'
 
     defaultConfig {
         applicationId "de.ph1b.audiobook"
-        minSdkVersion minSdk
+        minSdkVersion 16
         targetSdkVersion 25
         versionCode 178
         versionName '3.2.0'
