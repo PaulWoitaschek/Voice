@@ -215,7 +215,7 @@ constructor(
       } else if (seekTo > duration) {
         next()
       } else {
-        changePosition(seekTo, it.currentFile)
+        changePosition(seekTo)
       }
     }
   }
@@ -238,7 +238,7 @@ constructor(
     val previousChapter = book.previousChapter()
     if (player.currentPosition > 2000 || previousChapter == null) {
       i { "seekTo beginning" }
-      changePosition(0, book.currentFile)
+      changePosition(0)
     } else {
       if (toNullOfNewTrack) {
         changePosition(0, previousChapter.file)
@@ -254,11 +254,11 @@ constructor(
       if (book.time >= startOfMark) {
         val diff = book.time - startOfMark
         if (diff > 2000) {
-          changePosition(startOfMark, book.currentFile)
+          changePosition(startOfMark)
           return true
         } else if (index > 0) {
           val seekTo = marks.keyAt(index - 1)
-          changePosition(seekTo, book.currentFile)
+          changePosition(seekTo)
           return true
         }
       }
@@ -291,7 +291,7 @@ constructor(
             if (autoRewind != 0) {
               val seekTo = (player.currentPosition - autoRewind)
                   .coerceAtLeast(0)
-              changePosition(seekTo, it.currentFile)
+              changePosition(seekTo)
             }
           }
 
@@ -310,7 +310,7 @@ constructor(
         ?: return
 
     val nextChapterMarkPosition = book.nextChapterMarkPosition()
-    if (nextChapterMarkPosition != null) changePosition(nextChapterMarkPosition, book.currentFile)
+    if (nextChapterMarkPosition != null) changePosition(nextChapterMarkPosition)
     else book.nextChapter()?.let { changePosition(0, it.file) }
   }
 
@@ -318,7 +318,7 @@ constructor(
    * Changes the current position in book. If the path is the same, continues playing the song.
    * Else calls [.prepare] to prepare the next file
    */
-  fun changePosition(time: Int, file: File) {
+  fun changePosition(time: Int, file: File? = null) {
     v { "changePosition with time $time and file $file" }
     bookSubject.value?.let {
       val changeFile = it.currentChapter().file != file
@@ -327,7 +327,7 @@ constructor(
         val wasPlaying = state == State.STARTED
         v { "wasPlaying=$wasPlaying" }
 
-        val copy = it.copy(currentFile = file, time = time)
+        val copy = if (file == null) it.copy(time = time) else it.copy(time = time, currentFile = file)
         bookSubject.onNext(copy)
 
         prepare()
