@@ -1,5 +1,7 @@
 package de.ph1b.audiobook
 
+import android.util.SparseArray
+import de.ph1b.audiobook.misc.emptySparseArray
 import java.io.File
 import java.util.*
 
@@ -22,8 +24,12 @@ object BookMocker {
     val author = "TestAuthor"
     val time = 0
     val name = "TestBook"
-    val chapter1 = Chapter(file1, file1.name, 1 + rnd.nextInt(100000), 13534, mapOf(0L to "first", 5000L to "second"))
-    val chapter2 = Chapter(file2, file2.name, 1 + rnd.nextInt(200000), 134134, emptyMap())
+    val marks1 = SparseArray<String>().apply {
+      put(0, "first")
+      put(5000, "second")
+    }
+    val chapter1 = Chapter(file1, file1.name, 1 + rnd.nextInt(100000), 13534, marks1)
+    val chapter2 = Chapter(file2, file2.name, 1 + rnd.nextInt(200000), 134134, emptySparseArray())
     val chapters = listOf(chapter1, chapter2)
     val playbackSpeed = 1f
     var root: String? = file1.parent

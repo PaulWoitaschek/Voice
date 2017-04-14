@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.features.chapterReader
 
+import de.ph1b.audiobook.misc.forEachIndexed
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.assertj.core.api.Assertions.assertThat
@@ -22,7 +23,13 @@ class ID3ChapterReaderTest {
     val inputStream = call.execute().body().byteStream()
     val chapters = ID3ChapterReader.readInputStream(inputStream)
 
-    val positions = chapters.map { it.start }
+    val positions = ArrayList<Int>()
+    val titles = ArrayList<String>()
+    chapters.forEachIndexed { _, key, value ->
+      positions.add(key)
+      titles.add(value)
+    }
+
     assertThat(positions)
         .isEqualTo(listOf(
             0L,
@@ -36,7 +43,6 @@ class ID3ChapterReaderTest {
             111500L)
         )
 
-    val titles = chapters.map { it.title }
     assertThat(titles)
         .isEqualTo(listOf(
             "Intro",

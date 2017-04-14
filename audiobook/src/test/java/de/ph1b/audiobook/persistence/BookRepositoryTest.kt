@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.persistence
 
 import android.os.Build
+import com.squareup.moshi.Moshi
 import de.ph1b.audiobook.BookMocker
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.TestApp
@@ -33,7 +34,8 @@ class BookRepositoryTest {
     @Before
     fun setUp() {
         val internalDb = InternalDb(RuntimeEnvironment.application)
-        val internalBookRegister = BookStorage(internalDb)
+        val moshi = Moshi.Builder().build()
+        val internalBookRegister = BookStorage(internalDb, moshi)
         repo = BookRepository(internalBookRegister)
     }
 

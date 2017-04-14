@@ -1,6 +1,7 @@
 package de.ph1b.audiobook.persistence.internals
 
 import android.os.Build
+import android.util.SparseArray
 import com.squareup.moshi.Moshi
 import de.ph1b.audiobook.*
 import org.assertj.core.api.Assertions.assertThat
@@ -108,7 +109,11 @@ class BookStorageTest {
 
     val oldChapters = inserted.chapters
     val substracted = oldChapters.minus(oldChapters.first())
-    val newChapters = substracted.plus(Chapter(File("/root/", "salkjsdg.mp3"), "askhsdglkjsdf", 113513516, 131351, mapOf(0L to "first", 5000L to "second")))
+    val marks1 = SparseArray<String>().apply {
+      put(15114, "The time has come")
+      put(2361341, "This is another chapter")
+    }
+    val newChapters = substracted.plus(Chapter(File("/root/", "salkjsdg.mp3"), "askhsdglkjsdf", 113513516, 131351, marks1))
 
     val changed = inserted.copy(
         type = Book.Type.SINGLE_FILE,
