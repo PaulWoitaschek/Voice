@@ -3,15 +3,13 @@ package de.ph1b.audiobook.injection
 import android.app.Application
 import android.content.Intent
 import android.support.v7.app.AppCompatDelegate
-import com.crashlytics.android.Crashlytics
-import com.crashlytics.android.core.CrashlyticsCore
 import de.ph1b.audiobook.BuildConfig
 import de.ph1b.audiobook.features.BookAdder
-import de.ph1b.audiobook.features.firebase.CrashLoggingTree
+import de.ph1b.audiobook.features.crashlytics.CrashLoggingTree
+import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.playback.PlaybackService
-import io.fabric.sdk.android.Fabric
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -24,12 +22,7 @@ class App : Application() {
   override fun onCreate() {
     super.onCreate()
 
-    val crashlytics = Crashlytics.Builder()
-        .core(CrashlyticsCore.Builder()
-            .disabled(BuildConfig.DEBUG)
-            .build())
-        .build()
-    Fabric.with(this, crashlytics)
+    CrashlyticsProxy.init(this)
 
     component = DaggerApplicationComponent.builder()
         .androidModule(AndroidModule(this))

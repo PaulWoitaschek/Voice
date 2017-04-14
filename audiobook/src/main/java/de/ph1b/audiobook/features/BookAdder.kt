@@ -5,12 +5,12 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Handler
 import android.support.v4.content.ContextCompat
-import com.crashlytics.android.Crashlytics
 import d
 import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.features.chapterReader.ID3ChapterReader
 import de.ph1b.audiobook.features.chapterReader.Mp4ChapterReader
+import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
@@ -295,7 +295,7 @@ import javax.inject.Singleton
           } catch (e: Exception) {
             Timber.e(e)
             // todo this is while the mp4 feature is experimental
-            Crashlytics.logException(e)
+            CrashlyticsProxy.logException(e)
             emptySparseArray<String>()
           }
         } else emptySparseArray<String>()

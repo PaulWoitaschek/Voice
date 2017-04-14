@@ -55,10 +55,8 @@ android {
         exclude 'META-INF/rxjava.properties'
     }
     productFlavors {
-        allConfigs {}
-        singleConfig {
-            resConfigs "en", "xxhdpi"
-        }
+        opensource {}
+        proprietary {}
     }
 }
 
@@ -92,7 +90,7 @@ dependencies {
 
     compile libraries.floatingActionButton
 
-    compile(libraries.crashlytics) {
+    proprietaryCompile(libraries.crashlytics) {
         transitive = true
     }
 
