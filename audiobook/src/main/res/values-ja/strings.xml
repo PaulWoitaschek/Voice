@@ -99,6 +99,7 @@
     <!--Misc-->
     <string name="popup_edit">編集</string>
     <string name="remove">削除</string>
+    <string name="play_current">現在を再生</string>
     <!--hide folder dialog-->
     <string name="hide_folder_title">フォルダーを非表示</string>
     <string name="hide_folder_content">音楽プレーヤーからフォルダーを非表示にしてもよろしいですか? ブックを音楽と認識しなくなります。</string>

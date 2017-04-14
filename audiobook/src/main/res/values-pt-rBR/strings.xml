@@ -102,6 +102,7 @@
     <!--Misc-->
     <string name="popup_edit">Editar</string>
     <string name="remove">Remover</string>
+    <string name="play_current">Reproduzir o atual</string>
     <!--hide folder dialog-->
     <string name="hide_folder_title">Esconder pasta</string>
     <string name="hide_folder_content">Você gostaria de esconder a pasta dos players de música, para que eles não reconheçam seu livro como música?</string>

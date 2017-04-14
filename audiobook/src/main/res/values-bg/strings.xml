@@ -102,6 +102,7 @@
     <!--Misc-->
     <string name="popup_edit">Редактиране</string>
     <string name="remove">Премахване</string>
+    <string name="play_current">Възпроизвеждане на текущата</string>
     <!--hide folder dialog-->
     <string name="hide_folder_title">Скриване на папката</string>
     <string name="hide_folder_content">Желаете ли да скриете папката от музикални плеъри, за да не разпознават книгите Ви като музика?</string>

@@ -17,6 +17,7 @@
     <string name="next_track">다음 트랙</string>
     <string name="play">재생</string>
     <string name="pause">정지</string>
+    <string name="equalizer">이퀄라이저</string>
     <!--NoExternalStorage-->
     <string name="no_external_storage">외부저장공간을 찾지 못했습니다. 연결/인식상태를 확인해주세요.</string>
     <string name="no_external_storage_action_bar_title">외부저장공간</string>
@@ -72,6 +73,10 @@
     <string name="action_settings">설정</string>
     <string name="pref_resume_on_replug">이어서 재생</string>
     <string name="pref_resume_on_replug_hint">이어폰잭을 빼면 자동으로 일시정지, 끼면 이어서 재생됩니다.</string>
+    <string name="pref_resume_after_call">통화 후 자동재시작</string>
+    <string name="pref_resume_after_call_hint">통화 후 자동으로 재시작합니다.</string>
+    <string name="min">%s 분</string>
+    <string name="delete_last_number">방금 입력한 숫자를 지웁니다</string>
     <plurals name="seconds">
         <item quantity="other">%d 초</item>
     </plurals>
@@ -94,6 +99,7 @@
     <!--Misc-->
     <string name="popup_edit">수정</string>
     <string name="remove">삭제</string>
+    <string name="play_current">재생 재시작</string>
     <!--hide folder dialog-->
     <string name="hide_folder_title">폴더 숨기기</string>
     <string name="hide_folder_content">폴더를 숨겨서, 음악 앱이 이 책을 음악으로 인식하지 않도록 할까요?</string>

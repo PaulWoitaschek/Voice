@@ -73,8 +73,8 @@
     <!--Settings-->
     <string name="action_settings">Inställningar</string>
     <string name="pref_resume_on_replug">Återuppta uppspelning</string>
-    <string name="pref_resume_on_replug_hint">Om du pausade genom att plugga ut headsetet, kommer det att återupptas vid anslutning.</string>
-    <string name="pref_resume_after_call">Återupptas efter samtal</string>
+    <string name="pref_resume_on_replug_hint">Om du pausade genom att plugga ut hörlurarna, kommer det att återupptas vid anslutning.</string>
+    <string name="pref_resume_after_call">Återuppta efter samtal</string>
     <string name="pref_resume_after_call_hint">Återupptar uppspelningen efter ett samtal.</string>
     <string name="min">%s min</string>
     <string name="delete_last_number">Tar bort det senast angivna numret</string>
@@ -102,6 +102,7 @@
     <!--Misc-->
     <string name="popup_edit">ändra</string>
     <string name="remove">Ta bort</string>
+    <string name="play_current">Spela aktuell</string>
     <!--hide folder dialog-->
     <string name="hide_folder_title">Göm mapp</string>
     <string name="hide_folder_content">Vill du dölja mappen från musikspelare, så att de inte känner igen din bok som musik?</string>

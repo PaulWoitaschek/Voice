@@ -108,6 +108,7 @@
     <!--Misc-->
     <string name="popup_edit">Edytuj</string>
     <string name="remove">Usuń</string>
+    <string name="play_current">Odtwórz aktualne</string>
     <!--hide folder dialog-->
     <string name="hide_folder_title">Ukryj folder</string>
     <string name="hide_folder_content">Czy chcesz ukryć ten folder tak, że programy do odtwarzania muzyki nie będą rozpoznawały książki jako muzyki?</string>

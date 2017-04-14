@@ -9,7 +9,7 @@
     <string name="play_pause">播放 / 暂停</string>
     <string name="action_sleep">睡眠定时器</string>
     <plurals name="pauses_after">
-        <item quantity="other">%d分钟后暂停。</item>
+        <item quantity="other">%d 分钟后暂停。</item>
     </plurals>
     <string name="rewind">倒回</string>
     <string name="fast_forward">快进</string>
@@ -19,10 +19,10 @@
     <string name="pause">暂停</string>
     <string name="equalizer">均衡器</string>
     <!--NoExternalStorage-->
-    <string name="no_external_storage">外部存储不可用。请保证外部存储已连接而且没有被电脑占用。</string>
+    <string name="no_external_storage">外部存储不可用。请确保外部存储已连接且没有被挂载。</string>
     <string name="no_external_storage_action_bar_title">外部存储</string>
     <!--Dialogs-->
-    <string name="dialog_confirm">设置</string>
+    <string name="dialog_confirm">设定</string>
     <string name="dialog_cancel">取消</string>
     <string name="dialog_no">否</string>
     <!--EditBookDialog-->
@@ -73,8 +73,12 @@
     <string name="action_settings">偏好设置</string>
     <string name="pref_resume_on_replug">继续播放</string>
     <string name="pref_resume_on_replug_hint">若因拔出耳机而暂停，插入耳机后将继续播放。</string>
+    <string name="pref_resume_after_call">通话结束后恢复播放</string>
+    <string name="pref_resume_after_call_hint">通话结束后恢复播放</string>
+    <string name="min">%s 分钟</string>
+    <string name="delete_last_number">删除最后输入的数字</string>
     <plurals name="seconds">
-        <item quantity="other">%d秒</item>
+        <item quantity="other">%d 秒</item>
     </plurals>
     <string name="pref_seek_time">跳过时间</string>
     <string name="pref_root_folder_title">有声书目录</string>
@@ -87,7 +91,7 @@
     <string name="pref_pause_on_can_duck_summary">受到打扰时暂停，而不是降低音量。</string>
     <string name="pref_auto_rewind_title">自动倒回</string>
     <plurals name="pref_auto_rewind_summary">
-        <item quantity="other">手动暂停后自动倒回%d秒。</item>
+        <item quantity="other">手动暂停后自动倒回 %d 秒。</item>
     </plurals>
     <string name="pref_support_title">支持</string>
     <string name="pref_support_translations">翻译</string>
@@ -95,6 +99,7 @@
     <!--Misc-->
     <string name="popup_edit">编辑</string>
     <string name="remove">删除</string>
+    <string name="play_current">播放当前书籍</string>
     <!--hide folder dialog-->
     <string name="hide_folder_title">隐藏目录</string>
     <string name="hide_folder_content">为避免有声书被识别为音乐， 针对音乐播放器隐藏目录？</string>

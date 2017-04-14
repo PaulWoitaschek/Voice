@@ -74,6 +74,10 @@
     <string name="action_settings">Préférences</string>
     <string name="pref_resume_on_replug">Reprendre la lecture</string>
     <string name="pref_resume_on_replug_hint">Si vous avez mis en pause en débranchant le casque, la lecture reprendra en le rebranchant.</string>
+    <string name="pref_resume_after_call">Reprendre aprsè l\'appel</string>
+    <string name="pref_resume_after_call_hint">Reprend la lecture après un appel</string>
+    <string name="min">%s min</string>
+    <string name="delete_last_number">Supprime le dernier nombre saisi</string>
     <plurals name="seconds">
         <item quantity="one">%d seconde</item>
         <item quantity="other">%d secondes</item>
@@ -98,6 +102,7 @@
     <!--Misc-->
     <string name="popup_edit">Modifer</string>
     <string name="remove">Enlever</string>
+    <string name="play_current">Lire l\'actuel</string>
     <!--hide folder dialog-->
     <string name="hide_folder_title">Masquer le dossier</string>
     <string name="hide_folder_content">Voulez vous masquer le dossier aux lecteurs audio afin qu\'ils ne considèrent pas vos livres comme de la musique ?</string>
