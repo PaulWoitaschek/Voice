@@ -3,7 +3,6 @@ package de.ph1b.audiobook.playback
 import android.content.Context
 import android.media.AudioManager
 import android.net.Uri
-import android.os.Build
 import android.os.PowerManager
 import de.paul_woitaschek.mediaplayer.AndroidPlayer
 import de.paul_woitaschek.mediaplayer.SpeedPlayer
@@ -36,18 +35,9 @@ constructor(
     private val prefs: PrefsManager,
     playerCapabilities: MediaPlayerCapabilities) {
 
-
-  // on android >= N-MR1 we use the regular android player as it can use speed.
-  // it is available on Marshmallow but the setPlaybackParams sometimes throws an IllegalStateExceptoin
-  // which was fixed on N_MR1.
-  // Else use it only if there is a bug in the device
-  private val player = (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 || !playerCapabilities.useCustomMediaPlayer()) {
+  private val player = (if (!playerCapabilities.useCustomMediaPlayer()) {
     AndroidPlayer(context)
   } else SpeedPlayer(context))
-      .apply {
-        setWakeMode(PowerManager.PARTIAL_WAKE_LOCK)
-        setAudioStreamType(AudioManager.STREAM_MUSIC)
-      }
 
   private var bookSubject = BehaviorSubject.create<Book>()
   private var stateSubject = BehaviorSubject.createDefault(State.IDLE)
@@ -64,6 +54,8 @@ constructor(
   val bookStream = bookSubject.hide()!!
 
   init {
+    player.setWakeMode(PowerManager.PARTIAL_WAKE_LOCK)
+    player.setAudioStreamType(AudioManager.STREAM_MUSIC)
     player.onCompletion {
       // After the current song has ended, prepare the next one if there is one. Else stop the
       // resources.
