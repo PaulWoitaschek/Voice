@@ -3,17 +3,13 @@ package de.ph1b.audiobook.features.chapterReader
 import android.util.SparseArray
 import com.coremedia.iso.IsoFile
 import com.coremedia.iso.IsoTypeReader
-import com.coremedia.iso.boxes.*
-import com.coremedia.iso.boxes.mdat.MediaDataBox
+import com.coremedia.iso.boxes.MovieHeaderBox
+import com.coremedia.iso.boxes.UnknownBox
 import com.googlecode.mp4parser.boxes.apple.AppleLyricsBox
 import com.googlecode.mp4parser.util.Path
 import de.ph1b.audiobook.misc.emptySparseArray
 import de.ph1b.audiobook.misc.isNotEmpty
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.nio.ByteBuffer
-import java.nio.channels.Channels
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -24,66 +20,14 @@ import java.util.concurrent.TimeUnit
 object Mp4ChapterReader {
 
   fun readChapters(file: File): SparseArray<String> {
-    val isoFile = IsoFile(file.absolutePath)
-
-    val fromChap = chap(isoFile)
+    val fromChap = ChapReader.read(file)
     if (fromChap.isNotEmpty()) return fromChap
 
+    val isoFile = IsoFile(file.absolutePath)
     val fromChpl = chpl(isoFile)
     if (fromChpl.isNotEmpty()) return fromChpl
 
     return lyr(isoFile)
-  }
-
-  private fun chap(isoFile: IsoFile): SparseArray<String> {
-    val chapBoxData = Path.getPath<UnknownBox>(isoFile, "moov/trak/tref/chap")
-        ?.data
-        ?: return emptySparseArray()
-    chapBoxData.rewind()
-
-    val trackId = chapBoxData.int
-
-    val trak = Path.getPaths<TrackBox>(isoFile, "moov/trak").firstOrNull {
-      it.trackHeaderBox.trackId == trackId.toLong()
-    } ?: return emptySparseArray()
-
-    val timeScale = Path.getPath<MediaHeaderBox?>(trak, "mdia/mdhd")
-        ?.timescale
-        ?: return emptySparseArray()
-
-    val durations = Path.getPath<TimeToSampleBox?>(trak, "mdia/minf/stbl/stts")
-        ?.entries
-        ?.map { it.count * 1000 / timeScale * it.delta }
-        ?: return emptySparseArray()
-
-    val mdat = Path.getPath<MediaDataBox?>(isoFile, "mdat[${trackId - 1}]")
-        ?: return emptySparseArray()
-
-    val outputStream = ByteArrayOutputStream()
-    mdat.getBox(Channels.newChannel(outputStream))
-    val byteBuffer = ByteBuffer.wrap(outputStream.toByteArray())
-
-    byteBuffer.position(8)
-    val names = ArrayList<String>()
-    while (byteBuffer.hasRemaining()) {
-      val textLength = byteBuffer.short.toInt()
-      val textBytes = ByteArray(textLength)
-      byteBuffer.get(textBytes)
-      val name = String(textBytes)
-      names.add(name)
-      byteBuffer.position(byteBuffer.position() + 12)
-    }
-
-    if (names.size != durations.size || names.isEmpty())
-      return emptySparseArray()
-
-    val array = SparseArray<String>(names.size)
-    var position = 0
-    names.forEachIndexed { index, name ->
-      array.put(position, name)
-      position += durations[index].toInt()
-    }
-    return array
   }
 
   private fun lyr(isoFile: IsoFile): SparseArray<String> {
