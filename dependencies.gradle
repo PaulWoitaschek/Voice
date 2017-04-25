@@ -9,7 +9,6 @@ ext.versions = [
         "fabric"              : "1.22.1",
         "floatingActionButton": "1.10.1",
         "gradleVersionsPlugin": "0.14.0",
-        "isoparser"           : "1.1.22",
         "jsr250"              : "1.0",
         "junit"               : "4.12",
         "kotlin"              : "1.1.1",
@@ -57,7 +56,6 @@ ext.libraries = [
         "androidPlayer"          : "com.github.PaulWoitaschek:AndroidPlayer:$versions.androidPlayer",
         "crashlytics"            : "com.crashlytics.sdk.android:crashlytics:$versions.crashlytics@aar",
         "moshi"                  : "com.squareup.moshi:moshi:$versions.moshi",
-        "isoparser"              : "com.googlecode.mp4parser:isoparser:$versions.isoparser",
 
         // testing
         "junit"                  : "junit:junit:$versions.junit",
