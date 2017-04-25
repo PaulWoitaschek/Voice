@@ -37,6 +37,7 @@ allprojects {
     configurations.all {
         resolutionStrategy {
             force libraries.supportV13
+            force "com.squareup.okio:okio:1.12.0"
         }
     }
 }
