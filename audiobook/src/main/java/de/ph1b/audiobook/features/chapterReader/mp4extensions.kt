@@ -7,11 +7,6 @@ import java.util.*
 
 data class Mp4Atom(val name: String, val position: Long, val length: Long, val children: List<Mp4Atom>)
 
-private fun RandomAccessFile.atoms(toVisit: List<String>): List<Mp4Atom> {
-  seek(0)
-  return atoms(toVisit, null)
-}
-
 fun RandomAccessFile.atoms(toVisit: List<String>, endOfAtom: Long? = null): List<Mp4Atom> {
   val atoms = ArrayList<Mp4Atom>()
   while (true) {
