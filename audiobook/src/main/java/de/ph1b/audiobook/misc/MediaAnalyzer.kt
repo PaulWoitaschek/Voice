@@ -22,7 +22,7 @@ object MediaAnalyzer {
     }
   }
 
-  fun compute(input: File): Result {
+  fun compute(input: File): Result? {
     // Note: MediaMetadataRetriever throws undocumented RuntimeExceptions. We catch these
     // and act appropriate.
     val mmr = MediaMetadataRetriever()
@@ -31,6 +31,8 @@ object MediaAnalyzer {
 
       val parsedDuration: String? = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
       val duration = parsedDuration?.toIntOrNull() ?: -1
+      if (duration <= 0)
+        return null
 
       // getting chapter-name
       var chapterName = mmr.safeExtract(MediaMetadataRetriever.METADATA_KEY_TITLE)
@@ -48,12 +50,16 @@ object MediaAnalyzer {
 
       return Result(duration, chapterName!!, author, bookName)
     } catch(ignored: RuntimeException) {
-      return Result(-1, "Chapter", null, null)
+      return null
     } finally {
       mmr.release()
     }
   }
 
-  data class Result(val duration: Int, val chapterName: String, val author: String?, val bookName: String?)
+  data class Result(val duration: Int, val chapterName: String, val author: String?, val bookName: String?) {
+    init {
+      require(duration > 0)
+    }
+  }
 }
 

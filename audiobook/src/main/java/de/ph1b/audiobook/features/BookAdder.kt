@@ -161,13 +161,11 @@ import javax.inject.Singleton
 
   // adds a new book
   private fun addNewBook(rootFile: File, newChapters: List<Chapter>, type: Book.Type) {
-    val bookRoot = if (rootFile.isDirectory)
-      rootFile.absolutePath
-    else
-      rootFile.parent
+    val bookRoot = if (rootFile.isDirectory) rootFile.absolutePath else rootFile.parent
 
     val firstChapterFile = newChapters.first().file
     val result = MediaAnalyzer.compute(firstChapterFile)
+        ?: return
     var bookName = result.bookName
     if (bookName.isNullOrEmpty()) {
       val withoutExtension = rootFile.nameWithoutExtension
@@ -284,7 +282,7 @@ import javax.inject.Singleton
 
       // else parse and add
       val result = MediaAnalyzer.compute(f)
-      if (result.duration > 0) {
+      if (result != null) {
         val marks = if (f.extension == "mp3") {
           f.inputStream().use { ID3ChapterReader.readInputStream(it) }
         } else if (f.extension in arrayOf("mp4", "m4a", "m4b", "aac")) {
