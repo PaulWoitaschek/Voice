@@ -111,7 +111,7 @@ dependencies {
 
     compile libraries.slimber
 
-    compile libraries.androidPlayer
+    compile libraries.exoPlayerCore
 
     compile libraries.conductor
     compile libraries.conductorSupport
