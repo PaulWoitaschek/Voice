@@ -42,9 +42,6 @@ allprojects {
     }
 }
 
-// task that is an alias for f-droid
-task fdroid(dependsOn: ':audiobook:assembleOpensourceRelease')
-
 task updateTranslations(type: Exec) {
     executable 'sh'
     args "-c", "tx pull -f --minimum-perc=5"

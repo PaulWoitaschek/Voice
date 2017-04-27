@@ -119,3 +119,6 @@ dependencies {
 
     compile libraries.moshi
 }
+
+// task that is an alias for f-droid
+task fdroid(dependsOn: ':audiobook:assembleOpensourceRelease')
