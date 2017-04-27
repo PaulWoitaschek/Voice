@@ -10,14 +10,12 @@ import de.ph1b.audiobook.Book
 import de.ph1b.audiobook.Chapter
 import de.ph1b.audiobook.features.chapterReader.ID3ChapterReader
 import de.ph1b.audiobook.features.chapterReader.Mp4ChapterReader
-import de.ph1b.audiobook.features.crashlytics.CrashlyticsProxy
 import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import timber.log.Timber
 import java.io.File
 import java.util.*
 import java.util.concurrent.CountDownLatch
@@ -290,14 +288,7 @@ import javax.inject.Singleton
         val marks = if (f.extension == "mp3") {
           f.inputStream().use { ID3ChapterReader.readInputStream(it) }
         } else if (f.extension in arrayOf("mp4", "m4a", "m4b", "aac")) {
-          try {
-            Mp4ChapterReader.readChapters(f)
-          } catch (e: Exception) {
-            Timber.e(e)
-            // todo this is while the mp4 feature is experimental
-            CrashlyticsProxy.logException(e)
-            emptySparseArray<String>()
-          }
+          Mp4ChapterReader.readChapters(f)
         } else emptySparseArray<String>()
         containingMedia.add(Chapter(f, result.chapterName, result.duration, lastModified, marks))
       }
