@@ -64,9 +64,7 @@ constructor(
     // on error reset the playback
     player.onError {
       e { "onError" }
-      player.stop()
       player.playWhenReady = false
-      state = PlayerState.IDLE
     }
 
     // upon position change update the book
