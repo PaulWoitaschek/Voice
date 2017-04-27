@@ -49,11 +49,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
    * Asks the user to add a .nomedia file if there is none. Else calls [FolderChooserView.finish]
    */
   fun chooseClicked() {
-    if (chosenFile!!.isDirectory && !HideFolderDialog.getNoMediaFileByFolder(chosenFile!!).exists()) {
-      view!!.askAddNoMediaFile(chosenFile!!)
-    } else {
-      addFileAndTerminate(chosenFile!!)
-    }
+    addFileAndTerminate(chosenFile!!)
   }
 
   /**
@@ -100,13 +96,6 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
     } else {
       return false
     }
-  }
-
-  /**
-   * Call this after the user made a decision on adding a .nomedia file.
-   */
-  fun hideFolderSelectionMade() {
-    addFileAndTerminate(chosenFile!!)
   }
 
   private fun addFileAndTerminate(chosen: File) {
@@ -187,7 +176,7 @@ class FolderChooserPresenter : Presenter<FolderChooserView>() {
 
   /** Gets the containing files of a folder (restricted to music and folders) in a naturally sorted order.  */
   private fun File.getContentsSorted() = listFilesSafely(FileRecognition.folderAndMusicFilter)
-    .sortedWith(NaturalOrderComparator.fileComparator)
+      .sortedWith(NaturalOrderComparator.fileComparator)
 
   override fun onRestore(savedState: Bundle) {
     super.onRestore(savedState)

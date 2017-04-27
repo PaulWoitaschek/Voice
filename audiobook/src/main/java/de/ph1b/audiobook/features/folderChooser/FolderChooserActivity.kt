@@ -30,7 +30,7 @@ import java.io.File
  *
  * @author Paul Woitaschek
  */
-class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPresenter>(), FolderChooserView, HideFolderDialog.OnChosenListener {
+class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPresenter>(), FolderChooserView {
 
   override fun newPresenter() = FolderChooserPresenter()
 
@@ -50,11 +50,6 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
   private lateinit var spinnerGroup: View
   private lateinit var permissions: Permissions
   private lateinit var permissionHelper: PermissionHelper
-
-  override fun askAddNoMediaFile(folderToHide: File) {
-    val hideFolderDialog = HideFolderDialog.newInstance(folderToHide)
-    hideFolderDialog.show(supportFragmentManager, HideFolderDialog.TAG)
-  }
 
   override fun getMode() = OperationMode.valueOf(intent.getStringExtra(NI_OPERATION_MODE))
 
@@ -166,10 +161,6 @@ class FolderChooserActivity : RxBaseActivity<FolderChooserView, FolderChooserPre
     upButton.isEnabled = upEnabled
     val upIcon = if (upEnabled) drawable(R.drawable.ic_arrow_upward) else null
     upButton.setImageDrawable(upIcon)
-  }
-
-  override fun onChosen() {
-    presenter().hideFolderSelectionMade()
   }
 
   enum class OperationMode {

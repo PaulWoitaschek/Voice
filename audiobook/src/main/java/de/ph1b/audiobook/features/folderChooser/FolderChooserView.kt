@@ -42,12 +42,6 @@ interface FolderChooserView {
   fun finish()
 
   /**
-   * Ask the user to add a .nomedia file to the chosen folder so it won't be discovered by music
-   * players.
-   */
-  fun askAddNoMediaFile(folderToHide: File)
-
-  /**
    * The operation mode for view to handle.
    */
   fun getMode(): FolderChooserActivity.OperationMode
