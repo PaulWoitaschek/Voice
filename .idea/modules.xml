@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MaterialAudiobookPlayer.iml" filepath="$PROJECT_DIR$/MaterialAudiobookPlayer.iml" />
       <module fileurl="file://$PROJECT_DIR$/audiobook/audiobook.iml" filepath="$PROJECT_DIR$/audiobook/audiobook.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
     </modules>
   </component>
 </project>

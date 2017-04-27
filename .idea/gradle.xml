@@ -9,6 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/audiobook" />
+            <option value="$PROJECT_DIR$/core" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

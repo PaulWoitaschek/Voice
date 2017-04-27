@@ -6,13 +6,13 @@ apply from: "../artifacts.gradle"
 
 android {
 
-    compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
 
     defaultConfig {
         applicationId "de.ph1b.audiobook"
-        minSdkVersion 16
-        targetSdkVersion 25
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
         versionCode 182
         versionName '3.2.0.3'
 
@@ -74,6 +74,8 @@ if (propFile.canRead()) {
 }
 
 dependencies {
+    compile project(":core")
+
     compile libraries.supportAppCompat
     compile libraries.supportRecyclerView
     compile libraries.supportDesign

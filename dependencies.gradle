@@ -1,7 +1,11 @@
 ext.versions = [
+        "minSdk"              : 16,
+        "targetSdk"           : 25,
+        "compileSdk"          : 25,
         "androidPlayer"       : "1.0",
         "androidPlugin"       : "2.3.1",
         "assertJ"             : "1.7.1",
+        "buildTools"          : "25.0.2",
         "conductor"           : "2.1.2",
         "constraintLayout"    : "1.0.2",
         "crashlytics"         : "2.6.7",

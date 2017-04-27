@@ -3,7 +3,7 @@ host = https://www.transifex.com
 lang_map = es_ES:es-rES,pt_BR:pt-rBR,zh_CN:zh-rCN,sv_SE:sv-rSE
 
 [material-audiobook-player.strings]
-file_filter = audiobook/src/main/res/values-<lang>/strings.xml
-source_file = audiobook/src/main/res/values/strings.xml
+file_filter = core/src/main/res/values-<lang>/strings.xml
+source_file = core/src/main/res/values/strings.xml
 source_lang = en
 type = ANDROID
