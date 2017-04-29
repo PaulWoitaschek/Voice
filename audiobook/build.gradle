@@ -113,6 +113,7 @@ dependencies {
     compile libraries.slimber
 
     compile libraries.exoPlayerCore
+    compile project(":exoplayer-flac")
 
     compile libraries.conductor
     compile libraries.conductorSupport

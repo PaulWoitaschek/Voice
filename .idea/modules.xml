@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/MaterialAudiobookPlayer.iml" filepath="$PROJECT_DIR$/MaterialAudiobookPlayer.iml" />
       <module fileurl="file://$PROJECT_DIR$/audiobook/audiobook.iml" filepath="$PROJECT_DIR$/audiobook/audiobook.iml" />
       <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/exoplayer-flac/exoplayer-flac.iml" filepath="$PROJECT_DIR$/exoplayer-flac/exoplayer-flac.iml" />
     </modules>
   </component>
 </project>
