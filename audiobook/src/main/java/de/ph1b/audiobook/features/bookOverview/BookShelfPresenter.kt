@@ -2,6 +2,7 @@ package de.ph1b.audiobook.features.bookOverview
 
 import de.ph1b.audiobook.features.BookAdder
 import de.ph1b.audiobook.misc.asV2Observable
+import de.ph1b.audiobook.misc.combineLatest
 import de.ph1b.audiobook.misc.value
 import de.ph1b.audiobook.mvp.Presenter
 import de.ph1b.audiobook.persistence.BookRepository
@@ -11,9 +12,7 @@ import de.ph1b.audiobook.playback.PlayStateManager.PlayState
 import de.ph1b.audiobook.playback.PlayerController
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
 import i
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.BiFunction
 import javax.inject.Inject
 
 /**
@@ -56,9 +55,9 @@ constructor(
           })
 
       // if there are no books and the scanner is active, show loading
-      add(Observable.combineLatest(bookAdder.scannerActive, repo.booksStream().map { it.isEmpty() }, BiFunction<Boolean, Boolean, Boolean> { active, booksEmpty ->
+      add(combineLatest(bookAdder.scannerActive, repo.booksStream().map { it.isEmpty() }) { active, booksEmpty ->
         if (booksEmpty) active else false
-      }).subscribe { view.showLoading(it) })
+      }.subscribe { view.showLoading(it) })
 
       // Subscription that updates the UI based on the play state.
       add(playStateManager.playStateStream().subscribe {

@@ -14,6 +14,7 @@ import de.ph1b.audiobook.misc.*
 import de.ph1b.audiobook.persistence.BookRepository
 import de.ph1b.audiobook.persistence.PrefsManager
 import de.ph1b.audiobook.uitools.CoverFromDiscCollector
+import i
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import java.io.File
@@ -38,6 +39,14 @@ import javax.inject.Singleton
   val scannerActive: Observable<Boolean> = scannerActiveSubject
   private val handler = Handler(context.mainLooper)
   @Volatile private var stopScanner = false
+  @Volatile private var isScanning = false
+
+  init {
+    val folderChanged = combineLatest(
+        prefs.collectionFolders.asV2Observable(),
+        prefs.singleBookFolders.asV2Observable()) { _, _ -> Unit }
+    folderChanged.subscribe { scanForFiles(restartIfScanning = true) }
+  }
 
   // check for new books
   @Throws(InterruptedException::class)
@@ -62,9 +71,14 @@ import javax.inject.Singleton
   }
 
   /** Restarts the scanner **/
-  fun scanForFiles() {
+  fun scanForFiles(restartIfScanning: Boolean = false) {
+    i { "scanForFiles with restartIfScanning=$restartIfScanning" }
+    if (isScanning && !restartIfScanning)
+      return
+
     stopScanner = true
     executor.execute {
+      isScanning = true
       val scanStart = System.nanoTime()
       handler.postBlocking { scannerActiveSubject.onNext(true) }
       stopScanner = false
@@ -78,6 +92,7 @@ import javax.inject.Singleton
 
       stopScanner = false
       handler.postBlocking { scannerActiveSubject.onNext(false) }
+      isScanning = false
       d { "a full scan took ${TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - scanStart)}" }
     }
   }
