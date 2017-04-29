@@ -126,7 +126,6 @@ constructor(
     player.volume = (if (loud) 1F else 0.1F)
   }
 
-  /** Plays the prepared file. */
   fun play() {
     v { "play called in state $state" }
     bookSubject.value?.let {
