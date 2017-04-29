@@ -105,7 +105,7 @@ class SleepTimerDialogFragment : AppCompatDialogFragment() {
 
     fab.setOnClickListener {
       // should be hidden if
-      check(selectedMinutes > 0) { "fab should be hidden when time is invalid" }
+      require(selectedMinutes > 0) { "fab should be hidden when time is invalid" }
       prefs.sleepTime.value = selectedMinutes
 
       prefs.bookmarkOnSleepTimer.value = bookmarkSwitch.isChecked

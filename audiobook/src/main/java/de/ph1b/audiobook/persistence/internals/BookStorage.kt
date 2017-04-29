@@ -118,7 +118,7 @@ class BookStorage
   }
 
   fun updateBook(book: Book) = db.asTransaction {
-    check(book.id != -1L) { "Book $book has an invalid id" }
+    require(book.id != -1L) { "Book $book has an invalid id" }
 
     // update book itself
     val bookCv = book.toContentValues()
