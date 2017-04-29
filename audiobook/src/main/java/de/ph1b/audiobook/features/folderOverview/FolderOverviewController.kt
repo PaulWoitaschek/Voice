@@ -71,14 +71,14 @@ class FolderOverviewController : MvpBaseController<FolderOverviewController, Fol
 
     adapter = FolderOverviewAdapter { toDelete ->
       MaterialDialog.Builder(activity)
-        .title(R.string.delete_folder)
-        .content("${getString(R.string.delete_folder_content)}\n$toDelete")
-        .positiveText(R.string.remove)
-        .negativeText(R.string.dialog_cancel)
-        .onPositive { _, _ ->
-          presenter.removeFolder(toDelete)
-        }
-        .show()
+          .title(R.string.delete_folder)
+          .content("${getString(R.string.delete_folder_content)}\n$toDelete")
+          .positiveText(R.string.remove)
+          .negativeText(R.string.dialog_cancel)
+          .onPositive { _, _ ->
+            presenter.removeFolder(toDelete)
+          }
+          .show()
     }
     recycler.adapter = adapter
 
@@ -94,8 +94,8 @@ class FolderOverviewController : MvpBaseController<FolderOverviewController, Fol
     super.onAttach(view)
 
     setupActionbar(toolbar = toolbar,
-      title = activity.getString(R.string.audiobook_folders_title),
-      upIndicator = R.drawable.close)
+        title = activity.getString(R.string.audiobook_folders_title),
+        upIndicator = R.drawable.close)
   }
 
   override fun provideView() = this
@@ -119,7 +119,7 @@ class FolderOverviewController : MvpBaseController<FolderOverviewController, Fol
 
         // create the animator for this view (the start radius is zero)
         val anim = ViewAnimationUtils.createCircularReveal(overlay,
-          famCenter.x, famCenter.y, 0f, finalRadius.toFloat())
+            famCenter.x, famCenter.y, 0f, finalRadius.toFloat())
 
         // make the view visible and start the animation
         overlay.visible = true
@@ -137,7 +137,7 @@ class FolderOverviewController : MvpBaseController<FolderOverviewController, Fol
 
         // create the animation (the final radius is zero)
         val anim = ViewAnimationUtils.createCircularReveal(overlay,
-          famCenter.x, famCenter.y, initialRadius.toFloat(), 0f)
+            famCenter.x, famCenter.y, initialRadius.toFloat(), 0f)
 
         // make the view invisible when the animation is done
         anim.addListener(object : AnimatorListenerAdapter() {

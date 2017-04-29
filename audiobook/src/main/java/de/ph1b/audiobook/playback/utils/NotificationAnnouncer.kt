@@ -42,9 +42,9 @@ class NotificationAnnouncer
       val coverFile = book.coverFile()
       if (coverFile.exists() && coverFile.canRead()) {
         Picasso.with(context)
-          .load(coverFile)
-          .resize(width, height)
-          .get()
+            .load(coverFile)
+            .resize(width, height)
+            .get()
       } else null
     } catch (ex: IOException) {
       e(ex) { "Error when retrieving cover from $book" }
@@ -95,22 +95,22 @@ class NotificationAnnouncer
     val contentPI = PendingIntent.getActivity(context, 0, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
     return notificationBuilder
-      .setStyle(NotificationCompat.MediaStyle()
-        .setShowActionsInCompactView(0, 1, 2)
-        .setCancelButtonIntent(stopPI)
-        .setShowCancelButton(true)
-        .setMediaSession(sessionToken))
-      .setCategory(NotificationCompat.CATEGORY_TRANSPORT)
-      .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-      .setShowWhen(false)
-      .setPriority(NotificationCompat.PRIORITY_HIGH)
-      .setContentIntent(contentPI)
-      .setContentTitle(book.name)
-      .setSmallIcon(R.drawable.ic_notification)
-      .setWhen(0)
-      .setDeleteIntent(stopPI)
-      .setAutoCancel(true)
-      .setLargeIcon(cover(book))
-      .build()
+        .setStyle(NotificationCompat.MediaStyle()
+            .setShowActionsInCompactView(0, 1, 2)
+            .setCancelButtonIntent(stopPI)
+            .setShowCancelButton(true)
+            .setMediaSession(sessionToken))
+        .setCategory(NotificationCompat.CATEGORY_TRANSPORT)
+        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+        .setShowWhen(false)
+        .setPriority(NotificationCompat.PRIORITY_HIGH)
+        .setContentIntent(contentPI)
+        .setContentTitle(book.name)
+        .setSmallIcon(R.drawable.ic_notification)
+        .setWhen(0)
+        .setDeleteIntent(stopPI)
+        .setAutoCancel(true)
+        .setLargeIcon(cover(book))
+        .build()
   }
 }

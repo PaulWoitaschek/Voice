@@ -22,7 +22,7 @@ class BookTransition : TransitionChangeHandler() {
   override fun getTransition(container: ViewGroup, from: View?, to: View?, isPush: Boolean): Transition {
     val context = container.context
     val move = TransitionInflater.from(context)
-      .inflateTransition(android.R.transition.move)
+        .inflateTransition(android.R.transition.move)
     move.addTarget(R.id.fab)
     move.addTarget(R.id.play)
     move.excludeTarget(R.id.toolbar, true)

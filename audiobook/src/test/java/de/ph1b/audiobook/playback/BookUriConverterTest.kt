@@ -21,41 +21,41 @@ import org.robolectric.shadows.ShadowLog
 @Config(constants = BuildConfig::class, sdk = intArrayOf(Build.VERSION_CODES.LOLLIPOP), manifest = "src/main/AndroidManifest.xml", application = TestApp::class)
 class BookUriConverterTest {
 
-    lateinit var converter: BookUriConverter
+  lateinit var converter: BookUriConverter
 
-    init {
-        ShadowLog.stream = System.out
-    }
+  init {
+    ShadowLog.stream = System.out
+  }
 
-    @Before fun setUp() {
-        converter = BookUriConverter()
-    }
+  @Before fun setUp() {
+    converter = BookUriConverter()
+  }
 
-    @Test fun testAllBooks() {
-        val uri = converter.allBooks()
+  @Test fun testAllBooks() {
+    val uri = converter.allBooks()
 
-        println(uri)
+    println(uri)
 
-        val match = converter.match(uri)
+    val match = converter.match(uri)
 
-        assertThat(match).isEqualTo(BookUriConverter.ROOT)
-    }
+    assertThat(match).isEqualTo(BookUriConverter.ROOT)
+  }
 
-    @Test fun testSingleBook() {
-        val uri = converter.book(1)
+  @Test fun testSingleBook() {
+    val uri = converter.book(1)
 
-        val match = converter.match(uri)
+    val match = converter.match(uri)
 
-        assertThat(match).isEqualTo(BookUriConverter.BOOK_ID)
-    }
+    assertThat(match).isEqualTo(BookUriConverter.BOOK_ID)
+  }
 
-    @Test fun testExtractBookOnly() {
-        val bookId = 153L
+  @Test fun testExtractBookOnly() {
+    val bookId = 153L
 
-        val uri = converter.book(bookId)
+    val uri = converter.book(bookId)
 
-        val extracted = converter.extractBook(uri)
+    val extracted = converter.extractBook(uri)
 
-        assertThat(bookId).isEqualTo(extracted)
-    }
+    assertThat(bookId).isEqualTo(extracted)
+  }
 }

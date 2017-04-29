@@ -13,8 +13,8 @@ class BookUriConverter
 @Inject constructor() {
 
   private fun baseBuilder() = Uri.Builder()
-    .authority(booksAuthority)
-    .appendPath(PATH_BOOKS)
+      .authority(booksAuthority)
+      .appendPath(PATH_BOOKS)
 
   private val matcher = UriMatcher(UriMatcher.NO_MATCH).apply {
     addURI(booksAuthority, PATH_BOOKS, ROOT)
@@ -26,8 +26,8 @@ class BookUriConverter
   fun allBooks(): Uri = baseBuilder().build()
 
   fun book(bookId: Long): Uri = baseBuilder()
-    .appendPath(bookId.toString())
-    .build()
+      .appendPath(bookId.toString())
+      .build()
 
   fun extractBook(uri: Uri) = uri.pathSegments[1].toLong()
 

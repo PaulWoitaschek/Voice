@@ -16,64 +16,64 @@ import java.util.*
  */
 class NaturalOrderComparatorTest : TestCase() {
 
-    val testFolder = TemporaryFolder()
-    @Rule fun testFolder() = testFolder
+  val testFolder = TemporaryFolder()
+  @Rule fun testFolder() = testFolder
 
-    override fun setUp() {
-        super.setUp()
-        testFolder.create()
-    }
+  override fun setUp() {
+    super.setUp()
+    testFolder.create()
+  }
 
-    @Test fun testFileComparator() {
-        testFolder.newFolder("folder", "subfolder", "subsubfolder")
-        testFolder.newFolder("storage", "emulated", "0")
-        testFolder.newFolder("xFolder")
+  @Test fun testFileComparator() {
+    testFolder.newFolder("folder", "subfolder", "subsubfolder")
+    testFolder.newFolder("storage", "emulated", "0")
+    testFolder.newFolder("xFolder")
 
-        val alarmsFolder = testFolder.newFolder("storage", "emulated", "0", "Alarms")
-        val desiredOrder = listOf(
-                alarmsFolder,
-                testFolder.newFile("folder/subfolder/subsubfolder/test2.mp3"),
-                testFolder.newFile("folder/subfolder/test.mp3"),
-                testFolder.newFile("folder/subfolder/test2.mp3"),
-                testFolder.newFile("folder/a.jpg"),
-                testFolder.newFile("folder/aC.jpg"),
-                testFolder.newFile("storage/emulated/0/1.ogg"),
-                testFolder.newFile("storage/emulated/0/2.ogg"),
-                testFolder.newFile("xFolder/d.jpg"),
-                testFolder.newFile("1.mp3"),
-                testFolder.newFile("a.jpg"))
+    val alarmsFolder = testFolder.newFolder("storage", "emulated", "0", "Alarms")
+    val desiredOrder = listOf(
+        alarmsFolder,
+        testFolder.newFile("folder/subfolder/subsubfolder/test2.mp3"),
+        testFolder.newFile("folder/subfolder/test.mp3"),
+        testFolder.newFile("folder/subfolder/test2.mp3"),
+        testFolder.newFile("folder/a.jpg"),
+        testFolder.newFile("folder/aC.jpg"),
+        testFolder.newFile("storage/emulated/0/1.ogg"),
+        testFolder.newFile("storage/emulated/0/2.ogg"),
+        testFolder.newFile("xFolder/d.jpg"),
+        testFolder.newFile("1.mp3"),
+        testFolder.newFile("a.jpg"))
 
-        val sorted = ArrayList(desiredOrder)
-        Collections.sort(sorted, NaturalOrderComparator.fileComparator)
-        assertThat(desiredOrder).isEqualTo(sorted)
-    }
+    val sorted = ArrayList(desiredOrder)
+    Collections.sort(sorted, NaturalOrderComparator.fileComparator)
+    assertThat(desiredOrder).isEqualTo(sorted)
+  }
 
-    @Test fun testStringComparator() {
-        val desiredOrder = listOf(
-                "00 I",
-                "00 Introduction",
-                "1",
-                "01 How to build a universe",
-                "01 I",
-                "2",
-                "9",
-                "10",
-                "a",
-                "Ab",
-                "aC",
-                "Ba",
-                "cA",
-                "D",
-                "e")
+  @Test fun testStringComparator() {
+    val desiredOrder = listOf(
+        "00 I",
+        "00 Introduction",
+        "1",
+        "01 How to build a universe",
+        "01 I",
+        "2",
+        "9",
+        "10",
+        "a",
+        "Ab",
+        "aC",
+        "Ba",
+        "cA",
+        "D",
+        "e")
 
-        val sorted = ArrayList(desiredOrder)
-        Collections.sort(sorted, NaturalOrderComparator.stringComparator)
-        assertThat(desiredOrder).isEqualTo(sorted)
-    }
+    val sorted = ArrayList(desiredOrder)
+    Collections.sort(sorted, NaturalOrderComparator.stringComparator)
+    assertThat(desiredOrder).isEqualTo(sorted)
+  }
 
-    override fun tearDown() {
-        testFolder.delete()
+  override fun tearDown() {
+    testFolder.delete()
 
-        super.tearDown()
-    }
+    super.tearDown()
+  }
 }

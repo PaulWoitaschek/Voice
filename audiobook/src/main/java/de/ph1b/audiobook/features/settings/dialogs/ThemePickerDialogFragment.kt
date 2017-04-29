@@ -31,22 +31,22 @@ class ThemePickerDialogFragment : DialogFragment() {
     val names = existingThemes.map { getString(it.nameId) }
 
     return MaterialDialog.Builder(context)
-      .items(*names.toTypedArray())
-      .itemsCallbackSingleChoice(existingThemes.indexOf(oldTheme)) { _, _, i, _ ->
-        val newTheme = existingThemes[i]
-        prefsManager.theme.value = newTheme
-        AppCompatDelegate.setDefaultNightMode(newTheme.nightMode)
+        .items(*names.toTypedArray())
+        .itemsCallbackSingleChoice(existingThemes.indexOf(oldTheme)) { _, _, i, _ ->
+          val newTheme = existingThemes[i]
+          prefsManager.theme.value = newTheme
+          AppCompatDelegate.setDefaultNightMode(newTheme.nightMode)
 
-        // use post so the dialog can close correctly
-        Handler().post {
-          (activity as AppCompatActivity).delegate.applyDayNight()
+          // use post so the dialog can close correctly
+          Handler().post {
+            (activity as AppCompatActivity).delegate.applyDayNight()
+          }
+          true
         }
-        true
-      }
-      .positiveText(R.string.dialog_confirm)
-      .negativeText(R.string.dialog_cancel)
-      .title(R.string.pref_theme_title)
-      .build()
+        .positiveText(R.string.dialog_confirm)
+        .negativeText(R.string.dialog_cancel)
+        .title(R.string.pref_theme_title)
+        .build()
   }
 
   companion object {

@@ -25,27 +25,27 @@ import org.robolectric.shadows.ShadowLog
 @Config(constants = BuildConfig::class, sdk = intArrayOf(Build.VERSION_CODES.LOLLIPOP), manifest = "src/main/AndroidManifest.xml", application = TestApp::class)
 class BookRepositoryTest {
 
-    init {
-        ShadowLog.stream = System.out
-    }
+  init {
+    ShadowLog.stream = System.out
+  }
 
-    private lateinit var repo: BookRepository
+  private lateinit var repo: BookRepository
 
-    @Before
-    fun setUp() {
-        val internalDb = InternalDb(RuntimeEnvironment.application)
-        val moshi = Moshi.Builder().build()
-        val internalBookRegister = BookStorage(internalDb, moshi)
-        repo = BookRepository(internalBookRegister)
-    }
+  @Before
+  fun setUp() {
+    val internalDb = InternalDb(RuntimeEnvironment.application)
+    val moshi = Moshi.Builder().build()
+    val internalBookRegister = BookStorage(internalDb, moshi)
+    repo = BookRepository(internalBookRegister)
+  }
 
-    @Test
-    fun testInOut() {
-        val dummy = BookMocker.mock(5)
-        repo.addBook(dummy)
-        val firstBook = repo.activeBooks.first()
-        val dummyWithUpdatedId = dummy.copy(id = firstBook.id)
+  @Test
+  fun testInOut() {
+    val dummy = BookMocker.mock(5)
+    repo.addBook(dummy)
+    val firstBook = repo.activeBooks.first()
+    val dummyWithUpdatedId = dummy.copy(id = firstBook.id)
 
-        assertThat(dummyWithUpdatedId).isEqualTo(firstBook)
-    }
+    assertThat(dummyWithUpdatedId).isEqualTo(firstBook)
+  }
 }

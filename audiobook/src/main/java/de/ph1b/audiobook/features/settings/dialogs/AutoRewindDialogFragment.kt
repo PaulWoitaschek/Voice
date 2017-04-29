@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.features.settings.dialogs
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -20,6 +21,7 @@ class AutoRewindDialogFragment : DialogFragment() {
 
   @Inject lateinit var prefs: PrefsManager
 
+  @SuppressLint("InflateParams")
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     App.component.inject(this)
 
@@ -38,15 +40,15 @@ class AutoRewindDialogFragment : DialogFragment() {
     }
 
     return MaterialDialog.Builder(context)
-      .title(R.string.pref_auto_rewind_title)
-      .customView(view, true)
-      .positiveText(R.string.dialog_confirm)
-      .negativeText(R.string.dialog_cancel)
-      .onPositive { _, _ ->
-        val newRewindAmount = seekBar.progress / FACTOR + MIN
-        prefs.autoRewindAmount.value = newRewindAmount
-      }
-      .build()
+        .title(R.string.pref_auto_rewind_title)
+        .customView(view, true)
+        .positiveText(R.string.dialog_confirm)
+        .negativeText(R.string.dialog_cancel)
+        .onPositive { _, _ ->
+          val newRewindAmount = seekBar.progress / FACTOR + MIN
+          prefs.autoRewindAmount.value = newRewindAmount
+        }
+        .build()
   }
 
   companion object {

@@ -96,7 +96,7 @@ class BookmarkAdapter(private val chapters: List<Chapter>, private val listener:
 
       summary.text = context.getString(R.string.format_bookmarks_n_of, index + 1, size)
       time.text = context.getString(R.string.format_bookmarks_time, formatTime(bookmark.time),
-        formatTime(currentChapter.duration))
+          formatTime(currentChapter.duration))
     }
 
     init {

@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.features.bookmarks
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -48,27 +49,27 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
       when (it.itemId) {
         R.id.edit -> {
           MaterialDialog.Builder(context)
-            .title(R.string.bookmark_edit_title)
-            .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
-            .input(getString(R.string.bookmark_edit_hint), bookmark.title, false) { _, charSequence ->
-              val newBookmark = Bookmark(bookmark.mediaFile, charSequence.toString(), bookmark.time)
-              adapter.replace(bookmark, newBookmark)
-              bookmarkProvider.deleteBookmark(bookmark.id)
-              bookmarkProvider.addBookmark(newBookmark)
-            }
-            .positiveText(R.string.dialog_confirm).show()
+              .title(R.string.bookmark_edit_title)
+              .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
+              .input(getString(R.string.bookmark_edit_hint), bookmark.title, false) { _, charSequence ->
+                val newBookmark = Bookmark(bookmark.mediaFile, charSequence.toString(), bookmark.time)
+                adapter.replace(bookmark, newBookmark)
+                bookmarkProvider.deleteBookmark(bookmark.id)
+                bookmarkProvider.addBookmark(newBookmark)
+              }
+              .positiveText(R.string.dialog_confirm).show()
           return@setOnMenuItemClickListener true
         }
         R.id.delete -> {
           builder.title(R.string.bookmark_delete_title)
-            .content(bookmark.title)
-            .positiveText(R.string.remove)
-            .negativeText(R.string.dialog_cancel)
-            .onPositive { _, _ ->
-              adapter.remove(bookmark)
-              bookmarkProvider.deleteBookmark(bookmark.id)
-            }
-            .show()
+              .content(bookmark.title)
+              .positiveText(R.string.remove)
+              .negativeText(R.string.dialog_cancel)
+              .onPositive { _, _ ->
+                adapter.remove(bookmark)
+                bookmarkProvider.deleteBookmark(bookmark.id)
+              }
+              .show()
           return@setOnMenuItemClickListener true
         }
         else -> return@setOnMenuItemClickListener false
@@ -114,6 +115,7 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
 
   private fun bookId() = arguments.getLong(BOOK_ID)
 
+  @SuppressLint("InflateParams")
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     val inflater = activity.layoutInflater
     val view = inflater.inflate(R.layout.dialog_bookmark, null)
@@ -128,9 +130,9 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
     recycler.layoutManager = layoutManager
 
     bookmarkProvider.bookmarks(book)
-      .subscribeOn(Schedulers.io())
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe { adapter.addAll(it) }
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe { adapter.addAll(it) }
 
     val add: View = view.find(R.id.add)
     add.setOnClickListener { addClicked() }
@@ -144,10 +146,10 @@ class BookmarkDialogFragment : DialogFragment(), BookmarkAdapter.OnOptionsMenuCl
     }
 
     return MaterialDialog.Builder(context)
-      .customView(view, false)
-      .title(R.string.bookmark)
-      .negativeText(R.string.dialog_cancel)
-      .build()
+        .customView(view, false)
+        .title(R.string.bookmark)
+        .negativeText(R.string.dialog_cancel)
+        .build()
   }
 
   companion object {

@@ -28,32 +28,32 @@ class FolderOverviewPresenter : Presenter<FolderOverviewController>() {
   override fun onBind(view: FolderOverviewController, disposables: CompositeDisposable) {
 
     val collectionFolderStream = prefsManager.collectionFolders.asV2Observable()
-      .map { it.map { FolderModel(it, true) } }
+        .map { it.map { FolderModel(it, true) } }
     val singleFolderStream = prefsManager.singleBookFolders.asV2Observable()
-      .map { it.map { FolderModel(it, false) } }
+        .map { it.map { FolderModel(it, false) } }
 
     val combined = Observable.combineLatest(collectionFolderStream, singleFolderStream, BiFunction<List<FolderModel>, List<FolderModel>, List<FolderModel>> { t1, t2 -> t1 + t2 })
     disposables.add(combined
-      .subscribe { view.newData(it) })
+        .subscribe { view.newData(it) })
   }
 
 
   /** removes a selected folder **/
   fun removeFolder(folder: FolderModel) {
     prefsManager.collectionFolders.asObservable()
-      .map { HashSet(it) }
-      .first()
-      .subscribe {
-        val removed = it.remove(folder.folder)
-        if (removed) prefsManager.collectionFolders.value = it
-      }
+        .map { HashSet(it) }
+        .first()
+        .subscribe {
+          val removed = it.remove(folder.folder)
+          if (removed) prefsManager.collectionFolders.value = it
+        }
 
     prefsManager.singleBookFolders.asObservable()
-      .map { HashSet(it) }
-      .first()
-      .subscribe {
-        val removed = it.remove(folder.folder)
-        if (removed) prefsManager.singleBookFolders.value = it
-      }
+        .map { HashSet(it) }
+        .first()
+        .subscribe {
+          val removed = it.remove(folder.folder)
+          if (removed) prefsManager.singleBookFolders.value = it
+        }
   }
 }

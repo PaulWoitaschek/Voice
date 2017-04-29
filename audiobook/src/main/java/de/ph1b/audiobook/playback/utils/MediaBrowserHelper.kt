@@ -37,18 +37,18 @@ import javax.inject.Inject
     if (match == BookUriConverter.ROOT) {
       val current = repo.bookById(prefs.currentBookId.value)?.let {
         MediaDescriptionCompat.Builder()
-          .setTitle("${context.getString(R.string.current_book)}: ${it.name}")
-          .setMediaId(bookUriConverter.book(it.id).toString())
-          .build().let {
+            .setTitle("${context.getString(R.string.current_book)}: ${it.name}")
+            .setMediaId(bookUriConverter.book(it.id).toString())
+            .build().let {
           MediaBrowserCompat.MediaItem(it, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
         }
       }
 
       val all = repo.activeBooks.map {
         val description = MediaDescriptionCompat.Builder()
-          .setTitle(it.name)
-          .setMediaId(bookUriConverter.book(it.id).toString())
-          .build()
+            .setTitle(it.name)
+            .setMediaId(bookUriConverter.book(it.id).toString())
+            .build()
         return@map MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
       }
 

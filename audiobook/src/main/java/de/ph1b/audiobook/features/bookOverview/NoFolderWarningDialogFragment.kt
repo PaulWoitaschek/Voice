@@ -17,15 +17,15 @@ class NoFolderWarningDialogFragment : DialogFragment() {
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     return MaterialDialog.Builder(context)
-      .title(R.string.no_audiobook_folders_title)
-      .content(getString(R.string.no_audiobook_folders_summary_start) +
-        "\n\n" + getString(R.string.no_audiobook_folders_end))
-      .positiveText(R.string.dialog_confirm)
-      .onPositive { _, _ ->
-        (activity as Callback).onNoFolderWarningConfirmed()
-      }
-      .cancelable(false)
-      .build()
+        .title(R.string.no_audiobook_folders_title)
+        .content(getString(R.string.no_audiobook_folders_summary_start) +
+            "\n\n" + getString(R.string.no_audiobook_folders_end))
+        .positiveText(R.string.dialog_confirm)
+        .onPositive { _, _ ->
+          (activity as Callback).onNoFolderWarningConfirmed()
+        }
+        .cancelable(false)
+        .build()
   }
 
   companion object {

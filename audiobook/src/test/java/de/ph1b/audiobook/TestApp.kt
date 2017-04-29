@@ -10,9 +10,9 @@ import timber.log.Timber
  */
 class TestApp : Application() {
 
-    override fun onCreate() {
-        super.onCreate()
+  override fun onCreate() {
+    super.onCreate()
 
-        if (Timber.treeCount() == 0) Timber.plant(Timber.DebugTree())
-    }
+    if (Timber.treeCount() == 0) Timber.plant(Timber.DebugTree())
+  }
 }

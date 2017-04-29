@@ -32,10 +32,10 @@ import javax.inject.Singleton
   init {
     // stops the player when the timer reaches 0
     internalSleepSand.filter { it == 0 } // when this reaches 0
-      .subscribe {
-        // stop the player
-        playerController.stop()
-      }
+        .subscribe {
+          // stop the player
+          playerController.stop()
+        }
 
     internalSleepSand.subscribe {
       if (it > 0) {
@@ -53,19 +53,19 @@ import javax.inject.Singleton
     // counts down the sleep sand
     val sleepUpdateInterval = 1000L
     playStateManager.playStateStream()
-      .map { it == PlayStateManager.PlayState.PLAYING }
-      .distinctUntilChanged()
-      .subscribe { playing ->
-        if (playing) {
-          sleepDisposable = Observable.interval(sleepUpdateInterval, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-            .filter { internalSleepSand.value > 0 } // only notify if there is still time left
-            .map { internalSleepSand.value - sleepUpdateInterval } // calculate the new time
-            .map { it.coerceAtLeast(0) } // but keep at least 0
-              .subscribe { internalSleepSand.onNext(it.toInt()) }
-        } else {
-          sleepDisposable?.dispose()
+        .map { it == PlayStateManager.PlayState.PLAYING }
+        .distinctUntilChanged()
+        .subscribe { playing ->
+          if (playing) {
+            sleepDisposable = Observable.interval(sleepUpdateInterval, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .filter { internalSleepSand.value > 0 } // only notify if there is still time left
+                .map { internalSleepSand.value - sleepUpdateInterval } // calculate the new time
+                .map { it.coerceAtLeast(0) } // but keep at least 0
+                .subscribe { internalSleepSand.onNext(it.toInt()) }
+          } else {
+            sleepDisposable?.dispose()
+          }
         }
-      }
   }
 
   /** turns the sleep timer on or off **/
@@ -107,10 +107,10 @@ import javax.inject.Singleton
     shakeTimeoutDisposable?.dispose()
     if (stopAfter != null) {
       shakeTimeoutDisposable = Observable.timer(stopAfter, TimeUnit.MINUTES)
-        .subscribe {
-          d { "disabling pauseOnShake through timout" }
-          resetTimerOnShake(false)
-        }
+          .subscribe {
+            d { "disabling pauseOnShake through timout" }
+            resetTimerOnShake(false)
+          }
     }
   }
 

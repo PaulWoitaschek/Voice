@@ -39,10 +39,10 @@ import javax.inject.Inject
 
 class WidgetUpdateService : Service() {
   private val executor = ThreadPoolExecutor(
-    1, 1, // single thread
-    5, TimeUnit.SECONDS,
-    LinkedBlockingQueue<Runnable>(2), // queue capacity
-    ThreadPoolExecutor.DiscardOldestPolicy())
+      1, 1, // single thread
+      5, TimeUnit.SECONDS,
+      LinkedBlockingQueue<Runnable>(2), // queue capacity
+      ThreadPoolExecutor.DiscardOldestPolicy())
   private val disposables = CompositeDisposable()
   @Inject lateinit var prefs: PrefsManager
   @Inject lateinit var repo: BookRepository
@@ -56,10 +56,10 @@ class WidgetUpdateService : Service() {
 
     // update widget if current book, current book id or playState have changed.
     disposables.add(Observable.merge(
-      repo.updateObservable().filter { it.id == prefs.currentBookId.value },
-      playStateManager.playStateStream(),
-      prefs.currentBookId.asV2Observable())
-      .subscribe { updateWidget() }
+        repo.updateObservable().filter { it.id == prefs.currentBookId.value },
+        playStateManager.playStateStream(),
+        prefs.currentBookId.asV2Observable())
+        .subscribe { updateWidget() }
     )
 
   }
@@ -78,7 +78,7 @@ class WidgetUpdateService : Service() {
       val book = repo.bookById(prefs.currentBookId.value)
       val isPortrait = isPortrait
       val ids = appWidgetManager.getAppWidgetIds(ComponentName(
-        this@WidgetUpdateService, BaseWidgetProvider::class.java))
+          this@WidgetUpdateService, BaseWidgetProvider::class.java))
 
       for (widgetId in ids) {
         val remoteViews = RemoteViews(packageName, R.layout.widget)
@@ -88,13 +88,13 @@ class WidgetUpdateService : Service() {
 
           val opts = appWidgetManager.getAppWidgetOptions(widgetId)
           val minHeight = dpToPx(opts.getInt(
-            AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT))
+              AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT))
           val maxHeight = dpToPx(opts.getInt(
-            AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT))
+              AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT))
           val minWidth = dpToPx(opts.getInt(
-            AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH))
+              AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH))
           val maxWidth = dpToPx(opts.getInt(
-            AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH))
+              AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH))
 
           val useWidth: Int
           val useHeight: Int
@@ -114,12 +114,12 @@ class WidgetUpdateService : Service() {
           val wholeWidgetClickI = Intent(this@WidgetUpdateService, MainActivity::class.java)
           wholeWidgetClickI.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
           val wholeWidgetClickPI = PendingIntent.getActivity(this@WidgetUpdateService, System.currentTimeMillis().toInt(),
-            wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT)
+              wholeWidgetClickI, PendingIntent.FLAG_UPDATE_CURRENT)
           remoteViews.setImageViewBitmap(R.id.imageView,
-            imageHelper.drawableToBitmap(
-              drawable(R.drawable.icon_108dp),
-              imageHelper.smallerScreenSize,
-              imageHelper.smallerScreenSize))
+              imageHelper.drawableToBitmap(
+                  drawable(R.drawable.icon_108dp),
+                  imageHelper.smallerScreenSize,
+                  imageHelper.smallerScreenSize))
           remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)
         }
 
@@ -158,18 +158,18 @@ class WidgetUpdateService : Service() {
   private fun initElements(remoteViews: RemoteViews, book: Book) {
     val playPauseI = serviceController.getPlayPauseIntent()
     val playPausePI = PendingIntent.getService(this,
-      KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseI, PendingIntent.FLAG_UPDATE_CURRENT)
+        KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, playPauseI, PendingIntent.FLAG_UPDATE_CURRENT)
     remoteViews.setOnClickPendingIntent(R.id.playPause, playPausePI)
 
     val fastForwardI = serviceController.getFastForwardIntent()
     val fastForwardPI = PendingIntent.getService(this,
-      KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, fastForwardI,
-      PendingIntent.FLAG_UPDATE_CURRENT)
+        KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, fastForwardI,
+        PendingIntent.FLAG_UPDATE_CURRENT)
     remoteViews.setOnClickPendingIntent(R.id.fastForward, fastForwardPI)
 
     val rewindI = serviceController.getRewindIntent()
     val rewindPI = PendingIntent.getService(this, KeyEvent.KEYCODE_MEDIA_REWIND,
-      rewindI, PendingIntent.FLAG_UPDATE_CURRENT)
+        rewindI, PendingIntent.FLAG_UPDATE_CURRENT)
     remoteViews.setOnClickPendingIntent(R.id.rewind, rewindPI)
 
     if (playStateManager.playState === PlayStateManager.PlayState.PLAYING) {
@@ -187,7 +187,7 @@ class WidgetUpdateService : Service() {
 
     val wholeWidgetClickI = MainActivity.goToBookIntent(this, book.id)
     val wholeWidgetClickPI = PendingIntent.getActivity(this@WidgetUpdateService, System.currentTimeMillis().toInt(), wholeWidgetClickI,
-      PendingIntent.FLAG_UPDATE_CURRENT)
+        PendingIntent.FLAG_UPDATE_CURRENT)
 
     var cover: Bitmap? = null
     try {
@@ -201,8 +201,8 @@ class WidgetUpdateService : Service() {
 
     if (cover == null) {
       cover = imageHelper.drawableToBitmap(CoverReplacement(book.name, this@WidgetUpdateService),
-        imageHelper.smallerScreenSize,
-        imageHelper.smallerScreenSize)
+          imageHelper.smallerScreenSize,
+          imageHelper.smallerScreenSize)
     }
     remoteViews.setImageViewBitmap(R.id.imageView, cover)
     remoteViews.setOnClickPendingIntent(R.id.wholeWidget, wholeWidgetClickPI)

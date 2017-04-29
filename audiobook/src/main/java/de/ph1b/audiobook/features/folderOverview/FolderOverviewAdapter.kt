@@ -7,7 +7,7 @@ import de.ph1b.audiobook.misc.layoutInflater
 import java.util.*
 
 class FolderOverviewAdapter(private val deleteClicked: (toDelete: FolderModel) -> Unit) :
-  RecyclerView.Adapter<FolderOverviewHolder>() {
+    RecyclerView.Adapter<FolderOverviewHolder>() {
 
   private val items = ArrayList<FolderModel>()
 

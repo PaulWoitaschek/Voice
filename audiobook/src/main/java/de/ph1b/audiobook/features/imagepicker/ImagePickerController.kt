@@ -1,5 +1,6 @@
 package de.ph1b.audiobook.features.imagepicker
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -101,6 +102,7 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
     "https://www.google.com/search?safe=on&site=imghp&tbm=isch&tbs=isz:lt,islt:qsvga&q=$encodedSearch"
   }
 
+  @SuppressLint("SetJavaScriptEnabled")
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
     val view = inflater.inflate(R.layout.activity_image_picker, container, false)
 
@@ -147,15 +149,15 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
 
     // after first successful load set visibilities
     webViewIsLoading
-      .distinctUntilChanged()
-      .filter { it == true }
-      .subscribe {
-        // sets progressbar and webviews visibilities correctly once the page is loaded
-        i { "WebView is now loading. Set webView visible" }
-        progressBar.visible = false
-        noNetwork.visible = false
-        webViewContainer.visible = true
-      }
+        .distinctUntilChanged()
+        .filter { it == true }
+        .subscribe {
+          // sets progressbar and webviews visibilities correctly once the page is loaded
+          i { "WebView is now loading. Set webView visible" }
+          progressBar.visible = false
+          noNetwork.visible = false
+          webViewContainer.visible = true
+        }
 
     webView.loadUrl(originalUrl)
 
@@ -170,8 +172,8 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
 
   override fun onAttach(view: View) {
     setupActionbar(toolbar = toolbar,
-      upIndicator = R.drawable.close,
-      title = getString(R.string.cover))
+        upIndicator = R.drawable.close,
+        title = getString(R.string.cover))
   }
 
   override fun onRestoreViewState(view: View, savedViewState: Bundle) {
@@ -193,6 +195,7 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
     }
   }
 
+  @SuppressLint("InflateParams")
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
     inflater.inflate(R.menu.image_picker, menu)
 
@@ -208,12 +211,12 @@ class ImagePickerController(bundle: Bundle) : BaseController(bundle) {
     MenuItemCompat.setActionView(refreshItem, rotateView)
 
     webViewIsLoading
-      .filter { it == true }
-      .filter { !rotation.hasStarted() }
-      .doOnNext { i { "is loading. Start animation" } }
-      .subscribe {
-        rotation.start()
-      }
+        .filter { it == true }
+        .filter { !rotation.hasStarted() }
+        .doOnNext { i { "is loading. Start animation" } }
+        .subscribe {
+          rotation.start()
+        }
 
     rotation.setAnimationListener(object : Animation.AnimationListener {
       override fun onAnimationRepeat(p0: Animation?) {

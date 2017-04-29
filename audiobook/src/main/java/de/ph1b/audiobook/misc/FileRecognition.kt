@@ -17,29 +17,29 @@ object FileRecognition {
 
   init {
     audioTypes = arrayListOf(
-      "3gp",
-      "aac",
-      "awb",
-      "flac",
-      "imy",
-      "m4a",
-      "m4b",
-      "mid",
-      "mka",
-      "mkv",
-      "mp3",
-      "mp3package",
-      "mp4",
-      "mxmf",
-      "oga",
-      "ogg",
-      "ota",
-      "rtttl",
-      "rtx",
-      "wav",
-      "webm",
-      "wma",
-      "xmf"
+        "3gp",
+        "aac",
+        "awb",
+        "flac",
+        "imy",
+        "m4a",
+        "m4b",
+        "mid",
+        "mka",
+        "mkv",
+        "mp3",
+        "mp3package",
+        "mp4",
+        "mxmf",
+        "oga",
+        "ogg",
+        "ota",
+        "rtttl",
+        "rtx",
+        "wav",
+        "webm",
+        "wma",
+        "xmf"
     )
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       audioTypes.add("opus")
@@ -61,7 +61,7 @@ object FileRecognition {
       return@FileFilter true
     } else {
       val extension = it.extension
-        .toLowerCase()
+          .toLowerCase()
       return@FileFilter audioTypes.contains(extension)
     }
   }
