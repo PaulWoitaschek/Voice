@@ -113,11 +113,11 @@ constructor(
   fun init(book: Book) {
     if (bookSubject.value != book) {
       i { "init called with ${book.name}" }
+      bookSubject.onNext(book)
       player.playWhenReady = false
       player.prepare(dataSourceConverter.toMediaSource(book))
       player.seekTo(book.currentChapterIndex(), book.time.toLong())
       player.setPlaybackSpeed(book.playbackSpeed)
-      bookSubject.onNext(book)
       state = PlayerState.PAUSED
     }
   }
