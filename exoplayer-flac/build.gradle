@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'de.undercouch.download'
 
 android {
     compileSdkVersion versions.compileSdk
@@ -34,7 +33,6 @@ task downloadFlac << {
     def flacDir = file("src/main/jni/flac")
     if (flacDir.exists())
         return
-    flacDir.delete()
 
     def flacVersion = "1.3.1"
 
@@ -42,10 +40,10 @@ task downloadFlac << {
     def dstFile = file("src/main/jni/flac-${flacVersion}.tar.xz")
     if (!dstFile.exists()) {
         def tmpFile = file("src/main/jni/flac.temp")
-        download {
-            src "http://downloads.xiph.org/releases/flac/flac-${flacVersion}.tar.xz"
-            dest tmpFile
-            overwrite true
+        tmpFile.delete()
+        exec {
+            executable 'sh'
+            args '-c', "curl http://downloads.xiph.org/releases/flac/flac-${flacVersion}.tar.xz > ${tmpFile.absolutePath}"
         }
         tmpFile.renameTo(dstFile)
     }
